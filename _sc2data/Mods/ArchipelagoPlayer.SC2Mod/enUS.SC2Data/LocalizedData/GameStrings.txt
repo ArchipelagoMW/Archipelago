@@ -91,6 +91,7 @@ Abil/Name/AP_FactoryTechReactorMorph=Factory Tech Reactor Morph
 Abil/Name/AP_FactoryTrain=Train (Factory)
 Abil/Name/AP_Feedback=Feedback
 Abil/Name/AP_FighterMode=Fighter Mode
+Abil/Name/AP_ForceFieldMonitor=Force Field
 Abil/Name/AP_ForgeResearch=Research (Forge)
 Abil/Name/AP_FungalGrowth=Fungal Growth
 Abil/Name/AP_FusionCoreResearch=Research
@@ -99,6 +100,7 @@ Abil/Name/AP_GhostCloak=Personal Cloaking
 Abil/Name/AP_GhostWeaponsFree=Weapons Free
 Abil/Name/AP_GravitonBeam=Graviton Beam
 Abil/Name/AP_GravitonBeamVoidCampaign=Graviton Beam
+Abil/Name/AP_GuardianShieldVoid=Guardian Shield
 Abil/Name/AP_HangarQueue5=Queue (5) (Hangar)
 Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/AP_HerculesTransport=Hercules Transport
@@ -171,6 +173,7 @@ Abil/Name/AP_NovaWeaponPlasmaBlastNew=Plasma Surge
 Abil/Name/AP_NovaWeaponPsiRifleAbduct=Nova - Weapon - Psi Rifle - Abduct
 Abil/Name/AP_NovaWeaponsFree=NovaWeaponsFree
 Abil/Name/AP_Obliterate=Obliterate
+Abil/Name/AP_ObserverTargetLock=Target Lock
 Abil/Name/AP_OracleRevelation=Oracle Revelation
 Abil/Name/AP_OracleStasisTrap=Oracle Stasis Ward
 Abil/Name/AP_OracleStasisTrapActivate=Activate
@@ -263,6 +266,9 @@ Abil/Name/AP_VoidMPImmortalReviveDeath=Void MPImmortal Revive Death
 Abil/Name/AP_VoidMPImmortalReviveRebuild=Void MPImmortal Revive Rebuild
 Abil/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Abil/Name/AP_VoidSentryBlackHole=Void Sentry Black Hole
+Abil/Name/AP_VoidSentryChronoBeam=Chrono Beam
+Abil/Name/AP_VoidSentryPhasingMode=Phasing Mode
+Abil/Name/AP_VoidSentryShieldRepairDouble=Shield Repair
 Abil/Name/AP_VolatileBurstBuilding=Volatile Burst Building
 Abil/Name/AP_VultureQueue3=Make Spider Mine Queue
 Abil/Name/AP_VultureSpiderMineBurrow=Spider Mine Burrow
@@ -349,6 +355,8 @@ Behavior/Name/AP_NovaPlasmaPuddleDamageDebuff=Plasma Pool
 Behavior/Name/AP_NovaPsiStrikeWalkStopStun=NovaPsiStrikeWalkStopStun
 Behavior/Name/AP_NovaWeaponInvictusLongshotLockdown=Lockdown
 Behavior/Name/AP_NoxiousDamage=Noxious Cloud
+Behavior/Name/AP_ObserverSquadSight=Squad Sight
+Behavior/Name/AP_ObserverTargetLock=Target Lock
 Behavior/Name/AP_OracleRevelation=Revealed
 Behavior/Name/AP_OracleStasisTrapTarget=Stasis
 Behavior/Name/AP_OracleWeapon=Pulsar Beam
@@ -396,6 +404,7 @@ Behavior/Name/AP_VoidMPImmortalReviveSupressed=Immortal Revive Supressed
 Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_VoidSentryBlackHole=Black Hole
+Behavior/Name/AP_VoidSentryChronoBeam=Chrono Beam
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
@@ -434,6 +443,8 @@ Behavior/Tooltip/AP_NovaDomination=This unit is being controlled by Nova.
 Behavior/Tooltip/AP_NovaHelmetGhostVisorDetector=Reveals the locations of enemy units within a radius of <d ref="Behavior,AP_NovaHelmetGhostVisorDetector,Modification.Radar"/> from Nova's position. Can detect cloaked and burrowed units.
 Behavior/Tooltip/AP_NovaPlasmaPuddleDamageDebuff=This unit is taking damage over time.
 Behavior/Tooltip/AP_NoxiousDamage=Taking damage over time.
+Behavior/Tooltip/AP_ObserverSquadSight=This unit's non-melee weapons have increased range.
+Behavior/Tooltip/AP_ObserverTargetLock=This unit is taking increased damage.
 Behavior/Tooltip/AP_OracleRevelation=This unit or structure is providing vision for the caster.
 Behavior/Tooltip/AP_OracleStasisTrapTarget=This unit cannot move, attack, or be damaged.
 Behavior/Tooltip/AP_OracleWeapon=This Oracle's weapon is enabled and can attack ground units.
@@ -469,6 +480,7 @@ Behavior/Tooltip/AP_VileAcidSlowFlatAmountStructure=Attack speeds are slowed.
 Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to increase its energy.
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_VoidSentryBlackHole=This unit cannot move or attack.
+Behavior/Tooltip/AP_VoidSentryChronoBeam=This unit has increased movement and attack speeds.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
@@ -480,7 +492,10 @@ Button/Name/AP_ActivateStasisWard=Stasis
 Button/Name/AP_AdeptPhaseShift=Psionic Transfer
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Button/Name/AP_AdvancedWeaponryRaven=Hunter-Seeker Missile
+Button/Name/AP_AlarakACMyLifefortheHighlord=Devotion
 Button/Name/AP_AlarakStalkerPhasingArmor=Phasing Armor
+Button/Name/AP_AlarakSupplicantMaxShields=Soul Augmentation
+Button/Name/AP_AlarakSupplicantSacrificeCDR=Wrath of the Highlord
 Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Button/Name/AP_AncillaryCarapaceHydralisk=Ancillary Carapace
 Button/Name/AP_ApolloCloakOnNova=Cloak
@@ -587,6 +602,7 @@ Button/Name/AP_GravitonBeam=Graviton Beam
 Button/Name/AP_GravitonBeamVoidCampaign=Graviton Beam
 Button/Name/AP_GravitonCatapult=Graviton Catapult
 Button/Name/AP_GroovedSpines=Grooved Spines
+Button/Name/AP_GuardianShield=Guardian Shield
 Button/Name/AP_HardenedShield=Hardened Shield
 Button/Name/AP_HaveBarrier=Improved Barrier
 Button/Name/AP_HaveNovaGadgetDefensiveDroneSummon=[PH] Place Defensive Drone
@@ -719,6 +735,7 @@ Button/Name/AP_OracleBuildStasisTrap=Stasis Ward
 Button/Name/AP_OracleRevelation=Revelation
 Button/Name/AP_OracleWeaponOff=Deactivate Pulsar Beam
 Button/Name/AP_OracleWeaponOn=Activate Pulsar Beam
+Button/Name/AP_PHSupplicantShieldArmor=Blood Shields
 Button/Name/AP_PerditionTurret=Build Perdition Turret
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
 Button/Name/AP_PermanentlyCloaked=Permanently Cloaked
@@ -779,6 +796,7 @@ Button/Name/AP_SOARadarNexus=Nexus Overcharge
 Button/Name/AP_SOAWarpTech=Warp Harmonization
 Button/Name/AP_Scan=Scanner Sweep
 Button/Name/AP_SensorTower=Build Sensor Tower
+Button/Name/AP_SentryTaldarimForceField=Force Field
 Button/Name/AP_ShapedBlast=Shaped Blast
 Button/Name/AP_ShapedHull=Shaped Hull
 Button/Name/AP_ShockwaveMissilePattern=Shockwave Missile Battery
@@ -798,6 +816,7 @@ Button/Name/AP_SpectreShadowClones=Shadow Clone
 Button/Name/AP_SpectreWeaponsFree=Weapons Free
 Button/Name/AP_SpiderMine=Deploy Spider Mine
 Button/Name/AP_SpiderMineReplenish=Replenish Spider Mine
+Button/Name/AP_SquadSight=Squad Sight
 Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
 Button/Name/AP_StalkerBlinkMultiple=Blink
 Button/Name/AP_StalkerBlinkShieldRestoreBase=Blink
@@ -807,6 +826,7 @@ Button/Name/AP_StopPlanetaryFortress=Stop
 Button/Name/AP_SuperStimpackLarge=Super Stimpack
 Button/Name/AP_SuperStimpackNova=Stim Infusion
 Button/Name/AP_SuperStimpackSmall=Super Stimpack
+Button/Name/AP_SupplicantSacrificeCDRLocked=Wrath of the Highlord
 Button/Name/AP_SupplyDepot=Build Supply Depot
 Button/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
 Button/Name/AP_SupplyDrop=Calldown: Extra Supplies
@@ -817,6 +837,7 @@ Button/Name/AP_SwarmHostRootBurrow=Burrow
 Button/Name/AP_SwarmHostUproot=Uproot
 Button/Name/AP_SwarmHostUprootUnburrow=Unburrow
 Button/Name/AP_SwarmSeeds=Swarm Seeds
+Button/Name/AP_TargetLock=Target Lock
 Button/Name/AP_TechReactor=Build Tech Reactor
 Button/Name/AP_TerranBuild=Build Structure
 Button/Name/AP_TerranInfantryArmorVanadiumPlatingLevel1=Upgrade Infantry Armor Level 1
@@ -871,6 +892,9 @@ Button/Name/AP_VoidRayPrismaticAlignmentBase=Prismatic Alignment
 Button/Name/AP_VoidRayShakuras=Warp in Void Ray
 Button/Name/AP_VoidRayVoidPrismaticRange=Prismatic Range
 Button/Name/AP_VoidSentryBlackHole=Black Hole
+Button/Name/AP_VoidSentryChronoBeam=Chrono Beam
+Button/Name/AP_VoidSentryPhasingMode=Phasing Mode
+Button/Name/AP_VoidSentryShieldRepairDouble=Double Shield Recharge
 Button/Name/AP_VoidStasis=Void Stasis
 Button/Name/AP_VoidVoidRayBeamBounce=Destruction Beam
 Button/Name/AP_Vulture=Build Vulture
@@ -888,11 +912,8 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_AlarakACMyLifefortheHighlord=Devotion
-Button/Name/AP_AlarakSupplicantMaxShields=Soul Augmentation
-Button/Name/AP_AlarakSupplicantSacrificeCDR=Wrath of the Highlord
-Button/Name/AP_PHSupplicantShieldArmor=Blood Shields
-Button/Name/AP_SupplicantSacrificeCDRLocked=Wrath of the Highlord
+Button/Name/AP_MatrixOverloadEnergizer=Matrix Overload
+Button/Name/AP_VoidSentryMobileMode=Mobile Mode
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -902,7 +923,10 @@ Button/Tooltip/AP_ActivateStasisWard=Traps nearby enemies in stasis for <d ref="
 Button/Tooltip/AP_AdeptPhaseShift=Projects an invulnerable Shade that can move but cannot attack. Enemies that touch the shade take <d ref="Effect,AP_AdeptPsionicTransferDamage,Amount"/> extra damage from all sources for <d ref="Behavior,AP_AdeptPsionicTransferDamageDebuff,Duration"/> seconds.<n/><n/>The Adept teleports to the Shade's location <d ref="Behavior,AP_AdeptPhaseShiftTimer,Duration"/> seconds after activation.<n/><n/>Can be canceled after activation.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
 Button/Tooltip/AP_AdvancedWeaponryRaven=Adds a Hunter-Seeker Missile weapon that automatically attacks enemy units and does not cost energy.
+Button/Tooltip/AP_AlarakACMyLifefortheHighlord=Supplicants are the first units sacrificed to heal Alarak when he is near death.
 Button/Tooltip/AP_AlarakStalkerPhasingArmor=Prevents the Slayer from taking damage for <d ref="Behavior,AP_AlarakStalkerPhasingArmorBuff,Duration"/> seconds after being attacked. Cannot occur more than once every <d ref="Behavior,AP_AlarakStalkerPhasingArmor,DamageResponse.Cost.Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_AlarakSupplicantMaxShields=Supplicants gain +<d ref="Effect,AP_AlarakSupplicantMaxShieldsDisplayDummy,Amount"/> shields.
+Button/Tooltip/AP_AlarakSupplicantSacrificeCDR=Reduces the cooldown of Alarak's Deady Charge by <d ref="(Effect,AP_AlarakSupplicantSacrificeCDR_A,Cost.Cooldown.TimeUse)*(-1)"/> seconds and Destruction Wave by <d ref="(Effect,AP_AlarakSupplicantSacrificeCDR_B,Cost.Cooldown.TimeUse)*(-1)"/> seconds whenever a Supplicant is sacrificed.
 Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
 Button/Tooltip/AP_AncillaryCarapaceHydralisk=Hydralisk gains +20 maximum life.
 Button/Tooltip/AP_ApolloCloakOnNova=Cloaks Nova for <d ref="Behavior,AP_NovaApolloCloak,Duration"/> seconds, preventing enemy units from seeing or attacking her. A cloaked unit will only be revealed by detectors or effects.
@@ -1027,6 +1051,7 @@ Button/Tooltip/AP_Feedback=Drains all energy from the target. Deals 1 damage per
 Button/Tooltip/AP_FireOnTheMove=The Diamondback can fire its Rail Gun while moving.
 Button/Tooltip/AP_Firebat=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_FleetBeacon=Carrier tech structure.
+Button/Tooltip/AP_ForceField=Barrier that lasts <d time="15"/> and impedes movement of ground units. Massive units will shatter Force Fields on contact.
 Button/Tooltip/AP_Forge=Contains weapon and armor upgrades for Protoss ground units and shield upgrades for all Protoss units and structures.<n/><n/><c val="ffff8a">Enables:</c><n/>- Photon Cannons from Probes
 Button/Tooltip/AP_FortifiedBunker=Bunkers are fortified and have more life.
 Button/Tooltip/AP_FusionCore=Contains Battlecruiser upgrades. <n/><n/><c val="ffff8a">Enables:</c><n/>- Battlecruisers at the Starport<n/>- Hercules at the Starport
@@ -1039,6 +1064,7 @@ Button/Tooltip/AP_GravitonBeam=Makes the target unit float in the air, disabling
 Button/Tooltip/AP_GravitonBeamVoidCampaign=Makes the target unit float in the air, disabling its abilities. Effect lasts up to <d time="10"/>.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_GravitonCatapult=Makes the Carrier launch Interceptors more quickly.
 Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
+Button/Tooltip/AP_GuardianShield=Creates a range 4 aura that reduces all incoming attack damage to friendly units by 2. Lasts <d time="15"/>.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HardenedShield=Reduces incoming damage to a maximum of 10 while the Immortal still has shields.
 Button/Tooltip/AP_HaveBarrier=Increases the amount of damage absorbed by the Immortal's Barrier by 100%.
@@ -1140,6 +1166,7 @@ Button/Tooltip/AP_MindControl=Permanently converts targeted Zerg unit to player 
 Button/Tooltip/AP_MissilePods=Missile Pods deal <d ref="Effect,AP_HurricaneMissileDamage,Amount * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,AP_HurricaneMissileDamage,AttributeBonus[0] * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/AP_MissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_MonarchBlades=Splash damage of Ultralisk attacks increased to <d ref="Effect,AP_HotSUltraliskKaiserBladesSecondaryUpgradeDamage,Amount"/>.
+Button/Tooltip/AP_Monitor=Tal'darim Faction<n/>Robotic support unit. Can use Target Lock, Squad Sight, and Force Field.
 Button/Tooltip/AP_MorphBackToRoboticsFacility=Transforms this Warp Robotics Facility back to a Robotics Facility.
 Button/Tooltip/AP_MorphBackToStargate=Transforms this Warp Stargate back to a Stargate.
 Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1197,6 +1224,7 @@ Button/Tooltip/AP_OracleWeaponOff=Deactivates the Oracle's Pulsar Beam and preve
 Button/Tooltip/AP_OracleWeaponOn=Charges the Oracle's Pulsar Beam and allows it to attack enemy ground units.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_OracleWeapon,Modification.VitalRegenArray[2] + Unit,AP_Oracle,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_OrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/AP_OrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep ability. Can use the abilities Calldown: MULE and Calldown: Extra Supplies.
+Button/Tooltip/AP_PHSupplicantShieldArmor=Reduces the damage enemies deal to the Supplicant's shields.
 Button/Tooltip/AP_PerditionTurret=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PerditionTurretUnderground=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PermanentCloakBanshee=Cloak no longer requires energy.
@@ -1270,6 +1298,10 @@ Button/Tooltip/AP_SOAWarpTech=Stargates and Robotics Facilities can transform to
 Button/Tooltip/AP_Scan=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_SensorTower=Reveals the locations of enemy units at long range. The Sensor Tower's detection area is visible to the enemy.
+Button/Tooltip/AP_SentryAiur=Aiur Faction<n/>Robotic support unit. Can use Double Shield Recharge and Guardian Shield.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_SentryPhasing=Purifier Faction<n/>Robotic support unit. Creates power for nearby structures. Can use Chrono Beam and Mobile Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_SentryPurifier=Purifier Faction<n/>Robotic support unit. Can use Chrono Beam and Phasing Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_SentryTaldarimForceField=Creates a solid barrier that lasts for <d ref="Behavior,AP_ForceFieldFate,Duration"/> seconds and impedes movement of ground units.<n/><n/><c val="#ColorAttackInfo">Massive units shatter Force Fields on contact.</c>
 Button/Tooltip/AP_ShapedBlast=Shock Cannon damage to friendly units reduced by 75%.
 Button/Tooltip/AP_ShapedHull=Increases Diamondback life by 50.
 Button/Tooltip/AP_ShockwaveMissilePattern=Banshee attack fires multiple missile bursts in a straight line.
@@ -1294,6 +1326,7 @@ Button/Tooltip/AP_SpectreShadowClones=The Spectre creates a clone of himself.  T
 Button/Tooltip/AP_SpectreWeaponsFree=Orders selected units to fire at will. They will engage enemy units within range and chase them as normal.
 Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
+Button/Tooltip/AP_SquadSight=Increases the non-melee attack range of all nearby friendly units by <d ref="Behavior,AP_ObserverSquadSight,Modification.RangedWeaponRange"/>.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
 Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_StalkerBlinkMultiple=Teleports the Stalker to a nearby target location. Ability regains a charge every <d ref="Abil,AP_BlinkMultiple,Cost[0].Charge.TimeUse"/> seconds. Can store a maximum of 3 charges.
@@ -1321,6 +1354,7 @@ Button/Tooltip/AP_SwarmHostRootBurrow=Burrows the Swarm Host. Prevents it from m
 Button/Tooltip/AP_SwarmHostUproot=Uproots the Swarm Host. Prevents it from spawning, but allows it to move about freely.
 Button/Tooltip/AP_SwarmHostUprootUnburrow=Unburrows the Swarm Host. Prevents it from spawning, but allows it to move about freely.
 Button/Tooltip/AP_SwarmSeeds=The Brood Lord shoots Broodlings at its target. A Broodling is a small creature that can attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_TargetLock=Increases damage dealt to target enemy unit by <d ref="Behavior,AP_ObserverTargetLock,Modification.DamageTakenFraction[Splash]*100"/>%. Effect lasts as long as the Havoc remains locked onto the target.
 Button/Tooltip/AP_TechLab=Enables additional unit construction options.
 Button/Tooltip/AP_TechReactor=Enables additional unit construction options and allows 2 units to be created simultaneously.
 Button/Tooltip/AP_TempestPurifier=Purifier Faction<n/>Siege artillery craft. Attacks from long range. Can use Disintegration.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1381,11 +1415,15 @@ Button/Tooltip/AP_VoidRayShakuras=Nerazim Faction<n/>Surgical strike craft. Has 
 Button/Tooltip/AP_VoidRayTaldarim=Tal'darim Faction<n/>Area assault craft. Can use Destruction Beam to attack multiple units.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_VoidRayVoidPrismaticRange=Increases the range of the Void Ray's Prismatic Beam as it continues to attack, up to a maximum of +<d ref="Behavior,AP_VoidRayChargeBeamRangePhase3,Modification.WeaponRange"/> range.
 Button/Tooltip/AP_VoidSentryBlackHole=Stuns enemy units in the target area for <d ref="Effect,AP_VoidSentryBlackHolePersistent,PeriodCount*Effect,AP_VoidSentryBlackHolePersistent,PeriodicPeriodArray[0]"/> seconds.
+Button/Tooltip/AP_VoidSentryChronoBeam=Friendly target gains 50% attack and 50% movement speed.
+Button/Tooltip/AP_VoidSentryPhasingMode=Transforms the Energizer to Phasing Mode and generates a power field as if it was a Pylon. The Energizer cannot move in this mode.
+Button/Tooltip/AP_VoidSentryShieldRepairDouble=Recharges the shields of two friendly Protoss units. <n/><n/><c val="f078ff">Restores <d ref="Effect,AP_VoidSentryShieldRepair,RechargeVitalRate*Effect,AP_VoidSentryShieldRepair,DrainVitalCostFactor"/> shields per 1 energy.</c>
 Button/Tooltip/AP_VoidStasis=Disables the target's attacks, abilities, movement, detection, production and tech for <d ref="Behavior,AP_DarkTemplarVoidStasis,Duration"/> seconds. Units and structures in stasis cannot be attacked or affected by abilities.<n/><n/><c val="#ColorAttackInfo">Can target ground units and structures.</c>
 Button/Tooltip/AP_VoidVoidRayBeamBounce=Prismatic Beam splits and deals damage to additional nearby targets as the Destroyer continues to attack, up to a maximum of 3 additional targets.
 Button/Tooltip/AP_Vulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_WarpInAdept=Purifier Faction<n/>Ranged specialist. Can use Psionic Transfer.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_WarpInSupplicant=Short range warrior. Sacrifices itself to heal Alarak when he is near death. Supplicants are warped in two at a time.<n/></n><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_WarpPrism=Flying transport. Can load and unload units. Can also deploy to create a power field.
 Button/Tooltip/AP_WarpPrismLoad=Loads units into the Warp Prism's matrix.
 Button/Tooltip/AP_WarpPrismPhasing=Immobile power provider. Can load and unload units. Can switch to a mobile Transport Mode.
@@ -1401,11 +1439,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_AlarakACMyLifefortheHighlord=Supplicants are the first units sacrificed to heal Alarak when he is near death.
-Button/Tooltip/AP_AlarakSupplicantMaxShields=Supplicants gain +<d ref="Effect,AP_AlarakSupplicantMaxShieldsDisplayDummy,Amount"/> shields.
-Button/Tooltip/AP_AlarakSupplicantSacrificeCDR=Reduces the cooldown of Alarak's Deady Charge by <d ref="(Effect,AP_AlarakSupplicantSacrificeCDR_A,Cost.Cooldown.TimeUse)*(-1)"/> seconds and Destruction Wave by <d ref="(Effect,AP_AlarakSupplicantSacrificeCDR_B,Cost.Cooldown.TimeUse)*(-1)"/> seconds whenever a Supplicant is sacrificed.
-Button/Tooltip/AP_PHSupplicantShieldArmor=Reduces the damage enemies deal to the Supplicant's shields.
-Button/Tooltip/AP_WarpInSupplicant=Short range warrior. Sacrifices itself to heal Alarak when he is near death. Supplicants are warped in two at a time.<n/></n><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_SentryPurifier=Purifier Faction<n/>Robotic support unit. Can use Chrono Beam and Phasing Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_MatrixOverloadEnergizer=All friendly units gain a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% bonus to movement speed and a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% bonus to attack speed while positioned within an Energizer's power field. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving the power field.<n/><n/><c val="ffff8a">Passive ability.</c>
+Button/Tooltip/AP_VoidSentryMobileMode=Transforms the Energizer to Mobile Mode. The Energizer can move, but no longer creates a power field.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1692,6 +1728,8 @@ Effect/Name/AP_DisablingCloudApplyBehavior=Disabling Cloud Apply Behavior
 Effect/Name/AP_DisablingCloudIterateTransport=Disabling Cloud
 Effect/Name/AP_DisablingCloudSearch=Disabling Cloud Search
 Effect/Name/AP_DisablingCloudSet=Disabling Cloud
+Effect/Name/AP_DisruptionBeam=Disruption Beam
+Effect/Name/AP_DisruptionBeamDamage=Disruption Beam
 Effect/Name/AP_DuskWingBansheeCreatePersistent=Screecher Missiles (Create Persistent)
 Effect/Name/AP_DuskWingBansheeDamage=Screecher Missiles (Damage)
 Effect/Name/AP_DuskWingBansheeLaunchMissile=Screecher Missiles (Launch Missile)
@@ -1716,6 +1754,8 @@ Effect/Name/AP_FirebatUFull=Flame Thrower (Damage)
 Effect/Name/AP_FlameThrowerApplyDoTBehavior=Flame Thrower (Apply DoT Behavior)
 Effect/Name/AP_FlameThrowerDamageSet=Flame Thrower (Damage Set)
 Effect/Name/AP_FlameThrowerViralPlasmaDoTDamage=Flame Thrower (Viral Plasma DoT Damage)
+Effect/Name/AP_ForceField=Force Field
+Effect/Name/AP_ForceFieldTimedLife=Force Field Timed Life
 Effect/Name/AP_FungalGrowthApplyBehavior=Fungal Growth
 Effect/Name/AP_FungalGrowthApplyMovementBehavior=Fungal Growth Apply Movement Behavior
 Effect/Name/AP_FungalGrowthDamage=Fungal Growth
@@ -1772,6 +1812,9 @@ Effect/Name/AP_GravitonBeamVoidCampaignBehavior=Anti Gravity (Apply Behavior)
 Effect/Name/AP_GravitonBeamVoidCampaignHeightBehavior=Anti Gravity (Height Behavior)
 Effect/Name/AP_GravitonBeamVoidCampaignInitialSet=Anti Gravity (Initial Set)
 Effect/Name/AP_GravitonBeamVoidCampaignPeriodicSet=Anti Gravity (Periodic Set)
+Effect/Name/AP_GuardianShieldApplyBehavior=Guardian Shield
+Effect/Name/AP_GuardianShieldPersistent=Guardian Shield
+Effect/Name/AP_GuardianShieldSearch=Guardian Shield
 Effect/Name/AP_HailstormMissilePodsCreatePersistent=Hellstorm Missile Pods (Create Persistent)
 Effect/Name/AP_HailstormMissilePodsDamage=Hellstorm Missile Pods (Damage)
 Effect/Name/AP_HailstormMissilePodsLaunchMissile=Hellstorm Missile Pods (Launch Missile)
@@ -2136,6 +2179,8 @@ Effect/Name/AP_NukeDetonate=Nuke
 Effect/Name/AP_NukePersistent=Nuke
 Effect/Name/AP_NukeSuicide=Nuke
 Effect/Name/AP_Obliterate=Obliterate
+Effect/Name/AP_ObserverSquadSightAB=Squad Sight AB
+Effect/Name/AP_ObserverSquadSightSearch=Squad Sight Search
 Effect/Name/AP_OracleRevelationApplyBehavior=Oracle Revelation Apply Behavior
 Effect/Name/AP_OracleRevelationDummyDamage=OracleRevelationDummyDamage
 Effect/Name/AP_OracleRevelationSearch=Oracle Revelation Search
@@ -2360,6 +2405,8 @@ Effect/Name/AP_SuicideRemove=Suicide Remove
 Effect/Name/AP_SuperStimpackNovaAB=Super Stimpack Nova
 Effect/Name/AP_SuperStimpackNovaMU=Super Stimpack Nova
 Effect/Name/AP_SuperStimpackNovaSet=Super Stimpack Nova Set
+Effect/Name/AP_SupplicantDamage=Damage
+Effect/Name/AP_SupplicantLM=LM
 Effect/Name/AP_SupplyDepotDropMorph=Supply Depot Drop Morph
 Effect/Name/AP_SupplyDepotMorphingApplyBehavior=Supply Depot Morphing Apply Behavior
 Effect/Name/AP_SupplyDropApplyBehavior=Supply Drop (Apply Behavior)
@@ -2484,6 +2531,10 @@ Effect/Name/AP_VoidSentryBlackHoleForceOffset=Void Sentry Black Hole Force Offse
 Effect/Name/AP_VoidSentryBlackHoleImpactSet=Void Sentry Black Hole Impact Set
 Effect/Name/AP_VoidSentryBlackHolePersistent=Void Sentry Black Hole Persistent
 Effect/Name/AP_VoidSentryBlackHoleSearch=Void Sentry Black Hole Search
+Effect/Name/AP_VoidSentryChronoBeamAB=Void Sentry Chrono Beam
+Effect/Name/AP_VoidSentryChronoBeamCP=Void Sentry Chrono Beam
+Effect/Name/AP_VoidSentryChronoBeamSet=Void Sentry Chrono Beam Set
+Effect/Name/AP_VoidSentryShieldRepairDouble=Void Sentry Shield Repair Double
 Effect/Name/AP_VoidStalkerRailgunWeapon=Void Stalker Railgun Weapon
 Effect/Name/AP_VolatileBurstU=Volatile Burst
 Effect/Name/AP_Vulture=Fragmentation Grenade (Missile)
@@ -2582,13 +2633,12 @@ Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
-Effect/Name/AP_SupplicantDamage=Damage
-Effect/Name/AP_SupplicantLM=LM
 Error/AP_AlreadyChronoBoosted=Target is already accelerated
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 Error/AP_SwarmHostBurrowed=Must Root to attack.
 Error/AP_TempestDisintegration=Target is already Disintegrating
+Error/AP_TooManyLockTargets=Cannot Target Lock more than 2 targets
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
 RequirementNode/Tooltip/AP_CountUnitFactoryFlyingCompleteOnly=Flying Factory
 RequirementNode/Tooltip/AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat=Mutate Spire into Greater Spire
@@ -2689,6 +2739,7 @@ Unit/Name/AP_Factory=Factory
 Unit/Name/AP_FactoryTechReactor=Tech Reactor
 Unit/Name/AP_Firebat=Firebat
 Unit/Name/AP_FleetBeacon=Fleet Beacon
+Unit/Name/AP_ForceField=Force Field
 Unit/Name/AP_Forge=Forge
 Unit/Name/AP_FungalGrowthMissile=Fungal Growth
 Unit/Name/AP_FusionCore=Fusion Core
@@ -2769,6 +2820,7 @@ Unit/Name/AP_Medic=Medic
 Unit/Name/AP_Medivac=Medivac
 Unit/Name/AP_MercCompound=Merc Compound
 Unit/Name/AP_MissileTurret=Missile Turret
+Unit/Name/AP_Monitor=Havoc
 Unit/Name/AP_Mutalisk=Mutalisk
 Unit/Name/AP_MutaliskBroodlord=Mutalisk
 Unit/Name/AP_MutaliskViper=Mutalisk
@@ -2829,6 +2881,9 @@ Unit/Name/AP_ScoutMP=Scout
 Unit/Name/AP_ScoutMPAirWeaponLeft=Scout MPAir Weapon Left
 Unit/Name/AP_ScoutMPAirWeaponRight=Scout MPAir Weapon Right
 Unit/Name/AP_SensorTower=Sensor Tower
+Unit/Name/AP_SentryAiur=Sentry
+Unit/Name/AP_SentryPhasing=Energizer
+Unit/Name/AP_SentryPurifier=Energizer
 Unit/Name/AP_SiegeBreaker=Siege Breaker
 Unit/Name/AP_SiegeBreakerSieged=Siege Breaker
 Unit/Name/AP_SiegeTank=Siege Tank
@@ -2849,6 +2904,8 @@ Unit/Name/AP_Stargate=Stargate
 Unit/Name/AP_StargateWarp=Warp Stargate
 Unit/Name/AP_Starport=Starport
 Unit/Name/AP_StarportTechReactor=Tech Reactor
+Unit/Name/AP_Supplicant=Supplicant
+Unit/Name/AP_SupplicantWeapon=Supplicant
 Unit/Name/AP_SupplyDepot=Supply Depot
 Unit/Name/AP_SupplyDepotDrop=Supply Depot Calldown Beacon
 Unit/Name/AP_SupplyDepotLowered=Supply Depot
@@ -2899,8 +2956,7 @@ Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_Supplicant=Supplicant
-Unit/Name/AP_SupplicantWeapon=Supplicant
+Unit/Name/AP_SentryPurifier=Energizer
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -2927,6 +2983,8 @@ Upgrade/Name/AP_AdeptPiercingAttack=Resonating Glaives
 Upgrade/Name/AP_AdeptShieldUpgrade=Shield Upgrade
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AdvancedMedicTraining=Advanced Medic Training
+Upgrade/Name/AP_AlarakSupplicantMaxShields=Soul Augmentation
+Upgrade/Name/AP_AlarakSupplicantShieldArmor=Blood Shields
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
 Upgrade/Name/AP_AresClassWeaponsSystemViking=Phobos-Class Weapons System
 Upgrade/Name/AP_ArmorPiercingRockets=Armor Piercing Rockets
@@ -3203,8 +3261,6 @@ Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
-Upgrade/Name/AP_AlarakSupplicantMaxShields=Soul Augmentation
-Upgrade/Name/AP_AlarakSupplicantShieldArmor=Blood Shields
 Upgrade/Name/BlackOps2=Black Ops
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
@@ -3241,6 +3297,7 @@ Weapon/Name/AP_DarkArchonWeapon=Chaotic Torrent
 Weapon/Name/AP_DarkTemplarTaldarim=Bane Blades
 Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Name/AP_Diamondback=Eviscerator Rail Gun
+Weapon/Name/AP_DisruptionBeam=Disruption Beam
 Weapon/Name/AP_DuskWingBanshee=Screecher Missiles
 Weapon/Name/AP_Firebat=Perdition Flamethrower
 Weapon/Name/AP_FusionCutter=Fusion Cutter
@@ -3337,6 +3394,7 @@ Weapon/Name/AP_SpartanCompanyG=Gatling Cannon
 Weapon/Name/AP_SpartanCompanyGUpgraded=Gatling Cannon
 Weapon/Name/AP_Specter=AGR-14 Gauss Rifle
 Weapon/Name/AP_SpectreShadowClone=Shadow Clone
+Weapon/Name/AP_SupplicantWeapon=Blood Orb
 Weapon/Name/AP_TempestPurifier=Kinetic Overload
 Weapon/Name/AP_TempestPurifierGround=Resonance Coil
 Weapon/Name/AP_ThermalLances=Thermal Lance
@@ -3357,7 +3415,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_SupplicantWeapon=Blood Orb
+Weapon/Name/AP_EnergizerWeapon=Sanitization Beam
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

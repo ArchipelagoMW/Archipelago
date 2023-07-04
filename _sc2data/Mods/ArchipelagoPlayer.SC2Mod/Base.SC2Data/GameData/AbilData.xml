@@ -4563,6 +4563,60 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_ForceFieldMonitor">
+        <AbilSetId value="ForceField"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ForceField"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="9"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <CursorEffect value="AP_ForceFieldPlacement"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SentryTaldarimForceField"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <PlaceUnit value="AP_ForceField"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_GuardianShieldVoid">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_GuardianShieldPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Link="GuardianShield" TimeUse="15"/>
+        </Cost>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastValidatorArray value="AP_VoidSentryNearbyFriendlyUnitInCombat"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="GuardianShield"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ObserverTargetLock">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ObserverTargetLockCP"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSLifeLargestFirst"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="AP_NotHaveTargetLock"/>
+        <AutoCastValidatorArray value="AP_NotInterceptor"/>
+        <CastOutroTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_TargetLock"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5464,4 +5518,80 @@
             <Flags index="IgnoreUser" value="1"/>
         </CmdButtonArray>
     </CAbilWarpable>
+    <CAbilEffectTarget id="AP_VoidSentryChronoBeam">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidSentryChronoBeamCP"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Enemy,Structure,Heroic,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="AP_TSVoidSentryChronoBeam"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <Arc value="4.9987"/>
+        <AutoCastFilters value="Visible;Self,Neutral,Enemy,Structure,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="TargetIsFiringWeapon"/>
+        <AutoCastValidatorArray value="AP_SentryChronoBeamTargetExlusion"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryChronoBeam"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_VoidSentryPhasingMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryPhasingMode"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_SentryPhasing">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_VoidSentryShieldRepairDouble">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <TargetFilters value="Visible;Self,Enemy,Structure,Missile,Uncommandable,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSShieldsFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="3"/>
+        <Arc value="4.9987"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Hallucination,Invulnerable"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="AP_UnitOrAttackingStructure"/>
+        <AutoCastValidatorArray value="CasterHas10Energy"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryShieldRepairDouble"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_VoidSentryMobileMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryMobileMode"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_SentryPurifier">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
 </Catalog>

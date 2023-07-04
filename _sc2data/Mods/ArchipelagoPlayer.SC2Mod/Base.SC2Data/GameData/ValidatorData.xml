@@ -2292,9 +2292,6 @@
     <CValidatorCombine id="AP_IsNotLarva">
         <CombineArray value="AP_IsNotVanillaLarva"/>
     </CValidatorCombine>
-    <CValidatorCombine id="AP_IsDisruptor">
-        <CombineArray value="AP_NotDummy"/>
-    </CValidatorCombine>
     <CValidatorPlayerRequirement id="AP_HaveVoidPhoenixGravitonDamage">
         <ResultNoPlayer value="Error"/>
         <Find value="1"/>
@@ -3199,4 +3196,211 @@
     <CValidatorUnitFilters id="AP_TargetIsUnderConstruction">
         <Filters value="UnderConstruction;-"/>
     </CValidatorUnitFilters>
+    <CValidatorLocationEnumArea id="AP_VoidSentryNearbyFriendlyUnitInCombat">
+        <WhichLocation Value="SourceUnit"/>
+        <AreaArray Radius="4.5" Validator="AP_VoidSentryTargetInCombatAndDoesntHaveGuardianShield"/>
+        <SearchFilters value="-;Neutral,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorCombine id="AP_VoidSentryTargetInCombatAndDoesntHaveGuardianShield">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidSentryTargetDoesntHaveGuardianShield"/>
+        <CombineArray value="TargetInCombat"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidSentryTargetDoesntHaveGuardianShield">
+        <Behavior value="AP_GuardianShield"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotHaveTargetLock">
+        <Behavior value="AP_ObserverTargetLock"/>
+        <ResultFailed value="Error,Error\TargetLock"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotAPInterceptor">
+        <Value value="AP_Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotVanillaInterceptor">
+        <Value value="Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_NotInterceptor">
+        <Type value="And"/>
+        <CombineArray value="AP_NotAPInterceptor"/>
+        <CombineArray value="AP_NotVanillaInterceptor"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_SentryChronoBeamTargetExlusion">
+        <Type value="And"/>
+        <CombineArray value="AP_TargetIsNotSentryAiur"/>
+        <CombineArray value="AP_TargetIsNotSentryPurifier"/>
+        <CombineArray value="AP_TargetIsNotSentryPhasing"/>
+<!--        <CombineArray value="AP_TargetIsNotReplicant"/>-->
+        <CombineArray value="AP_TargetIsNotHighTemplarTaldarim"/>
+        <CombineArray value="AP_TargetIsNotHighTemplarShakuras"/>
+<!--        <CombineArray value="TargetIsNotDisruptionWard"/>-->
+        <CombineArray value="AP_TargetIsNotArbiterMP"/>
+        <CombineArray value="AP_TargetIsNotCarrierAiur"/>
+        <!-- TODO: Make this unit -->
+<!--        <CombineArray value="TargetIsNotCarrierTaldarim"/>-->
+        <CombineArray value="AP_NotMaxVoidSentryChronoBeam"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_TargetIsNotSentryAiur">
+        <Value value="AP_SentryAiur"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotSentryPurifier">
+        <Value value="AP_SentryPurifier"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotSentryPhasing">
+        <Value value="AP_SentryPhasing"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+<!--    <CValidatorUnitType id="AP_TargetIsNotReplicant">-->
+<!--        <Value value="Replicant"/>-->
+<!--        <Find value="0"/>-->
+<!--    </CValidatorUnitType>-->
+    <CValidatorUnitType id="AP_TargetIsNotHighTemplarTaldarim">
+        <Value value="AP_HighTemplarTaldarim"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotHighTemplarShakuras">
+        <Value value="AP_HighTemplarShakuras"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotArbiterMP">
+        <Value value="AP_ArbiterMP"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotCarrierAiur">
+        <Value value="AP_CarrierAiur"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotMaxVoidSentryChronoBeam">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidSentryChronoBeam"/>
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingRepaired">
+        <Behavior value="AP_SentryTargetBeingRepaired"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_RepairBeamAvailable">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <Behavior value="AP_SentryRepairBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_RepairPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_SentryIsRepairing"/>
+        <!--CombineArray value="LifeGTZero"/-->
+        <!--CombineArray value="NotMaxHP"/-->
+        <CombineArray value="ShieldsNotFull"/>
+        <CombineArray value="RepairTargetInRange"/>
+        <CombineArray value="NotHidden"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_SentryIsRepairing">
+        <AbilLink value="AP_VoidSentryShieldRepairDouble"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_UnitOrAttackingStructure">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsKhaydarinMonolith"/>
+        <CombineArray value="AP_IsAnyBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsSpineCrawler"/>
+        <CombineArray value="AP_IsSporeCrawler"/>
+        <CombineArray value="AP_HasSOARadar"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaPhotonCannon">
+        <Value value="PhotonCannon"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPhotonCannon">
+        <Value value="AP_PhotonCannon"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPhotonCannon" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPhotonCannon"/>
+        <CombineArray value="AP_IsAPPhotonCannon"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawler">
+        <CombineArray value="AP_IsSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawlerRooted">
+        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsVanillaSpineCrawlerRooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawlerUprooted">
+        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsVanillaSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawler">
+        <CombineArray value="AP_IsSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawlerRooted">
+        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsVanillaSporeCrawlerRooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawlerUprooted">
+        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsVanillaSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSOARadar">
+        <Compare value="GT"/>
+        <Behavior value="AP_SOARadar"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsKhaydarinMonolith">
+        <Value value="AP_KhaydarinMonolith"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareField id="AP_TargetLockUnitRadiusLarge">
+        <Compare value="GE"/>
+        <Field value="Radius"/>
+        <Value value="0.75"/>
+    </CValidatorUnitCompareField>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotMaxTargetLocks">
+        <Behavior value="AP_ObserverTargetLockCaster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <WhichUnit Value="Caster"/>
+        <ResultFailed value="Error,Error/AP_TooManyLockTargets"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_MonitorTargetLockChecks">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+        <CombineArray value="TargetNotDead"/>
+        <CombineArray value="AP_MonitorTargetLockRangeCheck"/>
+        <CombineArray value="HiddenCompareAB"/>
+        <CombineArray value="HiddenCompareBA"/>
+        <CombineArray value="NotInvulnerable"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_MonitorTargetLockRangeCheck">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Compare value="LT"/>
+        <Range value="10"/>
+        <Value Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_VoidSentryChronoBeam">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="NotDead"/>
+        <CombineArray value="AP_VoidSentryChronoBeamCasterHasEnergy"/>
+        <CombineArray value="AP_NotMaxVoidSentryChronoBeam"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareVital id="AP_VoidSentryChronoBeamCasterHasEnergy">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="5"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingShieldRepaired">
+        <Behavior value="AP_SentryShieldRepairDoubleHealing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareField id="AP_TargetLockUnitRadiusSmall">
+        <Compare value="LT"/>
+        <Field value="Radius"/>
+        <Value value="0.75"/>
+    </CValidatorUnitCompareField>
 </Catalog>

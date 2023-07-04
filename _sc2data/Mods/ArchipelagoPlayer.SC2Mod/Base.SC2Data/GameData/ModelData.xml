@@ -11243,4 +11243,287 @@
     <CModel id="AP_Glaze_Alarak_COOP_Sacrifice" parent="Glaze">
         <EditorCategories value="Race:Protoss"/>
     </CModel>
+    <CModel id="AP_GuardianShield" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\SentryShieldBubble_Ex2\SentryShieldBubble_Ex2.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="SoundStart"/>
+            <Type value="Custom"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="SoundLoopStart"/>
+            <Type value="Custom"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="SoundLoopEnd"/>
+            <Type value="Custom"/>
+            <Time value="0.010000"/>
+        </Events>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_GuardianShieldImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\SentryShieldImpact\SentryShieldImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_Monitor" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_TalDarim\Sentry_TalDarim.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Sentry_SwarmAnims\Sentry_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid06"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.733000"/>
+        <ShadowRadius value="0.533000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid06"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.500000"/>
+        <TipabilityWidth value="0.500000"/>
+        <UnitGlossaryCamera value="Star2CameraMid06"/>
+    </CModel>
+    <CModel id="AP_MonitorDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_TalDarim_Death\Sentry_TalDarim_Death.m3"/>
+        <LowQualityModel value="ProtossTaldarimUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_MonitorPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\MonitorEx2Portrait\MonitorEx2Portrait.m3"/>
+        <Image value="Assets\Textures\MonitorPortrait_Static.dds"/>
+        <Lighting value="AP_MonitorPortrait"/>
+    </CModel>
+    <CModel id="AP_SentryAiur" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry\Sentry.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Sentry_SwarmAnims\Sentry_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid06"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.733000"/>
+        <ShadowRadius value="0.533000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid06"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.500000"/>
+        <TipabilityWidth value="0.500000"/>
+        <UnitGlossaryCamera value="Star2CameraMid06"/>
+    </CModel>
+    <CModel id="AP_SentryAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\SentryDeathEx1\SentryDeathEx1.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SentryAiurPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\SentryPlacement\SentryPlacement.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.499700"/>
+        <ShadowRadius value="0.499700"/>
+    </CModel>
+    <CModel id="AP_SentryAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\SentryWarpIn\SentryWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_SentryAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\NullifierBeam\NullifierBeam.m3"/>
+        <LowQualityModel value="SentryAttackBeamLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_SentryChronoBeamBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_Purifier_ChronoBeam\Sentry_Purifier_ChronoBeam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SentryChronoBeamImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_Purifier_ChronoBeam_Impact\Sentry_Purifier_ChronoBeam_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SentryPurifier" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier\Sentry_Purifier.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Sentry_SwarmAnims\Sentry_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid06"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.733000"/>
+        <ShadowRadius value="0.533000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid06"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.500000"/>
+        <TipabilityWidth value="0.500000"/>
+        <UnitGlossaryCamera value="Star2CameraMid06"/>
+    </CModel>
+    <CModel id="AP_SentryPurifierDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier_Death\Sentry_Purifier_Death.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SentryPurifierPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier_Placement\Sentry_Purifier_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.499700"/>
+        <ShadowRadius value="0.499700"/>
+    </CModel>
+    <CModel id="AP_SentryPurifierPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\EnergizerEx2Portrait\EnergizerEx2Portrait.m3"/>
+        <Image value="Assets\Textures\energizerportrait_static.dds"/>
+        <Lighting value="AP_PortraitEnergizerEx2Portrait"/>
+    </CModel>
+    <CModel id="AP_SentryPurifierWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier_WarpIn\Sentry_Purifier_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_SentryTalDarimPlacement">
+        <Model value="Assets\Units\Protoss\Sentry_TalDarim_Placement\Sentry_TalDarim_Placement.m3"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+    </CModel>
+    <CModel id="AP_SentryTalDarimWarpIn">
+        <Model value="Assets\Units\Protoss\Sentry_TalDarim_WarpIn\Sentry_TalDarim_WarpIn.m3"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+    </CModel>
+    <CModel id="AP_Sentry_HealingBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_HealingBeam\Sentry_HealingBeam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_Sentry_HealingBeam_Impact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_HealingBeam_Impact\Sentry_HealingBeam_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SquadSightAttachment" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\SquadSight\SquadSight.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_TargetLockAttachment" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\TargetLockImpact\TargetLockImpact.m3"/>
+    </CModel>
+    <CModel id="AP_TargetLockAttachmentLarge" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\TargetLockImpactLarge\TargetLockImpactLarge.m3"/>
+    </CModel>
+    <CModel id="AP_TargetLockLaserBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\TargetLockBeam\TargetLockBeam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SanitizationAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\NullifierBeam\NullifierBeam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <LowQualityModel value="SentryAttackBeamLow"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_SentryForceFieldAddition" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ForceFieldImpact\ForceFieldImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.100000,0.100000,0.100000"/>
+        <ScaleMin value="0.100000,0.100000,0.100000"/>
+    </CModel>
+    <CModel id="AP_SentryWarpPrismAddition">
+        <Model value="Assets\Units\Protoss\WarpPrism\WarpPrism.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.600000,0.600000,0.700000"/>
+        <ScaleMin value="0.600000,0.600000,0.700000"/>
+    </CModel>
+    <CModel id="AP_SentryPhasing" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier\Sentry_Purifier.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Sentry_SwarmAnims\Sentry_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.733000"/>
+        <Tipability value="0.750000"/>
+        <TipabilityWidth value="0.500000"/>
+        <TipabilityLength value="0.500000"/>
+        <SquibTypeDefault value="Metal"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <TechPurchaseCamera value="Star2CameraMid06"/>
+        <UnitGlossaryCamera value="Star2CameraMid06"/>
+        <PlanetPanelCamera value="Star2CameraMid06"/>
+        <ShadowRadius value="0.533000"/>
+    </CModel>
+    <CModel id="AP_SentryPhasingDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Sentry_Purifier_Death\Sentry_Purifier_Death.m3"/>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SentryPowerVisual" parent="UI">
+        <Model value="Assets\Effects\Protoss\Sentry_Purifier_PhasingMode_Radius\Sentry_Purifier_PhasingMode_Radius.m3"/>
+    </CModel>
 </Catalog>

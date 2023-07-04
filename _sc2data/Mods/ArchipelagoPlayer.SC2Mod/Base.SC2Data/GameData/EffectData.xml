@@ -10323,4 +10323,327 @@
         <!-- See Upgrade AP_AlarakSupplicantMaxShields -->
         <Amount value="25"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_DisruptionBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_DisruptionBeamDamage"/>
+        <PeriodicEffectArray value="AP_DisruptionBeamDamage"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_DisruptionBeamDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="AP_ForceField">
+        <ValidatorArray value="CliffLevelGE1"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="Placement" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnOwner Value="Neutral"/>
+        <SpawnEffect value="AP_ForceFieldTimedLife"/>
+        <SpawnUnit value="AP_ForceField"/>
+        <SpawnRange value="0"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_ForceFieldTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ForceFieldFate"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_GuardianShieldApplyBehavior">
+        <ValidatorArray index="0" value="SourceNotHidden"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_GuardianShield"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_GuardianShieldPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="SourceUnit"/>
+        <InitialEffect value="AP_GuardianShieldSearch"/>
+        <PeriodCount value="30"/>
+        <PeriodicValidator value="NotVortexd"/>
+        <PeriodicEffectArray value="AP_GuardianShieldSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_GuardianShieldSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <SearchFilters value="-;Neutral,Enemy,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="4" Effect="AP_GuardianShieldApplyBehavior"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_MonitorFakeWeapon">
+        <EffectArray value="AP_MonitorFakeWeaponTargetLockSearch"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_MonitorFakeWeaponTargetLockSearch">
+        <ValidatorArray value="AP_CasterNotMaxTargetLocks"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray>
+            <Arc value="169.9914"/>
+            <MaxCount value="1"/>
+            <Radius value="8"/>
+            <FacingAdjustment value="0.9997"/>
+            <Effect value="AP_ObserverTargetLockCP"/>
+        </AreaArray>
+        <SearchFlags index="CenterAtLaunch" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_ObserverSquadSightAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ObserverSquadSight"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_ObserverSquadSightSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="Visible;Neutral,Enemy,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="4" Effect="AP_ObserverSquadSightAB"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_ObserverTargetLockABCaster">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ObserverTargetLockCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ObserverTargetLockABTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ObserverTargetLock"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_ObserverTargetLockCP">
+        <ValidatorArray value="AP_NotHaveTargetLock"/>
+        <ValidatorArray value="AP_CasterNotMaxTargetLocks"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_ObserverTargetLockStartSet"/>
+        <FinalEffect value="AP_ObserverTargetLockFinishSet"/>
+        <PeriodicValidator value="AP_MonitorTargetLockChecks"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_ObserverTargetLockFinishSet">
+        <EffectArray value="AP_ObserverTargetLockRB"/>
+        <EffectArray value="AP_ObserverTargetLockRBCaster"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_ObserverTargetLockRB">
+        <EditorCategories value=""/>
+        <BehaviorLink value="AP_ObserverTargetLock"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_ObserverTargetLockRBCaster">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ObserverTargetLockCaster"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_ObserverTargetLockStartSet">
+        <EffectArray value="AP_ObserverTargetLockABTarget"/>
+        <EffectArray value="AP_ObserverTargetLockABCaster"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_SanitizationBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_SanitizationBeamDamage"/>
+        <PeriodicEffectArray value="AP_SanitizationBeamDamage"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_SanitizationBeamDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_VoidSentryChronoBeamAB">
+        <EditorCategories value=""/>
+        <Behavior value="AP_VoidSentryChronoBeam"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_VoidSentryChronoBeamCP">
+        <ValidatorArray value="AP_NotMaxVoidSentryChronoBeam"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireEffect value="AP_VoidSentryChronoBeamAB"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="AP_VoidSentryChronoBeam"/>
+        <PeriodicEffectArray value="AP_VoidSentryChronoBeamSet"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_VoidSentryChronoBeamSet">
+        <EffectArray value="AP_VoidSentryChronoBeamAB"/>
+    </CEffectSet>
+    <CEffectCreateHealer id="AP_VoidSentryShieldRepairDouble">
+        <ValidatorArray value="ShieldsNotFull"/>
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotVortexd"/>
+        <PeriodicEffect value="AP_VoidSentryShieldRepairDoublePeriodicSet"/>
+        <PeriodicPeriod value="0.33"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVital value="Shields"/>
+        <RechargeVitalRate value="9"/>
+        <InitialEffect value="AP_VoidSentryShieldRepairDoubleInitialSet"/>
+        <FinalEffect value="AP_SentryShieldRepairDoubleRemoveBehavior"/>
+    </CEffectCreateHealer>
+    <CEffectSet id="AP_VoidSentryShieldRepairDoubleInitialSet">
+        <!--EffectArray value="VoidSentryShieldRepairDoubleExtraDelay1"/-->
+        <EffectArray value="AP_SentryShieldRepairDoubleApplyBehavior"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidSentryShieldRepairDoublePeriodicSet">
+        <EffectArray value="AP_VoidSentryShieldRepairDoubleExtraDelay1"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_VoidSentryShieldRepairDoubleExtraDelay1">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_VoidSentryShieldRepairDoubleExtraSearch1"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <!--only need if you have to toggle on the extra heal via a behavior-->
+        <!--ValidatorArray value="HaveVoidSentryShieldRepairDouble"/-->
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_VoidSentryShieldRepairDoubleExtraSearch1">
+        <SearchFilters value="-;Self,Neutral,Enemy,Structure,Missile,Stasis,Dead"/>
+        <AreaArray MaxCount="1" Radius="5" Effect="AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactCP"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <ExcludeArray Value="Target"/>
+        <ExcludeArray/>
+        <!--ImpactLocation Value="TargetUnit"/-->
+        <ImpactLocation Value="CasterUnit"/>
+        <TargetSorts>
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactDummy"/>
+        <!--PeriodicEffectArray value="MercMedicHealExtraDelay2"/-->
+        <PeriodicEffectArray value="AP_VoidSentryShieldRepairDoubleExtra"/>
+        <PeriodicEffectArray value="AP_SentryShieldRepairDoubleApplyBehavior"/>
+        <PeriodicEffectArray value="AP_SentryShieldRepairDoubleRemoveBehavior"/>
+        <PeriodicPeriodArray value="0"/>
+        <!--PeriodicPeriodArray value="0"/-->
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.3"/>
+        <ValidatorArray value="AP_TargetNotBeingShieldRepaired"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="ShieldsNotFull"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateHealer id="AP_VoidSentryShieldRepairDoubleExtra">
+        <DrainVital value="Energy"/>
+        <RechargeVitalRate value="9"/>
+        <RechargeVital value="Shields"/>
+        <PeriodCount value="1"/>
+        <PeriodicPeriod value="0.33"/>
+        <Flags index="Channeled" value="0"/>
+    </CEffectCreateHealer>
+    <CEffectApplyBehavior id="AP_SentryShieldRepairDoubleApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_SentryShieldRepairDoubleHealing"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_SentryShieldRepairDoubleRemoveBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <BehaviorLink value="AP_SentryShieldRepairDoubleHealing"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectModifyUnit id="AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactDummy"/>
+    <CEffectCreatePersistent id="AP_SentryRepairTargetPersistent">
+        <ValidatorArray value="AP_TargetNotBeingRepaired"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="ShieldsNotFull"/>
+        <ValidatorArray value="AP_RepairBeamAvailable"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="AP_SentryRepairApplyBehaviorSet"/>
+        <FinalEffect value="AP_SentryRepairRemoveBehaviorSet"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <PeriodicValidator value="AP_RepairPeriodicCombine"/>
+        <PeriodicEffectArray value="AP_SentryRepairModifySet"/>
+        <PeriodicPeriodArray value="0.111"/>
+        <Marker Link="Abil/SentryRepair">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_SentryRepairApplyBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_SentryRepairApplyCasterBehavior"/>
+        <EffectArray value="AP_SentryRepairApplyTargetBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_SentryRepairApplyCasterBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_SentryRepairBeamBusy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SentryRepairApplyTargetBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SentryTargetBeingRepaired"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_SentryRepairRemoveBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_SentryRepairRemoveCasterBehavior"/>
+        <EffectArray value="AP_RepairRemoveTargetBehavior"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_SentryRepairRemoveCasterBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_SentryRepairBeamBusy"/>
+        <Count value="1"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RepairRemoveTargetBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_SentryTargetBeingRepaired"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_SentryRepairModifySet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_SentryRepairModifyCasterEnergy"/>
+        <EffectArray value="AP_SentryRepairModifyTargetShields"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_SentryRepairModifyCasterEnergy">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Energy" Change="-0.33"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_SentryRepairModifyTargetShields">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchUnit Value="Caster"/>
+        <VitalArray index="Shields" Change="1"/>
+    </CEffectModifyUnit>
+    <CEffectCreateHealer id="AP_VoidSentryShieldRepair">
+        <EditorCategories value="Race:Terran"/>
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="ShieldsNotFull"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotUncommandable"/>
+        <ValidatorArray value="SourceNotHidden"/>
+        <ValidatorArray value="AP_NotInterceptor"/>
+        <RechargeVitalRate value="9"/>
+        <RechargeVital value="Shields"/>
+        <PeriodicValidator value="ShieldsNotFull"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+    </CEffectCreateHealer>
+    <CEffectEnumArea id="AP_ForceFieldPlacement">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Air,Ground,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.7"/>
+    </CEffectEnumArea>
 </Catalog>

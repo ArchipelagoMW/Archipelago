@@ -69,6 +69,88 @@
         <GlossaryWeakArray value="Phoenix"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
     </CUnit>
+    <CUnit default="1" id="AP_SentryCampaignBase">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldsStart value="40"/>
+        <ShieldsMax value="40"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="42"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="90"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <AbilArray Link="BuildInProgress"/>
+        <WeaponArray Link="AP_DisruptionBeam"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+        </CardLayouts>
+        <SeparationRadius value="0.625"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="150"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="25"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkSentry"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="25"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryWeakArray value="Reaper"/>
+        <GlossaryWeakArray value="Hydralisk"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="5"/>
+            <ChanceArray index="Idle" value="90"/>
+            <ChanceArray index="Turn" value="5"/>
+        </Fidget>
+    </CUnit>
     <CUnit id="AP_Marine">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -12274,6 +12356,107 @@
         <InnerRadius value="0.75"/>
         <EditorCategories value="ObjectType:Other,ObjectFamily:FactionTaldarim"/>
     </CUnit>
+    <CUnit id="AP_ForceField">
+        <DeathRevealRadius value="0"/>
+        <DeathRevealDuration value="0"/>
+        <Race value="Prot"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Uncloakable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="Destructible" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="ForceCollisionCheck" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Colossus" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <Radius value="1.5"/>
+        <SeparationRadius value="0"/>
+        <InnerRadius value="0.5"/>
+        <PlacementFootprint value="Footprint3x3ForceField"/>
+        <SubgroupPriority value="31"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_Monitor">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="AISupport" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldsStart value="40"/>
+        <ShieldsMax value="40"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.75"/>
+        <Acceleration value="10"/>
+        <Sight value="11"/>
+        <Food value="-1"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="40"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="AP_ObserverTargetLock"/>
+        <AbilArray Link="AP_ForceFieldMonitor"/>
+        <AbilArray Link="ProgressRally"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <BehaviorArray Link="AP_SquadSightPersistentBehavior"/>
+        <WeaponArray Link="AP_MonitorFakeWeapon" Turret="FreeRotate"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_TargetLock" Type="AbilCmd" AbilCmd="AP_ObserverTargetLock,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SentryTaldarimForceField" Type="AbilCmd" AbilCmd="AP_ForceFieldMonitor,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_SquadSight" Type="Passive" Behavior="AP_SquadSightPersistentBehavior" Row="2" Column="2"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+        </CardLayouts>
+        <CargoSize value="2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <AIEvalFactor value="0"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="120"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
@@ -14128,6 +14311,107 @@
     <CUnit id="AP_SupplicantWeapon" parent="MISSILE">
         <Race value="Prot"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:FactionTaldarim"/>
+    </CUnit>
+    <CUnit id="AP_SentryAiur" parent="AP_SentryCampaignBase">
+        <AbilArray Link="AP_GuardianShieldVoid"/>
+        <AbilArray Link="AP_VoidSentryShieldRepairDouble"/>
+        <CardLayouts index="0">
+            <LayoutButtons Face="AP_GuardianShield" Type="AbilCmd" AbilCmd="AP_GuardianShieldVoid,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_VoidSentryShieldRepairDouble" Type="AbilCmd" AbilCmd="AP_VoidSentryShieldRepairDouble,0" Row="2" Column="0"/>
+        </CardLayouts>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
+    <CUnit id="AP_SentryPhasing">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldsStart value="40"/>
+        <ShieldsMax value="40"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="42"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="90"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_VoidSentryChronoBeam"/>
+        <AbilArray Link="AP_VoidSentryMobileMode"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <BehaviorArray Link="AP_SentryPowerSource"/>
+        <BehaviorArray Link="AP_MatrixOverload"/>
+        <WeaponArray/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_VoidSentryChronoBeam" Type="AbilCmd" AbilCmd="AP_VoidSentryChronoBeam,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_VoidSentryMobileMode" Type="AbilCmd" AbilCmd="AP_VoidSentryMobileMode,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_MatrixOverloadEnergizer" Type="Passive" Requirements="AP_HaveSOAMatrixOverload" Row="2" Column="1"/>
+        </CardLayouts>
+        <SeparationRadius value="0.625"/>
+        <InnerRadius value="0.375"/>
+        <ScoreMake value="150"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="25"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="Sentry"/>
+        <TacticalAIThink value="AIThinkSentry"/>
+        <LeaderAlias value="AP_SentryPurifier"/>
+        <HotkeyAlias value="AP_SentryPurifier"/>
+        <SelectAlias value="AP_SentryPurifier"/>
+        <SubgroupAlias value="AP_SentryPurifier"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="25"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryWeakArray value="Reaper"/>
+        <GlossaryWeakArray value="Hydralisk"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+        <AIEvaluateAlias value="Sentry"/>
+    </CUnit>
+    <CUnit id="AP_SentryPurifier" parent="AP_SentryCampaignBase">
+        <AbilArray Link="AP_VoidSentryChronoBeam"/>
+        <AbilArray Link="AP_VoidSentryPhasingMode"/>
+        <WeaponArray index="0" Link="AP_EnergizerWeapon"/>
+        <CardLayouts index="0">
+            <LayoutButtons Face="AP_VoidSentryChronoBeam" Type="AbilCmd" AbilCmd="AP_VoidSentryChronoBeam,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_VoidSentryPhasingMode" Type="AbilCmd" AbilCmd="AP_VoidSentryPhasingMode,Execute" Row="2" Column="1"/>
+        </CardLayouts>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
     </CUnit>
     <CUnit id="TechLab">
         <!-- Override -->

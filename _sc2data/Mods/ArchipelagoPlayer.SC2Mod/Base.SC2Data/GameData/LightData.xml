@@ -995,4 +995,44 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_MonitorPortrait" parent="default">
+        <ToDInfoArray index="0" Id="PortraitMonitor" AmbientColor="0.384314,0.200000,0.000000">
+            <Param index="HDRExposure" value="1.480000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.576471,0.729412,0.956863"/>
+                <ColorMultiplier value="2.786000"/>
+                <SpecColorMultiplier value="1.500000"/>
+                <Direction value="0.000000,-0.642788,-0.766044"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.721569,0.882353,0.972549" ColorMultiplier="1.000000" Direction="-0.600785,0.717258,0.352985"/>
+            <DirectionalLight index="Back" Color="0.039216,0.713726,0.839216" ColorMultiplier="4.000000" Direction="-0.267658,-0.763458,-0.587785"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
+    <CLight id="AP_PortraitEnergizerEx2Portrait" parent="default">
+        <ToDInfoArray index="0" Id="PortraitEnergizerEx2Portrait" AmbientColor="0.407843,0.219608,0.015686" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="HDRSpecMultiplier" value="2.000000"/>
+            <Param index="HDREmisMultiplier" value="1.400000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationSaturation" value="0.002000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.909804,1.000000,1.000000"/>
+                <ColorMultiplier value="1.080000"/>
+                <SpecColorMultiplier value="0.750000"/>
+                <Direction value="0.467223,-0.228183,-0.854187"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.109804,0.337255,0.937255" ColorMultiplier="3.758000" Direction="0.388527,0.388527,0.835520"/>
+            <DirectionalLight index="Back" Color="0.784314,0.431373,0.047059" ColorMultiplier="12.000000" Direction="-0.667985,0.114781,0.735270"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

@@ -2317,4 +2317,44 @@
         <Tooltip value="Button/Tooltip/AbilLockedLevel15"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_GuardianShield">
+        <Icon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_SentryTaldarimForceField">
+        <Icon value="Assets\Textures\btn-ability-protoss-forcefield-red.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-forcefield-red.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_SquadSight">
+        <Icon value="Assets\Textures\btn-ability-protoss-squadsight.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_TargetLock">
+        <Icon value="Assets\Textures\btn-ability-protoss-targetlock.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidSentryChronoBeam">
+        <Icon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>
+    </CButton>
+    <CButton id="AP_VoidSentryPhasingMode">
+        <Icon value="Assets\Textures\btn-ability-protoss-energizerphasingmode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-energizerphasingmode.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidSentryShieldRepairDouble">
+        <Icon value="Assets\Textures\btn-ability-protoss-doubleshieldrecharge.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidSentryMobileMode">
+        <Icon value="Assets\Textures\btn-ability-protoss-energizermobilemode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-energizermobilemode.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_MatrixOverloadEnergizer">
+        <Icon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

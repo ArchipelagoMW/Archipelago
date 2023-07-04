@@ -13460,9 +13460,84 @@
         <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
         <On Terms="ActorCreation" Send="AnimBracketStart Birth Birth"/>
         <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
-        <Model value="AP_Glaze_Alarak_COOP_Sacrifice"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModelMaterial>
+    <CActorModel id="AP_GuardianShield" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_GuardianShieldPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_GuardianShieldPersistent.Stop; At Caster" Send="AnimBracketStop BSD"/>
+        <On Terms="ModelEvent; ModelEventName SoundStart" Send="Create AP_GuardianShieldSoundBirth"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopStart" Send="Create AP_GuardianShieldSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopEnd" Target="AP_GuardianShieldSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName SoundLoopEnd" Send="Create AP_GuardianShieldSoundDeath"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSound id="AP_GuardianShieldSoundBirth" parent="SoundOneShot">
+        <Sound value="Sentry_GuardianShieldLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_GuardianShieldSoundLoop" parent="SoundContinuous">
+        <Sound value="Sentry_GuardianShieldLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_GuardianShieldSoundDeath" parent="SoundOneShot">
+        <Sound value="Sentry_GuardianShieldDeath"/>
+    </CActorSound>
+    <CActorModel id="AP_GuardianShieldImpact" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_GuardianShield.On" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenterSoft"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorUnit id="AP_Monitor" parent="GenericUnitStandard" unitName="AP_Monitor">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Sentry_Land"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap MonitorWarpIn"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="$Birth"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="ModelSwap Monitor"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="AnimBaselineStart"/>
+        <AnimBlendTime value="1.200000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_SentryTalDarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_MonitorDeath" SoundLink="AP_Havoc_Explode"/>
+        <PlacementModel value="AP_SentryTalDarimPlacement"/>
+        <PortraitModel value="AP_MonitorPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-sentry-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Havoc_Ready"/>
+        <SoundArray index="Help" value="AP_Havoc_Help"/>
+        <SoundArray index="What" value="AP_Havoc_What"/>
+        <SoundArray index="Yes" value="AP_Havoc_Yes"/>
+        <SoundArray index="Attack" value="AP_Havoc_Attack"/>
+        <SoundArray index="Pissed" value="AP_Havoc_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-sentry-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorRange id="AP_ObserverTargetLockRange" parent="RangeAbil" abil="AP_ObserverTargetLock"/>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -15312,7 +15387,7 @@
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="PhysicsDeathsVoidGround"/>
         <Macros value="TerrainSquibAnimations"/>
-<!--        <On Terms="UnitDeathCustomize; KilledByEffect AP_AscendantSacrificeKillSupplicant" Send="DeathCustomize Shadow"/>-->
+        <!--        <On Terms="UnitDeathCustomize; KilledByEffect AP_AscendantSacrificeKillSupplicant" Send="DeathCustomize Shadow"/>-->
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Adept_Land"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
         <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
@@ -15355,7 +15430,6 @@
     <CActorAction id="AP_SupplicantAttack" parent="GenericAttack" effectImpact="AP_SupplicantDamage" effectLaunch="AP_SupplicantLM">
         <LaunchSiteOps Ops="SOpAttachWeaponRight"/>
         <LaunchAssets Model="AP_Supplicant_COOP_Missile_Launch" Sound="AP_Supplicant_AttackLaunch"/>
-        <Missile value="AP_SupplicantAttackMissile"/>
         <ImpactMap index="None" Model="AP_SupplicantImpact" Sound="AP_Supplicant_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_SupplicantAttackMissile" parent="GenericAttackMissile" unitName="AP_SupplicantWeapon"/>
@@ -15375,6 +15449,521 @@
         <On Terms="UnitDeathCustomize.AP_Supplicant; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
         <Sound value="AP_ZealotAlarak_Death"/>
     </CActorSound>
+    <CActorAction id="AP_SanitizationAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_SanitizationBeam.Start" Send="Create"/>
+        <On Terms="Effect.AP_SanitizationBeamDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_SanitizationBeam.Stop" Send="Destroy WhenReady"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SanitizationAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <On Terms="Effect.AP_SanitizationBeam.Stop; At Effect" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::actor.CasterUnit _Unit Caster Find"/>
+        <On Terms="ActorCreation" Target="::actor.CasterUnit" Send="Signal CampaignBeamCreated"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SanitizationAttackLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_SanitizationBeam.Start" Send="Create"/>
+        <On Terms="Effect.AP_SanitizationBeam.Stop" Send="Destroy"/>
+        <Sound value="AP_Sanitization_WeaponLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_SanitizationAttackStart" parent="SoundOneShot">
+        <On Terms="Effect.AP_SanitizationBeam.Start" Send="Create"/>
+        <Sound value="AP_Sanitization_WeaponStart"/>
+    </CActorSound>
+    <CActorSound id="AP_SanitizationAttackStop" parent="SoundOneShot">
+        <On Terms="Effect.AP_SanitizationBeam.Stop" Send="Create"/>
+        <Sound value="AP_Sanitization_WeaponEnd"/>
+    </CActorSound>
+    <CActorUnit id="AP_SentryAiur" parent="GenericUnitBase" unitName="AP_SentryAiur">
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
+        <On Terms="Abil.ForceField.SourceCastStart" Send="$Spell"/>
+        <On Terms="Effect.AP_GuardianShieldPersistent.Start" Send="AnimBracketStart Guardian Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Effect.AP_GuardianShieldPersistent.Stop" Send="AnimBracketStop Guardian"/>
+        <On Terms="Signal.*.CampaignBeamCreated" Send="RefSetFromMsg ::actor.MyAttackBeam ::Sender"/>
+        <On Terms="Signal.*.UnitRemoved" Target="::actor.MyAttackBeam" Send="Destroy Immediate"/>
+        <HostSiteOps Ops="SOpBankerSentry"/>
+        <AnimBlendTime value="0.650000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="AP_SentryAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_SentryAiurDeath" SoundLink="Sentry_Explode"/>
+        <PlacementModel value="AP_SentryAiurPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="SentryPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <BarOffset value="40"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-sentry.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Sentry_Birth"/>
+        <SoundArray index="Ready" value="Sentry_Ready"/>
+        <SoundArray index="Help" value="Sentry_Help"/>
+        <SoundArray index="What" value="Sentry_What"/>
+        <SoundArray index="Yes" value="Sentry_Yes"/>
+        <SoundArray index="Attack" value="Sentry_Attack"/>
+        <SoundArray index="Pissed" value="Sentry_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-sentry.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-sentry-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-sentry-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-sentry-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Sentry_Land" parent="SoundOneShot">
+        <Sound value="Sentry_Land"/>
+    </CActorSound>
+    <CActorAction id="AP_SentryAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_DisruptionBeam.Start" Send="Create"/>
+        <On Terms="Effect.AP_DisruptionBeamDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_DisruptionBeam.Stop" Send="Destroy WhenReady"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SentryAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <On Terms="Effect.AP_DisruptionBeam.Stop; At Effect" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::actor.CasterUnit _Unit Caster Find"/>
+        <On Terms="ActorCreation" Target="::actor.CasterUnit" Send="Signal CampaignBeamCreated"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SentryAttackLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_DisruptionBeam.Start" Send="Create"/>
+        <On Terms="Effect.AP_DisruptionBeam.Stop" Send="Destroy"/>
+        <Sound value="Sentry_WeaponLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryAttackStart" parent="SoundOneShot">
+        <On Terms="Effect.AP_DisruptionBeam.Start" Send="Create"/>
+        <Sound value="Sentry_WeaponStart"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryAttackStop" parent="SoundOneShot">
+        <On Terms="Effect.AP_DisruptionBeam.Stop" Send="Create"/>
+        <Sound value="Sentry_WeaponEnd"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_SentryChronoBeamBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_VoidSentryChronoBeamCP.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryChronoBeamCP.Stop" Send="AnimBracketStop BSD"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SentryChronoBeamSoundLoop" parent="SoundContinuous">
+        <On Terms="Effect.VoidSentryChronoBeamCP.Stop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="SentryPurifier_ChronoBeam_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryChronoBeamSoundStart" parent="SoundOneShot">
+        <On Terms="Effect.AP_VoidSentryChronoBeamCP.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="AP_SentryPurifier_ChronoBeam"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryChronoBeamSoundStop" parent="SoundOneShot">
+        <Sound value="AP_SentryPurifier_ChronoBeam_End"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_SentryDoubleHealBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_SentryRepairTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_SentryRepairTargetPersistent.Stop; At Target" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="AP_NanoRepairBeam"/>
+        <HostLaunchSiteOps Ops="SOpCasterUnit SOpAttachCenter"/>
+        <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_SentryDoubleHealModel">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.SentryRepairTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.SentryRepairTargetPersistent.Stop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="AP_NanoRepairBeamImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_SentryEnsnareDeath" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SentryEnsnare.Off" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachTarget"/>
+        <Sound value="AP_Sentry_EnsnareDeath"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryEnsnareLaunch" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SentryEnsnare.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachTarget"/>
+        <Sound value="AP_Sentry_EnsnareLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_SentryForceFieldAddition">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} Stand"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SentryForceFieldAdditionOffset"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="AP_SentryForceFieldAdditionOffset">
+        <LocalOffset value="0.000000,0.220000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSound id="AP_SentryForceFieldLaunch" parent="SoundOneShot">
+        <!--        <On Terms="Abil.ForceField.SourcePrepStart" Send="Create"/>-->
+        <On Terms="Abil.AP_ForceFieldMonitor.SourcePrepStart" Send="Create"/>
+        <Sound value="Sentry_ForceFieldLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryForceFieldSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_ForceField.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachTarget"/>
+        <Sound value="Sentry_ForceFieldLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryMonitor_TargetLock_On_ActorSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_ObserverTargetLockCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_ObserverTargetLockCP.Stop" Send="AnimBracketStop BSD"/>
+        <Sound value="AP_SentryMonitor_TargetLock_Ping"/>
+        <Layers Sound="AP_SentryMonitor_TargetLock_On">
+            <Chance value="0"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_SentryMonitor_TargetLock_Ping_ActorSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ObserverTargetLock.On; ValidateUnit AP_TargetLockUnitRadiusLarge" Send="Create"/>
+        <Sound value="AP_SentryMonitor_TargetLock_On"/>
+    </CActorSound>
+    <CActorUnit id="AP_SentryPurifier" parent="GenericUnitStandard" unitName="AP_SentryPurifier">
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_SentryPurifier; MorphTo AP_SentryPhasing" Send="AnimBracketStart Work Stand,Work,Start,A Stand,Work,A Stand,Work,End,A"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_SentryPhasing; MorphTo AP_SentryPurifier" Send="AnimBracketStop Work"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Sentry_Land"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SentryPurifier" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SentryPurifier" Send="Destroy"/>
+        <On Terms="Signal.*.CampaignBeamCreated" Send="RefSetFromMsg ::actor.MyAttackBeam ::Sender"/>
+        <On Terms="Signal.*.UnitRemoved" Target="::actor.MyAttackBeam" Send="Destroy Immediate"/>
+        <HostSiteOps Ops="SOpBankerSentry"/>
+        <AnimBlendTime value="0.650000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="AP_SentryPurifierWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_SentryPurifierDeath" SoundLink="AP_Energizer_Explode"/>
+        <PlacementModel value="AP_SentryPurifierPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_SentryPurifierPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <BarOffset value="40"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Energizer_Ready"/>
+        <SoundArray index="Help" value="AP_Energizer_Help"/>
+        <SoundArray index="What" value="AP_Energizer_What"/>
+        <SoundArray index="Yes" value="AP_Energizer_Yes"/>
+        <SoundArray index="Attack" value="AP_Energizer_Attack"/>
+        <SoundArray index="Pissed" value="AP_Energizer_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_SentryPhasing" parent="GenericUnitStandard" unitName="AP_SentryPhasing">
+        <PortraitModel value="AP_SentryPurifierPortrait"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
+        <On Terms="UnitBirth.AP_SentryPhasing" Send="AnimBracketStart Work {} Stand,Work,A Stand,Work,End,A Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SentryPurifier; MorphTo AP_SentryPhasing" Send="AnimBracketStart Work {} Stand,Work,A Stand,Work,End,A Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_SentryPhasing; MorphTo AP_SentryPurifier" Send="AnimBracketStop Work"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SentryPhasing" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SentryPhasing" Send="Destroy"/>
+        <DeathArray index="Normal" ModelLink="AP_SentryPurifierDeath" SoundLink="Energizer_Explode"/>
+        <BarWidth value="50"/>
+        <BarOffset value="40"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-phasemode-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-phasemode-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-phasemode-shield03.dds"/>
+        </WireframeShield>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-phasemode.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-sentry-purifier-phasemode.dds"/>
+        </Wireframe>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <HostSiteOps Ops="SOpBankerSentry"/>
+        <SoundArray index="Ready" value="AP_Energizer_Ready"/>
+        <SoundArray index="What" value="AP_Energizer_What"/>
+        <SoundArray index="Yes" value="AP_Energizer_Yes"/>
+        <SoundArray index="Attack" value="AP_Energizer_Attack"/>
+        <SoundArray index="Pissed" value="AP_Energizer_Pissed"/>
+    </CActorUnit>
+    <CActorSound id="AP_SentryPhasingModeSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SentryPhasing" Send="Create"/>
+        <Sound value="AP_SentryPurifier_PhaseMode_On"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryMobileModeSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SentryPurifier" Send="Create"/>
+        <Sound value="AP_SentryPurifier_MobileMode_On"/>
+    </CActorSound>
+    <CActorPower id="AP_SentryPower">
+        <On Terms="Behavior.AP_SentryPowerSource.Create; !Option Model Low" Send="Create"/>
+        <On Terms="Behavior.AP_SentryPowerSource.Destroy; !Option Model Low" Send="Destroy"/>
+        <VisualArray value="UnpoweredVisual"/>
+        <VisualArray value="AP_SentryPowerVisual"/>
+    </CActorPower>
+    <CActorPower id="AP_SentryPowerLow">
+        <PowerSource value="PowerSource"/>
+        <On Terms="Behavior.AP_SentryPowerSource.Create; Option Model Low" Send="Create"/>
+        <On Terms="Behavior.AP_SentryPowerSource.Destroy; Option Model Low" Send="Destroy"/>
+        <VisualArray value="UnpoweredVisualLow"/>
+        <VisualArray value="AP_SentryPowerVisualLow"/>
+    </CActorPower>
+    <CActorSplat id="AP_SentryPowerVisual">
+        <FogVisibility value="Visible"/>
+        <FadeIn value="0.000000"/>
+        <FadeOut value="0.000000"/>
+        <HoldTime value="-1.000000"/>
+        <Layer value="PowerLayer"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow SOpForwardNorth"/>
+    </CActorSplat>
+    <CActorRange id="AP_SentryPowerVisualLow">
+        <Icon value="Assets\Textures\PylonLowRingSplat.dds"/>
+        <IconArcLength value="0.750000"/>
+        <Behavior value="PowerSource"/>
+    </CActorRange>
+    <CActorBeamSimple id="AP_SentryShieldRepairBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStop" Send="AnimBracketStop BSD"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="AP_Sentry_HealingBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <!-- The effect doesn't exist -->
+    <CActorAction id="AP_SentryShieldRepairBeamAction" parent="GenericAttack" effectAttack="AP_SentryShieldRepairDoubleImpactDummy">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SentryShieldRepairBeamActionBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="TimerSet 0.500000 Beam"/>
+        <On Terms="TimerExpired; TimerName Beam" Send="AnimBracketStop BSD"/>
+        <Model value="Sentry_HealingBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SentryShieldRepairDoubleSoundLoop" parent="SoundContinuous">
+        <!-- This Effect doesn't exist (is commented out)-->
+        <On Terms="Effect.AP_SentryShieldRepairDoubleHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_SentryShieldRepairDoubleHeal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_SentryShieldRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_SentryShieldRepairSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="AP_SentryShieldRepair_Loop"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_SentryShieldRepairFirstBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <!-- This Effect doesn't exist (is commented out)-->
+        <On Terms="Effect.AP_SentryShieldRepairDoubleHeal.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_SentryShieldRepairDoubleHeal.TargetStop" Send="AnimBracketStop BSD"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="AP_Sentry_HealingBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_SentryShieldRepairModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStop; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStop; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_Sentry_HealingBeam_Impact"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_SentryShieldRepairSecondModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <!-- This Effect doesn't exist (is commented out)-->
+        <On Terms="Effect.AP_SentryShieldRepairDoubleSecondHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_SentryShieldRepairDoubleSecondHeal.TargetStop; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_Sentry_HealingBeam_Impact"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_SentryShieldRepairSoundLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepair.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDouble.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="Effect.AP_SentryRepairTargetPersistent.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_SentryRepairTargetPersistent.Stop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_SentryShieldRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_SentryShieldRepairSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="AP_SentryShieldRepair_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryShieldRepairSoundStart" parent="SoundOneShot">
+        <Sound value="Medivac_HealStart"/>
+    </CActorSound>
+    <CActorSound id="AP_SentryShieldRepairSoundStop" parent="SoundOneShot">
+        <Sound value="Medivac_HealEnd"/>
+    </CActorSound>
+    <CActorModel id="AP_SentryWarpPrismAddition" parent="ModelAddition">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SentryPhasing" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SentryPurifier" Send="AnimBracketStop Work"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpUpsideDown SOpMoveUpByDot15"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="AP_SquadSightAttachment" parent="ModelAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_SquadSightPersistentBehavior.On" Send="Create"/>
+        <On Terms="Behavior.AP_SquadSightPersistentBehavior.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpBasicScopeFollow" HoldRotation="1"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_TargetLockAttachment" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_ObserverTargetLock.On; ValidateUnit AP_TargetLockUnitRadiusSmall" Send="Create"/>
+        <On Terms="Behavior.AP_ObserverTargetLock.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <AutoScaleFactor value="0.700000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_TargetLockAttachmentLarge" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_ObserverTargetLock.On; ValidateUnit AP_TargetLockUnitRadiusLarge" Send="Create"/>
+        <On Terms="Behavior.AP_ObserverTargetLock.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorBeamSimple id="AP_TargetLockLaserBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_ObserverTargetLockCP.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_ObserverTargetLockCP.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.DarkArchonMindControlRemoveTargetLock.Start; At Target" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="Create AP_SentryMonitor_TargetLock_Loop_ActorSound"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SentryMonitor_TargetLock_Loop_ActorSound" parent="SoundContinuous">
+        <Sound value="AP_SentryMonitor_TargetLock_Loop"/>
+    </CActorSound>
+    <CActorSplat id="AP_ForceFieldMonitorCursorSplat" parent="ProtossCursorSplat" abil="AP_ForceFieldMonitor"/>
+    <CActorRange id="AP_ForceFieldMonitorRange" parent="RangeAbil" abil="AP_ForceFieldMonitor"/>
+    <CActorUnit id="AP_ForceField" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_ForceField">
+        <Model value="ForceField"/>
+        <BuildModel value="ForceField"/>
+        <On Terms="ActorCreation" Send="Create SoundEmitter Sentry_ForceFieldLoop"/>
+        <DeathArray index="Normal" SoundLink="Sentry_ForceFieldDeath"/>
+        <PlacementModel value="Invisible"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+        <UnitIcon value="Assets\Textures\BTN-Ability-Terran-ScannerSweep.dds"/>
+        <HeroIcon value="Assets\Textures\BTN-Ability-Terran-ScannerSweep.dds"/>
+    </CActorUnit>
+    <CActorModel id="AP_SentryShieldRepairModelSecondary" parent="ModelAnimationStyleOneShot">
+        <Model value="AP_Sentry_HealingBeam_Impact"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactDummy.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.333000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorBeamSimple id="AP_SentryShieldRepairBeamSecondBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <Model value="AP_Sentry_HealingBeam"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.333000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_SentryShieldRepairBeamSecond" parent="GenericAttack" effectAttack="AP_VoidSentryShieldRepairDoubleExtraSearch1ImpactDummy">
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ImpactMap index="None" Model="" Sound=""/>
+        <LaunchRequest Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

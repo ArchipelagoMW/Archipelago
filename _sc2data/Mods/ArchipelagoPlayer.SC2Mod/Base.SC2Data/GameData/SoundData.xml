@@ -6581,4 +6581,204 @@
         <Flags index="NeedsUpdate" value="1"/>
         <Flags index="NeedsTTS" value="1"/>
     </CSound>
+    <CSound id="AP_Energizer_Attack" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Energizer_Attack01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Attack02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Attack03.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Energizer_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="5.000000,7.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Energizer_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Energizer_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\Energizer_Pissed01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Pissed02.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Energizer_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\Energizer_Ready01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Energizer_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Energizer_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_What02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_What03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_What04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Energizer_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Energizer_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Yes03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Energizer_Yes04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_Attack" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack05.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Attack06.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="5.000000,7.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Havoc_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\Havoc_Pissed01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Pissed02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Pissed03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Pissed04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\Havoc_Ready01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Havoc_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_What02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_What03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_What04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Havoc_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Havoc_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Yes03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Yes04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Havoc_Yes05.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Sanitization_WeaponEnd" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_WeaponEnd.wav"/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.000000,-1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Sanitization_WeaponLoop" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_WeaponLoop.wav"/>
+        <DupeMuteCount value="4"/>
+        <LoopCount value="-1"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <OffsetFadeOut/>
+        <OffsetFadeOut Time="100" Volume="-96.000000"/>
+        <OverlapTimeDelta value="100"/>
+        <Pitch value="-1.000000,0.000000"/>
+        <SustainFade index="1" Time="100"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Sanitization_WeaponStart" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_WeaponStart.wav"/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.000000,1.640000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_SentryMonitor_TargetLock_On" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryMonitor_TargetLock_On_01.wav" FacialGroup=""/>
+        <Pitch value="-9.000000,-8.700000"/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_SentryMonitor_TargetLock_Ping" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryMonitor_Target_Ping_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryMonitor_Target_Ping_03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,-0.700000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_SentryPurifier_ChronoBeam" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_04.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_05.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,0.000000"/>
+        <Volume value="-3.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Sentry_EnsnareDeath" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_ForceFieldDeath0.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Volume value="-4.560000,-4.560000"/>
+    </CSound>
+    <CSound id="AP_Sentry_EnsnareLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Sentry\Sentry_ForceFieldLaunch.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_SentryShieldRepair_Loop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ShieldBattery_ReCharge2_Loop.wav" FacialGroup=""/>
+        <LoopCount value="-1"/>
+        <Pitch value="1.000000,2.000000"/>
+        <Volume value="-11.000000,-11.000000"/>
+    </CSound>
+    <CSound id="AP_SentryMonitor_TargetLock_Loop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryMonitor_TargetBeam_Loop_01.wav" LoopCount="-1" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryMonitor_TargetBeam_Loop_02.wav" LoopCount="-1" FacialGroup=""/>
+        <Pitch value="-1.000000,-1.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_SentryPurifier_PhaseMode_On" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_PhaseMode_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_PhaseMode_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_PhaseMode_03.wav" Pitch="-2.000000,-2.000000" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_SentryPurifier_MobileMode_On" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_MobileMode_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_MobileMode_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_MobileMode_03.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_SentryPurifier_ChronoBeam_End" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_End_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SentryPurifier_ChronoBeam_End_02.wav" Pitch="-1.000000,-1.000000" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
 </Catalog>

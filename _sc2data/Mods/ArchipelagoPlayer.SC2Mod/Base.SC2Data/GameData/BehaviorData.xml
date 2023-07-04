@@ -3841,7 +3841,7 @@
         <DisplayDuration index="Neutral" value="1"/>
         <DisplayDuration index="Enemy" value="1"/>
         <DisableValidatorArray value="AP_NotBeingAbducted"/>
-<!--        <DisableValidatorArray value="KD8CasterKnockingBack"/>-->
+        <!--        <DisableValidatorArray value="KD8CasterKnockingBack"/>-->
         <Duration value="10.0625"/>
         <FinalEffect value="AP_AdeptPhaseShiftCancel"/>
         <ExpireEffect value="AP_AdeptPhaseShiftCancel"/>
@@ -3900,4 +3900,85 @@
         <PowerLink value="PowerSource"/>
         <PoweredWhileUnderConstruction value="1"/>
     </CBehaviorPowerUser>
+    <CBehaviorBuff id="AP_ForceFieldFate" parent="TimedLife">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="0"/>
+        <DisplayDuration index="Ally" value="0"/>
+        <Duration value="15"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ObserverSquadSight">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-squadsight.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification RangedWeaponRange="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ObserverTargetLockCaster">
+        <InfoFlags index="Hidden" value="1"/>
+        <MaxStackCount value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SquadSightPersistentBehavior">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="IsNotWarpingIn"/>
+        <DisableValidatorArray value="AP_NotOracleStasisTrapped"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_ObserverSquadSightSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidSentryChronoBeam">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronobeam.dds"/>
+        <Duration value="10"/>
+        <Modification>
+            <AdditiveMoveSpeedFactor value="0.5"/>
+            <AdditiveAttackSpeedFactor value="0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SentryTargetBeingRepaired">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SentryRepairBeamBusy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <MaxStackCount value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SentryShieldRepairDoubleHealing">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <MaxStackCount value="5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SentryEnsnare">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="NotFrenzied"/>
+        <RemoveValidatorArray value="AP_TargetIsNotUnstoppable"/>
+        <Duration value="10"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <!-- Vanilla tagets a lot of morphs but leaving some gaps-->
+            <AbilClassDisableArray index="CAbilMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GuardianShield">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.6"/>
+        <DamageResponse>
+            <Kind index="Spell" value="0"/>
+            <Kind index="Melee" value="1"/>
+            <Kind index="Splash" value="1"/>
+            <ModifyAmount value="-2"/>
+            <Chance value="1"/>
+        </DamageResponse>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-shieldbattery.dds"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="AP_SentryPowerSource">
+        <PowerLink value="PowerSource"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Radius value="7.5"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorPowerSource>
 </Catalog>
