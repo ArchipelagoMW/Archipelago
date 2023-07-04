@@ -373,7 +373,9 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
-                        checks_done[location_to_area[location]] += 1
+                        area_name = location_to_area.get(location, None)
+                        if area_name:
+                            checks_done[area_name] += 1
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
