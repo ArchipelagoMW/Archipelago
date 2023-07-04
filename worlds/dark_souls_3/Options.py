@@ -181,7 +181,7 @@ class LateBasinOfVowsOption(Toggle):
 class LateDLCOption(Toggle):
     """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, 
     effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, 
-    and being able to get into Irithyll of the Boreal Valley"""
+    and being able to get into Irithyll of the Boreal Valley."""
     display_name = "Late DLC"
 
 

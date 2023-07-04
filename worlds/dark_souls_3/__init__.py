@@ -47,7 +47,7 @@ class DarkSouls3World(World):
     web = DarkSouls3Web()
     data_version = 6
     base_id = 100000
-    enabled_location_categories: Set[DS3LocationCategory] = set()
+    enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
@@ -340,7 +340,7 @@ class DarkSouls3World(World):
         return DarkSouls3Item(name, item_classification, data, self.player)
 
 
-    def get_filler_item_name(self) -> Item:
+    def get_filler_item_name(self) -> str:
         return "Soul of an Intrepid Hero"
 
 
