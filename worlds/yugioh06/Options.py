@@ -66,6 +66,7 @@ class BoosterPackPrices(Range):
     display_name = "Booster Pack Prices"
     range_start = 1
     range_end = 3000
+    default = 300
 
 
 ygo06_options: typing.Dict[str, type(Option)] = {

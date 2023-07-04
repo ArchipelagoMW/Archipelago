@@ -169,7 +169,7 @@ item_to_index = {
     "Banlist September 2004": 170,
     "Banlist March 2005": 171,
     "Banlist September 2005": 172,
-    "Money": 254,
+    "5000DP": 254,
     "Remote": 255
 }
 
@@ -267,6 +267,6 @@ excluded_items = {
     "All Traps",
     "All Spells",
     "All at Random",
-    "Money",
+    "5000DP",
     "Remote"
 }

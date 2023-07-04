@@ -75,10 +75,10 @@ class Yugioh06World(World):
     for k, v in Campaign_Opponents.items():
         location_name_to_id[k] = v + start_id
 
-    for k, v in Required_Cards.items():
+    for k, v in special.items():
         location_name_to_id[k] = v + start_id
 
-    for k, v in special.items():
+    for k, v in Required_Cards.items():
         location_name_to_id[k] = v + start_id
 
     set_rules = set_rules
@@ -106,9 +106,9 @@ class Yugioh06World(World):
 
         while len(item_pool) < len(self.location_name_to_id):
             item = Yugioh2006Item(
-                "Money",
+                "5000DP",
                 ItemClassification.filler,
-                self.item_name_to_id["Money"],
+                self.item_name_to_id["5000DP"],
                 self.player
             )
             item_pool.append(item)
@@ -245,7 +245,7 @@ class Yugioh06World(World):
         banlist_data_location = 0xf4496
         rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
         randomizer_data_start = 0x0000f310
-        for location in self.multiworld.get_locations():
+        for location in self.multiworld.get_locations(self.player):
             item = location.item.name
             if location.item.player != self.player:
                 item = "Remote"
