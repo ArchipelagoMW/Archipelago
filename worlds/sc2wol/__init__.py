@@ -62,7 +62,9 @@ class SC2WoLWorld(World):
             self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache
         )
 
-    def generate_basic(self):
+    def create_items(self):
+        setup_events(self.player, self.locked_locations, self.location_cache)
+
         excluded_items = get_excluded_items(self.multiworld, self.player)
 
         starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
@@ -74,7 +76,6 @@ class SC2WoLWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
         self.multiworld.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
 
     def get_filler_item_name(self) -> str:
