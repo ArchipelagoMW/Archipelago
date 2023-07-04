@@ -75,13 +75,12 @@ FIGURINES: Dict[str, ShopData] = {
 def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str, int]]:
     shop_price_mod = world.multiworld.shop_price[world.player].value
     shop_price_planned = world.multiworld.shop_price_plan[world.player]
-    local_random: Random = world.multiworld.per_slot_randoms[world.player]
 
     shop_prices: Dict[str, int] = {}
     figurine_prices: Dict[str, int] = {}
     for item, price in shop_price_planned.value.items():
         if not isinstance(price, int):
-            price = local_random.choices(list(price.keys()), weights=list(price.values()))[0]
+            price = world.random.choices(list(price.keys()), weights=list(price.values()))[0]
         if "Figurine" in item:
             figurine_prices[item] = price
         else:
@@ -90,7 +89,7 @@ def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str
     remaining_slots = [item for item in [*SHOP_ITEMS, *FIGURINES] if item not in shop_price_planned.value]
     for shop_item in remaining_slots:
         shop_data = SHOP_ITEMS.get(shop_item, FIGURINES.get(shop_item))
-        price = local_random.randint(shop_data.min_price, shop_data.max_price)
+        price = world.random.randint(shop_data.min_price, shop_data.max_price)
         adjusted_price = min(int(price * shop_price_mod / 100), 5000)
         if "Figurine" in shop_item:
             figurine_prices[shop_item] = adjusted_price

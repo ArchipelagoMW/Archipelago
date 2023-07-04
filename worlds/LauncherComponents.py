@@ -104,7 +104,7 @@ components: List[Component] = [
     # Pokémon
     Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
     # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client'),
+    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
@@ -116,6 +116,9 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.apzl')),
     # Kingdom Hearts 2
     Component('KH2 Client', "KH2Client"),
+
+    #MegaMan Battle Network 3
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
 
