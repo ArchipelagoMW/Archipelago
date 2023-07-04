@@ -10703,4 +10703,24 @@
     <CEffectDamage id="AP_ShieldBatteryRechargeChanneledDamageDummy">
         <EditorCategories value="Race:Protoss"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_ZergBuildingNotOnCreepDamage">
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="AP_ZergBuildingSpawnBroodling6">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnOwner Value="Caster"/>
+        <SpawnEffect value="AP_BroodlingTimedLife"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnCount value="6"/>
+    </CEffectCreateUnit>
+    <CEffectCreatePersistent id="AP_ZergBuildingSpawnBroodling6Delay">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ExpireDelay value="0.5"/>
+        <FinalEffect value="AP_ZergBuildingSpawnBroodling6"/>
+    </CEffectCreatePersistent>
 </Catalog>

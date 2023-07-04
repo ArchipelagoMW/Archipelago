@@ -3996,4 +3996,25 @@
             <TurretDisableArray value="AP_KhaydarinMonolith"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZergBuildingDies6">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="AP_ZergBuildingSpawnBroodling6Delay">
+                <Type index="Remove" value="0"/>
+            </DeathResponse>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZergBuildingNotOnCreep">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <Requirements value="NotOnCreep"/>
+        <Period value="0.3332"/>
+        <PeriodicEffect value="AP_ZergBuildingNotOnCreepDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZergGenericDeath">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
 </Catalog>

@@ -3419,4 +3419,8 @@
         <Vital value="Energy"/>
         <WhichUnit Value="Caster"/>
     </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasZergGenericDeath">
+        <Value value="1"/>
+        <Behavior value="AP_ZergGenericDeath"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

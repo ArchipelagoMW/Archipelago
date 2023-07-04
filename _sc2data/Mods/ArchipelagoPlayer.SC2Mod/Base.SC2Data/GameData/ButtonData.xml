@@ -2361,4 +2361,19 @@
         <Icon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_UltraliskPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_UltraliskNoxiousPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk-noxious.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk-noxious.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_UltraliskTorrasquePassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

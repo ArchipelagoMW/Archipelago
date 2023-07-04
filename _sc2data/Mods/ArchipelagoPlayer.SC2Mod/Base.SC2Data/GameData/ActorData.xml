@@ -16087,7 +16087,6 @@
         <SoundArray index="Birth" value="PylonBirth"/>
         <SoundArray index="Ready" value="Obelisk_What"/>
         <SoundArray index="Help" value="PylonHelp"/>
-        <SoundArray index="What" value="AP_ShieldBattery_What"/>
         <SoundArray index="Yes" value="PylonYes"/>
         <SoundArray index="Attack" value="PylonYes"/>
         <SoundArray index="Pissed" value="PylonPissed"/>
@@ -16153,6 +16152,30 @@
         <On Terms="ActorOrphan" Send="Destroy"/>
         <Sound value="AP_ShieldBattery_Recharge_Loop2"/>
     </CActorSound>
+    <CActorUnit id="AP_UltraliskCavern" parent="ZergBuildingEx" unitName="AP_UltraliskCavern">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="UltraliskCavern"/>
+        <BuildModel value="UltraliskCavern"/>
+        <DeathArray index="Normal" ModelLink="UltraliskCavernDeath" SoundLink="UltraliskCavern_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="UltraliskCavernDeathUnderConstruction" SoundLink="UltraliskCavern_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="UltraliskCavernPlacement"/>
+        <PortraitModel value="UltraliskCavernPortrait"/>
+        <BarOffset value="135"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-UltraliskCavern.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-ultraliskcavern.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="UltraliskCavern_Ready"/>
+        <SoundArray index="What" value="UltraliskCavern_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-ultraliskcavern.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-UltraliskCavern.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
@@ -21424,4 +21447,12 @@
         <Sound value="WarpPrism_MorphToTransport"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrism" Send="Create"/>
     </CActorSound>
+    <CActorStateMonitor id="ZergBloodMediumBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorStateMonitor id="MechaFlamesMediumBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
+    </CActorStateMonitor>
 </Catalog>
