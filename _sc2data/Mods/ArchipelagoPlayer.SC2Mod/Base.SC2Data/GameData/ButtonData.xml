@@ -2441,4 +2441,14 @@
         <HotkeyAlias value="zergflyerattack1"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_HydraliskLurkerPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_LurkerPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

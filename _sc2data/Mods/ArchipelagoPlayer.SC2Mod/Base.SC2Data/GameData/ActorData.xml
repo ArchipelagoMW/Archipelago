@@ -13615,8 +13615,8 @@
     <CActorSplat id="AP_KhaydarinMonolithSplat" parent="GenericUnitSplat" unitName="AP_KhaydarinMonolith"/>
     <CActorUnit id="AP_GreaterSpire" parent="ZergBuildingEx" unitName="AP_GreaterSpire">
         <Aliases value="_UnitHuge"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="Create"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="AnimPlay Morph Morph 0 0.000000 0.000000 2.000000 AsDuration"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_GreaterSpire" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_GreaterSpire" Send="AnimPlay Morph Morph 0 0.000000 0.000000 2.000000 AsDuration"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
         <Model value="GreaterSpire"/>
         <BuildModel value="GreaterSpireBuild"/>
@@ -13656,6 +13656,38 @@
             <Volume value="0.000000,0.000000"/>
         </Layers>
     </CActorSound>
+    <CActorUnit id="AP_LurkerDen" parent="ZergBuilding" unitName="AP_LurkerDen">
+        <Aliases value="_ZergBuildingMorphModel"/>
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Waiting" Send="DeathCustomize Upgrade"/>
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 2" Send="AnimClear Waiting"/>
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 2" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Create AP_HydraliskDen"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Target="AP_HydraliskDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Destroy"/>
+        <BuildModel value="AP_LurkerDenBuild"/>
+        <DeathArray index="Normal" ModelLink="AP_LurkerDenDeath" SoundLink="LurkerDen_Explode"/>
+        <DeathCustoms ModelLink="ZergBuildingDeath" Name="Upgrade"/>
+        <PlacementSound value="Zerg_BuildingPlacement"/>
+        <PortraitModel value="OverlordPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="LurkerDen_What"/>
+        <SoundArray index="What" value="LurkerDen_What"/>
+        <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -21484,5 +21516,6 @@
         <!-- Override -->
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
         <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
+        <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

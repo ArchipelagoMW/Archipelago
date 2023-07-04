@@ -11612,4 +11612,23 @@
         <EditorCategories value="Race:Protoss"/>
         <RadiusLoose value="1.000000"/>
     </CModel>
+    <CModel id="AP_LurkerDen" parent="Building" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\LurkerDen\LurkerDen.m3"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.117100"/>
+        <ShadowRadius value="2.117100"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LurkerDenBuild" parent="Building">
+        <Model value="Assets\Buildings\Zerg\MorphZergDen\MorphZergDen.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_LurkerDenDeath" parent="BuildingDeath" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\LurkerDenDeath\LurkerDenDeath.m3"/>
+        <LowQualityModel value="ZergLargeBuildingDeathLow"/>
+    </CModel>
 </Catalog>
