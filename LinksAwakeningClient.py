@@ -587,7 +587,7 @@ class LinksAwakeningContext(CommonContext):
         while True:
             try:
                 # TODO: cancel all client tasks
-                if not self.stop_bizhawk_spam:
+                if not self.client.stop_bizhawk_spam:
                     logger.info("(Re)Starting game loop")
                 self.found_checks.clear()
                 # On restart of game loop, clear all checks, just in case we swapped ROMs
