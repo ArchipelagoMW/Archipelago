@@ -13,7 +13,7 @@ from multiprocessing import Process
 
 def run_client():
     print('running undertale client')
-    from UndertaleClient import main  # lazy import
+    from .UndertaleClient import main  # lazy import
     p = Process(target=main)
     p.start()
 
