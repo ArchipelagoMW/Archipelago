@@ -62,14 +62,13 @@ class TestBase(unittest.TestCase):
 
     def testItemPoolNotModified(self):
         """Test that worlds don't modify the itempool after `create_items`"""
-        gen_steps = ["generate_early", "create_regions", "create_items", "set_rules"]
+        gen_steps = ("generate_early", "create_regions", "create_items", "set_rules")
+        additional_steps = ("set_rules", "generate_basic", "pre_fill")
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
-                created_item_count = len(multiworld.itempool)
-                call_all(multiworld, "generate_basic")
-                self.assertEqual(created_item_count, len(multiworld.itempool),
-                                 f"{game_name} modified the itempool during generate_basic")
-                call_all(multiworld, "pre_fill")
-                self.assertEqual(created_item_count, len(multiworld.itempool),
-                                 f"{game_name} modified the itempool during pre_fill")
+                created_items = multiworld.itempool.copy()
+                for step in additional_steps:
+                    call_all(multiworld, step)
+                    self.assertEqual(created_items, multiworld.itempool,
+                                     f"{game_name} modified the itempool during {step}")
