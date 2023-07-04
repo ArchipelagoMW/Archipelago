@@ -552,7 +552,7 @@ class LinksAwakeningContext(CommonContext):
             self.game = self.slot_info[self.slot].game
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
-            for index, item in enumerate(args["items"], args["index"]):
+            for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
 
     async def sync(self):
