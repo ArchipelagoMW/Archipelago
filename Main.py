@@ -7,7 +7,7 @@ import tempfile
 import time
 import zipfile
 import zlib
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
@@ -15,16 +15,9 @@ from Fill import balance_multiworld_progression, distribute_items_restrictive, d
 from Options import StartInventoryPool
 from Utils import __version__, get_options, output_path, version_tuple
 from worlds import AutoWorld
-from worlds.alttp.Regions import is_main_entrance
-from worlds.alttp.Shops import FillDisabledShopSlots
-from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
-ordered_areas = (
-    'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
-    'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-    'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
-)
+__all__ = ["main"]
 
 
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
@@ -165,19 +158,24 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for count in items.values():
                 new_items.append(player_world.create_filler())
         target: int = sum(sum(items.values()) for items in depletion_pool.values())
-        for item in world.itempool:
+        for i, item in enumerate(world.itempool):
             if depletion_pool[item.player].get(item.name, 0):
                 target -= 1
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
+                    new_items.extend(world.itempool[i+1:])
                     break
             else:
                 new_items.append(item)
-        for player, remaining_items in depletion_pool.items():
-            if remaining_items:
-                raise Exception(f"{world.get_player_name(player)}"
-                                f" is trying to remove items from their pool that don't exist: {remaining_items}")
+
+        # leftovers?
+        if target:
+            for player, remaining_items in depletion_pool.items():
+                remaining_items = {name: count for name, count in remaining_items.items() if count}
+                if remaining_items:
+                    raise Exception(f"{world.get_player_name(player)}"
+                                    f" is trying to remove items from their pool that don't exist: {remaining_items}")
         world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
@@ -278,8 +276,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, 'post_fill')
 
-    if world.players > 1:
+    if world.players > 1 and not args.skip_prog_balancing:
         balance_multiworld_progression(world)
+    else:
+        logger.info("Progression balancing skipped.")
 
     logger.info(f'Beginning output...')
 
@@ -303,35 +303,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             # collect ER hint info
             er_hint_data: Dict[int, Dict[int, str]] = {}
             AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
-
-            checks_in_area = {player: {area: list() for area in ordered_areas}
-                              for player in range(1, world.players + 1)}
-
-            for player in range(1, world.players + 1):
-                checks_in_area[player]["Total"] = 0
-
-            for location in world.get_filled_locations():
-                if type(location.address) is int:
-                    if location.game != "A Link to the Past":
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    else:
-                        main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                        if location.parent_region.dungeon:
-                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                           'Inverted Ganons Tower': 'Ganons Tower'} \
-                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                            checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                    checks_in_area[location.player]["Total"] += 1
-
-            FillDisabledShopSlots(world)
 
             def write_multidata():
                 import NetUtils
@@ -391,6 +362,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in world.worlds.values()
                 }
+
+                checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
                 multidata = {
                     "slot_data": slot_data,

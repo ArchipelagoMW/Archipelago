@@ -100,7 +100,7 @@ class OoTContext(CommonContext):
             await super(OoTContext, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to Bizhawk to get player information')
+            logger.info('Awaiting connection to EmuHawk to get player information')
             return
 
         await self.send_connect()

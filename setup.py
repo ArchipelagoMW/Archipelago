@@ -20,7 +20,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.7'
+    requirement = 'cx-Freeze>=6.15.2'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -57,23 +57,37 @@ if __name__ == "__main__":
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
+from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-apworlds: set = {
-    "Subnautica",
-    "Factorio",
-    "Rogue Legacy",
-    "Sonic Adventure 2 Battle",
-    "Donkey Kong Country 3",
-    "Super Mario World",
-    "Stardew Valley",
-    "Timespinner",
-    "Minecraft",
-    "The Messenger",
-    "Links Awakening DX",
-    "Super Metroid",
-    "SMZ3",
+non_apworlds: set = {
+    "A Link to the Past",
+    "Adventure",
+    "ArchipIDLE",
+    "Archipelago",
+    "Blasphemous",
+    "ChecksFinder",
+    "Clique",
+    "DLCQuest",
+    "Final Fantasy",
+    "Hollow Knight",
+    "Hylics 2",
+    "Kingdom Hearts 2",
+    "Lufia II Ancient Cave",
+    "Meritous",
+    "Ocarina of Time",
+    "Overcooked! 2",
+    "Pokemon Red and Blue",
+    "Raft",
+    "Secret of Evermore",
+    "Slay the Spire",
+    "Starcraft 2 Wings of Liberty",
+    "Sudoku",
+    "Super Mario 64",
+    "VVVVVV",
+    "Wargroove",
+    "Zillion",
 }
 
 
@@ -157,11 +171,22 @@ build_arch = build_platform.split('-')[-1] if '-' in build_platform else platfor
 
 
 # see Launcher.py on how to add scripts to setup.py
+def resolve_icon(icon_name: str):
+    base_path = icon_paths[icon_name]
+    if is_windows:
+        path, extension = os.path.splitext(base_path)
+        ico_file = path + ".ico"
+        assert os.path.exists(ico_file), f"ico counterpart of {base_path} should exist."
+        return ico_file
+    else:
+        return base_path
+
+
 exes = [
     cx_Freeze.Executable(
         script=f'{c.script_name}.py',
         target_name=c.frozen_name + (".exe" if is_windows else ""),
-        icon=icon_paths[c.icon],
+        icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
@@ -268,16 +293,26 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
         sni_thread.start()
 
-        # pre build steps
+        # pre-build steps
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
         ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
+        # auto-build cython modules
+        build_ext = self.distribution.get_command_obj("build_ext")
+        build_ext.inplace = True
+        self.run_command("build_ext")
+
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
+
+        # delete in-place built modules, otherwise this interferes with future pyximport
+        for path in build_ext.get_output_mapping().values():
+            print(f"deleting temp {path}")
+            os.unlink(path)
 
         # need to finish download before copying
         sni_thread.join()
@@ -311,11 +346,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
+        assert not non_apworlds - set(AutoWorldRegister.world_types), \
+            f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if worldname in apworlds:
+            if worldname not in non_apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
@@ -560,10 +596,10 @@ cx_Freeze.setup(
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
-    ext_modules=[],  # required to disable auto-discovery with setuptools>=61
+    ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["websockets", "worlds", "kivy"],
+            "packages": ["worlds", "kivy", "_speedups", "cymem"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
