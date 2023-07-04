@@ -91,16 +91,16 @@ class KH2World(World):
             "BountyRequired":       self.multiworld.BountyRequired[self.player].value
         }
 
-    def create_item(self, name: str, ) -> Item:
+    def create_item(self, name: str) -> Item:
         """
         Returns created KH2Item
         """
         # data = item_dictionary_table[name]
-        if name in ItemClassification_Dict["Progression"]:
+        if name in ItemClassification_Dict["progression_set"]:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
-
+        print(ItemClassification_Dict["Useful"])
         created_item = KH2Item(name, item_classification, self.item_name_to_id[name], self.player)
 
         return created_item

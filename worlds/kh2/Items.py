@@ -359,19 +359,19 @@ Wincon_Table = {
 # Equipped abilities have an offset of 0x8000 so check for if whatever || whatever+0x8000
 CheckDupingItems = {
     "Items":          {
-        item_name for set_ in [Progression_Table.keys(), Wincon_Table.keys(), [ItemName.MickyMunnyPouch,
+        item_name for keys in [Progression_Table.keys(), Wincon_Table.keys(), [ItemName.MickyMunnyPouch,
                                                                                ItemName.OletteMunnyPouch,
                                                                                ItemName.HadesCupTrophy,
                                                                                ItemName.UnknownDisk,
                                                                                ItemName.OlympusStone, ]]
-        for item_name in set_
+        for item_name in keys
 
     },
     "Magic":          {
         magic for magic in Magic_Table.keys()
     },
     "Bitmask":        {
-        item_name for set_ in [Forms_Table.keys(), Summon_Table.keys(), Reports_Table.keys()] for item_name in set_
+        item_name for keys in [Forms_Table.keys(), Summon_Table.keys(), Reports_Table.keys()] for item_name in keys
     },
     "Weapons":        {
         "Keyblades": {
@@ -402,7 +402,7 @@ CheckDupingItems = {
     },
     "Abilities":      {
         "Sora":   {
-            item_name for set_ in [SupportAbility_Table.keys(), ActionAbility_Table.keys(), Movement_Table.keys()] for item_name in set_
+            item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys(), Movement_Table.keys()] for item_name in keys
         },
         "Donald": {
             donald_ability for donald_ability in DonaldAbility_Table.keys()
@@ -415,12 +415,62 @@ CheckDupingItems = {
         boost for boost in Boosts_Table.keys()
     }
 }
-
+progression_set = {
+    # abilities
+    item_name for keys in [
+        Wincon_Table.keys(),
+        Progression_Table.keys(),
+        Forms_Table.keys(),
+        Magic_Table.keys(),
+        Summon_Table.keys(),
+        Movement_Table.keys(),
+        Keyblade_Table.keys(),
+        Staffs_Table.keys(),
+        Shields_Table.keys(),
+        [
+            ItemName.ComboMaster,
+            ItemName.ComboPlus,
+            ItemName.AirComboPlus,
+            ItemName.ReactionBoost,
+            ItemName.FinishingPlus,
+            ItemName.NegativeCombo,
+            ItemName.BerserkCharge,
+            ItemName.FormBoost,
+            ItemName.DriveConverter,
+            ItemName.LightDarkness,
+            ItemName.OnceMore,
+            ItemName.SecondChance,
+            ItemName.Guard,
+            ItemName.HorizontalSlash,
+            ItemName.FinishingLeap,
+            ItemName.Slapshot,
+            ItemName.FlashStep,
+            ItemName.SlideDash,
+            ItemName.GuardBreak,
+            ItemName.Explosion,
+            ItemName.AerialSweep,
+            ItemName.AerialDive,
+            ItemName.AerialSpiral,
+            ItemName.AerialFinish,
+            ItemName.AutoValor,
+            ItemName.AutoWisdom,
+            ItemName.AutoLimit,
+            ItemName.AutoMaster,
+            ItemName.AutoFinal,
+            ItemName.TrinityLimit,
+            # Party Limits
+            ItemName.FlareForce,
+            ItemName.Fantasia,
+            ItemName.Teamwork,
+            ItemName.TornadoFusion,
+            ItemName.HadesCupTrophy]]
+    for item_name in keys
+}
 ItemClassification_Dict = {
     # Items that are classified as progression
-    "Progression":     {
+    "progression_set": {
         # abilities
-        item_name for set_ in [
+        item_name for keys in [
             Wincon_Table.keys(),
             Progression_Table.keys(),
             Forms_Table.keys(),
@@ -467,11 +517,17 @@ ItemClassification_Dict = {
                 ItemName.Teamwork,
                 ItemName.TornadoFusion,
                 ItemName.HadesCupTrophy]]
-        for item_name in set_
+        for item_name in keys
     },
+    "Useful":      {item_name for keys in [
+        SupportAbility_Table.keys(),
+        ActionAbility_Table.keys(),
+        DonaldAbility_Table.keys(),
+        GoofyAbility_Table.keys()]
+        for item_name in keys if item_name not in progression_set}
 
 }
-visit_locking_dict={
+visit_locking_dict = {
     "2VisitLocking":   [
         ItemName.CastleKey,
         ItemName.BattlefieldsofWar,
@@ -514,7 +570,7 @@ exclusion_item_table = {
         ItemName.ItemSlotUp,
     },
     "Ability": {
-        item_name for set_ in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in set_
+        item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in keys
     }
 }
 
