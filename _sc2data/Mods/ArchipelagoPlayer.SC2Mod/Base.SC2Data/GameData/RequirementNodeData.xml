@@ -2428,4 +2428,7 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_AlarakSupplicantShieldArmor" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotSMutaliskBroodlord" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

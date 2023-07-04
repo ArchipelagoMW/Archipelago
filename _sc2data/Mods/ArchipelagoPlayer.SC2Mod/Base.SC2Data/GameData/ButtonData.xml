@@ -2376,4 +2376,69 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BroodLordPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-broodlord.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-broodlord.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskBroodlordPassiveGreater">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskPassiveGreater">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskViperPassiveGreater">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ViperPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-viper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-viper.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_zergflyerarmor1">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level1.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_zergflyerarmor2">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergflyerarmor1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_zergflyerarmor3">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level3.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergflyerarmor1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_zergflyerattack1">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-airattacks-level1.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_zergflyerattack2">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-airattacks-level2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergflyerattack1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_zergflyerattack3">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-airattacks-level3.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergflyerattack1"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

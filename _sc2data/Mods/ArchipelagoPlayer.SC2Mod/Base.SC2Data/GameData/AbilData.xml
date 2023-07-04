@@ -4637,6 +4637,51 @@
         <DefaultError value="RequiresHealTarget"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_ShieldBatteryRecharge"/>
     </CAbilEffectTarget>
+    <CAbilResearch id="AP_SpireResearch">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+<!--        <InfoArray index="Research1" Time="160" Upgrade="ZergFlyerWeaponsLevel1">-->
+<!--            <Resource index="Minerals" value="100"/>-->
+<!--            <Resource index="Vespene" value="100"/>-->
+<!--            <Button DefaultButtonFace="zergflyerattack1" State="Suppressed" Requirements="LearnZergFlyerAttack1">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Research2" Time="190" Upgrade="ZergFlyerWeaponsLevel2">-->
+<!--            <Resource index="Minerals" value="175"/>-->
+<!--            <Resource index="Vespene" value="175"/>-->
+<!--            <Button DefaultButtonFace="zergflyerattack2" State="Suppressed" Requirements="LearnZergFlyerAttack2">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Research3" Time="220" Upgrade="ZergFlyerWeaponsLevel3">-->
+<!--            <Resource index="Minerals" value="250"/>-->
+<!--            <Resource index="Vespene" value="250"/>-->
+<!--            <Button DefaultButtonFace="zergflyerattack3" State="Suppressed" Requirements="LearnZergFlyerAttack3">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Research4" Time="160" Upgrade="ZergFlyerArmorsLevel1">-->
+<!--            <Resource index="Minerals" value="150"/>-->
+<!--            <Resource index="Vespene" value="150"/>-->
+<!--            <Button DefaultButtonFace="zergflyerarmor1" State="Suppressed" Requirements="LearnZergFlyerArmor1">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Research5" Time="190" Upgrade="ZergFlyerArmorsLevel2">-->
+<!--            <Resource index="Minerals" value="225"/>-->
+<!--            <Resource index="Vespene" value="225"/>-->
+<!--            <Button DefaultButtonFace="zergflyerarmor2" State="Suppressed" Requirements="LearnZergFlyerArmor2">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Research6" Time="220" Upgrade="ZergFlyerArmorsLevel3">-->
+<!--            <Resource index="Minerals" value="300"/>-->
+<!--            <Resource index="Vespene" value="300"/>-->
+<!--            <Button DefaultButtonFace="zergflyerarmor3" State="Suppressed" Requirements="LearnZergFlyerArmor3">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--        </InfoArray>-->
+    </CAbilResearch>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

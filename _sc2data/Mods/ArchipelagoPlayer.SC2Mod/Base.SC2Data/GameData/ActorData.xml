@@ -13613,6 +13613,31 @@
         <Weapon value="AP_KhaydarinBeam"/>
     </CActorRange>
     <CActorSplat id="AP_KhaydarinMonolithSplat" parent="GenericUnitSplat" unitName="AP_KhaydarinMonolith"/>
+    <CActorUnit id="AP_GreaterSpire" parent="ZergBuildingEx" unitName="AP_GreaterSpire">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="AnimPlay Morph Morph 0 0.000000 0.000000 2.000000 AsDuration"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="GreaterSpire"/>
+        <BuildModel value="GreaterSpireBuild"/>
+        <DeathArray index="Normal" ModelLink="GreaterSpireDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" SoundLink="GreaterSpire_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PortraitModel value="GreaterSpirePortrait"/>
+        <BarOffset value="190"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-GreaterSpire.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="GreaterSpire_Ready"/>
+        <SoundArray index="What" value="GreaterSpire_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-GreaterSpire.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorTurret id="KhaydarinMonolithTurret2">
         <On Terms="TurretEnable.AP_KhaydarinMonolith" Send="Create"/>
     </CActorTurret>
@@ -21451,8 +21476,13 @@
         <!-- Override -->
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
     </CActorStateMonitor>
+    <CActorStateMonitor id="ZergBloodSmallBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
+    </CActorStateMonitor>
     <CActorStateMonitor id="MechaFlamesMediumBuilding">
         <!-- Override -->
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
+        <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

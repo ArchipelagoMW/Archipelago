@@ -1446,4 +1446,8 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantShieldArmorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskBroodLord">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>
