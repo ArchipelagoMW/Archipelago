@@ -3956,9 +3956,9 @@
         <Duration value="10"/>
         <Modification>
             <ModifyFlags index="SuppressMoving" value="1"/>
-            <AbilClassDisableArray index="CAbilMove" value="1"/>
             <!-- Vanilla tagets a lot of morphs but leaving some gaps-->
             <AbilClassDisableArray index="CAbilMorph" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_GuardianShield">
@@ -3967,8 +3967,6 @@
         <Duration value="0.6"/>
         <DamageResponse>
             <Kind index="Spell" value="0"/>
-            <Kind index="Melee" value="1"/>
-            <Kind index="Splash" value="1"/>
             <ModifyAmount value="-2"/>
             <Chance value="1"/>
         </DamageResponse>
@@ -3981,4 +3979,21 @@
         <Radius value="7.5"/>
         <InfoFlags index="Hidden" value="1"/>
     </CBehaviorPowerSource>
+    <CBehaviorBuff id="AP_KhaydarinBeamRetarget">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.0625"/>
+        <Modification>
+            <WeaponDisableArray value="AP_KhaydarinBeam3"/>
+            <!-- This weapon doesn't exist -->
+            <WeaponDisableArray value="AP_KhaydarinBeam4"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UnpoweredTurret">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="HasNoPower"/>
+        <Modification>
+            <TurretDisableArray value="AP_KhaydarinMonolith"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

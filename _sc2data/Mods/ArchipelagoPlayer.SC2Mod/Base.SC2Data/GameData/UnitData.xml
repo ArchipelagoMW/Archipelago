@@ -12457,6 +12457,74 @@
         <GlossaryPriority value="120"/>
         <HotkeyCategory value="Unit/Category/ProtossStory"/>
     </CUnit>
+    <CUnit id="AP_KhaydarinMonolith">
+        <Facing value="315"/>
+        <Race value="Prot"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <ShieldsStart value="100"/>
+        <ShieldsMax value="100"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Sight value="13"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="300"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <BehaviorArray Link="PowerUserBaseDefenseSmall"/>
+        <BehaviorArray Link="UnderConstruction"/>
+        <BehaviorArray Link="AP_UnpoweredTurret"/>
+        <WeaponArray Link="AP_KhaydarinBeam1" Turret="AP_KhaydarinMonolith"/>
+        <WeaponArray Link="AP_KhaydarinBeam3" Turret="AP_KhaydarinMonolith"/>
+        <WeaponArray Link="AP_KhaydarinBeam1Upgraded" Turret="AP_KhaydarinMonolith"/>
+        <WeaponArray Link="AP_KhaydarinBeam3Upgraded" Turret="AP_KhaydarinMonolith"/>
+        <EquipmentArray Weapon="AP_KhaydarinBeam"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="AttackBuilding" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="225"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <AIEvalFactor value="0.8"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="100"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

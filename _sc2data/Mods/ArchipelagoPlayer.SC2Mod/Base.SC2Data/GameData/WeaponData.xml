@@ -1986,4 +1986,70 @@
         </Cost>
         <Period value="3"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KhaydarinBeam1">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="ContinuousScan" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_KhaydarinBeamDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="3"/>
+        <DamagePoint value="2.9"/>
+        <Effect value="AP_KhaydarinBeamHighDamageSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KhaydarinBeam1Upgraded">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="ContinuousScan" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_KhaydarinBeamDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="3"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_KhaydarinBeamHighDamageSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KhaydarinBeam3">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="ContinuousScan" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_KhaydarinBeamDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="3"/>
+        <DamagePoint value="2.9"/>
+        <Effect value="AP_KhaydarinBeamDamageSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KhaydarinBeam3Upgraded">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="ContinuousScan" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_KhaydarinBeamDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <Period value="3"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_KhaydarinBeamDamageSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KhaydarinBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <Range value="13"/>
+        <Period value="3"/>
+        <DamagePoint value="2.9"/>
+        <Effect value="AP_KhaydarinBeamDamage"/>
+        <DisplayEffect value="AP_KhaydarinBeamDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Arc value="360"/>
+        <Options index="ContinuousScan" value="1"/>
+    </CWeaponLegacy>
 </Catalog>

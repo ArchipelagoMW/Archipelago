@@ -6781,4 +6781,87 @@
         <Pitch value="-3.000000,-1.000000"/>
         <Volume value="-8.000000,-6.000000"/>
     </CSound>
+    <CSound id="AP_KhaydarinMonolith_Ascend" parent="Ambience_Object">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_PoweredAscend.wav" FacialGroup=""/>
+        <Flags index="Download" value="1"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackImpact02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackImpact03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackImpact04.wav" FacialGroup=""/>
+        <Flags index="VariationFallback" value="0"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-2.000000"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-5.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_AttackLaunch04.wav" FacialGroup=""/>
+        <Flags index="VariationFallback" value="0"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-2.000000"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="0.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_Charge2" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_ChargeLoop.wav" LoopCount="1" FacialGroup=""/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <OffsetFadeOut/>
+        <OffsetFadeOut Time="250" Volume="-96.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-14.000000,-14.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_Charge" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_DefilerBonesStandLoop0.wav" LoopCount="-1"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_DefilerBonesStandLoop1.wav" LoopCount="-1"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_DefilerBonesStandLoop2.wav" LoopCount="-1"/>
+        <AssetArray File="Assets\Sounds\Uni\Doodads\Doodad_DefilerBonesStandLoop3.wav" LoopCount="-1"/>
+        <Pitch value="0.000000,2.000000"/>
+        <Volume value="-10.000000,-10.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_Descend" parent="Ambience_Object">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_UnpoweredDescend.wav" FacialGroup=""/>
+        <Flags index="Download" value="1"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_PowerDown" parent="Ambience_Object">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_PoweredBirth.wav" FacialGroup=""/>
+        <Pitch value="-0.200000,0.200000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_PowerUp" parent="Ambience_Object">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_PoweredBirth.wav" FacialGroup=""/>
+        <Flags index="Download" value="1"/>
+        <Pitch value="-0.200000,0.200000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_Ready" parent="Ready">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_What.wav" FacialGroup=""/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_KhaydarinMonolith_What" parent="Voice">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_What.wav" FacialGroup=""/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
 </Catalog>

@@ -13538,6 +13538,102 @@
         </WireframeShield>
     </CActorUnit>
     <CActorRange id="AP_ObserverTargetLockRange" parent="RangeAbil" abil="AP_ObserverTargetLock"/>
+    <CActorAction id="AP_KhaydarinBeamAttack" parent="GenericAttack" effectAttack="AP_KhaydarinBeamDamage">
+        <LaunchAssets Sound="AP_KhaydarinMonolith_AttackLaunch"/>
+        <Beam value="AP_KhaydarinBeamAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
+        <ImpactMap index="None" Model="AP_KhaydarinBeamAttackImpact" Sound="AP_KhaydarinMonolith_AttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_KhaydarinBeamAttackBeam" parent="BeamSimpleAnimationStyleOneShot"/>
+    <CActorUnit id="AP_KhaydarinMonolith" parent="ProtossBuilding" unitName="AP_KhaydarinMonolith">
+        <Macros value="UnpoweredAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="Create AP_KhaydarinMonolithPowerUpModel"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="Create AP_KhaydarinMonolith_ChargeSound"/>
+        <On Terms="WeaponStop.*.AttackStop" Target="AP_KhaydarinMonolithPowerUpModel" Send="Destroy"/>
+        <On Terms="WeaponStop.*.AttackStop" Target="AP_KhaydarinMonolith_ChargeSound" Send="Destroy"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
+        <BuildModel value="AP_KhaydarinMonolithBirth"/>
+        <DeathArray index="Normal" ModelLink="AP_KhaydarinMonolithDeath" SoundLink="PhotonCannon_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="PhotonCannon_Explode"/>
+        <DeathCustoms ModelLink="AP_KhaydarinMonolithUnpoweredDeath" SoundLink="PhotonCannon_Explode" Name="Variation2"/>
+        <PlacementModel value="AP_KhaydarinMonolithPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacement"/>
+        <PlacementActorModel value="AP_KhaydarinMonolithPlacementModel"/>
+        <PortraitModel value="ExecutorPortrait"/>
+        <BarOffset value="135"/>
+        <BarWidth value="75"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-ship-PhotonCannon.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-ship-photoncannon.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <SoundArray index="Ready" value="AP_KhaydarinMonolith_Ready"/>
+        <SoundArray index="What" value="AP_KhaydarinMonolith_What"/>
+        <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-ship-PhotonCannon.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-ship-PhotonCannon-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-ship-PhotonCannon-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-ship-PhotonCannon-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_KhaydarinMonolithPowerUpModel" parent="ModelAnimationStyleContinuous">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="AP_KhaydarinMonolithPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName AP_KhaydarinMonolithPlacement" Send="Create AP_KhaydarinMonolithProtectRange"/>
+        <On Terms="ActorCreation; ModelName AP_KhaydarinMonolithPlacement; ModelIsLowQuality" Send="Create AP_KhaydarinMonolithProtectRange"/>
+        <On Terms="ActorDestruction" Target="AP_KhaydarinMonolithProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorRange id="AP_KhaydarinMonolithProtectRange">
+        <On Terms="SelectionLocalUpdate.AP_KhaydarinMonolith.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_KhaydarinMonolith.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_KhaydarinMonolith.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_KhaydarinMonolith.Stop" Send="Destroy"/>
+        <Weapon value="AP_KhaydarinBeam"/>
+    </CActorRange>
+    <CActorSplat id="AP_KhaydarinMonolithSplat" parent="GenericUnitSplat" unitName="AP_KhaydarinMonolith"/>
+    <CActorTurret id="KhaydarinMonolithTurret2">
+        <On Terms="TurretEnable.AP_KhaydarinMonolith" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="AP_KhaydarinMonolith_ChargeSound" parent="SoundContinuous">
+        <On Terms="ActorCreation" Send="SoundSetPitch Linear 0.000000@0.000000,20.000000@3000.000000"/>
+        <Host Subject="_Unit"/>
+        <Sound value="AP_KhaydarinMonolith_Charge"/>
+        <Layers>
+            <Sound value="KhaydarinMonolith_Charge2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

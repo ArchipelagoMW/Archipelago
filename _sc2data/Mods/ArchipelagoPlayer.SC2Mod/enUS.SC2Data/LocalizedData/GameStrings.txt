@@ -675,6 +675,7 @@ Button/Name/AP_MagrailMunitions=Magrail Munitions
 Button/Name/AP_Marauder=Train Marauder
 Button/Name/AP_Marine=Train Marine
 Button/Name/AP_MatrixOverload=Matrix Overload
+Button/Name/AP_MatrixOverloadEnergizer=Matrix Overload
 Button/Name/AP_Medic=Train Medic
 Button/Name/AP_MedicHeal=Heal
 Button/Name/AP_Medivac=Build Medivac
@@ -893,6 +894,7 @@ Button/Name/AP_VoidRayShakuras=Warp in Void Ray
 Button/Name/AP_VoidRayVoidPrismaticRange=Prismatic Range
 Button/Name/AP_VoidSentryBlackHole=Black Hole
 Button/Name/AP_VoidSentryChronoBeam=Chrono Beam
+Button/Name/AP_VoidSentryMobileMode=Mobile Mode
 Button/Name/AP_VoidSentryPhasingMode=Phasing Mode
 Button/Name/AP_VoidSentryShieldRepairDouble=Double Shield Recharge
 Button/Name/AP_VoidStasis=Void Stasis
@@ -912,8 +914,6 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_MatrixOverloadEnergizer=Matrix Overload
-Button/Name/AP_VoidSentryMobileMode=Mobile Mode
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1157,6 +1157,7 @@ Button/Tooltip/AP_MagrailMunitions=Deals <d ref="Effect,AP_MagrailMunitionsDamag
 Button/Tooltip/AP_Marauder=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_MatrixOverload=All friendly units gain <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% movement speed and <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% attack speed within Pylon power fields. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving.<n/><n/><c val="ffff8a">Passive ability.</c>
+Button/Tooltip/AP_MatrixOverloadEnergizer=All friendly units gain a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% bonus to movement speed and a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% bonus to attack speed while positioned within an Energizer's power field. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving the power field.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
 Button/Tooltip/AP_MedicHeal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_heal,RechargeVitalRate"/> life per <d ref="Effect,AP_heal,RechargeVitalRate * Effect,AP_heal,DrainVitalCostFactor"/> energy.</c>
 Button/Tooltip/AP_Medivac=Air transport. Heals nearby biological units.
@@ -1416,6 +1417,7 @@ Button/Tooltip/AP_VoidRayTaldarim=Tal'darim Faction<n/>Area assault craft. Can u
 Button/Tooltip/AP_VoidRayVoidPrismaticRange=Increases the range of the Void Ray's Prismatic Beam as it continues to attack, up to a maximum of +<d ref="Behavior,AP_VoidRayChargeBeamRangePhase3,Modification.WeaponRange"/> range.
 Button/Tooltip/AP_VoidSentryBlackHole=Stuns enemy units in the target area for <d ref="Effect,AP_VoidSentryBlackHolePersistent,PeriodCount*Effect,AP_VoidSentryBlackHolePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_VoidSentryChronoBeam=Friendly target gains 50% attack and 50% movement speed.
+Button/Tooltip/AP_VoidSentryMobileMode=Transforms the Energizer to Mobile Mode. The Energizer can move, but no longer creates a power field.
 Button/Tooltip/AP_VoidSentryPhasingMode=Transforms the Energizer to Phasing Mode and generates a power field as if it was a Pylon. The Energizer cannot move in this mode.
 Button/Tooltip/AP_VoidSentryShieldRepairDouble=Recharges the shields of two friendly Protoss units. <n/><n/><c val="f078ff">Restores <d ref="Effect,AP_VoidSentryShieldRepair,RechargeVitalRate*Effect,AP_VoidSentryShieldRepair,DrainVitalCostFactor"/> shields per 1 energy.</c>
 Button/Tooltip/AP_VoidStasis=Disables the target's attacks, abilities, movement, detection, production and tech for <d ref="Behavior,AP_DarkTemplarVoidStasis,Duration"/> seconds. Units and structures in stasis cannot be attacked or affected by abilities.<n/><n/><c val="#ColorAttackInfo">Can target ground units and structures.</c>
@@ -1439,9 +1441,7 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_SentryPurifier=Purifier Faction<n/>Robotic support unit. Can use Chrono Beam and Phasing Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/AP_MatrixOverloadEnergizer=All friendly units gain a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% bonus to movement speed and a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% bonus to attack speed while positioned within an Energizer's power field. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving the power field.<n/><n/><c val="ffff8a">Passive ability.</c>
-Button/Tooltip/AP_VoidSentryMobileMode=Transforms the Energizer to Mobile Mode. The Energizer can move, but no longer creates a power field.
+Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2622,6 +2622,10 @@ Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
+Effect/Name/AP_KhaydarinBeamDamage=Khaydarin Beam (Damage)
+Effect/Name/AP_KhaydarinBeamDamageSet=Khaydarin Beam Damage Set
+Effect/Name/AP_KhaydarinBeamHighDamageSet=Khaydarin Beam High Damage Set
+Effect/Name/AP_KhaydarinBeamRetarget=Khaydarin Beam Retarget
 Effect/Name/Kill2=Kill
 Effect/Name/NeuralParasiteApplyTimedLife2=Neural Parasite
 Effect/Name/NeuralParasiteDroneCheck2=Neural Parasite Drone Check
@@ -2955,8 +2959,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_KhaydarinMonolith=Khaydarin Monolith
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_SentryPurifier=Energizer
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -3299,6 +3303,7 @@ Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Name/AP_Diamondback=Eviscerator Rail Gun
 Weapon/Name/AP_DisruptionBeam=Disruption Beam
 Weapon/Name/AP_DuskWingBanshee=Screecher Missiles
+Weapon/Name/AP_EnergizerWeapon=Sanitization Beam
 Weapon/Name/AP_Firebat=Perdition Flamethrower
 Weapon/Name/AP_FusionCutter=Fusion Cutter
 Weapon/Name/AP_GaussRifle=C-14 Gauss Rifle
@@ -3415,7 +3420,9 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_EnergizerWeapon=Sanitization Beam
+Weapon/Name/AP_KhaydarinBeam1=Khaydarin Beam1
+Weapon/Name/AP_KhaydarinBeam3=Khaydarin Beam3
+Weapon/Name/AP_KhaydarinBeam=Khaydarin Beam
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

@@ -10617,12 +10617,16 @@
         <EditorCategories value="Race:Terran"/>
         <LaunchUnit Value="Caster"/>
         <ImpactUnit Value="Caster"/>
-        <VitalArray index="Energy" Change="-0.33"/>
+        <VitalArray index="Energy">
+            <Change value="-0.33"/>
+        </VitalArray>
     </CEffectModifyUnit>
     <CEffectModifyUnit id="AP_SentryRepairModifyTargetShields">
         <EditorCategories value="Race:Terran"/>
         <LaunchUnit Value="Caster"/>
-        <VitalArray index="Shields" Change="1"/>
+        <VitalArray index="Shields">
+            <Change value="1"/>
+        </VitalArray>
     </CEffectModifyUnit>
     <CEffectCreateHealer id="AP_VoidSentryShieldRepair">
         <EditorCategories value="Race:Terran"/>
@@ -10646,4 +10650,30 @@
         <SearchFilters value="-;Air,Ground,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="1.7"/>
     </CEffectEnumArea>
+    <CEffectDamage id="AP_KhaydarinBeamDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_KhaydarinBeamDamageSet">
+        <ValidatorArray value="AP_KhaydarinBeamDamageLowCheck"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_KhaydarinBeamDamage"/>
+        <EffectArray value="AP_KhaydarinBeamRetarget"/>
+    </CEffectSet>
+    <CEffectSet id="AP_KhaydarinBeamHighDamageSet">
+        <ValidatorArray value="AP_KhaydarinBeamDamageHighCheck"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_KhaydarinBeamDamage"/>
+        <EffectArray value="AP_KhaydarinBeamRetarget"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_KhaydarinBeamRetarget">
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
 </Catalog>

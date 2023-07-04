@@ -11309,7 +11309,6 @@
     <CModel id="AP_MonitorPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\MonitorEx2Portrait\MonitorEx2Portrait.m3"/>
         <Image value="Assets\Textures\MonitorPortrait_Static.dds"/>
-        <Lighting value="AP_MonitorPortrait"/>
     </CModel>
     <CModel id="AP_SentryAiur" parent="Unit" Race="Protoss">
         <Model value="Assets\Units\Protoss\Sentry\Sentry.m3"/>
@@ -11525,5 +11524,92 @@
     </CModel>
     <CModel id="AP_SentryPowerVisual" parent="UI">
         <Model value="Assets\Effects\Protoss\Sentry_Purifier_PhasingMode_Radius\Sentry_Purifier_PhasingMode_Radius.m3"/>
+    </CModel>
+    <CModel id="AP_KhaydarinBeamAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\KhaydarinMonolith_Beam\KhaydarinMonolith_Beam.m3"/>
+        <LowQualityModel value="ArchonAttackBeamLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_KhaydarinBeamAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\KhaydarinMonolith_Beam_Impact\KhaydarinMonolith_Beam_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolith" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\DarkProtossTurretEx2_Shakuras\DarkProtossTurretEx2_Shakuras.m3"/>
+        <AttachProps Id="Ref_TurretZ">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Events>
+            <Anim value="Stand,Unpowered,End,00"/>
+            <Name value="KhaydarinMonolith_Ascend"/>
+            <Type value="Sound"/>
+            <Payload value="AP_KhaydarinMonolith_Ascend"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,End,00"/>
+            <Name value="KhaydarinMonolith_PowerUp"/>
+            <Type value="Sound"/>
+            <Time value="1.503000"/>
+            <Payload value="AP_KhaydarinMonolith_PowerUp"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,Start,00"/>
+            <Name value="KhaydarinMonolith_Descend"/>
+            <Type value="Sound"/>
+            <Time value="2.142000"/>
+            <Payload value="AP_KhaydarinMonolith_Descend"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,Unpowered,Start,00"/>
+            <Name value="KhaydarinMonolith_PowerDown"/>
+            <Type value="Sound"/>
+            <Time value="0.615000"/>
+            <Payload value="AP_KhaydarinMonolith_PowerDown"/>
+        </Events>
+        <PlanetPanelCamera value="Star2CameraHigh15"/>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.900000"/>
+        <ShadowRadius value="1.900000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh15"/>
+        <UnitGlossaryCamera value="Star2CameraHigh15"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithBirth">
+        <Model value="Assets\Buildings\Protoss\DarkProtossTurretEx2_Shakuras_WarpIn\DarkProtossTurretEx2_Shakuras_WarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.166600"/>
+        </Events>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.176200"/>
+        <ShadowRadius value="1.176200"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithDeath" parent="BuildingDeath" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\DarkProtossTurretEx2_Shakuras_Death\DarkProtossTurretEx2_Shakuras_Death.m3"/>
+        <LowQualityModel value="ProtossLargeBuildingDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\DarkProtossTurretEx2_Shakuras_Placement\DarkProtossTurretEx2_Shakuras_Placement.m3"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_PhotonCannon\Splat_PhotonCannon.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithUnpoweredDeath" parent="BuildingDeath" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\DarkProtossTurretEx2_Shakuras_Unpowered_Death\DarkProtossTurretEx2_Shakuras_Unpowered_Death.m3"/>
+        <LowQualityModel value="ProtossLargeBuildingTaldarimDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_KhaydarinMonolithPowerUpModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\KhaydarinMonolith_Powerup\KhaydarinMonolith_Powerup.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
     </CModel>
 </Catalog>

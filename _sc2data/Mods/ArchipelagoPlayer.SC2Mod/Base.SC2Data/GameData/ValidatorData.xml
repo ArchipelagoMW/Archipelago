@@ -3403,4 +3403,14 @@
         <Field value="Radius"/>
         <Value value="0.75"/>
     </CValidatorUnitCompareField>
+    <CValidatorUnitCompareVital id="AP_KhaydarinBeamDamageHighCheck">
+        <Compare value="GT"/>
+        <Value value="80"/>
+        <Type value="Maximum"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_KhaydarinBeamDamageLowCheck">
+        <Compare value="LE"/>
+        <Value value="80"/>
+        <Type value="Maximum"/>
+    </CValidatorUnitCompareVital>
 </Catalog>
