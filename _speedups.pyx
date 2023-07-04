@@ -5,20 +5,22 @@
 Provides faster implementation of some core parts.
 This is deliberately .pyx because using a non-compiled "pure python" may be slower.
 """
+import typing
 
 # pip install cython cymem
 import cython
 from cpython cimport PyObject
-from typing import Any, Dict, Iterable, Iterator, Generator, Sequence, Tuple, TypeVar, Union, Set, List
+from typing import Any, Dict, Iterable, Iterator, Generator, Sequence, Tuple, TypeVar, Union, Set, List, TYPE_CHECKING
 from cymem.cymem cimport Pool
 from libc.stdint cimport int64_t, uint32_t
 from libcpp.set cimport set as std_set
+from collections import defaultdict
 
 ctypedef uint32_t ap_player_t  # on AMD64 this is faster (and smaller) than 64bit ints
 ctypedef uint32_t ap_flags_t
 ctypedef int64_t ap_id_t
 
-DEF MAX_PLAYER_ID = 1000000  # limit the size of indexing array
+cdef ap_player_t MAX_PLAYER_ID = 1000000  # limit the size of indexing array
 cdef size_t INVALID_SIZE = <size_t>(-1)  # this is all 0xff... adding 1 results in 0, but it's not negative
 
 
@@ -214,7 +216,12 @@ cdef class LocationStore:
                         all_locations[entry.sender].add(entry.location)
         return all_locations
 
-    def get_checked(self, state: Dict[Tuple[int, int], Set[int]], team: int, slot: int) -> List[int]:
+    if TYPE_CHECKING:
+        State = Dict[Tuple[int, int], Set[int]]
+    else:
+        State = Union[Tuple[int, int], Set[int], defaultdict]
+
+    def get_checked(self, state: State, team: int, slot: int) -> List[int]:
         # This used to validate checks actually exist. A remnant from the past.
         # If the order of locations becomes relevant at some point, we could not do sorted(set), so leaving it.
         cdef set checked = state[team, slot]
@@ -233,7 +240,7 @@ cdef class LocationStore:
                 entry in self.entries[start:start+count] if
                 entry.location in checked]
 
-    def get_missing(self, state: Dict[Tuple[int, int], Set[int]], team: int, slot: int) -> List[int]:
+    def get_missing(self, state: State, team: int, slot: int) -> List[int]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
@@ -250,7 +257,7 @@ cdef class LocationStore:
                     entry in self.entries[start:start + count] if
                     entry.location not in checked]
 
-    def get_remaining(self, state: Dict[Tuple[int, int], Set[int]], team: int, slot: int) -> List[int]:
+    def get_remaining(self, state: State, team: int, slot: int) -> List[int]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
