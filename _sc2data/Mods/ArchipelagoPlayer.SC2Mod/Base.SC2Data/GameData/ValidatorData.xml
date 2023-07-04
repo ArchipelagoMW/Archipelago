@@ -3413,4 +3413,10 @@
         <Value value="80"/>
         <Type value="Maximum"/>
     </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_ShieldBatteryHasEnergy">
+        <Compare value="GE"/>
+        <Value value="10"/>
+        <Vital value="Energy"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareVital>
 </Catalog>

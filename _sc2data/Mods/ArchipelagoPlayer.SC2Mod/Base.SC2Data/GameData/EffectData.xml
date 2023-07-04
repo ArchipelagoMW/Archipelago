@@ -10676,4 +10676,31 @@
     <CEffectApplyBehavior id="AP_KhaydarinBeamRetarget">
         <WhichUnit Value="Caster"/>
     </CEffectApplyBehavior>
+    <CEffectCreateHealer id="AP_ShieldBatteryRechargeChanneled">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="ShieldsNotFull"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotUncommandable"/>
+        <ValidatorArray value="SourceNotHidden"/>
+        <ValidatorArray value="AP_NotInterceptor"/>
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicValidator value="ShieldsNotFull"/>
+        <PeriodicEffect value="AP_ShieldBatteryRechargeChanneledRevealSearch"/>
+        <DrainVital value="Energy"/>
+        <DrainVitalCostFactor value="0.33"/>
+        <RechargeVital value="Shields"/>
+        <RechargeVitalRate value="36"/>
+    </CEffectCreateHealer>
+    <CEffectEnumArea id="AP_ShieldBatteryRechargeChanneledRevealSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AreaArray Radius="10" Effect="AP_ShieldBatteryRechargeChanneledDamageDummy"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Missile,Dead,Hidden"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_ShieldBatteryRechargeChanneledDamageDummy">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectDamage>
 </Catalog>

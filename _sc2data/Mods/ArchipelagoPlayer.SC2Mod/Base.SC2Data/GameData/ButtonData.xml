@@ -2357,4 +2357,8 @@
         <AlertIcon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_ShieldBatteryRecharge">
+        <Icon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

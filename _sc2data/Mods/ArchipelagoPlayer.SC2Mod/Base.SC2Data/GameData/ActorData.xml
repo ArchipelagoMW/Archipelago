@@ -13540,10 +13540,9 @@
     <CActorRange id="AP_ObserverTargetLockRange" parent="RangeAbil" abil="AP_ObserverTargetLock"/>
     <CActorAction id="AP_KhaydarinBeamAttack" parent="GenericAttack" effectAttack="AP_KhaydarinBeamDamage">
         <LaunchAssets Sound="AP_KhaydarinMonolith_AttackLaunch"/>
-        <Beam value="AP_KhaydarinBeamAttackBeam"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
-        <ImpactMap index="None" Model="AP_KhaydarinBeamAttackImpact" Sound="AP_KhaydarinMonolith_AttackImpact"/>
+        <ImpactMap index="None" Sound="AP_KhaydarinMonolith_AttackImpact"/>
     </CActorAction>
     <CActorBeamSimple id="AP_KhaydarinBeamAttackBeam" parent="BeamSimpleAnimationStyleOneShot"/>
     <CActorUnit id="AP_KhaydarinMonolith" parent="ProtossBuilding" unitName="AP_KhaydarinMonolith">
@@ -13571,8 +13570,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-protoss-ship-photoncannon.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
-        <SoundArray index="Ready" value="AP_KhaydarinMonolith_Ready"/>
-        <SoundArray index="What" value="AP_KhaydarinMonolith_What"/>
         <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
         <UnitIcon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
         <Wireframe>
@@ -16060,6 +16057,102 @@
         <LaunchRequest Subject="_Unit" Scope="Caster" Actor="Find"/>
         <ShieldFlashType value="None"/>
     </CActorAction>
+    <CActorUnit id="AP_ShieldBattery" parent="ProtossBuilding" unitName="AP_ShieldBattery">
+        <Macros value="UnpoweredAnim"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <On Terms="Abil.AP_ShieldBatteryRechargeChanneled.SourceChannelStart" Send="AnimBracketStart Working Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Abil.AP_ShieldBatteryRechargeChanneled.SourceChannelStop" Send="AnimBracketStop Working"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap ShieldBatteryTaldarim"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap ShieldBatteryTaldarim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
+        <Model value="ShieldBattery"/>
+        <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
+        <CreepHeightClass value="Tiny"/>
+        <BuildModel value="ShieldBatteryBirth"/>
+        <DeathArray index="Normal" ModelLink="ShieldBatteryDeath" SoundLink="Obelisk_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Obelisk_Explode"/>
+        <DeathCustoms ModelLink="ShieldBatteryTaldarimDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="ShieldBatteryTaldarimDeath" Name="Variation3"/>
+        <PlacementModel value="ShieldBatteryPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PlacementActorModel value="ShieldBatteryPlacementModel"/>
+        <PortraitModel value="ExecutorPortrait"/>
+        <BarOffset value="60"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-ShieldBattery.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <SoundArray index="Birth" value="PylonBirth"/>
+        <SoundArray index="Ready" value="Obelisk_What"/>
+        <SoundArray index="Help" value="PylonHelp"/>
+        <SoundArray index="What" value="AP_ShieldBattery_What"/>
+        <SoundArray index="Yes" value="PylonYes"/>
+        <SoundArray index="Attack" value="PylonYes"/>
+        <SoundArray index="Pissed" value="PylonPissed"/>
+        <SoundArray index="Movement" value="PylonMovement"/>
+        <SoundArray index="Turning" value="PylonTurning"/>
+        <SoundArray index="Board" value="PylonBoard"/>
+        <SoundArray index="Click" value="PylonClick"/>
+        <SoundArray index="ClickError" value="PylonClickError"/>
+        <SoundArray index="Highlight" value="PylonHighlight"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-ShieldBattery.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-ShieldBattery-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-ShieldBattery-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-ShieldBattery-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorRange id="AP_ShieldBatteryRange" parent="RangeAbil" abil="AP_ShieldBatteryRechargeChanneled">
+        <On Terms="SelectionLocalUpdate.AP_ShieldBattery.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ShieldBattery.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ShieldBattery.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ShieldBattery.Stop" Send="Destroy"/>
+        <Abil Link="ShieldBatteryRecharge"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorBeamSimple id="AP_ShieldBatteryRechargeChanneledBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Target" Actor="Find"/>
+        <Model value="ShieldBatteryRechargeChanneledBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_ShieldBatteryRechargeChanneledModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ShieldBatteryRechargeChanneledModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ShieldBatteryRechargeChanneledSoundLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_SentryShieldRepairSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_SentryShieldRepairSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="AP_ShieldBattery_Recharge_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_ShieldBatteryStructureRechargeSoundLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStart; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_ShieldBatteryRechargeChanneled.TargetStop; At Caster" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Sound value="AP_ShieldBattery_Recharge_Loop2"/>
+    </CActorSound>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

@@ -4617,6 +4617,26 @@
         <CastOutroTime value="0.5"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_TargetLock"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ShieldBatteryRechargeChanneled">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <TargetFilters value="Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <Range value="4"/>
+        <Arc value="360"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Self,Neutral,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <AutoCastRange value="4"/>
+        <AutoCastValidatorArray value="AP_ShieldBatteryHasEnergy"/>
+        <AutoCastValidatorArray value="AP_UnitOrAttackingStructure"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ShieldBatteryRecharge"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

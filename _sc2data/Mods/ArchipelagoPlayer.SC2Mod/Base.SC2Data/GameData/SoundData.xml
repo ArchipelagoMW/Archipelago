@@ -6864,4 +6864,40 @@
         <AssetArray File="AP\Assets\Sounds\KhaydarinMonolith_What.wav" FacialGroup=""/>
         <Volume value="-4.000000,-4.000000"/>
     </CSound>
+    <CSound id="AP_ShieldBattery_Recharge_Loop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ShieldBattery_ReCharge2_Loop.wav" FacialGroup=""/>
+        <LoopCount value="-1"/>
+        <MuteFadeOut/>
+        <MuteFadeOut Time="299" Volume="-96.000000"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <OffsetShiftBlend value="Logarithmic"/>
+        <Pitch value="-1.000000,0.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ShieldBattery_Ready" parent="Ready">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ShieldBattery_What.wav" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ShieldBattery_Recharge_Loop2" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ShieldBattery_ReCharge2_Loop.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMuteCount value="3"/>
+        <LoopCount value="-1"/>
+        <MuteFadeOut/>
+        <MuteFadeOut Time="299" Volume="-96.000000"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <OffsetShiftBlend value="Logarithmic"/>
+        <Pitch value="8.000000,8.000000"/>
+        <Volume value="-10.000000,-10.000000"/>
+    </CSound>
+    <CSound id="AP_ShieldBattery_What" parent="Voice">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ShieldBattery_What.wav" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
 </Catalog>
