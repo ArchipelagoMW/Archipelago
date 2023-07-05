@@ -55,20 +55,13 @@ class WitnessWorld(World):
 
     required_client_version = (0, 3, 9)
 
-    def __init__(self, multiworld: game, player: int):
+    def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
 
-        disabled_locations = self.multiworld.exclude_locations[self.player].value
-
-        self.player_logic = WitnessPlayerLogic(
-            self.multiworld, self.player, disabled_locations, self.multiworld.start_inventory[self.player].value
-        )
-
-        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
-        self.items: WitnessPlayerItems = WitnessPlayerItems(self.multiworld, self.player, self.player_logic, self.locat)
-        self.regio: WitnessRegions = WitnessRegions(self.locat)
-
-        self.log_ids_to_hints = dict()
+        self.player_logic = None
+        self.locat: None
+        self.items: None
+        self.regio: None
 
     def _get_slot_data(self):
         return {
@@ -87,6 +80,18 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
+        disabled_locations = self.multiworld.exclude_locations[self.player].value
+
+        self.player_logic = WitnessPlayerLogic(
+            self.multiworld, self.player, disabled_locations, self.multiworld.start_inventory[self.player].value
+        )
+
+        self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self.multiworld, self.player, self.player_logic)
+        self.items: WitnessPlayerItems = WitnessPlayerItems(self.multiworld, self.player, self.player_logic, self.locat)
+        self.regio: WitnessRegions = WitnessRegions(self.locat)
+
+        self.log_ids_to_hints = dict()
+
         if not (is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
                 or get_option_value(self.multiworld, self.player, "shuffle_doors")
                 or is_option_enabled(self.multiworld, self.player, "shuffle_lasers")):
@@ -231,8 +236,11 @@ class WitnessWorld(World):
 
     def create_item(self, item_name: str) -> Item:
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
-        item_data: ItemData = self.items.item_data[item_name]\
-            if item_name in self.items.item_data else StaticWitnessItems.item_data[item_name]
+        item_data: ItemData
+        if hasattr(self, 'items') and item_name in self.items.item_data:
+            item_data = self.items.item_data[item_name]
+        else:
+            item_data = StaticWitnessItems.item_data[item_name]
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
