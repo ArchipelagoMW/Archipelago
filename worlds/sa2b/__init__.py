@@ -93,6 +93,7 @@ class SA2BWorld(World):
             "KartRaceChecks": self.multiworld.kart_race_checks[self.player].value,
             "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
+            "ChaoStats": self.multiworld.chao_stats[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,

@@ -1155,6 +1155,12 @@ chao_standard_karate = "Chao Karate - Standard"
 chao_expert_karate   = "Chao Karate - Expert"
 chao_super_karate    = "Chao Karate - Super"
 
+chao_stat_swim_base    = "Chao Stat - Swim - "
+chao_stat_fly_base     = "Chao Stat - Fly - "
+chao_stat_run_base     = "Chao Stat - Run - "
+chao_stat_power_base   = "Chao Stat - Power - "
+chao_stat_stamina_base = "Chao Stat - Stamina - "
+
 # Kart Race Definitions
 kart_race_beginner_sonic    = "Kart Race - Beginner - Sonic"
 kart_race_beginner_tails    = "Kart Race - Beginner - Tails"

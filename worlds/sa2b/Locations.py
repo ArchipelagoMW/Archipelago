@@ -1321,6 +1321,12 @@ chao_garden_expert_location_table = {
     LocationName.chao_super_karate: 0xFF0303,
 }
 
+chao_stat_swim_table    = { LocationName.chao_stat_swim_base    + str(index): (0xFF0E00 + index) for index in range(1,100) }
+chao_stat_fly_table     = { LocationName.chao_stat_fly_base     + str(index): (0xFF0F00 + index) for index in range(1,100) }
+chao_stat_run_table     = { LocationName.chao_stat_run_base     + str(index): (0xFF1000 + index) for index in range(1,100) }
+chao_stat_power_table   = { LocationName.chao_stat_power_base   + str(index): (0xFF1100 + index) for index in range(1,100) }
+chao_stat_stamina_table = { LocationName.chao_stat_stamina_base + str(index): (0xFF1200 + index) for index in range(1,100) }
+
 kart_race_beginner_location_table = {
     LocationName.kart_race_beginner_sonic: 0xFF0A00,
     LocationName.kart_race_beginner_tails: 0xFF0A01,
@@ -1398,6 +1404,11 @@ all_locations = {
     **green_hill_animal_location_table,
     **final_boss_location_table,
     **grand_prix_location_table,
+    **chao_stat_swim_table,
+    **chao_stat_fly_table,
+    **chao_stat_run_table,
+    **chao_stat_power_table,
+    **chao_stat_stamina_table,
 }
 
 boss_gate_set = [
@@ -1523,6 +1534,13 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
                     location_table[key] = value
             else:
                 location_table[key] = value
+
+        for index in range(1, world.chao_stats[player].value + 1):
+            location_table[LocationName.chao_stat_swim_base    + str(index)] = chao_stat_swim_table[   LocationName.chao_stat_swim_base    + str(index)]
+            location_table[LocationName.chao_stat_fly_base     + str(index)] = chao_stat_fly_table[    LocationName.chao_stat_fly_base     + str(index)]
+            location_table[LocationName.chao_stat_run_base     + str(index)] = chao_stat_run_table[    LocationName.chao_stat_run_base     + str(index)]
+            location_table[LocationName.chao_stat_power_base   + str(index)] = chao_stat_power_table[  LocationName.chao_stat_power_base   + str(index)]
+            location_table[LocationName.chao_stat_stamina_base + str(index)] = chao_stat_stamina_table[LocationName.chao_stat_stamina_base + str(index)]
 
         for x in range(len(boss_gate_set)):
             if x < world.number_of_level_gates[player].value:

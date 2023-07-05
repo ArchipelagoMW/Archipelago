@@ -1,8 +1,11 @@
 import typing
+import math
 
 from BaseClasses import MultiWorld, Region, Entrance
 from .Items import SA2BItem
-from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set
+from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
+                                     chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
+                                     chao_stat_power_table, chao_stat_stamina_table
 from .Names import LocationName, ItemName
 from .GateBosses import get_boss_name, all_gate_bosses_table, king_boom_boo
 
@@ -1694,6 +1697,34 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.kart_race_expert_region)
+
+    stat_checks_per_gate = world.chao_stats[player].value / (gates_len)
+    for index in range(1, world.chao_stats[player].value + 1):
+        gate_val = math.ceil(index / stat_checks_per_gate) - 1
+        gate_region = world.get_region("Gate " + str(gate_val), player)
+
+        loc_name_swim    = LocationName.chao_stat_swim_base    + str(index)
+        loc_name_fly     = LocationName.chao_stat_fly_base     + str(index)
+        loc_name_run     = LocationName.chao_stat_run_base     + str(index)
+        loc_name_power   = LocationName.chao_stat_power_base   + str(index)
+        loc_name_stamina = LocationName.chao_stat_stamina_base + str(index)
+
+        loc_id_swim    = chao_stat_swim_table[   loc_name_swim]
+        loc_id_fly     = chao_stat_fly_table[    loc_name_fly]
+        loc_id_run     = chao_stat_run_table[    loc_name_run]
+        loc_id_power   = chao_stat_power_table[  loc_name_power]
+        loc_id_stamina = chao_stat_stamina_table[loc_name_stamina]
+
+        location_swim    = SA2BLocation(player, loc_name_swim,    loc_id_swim,    gate_region)
+        location_fly     = SA2BLocation(player, loc_name_fly,     loc_id_fly,     gate_region)
+        location_run     = SA2BLocation(player, loc_name_run,     loc_id_run,     gate_region)
+        location_power   = SA2BLocation(player, loc_name_power,   loc_id_power,   gate_region)
+        location_stamina = SA2BLocation(player, loc_name_stamina, loc_id_stamina, gate_region)
+        gate_region.locations.append(location_swim)
+        gate_region.locations.append(location_fly)
+        gate_region.locations.append(location_run)
+        gate_region.locations.append(location_power)
+        gate_region.locations.append(location_stamina)
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):

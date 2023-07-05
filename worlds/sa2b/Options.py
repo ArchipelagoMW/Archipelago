@@ -344,6 +344,17 @@ class ChaoRaceChecks(Choice):
     default = 0
 
 
+class ChaoStats(Range):
+    """
+    Determines how many levels in each Chao Stat grant checks
+    (Swim, Fly, Run, Power, Stamina)
+    """
+    display_name = "Chao Stats"
+    range_start = 0
+    range_end = 99
+    default = 0
+
+
 class RequiredCannonsCoreMissions(Choice):
     """
     Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
@@ -675,6 +686,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
+    "chao_stats": ChaoStats,
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
     "omochao_trap_weight": OmochaoTrapWeight,
