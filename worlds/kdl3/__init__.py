@@ -1,5 +1,7 @@
 import logging
+import typing
 
+import settings
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
@@ -9,7 +11,7 @@ from .Regions import create_levels
 from .Options import kdl3_options
 from .Names import LocationName
 from .Rules import set_rules
-from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom
+from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
 from .Client import KDL3SNIClient
 
 from typing import Dict, TextIO
@@ -19,6 +21,16 @@ import threading
 import base64
 
 logger = logging.getLogger("Kirby's Dream Land 3")
+
+
+class KDL3Settings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the KDL3 JP or EN rom"""
+        description = "Kirby's Dream Land 3 ROM File"
+        copy_to = "Kirby's Dream Land 3.sfc"
+        md5s = [KDL3JHASH, KDL3UHASH]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class KDL3WebWorld(WebWorld):
@@ -43,6 +55,7 @@ class KDL3World(World):
 
     game = "Kirby's Dream Land 3"
     option_definitions = kdl3_options
+    settings: typing.ClassVar[KDL3Settings]
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
