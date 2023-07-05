@@ -59,25 +59,21 @@ class InscryptionWorld(World):
             self.multiworld.itempool.append(new_item)
 
     def create_regions(self) -> None:
-        local_regions = []
-        for name in inscryption_regions:
-            r = Region(name, self.player, self.multiworld)
-            for dest in inscryption_regions[name]:
-                if not(any(ent.name == dest for ent in self.multiworld.get_entrances())):
-                    r.exits.append(Entrance(self.player, dest, r))
-                else:
-                    r.exits.append(self.multiworld.get_entrance(dest, self.player))
-            for loc in filter(lambda location: location['region'] == name, location_table):
-                r.locations.append(Location(self.player, loc['name'], None, r))
-            self.multiworld.regions.append(r)
-            local_regions.append(r)
-        for region in local_regions:
-            for entrance in region.exits:
-                entrance.connect(self.multiworld.get_region(entrance.name, self.player))
+        for region_name in inscryption_regions.keys():
+            self.multiworld.regions.append(Region(region_name, self.player, self.multiworld))
+
+        for region_name, region_connections in inscryption_regions.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            region.add_exits(region_connections)
+            region.add_locations({
+                location['name']: self.location_name_to_id[location['name']] for location in location_table
+                if location['region'] == region_name
+            })
 
     def set_rules(self) -> None:
-        set_rule(self.multiworld.get_entrance("Act 2", self.player),
+        set_rule(self.multiworld.get_entrance("Menu -> Act 2", self.player),
                  lambda state: state.has("Film Roll", self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Film Roll", self.player)
         for item in inscryption_rules:
             for location in inscryption_rules[item]:
                 add_rule(self.multiworld.get_location(location, self.player),
