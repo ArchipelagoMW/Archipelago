@@ -127,6 +127,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserTacticalJump (int lp_player);

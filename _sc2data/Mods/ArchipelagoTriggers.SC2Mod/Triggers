@@ -5326,6 +5326,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="008514A4"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="7A2A07A4"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="01C499CC"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="3D3DE4CE"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="4385E314"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="B3B07D2D"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8B9C98A7"/>
@@ -7696,6 +7697,42 @@
         <Element Type="Param" Id="79951172">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_PermanentCloakBanshee</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="3D3DE4CE">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="98B03A56"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="41DD1B81"/>
+        </Element>
+        <Element Type="ParamDef" Id="98B03A56">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="EA53C488"/>
+        </Element>
+        <Element Type="Param" Id="EA53C488">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="41DD1B81">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="D8817587"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="FB34B7EF"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="8FB01082"/>
+        </Element>
+        <Element Type="Param" Id="D8817587">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="98B03A56"/>
+        </Element>
+        <Element Type="Param" Id="FB34B7EF">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="8FB01082">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_BansheeSpeed</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

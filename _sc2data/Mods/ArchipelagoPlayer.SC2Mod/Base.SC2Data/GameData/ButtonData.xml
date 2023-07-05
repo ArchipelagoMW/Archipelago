@@ -2622,4 +2622,9 @@
         <EditorCategories value="Race:Zerg"/>
         <HotkeyAlias value="zergmissileweapons1"/>
     </CButton>
+    <CButton id="AP_BansheeSpeed">
+        <Icon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

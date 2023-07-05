@@ -1687,25 +1687,26 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_ClusterWarheadsResearched"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_PermanentCloakBanshee"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_PermanentCloakBansheeResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_CrossSpectrumDampenersResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_BansheeSpeed" Type="Passive" Requirements="AP_HaveBansheeSpeed" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3977,25 +3978,26 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_ClusterWarheadsResearched"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_PermanentCloakBanshee"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_PermanentCloakBansheeResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_CrossSpectrumDampenersResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_BansheeSpeed" Type="Passive" Requirements="AP_HaveBansheeSpeed" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

@@ -2468,4 +2468,7 @@
         <Count Link="AP_HotSHaveAberration" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBansheeSpeedCompleteOnly">
+        <Count Link="AP_BansheeSpeed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

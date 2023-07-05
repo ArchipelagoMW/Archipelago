@@ -1043,6 +1043,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDamp
 
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_BansheeSpeed", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
