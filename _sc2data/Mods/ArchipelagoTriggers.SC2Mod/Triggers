@@ -5321,6 +5321,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="54410EA7"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="99767BCC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="237A0428"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="76A4A1A3"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="7F6B5364"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="4A055597"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="EE64D006"/>
@@ -7429,6 +7430,42 @@
         <Element Type="Param" Id="3F481438">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_AdvancedHealingAI</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="76A4A1A3">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="3566ABDF"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="3F22CC9C"/>
+        </Element>
+        <Element Type="ParamDef" Id="3566ABDF">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="4568894B"/>
+        </Element>
+        <Element Type="Param" Id="4568894B">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="3F22CC9C">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="1F11C7E3"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="A182E0E7"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="0901B3FD"/>
+        </Element>
+        <Element Type="Param" Id="1F11C7E3">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="3566ABDF"/>
+        </Element>
+        <Element Type="Param" Id="A182E0E7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="0901B3FD">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ExpandedHull</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

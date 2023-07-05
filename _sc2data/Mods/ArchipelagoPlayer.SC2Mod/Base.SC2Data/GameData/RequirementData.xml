@@ -232,7 +232,7 @@
         <NodeArray index="Use" Link="AP_CountUpgradeAuxiliaryMedBotsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_ExpandedHullResearched">
-        <NodeArray index="Use" Link="AP_CountUpgradeExpandedHullCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeExpandedHullCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnCaduceusReactor">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>

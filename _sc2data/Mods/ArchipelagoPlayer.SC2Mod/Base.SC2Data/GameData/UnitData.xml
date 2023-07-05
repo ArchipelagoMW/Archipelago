@@ -1369,6 +1369,7 @@
             <LayoutButtons Face="AP_Heal" Type="AbilCmd" AbilCmd="AP_MedivacDoubleBeamHeal,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_RapidDeploymentTubes" Type="Passive" Requirements="AP_RapidDeploymentResearched" Row="1" Column="0"/>
             <LayoutButtons Face="AP_AdvancedHealingAI" Type="Passive" Requirements="AP_AdvancedHealingAIPurchased" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MedivacExpandedHull" Type="Passive" Requirements="AP_ExpandedHullResearched" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

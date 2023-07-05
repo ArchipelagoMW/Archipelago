@@ -1006,6 +1006,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AdvancedHealingAI", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacExpandedHull (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ExpandedHull", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

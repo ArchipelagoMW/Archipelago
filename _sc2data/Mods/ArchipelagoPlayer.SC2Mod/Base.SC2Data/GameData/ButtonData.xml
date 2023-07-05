@@ -2640,4 +2640,9 @@
         <Icon value="Assets\Textures\btn-upgrade-terran-magrailmunitions.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
     </CButton>
+    <CButton id="AP_MedivacExpandedHull">
+        <Icon value="Assets\Textures\btn-upgrade-mengsk-engineeringbay-neosteelfortifiedarmor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-mengsk-engineeringbay-neosteelfortifiedarmor.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

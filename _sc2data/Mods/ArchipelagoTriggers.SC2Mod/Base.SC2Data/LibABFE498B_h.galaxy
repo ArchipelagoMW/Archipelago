@@ -122,6 +122,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem (int 
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacExpandedHull (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles (int lp_player);

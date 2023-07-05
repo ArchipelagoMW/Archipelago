@@ -969,8 +969,8 @@
     <CUpgrade id="AP_ExpandedHull">
         <Flags index="UpgradeCheat" value="0"/>
         <Alert value="ResearchComplete"/>
-        <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="2"/>
-        <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="2"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="4"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="4"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
