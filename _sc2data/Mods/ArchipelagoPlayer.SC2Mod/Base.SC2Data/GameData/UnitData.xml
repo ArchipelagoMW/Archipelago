@@ -1144,6 +1144,7 @@
             <LayoutButtons Face="AP_SiegeModeProgressiveRangeIncrease" Type="Passive" Requirements="AP_TankModeHaveSiegeTankSiegeModeProgressiveRangeIncease" Row="1" Column="3"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemSiegeTank" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1243,6 +1244,7 @@
             <LayoutButtons Face="AP_SiegeModeProgressiveRangeIncrease" Type="Passive" Requirements="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease" Row="1" Column="3"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemSiegeTank" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -3673,6 +3675,7 @@
             <LayoutButtons Face="AP_SiegeModeProgressiveRangeIncrease" Type="Passive" Requirements="AP_TankModeHaveSiegeTankSiegeModeProgressiveRangeIncease" Row="1" Column="3"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemSiegeTank" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3763,6 +3766,7 @@
             <LayoutButtons Face="AP_SiegeModeProgressiveRangeIncrease" Type="Passive" Requirements="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease" Row="1" Column="3"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemSiegeTank" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>

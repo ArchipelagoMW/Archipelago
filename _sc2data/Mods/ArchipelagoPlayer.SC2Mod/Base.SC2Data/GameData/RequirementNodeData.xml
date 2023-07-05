@@ -2478,4 +2478,8 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_SiegeTankSiegeModeProgressiveRangeIncease" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemSiegeTankCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LaserTargetingSystemSiegeTank" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

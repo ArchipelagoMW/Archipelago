@@ -118,6 +118,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSpiderMines (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells (int lp_player);
@@ -129,7 +130,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners (int lp_player, int lp_level);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors (int lp_player);
-void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystems (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserTacticalJump (int lp_player);

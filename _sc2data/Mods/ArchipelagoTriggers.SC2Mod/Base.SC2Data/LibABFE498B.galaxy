@@ -982,6 +982,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SiegeTankSiegeModeProgressiveRangeIncease", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemSiegeTank", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1055,7 +1061,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_BansheeSpeed", 1);
 }
 
-void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystems (int lp_player) {
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystem (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemBanshee", 1);

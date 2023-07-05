@@ -1495,4 +1495,8 @@
         <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemSiegeTank">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemSiegeTankCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -4535,4 +4535,26 @@
         <Icon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemSiegeTank">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_SiegeTank,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTank,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_90mmCannons,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_90mmCannons,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,MinScanRange" Value="1"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,MinScanRange" Value="1"/>
+    </CUpgrade>
 </Catalog>
