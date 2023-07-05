@@ -8,7 +8,6 @@ from . import options, data
 from .data.fish_data import legendary_fish, special_fish, all_fish
 from .data.museum_data import all_museum_items
 from .data.villagers_data import all_villagers
-from .strings.festival_check_names import FestivalCheck
 from .strings.goal_names import Goal
 from .strings.region_names import Region
 
@@ -223,7 +222,8 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     if festival_option == options.FestivalLocations.option_disabled:
         return
 
-    randomized_locations.extend(locations_by_tag[LocationTags.FESTIVAL])
+    festival_locations = locations_by_tag[LocationTags.FESTIVAL]
+    randomized_locations.extend(festival_locations)
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
@@ -231,7 +231,8 @@ def extend_hard_festival_locations(randomized_locations, festival_option: int):
     if festival_option != options.FestivalLocations.option_hard:
         return
 
-    randomized_locations.extend(locations_by_tag[LocationTags.FESTIVAL_HARD])
+    hard_festival_locations = locations_by_tag[LocationTags.FESTIVAL_HARD]
+    randomized_locations.extend(hard_festival_locations)
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], world_options):

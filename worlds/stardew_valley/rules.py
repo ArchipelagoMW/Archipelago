@@ -447,7 +447,8 @@ def set_backpack_rules(logic: StardewLogic, multi_world: MultiWorld, player: int
 
 
 def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):
-    festival_locations = locations.locations_by_tag[LocationTags.FESTIVAL]
+    festival_locations = []
+    festival_locations.extend(locations.locations_by_tag[LocationTags.FESTIVAL])
     festival_locations.extend(locations.locations_by_tag[LocationTags.FESTIVAL_HARD])
     for festival in festival_locations:
         if festival.name in all_location_names:
