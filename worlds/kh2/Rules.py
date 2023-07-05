@@ -3,7 +3,7 @@ from typing import Dict, Callable, TYPE_CHECKING
 from BaseClasses import MultiWorld, CollectionState
 from .logic import *
 from .Items import exclusion_item_table
-from .Locations import STT_Checks, exclusion_table
+from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
 from ..generic.Rules import add_rule, forbid_items, set_rule
 
@@ -198,7 +198,7 @@ class KH2Rules:
             add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
 
         #  Forbid Abilities on popups due to game limitations
-        for location in exclusion_table["Popups"]:
+        for location in list(popups_set):
             forbid_items(world.get_location(location, player), exclusion_item_table["Ability"])
             forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 

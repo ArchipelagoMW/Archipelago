@@ -10,13 +10,6 @@ def create_regions(world, player: int, active_locations):
     KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         "Menu":                           [],
         RegionName.GoA:                   [
-            LocationName.Crit_1,
-            LocationName.Crit_2,
-            LocationName.Crit_3,
-            LocationName.Crit_4,
-            LocationName.Crit_5,
-            LocationName.Crit_6,
-            LocationName.Crit_7,
             LocationName.GardenofAssemblageMap,
             LocationName.GoALostIllusion,
             LocationName.ProofofNonexistence,

@@ -185,7 +185,7 @@ def patch_kh2(self, output_directory):
             "GrowthAbilityLevel": 0,
         })
     # levels done down here because of optional settings that can take locations out of the pool.
-    self.i = 1
+    self.i = 2
     for location in SoraLevels:
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
         if location in levelsetting:
@@ -229,7 +229,21 @@ def patch_kh2(self, output_directory):
             "GeneralResistance":   100,
             "Unknown":             0
         })
+    self.formattedLvup["Sora"][1] = {
+        "Exp":           int(soraExp[1] / self.multiworld.Sora_Level_EXP[self.player].value),
+        "Strength":      2,
+        "Magic":         6,
+        "Defense":       2,
+        "Ap":            0,
+        "SwordAbility":  0,
+        "ShieldAbility": 0,
+        "StaffAbility":  0,
+        "Padding":       0,
+        "Character":     "Sora",
+        "Level":         1
+    }
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
+
 
     openkhmod = {
         "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),
@@ -238,6 +252,7 @@ def patch_kh2(self, output_directory):
         "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
     }
+
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
                        self.multiworld.get_file_safe_player_name(self.player))
