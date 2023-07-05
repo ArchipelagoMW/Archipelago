@@ -2627,4 +2627,8 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_SiegeModeProgressiveRangeIncrease">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
+    </CButton>
 </Catalog>

@@ -441,6 +441,7 @@
             <SectionArray index="Stats">
                 <DurationArray index="Delay" value="0.5"/>
                 <DurationArray index="Duration" value="3.5417"/>
+                <EffectArray index="Finish" value="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB"/>
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
@@ -1375,6 +1376,7 @@
             <SectionArray index="Stats">
                 <DurationArray index="Delay" value="0.5"/>
                 <DurationArray index="Duration" value="3.5417"/>
+                <EffectArray index="Finish" value="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB"/>
             </SectionArray>
         </InfoArray>
     </CAbilMorph>

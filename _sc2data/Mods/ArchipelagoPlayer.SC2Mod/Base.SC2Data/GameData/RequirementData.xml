@@ -1486,4 +1486,13 @@
     <CRequirement id="AP_HaveLaserTargetingSystemBanshee">
         <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_TankModeHaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+    </CRequirement>
 </Catalog>

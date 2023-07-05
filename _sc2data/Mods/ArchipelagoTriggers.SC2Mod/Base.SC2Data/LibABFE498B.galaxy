@@ -976,6 +976,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos (int lp_player
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosSiegeTank", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SiegeTankSiegeModeProgressiveRangeIncease", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

@@ -4515,7 +4515,6 @@
         <EffectArray Reference="Unit,AP_Banshee,Speed" Value="1"/>
         <EffectArray Reference="Unit,AP_DuskWing,Speed" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="Banshee"/>
     </CUpgrade>
     <CUpgrade id="AP_LaserTargetingSystemBanshee">
         <Flags index="UpgradeCheat" value="0"/>
@@ -4531,6 +4530,9 @@
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,Range" Value="1"/>
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,MinScanRange" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
-        <AffectedUnitArray value="Banshee"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SiegeTankSiegeModeProgressiveRangeIncease">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

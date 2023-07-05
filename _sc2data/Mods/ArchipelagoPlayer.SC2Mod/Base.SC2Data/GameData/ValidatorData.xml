@@ -3423,4 +3423,41 @@
         <Value value="1"/>
         <Behavior value="AP_ZergGenericDeath"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease0">
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease1">
+        <Value value="1"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease2">
+        <Value value="2"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease3">
+        <Value value="3"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease4">
+        <Value value="4"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease5">
+        <Value value="5"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsSiegeTankSiegedOrMerc">
+        <CombineArray value="AP_IsSiegeTankSieged"/>
+        <CombineArray value="AP_IsMercSiegeTankSieged"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsSiegeTankSieged">
+        <Value value="AP_SiegeTankSieged"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsMercSiegeTankSieged">
+        <Value value="AP_SiegeBreakerSieged"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <Find value="1"/>
+        <Value value="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

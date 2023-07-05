@@ -4039,4 +4039,21 @@
         <InfoIcon value="Assets\Textures\btn-ability-protoss-phaseshift2.dds"/>
         <Alignment value="Negative"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SiegeTankSiegeModeProgressiveRangeIncease">
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-swann-vehiclerangeincrease.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_IsSiegeTankSiegedOrMerc"/>
+        <DisableValidatorArray value="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease"/>
+        <MaxStackCount value="5"/>
+        <Period value="3"/>
+        <PeriodicEffect value="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB"/>
+        <PeriodCount value="1"/>
+        <FinalEffect value="AP_SiegeTankSiegeModeProgressiveRangeInceaseRB"/>
+        <Modification RangedWeaponRange="1">
+            <AttributeChangeArray/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
 </Catalog>

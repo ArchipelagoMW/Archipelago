@@ -2474,4 +2474,8 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly">
         <Count Link="AP_LaserTargetingSystemBanshee" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeTankSiegeModeProgressiveRangeIncease" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

@@ -10724,4 +10724,12 @@
         <FinalEffect value="AP_ZergBuildingSpawnBroodling6"/>
     </CEffectCreatePersistent>
     <CEffectDamage id="AP_HydraliskDenMorphFinishDummy"/>
+    <CEffectApplyBehavior id="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB">
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+        <ValidatorArray index="0" value="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_SiegeTankSiegeModeProgressiveRangeInceaseRB">
+        <BehaviorLink value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+        <Count value="5"/>
+    </CEffectRemoveBehavior>
 </Catalog>
