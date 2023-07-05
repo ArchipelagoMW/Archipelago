@@ -315,7 +315,7 @@ def launch_sni() -> None:
             f"please start it yourself if it is not running")
 
 
-async def _snes_connect(ctx: SNIContext, address: str) -> WebSocketClientProtocol:
+async def _snes_connect(ctx: SNIContext, address: str, retry: bool = True) -> WebSocketClientProtocol:
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems: typing.Set[str] = set()
@@ -336,6 +336,8 @@ async def _snes_connect(ctx: SNIContext, address: str) -> WebSocketClientProtoco
             await asyncio.sleep(1)
         else:
             return snes_socket
+        if not retry:
+            break
 
 
 class SNESRequest(typing.TypedDict):
@@ -684,6 +686,8 @@ async def main() -> None:
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
+            async_start(run_game(romfile))
+            await _snes_connect(SNIContext(args.snes, args.connect, args.password), args.snes, False)
             webbrowser.open(f"http://www.evermizer.com/apclient/#server={meta['server']}")
             logging.info("Starting Evermizer Client in your Browser...")
             import time
