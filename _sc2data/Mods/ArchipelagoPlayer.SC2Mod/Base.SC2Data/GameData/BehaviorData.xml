@@ -3272,6 +3272,7 @@
         <InfoIcon value="Assets\Textures\BTN-Ability-Protoss-CloakField.dds"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <DisableValidatorArray value="AP_NotStunnedorStasised"/>
         <Period value="0.2"/>
         <PeriodicEffect value="AP_ArbiterMPCloakingFieldSearch"/>
     </CBehaviorBuff>
@@ -4067,6 +4068,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_HHWidowMineBlossom">
         <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoFlags index="Hidden" value="1"/>
         <DamageResponse Fatal="1" Handled="AP_HHWidowMineBlossomIssueOrderSet" ModifyFraction="0">
@@ -4077,5 +4079,43 @@
         </Modification>
         <DisableValidatorArray value="AP_HHWidowMineBlossomNotOnCooldown"/>
         <DisableValidatorArray value="AP_HHWidowMineCombine"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GhostSCBWLockdown">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-swann-defensivematrix.dds"/>
+        <BehaviorCategories index="Restorable" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="65.5"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_OcularImplantsIndicator">
+        <!-- Indicator of passive upgrade - full command card -->
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <DisableValidatorArray value="AP_UseGhostOcularImplants"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-ocularimplants.dds"/>
+        <Name value="Button/Name/AP_OcularImplants"/>
+        <Tooltip value="Button/Tooltip/AP_OcularImplants"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CriusSuitIndicator">
+        <!-- Indicator of passive upgrade - full command card -->
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <DisableValidatorArray value="AP_UseGhostCriusSuit"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-criussuit.dds"/>
+        <Name value="Button/Name/AP_CriusSuit"/>
+        <Tooltip value="Button/Tooltip/AP_CriusSuit"/>
     </CBehaviorBuff>
 </Catalog>

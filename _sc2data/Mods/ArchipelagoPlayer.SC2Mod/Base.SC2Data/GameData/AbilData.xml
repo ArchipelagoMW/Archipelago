@@ -5864,4 +5864,18 @@
         </Cost>
         <Effect index="0" value="AP_HHWidowMineBlossomCP"/>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_GhostSCBWLockdown">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_GhostSCBWLockdown@LM"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Mechanical,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <CastIntroTime value="0.25"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GhostSCBWLockdown" Requirements="AP_GhostSCBWLockdown">
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
 </Catalog>

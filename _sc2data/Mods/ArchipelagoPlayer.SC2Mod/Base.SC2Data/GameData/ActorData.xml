@@ -21842,4 +21842,27 @@
         <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
         <On Terms="UnitCreation.AP_EvolutionChamber" Send="Create"/>
     </CActorStateMonitor>
+    <CActorMissile id="AP_GhostSCBWLockdown@Missile" parent="GenericAttackMissile" unitName="AP_GhostSCBWLockdown@Missile"/>
+    <CActorRange id="AP_GhostSCBWLockdown@Range" parent="RangeAbil" abil="AP_GhostSCBWLockdown"/>
+    <CActorModel id="AP_GhostSCBWLockdown@ImpactReaction" parent="GenericAttackImpactModelReaction">
+        <Terms value="ValidateUnit IsMechanical"/>
+    </CActorModel>
+    <CActorModel id="AP_GhostSCBWLockdown@Model" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_GhostSCBWLockdown.On" Send="Create"/>
+        <On Terms="Behavior.AP_GhostSCBWLockdown.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorAction id="AP_GhostSCBWLockdown@Attack" parent="GenericAttack" effectImpact="AP_GhostSCBWLockdown@AB" effectLaunch="AP_GhostSCBWLockdown@LM">
+        <Missile value="AP_GhostSCBWLockdown@Missile"/>
+        <LaunchAssets Sound="AP_GhostSCBWLockdown@Launch"/>
+        <ImpactMap index="None" Model="AP_GhostSCBWLockdown@Impact" Sound="AP_GhostSCBWLockdown@Impact"/>
+        <ImpactModelReaction value="AP_GhostSCBWLockdown@ImpactReaction"/>
+    </CActorAction>
+    <CActorModelMaterial id="AP_GhostSCBWLockdown@Glaze" parent="GlazeParent">
+        <On Terms="Behavior.AP_GhostSCBWLockdown.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
+        <On Terms="Behavior.AP_GhostSCBWLockdown.Off" Send="ModelMaterialRemoveFrom ::Main"/>
+        <On Terms="Behavior.AP_GhostSCBWLockdown.Off" Send="Destroy"/>
+    </CActorModelMaterial>
 </Catalog>

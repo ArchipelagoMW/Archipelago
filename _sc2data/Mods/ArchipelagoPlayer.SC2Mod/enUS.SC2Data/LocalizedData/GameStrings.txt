@@ -415,6 +415,7 @@ Behavior/Name/AP_VoidSentryBlackHole=Black Hole
 Behavior/Name/AP_VoidSentryChronoBeam=Chrono Beam
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
+Behavior/Name/AP_GhostSCBWLockdown=Lockdown
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -491,6 +492,7 @@ Behavior/Tooltip/AP_VoidSentryBlackHole=This unit cannot move or attack.
 Behavior/Tooltip/AP_VoidSentryChronoBeam=This unit has increased movement and attack speeds.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
+Behavior/Tooltip/AP_GhostSCBWLockdown=While Lockdown is active the unit cannot attack or move. Detection is disabled.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -980,6 +982,7 @@ Button/Name/AP_MedivacExpandedHull=Expanded Hull
 Button/Name/AP_MedivacSpeedBoost=Ignite Afterburners
 Button/Name/AP_HHWidowMineRangeAttack=Black Market Launchers
 Button/Name/AP_HHWidowMineDeathBlossom=Executioner Missiles
+Button/Name/AP_GhostSCBWLockdown=Lockdown
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1575,6 +1578,7 @@ Button/Tooltip/AP_MedivacExpandedHull=Increrases Medivac's cargo space by 4.
 Button/Tooltip/AP_MedivacSpeedBoost=Increases the Medivac's movement speed by 70% for <d time="8"/>.
 Button/Tooltip/AP_HHWidowMineRangeAttack=Sentinel missile range is increased by 50%.
 Button/Tooltip/AP_HHWidowMineDeathBlossom=Reduce Sentinel Missile Cooldown by <d time="20"/>. When killed the Widow Mine will launch 5 Sentinel Missiles at random nearby targets that deal <d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,Amount"/> (+<d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,ShieldBonus"/> vs. shields) area damage.
+Button/Tooltip/AP_GhostSCBWLockdown=Fires a Lockdown round disabling a mechanical unit for <c val="ffff8a"><d ref="Behavior,AP_GhostSCBWLockdown,Duration"/></c> seconds. Affected units cannot attack, move or use abilities, disabling passive <c val="ffff8a">Detection</c> and <c val="ffff8a">Cloaking</c>.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)

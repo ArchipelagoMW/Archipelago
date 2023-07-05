@@ -6951,4 +6951,15 @@
         <Volume value="-4.000000,-3.000000"/>
         <EditorCategories value="Race:Terran"/>
     </CSound>
+    <CSound id="AP_GhostSCBWLockdown@Impact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\GhostSCBW\GhostSCBWLockdown@Impact00.ogg"/>
+        <!--<Volume value="-5.490000,-5.490000"/>-->
+    </CSound>
+    <CSound id="AP_GhostSCBWLockdown@Launch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\GhostSCBW\GhostSCBWLockdown@Launch00.ogg"/>
+        <DupeMaximumMethod value="Replace"/>
+        <!--<Volume value="-6.860000,-6.860000"/>-->
+    </CSound>
 </Catalog>

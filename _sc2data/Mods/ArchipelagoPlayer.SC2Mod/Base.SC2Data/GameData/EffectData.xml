@@ -10823,4 +10823,13 @@
         <Abil value="AP_HHWidowMineBlossom"/>
         <WhichUnit Value="Caster"/>
     </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_GhostSCBWLockdown@AB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_GhostSCBWLockdown"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_GhostSCBWLockdown@LM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_GhostSCBWLockdown@AB"/>
+        <AmmoUnit value="AP_GhostSCBWLockdown@Missile"/>
+    </CEffectLaunchMissile>
 </Catalog>

@@ -3481,4 +3481,15 @@
     <CValidatorUnitCompareBehaviorCount id="AP_NoMineDroneCountdown">
         <Behavior value="AP_MineDroneCountdown"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_UseGhostOcularImplants">
+        <Find value="1"/>
+        <Value value="AP_UseGhostOcularImplants"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_UseGhostCriusSuit">
+        <Find value="1"/>
+        <Value value="AP_UseGhostCriusSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_NotStunnedorStasised">
+        <Filters value="-;Stasis,Stunned"/>
+    </CValidatorUnitFilters>
 </Catalog>

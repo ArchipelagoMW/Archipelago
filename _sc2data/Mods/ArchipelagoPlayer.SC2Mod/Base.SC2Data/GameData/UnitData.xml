@@ -1900,6 +1900,9 @@
         <AbilArray Link="AP_GhostHoldFire"/>
         <AbilArray Link="AP_EMP"/>
         <AbilArray Link="AP_GhostWeaponsFree"/>
+        <AbilArray Link="AP_GhostSCBWLockdown"/>
+        <BehaviorArray Link="AP_OcularImplantsIndicator"/>
+        <BehaviorArray Link="AP_CriusSuitIndicator"/>
         <WeaponArray Link="AP_C10CanisterRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -1910,27 +1913,28 @@
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,1" Row="2" Column="4"/>
             <LayoutButtons Face="AP_AttackGhost" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AP_Snipe" Type="AbilCmd" AbilCmd="AP_Snipe,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_NukeCalldown" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,0" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_NukeCalldown" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,0" Row="1" Column="0"/>
             <LayoutButtons Face="AP_CloakOnGhost" Type="AbilCmd" AbilCmd="AP_GhostCloak,0" Row="2" Column="2"/>
-            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_GhostCloak,1" Row="2" Column="2"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_GhostCloak,1" Row="2" Column="3"/>
             <LayoutButtons Face="AP_EMP" Type="AbilCmd" AbilCmd="AP_EMP,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_WeaponsFree" Type="AbilCmd" AbilCmd="AP_GhostWeaponsFree,0" Row="1" Column="3"/>
-            <LayoutButtons>
-                <Face value="AP_OcularImplants"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255"/>
-                <Requirements value="AP_UseGhostOcularImplants"/>
-                <Row value="1"/>
-                <Column value="0"/>
-            </LayoutButtons>
-            <LayoutButtons>
-                <Face value="AP_CriusSuit"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,0"/>
-                <Requirements value="AP_UseGhostCriusSuit"/>
-                <Row value="1"/>
-                <Column value="1"/>
-            </LayoutButtons>
+            <LayoutButtons Face="AP_GhostSCBWLockdown" Type="AbilCmd" AbilCmd="AP_GhostSCBWLockdown,Execute" Row="1" Column="1"/>
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_OcularImplants"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255"/>-->
+<!--                <Requirements value="AP_UseGhostOcularImplants"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="0"/>-->
+<!--            </LayoutButtons>-->
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_CriusSuit"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255,0"/>-->
+<!--                <Requirements value="AP_UseGhostCriusSuit"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="1"/>-->
+<!--            </LayoutButtons>-->
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -2053,6 +2057,11 @@
             <Charge Link="Ghost/Revive"/>
             <Cooldown Link="Ghost/Revive"/>
         </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GhostSCBWLockdown@Missile" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="AP_GhostSCBWLockdown@Mover"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
     <CUnit id="AP_Spectre">
         <DeathRevealRadius value="3"/>

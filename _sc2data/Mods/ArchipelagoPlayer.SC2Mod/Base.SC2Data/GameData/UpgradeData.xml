@@ -4598,4 +4598,7 @@
         <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,MinScanRange" Value="1"/>
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,MinScanRange" Value="1"/>
     </CUpgrade>
+    <CUpgrade id="AP_GhostSCBWLockdownResearch">
+        <Icon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
+    </CUpgrade>
 </Catalog>

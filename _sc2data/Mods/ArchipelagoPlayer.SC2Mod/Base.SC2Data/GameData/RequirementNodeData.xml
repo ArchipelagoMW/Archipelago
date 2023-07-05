@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirementCountUpgrade default="1" id="AP_SCBW_UpgradeCount">
+        <?token id="x" type="CUpgradeLink" value="Research"?>
+        <Count Link="##x##" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementAllowUnit id="AP_AllowUnitMarine">
         <Link value="AP_Marine"/>
     </CRequirementAllowUnit>
@@ -2512,4 +2516,8 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly">
         <Count Link="AP_LaserTargetingSystemLiberator" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_GhostSCBWLockdown@Show">
+        <OperandArray value="AP_GhostSCBWLockdownResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_GhostSCBWLockdownResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_GhostSCBWLockdownResearch"/>
 </Catalog>

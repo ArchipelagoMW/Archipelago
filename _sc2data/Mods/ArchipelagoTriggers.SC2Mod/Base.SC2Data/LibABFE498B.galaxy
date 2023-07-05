@@ -1139,6 +1139,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds (int lp_player) {
     TechTreeAbilityAllow(lp_player, AbilityCommand("AP_EMP", 0), true);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockGhostLockdown (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_GhostSCBWLockdownResearch", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockSpectrePsionicLash (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

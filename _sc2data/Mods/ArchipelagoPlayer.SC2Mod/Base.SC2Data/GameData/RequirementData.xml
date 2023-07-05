@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirement default="1" id="AP_SCBW_AbilReq">
+        <?token id="Race" value="Terran"?>
+        <EditorCategories value="Race:##Race##,TechType:Ability"/>
+        <NodeArray index="Use" Link="##id##"/>
+        <NodeArray index="Show" Link="##id##@Show"/>
+    </CRequirement>
     <CRequirement id="AP_HaveGreaterSpireAndHotSBroodlord">
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <CanBeSuppressed index="Use" value="0"/>
@@ -1544,4 +1550,5 @@
     <CRequirement id="AP_HaveLaserTargetingSystemLiberator">
         <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_GhostSCBWLockdown" parent="AP_SCBW_AbilReq"/>
 </Catalog>

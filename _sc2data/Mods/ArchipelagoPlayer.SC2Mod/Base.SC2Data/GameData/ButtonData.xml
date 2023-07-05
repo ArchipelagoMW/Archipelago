@@ -2659,4 +2659,9 @@
         <AlertIcon value="Assets\Textures\btn-ability-hornerhan-widowmine-deathblossom.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_GhostSCBWLockdown">
+        <Icon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

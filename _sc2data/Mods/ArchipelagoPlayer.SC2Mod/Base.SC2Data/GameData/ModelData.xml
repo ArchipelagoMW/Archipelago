@@ -11646,4 +11646,19 @@
         <EditorCategories value="Race:Zerg"/>
         <Lighting value=""/>
     </CModel>
+    <CModel id="AP_GhostSCBWLockdown@Glaze" parent="Glaze">
+        <Model value="Assets\Effects\Glaze\Glaze_Goliath_Lockdown\Glaze_Goliath_Lockdown.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GhostSCBWLockdown@Impact" parent="RaceImpactFX" Race="Terran">
+        <Model value="Assets\Effects\Terran\Goliath_Lockdown_Impact\Goliath_Lockdown_Impact.m3"/>
+    </CModel>
+    <CModel id="AP_GhostSCBWLockdown@Missile" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\Goliath_Lockdown_Missile\Goliath_Lockdown_Missile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_GhostSCBWLockdown@Model" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\Goliath_Lockdown\Goliath_Lockdown.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>
