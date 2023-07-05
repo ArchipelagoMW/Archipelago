@@ -78,15 +78,6 @@ class PokemonEmeraldWorld(World):
     free_fly_location_id: int = 0
     modified_data: PokemonEmeraldData
 
-    def _get_pokemon_emerald_data(self):
-        return {
-            'world_seed': self.multiworld.per_slot_randoms[self.player].getrandbits(32),
-            'seed_name': self.multiworld.seed_name,
-            'player_name': self.multiworld.get_player_name(self.player),
-            'player_id': self.player,
-            'race': self.multiworld.is_race,
-        }
-
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_path = get_base_rom_path()
@@ -765,11 +756,33 @@ class PokemonEmeraldWorld(World):
         generate_output(self.modified_data, self.multiworld, self.player, output_directory)
 
     def fill_slot_data(self):
-        slot_data = self._get_pokemon_emerald_data()
-        for option_name in option_definitions:
+        slot_data = {}
+
+        sent_options = [
+            "goal",
+            "badges",
+            "hms",
+            "key_items",
+            "bikes",
+            "rods",
+            "overworld_items",
+            "hidden_items",
+            "npc_gifts",
+            "require_itemfinder",
+            "require_flash",
+            "enable_ferry",
+            "elite_four_requirement",
+            "elite_four_count",
+            "norman_requirement",
+            "norman_count",
+            "extra_boulders",
+            "free_fly_location",
+            "fly_without_badge",
+        ]
+
+        for option_name in sent_options:
             option = getattr(self.multiworld, option_name)[self.player]
-            if slot_data.get(option_name, None) is None and type(option.value) in {int}:
-                slot_data[option_name] = int(option.value)
+            slot_data[option_name] = int(option.value)
 
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         slot_data["remove_roadblocks"] = list(self.multiworld.remove_roadblocks[self.player].value)
