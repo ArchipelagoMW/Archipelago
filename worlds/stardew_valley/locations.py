@@ -56,7 +56,7 @@ class LocationTags(enum.Enum):
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
-    WALNUT_PURCHASE = enum.auto
+    WALNUT_PURCHASE = enum.auto()
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()

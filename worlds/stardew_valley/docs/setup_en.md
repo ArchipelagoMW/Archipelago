@@ -83,11 +83,11 @@ To include supported mods in your multiworld slot, you need to include a section
 This section must be an array with the **exact** names of every mod you wish to include. Any improperly typed mod name will be ignored.
 ![image](https://i.imgur.com/uOHtXmU.png)
 
-These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes spell that allow a player to teleport, and if included, teleporting can be required to reach checks.
+These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes a spell that allow a player to teleport, and, if included, teleporting can be required to reach checks.
 
 Furthermore, as mod development can be unpredictable, the generator and the StardewArchipelago client are designed and tested for a very specific version of any supported mod. When installing them, you must choose the correct version, or you will not be able to play.
 
-A Zip archive of **every supported mod** is included in the [StardewArchipelago Mod Releases](https://github.com/agilbert1412/StardewArchipelago/releases) alongside the main mod, which should all have the correct versions available. The archive also contains recommend configs for customizable mods.
+A Zip archive of **every supported mod** is included in the [StardewArchipelago Mod Releases](https://github.com/agilbert1412/StardewArchipelago/releases) alongside the main mod, which should all have the correct versions available. The archive also contains recommended configs for customizable mods.
 
 The archive also contains every dependency for these mods, but dependency versions are less strict.
 
