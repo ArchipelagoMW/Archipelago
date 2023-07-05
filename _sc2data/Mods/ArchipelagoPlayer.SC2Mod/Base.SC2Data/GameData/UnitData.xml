@@ -3082,6 +3082,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_WidowMineAttack"/>
+        <AbilArray Link="AP_HHWidowMineBlossom"/>
+        <BehaviorArray Link="AP_HHWidowMineBlossom"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3092,6 +3094,10 @@
             <LayoutButtons Face="AP_WidowMineBioSplash" Type="Passive" Row="2" Column="0"/>
             <LayoutButtons Face="AP_WidowMineBurrow" Type="AbilCmd" AbilCmd="AP_WidowMineBurrow,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_WidowMineAttack" Type="AbilCmd" AbilCmd="AP_WidowMineAttack,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_DrillClaws" Type="Passive" Requirements="AP_HaveWidowMineDrillingClaws" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_WidowMineConcealment" Type="Passive" Requirements="AP_HaveWidowMineImprovedConcealmentUnburrowed" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HHWidowMineRangeAttack" Type="Passive" Requirements="AP_HaveHHWidowMineAttackRangeUnburrowed" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_HHWidowMineDeathBlossom" Type="Passive" Requirements="AP_HaveHHWidowMineDeathBlossom" Row="1" Column="3"/>
         </CardLayouts>
         <CargoSize value="2"/>
         <ScoreMake value="100"/>
@@ -3151,17 +3157,21 @@
         <AttackTargetPriority value="20"/>
         <AbilArray Link="AP_WidowMineUnburrow"/>
         <AbilArray Link="AP_WidowMineAttack"/>
+        <AbilArray Link="AP_HHWidowMineBlossom"/>
         <BehaviorArray Link="AP_WidowMineArmed"/>
         <BehaviorArray Link="AP_WidowMineBurrowedCloakingBehavior"/>
         <BehaviorArray Link="AP_WidowMineImprovedConcealmentUpgradeTracker"/>
+        <BehaviorArray Link="AP_HHWidowMineBlossom"/>
         <CardLayouts>
             <LayoutButtons Face="AP_WidowMineBioSplash" Type="Passive" AbilCmd="AP_WidowMineAttack,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="AP_WidowMineUnburrow" Type="AbilCmd" AbilCmd="AP_WidowMineUnburrow,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_WidowMineAttack" Type="AbilCmd" AbilCmd="AP_WidowMineAttack,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
-            <LayoutButtons Face="AP_DrillClaws" Type="Passive" Requirements="AP_HaveWidowMineDrillingClaws" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_WidowMineConcealment" Type="Passive" Requirements="AP_HaveWidowMineImprovedConcealment" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_DrillClaws" Type="Passive" Requirements="AP_HaveWidowMineDrillingClaws" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_WidowMineConcealment" Type="Passive" Requirements="AP_HaveWidowMineImprovedConcealment" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HHWidowMineRangeAttack" Type="Passive" Requirements="AP_HaveHHWidowMineAttackRange" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_HHWidowMineDeathBlossom" Type="Passive" Requirements="AP_HaveHHWidowMineDeathBlossom" Row="1" Column="3"/>
         </CardLayouts>
         <ScoreKill value="100"/>
         <SubgroupPriority value="4"/>
@@ -3186,6 +3196,11 @@
     <CUnit id="AP_WidowMineWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
         <EditorCategories value="ObjectFamily:Melee,ObjectType:Projectile"/>
+    </CUnit>
+    <CUnit id="AP_HHWidowMineBlossomWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectFamily:FactionMarauder,ObjectType:Projectile"/>
+        <Mover value="AP_WidowMineWeapon"/>
     </CUnit>
     <CUnit id="AP_Cyclone">
         <Description value="Button/Tooltip/AP_BuildCyclone"/>

@@ -163,6 +163,8 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineBlackMarketLaunchers (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineExecutionerMissiles (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerNeosteelBunker (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerShrikeTurret (int lp_player);

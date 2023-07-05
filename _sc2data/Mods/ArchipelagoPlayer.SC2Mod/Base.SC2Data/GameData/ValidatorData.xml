@@ -3460,4 +3460,25 @@
         <Find value="1"/>
         <Value value="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HHWidowMineAttackRangeUpgraded">
+        <Find value="1"/>
+        <Value value="AP_HaveHHWidowMineAttackRange"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HHWidowMineDeathBlossomUpgraded">
+        <Find value="1"/>
+        <Value value="AP_HaveHHWidowMineDeathBlossom"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HHWidowMineCombine">
+        <CombineArray value="AP_IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="AP_HHWidowMineDeathBlossomUpgraded"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareCooldown id="AP_HHWidowMineBlossomNotOnCooldown">
+        <WhichUnit Value="Caster"/>
+        <CooldownLink value="Abil/AP_HHWidowMineBlossom"/>
+        <Ability value="AP_HHWidowMineBlossom"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoMineDroneCountdown">
+        <Behavior value="AP_MineDroneCountdown"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

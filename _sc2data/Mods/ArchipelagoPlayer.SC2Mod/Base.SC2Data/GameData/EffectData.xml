@@ -2012,7 +2012,7 @@
         <Behavior value="AP_WidowMineAnimationController"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_WidowMineAttack">
-        <ValidatorArray value="NoMineDroneCountdown"/>
+        <ValidatorArray value="AP_NoMineDroneCountdown"/>
         <ValidatorArray value="NotLarva"/>
         <EditorCategories value="Race:Terran"/>
         <Marker Link="AP_WidowMineAttack"/>
@@ -10735,4 +10735,92 @@
     <CEffectApplyBehavior id="AP_MedivacSpeedBoost">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="5"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomCP1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomCP2"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomCP3"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomCP4"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomCP5"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP1">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicOffsetArray value="5.5,0,0"/>
+        <PeriodicOffsetArray value="-5.5,0,0"/>
+        <PeriodicOffsetArray value="2.5,0,0"/>
+        <PeriodCount value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomLM"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP2">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicOffsetArray value="4.354,-3.0266,0"/>
+        <PeriodicOffsetArray value="1,-2.0981,0"/>
+        <PeriodicOffsetArray value="1.354,-5.2062,0"/>
+        <PeriodCount value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomLM"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP3">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicOffsetArray value="4.354,3.0266,0"/>
+        <PeriodicOffsetArray value="1,2.0981,0"/>
+        <PeriodicOffsetArray value="1.354,5.2062,0"/>
+        <PeriodCount value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomLM"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP4">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicOffsetArray value="-4.354,-3.0266,0"/>
+        <PeriodicOffsetArray value="-1.354,-5.2062,0"/>
+        <PeriodicOffsetArray value="-1,-2.0981,0"/>
+        <PeriodCount value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomLM"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_HHWidowMineBlossomCP5">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodicOffsetArray value="-4.354,3.0266,0"/>
+        <PeriodicOffsetArray value="-1.354,5.2062,0"/>
+        <PeriodicOffsetArray value="-1,2.0981,0"/>
+        <PeriodCount value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodicEffectArray value="AP_HHWidowMineBlossomLM"/>
+        <OffsetRandMode value="RandomNoRepeat"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_HHWidowMineBlossomLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_HHWidowMineBlossomExplodeSplashSearch"/>
+        <AmmoUnit value="AP_HHWidowMineBlossomWeapon"/>
+        <ImpactLocation Value="TargetPoint"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_HHWidowMineBlossomExplodeSplashSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.625" Effect="AP_HHWidowMineBlossomExplodeSplash"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_HHWidowMineBlossomExplodeSplash" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Spell"/>
+        <KindSplash value="Splash"/>
+        <Amount value="10"/>
+        <Death value="Blast"/>
+        <ArmorReduction value="0"/>
+        <ShieldBonus value="10"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HHWidowMineBlossomIssueOrderSet">
+        <EffectArray value="AP_HHWidowMineBlossomCP"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_HHWidowMineBlossomIssueOrder">
+        <Abil value="AP_HHWidowMineBlossom"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectIssueOrder>
 </Catalog>

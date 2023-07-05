@@ -6913,4 +6913,42 @@
         <AssetArray File="Assets\Sounds\Zerg\LurkerDen\LurkerDen_What0.ogg"/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_HH_TornadoMissile_LaunchBlossom" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Launch_B_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Launch_B_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Launch_B_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Launch_B_04.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-5.000000,-3.000000"/>
+        <Volume value="-4.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_HH_TornadoMissile_LaunchFly" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\WarHawk_Missile_Launch_Prop_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarHawk_Missile_Launch_Prop_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarHawk_Missile_Launch_Prop_03.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-15.000000,-12.000000"/>
+        <DupeDestroyCount value="3"/>
+    </CSound>
+    <CSound id="AP_HH_TornadoMissile_Blossom_Launch" parent="Combat">
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutator_Fireworks_Missle_Attack_Impact_04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-3.000000"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Select value="Random"/>
+        <Volume value="-4.000000,-3.000000"/>
+        <EditorCategories value="Race:Terran"/>
+    </CSound>
 </Catalog>

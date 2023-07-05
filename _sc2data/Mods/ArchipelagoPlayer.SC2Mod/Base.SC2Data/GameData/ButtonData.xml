@@ -2649,4 +2649,14 @@
         <Icon value="Assets\Textures\BTN-Upgrade-Terran-MedivacEmergencyThrusters.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Upgrade-Terran-MedivacEmergencyThrusters.dds"/>
     </CButton>
+    <CButton id="AP_HHWidowMineRangeAttack">
+        <Icon value="Assets\Textures\btn-ability-hornerhan-widowmine-attackrange.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-hornerhan-widowmine-attackrange.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HHWidowMineDeathBlossom">
+        <Icon value="Assets\Textures\btn-ability-hornerhan-widowmine-deathblossom.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-hornerhan-widowmine-deathblossom.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

@@ -1287,6 +1287,18 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment (int lp_player
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ImprovedConcealment", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineBlackMarketLaunchers (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HHWidowMineBurrowedRange", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineExecutionerMissiles (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HHWidowMineDeathBlossom", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

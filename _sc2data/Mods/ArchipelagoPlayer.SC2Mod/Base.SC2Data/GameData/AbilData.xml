@@ -5856,4 +5856,12 @@
             <Cooldown TimeUse="20"/>
         </Cost>
     </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_HHWidowMineBlossom">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_WidowMineAttack"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Effect index="0" value="AP_HHWidowMineBlossomCP"/>
+    </CAbilEffectInstant>
 </Catalog>

@@ -4065,4 +4065,17 @@
         <DisplayDuration index="Ally" value="1"/>
         <InfoIcon value="Assets\Textures\btn-upgrade-terran-jotunboosters.dds"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HHWidowMineBlossom">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <DamageResponse Fatal="1" Handled="AP_HHWidowMineBlossomIssueOrderSet" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+        <Modification>
+            <DeathResponse Chance="1" Effect="AP_HHWidowMineBlossomIssueOrderSet"/>
+        </Modification>
+        <DisableValidatorArray value="AP_HHWidowMineBlossomNotOnCooldown"/>
+        <DisableValidatorArray value="AP_HHWidowMineCombine"/>
+    </CBehaviorBuff>
 </Catalog>

@@ -2498,4 +2498,15 @@
     <CRequirementCountUpgrade id="AP_MedivacSpeedBoostCompleteOnly">
         <Count Link="AP_MedivacSpeedBoost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HHWidowMineBurrowedRange" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleWidowMineBurrowedCompleteOnly">
+        <Count Link="AP_NotPossibleWidowMineBurrowed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHHWidowMineDeathBlossomCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HHWidowMineDeathBlossom" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>
