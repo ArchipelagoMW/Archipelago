@@ -2509,4 +2509,7 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HHWidowMineDeathBlossom" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly">
+        <Count Link="AP_LaserTargetingSystemLiberator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

@@ -1541,4 +1541,7 @@
     <CRequirement id="AP_HaveHHWidowMineDeathBlossom">
         <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineDeathBlossomCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemLiberator">
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -4582,4 +4582,20 @@
         <AffectedUnitArray value="AP_WidowMineBurrowed"/>
         <Icon value="Assets\Textures\btn-ability-hornerhan-widowmine-deathblossom.dds"/>
     </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemLiberator">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Liberator,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Liberator,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,Range" Value="1"/>
+        <EffectArray Reference="Abil,AP_LiberatorAGTarget,Range[0]" Value="1"/>
+        <EffectArray Reference="Validator,AP_LiberatorAGNotOutOfRange,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,MinScanRange" Value="1"/>
+    </CUpgrade>
 </Catalog>

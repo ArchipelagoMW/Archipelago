@@ -2890,6 +2890,7 @@
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
             <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocolNoDefenderMode" Row="1" Column="1"/>
             <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosLiberator" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemLiberator" Row="1" Column="3"/>
             <LayoutButtons Face="AP_CloakOnLiberator" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,On" Row="2" Column="2"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,Off" Row="2" Column="3"/>
         </CardLayouts>
@@ -2962,6 +2963,7 @@
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
             <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
             <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosLiberator" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemLiberator" Row="1" Column="3"/>
             <LayoutButtons Face="AP_CloakOnLiberator" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,On" Row="2" Column="2"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,Off" Row="2" Column="3"/>
         </CardLayouts>
