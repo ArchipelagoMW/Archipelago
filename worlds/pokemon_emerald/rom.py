@@ -233,7 +233,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
     # Set slot name
-    for i, byte in enumerate(multiworld.player_name[player].encode()):
+    for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Write Output

@@ -124,7 +124,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
 
     if "slot_name" in gba_data:
         if ctx.auth is None:
-            ctx.auth = bytes([byte for byte in gba_data["slot_name"] if byte != 0]).decode()
+            ctx.auth = bytes([byte for byte in gba_data["slot_name"] if byte != 0]).decode("utf-8")
             if ctx.awaiting_rom:
                 await ctx.server_auth(False)
 
@@ -196,7 +196,7 @@ async def gba_send_receive_task(ctx: GBAContext):
         else:
             (reader, writer) = ctx.gba_streams
 
-            message = create_payload(ctx).encode()
+            message = create_payload(ctx).encode("utf-8")
             writer.write(message)
             writer.write(b"\n")
 
@@ -217,7 +217,7 @@ async def gba_send_receive_task(ctx: GBAContext):
             # Read
             try:
                 data_bytes = await asyncio.wait_for(reader.readline(), timeout=5)
-                data_decoded = json.loads(data_bytes.decode())
+                data_decoded = json.loads(data_bytes.decode("utf-8"))
 
                 if data_decoded["script_version"] != EXPECTED_SCRIPT_VERSION:
                     logger.warning(f"Your connector script is incompatible with this client. Expected version {EXPECTED_SCRIPT_VERSION}, got {data_decoded['script_version']}.")
