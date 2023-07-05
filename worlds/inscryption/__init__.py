@@ -74,7 +74,7 @@ class InscryptionWorld(World):
         set_rule(self.multiworld.get_entrance("Menu -> Act 2", self.player),
                  lambda state: state.has("Film Roll", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Film Roll", self.player)
-        for item in inscryption_rules:
+        for item in inscryption_rules.keys():
             for location in inscryption_rules[item]:
-                add_rule(self.multiworld.get_location(location, self.player),
+                set_rule(self.multiworld.get_location(location, self.player),
                          lambda state: state.has(item, self.player))
