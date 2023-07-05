@@ -347,6 +347,18 @@ class Hint(typing.NamedTuple):
 
 
 class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tuple[int, int, int]]]):
+    def __init__(self, values: typing.MutableMapping[int, typing.Dict[int, typing.Tuple[int, int, int]]]):
+        super().__init__(values)
+
+        if not self:
+            raise ValueError(f"Rejecting game with 0 players")
+
+        if len(self) != max(self):
+            raise ValueError("Player IDs not continuous")
+
+        if len(self.get(0, {})):
+            raise ValueError("Invalid player id 0 for location")
+
     def find_item(self, slots: typing.Set[int], seeked_item_id: int
                   ) -> typing.Generator[typing.Tuple[int, int, int, int, int], None, None]:
         for finding_player, check_data in self.items():
