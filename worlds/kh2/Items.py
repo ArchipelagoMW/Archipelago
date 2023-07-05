@@ -616,7 +616,9 @@ exclusion_item_table = {
         item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in keys
     }
 }
+event_item_to_location={
 
+}
 item_dictionary_table = {
     **Reports_Table,
     **Progression_Table,
