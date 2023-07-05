@@ -294,7 +294,7 @@ class _UserPath(str):
         if os.path.isabs(self):
             return str(self)
         from Utils import user_path
-        return _resolve_exe(user_path(self))
+        return user_path(_resolve_exe(self))
 
 
 class _LocalPath(str):
@@ -302,7 +302,7 @@ class _LocalPath(str):
         if os.path.isabs(self):
             return str(self)
         from Utils import local_path
-        return _resolve_exe(local_path(self))
+        return local_path(_resolve_exe(self))
 
 
 class FilePath(Path):
