@@ -17,7 +17,7 @@
 The Dark Souls III AP Client is a dinput8.dll triggered when launching Dark Souls III. This .dll file will launch a command 
 prompt where you can read information about your run and write any command to interact with the Archipelago server.
 
-This client has only been tested with the Official Steam version of the game at version 1.15. It does not matter which DLCs are installed. However, you will have to downpatch your Dark Souls III installation from current patch, which is 1.15.2.
+This client has only been tested with the Official Steam version of the game at version 1.15. It does not matter which DLCs are installed. However, you will have to downpatch your Dark Souls III installation from current patch.
 
 ## Downpatching Dark Souls III
 
