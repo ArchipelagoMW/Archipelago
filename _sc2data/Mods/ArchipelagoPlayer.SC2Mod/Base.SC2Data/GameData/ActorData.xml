@@ -2010,6 +2010,10 @@
         <On Terms="Upgrade.AP_ExpandedHull.Add" Send="ModelSwap AP_MedivacUpgrade"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
+        <On Terms="Behavior.AP_MedivacSpeedBoost.On" Send="AnimPlay Turbo Spell,B"/>
+        <On Terms="Behavior.AP_MedivacSpeedBoost.On" Send="StatusSet Turbo 1"/>
+        <On Terms="Behavior.AP_MedivacSpeedBoost.Off" Send="StatusSet Turbo 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Turbo 1" Send="Create AP_Medivac_MovementAfterburner"/>
         <HostSiteOps Ops="SOpBankerMedivac"/>
         <Model value="Medivac"/>
         <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
@@ -2040,6 +2044,9 @@
             <Image value="Assets\Textures\Wireframe-Terran-Medivac.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorSound id="AP_Medivac_MovementAfterburner" parent="SoundOneShot">
+        <Sound value="Medivac_MovementAfterburner"/>
+    </CActorSound>
     <CActorBeamSimple id="AP_MedivacDoubleHealBeam" parent="BeamSimpleAnimationStyleContinuous">
         <On Terms="ActorCreation" Target="::scope.AP_MedivacHealLaunch" Send="StatusIncrement Beams"/>
         <On Terms="Effect.AP_MedivacHealTargetPersistent.Stop" Send="Destroy"/>
@@ -2158,6 +2165,14 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="MedicHealModel"/>
     </CActorModel>
+    <CActorSound id="AP_Medivac_IgniteAfterburners" parent="SoundOneShot">
+        <On Terms="Behavior.AP_MedivacSpeedBoost.On" Send="Create"/>
+        <Sound value="Medivac_IgniteAfterburners"/>
+    </CActorSound>
+    <CActorSound id="AP_Medivac_IgniteAfterburners2" parent="SoundOneShot">
+        <On Terms="Behavior.AP_MedivacSpeedBoost.On" Send="Create"/>
+        <Sound value="Medivac_IgniteAfterburners2"/>
+    </CActorSound>
     <CActorUnit id="AP_Wraith" parent="GenericUnitBase" unitName="AP_Wraith">
         <Aliases value="_UnitLarge"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>

@@ -2495,4 +2495,7 @@
     <CRequirementCountUpgrade id="AP_NotPossibleVikingAssaultCompleteOnly">
         <Count Link="AP_NotPossibleVikingAssault" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_MedivacSpeedBoostCompleteOnly">
+        <Count Link="AP_MedivacSpeedBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

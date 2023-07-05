@@ -10732,4 +10732,7 @@
         <BehaviorLink value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
         <Count value="5"/>
     </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_MedivacSpeedBoost">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
 </Catalog>

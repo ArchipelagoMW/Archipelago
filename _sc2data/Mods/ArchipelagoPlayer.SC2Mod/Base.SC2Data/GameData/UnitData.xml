@@ -1355,7 +1355,8 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_MedivacTransport"/>
         <AbilArray Link="AP_MedivacDoubleBeamHeal"/>
-        <BehaviorArray Link="ScavengingSystemsMechDeath"/>
+        <AbilArray Link="AP_MedivacSpeedBoost"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -1367,6 +1368,7 @@
             <LayoutButtons Face="AP_Heal" Type="AbilCmd" AbilCmd="AP_MedivacHeal,0" Row="2" Column="0"/>
             <LayoutButtons Face="MedivacUnloadAll" Type="AbilCmd" AbilCmd="AP_MedivacTransport,2" Row="2" Column="3"/>
             <LayoutButtons Face="AP_Heal" Type="AbilCmd" AbilCmd="AP_MedivacDoubleBeamHeal,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MedivacSpeedBoost" Type="AbilCmd" AbilCmd="AP_MedivacSpeedBoost,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_RapidDeploymentTubes" Type="Passive" Requirements="AP_RapidDeploymentResearched" Row="1" Column="0"/>
             <LayoutButtons Face="AP_AdvancedHealingAI" Type="Passive" Requirements="AP_AdvancedHealingAIPurchased" Row="1" Column="1"/>
             <LayoutButtons Face="AP_MedivacExpandedHull" Type="Passive" Requirements="AP_ExpandedHullResearched" Row="1" Column="2"/>

@@ -4569,4 +4569,5 @@
     </CUpgrade>
     <CUpgrade id="AP_NotPossibleVikingFighter"/>
     <CUpgrade id="AP_NotPossibleVikingAssault"/>
+    <CUpgrade id="AP_MedivacSpeedBoost"/>
 </Catalog>

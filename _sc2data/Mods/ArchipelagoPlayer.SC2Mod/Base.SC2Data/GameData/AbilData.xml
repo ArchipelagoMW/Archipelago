@@ -5846,4 +5846,14 @@
 <!--        </InfoArray>-->
 <!--        <InfoArray index="Research10" Time="90"/>-->
     </CAbilResearch>
+    <CAbilEffectInstant id="AP_MedivacSpeedBoost">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedivacSpeedBoost" Requirements="AP_HaveMedivacSpeedBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+    </CAbilEffectInstant>
 </Catalog>

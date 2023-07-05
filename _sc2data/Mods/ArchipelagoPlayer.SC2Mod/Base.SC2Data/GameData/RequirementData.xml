@@ -1522,4 +1522,8 @@
         <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotPossibleVikingAssaultCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveMedivacSpeedBoost">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_MedivacSpeedBoostCompleteOnly"/>
+    </CRequirement>
 </Catalog>
