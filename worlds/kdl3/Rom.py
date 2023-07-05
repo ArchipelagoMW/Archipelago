@@ -609,6 +609,7 @@ def write_heart_star_sprites(rom: RomData):
     decompressed = hal_decompress(compressed)
     patch = get_data(__name__, os.path.join("data", "APHeartStar.bsdiff4"))
     patched = bytearray(bsdiff4.patch(decompressed, patch))
+    rom.write_bytes(0x1AF7DF, patched)
     patched[0:0] = [0xE3, 0xFF]
     patched.append(0xFF)
     rom.write_bytes(0x1CD000, patched)
