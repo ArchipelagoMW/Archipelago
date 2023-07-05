@@ -4557,4 +4557,10 @@
         <EffectArray Reference="Weapon,AP_SiegeBreaker,MinScanRange" Value="1"/>
         <EffectArray Reference="Weapon,AP_ArcliteShockCannon,MinScanRange" Value="1"/>
     </CUpgrade>
+    <CUpgrade id="AP_RaynorImprovedSiegeMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-raynor-improvedsiegemode.dds"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,LifeArmor" Value="3"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,LifeArmor" Value="3"/>
+    </CUpgrade>
 </Catalog>

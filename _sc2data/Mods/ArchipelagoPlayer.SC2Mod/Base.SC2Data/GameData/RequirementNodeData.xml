@@ -2482,4 +2482,8 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_LaserTargetingSystemSiegeTank" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_RaynorImprovedSiegeMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

@@ -2631,4 +2631,9 @@
         <Icon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
     </CButton>
+    <CButton id="AP_ImprovedSiegeMode">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-improvedsiegemode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-raynor-improvedsiegemode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

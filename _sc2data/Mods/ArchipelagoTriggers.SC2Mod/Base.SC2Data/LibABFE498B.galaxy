@@ -988,6 +988,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem (int 
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemSiegeTank", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RaynorImprovedSiegeMode", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

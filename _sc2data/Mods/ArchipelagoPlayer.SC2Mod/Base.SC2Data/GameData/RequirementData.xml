@@ -1499,4 +1499,13 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemSiegeTankCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveImprovedSiegeMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_TankModeHaveImprovedSiegeMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+    </CRequirement>
 </Catalog>
