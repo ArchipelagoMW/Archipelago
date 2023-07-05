@@ -19,7 +19,7 @@ KDL3_ROMNAME = SRAM_1_START + 0x8100
 KDL3_DEATH_LINK_ADDR = SRAM_1_START + 0x9010
 KDL3_GOAL_ADDR = SRAM_1_START + 0x9012
 KDL3_LEVEL_ADDR = SRAM_1_START + 0x9020
-
+KDL3_IS_DEMO = SRAM_1_START + 0x5AD5
 KDL3_GAME_STATE = SRAM_1_START + 0x36D0
 KDL3_GAME_SAVE = SRAM_1_START + 0x3617
 KDL3_LIFE_COUNT = SRAM_1_START + 0x39CF
@@ -197,6 +197,9 @@ class KDL3SNIClient(SNIClient):
         if halken != b"halken":
             return
         # can't check debug anymore, without going and copying the value. might be important later.
+        is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)  # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
+        if is_demo[0] > 0x00:
+            return
         current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
         goal = await snes_read(ctx, KDL3_GOAL_ADDR, 1)
         boss_butch_status = await snes_read(ctx, KDL3_BOSS_BUTCH_STATUS + (current_save[0] * 2), 1)
