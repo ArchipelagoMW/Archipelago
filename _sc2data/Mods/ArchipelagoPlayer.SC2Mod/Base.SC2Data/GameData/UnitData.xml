@@ -1707,6 +1707,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_BansheeSpeed" Type="Passive" Requirements="AP_HaveBansheeSpeed" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemBanshee" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3998,6 +3999,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_BansheeSpeed" Type="Passive" Requirements="AP_HaveBansheeSpeed" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemBanshee" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

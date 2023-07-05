@@ -2471,4 +2471,7 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeBansheeSpeedCompleteOnly">
         <Count Link="AP_BansheeSpeed" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly">
+        <Count Link="AP_LaserTargetingSystemBanshee" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

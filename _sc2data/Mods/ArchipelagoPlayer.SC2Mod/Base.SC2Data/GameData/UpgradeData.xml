@@ -4517,4 +4517,20 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="Banshee"/>
     </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemBanshee">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Banshee,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Banshee,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_BacklashRockets,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_BacklashRockets,MinScanRange" Value="1"/>
+        <EffectArray Reference="Unit,AP_DuskWing,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_DuskWing,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,MinScanRange" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Banshee"/>
+    </CUpgrade>
 </Catalog>

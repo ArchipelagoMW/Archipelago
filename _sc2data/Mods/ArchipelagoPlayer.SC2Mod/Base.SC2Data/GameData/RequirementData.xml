@@ -1483,4 +1483,7 @@
     <CRequirement id="AP_HaveBansheeSpeed">
         <NodeArray index="Show" Link="AP_CountUpgradeBansheeSpeedCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemBanshee">
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly"/>
+    </CRequirement>
 </Catalog>
