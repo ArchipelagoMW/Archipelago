@@ -4601,4 +4601,10 @@
     <CUpgrade id="AP_GhostSCBWLockdownResearch">
         <Icon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
     </CUpgrade>
+    <CUpgrade id="AP_MedicSCBWRestorationResearch">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-restoration@scbw.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MedicSCBWOpticFlareResearch">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-fenix-dragoonsolariteflare.dds"/>
+    </CUpgrade>
 </Catalog>

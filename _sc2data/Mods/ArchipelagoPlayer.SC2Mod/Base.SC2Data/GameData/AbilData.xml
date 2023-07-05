@@ -5873,7 +5873,32 @@
         <TargetFilters value="Mechanical,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
         <Range value="9"/>
         <CastIntroTime value="0.25"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GhostSCBWLockdown" Requirements="AP_GhostSCBWLockdown">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GhostSCBWLockdown" Requirements="AP_GhostSCBWLockdown"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MedicSCBWRestoration">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_MedicSCBWRestoration@Set"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Structure,Missile,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedicSCBWRestoration" Requirements="AP_MedicSCBWRestoration"/>
+        <PrepTime value="0.5"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MedicSCBWOpticFlare">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MedicSCBWOpticFlare@LM"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="-;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <PrepTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedicSCBWOpticFlare" Requirements="AP_MedicSCBWOpticFlare">
             <Flags index="UseDefaultButton" value="1"/>
             <Flags index="CreateDefaultButton" value="1"/>
         </CmdButtonArray>

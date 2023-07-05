@@ -271,3 +271,5 @@ Button/Hotkey/AP_zergmissileweapons2=A
 Button/Hotkey/AP_zergmissileweapons3=A
 Button/Hotkey/AP_MedivacSpeedBoost=B
 Button/Hotkey/AP_GhostSCBWLockdown=L
+Button/Hotkey/AP_MedicSCBWRestoration=R
+Button/Hotkey/AP_MedicSCBWOpticFlare=F

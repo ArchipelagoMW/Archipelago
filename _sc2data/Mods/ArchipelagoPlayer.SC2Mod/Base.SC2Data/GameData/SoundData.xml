@@ -6962,4 +6962,16 @@
         <DupeMaximumMethod value="Replace"/>
         <!--<Volume value="-6.860000,-6.860000"/>-->
     </CSound>
+    <CSound id="AP_MedicSCBWRestoration@Impact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\MedicSCBW\MedicSCBWRestoration@Impact00.ogg"/>
+    </CSound>
+    <CSound id="AP_MedicSCBWOpticFlare@Impact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\MedicSCBW\MedicSCBWOpticFlare@Impact00.ogg"/>
+    </CSound>
+    <CSound id="AP_MedicSCBWOpticFlare@Launch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\MedicSCBW\MedicSCBWOpticFlare@Launch00.ogg" FacialGroup=""/>
+    </CSound>
 </Catalog>

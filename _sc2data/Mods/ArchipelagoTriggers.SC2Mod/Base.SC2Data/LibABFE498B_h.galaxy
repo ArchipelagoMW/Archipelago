@@ -85,6 +85,8 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem (int lp_
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineMagRailMunitions (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedicRestoration (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatJuggernautPlating (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_player, int lp_level);

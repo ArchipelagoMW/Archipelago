@@ -1551,4 +1551,6 @@
         <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_GhostSCBWLockdown" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_MedicSCBWRestoration" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_MedicSCBWOpticFlare" parent="AP_SCBW_AbilReq"/>
 </Catalog>

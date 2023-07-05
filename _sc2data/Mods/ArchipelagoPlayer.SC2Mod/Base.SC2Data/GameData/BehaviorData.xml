@@ -1187,9 +1187,11 @@
         <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_MindControl">
-        <Alignment value="Negative"/>
+        <!-- Not to be dispelled by Restoration -->
+<!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\ui_debuff_hivemindemulator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BehaviorCategories index="User8" value="1"/>
         <InitialEffect value="AP_MindControlKillCargo"/>
         <Player Value="Caster"/>
         <Modification>
@@ -1811,9 +1813,11 @@
         <Duration value="180"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_NovaDomination">
-        <Alignment value="Negative"/>
+        <!-- Not to be dispelled by Restoration -->
+<!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\BTN-Ability-Nova-Domination.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BehaviorCategories index="User8" value="1"/>
         <DisplayDuration index="Self" value="1"/>
         <Player Value="Caster"/>
     </CBehaviorBuff>
@@ -3427,9 +3431,11 @@
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DarkArchonMindControl">
-        <Alignment value="Negative"/>
+        <!-- Not to be dispelled by Restoration -->
+<!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BehaviorCategories index="User8" value="1"/>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
         <DisplayDuration index="Neutral" value="1"/>
@@ -4117,5 +4123,13 @@
         <InfoIcon value="Assets\Textures\btn-techupgrade-terran-criussuit.dds"/>
         <Name value="Button/Name/AP_CriusSuit"/>
         <Tooltip value="Button/Tooltip/AP_CriusSuit"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MedicSCBWOpticFlare">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-nova-domination.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification SightMaximum="1">
+            <StateFlags index="SuppressDetection" value="1"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

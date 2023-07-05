@@ -2664,4 +2664,15 @@
         <AlertIcon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_MedicSCBWRestoration">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-restoration@scbw.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <AlertIcon value="AP\Assets\Textures\btn-ability-terran-restoration@scbw.dds"/>
+    </CButton>
+    <CButton id="AP_MedicSCBWOpticFlare">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-fenix-dragoonsolariteflare.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-protoss-fenix-dragoonsolariteflare.dds"/>
+        <DefaultButtonLayout Row="2" Column="2"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

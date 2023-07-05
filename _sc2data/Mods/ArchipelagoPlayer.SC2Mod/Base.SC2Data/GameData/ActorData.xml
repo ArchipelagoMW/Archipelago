@@ -820,6 +820,43 @@
     <CActorSound id="AP_Medic_Death" parent="SoundOneShot">
         <On Terms="UnitDeath.AP_Medic; PassChance 25.000000" Send="Create"/>
     </CActorSound>
+    <CActorRange id="AP_MedicSCBWRestoration@Range" parent="RangeAbil" abil="AP_MedicSCBWOpticFlare">
+        <On index="1" Terms="Abil.AP_MedicSCBWRestoration.TargetOn" Send="Create"/>
+        <On index="2" Terms="Abil.AP_MedicSCBWRestoration.TargetOff" Send="Destroy"/>
+        <On index="3" Terms="Abil.AP_MedicSCBWRestoration.ButtonHoverOn" Send="Create"/>
+        <On index="4" Terms="Abil.AP_MedicSCBWRestoration.ButtonHoverOff" Send="Destroy"/>
+        <Abil Link="AP_MedicSCBWRestoration"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="AP_MedicSCBWRestoration@ImpactModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_MedicSCBWRestoration@Set.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
+        <Model value="AP_MedicSCBWRestoration@Impact"/>
+    </CActorModel>
+    <CActorSound id="AP_MedicSCBWRestoration@ImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.AP_MedicSCBWRestoration@Set.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_MedicSCBWRestoration@Impact"/>
+    </CActorSound>
+    <CActorAction id="AP_MedicSCBWOpticFlare@Action" parent="GenericAttack" effectImpact="AP_MedicSCBWOpticFlare@Set" effectLaunch="AP_MedicSCBWOpticFlare@LM">
+        <LaunchAssets Sound="AP_MedicSCBWOpticFlare@Launch"/>
+        <Missile value="AP_MedicSCBWOpticFlare@Missile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ImpactMap index="None" Model="AP_MedicSCBWOpticFlare@Impact" Sound="AP_MedicSCBWOpticFlare@Impact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_MedicSCBWOpticFlare@Missile" parent="GenericUnitMinimal" unitName="AP_MedicSCBWOpticFlare@Missile">
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorRange id="AP_MedicSCBWOpticFlare@Range" parent="RangeAbil" abil="AP_MedicSCBWOpticFlare">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
     <CActorUnit id="AP_Firebat" parent="GenericUnitStandard" unitName="AP_Firebat">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>

@@ -2520,4 +2520,12 @@
         <OperandArray value="AP_GhostSCBWLockdownResearch@Count"/>
     </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_GhostSCBWLockdownResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_GhostSCBWLockdownResearch"/>
+    <CRequirementAnd id="AP_MedicSCBWRestoration@Show">
+        <OperandArray value="AP_MedicSCBWRestorationResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_MedicSCBWRestorationResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_MedicSCBWRestorationResearch"/>
+    <CRequirementAnd id="AP_MedicSCBWOpticFlare@Show">
+        <OperandArray value="AP_MedicSCBWOpticFlareResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_MedicSCBWOpticFlareResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_MedicSCBWOpticFlareResearch"/>
 </Catalog>

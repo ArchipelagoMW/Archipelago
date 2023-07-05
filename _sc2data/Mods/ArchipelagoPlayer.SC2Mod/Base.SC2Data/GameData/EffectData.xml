@@ -10832,4 +10832,32 @@
         <ImpactEffect value="AP_GhostSCBWLockdown@AB"/>
         <AmmoUnit value="AP_GhostSCBWLockdown@Missile"/>
     </CEffectLaunchMissile>
+    <CEffectSet id="AP_MedicSCBWRestoration@Set">
+        <EffectArray value="AP_MedicSCBWRestoration@RB"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_MedicSCBWRestoration@RB">
+        <EditorCategories value="Race:Terran"/>
+        <!--
+        <BehaviorCategories index="Restorable" value="1"/>
+        <BehaviorCategories index="Temporary" value="1"/>
+        -->
+        <!--BehaviorClass value="CBehaviorBuff"/-->
+        <BehaviorAlignment value="Negative"/>
+        <MatchesAll value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectLaunchMissile id="AP_MedicSCBWOpticFlare@LM">
+        <EditorCategories value=""/>
+        <ImpactEffect value="AP_MedicSCBWOpticFlare@Set"/>
+        <AmmoUnit value="AP_MedicSCBWOpticFlare@Missile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_MedicSCBWOpticFlare@Set">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MedicSCBWOpticFlare@ABBlind"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MedicSCBWOpticFlare@ABBlind">
+        <!--<ValidatorArray index="0" value="BlindingCloudABTargetFilters"/>-->
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_MedicSCBWOpticFlare"/>
+    </CEffectApplyBehavior>
 </Catalog>

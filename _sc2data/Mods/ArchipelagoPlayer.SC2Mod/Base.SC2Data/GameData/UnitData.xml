@@ -272,6 +272,8 @@
         <AbilArray Link="Flare"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_heal"/>
+        <AbilArray Link="AP_MedicSCBWRestoration"/>
+        <AbilArray Link="AP_MedicSCBWOpticFlare"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -280,6 +282,8 @@
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="AP_MedicHeal" Type="AbilCmd" AbilCmd="AP_heal,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MedicSCBWRestoration" Type="AbilCmd" AbilCmd="AP_MedicSCBWRestoration,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_MedicSCBWOpticFlare" Type="AbilCmd" AbilCmd="AP_MedicSCBWOpticFlare,0" Row="2" Column="2"/>
             <!-- <LayoutButtons Face="Flare" Type="AbilCmd" AbilCmd="Flare,0" Row="2" Column="1"/> -->
             <!-- Looks like a Blizz leftover -->
             <LayoutButtons>
@@ -287,8 +291,8 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseStabilizerMedpacks"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
         </CardLayouts>
         <Radius value="0.375"/>
@@ -308,6 +312,11 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_MedicSCBWOpticFlare@Missile" parent="MISSILE_INVULNERABLE">
+        <Race value="BWTe"/>
+        <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
     <CUnit id="AP_Firebat">
         <DeathRevealRadius value="3"/>
