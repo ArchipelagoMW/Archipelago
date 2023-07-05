@@ -21,7 +21,7 @@ which either points to the installation directory, if writable, or to %home%/Arc
 * path\to\code\repository\host.yaml
 * ~/Archipelago/host.yaml
 
-With the new settings API, AP can update the config file and can create it with default values and comments,
+Using the settings API, AP can update the config file or create a new one with default values and comments, 
 if it does not exist.
 
 
@@ -47,8 +47,8 @@ Worlds can define the top level key to use by defining `settings_key: ClassVar[s
 It defaults to `{folder_name}_options` if undefined, i.e. `worlds/factorio/...` defaults to `factorio_options`.
 
 Worlds define the layout of their config section using type annotation of the variable `settings` in the class.
-The type has to inherit from `settings.Group`. Each value in the config can have a comment by subclassing a builtin
-type. Some helper types are defined `settings.py`, see [Types](#Types) for a list.
+The type has to inherit from `settings.Group`. Each value in the config can have a comment by subclassing a built-in
+type. Some helper types are defined in `settings.py`, see [Types](#Types) for a list.```
 
 Inside the class code, you can then simply use `self.settings.rom_file` to get the value.
 In case of paths they will automatically be read as absolute file paths. No need to use user_path or local_path.

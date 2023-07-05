@@ -92,7 +92,7 @@ added to the `World` object for easy access.
 ### World Options
 
 Any AP installation can provide settings for a world, for example a ROM file, accessible through `self.settings.option`
-or `cls.settings.option` (new API) or `Utils.get_options()["<world>_options"]["<option>"]` (old API).
+or `cls.settings.option` (new API) or `Utils.get_options()["<world>_options"]["<option>"]` (deprecated).
 
 Users can set those in their `host.yaml` file. Some options may automatically open a file browser if a file is missing.
 
