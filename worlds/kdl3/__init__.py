@@ -1,7 +1,6 @@
 import logging
 import typing
 
-import settings
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
@@ -19,18 +18,21 @@ import os
 import math
 import threading
 import base64
-
+from Main import __version__ as APVersion
 logger = logging.getLogger("Kirby's Dream Land 3")
 
 
-class KDL3Settings(settings.Group):
-    class RomFile(settings.SNESRomPath):
-        """File name of the KDL3 JP or EN rom"""
-        description = "Kirby's Dream Land 3 ROM File"
-        copy_to = "Kirby's Dream Land 3.sfc"
-        md5s = [KDL3JHASH, KDL3UHASH]
+if APVersion == "0.4.2":
+    import settings
 
-    rom_file: RomFile = RomFile(RomFile.copy_to)
+    class KDL3Settings(settings.Group):
+        class RomFile(settings.SNESRomPath):
+            """File name of the KDL3 JP or EN rom"""
+            description = "Kirby's Dream Land 3 ROM File"
+            copy_to = "Kirby's Dream Land 3.sfc"
+            md5s = [KDL3JHASH, KDL3UHASH]
+
+        rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class KDL3WebWorld(WebWorld):
@@ -55,7 +57,6 @@ class KDL3World(World):
 
     game = "Kirby's Dream Land 3"
     option_definitions = kdl3_options
-    settings: typing.ClassVar[KDL3Settings]
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
@@ -66,6 +67,9 @@ class KDL3World(World):
     player_levels = dict()
     stage_shuffle_enabled = False
     boss_butch_bosses = dict()
+
+    if APVersion == "0.4.2":
+        settings: typing.ClassVar[KDL3Settings]
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = None
