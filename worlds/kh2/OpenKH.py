@@ -15,7 +15,7 @@ class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
-                 player=None, player_name: str = "", server: str = ""):
+        player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
         container_path = os.path.join(output_directory, base_path + ".zip")
@@ -27,8 +27,8 @@ class KH2Container(APContainer):
         for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "mod_template")):
             for file in files:
                 opened_zipfile.write(os.path.join(root, file),
-                                     os.path.relpath(os.path.join(root, file),
-                                                     os.path.join(os.path.dirname(__file__), "mod_template")))
+                        os.path.relpath(os.path.join(root, file),
+                                os.path.join(os.path.dirname(__file__), "mod_template")))
         # opened_zipfile.writestr(self.zpf_path, self.patch_data)
         super().write_contents(opened_zipfile)
 
@@ -91,7 +91,6 @@ def patch_kh2(self, output_directory):
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
 
     for location in self.multiworld.get_filled_locations(self.player):
-
         data = all_locations[location.name]
         if location.item.player == self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id
@@ -154,7 +153,8 @@ def patch_kh2(self, output_directory):
                     2: self.multiworld.Wisdom_Form_EXP[self.player].value,
                     3: self.multiworld.Limit_Form_EXP[self.player].value,
                     4: self.multiworld.Master_Form_EXP[self.player].value,
-                    5: self.multiworld.Final_Form_EXP[self.player].value}
+                    5: self.multiworld.Final_Form_EXP[self.player].value
+                }
                 formexp = formDictExp[data.charName]
                 formName = formDict[data.charName]
                 self.formattedFmlv[formName] = []
@@ -185,15 +185,15 @@ def patch_kh2(self, output_directory):
             "GrowthAbilityLevel": 0,
         })
     # levels done down here because of optional settings that can take locations out of the pool.
-    self.i = 1
-    for location in SoraLevels:
+    self.i = 2
+    for location_name in SoraLevels:
         increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
-        if location in levelsetting:
-            data = self.multiworld.get_location(location, self.player)
-            if data.item.player == self.player:
-                itemcode = item_dictionary_table[data.item.name].kh2id
+        if location_name in levelsetting:
+            location_object = self.multiworld.get_location(location_name, self.player)
+            if location_object.item.player == self.player:
+                itemcode = item_dictionary_table[location_object.item.name].kh2id
             else:
-                itemcode = 90  # castle map
+                itemcode = 90  # castle map(ap item)
         else:
             increaseStat(self.multiworld.per_slot_randoms[self.player].randint(0, 3))
             itemcode = 0
@@ -239,6 +239,5 @@ def patch_kh2(self, output_directory):
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
     }
 
-    mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
-                       self.multiworld.get_file_safe_player_name(self.player))
+    mod = KH2Container(openkhmod, mod_dir, output_directory, self.player, self.multiworld.get_file_safe_player_name(self.player))
     mod.write()

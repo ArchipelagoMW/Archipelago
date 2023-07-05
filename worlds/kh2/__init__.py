@@ -438,9 +438,7 @@ class KH2World(World):
         Fills excluded_locations from player's settings.
         """
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
-        if not self.multiworld.SuperBosses[self.player] and not self.multiworld.Goal[self.player] == "hitlist":
-            for superboss in exclusion_table["Datas"]:
-                self.multiworld.exclude_locations[self.player].value.add(superboss)
+        if not self.multiworld.SuperBosses[self.player]:
             for superboss in exclusion_table["SuperBosses"]:
                 self.multiworld.exclude_locations[self.player].value.add(superboss)
 
@@ -448,6 +446,7 @@ class KH2World(World):
         if self.multiworld.Cups[self.player] == "no_cups":
             for cup in exclusion_table["Cups"]:
                 self.multiworld.exclude_locations[self.player].value.add(cup)
+
         # exclude only hades paradox. If cups and hades paradox then nothing is excluded
         elif self.multiworld.Cups[self.player] == "cups":
             self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
@@ -459,16 +458,17 @@ class KH2World(World):
         # there are levels but level 1 is there for the yamls
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
             # level 99 sanity
-            self.totalLocations -= 1
+            #self.totalLocations -= 1
+            pass
         elif self.multiworld.LevelDepth[self.player] == "level_50_sanity":
             # level 50 sanity
-            self.totalLocations -= 50
+            self.totalLocations -= 49
         elif self.multiworld.LevelDepth[self.player] == "level_1":
             # level 1. No checks on levels
-            self.totalLocations -= 99
+            self.totalLocations -= 98
         else:
             # level 50/99 since they contain the same amount of levels
-            self.totalLocations -= 76
+            self.totalLocations -= 75
 
     def get_filler_item_name(self) -> str:
         """
