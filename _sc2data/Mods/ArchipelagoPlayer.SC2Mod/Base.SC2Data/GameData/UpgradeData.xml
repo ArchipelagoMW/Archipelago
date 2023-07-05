@@ -4607,4 +4607,6 @@
     <CUpgrade id="AP_MedicSCBWOpticFlareResearch">
         <Icon value="Assets\Textures\btn-upgrade-protoss-fenix-dragoonsolariteflare.dds"/>
     </CUpgrade>
+    <CUpgrade id="AP_HellbatStimpack"/>
+    <CUpgrade id="AP_SuperStimpackHellbat"/>
 </Catalog>

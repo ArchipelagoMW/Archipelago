@@ -100,6 +100,21 @@
         <OperandArray value="AP_CountUpgradeFirebatStimpackCompleteOnly"/>
         <OperandArray value="AP_NotCountUpgradeSuperStimpackFirebatCompleteOnly"/>
     </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHellbatStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HellbatStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackHellbatCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackHellbat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackHellbatCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackHellbatCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseHellbatStimpack">
+        <OperandArray value="AP_CountUpgradeHellbatStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackHellbatCompleteOnly"/>
+    </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_CountUpgradeReaperU238RoundsCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ReaperU238Rounds" State="CompleteOnly"/>

@@ -5306,6 +5306,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="8C0E7C5A"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="87B650CC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="CDA67482"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="E763DC7B"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="FB79E79C"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="D1FF83B8"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="D8068F8E"/>
@@ -6897,6 +6898,128 @@
         <Element Type="Param" Id="E2B37F29">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_HoverHellbat</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="E763DC7B">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="8827311D"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="3BC06227"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="E57FD772"/>
+        </Element>
+        <Element Type="ParamDef" Id="8827311D">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="568B71B0"/>
+        </Element>
+        <Element Type="Param" Id="568B71B0">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="3BC06227">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="E178A69F"/>
+        </Element>
+        <Element Type="Param" Id="E178A69F">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="E57FD772">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="9499DE33"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="4277F94A"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="8DADF9E2"/>
+        </Element>
+        <Element Type="FunctionCall" Id="9499DE33">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000003"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="E61B6258"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="73869F0E"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="37638549"/>
+        </Element>
+        <Element Type="Param" Id="E61B6258">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="3BC06227"/>
+        </Element>
+        <Element Type="Param" Id="73869F0E">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="B128CB9A"/>
+        </Element>
+        <Element Type="Param" Id="37638549">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="4277F94A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="BD307A84"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="9F818A11"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="A75026A3"/>
+        </Element>
+        <Element Type="Param" Id="BD307A84">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="8827311D"/>
+        </Element>
+        <Element Type="Param" Id="9F818A11">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="A75026A3">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_HellbatStimpack</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionCall" Id="8DADF9E2">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="E5FDA1BF"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="53189B4F"/>
+        </Element>
+        <Element Type="FunctionCall" Id="E5FDA1BF">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000003"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="0BA0B681"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="9CA23E17"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="968D1F84"/>
+        </Element>
+        <Element Type="Param" Id="0BA0B681">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="3BC06227"/>
+        </Element>
+        <Element Type="Param" Id="9CA23E17">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="B128CB9A"/>
+        </Element>
+        <Element Type="Param" Id="968D1F84">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>2</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="53189B4F">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F38E7813"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="7F5D72B1"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="105211D6"/>
+        </Element>
+        <Element Type="Param" Id="F38E7813">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="8827311D"/>
+        </Element>
+        <Element Type="Param" Id="7F5D72B1">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="105211D6">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_SuperStimpackHellbat</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

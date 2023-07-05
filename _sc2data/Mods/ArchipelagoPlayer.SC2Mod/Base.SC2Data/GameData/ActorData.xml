@@ -1243,12 +1243,14 @@
         <Sound value="Marauder_Stimpack"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackHellbat.SourceCastStart" Send="Create"/>
     </CActorSound>
     <CActorModel id="AP_StimpackStartImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackHellbat.SourceCastStart" Send="Create"/>
         <Model value="StimpackStartImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
@@ -1259,6 +1261,7 @@
         <On Terms="Behavior.AP_StimpackReaper.Off; ValidateUnit NotDead" Send="Create"/>
         <On Terms="Behavior.AP_StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
         <On Terms="Behavior.AP_StimpackFirebat.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackHellbat.Off; ValidateUnit NotDead" Send="Create"/>
         <Model value="StimpackEndImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
@@ -1274,7 +1277,7 @@
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -1284,7 +1287,7 @@
         <Sound value="AP_SuperStimpackSweetener"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
@@ -1292,7 +1295,7 @@
         <Sound value="AP_SuperStimpackOn"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>

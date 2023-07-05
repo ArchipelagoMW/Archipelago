@@ -916,6 +916,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HoverHellbat", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HellbatStimpack", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackHellbat", 1);
+        }
+
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

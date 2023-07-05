@@ -161,6 +161,11 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackHellbat" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackHellbat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackBase">
         <AbilSetId value="Stimpack"/>
         <AINotifyEffect value="Stimpack"/>
@@ -205,6 +210,11 @@
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackFirebat" parent="AP_SuperStimpackLargeBase">
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackHellbat" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackHellbat">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>

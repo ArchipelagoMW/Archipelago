@@ -121,9 +121,17 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_UseBaseFirebatStimpack"/>
     </CRequirement>
+    <CRequirement id="AP_UseStimpackHellbat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseHellbatStimpack"/>
+    </CRequirement>
     <CRequirement id="AP_HaveSuperStimpackFirebat">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackFirebatCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackHellbat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackHellbatCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseG4ClusterBombs">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
