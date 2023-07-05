@@ -55,6 +55,7 @@ class LocationTags(enum.Enum):
     MUSEUM_DONATIONS = enum.auto()
     FRIENDSANITY = enum.auto()
     FESTIVAL = enum.auto()
+    FESTIVAL_HARD = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
@@ -222,42 +223,15 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     if festival_option == options.FestivalLocations.option_disabled:
         return
 
-    randomized_locations.append(location_table[FestivalCheck.egg_hunt])
-    randomized_locations.append(location_table[FestivalCheck.strawberry_seeds])
-    randomized_locations.append(location_table[FestivalCheck.dance])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_5])
-    randomized_locations.append(location_table[FestivalCheck.luau_soup])
-    randomized_locations.append(location_table[FestivalCheck.moonlight_jellies])
-    randomized_locations.append(location_table[FestivalCheck.smashing_stone])
-    randomized_locations.append(location_table[FestivalCheck.grange_display])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_1])
-    randomized_locations.append(location_table[FestivalCheck.fair_stardrop])
-    randomized_locations.append(location_table[FestivalCheck.spirit_eve_maze])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_2])
-    randomized_locations.append(location_table[FestivalCheck.fishing_competition])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_4])
-    randomized_locations.append(location_table[FestivalCheck.mermaid_pearl])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_7])
-    randomized_locations.append(location_table[FestivalCheck.rarecrow_8])
-    randomized_locations.append(location_table[FestivalCheck.secret_santa])
-    randomized_locations.append(location_table[FestivalCheck.legend_of_the_winter_star])
-    randomized_locations.append(location_table[FestivalCheck.lupini_red_eagle])
-    randomized_locations.append(location_table[FestivalCheck.lupini_portrait_mermaid])
-    randomized_locations.append(location_table[FestivalCheck.lupini_solar_kingdom])
+    randomized_locations.extend(locations_by_tag[LocationTags.FESTIVAL])
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
 def extend_hard_festival_locations(randomized_locations, festival_option: int):
     if festival_option != options.FestivalLocations.option_hard:
         return
-    randomized_locations.append(location_table[FestivalCheck.cone_hat])
-    randomized_locations.append(location_table[FestivalCheck.iridium_fireplace])
-    randomized_locations.append(location_table[FestivalCheck.lupini_clouds])
-    randomized_locations.append(location_table[FestivalCheck.lupini_1000_years])
-    randomized_locations.append(location_table[FestivalCheck.lupini_three_trees])
-    randomized_locations.append(location_table[FestivalCheck.lupini_the_serpent])
-    randomized_locations.append(location_table[FestivalCheck.lupini_tropical_fish])
-    randomized_locations.append(location_table[FestivalCheck.lupini_land_of_clay])
+
+    randomized_locations.extend(locations_by_tag[LocationTags.FESTIVAL_HARD])
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], world_options):
