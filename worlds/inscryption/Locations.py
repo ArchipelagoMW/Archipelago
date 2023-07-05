@@ -6,7 +6,7 @@ base_id = 147000
 
 
 class InscryptionLocation(Location):
-    name: str = "Inscryption"
+    game: str = "Inscryption"
 
 
 class LocDict(TypedDict):
