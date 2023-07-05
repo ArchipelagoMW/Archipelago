@@ -8,6 +8,7 @@ This is deliberately .pyx because using a non-compiled "pure python" may be slow
 
 # pip install cython cymem
 import cython
+import warnings
 from cpython cimport PyObject
 from typing import Any, Dict, Iterable, Iterator, Generator, Sequence, Tuple, TypeVar, Union, Set, List, TYPE_CHECKING
 from cymem.cymem cimport Pool
@@ -107,12 +108,15 @@ cdef class LocationStore:
                 count += 1
             sender_count += 1
 
-        if not count:
-            raise ValueError("No locations")
+        if not sender_count:
+            raise ValueError(f"Rejecting game with 0 players")
 
         if sender_count != max_sender:
             # we assume player 0 will never have locations
             raise ValueError("Player IDs not continuous")
+
+        if not count:
+            warnings.warn("Game has no locations")
 
         # allocate the arrays and invalidate index (0xff...)
         self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
@@ -140,9 +144,9 @@ cdef class LocationStore:
         self._proxies.append(None)  # player 0
         assert self.sender_index[0].count == 0
         for i in range(1, max_sender + 1):
-            if self.sender_index[i].count == 0 and self.sender_index[i].start >= count:
-                self.sender_index[i].start = 0  # do not point outside valid entries
-            assert self.sender_index[i].start < count
+            assert self.sender_index[i].count == 0 or (
+                    self.sender_index[i].start < count and
+                    self.sender_index[i].start + self.sender_index[i].count <= count)
             key = i  # allocate python integer
             proxy = PlayerLocationProxy(self, i)
             self._keys.append(key)

@@ -37,6 +37,7 @@ README.html
 EnemizerCLI/
 /Players/
 /SNI/
+/host.yaml
 /options.yaml
 /config.yaml
 /logs/
