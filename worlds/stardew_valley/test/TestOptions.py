@@ -9,8 +9,11 @@ from . import setup_solo_multiworld, SVTestBase
 from .. import StardewItem, options, items_by_group, Group
 from ..locations import locations_by_tag, LocationTags
 from ..options import StardewOption, stardew_valley_option_classes, Mods
+from ..strings.goal_names import Goal
+from ..strings.season_names import Season
+from ..strings.tool_names import ToolMaterial, Tool
 
-SEASONS = {"Spring", "Summer", "Fall", "Winter"}
+SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 
 
@@ -93,11 +96,14 @@ class TestGenerateDynamicOptions(SVTestBase):
 
 class TestGoal(SVTestBase):
     def test_given_goal_when_generate_then_victory_is_in_correct_location(self):
-        for goal, location in [("community_center", "Complete Community Center"),
-                               ("grandpa_evaluation", "Succeed Grandpa's Evaluation"),
-                               ("bottom_of_the_mines", "Reach the Bottom of The Mines"),
-                               ("cryptic_note", "Complete Quest Cryptic Note"),
-                               ("master_angler", "Catch Every Fish")]:
+        for goal, location in [("community_center", Goal.community_center),
+                               ("grandpa_evaluation", Goal.grandpa_evaluation),
+                               ("bottom_of_the_mines", Goal.bottom_of_the_mines),
+                               ("cryptic_note", Goal.cryptic_note),
+                               ("master_angler", Goal.master_angler),
+                               ("complete_collection", Goal.complete_museum),
+                               ("full_house", Goal.full_house),
+                               ("perfection", Goal.perfection)]:
             with self.subTest(msg=f"Goal: {goal}, Location: {location}"):
                 world_options = {options.Goal.internal_name: options.Goal.options[goal]}
                 multi_world = setup_solo_multiworld(world_options)
@@ -126,7 +132,7 @@ class TestSeasonRandomization(SVTestBase):
         multi_world = setup_solo_multiworld(world_options)
 
         items = [item.name for item in multi_world.get_items()]
-        self.assertEqual(items.count("Progressive Season"), 3)
+        self.assertEqual(items.count(Season.progressive), 3)
 
 
 class TestBackpackProgression(SVTestBase):
@@ -180,8 +186,10 @@ class TestToolProgression(SVTestBase):
         multi_world = setup_solo_multiworld(world_options)
 
         locations = {locations.name for locations in multi_world.get_locations(1)}
-        for material, tool in itertools.product(["Copper", "Iron", "Gold", "Iridium"],
-                                                ["Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can"]):
+        for material, tool in itertools.product(ToolMaterial.tiers.values(),
+                                                [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can]):
+            if material == ToolMaterial.basic:
+                continue
             self.assertIn(f"{material} {tool} Upgrade", locations)
         self.assertIn("Purchase Training Rod", locations)
         self.assertIn("Bamboo Pole Cutscene", locations)
@@ -219,7 +227,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
                     check_no_ginger_island(self, multiworld)
 
     def test_given_island_related_goal_then_override_exclude_ginger_island(self):
-        island_goals = [value for value in options.Goal.options if value in ["greatest_walnut_hunter", "perfection"]]
+        island_goals = [value for value in options.Goal.options if value in ["walnut_hunter", "perfection"]]
         island_option = options.ExcludeGingerIsland
         for goal in island_goals:
             for value in island_option.options:

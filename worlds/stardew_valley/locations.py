@@ -9,6 +9,8 @@ from .data.fish_data import legendary_fish, special_fish, all_fish
 from .data.museum_data import all_museum_items
 from .data.villagers_data import all_villagers
 from .strings.festival_check_names import FestivalCheck
+from .strings.goal_names import Goal
+from .strings.region_names import Region
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -103,15 +105,15 @@ def load_location_csv() -> List[LocationData]:
 
 
 events_locations = [
-    LocationData(None, "Stardew Valley", "Succeed Grandpa's Evaluation"),
-    LocationData(None, "Community Center", "Complete Community Center"),
-    LocationData(None, "The Mines - Floor 120", "Reach the Bottom of The Mines"),
-    LocationData(None, "Skull Cavern", "Complete Quest Cryptic Note"),
-    LocationData(None, "Stardew Valley", "Catch Every Fish"),
-    LocationData(None, "Stardew Valley", "Complete the Museum Collection"),
-    LocationData(None, "Stardew Valley", "Full House"),
-    LocationData(None, "Stardew Valley", "Greatest Walnut Hunter"),
-    LocationData(None, "Stardew Valley", "Perfection"),
+    LocationData(None, Region.farm_house, Goal.grandpa_evaluation),
+    LocationData(None, Region.community_center, Goal.community_center),
+    LocationData(None, Region.mines_floor_120, Goal.bottom_of_the_mines),
+    LocationData(None, Region.skull_cavern_100, Goal.cryptic_note),
+    LocationData(None, Region.farm, Goal.master_angler),
+    LocationData(None, Region.museum, Goal.complete_museum),
+    LocationData(None, Region.farm_house, Goal.full_house),
+    LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
+    LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 
 all_locations = load_location_csv() + events_locations

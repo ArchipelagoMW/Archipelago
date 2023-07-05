@@ -13,6 +13,7 @@ from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
 from .mods.mod_data import mod_versions
+from .strings.goal_names import Goal
 
 client_version = 0
 
@@ -167,39 +168,39 @@ class StardewValleyWorld(World):
 
     def setup_victory(self):
         if self.options[options.Goal] == options.Goal.option_community_center:
-            self.create_event_location(location_table["Complete Community Center"],
+            self.create_event_location(location_table[Goal.community_center],
                                        self.logic.can_complete_community_center().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_grandpa_evaluation:
-            self.create_event_location(location_table["Succeed Grandpa's Evaluation"],
+            self.create_event_location(location_table[Goal.grandpa_evaluation],
                                        self.logic.can_finish_grandpa_evaluation().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_bottom_of_the_mines:
-            self.create_event_location(location_table["Reach the Bottom of The Mines"],
+            self.create_event_location(location_table[Goal.bottom_of_the_mines],
                                        self.logic.can_mine_to_floor(120).simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_cryptic_note:
-            self.create_event_location(location_table["Complete Quest Cryptic Note"],
+            self.create_event_location(location_table[Goal.cryptic_note],
                                        self.logic.can_complete_quest("Cryptic Note").simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_master_angler:
-            self.create_event_location(location_table["Catch Every Fish"],
+            self.create_event_location(location_table[Goal.master_angler],
                                        self.logic.can_catch_every_fish().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_complete_collection:
-            self.create_event_location(location_table["Complete the Museum Collection"],
+            self.create_event_location(location_table[Goal.complete_museum],
                                        self.logic.can_complete_museum().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_full_house:
-            self.create_event_location(location_table["Full House"],
+            self.create_event_location(location_table[Goal.full_house],
                                        (self.logic.has_children(2) & self.logic.can_reproduce()).simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter:
-            self.create_event_location(location_table["Greatest Walnut Hunter"],
+            self.create_event_location(location_table[Goal.greatest_walnut_hunter],
                                        self.logic.has_walnut(130).simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_perfection:
-            self.create_event_location(location_table["Perfection"],
+            self.create_event_location(location_table[Goal.perfection],
                                        self.logic.has_everything(self.all_progression_items).simplify(),
                                        "Victory")
 
