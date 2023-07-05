@@ -68,6 +68,7 @@ class KDL3World(World):
     boss_butch_bosses = dict()
 
     def __init__(self, world: MultiWorld, player: int):
+        self.rom_name = None
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
 

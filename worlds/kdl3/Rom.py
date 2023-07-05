@@ -548,28 +548,28 @@ room_pointers = [
 
 
 class RomData:
-    def __init__(self, file, name=None):
+    def __init__(self, file: str, name: typing.Optional[str] = None):
         self.file = bytearray()
         self.read_from_file(file)
         self.name = name
 
-    def read_byte(self, offset):
+    def read_byte(self, offset: int):
         return self.file[offset]
 
-    def read_bytes(self, offset, length):
+    def read_bytes(self, offset: int, length: int):
         return self.file[offset:offset + length]
 
-    def write_byte(self, offset, value):
+    def write_byte(self, offset: int, value: int):
         self.file[offset] = value
 
-    def write_bytes(self, offset, values):
+    def write_bytes(self, offset: int, values):
         self.file[offset:offset + len(values)] = values
 
-    def write_to_file(self, file):
+    def write_to_file(self, file: str):
         with open(file, 'wb') as outfile:
             outfile.write(self.file)
 
-    def read_from_file(self, file):
+    def read_from_file(self, file: str):
         with open(file, 'rb') as stream:
             self.file = bytearray(stream.read())
 
@@ -1442,11 +1442,11 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
 
-def get_base_rom_bytes(file_name: str = "") -> bytes:
+def get_base_rom_bytes() -> bytes:
+    rom_file: str = get_base_rom_path()
     base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
-        file_name: str = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
+        base_rom_bytes = bytes(Utils.read_snes_rom(open(rom_file, "rb")))
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
