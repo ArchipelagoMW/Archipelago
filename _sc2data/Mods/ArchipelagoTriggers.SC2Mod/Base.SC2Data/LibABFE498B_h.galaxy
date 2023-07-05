@@ -127,6 +127,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField (int lp_pla
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockVikingMagrailMunitions (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners (int lp_player, int lp_level);

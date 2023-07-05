@@ -2636,4 +2636,8 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-raynor-improvedsiegemode.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_MagrailMunitionsViking">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magrailmunitions.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+    </CButton>
 </Catalog>

@@ -2486,4 +2486,13 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_RaynorImprovedSiegeMode" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_VikingMagWeaponCompleteOnly">
+        <Count Link="AP_VikingMagWeapon" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleVikingFighterCompleteOnly">
+        <Count Link="AP_NotPossibleVikingFighter" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleVikingAssaultCompleteOnly">
+        <Count Link="AP_NotPossibleVikingAssault" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

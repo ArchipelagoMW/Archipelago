@@ -1036,6 +1036,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosViking", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockVikingMagrailMunitions (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VikingMagWeapon", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player) {
     // Automatic Variable Declarations
     // Deprecated

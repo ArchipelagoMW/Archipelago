@@ -264,6 +264,11 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_AssaultModeHALORocketsResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleVikingFighterCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_LearnVikingMissileUpgrade">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_NotCountUpgradeVikingJotunBoostersQueuedOrBetter"/>
@@ -1507,5 +1512,14 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVikingMagWeapon">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_FighterModeHaveVikingMagWeapon">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleVikingAssaultCompleteOnly"/>
     </CRequirement>
 </Catalog>

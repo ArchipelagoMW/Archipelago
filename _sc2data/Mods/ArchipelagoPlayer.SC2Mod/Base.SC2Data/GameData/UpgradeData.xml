@@ -4563,4 +4563,10 @@
         <EffectArray Reference="Unit,AP_SiegeTankSieged,LifeArmor" Value="3"/>
         <EffectArray Reference="Unit,AP_SiegeBreakerSieged,LifeArmor" Value="3"/>
     </CUpgrade>
+    <CUpgrade id="AP_VikingMagWeapon">
+        <EffectArray Reference="Effect,AP_TwinGatlingCannons,AttributeBonus[Mechanical]" Value="8"/>
+        <EffectArray Reference="Effect,AP_WreckingCrewAssault,AttributeBonus[Mechanical]" Value="11"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NotPossibleVikingFighter"/>
+    <CUpgrade id="AP_NotPossibleVikingAssault"/>
 </Catalog>

@@ -1524,9 +1524,10 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="FighterMode" Type="AbilCmd" AbilCmd="AP_FighterMode,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_AssaultModeHALORocketsResearched" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_MagrailMunitionsViking" Type="Passive" Requirements="AP_HaveVikingMagWeapon" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -1602,9 +1603,10 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AssaultMode" Type="AbilCmd" AbilCmd="AP_AssaultMode,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_MagrailMunitionsViking" Type="Passive" Requirements="AP_FighterModeHaveVikingMagWeapon" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3836,9 +3838,10 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="FighterMode" Type="AbilCmd" AbilCmd="AP_WreckingCrewFighterMode,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_AssaultModeHALORocketsResearched" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_MagrailMunitionsViking" Type="Passive" Requirements="AP_HaveVikingMagWeapon" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3910,9 +3913,10 @@
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AssaultMode" Type="AbilCmd" AbilCmd="AP_WreckingCrewAssaultMode,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_MagrailMunitionsViking" Type="Passive" Requirements="AP_FighterModeHaveVikingMagWeapon" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
