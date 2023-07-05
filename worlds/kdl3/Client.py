@@ -265,10 +265,12 @@ class KDL3SNIClient(SNIClient):
         stages_raw = await snes_read(ctx, KDL3_COMPLETED_STAGES, 60)
         stages = struct.unpack("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", stages_raw)
         for i in range(30):
-            if stages[i] == 1:
-                loc_id = 0x770000 + i + 1
-                if loc_id not in ctx.checked_locations:
-                    new_checks.append(loc_id)
+            loc_id = 0x770000 + i + 1
+            if stages[i] == 1 and loc_id not in ctx.checked_locations:
+                new_checks.append(loc_id)
+            elif stages[i] == 0 and loc_id in ctx.checked_locations:
+                snes_buffered_write(ctx, KDL3_COMPLETED_STAGES + (i * 2), struct.pack("H", 1))
+
         # heart star status
         heart_stars = await snes_read(ctx, KDL3_HEART_STARS, 35)
         for i in range(5):
