@@ -878,7 +878,7 @@ class Region:
         for connecting_region, name in exits.items():
             self.connect(self.multiworld.get_region(connecting_region, self.player),
                          name if name else f"{self.name} -> {connecting_region}",
-                         rules[connecting_region] if connecting_region in rules else None)
+                         rules[connecting_region] if rules and connecting_region in rules else None)
 
     def __repr__(self):
         return self.__str__()
