@@ -48,7 +48,7 @@ class LinksAwakeningSettings(settings.Group):
            Retroarch:
         rom_start: "C:/RetroArch-Win64/retroarch.exe -L sameboy"
            BizHawk:
-         rom_start: "C:/BizHawk-2.9-win-x64/EmuHawk.exe --lua=data/lua/connector_ladx_bizhawk.lua"
+        rom_start: "C:/BizHawk-2.9-win-x64/EmuHawk.exe --lua=data/lua/connector_ladx_bizhawk.lua"
         """
 
     class DisplayMsgs(settings.Bool):
