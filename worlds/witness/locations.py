@@ -470,7 +470,7 @@ class WitnessPlayerLocations:
         victory = get_option_value(world, player, "victory_condition")
         mount_lasers = get_option_value(world, player, "mountain_lasers")
         chal_lasers = get_option_value(world, player, "challenge_lasers")
-        laser_shuffle = get_option_value(world, player, "shuffle_lasers")
+        # laser_shuffle = get_option_value(world, player, "shuffle_lasers")
 
         postgame = set()
         postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS

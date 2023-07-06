@@ -158,7 +158,8 @@ class WitnessPlayerItems:
         """
         Generates a list of filler items of the given length.
         """
-        if quantity <= 0: return {}
+        if quantity <= 0:
+            return {}
 
         output: dict[str, int] = {}
         remaining_quantity = quantity

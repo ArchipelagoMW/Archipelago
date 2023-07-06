@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 
 from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
@@ -194,7 +194,8 @@ class StaticWitnessLogic:
 
     ENTITY_ID_TO_NAME = dict()
 
-    def parse_items(self):
+    @staticmethod
+    def parse_items():
         """
         Parses currently defined items from WitnessItems.txt
         """
