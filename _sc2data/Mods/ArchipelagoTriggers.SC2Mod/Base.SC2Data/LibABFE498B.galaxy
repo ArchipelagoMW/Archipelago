@@ -51,7 +51,7 @@ void libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup (trigger lp_onCasua
     libABFE498B_gv_aP_Triggers_onDifficultyBrutal = lp_onBrutal;
 }
 
-void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar) {
+void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_gameSpeed, string lp_difficultyChar) {
     // Variable Declarations
     int lv_currentPlayer;
     int lv_difficulty;
@@ -91,6 +91,21 @@ void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar) {
                 }
             }
         }
+    }
+    if ((lp_gameSpeed == "1")) {
+        GameSetSpeedValue(c_gameSpeedSlower);
+    }
+    else if ((lp_gameSpeed == "2")) {
+        GameSetSpeedValue(c_gameSpeedSlow);
+    }
+    else if ((lp_gameSpeed == "3")) {
+        GameSetSpeedValue(c_gameSpeedNormal);
+    }
+    else if ((lp_gameSpeed == "4")) {
+        GameSetSpeedValue(c_gameSpeedFast);
+    }
+    else if ((lp_gameSpeed == "5")) {
+        GameSetSpeedValue(c_gameSpeedFaster);
     }
     auto7AEE654A_g = PlayerGroupAll();
     lv_currentPlayer = -1;
@@ -2119,12 +2134,14 @@ void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgr
 //--------------------------------------------------------------------------------------------------
 bool libABFE498B_gt_AP_Triggers_setOptions_Func (bool testConds, bool runActions) {
     // Variable Declarations
+    string lv_gameSpeed;
     string lv_difficulty;
     string lv_genericUpgradeResearch;
     string lv_allInVariant;
 
     // Automatic Variable Declarations
     // Variable Initialization
+    lv_gameSpeed = "";
     lv_difficulty = "";
     lv_genericUpgradeResearch = "";
     lv_allInVariant = "";
@@ -2138,7 +2155,8 @@ bool libABFE498B_gt_AP_Triggers_setOptions_Func (bool testConds, bool runActions
     lv_difficulty = StringWord(EventChatMessage(false), 2);
     lv_genericUpgradeResearch = StringWord(EventChatMessage(false), 3);
     lv_allInVariant = StringWord(EventChatMessage(false), 4);
-    libABFE498B_gf_AP_Triggers_setDifficulty(lv_difficulty);
+    lv_gameSpeed = StringWord(EventChatMessage(false), 5);
+    libABFE498B_gf_AP_Triggers_setDifficulty(lv_gameSpeed, lv_difficulty);
     libABFE498B_gv_aP_Triggers_Option_genericUpgradeResearch = StringToInt(lv_genericUpgradeResearch);
     libABFE498B_gv_aP_Triggers_Option_allInMissionVariant = StringToInt(lv_allInVariant);
     return true;

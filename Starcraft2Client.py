@@ -201,6 +201,7 @@ class SC2Context(CommonContext):
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
     difficulty = -1
+    game_speed = -1
     all_in_choice = 0
     mission_order = 0
     player_color = 2
@@ -231,6 +232,7 @@ class SC2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
+            self.game_speed = args["slot_data"]["game_speed"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             # Maintaining backwards compatibility with older slot data
@@ -652,10 +654,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("?SetOptions {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
-                self.ctx.all_in_choice
+                self.ctx.all_in_choice,
+                self.ctx.game_speed
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[8],

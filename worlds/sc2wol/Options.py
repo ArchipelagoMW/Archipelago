@@ -12,6 +12,16 @@ class GameDifficulty(Choice):
     option_hard = 2
     option_brutal = 3
 
+class GameSpeed(Choice):
+    """Optional setting to override difficulty-based game speed."""
+    display_name = "Game Speed"
+    option_default = 0
+    option_slower = 1
+    option_slow = 2
+    option_normal = 3
+    option_fast = 4
+    option_faster = 5
+    default = option_default
 
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
@@ -180,6 +190,7 @@ class SC2ItemSet(Choice):
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
+    "game_speed": GameSpeed,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
