@@ -786,6 +786,48 @@ class CollectionState():
             self.stale[item.player] = True
 
 
+class Entrance:
+    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    hide_path: bool = False
+    player: int
+    name: str
+    parent_region: Optional[Region]
+    connected_region: Optional[Region] = None
+    # LttP specific, TODO: should make a LttPEntrance
+    addresses = None
+    target = None
+
+    def __init__(self, player: int, name: str = '', parent: Region = None):
+        self.name = name
+        self.parent_region = parent
+        self.player = player
+        from inspect import stack
+        if not __debug__ and not stack()[1].function == "create_exit":
+            logging.warning(f"Direct Entrance creation is deprecated.\n{stack()[1][1::1]}\n"
+                            "Please use `Region.create_exit`, `Region.connect` or `Region.add_exits` to create Entrances")
+
+    def can_reach(self, state: CollectionState) -> bool:
+        if self.parent_region.can_reach(state) and self.access_rule(state):
+            if not self.hide_path and not self in state.path:
+                state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
+            return True
+
+        return False
+
+    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
+        self.connected_region = region
+        self.target = target
+        self.addresses = addresses
+        region.entrances.append(self)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        world = self.parent_region.multiworld if self.parent_region else None
+        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+
+
 class Region:
     name: str
     _hint_text: str
