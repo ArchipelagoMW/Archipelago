@@ -836,6 +836,7 @@ class Region:
     entrances: List[Entrance]
     exits: List[Entrance]
     locations: List[Location]
+    entrance_type: typing.ClassVar[typing.Type[Entrance]] = Entrance
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
@@ -896,13 +897,13 @@ class Region:
             _exit.access_rule = rule
         _exit.connect(connecting_region)
     
-    def create_exit(self, name: str) -> Entrance:
+    def create_exit(self, name: str) -> entrance_type:
         """
         Creates and returns an Entrance object as an exit of this region.
         
         :param name: name of the Entrance being created
         """
-        _exit = Entrance(self.player, name, self)
+        _exit = self.entrance_type(self.player, name, self)
         self.exits.append(_exit)
         return _exit
 
@@ -919,7 +920,7 @@ class Region:
             exits = dict.fromkeys(exits)
         for connecting_region, name in exits.items():
             self.connect(self.multiworld.get_region(connecting_region, self.player),
-                         name if name else f"{self.name} -> {connecting_region}",
+                         name if name else None,
                          rules[connecting_region] if rules and connecting_region in rules else None)
 
     def __repr__(self):
@@ -927,18 +928,12 @@ class Region:
 
     def __str__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
+    
+    def __class_getitem__(cls, item: Any) -> typing.Type[Region]:
+        if issubclass(item, Entrance):
+            cls.entrance_type = item
+            return cls
 
-
-class Entrance:
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
-    hide_path: bool = False
-    player: int
-    name: str
-    parent_region: Optional[Region]
-    connected_region: Optional[Region] = None
-    # LttP specific, TODO: should make a LttPEntrance
-    addresses = None
-    target = None
 
     def __init__(self, player: int, name: str = '', parent: Region = None):
         self.name = name
