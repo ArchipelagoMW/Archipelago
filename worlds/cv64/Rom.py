@@ -719,6 +719,18 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828
     rom.write_int32s(0xBFD828, Patches.new_game_extras)
 
+    # Everything related to shopsanity
+    if multiworld.shopsanity[player]:
+        rom.write_bytes(0x103868, cv64_text_converter("Not purchased.", False))
+        rom.write_int32s(0xBFD8D0, Patches.shopsanity_stuff)
+        rom.write_int32(0xBD828, 0x0C0FF643)     # JAL	0x803FD90C
+        rom.write_int32(0xBD5B8, 0x0C0FF651)     # JAL	0x803FD944
+        rom.write_int32(0xD04F8, 0x0C0FF65F)     # JAL	0x803FD97C
+        rom.write_int32(0xD14C4, 0x0C0FF66B)     # JAL	0x803FD9AC
+        rom.write_int32(0xD1754, 0x0C0FF66B)     # JAL	0x803FD9AC
+        rom.write_int32s(0xBD24C, [0x0C0FF643,   # J  	0x803FD9DC
+                                   0x00000000])  # NOP
+
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
         if item_id <= 0xFF:

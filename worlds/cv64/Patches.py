@@ -1863,3 +1863,96 @@ new_game_extras = [
     0x25080004,  # ADDIU T0, T0, 0x0004
     0x03E00008   # JR    RA
 ]
+
+shopsanity_stuff = [
+    # Everything related to shopsanity.
+    # Flag table (in bytes) start
+    0x80402010,
+    0x08000000,
+    0x00000000,
+    0x00000000,
+    0x00040200,
+    # Replacement item table (in halfwords) start
+    0x00030003,
+    0x00030003,
+    0x00030000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000003,
+    0x00030000,
+    # Switches the vanilla item being bought with the randomized one, if its flag is un-set, and sets its flag.
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01044021,  # ADDU  T0, T0, A0
+    0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
+    0x01496024,  # AND   T4, T2, T1
+    0x15800005,  # BNEZ  T4,     [forward 0x05]
+    0x01495025,  # OR    T2, T2, T1
+    0xA16A9C1D,  # SB    T2, 0x9C1D (T3)
+    0x01044021,  # ADDU  T0, T0, A0
+    0x9504D8D8,  # LHU   A0, 0xD8D8 (T0)
+    0x308400FF,  # ANDI  A0, A0, 0x00FF
+    0x0804EFFB,  # J     0x8013BFEC
+    0x00000000,  # NOP
+    # Switches the vanilla item model on the buy menu with the randomized item if the randomized item isn't purchased.
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01044021,  # ADDU  T0, T0, A0
+    0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
+    0x01495024,  # AND   T2, T2, T1
+    0x15400005,  # BNEZ  T2,     [forward 0x05]
+    0x01044021,  # ADDU  T0, T0, A0
+    0x9504D8D8,  # LHU   A0, 0xD8D8 (T0)
+    0x00046202,  # SRL   T4, A0, 8
+    0x55800001,  # BNEZL T4,     [forward 0x01]
+    0x01802021,  # ADDU  A0, T4, R0
+    0x0804F180,  # J     0x8013C600
+    0x00000000,  # NOP
+    # Switches the vanilla item name in the shop menu with the randomized item if the randomized item isn't purchased.
+    # For scrolling up/down in the item list page.
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
+    0x01495024,  # AND   T2, T2, T1
+    0x15400003,  # BNEZ  T2,     [forward 0x03]
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9505D8D8,  # LHU   A1, 0xD8D8 (T0)
+    0x30A500FF,  # ANDI  A1, A1, 0x00FF
+    0x00400008,  # JR    V0
+    0x00000000,  # NOP
+    # Switches the vanilla item name in the shop menu with the randomized item if the randomized item isn't purchased.
+    # For opening the initial item list page.
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
+    0x01495024,  # AND   T2, T2, T1
+    0x15400003,  # BNEZ  T2,     [forward 0x03]
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9505D8D8,  # LHU   A1, 0xD8D8 (T0)
+    0x30A500FF,  # ANDI  A1, A1, 0x00FF
+    0x03200008,  # JR    T9
+    0x00000000,  # NOP
+    # Displays "Not purchased." if the selected randomized item is nor purchased, or the current holding amount of that
+    # slot's vanilla item if it is.
+    0x3C0C8040,  # LUI   T4, 0x8040
+    0x018B6021,  # ADDU  T4, T4, T3
+    0x918DD8CA,  # LBU   T5, 0xD8CA (T4)
+    0x3C0E8039,  # LUI   T6, 0x8039
+    0x91D89C1D,  # LBU   T8, 0x9C1D (T6)
+    0x030DC024,  # AND   T8, T8, T5
+    0x13000003,  # BEQZ  T8,     [forward 0x03]
+    0x00000000,  # NOP
+    0x0804E819,  # J     0x8013A064
+    0x00000000,  # NOP
+    0x0804E852,  # J     0x8013A148
+    0x820F0061   # LB    T7, 0x0061 (S0)
+]
