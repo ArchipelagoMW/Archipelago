@@ -59,9 +59,9 @@ class WitnessWorld(World):
         super().__init__(multiworld, player)
 
         self.player_logic = None
-        self.locat: None
-        self.items: None
-        self.regio: None
+        self.locat = None
+        self.items = None
+        self.regio = None
 
     def _get_slot_data(self):
         return {
