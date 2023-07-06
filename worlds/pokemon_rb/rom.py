@@ -224,6 +224,8 @@ def generate_output(self, output_directory: str):
     for region in self.multiworld.get_regions(self.player):
         for entrance in region.exits:
             if isinstance(entrance, PokemonRBWarp):
+                self.multiworld.spoiler.set_entrance(entrance.name, entrance.connected_region.name, "entrance",
+                                                     self.player)
                 warp_ids = (entrance.warp_id,) if isinstance(entrance.warp_id, int) else entrance.warp_id
                 warp_to_ids = (entrance.target,) if isinstance(entrance.target, int) else entrance.target
                 for i, warp_id in enumerate(warp_ids):
