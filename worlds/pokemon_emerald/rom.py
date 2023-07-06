@@ -252,7 +252,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(Utils.get_settings().pokemon_emerald.rom_file, "rb") as infile:
+    with open(Utils.get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes

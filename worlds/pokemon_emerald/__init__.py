@@ -77,7 +77,7 @@ class PokemonEmeraldWorld(World):
     option_definitions = option_definitions
     topology_present = True
 
-    settings_key = "pokemon_emerald"
+    settings_key = "pokemon_emerald_settings"
     settings: ClassVar[PokemonEmeraldSettings]
 
     item_name_to_id = create_item_label_to_code_map()
