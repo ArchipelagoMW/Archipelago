@@ -3492,4 +3492,12 @@
     <CValidatorUnitFilters id="AP_NotStunnedorStasised">
         <Filters value="-;Stasis,Stunned"/>
     </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_UseSpectreNyxSuit">
+        <Find value="1"/>
+        <Value value="AP_UseSpectreNyxSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveImpalerRounds">
+        <Find value="1"/>
+        <Value value="AP_HaveImpalerRounds"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

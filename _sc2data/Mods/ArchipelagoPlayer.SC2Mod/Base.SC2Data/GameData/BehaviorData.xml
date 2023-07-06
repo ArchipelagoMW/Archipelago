@@ -4135,4 +4135,20 @@
             <StateFlags index="SuppressDetection" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NyxClassCloakingModuleIndicator">
+        <!-- Indicator of passive upgrade - full command card -->
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-nyxcloakingclassmodule.dds"/>
+        <DisableValidatorArray value="AP_UseSpectreNyxSuit"/>
+        <Name value="Button/Name/AP_NyxClassCloakingModule"/>
+        <Tooltip value="Button/Tooltip/AP_NyxClassCloakingModule"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImpalerRoundsIndicator">
+        <!-- Indicator of passive upgrade - full command card -->
+        <Alignment value="Positive"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-impalerrounds.dds"/>
+        <DisableValidatorArray value="AP_HaveImpalerRounds"/>
+    </CBehaviorBuff>
 </Catalog>

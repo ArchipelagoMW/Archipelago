@@ -1253,6 +1253,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreNyxClassCloakingModule (int 
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_PermanentCloakSpectre", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ImpalerRounds", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockThor330mmBarrageCannon (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

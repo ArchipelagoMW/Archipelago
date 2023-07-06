@@ -2136,6 +2136,8 @@
         <AbilArray Link="AP_SpectreHoldFire"/>
         <AbilArray Link="AP_SpectreWeaponsFree"/>
         <AbilArray Link="AP_TacNukeStrike"/>
+        <BehaviorArray Link="AP_NyxClassCloakingModuleIndicator"/>
+        <BehaviorArray Link="AP_ImpalerRoundsIndicator"/>
         <WeaponArray Link="AP_Specter"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -2148,14 +2150,14 @@
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_SpectreNuke,1" Row="2" Column="4"/>
             <LayoutButtons Face="AP_SpectreHoldFire" Type="AbilCmd" AbilCmd="AP_SpectreHoldFire,0" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SpectreWeaponsFree" Type="AbilCmd" AbilCmd="AP_SpectreWeaponsFree,Execute" Row="1" Column="3"/>
-            <LayoutButtons>
-                <Face value="AP_NyxClassCloakingModule"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,255"/>
-                <Requirements value="AP_UseSpectreNyxSuit"/>
-                <Row value="1"/>
-                <Column value="1"/>
-            </LayoutButtons>
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_NyxClassCloakingModule"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255,255"/>-->
+<!--                <Requirements value="AP_UseSpectreNyxSuit"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="1"/>-->
+<!--            </LayoutButtons>-->
             <LayoutButtons Face="AP_UltrasonicPulse" Type="AbilCmd" AbilCmd="AP_UltrasonicPulse,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SpectreNukeCalldown" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,Execute" Row="1" Column="0"/>
             <LayoutButtons Face="AP_Obliterate" Type="AbilCmd" AbilCmd="AP_Obliterate,0" Row="2" Column="1"/>

@@ -1589,4 +1589,7 @@
     <CRequirement id="AP_HaveSpiderMineDamage">
         <NodeArray index="Show" Link="AP_CountUpgradeSpiderMineDamageCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveImpalerRounds">
+        <NodeArray index="Show" Link="AP_CountUpgradeImpalerRoundsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

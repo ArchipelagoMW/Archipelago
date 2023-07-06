@@ -156,6 +156,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostLockdown (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSpectrePsionicLash (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreNyxClassCloakingModule (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThor330mmBarrageCannon (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorImmortalityProtocol (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_player);
