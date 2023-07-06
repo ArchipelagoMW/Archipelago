@@ -200,13 +200,13 @@ class SMZ3World(World):
 
         self.local_random = random.Random(self.multiworld.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(self.config, self.multiworld.get_player_name(self.player), self.player, self.multiworld.seed_name)
+        self.smz3World.Setup(WorldState.Generate(self.config, self.multiworld.random))
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
     
-    def generate_basic(self):
-        self.smz3World.Setup(WorldState.Generate(self.config, self.multiworld.random))
+    def create_items(self):
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
@@ -487,7 +487,7 @@ class SMZ3World(World):
                         ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
                         TotalSMZ3Item.ItemType[name], self.item_name_to_id[name],
                         self.player,
-                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
+                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], getattr(self, "smz3World", None)))
 
     def pre_fill(self):
         from Fill import fill_restrictive

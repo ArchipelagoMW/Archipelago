@@ -36,7 +36,7 @@ class Hylics2World(World):
 
     topology_present: bool = True
 
-    data_version = 1
+    data_version = 2
 
     start_location = "Waynehouse"
 

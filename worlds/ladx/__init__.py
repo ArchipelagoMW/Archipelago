@@ -2,7 +2,10 @@ import binascii
 import bsdiff4
 import os
 import pkgutil
+import settings
+import typing
 import tempfile
+
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
@@ -29,6 +32,16 @@ from .Rom import LADXDeltaPatch
 DEVELOPER_MODE = False
 
 
+class LinksAwakeningSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Link's Awakening DX rom"""
+        copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+        description = "LADX ROM File"
+        md5s = [LADXDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+
+
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -40,6 +53,7 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
 
+
 class LinksAwakeningWorld(World):
     """
     After a previous adventure, Link is stranded on Koholint Island, full of mystery and familiar faces.
@@ -49,6 +63,7 @@ class LinksAwakeningWorld(World):
     web = LinksAwakeningWebWorld()
     
     option_definitions = links_awakening_options  # options the player can set
+    settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
 
     # data_version is used to signal that items, locations or their names
@@ -83,8 +98,8 @@ class LinksAwakeningWorld(World):
     player_options = None
 
     rupees = {
-        ItemName.RUPEES_20: 0,
-        ItemName.RUPEES_50: 0,
+        ItemName.RUPEES_20: 20,
+        ItemName.RUPEES_50: 50,
         ItemName.RUPEES_100: 100,
         ItemName.RUPEES_200: 200,
         ItemName.RUPEES_500: 500,
@@ -236,21 +251,7 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
-            if not start_loc.item:
-                possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                    if item.player == self.player 
-                        and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS]
-                
-                index = self.multiworld.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
-                start_loc.place_locked_item(start_item)
-
-        
+       
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions():
             if r.player != self.player:
@@ -267,12 +268,28 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
+    def force_start_item(self):    
+        start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
+        if not start_loc.item:
+            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
+                if item.player == self.player 
+                    and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS and not item.location]
+            if possible_start_items:
+                index = self.multiworld.random.choice(possible_start_items)
+                start_item = self.multiworld.itempool.pop(index)
+                start_loc.place_locked_item(start_item)
+
+
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
 
+        # For now, special case first item
+        FORCE_START_ITEM = True
+        if FORCE_START_ITEM:
+            self.force_start_item()
 
         # Set up filter rules
 
@@ -284,7 +301,7 @@ class LinksAwakeningWorld(World):
         # Do dungeon specific things
         for dungeon_index in range(0, 9):
             # set up allow-list for dungeon specific items
-            locs = set(self.dungeon_locations_by_dungeon[dungeon_index])
+            locs = set(loc for loc in self.dungeon_locations_by_dungeon[dungeon_index] if not loc.item)
             for item in self.prefill_original_dungeon[dungeon_index]:
                 allowed_locations_by_item[item] = locs
 
@@ -310,7 +327,8 @@ class LinksAwakeningWorld(World):
             allowed_locations_by_item[item] = all_dungeon_locs
 
         # Get the list of locations and shuffle
-        all_dungeon_locs_to_fill = list(all_dungeon_locs)
+        all_dungeon_locs_to_fill = sorted(all_dungeon_locs)
+
         self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
 
         # Get the list of items and sort by priority
@@ -414,11 +432,12 @@ class LinksAwakeningWorld(World):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
                     assert(loc.item)
+                        
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):
                         loc.ladxr_item.item = loc.item.item_data.ladxr_id
 
-                    # TODO: if the item name contains "sword", use a sword icon, etc
+                    # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     else:
                         loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item.name)

@@ -109,13 +109,13 @@ class BlueChestCount(Range):
     more for each party member or capsule monster if you have shuffle_party_members/shuffle_capsule_monsters enabled.
     (You will still encounter blue chests in your world after all the multiworld location checks have been exhausted,
     but these chests will then generate items for yourself only.)
-    Supported values: 10 – 75
+    Supported values: 10 – 100
     Default value: 25
     """
 
     display_name = "Blue chest count"
     range_start = 10
-    range_end = 75
+    range_end = 100
     default = 25
 
 
@@ -174,6 +174,39 @@ class Boss(RandomGroupsChoice):
     option_master = 0x26
     default = option_master
 
+    _sprite: Dict[int, int] = {
+        option_lizard_man: 0x9E,
+        option_big_catfish: 0xC5,
+        option_regal_goblin: 0x9D,
+        option_follower_x2: 0x76,
+        option_camu: 0x75,
+        option_tarantula: 0xC6,
+        option_pierre: 0x77,
+        option_daniele: 0x78,
+        option_gades_a: 0x7A,
+        option_mummy_x4: 0xA8,
+        option_troll_x3: 0xA9,
+        option_gades_b: 0x7A,
+        option_idura_a: 0x74,
+        option_lion_x2: 0xB7,
+        option_idura_b: 0x74,
+        option_idura_c: 0x74,
+        option_rogue_flower: 0x96,
+        option_soldier_x4: 0x18,
+        option_gargoyle_x4: 0xC4,
+        option_venge_ghost: 0xD0,
+        option_white_dragon_x3: 0xC3,
+        option_fire_dragon: 0xC0,
+        option_ghost_ship: 0xC8,
+        option_tank: 0xC7,
+        option_gades_c: 0x7A,
+        option_amon: 0x79,
+        option_erim: 0x38,
+        option_daos: 0x7B,
+        option_egg_dragon: 0xC0,
+        option_master: 0x94,
+    }
+
     random_groups = {
         "random-low": ["lizard_man", "big_catfish", "regal_goblin", "follower_x2", "camu", "tarantula", "pierre",
                        "daniele", "mummy_x4", "troll_x3"],
@@ -186,6 +219,15 @@ class Boss(RandomGroupsChoice):
     @property
     def flag(self) -> int:
         return 0xFE if self.value == Boss.option_master else 0xFF
+
+    @property
+    def music(self) -> int:
+        return 0x1B if self.value in {Boss.option_master, Boss.option_gades_a, Boss.option_gades_b, Boss.option_gades_c,
+                                      Boss.option_amon, Boss.option_erim, Boss.option_daos} else 0x19
+
+    @property
+    def sprite(self) -> int:
+        return Boss._sprite[self.value]
 
 
 class CapsuleCravingsJPStyle(Toggle):
