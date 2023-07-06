@@ -1,11 +1,15 @@
 from BaseClasses import ItemClassification
 from .poke_data import pokemon_data
+from .locations import location_data
+from copy import deepcopy
+
 
 class ItemData:
-    def __init__(self, id, classification, groups):
+    def __init__(self, item_id, classification, groups):
         self.groups = groups
         self.classification = classification
-        self.id = None if id is None else id + 172000000
+        self.id = None if item_id is None else item_id + 172000000
+
 
 item_table = {
     "Master Ball": ItemData(1, ItemClassification.useful, ["Consumables", "Poke Balls"]),
@@ -214,3 +218,97 @@ item_groups = {}
 for item, data in item_table.items():
     for group in data.groups:
         item_groups[group] = item_groups.get(group, []) + [item]
+
+
+def generate_items(self) -> None:
+    start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+    if self.multiworld.randomize_pokedex[self.player] == "start_with":
+        start_inventory["Pokedex"] = 1
+        self.multiworld.push_precollected(self.create_item("Pokedex"))
+    if self.multiworld.exp_all[self.player] == "start_with":
+        start_inventory["Exp. All"] = 1
+        self.multiworld.push_precollected(self.create_item("Exp. All"))
+
+    locations = [location for location in location_data if location.type in ("Item", "Trainer Parties")]
+    self.item_pool = []
+    combined_traps = (self.multiworld.poison_trap_weight[self.player].value
+                      + self.multiworld.fire_trap_weight[self.player].value
+                      + self.multiworld.paralyze_trap_weight[self.player].value
+                      + self.multiworld.ice_trap_weight[self.player].value)
+    stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
+    for location in locations:
+        event = location.event
+        if not location.inclusion(self.multiworld, self.player):
+            continue
+
+        if location.original_item is None:
+            item = self.create_filler()
+        elif location.original_item == "Exp. All" and self.multiworld.exp_all[self.player] == "remove":
+            item = self.create_filler()
+        elif location.original_item == "Pokedex":
+            if self.multiworld.randomize_pokedex[self.player] == "vanilla":
+                self.multiworld.get_location(location.name, self.player).event = True
+                event = True
+            item = self.create_item("Pokedex")
+        elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
+            stone = stones.pop()
+            item = self.create_item(stone)
+        elif location.original_item.startswith("TM"):
+            if self.multiworld.randomize_tm_moves[self.player]:
+                item = self.create_item(location.original_item.split(" ")[0])
+            else:
+                item = self.create_item(location.original_item)
+        elif location.original_item == "Card Key" and self.multiworld.split_card_key[self.player] == "on":
+            item = self.create_item("Card Key 3F")
+        elif "Card Key" in location.original_item and self.multiworld.split_card_key[self.player] == "progressive":
+            item = self.create_item("Progressive Card Key")
+        else:
+            item = self.create_item(location.original_item)
+            if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
+                    <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
+                item = self.create_item(self.select_trap())
+
+        if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
+            continue
+
+        if item.name in start_inventory and start_inventory[item.name] > 0 and \
+                location.original_item in item_groups["Unique"]:
+            start_inventory[location.original_item] -= 1
+            item = self.create_filler()
+
+        if event:
+            loc = self.multiworld.get_location(location.name, self.player)
+            loc.place_locked_item(item)
+            if location.type == "Trainer Parties":
+                # loc.item.classification = ItemClassification.filler
+                loc.party_data = deepcopy(location.party_data)
+        elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
+            self.item_pool.append(item)
+
+    self.multiworld.random.shuffle(self.item_pool)
+    advancement_items = [item.name for item in self.item_pool if item.advancement] \
+                        + [item.name for item in self.multiworld.precollected_items[self.player] if
+                           item.advancement]
+    self.total_key_items = len(
+        # The stonesanity items are not checekd for here and instead just always added as the `+ 4`
+        # They will always exist, but if stonesanity is off, then only as events.
+        # We don't want to just add 4 if stonesanity is off while still putting them in this list in case
+        # the player puts stones in their start inventory, in which case they would be double-counted here.
+        [item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
+                           "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
+                           "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
+                           "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
+                           "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
+                           "Card Key 11F", "Exp. All", "Moon Stone"] if item in advancement_items]) + 4
+    if "Progressive Card Key" in advancement_items:
+        self.total_key_items += 10
+
+    self.multiworld.cerulean_cave_key_items_condition[self.player].total = int((self.total_key_items / 100)
+                                                                               *
+                                                                               self.multiworld.cerulean_cave_key_items_condition[
+                                                                                   self.player].value)
+
+    self.multiworld.elite_four_key_items_condition[self.player].total = int((self.total_key_items / 100)
+                                                                            *
+                                                                            self.multiworld.elite_four_key_items_condition[
+                                                                                self.player].value)
