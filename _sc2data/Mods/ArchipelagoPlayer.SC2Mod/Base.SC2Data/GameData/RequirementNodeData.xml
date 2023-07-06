@@ -2574,4 +2574,14 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeImpalerRoundsCompleteOnly">
         <Count Link="AP_ImpalerRounds" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_ScienceVesselSCBWEMPShockwave@Show">
+        <OperandArray value="AP_ScienceVesselSCBWEMPShockwaveResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_ScienceVesselSCBWEMPShockwaveResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_ScienceVesselSCBWEMPShockwaveResearch"/>
+    <CRequirementAnd id="AP_ScienceVesselSCBWDefensiveMatrix@Show">
+        <OperandArray value="AP_CountUpgradeScienceVesselDefensiveMatrixCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselDefensiveMatrixCompleteOnly">
+        <Count Link="AP_ScienceVesselDefensiveMatrix" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

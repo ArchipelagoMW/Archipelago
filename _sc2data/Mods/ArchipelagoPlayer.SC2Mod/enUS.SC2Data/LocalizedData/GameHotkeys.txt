@@ -274,3 +274,5 @@ Button/Hotkey/AP_GhostSCBWLockdown=L
 Button/Hotkey/AP_MedicSCBWRestoration=R
 Button/Hotkey/AP_MedicSCBWOpticFlare=F
 Button/Hotkey/AP_ValkyrieSpeedBoost=B
+Button/Hotkey/AP_ScienceVesselSCBWEMPShockwave=E
+Button/Hotkey/AP_ScienceVesselSCBWDefensiveMatrix=D

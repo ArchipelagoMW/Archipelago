@@ -10871,4 +10871,89 @@
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="AP_MedicSCBWOpticFlare"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ScienceVesselSCBWEMPShockwave@ABDecloak">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_ScienceVesselSCBWEMPShockwave@Decloak"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_ScienceVesselSCBWEMPShockwave@Damage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ShieldBonus value="10000"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ScienceVesselSCBWEMPShockwave@LM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_ScienceVesselSCBWEMPShockwave@Search"/>
+        <AmmoUnit value="AP_ScienceVesselSCBWEMPShockwave@Missile"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit">
+        <ValidatorArray value="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit"/>
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Energy">
+            <Change value="-10000"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_ScienceVesselSCBWEMPShockwave@Search">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Hidden,Invulnerable"/>
+        <AreaArray Radius="1.875" Effect="AP_ScienceVesselSCBWEMPShockwave@Set"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ScienceVesselSCBWEMPShockwave@Set">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@Damage"/>
+        <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit"/>
+<!--        <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@ABDecloak"/>-->
+        <EffectArray value="AP_HighTemplarSCBWHallucination@KillHallucination"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_HighTemplarSCBWHallucination@KillHallucination">
+        <ValidatorArray value="AP_HighTemplarSCBWHallucination@KillHallucinationTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_ScienceVesselSCBWDefensiveMatrix@AB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_ScienceVesselSCBWDefensiveMatrix"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ScienceVesselSCBWDefensiveMatrix@ABDummy">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_ScienceVesselSCBWDefensiveMatrix@Dummy"/>
+    </CEffectApplyBehavior>
+    <CEffectUserData id="AP_ScienceVesselSCBWDefensiveMatrix@UDInit">
+        <EditorCategories value=""/>
+        <Key value="AP_ScienceVesselSCBWDefensiveMatrix"/>
+        <Amount value="0"/>
+        <SourceKey value="AP_ScienceVesselSCBWDefensiveMatrix"/>
+        <Operation value="Set"/>
+    </CEffectUserData>
+    <CEffectModifyUnit id="AP_ScienceVesselSCBWDefensiveMatrix@ModifyUnit">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="AP_ScienceVesselSCBWDefensiveMatrix@RBDummy">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_ScienceVesselSCBWDefensiveMatrix@Dummy"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_ScienceVesselSCBWDefensiveMatrix@RB">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_ScienceVesselSCBWDefensiveMatrix"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_ScienceVesselSCBWDefensiveMatrix@Set">
+        <EditorCategories value="Race:Terran"/>
+        <!--<EffectArray value="ScienceVesselSCBWDefensiveMatrix@ABDummy"/>-->
+        <EffectArray value="AP_ScienceVesselSCBWDefensiveMatrix@AB"/>
+        <EffectArray value="AP_ScienceVesselSCBWDefensiveMatrix@ModifyUnit"/>
+        <EffectArray value="AP_HighTemplarSCBWHallucination@KillHallucination"/>
+        <!--<EffectArray value="ScienceVesselSCBWDefensiveMatrix@RBDummy"/>-->
+    </CEffectSet>
 </Catalog>

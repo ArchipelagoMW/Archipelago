@@ -6974,4 +6974,27 @@
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="AP\Assets\Sounds\Terran\MedicSCBW\MedicSCBWOpticFlare@Launch00.ogg" FacialGroup=""/>
     </CSound>
+    <CSound id="AP_ScienceVesselSCBWEMPShockwave@Impact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP_Assets\Sounds\Terran\ScienceVesselSCBW\ScienceVesselSCBWEMPShockwave@Impact00.ogg"/>
+    </CSound>
+    <CSound id="AP_ScienceVesselSCBWEMPShockwave@Launch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_EMPAttackLaunch.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Volume value="-6.860000,-6.860000"/>
+    </CSound>
+    <CSound id="AP_ScienceVesselSCBWDefensiveMatrix@Birth" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\Terran\ScienceVesselSCBW\ScienceVesselSCBWDefensiveMatrix@Impact00.ogg"/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="8"/>
+    </CSound>
+    <CSound id="AP_ScienceVesselSCBWDefensiveMatrix@Death" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_DefensiveMatrixDeath0.ogg"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_DefensiveMatrixDeath1.ogg"/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="8"/>
+    </CSound>
 </Catalog>

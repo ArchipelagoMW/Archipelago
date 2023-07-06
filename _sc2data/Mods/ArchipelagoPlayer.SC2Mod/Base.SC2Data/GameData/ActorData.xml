@@ -17244,6 +17244,51 @@
     <CActorSound id="AP_ScienceVessel_IrradiateImpact" parent="SoundOneShot">
         <On Terms="Behavior.AP_Irradiate.On" Send="Create"/>
     </CActorSound>
+    <CActorAction id="AP_ScienceVesselSCBWEMPShockwave@Action" parent="GenericAttack" effectImpact="AP_ScienceVesselSCBWEMPShockwave@Search" effectLaunch="AP_ScienceVesselSCBWEMPShockwave@LM">
+<!--        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>-->
+        <LaunchAssets Sound="AP_ScienceVesselSCBWEMPShockwave@Launch"/>
+        <Missile value="AP_ScienceVesselSCBWEMPShockwave@Missile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
+        <ImpactMap index="None" Sound="AP_ScienceVesselSCBWEMPShockwave@Impact"/>
+    </CActorAction>
+    <CActorModel id="AP_ScienceVesselSCBWEMPShockwave@Impact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ScienceVesselSCBWEMPShockwave@Search.Start" Send="Create"/>
+        <On Terms="Effect.AP_ScienceVesselSCBWEMPShockwave@Search.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorMissile id="AP_ScienceVesselSCBWEMPShockwave@Missile" parent="GenericAttackMissile" unitName="AP_ScienceVesselSCBWEMPShockwave@Missile"/>
+    <CActorRange id="AP_ScienceVesselSCBWEMPShockwave@Range" parent="RangeAbil" abil="AP_ScienceVesselSCBWEMPShockwave">
+<!--        <On index="1" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.TargetOn" Send="Create"/>-->
+<!--        <On index="2" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.TargetOff" Send="Destroy"/>-->
+<!--        <On index="3" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.ButtonHoverOn" Send="Create"/>-->
+<!--        <On index="4" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.ButtonHoverOff" Send="Destroy"/>-->
+        <Abil Link="AP_ScienceVesselSCBWEMPShockwave"/>
+    </CActorRange>
+    <CActorSplat id="AP_ScienceVesselSCBWEMPShockwave@CursorSplat" parent="TerranCursorSplat" abil="AP_ScienceVesselSCBWEMPShockwave"/>
+    <CActorSound id="AP_ScienceVesselSCBWDefensiveMatrix@Birth" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.Off" Send="Destroy"/>
+    </CActorSound>
+    <CActorRange id="AP_ScienceVesselSCBWDefensiveMatrix@Range" parent="RangeAbil" abil="AP_ScienceVesselSCBWDefensiveMatrix"/>
+    <CActorSound id="ScienceVesselSCBWDefensiveMatrix@Death" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.Off" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_ScienceVesselSCBWDefensiveMatrix@Effect" parent="ModelAddition">
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,3.000000"/>
+        <On Terms="ActorCreation; ValidateUnit IsVoidRay" Send="SetScale 1.200000,1.600000,1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="SetScale 1.200000,1.500000,1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit IsThor" Send="SetScale 1.400000,1.200000,1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsHerculesCombine" Send="SetScale 1.100000,1.700000,1.100000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsGoliath" Send="SetScale 1.300000"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="1.500000"/>
+    </CActorModel>
+    <CActorSound id="AP_ScienceVesselSCBWDefensiveMatrix@Death" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.Off" Send="Create"/>
+    </CActorSound>
     <CActorUnit id="AP_Predator" parent="GenericUnitStandard" unitName="AP_Predator">
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorCombine default="1" id="AP_SCBW_Effect">
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine default="1" id="AP_SCBW_Behavior">
+        <Type value="And"/>
+    </CValidatorCombine>
     <CValidatorPlayerRequirement id="AP_HaveHotSImpaler">
         <Find value="1"/>
         <Value value="AP_HaveHotSImpaler"/>
@@ -3500,4 +3506,24 @@
         <Find value="1"/>
         <Value value="AP_HaveImpalerRounds"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_HighTemplarSCBWHallucination@KillHallucinationTargetFilters">
+        <Filters value="Hallucination;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit" parent="AP_SCBW_Effect">
+        <CombineArray value="AP_ScienceVesselSCBWEMPShockwave@TargetFilters"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_ScienceVesselSCBWEMPShockwave@TargetFilters">
+        <Filters value="-;Stasis,Dead,Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@Decloak@Disable" parent="AP_SCBW_Behavior"/>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@Decloak@Remove" parent="AP_SCBW_Behavior">
+        <CombineArray value="IsNotBuried"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsGoliath">
+        <Value value="AP_Goliath"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVoidRay">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
 </Catalog>

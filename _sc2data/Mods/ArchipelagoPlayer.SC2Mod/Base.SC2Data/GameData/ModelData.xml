@@ -11677,4 +11677,24 @@
         <ScaleMax value="0.500000,0.500000,0.500000"/>
         <ScaleMin value="0.500000,0.500000,0.500000"/>
     </CModel>
+    <CModel id="AP_ScienceVesselSCBWEMPShockwave@Missile" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\EMPMissile\EMPMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ScienceVesselSCBWEMPShockwave@Impact" parent="OneShotSpellFX">
+        <Model value="Assets\COOP\Mengsk\Effects\Ghost_Mengsk_COOP_EMP\Ghost_Mengsk_COOP_EMP.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <RadiusLoose value="0.600000"/>
+        <ScaleMax value="0.400000,0.400000,0.400000"/>
+        <ScaleMin value="0.400000,0.400000,0.400000"/>
+    </CModel>
+    <CModel id="AP_ScienceVesselSCBWDefensiveMatrix@Effect" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserDefensiveMatrix\BattlecruiserDefensiveMatrix.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Radius value="2.000000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
 </Catalog>

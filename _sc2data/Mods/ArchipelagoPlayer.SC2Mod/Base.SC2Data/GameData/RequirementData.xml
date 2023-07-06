@@ -1592,4 +1592,6 @@
     <CRequirement id="AP_HaveImpalerRounds">
         <NodeArray index="Show" Link="AP_CountUpgradeImpalerRoundsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_ScienceVesselSCBWEMPShockwave" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_ScienceVesselSCBWDefensiveMatrix" parent="AP_SCBW_AbilReq"/>
 </Catalog>

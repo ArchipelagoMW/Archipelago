@@ -5621,6 +5621,8 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="7007C27D"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="82852EB2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="28785DF7"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="2529DFEF"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="378FBD60"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="681259FC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="5FF93E28"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="113B7B29"/>
@@ -9554,6 +9556,78 @@
         <Element Type="Param" Id="29A5F08A">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="082C2741"/>
+        </Element>
+        <Element Type="FunctionDef" Id="2529DFEF">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="AAF140EA"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="AE9A9E26"/>
+        </Element>
+        <Element Type="ParamDef" Id="AAF140EA">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="5D0A8E0C"/>
+        </Element>
+        <Element Type="Param" Id="5D0A8E0C">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="AE9A9E26">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="475895EB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="DB837D5F"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="27FB2CA1"/>
+        </Element>
+        <Element Type="Param" Id="475895EB">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="DB837D5F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ScienceVesselSCBWEMPShockwaveResearch</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="Param" Id="27FB2CA1">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="AAF140EA"/>
+        </Element>
+        <Element Type="FunctionDef" Id="378FBD60">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="C9354091"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="32B8BB0E"/>
+        </Element>
+        <Element Type="ParamDef" Id="C9354091">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="FE76CF87"/>
+        </Element>
+        <Element Type="Param" Id="FE76CF87">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="32B8BB0E">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="3EF2EB5B"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="646DE331"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="1A428A02"/>
+        </Element>
+        <Element Type="Param" Id="3EF2EB5B">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="646DE331">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ScienceVesselDefensiveMatrix</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="Param" Id="1A428A02">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="C9354091"/>
         </Element>
         <Element Type="FunctionDef" Id="681259FC">
             <FlagAction/>

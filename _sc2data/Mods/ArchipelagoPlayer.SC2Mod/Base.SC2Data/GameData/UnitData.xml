@@ -2727,6 +2727,8 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_Irradiate"/>
         <AbilArray Link="AP_NanoRepair"/>
+        <AbilArray Link="AP_ScienceVesselSCBWEMPShockwave"/>
+        <AbilArray Link="AP_ScienceVesselSCBWDefensiveMatrix"/>
         <BehaviorArray Link="Detector11"/>
         <WeaponArray Turret="AP_ScienceVesselRotate"/>
         <CardLayouts>
@@ -2736,9 +2738,11 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
-            <LayoutButtons Face="Detector" Type="Passive" Row="2" Column="3"/>
+            <LayoutButtons Face="Detector" Type="Passive" Row="1" Column="4"/>
             <LayoutButtons Face="AP_Irradiate" Type="AbilCmd" AbilCmd="AP_Irradiate,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_NanoRepair" Type="AbilCmd" AbilCmd="AP_NanoRepair,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_ScienceVesselSCBWEMPShockwave" Type="AbilCmd" AbilCmd="AP_ScienceVesselSCBWEMPShockwave,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_ScienceVesselSCBWDefensiveMatrix" Type="AbilCmd" AbilCmd="AP_ScienceVesselSCBWDefensiveMatrix,0" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -2758,6 +2762,11 @@
             <ChanceArray index="Anim" value="33"/>
             <ChanceArray index="Idle" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_ScienceVesselSCBWEMPShockwave@Missile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_ScienceVesselSCBWEMPShockwave@Mover"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
     <CUnit id="AP_Predator">
         <DeathRevealRadius value="3"/>

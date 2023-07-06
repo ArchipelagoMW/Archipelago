@@ -4687,4 +4687,8 @@
     <CUpgrade id="AP_SpiderMineDamage">
         <EffectArray Reference="Effect,AP_VultureSpiderMinesDamage,Amount" Value="55"/>
     </CUpgrade>
+    <CUpgrade id="AP_ScienceVesselSCBWEMPShockwaveResearch">
+        <Icon value="Assets\Textures\btn-ability-mengsk-ghost-staticempblast.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ScienceVesselDefensiveMatrix"/>
 </Catalog>

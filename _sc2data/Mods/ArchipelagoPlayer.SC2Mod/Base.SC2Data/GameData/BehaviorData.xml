@@ -4151,4 +4151,38 @@
         <InfoIcon value="Assets\Textures\btn-techupgrade-terran-impalerrounds.dds"/>
         <DisableValidatorArray value="AP_HaveImpalerRounds"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScienceVesselSCBWEMPShockwave@Decloak">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-emp.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_ScienceVesselSCBWEMPShockwave@Decloak@Remove"/>
+        <Duration value="10"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+        <DisableValidatorArray value="AP_ScienceVesselSCBWEMPShockwave@Decloak@Disable"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScienceVesselSCBWDefensiveMatrix">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <!--<RemoveValidatorArray value="hasShields"/>-->
+        <Duration value="84"/>
+        <DamageResponse>
+            <ClampMaximum value="0.5"/>
+            <Minimum value="0.5"/>
+            <ModifyLimit value="250"/>
+            <ModifyMinimumDamage value="1"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScienceVesselSCBWDefensiveMatrix@Dummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="250"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

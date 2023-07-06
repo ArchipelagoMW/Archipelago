@@ -5926,4 +5926,39 @@
             <Cooldown TimeUse="20"/>
         </Cost>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ScienceVesselSCBWEMPShockwave">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ScienceVesselSCBWEMPShockwave@LM"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="0.0625"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="AP_ScienceVesselSCBWEMPShockwave@Search"/>
+        <AINotifyEffect value="EMPLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ScienceVesselSCBWEMPShockwave" Requirements="AP_ScienceVesselSCBWEMPShockwave"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ScienceVesselSCBWDefensiveMatrix">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ScienceVesselSCBWDefensiveMatrix@Set"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="-;Self,Structure,RawResource,HarvestableResource,Item,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ScienceVesselSCBWDefensiveMatrix" State="Restricted" Requirements="AP_ScienceVesselSCBWDefensiveMatrix">
+            <Flags index="ToSelection" value="1"/>
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
 </Catalog>
