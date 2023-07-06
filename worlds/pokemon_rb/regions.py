@@ -1932,7 +1932,10 @@ def create_regions(self):
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances[0:-1], 11), pokemon_centers[0:-1]):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
-            for a, b in zip(multiworld.random.sample(pokemart_entrances, 8), pokemarts):
+            forced_pokemarts = multiworld.random.sample(pokemart_entrances, 8)
+            if self.multiworld.key_items_only[self.player]:
+                forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
+            for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
         else:
             # Pokemon Centers must be reached from the Cities and Routes that have programmed coordinates for
@@ -1988,13 +1991,6 @@ def create_regions(self):
         entrance_b.connect(entrance_a)
         entrances.remove(entrance_a)
         entrances.remove(entrance_b)
-    # else:
-    #     for region, region_entrances in warp_data.items():
-    #         for entrance in region_entrances:
-    #             if "Rock Tunnel" in region:
-    #                 connect(multiworld, player, region, entrance["to"]["map"], lambda state: logic.rock_tunnel(state, player))
-    #             else:
-    #                 connect(multiworld, player, region, entrance["to"]["map"])
 
     if multiworld.door_shuffle[player] == "simple":
         def connect_connecting_interiors(interior_exits, exterior_entrances):
@@ -2028,24 +2024,24 @@ def create_regions(self):
                     entrance_a.connect(entrance_b)
                     entrances.remove(entrance_a)
 
-        interior_dungeons = safe_connecting_interior_dungeons + unsafe_connecting_interior_dungeons
+        placed_connecting_interior_dungeons = safe_connecting_interior_dungeons + unsafe_connecting_interior_dungeons
         interior_dungeon_entrances = connecting_interior_dungeon_entrances.copy()
 
-        single_entrance_dungeons = dungeons.copy()
+        placed_single_entrance_dungeons = dungeons.copy()
         single_entrance_dungeon_entrances = dungeon_entrances.copy()
 
         for i in range(2):
             if True or not multiworld.random.randint(0, 2):
-                interior_dungeons.append(multi_purpose_dungeons[i])
+                placed_connecting_interior_dungeons.append(multi_purpose_dungeons[i])
                 interior_dungeon_entrances.append([multi_purpose_dungeon_entrances[i], None])
             else:
-                single_entrance_dungeons.append(multi_purpose_dungeons[i])
+                placed_single_entrance_dungeons.append(multi_purpose_dungeons[i])
                 single_entrance_dungeon_entrances.append(multi_purpose_dungeon_entrances[i])
 
-        multiworld.random.shuffle(interior_dungeons)
-        while interior_dungeons[0] in unsafe_connecting_interior_dungeons:
-            multiworld.random.shuffle(interior_dungeons)
-        connect_connecting_interiors(interior_dungeons, interior_dungeon_entrances)
+        multiworld.random.shuffle(placed_connecting_interior_dungeons)
+        while placed_connecting_interior_dungeons[0] in unsafe_connecting_interior_dungeons:
+            multiworld.random.shuffle(placed_connecting_interior_dungeons)
+        connect_connecting_interiors(placed_connecting_interior_dungeons, interior_dungeon_entrances)
 
         interiors = connecting_interiors.copy()
         multiworld.random.shuffle(interiors)
@@ -2060,8 +2056,8 @@ def create_regions(self):
             multiworld.random.shuffle(interiors)
 
         connect_connecting_interiors(interiors, connecting_interior_entrances)
-        g = gyms.copy()
-        multiworld.random.shuffle(g)
+        placed_gyms = gyms.copy()
+        multiworld.random.shuffle(placed_gyms)
 
         # Celadon Gym requires Cut access to reach the Gym Leader. There are some scenarios where its placement
         # could make badge placement impossible
@@ -2072,11 +2068,11 @@ def create_regions(self):
 
             # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
             # No gym leaders would be reachable.
-            if gyms[3] == g[0] and multiworld.viridian_gym_condition[player] > 0:
+            if gyms[3] == placed_gyms[0] and multiworld.viridian_gym_condition[player] > 0:
                 return True
 
             # Celadon Gym not on Cinnabar Island or can access Viridian City gym with one badge
-            if not gyms[3] == g[6] and multiworld.viridian_gym_condition[player] > 1:
+            if not gyms[3] == placed_gyms[6] and multiworld.viridian_gym_condition[player] > 1:
                 return False
 
             # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
@@ -2088,24 +2084,24 @@ def create_regions(self):
                 return False
 
             # Route 3 condition is boulder badge but Mt Moon entrance leads to safe dungeons or Rock Tunnel
-            if multiworld.route_3_condition[player] == "boulder_badge" and interior_dungeons[2] not in \
-                    (unsafe_connecting_interior_dungeons[0], unsafe_connecting_interior_dungeons[2]):
+            if multiworld.route_3_condition[player] == "boulder_badge" and placed_connecting_interior_dungeons[2] not \
+                    in (unsafe_connecting_interior_dungeons[0], unsafe_connecting_interior_dungeons[2]):
                 return False
 
             # Route 3 condition is Defeat Brock and he is in Pewter City, or any other condition besides Boulder Badge.
             # Any badge can land in Pewter City, so the only problematic dungeon at Mt Moon is Seafoam Islands since
             # it requires two badges
-            if (((multiworld.route_3_condition[player] == "defeat_brock" and gyms[0] == g[0])
+            if (((multiworld.route_3_condition[player] == "defeat_brock" and gyms[0] == placed_gyms[0])
                     or multiworld.route_3_condition[player] not in ("defeat_brock", "boulder_badge"))
-                    and interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
+                    and placed_connecting_interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
                 return False
 
             # If dungeon at Diglett's Cave does not require a badge, we can get Cut access and make it through
-            if interior_dungeons[1] in safe_connecting_interior_dungeons:
+            if placed_connecting_interior_dungeons[1] in safe_connecting_interior_dungeons:
                 return False
 
             # If dungeon at Seafoam Islands does not require a badge, we can get Surf access and make it through
-            if interior_dungeons[3] in safe_connecting_interior_dungeons:
+            if placed_connecting_interior_dungeons[3] in safe_connecting_interior_dungeons:
                 return False
 
             # No apparent way to proceed, reshuffle
@@ -2114,10 +2110,10 @@ def create_regions(self):
         # Also check for a very specific situation where Brock or vending machines are needed to access
         # Cerulean City, but they are placed in Cerulean City
         def cerulean_city_problem():
-            if (gyms[0] == g[1]  # Pewter Gym in Cerulean City
+            if (gyms[0] == placed_gyms[1]  # Pewter Gym in Cerulean City
                     and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
                     and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
-                    and multi_purpose_dungeons[0] == interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
+                    and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
                     and (not multiworld.tea[player])                       # not traversable backwards
                     and multiworld.route_3_condition[player] == "defeat_brock"
                     and multiworld.worlds[player].fly_map != "Cerulean City"
@@ -2125,14 +2121,14 @@ def create_regions(self):
                 return True
 
         while celadon_gym_problem() or cerulean_city_problem():
-            multiworld.random.shuffle(g)
+            multiworld.random.shuffle(placed_gyms)
 
-        connect_interiors(g, gym_entrances)
+        connect_interiors(placed_gyms, gym_entrances)
 
-        multiworld.random.shuffle(single_entrance_dungeons)
-        while dungeons[4] == single_entrance_dungeons[0]:  # Pokémon Tower at Silph Co
-            multiworld.random.shuffle(single_entrance_dungeons)
-        connect_interiors(single_entrance_dungeons, single_entrance_dungeon_entrances)
+        multiworld.random.shuffle(placed_single_entrance_dungeons)
+        while dungeons[4] == placed_single_entrance_dungeons[0]:  # Pokémon Tower at Silph Co
+            multiworld.random.shuffle(placed_single_entrance_dungeons)
+        connect_interiors(placed_single_entrance_dungeons, single_entrance_dungeon_entrances)
 
         remaining_entrances = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name)]
         multiworld.random.shuffle(remaining_entrances)
@@ -2316,6 +2312,7 @@ def create_regions(self):
                 pair[1].connected_region = pair[0].connected_region
                 pair[1].parent_region.entrances.append(pair[0])
                 pair[1].target = pair[0].target
+
     if multiworld.door_shuffle[player]:
         for region in multiworld.get_regions(player):
             checked_regions = {region}
@@ -2368,7 +2365,6 @@ class PokemonRBWarp(Entrance):
         self.warp_id = warp_id
         self.address = address
         self.flags = flags
-        # self.placement_order = 0
 
     def connect(self, entrance):
         super().connect(entrance.parent_region, None, target=entrance.warp_id)
