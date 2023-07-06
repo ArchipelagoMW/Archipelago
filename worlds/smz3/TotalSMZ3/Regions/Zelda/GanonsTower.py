@@ -144,7 +144,8 @@ class GanonsTower(Z3Region):
 
     def CanFill(self, item: Item):
         if (self.Config.Multiworld):
-            if (item.World != self.world or item.Progression):
+            # item.World will be None for item created by create_item for item links
+            if (item.World is not None and (item.World != self.world or item.Progression)):
                 return False
             if (self.Config.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
                 return False
