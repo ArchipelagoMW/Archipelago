@@ -252,23 +252,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(get_base_rom_path(), "rb") as infile:
+    with open(Utils.get_settings().pokemon_emerald.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes
-
-
-def get_base_rom_path() -> str:
-    options = Utils.get_options()
-    emerald_options = options.get("pokemon_emerald_options", None)
-    if emerald_options is None:
-        file_name = "Pokemon - Emerald Version (USA, Europe).gba"
-    else:
-        file_name = emerald_options["rom_file"]
-
-    if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
-    return file_name
 
 
 def _set_bytes_little_endian(byte_array, address, size, value) -> None:

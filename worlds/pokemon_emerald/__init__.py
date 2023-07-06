@@ -4,11 +4,12 @@ Archipelago World definition for Pokemon Emerald Version
 import copy
 import hashlib
 import os
-from typing import Set, List, Dict, Optional, Tuple
+from typing import Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
 from Options import Toggle
+import settings
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
@@ -22,7 +23,7 @@ from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges,
                       HmCompatibility, RandomizeStaticEncounters, option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
-from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
+from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
                     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
@@ -55,6 +56,16 @@ class PokemonEmeraldWebWorld(WebWorld):
     tutorials = [setup_en]
 
 
+class PokemonEmeraldSettings(settings.Group):
+    class PokemonEmeraldRomFile(settings.UserFilePath):
+        """File name of your English Pokemon Emerald ROM"""
+        description = "Pokemon Emerald ROM File"
+        copy_to = "Pokemon - Emerald Version (USA, Europe).gba"
+        md5s = [PokemonEmeraldDeltaPatch.hash]
+
+    rom_file: PokemonEmeraldRomFile = PokemonEmeraldRomFile(PokemonEmeraldRomFile.copy_to)
+
+
 class PokemonEmeraldWorld(World):
     """
     Pokémon Emerald is the definitive Gen III Pokémon game and one of the most beloved in the franchise.
@@ -65,6 +76,9 @@ class PokemonEmeraldWorld(World):
     web = PokemonEmeraldWebWorld()
     option_definitions = option_definitions
     topology_present = True
+
+    settings_key = "pokemon_emerald"
+    settings: ClassVar[PokemonEmeraldSettings]
 
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
@@ -80,16 +94,8 @@ class PokemonEmeraldWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_path = get_base_rom_path()
-        if not os.path.exists(rom_path):
-            raise FileNotFoundError(rom_path)
-
-        with open(rom_path, "rb") as infile:
-            local_hash = hashlib.md5()
-            local_hash.update(bytes(infile.read()))
-
-            if local_hash.hexdigest() != PokemonEmeraldDeltaPatch.hash:
-                raise AssertionError("Base ROM for Pokemon Emerald does not match expected hash. Please get Pokemon Emerald Version (USA, Europe) and dump it.")
+        if not os.path.exists(cls.settings.rom_file):
+            raise FileNotFoundError(cls.settings.rom_file)
 
         if sanity_check() is False:
             raise AssertionError("Pokemon Emerald sanity check failed. See log for details.")
