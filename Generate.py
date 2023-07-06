@@ -229,7 +229,7 @@ def main(args=None, callback=ERmain):
             yaml.dump(important, f)
 
     if not __debug__:
-        sys.excepthook = failure_gui
+        sys.excepthook = generation_failure_gui
     callback(erargs, seed)
 
 
@@ -646,20 +646,24 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                         ret.sprite_pool += [key] * int(value)
 
 
-def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
-    exception_text = format_exception(type, value, traceback.tb_next, 0)
+def parsing_failure_gui(_type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
+    exception_text = format_exception(_type, value, traceback.tb_next, 0)
     error_message = "".join(exception_text[0])
-    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(type, value)[0]}"
+    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(_type, value)[0]}"
 
     messagebox(f"Generation Failed", f"{error_message}", True)
 
 
-def failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
-    exception_text = f"Please attach log from {Utils.local_path('logs')}\nand all used player files in a bug report."
-    if type is FileNotFoundError:
-        exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
-    logging.exception("".join(format_exception(type, value, traceback.tb_next)))
-    messagebox(f"Generation Failed", exception_text, True)
+def generation_failure_gui(_type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
+    exception_text = format_exception(_type, value, traceback.tb_next, 0)
+    error_message = exception_text[0]
+    error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(_type, value)[0]}"
+    
+    logging.exception(error_message, exc_info=value)
+    if _type is not FileNotFoundError:
+        error_message += f"\nPlease attach log from {Utils.local_path('logs')}" \
+                         f"\nand all used player files in a bug report."
+    messagebox(f"Generation Failed", error_message, True)
 
 
 if __name__ == '__main__':
