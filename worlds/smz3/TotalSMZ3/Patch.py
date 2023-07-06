@@ -84,6 +84,7 @@ class DropPrize(Enum):
 class Patch:
     Major = 11
     Minor = 3
+    Patch = 1
     allWorlds: List[World]
     myWorld: World
     seedGuid: str
@@ -615,7 +616,7 @@ class Patch:
                     "H" if self.myWorld.Config.SMLogic == Config.SMLogic.Hard else \
                     "X"
 
-        self.title = f"ZSM{Patch.Major}{Patch.Minor}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
+        self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
         self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
         self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
     

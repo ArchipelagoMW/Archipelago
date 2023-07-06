@@ -136,7 +136,7 @@ class GanonsTower(Z3Region):
     def CanEnter(self, items: Progression):
         return items.MoonPearl and self.world.CanEnter("Dark World Death Mountain East", items) and \
             self.world.CanAcquireAtLeast(self.world.TowerCrystals, items, RewardType.AnyCrystal) and \
-            self.world.CanAcquireAtLeast(self.world.TourianBossTokens * (self.world.TowerCrystals / 7), items, RewardType.AnyBossToken)
+            self.world.CanAcquireAtLeast((self.world.TourianBossTokens * self.world.TowerCrystals) / 7, items, RewardType.AnyBossToken)
 
     # added for AP completion_condition when TowerCrystals is lower than GanonCrystals
     def CanComplete(self, items: Progression):
