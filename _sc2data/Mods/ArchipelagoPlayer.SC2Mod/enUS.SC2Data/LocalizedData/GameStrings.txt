@@ -1611,6 +1611,8 @@ Button/Tooltip/AP_VultureAutoLaunchers=Vulture can attack while moving
 Button/Tooltip/AP_SpiderMineDamage=Spider Mines do more damage when exploding
 Button/Tooltip/AP_ScienceVesselSCBWEMPShockwave=Creates an electromagnetic pulse that reduces energy and shields to <c val="ffff8a">0</c> of all units in the targeted area.
 Button/Tooltip/AP_ScienceVesselSCBWDefensiveMatrix=Surrounds the target unit with a shield that can absorb up to <c val="ffff8a"><d ref="Behavior,AP_ScienceVesselSCBWDefensiveMatrix@Dummy,Modification.VitalMaxArray[Shields]"/></c> maximum damage.
+Button/Tooltip/AP_ThorUpgraded=Heavy assault mech. Can use 330mm Barrage Cannons.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_ThorWreckageUpgraded=Heavy assault mech.  Can use 330mm Barrage Cannon.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)

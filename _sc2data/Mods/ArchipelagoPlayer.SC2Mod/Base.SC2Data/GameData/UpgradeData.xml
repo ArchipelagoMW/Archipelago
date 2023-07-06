@@ -494,10 +494,10 @@
     <CUpgrade id="AP_330mmBarrageCannons">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
-        <EffectArray Operation="Set" Reference="Button,AP_Thor,Tooltip" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,Tooltip" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/AP_ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HotsKeneticMitosis">
