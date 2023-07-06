@@ -2558,4 +2558,8 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly">
         <Count Link="AP_WraithAdvancedLaserTechnology" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHyperfluxorCompleteOnly">
+        <Count Link="AP_Hyperfluxor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

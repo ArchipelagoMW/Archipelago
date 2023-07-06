@@ -2698,4 +2698,14 @@
         <Icon value="Assets\Textures\btn-upgrade-swann-improvedburstlaser.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-swann-improvedburstlaser.dds"/>
     </CButton>
+    <CButton id="AP_Hyperfluxor">
+        <Icon value="Assets\Textures\btn-upgrade-mengsk-engineeringbay-orbitaldrop.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_BurstCapacitors">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-burstcapacitors.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

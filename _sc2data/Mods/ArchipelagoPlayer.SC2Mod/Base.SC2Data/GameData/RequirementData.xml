@@ -193,7 +193,7 @@
         <NodeArray index="Show" Link="AP_CountUpgradeGoliathJumpJetCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_BurstCapacitorsResearched">
-        <NodeArray index="Use" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseShapedHull">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -1575,5 +1575,9 @@
     </CRequirement>
     <CRequirement id="AP_HaveWraithAdvancedLaserTechnology">
         <NodeArray index="Show" Link="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseHyperfluxor">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHyperfluxorCompleteOnly"/>
     </CRequirement>
 </Catalog>

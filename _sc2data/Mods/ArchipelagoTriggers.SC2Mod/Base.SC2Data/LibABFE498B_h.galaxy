@@ -116,6 +116,8 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem (in
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackHyperfluxor (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankShapedBlast (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets (int lp_player);

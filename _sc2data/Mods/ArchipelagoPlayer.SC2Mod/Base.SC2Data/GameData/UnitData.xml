@@ -1041,6 +1041,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_BurstCapacitorsDamageBuff"/>
         <WeaponArray Link="AP_Diamondback" Turret="AP_Diamondback"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -1048,13 +1049,13 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="AP_FireOnTheMove" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_FireOnTheMove" Type="Passive" Row="1" Column="0"/>
             <LayoutButtons>
                 <Face value="AP_TriLithiumPowerCells"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseTriLithiumPowerCells"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons>
@@ -1062,9 +1063,11 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedHull"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="2"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_Hyperfluxor" Type="Passive" Requirements="AP_UseHyperfluxor" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_BurstCapacitors" Type="Passive" Requirements="AP_BurstCapacitorsResearched" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>

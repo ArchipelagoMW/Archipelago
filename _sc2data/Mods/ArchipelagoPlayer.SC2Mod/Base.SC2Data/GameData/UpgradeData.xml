@@ -867,6 +867,7 @@
         <AffectedUnitArray value="AP_SpartanCompany"/>
     </CUpgrade>
     <CUpgrade id="AP_BurstCapacitors">
+        <!-- Apply Behavior AP_BurstCapacitorsDamageBuff when granting this upgrade -->
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>

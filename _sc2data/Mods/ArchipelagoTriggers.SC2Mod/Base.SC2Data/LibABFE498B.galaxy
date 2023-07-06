@@ -991,6 +991,33 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull (int lp_playe
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ShapedHull", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackHyperfluxor (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_Hyperfluxor", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors (int lp_player) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoDFE61BDD_g;
+    int autoDFE61BDD_u;
+
+    // Variable Initialization
+
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_BurstCapacitors", 1);
+    autoDFE61BDD_g = UnitGroup("AP_Diamondback", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoDFE61BDD_u = UnitGroupCount(autoDFE61BDD_g, c_unitCountAll);
+    for (;; autoDFE61BDD_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoDFE61BDD_g, autoDFE61BDD_u);
+        if (lv_currentUnit == null) { break; }
+        UnitBehaviorAdd(lv_currentUnit, "AP_BurstCapacitorsDamageBuff", lv_currentUnit, 1);
+    }
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

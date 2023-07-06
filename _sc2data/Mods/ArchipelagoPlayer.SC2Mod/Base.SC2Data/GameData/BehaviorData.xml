@@ -188,8 +188,11 @@
         <FinalEffect value="AP_BurstCapacitorsApplyDamageBuff"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_BurstCapacitorsDamageBuff">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-burstcapacitors.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <RemoveValidatorArray value="AP_DiamondbackNotAttacking"/>
+        <RemoveValidatorArray value="AP_BurstCapacitorsPurchased"/>
         <Modification>
             <DamageDealtScaled index="Spell" value="10"/>
             <DamageDealtScaled index="Melee" value="10"/>
