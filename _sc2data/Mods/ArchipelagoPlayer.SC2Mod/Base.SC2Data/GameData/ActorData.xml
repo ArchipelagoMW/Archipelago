@@ -2218,6 +2218,7 @@
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="WeaponStart.AP_WraithA.AttackStart" Send="AnimBracketStart Attack Attack,Superior"/>
         <On Terms="WeaponStart.AP_WraithG.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStart.AP_WraithAG.AttackStart" Send="AnimBracketStart Attack Attack"/>
         <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
         <HostSiteOps Ops="AP_SOpBankerWraith"/>
@@ -2268,6 +2269,12 @@
     <CActorAction id="AP_WraithGroundAttack" parent="GenericAttack" effectImpact="AP_WraithGU" effectLaunch="AP_WraithGLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeaponBottom"/>
         <ImpactMap index="None" Sound="AP_Wraith_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_WraithAirGroundAttack" parent="GenericAttack" effectImpact="AP_WraithAGU" effectLaunch="AP_WraithAGLaunchMissile">
+        <Missile value="AP_WraithGroundAttackMissile"/>
+        <LaunchAssets Sound="AP_WraithGroundAttackLaunch"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponBottom"/>
+        <ImpactMap index="None" Model="AP_WraithGroundAttackImpact" Sound="AP_Wraith_GroundAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WraithGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_WraithGroundWeapon"/>
     <CActorSound id="AP_CloakOff">

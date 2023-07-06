@@ -1002,6 +1002,17 @@
         <Kind value="Ranged"/>
         <Amount value="8"/>
     </CEffectDamage>
+    <CEffectLaunchMissile id="AP_WraithAGLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_WraithAGU"/>
+        <AmmoUnit value="AP_WraithGroundWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_WraithAGU" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+    </CEffectDamage>
     <CEffectCreatePersistent id="AP_LanzerTorpedoes">
         <EditorCategories value="Race:Terran"/>
         <WhichLocation Value="TargetUnit"/>

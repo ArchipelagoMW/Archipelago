@@ -1573,4 +1573,7 @@
     <CRequirement id="AP_HaveValkyrieSpeedBoost">
         <NodeArray index="Show" Link="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveWraithAdvancedLaserTechnology">
+        <NodeArray index="Show" Link="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly"/>
+    </CRequirement>
 </Catalog>

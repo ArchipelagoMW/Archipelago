@@ -1055,6 +1055,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField (int lp_pla
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CloakDistortionField", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockWraithAdvancedLaserTechnology (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_WraithAdvancedLaserTechnology", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

@@ -2555,4 +2555,7 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly">
         <Count Link="AP_ValkyrieSpeedBoost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly">
+        <Count Link="AP_WraithAdvancedLaserTechnology" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

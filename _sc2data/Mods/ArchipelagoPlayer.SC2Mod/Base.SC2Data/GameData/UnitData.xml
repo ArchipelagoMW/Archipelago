@@ -1434,6 +1434,7 @@
         <BehaviorArray Link="AP_CloakDistortionField"/>
         <WeaponArray Link="AP_WraithA"/>
         <WeaponArray Link="AP_WraithG"/>
+        <WeaponArray Link="AP_WraithAG"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -1447,17 +1448,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_CloakDistortionFieldResearched"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_SingularityAnchor"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_DynamicPowerRoutingResearched"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_WraithAdvancedLaserTechnology" Type="Passive" Requirements="AP_HaveWraithAdvancedLaserTechnology" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

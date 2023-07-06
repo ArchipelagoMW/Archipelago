@@ -237,6 +237,8 @@
         <EffectArray Reference="Effect,AP_WraithGU,Amount" Value="1"/>
         <EffectArray Reference="Weapon,AP_WraithA,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_WraithAU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithAG,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WraithAGU,Amount" Value="2"/>
         <!-- Merc Banshee -->
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_DuskWingBansheeDamage,Amount" Value="2"/>
@@ -282,6 +284,7 @@
         <EffectArray Reference="Weapon,AP_TwinGatlingCannon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WraithG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WraithA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WraithAG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WreckingCrewAssault,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WreckingCrewFighter,RateMultiplier" Value="0.05"/>
@@ -2246,6 +2249,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -2270,6 +2274,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -2294,6 +2299,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -2318,6 +2324,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -2341,6 +2348,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -2364,6 +2372,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -4646,4 +4655,13 @@
         <AffectedUnitArray value="AP_ValkyrieSCBW"/>
     </CUpgrade>
     <CUpgrade id="AP_ValkyrieSpeedBoost"/>
+    <CUpgrade id="AP_WraithAdvancedLaserTechnology">
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_WraithAG,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_WraithAG,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithA,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithA,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithG,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithG,Options[Disabled]" Value="1"/>
+        <AffectedUnitArray value="AP_Wraith"/>
+    </CUpgrade>
 </Catalog>
