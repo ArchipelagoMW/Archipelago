@@ -237,7 +237,7 @@ class WitnessWorld(World):
     def create_item(self, item_name: str) -> Item:
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
         item_data: ItemData
-        if hasattr(self, 'items') and item_name in self.items.item_data:
+        if hasattr(self, 'items') and self.items and item_name in self.items.item_data:
             item_data = self.items.item_data[item_name]
         else:
             item_data = StaticWitnessItems.item_data[item_name]
