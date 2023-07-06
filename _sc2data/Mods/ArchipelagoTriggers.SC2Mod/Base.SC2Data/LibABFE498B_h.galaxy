@@ -109,8 +109,11 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect (int lp_player
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack (int lp_player, int lp_level);
-void libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockVultureIonThrusters (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockVultureAutoLaunchers (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineCerberusMine (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineHighExplosiveMunition (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathMultiLockWeaponsSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets (int lp_player);

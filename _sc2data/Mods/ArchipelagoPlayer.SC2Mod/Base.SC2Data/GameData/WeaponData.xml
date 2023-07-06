@@ -84,6 +84,22 @@
         <Period value="1.694"/>
         <Backswing value="0"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VultureMoving">
+        <DisplayName value="Weapon/Name/AP_Vulture"/>
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_VultureU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Effect value="AP_Vulture"/>
+        <Range value="6"/>
+        <Period value="1.694"/>
+        <Backswing value="0"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_VultureSpiderMines">
         <EditorCategories value="Race:Terran"/>
         <Options index="Melee" value="1"/>

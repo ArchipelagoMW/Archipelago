@@ -210,7 +210,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory2 (int lp_player, int lp_bitAr
         lp_bitArrayValue,
         libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower, // 0
         libABFE498B_gf_AP_Triggers_Terran_unlockHellionThermiteFilaments, // 1
-        libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineCerberusMine, // 2
         libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine, // 3
         libABFE498B_gf_AP_Triggers_Terran_unlockGoliathMultiLockWeaponsSystem, // 4
         libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem, // 5
@@ -949,16 +949,34 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack (int lp_
 
 }
 
-void libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine (int lp_player) {
+void libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_NanoConstructor", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockVultureIonThrusters (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VultureIonThrusters", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockVultureAutoLaunchers (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VultureAutoLaunchers", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineCerberusMine (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CerberusMines", 1);
 }
 
-void libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine (int lp_player) {
+void libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineHighExplosiveMunition (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
-    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_NanoConstructor", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SpiderMineDamage", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathMultiLockWeaponsSystem (int lp_player) {

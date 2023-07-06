@@ -1580,4 +1580,13 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHyperfluxorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveVultureIonThrusters">
+        <NodeArray index="Show" Link="AP_CountUpgradeVultureIonThrustersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVultureAutoLaunchers">
+        <NodeArray index="Show" Link="AP_CountUpgradeVultureAutoLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpiderMineDamage">
+        <NodeArray index="Show" Link="AP_CountUpgradeSpiderMineDamageCompleteOnly"/>
+    </CRequirement>
 </Catalog>

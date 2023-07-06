@@ -2562,4 +2562,13 @@
         <Count Link="AP_Hyperfluxor" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVultureIonThrustersCompleteOnly">
+        <Count Link="AP_VultureIonThrusters" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVultureAutoLaunchersCompleteOnly">
+        <Count Link="AP_VultureAutoLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSpiderMineDamageCompleteOnly">
+        <Count Link="AP_SpiderMineDamage" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

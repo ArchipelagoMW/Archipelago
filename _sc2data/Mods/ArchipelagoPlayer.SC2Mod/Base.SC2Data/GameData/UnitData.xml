@@ -787,6 +787,17 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_VultureSpiderMineBurrowFirst"/>
         <WeaponArray Link="AP_VultureSpiderMines"/>
+        <CardLayouts>
+            <LayoutButtons>
+                <Face value="AP_CerberusMines"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,0"/>
+                <Requirements value="AP_UseCerberusMines"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+            <LayoutButtons Face="AP_SpiderMineDamage" Type="Passive" Requirements="AP_HaveSpiderMineDamage" Row="2" Column="1"/>
+        </CardLayouts>
         <Radius value="0.125"/>
         <SeparationRadius value="0"/>
         <SubgroupPriority value="15"/>
@@ -826,6 +837,17 @@
         <RepairTime value="33.3332"/>
         <AbilArray Link="AP_VultureSpiderMineUnburrow"/>
         <BehaviorArray Link="AP_VultureSpiderMineBurrowFirst"/>
+        <CardLayouts>
+            <LayoutButtons>
+                <Face value="AP_CerberusMines"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255,0"/>
+                <Requirements value="AP_UseCerberusMines"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+            <LayoutButtons Face="AP_SpiderMineDamage" Type="Passive" Requirements="AP_HaveSpiderMineDamage" Row="2" Column="1"/>
+        </CardLayouts>
         <Radius value="0.125"/>
         <SeparationRadius value="0"/>
         <SubgroupPriority value="15"/>
@@ -871,6 +893,7 @@
         <AbilArray Link="AP_VultureQueue3"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_Vulture"/>
+        <WeaponArray Link="AP_VultureMoving" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -878,14 +901,8 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="AP_SpiderMine" Type="AbilCmd" AbilCmd="AP_VultureSpiderMines,0" Row="2" Column="0"/>
-            <LayoutButtons>
-                <Face value="AP_CerberusMines"/>
-                <Type value="Passive"/>
-                <AbilCmd value="255,0"/>
-                <Requirements value="AP_UseCerberusMines"/>
-                <Row value="2"/>
-                <Column value="2"/>
-            </LayoutButtons>
+            <LayoutButtons Face="AP_VultureSpeedUpgrade" Type="Passive" Requirements="AP_HaveVultureIonThrusters" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_VultureAutoLaunchers" Type="Passive" Requirements="AP_HaveVultureAutoLaunchers" Row="1" Column="1"/>
             <LayoutButtons Face="AP_SpiderMineReplenish" Type="AbilCmd" AbilCmd="AP_MakeVultureSpiderMines,0" Row="2" Column="1"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_VultureQueue3,0" Row="2" Column="4"/>
         </CardLayouts>

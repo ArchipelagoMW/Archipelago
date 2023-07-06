@@ -433,6 +433,7 @@
         <EffectArray Reference="Effect,AP_DiamondbackBeam,AttributeBonus[Armored]" Value="2"/>
         <!-- Vulture -->
         <EffectArray Reference="Weapon,AP_Vulture,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_VultureMoving,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_VultureU,Amount" Value="2"/>
         <!-- Goliath -->
         <EffectArray Reference="Weapon,AP_GoliathG,Level" Value="1"/>
@@ -475,6 +476,7 @@
         <EffectArray Reference="Weapon,AP_InfernalFlameThrower,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_HellionTank,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Diamondback,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_VultureMoving,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Vulture,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_GoliathG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_GoliathA,RateMultiplier" Value="0.05"/>
@@ -2516,6 +2518,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2543,6 +2546,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2570,6 +2574,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -2597,6 +2602,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2623,6 +2629,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2649,6 +2656,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -4664,5 +4672,19 @@
         <EffectArray Reference="Weapon,AP_WraithG,Options[Hidden]" Value="1"/>
         <EffectArray Reference="Weapon,AP_WraithG,Options[Disabled]" Value="1"/>
         <AffectedUnitArray value="AP_Wraith"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VultureIonThrusters">
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,Speed" Value="1.5"/>
+        <AffectedUnitArray value="AP_Vulture"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VultureAutoLaunchers">
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_VultureMoving,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_VultureMoving,Options[Disabled]" Value="1"/>
+        <AffectedUnitArray value="AP_Vulture"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SpiderMineDamage">
+        <EffectArray Reference="Effect,AP_VultureSpiderMinesDamage,Amount" Value="55"/>
     </CUpgrade>
 </Catalog>

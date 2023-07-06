@@ -2708,4 +2708,22 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_VultureSpeedUpgrade">
+        <Icon value="Assets\Textures\btn-ability-terran-emergencythrusters.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-emergencythrusters.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_VultureAutoLaunchers">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-jotunboosters.dds"/>
+        <AlertIcon value="Assets\Textures\btn-techupgrade-terran-jotunboosters.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_SpiderMineDamage">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-ability-terran-spidermine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>
