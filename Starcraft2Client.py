@@ -50,7 +50,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
-        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
 
@@ -84,7 +84,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
 
     def _cmd_game_speed(self, game_speed: str = "") -> bool:
-        """Overrides the current game speed for the seed.
+        """Overrides the current game speed for the world.
          Takes the arguments default, slower, slow, normal, fast, faster"""
         options = game_speed.split()
         num_options = len(options)
