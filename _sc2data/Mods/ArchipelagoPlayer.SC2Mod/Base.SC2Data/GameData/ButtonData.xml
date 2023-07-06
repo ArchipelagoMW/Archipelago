@@ -2675,4 +2675,23 @@
         <DefaultButtonLayout Row="2" Column="2"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_ValkyrieEnhancedClusterLaunchers">
+        <TintRacially value="1"/>
+        <Icon value="AP\Assets\Textures\btn-weapon-terran-hailstormmissiles.dds"/>
+    </CButton>
+    <CButton id="AP_ValkyrieShapedHull">
+        <Name value="Button/Name/AP_ShapedHull"/>
+        <Icon value="Assets\Textures\btn-techupgrade-terran-shapedhull.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ValkyrieBurstLasers">
+        <Icon value="Assets\Textures\btn-upgrade-swann-improvedburstlaser.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-swann-improvedburstlaser.dds"/>
+    </CButton>
+    <CButton id="AP_ValkyrieSpeedBoost">
+        <Name value="Button/Name/AP_MedivacSpeedBoost"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Terran-MedivacEmergencyThrusters.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Terran-MedivacEmergencyThrusters.dds"/>
+    </CButton>
 </Catalog>

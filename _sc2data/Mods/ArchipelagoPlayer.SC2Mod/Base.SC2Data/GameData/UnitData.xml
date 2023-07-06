@@ -3046,13 +3046,19 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="AP_ValkyrieSpeedBoost"/>
         <WeaponArray Link="AP_ValkyrieSCBWWeapon"/>
+        <WeaponArray Link="AP_ValkyrieG" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_ValkyrieEnhancedClusterLaunchers" Type="Passive" Requirements="AP_HaveValkyrieEnhancedClusterLaunchers" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_ValkyrieShapedHull" Type="Passive" Requirements="AP_HaveValkyrieShapedHull" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_ValkyrieBurstLasers" Type="Passive" Requirements="AP_HaveValkyrieBurstLasers" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_ValkyrieSpeedBoost" Type="AbilCmd" AbilCmd="AP_ValkyrieSpeedBoost,0" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

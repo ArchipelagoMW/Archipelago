@@ -1336,6 +1336,30 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineExecutionerMissiles (int l
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HHWidowMineDeathBlossom", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieEnhancedCluserLaunchers (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ValkyrieEnhancedClusterLaunchers", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieShapedHull (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ValkyrieShapedHull", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieBurstLasers (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ValkyrieBurstLasers", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieAfterburners (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ValkyrieSpeedBoost", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

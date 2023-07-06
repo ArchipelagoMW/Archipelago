@@ -1561,4 +1561,16 @@
     <CRequirement id="AP_GhostSCBWLockdown" parent="AP_SCBW_AbilReq"/>
     <CRequirement id="AP_MedicSCBWRestoration" parent="AP_SCBW_AbilReq"/>
     <CRequirement id="AP_MedicSCBWOpticFlare" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_HaveValkyrieEnhancedClusterLaunchers">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieEnhancedClusterLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieShapedHull">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieShapedHullCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieBurstLasers">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieBurstLasersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieSpeedBoost">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly"/>
+    </CRequirement>
 </Catalog>

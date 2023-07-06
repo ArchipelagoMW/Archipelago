@@ -5857,6 +5857,7 @@
 <!--        <InfoArray index="Research10" Time="90"/>-->
     </CAbilResearch>
     <CAbilEffectInstant id="AP_MedivacSpeedBoost">
+        <AbilSetId value="Afterburners"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="Transient" value="1"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedivacSpeedBoost" Requirements="AP_HaveMedivacSpeedBoost">
@@ -5913,4 +5914,16 @@
             <Flags index="CreateDefaultButton" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_ValkyrieSpeedBoost">
+        <Effect index="0" value="AP_MedivacSpeedBoost"/>
+        <AbilSetId value="Afterburners"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ValkyrieSpeedBoost" Requirements="AP_HaveValkyrieSpeedBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+    </CAbilEffectInstant>
 </Catalog>

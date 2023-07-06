@@ -5369,6 +5369,10 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="B38C6B54"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="CD53B9B0"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="3D2B8858"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="9F180882"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="C159FECF"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="91CAF50F"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="80047953"/>
         </Element>
         <Element Type="FunctionDef" Id="EC36AF20">
             <FlagAction/>
@@ -9560,6 +9564,150 @@
         <Element Type="Param" Id="02B38932">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_HHWidowMineDeathBlossom</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="9F180882">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="1D202509"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="A3A8AF29"/>
+        </Element>
+        <Element Type="ParamDef" Id="1D202509">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="D3FCB397"/>
+        </Element>
+        <Element Type="Param" Id="D3FCB397">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="A3A8AF29">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="FBA9F3D0"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="4C14C571"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="73ED668A"/>
+        </Element>
+        <Element Type="Param" Id="FBA9F3D0">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="1D202509"/>
+        </Element>
+        <Element Type="Param" Id="4C14C571">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="73ED668A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ValkyrieEnhancedClusterLaunchers</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="C159FECF">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="655BE29F"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="ECE313A7"/>
+        </Element>
+        <Element Type="ParamDef" Id="655BE29F">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="3EEADEC9"/>
+        </Element>
+        <Element Type="Param" Id="3EEADEC9">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="ECE313A7">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B7566F88"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="470E1BE6"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="5FF13C05"/>
+        </Element>
+        <Element Type="Param" Id="B7566F88">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="655BE29F"/>
+        </Element>
+        <Element Type="Param" Id="470E1BE6">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="5FF13C05">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ValkyrieShapedHull</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="91CAF50F">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="1B27F501"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="D009D8B0"/>
+        </Element>
+        <Element Type="ParamDef" Id="1B27F501">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="73E7B84B"/>
+        </Element>
+        <Element Type="Param" Id="73E7B84B">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D009D8B0">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="90CE32DB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="BD1B57E7"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="7A5997A7"/>
+        </Element>
+        <Element Type="Param" Id="90CE32DB">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="1B27F501"/>
+        </Element>
+        <Element Type="Param" Id="BD1B57E7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="7A5997A7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ValkyrieBurstLasers</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="80047953">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="257B0FB9"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="C2E9A60C"/>
+        </Element>
+        <Element Type="ParamDef" Id="257B0FB9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="9D375FCE"/>
+        </Element>
+        <Element Type="Param" Id="9D375FCE">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="C2E9A60C">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="66B8B09D"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F58CA448"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="744A7F43"/>
+        </Element>
+        <Element Type="Param" Id="66B8B09D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="257B0FB9"/>
+        </Element>
+        <Element Type="Param" Id="F58CA448">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="744A7F43">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ValkyrieSpeedBoost</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

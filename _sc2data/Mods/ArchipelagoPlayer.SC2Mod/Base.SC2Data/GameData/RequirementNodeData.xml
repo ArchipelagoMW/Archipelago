@@ -2543,4 +2543,16 @@
         <OperandArray value="AP_MedicSCBWOpticFlareResearch@Count"/>
     </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_MedicSCBWOpticFlareResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_MedicSCBWOpticFlareResearch"/>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieEnhancedClusterLaunchersCompleteOnly">
+        <Count Link="AP_ValkyrieEnhancedClusterLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieShapedHullCompleteOnly">
+        <Count Link="AP_ValkyrieShapedHull" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieBurstLasersCompleteOnly">
+        <Count Link="AP_ValkyrieBurstLasers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly">
+        <Count Link="AP_ValkyrieSpeedBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

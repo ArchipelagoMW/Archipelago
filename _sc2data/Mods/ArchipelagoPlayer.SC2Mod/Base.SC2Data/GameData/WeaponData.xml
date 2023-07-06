@@ -401,7 +401,9 @@
         <RangeSlop value="0"/>
         <Period value="3"/>
         <Backswing value="0.25"/>
+        <Arc value="29.9926"/>
         <Effect value="AP_ValkyrieSCBWWeapon@CP"/>
+        <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="AP_WidowMineDummy">
         <EditorCategories value="Race:Terran"/>
@@ -2051,5 +2053,20 @@
         <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <Arc value="360"/>
         <Options index="ContinuousScan" value="1"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ValkyrieG">
+        <DisplayName value="Weapon/Name/AP_WraithG"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_WraithGU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="1.694"/>
+        <Effect value="AP_WraithGLaunchMissile"/>
+        <AllowedMovement value="Slowing"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
     </CWeaponLegacy>
 </Catalog>

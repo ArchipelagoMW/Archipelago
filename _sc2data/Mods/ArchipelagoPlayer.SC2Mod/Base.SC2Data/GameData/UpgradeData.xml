@@ -267,6 +267,8 @@
         <!-- Valkyrie -->
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <!-- The damage effect is same as Wraith's -->
+        <EffectArray Reference="Weapon,AP_ValkyrieG,Level" Value="1"/>
         <!-- Raven -->
         <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_NovaRavenSeekerMissileDamage,Amount" Value="5.000000"/>
@@ -292,6 +294,7 @@
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ValkyrieG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranVehicleArmors">
@@ -2252,6 +2255,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <LeaderLevel value="1"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsLevel2" parent="AP_BaseTerranShipWeapons">
@@ -2275,6 +2279,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <LeaderLevel value="2"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsLevel3" parent="AP_BaseTerranShipWeapons">
@@ -2298,6 +2303,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel1" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
@@ -2321,6 +2327,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel2" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
         <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel2"/>
@@ -2343,6 +2350,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
         <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel3"/>
@@ -2365,6 +2373,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranVehicleArmorsLevel1" parent="AP_BaseTerranVehicleArmors">
         <Name value="Upgrade/Name/AP_TerranVehicleArmorsLevel1"/>
@@ -4609,4 +4618,32 @@
     </CUpgrade>
     <CUpgrade id="AP_HellbatStimpack"/>
     <CUpgrade id="AP_SuperStimpackHellbat"/>
+    <CUpgrade id="AP_ValkyrieEnhancedClusterLaunchers">
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodCount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[1]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[2]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[3]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[4]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,DisplayAttackCount" Value="10"/>
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieShapedHull">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="UpgradeComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeStart" Value="50"/>
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeMax" Value="50"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieBurstLasers">
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_ValkyrieG,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_ValkyrieG,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireWhileInAttackOrder]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireAtAttackOrderTarget]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[LinkedCooldown]" Value="0"/>
+<!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieSpeedBoost"/>
 </Catalog>
