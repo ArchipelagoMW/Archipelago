@@ -27,6 +27,7 @@ int[21] libABFE498B_gv_aP_Triggers_Terran_terranShipWeaponLevel;
 // Function Declarations
 void libABFE498B_gf_AP_Triggers_MapConfig_setMissionBuild (bool lp_build);
 void libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup (trigger lp_onCasual, trigger lp_onNormal, trigger lp_onHard, trigger lp_onBrutal);
+void libABFE498B_gf_AP_Triggers_setGameSpeed (string lp_gameSpeed);
 void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar);
 void libABFE498B_gf_AP_Triggers_unlockTerranUnits (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranArmory1 (int lp_player, int lp_bitArrayValue);
