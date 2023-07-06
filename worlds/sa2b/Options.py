@@ -347,12 +347,26 @@ class ChaoRaceChecks(Choice):
 class ChaoStats(Range):
     """
     Determines how many levels in each Chao Stat grant checks
-    (Swim, Fly, Run, Power, Stamina)
+    (Swim, Fly, Run, Power)
     """
     display_name = "Chao Stats"
     range_start = 0
     range_end = 99
     default = 0
+
+
+class ChaoStatsStamina(Toggle):
+    """
+    Determines whether Stamina is included in the `chao_stats` option
+    """
+    display_name = "Chao Stats - Stamina"
+
+
+class ChaoStatsHidden(Toggle):
+    """
+    Determines whether the hidden stats Luck and Intelligence is included in the `chao_stats` option
+    """
+    display_name = "Chao Stats - Luck and Intelligence"
 
 
 class RequiredCannonsCoreMissions(Choice):
@@ -687,6 +701,8 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
     "chao_stats": ChaoStats,
+    "chao_stats_stamina": ChaoStatsStamina,
+    "chao_stats_hidden": ChaoStatsHidden,
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
     "omochao_trap_weight": OmochaoTrapWeight,
