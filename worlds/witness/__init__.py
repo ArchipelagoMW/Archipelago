@@ -1,7 +1,6 @@
 """
 Archipelago init file for The Witness
 """
-import pprint
 import typing
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial
@@ -62,6 +61,8 @@ class WitnessWorld(World):
         self.locat = None
         self.items = None
         self.regio = None
+
+        self.log_ids_to_hints = None
 
     def _get_slot_data(self):
         return {
@@ -130,7 +131,7 @@ class WitnessWorld(World):
         if len(item_pool) > pool_size:
             error_string = "The Witness world has too few locations ({num_loc}) to place its necessary items " \
                            "({num_item})."
-            error(error_string.format(num_loc = pool_size, num_item = len(item_pool)))
+            error(error_string.format(num_loc=pool_size, num_item=len(item_pool)))
             return
 
         remaining_item_slots = pool_size - sum(item_pool.values())
@@ -146,7 +147,6 @@ class WitnessWorld(World):
         # Add junk items.
         if remaining_item_slots > 0:
             item_pool.update(self.items.get_filler_items(remaining_item_slots))
-            remaining_item_slots = 0
 
         # Add event items and tie them to event locations (e.g. laser activations).
         for event_location in self.locat.EVENT_LOCATION_TABLE:
@@ -178,7 +178,7 @@ class WitnessWorld(World):
 
         # Generate the actual items.
         for item_name, quantity in item_pool.items():
-            self.multiworld.itempool += [self.create_item(item_name) for x in range(0, quantity)]
+            self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
 
