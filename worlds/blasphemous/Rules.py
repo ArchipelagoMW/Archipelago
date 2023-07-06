@@ -224,7 +224,7 @@ def broke_jondo_bell_e(state: CollectionState, logic: int, enemy: int, player: i
         or state.has("D03Z02S05[W]", player)
         and (
             can_cross_gap(state, logic, player, 5)
-            or can_enemy_bounce(state, logic, enemy)
+            or can_enemy_bounce(logic, enemy)
             and can_cross_gap(state, logic, player, 3)
         )
     )
