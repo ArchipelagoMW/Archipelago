@@ -360,7 +360,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         if "Online" in tags:
-            data = args.get("worlds/undertale/data", {})
+            data = args.get("data", {})
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
@@ -406,34 +406,40 @@ async def game_watcher(ctx: UndertaleContext):
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
-            with open(os.path.join(ctx.save_game_folder, "/WelcomeToTheDead.youDied"), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, "WelcomeToTheDead.youDied"), "w") as f:
                 f.close()
         sending = []
         victory = False
         found_routes = 0
         for root, dirs, files in os.walk(path):
             for file in files:
-                if "DontBeMad.mad" in file and "DeathLink" in ctx.tags:
+                if "DontBeMad.mad" in file:
                     os.remove(root+"/"+file)
-                    await ctx.send_death()
+                    if "DeathLink" in ctx.tags:
+                        await ctx.send_death()
                 if "scout" == file:
                     sending = []
-                    with open(root+"/"+file, "r") as f:
-                        lines = f.readlines()
+                    try:
+                        with open(root+"/"+file, "r") as f:
+                            lines = f.readlines()
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
                                 sending = sending + [int(l)+12000]
-                    await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
-                                                      "create_as_hint": int(2)}])
-                    os.remove(root+"/"+file)
+                        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
+                                                          "create_as_hint": int(2)}])
+                    finally:
+                        os.remove(root+"/"+file)
                 if "check.spot" in file:
                     sending = []
-                    with open(root+"/"+file, "r") as f:
-                        lines = f.readlines()
+                    try:
+                        with open(root+"/"+file, "r") as f:
+                            lines = f.readlines()
                         for l in lines:
                             sending = sending+[(int(l))+12000]
-                    message = [{"cmd": "LocationChecks", "locations": sending}]
-                    await ctx.send_msgs(message)
+                        message = [{"cmd": "LocationChecks", "locations": sending}]
+                        await ctx.send_msgs(message)
+                    finally:
+                        pass
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:
