@@ -71,8 +71,8 @@ if lua_version == '5-1' then
         event.onexit(close_socket)
         return s
     end
+    socket.udp = udp
 end
-socket.udp = udp
 
 -----------------------------------------------------------------------------
 -- Exported auxiliar functions
