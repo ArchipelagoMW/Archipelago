@@ -1,5 +1,4 @@
 from . import InscryptionTestBase
-from ..Rules import inscryption_rules
 
 
 class AccessTest(InscryptionTestBase):

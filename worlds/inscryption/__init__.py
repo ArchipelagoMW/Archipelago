@@ -2,12 +2,12 @@ from .Options import inscryption_options
 from .Items import item_table, base_id, InscryptionItem, ItemDict
 from .Locations import location_table, LocDict
 from .Regions import inscryption_regions
-from .Rules import inscryption_rules
 from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from worlds.AutoWorld import World
 from Utils import get_options, output_path
 from typing import Dict, ClassVar, Set, List, Tuple
 from collections import Counter
+from . import Rules
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
@@ -74,7 +74,4 @@ class InscryptionWorld(World):
         set_rule(self.multiworld.get_entrance("Menu -> Act 2", self.player),
                  lambda state: state.has("Film Roll", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Film Roll", self.player)
-        for item in inscryption_rules.keys():
-            for location in inscryption_rules[item]:
-                set_rule(self.multiworld.get_location(location, self.player),
-                         lambda state: state.has(item, self.player))
+        Rules.InscryptionRules(self).set_location_rules()
