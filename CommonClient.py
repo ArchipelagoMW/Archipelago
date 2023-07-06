@@ -191,6 +191,10 @@ class CommonContext:
     server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
     locations_info: typing.Dict[int, NetworkItem]
 
+    # data storage
+    stored_data: typing.Dict[str, typing.Any]
+    stored_data_notification_keys: typing.Set[str]
+
     # internals
     # current message box through kvui
     _messagebox: typing.Optional["kvui.MessageBox"] = None
@@ -225,6 +229,9 @@ class CommonContext:
         self.checked_locations = set()  # server state
         self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
         self.locations_info = {}
+
+        self.stored_data = {}
+        self.stored_data_notification_keys = set()
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -466,6 +473,21 @@ class CommonContext:
         Utils.persistent_store("datapackage", "games", current_cache)
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
+
+    # data storage
+
+    def set_notify(self, *keys: str) -> None:
+        """Subscribe to be notified of changes to selected data storage keys.
+
+        The values can be accessed via the "stored_data" attribute of this context, which is a dictionary mapping the
+        names of the data storage keys to the latest values received from the server.
+        """
+        if new_keys := (set(keys) - self.stored_data_notification_keys):
+            self.stored_data_notification_keys.update(new_keys)
+            async_start(self.send_msgs([{"cmd": "Get",
+                                         "keys": list(new_keys)},
+                                        {"cmd": "SetNotify",
+                                         "keys": list(new_keys)}]))
 
     # DeathLink hooks
 
@@ -737,6 +759,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if ctx.locations_scouted:
             msgs.append({"cmd": "LocationScouts",
                          "locations": list(ctx.locations_scouted)})
+        if ctx.stored_data_notification_keys:
+            msgs.append({"cmd": "Get",
+                         "keys": list(ctx.stored_data_notification_keys)})
+            msgs.append({"cmd": "SetNotify",
+                         "keys": list(ctx.stored_data_notification_keys)})
         if msgs:
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
@@ -800,7 +827,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
+
+    elif cmd == "Retrieved":
+        ctx.stored_data.update(args["keys"])
+
     elif cmd == "SetReply":
+        ctx.stored_data[args["key"]] = args["value"]
         if args["key"] == "EnergyLink":
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:

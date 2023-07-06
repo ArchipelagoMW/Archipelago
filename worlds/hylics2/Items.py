@@ -23,7 +23,7 @@ item_table: Dict[int, ItemDict] = {
              'count': 6,
              'name': 'SOUL SPONGE'},
     200626: {'classification': ItemClassification.useful,
-             'count': 6,
+             'count': 7,
              'name': 'MUSCLE APPLIQUE'},
     200627: {'classification': ItemClassification.filler,
              'count': 1,
