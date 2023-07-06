@@ -49,6 +49,7 @@ Currently, the following games are supported:
 * Bumper Stickers
 * Mega Man Battle Network 3: Blue Version
 * Muse Dash
+* DOOM 1993
 * Final Fantasy Mystic Quest
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
