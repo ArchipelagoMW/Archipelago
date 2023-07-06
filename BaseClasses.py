@@ -841,18 +841,18 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
     
-    def connect(self, exiting_region: Region, name: Optional[str] = None,
+    def connect(self, connecting_region: Region, name: Optional[str] = None,
                 rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
         
-        :param exiting_region: Region object to connect to path is `self -> exiting_region`
+        :param connecting_region: Region object to connect to path is `self -> exiting_region`
         :param name: name of the connection being created
         :param rule: callable to determine access of this connection to go from self to the exiting_region"""
-        _exit = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {exiting_region}")
+        _exit = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {connecting_region}")
         if rule:
             _exit.access_rule = rule
-        _exit.connect(exiting_region)
+        _exit.connect(connecting_region)
     
     def create_exit(self, name: str) -> Entrance:
         """
@@ -876,10 +876,9 @@ class Region:
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
         for connecting_region, name in exits.items():
-            entrance = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {connecting_region}")
-            if rules and connecting_region in rules:
-                entrance.access_rule = rules[connecting_region]
-            entrance.connect(self.multiworld.get_region(connecting_region, self.player))
+            self.connect(self.multiworld.get_region(connecting_region, self.player),
+                         name if name else f"{self.name} -> {connecting_region}",
+                         rules[connecting_region] if connecting_region in rules else None)
 
     def __repr__(self):
         return self.__str__()
