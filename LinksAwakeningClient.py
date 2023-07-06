@@ -125,7 +125,7 @@ class RAGameboy():
         self.check_command_response(command, response_str)
         return response_str.rstrip()
 
-    async def get_retroarch_version(self):        
+    async def get_retroarch_version(self):
         return await self.send_command("VERSION")
 
     async def get_retroarch_status(self):
@@ -254,7 +254,7 @@ class RAGameboy():
         # Ignore the address for now
         if splits[2][:2] == "-1":
             raise BadRetroArchResponse()
-        
+
         # TODO: check response address, check hex behavior between RA and BH
 
         return bytearray.fromhex(splits[2])
@@ -267,11 +267,18 @@ class RAGameboy():
         self.check_command_response(command, response)
         response = response[:-1]
         splits = response.decode().split(" ", 2)
-        
-        # Ignore the address for now
+        try:
+            response_addr = int(splits[1], 16)
+        except ValueError:
+            raise BadRetroArchResponse()
 
-        # TODO: transform to bytes
-        return bytearray.fromhex(splits[2])
+        if response_addr != address:
+            raise BadRetroArchResponse()
+
+        ret = bytearray.fromhex(splits[2])
+        if len(ret) > size:
+            raise BadRetroArchResponse()
+        return ret
 
     def write_memory(self, address, bytes):
         command = "WRITE_CORE_MEMORY"
