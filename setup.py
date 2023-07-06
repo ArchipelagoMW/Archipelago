@@ -67,7 +67,6 @@ non_apworlds: set = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Blasphemous",
     "ChecksFinder",
     "Clique",
     "DLCQuest",
