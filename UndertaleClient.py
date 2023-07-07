@@ -227,7 +227,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             f.close()
         filename = f"check.spot"
         with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-            for ss in ctx.checked_locations:
+            for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
             f.close()
     elif cmd == "LocationInfo":
@@ -353,7 +353,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if "checked_locations" in args:
             filename = f"check.spot"
             with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-                for ss in ctx.checked_locations:
+                for ss in set(args["checked_locations"]):
                     f.write(str(ss-12000)+"\n")
                 f.close()
 
