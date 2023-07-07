@@ -14,13 +14,14 @@ from .Options import option_definitions
 from .Client import FFMQClient
 
 
-class FFMQSettings(settings.Group):
-    class APIUrls(list):
-        """A list of API URLs to get map shuffle, crest shuffle, and battlefield reward shuffle data from."""
-    api_urls: APIUrls = [
-        "https://api.ffmqrando.net/",
-        "http://ffmqr.jalchavware.com:5271/"
-    ]
+# removed until lists are supported
+# class FFMQSettings(settings.Group):
+#     class APIUrls(list):
+#         """A list of API URLs to get map shuffle, crest shuffle, and battlefield reward shuffle data from."""
+#     api_urls: APIUrls = [
+#         "https://api.ffmqrando.net/",
+#         "http://ffmqr.jalchavware.com:5271/"
+#     ]
 
 
 class FFMQWebWorld(WebWorld):
@@ -58,7 +59,7 @@ class FFMQWorld(World):
     data_version = 1
     
     web = FFMQWebWorld()
-    settings: FFMQSettings
+    # settings: FFMQSettings
 
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
@@ -85,7 +86,11 @@ class FFMQWorld(World):
     @classmethod
     def stage_generate_early(cls, multiworld):
 
-        api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
+        # api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
+        api_urls = [
+            "https://api.ffmqrando.net/",
+            "http://ffmqr.jalchavware.com:5271/"
+        ]
 
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
             if (world.multiworld.map_shuffle[world.player] or world.multiworld.crest_shuffle[world.player] or
