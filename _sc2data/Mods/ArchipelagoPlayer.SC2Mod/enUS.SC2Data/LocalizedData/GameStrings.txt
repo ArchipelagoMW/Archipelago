@@ -217,6 +217,8 @@ Abil/Name/AP_SpectreHoldFire=Hold Fire
 Abil/Name/AP_SpectreNuke=Nuke
 Abil/Name/AP_SpectreNukeSiloArmMagazine=Spectre Nuke Silo Arm Magazine
 Abil/Name/AP_SpiderMineUnburrowRangeDummy=Spider Mine Unburrow Range Dummy
+Abil/Name/AP_SpineCrawlerRoot=Root
+Abil/Name/AP_SpineCrawlerUproot=Uproot
 Abil/Name/AP_SpireResearch=Research (Spire & GreaterSpire)
 Abil/Name/AP_StargateTrain=Train (Stargate)
 Abil/Name/AP_StargateWarpTrain=Stargate Warp Train
@@ -294,6 +296,7 @@ Abil/Name/AP_attackProtossBuilding=attack Protoss Building
 Abil/Name/AP_attackProtossPylon=attack Protoss Pylon
 Abil/Name/AP_burrowedBanelingStop=Stop
 Abil/Name/AP_burrowedStop=Stop
+Abil/Name/AP_evolutionchamberresearch=Research (Evolution Chamber)
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
@@ -302,7 +305,6 @@ Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_evolutionchamberresearch=Research (Evolution Chamber)
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -335,11 +337,13 @@ Behavior/Name/AP_GhostBlast="AOE Sleep"
 Behavior/Name/AP_GhostCloak=Cloak
 Behavior/Name/AP_GhostHoldFire=Hold Fire
 Behavior/Name/AP_GhostHoldFireB=Hold Fire
+Behavior/Name/AP_GhostSCBWLockdown=Lockdown
 Behavior/Name/AP_GravitonBeam=Graviton Beam
 Behavior/Name/AP_HellbatLeapStun=Stunned
 Behavior/Name/AP_HighArchonPsiStorm=Psi Storm
 Behavior/Name/AP_HydraliskFrenzy=Frenzy
 Behavior/Name/AP_ImmortalOverload=Barrier
+Behavior/Name/AP_ImpalerRoundsIndicator=Impaler Rounds
 Behavior/Name/AP_Irradiate=Irradiated
 Behavior/Name/AP_KeneticMitosisSplitBehavior=Kenetic Mitosis Split Behavior
 Behavior/Name/AP_LiberatorCloak=Cloak
@@ -347,6 +351,7 @@ Behavior/Name/AP_LightningBomb=Disintegration
 Behavior/Name/AP_LockOn=Lock On Target
 Behavior/Name/AP_LockdownB=Lockdown
 Behavior/Name/AP_MatrixOverloadTarget=Matrix Overload
+Behavior/Name/AP_MedicSCBWOpticFlare=Blind
 Behavior/Name/AP_MercAirDropDelay=Merc Air Drop Delay
 Behavior/Name/AP_MercGroundDrop=Merc Ground Drop
 Behavior/Name/AP_MercGroundDropDelay=Merc Ground Drop Delay
@@ -415,9 +420,6 @@ Behavior/Name/AP_VoidSentryBlackHole=Black Hole
 Behavior/Name/AP_VoidSentryChronoBeam=Chrono Beam
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_GhostSCBWLockdown=Lockdown
-Behavior/Name/AP_MedicSCBWOpticFlare=Blind
-Behavior/Name/AP_ImpalerRoundsIndicator=Impaler Rounds
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -437,16 +439,19 @@ Behavior/Tooltip/AP_EMPDecloak=Target was recently hit by an EMP Round, making i
 Behavior/Tooltip/AP_FungalGrowth=Target is affected by Fungal Growth. Target is detected and cannot move.
 Behavior/Tooltip/AP_GhostCloak=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_GhostHoldFireB=This unit will not attack enemy units unless ordered to do so.
+Behavior/Tooltip/AP_GhostSCBWLockdown=While Lockdown is active the unit cannot attack or move. Detection is disabled.
 Behavior/Tooltip/AP_GravitonBeam=Target is being lifted in the air and is now vulnerable to air attacks. This unit cannot attack or use abilities until the Graviton Beam ends.
 Behavior/Tooltip/AP_GravitonBeamVoidCampaign=Target is being lifted in the air and is now vulnerable to air attacks. This unit cannot attack or use abilities until the Graviton Beam ends.
 Behavior/Tooltip/AP_HellbatLeapStun=This unit cannot move or attack.
 Behavior/Tooltip/AP_HighArchonPsiStorm=Target is under the effects of Psionic Storm and will take massive damage while in this area of effect.
 Behavior/Tooltip/AP_HydraliskFrenzy=Attack speed increased.
 Behavior/Tooltip/AP_ImmortalOverload=This unit is absorbing damage dealt to it.
+Behavior/Tooltip/AP_ImpalerRoundsIndicator=Tungsten alloy rounds that do an additional 5 damage to light armor.
 Behavior/Tooltip/AP_Irradiate=Irradiated unit. All Biological units in or near the radiation field will take damage.
 Behavior/Tooltip/AP_LightningBomb=This unit or structure is taking damage over time.
 Behavior/Tooltip/AP_LockOn=This unit has been targeted by a Cyclone's Lock On ability.
 Behavior/Tooltip/AP_MatrixOverloadTarget=This unit's movement and attack speed has been increased.
+Behavior/Tooltip/AP_MedicSCBWOpticFlare=Sight range reduced to melee range. Passive detection disabled.
 Behavior/Tooltip/AP_NPSwarm=This unit is being controlled by the Swarm.
 Behavior/Tooltip/AP_NeuralParasite=This unit is being controlled by an Infestor.
 Behavior/Tooltip/AP_NovaApolloCloak=This unit is cloaked and will only be revealed by detectors or effects.
@@ -494,12 +499,10 @@ Behavior/Tooltip/AP_VoidSentryBlackHole=This unit cannot move or attack.
 Behavior/Tooltip/AP_VoidSentryChronoBeam=This unit has increased movement and attack speeds.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_GhostSCBWLockdown=While Lockdown is active the unit cannot attack or move. Detection is disabled.
-Behavior/Tooltip/AP_MedicSCBWOpticFlare=Sight range reduced to melee range. Passive detection disabled.
-Behavior/Tooltip/AP_ImpalerRoundsIndicator=Tungsten alloy rounds that do an additional 5 damage to light armor.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
+Button/Name/AP_AberrationPassive=Aberration
 Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_ActivateStasisWard=Stasis
@@ -531,6 +534,7 @@ Button/Name/AP_BanelingPassive=Baneling
 Button/Name/AP_BanelingSplitterlingPassive=Baneling
 Button/Name/AP_BanelingSplitterlingSplitPassive=Division
 Button/Name/AP_Banshee=Build Banshee
+Button/Name/AP_BansheeSpeed=Hyperflight Rotors
 Button/Name/AP_Barracks=Build Barracks
 Button/Name/AP_Battlecruiser=Build Battlecruiser
 Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
@@ -551,6 +555,7 @@ Button/Name/AP_BurrowCharge=Burrow Charge
 Button/Name/AP_BurrowChargeCampaign=Burrow Charge
 Button/Name/AP_BurrowLurkerMP=Burrow
 Button/Name/AP_BurrowSwarmHost=Burrow
+Button/Name/AP_BurstCapacitors=Burst Capacitors
 Button/Name/AP_CalldownMULE=Calldown: MULE
 Button/Name/AP_CarrierAiur=Warp in Carrier
 Button/Name/AP_CerberusMines=Cerberus Mine
@@ -615,6 +620,7 @@ Button/Name/AP_GatherMULE=Gather
 Button/Name/AP_Ghost=Train Ghost
 Button/Name/AP_GhostAcademy=Build Shadow Ops
 Button/Name/AP_GhostHoldFire=Hold Fire
+Button/Name/AP_GhostSCBWLockdown=Lockdown
 Button/Name/AP_Goliath=Build Goliath
 Button/Name/AP_GravitonBeam=Graviton Beam
 Button/Name/AP_GravitonBeamVoidCampaign=Graviton Beam
@@ -623,6 +629,8 @@ Button/Name/AP_GreaterSpireBroodlord=Mutate into Greater Spire
 Button/Name/AP_GreaterSpireViper=Mutate into Greater Spire
 Button/Name/AP_GroovedSpines=Grooved Spines
 Button/Name/AP_GuardianShield=Guardian Shield
+Button/Name/AP_HHWidowMineDeathBlossom=Executioner Missiles
+Button/Name/AP_HHWidowMineRangeAttack=Black Market Launchers
 Button/Name/AP_HardenedShield=Hardened Shield
 Button/Name/AP_HaveBarrier=Improved Barrier
 Button/Name/AP_HaveNovaGadgetDefensiveDroneSummon=[PH] Place Defensive Drone
@@ -663,6 +671,7 @@ Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_HydraliskImpalerPassive=Hydralisk
 Button/Name/AP_HydraliskLurkerPassive=Hydralisk
 Button/Name/AP_HydraliskPassive=Hydralisk
+Button/Name/AP_Hyperfluxor=Hyperfluxor
 Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_Immortal=Warp In Immortal
 Button/Name/AP_ImmortalAiur=Warp in Immortal
@@ -675,6 +684,7 @@ Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_Impaler=Morph to Impaler
 Button/Name/AP_ImpalerDen=Mutate into Impaler Den
 Button/Name/AP_ImpalerPassive=Impaler
+Button/Name/AP_ImprovedSiegeMode=Advanced Siege Tech
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
 Button/Name/AP_InfestorConsumption=Consumption
@@ -702,13 +712,18 @@ Button/Name/AP_LurkerPassive=Lurker
 Button/Name/AP_MaelstromRounds=Maelstrom Rounds
 Button/Name/AP_MagFieldLaunchers=Mag-Field Launchers
 Button/Name/AP_MagrailMunitions=Magrail Munitions
+Button/Name/AP_MagrailMunitionsViking=Magrail Munitions
 Button/Name/AP_Marauder=Train Marauder
 Button/Name/AP_Marine=Train Marine
 Button/Name/AP_MatrixOverload=Matrix Overload
 Button/Name/AP_MatrixOverloadEnergizer=Matrix Overload
 Button/Name/AP_Medic=Train Medic
 Button/Name/AP_MedicHeal=Heal
+Button/Name/AP_MedicSCBWOpticFlare=Optical Flare
+Button/Name/AP_MedicSCBWRestoration=Restoration
 Button/Name/AP_Medivac=Build Medivac
+Button/Name/AP_MedivacExpandedHull=Expanded Hull
+Button/Name/AP_MedivacSpeedBoost=Ignite Afterburners
 Button/Name/AP_MercCompound=Build Merc Compound
 Button/Name/AP_MicroFiltering=Micro-Filtering
 Button/Name/AP_MindControl=Mind Control
@@ -842,6 +857,7 @@ Button/Name/AP_ShapedHull=Shaped Hull
 Button/Name/AP_ShieldBatteryRecharge=Restore
 Button/Name/AP_ShockwaveMissilePattern=Shockwave Missile Battery
 Button/Name/AP_ShrikeTurret=Shrike Turret
+Button/Name/AP_SiegeModeProgressiveRangeIncrease=Graduating Range
 Button/Name/AP_SiegeTank=Build Siege Tank
 Button/Name/AP_SiegeTankJumpJet=Jump Jets
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
@@ -856,7 +872,13 @@ Button/Name/AP_SpectreNukeCalldown=Tac Nuke Strike
 Button/Name/AP_SpectreShadowClones=Shadow Clone
 Button/Name/AP_SpectreWeaponsFree=Weapons Free
 Button/Name/AP_SpiderMine=Deploy Spider Mine
+Button/Name/AP_SpiderMineDamage=High-Explosive Munition
 Button/Name/AP_SpiderMineReplenish=Replenish Spider Mine
+Button/Name/AP_SpineCrawler=Mutate into Spine Crawler
+Button/Name/AP_SpineCrawlerRoot=Root
+Button/Name/AP_SpineCrawlerRootCancel=Cancel Root command
+Button/Name/AP_SpineCrawlerUproot=Uproot
+Button/Name/AP_SporeCrawlerPassive=Spore Crawler
 Button/Name/AP_SquadSight=Squad Sight
 Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
 Button/Name/AP_StalkerBlinkMultiple=Blink
@@ -920,6 +942,8 @@ Button/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Button/Name/AP_UpgradeToPlanetaryFortress=Upgrade to Planetary Fortress
 Button/Name/AP_UpgradeToRoboticsFacilityWarp=Transform to Warp Robotics Facility
 Button/Name/AP_UpgradeToStargateWarp=Transform to Warp Stargate
+Button/Name/AP_ValkyrieBurstLasers=Burst Lasers
+Button/Name/AP_ValkyrieEnhancedClusterLaunchers=Enchanced Cluster Launchers
 Button/Name/AP_ValkyrieSCBW=Build Valkyrie
 Button/Name/AP_ViciousGlaive=Vicious Glave
 Button/Name/AP_VikingFighter=Build Viking
@@ -947,6 +971,8 @@ Button/Name/AP_VoidSentryShieldRepairDouble=Double Shield Recharge
 Button/Name/AP_VoidStasis=Void Stasis
 Button/Name/AP_VoidVoidRayBeamBounce=Destruction Beam
 Button/Name/AP_Vulture=Build Vulture
+Button/Name/AP_VultureAutoLaunchers=Auto Launchers
+Button/Name/AP_VultureSpeedUpgrade=Ion Thrusters
 Button/Name/AP_WarpPrism=Warp in Warp Prism
 Button/Name/AP_WarpPrismLoad=Load
 Button/Name/AP_WarpPrismUnloadAll=Unload All
@@ -958,6 +984,7 @@ Button/Name/AP_WidowMineBurrow=Activate Mine
 Button/Name/AP_WidowMineConcealment=Concealment
 Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_Wraith=Build Wraith
+Button/Name/AP_WraithAdvancedLaserTechnology=Advanced Laser Technology
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
@@ -967,8 +994,6 @@ Button/Name/AP_zergflyerarmor3=Evolve Flyer Carapace Level 3
 Button/Name/AP_zergflyerattack1=Evolve Flyer Attacks Level 1
 Button/Name/AP_zergflyerattack2=Evolve Flyer Attacks Level 2
 Button/Name/AP_zergflyerattack3=Evolve Flyer Attacks Level 3
-Button/Name/AP_AberrationPassive=Aberration
-Button/Name/AP_SporeCrawlerPassive=Spore Crawler
 Button/Name/AP_zerggroundarmor1=Evolve Ground Carapace Level 1
 Button/Name/AP_zerggroundarmor2=Evolve Ground Carapace Level 2
 Button/Name/AP_zerggroundarmor3=Evolve Ground Carapace Level 3
@@ -978,28 +1003,13 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_BansheeSpeed=Hyperflight Rotors
-Button/Name/AP_SiegeModeProgressiveRangeIncrease=Graduating Range
-Button/Name/AP_ImprovedSiegeMode=Advanced Siege Tech
-Button/Name/AP_MagrailMunitionsViking=Magrail Munitions
-Button/Name/AP_MedivacExpandedHull=Expanded Hull
-Button/Name/AP_MedivacSpeedBoost=Ignite Afterburners
-Button/Name/AP_HHWidowMineRangeAttack=Black Market Launchers
-Button/Name/AP_HHWidowMineDeathBlossom=Executioner Missiles
-Button/Name/AP_GhostSCBWLockdown=Lockdown
-Button/Name/AP_MedicSCBWRestoration=Restoration
-Button/Name/AP_MedicSCBWOpticFlare=Optical Flare
-Button/Name/AP_ValkyrieEnhancedClusterLaunchers=Enchanced Cluster Launchers
-Button/Name/AP_ValkyrieBurstLasers=Burst Lasers
-Button/Name/AP_WraithAdvancedLaserTechnology=Advanced Laser Technology
-Button/Name/AP_Hyperfluxor=Hyperfluxor
-Button/Name/AP_BurstCapacitors=Burst Capacitors
-Button/Name/AP_VultureSpeedUpgrade=Ion Thrusters
-Button/Name/AP_VultureAutoLaunchers=Auto Launchers
-Button/Name/AP_SpiderMineDamage=High-Explosive Munition
+Button/Name/AP_SpineCrawler=Mutate into Spine Crawler
+Button/Name/AP_SpineCrawlerPassive=Spine Crawler
+Button/Name/AP_SpineCrawlerRootCancel=Cancel Root command
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_AberrationPassive=Evolution Chamber allows you to morph Aberrations.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_ActivateStasisWard=Traps nearby enemies in stasis for <d ref="Behavior,AP_OracleStasisTrapTarget,Duration"/> seconds. Trapped units cannot be attacked or affected by abilities.
@@ -1040,6 +1050,7 @@ Button/Tooltip/AP_BanelingPassive=Baneling Nest enables you to morph Banelings f
 Button/Tooltip/AP_BanelingSplitterlingPassive=Splitter Strain<n/><n/>Baneling Nest enables you to morph Banelings from Zerglings.
 Button/Tooltip/AP_BanelingSplitterlingSplitPassive=Splits into two smaller Baneling Spawn upon death or eruption.
 Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_BansheeSpeed=Banshees have increased movement speed.
 Button/Tooltip/AP_Barracks=Infantry production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Bunkers from SCVs
 Button/Tooltip/AP_BarracksFlying=Barracks must land to start unit production.
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -1062,6 +1073,7 @@ Button/Tooltip/AP_BurrowCharge=Burrow and charge towards a unit. Range of 8.
 Button/Tooltip/AP_BurrowChargeCampaign=Ultralisk burrows and charges toward units. When the Ultralisk unburrows, all enemy units nearby are knocked back and stunned for 2 seconds.
 Button/Tooltip/AP_BurrowLurkerMP=Buries the Lurker underground. Burrowed Lurkers are unable to move, but are able to attack. They cannot be seen without detection.
 Button/Tooltip/AP_BurrowSwarmHost=Allows Swarm Hosts to burrow. When burrowed, they cannot be seen without detection.
+Button/Tooltip/AP_BurstCapacitors=When not attacking Diamondback charges its weapon to deal additional 10 damage in the next attack.
 Button/Tooltip/AP_CalldownMULE=Drops an experimental robotic MULE miner onto the target Mineral Field. MULEs collect minerals more quickly than SCVs.  <n/><n/>MULEs last <d time="90"/> before their systems fail.
 Button/Tooltip/AP_Carrier=Capital ship. Builds and launches Interceptors that attack enemy targets.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_CarrierAiur=Aiur Faction<n/>Capital ship. Builds and launches Interceptors that attack enemy targets. Repair Drones heal nearby mechanical units.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1130,6 +1142,7 @@ Button/Tooltip/AP_EMP=Creates an electromagnetic pulse that does 100 damage to s
 Button/Tooltip/AP_EnableBuildingAttack=Allows Banelings to automatically target structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeLargeDirect,Amount) + (Effect,AP_HotSBanelingExplodeLargeDirect,AttributeBonus[Structure])"/> damage to structures.
 Button/Tooltip/AP_EnableBuildingAttackSplitterling=Allows Banelings to automatically target structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeSmallDirect,Amount) + (Effect,AP_HotSBanelingExplodeSmallDirect,AttributeBonus[Structure])"/> damage to structures.
 Button/Tooltip/AP_EngineeringBay=Contains upgrades for Terran infantry units. Enables the construction of Terran defensive structures.
+Button/Tooltip/AP_EvolutionChamber=Contains upgrades for Zerg ground units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Spore Crawlers from Drones
 Button/Tooltip/AP_ExplosiveGlaive=Mutalisk gains +9 damage vs. armored units. Attacks no longer bounce to additional targets.
 Button/Tooltip/AP_ExplosiveMode=Arms the Thor's Javelin missile launchers. Javelin missiles deal splash damage to nearby air units and additional damage vs. light units.
 Button/Tooltip/AP_FaceEmbrace=Pulls target unit to the Viper. Enemy is stunned for 1 second.
@@ -1147,6 +1160,7 @@ Button/Tooltip/AP_GatherMULE=Orders MULE to gather minerals from a selected Mine
 Button/Tooltip/AP_Ghost=Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_GhostAcademy=Can build Nukes that Ghosts can use.<n/><n/><c val="ffff8a">Enables:</c><n/>- Ghosts at the Barracks
 Button/Tooltip/AP_GhostHoldFire=Orders selected units to holster their weapons and avoid engaging enemies, unless given a direct command. Units holding fire will flee if attacked.
+Button/Tooltip/AP_GhostSCBWLockdown=Fires a Lockdown round disabling a mechanical unit for <c val="ffff8a"><d ref="Behavior,AP_GhostSCBWLockdown,Duration"/></c> seconds. Affected units cannot attack, move or use abilities, disabling passive <c val="ffff8a">Detection</c> and <c val="ffff8a">Cloaking</c>.
 Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_GravitonBeam=Makes the target unit float in the air, disabling its abilities and dealing damage over time. Effect lasts up to <d time="10"/>.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_GravitonBeamVoidCampaign=Makes the target unit float in the air, disabling its abilities. Effect lasts up to <d time="10"/>.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
@@ -1156,6 +1170,8 @@ Button/Tooltip/AP_GreaterSpireBroodlord=<c val="ffff8a">Enables:</c><n/>- Brood 
 Button/Tooltip/AP_GreaterSpireViper=<c val="ffff8a">Enables:</c><n/>- Vipers from Mutalisks
 Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
 Button/Tooltip/AP_GuardianShield=Creates a range 4 aura that reduces all incoming attack damage to friendly units by 2. Lasts <d time="15"/>.
+Button/Tooltip/AP_HHWidowMineDeathBlossom=Reduce Sentinel Missile Cooldown by <d time="20"/>. When killed the Widow Mine will launch 5 Sentinel Missiles at random nearby targets that deal <d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,Amount"/> (+<d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,ShieldBonus"/> vs. shields) area damage.
+Button/Tooltip/AP_HHWidowMineRangeAttack=Sentinel missile range is increased by 50%.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HardenedShield=Reduces incoming damage to a maximum of 10 while the Immortal still has shields.
 Button/Tooltip/AP_HaveBarrier=Increases the amount of damage absorbed by the Immortal's Barrier by 100%.
@@ -1208,6 +1224,7 @@ Button/Tooltip/AP_HydraliskImpalerPassive=Impaler Strain<n/><n/>Impaler Den enab
 Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
 Button/Tooltip/AP_HydraliskLurkerPassive=Lurker Strain<n/><n/>Lurker Den enables you to morph Hydralisks.
 Button/Tooltip/AP_HydraliskPassive=Hydralisk Den enables you to morph Hydralisks.
+Button/Tooltip/AP_Hyperfluxor=Increases Diamondback attack speed by 20%.
 Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_Immortal=Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ImmortalAiur=Aiur Faction<n/>Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
@@ -1224,6 +1241,7 @@ Button/Tooltip/AP_ImpalerBurrowed=Long-range anti-armor ambusher. Must burrow to
 Button/Tooltip/AP_ImpalerDen=<c val="ffff8a">Enables:</c><n/>- Impalers from Hydralisks
 Button/Tooltip/AP_ImpalerEgg=This cocoon contains a Hydralisk that is morphing into an Impaler.
 Button/Tooltip/AP_ImpalerPassive=Impaler Den enables you to morph Impalers from Hydralisks.
+Button/Tooltip/AP_ImprovedSiegeMode=Siege Tanks gain +3 armor in Siege Mode.
 Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/AP_InfernalPreIgniter=Hellions do an additional 10 damage to light armor.
 Button/Tooltip/AP_InfestationPit=<c val="ffff8a">Enables:</c><n/>- Infestors from Larvae<n/>- Swarm Hosts from Larvae
@@ -1258,13 +1276,18 @@ Button/Tooltip/AP_MULE=Prototype harvesting unit. Gathers minerals more quickly 
 Button/Tooltip/AP_MaelstromRounds=Shock Cannon deals +40 damage to primary target. Splash damage remains the same.
 Button/Tooltip/AP_MagFieldLaunchers=Increases <c val="ffff8a">Cyclone's</c> attack range by +<d ref="$UpgradeEffectArrayValue:AP_MagFieldLaunchers:Weapon,AP_TyphoonMissilePod,Range$"/>.
 Button/Tooltip/AP_MagrailMunitions=Deals <d ref="Effect,AP_MagrailMunitionsDamage,Amount"/> damage to target enemy unit.
+Button/Tooltip/AP_MagrailMunitionsViking=Increases Viking's damage to mechanical units while in Assault mode.
 Button/Tooltip/AP_Marauder=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_MatrixOverload=All friendly units gain <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% movement speed and <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% attack speed within Pylon power fields. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_MatrixOverloadEnergizer=All friendly units gain a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% bonus to movement speed and a <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% bonus to attack speed while positioned within an Energizer's power field. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving the power field.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
 Button/Tooltip/AP_MedicHeal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_heal,RechargeVitalRate"/> life per <d ref="Effect,AP_heal,RechargeVitalRate * Effect,AP_heal,DrainVitalCostFactor"/> energy.</c>
+Button/Tooltip/AP_MedicSCBWOpticFlare=Reduces vision range of the target enemy unit. Passive <c val="ffff8a">Detection</c> is disabled.
+Button/Tooltip/AP_MedicSCBWRestoration=Removes any negative effects from the target allied unit
 Button/Tooltip/AP_Medivac=Air transport. Heals nearby biological units.
+Button/Tooltip/AP_MedivacExpandedHull=Increrases Medivac's cargo space by 4.
+Button/Tooltip/AP_MedivacSpeedBoost=Increases the Medivac's movement speed by 70% for <d time="8"/>.
 Button/Tooltip/AP_MercCompound=Trains Mercenary units.
 Button/Tooltip/AP_MicroFiltering=This refinery is producing Vespene gas 25% faster
 Button/Tooltip/AP_MindControl=Permanently converts targeted Zerg unit to player control.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
@@ -1425,6 +1448,7 @@ Button/Tooltip/AP_ShockwaveMissilePattern=Banshee attack fires multiple missile 
 Button/Tooltip/AP_ShrikeTurret=Bunkers are outfitted with an automated turret.
 Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_SiegeModeProgressiveRangeIncrease=Increases the Siege Tank's attack range by 1 every 3 seconds while in Siege Mode, up to a maximum of 5 additional range.
 Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeTankJumpJet=Repositions the Siege Tank to a target location. Can be used to jump up and down cliffs.
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1442,8 +1466,14 @@ Button/Tooltip/AP_SpectreNukeCalldown=Calls down a Nuclear Strike at a target lo
 Button/Tooltip/AP_SpectreShadowClones=The Spectre creates a clone of himself.  This clone can be used to draw fire away from friendly units.  The clone deals no damage and lasts <d ref="Behavior,ToshShadowCloneTimedLife,Duration"/> seconds.<n/>
 Button/Tooltip/AP_SpectreWeaponsFree=Orders selected units to fire at will. They will engage enemy units within range and chase them as normal.
 Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
+Button/Tooltip/AP_SpiderMineDamage=Spider Mines do more damage when exploding
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
+Button/Tooltip/AP_SpineCrawler=Anti-ground defensive structure. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_SpineCrawlerRoot=Roots the Spine Crawler. A rooted Spine Crawler has the ability to attack ground units but is unable to move.
+Button/Tooltip/AP_SpineCrawlerUproot=Uproots the Spine Crawler. An uprooted Spine Crawler has the ability to move but cannot attack. Moves much faster on creep.
+Button/Tooltip/AP_SpineCrawlerUprooted=Uprooted anti-ground defensive structure. Can move when uprooted, but cannot attack. Must plant itself in creep to attack.
 Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
+Button/Tooltip/AP_SporeCrawlerPassive=Evolution Chamber allows you to mutate Drones into Spore Crawlers.
 Button/Tooltip/AP_SquadSight=Increases the non-melee attack range of all nearby friendly units by <d ref="Behavior,AP_ObserverSquadSight,Modification.RangedWeaponRange"/>.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
 Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1519,7 +1549,11 @@ Button/Tooltip/AP_UltrasonicPulse=Stuns enemy units in target area for a short t
 Button/Tooltip/AP_UpgradeToPlanetaryFortress=Adds a powerful turret, and increases armor. Removes Lift Off, Scanner Sweep, and MULE abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_UpgradeToRoboticsFacilityWarp=Upgrades this Robotics Facility to a Warp Robotics Facility, allowing it to warp in units to any location powered by a Pylon.
 Button/Tooltip/AP_UpgradeToStargateWarp=Upgrades this Stargate to a Warp Stargate, allowing it to warp in units to any location powered by a Pylon.
+Button/Tooltip/AP_ValkyrieBurstLasers=Valkyries are equipped with <c val="ffff8a">Burst Laser</c> to attack ground units.
+Button/Tooltip/AP_ValkyrieEnhancedClusterLaunchers=Valkyrie fires 2 additional rockets each volley.
 Button/Tooltip/AP_ValkyrieSCBW=Advanced anti-aircraft fighter. Able to use cluster missiles that deal area damage to air targets.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
+Button/Tooltip/AP_ValkyrieShapedHull=Increases Valkyrie life by 50.
+Button/Tooltip/AP_ValkyrieSpeedBoost=Increases the Valkyrie's movement speed by 70% for <d time="8"/>.
 Button/Tooltip/AP_ViciousGlaive=Attacks bounce three additional times, hitting up to six targets. Bounces also travel farther.
 Button/Tooltip/AP_VikingAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_VikingFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
@@ -1548,6 +1582,8 @@ Button/Tooltip/AP_VoidSentryShieldRepairDouble=Recharges the shields of two frie
 Button/Tooltip/AP_VoidStasis=Disables the target's attacks, abilities, movement, detection, production and tech for <d ref="Behavior,AP_DarkTemplarVoidStasis,Duration"/> seconds. Units and structures in stasis cannot be attacked or affected by abilities.<n/><n/><c val="#ColorAttackInfo">Can target ground units and structures.</c>
 Button/Tooltip/AP_VoidVoidRayBeamBounce=Prismatic Beam splits and deals damage to additional nearby targets as the Destroyer continues to attack, up to a maximum of 3 additional targets.
 Button/Tooltip/AP_Vulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_VultureAutoLaunchers=Vulture can attack while moving
+Button/Tooltip/AP_VultureSpeedUpgrade=Vulture movement speed is increased.
 Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_WarpInAdept=Purifier Faction<n/>Ranged specialist. Can use Psionic Transfer.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_WarpInSupplicant=Short range warrior. Sacrifices itself to heal Alarak when he is near death. Supplicants are warped in two at a time.<n/></n><c val="ffff8a">Can attack ground units.</c>
@@ -1563,6 +1599,7 @@ Button/Tooltip/AP_WidowMineBurrow=Burrows the Widow Mine and readies its weapon.
 Button/Tooltip/AP_WidowMineConcealment=This unit is no longer revealed while reloading.
 Button/Tooltip/AP_WidowMineUnburrow=Unburrows the Widow Mine and deactivates its weapon, allowing it to move.
 Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strikes.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_WraithAdvancedLaserTechnology=<c val="ffff8a">Burst Lasers</c> do more damage and hit both air and ground units. Replaces Gemini Missiles weapon.
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
@@ -1572,9 +1609,6 @@ Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack1=Upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack2=Further upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack3=Maximizes the attacks of all Zerg air units.
-Button/Tooltip/AP_AberrationPassive=Evolution Chamber allows you to morph Aberrations.
-Button/Tooltip/AP_EvolutionChamber=Contains upgrades for Zerg ground units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Spore Crawlers from Drones
-Button/Tooltip/AP_SporeCrawlerPassive=Evolution Chamber allows you to mutate Drones into Spore Crawlers.
 Button/Tooltip/AP_zerggroundarmor1=Upgrades the armor of all Zerg ground units.
 Button/Tooltip/AP_zerggroundarmor2=Further upgrades the armor of all Zerg ground units.
 Button/Tooltip/AP_zerggroundarmor3=Maximizes the armor of all Zerg ground units.
@@ -1584,27 +1618,8 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_BansheeSpeed=Banshees have increased movement speed.
-Button/Tooltip/AP_SiegeModeProgressiveRangeIncrease=Increases the Siege Tank's attack range by 1 every 3 seconds while in Siege Mode, up to a maximum of 5 additional range.
-Button/Tooltip/AP_ImprovedSiegeMode=Siege Tanks gain +3 armor in Siege Mode.
-Button/Tooltip/AP_MagrailMunitionsViking=Increases Viking's damage to mechanical units while in Assault mode.
-Button/Tooltip/AP_MedivacExpandedHull=Increrases Medivac's cargo space by 4.
-Button/Tooltip/AP_MedivacSpeedBoost=Increases the Medivac's movement speed by 70% for <d time="8"/>.
-Button/Tooltip/AP_HHWidowMineRangeAttack=Sentinel missile range is increased by 50%.
-Button/Tooltip/AP_HHWidowMineDeathBlossom=Reduce Sentinel Missile Cooldown by <d time="20"/>. When killed the Widow Mine will launch 5 Sentinel Missiles at random nearby targets that deal <d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,Amount"/> (+<d ref="Effect,AP_HHWidowMineBlossomExplodeSplash,ShieldBonus"/> vs. shields) area damage.
-Button/Tooltip/AP_GhostSCBWLockdown=Fires a Lockdown round disabling a mechanical unit for <c val="ffff8a"><d ref="Behavior,AP_GhostSCBWLockdown,Duration"/></c> seconds. Affected units cannot attack, move or use abilities, disabling passive <c val="ffff8a">Detection</c> and <c val="ffff8a">Cloaking</c>.
-Button/Tooltip/AP_MedicSCBWOpticFlare=Reduces vision range of the target enemy unit. Passive <c val="ffff8a">Detection</c> is disabled.
-Button/Tooltip/AP_MedicSCBWRestoration=Removes any negative effects from the target allied unit
-Button/Tooltip/AP_ValkyrieEnhancedClusterLaunchers=Valkyrie fires 2 additional rockets each volley.
-Button/Tooltip/AP_ValkyrieShapedHull=Increases Valkyrie life by 50.
-Button/Tooltip/AP_ValkyrieBurstLasers=Valkyries are equipped with <c val="ffff8a">Burst Laser</c> to attack ground units.
-Button/Tooltip/AP_ValkyrieSpeedBoost=Increases the Valkyrie's movement speed by 70% for <d time="8"/>.
-Button/Tooltip/AP_WraithAdvancedLaserTechnology=<c val="ffff8a">Burst Lasers</c> do more damage and hit both air and ground units. Replaces Gemini Missiles weapon.
-Button/Tooltip/AP_Hyperfluxor=Increases Diamondback attack speed by 20%.
-Button/Tooltip/AP_BurstCapacitors=When not attacking Diamondback charges its weapon to deal additional 10 damage in the next attack.
-Button/Tooltip/AP_VultureSpeedUpgrade=Vulture movement speed is increased.
-Button/Tooltip/AP_VultureAutoLaunchers=Vulture can attack while moving
-Button/Tooltip/AP_SpiderMineDamage=Spider Mines do more damage when exploding
+Button/Tooltip/AP_SpineCrawler=Anti-ground defensive structure. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_SpineCrawlerPassive=Spawning Pool allows you to mutate Drones into Spine Crawlers.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2088,6 +2103,8 @@ Effect/Name/AP_ImmortalTaldarimWeaponSearch=Immortal Taldarim Weapon Search
 Effect/Name/AP_Impaler=Primal Lurker
 Effect/Name/AP_ImpalerDamage=Primal Lurker
 Effect/Name/AP_ImpalerDummySearch=Primal Lurker Dummy Search
+Effect/Name/AP_ImpalerTentacleLM=Spine Crawler (Launch Missile)
+Effect/Name/AP_ImpalerTentacleU=Spine Crawler (Damage)
 Effect/Name/AP_InfernalFlameThrower=Infernal Flame Thrower
 Effect/Name/AP_InfernalFlameThrowerCP=Infernal Flame Thrower
 Effect/Name/AP_InfernalFlameThrowerE=Infernal Flame Thrower
@@ -2907,6 +2924,7 @@ Unit/Name/AP_DuskWing=Dusk Wings
 Unit/Name/AP_DuskWingWeapon=Dusk Wing
 Unit/Name/AP_EMP2Weapon=EMP
 Unit/Name/AP_EngineeringBay=Engineering Bay
+Unit/Name/AP_EvolutionChamber=Evolution Chamber
 Unit/Name/AP_Factory=Factory
 Unit/Name/AP_FactoryTechReactor=Tech Reactor
 Unit/Name/AP_Firebat=Firebat
@@ -3075,6 +3093,9 @@ Unit/Name/AP_Spectre=Spectre
 Unit/Name/AP_SpectreNuke=Spectre Nuke
 Unit/Name/AP_SpectreShadowClone=Spectre Shadow
 Unit/Name/AP_SpiderMine=Spider Mine
+Unit/Name/AP_SpineCrawler=AP - Spine Crawler
+Unit/Name/AP_SpineCrawlerUprooted=AP - Spine Crawler
+Unit/Name/AP_SpineCrawlerWeapon=Spine Crawler
 Unit/Name/AP_Spire=Spire
 Unit/Name/AP_Stalker=Stalker
 Unit/Name/AP_StalkerPurifier=Instigator
@@ -3137,7 +3158,6 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
-Unit/Name/AP_EvolutionChamber=Evolution Chamber
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
@@ -3314,6 +3334,9 @@ Upgrade/Name/AP_NeoSteelFrame=Neosteel Bunker
 Upgrade/Name/AP_NeosteelFrame=Neosteel Frame
 Upgrade/Name/AP_NotPossibleDefenderMode=Defender Mode
 Upgrade/Name/AP_NotPossibleSiegeMode=Siege Mode
+Upgrade/Name/AP_NotPossibleVikingAssault=Assault Mode
+Upgrade/Name/AP_NotPossibleVikingFighter=Fighter Mode
+Upgrade/Name/AP_NotPossibleWidowMineBurrowed=Widow Mine activated
 Upgrade/Name/AP_NovaArmorApolloInfantrySuit=Apollo Infantry Suit
 Upgrade/Name/AP_NovaArmorBlinkSuit=NovaArmorBlinkSuit
 Upgrade/Name/AP_NovaArmorJumpSuit=Jump Suit
@@ -3444,11 +3467,10 @@ Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
+Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
+Upgrade/Name/AP_K5TwoDrones=K5 Two Drones
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
-Upgrade/Name/AP_NotPossibleVikingFighter=Fighter Mode
-Upgrade/Name/AP_NotPossibleVikingAssault=Assault Mode
-Upgrade/Name/AP_NotPossibleWidowMineBurrowed=Widow Mine activated
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -3512,6 +3534,7 @@ Weapon/Name/AP_ImmortalMelee=Phase Disruptor
 Weapon/Name/AP_ImmortalShakurasAntiAirMissileDummyWeapon=Anti Air Missile Dummy Weapon
 Weapon/Name/AP_ImmortalTaldarim=Scatter Cannon
 Weapon/Name/AP_Impaler=Piercing Tentacle
+Weapon/Name/AP_ImpalerTentacle=Impaler Tentacle
 Weapon/Name/AP_InfernalFlameThrower=Infernal Flamethrower
 Weapon/Name/AP_InfestedAbomination=Pustulant Smash
 Weapon/Name/AP_InterceptorAiurLaunch=Interceptor Aiur Launch

@@ -2726,4 +2726,30 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_SpineCrawlerUproot">
+        <Icon value="Assets\Textures\btn-ability-zerg-uproot-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-uproot-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SpineCrawlerRoot">
+        <Icon value="Assets\Textures\btn-ability-zerg-root-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-root-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SpineCrawler">
+        <Icon value="Assets\Textures\btn-building-zerg-spinecrawler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-spinecrawler.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SpineCrawlerPassive">
+        <Icon value="Assets\Textures\btn-building-zerg-spinecrawler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-spinecrawler.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SpineCrawlerRootCancel">
+        <Icon value="Assets\Textures\btn-ability-zerg-root.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-root.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

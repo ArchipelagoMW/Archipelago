@@ -2086,6 +2086,9 @@
         <DisplayName value="Weapon/Name/AP_WraithG"/>
         <Options index="Disabled" value="1"/>
         <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_WraithGU"/>
@@ -2093,8 +2096,16 @@
         <Period value="1.694"/>
         <Effect value="AP_WraithGLaunchMissile"/>
         <AllowedMovement value="Slowing"/>
-        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
-        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="0"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImpalerTentacle">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-seismicspines.dds"/>
+        <DisplayEffect value="AP_ImpalerTentacleU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="0"/>
+        <Period value="1.6"/>
+        <DamagePoint value="0.3332"/>
+        <Effect value="AP_ImpalerTentacleLM"/>
     </CWeaponLegacy>
 </Catalog>

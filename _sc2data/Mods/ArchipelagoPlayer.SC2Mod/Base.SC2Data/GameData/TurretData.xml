@@ -194,4 +194,17 @@
         <YawIdleRate value="14.9414"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_SpineCrawler">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SpineCrawlerUprooted">
+        <Idle value="FollowMovementReverse"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

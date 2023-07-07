@@ -4694,6 +4694,50 @@
         <!--            </Button>-->
         <!--        </InfoArray>-->
     </CAbilResearch>
+    <CAbilMorph id="AP_SpineCrawlerUproot">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpineCrawlerUproot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Uproot"/>
+        <Flags index="FastBuild" value="1"/>
+        <InfoArray Unit="AP_SpineCrawlerUprooted">
+            <SectionArray index="Abils">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorphPlacement id="AP_SpineCrawlerRoot">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpineCrawlerRoot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Root"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_SpineCrawler" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+        </InfoArray>
+        <ProgressButton value="AP_SpineCrawlerRootCancel"/>
+    </CAbilMorphPlacement>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5809,52 +5853,52 @@
     </CAbilMorph>
     <CAbilResearch id="AP_evolutionchamberresearch">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
-<!--        <InfoArray index="Research1" Time="160" Upgrade="ZergMeleeWeaponsLevel1">-->
-<!--            <Resource index="Minerals" value="100"/>-->
-<!--            <Resource index="Vespene" value="100"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons1" State="Suppressed" Requirements="LearnZergMeleeWeapon1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research2" Time="190" Upgrade="ZergMeleeWeaponsLevel2">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons2" State="Suppressed" Requirements="LearnZergMeleeWeapon2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research3" Time="220" Upgrade="ZergMeleeWeaponsLevel3">-->
-<!--            <Resource index="Minerals" value="200"/>-->
-<!--            <Resource index="Vespene" value="200"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons3" State="Suppressed" Requirements="LearnZergMeleeWeapon3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research4" Time="160" Upgrade="ZergGroundArmorsLevel1">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor1" State="Suppressed" Requirements="LearnZergGroundArmor1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research5" Time="190" Upgrade="ZergGroundArmorsLevel2">-->
-<!--            <Resource index="Minerals" value="225"/>-->
-<!--            <Resource index="Vespene" value="225"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor2" State="Suppressed" Requirements="LearnZergGroundArmor2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research6" Time="220" Upgrade="ZergGroundArmorsLevel3">-->
-<!--            <Resource index="Minerals" value="300"/>-->
-<!--            <Resource index="Vespene" value="300"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor3" State="Suppressed" Requirements="LearnZergGroundArmor3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research7" Time="160" Upgrade="ZergMissileWeaponsLevel1">-->
-<!--            <Resource index="Minerals" value="100"/>-->
-<!--            <Resource index="Vespene" value="100"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons1" State="Suppressed" Requirements="LearnZergMissileWeapon1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research8" Time="190" Upgrade="ZergMissileWeaponsLevel2">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons2" State="Suppressed" Requirements="LearnZergMissileWeapon2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research9" Time="220" Upgrade="ZergMissileWeaponsLevel3">-->
-<!--            <Resource index="Minerals" value="200"/>-->
-<!--            <Resource index="Vespene" value="200"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons3" State="Suppressed" Requirements="LearnZergMissileWeapon3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research10" Time="90"/>-->
+        <!--        <InfoArray index="Research1" Time="160" Upgrade="ZergMeleeWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons1" State="Suppressed" Requirements="LearnZergMeleeWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research2" Time="190" Upgrade="ZergMeleeWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons2" State="Suppressed" Requirements="LearnZergMeleeWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research3" Time="220" Upgrade="ZergMeleeWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons3" State="Suppressed" Requirements="LearnZergMeleeWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research4" Time="160" Upgrade="ZergGroundArmorsLevel1">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor1" State="Suppressed" Requirements="LearnZergGroundArmor1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research5" Time="190" Upgrade="ZergGroundArmorsLevel2">-->
+        <!--            <Resource index="Minerals" value="225"/>-->
+        <!--            <Resource index="Vespene" value="225"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor2" State="Suppressed" Requirements="LearnZergGroundArmor2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research6" Time="220" Upgrade="ZergGroundArmorsLevel3">-->
+        <!--            <Resource index="Minerals" value="300"/>-->
+        <!--            <Resource index="Vespene" value="300"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor3" State="Suppressed" Requirements="LearnZergGroundArmor3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research7" Time="160" Upgrade="ZergMissileWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons1" State="Suppressed" Requirements="LearnZergMissileWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research8" Time="190" Upgrade="ZergMissileWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons2" State="Suppressed" Requirements="LearnZergMissileWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research9" Time="220" Upgrade="ZergMissileWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons3" State="Suppressed" Requirements="LearnZergMissileWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research10" Time="90"/>-->
     </CAbilResearch>
     <CAbilEffectInstant id="AP_MedivacSpeedBoost">
         <AbilSetId value="Afterburners"/>

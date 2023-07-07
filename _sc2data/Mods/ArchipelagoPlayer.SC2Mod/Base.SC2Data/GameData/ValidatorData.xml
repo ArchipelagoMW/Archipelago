@@ -656,8 +656,7 @@
         <CombineArray value="AP_IsVanillaBunker"/>
         <CombineArray value="AP_IsAPBunker"/>
         <CombineArray value="IsMissileTurret"/>
-        <CombineArray value="AP_IsVanillaSpineCrawler"/>
-        <!-- FIXME: Add AP_SpineCrawler -->
+        <CombineArray value="AP_IsSpineCrawler"/>
         <CombineArray value="AP_IsVanillaSporeCrawler"/>
         <!-- FIXME: Add AP_SporeCrawler -->
         <CombineArray value="IsPlanetaryFortress"/>
@@ -1454,8 +1453,7 @@
         <CombineArray value="AP_IsVanillaBunker"/>
         <CombineArray value="AP_IsAPBunker"/>
         <CombineArray value="IsMissileTurret"/>
-        <CombineArray value="AP_IsVanillaSpineCrawler"/>
-        <!-- FIXME: Add AP_SpineCrawler -->
+        <CombineArray value="AP_IsSpineCrawler"/>
         <CombineArray value="AP_IsVanillaSporeCrawler"/>
         <!-- FIXME: Add AP_SporeCrawler -->
         <CombineArray value="IsPlanetaryFortress"/>
@@ -1474,6 +1472,16 @@
     </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsVanillaSpineCrawlerUprooted">
         <Value value="SpineCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAPSpineCrawler">
+        <CombineArray value="AP_IsAPSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsAPSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPSpineCrawlerRooted">
+        <Value value="AP_SpineCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPSpineCrawlerUprooted">
+        <Value value="AP_SpineCrawlerUprooted"/>
     </CValidatorUnitType>
     <CValidatorCombine id="AP_IsVanillaSporeCrawler">
         <CombineArray value="AP_IsVanillaSporeCrawlerRooted"/>
@@ -3327,11 +3335,11 @@
         <CombineArray value="AP_IsSpineCrawlerUprooted"/>
     </CValidatorCombine>
     <CValidatorCombine id="AP_IsSpineCrawlerRooted">
-        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsAPSpineCrawlerRooted"/>
         <CombineArray value="AP_IsVanillaSpineCrawlerRooted"/>
     </CValidatorCombine>
     <CValidatorCombine id="AP_IsSpineCrawlerUprooted">
-        <!-- TODO: AP Variant -->
+        <CombineArray value="AP_IsAPSpineCrawlerUprooted"/>
         <CombineArray value="AP_IsVanillaSpineCrawlerUprooted"/>
     </CValidatorCombine>
     <CValidatorCombine id="AP_IsSporeCrawler">
