@@ -354,6 +354,8 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_StimpackFirebat"/>
         <AbilArray Link="AP_SuperStimpackFirebat"/>
+        <AbilArray Link="AP_FirebatOptimizedLogisticsMorph"/>
+        <BehaviorArray Link="AP_MorphFirebatOptimizedLogistics"/>
         <WeaponArray Link="AP_Firebat"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -401,6 +403,12 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_FirebatOptimizedLogistics" parent="AP_Firebat">
+        <!-- Cargo space is impossible to be set by an upgrade! -->
+        <AbilArray index="5" removed="1"/>
+        <BehaviorArray index="0" removed="1"/>
+        <CargoSize value="1"/>
     </CUnit>
     <CUnit id="AP_Marauder">
         <DeathRevealRadius value="3"/>
@@ -3474,6 +3482,8 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_StimpackFirebat"/>
         <AbilArray Link="AP_SuperStimpackFirebat"/>
+        <AbilArray Link="AP_MercFirebatOptimizedLogisticsMorph"/>
+        <BehaviorArray Link="AP_MorphMercFirebatOptimizedLogistics"/>
         <WeaponArray Link="AP_DevilDogFlameThrower"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3520,6 +3530,12 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_DevilDogOptimizedLogistics" parent="AP_DevilDog">
+        <!-- Cargo space is impossible to be set by an upgrade! -->
+        <AbilArray index="5" removed="1"/>
+        <BehaviorArray index="0" removed="1"/>
+        <CargoSize value="1"/>
     </CUnit>
     <CUnit id="AP_HammerSecurity">
         <DeathRevealRadius value="3"/>

@@ -11003,4 +11003,16 @@
         <EffectArray value="AP_HighTemplarSCBWHallucination@KillHallucination"/>
         <!--<EffectArray value="ScienceVesselSCBWDefensiveMatrix@RBDummy"/>-->
     </CEffectSet>
+    <CEffectIssueOrder id="AP_FirebatOptimizedLogisticsMorph">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="AP_FirebatOptimizedLogisticsMorph"/>
+        <!-- Don't interrupt orders -->
+        <CmdFlags index="Queued" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_MercFirebatOptimizedLogisticsMorph">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="AP_MercFirebatOptimizedLogisticsMorph"/>
+        <!-- Don't interrupt orders -->
+        <CmdFlags index="Queued" value="1"/>
+    </CEffectIssueOrder>
 </Catalog>

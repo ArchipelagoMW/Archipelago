@@ -17,6 +17,8 @@
         <EffectArray Reference="Unit,AP_MULE,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_Medic,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Medic,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_Spectre,LifeArmorLevel" Value="1"/>
@@ -27,6 +29,8 @@
         <EffectArray Reference="Unit,AP_HammerSecurity,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmor" Value="1"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranInfantryArmorsVanadiumPlating" parent="AP_BaseTerranInfantryArmors">
         <Name value="Upgrade/Name/AP_BaseTerranInfantryArmorsVanadiumPlating"/>
@@ -53,6 +57,8 @@
         <!--  Firebat -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_FirebatOptimizedLogistics,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_FirebatOptimizedLogistics,LifeStart" Value="1.05"/>
         <!--  Medic -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeStart" Value="1.05"/>
@@ -68,6 +74,8 @@
         <!--  Merc Firebat -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDogOptimizedLogistics,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDogOptimizedLogistics,LifeStart" Value="1.05"/>
         <!-- Set the HP boost here -->
         <EditorCategories value="Race:Terran,UpgradeType:ArmorBonus"/>
     </CUpgrade>
@@ -603,7 +611,9 @@
     <CUpgrade id="AP_FirebatJuggernautPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmor" Value="2"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmor" Value="2"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_StabilizerMedPacks">
@@ -4755,5 +4765,19 @@
         <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train2].Button.Requirements"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Banshee"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsFirebat">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Firebat,CostResource[Minerals]" Value="50"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_Firebat,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_FirebatOptimizedLogistics,CostResource[Minerals]" Value="50"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDog,CostResource[Minerals]" Value="50"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_DevilDog,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDogOptimizedLogistics,CostResource[Minerals]" Value="50"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Firebat"/>
+        <AffectedUnitArray value="AP_FirebatOptimizedLogistics"/>
+        <AffectedUnitArray value="AP_DevilDog"/>
+        <AffectedUnitArray value="AP_DevilDogOptimizedLogistics"/>
     </CUpgrade>
 </Catalog>

@@ -6049,4 +6049,16 @@
         </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_FirebatOptimizedLogisticsMorph">
+        <CmdButtonArray index="Execute" Requirements="AP_HaveOptimizedLogisticsFirebat" DefaultButtonFace="AP_Firebat"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_FirebatOptimizedLogistics"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_MercFirebatOptimizedLogisticsMorph">
+        <CmdButtonArray index="Execute" Requirements="AP_HaveOptimizedLogisticsFirebat" DefaultButtonFace="AP_Firebat"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_DevilDogOptimizedLogistics"/>
+    </CAbilMorph>
 </Catalog>

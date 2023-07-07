@@ -97,6 +97,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatJuggernautPlating (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatOptimizedLogistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderConcussiveShells (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderKineticFoam (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack (int lp_player, int lp_level);

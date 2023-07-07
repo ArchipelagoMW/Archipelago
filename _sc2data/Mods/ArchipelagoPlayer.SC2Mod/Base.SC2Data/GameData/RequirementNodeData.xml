@@ -2584,4 +2584,7 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselDefensiveMatrixCompleteOnly">
         <Count Link="AP_ScienceVesselDefensiveMatrix" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly">
+        <Count Link="AP_OptimizedLogisticsFirebat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

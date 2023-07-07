@@ -856,6 +856,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_
 
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatOptimizedLogistics (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_OptimizedLogisticsFirebat", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderConcussiveShells (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

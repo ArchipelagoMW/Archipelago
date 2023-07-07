@@ -4185,4 +4185,20 @@
             <VitalMaxArray index="Shields" value="250"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MorphFirebatOptimizedLogistics">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveOptimizedLogisticsFirebat"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_FirebatOptimizedLogisticsMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MorphMercFirebatOptimizedLogistics">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveOptimizedLogisticsFirebat"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_MercFirebatOptimizedLogisticsMorph"/>
+    </CBehaviorBuff>
 </Catalog>

@@ -6041,6 +6041,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="A001B908"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="DD02F4F8"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="50C99E30"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="4F756D05"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="70355491"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="836F60F0"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="9D916EDC"/>
@@ -6926,6 +6927,42 @@
         <Element Type="Param" Id="A9E73950">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_FirebatStimpack</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="4F756D05">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="47C47FAC"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="D6C8384A"/>
+        </Element>
+        <Element Type="ParamDef" Id="47C47FAC">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="0313D211"/>
+        </Element>
+        <Element Type="Param" Id="0313D211">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D6C8384A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="295CF733"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="CCA92112"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B0F467D0"/>
+        </Element>
+        <Element Type="Param" Id="295CF733">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="47C47FAC"/>
+        </Element>
+        <Element Type="Param" Id="CCA92112">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="B0F467D0">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_OptimizedLogisticsFirebat</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

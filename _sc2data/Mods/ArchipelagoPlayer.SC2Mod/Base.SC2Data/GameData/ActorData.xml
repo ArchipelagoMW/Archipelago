@@ -858,6 +858,7 @@
         <IconArcLength value="3.250000"/>
     </CActorRange>
     <CActorUnit id="AP_Firebat" parent="GenericUnitStandard" unitName="AP_Firebat">
+        <On Terms="UnitBirth.AP_FirebatOptimizedLogistics" Send="Create"/>
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Abil.attack.ReadyStop" Target="AP_FirebatAttackModel" Send="SetOpacity 0.000000 0.250000"/>
@@ -18834,6 +18835,7 @@
         <Sound value="Cyclone_TargetLock_On"/>
     </CActorSound>
     <CActorUnit id="AP_DevilDog" parent="GenericUnitStandard" unitName="AP_DevilDog">
+        <On Terms="UnitBirth.AP_DevilDogOptimizedLogistics" Send="Create"/>
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_DevilDogDropModel"/>

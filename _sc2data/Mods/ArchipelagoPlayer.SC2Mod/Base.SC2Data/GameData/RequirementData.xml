@@ -1598,4 +1598,7 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveOptimizedLogisticsFirebat">
+        <NodeArray index="Show" Link="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly"/>
+    </CRequirement>
 </Catalog>
