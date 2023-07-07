@@ -4691,4 +4691,23 @@
         <Icon value="Assets\Textures\btn-ability-mengsk-ghost-staticempblast.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_ScienceVesselDefensiveMatrix"/>
+    <CUpgrade id="AP_FastBuildMarine">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train1].Time" Value="17.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildLiberator">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_StarportTrain,InfoArray[Train9].Time" Value="40.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildBattlecruiser">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_StarportTrain,InfoArray[Train4].Time" Value="60.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildGoliath">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_FactoryTrain,InfoArray[Train7].Time" Value="27.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildHellion">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_FactoryTrain,InfoArray[Train6].Time" Value="20.000000"/>
+    </CUpgrade>
 </Catalog>
