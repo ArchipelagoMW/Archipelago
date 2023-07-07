@@ -16616,7 +16616,7 @@
         <On Terms="MissileTentacleRetracted" Send="AnimClear Attack"/>
         <On Terms="MissileTentacleRetracted" Send="RefClear TentacleAttack"/>
         <On Terms="MissileTentacleRetracted" Send="AnimGroupRemove Ready"/>
-        <On Terms="MissileTentacleRetracted; ValidateUnit AP_SpineCrawler" Send="AnimPlay AttackEnd Attack,End 0 0.000000"/>
+        <On Terms="MissileTentacleRetracted; ValidateUnit AP_IsSpineCrawler" Send="AnimPlay AttackEnd Attack,End 0 0.000000"/>
         <On Terms="UnitDeathCustomize.AP_SpineCrawlerUprooted" Send="DeathCustomize Uprooted"/>
         <On Terms="UnitDeathCustomize; AnimPlaying Morph" Send="DeathCustomize Uprooted"/>
         <On Terms="UnitDeathCustomize.AP_SpineCrawler" Send="AnimSetTimeScaleGlobal 1.000000"/>
@@ -16676,7 +16676,6 @@
         <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="SpineCrawler_AttackLaunch"/>
-        <Missile value="AP_SpineCrawlerAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
         <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
         <ImpactMap index="None" Sound="SpineCrawler_AttackImpact"/>
@@ -16723,6 +16722,14 @@
         <On Terms="UnitDeath.AP_SpineCrawlerUprooted; PassChance 25.000000" Send="Create"/>
         <Sound value="SpineCrawler_Death"/>
     </CActorSound>
+    <CActorTurret id="AP_SpineCrawlerTurret">
+        <On Terms="TurretEnable.AP_SpineCrawler" Send="Create"/>
+        <On Terms="TurretEnable.AP_SpineCrawlerUprooted" Send="Destroy"/>
+    </CActorTurret>
+    <CActorTurret id="AP_SpineCrawlerUprootedTurret">
+        <On Terms="TurretEnable.AP_SpineCrawlerUprooted" Send="Create"/>
+        <On Terms="TurretEnable.AP_SpineCrawler" Send="Destroy"/>
+    </CActorTurret>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
