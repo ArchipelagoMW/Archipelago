@@ -4,10 +4,11 @@
 
 For Steam-based installation, subscribe to the following mods:
 
-- ModTheSpire from the [Slay the Spire Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1605060445)
-- BaseMod from the [Slay the Spire Workshop](https://steamcommunity.com/workshop/filedetails/?id=1605833019)
-- Archipelago Multiworld Randomizer Mod from
-  the [Slay the Spire Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2596397288)
+- [ModTheSpire](https://steamcommunity.com/sharedfiles/filedetails/?id=1605060445)
+- [BaseMod](https://steamcommunity.com/workshop/filedetails/?id=1605833019)
+- [Archipelago Multiworld Randomizer](https://steamcommunity.com/sharedfiles/filedetails/?id=2596397288)
+- (optional) [Downfall](https://steamcommunity.com/sharedfiles/filedetails/?id=1610056683)
+- (required for downfall) [StSLib](https://steamcommunity.com/workshop/filedetails/?id=1609158507)
 
 For GOG or Xbox PC Game Pass installation:
 
