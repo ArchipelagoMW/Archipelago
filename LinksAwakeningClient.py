@@ -622,9 +622,13 @@ class LinksAwakeningContext(CommonContext):
                         self.last_resend = now
                         await self.send_checks()
                     if self.magpie_enabled:
-                        self.magpie.set_checks(self.client.tracker.all_checks)
-                        await self.magpie.set_item_tracker(self.client.item_tracker)
-                        await self.magpie.send_gps(self.client.gps_tracker)
+                        try:
+                            self.magpie.set_checks(self.client.tracker.all_checks)
+                            await self.magpie.set_item_tracker(self.client.item_tracker)
+                            await self.magpie.send_gps(self.client.gps_tracker)
+                        except Exception:
+                            # Don't let magpie errors take out the client
+                            pass
                     if self.client.should_reset_auth:
                         self.client.should_reset_auth = False
                         raise GameboyException("Resetting due to wrong archipelago server")
