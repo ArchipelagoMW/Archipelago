@@ -1,7 +1,9 @@
-from typing import TextIO
 import os
-import logging
+import settings
+import typing
+
 from copy import deepcopy
+from typing import TextIO
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError, sweep_from_pool
@@ -15,10 +17,34 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
-    process_static_pokemon, process_move_data
+    process_static_pokemon, process_move_data, RedDeltaPatch, BlueDeltaPatch
 from .rules import set_rules
 
 import worlds.pokemon_rb.poke_data as poke_data
+
+
+class PokemonSettings(settings.Group):
+    class RedRomFile(settings.UserFilePath):
+        """File names of the Pokemon Red and Blue roms"""
+        description = "Pokemon Red (UE) ROM File"
+        copy_to = "Pokemon Red (UE) [S][!].gb"
+        md5s = [RedDeltaPatch.hash]
+
+    class BlueRomFile(settings.UserFilePath):
+        description = "Pokemon Blue (UE) ROM File"
+        copy_to = "Pokemon Blue (UE) [S][!].gb"
+        md5s = [BlueDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+        True for operating system default program
+        Alternatively, a path to a program to open the .gb file with
+        """
+
+    red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
+    blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
 
 
 class PokemonWebWorld(WebWorld):
@@ -39,6 +65,7 @@ class PokemonRedBlueWorld(World):
     # -MuffinJets#4559
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
+    settings: typing.ClassVar[PokemonSettings]
 
     data_version = 8
     required_client_version = (0, 3, 9)

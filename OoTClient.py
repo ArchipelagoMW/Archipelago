@@ -296,8 +296,6 @@ async def patch_and_run_game(apz5_file):
     comp_path = base_name + '.z64'
     # Load vanilla ROM, patch file, compress ROM
     rom_file_name = Utils.get_options()["oot_options"]["rom_file"]
-    if not os.path.exists(rom_file_name):
-        rom_file_name = Utils.user_path(rom_file_name)
     rom = Rom(rom_file_name)
 
     sub_file = None
