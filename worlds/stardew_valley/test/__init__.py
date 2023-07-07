@@ -6,6 +6,7 @@ from BaseClasses import MultiWorld
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
 from .. import StardewValleyWorld, options
+from ..mods.mod_data import ModNames
 from ...AutoWorld import call_all
 
 
@@ -30,7 +31,26 @@ class SVTestBase(WorldTestBase):
         should_run_default_tests = is_not_stardew_test and super().run_default_tests
         return should_run_default_tests
 
-    def allsanity_options(self):
+    def minimal_locations_maximal_items(self):
+        min_max_options = {
+            options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
+            options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
+            options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
+            options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
+            options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
+            options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
+            options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
+            options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
+            options.HelpWantedLocations.internal_name: 0,
+            options.Fishsanity.internal_name: options.Fishsanity.option_none,
+            options.Museumsanity.internal_name: options.Museumsanity.option_none,
+            options.Friendsanity.internal_name: options.Friendsanity.option_none,
+            options.NumberOfMovementBuffs.internal_name: 12,
+            options.NumberOfLuckBuffs.internal_name: 12,
+        }
+        return min_max_options
+
+    def allsanity_options_without_mods(self):
         allsanity = {
             options.Goal.internal_name: options.Goal.option_perfection,
             options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
@@ -48,12 +68,27 @@ class SVTestBase(WorldTestBase):
             options.HelpWantedLocations.internal_name: 56,
             options.Fishsanity.internal_name: options.Fishsanity.option_all,
             options.Museumsanity.internal_name: options.Museumsanity.option_all,
-            options.Friendsanity.internal_name: options.Friendsanity.option_all,
+            options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+            options.FriendsanityHeartSize.internal_name: 1,
             options.NumberOfMovementBuffs.internal_name: 12,
             options.NumberOfLuckBuffs.internal_name: 12,
             options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
             options.TrapItems.internal_name: options.TrapItems.option_nightmare,
         }
+        return allsanity
+
+    def allsanity_options_with_mods(self):
+        allsanity = {}
+        allsanity.update(self.allsanity_options_without_mods())
+        all_mods = (
+            ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator
+        )
+        allsanity.update({options.Mods.internal_name: all_mods})
         return allsanity
 
 pre_generated_worlds = {}

@@ -182,7 +182,7 @@ class TestModTraps(SVTestBase):
         for value in trap_option.options:
             if value == "no_traps":
                 continue
-            world_options = self.allsanity_options()
+            world_options = self.allsanity_options_without_mods()
             world_options.update({options.TrapItems.internal_name: trap_option.options[value], Mods: "Magic"})
             multi_world = setup_solo_multiworld(world_options)
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]

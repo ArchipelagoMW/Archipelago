@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from . import SVTestBase
+from . import setup_solo_multiworld, SVTestBase
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import items_by_group, Group
@@ -198,25 +198,36 @@ class TestLocationGeneration(SVTestBase):
 
 
 class TestLocationAndItemCount(SVTestBase):
-    options = {
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-        options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
-        options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
-        options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
-        options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
-        options.HelpWantedLocations.internal_name: 0,
-        options.Fishsanity.internal_name: options.Fishsanity.option_none,
-        options.Museumsanity.internal_name: options.Museumsanity.option_none,
-        options.Friendsanity.internal_name: options.Friendsanity.option_none,
-        options.NumberOfMovementBuffs.internal_name: 12,
-        options.NumberOfLuckBuffs.internal_name: 12,
-    }
-
     def test_minimal_location_maximal_items_still_valid(self):
-        self.assertGreaterEqual(len(self.multiworld.get_locations()), len(self.multiworld.get_items()))
+        min_max_options = self.minimal_locations_maximal_items()
+        multiworld = setup_solo_multiworld(min_max_options)
+        self.assertGreaterEqual(len(multiworld.get_locations()), len(multiworld.get_items()))
+
+    def test_allsanity_without_mods_has_at_least_locations(self):
+        expected_locations = 959
+        allsanity_options = self.allsanity_options_without_mods()
+        multiworld = setup_solo_multiworld(allsanity_options)
+        number_locations = len(multiworld.get_locations())
+        self.assertGreaterEqual(number_locations, expected_locations)
+        print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
+        if number_locations != expected_locations:
+            print(f"\tNew locations detected!"
+                  f"\n\tPlease update test_allsanity_without_mods_has_at_least_locations"
+                  f"\n\t\tExpected: {expected_locations}"
+                  f"\n\t\tActual: {number_locations}")
+
+    def test_allsanity_with_mods_has_at_least_locations(self):
+        expected_locations = 1211
+        allsanity_options = self.allsanity_options_with_mods()
+        multiworld = setup_solo_multiworld(allsanity_options)
+        number_locations = len(multiworld.get_locations())
+        self.assertGreaterEqual(number_locations, expected_locations)
+        print(f"\nStardew Valley - Allsanity Locations with all mods: {number_locations}")
+        if number_locations != expected_locations:
+            print(f"\tNew locations detected!"
+                  f"\n\tPlease update test_allsanity_with_mods_has_at_least_locations"
+                  f"\n\t\tExpected: {expected_locations}"
+                  f"\n\t\tActual: {number_locations}")
 
 
 class TestFriendsanityNone(SVTestBase):
