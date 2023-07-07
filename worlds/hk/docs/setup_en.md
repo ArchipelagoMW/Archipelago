@@ -6,6 +6,7 @@
 
 ## Optional Software
 * Archipelago Map Mod from Scarab+
+  * Ensure that both RandoMapMod and MapChanger are uninstalled or disabled as they are incompatible with Archipelago Map Mod.
 
 ## Installing the Archipelago Mod using Scarab
 1. Launch Scarab+ and ensure it locates your Hollow Knight installation directory.
