@@ -10871,6 +10871,34 @@
         <EditorCategories value="Race:Zerg"/>
         <Behavior value="AP_MedicSCBWOpticFlare"/>
     </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_ImpalerTentacleLM">
+        <ValidatorArray index="0" value="SpineCrawlerLMTargetFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_ImpalerTentacleU"/>
+        <Flags index="Return" value="1"/>
+        <AmmoUnit value="AP_SpineCrawlerWeapon"/>
+        <ReturnDelay value="0.175"/>
+        <ReturnMovers Link="SpineCrawlerTentacleRetractShort" IfRangeLTE="3"/>
+        <ReturnMovers Link="SpineCrawlerTentacleRetractLong" IfRangeLTE="7"/>
+        <Movers Link="SpineCrawlerTentacleExtendShort" IfRangeLTE="3"/>
+        <Movers Link="SpineCrawlerTentacleExtendLong" IfRangeLTE="7"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_ImpalerTentacleU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Amount value="25"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_SporeCrawler">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_SporeCrawlerU"/>
+        <AmmoUnit value="AP_SporeCrawlerWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_SporeCrawlerU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Biological" value="30"/>
+        <Amount value="15"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
     <CEffectApplyBehavior id="AP_ScienceVesselSCBWEMPShockwave@ABDecloak">
         <EditorCategories value="Race:Terran"/>
         <Behavior value="AP_ScienceVesselSCBWEMPShockwave@Decloak"/>
