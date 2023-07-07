@@ -2086,9 +2086,6 @@
         <DisplayName value="Weapon/Name/AP_WraithG"/>
         <Options index="Disabled" value="1"/>
         <Options index="Hidden" value="1"/>
-        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
-        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="0"/>
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_WraithGU"/>
@@ -2096,6 +2093,9 @@
         <Period value="1.694"/>
         <Effect value="AP_WraithGLaunchMissile"/>
         <AllowedMovement value="Slowing"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="AP_ImpalerTentacle">
         <EditorCategories value="Race:Zerg"/>

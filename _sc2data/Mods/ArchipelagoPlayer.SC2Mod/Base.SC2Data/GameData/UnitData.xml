@@ -1950,23 +1950,23 @@
             <LayoutButtons Face="AP_EMP" Type="AbilCmd" AbilCmd="AP_EMP,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_WeaponsFree" Type="AbilCmd" AbilCmd="AP_GhostWeaponsFree,0" Row="1" Column="3"/>
             <LayoutButtons Face="AP_GhostSCBWLockdown" Type="AbilCmd" AbilCmd="AP_GhostSCBWLockdown,Execute" Row="1" Column="1"/>
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_OcularImplants"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255"/>-->
+<!--                <Requirements value="AP_UseGhostOcularImplants"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="0"/>-->
+<!--            </LayoutButtons>-->
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_CriusSuit"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255,0"/>-->
+<!--                <Requirements value="AP_UseGhostCriusSuit"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="1"/>-->
+<!--            </LayoutButtons>-->
         </CardLayouts>
-        <!--            <LayoutButtons>-->
-        <!--                <Face value="AP_OcularImplants"/>-->
-        <!--                <Type value="Passive"/>-->
-        <!--                <AbilCmd value="255"/>-->
-        <!--                <Requirements value="AP_UseGhostOcularImplants"/>-->
-        <!--                <Row value="1"/>-->
-        <!--                <Column value="0"/>-->
-        <!--            </LayoutButtons>-->
-        <!--            <LayoutButtons>-->
-        <!--                <Face value="AP_CriusSuit"/>-->
-        <!--                <Type value="Passive"/>-->
-        <!--                <AbilCmd value="255,0"/>-->
-        <!--                <Requirements value="AP_UseGhostCriusSuit"/>-->
-        <!--                <Row value="1"/>-->
-        <!--                <Column value="1"/>-->
-        <!--            </LayoutButtons>-->
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
         <InnerRadius value="0.375"/>
@@ -2150,14 +2150,14 @@
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_SpectreNuke,1" Row="2" Column="4"/>
             <LayoutButtons Face="AP_SpectreHoldFire" Type="AbilCmd" AbilCmd="AP_SpectreHoldFire,0" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SpectreWeaponsFree" Type="AbilCmd" AbilCmd="AP_SpectreWeaponsFree,Execute" Row="1" Column="3"/>
-            <!--            <LayoutButtons>-->
-            <!--                <Face value="AP_NyxClassCloakingModule"/>-->
-            <!--                <Type value="Passive"/>-->
-            <!--                <AbilCmd value="255,255"/>-->
-            <!--                <Requirements value="AP_UseSpectreNyxSuit"/>-->
-            <!--                <Row value="1"/>-->
-            <!--                <Column value="1"/>-->
-            <!--            </LayoutButtons>-->
+<!--            <LayoutButtons>-->
+<!--                <Face value="AP_NyxClassCloakingModule"/>-->
+<!--                <Type value="Passive"/>-->
+<!--                <AbilCmd value="255,255"/>-->
+<!--                <Requirements value="AP_UseSpectreNyxSuit"/>-->
+<!--                <Row value="1"/>-->
+<!--                <Column value="1"/>-->
+<!--            </LayoutButtons>-->
             <LayoutButtons Face="AP_UltrasonicPulse" Type="AbilCmd" AbilCmd="AP_UltrasonicPulse,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SpectreNukeCalldown" Type="AbilCmd" AbilCmd="AP_TacNukeStrike,Execute" Row="1" Column="0"/>
             <LayoutButtons Face="AP_Obliterate" Type="AbilCmd" AbilCmd="AP_Obliterate,0" Row="2" Column="1"/>
