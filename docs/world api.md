@@ -91,10 +91,13 @@ added to the `World` object for easy access.
 
 ### World Options
 
-Any AP installation can provide settings for a world, for example a ROM file,
-accessible through `Utils.get_options()['<world>_options']['<option>']`.
+Any AP installation can provide settings for a world, for example a ROM file, accessible through `self.settings.option`
+or `cls.settings.option` (new API) or `Utils.get_options()["<world>_options"]["<option>"]` (deprecated).
 
-Users can set those in their `host.yaml` file.
+Users can set those in their `host.yaml` file. Some options may automatically open a file browser if a file is missing.
+
+Refer to [settings api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/settings%20api.md)
+for details.
 
 ### Locations
 
@@ -349,6 +352,8 @@ class MyGameWorld(World):
 ```python
 # world/mygame/__init__.py
 
+import settings
+import typing
 from .Options import mygame_options  # the options we defined earlier
 from .Items import mygame_items  # data used below to add items to the World
 from .Locations import mygame_locations  # same as above
@@ -356,16 +361,27 @@ from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
+
 class MyGameItem(Item):  # or from Items import MyGameItem
     game = "My Game"  # name of the game/world this item is from
 
+
 class MyGameLocation(Location):  # or from Locations import MyGameLocation
     game = "My Game"  # name of the game/world this location is in
+
+
+class MyGameSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """Insert help text for host.yaml here."""
+
+    rom_file: RomFile = RomFile("MyGame.sfc")
+
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
     game = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
+    settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
     # ID of first item and location, could be hard-coded but code may be easier
@@ -668,7 +684,7 @@ def generate_output(self, output_directory: str):
         "fix_xyz_glitch": self.multiworld.fix_xyz_glitch[self.player].value
     }
     # point to a ROM specified by the installation
-    src = Utils.get_options()["mygame_options"]["rom_file"]
+    src = self.settings.rom_file
     # or point to worlds/mygame/data/mod_template
     src = os.path.join(os.path.dirname(__file__), "data", "mod_template")
     # generate output path
