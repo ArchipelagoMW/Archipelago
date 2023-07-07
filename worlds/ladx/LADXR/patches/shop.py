@@ -1,6 +1,16 @@
 from ..assembler import ASM
 
-
+# Patches the max rupee count to be 9999
+# works, but (1) needs testing at 9999
+# (2) needs GUI rendering support code
+def patchMaxRupees(rom):
+    rom.patch(0x02, 0x6296 - 0x4000, "09", "63")
+    
+    rom.patch(0x02, 0x6292 - 0x4000, "0A", "64")
+    # noop out the cp to 0x10, we want to instead just check the daa overflow
+    rom.patch(0x02, 0x625C - 0x4000, "FE1038", "000030")
+    rom.patch(0x02, 0x6261 - 0x4000, "09", "99")
+        
 def fixShop(rom):
     # Move shield visuals to the 2nd slot, and arrow to 3th slot
     rom.patch(0x04, 0x3732 + 22, "986A027FB2B098AC01BAB1", "9867027FB2B098A801BAB1")

@@ -80,7 +80,7 @@ class GBContext(CommonContext):
             await super(GBContext, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to Bizhawk to get Player information')
+            logger.info('Awaiting connection to EmuHawk to get Player information')
             return
 
         await self.send_connect()
