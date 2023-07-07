@@ -1,4 +1,9 @@
 import Utils
+import settings
+import base64
+import threading
+import requests
+import yaml
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
@@ -7,10 +12,15 @@ from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
 from .Options import option_definitions
 from .Client import FFMQClient
-import base64
-import threading
-import requests
-import yaml
+
+
+class FFMQSettings(settings.Group):
+    class APIUrls(list):
+        """A list of API URLs to get map shuffle, crest shuffle, and battlefield reward shuffle data from."""
+    api_urls: APIUrls = [
+        "https://api.ffmqrando.net/",
+        "http://ffmqr.jalchavware.com:5271/"
+    ]
 
 
 class FFMQWebWorld(WebWorld):
@@ -48,6 +58,7 @@ class FFMQWorld(World):
     data_version = 1
     
     web = FFMQWebWorld()
+    settings: FFMQSettings
 
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
