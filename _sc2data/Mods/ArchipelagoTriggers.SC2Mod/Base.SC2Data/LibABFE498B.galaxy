@@ -431,8 +431,14 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockFirebat (int lp_player) {
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauder (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
+    libABFE498B_gv_aP_Triggers_Terran_hasMarauder[lp_player] = true;
     TechTreeUnitAllow(lp_player, "AP_Barracks", true);
-    TechTreeUnitAllow(lp_player, "AP_BarracksTechLab", true);
+    if ((TechTreeUpgradeCount(lp_player, "AP_InternalizedTechModuleMarauder", c_techCountCompleteOnly) >= 1)) {
+        TechTreeUnitAllow(lp_player, "AP_BarracksReactor", true);
+    }
+    else {
+        TechTreeUnitAllow(lp_player, "AP_BarracksTechLab", true);
+    }
     TechTreeUnitAllow(lp_player, "AP_Marauder", true);
 }
 
@@ -479,8 +485,14 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockGoliath (int lp_player) {
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTank (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
+    libABFE498B_gv_aP_Triggers_Terran_hasSiegeTank[lp_player] = true;
     TechTreeUnitAllow(lp_player, "AP_Factory", true);
-    TechTreeUnitAllow(lp_player, "AP_FactoryTechLab", true);
+    if ((TechTreeUpgradeCount(lp_player, "AP_InternalizedTechModuleSiegeTank", c_techCountCompleteOnly) >= 1)) {
+        TechTreeUnitAllow(lp_player, "AP_FactoryReactor", true);
+    }
+    else {
+        TechTreeUnitAllow(lp_player, "AP_FactoryTechLab", true);
+    }
     TechTreeUnitAllow(lp_player, "AP_SiegeTank", true);
 }
 
@@ -511,16 +523,28 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockViking (int lp_player) {
 void libABFE498B_gf_AP_Triggers_Terran_unlockBanshee (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
+    libABFE498B_gv_aP_Triggers_Terran_hasBanshee[lp_player] = true;
     TechTreeUnitAllow(lp_player, "AP_Starport", true);
-    TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    if ((TechTreeUpgradeCount(lp_player, "AP_InternalizedTechModuleBanshee", c_techCountCompleteOnly) >= 1)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+    else {
+        TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    }
     TechTreeUnitAllow(lp_player, "AP_Banshee", true);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiser (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
+    libABFE498B_gv_aP_Triggers_Terran_hasBattlecruiser[lp_player] = true;
     TechTreeUnitAllow(lp_player, "AP_Starport", true);
-    TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    if ((TechTreeUpgradeCount(lp_player, "AP_InternalizedTechModuleBattlecruiser", c_techCountCompleteOnly) >= 1)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+    else {
+        TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    }
     TechTreeUnitAllow(lp_player, "AP_FusionCore", true);
     TechTreeUnitAllow(lp_player, "AP_Battlecruiser", true);
 }
@@ -557,8 +581,14 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockThor (int lp_player) {
 void libABFE498B_gf_AP_Triggers_Terran_unlockRaven (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
+    libABFE498B_gv_aP_Triggers_Terran_hasRaven[lp_player] = true;
     TechTreeUnitAllow(lp_player, "AP_Starport", true);
-    TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    if ((TechTreeUpgradeCount(lp_player, "AP_InternalizedTechModuleRaven", c_techCountCompleteOnly) >= 1)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+    else {
+        TechTreeUnitAllow(lp_player, "AP_StarportTechLab", true);
+    }
     TechTreeUnitAllow(lp_player, "AP_Raven", true);
 }
 
@@ -863,6 +893,16 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderMagRailMunitions (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MagrailMunitionsMarauder", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderInternalTechModule (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_InternalizedTechModuleMarauder", 1);
+    if ((libABFE498B_gv_aP_Triggers_Terran_hasMarauder[lp_player] == true)) {
+        TechTreeUnitAllow(lp_player, "AP_BarracksReactor", true);
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1102,6 +1142,16 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech (int lp_
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RaynorImprovedSiegeMode", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankInternalTechModule (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_InternalizedTechModuleSiegeTank", 1);
+    if ((libABFE498B_gv_aP_Triggers_Terran_hasSiegeTank[lp_player] == true)) {
+        TechTreeUnitAllow(lp_player, "AP_FactoryReactor", true);
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1205,6 +1255,16 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystem (int lp
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemBanshee", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeInternalTechModule (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_InternalizedTechModuleBanshee", 1);
+    if ((libABFE498B_gv_aP_Triggers_Terran_hasBanshee[lp_player] == true)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1239,6 +1299,16 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserOptimizedLogistics (in
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_FastBuildBattlecruiser", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserInternalTechModule (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_InternalizedTechModuleBattlecruiser", 1);
+    if ((libABFE498B_gv_aP_Triggers_Terran_hasBattlecruiser[lp_player] == true)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostOcularImplants (int lp_player) {
@@ -1341,6 +1411,16 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockRavenAntiArmorMissile (int lp_playe
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RavenAntiArmorMissile", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockRavenInternalTechModule (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_InternalizedTechModuleRaven", 1);
+    if ((libABFE498B_gv_aP_Triggers_Terran_hasRaven[lp_player] == true)) {
+        TechTreeUnitAllow(lp_player, "AP_StarportReactor", true);
+    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselEMPShockwave (int lp_player) {

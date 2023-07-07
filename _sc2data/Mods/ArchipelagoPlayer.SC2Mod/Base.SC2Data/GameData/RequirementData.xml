@@ -1594,4 +1594,8 @@
     </CRequirement>
     <CRequirement id="AP_ScienceVesselSCBWEMPShockwave" parent="AP_SCBW_AbilReq"/>
     <CRequirement id="AP_ScienceVesselSCBWDefensiveMatrix" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_HaveFusionCore">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

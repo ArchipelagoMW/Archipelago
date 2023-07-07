@@ -4710,4 +4710,50 @@
     <CUpgrade id="AP_FastBuildHellion">
         <EffectArray Operation="Subtract" Reference="Abil,AP_FactoryTrain,InfoArray[Train6].Time" Value="20.000000"/>
     </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleMarauder">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marauder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train4].Button.Requirements"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleSiegeTank">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SiegeTank"/>
+        <AffectedUnitArray value="AP_SiegeTankSieged"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_FactoryTrain,InfoArray[Train2].Button.Requirements"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleBattlecruiser">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Starport"/>
+        <AffectedUnitArray value="Battlecruiser"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train4].Button.Requirements" Value="AP_HaveFusionCore"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleRaven">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train3].Button.Requirements"/>
+        <AffectedUnitArray value="AP_Raven"/>
+        <AffectedUnitArray value="AP_Starport"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleBanshee">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train2].Button.Requirements"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Banshee"/>
+    </CUpgrade>
 </Catalog>
