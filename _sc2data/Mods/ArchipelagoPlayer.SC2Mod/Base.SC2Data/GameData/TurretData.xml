@@ -207,4 +207,18 @@
         <YawIdleRate value="720"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_SporeCrawler">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SporeCrawlerUprooted">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

@@ -220,6 +220,8 @@ Abil/Name/AP_SpiderMineUnburrowRangeDummy=Spider Mine Unburrow Range Dummy
 Abil/Name/AP_SpineCrawlerRoot=Root
 Abil/Name/AP_SpineCrawlerUproot=Uproot
 Abil/Name/AP_SpireResearch=Research (Spire & GreaterSpire)
+Abil/Name/AP_SporeCrawlerRoot=Root
+Abil/Name/AP_SporeCrawlerUproot=Uproot
 Abil/Name/AP_StargateTrain=Train (Stargate)
 Abil/Name/AP_StargateWarpTrain=Stargate Warp Train
 Abil/Name/AP_StarportLand=Land
@@ -875,10 +877,15 @@ Button/Name/AP_SpiderMine=Deploy Spider Mine
 Button/Name/AP_SpiderMineDamage=High-Explosive Munition
 Button/Name/AP_SpiderMineReplenish=Replenish Spider Mine
 Button/Name/AP_SpineCrawler=Mutate into Spine Crawler
+Button/Name/AP_SpineCrawlerPassive=Spine Crawler
 Button/Name/AP_SpineCrawlerRoot=Root
 Button/Name/AP_SpineCrawlerRootCancel=Cancel Root command
 Button/Name/AP_SpineCrawlerUproot=Uproot
+Button/Name/AP_SporeCrawler=Mutate into Spore Crawler
 Button/Name/AP_SporeCrawlerPassive=Spore Crawler
+Button/Name/AP_SporeCrawlerRoot=Root
+Button/Name/AP_SporeCrawlerRootCancel=Cancel Root command
+Button/Name/AP_SporeCrawlerUproot=Uproot
 Button/Name/AP_SquadSight=Squad Sight
 Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
 Button/Name/AP_StalkerBlinkMultiple=Blink
@@ -1003,9 +1010,6 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_SpineCrawler=Mutate into Spine Crawler
-Button/Name/AP_SpineCrawlerPassive=Spine Crawler
-Button/Name/AP_SpineCrawlerRootCancel=Cancel Root command
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1469,11 +1473,15 @@ Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range,
 Button/Tooltip/AP_SpiderMineDamage=Spider Mines do more damage when exploding
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
 Button/Tooltip/AP_SpineCrawler=Anti-ground defensive structure. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_SpineCrawlerPassive=Spawning Pool allows you to mutate Drones into Spine Crawlers.
 Button/Tooltip/AP_SpineCrawlerRoot=Roots the Spine Crawler. A rooted Spine Crawler has the ability to attack ground units but is unable to move.
 Button/Tooltip/AP_SpineCrawlerUproot=Uproots the Spine Crawler. An uprooted Spine Crawler has the ability to move but cannot attack. Moves much faster on creep.
 Button/Tooltip/AP_SpineCrawlerUprooted=Uprooted anti-ground defensive structure. Can move when uprooted, but cannot attack. Must plant itself in creep to attack.
 Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
+Button/Tooltip/AP_SporeCrawler=Anti-air defensive structure. <n/><n/><c val="ffff8a">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_SporeCrawlerPassive=Evolution Chamber allows you to mutate Drones into Spore Crawlers.
+Button/Tooltip/AP_SporeCrawlerUproot=Uproots the Spore Crawler. An uprooted Spore Crawler has the ability to move but cannot attack. Moves much faster on creep.
+Button/Tooltip/AP_SporeCrawlerUprooted=Uprooted anti-air defensive structure. Can move when uprooted, but cannot attack. Must plant itself in creep to attack.
 Button/Tooltip/AP_SquadSight=Increases the non-melee attack range of all nearby friendly units by <d ref="Behavior,AP_ObserverSquadSight,Modification.RangedWeaponRange"/>.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
 Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1618,8 +1626,7 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_SpineCrawler=Anti-ground defensive structure. <n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_SpineCrawlerPassive=Spawning Pool allows you to mutate Drones into Spine Crawlers.
+Button/Tooltip/AP_SporeCrawlerRoot=Roots the Spore Crawler. A rooted Spore Crawler has the ability to attack air units and detect cloaked units, but it's unable to move.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2579,6 +2586,8 @@ Effect/Name/AP_SpectreNukeSuicide=Spectre Nuke Suicide
 Effect/Name/AP_SpectreWeaponsFree=Spectre Weapons Free
 Effect/Name/AP_SpiderMineInvulnerable=Spider Mine Invulnerable
 Effect/Name/AP_SpiderMineVulnerable=Spider Mine Vulnerable
+Effect/Name/AP_SporeCrawler=Spore Crawler (Missile)
+Effect/Name/AP_SporeCrawlerU=Spore Crawler (Damage)
 Effect/Name/AP_StalkerEntropyLanceSearch=Stalker - Entropy Lance (Search)
 Effect/Name/AP_StalkerEntropyLanceSearchSet=Stalker - Entropy Lance (Impact Set)
 Effect/Name/AP_StalkerEntropyLanceSecondaryDamage=Entropy Lance Secondary Damage
@@ -3097,6 +3106,9 @@ Unit/Name/AP_SpineCrawler=Spine Crawler
 Unit/Name/AP_SpineCrawlerUprooted=Spine Crawler
 Unit/Name/AP_SpineCrawlerWeapon=Spine Crawler
 Unit/Name/AP_Spire=Spire
+Unit/Name/AP_SporeCrawler=Spore Crawler
+Unit/Name/AP_SporeCrawlerUprooted=Spore Crawler
+Unit/Name/AP_SporeCrawlerWeapon=Spore Crawler Weapon
 Unit/Name/AP_Stalker=Stalker
 Unit/Name/AP_StalkerPurifier=Instigator
 Unit/Name/AP_StalkerSecondaryWeapon=Stalker Secondary Weapon
@@ -3467,14 +3479,13 @@ Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
-Upgrade/Name/AP_K5TwoDrones=K5 Two Drones
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
 Weapon/Name/AP_AcidSaliva=Acid Saliva
+Weapon/Name/AP_AcidSpew=Acid Spew
 Weapon/Name/AP_Adept=Purifier Glaive Cannon
 Weapon/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Weapon/Name/AP_AnnihilatorParticleDisruptors=Particle Disruptors

@@ -10887,4 +10887,15 @@
         <AttributeBonus index="Armored" value="5"/>
         <Amount value="25"/>
     </CEffectDamage>
+    <CEffectLaunchMissile id="AP_SporeCrawler">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_SporeCrawlerU"/>
+        <AmmoUnit value="AP_SporeCrawlerWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_SporeCrawlerU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Biological" value="30"/>
+        <Amount value="15"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
 </Catalog>

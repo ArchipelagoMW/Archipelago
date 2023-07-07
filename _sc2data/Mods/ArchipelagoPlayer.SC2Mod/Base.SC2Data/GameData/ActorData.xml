@@ -16730,6 +16730,116 @@
         <On Terms="TurretEnable.AP_SpineCrawlerUprooted" Send="Create"/>
         <On Terms="TurretEnable.AP_SpineCrawler" Send="Destroy"/>
     </CActorTurret>
+    <CActorUnit id="AP_SporeCrawler" parent="ZergBuildingEx" unitName="AP_SporeCrawler">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Root" Send="Create LargeBurrowDownEffects"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Root" Send="Create BurrowDownLarge"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Uproot" Send="Create LargeBurrowUpEffects"/>
+        <On Terms="AbilMorph.*.Start; AbilKey Uproot" Send="Create BurrowUpLarge"/>
+        <On Terms="UnitBirth.AP_SporeCrawlerUprooted" Send="Create"/>
+        <On Terms="UnitBirth.AP_SporeCrawlerUprooted" Send="AnimGroupRemove Burrow"/>
+        <On Terms="UnitBirth.AP_SporeCrawlerUprooted" Target="_BuildingTerrainFlatten" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_SporeCrawlerUprooted" Send="AnimBlendTimeApply 0.100000"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawlerUprooted" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawlerUprooted" Send="AnimPlay Unburrow Unburrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawlerUprooted" Target="_BuildingTerrainFlatten" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawlerUprooted" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawlerUprooted" Send="AnimBlendTimeApply 0.100000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_SporeCrawler" Send="AnimBracketStop Morph Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawler" Send="AnimBracketStart Morph IGNORE Burrow Stand,Burrow ContentPlayOnce"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawler" Send="Create BuildingTerrainFlatten"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawler" Send="Create SporeCrawlerBurrowLoop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawler" Send="AnimGroupApply Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawler" Send="AnimBracketStop Morph"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawler" Target="SporeCrawlerBurrowLoop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_SporeCrawler" Target="SporeCrawlerBurrowLoop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawler" Send="AnimBlendTimeApply 0.400000"/>
+        <On Terms="Behavior.Corruption.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.Corruption.Off" Send="AnimSetPaused Morph 0"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Burrow"/>
+        <On Terms="UnitDeathCustomize.AP_SporeCrawlerUprooted" Send="DeathCustomize Uprooted"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Morph" Send="DeathCustomize Uprooted"/>
+        <On Terms="UnitBirth.AP_SporeCrawlerUprooted" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawlerUprooted" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SporeCrawler" Send="TerrainSquibDeactivate"/>
+        <On Terms="Behavior.ZeratulStun.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.ZeratulStun.Off" Send="AnimSetPaused Morph 0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="SporeCrawler"/>
+        <AnimBlendTime value="0.400000"/>
+        <EventDataSound Name="SporeCrawlerBurrowEnd" Actor="UnitSound" Sound="Zerg_BurrowLarge"/>
+        <BuildModel value="SporeCrawler"/>
+        <DeathArray index="Normal" ModelLink="SporeCrawlerDeath" SoundLink="SporeCrawler_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="SporeCrawlerDeathUnderConstruction" SoundLink="SporeCrawler_Explode"/>
+        <DeathCustoms ModelLink="SporeCrawlerUnburrowedDeath" Name="Uprooted"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="SporeCrawlerPlacement"/>
+        <PlacementSound value="Zerg_BuildingPlacementSmall"/>
+        <PlacementActorModel value="SporeCrawlerPlacementModel"/>
+        <PlaceholderActorModel value="SporeCrawlerPlacementModel"/>
+        <PortraitModel value="SporeCrawlerPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="2.000000"/>
+            <RangeDown value="2.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive15"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="0.7968"/>
+        <BarOffset value="60"/>
+        <BarWidth value="90"/>
+        <ErrorArray Error="CantSeeBuildLocation" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantSeeLandLocation" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantLandLocationInvalid" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantBuildTooFarFromCreepSource" Sound="Alert_ZergPlaceOnCreep" GroupSound="Alert_ZergPlaceOnCreep"/>
+        <ErrorArray Error="CantLandTooFarFromCreepSource" Sound="Alert_ZergPlaceOnCreep" GroupSound="Alert_ZergPlaceOnCreep"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-SporeCrawler.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-sporecrawler.dds"/>
+        <NameOffset value="30"/>
+        <SoundArray index="Ready" value="SporeCrawler_Ready"/>
+        <SoundArray index="What" value="SporeCrawler_What"/>
+        <SoundArray index="Yes" value="SporeCrawler_Yes"/>
+        <SoundArray index="Attack" value="SporeCrawler_Attack"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-sporecrawler.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-SporeCrawler.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SporeCrawlerAttack" parent="GenericAttack" effectImpact="AP_SporeCrawlerU" effectLaunch="AP_SporeCrawler">
+        <LaunchAssets Sound="SporeCrawler_AttackLaunch"/>
+        <ImpactMap index="None" Model="SporeCrawlerAttackImpact" Sound="SporeCrawler_AttackImpact"/>
+        <ImpactPhysics Name="AcidSpewImpact" MatchKeys="Basic" Physics="SporeCrawlerAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_SporeCrawlerAttackMissile" parent="GenericAttackMissile" unitName="AP_SporeCrawlerWeapon">
+        <Model value="SporeCrawlerWeapon"/>
+    </CActorMissile>
+    <CActorSplat id="AP_SporeCrawlerSplat" parent="BurrowedSplatBase">
+        <On Terms="UnitBirth.AP_SporeCrawler" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SporeCrawler" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_SporeCrawler" Send="RefClear ::Host"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_SporeCrawler" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <AutoScaleFactor value="0.800000"/>
+    </CActorSplat>
+    <CActorTurret id="AP_SporeCrawlerTurret">
+        <On Terms="TurretEnable.AP_SporeCrawler" Send="Create"/>
+        <On Terms="TurretEnable.AP_SporeCrawlerUprooted" Send="Destroy"/>
+    </CActorTurret>
+    <CActorTurret id="AP_SporeCrawlerUprootedTurret">
+        <On Terms="TurretEnable.AP_SporeCrawlerUprooted" Send="Create"/>
+        <On Terms="TurretEnable.AP_SporeCrawler" Send="Destroy"/>
+    </CActorTurret>
+    <CActorSound id="AP_SporeCrawler_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_SporeCrawler; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeath.AP_SporeCrawlerUprooted; PassChance 25.000000" Send="Create"/>
+        <Sound value="SporeCrawler_Death"/>
+    </CActorSound>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
