@@ -171,6 +171,8 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselEMPShockwave (int lp_p
 void libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselDefensiveMatrix (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneTargetingOptics (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneRapidFireLaunchers (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player);

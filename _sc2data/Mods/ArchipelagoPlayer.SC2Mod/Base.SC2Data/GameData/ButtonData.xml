@@ -2736,4 +2736,8 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-swann-defensivematrix.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_LockOnRangeUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-swann-targetingoptics.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-swann-targetingoptics.dds"/>
+    </CButton>
 </Catalog>

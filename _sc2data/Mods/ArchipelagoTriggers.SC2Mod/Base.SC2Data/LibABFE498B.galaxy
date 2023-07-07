@@ -1343,6 +1343,18 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MagFieldLaunchers", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneTargetingOptics (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CycloneLockOnRangeUpgrade", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneRapidFireLaunchers (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CycloneRapidFireLaunchers", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

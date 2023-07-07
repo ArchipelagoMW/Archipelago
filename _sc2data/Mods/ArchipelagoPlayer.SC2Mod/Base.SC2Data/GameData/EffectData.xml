@@ -2356,6 +2356,25 @@
         <PeriodicValidator value="AP_LockOnGroundAirPeriodicValidators"/>
         <PeriodicEffectArray value="AP_CycloneWeaponLaunchMissileSwitch"/>
         <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="1"/>
         <RevealRadius value="2"/>
     </CEffectCreatePersistent>
     <CEffectSet id="AP_LockOnClearSet">

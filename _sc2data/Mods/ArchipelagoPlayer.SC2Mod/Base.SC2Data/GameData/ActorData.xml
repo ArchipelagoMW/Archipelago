@@ -18422,21 +18422,21 @@
     <CActorAction id="AP_CycloneAirAttackRight" parent="GenericAttack" effectImpact="AP_CycloneAirWeaponDamage" effectLaunch="AP_CycloneAirWeaponLaunchMissileRight">
         <LaunchAttachQuery Methods="Weapon 2"/>
         <LaunchAssets Model="CycloneMissileLaunch" Sound="Cyclone_Missile_Launch"/>
-        <Missile value="CycloneMissileLargeAir"/>
+        <Missile value="AP_CycloneMissileLargeAir"/>
         <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
         <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
     </CActorAction>
     <CActorAction id="AP_CycloneAttackLeft" parent="GenericAttack" effectImpact="AP_CycloneWeaponDamage" effectLaunch="AP_CycloneWeaponLaunchMissileLeft">
         <LaunchAttachQuery Methods="Weapon 1"/>
         <LaunchAssets Sound="Cyclone_Missile_Launch"/>
-        <Missile value="CycloneMissileLarge"/>
+        <Missile value="AP_CycloneMissileLarge"/>
         <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
         <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
     </CActorAction>
     <CActorAction id="AP_CycloneAttackRight" parent="GenericAttack" effectImpact="AP_CycloneWeaponDamage" effectLaunch="AP_CycloneWeaponLaunchMissileRight">
         <LaunchAttachQuery Methods="Weapon 2"/>
         <LaunchAssets Sound="Cyclone_Missile_Launch"/>
-        <Missile value="CycloneMissileLarge"/>
+        <Missile value="AP_CycloneMissileLarge"/>
         <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
         <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
     </CActorAction>

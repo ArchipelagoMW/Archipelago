@@ -1466,22 +1466,22 @@
         <Race value="Terr"/>
         <ScoreAmount value="300"/>
         <ScoreResult value="BuildOrder"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[4]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[5]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[6]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[7]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[8]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[9]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[10]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[11]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[4]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[5]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[6]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[7]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[8]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[9]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[10]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[11]" Value="0.294"/>
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

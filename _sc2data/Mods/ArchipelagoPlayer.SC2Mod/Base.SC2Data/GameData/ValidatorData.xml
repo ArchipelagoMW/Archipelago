@@ -1444,6 +1444,11 @@
         <Compare value="GT"/>
         <Behavior value="AP_LockOnDisableAttack"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CycloneWeaponLaunchMissileAlternate">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_CycloneWeaponLaunchMissileAlternate"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitType id="AP_IsVanillaBunker">
         <Value value="Bunker"/>
     </CValidatorUnitType>

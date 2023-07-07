@@ -533,23 +533,23 @@
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnAirUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneAirUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneAirUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnDamageUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnRangeUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneRapidFireLaunchers">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveMagFieldLaunchers">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeMagFieldLaunchersCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagFieldLaunchersCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnCycloneLockOnAirUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>

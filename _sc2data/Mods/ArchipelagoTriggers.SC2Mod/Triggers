@@ -5625,6 +5625,8 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="378FBD60"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="681259FC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="5FF93E28"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="95432208"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="482A9B78"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="113B7B29"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="5B121ED1"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="0918D723"/>
@@ -9698,6 +9700,78 @@
         <Element Type="Param" Id="A84BF1E5">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_MagFieldLaunchers</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="95432208">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="DCAFA8B4"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="6E1A9F70"/>
+        </Element>
+        <Element Type="ParamDef" Id="DCAFA8B4">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="8E3BFD85"/>
+        </Element>
+        <Element Type="Param" Id="8E3BFD85">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="6E1A9F70">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="589D226D"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="71DAF9C5"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="76F240A8"/>
+        </Element>
+        <Element Type="Param" Id="589D226D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="DCAFA8B4"/>
+        </Element>
+        <Element Type="Param" Id="71DAF9C5">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="76F240A8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_CycloneLockOnRangeUpgrade</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="482A9B78">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="BABA11AE"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="9543E481"/>
+        </Element>
+        <Element Type="ParamDef" Id="BABA11AE">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="FB271841"/>
+        </Element>
+        <Element Type="Param" Id="FB271841">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="9543E481">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="03001143"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="5089E011"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="CE492071"/>
+        </Element>
+        <Element Type="Param" Id="03001143">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="BABA11AE"/>
+        </Element>
+        <Element Type="Param" Id="5089E011">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="CE492071">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_CycloneRapidFireLaunchers</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

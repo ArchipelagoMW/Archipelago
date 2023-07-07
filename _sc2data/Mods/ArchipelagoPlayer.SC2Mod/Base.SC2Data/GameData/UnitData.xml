@@ -3312,6 +3312,8 @@
             <LayoutButtons Face="AP_LockOnCancel" Type="AbilCmd" AbilCmd="AP_LockOnCancel,0" Row="2" Column="4"/>
             <LayoutButtons Face="AP_CycloneLockOnDamageUpgrade" Type="Passive" Requirements="AP_HaveCycloneLockOnDamageUpgrade" Row="1" Column="0"/>
             <LayoutButtons Face="AP_MagFieldLaunchers" Type="Passive" Requirements="AP_HaveMagFieldLaunchers" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_LockOnRangeUpgrade" Type="Passive" Requirements="AP_HaveCycloneLockOnRangeUpgrade" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_CycloneRapidFireLaunchers" Type="Passive" Requirements="AP_HaveCycloneRapidFireLaunchers" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <InnerRadius value="0.5"/>
