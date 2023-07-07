@@ -18294,6 +18294,12 @@
         <On Terms="ActorCreation" Send="Create AP_WidowMineAttackLaunch"/>
         <On Terms="ActorCreation" Send="Create AP_HH_TornadoMissile_LaunchBlossom_AS"/>
     </CActorMissile>
+    <CActorAction id="AP_HHWidowMineBlossomWeaponAttack" parent="GenericAttack" effectImpact="AP_HHWidowMineBlossomExplodeSplashSearch" effectLaunch="AP_HHWidowMineBlossomLM">
+        <LaunchSiteOps Ops="SOpForwardPointsUp"/>
+        <LaunchAttachQuery Methods="Center"/>
+        <ImpactMap index="None" Model="" Sound=""/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
     <CActorSound id="AP_HH_TornadoMissile_LaunchBlossom_AS" parent="GenericAttackLaunchSound">
         <Inherits index="Visibility" value="0"/>
         <Sound value="AP_HH_TornadoMissile_Blossom_Launch"/>
