@@ -6038,6 +6038,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="BADDFA87"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8826925C"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="BF54FEC3"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="5FA0F67A"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="A001B908"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="DD02F4F8"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="50C99E30"/>
@@ -6075,6 +6076,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="1879BA59"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="FC772A85"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="CCA989E6"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="0D9964C2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="311283F0"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="DBFFE0A0"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="87978982"/>
@@ -6084,6 +6086,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="CEC91B58"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="54410EA7"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="2CD655BE"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="60946550"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="99767BCC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="237A0428"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="76A4A1A3"/>
@@ -6733,6 +6736,42 @@
         <Element Type="Param" Id="C0F020D4">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_MedicSCBWOpticFlareResearch</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="5FA0F67A">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="AE345364"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="790420DC"/>
+        </Element>
+        <Element Type="ParamDef" Id="AE345364">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="F05573A1"/>
+        </Element>
+        <Element Type="Param" Id="F05573A1">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="790420DC">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F97A884D"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="C71DDE10"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F83A25E0"/>
+        </Element>
+        <Element Type="Param" Id="F97A884D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="AE345364"/>
+        </Element>
+        <Element Type="Param" Id="C71DDE10">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="F83A25E0">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_OptimizedLogisticsMedic</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>
@@ -8549,6 +8588,42 @@
             <ParameterDef Type="ParamDef" Library="Ntve" Id="02BBDCC1"/>
             <Variable Type="Variable" Library="ABFE498B" Id="4AA65A5B"/>
         </Element>
+        <Element Type="FunctionDef" Id="0D9964C2">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="590544C7"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="58962524"/>
+        </Element>
+        <Element Type="ParamDef" Id="590544C7">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="707FB32F"/>
+        </Element>
+        <Element Type="Param" Id="707FB32F">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="58962524">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="20AB5561"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="494574DC"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="D33AC38D"/>
+        </Element>
+        <Element Type="Param" Id="20AB5561">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="590544C7"/>
+        </Element>
+        <Element Type="Param" Id="494574DC">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="D33AC38D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_OptimizedLogisticsDiamondback</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
         <Element Type="FunctionDef" Id="311283F0">
             <FlagAction/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="6FAEA8A6"/>
@@ -8923,6 +8998,42 @@
             <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
             <Value>true</Value>
             <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionDef" Id="60946550">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="17FF7EA9"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="BA2C0D6A"/>
+        </Element>
+        <Element Type="ParamDef" Id="17FF7EA9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="E2BF8D82"/>
+        </Element>
+        <Element Type="Param" Id="E2BF8D82">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="BA2C0D6A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="99A9B883"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="804F671B"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="AFB5889E"/>
+        </Element>
+        <Element Type="Param" Id="99A9B883">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="17FF7EA9"/>
+        </Element>
+        <Element Type="Param" Id="804F671B">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="AFB5889E">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_OptimizedLogisticsPredator</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
         </Element>
         <Element Type="FunctionDef" Id="99767BCC">
             <FlagAction/>

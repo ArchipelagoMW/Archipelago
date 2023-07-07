@@ -831,6 +831,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MedicSCBWOpticFlareResearch", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOptimizedLogistics (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_OptimizedLogisticsMedic", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1100,6 +1106,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors (int lp_
     }
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackOptimizedLogistics (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_OptimizedLogisticsDiamondback", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1156,6 +1168,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankInternalTechModule (int lp
         TechTreeUnitAllow(lp_player, "AP_FactoryReactor", true);
     }
 
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockPredatorOptimizedLogistics (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_OptimizedLogisticsPredator", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {

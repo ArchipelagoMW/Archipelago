@@ -4780,4 +4780,20 @@
         <AffectedUnitArray value="AP_DevilDog"/>
         <AffectedUnitArray value="AP_DevilDogOptimizedLogistics"/>
     </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsPredator">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Predator,CostResource[Vespene]" Value="75"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_Predator,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Predator"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsMedic">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Vespene]" Value="25"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_Medic,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Medic"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsDiamondback">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Diamondback,CostResource[Vespene]" Value="50"/>
+        <EffectArray Operation="Add" Reference="Unit,AP_Diamondback,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Diamondback"/>
+    </CUpgrade>
 </Catalog>

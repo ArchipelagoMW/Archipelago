@@ -94,6 +94,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int l
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicRestoration (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMedicOptimizedLogistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatJuggernautPlating (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_player, int lp_level);
@@ -131,6 +132,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell (int
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackHyperfluxor (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackOptimizedLogistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankShapedBlast (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets (int lp_player);
@@ -140,6 +142,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange (int lp_pl
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankInternalTechModule (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockPredatorOptimizedLogistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacExpandedHull (int lp_player);
