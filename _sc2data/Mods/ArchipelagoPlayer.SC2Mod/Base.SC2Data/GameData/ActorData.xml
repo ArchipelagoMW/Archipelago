@@ -18191,6 +18191,7 @@
     </CActorForceSphere>
     <CActorModel id="AP_WidowMineAttackImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_WidowMineExplodeSplashSearch.Start" Send="Create"/>
+        <On Terms="Effect.AP_HHWidowMineBlossomExplodeSplashSearch.Start" Send="Create"/>
         <Model value="WidowMineAttackImpact"/>
     </CActorModel>
     <CActorModel id="AP_WidowMineAttackLaunch" parent="ModelAnimationStyleOneShot">
