@@ -23,7 +23,7 @@ ModuleUpdate.update()
 kh2_loc_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
 kh2_loc_id_to_loc_name = {v: k for k, v in kh2_loc_name_to_id.items()}
 kh2_item_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["item_name_to_id"]
-kh2_item_id_to_name = {v: k for k, v in kh2_loc_name_to_id.items()}
+kh2_item_id_to_name = {v: k for k, v in kh2_item_name_to_id.items()}
 # class KH2CommandProcessor(ClientCommandProcessor):
 
 
@@ -44,7 +44,7 @@ class KH2Context(CommonContext):
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_loc_name_to_id = kh2_loc_name_to_id
-        self.kh2_item_name_to_id=kh2_item_name_to_id
+        self.kh2_item_name_to_id= kh2_item_name_to_id
         self.lookup_id_to_item = kh2_item_id_to_name
         self.lookup_id_to_location = kh2_loc_id_to_loc_name
 
@@ -311,12 +311,13 @@ class KH2Context(CommonContext):
             if currentworldint in self.worldid:
                 curworldid = self.worldid[currentworldint]
                 for location, data in curworldid.items():
-                    locationId = kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
-                            and (int.from_bytes(
-                            self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                            "big") & 0x1 << data.bitIndex) > 0:
-                        self.sending = self.sending + [(int(locationId))]
+                    if location in kh2_loc_name_to_id.keys():
+                        locationId = kh2_loc_name_to_id[location]
+                        if locationId not in self.locations_checked \
+                                and (int.from_bytes(
+                                self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
+                                "big") & 0x1 << data.bitIndex) > 0:
+                            self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             logger.info("Line 285")
             if self.kh2connected:

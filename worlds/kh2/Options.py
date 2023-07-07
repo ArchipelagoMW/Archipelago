@@ -125,7 +125,7 @@ class FightLogic(Choice):
     option_normal = 1
     option_hard = 2
     option_none = 3
-    default = 0
+    default = 1
 
 
 class FinalFormLogic(Choice):

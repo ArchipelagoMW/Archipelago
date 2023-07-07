@@ -414,11 +414,11 @@ class KH2FightRules(KH2Rules):
             RegionName.Hydra:                 lambda state: self.get_hydra_rules(state),
             RegionName.Hades:                 lambda state: self.get_hades_rules(state),
             RegionName.DataZexion:            lambda state: self.get_data_zexion_rules(state),
-            RegionName.Oc_pain_and_panic_cup: lambda state: self.get_future_pete_rules(state),
-            RegionName.Oc_cerberus_cup:       lambda state: self.get_future_pete_rules(state),
-            RegionName.Oc2_titan_cup:         lambda state: self.get_future_pete_rules(state),
-            RegionName.Oc2_gof_cup:           lambda state: self.get_future_pete_rules(state),
-            RegionName.HadesCups:             lambda state: self.get_future_pete_rules(state),
+            RegionName.Oc_pain_and_panic_cup: lambda state: self.get_pain_and_panic_cup_rules(state),
+            RegionName.Oc_cerberus_cup:       lambda state: self.get_cerberus_cup_rules(state),
+            RegionName.Oc2_titan_cup:         lambda state: self.get_titan_cup_rules(state),
+            RegionName.Oc2_gof_cup:           lambda state: self.get_goddess_of_fate_cup_rules(state),
+            RegionName.HadesCups:             lambda state: self.get_hades_cup_rules(state),
             RegionName.Thresholder:           lambda state: self.get_thresholder_rules(state),
             RegionName.Beast:                 lambda state: self.get_beast_rules(),
             RegionName.DarkThorn:             lambda state: self.get_dark_thorn_rules(state),
@@ -742,7 +742,7 @@ class KH2FightRules(KH2Rules):
             "normal": self.kh2_set_count_sum(party_limit, state) >= 1 and state.has(ItemName.ReflectElement, self.player),
             "hard":   state.has(ItemName.ReflectElement, self.player)
         }
-        return pain_and_panic_rules[self.fight_logic] and (state.can_reach(self.world.multiworld.get_location(LocationName.FuturePete, self.player), "location", self.player) or state.has(ItemName.HadesCupTrophy, self.player))
+        return pain_and_panic_rules[self.fight_logic] and (self.kh2_has_all([ItemName.FuturePeteEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_cerberus_cup_rules(self, state: CollectionState) -> bool:
         # easy:3 drive forms,reflect
@@ -753,7 +753,7 @@ class KH2FightRules(KH2Rules):
             "normal": self.kh2_can_reach_any([LocationName.Valorlvl4, LocationName.Wisdomlvl4, LocationName.Limitlvl4, LocationName.Masterlvl4, LocationName.Finallvl4], state) and state.has(ItemName.ReflectElement, self.player),
             "hard":   state.has(ItemName.ReflectElement, self.player)
         }
-        return cerberus_cup_rules[self.fight_logic] and (self.kh2_can_reach_all([LocationName.LampCharm, LocationName.OogieBoogie, LocationName.Scar], state) or state.has(ItemName.HadesCupTrophy, self.player))
+        return cerberus_cup_rules[self.fight_logic] and (self.kh2_has_all([ItemName.ScarEvent,ItemName.OogieBoogieEvent,ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_titan_cup_rules(self, state: CollectionState) -> bool:
         # easy:4 summons,reflera
@@ -764,18 +764,15 @@ class KH2FightRules(KH2Rules):
             "normal": self.kh2_set_count_sum(summons, state) >= 3 and state.has(ItemName.ReflectElement, self.player, 2),
             "hard":   self.kh2_set_count_sum(summons, state) >= 2 and state.has(ItemName.ReflectElement, self.player, 2),
         }
-        return titan_cup_rules[self.fight_logic] and (self.kh2_can_reach(LocationName.Hades, state) or state.has(ItemName.HadesCupTrophy, self.player))
+        return titan_cup_rules[self.fight_logic] and (state.has(ItemName.HadesEvent, self.player) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_goddess_of_fate_cup_rules(self, state: CollectionState) -> bool:
-        # can beat all the other cups
-        #print(self.kh2_can_reach_all([LocationName.ProtectBeltPainandPanicCup, LocationName.RisingDragonCerberusCup, LocationName.SkillfulRingTitanCup], state))
-        #for location in [LocationName.ProtectBeltPainandPanicCup, LocationName.RisingDragonCerberusCup, LocationName.SkillfulRingTitanCup]:
-        print(self.kh2_can_reach_all([LocationName.ProtectBeltPainandPanicCup, LocationName.RisingDragonCerberusCup, LocationName.SkillfulRingTitanCup], state))
-        return self.kh2_can_reach_all([LocationName.ProtectBeltPainandPanicCup, LocationName.RisingDragonCerberusCup, LocationName.SkillfulRingTitanCup], state)
+        # can beat all the other cups+xemnas 1
+        return self.kh2_has_all([ItemName.Oc_pain_and_panic_cupEvent, ItemName.Oc_cerberus_cupEvent, ItemName.Oc2_titan_cupEvent], state)
 
     def get_hades_cup_rules(self, state: CollectionState) -> bool:
         # can beat goddes of fate cup
-        return self.kh2_can_reach(LocationName.FatalCrestGoddessofFateCup, state)
+        return state.has(ItemName.Oc2_gof_cupEvent, self.player)
 
     def get_olympus_pete_rules(self, state: CollectionState) -> bool:
         # easy:gap closer,defensive option,drive form

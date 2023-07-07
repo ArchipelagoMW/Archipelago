@@ -89,12 +89,12 @@ def patch_kh2(self, output_directory):
             levelsetting.extend(exclusion_table["Level99Sanity"])
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
-
+    all_valid_locations={location for location,data in all_locations.items()}
     for location in self.multiworld.get_filled_locations(self.player):
-        if location.name in all_locations.keys():
+        if location.name in all_valid_locations:
             data = all_locations[location.name]
         else:
-            break
+            continue
 
         if location.item.player == self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id

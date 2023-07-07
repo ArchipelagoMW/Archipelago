@@ -241,21 +241,11 @@ class KH2World(World):
         """
         universal_logic = Rules.KH2Rules(self)
         form_logic = Rules.KH2FormRules(self)
-        yourmom = Rules.KH2FightRules(self)
-        yourmom.set_kh2_fight_rules()
+        if self.multiworld.FightLogic[self.player] is not None:
+            fight_rules = Rules.KH2FightRules(self)
+            fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
-
-        # logic = self.multiworld.logic_level[self.player]
-        # if logic == Logic.option_normal:
-        #    Rules.MessengerRules(self).set_messenger_rules()
-        # elif logic == Logic.option_hard:
-        #    Rules.MessengerHardRules(self).set_messenger_rules()
-        # elif logic == Logic.option_challenging:
-        #    Rules.MessengerChallengeRules(self).set_messenger_rules()
-        # else:
-        #    Rules.MessengerOOBRules(self).set_messenger_rules()
-        # set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
         """
