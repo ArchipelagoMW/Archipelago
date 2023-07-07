@@ -87,6 +87,42 @@ class RiskOfRainWorld(World):
                 self.multiworld.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
 
+        # Generate item pool
+        itempool: List = []
+        # Add revive items for the player
+        itempool += ["Dio's Best Friend"] * self.total_revivals
+        itempool += ["Beads of Fealty"]
+
+        for env_name, _ in environments_pool.items():
+            itempool += [env_name]
+
+        if self.multiworld.goal[self.player] == "classic":
+            # classic mode
+            total_locations = self.multiworld.total_locations[self.player].value
+        else:
+            # explore mode
+            total_locations = len(
+                orderedstage_location.get_locations(
+                    chests=self.multiworld.chests_per_stage[self.player].value,
+                    shrines=self.multiworld.shrines_per_stage[self.player].value,
+                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
+                    scanners=self.multiworld.scanner_per_stage[self.player].value,
+                    altars=self.multiworld.altars_per_stage[self.player].value,
+                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
+                )
+            )
+        # Fill remaining items with randomly generated junk
+        while len(itempool) < total_locations:
+            itempool.append(self.get_filler_item_name())
+
+        # Convert itempool into real items
+        itempool = list(map(lambda name: self.create_item(name), itempool))
+        self.multiworld.itempool += itempool
+
+    def set_rules(self) -> None:
+        set_rules(self.multiworld, self.player)
+
+    def get_filler_item_name(self) -> str:
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.multiworld.item_weights[self.player].value
         junk_pool: Dict[str, int] = {}
@@ -118,43 +154,10 @@ class RiskOfRainWorld(World):
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
-
-        # Generate item pool
-        itempool: List = []
-        # Add revive items for the player
-        itempool += ["Dio's Best Friend"] * self.total_revivals
-        itempool += ["Beads of Fealty"]
-
-        for env_name, _ in environments_pool.items():
-            itempool += [env_name]
-
-        nonjunk_item_count = len(itempool)
-        if self.multiworld.goal[self.player] == "classic":
-            # classic mode
-            total_locations = self.multiworld.total_locations[self.player].value
-        else:
-            # explore mode
-            total_locations = len(
-                orderedstage_location.get_locations(
-                    chests=self.multiworld.chests_per_stage[self.player].value,
-                    shrines=self.multiworld.shrines_per_stage[self.player].value,
-                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
-                    scanners=self.multiworld.scanner_per_stage[self.player].value,
-                    altars=self.multiworld.altars_per_stage[self.player].value,
-                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
-                )
-            )
-        junk_item_count = total_locations - nonjunk_item_count
-        # Fill remaining items with randomly generated junk
-        itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                                   k=junk_item_count)
-
-        # Convert itempool into real items
-        itempool = list(map(lambda name: self.create_item(name), itempool))
-        self.multiworld.itempool += itempool
-
-    def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player)
+        weights = [data for data in junk_pool.values()]
+        filler = self.multiworld.random.choices([filler for filler in junk_pool.keys()], weights,
+                                       k=1)[0]
+        return filler
 
     def create_regions(self) -> None:
 
