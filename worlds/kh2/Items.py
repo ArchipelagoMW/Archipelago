@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Item
-from .Names import ItemName
+from .Names import ItemName, LocationName
 
 
 class KH2Item(Item):
@@ -534,7 +534,7 @@ progression_set = {
             ItemName.Teamwork,
             ItemName.TornadoFusion,
             ItemName.HadesCupTrophy],
-            Events_Table]
+        Events_Table]
     for item_name in keys
 }
 party_filler_set = {
@@ -616,9 +616,7 @@ exclusion_item_table = {
         item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in keys
     }
 }
-event_item_to_location={
 
-}
 item_dictionary_table = {
     **Reports_Table,
     **Progression_Table,

@@ -3,7 +3,7 @@ import logging
 
 from .Rules import *
 from .Items import *
-from .Locations import all_locations, exclusion_table, AllWeaponSlot
+from .Locations import *
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
@@ -39,7 +39,6 @@ class KH2World(World):
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
-    item_name_to_id.update({event_name: None for event_name in Events_Table})
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -170,7 +169,7 @@ class KH2World(World):
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
-        self.plando_locations = dict()
+        self.plando_locations = event_location_to_item
         self.starting_invo_verify()
 
         # Option to turn off Promise Charm Item
@@ -222,7 +221,10 @@ class KH2World(World):
         """
         Plandoing Items to their locations.
         """
+        self.item_name_to_id.update({event_name: None for event_name in Events_Table})
         for location, item in self.plando_locations.items():
+            if item==ItemName.HostileProgramEvent:
+                print()
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
 
