@@ -897,7 +897,7 @@ class Region:
             _exit.access_rule = rule
         _exit.connect(connecting_region)
     
-    def create_exit(self, name: str) -> entrance_type:
+    def create_exit(self, name: str) -> Entrance:
         """
         Creates and returns an Entrance object as an exit of this region.
         
@@ -928,11 +928,6 @@ class Region:
 
     def __str__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
-    
-    def __class_getitem__(cls, item: Any) -> typing.Type[Region]:
-        if issubclass(item, Entrance):
-            cls.entrance_type = item
-            return cls
 
 
     def __init__(self, player: int, name: str = '', parent: Region = None):
