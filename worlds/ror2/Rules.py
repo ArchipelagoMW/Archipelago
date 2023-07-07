@@ -31,10 +31,11 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 # unlock event to next set of stages
 def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int):
     if not multiworld.dlc_sotv[player]:
-        environment_name = multiworld.random.choices(list(environment_vanilla_orderedstages_table[stage_number].keys()), k=1)
+        environment_name = multiworld.random.choices(list(environment_vanilla_orderedstages_table[stage_number].keys()),
+                                                     k=1)
     else:
         environment_name = multiworld.random.choices(list(environment_orderedstages_table[stage_number].keys()), k=1)
-    multiworld.get_location(f"Stage_{stage_number+1}", player).access_rule = \
+    multiworld.get_location(f"Stage_{stage_number + 1}", player).access_rule = \
         lambda state: get_one_of_the_stages(state, environment_name[0], player)
 
 
@@ -43,7 +44,6 @@ def get_one_of_the_stages(state: CollectionState, stage: str, player: int):
 
 
 def set_rules(multiworld: MultiWorld, player: int) -> None:
-
     if multiworld.goal[player] == "classic":
         # classic mode
         total_locations = multiworld.total_locations[player].value  # total locations for current player
@@ -72,21 +72,22 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                     event_loc = multiworld.get_location(f"Pickup{i * event_location_step}", player)
                     set_rule(event_loc,
                             lambda state, i=i: state.can_reach(f"ItemPickup{i * event_location_step - 1}", "Location", player))
-                for n in range(i * event_location_step, (i + 1) * event_location_step + 1):  # we want to create a rule for each of the 25 locations per division
+                    # we want to create a rule for each of the 25 locations per division
+                for n in range(i * event_location_step, (i + 1) * event_location_step + 1):
                     if n > total_locations:
                         break
                     if n == i * event_location_step:
                         set_rule(multiworld.get_location(f"ItemPickup{n}", player),
-                                lambda state, event_item=event_loc.item.name: state.has(event_item, player))
+                                 lambda state, event_item=event_loc.item.name: state.has(event_item, player))
                     else:
                         set_rule(multiworld.get_location(f"ItemPickup{n}", player),
-                                lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player))
+                                 lambda state, n=n: state.can_reach(f"ItemPickup{n - 1}", "Location", player))
         set_rule(multiworld.get_location("Victory", player),
-                lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
+                 lambda state: state.can_reach(f"ItemPickup{total_locations}", "Location", player))
         if total_revivals or multiworld.start_with_revive[player].value:
             add_rule(multiworld.get_location("Victory", player),
-                    lambda state: state.has("Dio's Best Friend", player,
-                                            total_revivals + multiworld.start_with_revive[player]))
+                     lambda state: state.has("Dio's Best Friend", player,
+                                             total_revivals + multiworld.start_with_revive[player]))
 
     elif multiworld.goal[player] == "explore":
         # When explore_mode is used,
@@ -96,10 +97,10 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         #   help prevent being stuck in the same stages until that point.)
 
         for location in multiworld.get_locations():
-            if location.player != player: continue # ignore all checks that don't belong to this player
+            if location.player != player: continue  # ignore all checks that don't belong to this player
             if "Scavenger" in location.name:
                 add_rule(location, lambda state: state.has("Stage_5", player))
-    # Regions
+        # Regions
         chests = multiworld.chests_per_stage[player]
         shrines = multiworld.shrines_per_stage[player]
         newts = multiworld.altars_per_stage[player]
@@ -140,11 +141,13 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
                             has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                     if i > 0:
                         has_entrance_access_rule(multiworld, f"Stage_{i}", environment_name, player)
-        has_entrance_access_rule(multiworld, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole", player)
+        has_entrance_access_rule(multiworld, f"Hidden Realm: A Moment, Fractured", "Hidden Realm: A Moment, Whole",
+                                 player)
         has_entrance_access_rule(multiworld, f"Stage_1", "Hidden Realm: Bazaar Between Time", player)
         has_entrance_access_rule(multiworld, f"Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Commencement", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
+        has_entrance_access_rule(multiworld, "Beads of Fealty", "Hidden Realm: A Moment, Whole", player)
         if multiworld.dlc_sotv[player]:
             has_entrance_access_rule(multiworld, f"Stage_5", "Void Locus", player)
             has_entrance_access_rule(multiworld, f"Void Locus", "The Planetarium", player)
