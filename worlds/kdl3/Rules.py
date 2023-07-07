@@ -3,6 +3,7 @@ from .Locations import location_table, level_consumables
 from .Names import LocationName
 from .Items import copy_ability_table
 import typing
+from BaseClasses import MultiWorld
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -26,6 +27,7 @@ def can_reach_level(state: "CollectionState", player: int, level: int, player_le
         else:
             return state.can_reach(location_table[player_levels[level - 1][5]], "Location", player)
 
+#def can_reach_rick(state: "CollectionState", multiworld: MultiWorld, player: int) -> bool:
 
 def can_reach_coo(state: "CollectionState", player: int) -> bool:
     return state.can_reach("Grass Land 3 - Complete", "Location", player) or \

@@ -2,9 +2,13 @@ import typing
 from BaseClasses import Location
 from .Names import LocationName
 
+if typing.TYPE_CHECKING:
+    from .Room import Room
+
 
 class KDL3Location(Location):
     game: str = "Kirby's Dream Land 3"
+    room: typing.Optional["Room"] = None
 
     def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
         super().__init__(player, name, address, parent)

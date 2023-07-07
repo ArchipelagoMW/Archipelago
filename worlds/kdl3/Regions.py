@@ -31,6 +31,9 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
         return new_stage
 
 
+#def generate_rooms(world: World, door_shuffle: bool, )
+
+
 def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bool) -> dict:
     levels: typing.Dict[int, typing.List[typing.Optional[int]]] = {
         1: [None for _ in range(7)],
