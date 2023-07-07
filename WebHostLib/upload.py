@@ -7,12 +7,13 @@ import zipfile
 import zlib
 
 from io import BytesIO
-from flask import request, flash, redirect, url_for, session, render_template, Markup
+from flask import request, flash, redirect, url_for, session, render_template
+from markupsafe import Markup
 from pony.orm import commit, flush, select, rollback
 from pony.orm.core import TransactionIntegrityError
 
 import MultiServer
-from NetUtils import NetworkSlot, SlotType
+from NetUtils import SlotType
 from Utils import VersionException, __version__
 from worlds.Files import AutoPatchRegister
 from . import app
