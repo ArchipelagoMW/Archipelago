@@ -851,21 +851,19 @@ def visualize_regions(root_region: Region, file_name: str, *,
                       linetype_ortho: bool = True) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
-    Positional arguments:
-    root_region -- The region from which to start the diagram from. (Usually the "Menu" region of your world)
-    file_name -- The name of the destination .puml file
-    Keyword arguments:
-    show_entrance_names -- (default False) If enabled, the name of the entrance will be shown next to each connection
-    show_locations -- (default True) If enabled, the locations will be listed inside each region
-            Priority locations will be shown in bold
-            Excluded locations will be stricken out
-            Locations without ID will be shown in italics
-            Locked locations will be shown with a padlock icon
-            For filled locations, the item name will be shown after the location name
-            Progression items will be shown in bold
-            Items without ID will be shown in italics
-    show_other_regions -- (default True) If enabled, regions that can't be reached by traversing exits are shown as well
-    linetype_ortho -- (default True) If enabled, orthogonal straight line segments will be used; otherwise polylines
+    :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
+    :param file_name: The name of the destination .puml file.
+    :param show_entrance_names: (default False) If enabled, the name of the entrance will be shown near each connection.
+    :param show_locations: (default True) If enabled, the locations will be listed inside each region.
+            Priority locations will be shown in bold.
+            Excluded locations will be stricken out.
+            Locations without ID will be shown in italics.
+            Locked locations will be shown with a padlock icon.
+            For filled locations, the item name will be shown after the location name.
+            Progression items will be shown in bold.
+            Items without ID will be shown in italics.
+    :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
+    :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
 
     Example usage in World code:
     from Utils import visualize_regions
