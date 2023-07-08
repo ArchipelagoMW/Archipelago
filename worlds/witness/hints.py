@@ -180,6 +180,7 @@ def get_priority_hint_locations(multiworld: MultiWorld, player: int):
         "Mountainside Discard",
         "Tunnels Theater Flowers EP",
         "Boat Shipwreck Green EP",
+        "Quarry Stoneworks Control Room Left",
     }
 
 
