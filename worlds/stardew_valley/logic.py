@@ -615,11 +615,11 @@ class StardewLogic:
         elif skill == Skill.farming:
             xp_rule = self.can_get_farming_xp() & self.has_tool(Tool.hoe, tool_material) & self.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = self.can_get_foraging_xp() & self.has_tool(Tool.axe, tool_material) | \
-                      magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
+            xp_rule = self.can_get_foraging_xp() & \
+                      (self.has_tool(Tool.axe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level))
         elif skill == Skill.mining:
-            xp_rule = self.can_get_mining_xp() & self.has_tool(Tool.pickaxe, tool_material) | \
-                      magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
+            xp_rule = self.can_get_mining_xp() & \
+                      (self.has_tool(Tool.pickaxe, tool_material) | magic.can_use_clear_debris_instead_of_tool_level(self, tool_level))
         elif skill == Skill.combat:
             combat_tier = Performance.tiers[tool_level]
             xp_rule = self.can_get_combat_xp() & self.can_do_combat_at_level(combat_tier)

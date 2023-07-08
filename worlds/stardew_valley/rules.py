@@ -466,23 +466,27 @@ def set_traveling_merchant_rules(logic: StardewLogic, multi_world: MultiWorld, p
 
 
 def set_arcade_machine_rules(logic: StardewLogic, multi_world: MultiWorld, player: int, world_options):
-    if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_junimo_kart, player),
-                                 (logic.received("Skull Key") & logic.has("Junimo Kart Small Buff")).simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_2, player),
-                                 logic.has("Junimo Kart Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_3, player),
-                                 logic.has("Junimo Kart Big Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_location("Junimo Kart: Sunset Speedway (Victory)", player),
-                                 logic.has("Junimo Kart Max Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
-                                 logic.has("JotPK Small Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_2, player),
-                                 logic.has("JotPK Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_3, player),
-                                 logic.has("JotPK Big Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_location("Journey of the Prairie King Victory", player),
-                                 logic.has("JotPK Max Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_junimo_kart, player),
+                             logic.received(Wallet.skull_key).simplify())
+    if world_options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_full_shuffling:
+        return
+
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_junimo_kart, player),
+                             logic.has("Junimo Kart Small Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_2, player),
+                             logic.has("Junimo Kart Medium Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_3, player),
+                             logic.has("Junimo Kart Big Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Junimo Kart: Sunset Speedway (Victory)", player),
+                             logic.has("Junimo Kart Max Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
+                             logic.has("JotPK Small Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_2, player),
+                             logic.has("JotPK Medium Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_3, player),
+                             logic.has("JotPK Big Buff").simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Journey of the Prairie King Victory", player),
+                             logic.has("JotPK Max Buff").simplify())
 
 
 def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world: MultiWorld, player: int):
