@@ -31,4 +31,13 @@ map_names: List[str] = [
     'Limbo (E3M7)',
     'Dis (E3M8)',
     'Warrens (E3M9)',
+    'Hell Beneath (E4M1)',
+    'Perfect Hatred (E4M2)',
+    'Sever the Wicked (E4M3)',
+    'Unruly Evil (E4M4)',
+    'They Will Repent (E4M5)',
+    'Against Thee Wickedly (E4M6)',
+    'And Hell Followed (E4M7)',
+    'Unto the Cruel (E4M8)',
+    'Fear (E4M9)',
 ]

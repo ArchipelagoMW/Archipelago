@@ -354,5 +354,135 @@ regions:List[RegionDict] = [
      "connections":["Warrens (E3M9) Main"]},
     {"name":"Warrens (E3M9) Blue trigger",
      "connects_to_hub":False,
-     "connections":["Warrens (E3M9) Main"]},
+     "connections":[]},
+
+    # Hell Beneath (E4M1)
+    {"name":"Hell Beneath (E4M1) Main",
+     "connects_to_hub":True,
+     "connections":[
+        "Hell Beneath (E4M1) Red",
+        "Hell Beneath (E4M1) Blue"]},
+    {"name":"Hell Beneath (E4M1) Red",
+     "connects_to_hub":False,
+     "connections":["Hell Beneath (E4M1) Main"]},
+    {"name":"Hell Beneath (E4M1) Blue",
+     "connects_to_hub":False,
+     "connections":["Hell Beneath (E4M1) Main"]},
+
+    # Perfect Hatred (E4M2)
+    {"name":"Perfect Hatred (E4M2) Main",
+     "connects_to_hub":True,
+     "connections":[
+        "Perfect Hatred (E4M2) Blue",
+        "Perfect Hatred (E4M2) Yellow"]},
+    {"name":"Perfect Hatred (E4M2) Blue",
+     "connects_to_hub":False,
+     "connections":[
+        "Perfect Hatred (E4M2) Main",
+        "Perfect Hatred (E4M2) Cave"]},
+    {"name":"Perfect Hatred (E4M2) Yellow",
+     "connects_to_hub":False,
+     "connections":[
+        "Perfect Hatred (E4M2) Main",
+        "Perfect Hatred (E4M2) Cave"]},
+    {"name":"Perfect Hatred (E4M2) Cave",
+     "connects_to_hub":False,
+     "connections":[]},
+
+    # Sever the Wicked (E4M3)
+    {"name":"Sever the Wicked (E4M3) Main",
+     "connects_to_hub":True,
+     "connections":["Sever the Wicked (E4M3) Red"]},
+    {"name":"Sever the Wicked (E4M3) Red",
+     "connects_to_hub":False,
+     "connections":[
+        "Sever the Wicked (E4M3) Blue",
+        "Sever the Wicked (E4M3) Main"]},
+    {"name":"Sever the Wicked (E4M3) Blue",
+     "connects_to_hub":False,
+     "connections":["Sever the Wicked (E4M3) Red"]},
+
+    # Unruly Evil (E4M4)
+    {"name":"Unruly Evil (E4M4) Main",
+     "connects_to_hub":True,
+     "connections":["Unruly Evil (E4M4) Red"]},
+    {"name":"Unruly Evil (E4M4) Red",
+     "connects_to_hub":False,
+     "connections":["Unruly Evil (E4M4) Main"]},
+
+    # They Will Repent (E4M5)
+    {"name":"They Will Repent (E4M5) Main",
+     "connects_to_hub":True,
+     "connections":["They Will Repent (E4M5) Red"]},
+    {"name":"They Will Repent (E4M5) Yellow",
+     "connects_to_hub":False,
+     "connections":["They Will Repent (E4M5) Red"]},
+    {"name":"They Will Repent (E4M5) Blue",
+     "connects_to_hub":False,
+     "connections":["They Will Repent (E4M5) Red"]},
+    {"name":"They Will Repent (E4M5) Red",
+     "connects_to_hub":False,
+     "connections":[
+        "They Will Repent (E4M5) Main",
+        "They Will Repent (E4M5) Yellow",
+        "They Will Repent (E4M5) Blue"]},
+
+    # Against Thee Wickedly (E4M6)
+    {"name":"Against Thee Wickedly (E4M6) Main",
+     "connects_to_hub":True,
+     "connections":[
+        "Against Thee Wickedly (E4M6) Blue",
+        "Against Thee Wickedly (E4M6) Yellow",
+        "Against Thee Wickedly (E4M6) Red"]},
+    {"name":"Against Thee Wickedly (E4M6) Red",
+     "connects_to_hub":False,
+     "connections":["Against Thee Wickedly (E4M6) Main"]},
+    {"name":"Against Thee Wickedly (E4M6) Blue",
+     "connects_to_hub":False,
+     "connections":["Against Thee Wickedly (E4M6) Main"]},
+    {"name":"Against Thee Wickedly (E4M6) Yellow",
+     "connects_to_hub":False,
+     "connections":["Against Thee Wickedly (E4M6) Main"]},
+
+    # And Hell Followed (E4M7)
+    {"name":"And Hell Followed (E4M7) Main",
+     "connects_to_hub":True,
+     "connections":[
+        "And Hell Followed (E4M7) Blue",
+        "And Hell Followed (E4M7) Red",
+        "And Hell Followed (E4M7) Yellow"]},
+    {"name":"And Hell Followed (E4M7) Red",
+     "connects_to_hub":False,
+     "connections":["And Hell Followed (E4M7) Main"]},
+    {"name":"And Hell Followed (E4M7) Blue",
+     "connects_to_hub":False,
+     "connections":["And Hell Followed (E4M7) Main"]},
+    {"name":"And Hell Followed (E4M7) Yellow",
+     "connects_to_hub":False,
+     "connections":["And Hell Followed (E4M7) Main"]},
+
+    # Unto the Cruel (E4M8)
+    {"name":"Unto the Cruel (E4M8) Main",
+     "connects_to_hub":True,
+     "connections":[
+        "Unto the Cruel (E4M8) Red",
+        "Unto the Cruel (E4M8) Yellow",
+        "Unto the Cruel (E4M8) Orange"]},
+    {"name":"Unto the Cruel (E4M8) Yellow",
+     "connects_to_hub":False,
+     "connections":["Unto the Cruel (E4M8) Main"]},
+    {"name":"Unto the Cruel (E4M8) Red",
+     "connects_to_hub":False,
+     "connections":["Unto the Cruel (E4M8) Main"]},
+    {"name":"Unto the Cruel (E4M8) Orange",
+     "connects_to_hub":False,
+     "connections":["Unto the Cruel (E4M8) Main"]},
+
+    # Fear (E4M9)
+    {"name":"Fear (E4M9) Main",
+     "connects_to_hub":True,
+     "connections":["Fear (E4M9) Yellow"]},
+    {"name":"Fear (E4M9) Yellow",
+     "connects_to_hub":False,
+     "connections":["Fear (E4M9) Main"]},
 ]
