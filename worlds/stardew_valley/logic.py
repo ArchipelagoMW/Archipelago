@@ -377,24 +377,24 @@ class StardewLogic:
             self.item_rules[recipe] = obtention_rule | cooking_rule
 
         self.building_rules.update({
-            Building.barn: self.can_spend_money(6000) & self.has([Material.wood, Material.stone]),
-            Building.big_barn: self.can_spend_money(12000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.barn),
-            Building.deluxe_barn: self.can_spend_money(25000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_barn),
-            Building.coop: self.can_spend_money(4000) & self.has([Material.wood, Material.stone]),
-            Building.big_coop: self.can_spend_money(10000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.coop),
-            Building.deluxe_coop: self.can_spend_money(20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_coop),
-            Building.fish_pond: self.can_spend_money(5000) & self.has([Material.stone, WaterItem.seaweed, WaterItem.green_algae]),
-            Building.mill: self.can_spend_money(2500) & self.has([Material.stone, Material.wood, ArtisanGood.cloth]),
-            Building.shed: self.can_spend_money(15000) & self.has(Material.wood),
-            Building.big_shed: self.can_spend_money(20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.shed),
-            Building.silo: self.can_spend_money(100) & self.has([Material.stone, Material.clay, MetalBar.copper]),
-            Building.slime_hutch: self.can_spend_money(10000) & self.has([Material.stone, MetalBar.quartz, MetalBar.iridium]),
-            Building.stable: self.can_spend_money(10000) & self.has([Material.hardwood, MetalBar.iron]),
-            Building.well: self.can_spend_money(1000) & self.has(Material.stone),
-            Building.shipping_bin: self.can_spend_money(250) & self.has(Material.wood),
-            Building.kitchen: self.can_spend_money(10000) & self.has(Material.wood) & self.has_house(0),
-            Building.kids_room: self.can_spend_money(50000) & self.has(Material.hardwood) & self.has_house(1),
-            Building.cellar: self.can_spend_money(100000) & self.has_house(2),
+            Building.barn: self.can_spend_money_at(Region.carpenter, 6000) & self.has([Material.wood, Material.stone]),
+            Building.big_barn: self.can_spend_money_at(Region.carpenter, 12000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.barn),
+            Building.deluxe_barn: self.can_spend_money_at(Region.carpenter, 25000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_barn),
+            Building.coop: self.can_spend_money_at(Region.carpenter, 4000) & self.has([Material.wood, Material.stone]),
+            Building.big_coop: self.can_spend_money_at(Region.carpenter, 10000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.coop),
+            Building.deluxe_coop: self.can_spend_money_at(Region.carpenter, 20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_coop),
+            Building.fish_pond: self.can_spend_money_at(Region.carpenter, 5000) & self.has([Material.stone, WaterItem.seaweed, WaterItem.green_algae]),
+            Building.mill: self.can_spend_money_at(Region.carpenter, 2500) & self.has([Material.stone, Material.wood, ArtisanGood.cloth]),
+            Building.shed: self.can_spend_money_at(Region.carpenter, 15000) & self.has(Material.wood),
+            Building.big_shed: self.can_spend_money_at(Region.carpenter, 20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.shed),
+            Building.silo: self.can_spend_money_at(Region.carpenter, 100) & self.has([Material.stone, Material.clay, MetalBar.copper]),
+            Building.slime_hutch: self.can_spend_money_at(Region.carpenter, 10000) & self.has([Material.stone, MetalBar.quartz, MetalBar.iridium]),
+            Building.stable: self.can_spend_money_at(Region.carpenter, 10000) & self.has([Material.hardwood, MetalBar.iron]),
+            Building.well: self.can_spend_money_at(Region.carpenter, 1000) & self.has(Material.stone),
+            Building.shipping_bin: self.can_spend_money_at(Region.carpenter, 250) & self.has(Material.wood),
+            Building.kitchen: self.can_spend_money_at(Region.carpenter, 10000) & self.has(Material.wood) & self.has_house(0),
+            Building.kids_room: self.can_spend_money_at(Region.carpenter, 50000) & self.has(Material.hardwood) & self.has_house(1),
+            Building.cellar: self.can_spend_money_at(Region.carpenter, 100000) & self.has_house(2),
         })
 
         self.building_rules.update(get_modded_building_rules(self, self.options[options.Mods]))
@@ -682,7 +682,7 @@ class StardewLogic:
             return False_()
 
         if not self.options[options.BuildingProgression] == options.BuildingProgression.option_vanilla:
-            return self.received(f"Progressive House", upgrade_level)
+            return self.received(f"Progressive House", upgrade_level) & self.can_reach_region(Region.carpenter)
 
         if upgrade_level == 1:
             return Has(Building.kitchen, self.building_rules)
