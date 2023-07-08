@@ -100,7 +100,7 @@ item_table = {
     "Internal Tech Module (Marauder)": ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, classification=ItemClassification.filler, parent_item="Marauder"),
 
     # Items from new mod
-    "Progressive Stimpack (Reaper)": ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10, parent_item="Reaper"),
+    "Progressive Stimpack (Reaper)": ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10, parent_item="Reaper", quantity=2),
     "Laser Targeting System (Reaper)": ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, classification=ItemClassification.filler, parent_item="Reaper"),
     "Advanced Cloaking Field (Reaper)": ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, parent_item="Reaper"),
     "Spider Mines (Reaper)": ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, classification=ItemClassification.filler, parent_item="Reaper"),
@@ -109,7 +109,7 @@ item_table = {
     "Smart Servos (Hellion)": ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, parent_item="Hellion"),
     "Optimized Logistics (Hellion)": ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, classification=ItemClassification.filler, parent_item="Hellion"),
     "Jump Jets (Hellbat)": ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, classification=ItemClassification.filler, parent_item="Hellbat Aspect (Hellion)"),
-    "Progressive Stimpack (Hellbat)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellbat Aspect (Hellion)"),
+    "Progressive Stimpack (Hellbat)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellbat Aspect (Hellion)", quantity=2),
     "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, parent_item="Vulture"),
     "Auto Launchers (Vulture)": ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, parent_item="Vulture"),
     "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10),
@@ -309,6 +309,13 @@ zerg_defense_ratings = {
     # Bunker w/ Firebat: 2,
     "Hive Mind Emulator": 3,
     "Psi Disruptor": 3
+}
+
+spider_mine_sources = {
+    "Vulture",
+    "Spider Mines (Reaper)",
+    "Spider Mines (Siege Tank)",
+    "Spider Mines (Raven)"
 }
 
 # 'number' values of upgrades for upgrade bundle items

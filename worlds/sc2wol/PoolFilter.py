@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list
+from .Items import get_full_item_list, spider_mine_sources
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value
@@ -96,6 +96,14 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     ]
 
 
+def get_item_quantity(item):
+    return get_full_item_list()[item.name].quantity
+
+
+def copy_item(item: Item):
+    return Item(item.name, item.classification, item.code, item.player)
+
+
 class ValidInventory:
 
     def has(self, item: str, player: int):
@@ -133,7 +141,8 @@ class ValidInventory:
                 for item in items_to_lock:
                     if item in inventory:
                         inventory.remove(item)
-                        locked_items.append(item)
+                        for _ in range(get_item_quantity(item)):
+                            locked_items.append(copy_item(item))
                     if item in existing_items:
                         existing_items.remove(item)
 
@@ -149,7 +158,8 @@ class ValidInventory:
                 if not all(requirement(self) for requirement in requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.add(item.name)
-                    locked_items.append(item)
+                    for _ in range(get_item_quantity(item)):
+                        locked_items.append(copy_item(item))
                     return False
             return True
 
@@ -187,11 +197,15 @@ class ValidInventory:
                         if transient_item in inventory:
                             inventory.remove(transient_item)
                         if transient_item not in locked_items:
-                            locked_items.append(transient_item)
+                            for _ in range(get_item_quantity(transient_item)):
+                                locked_items.append(copy_item(transient_item))
                         if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
                             self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
+
+        if not spider_mine_sources & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
 
         return inventory + locked_items
 
