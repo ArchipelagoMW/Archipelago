@@ -1,6 +1,6 @@
 
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
-from .items import item_table
+from .items import item_table, generate_items
 from .locations import location_data, PokemonRBLocation
 from . import logic
 from . import poke_data
@@ -1521,6 +1521,9 @@ def create_regions(self):
     if __debug__:
         for region in locations_per_region:
             assert not locations_per_region[region], f"locations not assigned to region {region}"
+
+    generate_items(self)
+
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)

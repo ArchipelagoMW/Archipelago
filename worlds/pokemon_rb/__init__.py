@@ -1,5 +1,6 @@
 import os
 import settings
+import typing
 import threading
 from copy import deepcopy
 from typing import TextIO
@@ -8,7 +9,7 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Location
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from ..AutoWorld import World, WebWorld
 from ..generic.Rules import add_item_rule
-from .items import item_table, item_groups, generate_items
+from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from .regions import create_regions
 from .options import pokemon_rb_options
@@ -226,8 +227,6 @@ class PokemonRedBlueWorld(World):
             *[False for _ in range(151 - round(self.multiworld.dexsanity[self.player].value * 1.51))]
         ]
         self.multiworld.random.shuffle(self.dexsanity_table)
-
-        generate_items(self)
 
     def create_items(self):
         self.multiworld.itempool += self.item_pool
