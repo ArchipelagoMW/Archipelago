@@ -9,8 +9,8 @@ from .LogicMixin import SC2WoLLogic
 # Items with associated upgrades
 UPGRADABLE_ITEMS = [
     "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
-    "Hellion", "Hellbat Aspect (Hellion)", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "High Impact Payload (Thor)", "Predator", "Widow Mine", "Cyclone"
-    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie"
+    "Hellion", "Hellbat Aspect (Hellion)", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "High Impact Payload (Thor)", "Predator", "Widow Mine", "Cyclone",
+    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
     "Bunker", "Missile Turret"
 ]
 
