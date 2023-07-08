@@ -20,10 +20,10 @@ from worlds.GS2.Locations import all_locations, scoutable_locations
 
 SYSTEM_MESSAGE_ID = 0
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_mmbn3.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_GS23.lua"
 CONNECTION_REFUSED_STATUS = \
-    "Connection refused. Please start your emulator and make sure connector_mmbn3.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_mmbn3.lua"
+    "Connection refused. Please start your emulator and make sure connector_GS23.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_GS23.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -55,7 +55,7 @@ class GS2CommandProcessor(ClientCommandProcessor):
         logger.info("Debug Overlay Enabled" if debugEnabled else "Debug Overlay Disabled")
 
 
-class MMBN3Context(CommonContext):
+class GS2Context(CommonContext):
     command_processor = GS2CommandProcessor
     game = "Golden Sun: The Lost Age"
     items_handling = 0b001  # full local
@@ -299,10 +299,10 @@ async def run_game(romfile):
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-async def patch_and_run_game(apmmbn3_file):
-    base_name = os.path.splitext(apmmbn3_file)[0]
+async def patch_and_run_game(apGS23_file):
+    base_name = os.path.splitext(apGS23_file)[0]
 
-    with zipfile.ZipFile(apmmbn3_file, 'r') as patch_archive:
+    with zipfile.ZipFile(apGS23_file, 'r') as patch_archive:
         try:
             with patch_archive.open("delta.bsdiff4", 'r') as stream:
                 patch_data = stream.read()
@@ -341,7 +341,7 @@ if __name__ == "__main__":
         multiprocessing.freeze_support()
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?",
-                            help="Path to an APMMBN3 file")
+                            help="Path to an APGS23 file")
         args = parser.parse_args()
         checksum_matches = confirm_checksum()
         if checksum_matches:
