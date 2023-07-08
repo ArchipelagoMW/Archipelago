@@ -12,6 +12,7 @@ local SCRIPT_VERSION = 1
 
 local LocationAddress = 0x52e8
 local ItemAddress = 0x5307
+local MoneyAddress = 0x6c38
 
 local ItemsReceived = nil
 local playerName = nil
@@ -166,7 +167,15 @@ function main()
                     for i, item in ipairs(ItemsReceived) do
                         if (item ~=nil) then
                             local current_item = u8(ItemAddress + i)
-                            wU8(ItemAddress + i, bit.bor(current_item, item))
+                            if (i == 32) then
+                                local current_money = memory.read_u32_le(MoneyAddress)
+                                if (item>current_item) then
+                                    memory.write_u32_le(MoneyAddress, current_money + 5000 * (item - current_item))
+                                    wU8(ItemAddress + i, item)
+                                end
+                            else
+                                wU8(ItemAddress + i, bit.bor(current_item, item))
+                            end
                         end
                     end
                 end

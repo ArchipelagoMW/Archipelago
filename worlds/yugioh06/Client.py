@@ -123,12 +123,15 @@ def get_payload(ctx: GBAContext):
 
 
 def parse_items(items: List[NetworkItem]):
-    array = [0] * 31
+    array = [0] * 32
     for item in items:
         index = item.item - 5730001
-        byte = math.floor(index / 8)
-        bit = index % 8
-        array[byte] = array[byte] | (1 << bit)
+        if index == 253:
+            array[31] += 1
+        else:
+            byte = math.floor(index / 8)
+            bit = index % 8
+            array[byte] = array[byte] | (1 << bit)
     return array
 
 
