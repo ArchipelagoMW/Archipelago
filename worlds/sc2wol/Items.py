@@ -72,7 +72,7 @@ item_table = {
     "Dual-Fusion Welders (SCV)": ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5, parent_item="SCV"),
     "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6),
     "Orbital Command (Building)": ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7),
-    "Progressive Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 12, parent_item="Marine", quantity=2),
+    "Progressive Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 0, parent_item="Marine", quantity=2),
     "Combat Shield (Marine)": ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, classification=ItemClassification.progression, parent_item="Marine"),
     "Advanced Medic Facilities (Medic)": ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, classification=ItemClassification.filler, parent_item="Medic"),
     "Stabilizer Medpacks (Medic)": ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, classification=ItemClassification.progression, parent_item="Medic"),
@@ -92,15 +92,15 @@ item_table = {
     "Restoration (Medic)": ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, classification=ItemClassification.filler, parent_item="Medic"),
     "Optical Flare (Medic)": ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, classification=ItemClassification.filler, parent_item="Medic"),
     "Optimized Logistics (Medic)": ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, classification=ItemClassification.filler, parent_item="Medic"),
-    "Progressive Stimpack (Firebat)": ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 18, parent_item="Firebat", quantity=2),
+    "Progressive Stimpack (Firebat)": ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 6, parent_item="Firebat", quantity=2),
     "Optimized Logistics (Firebat)": ItemData(227 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 25, parent_item="Firebat"),
-    "Progressive Stimpack (Marauder)": ItemData(228 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 20, parent_item="Marauder", quantity=2),
+    "Progressive Stimpack (Marauder)": ItemData(228 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 8, parent_item="Marauder", quantity=2),
     "Laser Targeting System (Marauder)": ItemData(229 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 26, classification=ItemClassification.filler, parent_item="Marauder"),
     "Magrail Munitions (Marauder)": ItemData(230 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 27, classification=ItemClassification.filler, parent_item="Marauder"),
     "Internal Tech Module (Marauder)": ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, classification=ItemClassification.filler, parent_item="Marauder"),
 
     # Items from new mod
-    "Progressive Stimpack (Reaper)": ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 22, parent_item="Reaper"),
+    "Progressive Stimpack (Reaper)": ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10, parent_item="Reaper"),
     "Laser Targeting System (Reaper)": ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, classification=ItemClassification.filler, parent_item="Reaper"),
     "Advanced Cloaking Field (Reaper)": ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, parent_item="Reaper"),
     "Spider Mines (Reaper)": ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, classification=ItemClassification.filler, parent_item="Reaper"),
@@ -109,7 +109,7 @@ item_table = {
     "Smart Servos (Hellion)": ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, parent_item="Hellion"),
     "Optimized Logistics (Hellion)": ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, classification=ItemClassification.filler, parent_item="Hellion"),
     "Jump Jets (Hellbat)": ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, classification=ItemClassification.filler, parent_item="Hellbat Aspect (Hellion)"),
-    "Progressive Stimpack (Hellbat)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 24, parent_item="Hellbat Aspect (Hellion)"),
+    "Progressive Stimpack (Hellbat)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellbat Aspect (Hellion)"),
     "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, parent_item="Vulture"),
     "Auto Launchers (Vulture)": ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, parent_item="Vulture"),
     "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10),
@@ -148,7 +148,7 @@ item_table = {
     "Displacement Field (Wraith)": ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, classification=ItemClassification.filler, parent_item="Wraith"),
     "Ripwave Missiles (Viking)": ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14, parent_item="Viking"),
     "Phobos-Class Weapons System (Viking)": ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15, parent_item="Viking"),
-    "Progressive Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 14, classification=ItemClassification.filler, parent_item="Banshee", quantity=2),
+    "Progressive Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 2, classification=ItemClassification.filler, parent_item="Banshee", quantity=2),
     "Shockwave Missile Battery (Banshee)": ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 17, parent_item="Banshee"),
     "Missile Pods (Battlecruiser)": ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18, classification=ItemClassification.filler, parent_item="Battlecruiser"),
     "Defensive Matrix (Battlecruiser)": ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, classification=ItemClassification.filler, parent_item="Battlecruiser"),
@@ -231,7 +231,7 @@ item_table = {
     "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, classification=ItemClassification.filler),
     "Hercules": ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, classification=ItemClassification.progression),
     "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16),
-    "Progressive Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 16, quantity=2),
+    "Progressive Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 4, quantity=2),
     "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, ItemClassification.progression),
     "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, classification=ItemClassification.progression),
 
@@ -349,9 +349,9 @@ lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, 
 # Map type to expected int
 type_flaggroups: typing.Dict[str, int] = {
     "Unit": 0,
-    "Upgrade": 1,
-    "Armory 1": 2,
-    "Armory 2": 3,
+    "Upgrade": 1,  # Weapon / Armor upgrades
+    "Armory 1": 2,  # Unit upgrades
+    "Armory 2": 3,  # Unit upgrades
     "Building": 4,
     "Mercenary": 5,
     "Laboratory": 6,
@@ -360,6 +360,7 @@ type_flaggroups: typing.Dict[str, int] = {
     "Vespene": 9,
     "Supply": 10,
     "Goal": 11,
-    "Armory 3": 12,
-    "Armory 4": 13
+    "Armory 3": 12,  # Unit upgrades
+    "Armory 4": 13,  # Unit upgrades
+    "Progressive Upgrade": 14  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
 }

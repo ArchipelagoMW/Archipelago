@@ -43,6 +43,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranLaboratory (int lp_player, int lp_bi
 void libABFE498B_gf_AP_Triggers_unlockTerranMercenaries (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranBuildings (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranUpgrades (int lp_player, int lp_bitArrayValue);
+void libABFE498B_gf_AP_Triggers_unlockTerranProgressiveUpgrades (int lp_player, int lp_bitArrayValue);
 bool libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock ();
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarine (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedic (int lp_player);

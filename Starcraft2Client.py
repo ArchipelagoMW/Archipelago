@@ -612,9 +612,11 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
             accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
         # exists multiple times
-        elif item_data.type == "Upgrade":
+        elif item_data.type == "Upgrade" or item_data.type == "Progressive Upgrade":
             flaggroup = type_flaggroups[item_data.type]
-            if ctx.generic_upgrade_items == 0:
+
+            # Generic upgrades apply only to Weapon / Armor upgrades
+            if item_data.type == "Upgrade" and ctx.generic_upgrade_items == 0:
                 accumulators[flaggroup] += 1 << item_data.number
             else:
                 for bundled_number in upgrade_numbers[item_data.number]:
@@ -714,9 +716,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 start_items[9],
                 start_items[10]
             ))
-            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {}    ".format(
+            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
-                start_items[5], start_items[6], start_items[12], start_items[13]))
+                start_items[5], start_items[6], start_items[12], start_items[13], start_items[14]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
@@ -739,9 +741,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {}".format(
+                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                    current_items[5], current_items[6], current_items[12], current_items[13]))
+                    current_items[5], current_items[6], current_items[12], current_items[13], current_items[14]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
