@@ -422,8 +422,8 @@ class NumberOfLuckBuffs(Range):
 
 class ExcludeGingerIsland(Toggle):
     """Exclude Ginger Island?
-    This option will override every other option in the yaml and forcefully exclude everything related to Ginger Island
-    from the slot."""
+    This option will forcefully exclude everything related to Ginger Island from the slot.
+    If you pick a goal that requires Ginger Island, you cannot exclude it and it will get included anyway"""
     internal_name = "exclude_ginger_island"
     display_name = "Exclude Ginger Island"
     default = 0
