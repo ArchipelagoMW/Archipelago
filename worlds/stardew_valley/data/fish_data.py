@@ -96,6 +96,7 @@ sunfish = create_fish("Sunfish", 145, town_river + forest_river, (season.spring,
 super_cucumber = create_fish("Super Cucumber", 155, ocean + ginger_island_ocean, (season.summer, season.fall), 80)
 tiger_trout = create_fish("Tiger Trout", 699, town_river + forest_river, (season.fall, season.winter), 60)
 tilapia = create_fish("Tilapia", 701, ocean + ginger_island_ocean, (season.summer, season.fall), 50)
+# Tuna has different seasons on ginger island. Should be changed when the whole fish thing is refactored
 tuna = create_fish("Tuna", 130, ocean + ginger_island_ocean, (season.summer, season.winter), 70)
 void_salmon = create_fish("Void Salmon", 795, witch_swamp, season.all_seasons, 80)
 walleye = create_fish("Walleye", 140, town_river + forest_river + forest_pond + mountain_lake, season.fall, 45)

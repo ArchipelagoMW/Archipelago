@@ -43,3 +43,10 @@ class TestItems(SVTestBase):
             self.assertEqual(len(baby_items), 2)
             baby_permutations.add(f"{baby_items[0]} - {baby_items[1]}")
         self.assertEqual(len(baby_permutations), 4)
+
+    def test_correct_number_of_stardrops(self):
+        seed = random.randrange(sys.maxsize)
+        allsanity_options = self.allsanity_options_without_mods()
+        multiworld = setup_solo_multiworld(allsanity_options, seed=seed)
+        stardrop_items = [item for item in multiworld.get_items() if "Stardrop" in item.name]
+        self.assertEqual(len(stardrop_items), 5)
