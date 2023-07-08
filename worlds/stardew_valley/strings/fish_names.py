@@ -30,7 +30,7 @@ class Fish:
     largemouth_bass = "Largemouth Bass"
     smallmouth_bass = "Smallmouth Bass"
     sardine = "Sardine"
-    periwinkly = "Periwinkle"
+    periwinkle = "Periwinkle"
     shrimp = "Shrimp"
     snail = "Snail"
     tuna = "Tuna"
@@ -47,7 +47,6 @@ class WaterItem:
     coral = "Coral"
     nautilus_shell = "Nautilus Shell"
     sea_urchin = "Sea Urchin"
-    periwinkle = "Periwinkle"
 
 
 class Trash:

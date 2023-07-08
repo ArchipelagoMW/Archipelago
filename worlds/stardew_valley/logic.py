@@ -286,7 +286,7 @@ class StardewLogic:
             Fish.oyster: True_(),
             ArtisanGood.pale_ale: self.can_keg(Vegetable.hops),
             Gift.pearl: (self.has(Fish.blobfish) & self.has_building(Building.fish_pond)) | self.has(Geode.artifact_trove),
-            Fish.periwinkly: self.can_crab_pot(Region.town),
+            Fish.periwinkle: self.can_crab_pot(Region.town),
             ArtisanGood.pickles: self.has_pickle(),
             Animal.pig: self.can_buy_animal(Animal.pig),
             Beverage.pina_colada: self.can_spend_money_at(Region.island_resort, 600),
@@ -335,7 +335,7 @@ class StardewLogic:
             AnimalProduct.squid_ink: self.can_mine_in_the_mines_floor_81_120() | (self.has_building(Building.fish_pond) & self.has(Fish.squid)),
             Craftable.staircase: self.has_skill_level(Skill.mining, 2) & self.has(Material.stone),
             Material.stone: self.has_tool(Tool.pickaxe),
-            Meal.strange_bun: self.has_relationship(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(WaterItem.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
+            Meal.strange_bun: self.has_relationship(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(Fish.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.has_building(Building.fish_pond),
             Ingredient.sugar: self.can_spend_money_at(Region.pierre_store, 100) | (
                     self.has_building(Building.mill) & self.has(Vegetable.beet)),
