@@ -127,8 +127,8 @@ class DOOM1993World(World):
         # Forbid progression items to locations that can be missed and can't be picked up. (e.g. One-time timed
         # platform) Unless the user allows for it.
         if getattr(self.multiworld, "allow_death_logic")[self.player]:
-            self.multiworld.exclude_locations[self.player] += set(Locations.death_logic_locations)
-    
+            self.multiworld.exclude_locations[self.player].value.update(Locations.death_logic_locations)
+
     def create_item(self, name: str) -> DOOM1993Item:
         item_id: int = self.item_name_to_id[name]
         return DOOM1993Item(name, Items.item_table[item_id]["classification"], item_id, self.player)
@@ -170,7 +170,7 @@ class DOOM1993World(World):
 
             self.multiworld.get_location(event, self.player).place_locked_item(self.create_event(event))
             self.location_count -= 1
-    
+
         # Special case for E2M6 and E3M8, where you enter a normal door then get stuck behind with a key door.
         # We need to put the key in the locations available behind this door.
         if self.included_episodes[1]:
