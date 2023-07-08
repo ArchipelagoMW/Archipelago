@@ -346,7 +346,7 @@ class StardewLogic:
             Trash.trash: self.can_crab_pot(),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
-            AnimalProduct.truffle: self.has_animal(Animal.pig) & self.has_spring_summer_or_fall(),
+            AnimalProduct.truffle: self.has_animal(Animal.pig) & self.has_any_season_not_winter(),
             Ingredient.vinegar: self.can_spend_money_at(Region.pierre_store, 200),
             AnimalProduct.void_egg: self.can_spend_money_at(Region.sewer, 5000) | (self.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
             Loot.void_essence: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
@@ -1255,9 +1255,6 @@ class StardewLogic:
 
     def has_year_three(self) -> StardewRule:
         return self.has_lived_months(8)
-
-    def has_spring_summer_or_fall(self) -> StardewRule:
-        return self.has_season(Season.spring) | self.has_season(Season.summer) | self.has_season(Season.fall)
 
     def can_speak_dwarf(self) -> StardewRule:
         if self.options[options.Museumsanity] == options.Museumsanity.option_none:
