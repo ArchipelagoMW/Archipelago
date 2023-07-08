@@ -243,7 +243,9 @@ def extend_special_order_locations(randomized_locations: List[LocationData], wor
     board_locations = filter_disabled_locations(world_options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
     randomized_locations.extend(board_locations)
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island:
-        randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
+        include_arcade = world_options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_disabled
+        qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if include_arcade or LocationTags.JUNIMO_KART not in location.tags]
+        randomized_locations.extend(qi_orders)
 
 
 def extend_walnut_purchase_locations(randomized_locations: List[LocationData], world_options):
@@ -300,7 +302,7 @@ def create_locations(location_collector: StardewLocationCollector,
             if location.mod_name is None or location.mod_name in world_options[options.Mods]:
                 randomized_locations.append(location_table[location.name])
 
-    if not world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_disabled:
+    if world_options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_disabled:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])
 
     if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
