@@ -57,6 +57,11 @@ class AllowDeathLogic(Toggle):
     display_name = "Allow Death Logic"
 
 
+class StartWithComputerAreaMaps(Toggle):
+    """Give the player all Computer Area Map items from the start."""
+    display_name = "Start With Computer Area Maps"
+
+
 class Episode1(DefaultOnToggle):
     """Knee-Deep in the Dead.
     If none of the episodes are chosen, Episode 1 will be chosen by default."""
@@ -80,7 +85,8 @@ options: typing.Dict[str, AssembleOptions] = {
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
     "allow_death_logic": AllowDeathLogic,
-    "death_link": DeathLink,
+    "start_with_computer_area_maps": StartWithComputerAreaMaps,
+    "DeathLink": DeathLink,
     "episode1": Episode1,
     "episode2": Episode2,
     "episode3": Episode3
