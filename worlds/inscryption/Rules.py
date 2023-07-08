@@ -24,7 +24,24 @@ class InscryptionRules:
             "Act 1 Wardrobe Drawer 4": self.has_wardrobe_key,
             "Act 1 Dagger": self.has_caged_wolf,
             "Act 1 Magnificus Eye": self.has_dagger,
-            "Act 1 Cabin Clock Main Compartment": self.has_magnificus_eye
+            "Act 2 Battle Goobert": self.has_act2_bridge_requirements,
+            "Act 2 Battle Pike Mage": self.has_act2_bridge_requirements,
+            "Act 2 Battle Lonely Wizard": self.has_act2_bridge_requirements,
+            "Act 2 Battle Inspector": self.has_act2_bridge_requirements,
+            "Act 2 Battle Melter": self.has_act2_bridge_requirements,
+            "Act 2 Battle Dredger": self.has_act2_bridge_requirements,
+            "Act 2 Tower Chest 1": self.has_act2_bridge_requirements,
+            "Act 2 Tower Chest 2": self.has_act2_bridge_requirements,
+            "Act 2 Tower Chest 3": self.has_act2_bridge_requirements,
+            "Act 2 Tower Bath": self.has_act2_bridge_requirements,
+            "Act 2 Factory Trash Can": self.has_act2_bridge_requirements,
+            "Act 2 Factory Drawer 1": self.has_act2_bridge_requirements,
+            "Act 2 Factory Drawer 2": self.has_act2_bridge_requirements,
+            "Act 2 Factory Chest 1": self.has_act2_bridge_requirements,
+            "Act 2 Factory Chest 2": self.has_act2_bridge_requirements,
+            "Act 2 Factory Chest 3": self.has_act2_bridge_requirements,
+            "Act 2 Factory Chest 4": self.has_act2_bridge_requirements,
+            "Act 2 Monocle": self.has_act2_bridge_requirements,
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -41,6 +58,17 @@ class InscryptionRules:
     def has_dagger(self, state: CollectionState) -> bool:
         return state.has("Dagger", self.player)
 
+    def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
+        return state.has("Epitaph Piece 1", self.player) and \
+            state.has("Epitaph Piece 2", self.player) and state.has("Epitaph Piece 3", self.player) and \
+            state.has("Epitaph Piece 4", self.player) and state.has("Epitaph Piece 5", self.player) and \
+            state.has("Epitaph Piece 6", self.player) and state.has("Epitaph Piece 7", self.player) and \
+            state.has("Epitaph Piece 8", self.player) and state.has("Epitaph Piece 9", self.player)
+
+    def has_act2_bridge_requirements(self, state: CollectionState) -> bool:
+        return (state.has("Camera Replica", self.player) and state.has("Pile Of Meat", self.player)) or \
+            self.has_all_epitaph_pieces(state)
+
     def has_magnificus_eye(self, state: CollectionState) -> bool:
         return state.has("Magnificus Eye", self.player)
 
@@ -48,11 +76,7 @@ class InscryptionRules:
         return state.has("Film Roll", self.player)
 
     def has_act3_requirements(self, state: CollectionState) -> bool:
-        return self.has_act2_requirements(state) and state.has("Epitaph Piece 1", self.player) and \
-            state.has("Epitaph Piece 2", self.player) and state.has("Epitaph Piece 3", self.player) and \
-            state.has("Epitaph Piece 4", self.player) and state.has("Epitaph Piece 5", self.player) and \
-            state.has("Epitaph Piece 6", self.player) and state.has("Epitaph Piece 7", self.player) and \
-            state.has("Epitaph Piece 8", self.player) and state.has("Epitaph Piece 9", self.player)
+        return self.has_act2_requirements(state) and self.has_all_epitaph_pieces(state)
 
     def has_epilogue_requirements(self, state: CollectionState) -> bool:
         # TODO Had the missing checks
