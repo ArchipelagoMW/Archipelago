@@ -177,7 +177,7 @@ item_table = {
     "Lockdown (Ghost)": ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, parent_item="Ghost"),
     "Impaler Rounds (Spectre)": ItemData(360 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 10, parent_item="Spectre"),
     "High Impact Payload (Thor)": ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 11, parent_item="Thor"),
-    "Internal Tech Module (Thor)": ItemData(362 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 12, classification=ItemClassification.filler, parent_item="Thor"),
+    "Smart Servos (Thor)": ItemData(362 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 12, classification=ItemClassification.filler, parent_item="High Impact Payload (Thor)"),
     "Bio Mechanical Repair Drone (Raven)": ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 13, parent_item="Raven"),
     "Spider Mines (Raven)": ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 14, parent_item="Raven"),
     "Railgun Turret (Raven)": ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, parent_item="Raven"),
