@@ -6,8 +6,8 @@ from typing import Dict
 from BaseClasses import ItemClassification, MultiWorld
 from Options import SpecialRange, OptionSet
 from . import setup_solo_multiworld, SVTestBase
-from .. import StardewItem, options, items_by_group, Group, item_table
-from ..locations import locations_by_tag, LocationTags
+from .. import StardewItem, options, items_by_group, Group
+from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import StardewOption, stardew_valley_option_classes, Mods
 from ..strings.goal_names import Goal
 from ..strings.season_names import Season
@@ -273,40 +273,46 @@ class TestSpecialOrders(SVTestBase):
         world_options = {options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled}
         multi_world = setup_solo_multiworld(world_options)
 
-        items_in_pool = {item.name for item in multi_world.get_items()}
-        for item_name in items_in_pool:
-            item = item_table[item_name]
-            self.assertNotIn(Group.SPECIAL_ORDER_BOARD, item.groups)
-            self.assertNotIn(Group.SPECIAL_ORDER_QI, item.groups)
+        locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
+        for location_name in locations_in_pool:
+            location = location_table[location_name]
+            self.assertNotIn(LocationTags.SPECIAL_ORDER_BOARD, location.tags)
+            self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
     def test_given_board_only_then_no_qi_order_in_pool(self):
         world_options = {options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_only}
         multi_world = setup_solo_multiworld(world_options)
 
-        items_in_pool = {item.name for item in multi_world.get_items()}
-        for item_name in items_in_pool:
-            item = item_table[item_name]
-            self.assertNotIn(Group.SPECIAL_ORDER_QI, item.groups)
+        locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
+        for location_name in locations_in_pool:
+            location = location_table[location_name]
+            self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
-        for board_item_name in items_by_group[Group.SPECIAL_ORDER_BOARD]:
-            self.assertIn(board_item_name, items_in_pool)
+        for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+            if board_location.mod_name:
+                continue
+            self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_then_all_orders_in_pool(self):
         world_options = {options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
                          options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_victories}
         multi_world = setup_solo_multiworld(world_options)
 
-        items_in_pool = {item.name for item in multi_world.get_items()}
-        for qi_item_name in items_by_group[Group.SPECIAL_ORDER_QI]:
-            self.assertIn(qi_item_name, items_in_pool)
+        locations_in_pool = {location.name for location in multi_world.get_locations()}
+        for qi_location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
+            if qi_location.mod_name:
+                continue
+            self.assertIn(qi_location.name, locations_in_pool)
 
-        for board_item_name in items_by_group[Group.SPECIAL_ORDER_BOARD]:
-            self.assertIn(board_item_name, items_in_pool)
+        for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
+            if board_location.mod_name:
+                continue
+            self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_without_arcade_machines_then_lets_play_a_game_not_in_pool(self):
         world_options = {options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
                          options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled}
         multi_world = setup_solo_multiworld(world_options)
 
-        items_in_pool = {item.name for item in multi_world.get_items()}
-        self.assertNotIn(SpecialOrder.lets_play_a_game, items_in_pool)
+        locations_in_pool = {location.name for location in multi_world.get_locations()}
+        self.assertNotIn(SpecialOrder.lets_play_a_game, locations_in_pool)
