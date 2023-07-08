@@ -44,5 +44,14 @@ void ap_triggers_processUpgrades(
     ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade2handler,
     ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade3handler,
     ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade4handler,
-    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade5handler
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade5handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade6handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade7handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade8handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade9handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade10handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade11handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade12handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade13handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade14handler
 );

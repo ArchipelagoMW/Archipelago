@@ -501,7 +501,7 @@ Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shie
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
 Behavior/Tooltip/AP_GhostSCBWLockdown=While Lockdown is active the unit cannot attack or move. Detection is disabled.
 Behavior/Tooltip/AP_MedicSCBWOpticFlare=Sight range reduced to melee range. Passive detection disabled.
-Behavior/Tooltip/AP_ImpalerRoundsIndicator=Tungsten alloy rounds that do an additional 5 damage to light armor.
+Behavior/Tooltip/AP_ImpalerRoundsIndicator=Tungsten alloy rounds that do an additional 5 damage to armored units.
 Behavior/Tooltip/AP_ScienceVesselSCBWDefensiveMatrix=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of <c val="ffff8a"><d ref="Behavior,AP_ScienceVesselSCBWDefensiveMatrix@Dummy,Modification.VitalMaxArray[Shields]"/></c>.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons

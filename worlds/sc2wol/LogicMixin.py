@@ -14,7 +14,9 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_has_air_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Viking', player) \
-               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Wraith', 'Valkyrie'}, player)
+                or self.has_all({'Wraith', 'Advanced Laser Technology (Wraith)'}, player) \
+                or self.has_all({'Battlecruiser', 'ATX Laser Battery (Battlecruiser)'}, player) \
+                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Wraith', 'Valkyrie', 'Battlecruiser'}, player)
 
     def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Goliath', player) \
@@ -33,6 +35,8 @@ class SC2WoLLogic(LogicMixin):
             defense_score += 3
         if self.has_all({'Siege Tank', 'Maelstrom Rounds (Siege Tank)'}, player):
             defense_score += 2
+        if self.has_all({'Siege Tank', 'Graduating Range (Siege Tank)'}, player):
+            defense_score += 1
         if self.has_all({'Widow Mine', 'Concealment (Widow Mine)'}, player):
             defense_score += 1
         if zerg_enemy:

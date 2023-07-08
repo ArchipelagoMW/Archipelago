@@ -176,7 +176,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory1 (int lp_player, int lp_bitAr
         libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders, // 5
         libABFE498B_gf_AP_Triggers_Terran_unlockFireSuppressionSystem, // 6
         libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterOrbitalCommand, // 7
-        libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem, // 8
         libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield, // 9
         libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities, // 10
         libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks, // 11
@@ -188,15 +188,15 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory1 (int lp_player, int lp_bitAr
         libABFE498B_gf_AP_Triggers_Terran_unlockReaperG4Clusterbomb, // 17
         libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators, // 18
         libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers, // 19
-        ap_triggers_PlayerConsumer_sig, // 20
-        ap_triggers_PlayerConsumer_sig, // 21
-        ap_triggers_PlayerConsumer_sig, //22
-        ap_triggers_PlayerConsumer_sig, //23
-        ap_triggers_PlayerConsumer_sig, //24
-        ap_triggers_PlayerConsumer_sig, //25
-        ap_triggers_PlayerConsumer_sig, //26
-        ap_triggers_PlayerConsumer_sig, //27
-        ap_triggers_PlayerConsumer_sig, //28
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineMagRailMunitions, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineOptimizedLogistics, // 21
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicRestoration, //22
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare, //23
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicOptimizedLogistics, //24
+        libABFE498B_gf_AP_Triggers_Terran_unlockFirebatOptimizedLogistics, //25
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderLaserTargetingSystem, //26
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderMagRailMunitions, //27
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderInternalTechModule, //28
         ap_triggers_PlayerConsumer_sig //29
     );
 }
@@ -224,7 +224,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory2 (int lp_player, int lp_bitAr
         libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField, // 13
         libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles, // 14
         libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem, // 15
-        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners, // 16
+        ap_triggers_PlayerConsumer_sig, // 16
         libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery, // 17
         libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods, // 18
         libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix, // 19
@@ -238,6 +238,86 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory2 (int lp_player, int lp_bitAr
         libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol, //27
         libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws, //28
         libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranArmory3 (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperLaserTargetingSystem, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperAdvancedCloakingField, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperSpiderMines, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperCombatDrugs, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellionSmartServos, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellionOptimizedLogistics, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockVultureIonThrusters, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockVultureAutoLaunchers, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineHighExplosiveMunition, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockGoliathOptimizedLogistics, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackHyperfluxor, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackOptimizedLogistics, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSpiderMines, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange, // 19
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech, // 21
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankInternalTechModule, //22
+        libABFE498B_gf_AP_Triggers_Terran_unlockPredatorOptimizedLogistics, //23
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedivacExpandedHull, //24
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAfterburners, //25
+        libABFE498B_gf_AP_Triggers_Terran_unlockWraithAdvancedLaserTechnology, //26
+        libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos, //27
+        libABFE498B_gf_AP_Triggers_Terran_unlockVikingMagrailMunitions, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranArmory4 (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystem, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeInternalTechModule, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserTacticalJump, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserCloak, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserATXLaserBattery, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserOptimizedLogistics, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserInternalTechModule, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockGhostLockdown, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenRailgunTurret, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenHunterSeekerWeapon, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenInterferenceMatrix, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenAntiArmorMissile, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockRavenInternalTechModule, // 19
+        libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselEMPShockwave, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselDefensiveMatrix, // 21
+        libABFE498B_gf_AP_Triggers_Terran_unlockCycloneTargetingOptics, //22
+        libABFE498B_gf_AP_Triggers_Terran_unlockCycloneRapidFireLaunchers, //23
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak, //24
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorLaserTargetingSystem, //25
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorOptimizedLogistics, //26
+        libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineBlackMarketLaunchers, //27
+        libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineExecutionerMissiles, //28
+        ap_triggers_PlayerConsumer_sig //29
     );
 }
 
@@ -265,12 +345,12 @@ void libABFE498B_gf_AP_Triggers_unlockTerranLaboratory (int lp_player, int lp_bi
         libABFE498B_gf_AP_Triggers_Terran_unlockPredator, // 14
         libABFE498B_gf_AP_Triggers_Terran_unlockHercules, // 15
         libABFE498B_gf_AP_Triggers_Terran_unlockCellularReactor, // 16
-        libABFE498B_gf_AP_Triggers_Terran_unlockRegenerativeBioSteel, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieEnhancedCluserLaunchers, // 17
         libABFE498B_gf_AP_Triggers_Terran_unlockHiveMindEmulator, // 18
         libABFE498B_gf_AP_Triggers_Terran_unlockPsiDisrupter, // 19
-        ap_triggers_PlayerConsumer_sig, // 20
-        ap_triggers_PlayerConsumer_sig, // 21
-        ap_triggers_PlayerConsumer_sig, //22
+        libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieShapedHull, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieBurstLasers, // 21
+        libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieAfterburners, //22
         ap_triggers_PlayerConsumer_sig, //23
         ap_triggers_PlayerConsumer_sig, //24
         ap_triggers_PlayerConsumer_sig, //25
@@ -373,7 +453,16 @@ void libABFE498B_gf_AP_Triggers_unlockTerranUpgrades (int lp_player, int lp_bitA
         libABFE498B_gf_AP_Triggers_Terran_unlockVehicleWeapon, // 2
         libABFE498B_gf_AP_Triggers_Terran_unlockVehicleArmor, // 3
         libABFE498B_gf_AP_Triggers_Terran_unlockShipWeapon, // 4
-        libABFE498B_gf_AP_Triggers_Terran_unlockShipArmor // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockShipArmor, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineProgressiveStimpack, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockProgressiveRegenerativeBioSteel, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack, // 12
+        ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 13
+        ap_triggers_PlayerUpgradeLevelBiConsumer_sig // 14
     );
 }
 
@@ -757,12 +846,6 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders (int lp_player
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_DualFusionWelders", 1);
-}
-
-void libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack (int lp_player) {
-    // Automatic Variable Declarations
-    // Deprecated
-    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MarineStimpack", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield (int lp_player) {
@@ -1240,12 +1323,6 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVikingMagrailMunitions (int lp_play
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VikingMagWeapon", 1);
-}
-
-void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player) {
-    // Automatic Variable Declarations
-    // Deprecated
-    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CrossSpectrumDampeners", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player) {
@@ -2090,12 +2167,6 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCellularReactor (int lp_player) {
 
 }
 
-void libABFE498B_gf_AP_Triggers_Terran_unlockRegenerativeBioSteel (int lp_player) {
-    // Automatic Variable Declarations
-    // Deprecated
-    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RegenerativeBioSteel", 1);
-}
-
 void libABFE498B_gf_AP_Triggers_Terran_unlockProgressiveRegenerativeBioSteel (int lp_player, int lp_level) {
     // Automatic Variable Declarations
     // Implementation
@@ -2393,6 +2464,8 @@ bool libABFE498B_gt_AP_Triggers_giveTerranTech_Func (bool testConds, bool runAct
     string lv_upgradeValue;
     string lv_armory1Value;
     string lv_armory2Value;
+    string lv_armory3Value;
+    string lv_armory4Value;
     string lv_buildingValue;
     string lv_mercenaryValue;
     string lv_laboratoryValue;
@@ -2405,6 +2478,8 @@ bool libABFE498B_gt_AP_Triggers_giveTerranTech_Func (bool testConds, bool runAct
     lv_upgradeValue = "";
     lv_armory1Value = "";
     lv_armory2Value = "";
+    lv_armory3Value = "";
+    lv_armory4Value = "";
     lv_buildingValue = "";
     lv_mercenaryValue = "";
     lv_laboratoryValue = "";
@@ -2421,6 +2496,8 @@ bool libABFE498B_gt_AP_Triggers_giveTerranTech_Func (bool testConds, bool runAct
     lv_buildingValue = StringWord(EventChatMessage(false), 6);
     lv_mercenaryValue = StringWord(EventChatMessage(false), 7);
     lv_laboratoryValue = StringWord(EventChatMessage(false), 8);
+    lv_armory3Value = StringWord(EventChatMessage(false), 9);
+    lv_armory4Value = StringWord(EventChatMessage(false), 10);
     auto3377504F_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
     lv_currentPlayer = -1;
     while (true) {
@@ -2430,6 +2507,8 @@ bool libABFE498B_gt_AP_Triggers_giveTerranTech_Func (bool testConds, bool runAct
         libABFE498B_gf_AP_Triggers_unlockTerranUpgrades(lv_currentPlayer, StringToInt(lv_upgradeValue));
         libABFE498B_gf_AP_Triggers_unlockTerranArmory1(lv_currentPlayer, StringToInt(lv_armory1Value));
         libABFE498B_gf_AP_Triggers_unlockTerranArmory2(lv_currentPlayer, StringToInt(lv_armory2Value));
+        libABFE498B_gf_AP_Triggers_unlockTerranArmory3(lv_currentPlayer, StringToInt(lv_armory3Value));
+        libABFE498B_gf_AP_Triggers_unlockTerranArmory4(lv_currentPlayer, StringToInt(lv_armory4Value));
         libABFE498B_gf_AP_Triggers_unlockTerranBuildings(lv_currentPlayer, StringToInt(lv_buildingValue));
         libABFE498B_gf_AP_Triggers_unlockTerranMercenaries(lv_currentPlayer, StringToInt(lv_mercenaryValue));
         libABFE498B_gf_AP_Triggers_unlockTerranLaboratory(lv_currentPlayer, StringToInt(lv_laboratoryValue));

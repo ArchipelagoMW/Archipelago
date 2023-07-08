@@ -268,6 +268,8 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="CD3DFA80"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="1685C06F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8EC2DB6F"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="3BCDC090"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="6B972EC2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="9706676A"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="52E13FC7"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="66568157"/>
@@ -977,7 +979,7 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders, // 5
                     libABFE498B_gf_AP_Triggers_Terran_unlockFireSuppressionSystem, // 6
                     libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterOrbitalCommand, // 7
-                    libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack, // 8
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem, // 8
                     libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield, // 9
                     libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities, // 10
                     libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks, // 11
@@ -989,15 +991,15 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockReaperG4Clusterbomb, // 17
                     libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators, // 18
                     libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers, // 19
-                    ap_triggers_PlayerConsumer_sig, // 20
-                    ap_triggers_PlayerConsumer_sig, // 21
-                    ap_triggers_PlayerConsumer_sig, //22
-                    ap_triggers_PlayerConsumer_sig, //23
-                    ap_triggers_PlayerConsumer_sig, //24
-                    ap_triggers_PlayerConsumer_sig, //25
-                    ap_triggers_PlayerConsumer_sig, //26
-                    ap_triggers_PlayerConsumer_sig, //27
-                    ap_triggers_PlayerConsumer_sig, //28
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarineMagRailMunitions, // 20
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarineOptimizedLogistics, // 21
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMedicRestoration, //22
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMedicOpticalFlare, //23
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMedicOptimizedLogistics, //24
+                    libABFE498B_gf_AP_Triggers_Terran_unlockFirebatOptimizedLogistics, //25
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarauderLaserTargetingSystem, //26
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarauderMagRailMunitions, //27
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarauderInternalTechModule, //28
                     ap_triggers_PlayerConsumer_sig //29
                 );
             </ScriptCode>
@@ -1051,7 +1053,7 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField, // 13
                     libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles, // 14
                     libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem, // 15
-                    libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners, // 16
+                    ap_triggers_PlayerConsumer_sig, // 16
                     libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery, // 17
                     libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods, // 18
                     libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix, // 19
@@ -1065,6 +1067,138 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol, //27
                     libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws, //28
                     libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment //29
+                );
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="3BCDC090">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="9660AB67"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="A2ECDBBD"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="D62D1A0D"/>
+        </Element>
+        <Element Type="ParamDef" Id="9660AB67">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="23F55FB6"/>
+        </Element>
+        <Element Type="Param" Id="23F55FB6">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="A2ECDBBD">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="85189BC5"/>
+        </Element>
+        <Element Type="Param" Id="85189BC5">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D62D1A0D">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                // Yeah, this must be done in Galaxy
+                ap_triggers_processBitsInBitArray(
+                    lp_player,
+                    lp_bitArrayValue,
+                    libABFE498B_gf_AP_Triggers_Terran_unlockReaperLaserTargetingSystem, // 0
+                    libABFE498B_gf_AP_Triggers_Terran_unlockReaperAdvancedCloakingField, // 1
+                    libABFE498B_gf_AP_Triggers_Terran_unlockReaperSpiderMines, // 2
+                    libABFE498B_gf_AP_Triggers_Terran_unlockReaperCombatDrugs, // 3
+                    libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect, // 4
+                    libABFE498B_gf_AP_Triggers_Terran_unlockHellionSmartServos, // 5
+                    libABFE498B_gf_AP_Triggers_Terran_unlockHellionOptimizedLogistics, // 6
+                    libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets, // 7
+                    libABFE498B_gf_AP_Triggers_Terran_unlockVultureIonThrusters, // 8
+                    libABFE498B_gf_AP_Triggers_Terran_unlockVultureAutoLaunchers, // 9
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSpiderMineHighExplosiveMunition, // 10
+                    libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets, // 11
+                    libABFE498B_gf_AP_Triggers_Terran_unlockGoliathOptimizedLogistics, // 12
+                    libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackHyperfluxor, // 13
+                    libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackBurstCapacitors, // 14
+                    libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackOptimizedLogistics, // 15
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets, // 16
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSpiderMines, // 17
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos, // 18
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankGraduatingRange, // 19
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankLaserTargetingSystem, // 20
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankAdvancedSiegeTech, // 21
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankInternalTechModule, //22
+                    libABFE498B_gf_AP_Triggers_Terran_unlockPredatorOptimizedLogistics, //23
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMedivacExpandedHull, //24
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAfterburners, //25
+                    libABFE498B_gf_AP_Triggers_Terran_unlockWraithAdvancedLaserTechnology, //26
+                    libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos, //27
+                    libABFE498B_gf_AP_Triggers_Terran_unlockVikingMagrailMunitions, //28
+                    ap_triggers_PlayerConsumer_sig //29
+                );
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="6B972EC2">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="DB2038C9"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="25FC1416"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="97411205"/>
+        </Element>
+        <Element Type="ParamDef" Id="DB2038C9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="33A03636"/>
+        </Element>
+        <Element Type="Param" Id="33A03636">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="25FC1416">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="4CDA731C"/>
+        </Element>
+        <Element Type="Param" Id="4CDA731C">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="97411205">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+            <ScriptCode>
+                // Yeah, this must be done in Galaxy
+                ap_triggers_processBitsInBitArray(
+                    lp_player,
+                    lp_bitArrayValue,
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBansheeHyperflightRotors, // 0
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBansheeLaserTargetingSystem, // 1
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBansheeInternalTechModule, // 2
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserTacticalJump, // 3
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserCloak, // 4
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserATXLaserBattery, // 5
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserOptimizedLogistics, // 6
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserInternalTechModule, // 7
+                    libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds, // 8
+                    libABFE498B_gf_AP_Triggers_Terran_unlockGhostLockdown, // 9
+                    libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds, // 10
+                    libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload, // 11
+                    libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos, // 12
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone, // 13
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines, // 14
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenRailgunTurret, // 15
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenHunterSeekerWeapon, // 16
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenInterferenceMatrix, // 17
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenAntiArmorMissile, // 18
+                    libABFE498B_gf_AP_Triggers_Terran_unlockRavenInternalTechModule, // 19
+                    libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselEMPShockwave, // 20
+                    libABFE498B_gf_AP_Triggers_Terran_unlockScienceVesselDefensiveMatrix, // 21
+                    libABFE498B_gf_AP_Triggers_Terran_unlockCycloneTargetingOptics, //22
+                    libABFE498B_gf_AP_Triggers_Terran_unlockCycloneRapidFireLaunchers, //23
+                    libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak, //24
+                    libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorLaserTargetingSystem, //25
+                    libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorOptimizedLogistics, //26
+                    libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineBlackMarketLaunchers, //27
+                    libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineExecutionerMissiles, //28
+                    ap_triggers_PlayerConsumer_sig //29
                 );
             </ScriptCode>
         </Element>
@@ -1118,12 +1252,12 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockPredator, // 14
                     libABFE498B_gf_AP_Triggers_Terran_unlockHercules, // 15
                     libABFE498B_gf_AP_Triggers_Terran_unlockCellularReactor, // 16
-                    libABFE498B_gf_AP_Triggers_Terran_unlockRegenerativeBioSteel, // 17
+                    libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieEnhancedCluserLaunchers, // 17
                     libABFE498B_gf_AP_Triggers_Terran_unlockHiveMindEmulator, // 18
                     libABFE498B_gf_AP_Triggers_Terran_unlockPsiDisrupter, // 19
-                    ap_triggers_PlayerConsumer_sig, // 20
-                    ap_triggers_PlayerConsumer_sig, // 21
-                    ap_triggers_PlayerConsumer_sig, //22
+                    libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieShapedHull, // 20
+                    libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieBurstLasers, // 21
+                    libABFE498B_gf_AP_Triggers_Terran_unlockValkyrieAfterburners, //22
                     ap_triggers_PlayerConsumer_sig, //23
                     ap_triggers_PlayerConsumer_sig, //24
                     ap_triggers_PlayerConsumer_sig, //25
@@ -1304,7 +1438,16 @@
                     libABFE498B_gf_AP_Triggers_Terran_unlockVehicleWeapon, // 2
                     libABFE498B_gf_AP_Triggers_Terran_unlockVehicleArmor, // 3
                     libABFE498B_gf_AP_Triggers_Terran_unlockShipWeapon, // 4
-                    libABFE498B_gf_AP_Triggers_Terran_unlockShipArmor // 5
+                    libABFE498B_gf_AP_Triggers_Terran_unlockShipArmor, // 5
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarineProgressiveStimpack, // 6
+                    libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners, // 7
+                    libABFE498B_gf_AP_Triggers_Terran_unlockProgressiveRegenerativeBioSteel, // 8
+                    libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack, // 9
+                    libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack, // 10
+                    libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack, // 11
+                    libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack, // 12
+                    ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 13
+                    ap_triggers_PlayerUpgradeLevelBiConsumer_sig // 14
                 );
             </ScriptCode>
         </Element>
@@ -1607,6 +1750,8 @@
             <Variable Type="Variable" Library="ABFE498B" Id="93E8CB68"/>
             <Variable Type="Variable" Library="ABFE498B" Id="635F80EB"/>
             <Variable Type="Variable" Library="ABFE498B" Id="D59FC083"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="3D70DF58"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="BEDD7954"/>
             <Variable Type="Variable" Library="ABFE498B" Id="232483FD"/>
             <Variable Type="Variable" Library="ABFE498B" Id="9904111B"/>
             <Variable Type="Variable" Library="ABFE498B" Id="62ACDBC9"/>
@@ -1618,6 +1763,8 @@
             <Action Type="FunctionCall" Library="ABFE498B" Id="3320AA22"/>
             <Action Type="FunctionCall" Library="ABFE498B" Id="4380823E"/>
             <Action Type="FunctionCall" Library="ABFE498B" Id="11ADB3C5"/>
+            <Action Type="FunctionCall" Library="ABFE498B" Id="1B87351B"/>
+            <Action Type="FunctionCall" Library="ABFE498B" Id="1067E998"/>
             <Action Type="FunctionCall" Library="ABFE498B" Id="3377504F"/>
         </Element>
         <Element Type="Variable" Id="7D25C7CD">
@@ -1664,6 +1811,24 @@
             <Value Type="Param" Library="ABFE498B" Id="AFD7205A"/>
         </Element>
         <Element Type="Param" Id="AFD7205A">
+            <ValueType Type="string"/>
+        </Element>
+        <Element Type="Variable" Id="3D70DF58">
+            <VariableType>
+                <Type Value="string"/>
+            </VariableType>
+            <Value Type="Param" Library="ABFE498B" Id="DF527FA0"/>
+        </Element>
+        <Element Type="Param" Id="DF527FA0">
+            <ValueType Type="string"/>
+        </Element>
+        <Element Type="Variable" Id="BEDD7954">
+            <VariableType>
+                <Type Value="string"/>
+            </VariableType>
+            <Value Type="Param" Library="ABFE498B" Id="113AF103"/>
+        </Element>
+        <Element Type="Param" Id="113AF103">
             <ValueType Type="string"/>
         </Element>
         <Element Type="Variable" Id="232483FD">
@@ -1957,6 +2122,76 @@
             <Value>8</Value>
             <ValueType Type="int"/>
         </Element>
+        <Element Type="FunctionCall" Id="1B87351B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000136"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="16DC16D2"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="2FD330EA"/>
+        </Element>
+        <Element Type="Param" Id="16DC16D2">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000219"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="3D70DF58"/>
+        </Element>
+        <Element Type="Param" Id="2FD330EA">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000220"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="62052B10"/>
+        </Element>
+        <Element Type="FunctionCall" Id="62052B10">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="A078FB65"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="FDB7EDE5"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="689E0C63"/>
+        </Element>
+        <Element Type="Param" Id="FDB7EDE5">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="655C865B"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="167AA3C3"/>
+        </Element>
+        <Element Type="FunctionCall" Id="167AA3C3">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000122"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="2245A113"/>
+        </Element>
+        <Element Type="Param" Id="2245A113">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000194"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="00000076"/>
+        </Element>
+        <Element Type="Param" Id="689E0C63">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="13CABA7C"/>
+            <Value>9</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="1067E998">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000136"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="65313CEE"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B5F8BD5A"/>
+        </Element>
+        <Element Type="Param" Id="65313CEE">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000219"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="BEDD7954"/>
+        </Element>
+        <Element Type="Param" Id="B5F8BD5A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000220"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="385D46E4"/>
+        </Element>
+        <Element Type="FunctionCall" Id="385D46E4">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="A078FB65"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="DDB74255"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F076B788"/>
+        </Element>
+        <Element Type="Param" Id="DDB74255">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="655C865B"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="DDBB3232"/>
+        </Element>
+        <Element Type="FunctionCall" Id="DDBB3232">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000122"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="9F6438E8"/>
+        </Element>
+        <Element Type="Param" Id="9F6438E8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000194"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="00000076"/>
+        </Element>
+        <Element Type="Param" Id="F076B788">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="13CABA7C"/>
+            <Value>10</Value>
+            <ValueType Type="int"/>
+        </Element>
         <Element Type="FunctionCall" Id="3377504F">
             <FunctionDef Type="FunctionDef" Library="Ntve" Id="B525B112"/>
             <Parameter Type="Param" Library="ABFE498B" Id="0C92D46A"/>
@@ -1965,6 +2200,8 @@
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="2188CED2"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="95211E2C"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="9C2EBC30"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="B4D49A73"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="86401855"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="FAB2E15F"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="9A6ABC82"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="5E6BD774"/>
@@ -2064,6 +2301,50 @@
         <Element Type="Param" Id="01A4343A">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="00000006"/>
             <Variable Type="Variable" Library="ABFE498B" Id="D59FC083"/>
+        </Element>
+        <Element Type="FunctionCall" Id="B4D49A73">
+            <FunctionDef Type="FunctionDef" Library="ABFE498B" Id="3BCDC090"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="DF50D5F0"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="E602A5FF"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B01529C7"/>
+        </Element>
+        <Element Type="Param" Id="E602A5FF">
+            <ParameterDef Type="ParamDef" Library="ABFE498B" Id="9660AB67"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="7D25C7CD"/>
+        </Element>
+        <Element Type="Param" Id="B01529C7">
+            <ParameterDef Type="ParamDef" Library="ABFE498B" Id="A2ECDBBD"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="386A1AF8"/>
+        </Element>
+        <Element Type="FunctionCall" Id="386A1AF8">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000005"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="4E09F1F9"/>
+        </Element>
+        <Element Type="Param" Id="4E09F1F9">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000006"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="3D70DF58"/>
+        </Element>
+        <Element Type="FunctionCall" Id="86401855">
+            <FunctionDef Type="FunctionDef" Library="ABFE498B" Id="6B972EC2"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="DF50D5F0"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="DB6E25AD"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="A8358D53"/>
+        </Element>
+        <Element Type="Param" Id="DB6E25AD">
+            <ParameterDef Type="ParamDef" Library="ABFE498B" Id="DB2038C9"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="7D25C7CD"/>
+        </Element>
+        <Element Type="Param" Id="A8358D53">
+            <ParameterDef Type="ParamDef" Library="ABFE498B" Id="25FC1416"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="174A5383"/>
+        </Element>
+        <Element Type="FunctionCall" Id="174A5383">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000005"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="AF1835ED"/>
+        </Element>
+        <Element Type="Param" Id="AF1835ED">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000006"/>
+            <Variable Type="Variable" Library="ABFE498B" Id="BEDD7954"/>
         </Element>
         <Element Type="FunctionCall" Id="FAB2E15F">
             <FunctionDef Type="FunctionDef" Library="ABFE498B" Id="66568157"/>
@@ -6028,7 +6309,6 @@
         <Element Type="Category" Id="279E947C">
             <Item Type="FunctionDef" Library="ABFE498B" Id="EC36AF20"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="2BF54829"/>
-            <Item Type="FunctionDef" Library="ABFE498B" Id="357A6C7B"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="AD5B5003"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="3D9164AE"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="9E2FBC92"/>
@@ -6098,7 +6378,6 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="03E01987"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="C5AEEB4F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="B5F8A5F3"/>
-            <Item Type="FunctionDef" Library="ABFE498B" Id="008514A4"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="7A2A07A4"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="01C499CC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="3D3DE4CE"/>
@@ -6219,43 +6498,6 @@
         <Element Type="Param" Id="864CAD7E">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_DualFusionWelders</Value>
-            <ValueType Type="gamelink"/>
-            <ValueGameType Type="Upgrade"/>
-        </Element>
-        <Element Type="FunctionDef" Id="357A6C7B">
-            <Deprecated/>
-            <FlagAction/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="39ED0C69"/>
-            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="61013542"/>
-        </Element>
-        <Element Type="ParamDef" Id="39ED0C69">
-            <ParameterType>
-                <Type Value="int"/>
-            </ParameterType>
-            <Default Type="Param" Library="ABFE498B" Id="74EE5DA4"/>
-        </Element>
-        <Element Type="Param" Id="74EE5DA4">
-            <Value>0</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="FunctionCall" Id="61013542">
-            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="E6227189"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="256A70E7"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="11CCFEE0"/>
-        </Element>
-        <Element Type="Param" Id="E6227189">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="39ED0C69"/>
-        </Element>
-        <Element Type="Param" Id="256A70E7">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="Param" Id="11CCFEE0">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
-            <Value>AP_MarineStimpack</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>
@@ -9428,49 +9670,6 @@
         <Element Type="Param" Id="5F3438E9">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_VikingMagWeapon</Value>
-            <ValueType Type="gamelink"/>
-            <ValueGameType Type="Upgrade"/>
-        </Element>
-        <Element Type="FunctionDef" Id="008514A4">
-            <Deprecated/>
-            <FlagAction/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="52A84725"/>
-            <FunctionCall Type="Comment" Library="ABFE498B" Id="A5BC0298"/>
-            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="011D7C58"/>
-        </Element>
-        <Element Type="ParamDef" Id="52A84725">
-            <ParameterType>
-                <Type Value="int"/>
-            </ParameterType>
-            <Default Type="Param" Library="ABFE498B" Id="14E7E88F"/>
-        </Element>
-        <Element Type="Param" Id="14E7E88F">
-            <Value>0</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="Comment" Id="A5BC0298">
-            <Comment>
-                Deprecated, see unlockBansheeProgressiveCrossSpectrumDampeners
-            </Comment>
-        </Element>
-        <Element Type="FunctionCall" Id="011D7C58">
-            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="EA30460B"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="2FCB00DE"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="D43D37EA"/>
-        </Element>
-        <Element Type="Param" Id="EA30460B">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="52A84725"/>
-        </Element>
-        <Element Type="Param" Id="2FCB00DE">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="Param" Id="D43D37EA">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
-            <Value>AP_CrossSpectrumDampeners</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>
@@ -16240,7 +16439,6 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="A7AE2616"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="AEC18195"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="BE1794EA"/>
-            <Item Type="FunctionDef" Library="ABFE498B" Id="6124EA5E"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="4E0C3C5C"/>
         </Element>
         <Element Type="FunctionDef" Id="C22B56E2">
@@ -17086,43 +17284,6 @@
             <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
             <Value>1</Value>
             <ValueType Type="int"/>
-        </Element>
-        <Element Type="FunctionDef" Id="6124EA5E">
-            <Deprecated/>
-            <FlagAction/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="B5461D2C"/>
-            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="981183E7"/>
-        </Element>
-        <Element Type="ParamDef" Id="B5461D2C">
-            <ParameterType>
-                <Type Value="int"/>
-            </ParameterType>
-            <Default Type="Param" Library="ABFE498B" Id="EA1E7CF5"/>
-        </Element>
-        <Element Type="Param" Id="EA1E7CF5">
-            <Value>0</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="FunctionCall" Id="981183E7">
-            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="6C4C2C84"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="3A8236EC"/>
-            <Parameter Type="Param" Library="ABFE498B" Id="1D257DF0"/>
-        </Element>
-        <Element Type="Param" Id="6C4C2C84">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Parameter Type="ParamDef" Library="ABFE498B" Id="B5461D2C"/>
-        </Element>
-        <Element Type="Param" Id="3A8236EC">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
-        </Element>
-        <Element Type="Param" Id="1D257DF0">
-            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
-            <Value>AP_RegenerativeBioSteel</Value>
-            <ValueType Type="gamelink"/>
-            <ValueGameType Type="Upgrade"/>
         </Element>
         <Element Type="FunctionDef" Id="4E0C3C5C">
             <FlagAction/>

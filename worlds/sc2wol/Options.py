@@ -177,16 +177,6 @@ class ExcludedMissions(OptionSet):
     display_name = "Excluded Missions"
     valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
-class SC2ItemSet(Choice):
-    """Set of items available in world
-
-    Basic: Only units/upgrades/abilities present in SC2 WoL vanilla campaign
-    Extended: Added some SC1 and other units"""
-    display_name = "Item set"
-    option_basic = 0
-    option_extended = 1
-    default = option_basic
-
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
@@ -205,7 +195,6 @@ sc2wol_options: Dict[str, Option] = {
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,
-    "item_set": SC2ItemSet
 }
 
 
