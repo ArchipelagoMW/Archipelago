@@ -150,7 +150,7 @@ class StardewLogic:
             Fish.any: Or([self.can_catch_fish(fish) for fish in all_fish]),
             Geode.artifact_trove: self.has(Geode.omni) & self.can_reach_region(Region.desert),
             Craftable.bait: (self.has_skill_level(Skill.fishing, 2) & self.has(Loot.bug_meat)) | self.has(Machine.worm_bin),
-            Fertilizer.basic: (self.has(Material.sap) & self.has_farming_level(1)) | self.has_lived_months(1),
+            Fertilizer.basic: (self.has(Material.sap) & self.has_farming_level(1)) | (self.has_lived_months(1) & self.can_spend_money_at(Region.pierre_store, 100)),
             Fertilizer.quality: (self.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.has_year_two() & self.can_spend_money_at(Region.pierre_store, 150)),
             Fertilizer.deluxe: False_(),
             # self.received("Deluxe Fertilizer Recipe") & self.has(MetalBar.iridium) & self.has(SVItem.sap),
