@@ -1258,7 +1258,7 @@ class StardewLogic:
 
     def can_speak_dwarf(self) -> StardewRule:
         if self.options[options.Museumsanity] == options.Museumsanity.option_none:
-            self.has([item.name for item in dwarf_scrolls])
+            return self.has([item.name for item in dwarf_scrolls])
         return self.received("Dwarvish Translation Guide")
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
