@@ -341,7 +341,7 @@ class StardewLogic:
                     self.has_building(Building.mill) & self.has(Vegetable.beet)),
             Forageable.sweet_pea: self.can_forage(Season.summer),
             Machine.tapper: self.has_skill_level(Skill.foraging, 3) & self.has(Material.wood) & self.has(MetalBar.copper),
-            Vegetable.tea_leaves: self.has(Sapling.tea) & self.has_lived_months(2),
+            Vegetable.tea_leaves: self.has(Sapling.tea) & self.has_lived_months(2) & self.has_any_season_not_winter(),
             Sapling.tea: self.has_relationship(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             Trash.trash: self.can_crab_pot(),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
@@ -518,13 +518,19 @@ class StardewLogic:
             SpecialOrder.four_precious_stones: self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Shard") &
                                     self.can_mine_perfectly_in_the_skull_cavern(),
             SpecialOrder.qis_hungry_challenge: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            SpecialOrder.qis_cuisine: self.can_cook() & self.can_spend_money(250000),
+            SpecialOrder.qis_cuisine: self.can_cook() & (self.can_spend_money_at(Region.saloon, 205000) | self.can_spend_money_at(Region.pierre_store, 170000)),
             SpecialOrder.qis_kindness: self.can_give_loved_gifts_to_everyone(),
             SpecialOrder.extended_family: self.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &
                                self.has(Fish.crimsonfish) & self.has(Fish.mutant_carp) & self.has(Fish.legend),
             SpecialOrder.danger_in_the_deep: self.can_mine_perfectly() & self.has_mine_elevator_to_floor(120),
             SpecialOrder.skull_cavern_invasion: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
+            SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) & # 100 Bug Meat
+                                               self.can_spend_money_at(Region.saloon, 24000) &  # 100 Spaghetti
+                                               self.can_spend_money_at(Region.blacksmith, 15000) &  # 100 Copper Ore
+                                               self.can_spend_money_at(Region.ranch, 5000) &  # 100 Hay
+                                               self.can_spend_money_at(Region.saloon, 22000) &  # 100 Salads
+                                               self.can_spend_money_at(Region.saloon, 7500) &  # 100 Joja Cola
+                                               self.can_spend_money(80000),  # I need this extra rule because money rules aren't additive...
         })
 
         self.special_order_rules.update(get_modded_special_orders_rules(self, self.options[options.Mods]))
@@ -651,12 +657,12 @@ class StardewLogic:
                 skills.append_mod_skill_level(skills_items, self.options)
             return self.received(skills_items, count=level)
 
-        months_5_skills = max(1, (level // 5) - 1)
-        months_4_skills = max(1, (level // 5) - 1)
-        rule_with_fishing = self.has_lived_months(months_5_skills) & self.can_get_fishing_xp()
+        months_with_4_skills = max(1, (level // 4) - 1)
+        months_with_5_skills = max(1, (level // 5) - 1)
+        rule_with_fishing = self.has_lived_months(months_with_5_skills) & self.can_get_fishing_xp()
         if level > 40:
             return rule_with_fishing
-        return self.has_lived_months(months_4_skills) | rule_with_fishing
+        return self.has_lived_months(months_with_4_skills) | rule_with_fishing
 
     def has_building(self, building: str) -> StardewRule:
         carpenter_rule = self.can_reach_region(Region.carpenter)
