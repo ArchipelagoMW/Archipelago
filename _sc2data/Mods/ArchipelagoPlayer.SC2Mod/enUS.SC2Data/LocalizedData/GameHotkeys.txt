@@ -282,3 +282,4 @@ Button/Hotkey/AP_MedicSCBWOpticFlare=F
 Button/Hotkey/AP_ValkyrieSpeedBoost=B
 Button/Hotkey/AP_ScienceVesselSCBWEMPShockwave=E
 Button/Hotkey/AP_ScienceVesselSCBWDefensiveMatrix=D
+Button/Hotkey/AP_Stim=T

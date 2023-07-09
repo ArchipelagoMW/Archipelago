@@ -142,27 +142,27 @@
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSM">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Stim" State="Restricted" Requirements="AP_UseStimpackSM">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackReaper" parent="AP_StimpackSmallBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackMarauder" parent="AP_StimpackLargeBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackMarauder">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackMarauder">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackFirebat" parent="AP_StimpackLargeBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackFirebat">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackFirebat">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackHellbat" parent="AP_StimpackLargeBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackHellbat">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackHellbat">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>

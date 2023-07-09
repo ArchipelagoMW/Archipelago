@@ -194,7 +194,7 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarine,0" Row="2" Column="0"/>
             <LayoutButtons>
                 <Face value="AP_CombatShield"/>
@@ -379,7 +379,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackFirebat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackFirebat,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackFirebat,0" Row="2" Column="0"/>
         </CardLayouts>
         <InnerRadius value="0.4375"/>
@@ -472,7 +472,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarauder,Execute" Row="2" Column="1"/>
         </CardLayouts>
@@ -610,7 +610,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemReaper" Row="1" Column="2"/>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackReaper,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_Stim" Type="AbilCmd" AbilCmd="AP_StimpackReaper,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackReaper,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_D8Charge" Type="AbilCmd" AbilCmd="AP_D8Charge,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="AP_CloakOnReaper" Type="Passive" Requirements="AP_CloakingTechnologyReaper" Row="1" Column="3"/>
@@ -745,7 +745,7 @@
             <LayoutButtons Face="AP_NovaMultiTaskMAFServosHellion" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
             <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="1" Column="3"/>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackHellbat,0" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
@@ -7861,7 +7861,7 @@
             <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
             <LayoutButtons Face="AP_MorphToHellion" Type="AbilCmd" AbilCmd="AP_MorphToHellion,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="1" Column="3"/>
-            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackHellbat,0" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>

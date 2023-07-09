@@ -2787,4 +2787,10 @@
         <Icon value="Assets\Textures\btn-upgrade-swann-targetingoptics.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-swann-targetingoptics.dds"/>
     </CButton>
+    <CButton id="AP_Stim">
+        <Icon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>
