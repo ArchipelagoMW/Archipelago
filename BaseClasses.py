@@ -9,7 +9,8 @@ import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import ChainMap, Counter, deque
 from enum import IntEnum, IntFlag
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
+from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
+    Type, ClassVar
 
 import NetUtils
 import Options
@@ -801,10 +802,6 @@ class Entrance:
         self.name = name
         self.parent_region = parent
         self.player = player
-        from inspect import stack
-        if not __debug__ and not stack()[1].function == "create_exit":
-            logging.warning(f"Direct Entrance creation is deprecated.\n{stack()[1][1::1]}\n"
-                            "Please use `Region.create_exit`, `Region.connect` or `Region.add_exits` to create Entrances")
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
@@ -836,7 +833,7 @@ class Region:
     entrances: List[Entrance]
     exits: List[Entrance]
     locations: List[Location]
-    entrance_type: typing.ClassVar[typing.Type[Entrance]] = Entrance
+    entrance_type: ClassVar[Type[Entrance]] = Entrance
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
@@ -864,7 +861,7 @@ class Region:
     def hint_text(self) -> str:
         return self._hint_text if self._hint_text else self.name
 
-    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
+    def get_connecting_entrance(self, is_main_entrance: Callable[[Entrance], bool]) -> Entrance:
         for entrance in self.entrances:
             if is_main_entrance(entrance):
                 return entrance
@@ -872,7 +869,7 @@ class Region:
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
     def add_locations(self, locations: Dict[str, Optional[int]],
-                      location_type: Optional[typing.Type[Location]] = None) -> None:
+                      location_type: Optional[Type[Location]] = None) -> None:
         """
         Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address.
@@ -892,10 +889,10 @@ class Region:
         :param connecting_region: Region object to connect to path is `self -> exiting_region`
         :param name: name of the connection being created
         :param rule: callable to determine access of this connection to go from self to the exiting_region"""
-        _exit = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {connecting_region}")
+        exit_ = self.create_exit(name if name else f"{self.name} -> {connecting_region.name}")
         if rule:
-            _exit.access_rule = rule
-        _exit.connect(connecting_region)
+            exit_.access_rule = rule
+        exit_.connect(connecting_region)
     
     def create_exit(self, name: str) -> Entrance:
         """
@@ -903,9 +900,9 @@ class Region:
         
         :param name: name of the Entrance being created
         """
-        _exit = self.entrance_type(self.player, name, self)
-        self.exits.append(_exit)
-        return _exit
+        exit_ = self.entrance_type(self.player, name, self)
+        self.exits.append(exit_)
+        return exit_
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
                   rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
@@ -920,7 +917,7 @@ class Region:
             exits = dict.fromkeys(exits)
         for connecting_region, name in exits.items():
             self.connect(self.multiworld.get_region(connecting_region, self.player),
-                         name if name else None,
+                         name,
                          rules[connecting_region] if rules and connecting_region in rules else None)
 
     def __repr__(self):
@@ -928,33 +925,6 @@ class Region:
 
     def __str__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
-
-
-    def __init__(self, player: int, name: str = '', parent: Region = None):
-        self.name = name
-        self.parent_region = parent
-        self.player = player
-
-    def can_reach(self, state: CollectionState) -> bool:
-        if self.parent_region.can_reach(state) and self.access_rule(state):
-            if not self.hide_path and not self in state.path:
-                state.path[self] = (self.name, state.path.get(self.parent_region, (self.parent_region.name, None)))
-            return True
-
-        return False
-
-    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
-        self.connected_region = region
-        self.target = target
-        self.addresses = addresses
-        region.entrances.append(self)
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
 
 
 class LocationProgressType(IntEnum):
