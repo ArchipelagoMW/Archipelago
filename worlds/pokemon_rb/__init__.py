@@ -501,15 +501,14 @@ class PokemonRedBlueWorld(World):
         # the spoiler playthrough calculation because it removes each advancement item one at a time to verify
         # if the game is beatable without it. We go through each zone and flag any duplicates as useful.
         # Especially with area 1-to-1 mapping / vanilla wild Pokémon, this should cut down significantly on wasted time.
-        # for region in self.multiworld.get_regions(self.player):
-        #     region_mons = set()
-        #     for location in region.locations:
-        #         if "Wild Pokemon" in location.name:
-        #             if location.item.name in region_mons:
-        #                 print(location.name)
-        #                 location.item.classification = ItemClassification.useful
-        #             else:
-        #                 region_mons.add(location.item.name)
+        for region in self.multiworld.get_regions(self.player):
+            region_mons = set()
+            for location in region.locations:
+                if "Wild Pokemon" in location.name:
+                    if location.item.name in region_mons:
+                        location.item.classification = ItemClassification.useful
+                    else:
+                        region_mons.add(location.item.name)
 
         self.multiworld.elite_four_pokedex_condition[self.player].total = \
             int((len(reachable_mons) / 100) * self.multiworld.elite_four_pokedex_condition[self.player].value)
