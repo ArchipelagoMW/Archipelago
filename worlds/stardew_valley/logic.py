@@ -283,7 +283,7 @@ class StardewLogic:
             Animal.ostrich: self.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             AnimalProduct.ostrich_egg: self.can_forage(Generic.any, Region.island_north, True),
             Machine.ostrich_incubator: self.received("Ostrich Incubator Recipe") & self.has(Fossil.bone_fragment) & self.has(Material.hardwood) & self.has(Material.cinder_shard),
-            Fish.oyster: True_(),
+            Fish.oyster: self.can_forage(Generic.any, Region.beach),
             ArtisanGood.pale_ale: self.can_keg(Vegetable.hops),
             Gift.pearl: (self.has(Fish.blobfish) & self.has_building(Building.fish_pond)) | self.can_open_geode(Geode.artifact_trove),
             Fish.periwinkle: self.can_crab_pot(Region.town),
