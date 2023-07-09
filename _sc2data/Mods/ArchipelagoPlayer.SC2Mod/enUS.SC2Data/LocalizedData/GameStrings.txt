@@ -1183,7 +1183,7 @@ Button/Tooltip/AP_HaveNovaGadgetDefensiveDroneSummon=
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
 Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Button/Tooltip/AP_HealingPsionicStorm=Psionic Storm restores <d ref="((Effect,AP_HighArchonPsiStormPersistent,PeriodCount+1)*(Effect,AP_HighArchonPsiStormHeal,RechargeVitalRate))/2"/> shields to friendly units in the target area.<c/>
-Button/Tooltip/AP_HellbatCharge=Launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
+Button/Tooltip/AP_HellbatCharge=Increases movement speed in Hellion mode. <n/>In Hellbat mode, launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HellstormMissileBatteries=The Missile Turret unleashes an additional flurry of missiles with each attack.

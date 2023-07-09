@@ -55,7 +55,6 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="15"/>
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
-        <RemoveValidatorArray value="AP_SourceIsNotHellion"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_MagrailStun1Sec">
         <InfoFlags index="Hidden" value="1"/>

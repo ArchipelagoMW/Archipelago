@@ -299,8 +299,8 @@ void libABFE498B_gf_AP_Triggers_unlockTerranArmory4 (int lp_player, int lp_bitAr
         libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds, // 8
         libABFE498B_gf_AP_Triggers_Terran_unlockGhostLockdown, // 9
         libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds, // 10
-        libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload, // 11
-        libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos, // 12
+        ap_triggers_PlayerConsumer_sig, // 11
+        ap_triggers_PlayerConsumer_sig, // 12
         libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone, // 13
         libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines, // 14
         libABFE498B_gf_AP_Triggers_Terran_unlockRavenRailgunTurret, // 15
@@ -480,7 +480,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranProgressiveUpgrades (int lp_player, 
         libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack, // 4
         libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack, // 5
         libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack, // 6
-        ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockThorProgressiveHighImpactPayload, // 7
         ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 8
         ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 9
         ap_triggers_PlayerUpgradeLevelBiConsumer_sig, // 10
@@ -1106,6 +1106,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HoverHellbat", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_TurboChargedEngines", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatProgressiveStimpack (int lp_player, int lp_level) {
@@ -1495,6 +1496,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_playe
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ThorMorph", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockThorProgressiveHighImpactPayload (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ThorMorph", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosThor", 1);
+        }
+
+    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos (int lp_player) {

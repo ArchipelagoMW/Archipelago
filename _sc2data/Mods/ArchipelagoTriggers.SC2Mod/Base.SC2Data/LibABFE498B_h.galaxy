@@ -178,6 +178,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreImpalerRounds (int lp_player
 void libABFE498B_gf_AP_Triggers_Terran_unlockThor330mmBarrageCannon (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorImmortalityProtocol (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockThorProgressiveHighImpactPayload (int lp_player, int lp_level);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines (int lp_player);
