@@ -908,8 +908,8 @@ def patch_rom(world, rom, player: int):
     Menu_Data(rom) #Data related to the AP menu
     Handle_Locations(rom)
 
-    rom.write_bytes(0x06FC89, ([world.lives_low[player]]))
-    rom.write_bytes(0x06FC8A, ([world.lives_high(player).value]))
+    rom.write_bytes(0x06FC89, ([world.lives_low]))
+    rom.write_bytes(0x06FC8A, ([world.lives_high]))
     rom.write_bytes(0x06FC83, ([world.starting_world[player].value]))
     rom.write_bytes(0x06FC84, ([world.hidden_object_visibility[player].value]))
     rom.write_bytes(0x06FC88, ([world.shuffle_midrings[player].value]))

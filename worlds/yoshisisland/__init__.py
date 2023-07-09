@@ -235,15 +235,15 @@ def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: in
         item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
         pool.append(item)
 
-def var_boss(self, world: MultiWorld, player: int):
-    world.castle_bosses = world.castle_open_condition[player].value
-    world.bowser_bosses = world.castle_clear_condition[player].value
+def var_boss(self: YIWorld, world: MultiWorld, player: int):
+    world.castle_bosses = world.castle_open_condition[self.player].value
+    world.bowser_bosses = world.castle_clear_condition[self.player].value
     if world.starting_lives[player] > 255:
-        world.lives_high = world.starting_lives[player].value >> 8
-        world.lives_low = (world.starting_lives[player].value - world.lives_high) - ((255 * world.lives_high))
+        world.lives_high = world.starting_lives[self.player].value >> 8
+        world.lives_low = (world.starting_lives[self.player].value - world.lives_high) - ((255 * world.lives_high))
     else:
         world.lives_high = 0x00
-        world.lives_low = world.starting_lives[player].value
+        world.lives_low = world.starting_lives[self.player].value
 
     world.level_colors = []
     world.color_order = []
