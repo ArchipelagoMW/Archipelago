@@ -64,6 +64,7 @@ joke_hints = [
     "Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of \"adventure\" in video games.",
     "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
     "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
+    "Have you tried Blasphemous?\nYou haven't? Blasphemy!\n...Sorry. You should try it, though!",
     
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
