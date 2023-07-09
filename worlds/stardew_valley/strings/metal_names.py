@@ -25,7 +25,7 @@ class Mineral:
 
 
 class Artifact:
-    a = "a"
+    pass # Eventually this will be the artifact names
 
 
 class Fossil:
