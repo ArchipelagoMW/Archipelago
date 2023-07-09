@@ -107,7 +107,7 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
         return (self.has_any({'Banshee', 'Battlecruiser'}, player) or
-                self.has_all({'Liberator', 'Raid Artillery (Liberator)'})) \
+                self.has_all({'Liberator', 'Raid Artillery (Liberator)'}, player)) \
             and self._sc2wol_has_competent_anti_air(multiworld, player) or \
             self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
 
