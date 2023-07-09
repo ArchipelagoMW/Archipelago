@@ -530,7 +530,7 @@ def _create_region(world: MultiWorld, player: int, name: str, type: LTTPRegionTy
     ret = LTTPRegion(name, type, hint, player, world)
     if exits:
         for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+            ret.create_exit(exit)
     if locations:
         for location in locations:
             address, player_address, crystal, hint_text = location_table[location]

@@ -845,9 +845,7 @@ def swordless_rules(world, player):
 def add_connection(parent_name, target_name, entrance_name, world, player):
     parent = world.get_region(parent_name, player)
     target = world.get_region(target_name, player)
-    connection = Entrance(player, entrance_name, parent)
-    parent.exits.append(connection)
-    connection.connect(target)
+    parent.connect(target, entrance_name)
 
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
