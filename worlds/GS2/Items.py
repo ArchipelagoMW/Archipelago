@@ -8,7 +8,7 @@ class GoldenSunItem(Item):
     game: str = "Golden Sun: The Dark Age"
 
 item_table = {
-    "Battle Axe": ItemData (27, False) ,
+    "Battle Axe": ItemData (27) ,
 }
 
 item_frequencies = {
