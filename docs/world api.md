@@ -512,30 +512,28 @@ def create_items(self) -> None:
 def create_regions(self) -> None:
     # Add regions to the multiworld. "Menu" is the required starting point.
     # Arguments to Region() are name, player, world, and optionally hint_text
-    r = Region("Menu", self.player, self.multiworld)
-    # Set Region.exits to a list of entrances that are reachable from region
-    r.exits = [Entrance(self.player, "New game", r)]  # or use r.exits.append
-    # Append region to MultiWorld's regions
-    self.multiworld.regions.append(r)  # or use += [r...]
+    menu_region = Region("Menu", self.player, self.multiworld)
+    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
     
-    r = Region("Main Area", self.player, self.multiworld)
+    main_region = Region("Main Area", self.player, self.multiworld)
     # Add main area's locations to main area (all but final boss)
-    r.locations = [MyGameLocation(self.player, location.name,
-                   self.location_name_to_id[location.name], r)]
-    r.exits = [Entrance(self.player, "Boss Door", r)]
-    self.multiworld.regions.append(r)
+    main_region.add_locations(main_region_locations, MyGameLocation)
+    # or 
+    # main_region.locations = \
+    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
+    self.multiworld.regions.append(main_region)
     
-    r = Region("Boss Room", self.player, self.multiworld)
-    # add event to Boss Room
-    r.locations = [MyGameLocation(self.player, "Final Boss", None, r)]
-    self.multiworld.regions.append(r)
-    
-    # If entrances are not randomized, they should be connected here, otherwise
-    # they can also be connected at a later stage.
-    self.multiworld.get_entrance("New Game", self.player)
-        .connect(self.multiworld.get_region("Main Area", self.player))
-    self.multiworld.get_entrance("Boss Door", self.player)
-        .connect(self.multiworld.get_region("Boss Room", self.player))
+    boss_region = Region("Boss Room", self.player, self.multiworld)
+    # Add event to Boss Room
+    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
+
+    # If entrances are not randomized, they should be connected here,
+    # otherwise they can also be connected at a later stage.
+    # Create Entrances and connect the Regions
+    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
+    # or
+    main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
+    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
     
     # If setting location access rules from data is easier here, set_rules can
     # possibly omitted.
