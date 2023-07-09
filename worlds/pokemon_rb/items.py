@@ -282,7 +282,7 @@ def generate_items(self) -> None:
             if location.type == "Trainer Parties":
                 # loc.item.classification = ItemClassification.filler
                 loc.party_data = deepcopy(location.party_data)
-        elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
+        else:
             self.item_pool.append(item)
 
     self.multiworld.random.shuffle(self.item_pool)

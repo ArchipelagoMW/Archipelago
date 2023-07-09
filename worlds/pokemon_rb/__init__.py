@@ -101,6 +101,7 @@ class PokemonRedBlueWorld(World):
         self.trade_mons = {}
         self.finished_level_scaling = threading.Event()
         self.dexsanity_table = []
+        self.local_locs = []
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -131,6 +132,9 @@ class PokemonRedBlueWorld(World):
 
         if len(self.multiworld.player_name[self.player].encode()) > 16:
             raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
+
+        if not self.multiworld.badgesanity[self.player]:
+            self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
@@ -231,6 +235,103 @@ class PokemonRedBlueWorld(World):
     def create_items(self):
         self.multiworld.itempool += self.item_pool
 
+    @classmethod
+    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
+        locs = []
+        for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
+            locs += world.local_locs
+        for loc in sorted(locs):
+            itempool = progitempool + usefulitempool + filleritempool
+            multiworld.random.shuffle(itempool)
+            unplaced_items = []
+            for item in itempool:
+                if item.player == loc.player and loc.can_fill(multiworld.state, item, False):
+                    if item in progitempool:
+                        progitempool.remove(item)
+                    elif item in usefulitempool:
+                        usefulitempool.remove(item)
+                    elif item in filleritempool:
+                        filleritempool.remove(item)
+                    if item.advancement:
+                        state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
+                    if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
+                        multiworld.push_item(loc, item, False)
+                        loc.event = item.advancement
+                        fill_locations.remove(loc)
+                        break
+                    else:
+                        unplaced_items.append(item)
+            progitempool += [item for item in unplaced_items if item.advancement]
+            usefulitempool += [item for item in unplaced_items if item.useful]
+            filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
+
+    def fill_hook(self, progitempool, usefulitempool, filleritempool, fill_locations):
+        if not self.multiworld.badgesanity[self.player]:
+            # Door Shuffle options besides Simple place badges during door shuffling
+            if not self.multiworld.door_shuffle[self.player] not in ("off", "simple"):
+                badges = [item for item in progitempool if "Badge" in item.name and item.player == self.player]
+                for badge in badges:
+                    progitempool.remove(badge)
+                for _ in range(5):
+                    badgelocs = []
+                    for loc in [self.multiworld.get_location(loc, self.player) for loc in [
+                            "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
+                            "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
+                            "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                            "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]]:
+                        if loc in fill_locations:
+                            fill_locations.remove(loc)
+                            badgelocs.append(loc)
+                    state = self.multiworld.get_all_state(False)
+                    self.multiworld.random.shuffle(badges)
+                    self.multiworld.random.shuffle(badgelocs)
+                    badgelocs_copy = badgelocs.copy()
+                    # allow_partial so that unplaced badges aren't lost, for debugging purposes
+                    fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
+                    if badges:
+                        for location in badgelocs:
+                            if location.item:
+                                badges.append(location.item)
+                                location.item = None
+                        continue
+                    break
+                else:
+                    raise FillError(f"Failed to place badges for player {self.player}")
+
+        if self.multiworld.key_items_only[self.player]:
+            return
+
+        tms = [item for item in usefulitempool + filleritempool if item.name.startswith("TM") and (item.player ==
+               self.player or self.player in self.multiworld.groups[item.player]["players"])]
+        if len(tms) > 7:
+            for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
+                               ("Celadon Gym-C", "Erika"), ("Fuchsia Gym", "Koga"), ("Saffron Gym-C", "Sabrina"),
+                               ("Cinnabar Gym", "Blaine"), ("Viridian Gym", "Giovanni")):
+                loc = self.multiworld.get_location(f"{gym_leader[0].split('-')[0]} - {gym_leader[1]} TM",
+                                                   self.player)
+                if loc.item:
+                    continue
+                for party in self.multiworld.get_location(gym_leader[0] + " - Trainer Parties", self.player).party_data:
+                    if party["party_address"] == \
+                            f"Trainer_Party_{gym_leader[1].replace('. ', '').replace('Giovanni', 'Viridian_Gym_Giovanni')}_A":
+                        mon = party["party"][-1]
+                        learnable_tms = [tm for tm in tms if self.local_poke_data[mon]["tms"][
+                            int((int(tm.name[2:4]) - 1) / 8)] & 1 << ((int(tm.name[2:4]) - 1) % 8)]
+                        if not learnable_tms:
+                            learnable_tms = tms
+                        tm = self.multiworld.random.choice(learnable_tms)
+
+                        loc.place_locked_item(tm)
+                        fill_locations.remove(loc)
+                        tms.remove(tm)
+                        if tm.useful:
+                            usefulitempool.remove(tm)
+                        else:
+                            filleritempool.remove(tm)
+                        break
+                else:
+                    raise Exception("Missing Gym Leader data")
+
     def pre_fill(self) -> None:
         process_pokemon_locations(self)
         process_trainer_data(self)
@@ -289,10 +390,6 @@ class PokemonRedBlueWorld(World):
         while True:
             intervene_move = None
             test_state = self.multiworld.get_all_state(False)
-            # if (not self.multiworld.badgesanity[self.player] and self.multiworld.door_shuffle[self.player] in
-            #         ("off", "simple")):
-            #     for badge in ["Cascade Badge", "Thunder Badge", "Soul Badge", "Rainbow Badge", "Boulder Badge"]:
-            #         test_state.collect(self.create_item(badge))
             if not logic.can_learn_hm(test_state, "Surf", self.player):
                 intervene_move = "Surf"
             elif not logic.can_learn_hm(test_state, "Strength", self.player):
@@ -339,26 +436,6 @@ class PokemonRedBlueWorld(World):
         if clear_cache:
             self.multiworld.clear_location_cache()
 
-        tms = [item for item in self.multiworld.itempool if item.player == self.player and item.name.startswith("TM")]
-        if len(tms) > 7:
-            for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
-                                ("Celadon Gym-C", "Erika"), ("Fuchsia Gym", "Koga"), ("Saffron Gym-C", "Sabrina"),
-                                ("Cinnabar Gym", "Blaine"), ("Viridian Gym", "Giovanni")):
-                for party in self.multiworld.get_location(gym_leader[0] + " - Trainer Parties", self.player).party_data:
-                    if party["party_address"] == f"Trainer_Party_{gym_leader[1].replace('. ', '').replace('Giovanni','Viridian_Gym_Giovanni')}_A":
-                        mon = party["party"][-1]
-                        learnable_tms = [tm for tm in tms if self.local_poke_data[mon]["tms"][
-                            int((int(tm.name[2:4]) - 1) / 8)] & 1 << ((int(tm.name[2:4]) - 1) % 8)]
-                        if not learnable_tms:
-                            learnable_tms = tms
-                        tm = self.multiworld.random.choice(learnable_tms)
-                        self.multiworld.get_location(f"{gym_leader[0].split('-')[0]} - {gym_leader[1]} TM",
-                                                     self.player).place_locked_item(tm)
-                        tms.remove(tm)
-                        self.multiworld.itempool.remove(tm)
-                        break
-                else:
-                    raise Exception("Missing Gym Leader data")
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -370,34 +447,6 @@ class PokemonRedBlueWorld(World):
                     except KeyError:
                         pass
 
-        if not self.multiworld.badgesanity[self.player]:
-            self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
-            # Door Shuffle options besides Simple place badges during door shuffling
-            if not self.multiworld.door_shuffle[self.player] not in ("off", "simple"):
-                for _ in range(5):
-                    badges = []
-                    badgelocs = []
-                    for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
-                                  "Marsh Badge", "Volcano Badge", "Earth Badge"]:
-                        badges.append(self.create_item(badge))
-                    for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
-                                "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
-                                "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
-                                "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
-                        badgelocs.append(self.multiworld.get_location(loc, self.player))
-                    state = self.multiworld.get_all_state(False)
-                    self.multiworld.random.shuffle(badges)
-                    self.multiworld.random.shuffle(badgelocs)
-                    badgelocs_copy = badgelocs.copy()
-                    # allow_partial so that unplaced badges aren't lost, for debugging purposes
-                    fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
-                    if badges:
-                        for location in badgelocs:
-                            location.item = None
-                        continue
-                    break
-                else:
-                    raise FillError(f"Failed to place badges for player {self.player}")
 
         # Place local items in some locations to prevent save-scumming. Also Oak's PC to prevent an "AP Item" from
         # entering the player's inventory.
@@ -433,24 +482,13 @@ class PokemonRedBlueWorld(World):
             pass
 
         for loc in sorted(locs):
-            unplaced_items = []
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             add_item_rule(loc, lambda i: i.player == self.player)
-            if self.multiworld.old_man[self.player] == "early_parcel":
+            if self.multiworld.old_man[self.player] == "early_parcel" and loc.name != "Player's House 2F - Player's PC":
                 add_item_rule(loc, lambda i: i.name != "Oak's Parcel")
-            for item in self.multiworld.itempool.copy():
-                if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
-                    self.multiworld.itempool.remove(item)
-                    if item.advancement:
-                        state = sweep_from_pool(self.multiworld.state, self.multiworld.itempool + unplaced_items)
-                    if (not item.advancement) or state.can_reach(loc, "Location", self.player):
-                        self.multiworld.push_item(loc, item, False)
-                        loc.event = item.advancement
-                        break
-                    else:
-                        unplaced_items.append(item)
-            self.multiworld.itempool += unplaced_items
+
+        self.local_locs = locs
 
         all_state = self.multiworld.get_all_state(False)
 
@@ -462,12 +500,13 @@ class PokemonRedBlueWorld(World):
         # The large number of wild Pokemon can make sweeping for events time-consuming, and is especially bad in
         # the spoiler playthrough calculation because it removes each advancement item one at a time to verify
         # if the game is beatable without it. We go through each zone and flag any duplicates as useful.
-        # Especially with area 1-to-1 mapping or vanilla wild Pokémon, this should cut down on time wasted a lot.
+        # Especially with area 1-to-1 mapping / vanilla wild Pokémon, this should cut down significantly on wasted time.
         # for region in self.multiworld.get_regions(self.player):
         #     region_mons = set()
         #     for location in region.locations:
         #         if "Wild Pokemon" in location.name:
         #             if location.item.name in region_mons:
+        #                 print(location.name)
         #                 location.item.classification = ItemClassification.useful
         #             else:
         #                 region_mons.add(location.item.name)
