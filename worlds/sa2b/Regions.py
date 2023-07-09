@@ -1,12 +1,12 @@
 import typing
 import math
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Items import SA2BItem
 from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
                                      chao_stat_power_table, chao_stat_stamina_table,\
-                                     chao_stat_luck_table, chao_stat_intelligence_table
+                                     chao_stat_luck_table, chao_stat_intelligence_table, chao_animal_event_location_table
 from .Names import LocationName, ItemName
 from .GateBosses import get_boss_name, all_gate_bosses_table, king_boom_boo
 
@@ -1398,6 +1398,204 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations)
 
+    animal_penguin_region_locations = [
+        LocationName.animal_penguin,
+        LocationName.chao_penguin_arms,
+        LocationName.chao_penguin_forehead,
+        LocationName.chao_penguin_legs,
+    ]
+    animal_penguin_region = create_region(world, player, active_locations, LocationName.animal_penguin,
+                                          animal_penguin_region_locations)
+
+    animal_seal_region_locations = [
+        LocationName.animal_seal,
+        LocationName.chao_seal_arms,
+        LocationName.chao_seal_tail,
+    ]
+    animal_seal_region = create_region(world, player, active_locations, LocationName.animal_seal,
+                                       animal_seal_region_locations)
+
+    animal_otter_region_locations = [
+        LocationName.animal_otter,
+        LocationName.chao_otter_arms,
+        LocationName.chao_otter_ears,
+        LocationName.chao_otter_legs,
+        LocationName.chao_otter_tail,
+    ]
+    animal_otter_region = create_region(world, player, active_locations, LocationName.animal_otter,
+                                        animal_otter_region_locations)
+
+    animal_rabbit_region_locations = [
+        LocationName.animal_rabbit,
+        LocationName.chao_rabbit_arms,
+        LocationName.chao_rabbit_ears,
+        LocationName.chao_rabbit_legs,
+        LocationName.chao_rabbit_tail,
+    ]
+    animal_rabbit_region = create_region(world, player, active_locations, LocationName.animal_rabbit,
+                                         animal_rabbit_region_locations)
+
+    animal_cheetah_region_locations = [
+        LocationName.animal_cheetah,
+        LocationName.chao_cheetah_arms,
+        LocationName.chao_cheetah_ears,
+        LocationName.chao_cheetah_legs,
+        LocationName.chao_cheetah_tail,
+    ]
+    animal_cheetah_region = create_region(world, player, active_locations, LocationName.animal_cheetah,
+                                          animal_cheetah_region_locations)
+
+    animal_warthog_region_locations = [
+        LocationName.animal_warthog,
+        LocationName.chao_warthog_arms,
+        LocationName.chao_warthog_ears,
+        LocationName.chao_warthog_face,
+        LocationName.chao_warthog_legs,
+        LocationName.chao_warthog_tail,
+    ]
+    animal_warthog_region = create_region(world, player, active_locations, LocationName.animal_warthog,
+                                          animal_warthog_region_locations)
+
+    animal_bear_region_locations = [
+        LocationName.animal_bear,
+        LocationName.chao_bear_arms,
+        LocationName.chao_bear_ears,
+        LocationName.chao_bear_legs,
+    ]
+    animal_bear_region = create_region(world, player, active_locations, LocationName.animal_bear,
+                                       animal_bear_region_locations)
+
+    animal_tiger_region_locations = [
+        LocationName.animal_tiger,
+        LocationName.chao_tiger_arms,
+        LocationName.chao_tiger_ears,
+        LocationName.chao_tiger_legs,
+        LocationName.chao_tiger_tail,
+    ]
+    animal_tiger_region = create_region(world, player, active_locations, LocationName.animal_tiger,
+                                        animal_tiger_region_locations)
+
+    animal_gorilla_region_locations = [
+        LocationName.animal_gorilla,
+        LocationName.chao_gorilla_arms,
+        LocationName.chao_gorilla_ears,
+        LocationName.chao_gorilla_forehead,
+        LocationName.chao_gorilla_legs,
+    ]
+    animal_gorilla_region = create_region(world, player, active_locations, LocationName.animal_gorilla,
+                                          animal_gorilla_region_locations)
+
+    animal_peacock_region_locations = [
+        LocationName.animal_peacock,
+        LocationName.chao_peacock_forehead,
+        LocationName.chao_peacock_legs,
+        LocationName.chao_peacock_tail,
+        LocationName.chao_peacock_wings,
+    ]
+    animal_peacock_region = create_region(world, player, active_locations, LocationName.animal_peacock,
+                                          animal_peacock_region_locations)
+
+    animal_parrot_region_locations = [
+        LocationName.animal_parrot,
+        LocationName.chao_parrot_forehead,
+        LocationName.chao_parrot_legs,
+        LocationName.chao_parrot_tail,
+        LocationName.chao_parrot_wings,
+    ]
+    animal_parrot_region = create_region(world, player, active_locations, LocationName.animal_parrot,
+                                         animal_parrot_region_locations)
+
+    animal_condor_region_locations = [
+        LocationName.animal_condor,
+        LocationName.chao_condor_ears,
+        LocationName.chao_condor_legs,
+        LocationName.chao_condor_tail,
+        LocationName.chao_condor_wings,
+    ]
+    animal_condor_region = create_region(world, player, active_locations, LocationName.animal_condor,
+                                         animal_condor_region_locations)
+
+    animal_skunk_region_locations = [
+        LocationName.animal_skunk,
+        LocationName.chao_skunk_arms,
+        LocationName.chao_skunk_forehead,
+        LocationName.chao_skunk_legs,
+        LocationName.chao_skunk_tail,
+    ]
+    animal_skunk_region = create_region(world, player, active_locations, LocationName.animal_skunk,
+                                        animal_skunk_region_locations)
+
+    animal_sheep_region_locations = [
+        LocationName.animal_sheep,
+        LocationName.chao_sheep_arms,
+        LocationName.chao_sheep_ears,
+        LocationName.chao_sheep_legs,
+        LocationName.chao_sheep_horn,
+        LocationName.chao_sheep_tail,
+    ]
+    animal_sheep_region = create_region(world, player, active_locations, LocationName.animal_sheep,
+                                        animal_sheep_region_locations)
+
+    animal_raccoon_region_locations = [
+        LocationName.animal_raccoon,
+        LocationName.chao_raccoon_arms,
+        LocationName.chao_raccoon_ears,
+        LocationName.chao_raccoon_legs,
+    ]
+    animal_raccoon_region = create_region(world, player, active_locations, LocationName.animal_raccoon,
+                                          animal_raccoon_region_locations)
+
+    animal_halffish_region_locations = [
+        LocationName.animal_halffish,
+    ]
+    animal_halffish_region = create_region(world, player, active_locations, LocationName.animal_halffish,
+                                           animal_halffish_region_locations)
+
+    animal_skeleton_dog_region_locations = [
+        LocationName.animal_skeleton_dog,
+    ]
+    animal_skeleton_dog_region = create_region(world, player, active_locations, LocationName.animal_skeleton_dog,
+                                               animal_skeleton_dog_region_locations)
+
+    animal_bat_region_locations = [
+        LocationName.animal_bat,
+    ]
+    animal_bat_region = create_region(world, player, active_locations, LocationName.animal_bat,
+                                      animal_bat_region_locations)
+
+    animal_dragon_region_locations = [
+        LocationName.animal_dragon,
+        LocationName.chao_dragon_arms,
+        LocationName.chao_dragon_ears,
+        LocationName.chao_dragon_legs,
+        LocationName.chao_dragon_horn,
+        LocationName.chao_dragon_tail,
+        LocationName.chao_dragon_wings,
+    ]
+    animal_dragon_region = create_region(world, player, active_locations, LocationName.animal_dragon,
+                                         animal_dragon_region_locations)
+
+    animal_unicorn_region_locations = [
+        LocationName.animal_unicorn,
+        LocationName.chao_unicorn_arms,
+        LocationName.chao_unicorn_ears,
+        LocationName.chao_unicorn_forehead,
+        LocationName.chao_unicorn_legs,
+        LocationName.chao_unicorn_tail,
+    ]
+    animal_unicorn_region = create_region(world, player, active_locations, LocationName.animal_unicorn,
+                                          animal_unicorn_region_locations)
+
+    animal_phoenix_region_locations = [
+        LocationName.animal_phoenix,
+        LocationName.chao_phoenix_forehead,
+        LocationName.chao_phoenix_legs,
+        LocationName.chao_phoenix_tail,
+        LocationName.chao_phoenix_wings,
+    ]
+    animal_phoenix_region = create_region(world, player, active_locations, LocationName.animal_phoenix,
+                                          animal_phoenix_region_locations)
+
     kart_race_beginner_region_locations = []
     if world.kart_race_checks[player] == 2:
         kart_race_beginner_region_locations.extend([
@@ -1450,14 +1648,20 @@ def create_regions(world, player: int, active_locations):
         grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
                                           grand_prix_region_locations)
         world.regions += [grand_prix_region]
-
-    if world.goal[player] in [0, 2, 4, 5, 6]:
+    elif world.goal[player] in [0, 2, 4, 5, 6]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
         biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region,
                                          biolizard_region_locations)
         world.regions += [biolizard_region]
+    elif world.goal[player] == 7:
+        chaos_chao_region_locations = [
+            LocationName.chaos_chao,
+        ]
+        chaos_chao_region = create_region(world, player, active_locations, LocationName.chaos_chao_region,
+                                          chaos_chao_region_locations)
+        world.regions += [chaos_chao_region]
 
     if world.goal[player] in [1, 2]:
         green_hill_region_locations = [
@@ -1520,6 +1724,27 @@ def create_regions(world, player: int, active_locations):
         kart_race_beginner_region,
         kart_race_standard_region,
         kart_race_expert_region,
+        animal_penguin_region,
+        animal_seal_region,
+        animal_otter_region,
+        animal_rabbit_region,
+        animal_cheetah_region,
+        animal_warthog_region,
+        animal_bear_region,
+        animal_tiger_region,
+        animal_gorilla_region,
+        animal_peacock_region,
+        animal_parrot_region,
+        animal_condor_region,
+        animal_skunk_region,
+        animal_sheep_region,
+        animal_raccoon_region,
+        animal_halffish_region,
+        animal_skeleton_dog_region,
+        animal_bat_region,
+        animal_dragon_region,
+        animal_unicorn_region,
+        animal_phoenix_region,
     ]
 
 
@@ -1580,6 +1805,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
                 connect(world, player, names, "Boss Rush " + str(i + 1), "Boss Rush " + str(i + 2))
 
         connect(world, player, names, LocationName.boss_rush_16_region, LocationName.biolizard_region)
+    elif world.goal[player] == 7:
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chaos_chao,
+                lambda state: (state.has_all(chao_animal_event_location_table.keys(), player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(world, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
@@ -1740,6 +1968,351 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             loc_id_intelligence   = chao_stat_intelligence_table[loc_name_intelligence]
             location_intelligence = SA2BLocation(player, loc_name_intelligence, loc_id_intelligence, gate_region)
             gate_region.locations.append(location_intelligence)
+
+    # Handle access to Animal Parts
+    if world.goal[player] == 7 or world.chao_animal_parts[player]:
+        connect(world, player, names, LocationName.city_escape_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.city_escape_region, LocationName.animal_skunk)
+        connect(world, player, names, LocationName.city_escape_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.city_escape_region, LocationName.animal_raccoon)
+
+        connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_cheetah)
+        connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_sheep)
+
+        connect(world, player, names, LocationName.prison_lane_region, LocationName.animal_otter)
+        connect(world, player, names, LocationName.prison_lane_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.prison_lane_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.prison_lane_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.prison_lane_region, LocationName.animal_unicorn,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+
+        connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_raccoon)
+
+        connect(world, player, names, LocationName.green_forest_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.green_forest_region, LocationName.animal_cheetah)
+        connect(world, player, names, LocationName.green_forest_region, LocationName.animal_parrot)
+        connect(world, player, names, LocationName.green_forest_region, LocationName.animal_raccoon)
+        connect(world, player, names, LocationName.green_forest_region, LocationName.animal_halffish)
+
+        connect(world, player, names, LocationName.pumpkin_hill_region, LocationName.animal_cheetah)
+        connect(world, player, names, LocationName.pumpkin_hill_region, LocationName.animal_warthog)
+        connect(world, player, names, LocationName.pumpkin_hill_region, LocationName.animal_skeleton_dog)
+        connect(world, player, names, LocationName.pumpkin_hill_region, LocationName.animal_bat)
+
+        connect(world, player, names, LocationName.mission_street_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.mission_street_region, LocationName.animal_warthog)
+        connect(world, player, names, LocationName.mission_street_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.mission_street_region, LocationName.animal_sheep)
+
+        connect(world, player, names, LocationName.aquatic_mine_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.aquatic_mine_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.aquatic_mine_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.aquatic_mine_region, LocationName.animal_skunk)
+        connect(world, player, names, LocationName.aquatic_mine_region, LocationName.animal_dragon)
+
+        connect(world, player, names, LocationName.hidden_base_region, LocationName.animal_penguin,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+        connect(world, player, names, LocationName.hidden_base_region, LocationName.animal_otter,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+        connect(world, player, names, LocationName.hidden_base_region, LocationName.animal_tiger,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+        connect(world, player, names, LocationName.hidden_base_region, LocationName.animal_skunk)
+        connect(world, player, names, LocationName.hidden_base_region, LocationName.animal_halffish,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+
+        connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_bat)
+
+        connect(world, player, names, LocationName.death_chamber_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.death_chamber_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.death_chamber_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.death_chamber_region, LocationName.animal_skunk)
+
+        connect(world, player, names, LocationName.eternal_engine_region, LocationName.animal_warthog)
+        connect(world, player, names, LocationName.eternal_engine_region, LocationName.animal_parrot,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+        connect(world, player, names, LocationName.eternal_engine_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.eternal_engine_region, LocationName.animal_raccoon)
+
+        connect(world, player, names, LocationName.meteor_herd_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.meteor_herd_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.meteor_herd_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.meteor_herd_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.meteor_herd_region, LocationName.animal_phoenix)
+
+        connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_bear)
+        connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_tiger)
+
+        connect(world, player, names, LocationName.final_rush_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.final_rush_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.final_rush_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.final_rush_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.final_rush_region, LocationName.animal_dragon,
+                lambda state: (state.has(ItemName.sonic_bounce_bracelet, player)))
+
+        connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_skunk)
+
+        connect(world, player, names, LocationName.dry_lagoon_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.dry_lagoon_region, LocationName.animal_otter)
+        connect(world, player, names, LocationName.dry_lagoon_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.dry_lagoon_region, LocationName.animal_sheep)
+        connect(world, player, names, LocationName.dry_lagoon_region, LocationName.animal_unicorn)
+
+        connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_parrot)
+        connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_raccoon)
+        connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_bat)
+
+        connect(world, player, names, LocationName.radical_highway_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.radical_highway_region, LocationName.animal_cheetah)
+        connect(world, player, names, LocationName.radical_highway_region, LocationName.animal_warthog)
+        connect(world, player, names, LocationName.radical_highway_region, LocationName.animal_raccoon)
+
+        connect(world, player, names, LocationName.egg_quarters_region, LocationName.animal_bear)
+        connect(world, player, names, LocationName.egg_quarters_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.egg_quarters_region, LocationName.animal_parrot)
+        connect(world, player, names, LocationName.egg_quarters_region, LocationName.animal_skunk)
+        connect(world, player, names, LocationName.egg_quarters_region, LocationName.animal_halffish)
+
+        connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_warthog)
+        connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_bat)
+
+        connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_otter)
+        connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_cheetah)
+        connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_sheep)
+
+        connect(world, player, names, LocationName.security_hall_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.security_hall_region, LocationName.animal_parrot)
+        connect(world, player, names, LocationName.security_hall_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.security_hall_region, LocationName.animal_raccoon)
+
+        connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_bear)
+        connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_parrot)
+        connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_skunk)
+
+        connect(world, player, names, LocationName.sky_rail_region, LocationName.animal_bear)
+        connect(world, player, names, LocationName.sky_rail_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.sky_rail_region, LocationName.animal_condor)
+        connect(world, player, names, LocationName.sky_rail_region, LocationName.animal_sheep)
+
+        connect(world, player, names, LocationName.mad_space_region, LocationName.animal_peacock)
+        connect(world, player, names, LocationName.mad_space_region, LocationName.animal_parrot)
+
+        connect(world, player, names, LocationName.cosmic_wall_region, LocationName.animal_otter,
+                lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+        connect(world, player, names, LocationName.cosmic_wall_region, LocationName.animal_rabbit)
+        connect(world, player, names, LocationName.cosmic_wall_region, LocationName.animal_cheetah,
+                lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+        connect(world, player, names, LocationName.cosmic_wall_region, LocationName.animal_sheep,
+                lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+        connect(world, player, names, LocationName.cosmic_wall_region, LocationName.animal_dragon,
+                lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+        connect(world, player, names, LocationName.final_chase_region, LocationName.animal_penguin)
+        connect(world, player, names, LocationName.final_chase_region, LocationName.animal_otter)
+        connect(world, player, names, LocationName.final_chase_region, LocationName.animal_tiger)
+        connect(world, player, names, LocationName.final_chase_region, LocationName.animal_skunk)
+        connect(world, player, names, LocationName.final_chase_region, LocationName.animal_phoenix)
+
+        connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_seal)
+        connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_bear,
+                lambda state: (state.has(ItemName.tails_booster, player)))
+        connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_gorilla)
+        connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_skunk)
+
+        if world.goal[player] in [1, 2]:
+            connect(world, player, names, LocationName.green_hill_region, LocationName.animal_penguin)
+            connect(world, player, names, LocationName.green_hill_region, LocationName.animal_otter)
+            connect(world, player, names, LocationName.green_hill_region, LocationName.animal_gorilla)
+            connect(world, player, names, LocationName.green_hill_region, LocationName.animal_raccoon)
+            connect(world, player, names, LocationName.green_hill_region, LocationName.animal_unicorn)
+
+        if world.logic_difficulty[player].value == 0:
+            connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.sonic_light_shoes, player)))
+
+            connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_skunk,
+                    lambda state: (state.has(ItemName.sonic_bounce_bracelet, player)))
+            connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                   state.has(ItemName.sonic_bounce_bracelet, player) and
+                                   state.has(ItemName.sonic_flame_ring, player)))
+
+            connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.eggman_jet_engine, player) and
+                                   state.has(ItemName.eggman_large_cannon, player)))
+
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_gorilla,
+                    lambda state: (state.has(ItemName.rouge_iron_boots, player)))
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_raccoon,
+                    lambda state: (state.has(ItemName.rouge_iron_boots, player)))
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_halffish,
+                    lambda state: (state.has(ItemName.rouge_iron_boots, player)))
+
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_otter,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_rabbit,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player) and
+                                   state.has(ItemName.knuckles_air_necklace, player) and
+                                   state.has(ItemName.knuckles_hammer_gloves, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_cheetah,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_warthog,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_parrot,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player) and
+                                   state.has(ItemName.knuckles_air_necklace, player) and
+                                   state.has(ItemName.knuckles_hammer_gloves, player) and
+                                   (state.has(ItemName.sonic_bounce_bracelet, player) or
+                                    state.has(ItemName.sonic_flame_ring, player))))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_condor,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_raccoon,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   (state.has(ItemName.eggman_jet_engine, player) or
+                                    state.has(ItemName.eggman_large_cannon, player))))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.eggman_jet_engine, player)))
+
+        elif world.logic_difficulty[player].value == 1:
+            connect(world, player, names, LocationName.metal_harbor_region, LocationName.animal_phoenix)
+
+            connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_skunk)
+            connect(world, player, names, LocationName.crazy_gadget_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                   state.has(ItemName.sonic_flame_ring, player)))
+
+            connect(world, player, names, LocationName.weapons_bed_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_gorilla)
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_raccoon)
+            connect(world, player, names, LocationName.mad_space_region, LocationName.animal_halffish)
+
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_otter,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_rabbit,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.knuckles_hammer_gloves, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_cheetah,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_warthog,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_parrot,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.knuckles_hammer_gloves, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_condor,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_raccoon,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+            connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+
+        if world.keysanity[player]:
+            connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon,
+                    lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
+
+            connect(world, player, names, LocationName.mission_street_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.tails_bazooka, player)))
+
+            connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
+                    lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                   state.has(ItemName.sonic_flame_ring, player)))
+
+            connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_raccoon,
+                    lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+            if world.logic_difficulty[player].value == 0:
+                connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player) and
+                                       state.has(ItemName.eggman_large_cannon, player)))
+
+                connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player) and
+                                       state.has(ItemName.eggman_large_cannon, player)))
+            if world.logic_difficulty[player].value == 1:
+                connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+                connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+        else:
+            connect(world, player, names, LocationName.city_escape_region, LocationName.animal_unicorn)
+
+            connect(world, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon)
+
+            connect(world, player, names, LocationName.pumpkin_hill_region, LocationName.animal_halffish)
+
+            connect(world, player, names, LocationName.mission_street_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.tails_booster, player)))
+
+            connect(world, player, names, LocationName.death_chamber_region, LocationName.animal_skeleton_dog,
+                    lambda state: (state.has(ItemName.knuckles_shovel_claws, player) and
+                                   state.has(ItemName.knuckles_hammer_gloves, player)))
+
+            connect(world, player, names, LocationName.eternal_engine_region, LocationName.animal_halffish,
+                    lambda state: (state.has(ItemName.tails_booster, player) and
+                                   state.has(ItemName.tails_bazooka, player)))
+
+            connect(world, player, names, LocationName.iron_gate_region, LocationName.animal_dragon)
+
+            connect(world, player, names, LocationName.sand_ocean_region, LocationName.animal_skeleton_dog)
+
+            connect(world, player, names, LocationName.radical_highway_region, LocationName.animal_unicorn)
+
+            connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_raccoon)
+            connect(world, player, names, LocationName.lost_colony_region, LocationName.animal_skeleton_dog)
+
+            connect(world, player, names, LocationName.security_hall_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.rouge_pick_nails, player)))
+
+            connect(world, player, names, LocationName.sky_rail_region, LocationName.animal_phoenix)
+
+            if world.logic_difficulty[player].value == 0:
+                connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                       state.has(ItemName.sonic_bounce_bracelet, player) and
+                                       state.has(ItemName.sonic_mystic_melody, player)))
+
+                connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.shadow_air_shoes, player)))
+
+                connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.tails_booster, player) and
+                                       state.has(ItemName.eggman_jet_engine, player) and
+                                       state.has(ItemName.knuckles_air_necklace, player) and
+                                       state.has(ItemName.knuckles_hammer_gloves, player)))
+            elif world.logic_difficulty[player].value == 1:
+                connect(world, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
+
+                connect(world, player, names, LocationName.white_jungle_region, LocationName.animal_dragon)
+
+                connect(world, player, names, LocationName.cannon_core_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.tails_booster, player) and
+                                       state.has(ItemName.knuckles_hammer_gloves, player)))
 
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):

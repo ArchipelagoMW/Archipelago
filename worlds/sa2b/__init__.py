@@ -3,7 +3,7 @@ import math
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups
-from .Locations import SA2BLocation, all_locations, setup_locations
+from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
@@ -94,6 +94,7 @@ class SA2BWorld(World):
             "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
             "ChaoStats": self.multiworld.chao_stats[self.player].value,
+            "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
@@ -202,6 +203,15 @@ class SA2BWorld(World):
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 3:
             self.multiworld.get_location(LocationName.grand_prix, self.player).place_locked_item(self.create_item(ItemName.maria))
+        elif self.multiworld.goal[self.player].value == 7:
+            self.multiworld.get_location(LocationName.chaos_chao, self.player).place_locked_item(self.create_item(ItemName.maria))
+
+            for animal_name in chao_animal_event_location_table.keys():
+                animal_region = self.multiworld.get_region(animal_name, self.player)
+                animal_event_location = SA2BLocation(self.player, animal_name, 0x00, animal_region)
+                animal_region.locations.append(animal_event_location)
+                animal_event_item = SA2BItem(animal_name, ItemClassification.progression, 0x00, self.player)
+                self.multiworld.get_location(animal_name, self.player).place_locked_item(animal_event_item)
 
         itempool: typing.List[SA2BItem] = []
 

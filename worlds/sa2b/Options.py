@@ -13,6 +13,7 @@ class Goal(Choice):
     Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
     Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
     Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Chaos Chao: Raise a Chaos Chao to win
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -22,6 +23,7 @@ class Goal(Choice):
     option_boss_rush = 4
     option_cannons_core_boss_rush = 5
     option_boss_rush_chaos_emerald_hunt = 6
+    option_chaos_chao = 7
     default = 0
 
     @classmethod
@@ -364,9 +366,17 @@ class ChaoStatsStamina(Toggle):
 
 class ChaoStatsHidden(Toggle):
     """
-    Determines whether the hidden stats Luck and Intelligence is included in the `chao_stats` option
+    Determines whether the hidden stats (Luck and Intelligence) are included in the `chao_stats` option
     """
     display_name = "Chao Stats - Luck and Intelligence"
+
+
+class ChaoAnimalParts(Toggle):
+    """
+    Determines whether giving Chao various animal parts grants checks
+    (72 Locations)
+    """
+    display_name = "Chao Animal Parts"
 
 
 class RequiredCannonsCoreMissions(Choice):
@@ -703,6 +713,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_stats": ChaoStats,
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
+    "chao_animal_parts": ChaoAnimalParts,
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
     "omochao_trap_weight": OmochaoTrapWeight,

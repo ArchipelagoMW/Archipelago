@@ -1329,6 +1329,122 @@ chao_stat_stamina_table      = { LocationName.chao_stat_stamina_base      + str(
 chao_stat_luck_table         = { LocationName.chao_stat_luck_base         + str(index): (0xFF1080 + index) for index in range(1,100) }
 chao_stat_intelligence_table = { LocationName.chao_stat_intelligence_base + str(index): (0xFF1100 + index) for index in range(1,100) }
 
+chao_animal_event_location_table = {
+    LocationName.animal_penguin:      0x00,
+    LocationName.animal_seal:         0x00,
+    LocationName.animal_otter:        0x00,
+    LocationName.animal_rabbit:       0x00,
+    LocationName.animal_cheetah:      0x00,
+    LocationName.animal_warthog:      0x00,
+    LocationName.animal_bear:         0x00,
+    LocationName.animal_tiger:        0x00,
+    LocationName.animal_gorilla:      0x00,
+    LocationName.animal_peacock:      0x00,
+    LocationName.animal_parrot:       0x00,
+    LocationName.animal_condor:       0x00,
+    LocationName.animal_skunk:        0x00,
+    LocationName.animal_sheep:        0x00,
+    LocationName.animal_raccoon:      0x00,
+    LocationName.animal_halffish:     0x00,
+    LocationName.animal_skeleton_dog: 0x00,
+    LocationName.animal_bat:          0x00,
+    LocationName.animal_dragon:       0x00,
+    LocationName.animal_unicorn:      0x00,
+    LocationName.animal_phoenix:      0x00,
+}
+
+chao_animal_part_location_table = {
+    LocationName.chao_penguin_arms:     0xFF1220,
+    LocationName.chao_penguin_forehead: 0xFF1222,
+    LocationName.chao_penguin_legs:     0xFF1224,
+
+    LocationName.chao_seal_arms: 0xFF1228,
+    LocationName.chao_seal_tail: 0xFF122E,
+
+    LocationName.chao_otter_arms: 0xFF1230,
+    LocationName.chao_otter_ears: 0xFF1231,
+    LocationName.chao_otter_legs: 0xFF1234,
+    LocationName.chao_otter_tail: 0xFF1236,
+
+    LocationName.chao_rabbit_arms: 0xFF1238,
+    LocationName.chao_rabbit_ears: 0xFF1239,
+    LocationName.chao_rabbit_legs: 0xFF123C,
+    LocationName.chao_rabbit_tail: 0xFF123E,
+
+    LocationName.chao_cheetah_arms: 0xFF1240,
+    LocationName.chao_cheetah_ears: 0xFF1241,
+    LocationName.chao_cheetah_legs: 0xFF1244,
+    LocationName.chao_cheetah_tail: 0xFF1246,
+
+    LocationName.chao_warthog_arms: 0xFF1248,
+    LocationName.chao_warthog_ears: 0xFF1249,
+    LocationName.chao_warthog_face: 0xFF124B,
+    LocationName.chao_warthog_legs: 0xFF124C,
+    LocationName.chao_warthog_tail: 0xFF124E,
+
+    LocationName.chao_bear_arms: 0xFF1250,
+    LocationName.chao_bear_ears: 0xFF1251,
+    LocationName.chao_bear_legs: 0xFF1254,
+
+    LocationName.chao_tiger_arms: 0xFF1258,
+    LocationName.chao_tiger_ears: 0xFF1259,
+    LocationName.chao_tiger_legs: 0xFF125C,
+    LocationName.chao_tiger_tail: 0xFF125E,
+
+    LocationName.chao_gorilla_arms:     0xFF1260,
+    LocationName.chao_gorilla_ears:     0xFF1261,
+    LocationName.chao_gorilla_forehead: 0xFF1262,
+    LocationName.chao_gorilla_legs:     0xFF1264,
+
+    LocationName.chao_peacock_forehead: 0xFF126A,
+    LocationName.chao_peacock_legs:     0xFF126C,
+    LocationName.chao_peacock_tail:     0xFF126E,
+    LocationName.chao_peacock_wings:    0xFF126F,
+
+    LocationName.chao_parrot_forehead: 0xFF1272,
+    LocationName.chao_parrot_legs:     0xFF1274,
+    LocationName.chao_parrot_tail:     0xFF1276,
+    LocationName.chao_parrot_wings:    0xFF1277,
+
+    LocationName.chao_condor_ears:  0xFF1279,
+    LocationName.chao_condor_legs:  0xFF127C,
+    LocationName.chao_condor_tail:  0xFF127E,
+    LocationName.chao_condor_wings: 0xFF127F,
+
+    LocationName.chao_skunk_arms:     0xFF1280,
+    LocationName.chao_skunk_forehead: 0xFF1282,
+    LocationName.chao_skunk_legs:     0xFF1284,
+    LocationName.chao_skunk_tail:     0xFF1286,
+
+    LocationName.chao_sheep_arms: 0xFF1288,
+    LocationName.chao_sheep_ears: 0xFF1289,
+    LocationName.chao_sheep_legs: 0xFF128C,
+    LocationName.chao_sheep_horn: 0xFF128D,
+    LocationName.chao_sheep_tail: 0xFF128E,
+
+    LocationName.chao_raccoon_arms: 0xFF1290,
+    LocationName.chao_raccoon_ears: 0xFF1291,
+    LocationName.chao_raccoon_legs: 0xFF1294,
+
+    LocationName.chao_dragon_arms:  0xFF12A0,
+    LocationName.chao_dragon_ears:  0xFF12A1,
+    LocationName.chao_dragon_legs:  0xFF12A4,
+    LocationName.chao_dragon_horn:  0xFF12A5,
+    LocationName.chao_dragon_tail:  0xFF12A6,
+    LocationName.chao_dragon_wings: 0xFF12A7,
+
+    LocationName.chao_unicorn_arms:     0xFF12A8,
+    LocationName.chao_unicorn_ears:     0xFF12A9,
+    LocationName.chao_unicorn_forehead: 0xFF12AA,
+    LocationName.chao_unicorn_legs:     0xFF12AC,
+    LocationName.chao_unicorn_tail:     0xFF12AE,
+
+    LocationName.chao_phoenix_forehead: 0xFF12B2,
+    LocationName.chao_phoenix_legs:     0xFF12B4,
+    LocationName.chao_phoenix_tail:     0xFF12B6,
+    LocationName.chao_phoenix_wings:    0xFF12B7,
+}
+
 kart_race_beginner_location_table = {
     LocationName.kart_race_beginner_sonic: 0xFF0A00,
     LocationName.kart_race_beginner_tails: 0xFF0A01,
@@ -1383,6 +1499,10 @@ grand_prix_location_table = {
     LocationName.grand_prix: 0xFF007F,
 }
 
+chaos_chao_location_table = {
+    LocationName.chaos_chao: 0xFF009F,
+}
+
 all_locations = {
     **mission_location_table,
     **upgrade_location_table,
@@ -1406,6 +1526,7 @@ all_locations = {
     **green_hill_animal_location_table,
     **final_boss_location_table,
     **grand_prix_location_table,
+    **chaos_chao_location_table,
     **chao_stat_swim_table,
     **chao_stat_fly_table,
     **chao_stat_run_table,
@@ -1413,6 +1534,7 @@ all_locations = {
     **chao_stat_stamina_table,
     **chao_stat_luck_table,
     **chao_stat_intelligence_table,
+    **chao_animal_part_location_table,
 }
 
 boss_gate_set = [
@@ -1509,6 +1631,8 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
         if world.goal[player].value in [0, 2, 4, 5, 6]:
             location_table.update({**final_boss_location_table})
+        elif world.goal[player].value in [7]:
+            location_table.update({**chaos_chao_location_table})
 
         if world.goal[player].value in [1, 2]:
             location_table.update({**green_hill_location_table})
@@ -1551,6 +1675,9 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
             if world.chao_stats_hidden[player]:
                 location_table[LocationName.chao_stat_luck_base         + str(index)] = chao_stat_luck_table[        LocationName.chao_stat_luck_base         + str(index)]
                 location_table[LocationName.chao_stat_intelligence_base + str(index)] = chao_stat_intelligence_table[LocationName.chao_stat_intelligence_base + str(index)]
+
+        if world.chao_animal_parts[player]:
+            location_table.update({**chao_animal_part_location_table})
 
         for x in range(len(boss_gate_set)):
             if x < world.number_of_level_gates[player].value:

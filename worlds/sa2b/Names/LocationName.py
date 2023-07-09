@@ -1163,6 +1163,124 @@ chao_stat_stamina_base      = "Chao Stat - Stamina - "
 chao_stat_luck_base         = "Chao Stat - Luck - "
 chao_stat_intelligence_base = "Chao Stat - Intelligence - "
 
+# Animal Event Locations
+animal_penguin      = "Penguin"
+animal_seal         = "Seal"
+animal_otter        = "Otter"
+animal_rabbit       = "Rabbit"
+animal_cheetah      = "Cheetah"
+animal_warthog      = "Warthog"
+animal_bear         = "Bear"
+animal_tiger        = "Tiger"
+animal_gorilla      = "Gorilla"
+animal_peacock      = "Peacock"
+animal_parrot       = "Parrot"
+animal_condor       = "Condor"
+animal_skunk        = "Skunk"
+animal_sheep        = "Sheep"
+animal_raccoon      = "Raccoon"
+animal_halffish     = "HalfFish"
+animal_skeleton_dog = "Skeleton Dog"
+animal_bat          = "Bat"
+animal_dragon       = "Dragon"
+animal_unicorn      = "Unicorn"
+animal_phoenix      = "Phoenix"
+
+# Animal Body Part Locations
+chao_penguin_arms      = "Chao - Penguin Arms"
+chao_penguin_forehead  = "Chao - Penguin Forehead"
+chao_penguin_legs      = "Chao - Penguin Legs"
+
+chao_seal_arms     = "Chao - Seal Arms"
+chao_seal_tail     = "Chao - Seal Tail"
+
+chao_otter_arms = "Chao - Otter Arms"
+chao_otter_ears = "Chao - Otter Ears"
+chao_otter_legs = "Chao - Otter Legs"
+chao_otter_tail = "Chao - Otter Tail"
+
+chao_rabbit_arms = "Chao - Rabbit Arms"
+chao_rabbit_ears = "Chao - Rabbit Ears"
+chao_rabbit_legs = "Chao - Rabbit Legs"
+chao_rabbit_tail = "Chao - Rabbit Tail"
+
+chao_cheetah_arms = "Chao - Cheetah Arms"
+chao_cheetah_ears = "Chao - Cheetah Ears"
+chao_cheetah_legs = "Chao - Cheetah Legs"
+chao_cheetah_tail = "Chao - Cheetah Tail"
+
+chao_warthog_arms = "Chao - Warthog Arms"
+chao_warthog_ears = "Chao - Warthog Ears"
+chao_warthog_face = "Chao - Warthog Face"
+chao_warthog_legs = "Chao - Warthog Legs"
+chao_warthog_tail = "Chao - Warthog Tail"
+
+chao_bear_arms = "Chao - Bear Arms"
+chao_bear_ears = "Chao - Bear Ears"
+chao_bear_legs = "Chao - Bear Legs"
+
+chao_tiger_arms = "Chao - Tiger Arms"
+chao_tiger_ears = "Chao - Tiger Ears"
+chao_tiger_legs = "Chao - Tiger Legs"
+chao_tiger_tail = "Chao - Tiger Tail"
+
+chao_gorilla_arms     = "Chao - Gorilla Arms"
+chao_gorilla_ears     = "Chao - Gorilla Ears"
+chao_gorilla_forehead = "Chao - Gorilla Forehead"
+chao_gorilla_legs     = "Chao - Gorilla Legs"
+
+chao_peacock_forehead = "Chao - Peacock Forehead"
+chao_peacock_legs     = "Chao - Peacock Legs"
+chao_peacock_tail     = "Chao - Peacock Tail"
+chao_peacock_wings    = "Chao - Peacock Wings"
+
+chao_parrot_forehead = "Chao - Parrot Forehead"
+chao_parrot_legs     = "Chao - Parrot Legs"
+chao_parrot_tail     = "Chao - Parrot Tail"
+chao_parrot_wings    = "Chao - Parrot Wings"
+
+chao_condor_ears  = "Chao - Condor Ears"
+chao_condor_legs  = "Chao - Condor Legs"
+chao_condor_tail  = "Chao - Condor Tail"
+chao_condor_wings = "Chao - Condor Wings"
+
+chao_skunk_arms     = "Chao - Skunk Arms"
+chao_skunk_forehead = "Chao - Skunk Forehead"
+chao_skunk_legs     = "Chao - Skunk Legs"
+chao_skunk_tail     = "Chao - Skunk Tail"
+
+chao_sheep_arms = "Chao - Sheep Arms"
+chao_sheep_ears = "Chao - Sheep Ears"
+chao_sheep_legs = "Chao - Sheep Legs"
+chao_sheep_horn = "Chao - Sheep Horn"
+chao_sheep_tail = "Chao - Sheep Tail"
+
+chao_raccoon_arms = "Chao - Raccoon Arms"
+chao_raccoon_ears = "Chao - Raccoon Ears"
+chao_raccoon_legs = "Chao - Raccoon Legs"
+
+chao_dragon_arms  = "Chao - Dragon Arms"
+chao_dragon_ears  = "Chao - Dragon Ears"
+chao_dragon_legs  = "Chao - Dragon Legs"
+chao_dragon_horn  = "Chao - Dragon Horn"
+chao_dragon_tail  = "Chao - Dragon Tail"
+chao_dragon_wings = "Chao - Dragon Wings"
+
+chao_unicorn_arms     = "Chao - Unicorn Arms"
+chao_unicorn_ears     = "Chao - Unicorn Ears"
+chao_unicorn_forehead = "Chao - Unicorn Forehead"
+chao_unicorn_legs     = "Chao - Unicorn Legs"
+chao_unicorn_tail     = "Chao - Unicorn Tail"
+
+chao_phoenix_forehead = "Chao - Phoenix Forehead"
+chao_phoenix_legs     = "Chao - Phoenix Legs"
+chao_phoenix_tail     = "Chao - Phoenix Tail"
+chao_phoenix_wings    = "Chao - Phoenix Wings"
+
+chaos_chao        = "Chaos Chao"
+chaos_chao_region = "Chaos Chao"
+
+
 # Kart Race Definitions
 kart_race_beginner_sonic    = "Kart Race - Beginner - Sonic"
 kart_race_beginner_tails    = "Kart Race - Beginner - Tails"
