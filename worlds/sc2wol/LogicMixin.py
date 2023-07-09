@@ -9,7 +9,7 @@ class SC2WoLLogic(LogicMixin):
         return self.has_any(get_basic_units(multiworld, player), player)
 
     def _sc2wol_has_air(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({'Viking', 'Wraith', 'Banshee'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0 \
+        return self.has_any({'Viking', 'Wraith', 'Banshee', 'Battlecruiser'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0 \
                 and self.has_any({'Hercules', 'Medivac'}, player) and self._sc2wol_has_common_unit(multiworld, player)
 
     def _sc2wol_has_air_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
@@ -18,11 +18,24 @@ class SC2WoLLogic(LogicMixin):
                 or self.has_all({'Battlecruiser', 'ATX Laser Battery (Battlecruiser)'}, player) \
                 or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Wraith', 'Valkyrie', 'Battlecruiser'}, player)
 
-    def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+    def _sc2wol_has_competent_ground_to_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has('Goliath', player) \
                 or self.has('Marine', player) and self.has_any({'Medic', 'Medivac'}, player) \
-                or self._sc2wol_has_air_anti_air(multiworld, player) \
                 or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has('Cyclone', player)
+
+    def _sc2wol_has_competent_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2wol_has_competent_ground_to_air(multiworld, player) \
+                or self._sc2wol_has_air_anti_air(multiworld, player)
+
+    def _sc2wol_welcome_to_the_jungle_requirement(self, multiworld: MultiWorld, player: int) -> bool:
+        return (
+                self._sc2wol_has_common_unit(multiworld, player)
+                and self._sc2wol_has_competent_ground_to_air(multiworld, player)
+        ) or (
+                get_option_value(multiworld, player, 'required_tactics') > 0
+                and self.has('Marine', player)
+                and self._sc2wol_has_air_anti_air(multiworld, player)
+        )
 
     def _sc2wol_has_anti_air(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({'Missile Turret', 'Thor', 'War Pigs', 'Spartan Company', "Hel's Angel", 'Battlecruiser', 'Marine', 'Wraith', 'Valkyrie', 'Cyclone'}, player) \
@@ -81,8 +94,10 @@ class SC2WoLLogic(LogicMixin):
                or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'High Templar', 'Dark Templar'}, player)
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
-        return self.has_any({'Banshee', 'Battlecruiser'}, player) and self._sc2wol_has_competent_anti_air(multiworld, player) or \
-               self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
+        return (self.has_any({'Banshee', 'Battlecruiser'}, player) or
+                self.has_all('Liberator', 'Raid Artillery (Liberator)')) \
+            and self._sc2wol_has_competent_anti_air(multiworld, player) or \
+            self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
 
     def _sc2wol_has_mm_upgrade(self, multiworld: MultiWorld, player: int) -> bool:
         return self.has_any({"Combat Shield (Marine)", "Stabilizer Medpacks (Medic)"}, player)

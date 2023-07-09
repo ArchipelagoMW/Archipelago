@@ -159,15 +159,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Devil's Playground", "Devil's Playground: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1302,
                      lambda state: logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   state._sc2wol_has_competent_anti_air(multiworld, player)),
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Close Relic", SC2WOL_LOC_ID_OFFSET + 1401),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: West Relic", SC2WOL_LOC_ID_OFFSET + 1402,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   state._sc2wol_has_competent_anti_air(multiworld, player)),
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: North-East Relic", SC2WOL_LOC_ID_OFFSET + 1403,
-                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
-                                   state._sc2wol_has_competent_anti_air(multiworld, player)),
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
         LocationData("Breakout", "Breakout: Victory", SC2WOL_LOC_ID_OFFSET + 1500),
         LocationData("Breakout", "Breakout: Diamondback Prison", SC2WOL_LOC_ID_OFFSET + 1501),
         LocationData("Breakout", "Breakout: Siegetank Prison", SC2WOL_LOC_ID_OFFSET + 1502),
