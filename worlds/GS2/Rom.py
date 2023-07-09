@@ -7,11 +7,11 @@ import hashlib
 import bsdiff4
 from .lz10 import gba_decompress, gba_compress
 
-from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
-    generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
-    generate_external_item_message, generate_text_bytes
+#from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
+   # generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
+    #generate_external_item_message, generate_text_bytes
 
-from .Items import ItemType
+#from .Items import ItemType
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
