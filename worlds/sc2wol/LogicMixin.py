@@ -64,11 +64,23 @@ class SC2WoLLogic(LogicMixin):
         return defense_score
 
     def _sc2wol_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
-        return (self.has('Marine', player) or self.has('Marauder', player) and
-                self._sc2wol_has_competent_anti_air(multiworld, player)) and self.has_any({'Medivac', 'Medic'}, player) or \
-               self.has('Thor', player) or self.has("Banshee", player) and self._sc2wol_has_competent_anti_air(multiworld, player) or \
-               self.has('Battlecruiser', player) and self._sc2wol_has_common_unit(multiworld, player) or \
-               self.has('Siege Tank', player) and self._sc2wol_has_competent_anti_air(multiworld, player)
+        return \
+                (
+                        self.has('Marine', player) or self.has('Marauder', player)
+                        and self._sc2wol_has_competent_anti_air(multiworld, player)
+                        and self.has_any({'Medivac', 'Medic'}, player)
+                ) \
+                or \
+                (
+                        (
+                                self.has_any({'Thor', 'Banshee', 'Siege Tank'}, player)
+                                or self.has_all({'Liberator', 'Raid Artillery (Liberator)'}, player)
+                        ) and self._sc2wol_has_competent_anti_air(multiworld, player)
+                ) \
+                or \
+                (
+                        self.has('Battlecruiser', player) and self._sc2wol_has_common_unit(multiworld, player)
+                )
 
     def _sc2wol_has_train_killers(self, multiworld: MultiWorld, player: int) -> bool:
         return (
@@ -95,7 +107,7 @@ class SC2WoLLogic(LogicMixin):
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
         return (self.has_any({'Banshee', 'Battlecruiser'}, player) or
-                self.has_all('Liberator', 'Raid Artillery (Liberator)')) \
+                self.has_all({'Liberator', 'Raid Artillery (Liberator)'})) \
             and self._sc2wol_has_competent_anti_air(multiworld, player) or \
             self._sc2wol_has_competent_comp(multiworld, player) and self._sc2wol_has_air_anti_air(multiworld, player)
 
