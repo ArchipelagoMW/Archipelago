@@ -25,13 +25,13 @@ class Randomization_Range(IntEnum):
     high = 2
     extreme = 3
 
-class Scenario_Length(Choice):
+class Scenario_Length(IntEnum):
     speedrun = 0
     normal = 1
     lengthy = 2
     marathon = 3
     
-class Stat_ReRolls(Choice):
+class Stat_ReRolls(IntEnum):
     never = 0
     infrequent = 1
     semi_frequent = 2
@@ -67,9 +67,6 @@ class LocationBalancing(Choice):
     option_full = LocationBalancingMode.full.value
     default = LocationBalancingMode.compromise.value
 
-class RampTricks(OC2Toggle):
-    """If enabled, generated games may require sequence breaks on the overworld map. This includes crossing small gaps and escaping out of bounds."""
-    display_name = "Overworld Tricks"
     
 
 class DeathLink(Choice):
@@ -132,18 +129,18 @@ class Stat_ReRolls(Choice):
     option_frequent = Stat_ReRolls.frequent.value
     option_very_frequent = Stat_ReRolls.very_frequent.value
     option_extremely_frequent = Stat_ReRolls.extremely_frequent.value
-    default = Scenario_Length.infrequent.value
+    default = Stat_ReRolls.infrequent.value
 
 class Include_Park_Rules(OpenRCT2OnToggle):
     """Enables all park restrictions (No building above tree height, no marketing campains, harder guest generation, etc.) and includes items that will automatically disable them when found."""
     display_name = "Include Park Rules"
 
 
-class Randomize_Park_Values(OC2OnToggle):
+class Randomize_Park_Values(OpenRCT2OnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
 
-class Include_Guest_Objective(OC2OnToggle):
+class Include_Guest_Objective(OpenRCT2OnToggle):
     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
     display_name = "Include Guest Objective"
 
@@ -154,7 +151,7 @@ class Guest_Objective(Range):
     range_end = 7500
     default = 3000
 
-class Include_Park_Value_Objective(OC2OnToggle):
+class Include_Park_Value_Objective(OpenRCT2OnToggle):
     """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
     display_name = "Include Park Value Objective"
 
@@ -165,7 +162,7 @@ class Park_Value_Objective(Range):
     range_end = 1000000
     default = 300000
 
-class Include_Roller_Coaster_Objective(OC2OnToggle):
+class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
     """Include an objective to build a certain number of Roller Coasters with optional Paramaters. Multiple objectives can be enabled!"""
     display_name = "Include Roller Coaster Objective"
 
@@ -197,7 +194,7 @@ class Roller_Coaster_Nausea(Range):
     range_end = 10
     default = 5
 
-class Include_Park_Rating_Objective(OC2OnToggle):
+class Include_Park_Rating_Objective(OpenRCT2OnToggle):
     """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""
     display_name = "Include Park Rating Objective"
 
@@ -208,7 +205,7 @@ class Park_Rating_Objective(Range):
     range_end = 999
     default = 800
 
-class Pay_Off_Loan(OC2OnToggle):
+class Pay_Off_Loan(OpenRCT2OnToggle):
     """Require Loan to be paid off before scenario completion is awarded"""
     display_name = "Pay Off Loan"
 
@@ -217,12 +214,12 @@ class Pay_Off_Loan(OC2OnToggle):
 openRCT2_options = {
     # generator options
     "location_balancing": LocationBalancing,
+    "difficulty": Difficulty,
 
     # deathlink
     "deathlink": DeathLink,
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
-    "difficulty": Difficulty,
     "randomization_range": Randomization_Range,
     "scenario_length": Scenario_Length,
     "stat_rerolls": Stat_ReRolls,

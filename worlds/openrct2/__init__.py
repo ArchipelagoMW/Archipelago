@@ -1,32 +1,22 @@
 from typing import NamedTuple, Union
 import logging
 import json
-from .options import *
+from .Options import *
+from .Constants import *
+from .Items import *
+from .Locations import *
 
-from BaseClasses import Item, Tutorial, ItemClassification
+from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
 
 from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
 
 
 class OpenRCT2WebWorld(WebWorld):
-    advanced_settings = Tutorial('Advanced YAML Guide',
-                                 'A guide to reading YAML files and editing them to fully customize your game.',
-                                 'English', 'advanced_settings_en.md', 'advanced_settings/en',
-                                 ['alwaysintreble', 'Alchav'])
-    commands = Tutorial('Archipelago Server and Client Commands',
-                        'A guide detailing the commands available to the user when participating in an Archipelago session.',
-                        'English', 'commands_en.md', 'commands/en', ['jat2980', 'Ijwu'])
-    plando = Tutorial('Archipelago Plando Guide', 'A guide to understanding and using plando for your game.',
-                      'English', 'plando_en.md', 'plando/en', ['alwaysintreble', 'Alchav'])
-    setup = Tutorial('Getting Started',
-                     'A guide to setting up the Archipelago software, and generating, hosting, and connecting to '
-                     'multiworld games.',
-                     'English', 'setup_en.md', 'setup/en', ['alwaysintreble'])
-    triggers = Tutorial('Archipelago Triggers Guide', 'A guide to setting up and using triggers in your game settings.',
-                        'English', 'triggers_en.md', 'triggers/en', ['alwaysintreble'])
-    tutorials = [setup, mac, commands, advanced_settings, triggers, plando]
+    tutorials = []
 
+class OpenRCT2Location(Location):
+    game = "OpenRCT2"
 
 class OpenRCT2World(World):
     """
@@ -34,20 +24,49 @@ class OpenRCT2World(World):
     """
 
     game = "OpenRCT2"
-    topology_present = True
     
     option_definitions = openRCT2_options  # options the player can set
     topology_present = True  # show path to required location checks in spoiler
+    item_name_to_id = {name: id for id, name in enumerate(openRCT2_items, base_id)}
+    location_name_to_id = {name: id for id, name in enumerate(openRCT2_locations, base_id)}
 
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a propery.
-    base_id = 2000000
-    # Instead of dynamic numbering, IDs could be part of data.
+    def create_items(self) -> None:
+        for item in item_table:
+            self.multiworld.itempool.append(self.create_item(item))
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for
-                       id, name in enumerate(mygame_items, base_id)}
-    location_name_to_id = {name: id for
-                           id, name in enumerate(mygame_locations, base_id)}
+    def create_regions(self) -> None:
+        # Add regions to the multiworld. "Menu" is the required starting point.
+        # Arguments to Region() are name, player, world, and optionally hint_text
+        r = Region("Menu", self.player, self.multiworld)
+        # Set Region.exits to a list of entrances that are reachable from region
+        r.exits = [Entrance(self.player, "New Game", r)]  # or use r.exits.append
+        # Append region to MultiWorld's regions
+        self.multiworld.regions.append(r)  # or use += [r...]
+        
+        s = Region("Unlock Shop", self.player, self.multiworld)
+        # Add main location. All unlocks come from here
+        s.locations = []
+        s.exits = [Entrance(self.player, "No Prereqs", s)]#, Entrance(self.player, "Category Prereq", r), Entrance(self.player, "Ride Prereq", r)]
+        self.multiworld.regions.append(s)
+        
+        t = Region("No Prereqs", self.player, self.multiworld)
+        # Add unlocks that are just prices. This will always include location 0, which only has a price
+        NoPrereqs = []
+        for index, item in enumerate(item_table):
+        #if self.Options["difficulty"] == 0:
+            NoPrereqs.append(OpenRCT2Location(self.player,"OpenRCT2_" + str(index),self.location_name_to_id["OpenRCT2_" + str(index)],t))
+        
+        t.locations = NoPrereqs
+        self.multiworld.regions.append(t)
+
+        # If entrances are not randomized, they should be connected here, otherwise
+        # they can also be connected at a later stage.
+        self.multiworld.get_entrance("New Game", self.player).connect(self.multiworld.get_region("Unlock Shop", self.player))
+        self.multiworld.get_entrance("No Prereqs", self.player).connect(self.multiworld.get_region("No Prereqs", self.player))
+        #self.multiworld.get_entrance("Category ", self.player).connect(self.multiworld.get_region("No Prereqs", self.player))
+
+        
+
+
+    def create_item(self, name:str) -> OpenRCT2Item:
+        return OpenRCT2Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
