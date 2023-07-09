@@ -692,21 +692,27 @@ class LogicDifficulty(Choice):
 
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
+
     "mission_shuffle": MissionShuffle,
     "boss_rush_shuffle": BossRushShuffle,
+
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
     "omosanity": Omosanity,
     "animalsanity": Animalsanity,
     "kart_race_checks": KartRaceChecks,
+
+    "logic_difficulty": LogicDifficulty,
     "required_rank": RequiredRank,
-    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,
+
+    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "level_gate_costs": LevelGateCosts,
     "max_emblem_cap": MaximumEmblemCap,
+
     "chao_garden_difficulty": ChaoGardenDifficulty,
     "include_chao_karate": IncludeChaoKarate,
     "chao_race_checks": ChaoRaceChecks,
@@ -714,6 +720,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
     "chao_animal_parts": ChaoAnimalParts,
+
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
     "omochao_trap_weight": OmochaoTrapWeight,
@@ -728,37 +735,43 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "cutscene_trap_weight": CutsceneTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
-    "ring_loss": RingLoss,
-    "ring_link": RingLink,
+
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "voice_shuffle": VoiceShuffle,
     "narrator": Narrator,
-    "logic_difficulty": LogicDifficulty,
+    "ring_loss": RingLoss,
+
     "speed_mission_count": SpeedMissionCount,
     "speed_mission_2": SpeedMission2,
     "speed_mission_3": SpeedMission3,
     "speed_mission_4": SpeedMission4,
     "speed_mission_5": SpeedMission5,
+
     "mech_mission_count": MechMissionCount,
     "mech_mission_2": MechMission2,
     "mech_mission_3": MechMission3,
     "mech_mission_4": MechMission4,
     "mech_mission_5": MechMission5,
+
     "hunt_mission_count": HuntMissionCount,
     "hunt_mission_2": HuntMission2,
     "hunt_mission_3": HuntMission3,
     "hunt_mission_4": HuntMission4,
     "hunt_mission_5": HuntMission5,
+
     "kart_mission_count": KartMissionCount,
     "kart_mission_2": KartMission2,
     "kart_mission_3": KartMission3,
     "kart_mission_4": KartMission4,
     "kart_mission_5": KartMission5,
+
     "cannons_core_mission_count": CannonsCoreMissionCount,
     "cannons_core_mission_2": CannonsCoreMission2,
     "cannons_core_mission_3": CannonsCoreMission3,
     "cannons_core_mission_4": CannonsCoreMission4,
     "cannons_core_mission_5": CannonsCoreMission5,
+
+    "ring_link": RingLink,
     "death_link": DeathLink,
 }
