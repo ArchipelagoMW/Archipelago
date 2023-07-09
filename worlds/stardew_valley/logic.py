@@ -258,7 +258,7 @@ class StardewLogic:
             Forageable.leek: self.can_forage(Season.spring),
             Craftable.life_elixir: self.has_skill_level(Skill.combat, 2) & self.has(Forageable.red_mushroom) & self.has(Forageable.purple_mushroom) & self.has(Forageable.morel) & self.has(Forageable.chanterelle),
             Machine.lightning_rod: self.has_skill_level(Skill.foraging, 6) & self.has(MetalBar.iron) & self.has(MetalBar.quartz) & self.has(Loot.bat_wing),
-            Fish.lobster: self.can_crab_pot(),
+            Fish.lobster: self.can_crab_pot(Region.beach),
             Machine.loom: self.has_farming_level(7) & self.has(Material.wood) & self.has(Material.fiber) & self.has(ArtisanGood.pine_tar),
             Forageable.magma_cap: self.can_forage(Generic.any, Region.volcano_floor_5),
             Geode.magma: self.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.has_building(Building.fish_pond)),
