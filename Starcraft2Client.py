@@ -616,7 +616,7 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
             flaggroup = type_flaggroups[item_data.type]
 
             # Generic upgrades apply only to Weapon / Armor upgrades
-            if item_data.type == "Upgrade" and ctx.generic_upgrade_items == 0:
+            if item_data.type != "Upgrade" or ctx.generic_upgrade_items == 0:
                 accumulators[flaggroup] += 1 << item_data.number
             else:
                 for bundled_number in upgrade_numbers[item_data.number]:
