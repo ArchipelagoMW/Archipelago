@@ -153,9 +153,7 @@ class L2ACWorld(World):
             item_pool += self.item_name_groups["Party members"]
             self.o.blue_chest_count.value += len(self.item_name_groups["Party members"])
         for item_name in item_pool:
-            item_data: ItemData = l2ac_item_table[item_name]
-            item_id: int = items_start_id + item_data.code
-            self.multiworld.itempool.append(L2ACItem(item_name, item_data.classification, item_id, self.player))
+            self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         for i in range(1, self.o.blue_chest_count):
