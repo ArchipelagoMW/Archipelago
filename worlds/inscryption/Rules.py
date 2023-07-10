@@ -25,9 +25,11 @@ class InscryptionRules:
             "Act 1 - Dagger": self.has_caged_wolf,
             "Act 1 - Magnificus Eye": self.has_dagger,
             "Act 1 - Clock Main Compartment": self.has_magnificus_eye,
-            "Act 2 - Battle Pike Mage": self.has_act2_bridge_requirements,
-            "Act 2 - Battle Goobert": self.has_act2_bridge_requirements,
-            "Act 2 - Battle Lonely Wizard": self.has_act2_bridge_requirements,
+            "Act 2 - Battle Prospector": self.has_camera_and_meat,
+            "Act 2 - Battle Angler": self.has_camera,
+            "Act 2 - Battle Pike Mage": self.has_tower_requirements,
+            "Act 2 - Battle Goobert": self.has_tower_requirements,
+            "Act 2 - Battle Lonely Wizard": self.has_tower_requirements,
             "Act 2 - Battle Inspector": self.has_act2_bridge_requirements,
             "Act 2 - Battle Melter": self.has_act2_bridge_requirements,
             "Act 2 - Battle Dredger": self.has_act2_bridge_requirements,
@@ -43,6 +45,10 @@ class InscryptionRules:
             "Act 2 - Factory Chest 3": self.has_act2_bridge_requirements,
             "Act 2 - Factory Chest 4": self.has_act2_bridge_requirements,
             "Act 2 - Monocle": self.has_act2_bridge_requirements,
+            "Act 2 - Boss Grimora": self.has_all_epitaph_pieces,
+            "Act 2 - Boss Leshy": self.has_camera_and_meat,
+            "Act 2 - Boss Magnificus": self.has_tower_requirements,
+            "Act 2 - Boss P03": self.has_act2_bridge_requirements
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -59,6 +65,9 @@ class InscryptionRules:
     def has_dagger(self, state: CollectionState) -> bool:
         return state.has("Dagger", self.player)
 
+    def has_magnificus_eye(self, state: CollectionState) -> bool:
+        return state.has("Magnificus Eye", self.player)
+
     def has_all_epitaph_pieces(self, state: CollectionState) -> bool:
         return state.has("Epitaph Piece 1", self.player) and \
             state.has("Epitaph Piece 2", self.player) and state.has("Epitaph Piece 3", self.player) and \
@@ -66,29 +75,39 @@ class InscryptionRules:
             state.has("Epitaph Piece 6", self.player) and state.has("Epitaph Piece 7", self.player) and \
             state.has("Epitaph Piece 8", self.player) and state.has("Epitaph Piece 9", self.player)
 
-    def has_act2_bridge_requirements(self, state: CollectionState) -> bool:
-        return (state.has("Camera Replica", self.player) and state.has("Pile Of Meat", self.player)) or \
-            self.has_all_epitaph_pieces(state)
+    def has_camera(self, state: CollectionState) -> bool:
+        return state.has("Camera Replica", self.player)
 
-    def has_magnificus_eye(self, state: CollectionState) -> bool:
-        return state.has("Magnificus Eye", self.player)
+    def has_camera_and_meat(self, state: CollectionState) -> bool:
+        return self.has_camera(state) and state.has("Pile Of Meat", self.player)
+
+    def has_monocle(self, state: CollectionState) -> bool:
+        return state.has("Monocle", self.player)
+
+    def has_act2_bridge_requirements(self, state: CollectionState) -> bool:
+        return self.has_camera_and_meat(state) or self.has_all_epitaph_pieces(state)
+
+    def has_tower_requirements(self, state: CollectionState) -> bool:
+        return self.has_act2_bridge_requirements(state) and state.has("Monocle", self.player)
 
     def has_act2_requirements(self, state: CollectionState) -> bool:
         return state.has("Film Roll", self.player)
 
     def has_act3_requirements(self, state: CollectionState) -> bool:
-        return self.has_act2_requirements(state) and self.has_all_epitaph_pieces(state)
+        return self.has_act2_requirements(state) and \
+            self.has_all_epitaph_pieces(state) and \
+            self.has_camera_and_meat(state)
 
     def has_epilogue_requirements(self, state: CollectionState) -> bool:
-        # TODO Had the missing checks
-        return self.has_act2_requirements(state) and self.has_act3_requirements(state)
+        # TODO Add the missing checks
+        return self.has_act3_requirements(state)
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        #TODO Change this to the real completion check
-        multiworld.completion_condition[self.player] = self.has_epilogue_requirements
+        # TODO Change this to the real completion check
+        # multiworld.completion_condition[self.player] = self.has_epilogue_requirements
         for region in multiworld.get_regions(self.player):
-            if region in self.region_rules:
+            if region.name in self.region_rules:
                 for entrance in region.entrances:
                     entrance.access_rule = self.region_rules[region.name]
             for loc in region.locations:
