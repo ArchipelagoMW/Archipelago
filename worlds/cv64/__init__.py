@@ -432,22 +432,39 @@ class CV64World(World):
             # Figure out the item location and Countdown bytes
             active_locations = self.multiworld.get_locations(self.player)
             countdown_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            shop_list = []
 
             for loc in active_locations:
                 if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
                     if loc.item.player == self.player:
                         offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
-                        if loc.cv64_loc_type == "npc":
+                        if loc.cv64_loc_type == "npc" or loc.parent_region.name == RName.renon:
                             if 0x19 < offsets_to_ids[loc.cv64_rom_offset] < 0x1D:
                                 offsets_to_ids[loc.cv64_rom_offset] += 0x0D
-                            elif offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
+                            elif 0x10 == offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
                                 offsets_to_ids[loc.cv64_rom_offset] -= 0x03
+                            elif offsets_to_ids[loc.cv64_rom_offset] in [0x0D, 0x0E, 0x0F]:
+                                offsets_to_ids[loc.cv64_rom_offset] += 0x01
+                        # Figure out the shopsanity list here
+                        if loc.parent_region.name == RName.renon:
+                            shop_list.append([offsets_to_ids[loc.cv64_rom_offset], None])
                     else:
-                        if loc.item.classification == ItemClassification.progression or \
-                                loc.item.classification == ItemClassification.progression_skip_balancing:
+                        if loc.item.advancement:
                             offsets_to_ids[loc.cv64_rom_offset] = 0x11
-                        else:
+                            if loc.parent_region.name == RName.renon:
+                                shop_list.append(["prog", self.multiworld.get_player_name(loc.item.player)])
+                        elif loc.item.classification == ItemClassification.filler:
                             offsets_to_ids[loc.cv64_rom_offset] = 0x12
+                            if loc.parent_region.name == RName.renon:
+                                shop_list.append(["common", self.multiworld.get_player_name(loc.item.player)])
+                        elif loc.item.classification == ItemClassification.useful:
+                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
+                            if loc.parent_region.name == RName.renon:
+                                shop_list.append(["useful", self.multiworld.get_player_name(loc.item.player)])
+                        elif loc.item.classification == ItemClassification.trap:
+                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
+                            if loc.parent_region.name == RName.renon:
+                                shop_list.append(["trap", self.multiworld.get_player_name(loc.item.player)])
 
                     if loc.address is not None and loc.cv64_stage is not None:
                         if self.multiworld.countdown[self.player].value == 2 or \
@@ -501,7 +518,8 @@ class CV64World(World):
                         self.active_stage_exits[stage][2]].start_spawn_id
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
-                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list, countdown_list)
+                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list, countdown_list,
+                      shop_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

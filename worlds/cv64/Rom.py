@@ -161,6 +161,85 @@ rom_looping_music_fade_ins = {
 
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
+renon_item_dialogue = {
+    0x02: "More Sub-weapon uses.\n"
+          "Just what you need!",
+    0x03: "Galamoth told me it's\n"
+          "a heart in other times.",
+    0x04: "Collect a lot to make\n"
+          "the place your oyster!",
+    0x05: "I was told to safeguard\n"
+          "this, but I dunno why.",
+    0x06: "Fresh off a Behemoth!\n"
+          "Those cows are weird.",
+    0x07: "Preserved with special\n"
+          " wall-based methods.",
+    0x08: "Don't tell Geneva\n"
+          "about this...",
+    0x09: "If this existed in 1094,\n"
+          "then that whip...",
+    0x0A: "For when some lizard\n"
+          "brain spits on your ego.",
+    0x0C: "Don't lose it too\n"
+          "quickly!",
+    0x0D: "Night Creatures handle\n"
+          "carefully!",
+    0x0E: "Or Banshee Boomerang,\n"
+          "according to some.",
+    0x0F: "No weapon triangle\n"
+          "advantages with this.",
+    0x10: "Arthur was far better\n"
+          "with it than you!",
+    0x15: "This non-volatile kind\n"
+          "is safe to handle.",
+    0x16: "If you can soul-wield,\n"
+          "they have a good one!",
+    0x17: "Calls the morning sun\n"
+          "to vanquish the night.",
+    0x18: "On-demand horrible\n"
+          "nights. Devils love it!",
+    0x1A: "Pay me for a study\n"
+          "session here.",
+    0x1B: "\"Let them eat cake!\"\n"
+          "Said no princess ever.",
+    0x1C: "Why do I suspect this\n"
+          "was a toilet room?",
+    0x1D: "When you see Coller,\n"
+          "tell him I said hi!",
+    0x1E: "Atomic number is 29\n"
+          "and weight is 63.546.",
+    0x1F: "One torture per pay!\n"
+          "Who will it be?",
+    0x20: "Being here feels like\n"
+          "time is slowing down.",
+    0x21: "Only one thing beind\n"
+          "this. Do you dare?",
+    0x22: "The key 2 exploring\n"
+          "both Science halves!",
+    0x23: "This warehouse can\n"
+          "be yours for a fee!",
+    0x24: "Long road ahead if you\n"
+          "don't have the rest.",
+    0x25: "Beware of a curse of\n"
+          "eternal burning...",
+    0x26: "What's beyond time?\n"
+          "Find out yourself!",
+    0x27: "Want to take out a\n"
+          "loan? By all means!",
+    0x28: "The bag is green,\n"
+          "so it must be lucky!",
+    0x29: "(Does this fool\n"
+          "realize?) Oh, sorry.",
+    "prog":   "They'll likely need\n"
+              "it before long!",
+    "useful": "This would be very\n"
+              "useful to have!",
+    "common": "It doesn't look\n"
+              "important to me...",
+    "trap":   "I'll teach this fool\n"
+              "a lesson for a price!"
+}
+
 
 class LocalRom(object):
 
@@ -228,7 +307,7 @@ class LocalRom(object):
 
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
-              required_s2s, music_list, countdown_list):
+              required_s2s, music_list, countdown_list, shop_list):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -728,8 +807,18 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_int32(0xD04F8, 0x0C0FF65F)     # JAL	0x803FD97C
         rom.write_int32(0xD14C4, 0x0C0FF66B)     # JAL	0x803FD9AC
         rom.write_int32(0xD1754, 0x0C0FF66B)     # JAL	0x803FD9AC
-        rom.write_int32s(0xBD24C, [0x0C0FF643,   # J  	0x803FD9DC
+        rom.write_int32s(0xBD24C, [0x0C0FF677,   # J  	0x803FD9DC
                                    0x00000000])  # NOP
+        rom.write_int32(0xBD618, 0x0C0FF684)     # JAL	0x803FDA10
+
+        shopsanity_text = []
+        for i in range(len(shop_list)):
+            shopsanity_text += [0xA0, i]
+            if shop_list[i][1] is not None:
+                player_name = "For " + shop_list[i][1] + ".\n"
+                shopsanity_text += cv64_text_converter(player_name, False)
+            shopsanity_text += cv64_text_converter(renon_item_dialogue[shop_list[i][0]], False)
+        rom.write_bytes(0x1A800, shopsanity_text)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

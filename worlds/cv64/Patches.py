@@ -1954,5 +1954,18 @@ shopsanity_stuff = [
     0x0804E819,  # J     0x8013A064
     0x00000000,  # NOP
     0x0804E852,  # J     0x8013A148
-    0x820F0061   # LB    T7, 0x0061 (S0)
+    0x820F0061,  # LB    T7, 0x0061 (S0)
+    0x00000000,  # NOP
+    # Displays a custom item description if the selected randomized item is not purchased.
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9109D8D0,  # LBU   T1, 0xD8D0 (T0)
+    0x3C0A8039,  # LUI   T2, 0x8039
+    0x914B9C1D,  # LBU   T3, 0x9C1D (T2)
+    0x01695824,  # AND   T3, T3, T1
+    0x15600003,  # BNEZ  T3,     [forward 0x03]
+    0x00000000,  # NOP
+    0x3C048002,  # LUI   A0, 0x8002
+    0x24849C00,  # ADDIU A0, A0, 0x9C00
+    0x0804B39F   # J     0x8012CE7C
 ]
