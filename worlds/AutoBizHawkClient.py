@@ -22,9 +22,10 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
     @staticmethod
     async def get_handler(ctx: BizHawkClientContext, system: str) -> Optional[BizHawkClient]:
-        for handler in AutoBizHawkClientRegister.game_handlers[system].values():
-            if await handler.validate_rom(ctx):
-                return handler
+        if system in AutoBizHawkClientRegister.game_handlers:
+            for handler in AutoBizHawkClientRegister.game_handlers[system].values():
+                if await handler.validate_rom(ctx):
+                    return handler
 
         return None
 

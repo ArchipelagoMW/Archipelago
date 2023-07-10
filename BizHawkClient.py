@@ -41,6 +41,7 @@ class BizHawkClientContext(CommonContext):
     bizhawk_connection_status: BizHawkConnectionStatus
     slot_data: Optional[Dict[str, Any]] = None
     watcher_timeout: float = 0.5
+    rom_hash: Optional[str] = None
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
@@ -271,6 +272,9 @@ async def bizhawk_write(ctx: BizHawkClientContext, address: int, value: Iterable
 
 
 async def _game_watcher(ctx: BizHawkClientContext):
+    showed_connecting_message = False
+    showed_no_handler_message = False
+
     while not ctx.exit_event.is_set():
         try:
             await asyncio.wait_for(ctx.watcher_event.wait(), ctx.watcher_timeout)
@@ -280,9 +284,14 @@ async def _game_watcher(ctx: BizHawkClientContext):
         ctx.watcher_event.clear()
 
         if ctx.bizhawk_streams is None:
-            logger.info("Trying to connect to BizHawk...")
+            if not showed_connecting_message:
+                logger.info("Waiting to connect to BizHawk...")
+                showed_connecting_message = True
+
             if not await _try_connect(ctx):
                 continue
+
+        showed_connecting_message = False
 
         try:
             await send_requests(ctx, [{"type": "PING"}])
@@ -294,9 +303,24 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 ctx.client_handler = await AutoBizHawkClientRegister.get_handler(ctx, system)
 
                 if ctx.client_handler is None:
-                    raise NotImplementedError("No handler was found for this game")
-                else:
-                    logger.info(f"Running handler for {ctx.client_handler.game}")
+                    if not showed_no_handler_message:
+                        logger.info("No handler was found for this game")
+                        showed_no_handler_message = True
+                    continue
+
+                showed_no_handler_message = False
+                logger.info(f"Running handler for {ctx.client_handler.game}")
+
+                rom_hash = (await send_requests(ctx, [{"type": "HASH"}]))[0]["value"]
+                if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
+                    if ctx.server is not None:
+                        logger.info(f"ROM changed. Disconnecting from server.")
+                        await ctx.disconnect(True)
+
+                    ctx.auth = None
+                    ctx.username = None
+
+                ctx.rom_hash = rom_hash
         except RequestFailedError:
             continue
 

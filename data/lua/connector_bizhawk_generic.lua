@@ -22,6 +22,8 @@ local current_time = 0
 
 local locked = false
 
+local rom_hash = nil
+
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
 lua_major = tonumber(lua_major)
 lua_minor = tonumber(lua_minor)
@@ -80,6 +82,9 @@ function process_request (req)
     elseif req["type"] == "SYSTEM" then
         res["type"] = "SYSTEM_RESPONSE"
         res["value"] = emu.getsystemid()
+    elseif req["type"] == "HASH" then
+        res["type"] = "HASH_RESPONSE"
+        res["value"] = rom_hash
     elseif req["type"] == "LOCK" then
         res["type"] = "LOCKED"
         lock()
@@ -159,20 +164,26 @@ function main ()
     end
 
     local server, err = socket.bind("localhost", SOCKET_PORT)
-    if (err == "address already in use") then
-        print("ERROR: Port already in use")
-        print("This is likely because you switched ROMs after starting this script, which is not supported.")
-        print("Please close down BizHawk and your client and retry.")
-        return
-    elseif (err ~= nil) then
+    if (err ~= nil) then
         print(err)
         return
     end
 
-    if (emu.getsystemid() == "NULL") then
-        print("No ROM loaded. Load a ROM and then restart this script.")
-        return
+    function onexit ()
+        server:close()
     end
+
+    event.onexit(onexit)
+
+    local printed_no_rom_message = false
+    if (emu.getsystemid() == "NULL") then
+        print("No ROM is loaded. Please load a ROM.")
+        while (emu.getsystemid() == "NULL") do
+            emu.frameadvance()
+        end
+    end
+
+    rom_hash = gameinfo.getromhash()
 
     while true do
         current_time = socket.socket.gettime()
