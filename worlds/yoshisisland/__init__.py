@@ -47,6 +47,10 @@ class YIWorld(World):
     locked_locations: List[str]
     location_cache: List[Location]
     set_req_bosses: str
+    lives_high: int
+    lives_low: int
+    castle_bosses: int
+    bowser_bosses: int
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -150,7 +154,7 @@ class YIWorld(World):
             world = self.multiworld
             player = self.player
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self.multiworld, rom, self.player)
+            patch_rom(self, rom, self.player, self.multiworld)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
@@ -236,34 +240,32 @@ def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: in
         pool.append(item)
 
 def var_boss(self: YIWorld, world: MultiWorld, player: int):
-    world.castle_bosses = world.castle_open_condition[self.player].value
-    world.bowser_bosses = world.castle_clear_condition[self.player].value
     if world.starting_lives[player] > 255:
-        world.lives_high = world.starting_lives[self.player].value >> 8
-        world.lives_low = (world.starting_lives[self.player].value - world.lives_high) - ((255 * world.lives_high))
+        self.lives_high = world.starting_lives[player].value >> 8
+        self.lives_low = (world.starting_lives[player].value - self.lives_high) - ((255 * self.lives_high))
     else:
-        world.lives_high = 0x00
-        world.lives_low = world.starting_lives[self.player].value
+        self.lives_high = 0x00
+        self.lives_low = world.starting_lives[player].value
 
-    world.level_colors = []
-    world.color_order = []
+    self.level_colors = []
+    self.color_order = []
     for i in range(72):
-            world.level_colors.append(world.random.randint(0,7))
+            self.level_colors.append(world.random.randint(0,7))
     if world.yoshi_colors[player].value == 3:
         singularity_color = world.random.randint(0,7)
-        for i in range(len(world.level_colors)):
-                    world.level_colors[i] = singularity_color
+        for i in range(len(self.level_colors)):
+                    self.level_colors[i] = singularity_color
     elif world.yoshi_colors[player].value == 1:
-        world.leader_color = world.random.randint(0,7)
+        self.leader_color = world.random.randint(0,7)
         for i in range(7):
-            world.color_order.append(world.random.randint(0,7))
+            self.color_order.append(world.random.randint(0,7))
 
 
     bonus_valid = [0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]
 
-    world.world_bonus = []
+    self.world_bonus = []
     for i in range(12):
-        world.world_bonus.append(world.random.choice(bonus_valid))
+        self.world_bonus.append(world.random.choice(bonus_valid))
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:

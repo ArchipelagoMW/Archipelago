@@ -6,7 +6,7 @@ class BossReqs:
     player: int
 
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, world, player: int):
         self.player = player
 
         
@@ -17,8 +17,8 @@ class BossReqs:
         else:
             self.game_logic = "Hard"
 
-        self.castle_unlock = world.castle_bosses
-        self.boss_unlock = world.bowser_bosses
+        self.castle_unlock = world.castle_open_condition[player].value
+        self.boss_unlock = world.castle_clear_condition[player].value
 
     def castle_access(self, state: CollectionState,) -> bool:
         return state.has('Boss Clear', self.player, self.castle_unlock)

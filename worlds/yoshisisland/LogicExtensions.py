@@ -565,35 +565,35 @@ class YoshiLogic:
 ##################################################################################
     def _26Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
 
     def _26Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball', 'Egg Launcher'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball', 'Egg Launcher'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball','Egg Launcher'}, self.player)
 
     def _26Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player) and self.has_midring(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball', 'Key'}, self.player)
+            return True
 
     def _26Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball', 'Key', 'Egg Launcher'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
 
     def _26Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
