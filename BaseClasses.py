@@ -9,7 +9,8 @@ import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import ChainMap, Counter, deque
 from enum import IntEnum, IntFlag
-from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
+from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union, \
+    Type, ClassVar
 
 import NetUtils
 import Options
@@ -788,81 +789,6 @@ class CollectionState():
             self.stale[item.player] = True
 
 
-class Region:
-    name: str
-    _hint_text: str
-    player: int
-    multiworld: Optional[MultiWorld]
-    entrances: List[Entrance]
-    exits: List[Entrance]
-    locations: List[Location]
-
-    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
-        self.name = name
-        self.entrances = []
-        self.exits = []
-        self.locations = []
-        self.multiworld = multiworld
-        self._hint_text = hint
-        self.player = player
-
-    def can_reach(self, state: CollectionState) -> bool:
-        if state.stale[self.player]:
-            state.update_reachable_regions(self.player)
-        return self in state.reachable_regions[self.player]
-
-    def can_reach_private(self, state: CollectionState) -> bool:
-        for entrance in self.entrances:
-            if entrance.can_reach(state):
-                if not self in state.path:
-                    state.path[self] = (self.name, state.path.get(entrance, None))
-                return True
-        return False
-
-    @property
-    def hint_text(self) -> str:
-        return self._hint_text if self._hint_text else self.name
-
-    def get_connecting_entrance(self, is_main_entrance: typing.Callable[[Entrance], bool]) -> Entrance:
-        for entrance in self.entrances:
-            if is_main_entrance(entrance):
-                return entrance
-        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
-            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
-
-    def add_locations(self, locations: Dict[str, Optional[int]], location_type: Optional[typing.Type[Location]] = None) -> None:
-        """Adds locations to the Region object, where location_type is your Location class and locations is a dict of
-        location names to address."""
-        if location_type is None:
-            location_type = Location
-        for location, address in locations.items():
-            self.locations.append(location_type(self.player, location, address, self))
-
-    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
-        """
-        Connects current region to regions in exit dictionary. Passed region names must exist first.
-
-        :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
-        created entrances will be named "self.name -> connecting_region"
-        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
-        """
-        if not isinstance(exits, Dict):
-            exits = dict.fromkeys(exits)
-        for connecting_region, name in exits.items():
-            entrance = Entrance(self.player, name if name else f"{self.name} -> {connecting_region}", self)
-            if rules and connecting_region in rules:
-                entrance.access_rule = rules[connecting_region]
-            self.exits.append(entrance)
-            entrance.connect(self.multiworld.get_region(connecting_region, self.player))
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
-
-
 class Entrance:
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
@@ -899,6 +825,108 @@ class Entrance:
     def __str__(self):
         world = self.parent_region.multiworld if self.parent_region else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+
+
+class Region:
+    name: str
+    _hint_text: str
+    player: int
+    multiworld: Optional[MultiWorld]
+    entrances: List[Entrance]
+    exits: List[Entrance]
+    locations: List[Location]
+    entrance_type: ClassVar[Type[Entrance]] = Entrance
+
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
+        self.name = name
+        self.entrances = []
+        self.exits = []
+        self.locations = []
+        self.multiworld = multiworld
+        self._hint_text = hint
+        self.player = player
+
+    def can_reach(self, state: CollectionState) -> bool:
+        if state.stale[self.player]:
+            state.update_reachable_regions(self.player)
+        return self in state.reachable_regions[self.player]
+
+    def can_reach_private(self, state: CollectionState) -> bool:
+        for entrance in self.entrances:
+            if entrance.can_reach(state):
+                if not self in state.path:
+                    state.path[self] = (self.name, state.path.get(entrance, None))
+                return True
+        return False
+
+    @property
+    def hint_text(self) -> str:
+        return self._hint_text if self._hint_text else self.name
+
+    def get_connecting_entrance(self, is_main_entrance: Callable[[Entrance], bool]) -> Entrance:
+        for entrance in self.entrances:
+            if is_main_entrance(entrance):
+                return entrance
+        for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
+            return entrance.parent_region.get_connecting_entrance(is_main_entrance)
+
+    def add_locations(self, locations: Dict[str, Optional[int]],
+                      location_type: Optional[Type[Location]] = None) -> None:
+        """
+        Adds locations to the Region object, where location_type is your Location class and locations is a dict of
+        location names to address.
+        
+        :param locations: dictionary of locations to be created and added to this Region `{name: ID}`
+        :param location_type: Location class to be used to create the locations with"""
+        if location_type is None:
+            location_type = Location
+        for location, address in locations.items():
+            self.locations.append(location_type(self.player, location, address, self))
+    
+    def connect(self, connecting_region: Region, name: Optional[str] = None,
+                rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+        """
+        Connects this Region to another Region, placing the provided rule on the connection.
+        
+        :param connecting_region: Region object to connect to path is `self -> exiting_region`
+        :param name: name of the connection being created
+        :param rule: callable to determine access of this connection to go from self to the exiting_region"""
+        exit_ = self.create_exit(name if name else f"{self.name} -> {connecting_region.name}")
+        if rule:
+            exit_.access_rule = rule
+        exit_.connect(connecting_region)
+    
+    def create_exit(self, name: str) -> Entrance:
+        """
+        Creates and returns an Entrance object as an exit of this region.
+        
+        :param name: name of the Entrance being created
+        """
+        exit_ = self.entrance_type(self.player, name, self)
+        self.exits.append(exit_)
+        return exit_
+
+    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
+                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+        """
+        Connects current region to regions in exit dictionary. Passed region names must exist first.
+
+        :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
+        created entrances will be named "self.name -> connecting_region"
+        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+        """
+        if not isinstance(exits, Dict):
+            exits = dict.fromkeys(exits)
+        for connecting_region, name in exits.items():
+            self.connect(self.multiworld.get_region(connecting_region, self.player),
+                         name,
+                         rules[connecting_region] if rules and connecting_region in rules else None)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
 
 
 class LocationProgressType(IntEnum):
