@@ -5,7 +5,7 @@ from enum import IntFlag
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import AssembleOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
@@ -101,11 +101,9 @@ class L2ACWorld(World):
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
-        menu.exits.append(Entrance(self.player, "AncientDungeonEntrance", menu))
         self.multiworld.regions.append(menu)
 
         ancient_dungeon = Region("AncientDungeon", self.player, self.multiworld, "Ancient Dungeon")
-        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", ancient_dungeon))
         item_count: int = int(self.o.blue_chest_count)
         if self.o.shuffle_capsule_monsters:
             item_count += len(self.item_name_groups["Capsule monsters"])
@@ -136,10 +134,8 @@ class L2ACWorld(World):
         final_floor.locations.append(boss)
         self.multiworld.regions.append(final_floor)
 
-        self.multiworld.get_entrance("AncientDungeonEntrance", self.player) \
-            .connect(self.multiworld.get_region("AncientDungeon", self.player))
-        self.multiworld.get_entrance("FinalFloorEntrance", self.player) \
-            .connect(self.multiworld.get_region("FinalFloor", self.player))
+        menu.connect(ancient_dungeon, "AncientDungeonEntrance")
+        ancient_dungeon.connect(final_floor, "FinalFloorEntrance")
 
     def create_items(self) -> None:
         item_pool: List[str] = self.random.choices(sorted(self.item_name_groups["Blue chest items"]),
