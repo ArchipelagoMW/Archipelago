@@ -1,12 +1,11 @@
 import base64
 import itertools
 import os
-import settings
-
 from enum import IntFlag
 from random import Random
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
+import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import AssembleOptions
 from Utils import __version__
