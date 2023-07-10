@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import sys
 import asyncio
 import typing
 import bsdiff4
@@ -11,7 +12,7 @@ from NetUtils import NetworkItem, ClientStatus
 from worlds import undertale
 from MultiServer import mark_raw
 from CommonClient import CommonContext, server_loop, \
-    gui_enabled, ClientCommandProcessor, get_base_parser
+    gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from Utils import async_start
 
 
@@ -99,6 +100,24 @@ class UndertaleContext(CommonContext):
         self.tem_armor = False
         self.completed_count = 0
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
+        # self.game_communication_path: files go in this path to pass data between us and the actual game
+        if "localappdata" in os.environ:
+            self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
+        else:
+            # not windows. game is an exe so let's see if wine might be around to run it
+            if "WINEPREFIX" in os.environ:
+                wineprefix = os.environ["WINEPREFIX"]
+            elif shutil.which("wine") or shutil.which("wine-stable"):
+                wineprefix = os.path.expanduser("~/.wine") # default root of wine system data, deep in which is app data
+            else:
+                msg = "UndertaleClient couldn't detect system type. Unable to infer required save_game_folder"
+                logger.error("Error: " + msg)
+                Utils.messagebox("Error", msg, error=True)
+                sys.exit(1)
+            self.save_game_folder = os.path.join(
+                wineprefix,
+                "drive_c",
+                os.path.expandvars("users/$USER/Local Settings/Application Data/UNDERTALE"))
 
     def patch_game(self):
         with open(os.getcwd() + "/Undertale/data.win", "rb") as f:
