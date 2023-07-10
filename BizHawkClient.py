@@ -40,14 +40,17 @@ class BizHawkClientContext(CommonContext):
     bizhawk_streams: Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
     bizhawk_connection_status: BizHawkConnectionStatus
     slot_data: Optional[Dict[str, Any]] = None
-    watcher_timeout: float = 0.5
     rom_hash: Optional[str] = None
+
+    watcher_timeout: float
+    """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
         self.client_handler = None
         self.bizhawk_streams = None
         self.bizhawk_connection_status = BizHawkConnectionStatus.NOT_CONNECTED
+        self.watcher_timeout = 0.5
 
     def run_gui(self):
         from kvui import GameManager
@@ -61,7 +64,7 @@ class BizHawkClientContext(CommonContext):
     def on_package(self, cmd, args):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
-        
+
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
 
@@ -87,14 +90,17 @@ async def _try_connect(ctx: BizHawkClientContext):
 
 
 class RequestFailedError(Exception):
+    """Raised when the connector script did not respond to a request"""
     pass
 
 
 class NotConnectedError(Exception):
+    """Raised when something tries to make a request to the connector script before a connection has been established"""
     pass
 
 
 class BizHawkConnectorError(Exception):
+    """Raised when the connector script encounters an error while processing a request"""
     pass
 
 
