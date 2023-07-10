@@ -114,11 +114,11 @@ class L2ACWorld(World):
             item_count += len(self.item_name_groups["Party members"])
         for location_name, location_id in itertools.islice(l2ac_location_name_to_id.items(), item_count):
             ancient_dungeon.locations.append(L2ACLocation(self.player, location_name, location_id, ancient_dungeon))
-        prog_chest_access = L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player)
         for i in range(CHESTS_PER_SPHERE, item_count, CHESTS_PER_SPHERE):
             chest_access = \
                 L2ACLocation(self.player, f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", None, ancient_dungeon)
-            chest_access.place_locked_item(prog_chest_access)
+            chest_access.place_locked_item(
+                L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
             ancient_dungeon.locations.append(chest_access)
         for iris in self.item_name_groups["Iris treasures"]:
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
