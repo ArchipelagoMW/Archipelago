@@ -571,7 +571,7 @@ def set_magic_spell_rules(logic: StardewLogic, multi_world: MultiWorld, player: 
                                  (logic.can_reach_region(Region.witch_hut) & magic.can_use_altar(logic)).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Analyze: Bloodmana", player),
                                  (logic.can_reach_region(Region.mines_floor_100) & magic.can_use_altar(logic)).simplify())
-    MultiWorldRules.add_rule(multi_world.get_location("Analyze all Eldritch School Locations", player),
+    MultiWorldRules.add_rule(multi_world.get_location("Analyze All Eldritch School Locations", player),
                                  (logic.can_reach_region(Region.witch_hut) &
                                   logic.can_reach_region(Region.mines_floor_100) &
                                   logic.can_reach_region(Region.farm) & logic.has_lived_months(12) &
