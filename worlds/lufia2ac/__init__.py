@@ -2,7 +2,6 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from random import Random
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
 import settings
@@ -143,8 +142,8 @@ class L2ACWorld(World):
             .connect(self.multiworld.get_region("FinalFloor", self.player))
 
     def create_items(self) -> None:
-        item_pool: List[str] = self.multiworld.random.choices(sorted(self.item_name_groups["Blue chest items"]),
-                                                              k=self.o.blue_chest_count - self.o.custom_item_pool.count)
+        item_pool: List[str] = self.random.choices(sorted(self.item_name_groups["Blue chest items"]),
+                                                   k=self.o.blue_chest_count - self.o.custom_item_pool.count)
         item_pool += [item_name for item_name, count in self.o.custom_item_pool.items() for _ in range(count)]
 
         if self.o.shuffle_capsule_monsters:
@@ -269,7 +268,7 @@ class L2ACWorld(World):
 
     def get_filler_item_name(self) -> str:
         return ["Potion", "Hi-Magic", "Miracle", "Hi-Potion", "Potion", "Ex-Potion", "Regain", "Ex-Magic", "Hi-Magic"][
-            (self.multiworld.random.randrange(9) + self.multiworld.random.randrange(9)) // 2]
+            (self.random.randrange(9) + self.random.randrange(9)) // 2]
 
     # end of overridden AutoWorld.py methods
 
@@ -323,33 +322,31 @@ class L2ACWorld(World):
         index_set: Set[int] = set(used_indices)
         used_pointers: List[bytes] = [pointer for index, pointer in enumerate(pointers) if index in index_set]
 
-        slot_random: Random = self.multiworld.per_slot_randoms[self.player]
-
         d: int = 2 * 6
         if self.o.enemy_floor_numbers == EnemyFloorNumbers.option_shuffle:
-            constrained_shuffle(used_formations, d, random=slot_random)
+            constrained_shuffle(used_formations, d, random=self.random)
         elif self.o.enemy_floor_numbers == EnemyFloorNumbers.option_randomize:
-            used_formations = constrained_choices(used_formations, d, k=len(used_formations), random=slot_random)
+            used_formations = constrained_choices(used_formations, d, k=len(used_formations), random=self.random)
 
         if self.o.enemy_sprites == EnemySprites.option_shuffle:
-            slot_random.shuffle(used_sprites)
+            self.random.shuffle(used_sprites)
         elif self.o.enemy_sprites == EnemySprites.option_randomize:
-            used_sprites = slot_random.choices(tuple(dict.fromkeys(used_sprites)), k=len(used_sprites))
+            used_sprites = self.random.choices(tuple(dict.fromkeys(used_sprites)), k=len(used_sprites))
         elif self.o.enemy_sprites == EnemySprites.option_singularity:
-            used_sprites = [slot_random.choice(tuple(dict.fromkeys(used_sprites)))] * len(used_sprites)
+            used_sprites = [self.random.choice(tuple(dict.fromkeys(used_sprites)))] * len(used_sprites)
         elif self.o.enemy_sprites.sprite:
             used_sprites = [self.o.enemy_sprites.sprite] * len(used_sprites)
 
         if self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_pattern:
-            slot_random.shuffle(used_pointers)
+            self.random.shuffle(used_pointers)
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_pattern:
-            used_pointers = slot_random.choices(tuple(dict.fromkeys(used_pointers)), k=len(used_pointers))
+            used_pointers = self.random.choices(tuple(dict.fromkeys(used_pointers)), k=len(used_pointers))
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_sprite:
-            slot_random.shuffle(used_indices)
+            self.random.shuffle(used_indices)
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_sprite:
-            used_indices = slot_random.choices(tuple(dict.fromkeys(used_indices)), k=len(used_indices))
+            used_indices = self.random.choices(tuple(dict.fromkeys(used_indices)), k=len(used_indices))
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_singularity:
-            used_indices = [slot_random.choice(tuple(dict.fromkeys(used_indices)))] * len(used_indices)
+            used_indices = [self.random.choice(tuple(dict.fromkeys(used_indices)))] * len(used_indices)
         elif self.o.enemy_movement_patterns.sprite:
             used_indices = [indices[self.o.enemy_movement_patterns.sprite - 128]] * len(used_indices)
 
