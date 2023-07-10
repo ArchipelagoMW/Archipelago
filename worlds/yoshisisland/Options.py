@@ -155,7 +155,8 @@ yoshi_options: Dict[str, Option] ={
     "castle_clear_condition": FinalBossBosses,
     "yoshi_colors": YoshiColors,
     "traps_enabled": TrapsEnabled,
-    "trap_percent": TrapPercent
+    "trap_percent": TrapPercent,
+    "death_link": DeathLink
 
     
 }

@@ -197,11 +197,11 @@ class YoshiLogic:
 
     def _14Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Spring Ball', 'Key'}, self.player and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state)))
+            return state.has_all({'Spring Ball', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state))
         elif self.game_logic == "Normal":
-            return state.has_all({'Spring Ball', 'Key'}, self.player and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state)))
+            return state.has_all({'Spring Ball', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state))
         else:
-            return state.has_all({'Spring Ball', 'Key'}, self.player and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state)))
+            return state.has_all({'Spring Ball', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state))
 
     def _14Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1327,7 +1327,7 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Helicopter Morph', 'Dashed Stairs'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_any({'Dashed Stairs', 'Ice Melon'}, self.player and (state.has('Egg Capacity Upgrade', self.player, 1) or self.combat_item(state) or state.has('Helicopter Morph', self.player)))
+            return state.has_any({'Dashed Stairs', 'Ice Melon'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1) or self.combat_item(state) or state.has('Helicopter Morph', self.player))
         else:
             return True
 
@@ -1865,7 +1865,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
         else:
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+            return state.has_all({'Helicopter Morph'}, self.player)
 
     def _68Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1873,7 +1873,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
         else:
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+            return state.has_all({'Helicopter Morph'}, self.player)
 
     def _68Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1881,15 +1881,15 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self.has_midring(state)
         else:
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self.has_midring(state)
+            return state.has_all({'Helicopter Morph'}, self.player) and self.has_midring(state)
 
     def _68Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player) and self.has_midring(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self.has_midring(state)
-        else:
             return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+        else:
+            return state.has_all({'Helicopter Morph'}, self.player)
 ######################################################################################################################
     def _6ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
