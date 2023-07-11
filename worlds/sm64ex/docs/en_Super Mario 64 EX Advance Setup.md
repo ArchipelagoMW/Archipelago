@@ -30,7 +30,7 @@ Then follow the steps below.
 8. Set the location for the Models Pack.
 9. Set the location for the Texture Pack.
 10. Point the Launcher to your Super Mario 64 US/JP Rom, and set the Region correspondingly.
-11. Copy the .patch file/s to the enhancements folder which is located in e.g. `C:/sm64pclauncher/apmario/enhancements`.
+11. Copy the .patch file/s to the enhancements folder which is located in e.g. `yourpath/apmario/enhancements`.
   - NOTE: outside patches may break the game. Only the ones supplied with the repo are tested.
 12. Click on refresh patchlist. Click on the patches you want
 13. Set Build Options.
@@ -42,9 +42,8 @@ SM64EX will now be compiled. The Launcher will appear to have crashed, but this 
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
 
-NOTE: I would recommend building it in a new folder so it doesn't overwrite the working build.
+NOTE: It is recommended to build this a new folder so it doesn't overwrite the working build.
 - For some reason, starting the game for the first time always crashes the launcher. Just restart it.
-- if using the AP version follow the the steps listed here [Archipelago](https://archipelago.gg/tutorial/Super%20Mario%2064/setup/en)
 
 # Manual Compilation (Linux/Windows)
 
