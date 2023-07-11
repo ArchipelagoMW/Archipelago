@@ -28,10 +28,10 @@ class BrownBoxes(Choice):
 
 
 class SkyCoinMode(Choice):
-    """Configure how the Sky Coin is acquired. With standard, the Sky Coin will be placed randomly. With start_with, the
-    Sky Coin will be in your inventory at the start of the game. With save_the_crystals, the Sky Coin will be acquired
-    once you save all 4 crystals. With shattered_sky_coin, the Sky Coin is split in 40 fragments; you can enter Doom
-    Castle once the required amount is found. shattered_sky_coin will force brown box locations to be included."""
+    """Configure how the Sky Coin is acquired. With standard, the Sky Coin will be placed randomly. With Start With, the
+    Sky Coin will be in your inventory at the start of the game. With Save The Crystals, the Sky Coin will be acquired
+    once you save all 4 crystals. With Shattered Sky Coin, the Sky Coin is split in 40 fragments; you can enter Doom
+    Castle once the required amount is found. Shattered Sky Coin will force brown box locations to be included."""
     option_standard = 0
     option_start_with = 1
     option_save_the_crystals = 2
@@ -42,8 +42,8 @@ class SkyCoinMode(Choice):
 
 class ShatteredSkyCoinQuantity(Choice):
     """Configure the number of the 40 Sky Coin Fragments required to enter the Doom Castle. Only has an effect if
-    sky_coin_mode is set to shattered. low: 16. mid: 24. high: 32. random_narrow: random between 16 and 32.
-    random_wide: random between 10 and 38."""
+    Sky Coin Mode is set to shattered. Low: 16. Mid: 24. High: 32. Random Narrow: random between 16 and 32.
+    Random Wide: random between 10 and 38."""
     option_low_16 = 0
     option_mid_24 = 1
     option_high_32 = 2
@@ -118,9 +118,9 @@ class BossesScalingUpper(EnemyScaling):
 
 
 class EnemizerAttacks(Choice):
-    """Shuffles enemy attacks. standard: No shuffle. safe: Randomize every attack but leave out self-destruct and Dark
-    King attacks. chaos: Randomize and include self-destruct and Dark King attacks. self_destruct: Every enemy
-    self-destructs. simple_shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left
+    """Shuffles enemy attacks. Standard: No shuffle. Safe: Randomize every attack but leave out self-destruct and Dark
+    King attacks. Chaos: Randomize and include self-destruct and Dark King attacks. Self Destruct: Every enemy
+    self-destructs. Simple Shuffle: Instead of randomizing, shuffle one monster's attacks to another. Dark King is left
     vanilla."""
     display_name = "Enemizer Attacks"
     option_normal = 0
@@ -139,8 +139,8 @@ class ShuffleEnemiesPositions(Toggle):
 
 class ProgressiveFormations(Choice):
     """Enemies' formations are selected by regions, with the weakest formations always selected in Foresta and the
-    strongest in Windia. disabled: Standard formations are used. regions_strict: Formations will come exclusively
-    from the current region, whatever the map is. regions_keep_type: Formations will keep the original formation type
+    strongest in Windia. Disabled: Standard formations are used. Regions Strict: Formations will come exclusively
+    from the current region, whatever the map is. Regions Keep Type: Formations will keep the original formation type
     and match with the nearest power level."""
     display_name = "Progressive Formations"
     option_disabled = 0
@@ -149,9 +149,9 @@ class ProgressiveFormations(Choice):
 
 
 class DoomCastle(Choice):
-    """Configure how you reach the Dark King. With standard, you need to defeat all four bosses and their floors to
-    reach the Dark King. With boss_rush, only the bosses are blocking your way in the corridor to the Dark King's room.
-    With dark_king_only, the way to the Dark King is free of any obstacle."""
+    """Configure how you reach the Dark King. With Standard, you need to defeat all four bosses and their floors to
+    reach the Dark King. With Boss Rush, only the bosses are blocking your way in the corridor to the Dark King's room.
+    With Dark King Only, the way to the Dark King is free of any obstacle."""
     display_name = "Doom Castle"
     option_standard = 0
     option_boss_rush = 1
@@ -160,7 +160,7 @@ class DoomCastle(Choice):
 
 class DoomCastleShortcut(Toggle):
     """Create a shortcut granting access from the start to Doom Castle at Focus Tower's entrance.
-    Also modify the Desert floor so it can be navigated without the Mega Grenades and the Dragon Claw."""
+    Also modify the Desert floor, so it can be navigated without the Mega Grenades and the Dragon Claw."""
     display_name = "Doom Castle Shortcut"
 
 
@@ -172,9 +172,9 @@ class TweakFrustratingDungeons(Toggle):
 
 
 class MapShuffle(Choice):
-    """none: No shuffle. overworld: Only shuffle the Overworld locations. dungeons: Only shuffle the dungeons' floors
-    amongst themselves. Temples and Towns aren't included. overworld_and_dungeons: Shuffle the Overworld and dungeons
-    at the same time. everything: Shuffle the Overworld, dungeons, temples and towns all amongst each others.
+    """None: No shuffle. Overworld: Only shuffle the Overworld locations. Dungeons: Only shuffle the dungeons' floors
+    amongst themselves. Temples and Towns aren't included. Overworld And Dungeons: Shuffle the Overworld and dungeons
+    at the same time. Everything: Shuffle the Overworld, dungeons, temples and towns all amongst each others.
     When dungeons are shuffled, defeating Pazuzu won't teleport you to the 7th floor, you have to get there normally to
     save the Crystal and get Pazuzu's Chest."""
     display_name = "Map Shuffle"
@@ -229,16 +229,6 @@ class BattlefieldsBattlesQuantities(Choice):
     option_one = 4
     option_random_one_through_five = 5
     option_random_one_through_ten = 6
-
-
-class RandomizeBenjaminsPalette(Toggle):
-    """Randomly select Benjamin's palette, giving him a brand new look!"""
-    display_name = "Randomize Benjamin's Palette"
-
-
-class RandomizeMusic(Toggle):
-    """Shuffle the music tracks."""
-    display_name = "Randomize Music"
 
 
 option_definitions = {
