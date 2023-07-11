@@ -795,16 +795,16 @@ def create_regions(world, player: int, active_locations):
             LocationName.XemnasDataPowerBoost,
             LocationName.DataXemnasEventLocation
         ],
-        RegionName.AtlanticaSongOne:   [
+        RegionName.AtlanticaSongOne:      [
             LocationName.UnderseaKingdomMap
         ],
-        RegionName.AtlanticaSongTwo:   [
+        RegionName.AtlanticaSongTwo:      [
 
         ],
-        RegionName.AtlanticaSongThree: [
+        RegionName.AtlanticaSongThree:    [
             LocationName.MysteriousAbyss
         ],
-        RegionName.AtlanticaSongFour:  [
+        RegionName.AtlanticaSongFour:     [
             LocationName.MusicalBlizzardElement,
             LocationName.MusicalOrichalcumPlus
         ],
@@ -1016,7 +1016,7 @@ def connect_regions(world: MultiWorld, player: int):
                                         RegionName.Dc, RegionName.Stt,
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final,RegionName.AtlanticaSongOne},
+                                        RegionName.Final, RegionName.AtlanticaSongOne},
         RegionName.LoD:                {RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},

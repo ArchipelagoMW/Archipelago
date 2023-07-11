@@ -9,7 +9,7 @@ from .OpenKH import patch_kh2
 from .Options import KH2_Options
 from .Regions import create_regions, connect_regions
 # from .Rules import set_rules
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class KingdomHearts2Web(WebWorld):
