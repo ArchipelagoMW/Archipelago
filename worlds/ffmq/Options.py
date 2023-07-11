@@ -23,7 +23,7 @@ class BrownBoxes(Choice):
     option_exclude = 0
     option_include = 1
     option_shuffle = 2
-    default = 2
+    default = 1
     display_name = "Brown Boxes"
 
 
