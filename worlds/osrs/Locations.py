@@ -122,7 +122,7 @@ Quest_Locations = [
     LocationData(0x070011, LocationNames.Q_Misthalin_Mystery),
     LocationData(0x070012, LocationNames.Q_Corsair_Curse),
     LocationData(0x070013, LocationNames.Q_X_Marks_the_Spot),
-    LocationData(0x070014, LocationNames.Q_Below_Ice_Mountain)
+    LocationData(0x070014, LocationNames.Q_Below_Ice_Mountain),
 ]
 
 Skill_Locations = [

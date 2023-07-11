@@ -423,7 +423,6 @@ class OSRSWorld(World):
                 self.quest_points(state) >= 32 and state.can_reach(RegionNames.Crandor, None, self.player)
         )
 
-
         # place "Victory" at "Dragon Slayer" and set collection as win condition
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
             .place_locked_item(self.create_event("Victory"))
