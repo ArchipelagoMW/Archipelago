@@ -4796,4 +4796,27 @@
         <EffectArray Operation="Add" Reference="Unit,AP_Diamondback,Food" Value="1"/>
         <AffectedUnitArray value="AP_Diamondback"/>
     </CUpgrade>
+    <CUpgrade id="AP_CinematicMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Gateway"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+        <AffectedUnitArray value="AP_RoboticsBay"/>
+        <AffectedUnitArray value="AP_PhotonCannon"/>
+        <AffectedUnitArray value="AP_DarkShrine"/>
+        <AffectedUnitArray value="AP_Forge"/>
+        <AffectedUnitArray value="AP_TemplarArchive"/>
+        <AffectedUnitArray value="AP_FleetBeacon"/>
+        <AffectedUnitArray value="AP_StargateWarp"/>
+        <AffectedUnitArray value="AP_RoboticsFacilityWarp"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SOAHeroicShield">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_SoACaster"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HeroicShieldCleanUp">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>

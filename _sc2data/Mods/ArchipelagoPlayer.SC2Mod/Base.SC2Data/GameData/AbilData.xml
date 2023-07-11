@@ -2193,6 +2193,19 @@
     <CAbilMorph id="AP_CommandCenterLiftOff" parent="TerranBuildingLiftOff" unit="AP_CommandCenterFlying">
         <Name value="Abil/Name/AP_CommandCenterLiftOff"/>
     </CAbilMorph>
+    <CAbilAugment id="AP_Charge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Charge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Effect value="AP_Charge"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilMorph id="AP_BurrowRoachDown">
         <AbilSetId value="BrwD"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
@@ -3210,6 +3223,34 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilAugment id="AP_ShadowCharge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowCharge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
+    <CAbilAugment id="AP_ShadowChargeStun">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowChargeStun"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Effect value="AP_VoidZealotShadowChargeSearch"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AutoCastValidatorArray value="AP_TargetNotShadowStunnedAndNotShadowSlowed"/>
+        <AutoCastValidatorArray value="AP_VoidZealotShadowStunRange"/>
+        <AutoCastValidatorArray value="AP_VoidZealotNotShadowCharging"/>
+    </CAbilAugment>
     <CAbilEffectInstant id="AP_PoisonNova">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Flags index="AllowMovement" value="1"/>
@@ -5183,6 +5224,21 @@
         </InfoArray>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
+    <CAbilEffectInstant id="AP_VoidZealotWhirlwind">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidZealotWhirlwindSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="AP_VoidZealotWhirlwindCheck"/>
+        <CastOutroTime value="1.2"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotWhirlwind"/>
+    </CAbilEffectInstant>
     <CAbilStop id="AP_burrowedStop">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Stop" DefaultButtonFace="StopRoachBurrowed" Requirements="AP_HaveHotSTunnelingClaws"/>

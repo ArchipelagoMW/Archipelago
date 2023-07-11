@@ -557,6 +557,28 @@
         <CombineArray value="AP_HunterCliffCheckCasterLevel3"/>
         <CombineArray value="HunterCliffCheckTargetLevel2"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOAHeroicShield">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveSOAHeroicShield"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DoesNotHaveHeroicShieldWeakness">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_VoidZealotTerazineFuryWeakness"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSOAHeroicShieldImmunity">
+        <Compare value="GT"/>
+        <Behavior value="AP_SOAHeroicShieldImmunity"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHeroicShieldCleanUp">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHeroicShieldCleanUp"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DoesNotHaveSOAHeroicShieldWeakness">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_SOAHeroicShieldWeakness"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -747,6 +769,17 @@
         <CombineArray value="IsImmortal"/>
         <Negate value="1"/>
     </CValidatorCombine>
+    <CValidatorCombine id="AP_IsInvulnerableAndHasSOAHeroicShieldImmunity">
+        <Type value="And"/>
+        <CombineArray value="AP_IsInvulnerable"/>
+        <CombineArray value="AP_HasSOAHeroicShieldImmunity"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsSOACaster">
+        <Value value="AP_SoACaster"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsInvulnerable">
+        <Filters value="Invulnerable;-"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -871,6 +904,10 @@
         <Value value="AP_SporeCrawlerUprooted"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NotHaveHeroicShieldCleanUp">
+        <ResultNoPlayer value="Error"/>
+        <Value value="AP_HaveHeroicShieldCleanUp"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>
@@ -1605,6 +1642,32 @@
         <Type value="And"/>
         <CombineArray value="AP_OrbitalRelayUpgraded"/>
         <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsMassive">
+        <Filters value="Massive;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_IsUnstoppable">
+        <Filters value="Unstoppable;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeSlowed">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeSlow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeStunned">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeStun"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TargetNotShadowStunnedAndNotShadowSlowed">
+        <Type value="And"/>
+        <CombineArray value="AP_TargetNotShadowChargeStunned"/>
+        <CombineArray value="AP_TargetNotShadowChargeSlowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_TargetMassiveOrHeroicOrUnstoppable">
+        <CombineArray value="AP_IsHeroic"/>
+        <CombineArray value="AP_IsMassive"/>
+        <CombineArray value="AP_IsUnstoppable"/>
     </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_TargetNotHarmless">
         <Behavior value="AP_Harmless"/>
@@ -3550,9 +3613,59 @@
     </CValidatorCombine>
     <CValidatorUnitType id="AP_IsGoliath">
         <Value value="AP_Goliath"/>
+        <Type value="SelectAlias"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="IsVoidRay">
         <!-- Override -->
         <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorLocationEnumArea id="AP_VoidZealotWhirlwindCheck">
+        <WhichLocation Value="CasterUnit"/>
+        <AreaArray Compare="GE" Count="2" Radius="1.5"/>
+        <Compare value="GE"/>
+        <Count value="2"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasVoidZealotWhirlwind">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotWhirlwind"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_CasterNotDeadAndCasterNotStunned">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareOrderTargetRange id="AP_VoidZealotShadowStunRange">
+        <WhichUnit Value="Caster"/>
+        <OtherUnit Value="Target"/>
+        <Compare value="LT"/>
+        <AbilLink value="attack"/>
+        <Value value="0.1"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidZealotNotShadowCharging">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_ShadowCharging"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="IsCarrier">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCyclone">
+        <Value value="Cyclone"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsPhoenix">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsTempest">
+        <Value value="AP_Tempest"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsScienceVessel">
+        <Value value="AP_ScienceVessel"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCorsairMP">
+        <Value value="AP_CorsairMP"/>
     </CValidatorUnitType>
 </Catalog>

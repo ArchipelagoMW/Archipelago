@@ -1601,4 +1601,16 @@
     <CRequirement id="AP_HaveOptimizedLogisticsFirebat">
         <NodeArray index="Show" Link="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShield">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAHeroicShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHeroicShieldCleanUp">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHeroicShieldCleanUpCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShieldCooldownBehavior">
+        <EditorCategories value="TechType:Ability,Race:Protoss"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit"/>
+    </CRequirement>
 </Catalog>
