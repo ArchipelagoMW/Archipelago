@@ -33,7 +33,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             self.output("Patched.")
 
     def _cmd_savepath(self, directory: str):
-        """Redirect to proper save data folder. (Only use if needed!)"""
+        """Redirect to proper save data folder. (Use before connecting!)"""
         if isinstance(self.ctx, UndertaleContext):
             UndertaleContext.save_game_folder = directory
 
