@@ -102,8 +102,9 @@ def create_regions(self):
                                                                                                            "overworld"):
                             spoiler = True
 
-                        self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]], connect_room.name,
-                                                             'both', self.player)
+                        if spoiler:
+                            self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]], connect_room.name,
+                                                                 'both', self.player)
                     if link["access"]:
                         process_rules(connection, link["access"])
                     region.exits.append(connection)
