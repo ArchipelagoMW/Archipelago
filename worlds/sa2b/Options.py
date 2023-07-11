@@ -379,6 +379,13 @@ class ChaoAnimalParts(Toggle):
     display_name = "Chao Animal Parts"
 
 
+class ShuffleStartingChaoEggs(DefaultOnToggle):
+    """
+    Determines whether the starting Chao eggs in the gardens are random
+    """
+    display_name = "Shuffle Starting Chao Eggs"
+
+
 class RequiredCannonsCoreMissions(Choice):
     """
     Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
@@ -720,6 +727,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
     "chao_animal_parts": ChaoAnimalParts,
+    "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
 
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,

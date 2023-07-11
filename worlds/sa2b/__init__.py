@@ -62,6 +62,7 @@ class SA2BWorld(World):
 
     music_map: typing.Dict[int, int]
     voice_map: typing.Dict[int, int]
+    default_egg_map: typing.Dict[int, int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -77,6 +78,7 @@ class SA2BWorld(World):
             "Goal": self.multiworld.goal[self.player].value,
             "MusicMap": self.music_map,
             "VoiceMap": self.voice_map,
+            "DefaultEggMap": self.default_egg_map,
             "MissionMap": self.mission_map,
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
@@ -410,6 +412,20 @@ class SA2BWorld(World):
             voicelist_s = voicelist_o.copy()
 
             self.voice_map = dict(zip(voicelist_o, voicelist_s))
+
+        # Default Egg Color Shuffle
+        if self.multiworld.shuffle_starting_chao_eggs[self.player]:
+            egglist_o = list(range(0, 4))
+            egglist_s = self.multiworld.per_slot_randoms[self.player].sample(range(0,67), 4)
+
+            print(egglist_o, egglist_s)
+            self.default_egg_map = dict(zip(egglist_o, egglist_s))
+        else:
+            # Indicate these are not shuffled
+            egglist_o = [0, 1, 2, 3]
+            egglist_s = [255, 255, 255, 255]
+
+            self.default_egg_map = dict(zip(egglist_o, egglist_s))
 
 
     def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
