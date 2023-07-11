@@ -88,7 +88,7 @@ item_table = {
     # Items from new mod
     "Laser Targeting System (Marine)": ItemData(220 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, classification=ItemClassification.filler, parent_item="Marine"), # Freed slot from Stimpack
     "Magrail Munitions (Marine)": ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, parent_item="Marine"),
-    "Optimized Logistics (Marine)": ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, parent_item="Marine"),
+    "Optimized Logistics (Marine)": ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, classification=ItemClassification.filler, parent_item="Marine"),
     "Restoration (Medic)": ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, classification=ItemClassification.filler, parent_item="Medic"),
     "Optical Flare (Medic)": ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, classification=ItemClassification.filler, parent_item="Medic"),
     "Optimized Logistics (Medic)": ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, classification=ItemClassification.filler, parent_item="Medic"),
@@ -110,7 +110,7 @@ item_table = {
     "Optimized Logistics (Hellion)": ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, classification=ItemClassification.filler, parent_item="Hellion"),
     "Jump Jets (Hellion)": ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, classification=ItemClassification.filler, parent_item="Hellion"),
     "Progressive Stimpack (Hellion)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellion", quantity=2),
-    "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, parent_item="Vulture"),
+    "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, classification=ItemClassification.filler, parent_item="Vulture"),
     "Auto Launchers (Vulture)": ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, parent_item="Vulture"),
     "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10),
     "Jump Jets (Goliath)": ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 11, classification=ItemClassification.filler, parent_item="Goliath"),
@@ -120,7 +120,7 @@ item_table = {
     "Optimized Logistics (Diamondback)": ItemData(267 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 15, parent_item="Diamondback"),
     "Jump Jets (Siege Tank)": ItemData(268 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, parent_item="Siege Tank"),
     "Spider Mines (Siege Tank)": ItemData(269 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 17, classification=ItemClassification.filler, parent_item="Siege Tank"),
-    "Smart Servos (Siege Tank)": ItemData(270 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 18, parent_item="Siege Tank"),
+    "Smart Servos (Siege Tank)": ItemData(270 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 18, classification=ItemClassification.filler, parent_item="Siege Tank"),
     "Graduating Range (Siege Tank)": ItemData(271 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 19, classification=ItemClassification.progression, parent_item="Siege Tank"),
     "Laser Targeting System (Siege Tank)": ItemData(272 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 20, parent_item="Siege Tank"),
     "Advanced Siege Tech (Siege Tank)": ItemData(273 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, parent_item="Siege Tank"),
