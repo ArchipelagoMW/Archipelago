@@ -84,7 +84,7 @@ class KH2Context(CommonContext):
             8:  LoD_Checks,
             9:  HundredAcreChecks,
             10: PL_Checks,
-            11: DC_Checks,  # atlantica isn't a supported world. if you go in atlantica it will check dc
+            11: Atlantica_Checks,  # atlantica isn't a supported world. if you go in atlantica it will check dc
             12: DC_Checks,
             13: TR_Checks,
             14: HT_Checks,

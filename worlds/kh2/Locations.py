@@ -839,6 +839,14 @@ Goofy_Checks = {
     LocationName.GoofyStarting1:          LocationData(3, "Critical", "Goofy"),
     LocationName.GoofyStarting2:          LocationData(3, "Critical", "Goofy"),
 }
+
+Atlantica_Checks = {
+    LocationName.UnderseaKingdomMap:     LocationData(367, "Chest"),
+    LocationName.MysteriousAbyss:        LocationData(287, "Chest"),#needs 2 magnets
+    LocationName.MusicalBlizzardElement: LocationData(279, "Chest"),#2 magnets all thunders
+    LocationName.MusicalOrichalcumPlus:  LocationData(538, "Chest"),#2 magnets all thunders
+}
+
 event_location_to_item = {
     LocationName.HostileProgramEventLocation:        ItemName.HostileProgramEvent,
     LocationName.McpEventLocation:                   ItemName.McpEvent,
@@ -877,7 +885,7 @@ event_location_to_item = {
     LocationName.XemnasEventLocation:                ItemName.XemnasEvent,
     LocationName.ArmoredXemnasEventLocation:         ItemName.ArmoredXemnasEvent,
     LocationName.ArmoredXemnas2EventLocation:        ItemName.ArmoredXemnas2Event,
-    #LocationName.FinalXemnasEventLocation:           ItemName.FinalXemnasEvent,
+    # LocationName.FinalXemnasEventLocation:           ItemName.FinalXemnasEvent,
     LocationName.DataXemnasEventLocation:            ItemName.DataXemnasEvent,
     LocationName.ThresholderEventLocation:           ItemName.ThresholderEvent,
     LocationName.BeastEventLocation:                 ItemName.BeastEvent,
@@ -1102,6 +1110,7 @@ all_locations = {
     **Keyblade_Slots,
     **Donald_Checks,
     **Goofy_Checks,
+    **Atlantica_Checks,
 }
 popups_set = {
     LocationName.SweetMemories,
@@ -1210,7 +1219,11 @@ popups_set = {
     LocationName.ZexionASBookofShadows,
     LocationName.ZexionDataLostIllusion,
     LocationName.LexaeusASStrengthBeyondStrength,
-    LocationName.MarluxiaASEternalBlossom
+    LocationName.MarluxiaASEternalBlossom,
+    LocationName.UnderseaKingdomMap,
+    LocationName.MysteriousAbyss,
+    LocationName.MusicalBlizzardElement,
+    LocationName.MusicalOrichalcumPlus,
 }
 exclusion_table = {
     "SuperBosses":   {

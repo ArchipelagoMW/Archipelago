@@ -594,6 +594,12 @@ TWTNW_Checks = {
     LocationName.LuxordDataAPBoost:                     WorldLocationData(0x1EDA, 1),
     LocationName.RoxasDataMagicBoost:                   WorldLocationData(0x1ED9, 6),
 }
+Atlantica_Checks = {
+    LocationName.UnderseaKingdomMap:     WorldLocationData(0x1DF4, 2),
+    LocationName.MysteriousAbyss:        WorldLocationData(0x1DF5, 3),
+    LocationName.MusicalOrichalcumPlus:  WorldLocationData(0x1DF4, 1),
+    LocationName.MusicalBlizzardElement: WorldLocationData(0x1DF4, 1)
+}
 SoraLevels = {
     # LocationName.Lvl1:  WorldLocationData(0xFFFF,1),
     LocationName.Lvl2:  WorldLocationData(0xFFFF, 2),
@@ -833,6 +839,7 @@ all_world_locations = {
     **SP_Checks,
     **TWTNW_Checks,
     **HB_Checks,
+    **Atlantica_Checks,
 }
 
 levels_locations = {

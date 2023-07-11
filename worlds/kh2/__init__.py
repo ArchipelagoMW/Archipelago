@@ -59,7 +59,7 @@ class KH2World(World):
         self.sora_keyblade_ability_pool = list()
         self.keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
         self.keyblade_slot_copy.remove(LocationName.KingdomKeySlot)
-        self.totalLocations = len(all_locations.items())
+        self.total_locations = len(all_locations.keys())
         self.growth_list = list()
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
@@ -158,7 +158,7 @@ class KH2World(World):
 
         # Creating filler for unfilled locations
         itempool += [self.create_filler()
-                     for _ in range(self.totalLocations - len(itempool))]
+                     for _ in range(self.total_locations - len(itempool))]
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
@@ -197,7 +197,7 @@ class KH2World(World):
                 self.plando_locations[randomBoss] = ItemName.Bounty
                 self.hitlist.append(self.location_name_to_id[randomBoss])
                 self.RandomSuperBoss.remove(randomBoss)
-                self.totalLocations -= 1
+                self.total_locations -= 1
 
         self.donald_fill()
         self.goofy_fill()
@@ -215,7 +215,7 @@ class KH2World(World):
         self.level_subtraction()
 
         # subtraction from final xemnas
-        self.totalLocations -= 2
+        self.total_locations -= 2
 
     def pre_fill(self):
         """
@@ -268,7 +268,7 @@ class KH2World(World):
         for donaldLocation in Locations.Donald_Checks.keys():
             random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.donald_ability_pool)
             self.plando_locations[donaldLocation] = random_ability
-            self.totalLocations -= 1
+            self.total_locations -= 1
             self.donald_ability_pool.remove(random_ability)
 
     def goofy_fill(self):
@@ -288,7 +288,7 @@ class KH2World(World):
         for goofyLocation in Locations.Goofy_Checks.keys():
             random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool)
             self.plando_locations[goofyLocation] = random_ability
-            self.totalLocations -= 1
+            self.total_locations -= 1
             self.goofy_ability_pool.remove(random_ability)
 
     def keyblade_fill(self):
@@ -357,7 +357,7 @@ class KH2World(World):
             if self.sora_keyblade_ability_pool[random_ability] == 0:
                 self.valid_abilities.remove(random_ability)
                 self.sora_keyblade_ability_pool.pop(random_ability)
-            self.totalLocations -= 1
+            self.total_locations -= 1
 
     def starting_invo_verify(self):
         """
@@ -450,13 +450,13 @@ class KH2World(World):
             pass
         elif self.multiworld.LevelDepth[self.player] == "level_50_sanity":
             # level 50 sanity
-            self.totalLocations -= 49
+            self.total_locations -= 49
         elif self.multiworld.LevelDepth[self.player] == "level_1":
             # level 1. No checks on levels
-            self.totalLocations -= 98
+            self.total_locations -= 98
         else:
             # level 50/99 since they contain the same amount of levels
-            self.totalLocations -= 75
+            self.total_locations -= 75
 
     def get_filler_item_name(self) -> str:
         """

@@ -42,54 +42,57 @@ class KH2Rules:
         }
         # These Rules are Always in effect
         self.region_rules = {
-            RegionName.LoD:        lambda state: self.lod_unlocked(state, 1),
-            RegionName.LoD2:       lambda state: self.lod_unlocked(state, 2),
+            RegionName.LoD:                lambda state: self.lod_unlocked(state, 1),
+            RegionName.LoD2:               lambda state: self.lod_unlocked(state, 2),
 
-            RegionName.Oc:         lambda state: self.oc_unlocked(state, 1),
-            RegionName.Oc2:        lambda state: self.oc_unlocked(state, 2),
+            RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
+            RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
 
-            RegionName.Twtnw2:     lambda state: self.twtnw_unlocked(state, 1),
+            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 1),
             # These will be swapped and First Visit lock for twtnw is in development.
             # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
 
-            RegionName.Ht:         lambda state: self.ht_unlocked(state, 1),
-            RegionName.Ht2:        lambda state: self.ht_unlocked(state, 2),
+            RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
+            RegionName.Ht2:                lambda state: self.ht_unlocked(state, 2),
 
-            RegionName.Tt:         lambda state: self.tt_unlocked(state, 1),
-            RegionName.Tt2:        lambda state: self.tt_unlocked(state, 2),
-            RegionName.Tt3:        lambda state: self.tt_unlocked(state, 3),
+            RegionName.Tt:                 lambda state: self.tt_unlocked(state, 1),
+            RegionName.Tt2:                lambda state: self.tt_unlocked(state, 2),
+            RegionName.Tt3:                lambda state: self.tt_unlocked(state, 3),
 
-            RegionName.Pr:         lambda state: self.pr_unlocked(state, 1),
-            RegionName.Pr2:        lambda state: self.pr_unlocked(state, 2),
+            RegionName.Pr:                 lambda state: self.pr_unlocked(state, 1),
+            RegionName.Pr2:                lambda state: self.pr_unlocked(state, 2),
 
-            RegionName.Sp:         lambda state: self.sp_unlocked(state, 1),
-            RegionName.Sp2:        lambda state: self.sp_unlocked(state, 2),
+            RegionName.Sp:                 lambda state: self.sp_unlocked(state, 1),
+            RegionName.Sp2:                lambda state: self.sp_unlocked(state, 2),
 
-            RegionName.Stt:        lambda state: self.stt_unlocked(state, 1),
+            RegionName.Stt:                lambda state: self.stt_unlocked(state, 1),
 
-            RegionName.Dc:         lambda state: self.dc_unlocked(state, 1),
-            RegionName.Tr:         lambda state: self.dc_unlocked(state, 2),
+            RegionName.Dc:                 lambda state: self.dc_unlocked(state, 1),
+            RegionName.Tr:                 lambda state: self.dc_unlocked(state, 2),
             #  Terra is a fight and can have more than just this requirement.
             # RegionName.Terra:      lambda state:state.has(ItemName.ProofofConnection,self.player),
 
-            RegionName.Hb:         lambda state: self.hb_unlocked(state, 1),
-            RegionName.Hb2:        lambda state: self.hb_unlocked(state, 2),
-            RegionName.Mushroom13: lambda state: state.has(ItemName.ProofofPeace, self.player),
+            RegionName.Hb:                 lambda state: self.hb_unlocked(state, 1),
+            RegionName.Hb2:                lambda state: self.hb_unlocked(state, 2),
+            RegionName.Mushroom13:         lambda state: state.has(ItemName.ProofofPeace, self.player),
 
-            RegionName.Pl:         lambda state: self.pl_unlocked(state, 1),
-            RegionName.Pl2:        lambda state: self.pl_unlocked(state, 2),
+            RegionName.Pl:                 lambda state: self.pl_unlocked(state, 1),
+            RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
 
-            RegionName.Ag:         lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:        lambda state: self.ag_unlocked(state, 2),
+            RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
 
-            RegionName.Bc:         lambda state: self.bc_unlocked(state, 1),
-            RegionName.Bc2:        lambda state: self.bc_unlocked(state, 2),
+            RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
+            RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
 
-            RegionName.Valor:      lambda state: self.multi_form_region_access(state),
-            RegionName.Wisdom:     lambda state: self.multi_form_region_access(state),
-            RegionName.Limit:      lambda state: self.limit_form_region_access(state),
-            RegionName.Master:     lambda state: self.multi_form_region_access(state),
-            RegionName.Final:      lambda state: self.final_form_region_access(state)
+            RegionName.Valor:              lambda state: self.multi_form_region_access(state),
+            RegionName.Wisdom:             lambda state: self.multi_form_region_access(state),
+            RegionName.Limit:              lambda state: self.limit_form_region_access(state),
+            RegionName.Master:             lambda state: self.multi_form_region_access(state),
+            RegionName.Final:              lambda state: self.final_form_region_access(state),
+
+            RegionName.AtlanticaSongThree: lambda state:self.at_three_unlocked(state),
+            RegionName.AtlanticaSongFour:  lambda state:self.at_four_unlocked(state),
         }
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
@@ -130,6 +133,12 @@ class KH2Rules:
 
     def bc_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.BeastsClaw, self.player, Amount)
+
+    def at_three_unlocked(self, state: CollectionState) -> bool:
+        return state.has(ItemName.MagnetElement, self.player, 2)
+
+    def at_four_unlocked(self, state: CollectionState) -> bool:
+        return state.has(ItemName.ThunderElement, self.player, 3)
 
     def final_form_region_access(self, state: CollectionState) -> bool:
         """
@@ -753,7 +762,7 @@ class KH2FightRules(KH2Rules):
             "normal": self.kh2_can_reach_any([LocationName.Valorlvl4, LocationName.Wisdomlvl4, LocationName.Limitlvl4, LocationName.Masterlvl4, LocationName.Finallvl4], state) and state.has(ItemName.ReflectElement, self.player),
             "hard":   state.has(ItemName.ReflectElement, self.player)
         }
-        return cerberus_cup_rules[self.fight_logic] and (self.kh2_has_all([ItemName.ScarEvent,ItemName.OogieBoogieEvent,ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
+        return cerberus_cup_rules[self.fight_logic] and (self.kh2_has_all([ItemName.ScarEvent, ItemName.OogieBoogieEvent, ItemName.TwinLordsEvent], state) or state.has(ItemName.HadesCupTrophy, self.player))
 
     def get_titan_cup_rules(self, state: CollectionState) -> bool:
         # easy:4 summons,reflera

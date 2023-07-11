@@ -138,6 +138,12 @@ Axel1 = "Axel 1"
 Axel2 = "Axel 2"
 DataRoxas = "Data Roxas"
 
+AtlanticaSongOne = "Atlantica First Song"
+AtlanticaSongTwo = "Atlantica Second Song"
+AtlanticaSongThree = "Atlantica Third Song"
+AtlanticaSongFour = "Atlantica Fourth Song"
+
+
 LevelsVS1 = "Levels Region (1 Visit Locking Item)"
 LevelsVS3 = "Levels Region (3 Visit Locking Items)"
 LevelsVS6 = "Levels Region (6 Visit Locking Items)"
