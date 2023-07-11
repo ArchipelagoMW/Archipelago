@@ -9,6 +9,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
+from .AestheticData import chao_name_conversion, sample_chao_names
 from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
@@ -63,6 +64,7 @@ class SA2BWorld(World):
     music_map: typing.Dict[int, int]
     voice_map: typing.Dict[int, int]
     default_egg_map: typing.Dict[int, int]
+    default_chao_name_map: typing.Dict[int, int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -79,6 +81,7 @@ class SA2BWorld(World):
             "MusicMap": self.music_map,
             "VoiceMap": self.voice_map,
             "DefaultEggMap": self.default_egg_map,
+            "DefaultChaoNameMap": self.default_chao_name_map,
             "MissionMap": self.mission_map,
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
@@ -418,7 +421,6 @@ class SA2BWorld(World):
             egglist_o = list(range(0, 4))
             egglist_s = self.multiworld.per_slot_randoms[self.player].sample(range(0,67), 4)
 
-            print(egglist_o, egglist_s)
             self.default_egg_map = dict(zip(egglist_o, egglist_s))
         else:
             # Indicate these are not shuffled
@@ -426,6 +428,33 @@ class SA2BWorld(World):
             egglist_s = [255, 255, 255, 255]
 
             self.default_egg_map = dict(zip(egglist_o, egglist_s))
+
+        # Default Chao Names
+        number_of_names = 4
+        name_list_o = list(range(number_of_names * 7))
+        name_list_s = []
+
+        name_list_base = []
+        name_list_copy = list(self.multiworld.player_name.values())
+        name_list_copy.remove(self.multiworld.player_name[self.player])
+
+        if len(name_list_copy) >= number_of_names:
+            name_list_base = self.multiworld.per_slot_randoms[self.player].sample(name_list_copy, number_of_names)
+        else:
+            name_list_base = name_list_copy
+
+            name_list_base += self.multiworld.per_slot_randoms[self.player].sample(sample_chao_names, number_of_names - len(name_list_base))
+
+        self.multiworld.random.shuffle(name_list_base)
+
+        for name in name_list_base:
+            for char_idx in range(7):
+                if char_idx < len(name):
+                    name_list_s.append(chao_name_conversion[name[char_idx]])
+                else:
+                    name_list_s.append(0x00)
+
+        self.default_chao_name_map = dict(zip(name_list_o, name_list_s))
 
 
     def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
