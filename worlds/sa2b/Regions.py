@@ -93,32 +93,34 @@ gate_0_whitelist_regions = [
 def create_regions(world, player: int, active_locations):
     menu_region = create_region(world, player, active_locations, 'Menu', None)
 
+    conditional_regions = []
     gate_0_region = create_region(world, player, active_locations, 'Gate 0', None)
+    conditional_regions += [gate_0_region]
 
     if world.number_of_level_gates[player].value >= 1:
         gate_1_boss_region = create_region(world, player, active_locations, 'Gate 1 Boss', [LocationName.gate_1_boss])
         gate_1_region = create_region(world, player, active_locations, 'Gate 1', None)
-        world.regions += [gate_1_region, gate_1_boss_region]
+        conditional_regions += [gate_1_region, gate_1_boss_region]
 
     if world.number_of_level_gates[player].value >= 2:
         gate_2_boss_region = create_region(world, player, active_locations, 'Gate 2 Boss', [LocationName.gate_2_boss])
         gate_2_region = create_region(world, player, active_locations, 'Gate 2', None)
-        world.regions += [gate_2_region, gate_2_boss_region]
+        conditional_regions += [gate_2_region, gate_2_boss_region]
 
     if world.number_of_level_gates[player].value >= 3:
         gate_3_boss_region = create_region(world, player, active_locations, 'Gate 3 Boss', [LocationName.gate_3_boss])
         gate_3_region = create_region(world, player, active_locations, 'Gate 3', None)
-        world.regions += [gate_3_region, gate_3_boss_region]
+        conditional_regions += [gate_3_region, gate_3_boss_region]
 
     if world.number_of_level_gates[player].value >= 4:
         gate_4_boss_region = create_region(world, player, active_locations, 'Gate 4 Boss', [LocationName.gate_4_boss])
         gate_4_region = create_region(world, player, active_locations, 'Gate 4', None)
-        world.regions += [gate_4_region, gate_4_boss_region]
+        conditional_regions += [gate_4_region, gate_4_boss_region]
 
     if world.number_of_level_gates[player].value >= 5:
         gate_5_boss_region = create_region(world, player, active_locations, 'Gate 5 Boss', [LocationName.gate_5_boss])
         gate_5_region = create_region(world, player, active_locations, 'Gate 5', None)
-        world.regions += [gate_5_region, gate_5_boss_region]
+        conditional_regions += [gate_5_region, gate_5_boss_region]
 
     city_escape_region_locations = [
         LocationName.city_escape_1,
@@ -1647,21 +1649,21 @@ def create_regions(world, player: int, active_locations):
         ]
         grand_prix_region = create_region(world, player, active_locations, LocationName.grand_prix_region,
                                           grand_prix_region_locations)
-        world.regions += [grand_prix_region]
+        conditional_regions += [grand_prix_region]
     elif world.goal[player] in [0, 2, 4, 5, 6]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
         biolizard_region = create_region(world, player, active_locations, LocationName.biolizard_region,
                                          biolizard_region_locations)
-        world.regions += [biolizard_region]
+        conditional_regions += [biolizard_region]
     elif world.goal[player] == 7:
         chaos_chao_region_locations = [
             LocationName.chaos_chao,
         ]
         chaos_chao_region = create_region(world, player, active_locations, LocationName.chaos_chao_region,
                                           chaos_chao_region_locations)
-        world.regions += [chaos_chao_region]
+        conditional_regions += [chaos_chao_region]
 
     if world.goal[player] in [1, 2]:
         green_hill_region_locations = [
@@ -1671,7 +1673,7 @@ def create_regions(world, player: int, active_locations):
         ]
         green_hill_region = create_region(world, player, active_locations, LocationName.green_hill_region,
                                           green_hill_region_locations)
-        world.regions += [green_hill_region]
+        conditional_regions += [green_hill_region]
 
     if world.goal[player] in [4, 5, 6]:
         for i in range(16):
@@ -1680,13 +1682,12 @@ def create_regions(world, player: int, active_locations):
             ]
             boss_region = create_region(world, player, active_locations, "Boss Rush " + str(i + 1),
                                         boss_region_locations)
-            world.regions += [boss_region]
+            conditional_regions += [boss_region]
 
 
     # Set up the regions correctly.
     world.regions += [
         menu_region,
-        gate_0_region,
         city_escape_region,
         metal_harbor_region,
         green_forest_region,
@@ -1746,6 +1747,8 @@ def create_regions(world, player: int, active_locations):
         animal_unicorn_region,
         animal_phoenix_region,
     ]
+
+    world.regions += conditional_regions
 
 
 def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_emblems, gate_bosses, boss_rush_bosses, first_cannons_core_mission: str, final_cannons_core_mission: str):
