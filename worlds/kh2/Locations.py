@@ -37,9 +37,6 @@ LoD_Checks = {
     LocationName.ShanYu:                      LocationData(9, "Double Get Bonus"),
     LocationName.ShanYuGetBonus:              LocationData(9, "Second Get Bonus"),
     LocationName.HiddenDragon:                LocationData(257, "Chest"),
-
-}
-LoD2_Checks = {
     LocationName.ThroneRoomTornPages:      LocationData(25, "Chest"),
     LocationName.ThroneRoomPalaceMap:      LocationData(127, "Chest"),
     LocationName.ThroneRoomAPBoost:        LocationData(26, "Chest"),
@@ -82,9 +79,6 @@ AG_Checks = {
     LocationName.TreasureRoomSerenityGem:           LocationData(503, "Chest"),
     LocationName.ElementalLords:                    LocationData(37, "Get Bonus"),
     LocationName.LampCharm:                         LocationData(300, "Chest"),
-
-}
-AG2_Checks = {
     LocationName.RuinedChamberTornPages:          LocationData(34, "Chest"),
     LocationName.RuinedChamberRuinsMap:           LocationData(486, "Chest"),
     LocationName.GenieJafar:                      LocationData(15, "Get Bonus"),
@@ -105,9 +99,6 @@ DC_Checks = {
     LocationName.DisneyCastleMap:          LocationData(332, "Chest"),
     LocationName.MinnieEscort:             LocationData(38, "Double Get Bonus"),
     LocationName.MinnieEscortGetBonus:     LocationData(38, "Second Get Bonus"),
-
-}
-TR_Checks = {
     LocationName.CornerstoneHillMap:             LocationData(79, "Chest"),
     LocationName.CornerstoneHillFrostShard:      LocationData(12, "Chest"),
     LocationName.PierMythrilShard:               LocationData(81, "Chest"),
@@ -129,28 +120,20 @@ TR_Checks = {
     LocationName.LingeringWillManifestIllusion:  LocationData(591, "Chest"),
 
 }
-# the mismatch might be here
-HundredAcre1_Checks = {
+
+HundredAcre_Checks = {
     LocationName.PoohsHouse100AcreWoodMap: LocationData(313, "Chest"),
     LocationName.PoohsHouseAPBoost:        LocationData(97, "Chest"),
     LocationName.PoohsHouseMythrilStone:   LocationData(98, "Chest"),
-}
-HundredAcre2_Checks = {
     LocationName.PigletsHouseDefenseBoost: LocationData(105, "Chest"),
     LocationName.PigletsHouseAPBoost:      LocationData(103, "Chest"),
     LocationName.PigletsHouseMythrilGem:   LocationData(104, "Chest"),
-}
-HundredAcre3_Checks = {
     LocationName.RabbitsHouseDrawRing:       LocationData(314, "Chest"),
     LocationName.RabbitsHouseMythrilCrystal: LocationData(100, "Chest"),
     LocationName.RabbitsHouseAPBoost:        LocationData(101, "Chest"),
-}
-HundredAcre4_Checks = {
     LocationName.KangasHouseMagicBoost: LocationData(108, "Chest"),
     LocationName.KangasHouseAPBoost:    LocationData(106, "Chest"),
     LocationName.KangasHouseOrichalcum: LocationData(107, "Chest"),
-}
-HundredAcre5_Checks = {
     LocationName.SpookyCaveMythrilGem:     LocationData(110, "Chest"),
     LocationName.SpookyCaveAPBoost:        LocationData(111, "Chest"),
     LocationName.SpookyCaveOrichalcum:     LocationData(112, "Chest"),
@@ -159,8 +142,6 @@ HundredAcre5_Checks = {
     LocationName.SpookyCaveAPBoost2:       LocationData(116, "Chest"),
     LocationName.SweetMemories:            LocationData(284, "Chest"),
     LocationName.SpookyCaveMap:            LocationData(485, "Chest"),
-}
-HundredAcre6_Checks = {
     LocationName.StarryHillCosmicRing:     LocationData(312, "Chest"),
     LocationName.StarryHillStyleRecipe:    LocationData(94, "Chest"),
     LocationName.StarryHillCureElement:    LocationData(285, "Chest"),
@@ -197,9 +178,6 @@ Oc_Checks = {
     LocationName.Hydra:                        LocationData(7, "Double Get Bonus"),
     LocationName.HydraGetBonus:                LocationData(7, "Second Get Bonus"),
     LocationName.HerosCrest:                   LocationData(260, "Chest"),
-
-}
-Oc2_Checks = {
     LocationName.AuronsStatue:           LocationData(295, "Chest"),
     LocationName.Hades:                  LocationData(8, "Double Get Bonus"),
     LocationName.HadesGetBonus:          LocationData(8, "Second Get Bonus"),
@@ -207,8 +185,6 @@ Oc2_Checks = {
     LocationName.ZexionBonus:            LocationData(66, "Get Bonus"),
     LocationName.ZexionASBookofShadows:  LocationData(546, "Chest"),
     LocationName.ZexionDataLostIllusion: LocationData(551, "Chest"),
-}
-Oc2Cups = {
     LocationName.ProtectBeltPainandPanicCup:     LocationData(513, "Chest"),
     LocationName.SerenityGemPainandPanicCup:     LocationData(540, "Chest"),
     LocationName.RisingDragonCerberusCup:        LocationData(515, "Chest"),
@@ -247,9 +223,6 @@ BC_Checks = {
     LocationName.DarkThorn:                     LocationData(3, "Double Get Bonus"),
     LocationName.DarkThornGetBonus:             LocationData(3, "Second Get Bonus"),
     LocationName.DarkThornCureElement:          LocationData(299, "Chest"),
-
-}
-BC2_Checks = {
     LocationName.RumblingRose:           LocationData(270, "Chest"),
     LocationName.CastleWallsMap:         LocationData(325, "Chest"),
     LocationName.Xaldin:                 LocationData(4, "Double Get Bonus"),
@@ -272,9 +245,6 @@ SP_Checks = {
     LocationName.HostileProgram:               LocationData(31, "Double Get Bonus"),
     LocationName.HostileProgramGetBonus:       LocationData(31, "Second Get Bonus"),
     LocationName.PhotonDebugger:               LocationData(267, "Chest"),
-
-}
-SP2_Checks = {
     LocationName.SolarSailer:                       LocationData(61, "Get Bonus"),
     LocationName.CentralComputerCoreAPBoost:        LocationData(177, "Chest"),
     LocationName.CentralComputerCoreOrichalcumPlus: LocationData(178, "Chest"),
@@ -304,8 +274,6 @@ HT_Checks = {
     LocationName.PrisonKeeper:                    LocationData(18, "Get Bonus"),
     LocationName.OogieBoogie:                     LocationData(19, "Get Bonus"),
     LocationName.OogieBoogieMagnetElement:        LocationData(301, "Chest"),
-}
-HT2_Checks = {
     LocationName.Lock:                   LocationData(40, "Get Bonus"),
     LocationName.Present:                LocationData(297, "Chest"),
     LocationName.DecoyPresents:          LocationData(298, "Chest"),
@@ -336,9 +304,6 @@ PR_Checks = {
     LocationName.Barbossa:                  LocationData(21, "Double Get Bonus"),
     LocationName.BarbossaGetBonus:          LocationData(21, "Second Get Bonus"),
     LocationName.FollowtheWind:             LocationData(263, "Chest"),
-
-}
-PR2_Checks = {
     LocationName.GrimReaper1:                  LocationData(59, "Get Bonus"),
     LocationName.InterceptorsHoldFeatherCharm: LocationData(252, "Chest"),
     LocationName.SeadriftKeepAPBoost:          LocationData(76, "Chest"),
@@ -365,8 +330,6 @@ HB_Checks = {
     LocationName.Bailey:                      LocationData(47, "Get Bonus"),
     LocationName.BaileySecretAnsemReport7:    LocationData(531, "Chest"),
     LocationName.BaseballCharm:               LocationData(258, "Chest"),
-}
-HB2_Checks = {
     LocationName.PosternCastlePerimeterMap:                    LocationData(310, "Chest"),
     LocationName.PosternMythrilGem:                            LocationData(189, "Chest"),
     LocationName.PosternAPBoost:                               LocationData(190, "Chest"),
@@ -405,9 +368,6 @@ HB2_Checks = {
     LocationName.CoRDepthsAPBoost2:                            LocationData(566, "Chest"),
     LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap: LocationData(580, "Chest"),
     LocationName.CoRMineshaftLowerLevelAPBoost:                LocationData(578, "Chest"),
-
-}
-CoR_Checks = {
     LocationName.CoRDepthsUpperLevelRemembranceGem:  LocationData(567, "Chest"),
     LocationName.CoRMiningAreaSerenityGem:           LocationData(568, "Chest"),
     LocationName.CoRMiningAreaAPBoost:               LocationData(569, "Chest"),
@@ -454,9 +414,6 @@ PL_Checks = {
     LocationName.Hyenas1:                       LocationData(49, "Get Bonus"),
     LocationName.Scar:                          LocationData(29, "Get Bonus"),
     LocationName.ScarFireElement:               LocationData(302, "Chest"),
-
-}
-PL2_Checks = {
     LocationName.Hyenas2:              LocationData(50, "Get Bonus"),
     LocationName.Groundshaker:         LocationData(30, "Double Get Bonus"),
     LocationName.GroundshakerGetBonus: LocationData(30, "Second Get Bonus"),
@@ -521,14 +478,9 @@ TT_Checks = {
     LocationName.TowerWardrobeMythrilStone:      LocationData(470, "Chest"),
     LocationName.StarSeeker:                     LocationData(304, "Chest"),
     LocationName.ValorForm:                      LocationData(286, "Chest"),
-
-}
-TT2_Checks = {
     LocationName.SeifersTrophy: LocationData(294, "Chest"),
     LocationName.Oathkeeper:    LocationData(265, "Chest"),
     LocationName.LimitForm:     LocationData(543, "Chest"),
-}
-TT3_Checks = {
     LocationName.UndergroundConcourseMythrilGem:        LocationData(479, "Chest"),
     LocationName.UndergroundConcourseAPBoost:           LocationData(481, "Chest"),
     LocationName.UndergroundConcourseOrichalcum:        LocationData(480, "Chest"),
@@ -569,8 +521,6 @@ TWTNW_Checks = {
     LocationName.NothingsCallMythrilGem:          LocationData(378, "Chest"),
     LocationName.NothingsCallOrichalcum:          LocationData(379, "Chest"),
     LocationName.TwilightsViewCosmicBelt:         LocationData(336, "Chest"),
-}
-TWTNW2_Checks = {
     LocationName.XigbarBonus:                           LocationData(23, "Get Bonus"),
     LocationName.XigbarSecretAnsemReport3:              LocationData(527, "Chest"),
     LocationName.NaughtsSkywayMythrilGem:               LocationData(380, "Chest"),
@@ -1069,41 +1019,20 @@ RegionTable = {
 
 all_locations = {
     **TWTNW_Checks,
-    **TWTNW2_Checks,
     **TT_Checks,
-    **TT2_Checks,
-    **TT3_Checks,
     **STT_Checks,
     **PL_Checks,
-    **PL2_Checks,
-    **CoR_Checks,
     **HB_Checks,
-    **HB2_Checks,
     **HT_Checks,
-    **HT2_Checks,
     **PR_Checks,
-    **PR2_Checks,
     **PR_Checks,
-    **PR2_Checks,
     **SP_Checks,
-    **SP2_Checks,
     **BC_Checks,
-    **BC2_Checks,
     **Oc_Checks,
-    **Oc2_Checks,
-    **Oc2Cups,
-    **HundredAcre1_Checks,
-    **HundredAcre2_Checks,
-    **HundredAcre3_Checks,
-    **HundredAcre4_Checks,
-    **HundredAcre5_Checks,
-    **HundredAcre6_Checks,
+    **HundredAcre_Checks,
     **DC_Checks,
-    **TR_Checks,
     **AG_Checks,
-    **AG2_Checks,
     **LoD_Checks,
-    **LoD2_Checks,
     **SoraLevels,
     **Form_Checks,
     **GoA_Checks,
@@ -1438,7 +1367,15 @@ exclusion_table = {
         LocationName.HadesCupTrophyParadoxCups,
     ],
     "Cups":          {
-        cup_location for cup_location in Oc2Cups.keys()
+        LocationName.ProtectBeltPainandPanicCup,
+        LocationName.SerenityGemPainandPanicCup,
+        LocationName.RisingDragonCerberusCup,
+        LocationName.SerenityCrystalCerberusCup,
+        LocationName.GenjiShieldTitanCup,
+        LocationName.SkillfulRingTitanCup,
+        LocationName.FatalCrestGoddessofFateCup,
+        LocationName.OrichalcumPlusGoddessofFateCup,
+        LocationName.HadesCupTrophyParadoxCups,
     },
     "WeaponSlots":   {
         LocationName.FAKESlot:            ItemName.ValorForm,
