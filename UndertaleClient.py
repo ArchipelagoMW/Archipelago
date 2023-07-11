@@ -32,6 +32,11 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             self.ctx.patch_game()
             self.output("Patched.")
 
+    def _cmd_savepath(self, directory: str):
+        """Redirect to proper save data folder. (Only use if needed!)"""
+        if isinstance(self.ctx, UndertaleContext):
+            UndertaleContext.save_game_folder = directory
+
     @mark_raw
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
         """Patch the game automatically."""
