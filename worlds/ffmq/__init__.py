@@ -92,6 +92,8 @@ class FFMQWorld(World):
             "http://ffmqr.jalchavware.com:5271/"
         ]
 
+        rooms_data = {}
+
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
             if (world.multiworld.map_shuffle[world.player] or world.multiworld.crest_shuffle[world.player] or
                     world.multiworld.crest_shuffle[world.player]):
@@ -106,15 +108,20 @@ class FFMQWorld(World):
                 crest_shuffle = multiworld.crest_shuffle[world.player].current_key
                 battlefield_shuffle = multiworld.shuffle_battlefield_rewards[world.player].current_key
 
+                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
+
+                if query in rooms_data:
+                    world.rooms = rooms_data[query]
+                    continue
+
                 if not api_urls:
                     raise Exception("No FFMQR API URLs specified in host.yaml")
 
                 errors = []
                 for api_url in api_urls.copy():
-                    response = requests.get(api_url +
-                                            f"GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}")
+                    response = requests.get(f"{api_url}GenerateRooms?{query}")
                     if response.ok:
-                        world.rooms = yaml.load(response.text, yaml.Loader)
+                        world.rooms = rooms_data[query] = yaml.load(response.text, yaml.Loader)
                         break
                     else:
                         api_urls.remove(api_url)
