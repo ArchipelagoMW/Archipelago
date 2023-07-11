@@ -1016,7 +1016,7 @@ def connect_regions(world: MultiWorld, player: int):
                                         RegionName.Dc, RegionName.Stt,
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final},
+                                        RegionName.Final,RegionName.AtlanticaSongOne},
         RegionName.LoD:                {RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},
