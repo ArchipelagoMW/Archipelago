@@ -15,7 +15,7 @@ class KH2Container(APContainer):
     game: str = 'Kingdom Hearts 2'
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
-                 player=None, player_name: str = "", server: str = ""):
+        player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
         container_path = os.path.join(output_directory, base_path + ".zip")
@@ -24,12 +24,6 @@ class KH2Container(APContainer):
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         for filename, yml in self.patch_data.items():
             opened_zipfile.writestr(filename, yml)
-        for root, dirs, files in os.walk(os.path.join(os.path.dirname(__file__), "mod_template")):
-            for file in files:
-                opened_zipfile.write(os.path.join(root, file),
-                                     os.path.relpath(os.path.join(root, file),
-                                                     os.path.join(os.path.dirname(__file__), "mod_template")))
-        # opened_zipfile.writestr(self.zpf_path, self.patch_data)
         super().write_contents(opened_zipfile)
 
 
@@ -89,7 +83,7 @@ def patch_kh2(self, output_directory):
             levelsetting.extend(exclusion_table["Level99Sanity"])
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
-    all_valid_locations={location for location,data in all_locations.items()}
+    all_valid_locations = {location for location, data in all_locations.items()}
     for location in self.multiworld.get_filled_locations(self.player):
         if location.name in all_valid_locations:
             data = all_locations[location.name]
@@ -157,7 +151,8 @@ def patch_kh2(self, output_directory):
                     2: self.multiworld.Wisdom_Form_EXP[self.player].value,
                     3: self.multiworld.Limit_Form_EXP[self.player].value,
                     4: self.multiworld.Master_Form_EXP[self.player].value,
-                    5: self.multiworld.Final_Form_EXP[self.player].value}
+                    5: self.multiworld.Final_Form_EXP[self.player].value
+                }
                 formexp = formDictExp[data.charName]
                 formName = formDict[data.charName]
                 self.formattedFmlv[formName] = []
@@ -245,8 +240,79 @@ def patch_kh2(self, output_directory):
         "Character":     "Sora",
         "Level":         1
     }
+    self.mod_yml = {
+        "assets": [
+            {
+                "method": "binarc",
+                "name":   "00battle.bin",
+                "source": [
+                    {
+                        "method": "listpatch",
+                        "name":   "fmlv",
+                        "source": [
+                            {
+                                "name": "FmlvList.yml",
+                                "type": "fmlv"
+                            }
+                        ],
+                        "type":   "List"
+                    },
+                    {
+                        "method": "listpatch",
+                        "name":   "lvup",
+                        "source": [
+                            {
+                                "name": "LvupList.yml",
+                                "type": "lvup"
+                            }
+                        ],
+                        "type":   "List"
+                    },
+                    {
+                        "method": "listpatch",
+                        "name":   "bons",
+                        "source": [
+                            {
+                                "name": "BonsList.yml",
+                                "type": "bons"
+                            }
+                        ],
+                        "type":   "List"
+                    }
+                ]
+            },
+            {
+                "method": "binarc",
+                "name":   "03system.bin",
+                "source": [
+                    {
+                        "method": "listpatch",
+                        "name":   "trsr",
+                        "source": [
+                            {
+                                "name": "TrsrList.yml",
+                                "type": "trsr"
+                            }
+                        ],
+                        "type":   "List"
+                    },
+                    {
+                        "method": "listpatch",
+                        "name":   "item",
+                        "source": [
+                            {
+                                "name": "ItemList.yml",
+                                "type": "item"
+                            }
+                        ],
+                        "type":   "List"
+                    }
+                ]
+            }
+        ],
+        "title":  "Randomizer Seed"
+    }
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
-
 
     openkhmod = {
         "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),
@@ -254,9 +320,9 @@ def patch_kh2(self, output_directory):
         "BonsList.yml": yaml.dump(self.formattedBons, line_break="\n"),
         "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
+        "mod.yml":yaml.dump(self.mod_yml, line_break="\n")
     }
 
-
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
-                       self.multiworld.get_file_safe_player_name(self.player))
+            self.multiworld.get_file_safe_player_name(self.player))
     mod.write()

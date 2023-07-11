@@ -50,7 +50,6 @@ class KH2World(World):
         self.BountiesRequired = None
         self.BountiesAmount = None
         self.hitlist = None
-        self.LocalItems = {}
         self.RandomSuperBoss = list()
         self.filler_items = list()
         self.item_quantity_dict = {}
@@ -64,7 +63,7 @@ class KH2World(World):
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
         self.slotDataDuping = set()
-        self.localItems = dict()
+        self.local_items = dict()
 
     def fill_slot_data(self) -> dict:
         # localItems filling done here for the unit test.
@@ -74,7 +73,7 @@ class KH2World(World):
             else:
                 for inner_values in values.values():
                     self.slotDataDuping = self.slotDataDuping.union(inner_values)
-        self.LocalItems = {location.address: self.item_name_to_id[location.item.name]
+        self.local_items = {location.address: self.item_name_to_id[location.item.name]
                            for location in self.multiworld.get_filled_locations(self.player)
                            if location.item.player == self.player
                            and location.item.name in self.slotDataDuping
@@ -82,7 +81,7 @@ class KH2World(World):
 
         return {
             "hitlist":              self.hitlist,
-            "LocalItems":           self.LocalItems,
+            "LocalItems":           self.local_items,
             "Goal":                 self.multiworld.Goal[self.player].value,
             "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
             "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
