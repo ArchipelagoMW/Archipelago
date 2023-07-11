@@ -10,6 +10,7 @@ class TestEasy(KH2TestBase):
     def testEverything(self):
         self.collect_all_but([ItemName.Victory])
         self.assertBeatable(True)
+        self.testAllStateCanReachEverything()
 
 
 class TestNormal(KH2TestBase):
@@ -20,6 +21,7 @@ class TestNormal(KH2TestBase):
     def testEverything(self):
         self.collect_all_but([ItemName.Victory])
         self.assertBeatable(True)
+        self.testAllStateCanReachEverything()
 
 
 class TestHard(KH2TestBase):
@@ -30,4 +32,18 @@ class TestHard(KH2TestBase):
     def testEverything(self):
         self.collect_all_but([ItemName.Victory])
         self.assertBeatable(True)
+        self.testAllStateCanReachEverything()
+
+
+class TestNothing(KH2TestBase):
+    options = {
+        "FightLogic": 3
+    }
+
+    def testEverything(self):
+        self.collect_all_but([ItemName.Victory])
+        self.assertBeatable(True)
+        self.testAllStateCanReachEverything()
+
+
 

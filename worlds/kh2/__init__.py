@@ -209,9 +209,9 @@ class KH2World(World):
             self.plando_locations[LocationName.FinalXemnas] = self.create_filler().name
 
         # By imitating remote this doesn't have to be plandoded filler anymore
-        #  random_stt_item = self.create_filler().name
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
+
         self.level_subtraction()
 
         # subtraction from final xemnas
@@ -223,8 +223,6 @@ class KH2World(World):
         """
         self.item_name_to_id.update({event_name: None for event_name in Events_Table})
         for location, item in self.plando_locations.items():
-            if item==ItemName.HostileProgramEvent:
-                print()
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
 
@@ -241,7 +239,7 @@ class KH2World(World):
         """
         universal_logic = Rules.KH2Rules(self)
         form_logic = Rules.KH2FormRules(self)
-        if self.multiworld.FightLogic[self.player] is not None:
+        if self.multiworld.FightLogic[self.player].value != 3:
             fight_rules = Rules.KH2FightRules(self)
             fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()

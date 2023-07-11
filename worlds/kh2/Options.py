@@ -125,7 +125,7 @@ class FightLogic(Choice):
     option_normal = 1
     option_hard = 2
     option_none = 3
-    default = 1
+    default = 0
 
 
 class FinalFormLogic(Choice):
@@ -154,7 +154,7 @@ class RandomVisitLockingItem(Range):
     display_name = "Random Visit Locking Item"
     range_start = 0
     range_end = 25
-    default = 3
+    default = 0
 
 
 class SuperBosses(Toggle):

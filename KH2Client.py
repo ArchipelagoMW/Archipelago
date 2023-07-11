@@ -24,6 +24,8 @@ kh2_loc_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["location
 kh2_loc_id_to_loc_name = {v: k for k, v in kh2_loc_name_to_id.items()}
 kh2_item_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["item_name_to_id"]
 kh2_item_id_to_name = {v: k for k, v in kh2_item_name_to_id.items()}
+
+
 # class KH2CommandProcessor(ClientCommandProcessor):
 
 
@@ -44,7 +46,7 @@ class KH2Context(CommonContext):
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_loc_name_to_id = kh2_loc_name_to_id
-        self.kh2_item_name_to_id= kh2_item_name_to_id
+        self.kh2_item_name_to_id = kh2_item_name_to_id
         self.lookup_id_to_item = kh2_item_id_to_name
         self.lookup_id_to_location = kh2_loc_id_to_loc_name
 
@@ -120,7 +122,8 @@ class KH2Context(CommonContext):
 
         self.Equipment_Anchor_Dict = {
             "Armor":       [0x2504, 0x2506, 0x2508, 0x250A],
-            "Accessories": [0x2514, 0x2516, 0x2518, 0x251A]}
+            "Accessories": [0x2514, 0x2516, 0x2518, 0x251A]
+        }
 
         self.AbilityQuantityDict = {}
         self.ability_categories = CheckDupingItems["Abilities"]
@@ -135,16 +138,19 @@ class KH2Context(CommonContext):
         self.stat_increase_set = set(CheckDupingItems["Stat Increases"])
         self.AbilityQuantityDict = {item: self.item_name_to_data[item].quantity for item in self.all_abilities}
         #  Growth:[level 1,level 4,slot]
-        self.growth_values_dict = {"High Jump":    [0x05E, 0x061, 0x25DA],
-                                   "Quick Run":    [0x62, 0x65, 0x25DC],
-                                   "Dodge Roll":   [0x234, 0x237, 0x25DE],
-                                   "Aerial Dodge": [0x066, 0x069, 0x25E0],
-                                   "Glide":        [0x6A, 0x6D, 0x25E2]}
+        self.growth_values_dict = {
+            "High Jump":    [0x05E, 0x061, 0x25DA],
+            "Quick Run":    [0x62, 0x65, 0x25DC],
+            "Dodge Roll":   [0x234, 0x237, 0x25DE],
+            "Aerial Dodge": [0x066, 0x069, 0x25E0],
+            "Glide":        [0x6A, 0x6D, 0x25E2]
+        }
         self.boost_to_anchor_dict = {
             "Power Boost":   0x24F9,
             "Magic Boost":   0x24FA,
             "Defense Boost": 0x24FB,
-            "AP Boost":      0x24F8}
+            "AP Boost":      0x24F8
+        }
 
         self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
@@ -166,7 +172,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).connection_closed()
 
@@ -175,7 +181,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).disconnect()
 
@@ -189,9 +195,21 @@ class KH2Context(CommonContext):
     async def shutdown(self):
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
-                      'w') as f:
+                    'w') as f:
                 f.write(json.dumps(self.kh2seedsave, indent=4))
         await super(KH2Context, self).shutdown()
+
+    def kh2_read_short(self, address):
+        return self.kh2.read_short(self.kh2.base_address + address)
+
+    def kh2_write_short(self, address, value):
+        return self.kh2.write_short(self.kh2.base_address + address, value)
+
+    def kh2_write_byte(self, address, value):
+        return self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
+
+    def kh2_read_byte(self, address):
+        return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1), "big")
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
@@ -199,56 +217,66 @@ class KH2Context(CommonContext):
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
             if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
-                self.kh2seedsave = {"itemIndex":        -1,
-                                    # back of soras invo is 0x25E2. Growth should be moved there
-                                    #  Character: [back of invo, front of invo]
-                                    "SoraInvo":         [0x25D8, 0x2546],
-                                    "DonaldInvo":       [0x26F4, 0x2658],
-                                    "GoofyInvo":        [0x280A, 0x276C],
-                                    "AmountInvo":       {
-                                        "ServerItems": {
-                                            "Ability":      {},
-                                            "Amount":       {},
-                                            "Growth":       {"High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                                                             "Aerial Dodge": 0,
-                                                             "Glide":        0},
-                                            "Bitmask":      [],
-                                            "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                                            "Equipment":    [],
-                                            "Magic":        {},
-                                            "StatIncrease": {},
-                                            "Boost":        {},
-                                        },
-                                        "LocalItems":  {
-                                            "Ability":      {},
-                                            "Amount":       {},
-                                            "Growth":       {"High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                                                             "Aerial Dodge": 0, "Glide": 0},
-                                            "Bitmask":      [],
-                                            "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                                            "Equipment":    [],
-                                            "Magic":        {},
-                                            "StatIncrease": {},
-                                            "Boost":        {},
-                                        }},
-                                    #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
-                                    "LocationsChecked": [],
-                                    "Levels":           {
-                                        "SoraLevel":   0,
-                                        "ValorLevel":  0,
-                                        "WisdomLevel": 0,
-                                        "LimitLevel":  0,
-                                        "MasterLevel": 0,
-                                        "FinalLevel":  0,
-                                    },
-                                    "SoldEquipment":    [],
-                                    "SoldBoosts":       {"Power Boost":   0,
-                                                         "Magic Boost":   0,
-                                                         "Defense Boost": 0,
-                                                         "AP Boost":      0}
-                                    }
+                self.kh2seedsave = {
+                    "itemIndex":        -1,
+                    # back of soras invo is 0x25E2. Growth should be moved there
+                    #  Character: [back of invo, front of invo]
+                    "SoraInvo":         [0x25D8, 0x2546],
+                    "DonaldInvo":       [0x26F4, 0x2658],
+                    "GoofyInvo":        [0x280A, 0x276C],
+                    "AmountInvo":       {
+                        "ServerItems": {
+                            "Ability":      {},
+                            "Amount":       {},
+                            "Growth":       {
+                                "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                                "Aerial Dodge": 0,
+                                "Glide":        0
+                            },
+                            "Bitmask":      [],
+                            "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                            "Equipment":    [],
+                            "Magic":        {},
+                            "StatIncrease": {},
+                            "Boost":        {},
+                        },
+                        "LocalItems":  {
+                            "Ability":      {},
+                            "Amount":       {
+                                "Bounty": 0,
+                            },
+                            "Growth":       {
+                                "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                                "Aerial Dodge": 0, "Glide": 0
+                            },
+                            "Bitmask":      [],
+                            "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                            "Equipment":    [],
+                            "Magic":        {},
+                            "StatIncrease": {},
+                            "Boost":        {},
+                        }
+                    },
+                    #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
+                    "LocationsChecked": [],
+                    "Levels":           {
+                        "SoraLevel":   0,
+                        "ValorLevel":  0,
+                        "WisdomLevel": 0,
+                        "LimitLevel":  0,
+                        "MasterLevel": 0,
+                        "FinalLevel":  0,
+                    },
+                    "SoldEquipment":    [],
+                    "SoldBoosts":       {
+                        "Power Boost":   0,
+                        "Magic Boost":   0,
+                        "Defense Boost": 0,
+                        "AP Boost":      0
+                    }
+                }
                 with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
-                          'wt') as f:
+                        'wt') as f:
                     pass
                 self.locations_checked = set()
             elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
@@ -282,9 +310,11 @@ class KH2Context(CommonContext):
                 self.kh2seedsave["AmountInvo"]["ServerItems"] = {
                     "Ability":      {},
                     "Amount":       {},
-                    "Growth":       {"High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                                     "Aerial Dodge": 0,
-                                     "Glide":        0},
+                    "Growth":       {
+                        "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                        "Aerial Dodge": 0,
+                        "Glide":        0
+                    },
                     "Bitmask":      [],
                     "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
                     "Equipment":    [],
@@ -307,16 +337,14 @@ class KH2Context(CommonContext):
 
     async def checkWorldLocations(self):
         try:
-            currentworldint = int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x0714DB8, 1), "big")
+            currentworldint = self.kh2_read_byte(0x0714DB8)
             if currentworldint in self.worldid:
                 curworldid = self.worldid[currentworldint]
                 for location, data in curworldid.items():
                     if location in kh2_loc_name_to_id.keys():
                         locationId = kh2_loc_name_to_id[location]
                         if locationId not in self.locations_checked \
-                                and (int.from_bytes(
-                                self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                                "big") & 0x1 << data.bitIndex) > 0:
+                                and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                             self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             logger.info("Line 285")
@@ -328,8 +356,7 @@ class KH2Context(CommonContext):
     async def checkLevels(self):
         try:
             for location, data in SoraLevels.items():
-                currentLevel = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + 0x24FF, 1), "big")
+                currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
                 locationId = kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked \
                         and currentLevel >= data.bitIndex:
@@ -338,11 +365,11 @@ class KH2Context(CommonContext):
                     self.sending = self.sending + [(int(locationId))]
             formDict = {
                 0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
-                3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels]}
+                3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels]
+            }
             for i in range(5):
                 for location, data in formDict[i][1].items():
-                    formlevel = int.from_bytes(
-                            self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1), "big")
+                    formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
                     locationId = kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked \
                             and formlevel >= data.bitIndex:
@@ -361,15 +388,13 @@ class KH2Context(CommonContext):
             for location, data in weaponSlots.items():
                 locationId = kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                                      "big") > 0:
+                    if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
                         self.sending = self.sending + [(int(locationId))]
 
             for location, data in formSlots.items():
                 locationId = kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                                      "big") & 0x1 << data.bitIndex > 0:
+                    if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         # self.locations_checked
                         self.sending = self.sending + [(int(locationId))]
 
@@ -387,14 +412,9 @@ class KH2Context(CommonContext):
                 if locationName in self.chest_set:
                     if locationName in self.location_name_to_worlddata.keys():
                         locationData = self.location_name_to_worlddata[locationName]
-                        if int.from_bytes(
-                                self.kh2.read_bytes(self.kh2.base_address + self.Save + locationData.addrObtained, 1),
-                                "big") & 0x1 << locationData.bitIndex == 0:
-                            roomData = int.from_bytes(
-                                    self.kh2.read_bytes(self.kh2.base_address + self.Save + locationData.addrObtained,
-                                                        1), "big")
-                            self.kh2.write_bytes(self.kh2.base_address + self.Save + locationData.addrObtained,
-                                                 (roomData | 0x01 << locationData.bitIndex).to_bytes(1, 'big'), 1)
+                        if self.kh2_read_byte(self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
+                            roomData = self.kh2_read_byte(self.Save + locationData.addrObtained)
+                            self.kh2_write_byte(self.Save + locationData.addrObtained, roomData | 0x01 << locationData.bitIndex)
 
         except Exception as e:
             if self.kh2connected:
@@ -404,16 +424,16 @@ class KH2Context(CommonContext):
             logger.info(e)
 
     async def verifyLevel(self):
-        for leveltype, anchor in {"SoraLevel":   0x24FF,
-                                  "ValorLevel":  0x32F6,
-                                  "WisdomLevel": 0x332E,
-                                  "LimitLevel":  0x3366,
-                                  "MasterLevel": 0x339E,
-                                  "FinalLevel":  0x33D6}.items():
-            if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + anchor, 1), "big") < \
-                    self.kh2seedsave["Levels"][leveltype]:
-                self.kh2.write_bytes(self.kh2.base_address + self.Save + anchor,
-                                     (self.kh2seedsave["Levels"][leveltype]).to_bytes(1, 'big'), 1)
+        for leveltype, anchor in {
+            "SoraLevel":   0x24FF,
+            "ValorLevel":  0x32F6,
+            "WisdomLevel": 0x332E,
+            "LimitLevel":  0x3366,
+            "MasterLevel": 0x339E,
+            "FinalLevel":  0x33D6
+        }.items():
+            if self.kh2_read_byte(self.Save + anchor) < self.kh2seedsave["Levels"][leveltype]:
+                self.kh2_write_byte(self.Save + anchor, self.kh2seedsave["Levels"][leveltype])
 
     async def give_item(self, item, ItemType="ServerItems"):
         try:
@@ -450,18 +470,15 @@ class KH2Context(CommonContext):
                         self.kh2seedsave["GoofyInvo"][abilityInvoType] -= TwilightZone
 
             elif itemcode in self.bitmask_item_code:
-
                 if itemname not in self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"].append(itemname)
 
             elif itemdata.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
-
                 if itemname in self.kh2seedsave["AmountInvo"][ItemType]["Magic"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Magic"][itemname] += 1
                 else:
                     self.kh2seedsave["AmountInvo"][ItemType]["Magic"][itemname] = 1
             elif itemname in self.all_equipment:
-
                 self.kh2seedsave["AmountInvo"][ItemType]["Equipment"].append(itemname)
 
             elif itemname in self.all_weapons:
@@ -479,7 +496,6 @@ class KH2Context(CommonContext):
                     self.kh2seedsave["AmountInvo"][ItemType]["Boost"][itemname] = 1
 
             elif itemname in self.stat_increase_set:
-
                 if itemname in self.kh2seedsave["AmountInvo"][ItemType]["StatIncrease"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["StatIncrease"][itemname] += 1
                 else:
@@ -514,25 +530,24 @@ class KH2Context(CommonContext):
     async def IsInShop(self, sellable, master_boost):
         # journal = 0x741230 shop = 0x741320
         # if journal=-1 and shop = 5 then in shop
-        # if journam !=-1 and shop = 10 then journal
-        journal = self.kh2.read_short(self.kh2.base_address + 0x741230)
-        shop = self.kh2.read_short(self.kh2.base_address + 0x741320)
+        # if journal !=-1 and shop = 10 then journal
+
+        journal = self.kh2_read_short(0x741230)
+        shop = self.kh2_read_short(0x741320)
         if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
             # print("your in the shop")
             sellable_dict = {}
             for itemName in sellable:
                 itemdata = self.item_name_to_data[itemName]
-                amount = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemdata.memaddr, 1), "big")
+                amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 sellable_dict[itemName] = amount
             while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
-                journal = self.kh2.read_short(self.kh2.base_address + 0x741230)
-                shop = self.kh2.read_short(self.kh2.base_address + 0x741320)
+                journal = self.kh2_read_short(0x741230)
+                shop = self.kh2_read_short(0x741320)
                 await asyncio.sleep(0.5)
             for item, amount in sellable_dict.items():
                 itemdata = self.item_name_to_data[item]
-                afterShop = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemdata.memaddr, 1), "big")
+                afterShop = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 if afterShop < amount:
                     if item in master_boost:
                         self.kh2seedsave["SoldBoosts"][item] += (amount - afterShop)
@@ -583,6 +598,7 @@ class KH2Context(CommonContext):
 
             master_sell = master_equipment | master_staff | master_shield | master_boost
             await asyncio.create_task(self.IsInShop(master_sell, master_boost))
+
             for itemName in master_amount:
                 itemData = self.item_name_to_data[itemName]
                 amountOfItems = 0
@@ -596,74 +612,68 @@ class KH2Context(CommonContext):
                     # Will check the progression in 100 acre and - the amount of visits
                     # amountofitems-amount of visits done
                     for location, data in tornPageLocks.items():
-                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
-                                          "big") & 0x1 << data.bitIndex > 0:
+                        if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                             amountOfItems -= 1
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != amountOfItems and amountOfItems >= 0:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         amountOfItems.to_bytes(1, 'big'), 1)
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems and amountOfItems >= 0:
+                    self.kh2_write_byte(self.Save + itemData.memaddr, amountOfItems)
 
             for itemName in master_keyblade:
                 itemData = self.item_name_to_data[itemName]
-                # if the inventory slot for that keyblade is less than the amount they should have
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != 1 and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x1CFF, 1),
-                                                                 "big") != 13:
-                    # Checking form anchors for the keyblade
-                    if self.kh2.read_short(self.kh2.base_address + self.Save + 0x24F0) == itemData.kh2id \
-                            or self.kh2.read_short(self.kh2.base_address + self.Save + 0x32F4) == itemData.kh2id \
-                            or self.kh2.read_short(self.kh2.base_address + self.Save + 0x339C) == itemData.kh2id \
-                            or self.kh2.read_short(self.kh2.base_address + self.Save + 0x33D4) == itemData.kh2id:
-                        self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                             (0).to_bytes(1, 'big'), 1)
+                # if the inventory slot for that keyblade is less than the amount they should have,
+                # and they are not in stt
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != 1 and self.kh2_read_byte(self.Save + 0x1CFF) != 13:
+                    # Checking form anchors for the keyblade to remove extra keyblades
+                    if self.kh2_read_short(self.Save + 0x24F0) == itemData.kh2id \
+                            or self.kh2_read_short(self.Save + 0x32F4) == itemData.kh2id \
+                            or self.kh2_read_short(self.Save + 0x339C) == itemData.kh2id \
+                            or self.kh2_read_short(self.Save + 0x33D4) == itemData.kh2id:
+                        self.kh2_write_byte(self.Save + itemData.memaddr, 0)
                     else:
-                        self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                             (1).to_bytes(1, 'big'), 1)
+                        self.kh2_write_byte(self.Save + itemData.memaddr, 1)
+
             for itemName in master_staff:
                 itemData = self.item_name_to_data[itemName]
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != 1 \
-                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2604) != itemData.kh2id \
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != 1 \
+                        and self.kh2_read_short(self.Save + 0x2604) != itemData.kh2id \
                         and itemName not in self.kh2seedsave["SoldEquipment"]:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         (1).to_bytes(1, 'big'), 1)
+                    self.kh2_write_byte(self.Save + itemData.memaddr, 1)
 
             for itemName in master_shield:
                 itemData = self.item_name_to_data[itemName]
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != 1 \
-                        and self.kh2.read_short(self.kh2.base_address + self.Save + 0x2718) != itemData.kh2id \
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != 1 \
+                        and self.kh2_read_short(self.Save + 0x2718) != itemData.kh2id \
                         and itemName not in self.kh2seedsave["SoldEquipment"]:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         (1).to_bytes(1, 'big'), 1)
+                    self.kh2_write_byte(self.Save + itemData.memaddr, 1)
 
             for itemName in master_ability:
                 itemData = self.item_name_to_data[itemName]
                 ability_slot = []
+
                 if itemName in local_ability:
                     ability_slot += self.kh2seedsave["AmountInvo"]["LocalItems"]["Ability"][itemName]
                 if itemName in server_ability:
                     ability_slot += self.kh2seedsave["AmountInvo"]["ServerItems"]["Ability"][itemName]
                 for slot in ability_slot:
-                    current = self.kh2.read_short(self.kh2.base_address + self.Save + slot)
+                    current = self.kh2_read_short(self.Save + slot)
                     ability = current & 0x0FFF
                     if ability | 0x8000 != (0x8000 + itemData.memaddr):
                         if current - 0x8000 > 0:
-                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, (0x8000 + itemData.memaddr))
+                            self.kh2_write_short(self.Save + slot, 0x8000 + itemData.memaddr)
                         else:
-                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, itemData.memaddr)
+                            self.kh2_write_short(self.Save + slot, itemData.memaddr)
             # removes the duped ability if client gave faster than the game.
+
             for charInvo in {"SoraInvo", "DonaldInvo", "GoofyInvo"}:
-                if self.kh2.read_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1]) != 0 and \
+                if self.kh2_read_short(self.Save + self.kh2seedsave[charInvo][1]) != 0 and \
                         self.kh2seedsave[charInvo][1] + 2 < self.kh2seedsave[charInvo][0]:
-                    self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1], 0)
+                    self.kh2_write_short(self.Save + self.kh2seedsave[charInvo][1], 0)
+
             # remove the dummy level 1 growths if they are in these invo slots.
             for inventorySlot in {0x25CE, 0x25D0, 0x25D2, 0x25D4, 0x25D6, 0x25D8}:
-                current = self.kh2.read_short(self.kh2.base_address + self.Save + inventorySlot)
+                current = self.kh2_read_short(self.Save + inventorySlot)
                 ability = current & 0x0FFF
                 if 0x05E <= ability <= 0x06D:
-                    self.kh2.write_short(self.kh2.base_address + self.Save + inventorySlot, 0)
+                    self.kh2_write_short(self.Save + inventorySlot, 0)
 
             for itemName in self.master_growth:
                 growthLevel = self.kh2seedsave["AmountInvo"]["ServerItems"]["Growth"][itemName] \
@@ -674,29 +684,26 @@ class KH2Context(CommonContext):
                     max_growth = self.growth_values_dict[itemName][1]
                     if growthLevel > 4:
                         growthLevel = 4
-                    current_growth_level = self.kh2.read_short(self.kh2.base_address + self.Save + slot)
+                    current_growth_level = self.kh2_read_short(self.Save + slot)
                     ability = current_growth_level & 0x0FFF
+
                     # if the player should be getting a growth ability
                     if ability | 0x8000 != 0x8000 + min_growth - 1 + growthLevel:
                         # if it should be level one of that growth
                         if 0x8000 + min_growth - 1 + growthLevel <= 0x8000 + min_growth or ability < min_growth:
-                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, min_growth)
+                            self.kh2_write_short(self.Save + slot, min_growth)
                         # if it is already in the inventory
                         elif ability | 0x8000 < (0x8000 + max_growth):
-                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, current_growth_level + 1)
+                            self.kh2_write_short(self.Save + slot, current_growth_level + 1)
 
             for itemName in master_bitmask:
                 itemData = self.item_name_to_data[itemName]
-                itemMemory = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1), "big")
-                if (int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                   "big") & 0x1 << itemData.bitmask) == 0:
+                itemMemory = self.kh2_read_byte(self.Save + itemData.memaddr)
+                if self.kh2_read_byte(self.Save + itemData.memaddr) & 0x1 << itemData.bitmask == 0:
                     # when getting a form anti points should be reset to 0 but bit-shift doesn't trigger the game.
                     if itemName in {"Valor Form", "Wisdom Form", "Limit Form", "Master Form", "Final Form"}:
-                        self.kh2.write_bytes(self.kh2.base_address + self.Save + 0x3410,
-                                             (0).to_bytes(1, 'big'), 1)
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         (itemMemory | 0x01 << itemData.bitmask).to_bytes(1, 'big'), 1)
+                        self.kh2_write_byte(self.Save + 0x3410, 0)
+                    self.kh2_write_byte(self.Save + itemData.memaddr, itemMemory | 0x01 << itemData.bitmask)
 
             for itemName in master_equipment:
                 itemData = self.item_name_to_data[itemName]
@@ -707,18 +714,14 @@ class KH2Context(CommonContext):
                     Equipment_Anchor_List = self.Equipment_Anchor_Dict["Armor"]
                     # Checking form anchors for the equipment
                 for slot in Equipment_Anchor_List:
-                    if self.kh2.read_short(self.kh2.base_address + self.Save + slot) == itemData.kh2id:
+                    if self.kh2_read_short(self.Save + slot) == itemData.kh2id:
                         isThere = True
-                        if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                          "big") != 0:
-                            self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                                 (0).to_bytes(1, 'big'), 1)
+                        if self.kh2_read_byte(self.Save + itemData.memaddr) != 0:
+                            self.kh2_write_byte(self.Save + itemData.memaddr, 0)
                         break
                 if not isThere and itemName not in self.kh2seedsave["SoldEquipment"]:
-                    if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                      "big") != 1:
-                        self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                             (1).to_bytes(1, 'big'), 1)
+                    if self.kh2_read_byte(self.Save + itemData.memaddr) != 1:
+                        self.kh2_write_byte(self.Save + itemData.memaddr, 1)
 
             for itemName in master_magic:
                 itemData = self.item_name_to_data[itemName]
@@ -727,11 +730,8 @@ class KH2Context(CommonContext):
                     amountOfItems += self.kh2seedsave["AmountInvo"]["LocalItems"]["Magic"][itemName]
                 if itemName in server_magic:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["Magic"][itemName]
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != amountOfItems \
-                        and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + 0x741320, 1), "big") in {10, 8}:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         amountOfItems.to_bytes(1, 'big'), 1)
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems and self.kh2_read_byte(0x741320) not in {10, 8}:
+                    self.kh2_write_byte(self.Save + itemData.memaddr, amountOfItems)
 
             for itemName in master_stat:
                 itemData = self.item_name_to_data[itemName]
@@ -741,15 +741,9 @@ class KH2Context(CommonContext):
                 if itemName in server_stat:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["StatIncrease"][itemName]
 
-                # 0x130293 is Crit_1's location id for touching the computer
-                if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                                  "big") != amountOfItems \
-                        and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1),
-                                           "big") >= 5 and int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + 0x23DF, 1),
-                        "big") > 0:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         amountOfItems.to_bytes(1, 'big'), 1)
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems \
+                        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and self.kh2_read_byte(self.Save + 0x23DF) > 0:
+                    self.kh2_write_byte(self.Save + itemData.memaddr, amountOfItems)
 
             for itemName in master_boost:
                 itemData = self.item_name_to_data[itemName]
@@ -758,20 +752,14 @@ class KH2Context(CommonContext):
                     amountOfItems += self.kh2seedsave["AmountInvo"]["LocalItems"]["Boost"][itemName]
                 if itemName in server_boost:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["Boost"][itemName]
-                amountOfBoostsInInvo = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
-                        "big")
-                amountOfUsedBoosts = int.from_bytes(
-                        self.kh2.read_bytes(self.kh2.base_address + self.Save + self.boost_to_anchor_dict[itemName], 1),
-                        "big")
+                amountOfBoostsInInvo = self.kh2_read_byte(self.Save + itemData.memaddr)
+                amountOfUsedBoosts = self.kh2_read_byte(self.Save + self.boost_to_anchor_dict[itemName])
                 # Ap Boots start at +50 for some reason
                 if itemName == "AP Boost":
                     amountOfUsedBoosts -= 50
                 totalBoosts = (amountOfBoostsInInvo + amountOfUsedBoosts)
-                if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][
-                    itemName] and amountOfBoostsInInvo < 255:
-                    self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
-                                         (amountOfBoostsInInvo + 1).to_bytes(1, 'big'), 1)
+                if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][itemName] and amountOfBoostsInInvo < 255:
+                    self.kh2_write_byte(self.Save + itemData.memaddr, amountOfBoostsInInvo)
 
         except Exception as e:
             logger.info("Line 573")
@@ -787,9 +775,9 @@ def finishedGame(ctx: KH2Context, message):
             ctx.finalxemnas = True
     # three proofs
     if ctx.kh2slotdata['Goal'] == 0:
-        if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, 1), "big") > 0 \
-                and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, 1), "big") > 0 \
-                and int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, 1), "big") > 0:
+        if ctx.kh2_read_byte(ctx.Save + 0x36B2) > 0 \
+                and ctx.kh2_read_byte(ctx.Save + 0x36B3) > 0 \
+                and ctx.kh2_read_byte(ctx.Save + 0x36B4) > 0:
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
@@ -799,9 +787,9 @@ def finishedGame(ctx: KH2Context, message):
     elif ctx.kh2slotdata['Goal'] == 1:
         if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= \
                 ctx.kh2slotdata['LuckyEmblemsRequired']:
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
+            ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+            ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+            ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
@@ -812,10 +800,10 @@ def finishedGame(ctx: KH2Context, message):
         for boss in ctx.kh2slotdata["hitlist"]:
             if boss in message[0]["locations"]:
                 ctx.amountOfPieces += 1
-        if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"]:
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B2, (1).to_bytes(1, 'big'), 1)
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B3, (1).to_bytes(1, 'big'), 1)
-            ctx.kh2.write_bytes(ctx.kh2.base_address + ctx.Save + 0x36B4, (1).to_bytes(1, 'big'), 1)
+        if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
+            ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+            ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+            ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
