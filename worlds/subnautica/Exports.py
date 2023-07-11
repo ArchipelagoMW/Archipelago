@@ -13,11 +13,17 @@ if __name__ == "__main__":
     sys.path.append(new_home)
 
     from worlds.subnautica.Locations import Vector, location_table
-    from worlds.subnautica.Items import item_table, group_items
+    from worlds.subnautica.Items import item_table, group_items, items_by_type
     from NetUtils import encode
 
+    export_folder = os.path.join(new_home, "Subnautica Export")
+    os.makedirs(export_folder, exist_ok=True)
+
+    def in_export_folder(path: str) -> str:
+        return os.path.join(export_folder, path)
+
     payload = {location_id: location_data["position"] for location_id, location_data in location_table.items()}
-    with open("locations.json", "w") as f:
+    with open(in_export_folder("locations.json"), "w") as f:
         json.dump(payload, f)
 
     # copy-paste from Rules
@@ -49,17 +55,22 @@ if __name__ == "__main__":
         "751": [location_id for location_id, location_data
                 in location_table.items() if far_away(location_data["position"])],
     }
-    with open("logic.json", "w") as f:
+    with open(in_export_folder("logic.json"), "w") as f:
         json.dump(payload, f)
 
-    itemcount = sum(item_data["count"] for item_data in item_table.values())
+    itemcount = sum(item_data.count for item_data in item_table.values())
     assert itemcount == len(location_table), f"{itemcount} != {len(location_table)}"
-    payload = {item_id: item_data["tech_type"] for item_id, item_data in item_table.items()}
+    payload = {item_id: item_data.tech_type for item_id, item_data in item_table.items()}
     import json
 
-    with open("items.json", "w") as f:
+    with open(in_export_folder("items.json"), "w") as f:
         json.dump(payload, f)
-    with open("group_items.json", "w") as f:
+
+    with open(in_export_folder("group_items.json"), "w") as f:
+        # encode to convert set to list
         f.write(encode(group_items))
 
-    print(f"Subnautica exports dumped to {new_home}")
+    with open(in_export_folder("item_types.json"), "w") as f:
+        json.dump(items_by_type, f)
+
+    print(f"Subnautica exports dumped to {in_export_folder('')}")

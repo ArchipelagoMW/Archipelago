@@ -22,8 +22,7 @@ class MuseDashCollections:
         "MuseDash ka nanika hi",
         "Rush-Hour",
         "Find this Month's Featured Playlist",
-        "PeroPero in the Universe",
-        "CHAOS Glitch"
+        "PeroPero in the Universe"
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -127,6 +126,10 @@ class MuseDashCollections:
     def parse_song_difficulty(self, difficulty: str) -> Optional[int]:
         """Attempts to parse the song difficulty."""
         if len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿":
+            return None
+
+        # 0 is used as a filler and no songs actually have a 0 difficulty song.
+        if difficulty == "0":
             return None
 
         # Curse the 2023 april fools update. Used on 3rd Avenue.
