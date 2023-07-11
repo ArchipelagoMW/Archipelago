@@ -184,7 +184,8 @@ class OSRSWorld(World):
                 state.has(ItemNames.Progressive_Armor, self.player) and
                 state.can_reach(RegionNames.Falador, None, self.player) and
                 state.can_reach(RegionNames.Monastery, None, self.player) and
-                state.can_reach(RegionNames.Ice_Mountain, None, self.player)
+                state.can_reach(RegionNames.Ice_Mountain, None, self.player) and
+                self.quest_points(state) >= 12
         )
         self.multiworld.get_location(LocationNames.Q_Witchs_Potion, self.player).access_rule = lambda state: (
                 state.can_reach(RegionNames.Rimmington, None, self.player) and
@@ -231,7 +232,8 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.Barbarian_Village, None, self.player) and
                 state.can_reach(RegionNames.Falador, None, self.player) and
                 state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Edgeville, None, self.player)
+                state.can_reach(RegionNames.Edgeville, None, self.player) and
+                self.quest_points(state) >= 16
         )
 
         # QP Locations
@@ -355,23 +357,6 @@ class OSRSWorld(World):
                 (state.can_reach(RegionNames.Karamja, None, self.player) or state.can_reach(RegionNames.Corsair_Cove,
                                                                                             None, self.player))
         )
-        self.multiworld.get_location(LocationNames.Catch_Swordfish, self.player).access_rule = lambda state: (
-                state.can_reach(RegionNames.Port_Sarim, None, self.player) and
-                (state.can_reach(RegionNames.Karamja, None, self.player) or state.can_reach(RegionNames.Corsair_Cove,
-                                                                                            None, self.player))
-        )
-        """
-        self.multiworld.get_location(LocationNames.Holy_Symbol, self.player).access_rule = lambda state: (
-            # Mould and Silver
-                (state.can_reach(RegionNames.Al_Kharid, None, self.player) or state.can_reach(
-                    RegionNames.Crafting_Guild, None,
-                    self.player)) and
-                state.can_reach(RegionNames.Silver_Rock, None, self.player) and
-                state.can_reach(RegionNames.Sheep, None, self.player) and
-                state.can_reach(RegionNames.Spinning_Wheel, None, self.player) and
-                state.can_reach(RegionNames.Monastery, None, self.player)
-        )
-        """
         self.multiworld.get_location(LocationNames.Smelt_Silver, self.player).access_rule = lambda state: (
                 state.can_reach(RegionNames.Silver_Rock, None, self.player) and
                 state.can_reach(RegionNames.Furnace, None, self.player)
@@ -408,15 +393,6 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.Crandor, None, self.player) or
                 state.can_reach(RegionNames.Wizards_Tower, None, self.player) or
                 state.can_reach(RegionNames.Karamja, None, self.player)
-        )
-
-        self.multiworld.get_location(LocationNames.K_Obor, self.player).access_rule = lambda state: (
-            state.has(ItemNames.Progressive_Armor, self.player, 5) and
-            state.has(ItemNames.Progressive_Weapons, self.player, 5)
-        )
-        self.multiworld.get_location(LocationNames.K_Bryo, self.player).access_rule = lambda state: (
-                state.has(ItemNames.Progressive_Armor, self.player, 5) and
-                state.has(ItemNames.Progressive_Weapons, self.player, 5)
         )
 
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player).access_rule = lambda state: (

@@ -63,28 +63,26 @@ class RegionInfo(typing.NamedTuple):
 all_regions = [
     RegionInfo("Menu",
                [
-                   # LocationNames.Beginner_Clue,
                    LocationNames.Oak_Log,
                    LocationNames.Willow_Log,
                    LocationNames.Catch_Lobster,
-                   LocationNames.Catch_Swordfish,
-                   # LocationNames.Holy_Symbol,
                    LocationNames.Cut_Sapphire,
                    LocationNames.Cut_Emerald,
                    LocationNames.Cut_Ruby,
-                   # LocationNames.Cut_Diamond,
                    LocationNames.K_Lesser_Demon,
                    LocationNames.Bake_Cake,
                    LocationNames.Bake_Meat_Pizza,
                    LocationNames.Total_XP_5000,
+                   LocationNames.Total_XP_10000,
                    LocationNames.Total_XP_25000,
                    LocationNames.Total_XP_50000,
+                   LocationNames.Total_XP_100000,
                    LocationNames.Total_Level_50,
                    LocationNames.Total_Level_100,
                    LocationNames.Total_Level_200,
-                   LocationNames.Combat_Level_10,
+                   LocationNames.Combat_Level_5,
+                   LocationNames.Combat_Level_15,
                    LocationNames.Combat_Level_25,
-                   LocationNames.Combat_Level_50,
                ],
                {},
                lambda player: {}
@@ -396,7 +394,6 @@ all_regions = [
     RegionInfo(RegionNames.Varrock_Palace,
                [
                    LocationNames.Q_Shield_of_Arrav,
-                   LocationNames.K_Bryo,
                    LocationNames.QP_Shield_of_Arrav,
                ],
                {
@@ -468,7 +465,6 @@ all_regions = [
                ),
     RegionInfo(RegionNames.Edgeville,
                [
-                   LocationNames.K_Obor,
                ],
                {
                    f"{RegionNames.Edgeville}->{RegionNames.Wilderness}": RegionNames.Wilderness,
@@ -504,7 +500,6 @@ all_regions = [
                ),
     RegionInfo(RegionNames.Barbarian_Village,
                [
-                   # LocationNames.Stronghold_Of_Security
                ],
                {
                    f"{RegionNames.Barbarian_Village}->{RegionNames.Edgeville}": RegionNames.Edgeville,
@@ -534,7 +529,6 @@ all_regions = [
                ),
     RegionInfo(RegionNames.Monastery,
                [
-                   # LocationNames.Edgeville_Altar
                ],
                {
                    f"{RegionNames.Monastery}->{RegionNames.Edgeville}": RegionNames.Edgeville,
@@ -559,14 +553,9 @@ all_regions = [
     RegionInfo(RegionNames.Ice_Mountain,
                [
                    LocationNames.Q_Goblin_Diplomacy,
-                   # LocationNames.Simple_Lockbox,
-                   # LocationNames.Elaborate_Lockbox,
-                   # LocationNames.Ornate_Lockbox,
                    LocationNames.Guppy,
                    LocationNames.Cavefish,
                    LocationNames.Tetra,
-                   # LocationNames.Mind_Core,
-                   # LocationNames.Body_Core,
                    LocationNames.Barronite_Deposit,
                    LocationNames.QP_Goblin_Diplomacy
                ],
