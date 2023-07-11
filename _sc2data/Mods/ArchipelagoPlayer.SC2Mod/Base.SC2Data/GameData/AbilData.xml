@@ -2203,7 +2203,6 @@
         <Cost>
             <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
         </Cost>
-        <Effect value="AP_Charge"/>
         <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
     </CAbilAugment>
     <CAbilMorph id="AP_BurrowRoachDown">
@@ -4823,6 +4822,67 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilTrain id="AP_GatewayTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+        <InfoArray index="Train1" Time="38">
+            <Button DefaultButtonFace="AP_ZealotAiur" State="Restricted"/>
+            <Unit value="AP_ZealotAiur"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="42">
+            <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_StalkerShakuras"/>
+        </InfoArray>
+<!--        <InfoArray index="Train3" Time="37">-->
+<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+<!--            <Unit value="Replicant"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train4" Time="55">
+            <Button DefaultButtonFace="AP_HighTemplarAiur" State="Restricted" Requirements="AP_HaveTemplarArchives"/>
+            <Unit value="AP_HighArchonTemplar"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="55">
+            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="AP_HaveDarkShrine"/>
+            <Unit value="AP_DarkTemplarShakuras"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="37">
+            <Button DefaultButtonFace="AP_SentryAiur" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_SentryAiur"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="38">
+            <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_Adept"/>
+        </InfoArray>
+<!--        <InfoArray index="Train8" Time="55">-->
+<!--            <Button DefaultButtonFace="HighArchon" State="Restricted" Requirements="HaveVoidHighTemplarArchonAdvanced"/>-->
+<!--            <Unit value="ArchonAdvanced"/>-->
+<!--        </InfoArray>-->
+    </CAbilTrain>
+    <CAbilMorph id="AP_MorphBackToGateway">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MorphBackToGateway"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Cost>
+            <Cooldown Link="AP_WarpGateTrain" Location="Unit"/>
+        </Cost>
+        <InfoArray Unit="AP_Gateway">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete"/>
+    </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5953,52 +6013,52 @@
     </CAbilMorph>
     <CAbilResearch id="AP_evolutionchamberresearch">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
-<!--        <InfoArray index="Research1" Time="160" Upgrade="ZergMeleeWeaponsLevel1">-->
-<!--            <Resource index="Minerals" value="100"/>-->
-<!--            <Resource index="Vespene" value="100"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons1" State="Suppressed" Requirements="LearnZergMeleeWeapon1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research2" Time="190" Upgrade="ZergMeleeWeaponsLevel2">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons2" State="Suppressed" Requirements="LearnZergMeleeWeapon2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research3" Time="220" Upgrade="ZergMeleeWeaponsLevel3">-->
-<!--            <Resource index="Minerals" value="200"/>-->
-<!--            <Resource index="Vespene" value="200"/>-->
-<!--            <Button DefaultButtonFace="zergmeleeweapons3" State="Suppressed" Requirements="LearnZergMeleeWeapon3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research4" Time="160" Upgrade="ZergGroundArmorsLevel1">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor1" State="Suppressed" Requirements="LearnZergGroundArmor1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research5" Time="190" Upgrade="ZergGroundArmorsLevel2">-->
-<!--            <Resource index="Minerals" value="225"/>-->
-<!--            <Resource index="Vespene" value="225"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor2" State="Suppressed" Requirements="LearnZergGroundArmor2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research6" Time="220" Upgrade="ZergGroundArmorsLevel3">-->
-<!--            <Resource index="Minerals" value="300"/>-->
-<!--            <Resource index="Vespene" value="300"/>-->
-<!--            <Button DefaultButtonFace="zerggroundarmor3" State="Suppressed" Requirements="LearnZergGroundArmor3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research7" Time="160" Upgrade="ZergMissileWeaponsLevel1">-->
-<!--            <Resource index="Minerals" value="100"/>-->
-<!--            <Resource index="Vespene" value="100"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons1" State="Suppressed" Requirements="LearnZergMissileWeapon1"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research8" Time="190" Upgrade="ZergMissileWeaponsLevel2">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons2" State="Suppressed" Requirements="LearnZergMissileWeapon2"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research9" Time="220" Upgrade="ZergMissileWeaponsLevel3">-->
-<!--            <Resource index="Minerals" value="200"/>-->
-<!--            <Resource index="Vespene" value="200"/>-->
-<!--            <Button DefaultButtonFace="zergmissileweapons3" State="Suppressed" Requirements="LearnZergMissileWeapon3"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research10" Time="90"/>-->
+        <!--        <InfoArray index="Research1" Time="160" Upgrade="ZergMeleeWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons1" State="Suppressed" Requirements="LearnZergMeleeWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research2" Time="190" Upgrade="ZergMeleeWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons2" State="Suppressed" Requirements="LearnZergMeleeWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research3" Time="220" Upgrade="ZergMeleeWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons3" State="Suppressed" Requirements="LearnZergMeleeWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research4" Time="160" Upgrade="ZergGroundArmorsLevel1">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor1" State="Suppressed" Requirements="LearnZergGroundArmor1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research5" Time="190" Upgrade="ZergGroundArmorsLevel2">-->
+        <!--            <Resource index="Minerals" value="225"/>-->
+        <!--            <Resource index="Vespene" value="225"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor2" State="Suppressed" Requirements="LearnZergGroundArmor2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research6" Time="220" Upgrade="ZergGroundArmorsLevel3">-->
+        <!--            <Resource index="Minerals" value="300"/>-->
+        <!--            <Resource index="Vespene" value="300"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor3" State="Suppressed" Requirements="LearnZergGroundArmor3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research7" Time="160" Upgrade="ZergMissileWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons1" State="Suppressed" Requirements="LearnZergMissileWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research8" Time="190" Upgrade="ZergMissileWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons2" State="Suppressed" Requirements="LearnZergMissileWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research9" Time="220" Upgrade="ZergMissileWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons3" State="Suppressed" Requirements="LearnZergMissileWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research10" Time="90"/>-->
     </CAbilResearch>
     <CAbilEffectInstant id="AP_MedivacSpeedBoost">
         <AbilSetId value="Afterburners"/>
@@ -6106,15 +6166,138 @@
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilMorph id="AP_FirebatOptimizedLogisticsMorph">
-        <CmdButtonArray index="Execute" Requirements="AP_HaveOptimizedLogisticsFirebat" DefaultButtonFace="AP_Firebat"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Firebat" Requirements="AP_HaveOptimizedLogisticsFirebat"/>
         <Flags index="Automatic" value="1"/>
         <Flags index="IgnoreUnitCost" value="1"/>
         <InfoArray Unit="AP_FirebatOptimizedLogistics"/>
     </CAbilMorph>
     <CAbilMorph id="AP_MercFirebatOptimizedLogisticsMorph">
-        <CmdButtonArray index="Execute" Requirements="AP_HaveOptimizedLogisticsFirebat" DefaultButtonFace="AP_Firebat"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Firebat" Requirements="AP_HaveOptimizedLogisticsFirebat"/>
         <Flags index="Automatic" value="1"/>
         <Flags index="IgnoreUnitCost" value="1"/>
         <InfoArray Unit="AP_DevilDogOptimizedLogistics"/>
     </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToWarpGate">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradeToWarpGate" State="Restricted"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_WarpGate">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToWarpGateInstant">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradeToWarpGate" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_WarpGate"/>
+    </CAbilMorph>
+    <CAbilWarpTrain id="AP_WarpGateTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <InfoArray index="Train1" Time="5" Unit="AP_ZealotAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="28"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_ZealotAiur" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="5" Unit="AP_StalkerShakuras">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="32"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+<!--        <InfoArray index="Train3" Time="5" Unit="Replicant">-->
+<!--            <Charge>-->
+<!--                <CountMax value="1"/>-->
+<!--                <CountStart value="1"/>-->
+<!--                <CountUse value="1"/>-->
+<!--                <Link value="AP_WarpGateTrain"/>-->
+<!--                <TimeUse value="32"/>-->
+<!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
+<!--            </Charge>-->
+<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train4" Time="5" Unit="AP_HighArchonTemplar">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="45"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_HighTemplarAiur" State="Restricted" Requirements="AP_HaveTemplarArchives"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="5" Unit="AP_DarkTemplarShakuras">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="45"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="HaveDarkShrine"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="5" Unit="AP_SentryAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="32"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_SentryAiur" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="5" Unit="AP_Adept">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="28"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+    </CAbilWarpTrain>
 </Catalog>

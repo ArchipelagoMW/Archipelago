@@ -4307,4 +4307,13 @@
         <BuffFlags index="Channeling" value="1"/>
         <RemoveValidatorArray value="ChargeTargetAttacked"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UpgradeToWarpGateInstant">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <ExpireEffect value="AP_UpgradeToWarpGateInstant"/>
+        <Requirements value="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech"/>
+        <Duration value="0.1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <RemoveValidatorArray value="AP_GameTimeGreaterthan5Seconds"/>
+    </CBehaviorBuff>
 </Catalog>

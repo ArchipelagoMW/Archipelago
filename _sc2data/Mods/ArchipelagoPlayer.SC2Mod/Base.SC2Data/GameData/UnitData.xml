@@ -13102,6 +13102,85 @@
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
         <TechTreeUnlockedUnitArray value=""/>
     </CUnit>
+    <CUnit id="AP_Gateway">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="500"/>
+        <LifeMax value="500"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <ShieldsStart value="500"/>
+        <ShieldsMax value="500"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="150"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <AbilArray Link="AP_GatewayTrain"/>
+        <AbilArray Link="Rally"/>
+        <AbilArray Link="AP_UpgradeToWarpGate"/>
+        <AbilArray Link="AP_UpgradeToWarpGateInstant"/>
+        <BehaviorArray Link="PowerUserQueue"/>
+        <BehaviorArray Link="AP_UpgradeToWarpGateInstant"/>
+        <BehaviorArray Link="RecentlyCreated"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_UpgradeToWarpGate,1" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_ZealotAiur" Type="AbilCmd" AbilCmd="AP_GatewayTrain,Train1" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_StalkerShakuras" Type="AbilCmd" AbilCmd="AP_GatewayTrain,Train2" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_HighTemplarAiur" Type="AbilCmd" AbilCmd="AP_GatewayTrain,Train4" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_DarkTemplarShakuras" Type="AbilCmd" AbilCmd="AP_GatewayTrain,Train5" Row="1" Column="1"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_UpgradeToWarpGate" Type="AbilCmd" AbilCmd="AP_UpgradeToWarpGate,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SentryAiur" Type="AbilCmd" AbilCmd="AP_GatewayTrain,Train6" Row="0" Column="1"/>
+        </CardLayouts>
+        <!--            <LayoutButtons Face="AP_WarpInAdept" Type="AbilCmd" AbilCmd="GatewayTrain,Train7" Row="0" Column="2"/>-->
+        <!--            <LayoutButtons Face="AP_Dragoon" Type="AbilCmd" AbilCmd="GatewayTrain,Train7" Row="0" Column="2"/>-->
+        <!--            <LayoutButtons Face="AP_WarpInReplicant" Type="AbilCmd" AbilCmd="GatewayTrain,Train3" Row="0" Column="1"/>-->
+        <Radius value="1.75"/>
+        <SeparationRadius value="1.75"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="150"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Gateway"/>
+        <TacticalAIThink value="AIThinkGateway"/>
+        <TechAliasArray value="Alias_Gateway"/>
+        <GlossaryPriority value="22"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
@@ -16640,5 +16719,76 @@
             <Charge Link="Zealot/Revive"/>
             <Cooldown Link="Zealot/Revive"/>
         </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_WarpGate">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="500"/>
+        <LifeMax value="500"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <ShieldsStart value="500"/>
+        <ShieldsMax value="500"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="150"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_WarpGateTrain"/>
+        <AbilArray Link="AP_MorphBackToGateway"/>
+        <BehaviorArray Link="PowerUserQueue"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_ZealotAiur" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_StalkerShakuras" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_HighTemplarAiur" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,3" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_DarkTemplarShakuras" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,4" Row="1" Column="1"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="MorphBackToGateway" Type="AbilCmd" AbilCmd="AP_MorphBackToGateway,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_SentryAiur" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,5" Row="0" Column="1"/>
+<!--            <LayoutButtons Face="AP_WarpInAdept" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,6" Row="0" Column="2"/>-->
+            <!--            <LayoutButtons Face="WarpInReplicant" Type="AbilCmd" AbilCmd="AP_WarpGateTrain,2" Row="0" Column="1"/>-->
+            <LayoutButtons Face="AP_SuperiorWarpGates" Type="Passive" Requirements="AP_HaveSuperiorWarpGates" Row="2" Column="2"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.75"/>
+        <SeparationRadius value="1.75"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <HotkeyAlias value="Gateway"/>
+        <SelectAlias value="Gateway"/>
+        <TechAliasArray value="Alias_Gateway"/>
+        <GlossaryPriority value="24"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
     </CUnit>
 </Catalog>

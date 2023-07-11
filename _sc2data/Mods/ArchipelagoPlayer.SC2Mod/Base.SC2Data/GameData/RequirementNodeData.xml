@@ -2608,4 +2608,17 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HeroicShieldCleanUp" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitCyberneticsCoreCompleteOnlyTechTreeCheat">
+        <Count Link="AP_CyberneticsCore" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitTemplarArchiveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_TemplarArchive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitDarkShrineCompleteOnlyTechTreeCheat">
+        <Count Link="AP_DarkShrine" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperiorWarpGatesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperiorWarpGates" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

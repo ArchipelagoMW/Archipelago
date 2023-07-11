@@ -1484,14 +1484,14 @@
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[9]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[10]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[11]" Value="0.294"/>
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
@@ -4530,18 +4530,18 @@
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveInfestor">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveSwarmHost">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveSporeCrawler">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveAberration">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
     </CUpgrade>
     <CUpgrade id="AP_BansheeSpeed">
         <Icon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
@@ -4670,7 +4670,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireWhileInAttackOrder]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireAtAttackOrderTarget]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[LinkedCooldown]" Value="0"/>
-<!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
         <AffectedUnitArray value="AP_ValkyrieSCBW"/>
     </CUpgrade>
     <CUpgrade id="AP_ValkyrieSpeedBoost"/>
@@ -4768,13 +4768,13 @@
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsFirebat">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Firebat,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Firebat,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Firebat,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_FirebatOptimizedLogistics,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDog,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_DevilDog,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDog,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDogOptimizedLogistics,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
         <AffectedUnitArray value="AP_Firebat"/>
         <AffectedUnitArray value="AP_FirebatOptimizedLogistics"/>
         <AffectedUnitArray value="AP_DevilDog"/>
@@ -4782,18 +4782,18 @@
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsPredator">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Predator,CostResource[Vespene]" Value="75"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Predator,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Predator,Food" Value="1"/>
         <AffectedUnitArray value="AP_Predator"/>
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsMedic">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Vespene]" Value="25"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Medic,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Medic,Food" Value="1"/>
         <AffectedUnitArray value="AP_Medic"/>
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsDiamondback">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Diamondback,CostResource[Vespene]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Diamondback,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Diamondback,Food" Value="1"/>
         <AffectedUnitArray value="AP_Diamondback"/>
     </CUpgrade>
     <CUpgrade id="AP_CinematicMode">
@@ -4818,5 +4818,17 @@
     </CUpgrade>
     <CUpgrade id="AP_HeroicShieldCleanUp">
         <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SuperiorWarpGates">
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train1].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train2].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train3].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train4].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train5].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train6].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train7].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train8].Charge.CountMax" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
     </CUpgrade>
 </Catalog>

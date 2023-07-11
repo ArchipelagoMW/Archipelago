@@ -3668,4 +3668,26 @@
     <CValidatorUnitType id="AP_IsCorsairMP">
         <Value value="AP_CorsairMP"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaWarpgate">
+        <Value value="WarpGate"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPWarpgate">
+        <Value value="AP_WarpGate"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsWarpgate" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaWarpgate"/>
+        <CombineArray value="AP_IsAPWarpgate"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaGateway">
+        <Value value="Gateway"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPGateway">
+        <Value value="AP_Gateway"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsGateway" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaGateway"/>
+        <CombineArray value="AP_IsAPGateway"/>
+    </CValidatorCombine>
 </Catalog>

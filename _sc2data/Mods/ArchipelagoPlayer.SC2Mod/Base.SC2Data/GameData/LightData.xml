@@ -934,7 +934,7 @@
     </CLight>
     <CLight id="AP_Taldarim_Stalker_Portrait" parent="default">
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
-        <ToDInfoArray index="0" Id="DarkTemplar2Portrait" AmbientColor="0.321569,0.141176,0.129412" Colorize="1">
+        <ToDInfoArray index="0" Id="AP_DarkTemplarPortrait" AmbientColor="0.321569,0.141176,0.129412" Colorize="1">
             <Param index="HDRExposure" value="0.550000"/>
             <Param index="HDRSpecMultiplier" value="3.400000"/>
             <Param index="HDREmisMultiplier" value="1.900000"/>

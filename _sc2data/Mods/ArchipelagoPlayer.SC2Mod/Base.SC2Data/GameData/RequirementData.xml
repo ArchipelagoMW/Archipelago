@@ -1613,4 +1613,20 @@
         <EditorCategories value="TechType:Ability,Race:Protoss"/>
         <NodeArray index="Show" Link="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HaveCyberneticsCore">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitCyberneticsCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveTemplarArchives">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitTemplarArchiveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveDarkShrine">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitDarkShrineCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperiorWarpGates">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperiorWarpGatesCompleteOnly"/>
+    </CRequirement>
 </Catalog>

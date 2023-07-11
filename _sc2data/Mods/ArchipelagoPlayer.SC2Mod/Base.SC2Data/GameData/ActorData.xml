@@ -859,9 +859,9 @@
     </CActorRange>
     <CActorUnit id="AP_Firebat" parent="GenericUnitStandard" unitName="AP_Firebat">
         <On Terms="UnitBirth.AP_FirebatOptimizedLogistics" Send="Create"/>
+        <On Terms="Abil.attack.ReadyStop" Target="AP_FirebatAttackModel" Send="SetOpacity 0.000000 0.250000"/>
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
-        <On Terms="Abil.attack.ReadyStop" Target="AP_FirebatAttackModel" Send="SetOpacity 0.000000 0.250000"/>
         <DeathArray index="Normal" ModelLink="AP_FirebatDeath" SoundLink="AP_Firebat_Explode"/>
         <PortraitModel value="AP_FirebatPortrait"/>
         <WalkAnimMoveSpeed value="1.875"/>
@@ -5931,8 +5931,8 @@
         <Terms value="Cap 1"/>
         <On Terms="Behavior.AP_VoidZealotShadowChargeSlow.On" Send="Create"/>
         <On Terms="Behavior.AP_VoidZealotShadowChargeSlow.Off" Send="Destroy"/>
-<!--        <On Terms="Behavior.SOAGravitonBombHeroicUnit.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.SOAGravitonBombHeroicUnit.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.SOAGravitonBombHeroicUnit.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.SOAGravitonBombHeroicUnit.Off" Send="Destroy"/>-->
         <Host Subject="_Selectable"/>
         <AutoScaleFactor value="2.000000"/>
     </CActorModel>
@@ -5940,16 +5940,16 @@
         <Inherits index="Visibility" value="1"/>
         <EditorCategories value=""/>
         <!--These Behaviors don't seem to exist and/or aren't used anywhere /-->
-<!--        <On Terms="Behavior.FlyerBeastDiveHeightStun.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.FlyerBeastDiveHeightStun.Off" Send="Destroy"/>-->
-<!--        <On Terms="Behavior.GreaterBeastStun.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.GreaterBeastStun.Off" Send="Destroy"/>-->
-<!--        <On Terms="Behavior.VoidDarkTemplarStunningBlow.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.VoidDarkTemplarStunningBlow.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.FlyerBeastDiveHeightStun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.FlyerBeastDiveHeightStun.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.GreaterBeastStun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.GreaterBeastStun.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.VoidDarkTemplarStunningBlow.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.VoidDarkTemplarStunningBlow.Off" Send="Destroy"/>-->
         <On Terms="Behavior.AP_VoidZealotShadowChargeStun.On" Send="Create"/>
         <On Terms="Behavior.AP_VoidZealotShadowChargeStun.Off" Send="Destroy"/>
-<!--        <On Terms="Behavior.Aiur05EMPWaveStun.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.Aiur05EMPWaveStun.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.Aiur05EMPWaveStun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.Aiur05EMPWaveStun.Off" Send="Destroy"/>-->
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
@@ -13984,6 +13984,104 @@
             <Image value="Assets\Textures\Wireframe-Zerg-EvolutionChamber.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_Gateway" parent="ProtossBuildingEx" unitName="AP_Gateway">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="GlobalLoopMacroMore"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkEmissive"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkEmissive"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove Superior"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimSetPaused Morph"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimSetPaused Morph 0"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Gateway; MorphTo AP_WarpGate" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpGate; MorphTo AP_Gateway" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpGate; MorphTo AP_Gateway" Send="AnimPlay Morph Morph,End 0 0.000000"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_WarpGate; MorphTo AP_Gateway" Send="AnimClear Morph"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap Gateway_Taldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap Gateway_Taldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale ::Baseline 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale ::Baseline 1.000000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale GL_BSD 1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale ::Baseline 0.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <Model value="Gateway"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="GatewayBirth"/>
+        <DeathArray index="Normal" ModelLink="GatewayDeath" SoundLink="Gateway_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="GatewayDeathUnderConstruction" SoundLink="Gateway_Explode"/>
+        <DeathCustoms ModelLink="Gateway_Taldarim_Death" Name="DarkProtoss"/>
+        <DeathActorModel value="GatewayDeath"/>
+        <PlacementModel value="GatewayPlacement"/>
+        <PortraitModel value="GatewayPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Gateway.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-Gateway.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Gateway_Ready"/>
+        <SoundArray index="What" value="Gateway_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-Gateway.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Gateway.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Gateway-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Gateway-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Gateway-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_GatewaySplat" parent="GenericUnitSplat" unitName="AP_Gateway">
+        <Remove Terms="UnitCreation.AP_WarpGate" Send="Create"/>
+        <On Terms="UnitCreation.AP_WarpGate" Send="Create"/>
+        <On Terms="UnitBirth.AP_WarpGate" Send="Create"/>
+        <Model value="GatewaySplat"/>
+    </CActorSplat>
+    <CActorSound id="AP_GatewayMorphToWarpgate" parent="SoundOneShot">
+        <Sound value="Gateway_MorphToWarpgate"/>
+        <On Terms="Abil.AP_UpgradeToWarpGate.Start" Send="Create"/>
+        <On Terms="AbilMorph.AP_UpgradeToWarpGate.Pause" Send="SoundSetPaused 1"/>
+        <On Terms="AbilMorph.AP_UpgradeToWarpGate.Resume" Send="SoundSetPaused"/>
+    </CActorSound>
+    <CActorSound id="AP_WarpgateMorphToGateway" parent="SoundOneShot">
+        <Sound value="WarpGate_MorphToGateway"/>
+        <On Terms="Abil.AP_MorphBackToGateway.Start" Send="Create"/>
+        <On Terms="AbilMorph.AP_MorphBackToGateway.Pause" Send="SoundSetPaused 1"/>
+        <On Terms="AbilMorph.AP_MorphBackToGateway.Resume" Send="SoundSetPaused"/>
+    </CActorSound>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -14521,9 +14619,12 @@
     <CActorSplat id="AP_StargateWarpSplat" parent="GenericUnitSplat" unitName="AP_StargateWarp"/>
     <CActorModel id="AP_WarpInVoid">
         <Model value="WarpInVoid"/>
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStop" Send="AnimBracketStop BSD"/>
         <On Terms="Abil.AP_ChampionWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_ChampionWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
     </CActorModel>
@@ -14531,6 +14632,7 @@
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStart" Send="Create"/>
     </CActorProgress>
     <CActorUnit id="AP_RoboticsBay" parent="ProtossBuildingEx" unitName="AP_RoboticsBay">
         <Aliases value="_UnitHuge"/>
@@ -16892,17 +16994,131 @@
         <On Terms="UnitDeath.AP_SporeCrawlerUprooted; PassChance 25.000000" Send="Create"/>
         <Sound value="SporeCrawler_Death"/>
     </CActorSound>
+    <CActorUnit id="AP_WarpGate" parent="ProtossBuildingEx" unitName="AP_WarpGate">
+        <Aliases value="_UnitHuge"/>
+        <Aliases value="_SpecialPower"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Remove Terms="ActorCreation" Send="AnimGroupApply Superior"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkEmissive"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkEmissive"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Superior"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimBracketStart Unpowered Unpowered,Start Unpowered Unpowered,End"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimBracketStop Queuing Instant"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="SetTintColor 150,150,200 1.000000"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimBracketStop GL_BSD"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimSetPaused Morph"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimBlendTimeApply 0.000000"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimBracketStop Unpowered"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="SetTintColor 255,255,255 1.000000"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimSetPaused Morph 0"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0" Send="AnimBlendTimeApply"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpGate; MorphTo AP_Gateway" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Gateway; MorphTo AP_WarpGate" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Gateway; MorphTo AP_WarpGate" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Gateway; MorphTo AP_WarpGate" Send="AnimClear Morph"/>
+        <On Terms="UnitBirth.AP_WarpGate.Normal; ValidateUnit HasNoPower" Send="StatusSet CheckPower 1"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0; ValidateUnit NotUnderConstruction" Send="StatusSet CheckPower 1"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; ValidateUnit NotUnderConstruction" Send="StatusSet CheckPower 0"/>
+        <On Terms="Signal.*.PylonUnpoweredCheck; IsStatus CheckPower 1" Send="StatusSet UnpoweredGlaze 1"/>
+        <On Terms="Signal.*.PylonUnpoweredCheck" Send="TimerKill UnpoweredModelRevert"/>
+        <On Terms="Signal.*.PylonUnpoweredCheck" Send="TimerSet 0.100000 UnpoweredModelRevert"/>
+        <On Terms="TimerExpired; TimerName UnpoweredModelRevert" Send="StatusSet UnpoweredGlaze 0"/>
+        <On Terms="Signal.*.PylonPowerCheck" Send="StatusSet PowerGlaze 1"/>
+        <On Terms="Signal.*.PylonPowerCheck" Send="StatusSet UnpoweredGlaze 0"/>
+        <On Terms="Signal.*.PylonPowerCheck" Send="TimerKill PowerModelRevert"/>
+        <On Terms="Signal.*.PylonPowerCheck" Send="TimerSet 0.100000 PowerModelRevert"/>
+        <On Terms="TimerExpired; TimerName PowerModelRevert" Send="StatusSet PowerGlaze 0"/>
+        <On Terms="StatusOn.*.PowerGlaze" Send="ModelMaterialApply GlazePower"/>
+        <On Terms="StatusOff.*.PowerGlaze" Send="ModelMaterialRemove GlazePower"/>
+        <On Terms="StatusOn.*.UnpoweredGlaze" Send="ModelMaterialApply GlazeUnpowered"/>
+        <On Terms="StatusOff.*.UnpoweredGlaze" Send="ModelMaterialRemove GlazeUnpowered"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkEmissive"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation; !ValidatePlayer AP_HaveSOAWarpTech" Send="AnimGroupApply Superior"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveSOAWarpTech" Send="AnimPlay Morph Morph 0 0.000000 -1.000000 2.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Morph" Send="AnimGroupApply Superior"/>
+        <On Terms="UnitBirth; !ValidatePlayer AP_HaveSOAWarpTech" Send="AnimGroupApply Superior"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap Gateway_Taldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap Gateway_Taldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale ::Baseline 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale ::Baseline 1.000000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale GL_BSD 1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale ::Baseline 0.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <Model value="Gateway"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="GatewayBirth"/>
+        <DeathArray index="Normal" ModelLink="WarpGateDeath" SoundLink="Gateway_Explode"/>
+        <DeathArray index="UnderConstruction" SoundLink="Gateway_Explode"/>
+        <DeathCustoms ModelLink="WarpgateTaldarimDeath" Name="DarkProtoss"/>
+        <PlacementModel value="GatewayPlacement"/>
+        <PortraitModel value="GatewayPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="160"/>
+        <CooldownDisplay value="AP_WarpGateTrain,Train1"/>
+        <GlossaryAnim value="Stand,Superior"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-warpgate.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-WarpGate.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="WarpGate_Ready"/>
+        <SoundArray index="What" value="WarpGate_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-WarpGate.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-warpgate.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-warpgate-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-warpgate-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-warpgate-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStop" Send="AnimBracketStop BSD"/>
     </CActorModel>
     <CActorSound id="WarpTrainStart">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStart" Send="Create"/>
     </CActorSound>
     <CActorSound id="WarpTrainLoop">
         <!-- Override -->
@@ -16910,11 +17126,14 @@
         <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="Destroy"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="Destroy"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStop" Send="Destroy"/>
     </CActorSound>
     <CActorSound id="WarpTrainStop">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="Create"/>
+        <On Terms="Abil.AP_WarpGateTrain.TargetStop" Send="Create"/>
     </CActorSound>
     <CActorSound id="AP_StargateMorphToStargateWarp" parent="SoundOneShot">
         <Sound value="Gateway_MorphToWarpgate"/>
@@ -17559,7 +17778,7 @@
         <On Terms="Behavior.AP_Irradiate.On" Send="Create"/>
     </CActorSound>
     <CActorAction id="AP_ScienceVesselSCBWEMPShockwave@Action" parent="GenericAttack" effectImpact="AP_ScienceVesselSCBWEMPShockwave@Search" effectLaunch="AP_ScienceVesselSCBWEMPShockwave@LM">
-<!--        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>-->
+        <!--        <On Terms="Effect.EMPDamage.Start; At Caster" Send="ActionDamage"/>-->
         <LaunchAssets Sound="AP_ScienceVesselSCBWEMPShockwave@Launch"/>
         <Missile value="AP_ScienceVesselSCBWEMPShockwave@Missile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow GhostEMPOffset"/>
@@ -17571,13 +17790,7 @@
         <HostSiteOps Ops="SOpShadow"/>
     </CActorModel>
     <CActorMissile id="AP_ScienceVesselSCBWEMPShockwave@Missile" parent="GenericAttackMissile" unitName="AP_ScienceVesselSCBWEMPShockwave@Missile"/>
-    <CActorRange id="AP_ScienceVesselSCBWEMPShockwave@Range" parent="RangeAbil" abil="AP_ScienceVesselSCBWEMPShockwave">
-<!--        <On index="1" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.TargetOn" Send="Create"/>-->
-<!--        <On index="2" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.TargetOff" Send="Destroy"/>-->
-<!--        <On index="3" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.ButtonHoverOn" Send="Create"/>-->
-<!--        <On index="4" Terms="Abil.AP_ScienceVesselSCBWEMPShockwave.ButtonHoverOff" Send="Destroy"/>-->
-        <Abil Link="AP_ScienceVesselSCBWEMPShockwave"/>
-    </CActorRange>
+    <CActorRange id="AP_ScienceVesselSCBWEMPShockwave@Range" parent="RangeAbil" abil="AP_ScienceVesselSCBWEMPShockwave"/>
     <CActorSplat id="AP_ScienceVesselSCBWEMPShockwave@CursorSplat" parent="TerranCursorSplat" abil="AP_ScienceVesselSCBWEMPShockwave"/>
     <CActorSound id="AP_ScienceVesselSCBWDefensiveMatrix@Birth" parent="SoundOneShot">
         <On Terms="Behavior.AP_ScienceVesselSCBWDefensiveMatrix.On" Send="Create"/>
@@ -18887,10 +19100,10 @@
     </CActorSound>
     <CActorUnit id="AP_DevilDog" parent="GenericUnitStandard" unitName="AP_DevilDog">
         <On Terms="UnitBirth.AP_DevilDogOptimizedLogistics" Send="Create"/>
-        <Aliases value="_UnitMedium"/>
-        <Macros value="UnloadDropAnim"/>
         <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_DevilDogDropModel"/>
         <On Terms="Abil.attack.ReadyStop" Target="AP_DevilDogAttackModel" Send="SetOpacity 0.000000 0.250000"/>
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
         <DeathArray index="Normal" ModelLink="AP_DevilDogDeath" SoundLink="Firebat_Explode"/>
         <PortraitModel value="AP_FirebatMercenaryPortrait"/>
         <WalkAnimMoveSpeed value="1.875"/>
@@ -21209,7 +21422,7 @@
         <Macros value="TerrainSquibAnimations"/>
         <On Terms="Behavior.AP_Charging.On" Send="ModelSuddenMotionStart"/>
         <On Terms="Behavior.AP_Charging.Off" Send="ModelSuddenMotionStop"/>
-<!--        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>-->
+        <!--        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>-->
         <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
         <On Terms="Behavior.AP_VoidZealotWhirlwind.On" Send="HostSiteOpsSet ::Host AP_ZealotWhirlwindRotator"/>
         <On Terms="Effect.AP_VoidZealotWhirlwindSearch.Start" Send="AnimPlay Attack Attack,03"/>

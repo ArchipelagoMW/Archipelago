@@ -11030,7 +11030,6 @@
         -->
         <!--BehaviorClass value="CBehaviorBuff"/-->
         <BehaviorAlignment value="Negative"/>
-        <MatchesAll value="1"/>
     </CEffectRemoveBehavior>
     <CEffectLaunchMissile id="AP_MedicSCBWOpticFlare@LM">
         <EditorCategories value=""/>
@@ -11067,7 +11066,6 @@
     <CEffectLaunchMissile id="AP_SporeCrawler">
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_SporeCrawlerU"/>
-        <AmmoUnit value="AP_SporeCrawlerWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_SporeCrawlerU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Zerg"/>
@@ -11111,7 +11109,7 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@Damage"/>
         <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit"/>
-<!--        <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@ABDecloak"/>-->
+        <!--        <EffectArray value="AP_ScienceVesselSCBWEMPShockwave@ABDecloak"/>-->
         <EffectArray value="AP_HighTemplarSCBWHallucination@KillHallucination"/>
     </CEffectSet>
     <CEffectDamage id="AP_HighTemplarSCBWHallucination@KillHallucination">
@@ -11179,4 +11177,9 @@
         <ValidatorArray index="0" value="ChargeMinTriggerDistance"/>
         <ValidatorArray value="ChargeMaxDistance"/>
     </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_UpgradeToWarpGateInstant">
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_UpgradeToWarpGateInstant"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
 </Catalog>
