@@ -1495,7 +1495,7 @@ Button/Tooltip/AP_SOARadarNexus=The Nexus automatically attacks nearby enemy gro
 Button/Tooltip/AP_SOAWarpTech=Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_Scan=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_ScienceVesselSCBWDefensiveMatrix=Surrounds the target unit with a shield that can absorb up to <c val="ffff8a"><d ref="Behavior,AP_ScienceVesselSCBWDefensiveMatrix@Dummy,Modification.VitalMaxArray[Shields]"/></c> maximum damage.
+Button/Tooltip/AP_ScienceVesselSCBWDefensiveMatrix=Surrounds the target unit with a shield that can absorb up to <c val="ffff8a"><d ref="Behavior,AP_ScienceVesselSCBWDefensiveMatrix@Dummy,Modification.VitalMaxArray[Shields]"/></c> maximum damage for up to <c val="ffff8a"><d ref="Behavior,AP_ScienceVesselSCBWDefensiveMatrix,Duration"/></c> seconds.
 Button/Tooltip/AP_ScienceVesselSCBWEMPShockwave=Creates an electromagnetic pulse that reduces energy and shields to <c val="ffff8a">0</c> of all units in the targeted area.
 Button/Tooltip/AP_SensorTower=Reveals the locations of enemy units at long range. The Sensor Tower's detection area is visible to the enemy.
 Button/Tooltip/AP_SentryAiur=Aiur Faction<n/>Robotic support unit. Can use Double Shield Recharge and Guardian Shield.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
