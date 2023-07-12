@@ -222,17 +222,10 @@ class MuseDashWorld(World):
             item_count = needed_item_count
 
     def create_regions(self) -> None:
-        # Basic Region Setup: Menu -> Song Select -> Songs
         menu_region = Region("Menu", self.player, self.multiworld)
         song_select_region = Region("Song Select", self.player, self.multiworld)
-
-        song_select_entrance = Entrance(self.player, "Song Select Entrance", menu_region)
-
-        menu_region.exits.append(song_select_entrance)
-        song_select_entrance.connect(song_select_region)
-
-        self.multiworld.regions.append(menu_region)
-        self.multiworld.regions.append(song_select_region)
+        self.multiworld.regions += [menu_region, song_select_region]
+        menu_region.connect(song_select_region)
 
         # Make a collection of all songs available for this rando.
         # 1. All starting songs
@@ -252,33 +245,17 @@ class MuseDashWorld(World):
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
             region = Region(name, self.player, self.multiworld)
-
-            # 2 Locations are defined per song
-            location_name = name + "-0"
-            region.locations.append(MuseDashLocation(self.player, location_name,
-                                    self.md_collection.song_locations[location_name], region))
-
-            if i < two_item_location_count:
-                location_name = name + "-1"
-                region.locations.append(MuseDashLocation(self.player, location_name,
-                                        self.md_collection.song_locations[location_name], region))
-
-            region_exit = Entrance(self.player, name, song_select_region)
-            song_select_region.exits.append(region_exit)
-            region_exit.connect(region)
             self.multiworld.regions.append(region)
+            song_select_region.connect(region, name, lambda state, place=name: state.has(place, self.player))
+
+            # Up to 2 Locations are defined per song
+            region.add_locations({name + "-0": self.md_collection.song_locations[name + "-0"]}, MuseDashLocation)
+            if i < two_item_location_count:
+                region.add_locations({name + "-1": self.md_collection.song_locations[name + "-1"]}, MuseDashLocation)
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count())
-
-        for location in self.multiworld.get_locations(self.player):
-            item_name = location.name[0:(len(location.name) - 2)]
-            if item_name == self.victory_song_name:
-                set_rule(location, lambda state:
-                         state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
-            else:
-                set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
     def get_available_traps(self) -> List[str]:
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
