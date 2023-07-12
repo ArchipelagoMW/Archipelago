@@ -637,7 +637,7 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSZerglingFrenzy"/>
     </CValidatorPlayerRequirement>
-    <CValidatorLocationCompareRange id="HotSRaptorChargeMaxDistance2">
+    <CValidatorLocationCompareRange id="AP_HotSRaptorChargeMaxDistance">
         <ResultFailed value="TargetIsOutOfRange"/>
         <WhichLocation Value="TargetUnit"/>
         <Compare value="LT"/>

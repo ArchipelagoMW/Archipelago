@@ -744,6 +744,8 @@
             <LayoutButtons Face="AP_NovaMultiTaskMAFServosHellion" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
             <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackHellbat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
