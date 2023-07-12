@@ -2036,7 +2036,6 @@
     <CModel id="AP_ZealotAiurPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\Aiur_ZealotEx2_Portrait\Aiur_ZealotEx2_Portrait.m3"/>
         <Image value="Assets\Textures\aiurzealotportrait_static.dds"/>
-        <Lighting value="AP_ZealotAiurPortrait"/>
     </CModel>
     <CModel id="AP_ZealotAiurWarpIn" parent="OneShotSpellFX">
         <Model value="Assets\Units\Protoss\Zealot_Aiur_WarpIn\Zealot_Aiur_WarpIn.m3"/>
@@ -2103,7 +2102,6 @@
     <CModel id="AP_ZealotShakurasPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\Shakuras_ZealotEx2_Portrait\Shakuras_ZealotEx2_Portrait.m3"/>
         <Image value="Assets\Textures\shakuraszealotportrait_static.dds"/>
-        <Lighting value="AP_ZealotShakurasPortrait"/>
     </CModel>
     <CModel id="AP_ZealotShakurasWarpIn" parent="OneShotSpellFX">
         <Model value="Assets\Units\Protoss\Zealot_Nerazim_WarpIn\Zealot_Nerazim_WarpIn.m3"/>
@@ -11835,5 +11833,24 @@
         <ScaleMin value="0.900000,0.900000,0.900000"/>
         <SelectionRadius value="0.555400"/>
         <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_AutomatedAssimilator" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\Assimilator\Assimilator.m3"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.250000"/>
+        <ShadowRadius value="2.250000"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_AutomatedAssimilatorDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Protoss\AssimilatorDeath\AssimilatorDeath.m3"/>
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SOAVespeneBeamVespene" parent="FX">
+        <Model value="Assets\Buildings\Resources\GasCube\GasCube.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

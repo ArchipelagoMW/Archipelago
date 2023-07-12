@@ -2971,4 +2971,9 @@
         <HotkeyAlias value="Zealot"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_SOAAutoAssimilator">
+        <Icon value="Assets\Textures\btn-ability-spearofadun-orbitalassimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-spearofadun-orbitalassimilator.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

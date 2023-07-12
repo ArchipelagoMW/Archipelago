@@ -1629,4 +1629,20 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSuperiorWarpGatesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveCinematicMode">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCinematicModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAAutoAssimilator">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAAutoAssimilatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveSOAAutoAssimilator">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeSOAAutoAssimilatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveNexus">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_NotCountUnitNexusCompleteOnly"/>
+    </CRequirement>
 </Catalog>

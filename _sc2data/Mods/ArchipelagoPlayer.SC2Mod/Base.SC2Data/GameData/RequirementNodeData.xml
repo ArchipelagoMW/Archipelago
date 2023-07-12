@@ -2621,4 +2621,20 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_SuperiorWarpGates" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAAutoAssimilatorCompleteOnly">
+        <Count Link="AP_SOAAutoAssimilator" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSOAAutoAssimilatorCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeSOAAutoAssimilatorCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitNexusCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUnitNexusCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitNexusCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Nexus" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

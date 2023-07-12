@@ -4831,4 +4831,7 @@
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_WarpGate"/>
     </CUpgrade>
+    <CUpgrade id="AP_SOAAutoAssimilator">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>

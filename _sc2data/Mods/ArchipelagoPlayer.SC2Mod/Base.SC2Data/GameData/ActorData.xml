@@ -5564,7 +5564,304 @@
         <ShieldFlashType value="None"/>
     </CActorAction>
     <CActorMissile id="AscendantSacrificeDummy3AttackMissile2" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon3"/>
-    <CActorAction id="AvengerAttack2" parent="GenericAttack" effectAttack="AP_AvengerWeapon">
+    <CActorUnit id="AP_Assimilator" parent="ProtossBuildingEx" unitName="AP_Assimilator">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById AssimilatorDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById AssimilatorDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById AssimilatorDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById AssimilatorDarkSpecular"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasProtoss.Restore" Send="AnimGroupApply D"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_Assimilator" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById AssimilatorDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById AssimilatorDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById AssimilatorDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById AssimilatorDarkSpecular"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_Assimilator" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorPurifierGeyser" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorProtossGeyser" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorShakurasGeyser" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Assimilator; MorphFrom AP_AutomatedAssimilator" Send="Create"/>
+        <On Terms="AbilMorph.AP_AssimilatorPipesMorph.Finish; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap AssimilatorTaldarim"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitBirth.AP_AssimilatorPurifierGeyser" Send="Create"/>
+        <On Terms="UnitBirth.AP_AssimilatorProtossGeyser" Send="Create"/>
+        <On Terms="UnitBirth.AP_AssimilatorShakurasGeyser" Send="Create"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap AssimilatorTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap AssimilatorTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <Model value="Assimilator"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="AssimilatorBirth"/>
+        <DeathArray index="Normal" ModelLink="AssimilatorDeath" SoundLink="Assimilator_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="AssimilatorDeathUnderConstruction" SoundLink="Assimilator_Explode"/>
+        <DeathCustoms ModelLink="AssimilatorEmptyDeath" Name="Empty"/>
+        <DeathCustoms ModelLink="AssimilatorTaldarimDeath" SoundLink="Assimilator_Explode" Name="DarkProtoss"/>
+        <DeathActorModel value="AssimilatorDeath"/>
+        <PlacementModel value="AssimilatorPlacement"/>
+        <PortraitModel value="AssimilatorPortrait"/>
+        <BarOffset value="110"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-Assimilator.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Assimilator_Ready"/>
+        <SoundArray index="What" value="Assimilator_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-Assimilator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_AssimilatorRich" parent="ProtossBuildingEx" unitName="AP_AssimilatorRich">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasProtoss.Restore" Send="AnimGroupApply D"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilatorRich; MorphFrom AP_AssimilatorRich" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AssimilatorRich; MorphFrom AP_AutomatedAssimilatorRich" Send="Create"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_AssimilatorRich" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <Model value="AssimilatorRich"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="AssimilatorRichBirth"/>
+        <DeathArray index="Normal" ModelLink="AssimilatorDeath" SoundLink="Assimilator_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="AssimilatorRichDeathUnderConstruction" SoundLink="Assimilator_Explode"/>
+        <DeathCustoms ModelLink="AssimilatorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="AssimilatorPlacement"/>
+        <PortraitModel value="AssimilatorPortrait"/>
+        <BarOffset value="110"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-Assimilator.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Assimilator_Ready"/>
+        <SoundArray index="What" value="Assimilator_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-Assimilator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_AssimilatorRichSplat" parent="GenericUnitSplat" unitName="AP_AssimilatorRich">
+        <Model value="AssimilatorSplat"/>
+    </CActorSplat>
+    <CActorSplat id="AP_AssimilatorSplat" parent="GenericUnitSplat" unitName="AP_Assimilator">
+        <Model value="AssimilatorSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_AutomatedAssimilator" parent="ProtossBuilding" unitName="AP_AutomatedAssimilator">
+        <Macros value="ExtractAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_Assimilator" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorProtossGeyser" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorPurifierGeyser" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilator; MorphFrom AP_AssimilatorShakurasGeyser" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Assimilator; MorphFrom AP_AutomatedAssimilator" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply D"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 1"/>
+        <On Terms="ActorCreation" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="AnimGroupRemove D"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneProtoss.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneProtoss.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start" Send="Create AP_AutomatedAssimilatorTextKicker4"/>
+        <On Terms="Effect.AP_AutoHarvestVespene4.Start" Send="Create AP_SOAVespeneBeamVespene"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_AutomatedAssimilator" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
+        <BuildModel value="AssimilatorBirth"/>
+        <DeathArray index="Normal" ModelLink="AP_AutomatedAssimilatorDeath" SoundLink="Assimilator_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Assimilator_Explode"/>
+        <DeathCustoms ModelLink="AssimilatorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="AssimilatorPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacement"/>
+        <PortraitModel value="ExecutorPortrait"/>
+        <BarOffset value="110"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Assimilator_Ready"/>
+        <SoundArray index="What" value="Assimilator_What"/>
+        <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_AutomatedAssimilatorRich" parent="ProtossBuilding" unitName="AP_AutomatedAssimilatorRich">
+        <Model value="AP_AutomatedAssimilator"/>
+        <Macros value="ExtractAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedAssimilatorRich; MorphFrom AP_AssimilatorRich" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AssimilatorRich; MorphFrom AP_AutomatedAssimilatorRich" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply D"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 1"/>
+        <On Terms="ActorCreation" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="AnimGroupRemove D"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped; ValidatePlayer AP_HaveCinematicModeDisabled" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneProtoss.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneProtoss.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start" Send="Create AP_AutomatedAssimilatorTextKicker8"/>
+        <On Terms="Effect.AP_AutoHarvestVespene8.Start" Send="Create AP_SOAVespeneBeamVespene"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_AutomatedAssimilator" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
+        <BuildModel value="AssimilatorBirth"/>
+        <DeathArray index="Normal" ModelLink="AP_AutomatedAssimilatorDeath" SoundLink="Assimilator_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Assimilator_Explode"/>
+        <DeathCustoms ModelLink="AssimilatorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="AssimilatorPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacement"/>
+        <PortraitModel value="ExecutorPortrait"/>
+        <BarOffset value="110"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Assimilator_Ready"/>
+        <SoundArray index="What" value="Assimilator_What"/>
+        <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Assimilator-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorText id="AP_AutomatedAssimilatorTextKicker4">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedAssimilatorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/AP_AutomatedAssimilatorTextKicker4"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedAssimilatorTextKicker8">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedAssimilatorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/AP_AutomatedAssimilatorTextKicker8"/>
+    </CActorText>
+    <CActorSiteMover id="AP_AutomatedAssimilatorTextMover">
+        <Terms value="Cap 1"/>
+        <Acceleration value="5.000000"/>
+        <Deceleration value="1.000000"/>
+        <Speed value="0.800000"/>
+        <SpeedMax value="0.800000"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="RefSetFromMsg ::Host ::Sender"/>
+        <On Terms="ActorCreation" Send="MoverSetDestinationH 3.000000"/>
+        <On Terms="ActorCreation" Send="MoverMove"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorSiteMover>
+    <CActorModel id="AP_SOAVespeneBeamVespene" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_HarvestingBeamVespene.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_SOAResourceBeamMover"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="HostSiteOpsSet ::Host AP_SOAResourceBeamVespeneRotator"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorModel>
+    <CActorSiteMover id="AP_SOAResourceBeamMover">
+        <Acceleration value="15.000000"/>
+        <Deceleration value="15.000000"/>
+        <Speed value="3.500000"/>
+        <SpeedMax value="3.500000"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="RefSetFromMsg ::Host ::Sender"/>
+        <On Terms="ActorCreation" Send="MoverSetDestinationH 15.000000"/>
+        <On Terms="ActorCreation" Send="MoverMove"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorSiteMover>
+    <CActorSiteOpRotator id="AP_SOAResourceBeamVespeneRotator">
+        <Rate value="300.000000"/>
+        <LocalAxis value="0.000000,0.000000,1.000000"/>
+    </CActorSiteOpRotator>
+    <CActorAction id="AP_AvengerAttack" parent="GenericAttack" effectAttack="AP_AvengerWeapon">
         <ImpactMap index="None" Model="None" Sound="DarkTemplar_AttackImpact"/>
         <ShieldFlashType value="Header"/>
     </CActorAction>
@@ -15640,6 +15937,19 @@
             <Image value="Assets\Textures\Wireframe-Zerg-RoachWarren.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="SOAAutomatedAssimilatorBeam2" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.AutomatedAssimilatorBeam.On" Send="Create"/>
+        <On Terms="Behavior.AutomatedAssimilatorBeam.Off" Send="AnimBracketStop BSD"/>
+        <Model value="SOAAutomatedAssimilatorBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="SOAAutomatedAssimilatorBeam_ActorSoundLoop2" parent="SoundContinuous">
+        <FogVisibility value="Hidden"/>
+        <On Terms="Behavior.AutomatedAssimilatorBeam.On" Send="Create"/>
+        <On Terms="Behavior.AutomatedAssimilatorBeam.Off" Send="Destroy"/>
+        <Sound value="HarvestBeam_Loop"/>
+    </CActorSound>
     <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
         <Sound value="Mothership_RecallStart"/>
     </CActorSound>

@@ -3690,4 +3690,23 @@
         <CombineArray value="AP_IsVanillaGateway"/>
         <CombineArray value="AP_IsAPGateway"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveCinematicModeDisabled">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveCinematicMode"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAAutoAssimilator">
+        <Value value="AP_HaveSOAAutoAssimilator"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_AutomatedAssimilatorBeam">
+        <Type value="And"/>
+        <CombineArray value="IsNotConstructing"/>
+        <CombineArray value="AP_HaveSOAAutoAssimilator"/>
+        <CombineArray value="HasVespene"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_AutoHarvesterHarvestProtoss">
+        <Value value="AP_DontHaveNexus"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

@@ -11182,4 +11182,35 @@
         <Abil value="AP_UpgradeToWarpGateInstant"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_AssimilatorMorph">
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_AssimilatorToAutomatedAssimilator"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_AssimilatorMorphRich">
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_AssimilatorToAutomatedAssimilatorRich"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectModifyUnit id="AP_AutoHarvestVespene4">
+        <EditorCategories value=""/>
+        <Resources value="-4"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_AutoHarvestVespene8">
+        <EditorCategories value=""/>
+        <Resources value="-8"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_AutomatedAssimilatorMorph">
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_AutomatedAssimilatorToAssimilator"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectModifyUnit id="AP_HarvestingBeamVespene">
+        <EditorCategories value=""/>
+        <Resources value="-20"/>
+        <ResourcesHarvestedFraction value="1"/>
+        <LaunchUnit Value="Caster"/>
+    </CEffectModifyUnit>
 </Catalog>

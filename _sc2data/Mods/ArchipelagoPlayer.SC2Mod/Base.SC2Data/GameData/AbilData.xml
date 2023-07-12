@@ -2090,6 +2090,21 @@
         <Flags index="Transient" value="1"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Cancel"/>
     </CAbilEffectInstant>
+    <CAbilMorph id="AP_AssimilatorPipesMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_Assimilator" CollideRange="0"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_AssimilatorToAutomatedAssimilator">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_AutomatedAssimilator" CollideRange="0"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_AssimilatorToAutomatedAssimilatorRich">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_AutomatedAssimilatorRich" CollideRange="0"/>
+    </CAbilMorph>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -4833,10 +4848,10 @@
             <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
             <Unit value="AP_StalkerShakuras"/>
         </InfoArray>
-<!--        <InfoArray index="Train3" Time="37">-->
-<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
-<!--            <Unit value="Replicant"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train3" Time="37">-->
+        <!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+        <!--            <Unit value="Replicant"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train4" Time="55">
             <Button DefaultButtonFace="AP_HighTemplarAiur" State="Restricted" Requirements="AP_HaveTemplarArchives"/>
             <Unit value="AP_HighArchonTemplar"/>
@@ -4853,10 +4868,10 @@
             <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
             <Unit value="AP_Adept"/>
         </InfoArray>
-<!--        <InfoArray index="Train8" Time="55">-->
-<!--            <Button DefaultButtonFace="HighArchon" State="Restricted" Requirements="HaveVoidHighTemplarArchonAdvanced"/>-->
-<!--            <Unit value="ArchonAdvanced"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train8" Time="55">-->
+        <!--            <Button DefaultButtonFace="HighArchon" State="Restricted" Requirements="HaveVoidHighTemplarArchonAdvanced"/>-->
+        <!--            <Unit value="ArchonAdvanced"/>-->
+        <!--        </InfoArray>-->
     </CAbilTrain>
     <CAbilMorph id="AP_MorphBackToGateway">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
@@ -6240,17 +6255,17 @@
             <Cooldown Link="AP_WarpGateTrain"/>
             <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
         </InfoArray>
-<!--        <InfoArray index="Train3" Time="5" Unit="Replicant">-->
-<!--            <Charge>-->
-<!--                <CountMax value="1"/>-->
-<!--                <CountStart value="1"/>-->
-<!--                <CountUse value="1"/>-->
-<!--                <Link value="AP_WarpGateTrain"/>-->
-<!--                <TimeUse value="32"/>-->
-<!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
-<!--            </Charge>-->
-<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train3" Time="5" Unit="Replicant">-->
+        <!--            <Charge>-->
+        <!--                <CountMax value="1"/>-->
+        <!--                <CountStart value="1"/>-->
+        <!--                <CountUse value="1"/>-->
+        <!--                <Link value="AP_WarpGateTrain"/>-->
+        <!--                <TimeUse value="32"/>-->
+        <!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
+        <!--            </Charge>-->
+        <!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train4" Time="5" Unit="AP_HighArchonTemplar">
             <Charge>
                 <CountMax value="1"/>

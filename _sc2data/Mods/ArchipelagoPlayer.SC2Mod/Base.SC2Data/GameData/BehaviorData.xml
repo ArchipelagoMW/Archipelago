@@ -1190,7 +1190,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_MindControl">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\ui_debuff_hivemindemulator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -1816,7 +1816,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_NovaDomination">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\BTN-Ability-Nova-Domination.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -3434,7 +3434,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DarkArchonMindControl">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -4100,8 +4100,8 @@
             <ModifyFlags index="Detected" value="1"/>
             <ModifyFlags index="SuppressMoving" value="1"/>
             <ModifyFlags index="SuppressTurning" value="1"/>
-            <StateFlags index="SuppressDetection" value="1"/>
             <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
         </Modification>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
@@ -4316,4 +4316,84 @@
         <InfoFlags index="Hidden" value="1"/>
         <RemoveValidatorArray value="AP_GameTimeGreaterthan5Seconds"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveSOAAutoAssimilator"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorMorphRich">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveSOAAutoAssimilator"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorMorphRich"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorPipesMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorPipesMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarryHarvestableVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Capacity value="2500"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableVespeneGeyserGasProtoss"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneProtoss">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="2.1"/>
+        <!--Period value="1.68"/-->
+        <PeriodicEffect value="AP_AutoHarvestVespene4"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestProtoss"/>
+        <DisableValidatorArray value="AP_HaveCinematicModeDisabled"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneProtossRich">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="2.1"/>
+        <!--Period value="1.68"/-->
+        <PeriodicEffect value="AP_AutoHarvestVespene8"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestProtoss"/>
+        <DisableValidatorArray value="AP_HaveCinematicModeDisabled"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutomatedAssimilatorBeam">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_AutomatedAssimilatorBeam"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableRichVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGasProtoss"/>
+    </CBehaviorResource>
 </Catalog>
