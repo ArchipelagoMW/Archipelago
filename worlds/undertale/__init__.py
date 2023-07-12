@@ -13,12 +13,13 @@ from multiprocessing import Process
 
 def run_client():
     print('running undertale client')
-    from UndertaleClient import main  # lazy import
+    from .UndertaleClient import main  # lazy import
     p = Process(target=main)
     p.start()
 
 
 components.append(Component("Undertale Client", "UndertaleClient"))
+# components.append(Component("Undertale Client", func=run_client))
 
 
 def data_path(file_name: str):
