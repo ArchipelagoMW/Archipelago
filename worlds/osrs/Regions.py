@@ -79,6 +79,7 @@ all_regions = [
                    LocationNames.Total_XP_100000,
                    LocationNames.Total_Level_50,
                    LocationNames.Total_Level_100,
+                   LocationNames.Total_Level_150,
                    LocationNames.Total_Level_200,
                    LocationNames.Combat_Level_5,
                    LocationNames.Combat_Level_15,

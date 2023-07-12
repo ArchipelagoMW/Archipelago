@@ -302,17 +302,6 @@ class OSRSWorld(World):
         )
 
         # Other locations
-        """
-        self.multiworld.get_location(LocationNames.Simple_Lockbox, self.player).access_rule = lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        )
-        self.multiworld.get_location(LocationNames.Elaborate_Lockbox, self.player).access_rule = lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        )
-        self.multiworld.get_location(LocationNames.Ornate_Lockbox, self.player).access_rule = lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        )
-        """
         self.multiworld.get_location(LocationNames.Guppy, self.player).access_rule = lambda state: (
             state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
         )
@@ -322,14 +311,6 @@ class OSRSWorld(World):
         self.multiworld.get_location(LocationNames.Tetra, self.player).access_rule = lambda state: (
             state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
         )
-        """
-        self.multiworld.get_location(LocationNames.Mind_Core, self.player).access_rule = lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player) and state.has(ItemNames.QP_Rune_Mysteries, self.player)
-        )
-        self.multiworld.get_location(LocationNames.Body_Core, self.player).access_rule = lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player) and state.has(ItemNames.QP_Rune_Mysteries, self.player)
-        )
-        """
         self.multiworld.get_location(LocationNames.Barronite_Deposit, self.player).access_rule = lambda state: (
             state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
         )
@@ -397,6 +378,29 @@ class OSRSWorld(World):
 
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player).access_rule = lambda state: (
                 self.quest_points(state) >= 32 and state.can_reach(RegionNames.Crandor, None, self.player)
+        )
+
+        # Put some of the later grinds behind some QP so it's not all front-loaded
+        self.multiworld.get_location(LocationNames.Total_Level_150, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 3
+        )
+        self.multiworld.get_location(LocationNames.Total_Level_200, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 5
+        )
+        self.multiworld.get_location(LocationNames.Combat_Level_15, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 3
+        )
+        self.multiworld.get_location(LocationNames.Combat_Level_25, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 8
+        )
+        self.multiworld.get_location(LocationNames.Total_XP_25000, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 3
+        )
+        self.multiworld.get_location(LocationNames.Total_XP_50000, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 5
+        )
+        self.multiworld.get_location(LocationNames.Total_XP_100000, self.player).access_rule = lambda state: (
+                self.quest_points(state) >= 12
         )
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
