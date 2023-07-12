@@ -119,13 +119,13 @@ class MuseDashWorld(World):
         starting_song_count = self.multiworld.starting_song_count[self.player].value
         additional_song_count = self.multiworld.additional_song_count[self.player].value
 
-        self.multiworld.random.shuffle(available_song_keys)
+        self.random.shuffle(available_song_keys)
 
         # First, we must double check if the player has included too many guaranteed songs
         included_song_count = len(self.included_songs)
         if included_song_count > additional_song_count:
             # If so, we want to thin the list, thus let's get the goal song and starter songs while we are at it.
-            self.multiworld.random.shuffle(self.included_songs)
+            self.random.shuffle(self.included_songs)
             self.victory_song_name = self.included_songs.pop()
             while len(self.included_songs) > additional_song_count:
                 next_song = self.included_songs.pop()
@@ -133,7 +133,7 @@ class MuseDashWorld(World):
                     self.starting_songs.append(next_song)
         else:
             # If not, choose a random victory song from the available songs
-            chosen_song = self.multiworld.random.randrange(0, len(available_song_keys) + included_song_count)
+            chosen_song = self.random.randrange(0, len(available_song_keys) + included_song_count)
             if chosen_song < included_song_count:
                 self.victory_song_name = self.included_songs[chosen_song]
                 del self.included_songs[chosen_song]
@@ -198,7 +198,7 @@ class MuseDashWorld(World):
         trap_list = self.get_available_traps()
         if len(trap_list) > 0 and trap_count > 0:
             for _ in range(0, trap_count):
-                index = self.multiworld.random.randrange(0, len(trap_list))
+                index = self.random.randrange(0, len(trap_list))
                 self.multiworld.itempool.append(self.create_item(trap_list[index]))
 
             item_count += trap_count
@@ -215,7 +215,7 @@ class MuseDashWorld(World):
                 continue
 
             # Otherwise add a random assortment of songs
-            self.multiworld.random.shuffle(song_keys_in_pool)
+            self.random.shuffle(song_keys_in_pool)
             for i in range(0, needed_item_count - item_count):
                 self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
 
@@ -243,7 +243,7 @@ class MuseDashWorld(World):
         all_selected_locations = self.starting_songs.copy()
         included_song_copy = self.included_songs.copy()
 
-        self.multiworld.random.shuffle(included_song_copy)
+        self.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
 
         two_item_location_count = self.location_count - len(all_selected_locations)
