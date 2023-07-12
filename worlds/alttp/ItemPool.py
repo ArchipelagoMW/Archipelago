@@ -1,7 +1,7 @@
 from collections import namedtuple
 import logging
 
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, MultiWorld
 from Fill import FillError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
@@ -347,7 +347,7 @@ def generate_itempool(world):
                 if item in ['Hammer', 'Bombs (10)', 'Fire Rod', 'Cane of Somaria', 'Cane of Byrna']:
                     if item not in possible_weapons:
                         possible_weapons.append(item)
-            starting_weapon = multiworld.random.choice(possible_weapons)
+            starting_weapon = world.random.choice(possible_weapons)
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
         if placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Cane of Somaria', 'Cane of Byrna'] and multiworld.enemy_health[player] not in ['default', 'easy']:
@@ -406,7 +406,7 @@ def generate_itempool(world):
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
-    multiworld.random.shuffle(dungeon_item_replacements)
+    world.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
@@ -440,7 +440,7 @@ def generate_itempool(world):
             progressionitems.append(item)
         else:
             nonprogressionitems.append(GetBeemizerItem(multiworld, item.player, item))
-    multiworld.random.shuffle(nonprogressionitems)
+    world.random.shuffle(nonprogressionitems)
 
     if additional_triforce_pieces:
         if additional_triforce_pieces > len(nonprogressionitems):
@@ -449,15 +449,15 @@ def generate_itempool(world):
         progressionitems += [ItemFactory("Triforce Piece", player) for _ in range(additional_triforce_pieces)]
         nonprogressionitems.sort(key=lambda item: int("Heart" in item.name))  # try to keep hearts in the pool
         nonprogressionitems = nonprogressionitems[additional_triforce_pieces:]
-        multiworld.random.shuffle(nonprogressionitems)
+        world.random.shuffle(nonprogressionitems)
 
     # shuffle medallions
     if multiworld.required_medallions[player][0] == "random":
-        mm_medallion = multiworld.random.choice(['Ether', 'Quake', 'Bombos'])
+        mm_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         mm_medallion = multiworld.required_medallions[player][0]
     if multiworld.required_medallions[player][1] == "random":
-        tr_medallion = multiworld.random.choice(['Ether', 'Quake', 'Bombos'])
+        tr_medallion = world.random.choice(['Ether', 'Quake', 'Bombos'])
     else:
         tr_medallion = multiworld.required_medallions[player][1]
     multiworld.required_medallions[player] = (mm_medallion, tr_medallion)
@@ -538,15 +538,16 @@ def set_up_take_anys(world, player):
     world.initialize_regions()
 
 
-def get_pool_core(world, player: int):
-    shuffle = world.shuffle[player]
-    difficulty = world.difficulty[player]
-    timer = world.timer[player]
-    goal = world.goal[player]
-    mode = world.mode[player]
-    swordless = world.swordless[player]
-    retro_bow = world.retro_bow[player]
-    logic = world.logic[player]
+def get_pool_core(multiworld: MultiWorld, player: int):
+    world = multiworld.worlds[player]
+    shuffle = multiworld.shuffle[player]
+    difficulty = multiworld.difficulty[player]
+    timer = multiworld.timer[player]
+    goal = multiworld.goal[player]
+    mode = multiworld.mode[player]
+    swordless = multiworld.swordless[player]
+    retro_bow = multiworld.retro_bow[player]
+    logic = multiworld.logic[player]
 
     pool = []
     placed_items = {}
@@ -563,11 +564,11 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic in {'owglitches', 'hybridglitches', 'nologic'} and world.glitch_boots[player] and goal != 'icerodhunt':
+    if logic in {'owglitches', 'hybridglitches', 'nologic'} and multiworld.glitch_boots[player] and goal != 'icerodhunt':
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
-    want_progressives = world.progressive[player].want_progressives
+    want_progressives = multiworld.progressive[player].want_progressives
 
     if want_progressives(world.random):
         pool.extend(diff.progressiveglove)
@@ -613,7 +614,7 @@ def get_pool_core(world, player: int):
 
     if want_progressives(world.random):
         pool.extend(diff.progressivebow)
-        world.worlds[player].has_progressive_bows = True
+        multiworld.worlds[player].has_progressive_bows = True
     elif (swordless or logic == 'noglitches') and goal != 'icerodhunt':
         swordless_bows = ['Bow', 'Silver Bow']
         if difficulty == "easy":
@@ -640,11 +641,11 @@ def get_pool_core(world, player: int):
         clock_mode = 'countdown-ohko'
     additional_pieces_to_place = 0
     if 'triforcehunt' in goal:
-        pieces_in_core = min(extraitems, world.triforce_pieces_available[player])
-        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
+        pieces_in_core = min(extraitems, multiworld.triforce_pieces_available[player])
+        additional_pieces_to_place = multiworld.triforce_pieces_available[player] - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_count = world.triforce_pieces_required[player]
+        treasure_hunt_count = multiworld.triforce_pieces_required[player]
         treasure_hunt_icon = 'Triforce Piece'
 
     for extra in diff.extras:
@@ -664,7 +665,7 @@ def get_pool_core(world, player: int):
     if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+    if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':
             if world.key_drop_shuffle[player] and world.goal[player] != 'icerodhunt':

@@ -222,7 +222,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
-            multiworld.random.shuffle(locations)
+            subworld.random.shuffle(locations)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 

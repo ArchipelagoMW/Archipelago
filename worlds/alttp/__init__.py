@@ -283,7 +283,7 @@ class ALTTPWorld(World):
             self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
 
         # system for sharing ER layouts
-        self.er_seed = str(world.random.randint(0, 2 ** 64))
+        self.er_seed = str(self.random.randint(0, 2 ** 64))
 
         if "-" in world.shuffle[player]:
             shuffle, seed = world.shuffle[player].split("-", 1)
@@ -291,7 +291,7 @@ class ALTTPWorld(World):
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
-                self.er_seed = get_same_seed(world, (
+                self.er_seed = get_same_seed(world.worlds[player], (
                     shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
@@ -341,8 +341,8 @@ class ALTTPWorld(World):
             world.fix_fake_world[player] = False
 
         # seeded entrance shuffle
-        old_random = world.random
-        world.random = random.Random(self.er_seed)
+        old_random = self.random
+        self.random = random.Random(self.er_seed)
 
         if world.mode[player] != 'inverted':
             link_entrances(world, player)
@@ -357,13 +357,12 @@ class ALTTPWorld(World):
                 world.register_indirect_condition(world.get_region(region_name, player),
                                                   world.get_entrance(entrance_name, player))
 
-        world.random = old_random
+        self.random = old_random
         plando_connect(world, player)
 
         for region_name, entrance_name in indirect_connections.items():
             world.register_indirect_condition(world.get_region(region_name, player),
                                               world.get_entrance(entrance_name, player))
-
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
@@ -469,7 +468,7 @@ class ALTTPWorld(World):
             try:
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
-                world.random.shuffle(prize_locs)
+                self.random.shuffle(prize_locs)
                 fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True)
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
@@ -492,8 +491,8 @@ class ALTTPWorld(World):
 
 
     @classmethod
-    def stage_post_fill(cls, world):
-        ShopSlotFill(world)
+    def stage_post_fill(cls, multiworld: MultiWorld):
+        ShopSlotFill(multiworld, multiworld.get_game_players(cls.game)[0])
 
     @property
     def use_enemizer(self) -> bool:
@@ -630,10 +629,10 @@ class ALTTPWorld(World):
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
                 pass
             elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
-                trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
+                trash_counts[player] = world.worlds[player].random.randint(world.crystals_needed_for_gt[player] * 2,
                                                             world.crystals_needed_for_gt[player] * 4)
             else:
-                trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
+                trash_counts[player] = world.worlds[player].random.randint(0, world.crystals_needed_for_gt[player] * 2)
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -643,7 +642,7 @@ class ALTTPWorld(World):
 
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
-                world.random.shuffle(gtower_locations)
+                world.worlds[player].random.shuffle(gtower_locations)
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
@@ -776,7 +775,7 @@ class ALTTPWorld(World):
         if self.multiworld.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
-            item = self.multiworld.random.choice(extras_list)
+            item = self.random.choice(extras_list)
         return GetBeemizerItem(self.multiworld, self.player, item)
 
     def get_pre_fill_items(self):
@@ -815,12 +814,12 @@ class ALTTPWorld(World):
         return slot_data
 
 
-def get_same_seed(world, seed_def: tuple) -> str:
-    seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})
+def get_same_seed(world: ALTTPWorld, seed_def: tuple) -> str:
+    seeds: typing.Dict[tuple, str] = getattr(world.multiworld, "__named_seeds", {})
     if seed_def in seeds:
         return seeds[seed_def]
     seeds[seed_def] = str(world.random.randint(0, 2 ** 64))
-    world.__named_seeds = seeds
+    world.multiworld.__named_seeds = seeds
     return seeds[seed_def]
 
 

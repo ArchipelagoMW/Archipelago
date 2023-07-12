@@ -188,7 +188,7 @@ boss_location_table: List[Tuple[str, str]] = [
 def place_plando_bosses(world: "ALTTPWorld", bosses: List[str]) -> Tuple[List[str], List[Tuple[str, str]]]:
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
-    world.multiworld.random.shuffle(boss_locations)
+    world.world.random.shuffle(boss_locations)
     boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
     already_placed_bosses: List[str] = []
 
@@ -275,7 +275,7 @@ def place_bosses(world: "ALTTPWorld") -> None:
     # Most to least restrictive order
     if not remaining_locations and not already_placed_bosses:
         remaining_locations = boss_location_table.copy()
-    multiworld.random.shuffle(remaining_locations)
+    world.random.shuffle(remaining_locations)
     remaining_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
 
     all_bosses = sorted(boss_table.keys())  # sorted to be deterministic on older pythons
@@ -285,7 +285,7 @@ def place_bosses(world: "ALTTPWorld") -> None:
         if boss_shuffle == Bosses.option_basic:  # vanilla bosses shuffled
             bosses = placeable_bosses + ['Armos Knights', 'Lanmolas', 'Moldorm']
         else:  # all bosses present, the three duplicates chosen at random
-            bosses = placeable_bosses + multiworld.random.sample(placeable_bosses, 3)
+            bosses = placeable_bosses + world.random.sample(placeable_bosses, 3)
 
         # there is probably a better way to do this
         while already_placed_bosses:
@@ -297,7 +297,7 @@ def place_bosses(world: "ALTTPWorld") -> None:
 
         logging.debug('Bosses chosen %s', bosses)
 
-        multiworld.random.shuffle(bosses)
+        world.random.shuffle(bosses)
         for loc, level in remaining_locations:
             for _ in range(len(bosses)):
                 boss = bosses.pop()
@@ -315,7 +315,7 @@ def place_bosses(world: "ALTTPWorld") -> None:
     elif boss_shuffle == Bosses.option_chaos:  # all bosses chosen at random
         for loc, level in remaining_locations:
             try:
-                boss = multiworld.random.choice(
+                boss = world.random.choice(
                     [b for b in placeable_bosses if can_place_boss(b, loc, level)])
             except IndexError:
                 raise FillError(f'Could not place boss for location {format_boss_location(loc, level)}')
@@ -323,11 +323,11 @@ def place_bosses(world: "ALTTPWorld") -> None:
                 place_boss(world, boss, loc, level)
 
     elif boss_shuffle == Bosses.option_singularity:
-        primary_boss = multiworld.random.choice(placeable_bosses)
+        primary_boss = world.random.choice(placeable_bosses)
         remaining_boss_locations, _ = place_where_possible(world, primary_boss, remaining_locations)
         if remaining_boss_locations:
             # pick a boss to go into the remaining locations
-            remaining_boss = multiworld.random.choice([boss for boss in placeable_bosses if all(
+            remaining_boss = world.random.choice([boss for boss in placeable_bosses if all(
                 can_place_boss(boss, loc, level) for loc, level in remaining_boss_locations)])
             remaining_boss_locations, _ = place_where_possible(world, remaining_boss, remaining_boss_locations)
             if remaining_boss_locations:
