@@ -3,6 +3,7 @@ import typing
 from BaseClasses import Location
 from .Names import LocationNames
 
+
 class OSRSLocation(Location):
     game: str = "Old School Runescape"
 

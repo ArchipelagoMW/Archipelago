@@ -47,6 +47,7 @@ class RegionNames:
     Oak_Tree = "Oak Tree"
     Willow_Tree = "Willow Tree"
 
+
 class ItemNames:
     Lumbridge = "Area: Lumbridge"
     Lumbridge_Swamp = "Area: Lumbridge Swamp"
@@ -112,6 +113,7 @@ class ItemNames:
     QP_Corsair_Curse = "2 QP (The Corsair Curse)"
     QP_X_Marks_the_Spot = "1 QP (X Marks The Spot)"
     QP_Below_Ice_Mountain = "1 QP (Below Ice Mountain)"
+
 
 class LocationNames:
     Q_Cooks_Assistant = "Quest: Cook's Assistant"

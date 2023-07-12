@@ -1,11 +1,9 @@
-import random
-
 from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
 from worlds.AutoWorld import WebWorld, World
 
 from .Regions import all_regions
 from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location_Items, \
-    chunksanity_starting_chunks
+    chunksanity_starting_chunks, QP_Items
 from .Locations import OSRSLocation, all_locations
 from .Options import OSRSOptions
 from .Names import LocationNames, ItemNames, RegionNames
@@ -47,7 +45,7 @@ class OSRSWorld(World):
             random_bank = rnd.randint(0, 7)
             self.starting_area_item = starting_area_dict[random_bank]
         else:
-            chunksanity_random = rnd.randint(0, len(chunksanity_starting_chunks)-1)
+            chunksanity_random = rnd.randint(0, len(chunksanity_starting_chunks) - 1)
             self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
 
         # Set Starting Chunk
@@ -80,8 +78,8 @@ class OSRSWorld(World):
                 region.exits.append(entrance)
             else:
                 # FIXME These dictionaries are backwards but there's a ton of them pls fix
-                invertExits = dict((v, k) for k, v in region_info.exits.items())
-                region.add_exits(invertExits, region_info.conditionGenerator(self.player))
+                invert_exits = dict((v, k) for k, v in region_info.exits.items())
+                region.add_exits(invert_exits, region_info.conditionGenerator(self.player))
 
     def create_items(self) -> None:
         for item in all_items:
@@ -192,7 +190,6 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.Draynor_Village, None, self.player)
         )
         self.multiworld.get_location(LocationNames.Q_Black_Knights_Fortress, self.player).access_rule = lambda state: (
-            # Non-Draynor Cabbage
                 (state.can_reach(RegionNames.Edgeville, None, self.player) or
                  state.can_reach(RegionNames.Falador_Farm, None, self.player)) and
                 state.has(ItemNames.Progressive_Armor, self.player) and
@@ -411,7 +408,7 @@ class OSRSWorld(World):
 
     def quest_points(self, state):
         qp = 0
-        for qp_event in Items.QP_Items:
+        for qp_event in QP_Items:
             if state.has(qp_event, self.player):
                 qp += int(qp_event[0])
         return qp
