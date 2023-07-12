@@ -16,8 +16,6 @@ class RegionInfo(typing.NamedTuple):
 all_regions = [
     RegionInfo("Menu",
                [
-                   LocationNames.Oak_Log,
-                   LocationNames.Willow_Log,
                    LocationNames.Catch_Lobster,
                    LocationNames.Cut_Sapphire,
                    LocationNames.Cut_Emerald,
@@ -59,6 +57,8 @@ all_regions = [
                    f"{RegionNames.Lumbridge}->{RegionNames.Al_Kharid}": RegionNames.Al_Kharid,
                    f"{RegionNames.Lumbridge}->{RegionNames.Spinning_Wheel}": RegionNames.Spinning_Wheel,
                    f"{RegionNames.Lumbridge}->{RegionNames.Imp}": RegionNames.Imp,
+                   f"{RegionNames.Lumbridge}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
+                   f"{RegionNames.Lumbridge}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Lumbridge_Swamp:
@@ -72,6 +72,10 @@ all_regions = [
                    RegionNames.Spinning_Wheel:
                        lambda state: True,
                    RegionNames.Imp:
+                       lambda state: True,
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
+                   RegionNames.Willow_Tree:
                        lambda state: True,
                })
                ),
@@ -113,6 +117,7 @@ all_regions = [
                    f"{RegionNames.Lumbridge_Farms}->{RegionNames.Wheat}": RegionNames.Wheat,
                    f"{RegionNames.Lumbridge_Farms}->{RegionNames.Windmill}": RegionNames.Windmill,
                    f"{RegionNames.Lumbridge_Farms}->{RegionNames.Imp}": RegionNames.Imp,
+                   f"{RegionNames.Lumbridge_Farms}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Lumbridge:
@@ -134,6 +139,8 @@ all_regions = [
                    RegionNames.Windmill:
                        lambda state: True,
                    RegionNames.Imp:
+                       lambda state: True,
+                   RegionNames.Willow_Tree:
                        lambda state: True,
                })
                ),
@@ -170,6 +177,8 @@ all_regions = [
                    f"{RegionNames.Draynor_Village}->{RegionNames.Wheat}": RegionNames.Wheat,
                    f"{RegionNames.Draynor_Village}->{RegionNames.Imp}": RegionNames.Imp,
                    f"{RegionNames.Draynor_Village}->{RegionNames.Anvil}": RegionNames.Anvil,
+                   f"{RegionNames.Draynor_Village}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
+                   f"{RegionNames.Draynor_Village}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Lumbridge_Farms:
@@ -187,6 +196,10 @@ all_regions = [
                    RegionNames.Imp:
                        lambda state: True,
                    RegionNames.Anvil:
+                       lambda state: True,
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
+                   RegionNames.Willow_Tree:
                        lambda state: True,
                })
                ),
@@ -291,6 +304,7 @@ all_regions = [
                    f"{RegionNames.South_Of_Varrock}->{RegionNames.Clay_Rock}": RegionNames.Clay_Rock,
                    f"{RegionNames.South_Of_Varrock}->{RegionNames.Iron_Rock}": RegionNames.Iron_Rock,
                    f"{RegionNames.South_Of_Varrock}->{RegionNames.Silver_Rock}": RegionNames.Silver_Rock,
+                   f"{RegionNames.South_Of_Varrock}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Al_Kharid:
@@ -313,6 +327,8 @@ all_regions = [
                        lambda state: True,
                    RegionNames.Silver_Rock:
                        lambda state: True,
+                   RegionNames.Willow_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.Central_Varrock,
@@ -329,6 +345,7 @@ all_regions = [
                    f"{RegionNames.Central_Varrock}->{RegionNames.Varrock_Palace}": RegionNames.Varrock_Palace,
                    f"{RegionNames.Central_Varrock}->{RegionNames.Imp}": RegionNames.Imp,
                    f"{RegionNames.Central_Varrock}->{RegionNames.Anvil}": RegionNames.Anvil,
+                   f"{RegionNames.Central_Varrock}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
                },
                lambda player: ({
                    RegionNames.South_Of_Varrock:
@@ -343,6 +360,8 @@ all_regions = [
                        lambda state: True,
                    RegionNames.Anvil:
                        lambda state: True,
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.Varrock_Palace,
@@ -353,12 +372,15 @@ all_regions = [
                {
                    f"{RegionNames.Varrock_Palace}->{RegionNames.East_Of_Varrock}": RegionNames.East_Of_Varrock,
                    f"{RegionNames.Varrock_Palace}->{RegionNames.Wilderness}": RegionNames.Wilderness,
+                   f"{RegionNames.Varrock_Palace}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
                },
                lambda player: ({
                    RegionNames.East_Of_Varrock:
                        lambda state: (state.has(ItemNames.East_Of_Varrock, player)),
                    RegionNames.Wilderness:
                        lambda state: (state.has(ItemNames.Wilderness, player)),
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.East_Of_Varrock,
@@ -430,6 +452,7 @@ all_regions = [
                    f"{RegionNames.Edgeville}->{RegionNames.Coal_Rock}": RegionNames.Coal_Rock,
                    f"{RegionNames.Edgeville}->{RegionNames.Iron_Rock}": RegionNames.Iron_Rock,
                    f"{RegionNames.Edgeville}->{RegionNames.Furnace}": RegionNames.Furnace,
+                   f"{RegionNames.Edgeville}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Wilderness:
@@ -449,6 +472,8 @@ all_regions = [
                    RegionNames.Iron_Rock:
                        lambda state: True,
                    RegionNames.Furnace:
+                       lambda state: True,
+                   RegionNames.Willow_Tree:
                        lambda state: True,
                })
                ),
@@ -583,6 +608,7 @@ all_regions = [
                    f"{RegionNames.Falador}->{RegionNames.Imp}": RegionNames.Imp,
                    f"{RegionNames.Falador}->{RegionNames.Coal_Rock}": RegionNames.Coal_Rock,
                    f"{RegionNames.Falador}->{RegionNames.Furnace}": RegionNames.Furnace,
+                   f"{RegionNames.Falador}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
                },
                lambda player: ({
                    RegionNames.Dwarven_Mines:
@@ -596,6 +622,8 @@ all_regions = [
                    RegionNames.Coal_Rock:
                        lambda state: True,
                    RegionNames.Furnace:
+                       lambda state: True,
+                   RegionNames.Oak_Tree:
                        lambda state: True,
                })
                ),
@@ -612,6 +640,7 @@ all_regions = [
                    f"{RegionNames.Falador_Farm}->{RegionNames.Egg}": RegionNames.Egg,
                    f"{RegionNames.Falador_Farm}->{RegionNames.Milk}": RegionNames.Milk,
                    f"{RegionNames.Falador_Farm}->{RegionNames.Imp}": RegionNames.Imp,
+                   f"{RegionNames.Falador_Farm}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
                },
                lambda player: ({
                    RegionNames.Crafting_Guild:
@@ -628,6 +657,8 @@ all_regions = [
                        lambda state: True,
                    RegionNames.Imp:
                        lambda state: True,
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.Crafting_Guild,
@@ -641,6 +672,7 @@ all_regions = [
                    f"{RegionNames.Crafting_Guild}->{RegionNames.Clay_Rock}": RegionNames.Clay_Rock,
                    f"{RegionNames.Crafting_Guild}->{RegionNames.Silver_Rock}": RegionNames.Silver_Rock,
                    f"{RegionNames.Crafting_Guild}->{RegionNames.Gold_Rock}": RegionNames.Gold_Rock,
+                   f"{RegionNames.Crafting_Guild}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Falador_Farm:
@@ -664,6 +696,8 @@ all_regions = [
                    RegionNames.Gold_Rock:
                        lambda state: state.can_reach(RegionNames.West_Varrock, None, player) or state.can_reach(
                            RegionNames.Central_Varrock, None, player),
+                   RegionNames.Willow_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.Rimmington,
@@ -683,6 +717,7 @@ all_regions = [
                    f"{RegionNames.Rimmington}->{RegionNames.Clay_Rock}": RegionNames.Clay_Rock,
                    f"{RegionNames.Rimmington}->{RegionNames.Iron_Rock}": RegionNames.Iron_Rock,
                    f"{RegionNames.Rimmington}->{RegionNames.Gold_Rock}": RegionNames.Gold_Rock,
+                   f"{RegionNames.Rimmington}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Crafting_Guild:
@@ -707,6 +742,8 @@ all_regions = [
                        lambda state: True,
                    RegionNames.Gold_Rock:
                        lambda state: True,
+                   RegionNames.Willow_Tree:
+                       lambda state: True,
                })
                ),
     RegionInfo(RegionNames.Port_Sarim,
@@ -719,6 +756,8 @@ all_regions = [
                    f"{RegionNames.Port_Sarim}->{RegionNames.Rimmington}": RegionNames.Rimmington,
                    f"{RegionNames.Port_Sarim}->{RegionNames.Mudskipper_Point}": RegionNames.Mudskipper_Point,
                    f"{RegionNames.Port_Sarim}->{RegionNames.Crandor}": RegionNames.Crandor,
+                   f"{RegionNames.Port_Sarim}->{RegionNames.Oak_Tree}": RegionNames.Oak_Tree,
+                   f"{RegionNames.Port_Sarim}->{RegionNames.Willow_Tree}": RegionNames.Willow_Tree,
                },
                lambda player: ({
                    RegionNames.Falador_Farm:
@@ -738,8 +777,11 @@ all_regions = [
                                                        player) or state.can_reach(
                                           RegionNames.Falador, None, player)) and
                                       state.can_reach(RegionNames.Port_Sarim, None, player) and
-                                      state.can_reach(RegionNames.Draynor_Village, None, player))
-
+                                      state.can_reach(RegionNames.Draynor_Village, None, player)),
+                   RegionNames.Oak_Tree:
+                       lambda state: True,
+                   RegionNames.Willow_Tree:
+                       lambda state: True,
                }),
                ),
     RegionInfo(RegionNames.Mudskipper_Point,
@@ -874,5 +916,12 @@ all_regions = [
         LocationNames.Smelt_Gold
     ], {}, lambda player: {}),
     RegionInfo(RegionNames.Furnace, [], {}, lambda player: {}),
-    RegionInfo(RegionNames.Anvil, [], {}, lambda player: {})
+    RegionInfo(RegionNames.Anvil, [], {}, lambda player: {}),
+    RegionInfo(RegionNames.Oak_Tree, [
+        LocationNames.Oak_Log,
+    ], {}, lambda player: {}),
+    RegionInfo(RegionNames.Willow_Tree, [
+        LocationNames.Willow_Log,
+    ], {}, lambda player: {}),
+
 ]

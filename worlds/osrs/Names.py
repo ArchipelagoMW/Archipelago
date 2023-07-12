@@ -44,6 +44,8 @@ class RegionNames:
     Gold_Rock = "Gold Rocks"
     Furnace = "Furnace"
     Anvil = "Anvil"
+    Oak_Tree = "Oak Tree"
+    Willow_Tree = "Willow Tree"
 
 class ItemNames:
     Lumbridge = "Area: Lumbridge"
