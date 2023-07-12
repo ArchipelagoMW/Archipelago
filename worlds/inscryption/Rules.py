@@ -26,7 +26,8 @@ class InscryptionRules:
             "Act 1 - Magnificus Eye": self.has_dagger,
             "Act 1 - Clock Main Compartment": self.has_magnificus_eye,
             "Act 2 - Battle Prospector": self.has_camera_and_meat,
-            "Act 2 - Battle Angler": self.has_camera,
+            "Act 2 - Battle Angler": self.has_camera_and_meat,
+            "Act 2 - Battle Trapper": self.has_camera_and_meat,
             "Act 2 - Battle Pike Mage": self.has_tower_requirements,
             "Act 2 - Battle Goobert": self.has_tower_requirements,
             "Act 2 - Battle Lonely Wizard": self.has_tower_requirements,
@@ -48,7 +49,11 @@ class InscryptionRules:
             "Act 2 - Boss Grimora": self.has_all_epitaph_pieces,
             "Act 2 - Boss Leshy": self.has_camera_and_meat,
             "Act 2 - Boss Magnificus": self.has_tower_requirements,
-            "Act 2 - Boss P03": self.has_act2_bridge_requirements
+            "Act 2 - Boss P03": self.has_act2_bridge_requirements,
+            "Act 2 - Bone Lord Femur": self.has_obol,
+            "Act 2 - Bone Lord Horn": self.has_obol,
+            "Act 2 - Bone Lord Holo Key": self.has_obol,
+            "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -75,14 +80,17 @@ class InscryptionRules:
             state.has("Epitaph Piece 6", self.player) and state.has("Epitaph Piece 7", self.player) and \
             state.has("Epitaph Piece 8", self.player) and state.has("Epitaph Piece 9", self.player)
 
-    def has_camera(self, state: CollectionState) -> bool:
-        return state.has("Camera Replica", self.player)
-
     def has_camera_and_meat(self, state: CollectionState) -> bool:
-        return self.has_camera(state) and state.has("Pile Of Meat", self.player)
+        return state.has("Camera Replica", self.player) and state.has("Pile Of Meat", self.player)
 
     def has_monocle(self, state: CollectionState) -> bool:
         return state.has("Monocle", self.player)
+
+    def has_obol(self, state: CollectionState) -> bool:
+        return state.has("Ancient Obol", self.player)
+
+    def has_epitaphs_and_forest_items(self, state: CollectionState) -> bool:
+        return self.has_camera_and_meat(state) and self.has_all_epitaph_pieces(state)
 
     def has_act2_bridge_requirements(self, state: CollectionState) -> bool:
         return self.has_camera_and_meat(state) or self.has_all_epitaph_pieces(state)
@@ -104,8 +112,7 @@ class InscryptionRules:
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        # TODO Change this to the real completion check
-        # multiworld.completion_condition[self.player] = self.has_epilogue_requirements
+        multiworld.completion_condition[self.player] = self.has_epilogue_requirements
         for region in multiworld.get_regions(self.player):
             if region.name in self.region_rules:
                 for entrance in region.entrances:

@@ -21,19 +21,19 @@ class InscrypWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Glowbuzz"]
+        ["DrBibop"]
     )]
 
     guide_fr = [Tutorial(
         "Multiworld Setup Guide",
         "Un guide pour configurer Inscryption Archipelago Multiworld",
-        "English",
+        "Français",
         "setup_fr.md",
         "setup/fr",
         ["Glowbuzz"]
     )]
 
-    tutorials = [guide_en, guide_en]
+    tutorials = [guide_en, guide_fr]
 
 
 class InscryptionWorld(World):
