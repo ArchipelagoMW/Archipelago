@@ -31,7 +31,7 @@ class KH2World(World):
     """
     game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 1
+    data_version = 0
     required_client_version = (0, 4, 0)
     option_definitions = KH2_Options
     item_name_to_id = {item: item_id
@@ -74,10 +74,10 @@ class KH2World(World):
                 for inner_values in values.values():
                     self.slotDataDuping = self.slotDataDuping.union(inner_values)
         self.local_items = {location.address: self.item_name_to_id[location.item.name]
-                           for location in self.multiworld.get_filled_locations(self.player)
-                           if location.item.player == self.player
-                           and location.item.name in self.slotDataDuping
-                           and location.name not in AllWeaponSlot}
+                            for location in self.multiworld.get_filled_locations(self.player)
+                            if location.item.player == self.player
+                            and location.item.name in self.slotDataDuping
+                            and location.name not in AllWeaponSlot}
 
         return {
             "hitlist":              self.hitlist,
@@ -111,8 +111,7 @@ class KH2World(World):
         self.visitlocking_dict = visit_locking_dict["AllVisitLocking"].copy()
         if self.multiworld.Schmovement[self.player] != "level_0":
             for _ in range(self.multiworld.Schmovement[self.player].value):
-                for name in {ItemName.HighJump, ItemName.QuickRun, ItemName.DodgeRoll, ItemName.AerialDodge,
-                             ItemName.Glide}:
+                for name in Movement_Table.keys():
                     self.item_quantity_dict[name] -= 1
                     self.growth_list.remove(name)
                     self.multiworld.push_precollected(self.create_item(name))

@@ -741,8 +741,10 @@ class KH2Context(CommonContext):
                 if itemName in server_stat:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["StatIncrease"][itemName]
 
+                # if slot1 has 5 drive gauge and goa lost illusion is checked and they are not in a cutscene
                 if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems \
-                        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and self.kh2_read_byte(self.Save + 0x23DF) > 0:
+                        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
+                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0xB627B4) == 255:
                     self.kh2_write_byte(self.Save + itemData.memaddr, amountOfItems)
 
             for itemName in master_boost:
@@ -771,7 +773,7 @@ class KH2Context(CommonContext):
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if 0x1301ED in message[0]["locations"]:
+        if not ctx.finalxemnas and kh2_loc_name_to_id[LocationName.FinalXemnas] in ctx.kh2seedsave["LocationsChecked"]:
             ctx.finalxemnas = True
     # three proofs
     if ctx.kh2slotdata['Goal'] == 0:
@@ -865,7 +867,6 @@ def launch():
         await progression_watcher
 
         await ctx.shutdown()
-
 
     import colorama
 
