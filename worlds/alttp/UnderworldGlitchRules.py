@@ -1,6 +1,6 @@
-from BaseClasses import Entrance
 from worlds.generic.Rules import set_rule, add_rule
 from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
+from .SubClasses import LTTPEntrance
 
 
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
@@ -35,7 +35,7 @@ def fake_pearl_state(state, player):
 
 # Sets the rules on where we can actually go using this clip.
 # Behavior differs based on what type of ER shuffle we're playing. 
-def dungeon_reentry_rules(world, player, clip: Entrance, dungeon_region: str, dungeon_exit: str): 
+def dungeon_reentry_rules(world, player, clip: LTTPEntrance, dungeon_region: str, dungeon_exit: str): 
     fix_dungeon_exits = world.fix_palaceofdarkness_exit[player]
     fix_fake_worlds = world.fix_fake_world[player]
 

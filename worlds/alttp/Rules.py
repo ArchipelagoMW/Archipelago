@@ -2,7 +2,7 @@ import collections
 import logging
 from typing import Iterator, Set
 
-from BaseClasses import Entrance, MultiWorld
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
                                   item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
 
@@ -847,6 +847,7 @@ def add_connection(parent_name, target_name, entrance_name, world, player):
     target = world.get_region(target_name, player)
     parent.connect(target, entrance_name)
 
+
 def standard_rules(world, player):
     add_connection('Menu', 'Hyrule Castle Secret Entrance', 'Uncle S&Q', world, player)
     world.get_entrance('Uncle S&Q', player).hide_path = True
@@ -854,6 +855,7 @@ def standard_rules(world, player):
     set_rule(world.get_entrance('Hyrule Castle Exit (West)', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Links House S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
     set_rule(world.get_entrance('Sanctuary S&Q', player), lambda state: state.can_reach('Sanctuary', 'Region', player))
+
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',

@@ -2,8 +2,6 @@
 Helper functions to deliver entrance/exit/region sets to OWG rules.
 """
 
-from BaseClasses import Entrance
-
 from .StateHelpers import can_lift_heavy_rocks, can_boots_clip_lw, can_boots_clip_dw, can_get_glitched_speed_dw
 
 
