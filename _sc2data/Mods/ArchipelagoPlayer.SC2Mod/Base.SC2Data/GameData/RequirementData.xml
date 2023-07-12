@@ -12,6 +12,10 @@
         <NodeArray index="Use" Link="AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSHaveRaptor">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveRaptorCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_HaveHotSMutaliskViper">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
@@ -1411,9 +1415,6 @@
         <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeAlarakStalkerPhasingArmorCompleteOnly"/>
     </CRequirement>
-    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
-        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
-    </CRequirementNot>
     <CRequirement id="AP_HaveAlarakLightningStrikes">
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantSacrificeLightningStrikesCompleteOnly"/>
@@ -1426,4 +1427,64 @@
     <CRequirement id="AP_CommanderPrestigeAlarakMech">
         <NodeArray index="Show" Link="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSMetabolicBoost">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMetabolicBoostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingFrenzy">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingFrenzyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingFury">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingFuryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingHealth">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingHealthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingRange">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingRangeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingSunder">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingSunderCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveK5ZerglingRespawn">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5ZerglingRespawnCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveZerglingRespawnPrimary">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveZerglingRespawnPrimaryAndUpgrade">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndCountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnitCountUpgradeK5ZerglingRespawnCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ZerglingRespawnEnabled">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AllowAbilZerglingRespawn0"/>
+    </CRequirement>
+    <CRequirement id="AP_ZerglingRespawnPrimaryNotActive">
+        <EditorCategories value="TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorZerglingRespawnPrimaryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveZerglingRespawnPrimary">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountBehaviorZerglingRespawnPrimaryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSHaveSwarmling">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveBaneling">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitBanelingNestCompleteOnlyTechTreeCheat"/>
+        <!-- NodeArray index="Show" Link="AndNotCountUpgradeHotSHaveSplitterlingCompleteOnlyNotCountUpgradeHotSHunterCompleteOnly"/ -->
+    </CRequirement>
+    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

@@ -5973,4 +5973,30 @@
         <Select value="Random"/>
         <Volume value="-22.000000,-16.000000"/>
     </CSound>
+    <CSound id="AP_Raptor_Jump" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Raptor_Jump00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Raptor_Jump01.wav" Pitch="-1.000000,0.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Raptor_Jump02.wav" FacialGroup=""/>
+        <Pitch value="-7.000000,0.000000"/>
+        <Volume value="-22.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_BroodLord_wings" parent="Movement">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap10.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap11.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mutalisk_WingFlap12.wav" FacialGroup=""/>
+        <Pitch value="-18.000000,-15.000000"/>
+        <Volume value="-20.000000,0.000000"/>
+    </CSound>
 </Catalog>

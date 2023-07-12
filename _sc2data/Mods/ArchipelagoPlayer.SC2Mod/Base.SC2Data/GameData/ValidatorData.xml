@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHaveRaptor">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHaveRaptor"/>
+    </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="AP_HaveHotSImpaler">
         <Find value="1"/>
         <Value value="AP_HaveHotSImpaler"/>
@@ -551,6 +555,66 @@
         <CombineArray value="AP_HunterCliffCheckCasterLevel3"/>
         <CombineArray value="HunterCliffCheckTargetLevel2"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury1">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury1"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury2">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury2"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury3">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury3"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury4">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury4"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury5">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury5"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingFury">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingFury"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingRange">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingRange"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingSunder">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingSunder"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHaveSwarmling">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHaveSwarmling"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveZerglingRangeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingRange"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingFrenzy">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingFrenzy"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="HotSRaptorChargeMaxDistance2">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="4"/>
+    </CValidatorLocationCompareRange>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -726,6 +790,45 @@
         <Value value="AP_BroodLordCocoon"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorCombine id="IsHatchery" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHatchery"/>
+        <CombineArray value="AP_IsAPHatchery"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaHatchery">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Hatchery"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHatchery">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Hatchery"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsHive" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHive"/>
+        <CombineArray value="AP_IsAPHive"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaHive">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Hive"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHive">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Hive"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsLair" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaLair"/>
+        <CombineArray value="AP_IsAPLair"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaLair">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Lair"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPLair">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Lair"/>
+    </CValidatorUnitType>
     <CValidatorUnitType id="IsImmortal">
         <!-- Override -->
         <Type value="SelectAlias"/>
@@ -743,6 +846,28 @@
         <CombineArray value="IsImmortal"/>
         <Negate value="1"/>
     </CValidatorCombine>
+    <CValidatorCombine id="IsZergling" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaZergling"/>
+        <CombineArray value="AP_IsAPZergling"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaZergling">
+        <Value value="Zergling"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPZergling">
+        <Value value="AP_Zergling"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsZerglingBurrowed" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaZerglingBurrowed"/>
+        <CombineArray value="AP_IsAPZerglingBurrowed"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaZerglingBurrowed">
+        <Value value="ZerglingBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPZerglingBurrowed">
+        <Value value="AP_ZerglingBurrowed"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -1658,6 +1783,11 @@
         <WhichUnit Effect="CreateStasisCocoonController"/>
         <Value value="AP_ImmortalTaldarim"/>
     </CValidatorUnitType>
+    <CValidatorCombine id="AP_RaptorDeathValidators">
+        <!-- Changed from vanilla IsRaptor checks -->
+        <CombineArray value="IsZergling"/>
+        <CombineArray value="IsZerglingBurrowed"/>
+    </CValidatorCombine>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -2728,7 +2858,7 @@
         <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
         <Behavior value="AP_TimeWarpProduction"/>
     </CValidatorUnitCompareBehaviorCount>
-    <CValidatorCombine id="IsNotChronoBoosted" parent="CValidatorCombine">
+    <CValidatorCombine id="IsNotChronoBoosted">
         <!-- Override -->
         <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
         <Type value="And"/>
@@ -2841,4 +2971,29 @@
         <Find value="1"/>
         <Value value="AP_HaveAlarakSupplicantSacrificeCDR"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareOrderTargetRange id="AP_ZerglingAttackRangeHigh">
+        <Compare value="LT"/>
+        <AbilLink value="attack"/>
+        <Value value="2.5"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareOrderTargetRange id="AP_ZerglingAttackRangeLow">
+        <Compare value="GT"/>
+        <AbilLink value="attack"/>
+        <Value value="0.5"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitOrderQueue id="AP_ZerglingAttacking">
+        <AbilLink value="attack"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_ZerglingRangeAttackValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_ZerglingAttackRangeLow"/>
+        <CombineArray value="AP_ZerglingAttackRangeHigh"/>
+        <CombineArray value="AP_ZerglingAttacking"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_ZerglingRangeWait">
+        <WhichUnit Value="Source"/>
+        <Compare value="GE"/>
+        <Value value="7"/>
+        <Behavior value="AP_ZerglingRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>
