@@ -14030,7 +14030,7 @@
     <CActorUnit id="AP_Monitor" parent="GenericUnitStandard" unitName="AP_Monitor">
         <Aliases value="_UnitMedium"/>
         <Macros value="TerrainSquibAnimations"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Sentry_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
         <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap MonitorWarpIn"/>
         <On Terms="Behavior.WarpInEffect15.On" Send="$Birth"/>
         <On Terms="Behavior.WarpInEffect15.Off" Send="ModelSwap Monitor"/>
@@ -16669,7 +16669,7 @@
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
         <On Terms="AbilMorph.*.Start; MorphFrom AP_SentryPurifier; MorphTo AP_SentryPhasing" Send="AnimBracketStart Work Stand,Work,Start,A Stand,Work,A Stand,Work,End,A"/>
         <On Terms="AbilMorph.*.Start; MorphFrom AP_SentryPhasing; MorphTo AP_SentryPurifier" Send="AnimBracketStop Work"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Sentry_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Sentry_Land"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_SentryPurifier" Send="Create"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SentryPurifier" Send="Destroy"/>
         <On Terms="Signal.*.CampaignBeamCreated" Send="RefSetFromMsg ::actor.MyAttackBeam ::Sender"/>
