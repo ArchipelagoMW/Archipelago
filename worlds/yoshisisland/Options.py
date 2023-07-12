@@ -104,17 +104,51 @@ class FinalBossBosses(Range):
     range_end = 11
     default = 0
 
+class BossShuffle(Choice):
+    """This will randomize which boss room each boss door connects to. Baby Bowser will only appear in 6-8, and no other boss can appear there.
+        Normal: All bosses will be in their normal level.
+        Shuffled: Bosses will be shuffled amongst each other, with each guranteed to appear once.
+        Randomized: Bosses will be shuffled, possibly duplicating bosses.
+        Singularity: All bosses will be replaced with the same boss."""
+    display_name = "Boss Randomization"
+    option_none = 0
+    option_shuffled = 1
+    option_randomized = 2
+    option_singularity = 3
+    default = 0
+
 class YoshiColors(Choice):
     """Sets the Yoshi color for each level.
     Normal will use the vanilla colors.
     Random order will generate a random order of colors that will be used in each level. The stage 1 color will be used for Extra stages, and 6-8.
     Random color will generate a random color for each stage.
-    Singularity will generate a single color used in all stages."""
+    Singularity will use a single color defined under 'Singularity Yoshi Color' for use in all stages."""
     display_name = "Yoshi Colors"
     option_normal = 0
     option_random_order = 1
     option_random_color = 2
     option_singularity = 3
+    default = 0
+
+class SinguColor(Choice):
+    """Sets which color Yoshi will be if Yoshi Colors is set to singularity."""
+    display_name = "Singularity Yoshi Color"
+    option_green = 0
+    option_pink = 1
+    option_cyan = 2
+    option_yellow = 3
+    option_purple = 4
+    option_brown = 5
+    option_red = 6
+    option_blue = 7
+    default = 0
+
+class BabySound(Choice):
+    """Change the sound that Baby Mario makes when not on Yoshi."""
+    display_name = "Mario Sound Effect"
+    option_normal = 0
+    option_disabled = 1
+    option_random_sound_effect = 2
     default = 0
 
 class TrapsEnabled(Toggle):
@@ -153,7 +187,10 @@ yoshi_options: Dict[str, Option] ={
     "softlock_prevention": SoftlockPrevention,
     "castle_open_condition": FinalLevelBosses,
     "castle_clear_condition": FinalBossBosses,
+    "boss_randomizer": BossShuffle,
     "yoshi_colors": YoshiColors,
+    "yoshi_singularity_color": SinguColor,
+    "baby_mario_sound": BabySound,
     "traps_enabled": TrapsEnabled,
     "trap_percent": TrapPercent,
     "death_link": DeathLink

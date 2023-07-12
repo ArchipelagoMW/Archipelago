@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import typing
+import time
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
@@ -29,6 +30,7 @@ DEATH_RECEIVED = WRAM_START + 0x7E23B0
 GAME_MODE = WRAM_START + 0x0118
 YOSHI_STATE = SRAM_START + 0x00AC
 YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
+DEATHMUSIC_FLAG = WRAM_START + 0x004F
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
@@ -74,10 +76,10 @@ class YISNIClient(SNIClient):
         game_mode = await snes_read(ctx, GAME_MODE, 0x1)
         yoshi_state = await snes_read(ctx, YOSHI_STATE, 0x1)
         item_received = await snes_read(ctx, ITEM_RECEIVED, 0x1)
-        death_received = await snes_read(ctx, DEATH_RECEIVED, 0x1)
+        game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            currently_dead = game_mode[0] == 0x11
+            currently_dead = game_music[0] == 0x07 or game_mode[0] == 0x12
             await ctx.handle_deathlink_state(currently_dead)
 
         if game_mode is None:

@@ -51,6 +51,10 @@ class YIWorld(World):
     lives_low: int
     castle_bosses: int
     bowser_bosses: int
+    baby_mario_sfx: int
+    leader_color: int
+    burt_boss: int
+    boss_order: list
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -99,7 +103,7 @@ class YIWorld(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
-                        self.location_cache)
+                        self.location_cache, self)
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.multiworld.trap_percent[self.player].value
@@ -252,7 +256,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     for i in range(72):
             self.level_colors.append(world.random.randint(0,7))
     if world.yoshi_colors[player].value == 3:
-        singularity_color = world.random.randint(0,7)
+        singularity_color = world.yoshi_singularity_color[player].value
         for i in range(len(self.level_colors)):
                     self.level_colors[i] = singularity_color
     elif world.yoshi_colors[player].value == 1:
@@ -260,12 +264,121 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         for i in range(7):
             self.color_order.append(world.random.randint(0,7))
 
-
     bonus_valid = [0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]
 
     self.world_bonus = []
     for i in range(12):
         self.world_bonus.append(world.random.choice(bonus_valid))
+
+    safe_baby_sounds = [0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
+    0x21, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40,
+    0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x60, 
+    0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x73, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86,
+    0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2]
+
+    if world.baby_mario_sound[player] == 2:
+        self.baby_mario_sfx = world.random.choice(safe_baby_sounds)
+    elif world.baby_mario_sound == 1:
+        self.baby_mario_sfx = 0x42
+    else:
+        self.baby_mario_sfx = 0x44
+
+    boss_list = ["Burt The Bashful's Boss Room", "Salvo The Slime's Boss Room",
+                 "Bigger Boo's Boss Room", "Roger The Ghost's Boss Room",
+                "Prince Froggy's Boss Room", "Naval Piranha's Boss Room",
+                "Marching Milde's Boss Room", "Hookbill The Koopa's Boss Room",
+                "Sluggy The Unshaven's Boss Room", "Raphael The Raven's Boss Room",
+                "Tap-Tap The Red Nose's Boss Room"]
+
+    self.boss_order = []
+
+    if world.boss_randomizer[player].value == 0:
+        self.boss_order.append("Burt The Bashful's Boss Room")
+        self.boss_order.append("Salvo The Slime's Boss Room")
+        self.boss_order.append("Bigger Boo's Boss Room")
+        self.boss_order.append("Roger The Ghost's Boss Room")
+        self.boss_order.append("Prince Froggy's Boss Room")
+        self.boss_order.append("Naval Piranha's Boss Room")
+        self.boss_order.append("Marching Milde's Boss Room")
+        self.boss_order.append("Hookbill The Koopa's Boss Room")
+        self.boss_order.append("Sluggy The Unshaven's Boss Room")
+        self.boss_order.append("Raphael The Raven's Boss Room")
+        self.boss_order.append("Tap-Tap The Red Nose's Boss Room")
+    elif world.boss_randomizer[player] == 1:
+        for i in range(11):
+            self.boss_order.append(world.random.shuffle(boss_list))
+    elif world.boss_shuffle[player] == 2:
+        self.burt_boss = world.random.choice(boss_list)
+        self.slime_boss = world.random.choice(boss_list)
+        self.boo_boss = world.random.choice(boss_list)
+        self.pot_boss = world.random.choice(boss_list)
+        self.frog_boss = world.random.choice(boss_list)
+        self.plant_boss = world.random.choice(boss_list)
+        self.milde_boss = world.random.choice(boss_list)
+        self.koopa_boss = world.random.choice(boss_list)
+        self.slug_boss = world.random.choice(boss_list)
+        self.raven_boss = world.random.choice(boss_list)
+        self.taptap_boss = world.random.choice(boss_list)
+
+
+    boss_burt = [0x3D, 0x05, 0x63, 0x00],
+    boss_slime = [0x70, 0x04, 0x78, 0x00],
+    boss_boo = [0xCE, 0x02, 0x76, 0x00],
+    boss_pot = [0xBE, 0x18, 0x4A, 0x00],
+    boss_frog = [0xBF, 0x12, 0x62, 0x04],
+    boss_plant = [0x7F, 0x0D, 0x42, 0x00],
+    boss_milde = [0x82, 0x06, 0x64, 0x00],
+    boss_koop = [0x86, 0x0D, 0x78, 0x00],
+    boss_slug = [0x8A, 0x09, 0x7A, 0x00],
+    boss_raph = [0xC4, 0x03, 0x4B, 0x05],
+    boss_tap = [0xCC, 0x49, 0x64, 0x02]
+
+
+    self.boss_burt_data = []
+    self.boss_slime_data = []
+    self.boss_boo_data = []
+    self.boss_pot_data = []
+    self.boss_frog_data = []
+    self.boss_plant_data = []
+    self.boss_milde_data = []
+    self.boss_koop_data = []
+    self.boss_slug_data = []
+    self.boss_raph_data = []
+    self.boss_tap_data = []
+
+    for i in range(4):
+        self.boss_burt_data.append(boss_burt[0])
+
+    for i in range(4):
+        self.boss_slime_data.append(boss_slime[0])
+
+    for i in range(4):
+        self.boss_boo_data.append(boss_boo)
+
+    for i in range(4):
+        self.boss_pot_data.append(boss_pot)
+
+    for i in range(4):
+        self.boss_frog_data.append(boss_frog)
+
+    for i in range(4):
+        self.boss_plant_data.append(boss_plant)
+
+    for i in range(4):
+        self.boss_milde_data.append(boss_milde)
+
+    for i in range(4):
+        self.boss_koop_data.append(boss_koop)
+
+    for i in range(4):
+        self.boss_slug_data.append(boss_slug)
+
+    for i in range(4):
+        self.boss_raph_data.append(boss_raph)
+
+    for i in range(4):
+        self.boss_tap_data.append(boss_tap)
+
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:

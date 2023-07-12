@@ -213,11 +213,19 @@ class YoshiLogic:
 
     def _14Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Spring Ball', 'Key', 'Egg Plant'}, self.player)
+            return state.has_all({'Spring Ball', 'Key'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Spring Ball', 'Key', 'Egg Plant'}, self.player)
+            return state.has_all({'Spring Ball', 'Key'}, self.player)
         else:
-            return state.has_all({'Spring Ball', 'Key'}, self.player and (state.has('Egg Capacity Upgrade', self.player, 5) or state.has('Egg Plant', self.player)))
+            return state.has_all({'Spring Ball', 'Key'}, self.player)
+
+    def _14Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return state.has_all({'Egg Plant'}, self.player)
+        elif self.game_logic == "Normal":
+            return state.has_all({'Egg Plant'}, self.player)
+        else:
+            return (state.has('Egg Capacity Upgrade', self.player, 5) or state.has('Egg Plant', self.player))
 ######################################################
     def _15Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -354,6 +362,14 @@ class YoshiLogic:
             return state.has_all({'Key', 'Arrow Wheel'}, self.player)
         else:
             return state.has_all({'Key', 'Arrow Wheel'}, self.player)
+
+    def _18Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
+        else:
+            return True
 ##################################################################################
     def _1ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -530,6 +546,14 @@ class YoshiLogic:
             return state.has_all({'! Switch', 'Dashed Stairs'}, self.player)
         else:
             return state.has_all({'! Switch'}, self.player)
+
+    def _24Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
+        else:
+            return True
 ###########################################################################################
     def _25Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -674,6 +698,14 @@ class YoshiLogic:
             return state.has_any({'Arrow Wheel', 'Key'}, self.player)
         else:
             return state.has_any({'Arrow Wheel', 'Key'}, self.player)
+
+    def _28Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
+        else:
+            return True
 ######################################################################################################
     def _2ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -837,9 +869,17 @@ class YoshiLogic:
 
     def _34Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Giant Eggs'}, self.player) and state.has('Dashed Platform', self.player)
+            return state.has('Dashed Platform', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Giant Eggs'}, self.player) and (state.has('Dashed Platform', self.player) or self.has_midring(state))
+            return (state.has('Dashed Platform', self.player) or self.has_midring(state))
+        else:
+            return True
+
+    def _34Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return state.has_all({'Giant Eggs'}, self.player)
+        elif self.game_logic == "Normal":
+            return state.has_all({'Giant Eggs'}, self.player)
         else:
             return state.has_all({'Giant Eggs'}, self.player)
 #################################################################################################
@@ -976,6 +1016,14 @@ class YoshiLogic:
             return (state.has('Egg Capacity Upgrade', self.player, 3) or self.combat_item(state))
         elif self.game_logic == "Normal":
             return (state.has('Egg Capacity Upgrade', self.player, 1) or self.combat_item(state))
+        else:
+            return True
+
+    def _38Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
         else:
             return True
 ########################################################################################################
@@ -1146,6 +1194,14 @@ class YoshiLogic:
             return state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Arrow Wheel', 'Bucket', 'Key'}, self.player)
         else:
             return state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Arrow Wheel', 'Bucket', 'Key'}, self.player)
+
+    def _44Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
+        else:
+            return True
 ########################################################################################################
     def _45Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1285,11 +1341,19 @@ class YoshiLogic:
 
     def _48Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return (state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Key', 'Large Spring Ball'}, self.player)) and (state.has('Egg Capacity Upgrade', self.player, 5))
+            return (state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Key', 'Large Spring Ball'}, self.player))
         elif self.game_logic == "Normal":
-            return (state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Key', 'Large Spring Ball'}, self.player)) and (state.has('Egg Capacity Upgrade', self.player, 3))
+            return (state.has_all({'Dashed Stairs', 'Vanishing Arrow Wheel', 'Key', 'Large Spring Ball'}, self.player))
         else:
-            return (state.has_all({'Key', 'Large Spring Ball'}, self.player)) and (state.has('Egg Capacity Upgrade', self.player, 3))
+            return (state.has_all({'Key', 'Large Spring Ball'}, self.player))
+
+    def _48Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return (state.has('Egg Capacity Upgrade', self.player, 5))
+        elif self.game_logic == "Normal":
+            return (state.has('Egg Capacity Upgrade', self.player, 3))
+        else:
+            return (state.has('Egg Capacity Upgrade', self.player, 3))
 ##################################################################################################################
     def _4ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1453,11 +1517,19 @@ class YoshiLogic:
 
     def _54Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player)) and (state.has('Egg Capacity Upgrade', self.player, 2) and state.has('Egg Plant', self.player))
+            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player))
         elif self.game_logic == "Normal":
-            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player)) and ((state.has('Egg Capacity Upgrade', self.player, 1) and state.has('Egg Plant', self.player)) or (state.has('Egg Capacity Upgrade', self.player, 5) and self.has_midring(state)))
+            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player))
         else:
-            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player)) and ((state.has('Egg Plant', self.player)) or (state.has('Egg Capacity Upgrade', self.player, 3) and self.has_midring(state)))
+            return (state.has_all({'Dashed Stairs', 'Platform Ghost'}, self.player))
+
+    def _54Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return (state.has('Egg Capacity Upgrade', self.player, 2) and state.has('Egg Plant', self.player))
+        elif self.game_logic == "Normal":
+            return ((state.has('Egg Capacity Upgrade', self.player, 1) and state.has('Egg Plant', self.player)) or (state.has('Egg Capacity Upgrade', self.player, 5) and self.has_midring(state)))
+        else:
+            return ((state.has('Egg Plant', self.player)) or (state.has('Egg Capacity Upgrade', self.player, 3) and self.has_midring(state)))
 ###########################################################################################################
     def _55Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1586,6 +1658,14 @@ class YoshiLogic:
             return state.has_all({'Arrow Wheel', 'Large Spring Ball'}, self.player)
         else:
             return state.has_all({'Arrow Wheel', 'Large Spring Ball'}, self.player)
+
+    def _58Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return True
+        elif self.game_logic == "Normal":
+            return True
+        else:
+            return True
 ##############################################################################################
     def _5ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1754,6 +1834,14 @@ class YoshiLogic:
             return state.has_all({'Large Spring Ball', 'Egg Plant', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 2) or self.combat_item(state))
         else:
             return state.has_all({'Egg Plant', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1) or self.combat_item(state))
+
+    def _64Boss(self, state: CollectionState) -> bool:
+        if self.game_logic == "Easy":
+            return state.has_all({'Egg Plant'}, self.player)
+        elif self.game_logic == "Normal":
+            return state.has_all({'Egg Plant'}, self.player)
+        else:
+            return state.has_all({'Egg Plant'}, self.player)
 ###################################################################################################################
     def _65Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -1885,11 +1973,11 @@ class YoshiLogic:
 
     def _68Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch', 'Giant Eggs'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Giant Eggs'}, self.player)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Giant Eggs'}, self.player)
 ######################################################################################################################
     def _6ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
