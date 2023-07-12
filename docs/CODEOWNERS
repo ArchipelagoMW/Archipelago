@@ -53,7 +53,7 @@
 /worlds/ff1/ @jtoyoda
 
 # Hollow Knight
-/worlds/hk/ @dewiniaid
+# /worlds/hk/ <Unmaintained>
 
 # Hylics 2
 /worlds/hylics2/ @TRPG0
@@ -160,4 +160,4 @@
 ####################################
 
 # Ori and the Blind Forest
-# /worlds_disabled/oribf/ # Unmaintained
+# /worlds_disabled/oribf/ <Unmaintained>
