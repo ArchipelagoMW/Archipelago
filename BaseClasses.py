@@ -10,6 +10,7 @@ from argparse import Namespace
 from collections import ChainMap, Counter, deque
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
+from inspect import stack
 
 import NetUtils
 import Options
@@ -878,7 +879,6 @@ class Entrance:
         self.name = name
         self.parent_region = parent
         self.player = player
-        from inspect import stack
         frame_info = stack()[1]
         if frame_info.function != "create_exit":
             logging.warning("Direct Entrance creation is deprecated. Please use `Region.create_exit`, "
