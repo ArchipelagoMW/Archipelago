@@ -1,11 +1,14 @@
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
-    LocationProgressType
+import random
+
+from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
 from worlds.AutoWorld import WebWorld, World
 
-from .Regions import RegionNames, all_regions
-from .Items import OSRSItem, ItemNames, all_items, item_table
-from .Locations import LocationNames, OSRSLocation, all_locations
+from .Regions import all_regions
+from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location_Items, \
+    chunksanity_starting_chunks
+from .Locations import OSRSLocation, all_locations
 from .Options import OSRSOptions
+from .Names import LocationNames, ItemNames, RegionNames
 
 
 class OSRSWeb(WebWorld):
@@ -33,9 +36,22 @@ class OSRSWorld(World):
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
 
+    starting_area_item = None
+
     def generate_early(self) -> None:
+        rnd = self.multiworld.per_slot_randoms[self.player]
+        starting_area = self.multiworld.starting_area[self.player]
+        if starting_area.value < 8:
+            self.starting_area_item = starting_area_dict[starting_area.value]
+        elif starting_area.value == 8:
+            random_bank = rnd.randint(0, 7)
+            self.starting_area_item = starting_area_dict[random_bank]
+        else:
+            chunksanity_random = rnd.randint(0, len(chunksanity_starting_chunks)-1)
+            self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
+
         # Set Starting Chunk
-        self.multiworld.push_precollected(self.create_item(ItemNames.Lumbridge))
+        self.multiworld.push_precollected(self.create_item(self.starting_area_item.itemName))
 
     def create_regions(self) -> None:
         """
@@ -57,8 +73,7 @@ class OSRSWorld(World):
         for region_info in all_regions:
             region = name_to_region[region_info.name]
             if region_info.name == "Menu":
-                # TODO Set exit to chosen starting location instead of hard-coding lumbridge
-                start_region = RegionNames.Lumbridge
+                start_region = self.starting_area_item.unlocksRegion
                 connection_region = name_to_region[start_region]
                 entrance = Entrance(self.player, start_region, region)
                 entrance.connect(connection_region)
@@ -70,8 +85,7 @@ class OSRSWorld(World):
 
     def create_items(self) -> None:
         for item in all_items:
-            #TODO Change this for whatever your starting region is
-            if item.itemName is not ItemNames.Lumbridge:
+            if item.itemName is not self.starting_area_item.itemName:
                 for i in range(item.count):
                     self.multiworld.itempool.append(self.create_item(item.itemName))
 

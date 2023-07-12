@@ -3,54 +3,7 @@ import typing
 from BaseClasses import CollectionState
 from .Locations import LocationNames
 from .Items import ItemNames
-
-
-class RegionNames:
-    Lumbridge = "Lumbridge"
-    Lumbridge_Swamp = "Lumbridge Swamp"
-    Lumbridge_Farms = "Lumbridge Farms"
-    HAM_Hideout = "HAM Hideout"
-    Draynor_Village = "Draynor Village"
-    Draynor_Manor = "Draynor Manor"
-    Wizards_Tower = "Wizard's Tower"
-    Al_Kharid = "Al Kharid"
-    Citharede_Abbey = "Citharede Abbey"
-    South_Of_Varrock = "South of Varrock"
-    Central_Varrock = "Central Varrock"
-    Varrock_Palace = "Varrock Palace"
-    East_Of_Varrock = "East of Varrock"
-    West_Varrock = "West Varrock"
-    Edgeville = "Edgeville"
-    Barbarian_Village = "Barbarian Village"
-    Monastery = "Monastery"
-    Ice_Mountain = "Ice Mountain"
-    Dwarven_Mines = "Dwarven Mines"
-    Falador = "Falador"
-    Falador_Farm = "Falador Farm"
-    Crafting_Guild = "Crafting Guild"
-    Rimmington = "Rimmington"
-    Port_Sarim = "Port Sarim"
-    Mudskipper_Point = "Mudskipper Point"
-    Karamja = "Karamja"
-    Corsair_Cove = "Corsair Cove"
-    Wilderness = "The Wilderness"
-    Crandor = "Crandor"
-    # Resource Regions
-    Egg = "Egg"
-    Sheep = "Sheep"
-    Milk = "Milk"
-    Wheat = "Wheat"
-    Windmill = "Windmill"
-    Spinning_Wheel = "Spinning Wheel"
-    Imp = "Imp"
-    Bronze_Ores = "Tin and Copper"
-    Clay_Rock = "Clay Rocks"
-    Coal_Rock = "Coal Rocks"
-    Iron_Rock = "Iron Rocks"
-    Silver_Rock = "Silver Rocks"
-    Gold_Rock = "Gold Rocks"
-    Furnace = "Furnace"
-    Anvil = "Anvil"
+from .Names import RegionNames
 
 
 class RegionInfo(typing.NamedTuple):
