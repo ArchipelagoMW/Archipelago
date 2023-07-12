@@ -1341,7 +1341,7 @@ rom_addresses = {
     "Trainersanity_EVENT_BEAT_ROUTE_15_TRAINER_8_ITEM": 0x5992a,
     "Trainersanity_EVENT_BEAT_ROUTE_15_TRAINER_9_ITEM": 0x59938,
     "Static_Encounter_Snorlax_B": 0x59a52,
-    "Static_Encounter_Snorlax_B_Level": 0x59a59,
+    "Static_Encounter_Snorlax_B_Level": 0x59a57,
     "Trainersanity_EVENT_BEAT_ROUTE_16_TRAINER_0_ITEM": 0x59abe,
     "Trainersanity_EVENT_BEAT_ROUTE_16_TRAINER_1_ITEM": 0x59acc,
     "Trainersanity_EVENT_BEAT_ROUTE_16_TRAINER_2_ITEM": 0x59ada,
