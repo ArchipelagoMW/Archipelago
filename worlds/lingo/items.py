@@ -16,19 +16,19 @@ class ItemData(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
 
-    def should_include(self, world: MultiWorld, player: int) -> bool:
+    def should_include(self, multiworld: MultiWorld, player: int) -> bool:
         if self.mode == "colors":
-            return get_option_value(world, player, "shuffle_colors") > 0
+            return get_option_value(multiworld, player, "shuffle_colors") > 0
         elif self.mode == "doors":
-            return get_option_value(world, player, "shuffle_doors") > 0
+            return get_option_value(multiworld, player, "shuffle_doors") > 0
         elif self.mode == "orange tower":
             # door shuffle is on and tower isn't progressive
-            return get_option_value(world, player, "shuffle_doors") > 0\
-                and not get_option_value(world, player, "progressive_orange_tower")
+            return get_option_value(multiworld, player, "shuffle_doors") > 0\
+                and not get_option_value(multiworld, player, "progressive_orange_tower")
         elif self.mode == "complex door":
-            return get_option_value(world, player, "shuffle_doors") == 2  # complex doors
+            return get_option_value(multiworld, player, "shuffle_doors") == 2  # complex doors
         elif self.mode == "door group":
-            return get_option_value(world, player, "shuffle_doors") == 1  # simple doors
+            return get_option_value(multiworld, player, "shuffle_doors") == 1  # simple doors
         elif self.mode == "special":
             return False
         else:

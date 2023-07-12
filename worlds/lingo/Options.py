@@ -93,8 +93,8 @@ lingo_options: Dict[str, type] = {
 }
 
 
-def get_option_value(world: MultiWorld, player: int, name: str) -> Union[bool, int]:
-    option = getattr(world, name, None)
+def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[bool, int]:
+    option = getattr(multiworld, name, None)
 
     if option is None:
         return 0

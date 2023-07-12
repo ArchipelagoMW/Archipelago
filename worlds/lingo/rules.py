@@ -13,13 +13,12 @@ class LingoLogic(LogicMixin):
     Logic macros that get reused
     """
 
-    def lingo_can_use_entrance(self, room: str, door: RoomAndDoor, world: MultiWorld, player: int,
-                               player_logic: LingoPlayerLogic):
+    def lingo_can_use_entrance(self, room: str, door: RoomAndDoor, player: int, player_logic: LingoPlayerLogic):
         if door is None:
             return True
         else:
-            if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, world,
-                                         player, player_logic):
+            if self._lingo_can_open_door(room, room if door.room is None else door.room, door.door, player,
+                                         player_logic):
                 return True
             return False
 
@@ -38,19 +37,18 @@ class LingoLogic(LogicMixin):
                 break
         return viable_option
 
-    def lingo_can_use_location(self, location: PlayerLocation, room_name: str, world: MultiWorld, player: int,
+    def lingo_can_use_location(self, location: PlayerLocation, room_name: str, multiworld: MultiWorld, player: int,
                                player_logic: LingoPlayerLogic):
         for panel in location.panels:
             panel_room = room_name if panel.room is None else panel.room
-            if not self._lingo_can_solve_panel(room_name, panel_room, panel.panel, world, player, player_logic):
+            if not self._lingo_can_solve_panel(room_name, panel_room, panel.panel, multiworld, player, player_logic):
                 return False
         return True
 
-    def lingo_can_use_mastery_location(self, world: MultiWorld, player: int):
-        return self.has("Mastery Achievement", player, get_option_value(world, player, "mastery_achievements"))
+    def lingo_can_use_mastery_location(self, multiworld: MultiWorld, player: int):
+        return self.has("Mastery Achievement", player, get_option_value(multiworld, player, "mastery_achievements"))
 
-    def _lingo_can_open_door(self, start_room: str, room: str, door: str, world, player,
-                             player_logic: LingoPlayerLogic):
+    def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
         """
         Determines whether a door can be opened
         """
@@ -61,7 +59,7 @@ class LingoLogic(LogicMixin):
         else:
             return self.has(item_name, player)
 
-    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, world, player,
+    def _lingo_can_solve_panel(self, start_room: str, room: str, panel: str, multiworld: MultiWorld, player: int,
                                player_logic: LingoPlayerLogic):
         """
         Determines whether a panel can be solved
@@ -74,25 +72,26 @@ class LingoLogic(LogicMixin):
                 return False
         for req_door in panel_object.required_doors:
             if not self._lingo_can_open_door(start_room, room if req_door.room is None else req_door.room,
-                                             req_door.door, world, player, player_logic):
+                                             req_door.door, player, player_logic):
                 return False
-        if len(panel_object.colors) > 0 and get_option_value(world, player, "shuffle_colors") is True:
+        if len(panel_object.colors) > 0 and get_option_value(multiworld, player, "shuffle_colors") is True:
             for color in panel_object.colors:
                 if not self.has(color.capitalize(), player):
                     return False
         return True
 
 
-def make_location_lambda(location: PlayerLocation, room_name: str, world: MultiWorld, player: int,
+def make_location_lambda(location: PlayerLocation, room_name: str, multiworld: MultiWorld, player: int,
                          player_logic: LingoPlayerLogic):
     if location.name == player_logic.MASTERY_LOCATION:
-        return lambda state: state.lingo_can_use_mastery_location(world, player)
+        return lambda state: state.lingo_can_use_mastery_location(multiworld, player)
     else:
-        return lambda state: state.lingo_can_use_location(location, room_name, world, player, player_logic)
+        return lambda state: state.lingo_can_use_location(location, room_name, multiworld, player, player_logic)
 
 
-def set_rules(world: MultiWorld, player: int, player_logic: LingoPlayerLogic):
+def set_rules(multiworld: MultiWorld, player: int, player_logic: LingoPlayerLogic):
     for room_name, locations in player_logic.LOCATIONS_BY_ROOM.items():
         for location in locations:
-            set_rule(world.get_location(location.name, player), make_location_lambda(location, room_name, world, player,
-                                                                                     player_logic))
+            set_rule(multiworld.get_location(location.name, player), make_location_lambda(location, room_name,
+                                                                                          multiworld, player,
+                                                                                          player_logic))
