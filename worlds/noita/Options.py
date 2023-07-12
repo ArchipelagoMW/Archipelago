@@ -88,6 +88,15 @@ class ExtraOrbs(Range):
     default = 0
 
 
+class ShopPrice(Choice):
+    """Reduce the costs of Archipelago items in shops."""
+    display_name = "Shop Price Reduction"
+    option_full_price = 0
+    option_25_percent_off = 1
+    option_50_percent_off = 2
+    option_75_percent_off = 3
+
+
 noita_options: Dict[str, AssembleOptions] = {
     "death_link": DeathLink,
     "bad_effects": Traps,
@@ -98,4 +107,5 @@ noita_options: Dict[str, AssembleOptions] = {
     "orbs_as_checks": OrbsAsChecks,
     "bosses_as_checks": BossesAsChecks,
     "extra_orbs": ExtraOrbs,
+    "shop_price": ShopPrice,
 }
