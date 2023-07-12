@@ -879,9 +879,12 @@ class Entrance:
         self.parent_region = parent
         self.player = player
         from inspect import stack
-        if not stack()[1].function == "create_exit":
-            logging.warning(f"Direct Entrance creation is deprecated.\n{stack()[1][1::1]}\n"
-                            "Please use `Region.create_exit`, `Region.connect` or `Region.add_exits` to create Entrances")
+        frame_info = stack()[1]
+        if frame_info.function != "create_exit":
+            logging.warning("Direct Entrance creation is deprecated. Please use `Region.create_exit`, "
+                            "`Region.connect` or `Region.add_exits` to create Entrances.\n"
+                            f"  File \"{frame_info.filename}\", line {frame_info.lineno}, in {frame_info.function}\n"
+                            f"    {frame_info.code_context[0].lstrip()}")
 
     def can_reach(self, state: CollectionState) -> bool:
         if self.parent_region.can_reach(state) and self.access_rule(state):
