@@ -1407,6 +1407,78 @@
             <YawPitchRoll value="MAX"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_ScarabWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="10"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-0.2,-0.1"/>
+            <YawPitchRoll value="719.2968"/>
+            <Overlays Scale="0.7,0.1"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="10"/>
+            <ClearanceAcceleration value="75"/>
+            <YawPitchRoll value="MAX"/>
+            <Overlays Scale="0.1,0.1"/>
+        </MotionPhases>
+        <MotionOverlays Type="Wave" Axis="1,0,0" Wavelength="6,0.1"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_AdeptWeapon" parent="MissileDefault"/>
+    <CMoverMissile id="AP_AdeptUpgradeWeapon" parent="MissileDefault"/>
+    <CMoverMissile id="AP_SupplicantWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="18.75"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_GhostSCBWLockdown@Mover">
+        <PathMode value="Flying"/>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="2"/>
+            <MaxSpeed value="2"/>
+            <Outro value="0.2,0.55"/>
+            <Timeout value="10"/>
+            <ThrowRotationType value="LookAtTarget"/>
+            <ThrowVector value="0,-1,1"/>
+            <YawPitchRoll value="506.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <Speed value="2"/>
+            <MaxSpeed value="28"/>
+            <Outro value="0.56,1.5"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="3200"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_ScienceVesselSCBWEMPShockwave@Mover">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="30"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
     <CMoverMissile id="AP_HotSRaptorChargeMissile">
         <Flags index="RestoreHeight" value="1"/>
         <MotionPhases>

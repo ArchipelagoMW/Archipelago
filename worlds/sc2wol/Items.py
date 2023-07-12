@@ -19,7 +19,7 @@ class StarcraftWoLItem(Item):
 
 
 def get_full_item_list():
-    return extended_item_table
+    return item_table
 
 
 SC2WOL_ITEM_ID_OFFSET = 1000
@@ -43,7 +43,13 @@ item_table = {
     "Ghost": ItemData(15 + SC2WOL_ITEM_ID_OFFSET, "Unit", 15, classification=ItemClassification.progression),
     "Spectre": ItemData(16 + SC2WOL_ITEM_ID_OFFSET, "Unit", 16, classification=ItemClassification.progression),
     "Thor": ItemData(17 + SC2WOL_ITEM_ID_OFFSET, "Unit", 17, classification=ItemClassification.progression),
+    # EE units
+    "Liberator": ItemData(18 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression),
+    "Valkyrie": ItemData(19 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression),
+    "Widow Mine": ItemData(20 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, classification=ItemClassification.progression),
+    "Cyclone": ItemData(21 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, classification=ItemClassification.progression),
 
+    # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     "Progressive Infantry Weapon": ItemData(100 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 0, quantity=3),
     "Progressive Infantry Armor": ItemData(102 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     "Progressive Vehicle Weapon": ItemData(103 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
@@ -66,7 +72,7 @@ item_table = {
     "Dual-Fusion Welders (SCV)": ItemData(205 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 5, parent_item="SCV"),
     "Fire-Suppression System (Building)": ItemData(206 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 6),
     "Orbital Command (Building)": ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 7),
-    "Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, parent_item="Marine"),
+    "Progressive Stimpack (Marine)": ItemData(208 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 0, parent_item="Marine", quantity=2),
     "Combat Shield (Marine)": ItemData(209 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 9, classification=ItemClassification.progression, parent_item="Marine"),
     "Advanced Medic Facilities (Medic)": ItemData(210 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 10, classification=ItemClassification.filler, parent_item="Medic"),
     "Stabilizer Medpacks (Medic)": ItemData(211 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 11, classification=ItemClassification.progression, parent_item="Medic"),
@@ -76,10 +82,59 @@ item_table = {
     "Kinetic Foam (Marauder)": ItemData(215 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 15, parent_item="Marauder"),
     "U-238 Rounds (Reaper)": ItemData(216 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 16, parent_item="Reaper"),
     "G-4 Clusterbomb (Reaper)": ItemData(217 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 17, classification=ItemClassification.progression, parent_item="Reaper"),
+    # Items from EE
+    "Mag-Field Accelerators (Cyclone)": ItemData(218 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 18, parent_item="Cyclone"),
+    "Mag-Field Launchers (Cyclone)": ItemData(219 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 19, parent_item="Cyclone"),
+    # Items from new mod
+    "Laser Targeting System (Marine)": ItemData(220 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, classification=ItemClassification.filler, parent_item="Marine"), # Freed slot from Stimpack
+    "Magrail Munitions (Marine)": ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, parent_item="Marine"),
+    "Optimized Logistics (Marine)": ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, classification=ItemClassification.filler, parent_item="Marine"),
+    "Restoration (Medic)": ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, classification=ItemClassification.filler, parent_item="Medic"),
+    "Optical Flare (Medic)": ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, classification=ItemClassification.filler, parent_item="Medic"),
+    "Optimized Logistics (Medic)": ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, classification=ItemClassification.filler, parent_item="Medic"),
+    "Progressive Stimpack (Firebat)": ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 6, parent_item="Firebat", quantity=2),
+    "Optimized Logistics (Firebat)": ItemData(227 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 25, parent_item="Firebat"),
+    "Progressive Stimpack (Marauder)": ItemData(228 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 8, parent_item="Marauder", quantity=2),
+    "Laser Targeting System (Marauder)": ItemData(229 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 26, classification=ItemClassification.filler, parent_item="Marauder"),
+    "Magrail Munitions (Marauder)": ItemData(230 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 27, classification=ItemClassification.filler, parent_item="Marauder"),
+    "Internal Tech Module (Marauder)": ItemData(231 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 28, classification=ItemClassification.filler, parent_item="Marauder"),
+
+    # Items from new mod
+    "Progressive Stimpack (Reaper)": ItemData(250 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 10, parent_item="Reaper", quantity=2),
+    "Laser Targeting System (Reaper)": ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, classification=ItemClassification.filler, parent_item="Reaper"),
+    "Advanced Cloaking Field (Reaper)": ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, parent_item="Reaper"),
+    "Spider Mines (Reaper)": ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, classification=ItemClassification.filler, parent_item="Reaper"),
+    "Combat Drugs (Reaper)": ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, classification=ItemClassification.filler, parent_item="Reaper"),
+    "Hellbat Aspect (Hellion)": ItemData(255 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 4, parent_item="Hellion"),
+    "Smart Servos (Hellion)": ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, parent_item="Hellion"),
+    "Optimized Logistics (Hellion)": ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, classification=ItemClassification.filler, parent_item="Hellion"),
+    "Jump Jets (Hellion)": ItemData(258 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 7, classification=ItemClassification.filler, parent_item="Hellion"),
+    "Progressive Stimpack (Hellion)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellion", quantity=2),
+    "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, classification=ItemClassification.filler, parent_item="Vulture"),
+    "Auto Launchers (Vulture)": ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, parent_item="Vulture"),
+    "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10),
+    "Jump Jets (Goliath)": ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 11, classification=ItemClassification.filler, parent_item="Goliath"),
+    "Optimized Logistics (Goliath)": ItemData(264 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 12, classification=ItemClassification.filler, parent_item="Goliath"),
+    "Hyperfluxor (Diamondback)": ItemData(265 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 13, parent_item="Diamondback"),
+    "Burst Capacitors (Diamondback)": ItemData(266 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 14, classification=ItemClassification.filler, parent_item="Diamondback"),
+    "Optimized Logistics (Diamondback)": ItemData(267 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 15, parent_item="Diamondback"),
+    "Jump Jets (Siege Tank)": ItemData(268 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, parent_item="Siege Tank"),
+    "Spider Mines (Siege Tank)": ItemData(269 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 17, classification=ItemClassification.filler, parent_item="Siege Tank"),
+    "Smart Servos (Siege Tank)": ItemData(270 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 18, classification=ItemClassification.filler, parent_item="Siege Tank"),
+    "Graduating Range (Siege Tank)": ItemData(271 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 19, classification=ItemClassification.progression, parent_item="Siege Tank"),
+    "Laser Targeting System (Siege Tank)": ItemData(272 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 20, parent_item="Siege Tank"),
+    "Advanced Siege Tech (Siege Tank)": ItemData(273 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, parent_item="Siege Tank"),
+    "Internal Tech Module (Siege Tank)": ItemData(274 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 22, classification=ItemClassification.filler, parent_item="Siege Tank"),
+    "Optimized Logistics (Predator)": ItemData(275 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 23, classification=ItemClassification.filler, parent_item="Predator"),
+    "Expanded Hull (Medivac)": ItemData(276 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 24, classification=ItemClassification.filler, parent_item="Medivac"),
+    "Afterburners (Medivac)": ItemData(277 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 25, classification=ItemClassification.filler, parent_item="Medivac"),
+    "Advanced Laser Technology (Wraith)": ItemData(278 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 26, classification=ItemClassification.progression, parent_item="Wraith"),
+    "Smart Servos (Viking)": ItemData(279 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 27, parent_item="Viking"),
+    "Magrail Munitions (Viking)": ItemData(280 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 28, parent_item="Viking"),
 
     "Twin-Linked Flamethrower (Hellion)": ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 0, classification=ItemClassification.filler, parent_item="Hellion"),
     "Thermite Filaments (Hellion)": ItemData(301 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 1, parent_item="Hellion"),
-    "Cerberus Mine (Vulture)": ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, classification=ItemClassification.filler, parent_item="Vulture"),
+    "Cerberus Mine (Spider Mine)": ItemData(302 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, classification=ItemClassification.filler),
     "Replenishable Magazine (Vulture)": ItemData(303 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3, classification=ItemClassification.filler, parent_item="Vulture"),
     "Multi-Lock Weapons System (Goliath)": ItemData(304 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4, parent_item="Goliath"),
     "Ares-Class Targeting System (Goliath)": ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5, parent_item="Goliath"),
@@ -93,7 +148,7 @@ item_table = {
     "Displacement Field (Wraith)": ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 13, classification=ItemClassification.filler, parent_item="Wraith"),
     "Ripwave Missiles (Viking)": ItemData(314 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 14, parent_item="Viking"),
     "Phobos-Class Weapons System (Viking)": ItemData(315 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 15, parent_item="Viking"),
-    "Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 16, classification=ItemClassification.filler, parent_item="Banshee"),
+    "Progressive Cross-Spectrum Dampeners (Banshee)": ItemData(316 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 2, classification=ItemClassification.filler, parent_item="Banshee", quantity=2),
     "Shockwave Missile Battery (Banshee)": ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 17, parent_item="Banshee"),
     "Missile Pods (Battlecruiser)": ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 18, classification=ItemClassification.filler, parent_item="Battlecruiser"),
     "Defensive Matrix (Battlecruiser)": ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 19, classification=ItemClassification.filler, parent_item="Battlecruiser"),
@@ -103,6 +158,47 @@ item_table = {
     "Nyx-Class Cloaking Module (Spectre)": ItemData(323 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 23, parent_item="Spectre"),
     "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, classification=ItemClassification.filler, parent_item="Thor"),
     "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, classification=ItemClassification.filler, parent_item="Thor"),
+    # Items from EE
+    "Advanced Ballistics (Liberator)": ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
+    "Raid Artillery (Liberator)": ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator"),
+    "Drilling Claws (Widow Mine)": ItemData(328 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, classification=ItemClassification.filler, parent_item="Widow Mine"),
+    "Concealment (Widow Mine)": ItemData(329 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, classification=ItemClassification.progression, parent_item="Widow Mine"),
+
+    #Items from new mod
+    "Hyperflight Rotors (Banshee)": ItemData(350 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 0, classification=ItemClassification.filler, parent_item="Banshee"),
+    "Laser Targeting System (Banshee)": ItemData(351 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 1, classification=ItemClassification.filler, parent_item="Banshee"),
+    "Internal Tech Module (Banshee)": ItemData(352 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 2, classification=ItemClassification.filler, parent_item="Banshee"),
+    "Tactical Jump (Battlecruiser)": ItemData(353 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 3, parent_item="Battlecruiser"),
+    "Cloak (Battlecruiser)": ItemData(354 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 4, parent_item="Battlecruiser"),
+    "ATX Laser Battery (Battlecruiser)": ItemData(355 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 5, classification=ItemClassification.progression, parent_item="Battlecruiser"),
+    "Optimized Logistics (Battlecruiser)": ItemData(356 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 6, classification=ItemClassification.filler, parent_item="Battlecruiser"),
+    "Internal Tech Module (Battlecruiser)": ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, classification=ItemClassification.filler, parent_item="Battlecruiser"),
+    "EMP Rounds (Ghost)": ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, parent_item="Ghost"),
+    "Lockdown (Ghost)": ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, parent_item="Ghost"),
+    "Impaler Rounds (Spectre)": ItemData(360 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 10, parent_item="Spectre"),
+    "Progressive High Impact Payload (Thor)": ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 14, parent_item="Thor", quantity=2),  # L2 is Smart Servos
+    "Bio Mechanical Repair Drone (Raven)": ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 13, parent_item="Raven"),
+    "Spider Mines (Raven)": ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 14, parent_item="Raven"),
+    "Railgun Turret (Raven)": ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, parent_item="Raven"),
+    "Hunter-Seeker Weapon (Raven)": ItemData(366 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 16, parent_item="Raven"),
+    "Interference Matrix (Raven)": ItemData(367 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 17, parent_item="Raven"),
+    "Anti-Armor Missile (Raven)": ItemData(368 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 18, classification=ItemClassification.filler, parent_item="Raven"),
+    "Internal Tech Module (Raven)": ItemData(369 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 19, classification=ItemClassification.filler, parent_item="Raven"),
+    "EMP Shockwave (Science Vessel)": ItemData(370 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, parent_item="Science Vessel"),
+    "Defensive Matrix (Science Vessel)": ItemData(371 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 21, parent_item="Science Vessel"),
+    "Targeting Optics (Cyclone)": ItemData(372 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 22, parent_item="Cyclone"),
+    "Rapid Fire Launchers (Cyclone)": ItemData(373 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 23, parent_item="Cyclone"),
+    "Cloak (Liberator)": ItemData(374 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 24, classification=ItemClassification.filler, parent_item="Liberator"),
+    "Laser Targeting System (Liberator)": ItemData(375 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 25, classification=ItemClassification.filler, parent_item="Liberator"),
+    "Optimized Logistics (Liberator)": ItemData(376 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 26, classification=ItemClassification.filler, parent_item="Liberator"),
+    "Black Market Launchers (Widow Mine)": ItemData(377 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 27, classification=ItemClassification.filler, parent_item="Widow Mine"),
+    "Executioner Missiles (Widow Mine)": ItemData(378 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 28, parent_item="Widow Mine"),
+
+    # Just lazy to create a new group for one unit
+    "Enhanced Cluster Launchers (Valkyrie)": ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, parent_item="Valkyrie"),
+    "Shaped Hull (Valkyrie)": ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 20, classification=ItemClassification.filler, parent_item="Valkyrie"),
+    "Burst Lasers (Valkyrie)": ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 21, parent_item="Valkyrie"),
+    "Afterburners (Valkyrie)": ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, classification=ItemClassification.filler, parent_item="Valkyrie"),
 
     "Bunker": ItemData(400 + SC2WOL_ITEM_ID_OFFSET, "Building", 0, classification=ItemClassification.progression),
     "Missile Turret": ItemData(401 + SC2WOL_ITEM_ID_OFFSET, "Building", 1, classification=ItemClassification.progression),
@@ -134,7 +230,7 @@ item_table = {
     "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, classification=ItemClassification.filler),
     "Hercules": ItemData(615 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 15, classification=ItemClassification.progression),
     "Cellular Reactor": ItemData(616 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16),
-    "Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17),
+    "Progressive Regenerative Bio-Steel": ItemData(617 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 4, quantity=2),
     "Hive Mind Emulator": ItemData(618 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 18, ItemClassification.progression),
     "Psi Disrupter": ItemData(619 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 19, classification=ItemClassification.progression),
 
@@ -155,26 +251,8 @@ item_table = {
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
 
-extended_item_table = dict(**item_table, **{
-    "Liberator": ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression),
-    "Valkyrie": ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression),
-    "Widow Mine": ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, classification=ItemClassification.progression),
-    "Cyclone": ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, classification=ItemClassification.progression),
-
-    "Mag-Field Accelerators (Cyclone)": ItemData(940 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 18, parent_item="Cyclone"),
-    "Mag-Field Launchers (Cyclone)": ItemData(941 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 19, parent_item="Cyclone"),
-
-    "Advanced Ballistics (Liberator)": ItemData(950 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
-    "Raid Artillery (Liberator)": ItemData(951 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator"),
-    "Drilling Claws (Widow Mine)": ItemData(952 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, classification=ItemClassification.filler, parent_item="Widow Mine"),
-    "Concealment (Widow Mine)": ItemData(953 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, classification=ItemClassification.progression, parent_item="Widow Mine")
-})
-
 def get_item_table(multiworld: MultiWorld, player: int):
-    if get_option_value(multiworld, player, "item_set") > 0:
-        return extended_item_table
-    else:
-        return item_table
+    return item_table
 
 basic_units = {
     'Marine',
@@ -232,6 +310,13 @@ zerg_defense_ratings = {
     "Psi Disruptor": 3
 }
 
+spider_mine_sources = {
+    "Vulture",
+    "Spider Mines (Reaper)",
+    "Spider Mines (Siege Tank)",
+    "Spider Mines (Raven)"
+}
+
 # 'number' values of upgrades for upgrade bundle items
 upgrade_numbers = [
     {0, 4, 8}, # Weapon
@@ -270,9 +355,9 @@ lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, 
 # Map type to expected int
 type_flaggroups: typing.Dict[str, int] = {
     "Unit": 0,
-    "Upgrade": 1,
-    "Armory 1": 2,
-    "Armory 2": 3,
+    "Upgrade": 1,  # Weapon / Armor upgrades
+    "Armory 1": 2,  # Unit upgrades
+    "Armory 2": 3,  # Unit upgrades
     "Building": 4,
     "Mercenary": 5,
     "Laboratory": 6,
@@ -280,5 +365,8 @@ type_flaggroups: typing.Dict[str, int] = {
     "Minerals": 8,
     "Vespene": 9,
     "Supply": 10,
-    "Goal": 11
+    "Goal": 11,
+    "Armory 3": 12,  # Unit upgrades
+    "Armory 4": 13,  # Unit upgrades
+    "Progressive Upgrade": 14  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
 }

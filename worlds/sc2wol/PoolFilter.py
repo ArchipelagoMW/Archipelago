@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list
+from .Items import get_full_item_list, spider_mine_sources
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value
@@ -9,8 +9,8 @@ from .LogicMixin import SC2WoLLogic
 # Items with associated upgrades
 UPGRADABLE_ITEMS = [
     "Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "Spectre",
-    "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor",
-    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser",
+    "Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine", "Cyclone",
+    "Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Raven", "Science Vessel", "Liberator", "Valkyrie",
     "Bunker", "Missile Turret"
 ]
 
@@ -96,6 +96,14 @@ def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
     ]
 
 
+def get_item_quantity(item):
+    return get_full_item_list()[item.name].quantity
+
+
+def copy_item(item: Item):
+    return Item(item.name, item.classification, item.code, item.player)
+
+
 class ValidInventory:
 
     def has(self, item: str, player: int):
@@ -133,7 +141,8 @@ class ValidInventory:
                 for item in items_to_lock:
                     if item in inventory:
                         inventory.remove(item)
-                        locked_items.append(item)
+                        for _ in range(get_item_quantity(item)):
+                            locked_items.append(copy_item(item))
                     if item in existing_items:
                         existing_items.remove(item)
 
@@ -149,7 +158,8 @@ class ValidInventory:
                 if not all(requirement(self) for requirement in requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.add(item.name)
-                    locked_items.append(item)
+                    for _ in range(get_item_quantity(item)):
+                        locked_items.append(copy_item(item))
                     return False
             return True
 
@@ -187,11 +197,15 @@ class ValidInventory:
                         if transient_item in inventory:
                             inventory.remove(transient_item)
                         if transient_item not in locked_items:
-                            locked_items.append(transient_item)
+                            for _ in range(get_item_quantity(transient_item)):
+                                locked_items.append(copy_item(transient_item))
                         if transient_item.classification in (ItemClassification.progression, ItemClassification.progression_skip_balancing):
                             self.logical_inventory.add(transient_item.name)
             else:
                 attempt_removal(item)
+
+        if not spider_mine_sources & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
 
         return inventory + locked_items
 
@@ -200,6 +214,7 @@ class ValidInventory:
         self._sc2wol_has_air = lambda world, player: SC2WoLLogic._sc2wol_has_air(self, world, player)
         self._sc2wol_has_air_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_air_anti_air(self, world, player)
         self._sc2wol_has_competent_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_anti_air(self, world, player)
+        self._sc2wol_has_competent_ground_to_air = lambda world, player: SC2WoLLogic._sc2wol_has_competent_ground_to_air(self, world, player)
         self._sc2wol_has_anti_air = lambda world, player: SC2WoLLogic._sc2wol_has_anti_air(self, world, player)
         self._sc2wol_defense_rating = lambda world, player, zerg_enemy, air_enemy=False: SC2WoLLogic._sc2wol_defense_rating(self, world, player, zerg_enemy, air_enemy)
         self._sc2wol_has_competent_comp = lambda world, player: SC2WoLLogic._sc2wol_has_competent_comp(self, world, player)
@@ -210,6 +225,7 @@ class ValidInventory:
         self._sc2wol_has_protoss_common_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_common_units(self, world, player)
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
+        self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2WoLLogic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,

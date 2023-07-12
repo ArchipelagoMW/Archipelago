@@ -50,7 +50,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
-        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
 
@@ -75,8 +75,52 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             if self.ctx.difficulty == -1:
                 self.output("Please connect to a seed before checking difficulty.")
             else:
-                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
+                current_difficulty = self.ctx.difficulty
+                if self.ctx.difficulty_override >= 0:
+                    current_difficulty = self.ctx.difficulty_override
+                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][current_difficulty])
             self.output("To change the difficulty, add the name of the difficulty after the command.")
+            return False
+
+
+    def _cmd_game_speed(self, game_speed: str = "") -> bool:
+        """Overrides the current game speed for the world.
+         Takes the arguments default, slower, slow, normal, fast, faster"""
+        options = game_speed.split()
+        num_options = len(options)
+
+        if num_options > 0:
+            speed_choice = options[0].lower()
+            if speed_choice == "default":
+                self.ctx.game_speed_override = 0
+            elif speed_choice == "slower":
+                self.ctx.game_speed_override = 1
+            elif speed_choice == "slow":
+                self.ctx.game_speed_override = 2
+            elif speed_choice == "normal":
+                self.ctx.game_speed_override = 3
+            elif speed_choice == "fast":
+                self.ctx.game_speed_override = 4
+            elif speed_choice == "faster":
+                self.ctx.game_speed_override = 5
+            else:
+                self.output("Unable to parse game speed '" + options[0] + "'")
+                return False
+
+            self.output("Game speed set to " + options[0])
+            return True
+
+        else:
+            if self.ctx.game_speed == -1:
+                self.output("Please connect to a seed before checking game speed.")
+            else:
+                current_speed = self.ctx.game_speed
+                if self.ctx.game_speed_override >= 0:
+                    current_speed = self.ctx.game_speed_override
+                self.output("Current game speed: "
+                            + ["Default", "Slower", "Slow", "Normal", "Fast", "Faster"][current_speed])
+            self.output("To change the game speed, add the name of the speed after the command,"
+                        " or Default to select based on difficulty.")
             return False
 
     def _cmd_color(self, color: str = "") -> bool:
@@ -201,6 +245,7 @@ class SC2Context(CommonContext):
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
     difficulty = -1
+    game_speed = -1
     all_in_choice = 0
     mission_order = 0
     player_color = 2
@@ -215,6 +260,7 @@ class SC2Context(CommonContext):
     current_tooltip = None
     last_loc_list = None
     difficulty_override = -1
+    game_speed_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
 
@@ -231,6 +277,7 @@ class SC2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
+            self.game_speed = args["slot_data"]["game_speed"]
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             # Maintaining backwards compatibility with older slot data
@@ -565,9 +612,11 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
             accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
         # exists multiple times
-        elif item_data.type == "Upgrade":
+        elif item_data.type == "Upgrade" or item_data.type == "Progressive Upgrade":
             flaggroup = type_flaggroups[item_data.type]
-            if ctx.generic_upgrade_items == 0:
+
+            # Generic upgrades apply only to Weapon / Armor upgrades
+            if item_data.type != "Upgrade" or ctx.generic_upgrade_items == 0:
                 accumulators[flaggroup] += 1 << item_data.number
             else:
                 for bundled_number in upgrade_numbers[item_data.number]:
@@ -652,19 +701,24 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("?SetOptions {} {} {}".format(
+            if self.ctx.game_speed_override >= 0:
+                game_speed = self.ctx.game_speed_override
+            else:
+                game_speed = self.ctx.game_speed
+            await self.chat_send("?SetOptions {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
-                self.ctx.all_in_choice
+                self.ctx.all_in_choice,
+                game_speed
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[8],
                 start_items[9],
                 start_items[10]
             ))
-            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {}".format(
+            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
-                start_items[5], start_items[6]))
+                start_items[5], start_items[6], start_items[12], start_items[13], start_items[14]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
@@ -687,9 +741,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {}".format(
+                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                    current_items[5], current_items[6]))
+                    current_items[5], current_items[6], current_items[12], current_items[13], current_items[14]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:

@@ -1,0 +1,2 @@
+﻿RequirementNode/Name/AndCountUpgradeAP_GhostSCBWLockdownResearchCompleteOnlyTechTreeCheat=CountUpgrade(AP_GhostSCBWLockdownResearch,CompleteOnly)[TechTreeCheat] && ()
+RequirementNode/Name/CountUpgradeAP_GhostSCBWLockdownResearchCompleteOnlyTechTreeCheat=CountUpgrade(AP_GhostSCBWLockdownResearch,CompleteOnly)[TechTreeCheat]

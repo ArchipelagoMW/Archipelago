@@ -1065,7 +1065,7 @@ class RomPatcher:
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs
-        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(RomPatches.BombTorizoWake):
+        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(self.player, RomPatches.BombTorizoWake):
             bomb = next((il for il in itemLocs if il.Location.Name == "Bomb"), None)
             if bomb is not None and bomb.Item.Category == "Nothing":
                 for addrName in ["BTtweaksHack1", "BTtweaksHack2"]:

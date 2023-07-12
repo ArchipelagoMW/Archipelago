@@ -17,6 +17,8 @@
         <EffectArray Reference="Unit,AP_MULE,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_Medic,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Medic,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_Spectre,LifeArmorLevel" Value="1"/>
@@ -27,6 +29,8 @@
         <EffectArray Reference="Unit,AP_HammerSecurity,LifeArmor" Value="1"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmor" Value="1"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranInfantryArmorsVanadiumPlating" parent="AP_BaseTerranInfantryArmors">
         <Name value="Upgrade/Name/AP_BaseTerranInfantryArmorsVanadiumPlating"/>
@@ -53,6 +57,8 @@
         <!--  Firebat -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_FirebatOptimizedLogistics,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_FirebatOptimizedLogistics,LifeStart" Value="1.05"/>
         <!--  Medic -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeStart" Value="1.05"/>
@@ -68,6 +74,8 @@
         <!--  Merc Firebat -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDogOptimizedLogistics,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDogOptimizedLogistics,LifeStart" Value="1.05"/>
         <!-- Set the HP boost here -->
         <EditorCategories value="Race:Terran,UpgradeType:ArmorBonus"/>
     </CUpgrade>
@@ -237,6 +245,8 @@
         <EffectArray Reference="Effect,AP_WraithGU,Amount" Value="1"/>
         <EffectArray Reference="Weapon,AP_WraithA,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_WraithAU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithAG,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WraithAGU,Amount" Value="2"/>
         <!-- Merc Banshee -->
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_DuskWingBansheeDamage,Amount" Value="2"/>
@@ -267,6 +277,8 @@
         <!-- Valkyrie -->
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <!-- The damage effect is same as Wraith's -->
+        <EffectArray Reference="Weapon,AP_ValkyrieG,Level" Value="1"/>
         <!-- Raven -->
         <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_NovaRavenSeekerMissileDamage,Amount" Value="5.000000"/>
@@ -280,6 +292,7 @@
         <EffectArray Reference="Weapon,AP_TwinGatlingCannon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WraithG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WraithA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WraithAG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_DuskWingBanshee,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WreckingCrewAssault,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WreckingCrewFighter,RateMultiplier" Value="0.05"/>
@@ -292,6 +305,7 @@
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ValkyrieG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranVehicleArmors">
@@ -427,6 +441,7 @@
         <EffectArray Reference="Effect,AP_DiamondbackBeam,AttributeBonus[Armored]" Value="2"/>
         <!-- Vulture -->
         <EffectArray Reference="Weapon,AP_Vulture,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_VultureMoving,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_VultureU,Amount" Value="2"/>
         <!-- Goliath -->
         <EffectArray Reference="Weapon,AP_GoliathG,Level" Value="1"/>
@@ -469,6 +484,7 @@
         <EffectArray Reference="Weapon,AP_InfernalFlameThrower,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_HellionTank,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Diamondback,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_VultureMoving,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Vulture,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_GoliathG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_GoliathA,RateMultiplier" Value="0.05"/>
@@ -486,10 +502,10 @@
     <CUpgrade id="AP_330mmBarrageCannons">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
-        <EffectArray Operation="Set" Reference="Button,AP_Thor,Tooltip" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/ThorUpgraded"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,Tooltip" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/AP_ThorUpgraded"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/AP_ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveRaptorSwarmling">
@@ -606,7 +622,9 @@
     <CUpgrade id="AP_FirebatJuggernautPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,LifeArmor" Value="2"/>
         <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,LifeArmor" Value="2"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_StabilizerMedPacks">
@@ -872,6 +890,7 @@
         <AffectedUnitArray value="AP_SpartanCompany"/>
     </CUpgrade>
     <CUpgrade id="AP_BurstCapacitors">
+        <!-- Apply Behavior AP_BurstCapacitorsDamageBuff when granting this upgrade -->
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
@@ -980,8 +999,8 @@
     <CUpgrade id="AP_ExpandedHull">
         <Flags index="UpgradeCheat" value="0"/>
         <Alert value="ResearchComplete"/>
-        <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="2"/>
-        <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="2"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="4"/>
+        <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="4"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
@@ -1468,22 +1487,22 @@
         <Race value="Terr"/>
         <ScoreAmount value="300"/>
         <ScoreResult value="BuildOrder"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[4]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[5]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[6]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[7]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[8]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[9]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[10]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[11]" Value="0.294"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[4]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[5]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[6]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[7]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[8]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[9]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[10]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[11]" Value="0.294"/>
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
@@ -2254,6 +2273,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -2263,6 +2283,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <LeaderLevel value="1"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsLevel2" parent="AP_BaseTerranShipWeapons">
@@ -2277,6 +2298,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -2286,6 +2308,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <LeaderLevel value="2"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsLevel3" parent="AP_BaseTerranShipWeapons">
@@ -2300,6 +2323,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -2309,6 +2333,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel1" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
@@ -2323,6 +2348,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -2332,6 +2358,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel2" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
         <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel2"/>
@@ -2345,6 +2372,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -2354,6 +2382,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
         <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel3"/>
@@ -2367,6 +2396,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithAG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -2376,6 +2406,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranVehicleArmorsLevel1" parent="AP_BaseTerranVehicleArmors">
         <Name value="Upgrade/Name/AP_TerranVehicleArmorsLevel1"/>
@@ -2508,6 +2539,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2535,6 +2567,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2562,6 +2595,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -2589,6 +2623,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2615,6 +2650,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2641,6 +2677,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VultureMoving,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -4410,6 +4447,401 @@
     </CUpgrade>
     <CUpgrade id="AP_SupplicantSacrifice"/>
     <CUpgrade id="AP_CommanderPrestigeAlarakMech"/>
+    <CUpgrade id="AP_OracleEnergyUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-ResearchBosonicCore.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Oracle"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RestoreShields">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Oracle"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GraviticDrive">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-graviticdrive.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,Speed" Value="0.875000"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,Acceleration" Value="1.125"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_WarpPrismPhasing"/>
+        <AffectedUnitArray value="AP_WarpPrism"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdeptKillBounce">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-consumption.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Adept,Effect" Value="AP_AdeptUpgradeLM"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdeptPiercingAttack">
+        <Icon value="Assets\Textures\btn-ability-protoss-phasedisruptor.dds"/>
+        <EffectArray Reference="Weapon,AP_Adept,RateMultiplier" Value="0.45"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:AttackBonus"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdeptShieldUpgrade">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-AdeptShieldUpgrade.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldsMax" Value="50"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldsStart" Value="50"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantMaxShields">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantextrashields.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldsMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldsStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantShieldArmor">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantarmor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldArmor" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantShieldRegen">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldRegenRate" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveInfestor">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSwarmHost">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSporeCrawler">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveAberration">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_BansheeSpeed">
+        <Icon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="250"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Banshee,Speed" Value="1"/>
+        <EffectArray Reference="Unit,AP_DuskWing,Speed" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemBanshee">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Banshee,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Banshee,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_BacklashRockets,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_BacklashRockets,MinScanRange" Value="1"/>
+        <EffectArray Reference="Unit,AP_DuskWing,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_DuskWing,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,MinScanRange" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SiegeTankSiegeModeProgressiveRangeIncease">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-siegetankrange.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemSiegeTank">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_SiegeTank,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTank,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_90mmCannons,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_90mmCannons,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,MinScanRange" Value="1"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,MinScanRange" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RaynorImprovedSiegeMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-raynor-improvedsiegemode.dds"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,LifeArmor" Value="3"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,LifeArmor" Value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VikingMagWeapon">
+        <EffectArray Reference="Effect,AP_TwinGatlingCannons,AttributeBonus[Mechanical]" Value="8"/>
+        <EffectArray Reference="Effect,AP_WreckingCrewAssault,AttributeBonus[Mechanical]" Value="11"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NotPossibleVikingFighter"/>
+    <CUpgrade id="AP_NotPossibleVikingAssault"/>
+    <CUpgrade id="AP_MedivacSpeedBoost"/>
+    <CUpgrade id="AP_HHWidowMineBurrowedRange">
+        <EffectArray Reference="Abil,AP_WidowMineAttack,AutoCastRange" Value="2.5"/>
+        <EffectArray Reference="Abil,AP_WidowMineAttack,Range[0]" Value="2.5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NotPossibleWidowMineBurrowed"/>
+    <CUpgrade id="AP_HHWidowMineDeathBlossom">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_WidowMineAttack,Cost[0].Cooldown.TimeUse" Value="20.000000"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,AP_WidowMineAnimationController,Duration" Value="20.000000"/>
+        <AffectedUnitArray value="AP_WidowMine"/>
+        <AffectedUnitArray value="AP_WidowMineBurrowed"/>
+        <Icon value="Assets\Textures\btn-ability-hornerhan-widowmine-deathblossom.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemLiberator">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Liberator,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Liberator,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,Range" Value="1"/>
+        <EffectArray Reference="Abil,AP_LiberatorAGTarget,Range[0]" Value="1"/>
+        <EffectArray Reference="Validator,AP_LiberatorAGNotOutOfRange,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,MinScanRange" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GhostSCBWLockdownResearch">
+        <Icon value="AP\Assets\Textures\btn-abilty-terran-lockdown@scbw.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MedicSCBWRestorationResearch">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-restoration@scbw.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MedicSCBWOpticFlareResearch">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-fenix-dragoonsolariteflare.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HellbatStimpack"/>
+    <CUpgrade id="AP_SuperStimpackHellbat"/>
+    <CUpgrade id="AP_ValkyrieEnhancedClusterLaunchers">
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodCount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[1]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[2]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[3]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_ValkyrieSCBWWeapon@CP,PeriodicEffectArray[4]" Value="0.2"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,DisplayAttackCount" Value="10"/>
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieShapedHull">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="UpgradeComplete_Terr"/>
+        <Race value="Terr"/>
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeStart" Value="50"/>
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeMax" Value="50"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieBurstLasers">
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_ValkyrieG,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_ValkyrieG,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireWhileInAttackOrder]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireAtAttackOrderTarget]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[LinkedCooldown]" Value="0"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
+        <AffectedUnitArray value="AP_ValkyrieSCBW"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ValkyrieSpeedBoost"/>
+    <CUpgrade id="AP_WraithAdvancedLaserTechnology">
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_WraithAG,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_WraithAG,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithA,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithA,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithG,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithG,Options[Disabled]" Value="1"/>
+        <AffectedUnitArray value="AP_Wraith"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VultureIonThrusters">
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,Speed" Value="1.5"/>
+        <AffectedUnitArray value="AP_Vulture"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VultureAutoLaunchers">
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_VultureMoving,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_VultureMoving,Options[Disabled]" Value="1"/>
+        <AffectedUnitArray value="AP_Vulture"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SpiderMineDamage">
+        <EffectArray Reference="Effect,AP_VultureSpiderMinesDamage,Amount" Value="55"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ScienceVesselSCBWEMPShockwaveResearch">
+        <Icon value="Assets\Textures\btn-ability-mengsk-ghost-staticempblast.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ScienceVesselDefensiveMatrix"/>
+    <CUpgrade id="AP_FastBuildMarine">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train1].Time" Value="17.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildLiberator">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_StarportTrain,InfoArray[Train9].Time" Value="40.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildBattlecruiser">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_StarportTrain,InfoArray[Train4].Time" Value="60.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildGoliath">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_FactoryTrain,InfoArray[Train7].Time" Value="27.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_FastBuildHellion">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_FactoryTrain,InfoArray[Train6].Time" Value="20.000000"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleMarauder">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marauder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train4].Button.Requirements"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleSiegeTank">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SiegeTank"/>
+        <AffectedUnitArray value="AP_SiegeTankSieged"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_FactoryTrain,InfoArray[Train2].Button.Requirements"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleBattlecruiser">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Starport"/>
+        <AffectedUnitArray value="Battlecruiser"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train4].Button.Requirements" Value="AP_HaveFusionCore"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleRaven">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train3].Button.Requirements"/>
+        <AffectedUnitArray value="AP_Raven"/>
+        <AffectedUnitArray value="AP_Starport"/>
+    </CUpgrade>
+    <CUpgrade id="AP_InternalizedTechModuleBanshee">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_StarportTrain,InfoArray[Train2].Button.Requirements"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Banshee"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsFirebat">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Firebat,CostResource[Minerals]" Value="50"/>
+        <EffectArray Reference="Unit,AP_Firebat,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_FirebatOptimizedLogistics,CostResource[Minerals]" Value="50"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDog,CostResource[Minerals]" Value="50"/>
+        <EffectArray Reference="Unit,AP_DevilDog,Food" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDogOptimizedLogistics,CostResource[Minerals]" Value="50"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Firebat"/>
+        <AffectedUnitArray value="AP_FirebatOptimizedLogistics"/>
+        <AffectedUnitArray value="AP_DevilDog"/>
+        <AffectedUnitArray value="AP_DevilDogOptimizedLogistics"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsPredator">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Predator,CostResource[Vespene]" Value="75"/>
+        <EffectArray Reference="Unit,AP_Predator,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Predator"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsMedic">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Vespene]" Value="25"/>
+        <EffectArray Reference="Unit,AP_Medic,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Medic"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OptimizedLogisticsDiamondback">
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Diamondback,CostResource[Vespene]" Value="50"/>
+        <EffectArray Reference="Unit,AP_Diamondback,Food" Value="1"/>
+        <AffectedUnitArray value="AP_Diamondback"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CinematicMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Gateway"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+        <AffectedUnitArray value="AP_RoboticsBay"/>
+        <AffectedUnitArray value="AP_PhotonCannon"/>
+        <AffectedUnitArray value="AP_DarkShrine"/>
+        <AffectedUnitArray value="AP_Forge"/>
+        <AffectedUnitArray value="AP_TemplarArchive"/>
+        <AffectedUnitArray value="AP_FleetBeacon"/>
+        <AffectedUnitArray value="AP_StargateWarp"/>
+        <AffectedUnitArray value="AP_RoboticsFacilityWarp"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SOAHeroicShield">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_SoACaster"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HeroicShieldCleanUp">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SuperiorWarpGates">
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train1].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train2].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train3].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train4].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train5].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train6].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train7].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train8].Charge.CountMax" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+    </CUpgrade>
     <CUpgrade id="AP_HotSMetabolicBoost">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Zergling,Speed" Value="1.746000"/>

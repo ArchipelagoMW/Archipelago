@@ -142,22 +142,27 @@
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSM">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Stim" State="Restricted" Requirements="AP_UseStimpackSM">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackReaper" parent="AP_StimpackSmallBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackMarauder" parent="AP_StimpackLargeBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackMarauder">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackMarauder">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackFirebat" parent="AP_StimpackLargeBase">
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackFirebat">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackHellbat" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="StimMarauder" State="Restricted" Requirements="AP_UseStimpackHellbat">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
@@ -205,6 +210,11 @@
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackFirebat" parent="AP_SuperStimpackLargeBase">
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackHellbat" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackHellbat">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
@@ -441,6 +451,7 @@
             <SectionArray index="Stats">
                 <DurationArray index="Delay" value="0.5"/>
                 <DurationArray index="Duration" value="3.5417"/>
+                <EffectArray index="Finish" value="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB"/>
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
@@ -1235,7 +1246,7 @@
         <AutoCastRange value="5"/>
         <AutoCastValidatorArray value="NotLarvaEgg"/>
         <AutoCastValidatorArray value="IsNotNeuralParasited"/>
-        <AutoCastValidatorArray value="IsNotDisguisedChangeling"/>
+        <AutoCastValidatorArray value="AP_IsNotDisguisedChangeling"/>
         <AutoCastValidatorArray value="NotHallucinationOrNotDetected"/>
         <AutoCastValidatorArray value="noMarkers"/>
         <PrepTime value="1.5"/>
@@ -1375,6 +1386,7 @@
             <SectionArray index="Stats">
                 <DurationArray index="Delay" value="0.5"/>
                 <DurationArray index="Duration" value="3.5417"/>
+                <EffectArray index="Finish" value="AP_SiegeTankSiegeModeProgressiveRangeInceaseAB"/>
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
@@ -2052,6 +2064,32 @@
         <CursorEffect value="AP_ArbiterMPStasisFieldSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_ArbiterMPStasisField"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_AdeptPhaseShift">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_AdeptPhaseShiftInitialSet"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="16"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_AdeptPhaseShift">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_AdeptPhaseShiftCancel">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_AdeptPhaseShiftCancelAB"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Cancel" Requirements="AP_AdeptPhaseShifting"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_AdeptShadePhaseShiftCancel">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Cancel"/>
+    </CAbilEffectInstant>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -2155,6 +2193,18 @@
     <CAbilMorph id="AP_CommandCenterLiftOff" parent="TerranBuildingLiftOff" unit="AP_CommandCenterFlying">
         <Name value="Abil/Name/AP_CommandCenterLiftOff"/>
     </CAbilMorph>
+    <CAbilAugment id="AP_Charge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Charge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilMorph id="AP_BurrowRoachDown">
         <AbilSetId value="BrwD"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
@@ -3219,6 +3269,34 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilAugment id="AP_ShadowCharge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowCharge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
+    <CAbilAugment id="AP_ShadowChargeStun">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowChargeStun"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Effect value="AP_VoidZealotShadowChargeSearch"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AutoCastValidatorArray value="AP_TargetNotShadowStunnedAndNotShadowSlowed"/>
+        <AutoCastValidatorArray value="AP_VoidZealotShadowStunRange"/>
+        <AutoCastValidatorArray value="AP_VoidZealotNotShadowCharging"/>
+    </CAbilAugment>
     <CAbilEffectInstant id="AP_PoisonNova">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Flags index="AllowMovement" value="1"/>
@@ -4242,10 +4320,10 @@
     <CAbilTrain id="AP_RoboticsFacilityTrain">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
-        <!--        <InfoArray index="Train1" Time="50" Effect="WarpInEffect15">-->
-        <!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
-        <!--            <Unit value="AP_WarpPrism"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="50" Effect="WarpInEffect15">
+            <Button DefaultButtonFace="AP_WarpPrism" State="Restricted"/>
+            <Unit value="AP_WarpPrism"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="30" Effect="WarpInEffect15">
             <Button DefaultButtonFace="Observer" State="Restricted"/>
             <Unit value="AP_Observer"/>
@@ -4260,18 +4338,18 @@
         </InfoArray>
     </CAbilTrain>
     <CAbilWarpTrain id="AP_RoboticsFacilityWarpTrain">
-        <!--        <InfoArray index="Train1" Time="5" Unit="AP_WarpPrism">-->
-        <!--            <Charge>-->
-        <!--                <CountMax value="1"/>-->
-        <!--                <CountStart value="1"/>-->
-        <!--                <CountUse value="1"/>-->
-        <!--                <Link value="WarpGateTrain"/>-->
-        <!--                <TimeStart value="30"/>-->
-        <!--                <TimeUse value="40"/>-->
-        <!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
-        <!--            </Charge>-->
-        <!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="5" Unit="AP_WarpPrism">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="40"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_WarpPrism" State="Restricted"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="5" Unit="AP_Observer">
             <Charge>
                 <CountMax value="1"/>
@@ -4444,6 +4522,449 @@
         <Effect value="AP_HotSRaptorLeap"/>
         <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
     </CAbilAugment>
+    <CAbilEffectTarget id="AP_OracleRevelation">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_OracleRevelationSearch"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="2.5"/>
+        </Cost>
+        <Range value="9"/>
+        <CastOutroTime value="0.5"/>
+        <CursorEffect value="AP_OracleRevelationSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_OracleRevelation"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_OracleStasisTrap">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_OracleStasisTrapCU"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Placeholder value="AP_OracleStasisTrap"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_OracleBuildStasisTrap"/>
+        <PlaceUnit value="AP_OracleStasisTrap"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_OracleStasisTrapActivate">
+        <Effect index="0" value="AP_OracleStasisTrapActivateSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="0.5"/>
+        </Cost>
+        <Arc value="360"/>
+        <AutoCastRange value="3"/>
+        <AutoCastValidatorArray value="AP_ActivateStasisWardTargetInRange"/>
+        <PrepTime value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ActivateStasisWard"/>
+    </CAbilEffectInstant>
+    <CAbilBuild id="AP_OracleStasisTrapBuild">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <FlagArray index="RequireFacing" value="1"/>
+        <InfoArray index="Build1" Unit="AP_OracleStasisTrap" Time="5">
+            <Vital index="Energy" value="50"/>
+            <Button DefaultButtonFace="AP_OracleBuildStasisTrap">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+        </InfoArray>
+        <Range value="5"/>
+        <EffectArray index="Start" value="AP_OracleStasisTrapBuildBeamOn"/>
+        <EffectArray index="Finish" value="AP_OracleStasisTrapBuildBeamOff"/>
+        <EffectArray index="Cancel" value="AP_OracleStasisTrapBuildBeamOff"/>
+    </CAbilBuild>
+    <CAbilBehavior id="AP_OracleWeapon">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_OracleWeaponOn">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="AP_OracleWeaponOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="4"/>
+        </Cost>
+        <BehaviorArray value="AP_OracleWeapon"/>
+    </CAbilBehavior>
+    <CAbilEffectTarget id="AP_SOAMothershipBlink">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SOAMothershipBlinkCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="8"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SOAMothershipBlink"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_SOAMothershipLineAttack">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SOAMothershipLineAttackInitialCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SOAMothershipLineAttack"/>
+    </CAbilEffectTarget>
+    <CAbilArmMagazine id="AP_ReaverHangar">
+        <AbilSetId value="ReaverHanger"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Leash value="20"/>
+        <InfoArray index="Ammo1" Time="8" CountStart="5" Unit="AP_Scarab">
+            <Charge Link="AP_ReaverScarabs" Location="Unit"/>
+            <Button DefaultButtonFace="AP_ReaverScarabs" Requirements="AP_ArmScarab">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+        </InfoArray>
+        <Alert value="TrainComplete"/>
+        <MaxCount value="5"/>
+    </CAbilArmMagazine>
+    <CAbilEffectInstant id="AP_PurificationNova">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PurificationNovaSet"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNova"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <SharedFlags index="RegisterCooldownEvent" value="1"/>
+    </CAbilEffectInstant>
+    <CAbilMorph id="AP_PurificationNovaMorph">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNova"/>
+        <InfoArray Unit="AP_DisruptorPhased"/>
+        <Flags index="Transient" value="1"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_PurificationNovaMorphBack">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PurificationNova"/>
+        <Flags index="Transient" value="1"/>
+        <InfoArray Unit="AP_Disruptor"/>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_PurificationNovaTargeted">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <SharedFlags index="RegisterCooldownEvent" value="1"/>
+        <Effect index="0" value="AP_PurificationNovaTargettedInitialSet"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Charge Link="Abil/PurificationNovaTargetted"/>
+            <Cooldown Link="Abil/PurificationNovaTargetted" TimeUse="30"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNovaTargeted">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ChargedBlastTargeted">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="ChargedBlastSet"/>
+        <Flags index="RangeUsePathing" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Range value="15"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_ChargedBlastSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ChargedBlast"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_PhasingMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PhasingMode"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_WarpPrismPhasing">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_ForceFieldMonitor">
+        <AbilSetId value="ForceField"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ForceField"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="9"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MatchFlags index="CasterUnit" value="1"/>
+        </Marker>
+        <CursorEffect value="AP_ForceFieldPlacement"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SentryTaldarimForceField"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <PlaceUnit value="AP_ForceField"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_GuardianShieldVoid">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_GuardianShieldPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Link="GuardianShield" TimeUse="15"/>
+        </Cost>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastValidatorArray value="AP_VoidSentryNearbyFriendlyUnitInCombat"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="GuardianShield"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ObserverTargetLock">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ObserverTargetLockCP"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSLifeLargestFirst"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="AP_NotHaveTargetLock"/>
+        <AutoCastValidatorArray value="AP_NotInterceptor"/>
+        <CastOutroTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_TargetLock"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ShieldBatteryRechargeChanneled">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <TargetFilters value="Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <Range value="4"/>
+        <Arc value="360"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Self,Neutral,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <AutoCastRange value="4"/>
+        <AutoCastValidatorArray value="AP_ShieldBatteryHasEnergy"/>
+        <AutoCastValidatorArray value="AP_UnitOrAttackingStructure"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ShieldBatteryRecharge"/>
+    </CAbilEffectTarget>
+    <CAbilResearch id="AP_SpireResearch">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <!--        <InfoArray index="Research1" Time="160" Upgrade="ZergFlyerWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack1" State="Suppressed" Requirements="LearnZergFlyerAttack1">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research2" Time="190" Upgrade="ZergFlyerWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="175"/>-->
+        <!--            <Resource index="Vespene" value="175"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack2" State="Suppressed" Requirements="LearnZergFlyerAttack2">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research3" Time="220" Upgrade="ZergFlyerWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="250"/>-->
+        <!--            <Resource index="Vespene" value="250"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack3" State="Suppressed" Requirements="LearnZergFlyerAttack3">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research4" Time="160" Upgrade="ZergFlyerArmorsLevel1">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor1" State="Suppressed" Requirements="LearnZergFlyerArmor1">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research5" Time="190" Upgrade="ZergFlyerArmorsLevel2">-->
+        <!--            <Resource index="Minerals" value="225"/>-->
+        <!--            <Resource index="Vespene" value="225"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor2" State="Suppressed" Requirements="LearnZergFlyerArmor2">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research6" Time="220" Upgrade="ZergFlyerArmorsLevel3">-->
+        <!--            <Resource index="Minerals" value="300"/>-->
+        <!--            <Resource index="Vespene" value="300"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor3" State="Suppressed" Requirements="LearnZergFlyerArmor3">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+    </CAbilResearch>
+    <CAbilMorph id="AP_SpineCrawlerUproot">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpineCrawlerUproot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Uproot"/>
+        <Flags index="FastBuild" value="1"/>
+        <InfoArray Unit="AP_SpineCrawlerUprooted">
+            <SectionArray index="Abils">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorphPlacement id="AP_SpineCrawlerRoot">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpineCrawlerRoot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Root"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_SpineCrawler" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+        </InfoArray>
+        <ProgressButton value="AP_SpineCrawlerRootCancel"/>
+    </CAbilMorphPlacement>
+    <CAbilMorphPlacement id="AP_SporeCrawlerRoot">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SporeCrawlerRoot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Root"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_SporeCrawler" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+        </InfoArray>
+        <ProgressButton value="AP_SporeCrawlerRootCancel"/>
+    </CAbilMorphPlacement>
+    <CAbilMorph id="AP_SporeCrawlerUproot">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SporeCrawlerUproot"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="Uproot"/>
+        <Flags index="FastBuild" value="1"/>
+        <InfoArray Unit="AP_SporeCrawlerUprooted">
+            <SectionArray index="Abils">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilTrain id="AP_GatewayTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+        <InfoArray index="Train1" Time="38">
+            <Button DefaultButtonFace="AP_ZealotAiur" State="Restricted"/>
+            <Unit value="AP_ZealotAiur"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="42">
+            <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_StalkerShakuras"/>
+        </InfoArray>
+<!--        <InfoArray index="Train3" Time="37">-->
+<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+<!--            <Unit value="Replicant"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train4" Time="55">
+            <Button DefaultButtonFace="AP_HighTemplarAiur" State="Restricted" Requirements="AP_HaveTemplarArchives"/>
+            <Unit value="AP_HighArchonTemplar"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="55">
+            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="AP_HaveDarkShrine"/>
+            <Unit value="AP_DarkTemplarShakuras"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="37">
+            <Button DefaultButtonFace="AP_SentryAiur" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_SentryAiur"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="38">
+            <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+            <Unit value="AP_Adept"/>
+        </InfoArray>
+<!--        <InfoArray index="Train8" Time="55">-->
+<!--            <Button DefaultButtonFace="HighArchon" State="Restricted" Requirements="HaveVoidHighTemplarArchonAdvanced"/>-->
+<!--            <Unit value="ArchonAdvanced"/>-->
+<!--        </InfoArray>-->
+    </CAbilTrain>
+    <CAbilMorph id="AP_MorphBackToGateway">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="MorphBackToGateway"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Cost>
+            <Cooldown Link="AP_WarpGateTrain" Location="Unit"/>
+        </Cost>
+        <InfoArray Unit="AP_Gateway">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete"/>
+    </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4845,6 +5366,21 @@
         </InfoArray>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
+    <CAbilEffectInstant id="AP_VoidZealotWhirlwind">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidZealotWhirlwindSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="AP_VoidZealotWhirlwindCheck"/>
+        <CastOutroTime value="1.2"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotWhirlwind"/>
+    </CAbilEffectInstant>
     <CAbilStop id="AP_burrowedStop">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <CmdButtonArray index="Stop" DefaultButtonFace="StopRoachBurrowed" Requirements="AP_HaveHotSTunnelingClaws"/>
@@ -5347,4 +5883,581 @@
         </InfoArray>
         <Alert value="AP_ZerglingReconstitution"/>
     </CAbilTrain>
+    <CAbilEffectTarget id="AP_VoidSentryBlackHole">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidSentryBlackHolePersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_VoidSentryBlackHoleSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryBlackHole"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_TransportMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_TransportMode"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_WarpPrism">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilTransport id="AP_WarpPrismTransport">
+        <AbilSetId value="ULdM"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="MedivacLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="BunkerUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt" DefaultButtonFace="MedivacUnloadAll"/>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="CargoDeath" value="1"/>
+        <MaxCargoCount value="8"/>
+        <MaxCargoSize value="8"/>
+        <TotalCargoSpace value="8"/>
+        <UnloadPeriod value="1"/>
+        <TargetFilters value="Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden"/>
+        <LoadValidatorArray value="AP_NotWidowMineTarget"/>
+    </CAbilTransport>
+    <CAbilAttack id="AP_AttackWarpPrism">
+        <AbilSetId value=""/>
+        <TargetMessage value="Abil/TargetMessage/AttackWarpPrism"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AttackWarpPrism">
+            <Flags index="ToSelection" value="0"/>
+        </CmdButtonArray>
+        <AcquireFilters value="-;Self,Player,Ally,Neutral,Enemy"/>
+        <SmartFilters value="-;Self,Player,Ally,Neutral,Enemy"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilWarpTrain id="AP_WarpGateTrainSupplicantTrue">
+        <InfoArray index="Train12" Time="5" Unit="AP_Supplicant">
+            <Button DefaultButtonFace="AP_WarpInSupplicantHidden">
+                <Flags index="IgnoreUser" value="1"/>
+            </Button>
+        </InfoArray>
+        <Flags index="WarpTrainersButton" value="0"/>
+    </CAbilWarpTrain>
+    <CAbilWarpable id="AP_WarpableAnywhere">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerUserBehavior value="AP_PowerUserWarpableAnywhere"/>
+        <Cancelable value="1"/>
+        <CmdButtonArray index="Cancel">
+            <Flags index="IgnoreUser" value="1"/>
+        </CmdButtonArray>
+    </CAbilWarpable>
+    <CAbilEffectTarget id="AP_VoidSentryChronoBeam">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidSentryChronoBeamCP"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="3"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Enemy,Structure,Heroic,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="AP_TSVoidSentryChronoBeam"/>
+        </TargetSorts>
+        <Range value="8"/>
+        <Arc value="4.9987"/>
+        <AutoCastFilters value="Visible;Self,Neutral,Enemy,Structure,Missile,Item,Uncommandable,Stasis,Dead,Hidden"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="TargetIsFiringWeapon"/>
+        <AutoCastValidatorArray value="AP_SentryChronoBeamTargetExlusion"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryChronoBeam"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_VoidSentryPhasingMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryPhasingMode"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_SentryPhasing">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_VoidSentryShieldRepairDouble">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <TargetFilters value="Visible;Self,Enemy,Structure,Missile,Uncommandable,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSShieldsFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="3"/>
+        <Arc value="4.9987"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Hallucination,Invulnerable"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="AP_UnitOrAttackingStructure"/>
+        <AutoCastValidatorArray value="CasterHas10Energy"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryShieldRepairDouble"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_VoidSentryMobileMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryMobileMode"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_SentryPurifier">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpire">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpire" State="Suppressed" Requirements="AP_HaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelMutateMorph"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="100"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpireBroodlord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpireBroodlord" State="Suppressed" Requirements="AP_HaveHotSMutaliskBroodLordAndHaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpireViper">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpireViper" State="Suppressed" Requirements="AP_HaveHotSMutaliskViperAndHaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToImpalerDen">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ImpalerDen" State="Restricted" Requirements="AP_HaveHotSImpaler"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_ImpalerDen">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+                <EffectArray index="Finish" value="AP_HydraliskDenMorphFinishDummy"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToLurkerDen">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_LurkerDen" State="Restricted" Requirements="AP_HaveHotSLurker"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_LurkerDen">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="28"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+                <EffectArray index="Finish" value="AP_HydraliskDenMorphFinishDummy"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilResearch id="AP_evolutionchamberresearch">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <!--        <InfoArray index="Research1" Time="160" Upgrade="ZergMeleeWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons1" State="Suppressed" Requirements="LearnZergMeleeWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research2" Time="190" Upgrade="ZergMeleeWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons2" State="Suppressed" Requirements="LearnZergMeleeWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research3" Time="220" Upgrade="ZergMeleeWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmeleeweapons3" State="Suppressed" Requirements="LearnZergMeleeWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research4" Time="160" Upgrade="ZergGroundArmorsLevel1">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor1" State="Suppressed" Requirements="LearnZergGroundArmor1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research5" Time="190" Upgrade="ZergGroundArmorsLevel2">-->
+        <!--            <Resource index="Minerals" value="225"/>-->
+        <!--            <Resource index="Vespene" value="225"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor2" State="Suppressed" Requirements="LearnZergGroundArmor2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research6" Time="220" Upgrade="ZergGroundArmorsLevel3">-->
+        <!--            <Resource index="Minerals" value="300"/>-->
+        <!--            <Resource index="Vespene" value="300"/>-->
+        <!--            <Button DefaultButtonFace="zerggroundarmor3" State="Suppressed" Requirements="LearnZergGroundArmor3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research7" Time="160" Upgrade="ZergMissileWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons1" State="Suppressed" Requirements="LearnZergMissileWeapon1"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research8" Time="190" Upgrade="ZergMissileWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons2" State="Suppressed" Requirements="LearnZergMissileWeapon2"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research9" Time="220" Upgrade="ZergMissileWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="200"/>-->
+        <!--            <Resource index="Vespene" value="200"/>-->
+        <!--            <Button DefaultButtonFace="zergmissileweapons3" State="Suppressed" Requirements="LearnZergMissileWeapon3"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research10" Time="90"/>-->
+    </CAbilResearch>
+    <CAbilEffectInstant id="AP_MedivacSpeedBoost">
+        <AbilSetId value="Afterburners"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedivacSpeedBoost" Requirements="AP_HaveMedivacSpeedBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_HHWidowMineBlossom">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_WidowMineAttack"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Effect index="0" value="AP_HHWidowMineBlossomCP"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_GhostSCBWLockdown">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_GhostSCBWLockdown@LM"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Mechanical,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <CastIntroTime value="0.25"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GhostSCBWLockdown" Requirements="AP_GhostSCBWLockdown"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MedicSCBWRestoration">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_MedicSCBWRestoration@Set"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Structure,Missile,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedicSCBWRestoration" Requirements="AP_MedicSCBWRestoration"/>
+        <PrepTime value="0.5"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MedicSCBWOpticFlare">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MedicSCBWOpticFlare@LM"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="-;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <PrepTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MedicSCBWOpticFlare" Requirements="AP_MedicSCBWOpticFlare">
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_ValkyrieSpeedBoost">
+        <Effect index="0" value="AP_MedivacSpeedBoost"/>
+        <AbilSetId value="Afterburners"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ValkyrieSpeedBoost" Requirements="AP_HaveValkyrieSpeedBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ScienceVesselSCBWEMPShockwave">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ScienceVesselSCBWEMPShockwave@LM"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <PrepTime value="0.01"/>
+        <FinishTime value="0.0625"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CursorEffect value="AP_ScienceVesselSCBWEMPShockwave@Search"/>
+        <AINotifyEffect value="EMPLaunchMissile"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ScienceVesselSCBWEMPShockwave" Requirements="AP_ScienceVesselSCBWEMPShockwave"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ScienceVesselSCBWDefensiveMatrix">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ScienceVesselSCBWDefensiveMatrix@Set"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="-;Self,Structure,RawResource,HarvestableResource,Item,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ScienceVesselSCBWDefensiveMatrix" State="Restricted" Requirements="AP_ScienceVesselSCBWDefensiveMatrix">
+            <Flags index="ToSelection" value="1"/>
+            <Flags index="UseDefaultButton" value="1"/>
+            <Flags index="CreateDefaultButton" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_FirebatOptimizedLogisticsMorph">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Firebat" Requirements="AP_HaveOptimizedLogisticsFirebat"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_FirebatOptimizedLogistics"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_MercFirebatOptimizedLogisticsMorph">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Firebat" Requirements="AP_HaveOptimizedLogisticsFirebat"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_DevilDogOptimizedLogistics"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToWarpGate">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradeToWarpGate" State="Restricted"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_WarpGate">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToWarpGateInstant">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="UpgradeToWarpGate" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_WarpGate"/>
+    </CAbilMorph>
+    <CAbilWarpTrain id="AP_WarpGateTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <InfoArray index="Train1" Time="5" Unit="AP_ZealotAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="28"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_ZealotAiur" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="5" Unit="AP_StalkerShakuras">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="32"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_StalkerShakuras" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+<!--        <InfoArray index="Train3" Time="5" Unit="Replicant">-->
+<!--            <Charge>-->
+<!--                <CountMax value="1"/>-->
+<!--                <CountStart value="1"/>-->
+<!--                <CountUse value="1"/>-->
+<!--                <Link value="AP_WarpGateTrain"/>-->
+<!--                <TimeUse value="32"/>-->
+<!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
+<!--            </Charge>-->
+<!--            <Button DefaultButtonFace="WarpInReplicant" State="Restricted" Requirements="HaveVoidSentryReplicant"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train4" Time="5" Unit="AP_HighArchonTemplar">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="45"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_HighTemplarAiur" State="Restricted" Requirements="AP_HaveTemplarArchives"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="5" Unit="AP_DarkTemplarShakuras">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="45"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="HaveDarkShrine"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="5" Unit="AP_SentryAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="32"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_SentryAiur" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="5" Unit="AP_Adept">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_WarpGateTrain"/>
+                <TimeUse value="28"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Cooldown Link="AP_WarpGateTrain"/>
+            <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
+        </InfoArray>
+    </CAbilWarpTrain>
 </Catalog>

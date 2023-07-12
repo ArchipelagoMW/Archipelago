@@ -28,4 +28,8 @@
         <WhichUnit Value="Target"/>
         <Behavior value="AP_AscendantSacrificeSelfBuff"/>
     </CTargetSortBehaviorCount>
+    <CTargetSortBehaviorCount id="AP_TSVoidSentryChronoBeam">
+        <WhichUnit Value="Target"/>
+        <Behavior value="AP_VoidSentryChronoBeam"/>
+    </CTargetSortBehaviorCount>
 </Catalog>

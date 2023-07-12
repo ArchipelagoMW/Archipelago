@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirementCountUpgrade default="1" id="AP_SCBW_UpgradeCount">
+        <?token id="x" type="CUpgradeLink" value="Research"?>
+        <Count Link="##x##" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveRaptorCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HotSHaveRaptor" State="CompleteOnly"/>
@@ -99,6 +103,21 @@
     <CRequirementAnd id="AP_UseBaseFirebatStimpack">
         <OperandArray value="AP_CountUpgradeFirebatStimpackCompleteOnly"/>
         <OperandArray value="AP_NotCountUpgradeSuperStimpackFirebatCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHellbatStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HellbatStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackHellbatCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackHellbat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackHellbatCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackHellbatCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseHellbatStimpack">
+        <OperandArray value="AP_CountUpgradeHellbatStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackHellbatCompleteOnly"/>
     </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_CountUpgradeReaperU238RoundsCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
@@ -2418,6 +2437,211 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CommanderPrestigeAlarakMech" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementLT id="AP_LTCountUnitScarabQueuedOrBetterAtUnit5">
+        <OperandArray index="0" value="AP_CountUnitScarabQueuedOrBetterAtUnit"/>
+        <OperandArray index="1" value="5"/>
+    </CRequirementLT>
+    <CRequirementCountUnit id="AP_CountUnitScarabQueuedOrBetterAtUnit">
+        <Count Link="AP_Scarab" State="QueuedOrBetterAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUnit>
+    <CRequirementEq id="AP_EqCountUnitScarabCompleteOnlyAtUnit0">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUnitScarabCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementCountUnit id="AP_CountUnitScarabCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_Scarab" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementCountBehavior id="AP_CountBehaviorAdeptPhaseShiftCasterCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_AdeptPhaseShiftCaster" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakSupplicantMaxShieldsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakSupplicantMaxShields" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakSupplicantShieldArmorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakSupplicantShieldArmor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotSMutaliskBroodlord" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveInfestorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveInfestor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUpgradeHotSHaveSwarmHostCompleteOnlyCountUpgradeHotSHaveSwarmHostSplitACompleteOnlyCountUpgradeHotSHaveSwarmHostSplitBCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostCompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
+    </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSwarmHostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveSwarmHost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitHiveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_Hive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitHiveCompleteOnly">
+        <Count Link="AP_Hive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndCountUpgradeHotSHaveSporeCrawlerCompleteOnlyCountUnitEvolutionChamberCompleteOnly">
+        <OperandArray value="AP_CountUpgradeHotSHaveSporeCrawlerCompleteOnly"/>
+        <OperandArray value="AP_CountUnitEvolutionChamberCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSporeCrawlerCompleteOnly">
+        <Count Link="AP_HotSHaveSporeCrawler" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitEvolutionChamberCompleteOnly">
+        <Count Link="AP_EvolutionChamber" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveAberrationCompleteOnly">
+        <Count Link="AP_HotSHaveAberration" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBansheeSpeedCompleteOnly">
+        <Count Link="AP_BansheeSpeed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly">
+        <Count Link="AP_LaserTargetingSystemBanshee" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeTankSiegeModeProgressiveRangeIncease" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemSiegeTankCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LaserTargetingSystemSiegeTank" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_RaynorImprovedSiegeMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_VikingMagWeaponCompleteOnly">
+        <Count Link="AP_VikingMagWeapon" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleVikingFighterCompleteOnly">
+        <Count Link="AP_NotPossibleVikingFighter" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleVikingAssaultCompleteOnly">
+        <Count Link="AP_NotPossibleVikingAssault" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_MedivacSpeedBoostCompleteOnly">
+        <Count Link="AP_MedivacSpeedBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HHWidowMineBurrowedRange" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_NotPossibleWidowMineBurrowedCompleteOnly">
+        <Count Link="AP_NotPossibleWidowMineBurrowed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHHWidowMineDeathBlossomCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HHWidowMineDeathBlossom" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly">
+        <Count Link="AP_LaserTargetingSystemLiberator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_GhostSCBWLockdown@Show">
+        <OperandArray value="AP_GhostSCBWLockdownResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_GhostSCBWLockdownResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_GhostSCBWLockdownResearch"/>
+    <CRequirementAnd id="AP_MedicSCBWRestoration@Show">
+        <OperandArray value="AP_MedicSCBWRestorationResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_MedicSCBWRestorationResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_MedicSCBWRestorationResearch"/>
+    <CRequirementAnd id="AP_MedicSCBWOpticFlare@Show">
+        <OperandArray value="AP_MedicSCBWOpticFlareResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_MedicSCBWOpticFlareResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_MedicSCBWOpticFlareResearch"/>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieEnhancedClusterLaunchersCompleteOnly">
+        <Count Link="AP_ValkyrieEnhancedClusterLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieShapedHullCompleteOnly">
+        <Count Link="AP_ValkyrieShapedHull" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieBurstLasersCompleteOnly">
+        <Count Link="AP_ValkyrieBurstLasers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly">
+        <Count Link="AP_ValkyrieSpeedBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly">
+        <Count Link="AP_WraithAdvancedLaserTechnology" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHyperfluxorCompleteOnly">
+        <Count Link="AP_Hyperfluxor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVultureIonThrustersCompleteOnly">
+        <Count Link="AP_VultureIonThrusters" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVultureAutoLaunchersCompleteOnly">
+        <Count Link="AP_VultureAutoLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSpiderMineDamageCompleteOnly">
+        <Count Link="AP_SpiderMineDamage" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImpalerRoundsCompleteOnly">
+        <Count Link="AP_ImpalerRounds" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_ScienceVesselSCBWEMPShockwave@Show">
+        <OperandArray value="AP_ScienceVesselSCBWEMPShockwaveResearch@Count"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_ScienceVesselSCBWEMPShockwaveResearch@Count" parent="AP_SCBW_UpgradeCount" x="AP_ScienceVesselSCBWEMPShockwaveResearch"/>
+    <CRequirementAnd id="AP_ScienceVesselSCBWDefensiveMatrix@Show">
+        <OperandArray value="AP_CountUpgradeScienceVesselDefensiveMatrixCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselDefensiveMatrixCompleteOnly">
+        <Count Link="AP_ScienceVesselDefensiveMatrix" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly">
+        <Count Link="AP_OptimizedLogisticsFirebat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCinematicModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CinematicMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidZealotChargeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Charge" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAHeroicShieldCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SOAHeroicShield" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_SOAHeroicShieldCooldownDummy" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHeroicShieldCleanUpCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HeroicShieldCleanUp" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitCyberneticsCoreCompleteOnlyTechTreeCheat">
+        <Count Link="AP_CyberneticsCore" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitTemplarArchiveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_TemplarArchive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitDarkShrineCompleteOnlyTechTreeCheat">
+        <Count Link="AP_DarkShrine" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperiorWarpGatesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperiorWarpGates" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingFrenzyCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>

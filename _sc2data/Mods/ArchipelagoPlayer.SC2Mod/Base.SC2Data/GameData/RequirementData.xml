@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirement default="1" id="AP_SCBW_AbilReq">
+        <?token id="Race" value="Terran"?>
+        <EditorCategories value="Race:##Race##,TechType:Ability"/>
+        <NodeArray index="Use" Link="##id##"/>
+        <NodeArray index="Show" Link="##id##@Show"/>
+    </CRequirement>
     <CRequirement id="AP_HaveGreaterSpireAndHotSBroodlord">
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <CanBeSuppressed index="Use" value="0"/>
@@ -119,9 +125,17 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_UseBaseFirebatStimpack"/>
     </CRequirement>
+    <CRequirement id="AP_UseStimpackHellbat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseHellbatStimpack"/>
+    </CRequirement>
     <CRequirement id="AP_HaveSuperStimpackFirebat">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackFirebatCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackHellbat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackHellbatCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseG4ClusterBombs">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
@@ -183,7 +197,7 @@
         <NodeArray index="Show" Link="AP_CountUpgradeGoliathJumpJetCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_BurstCapacitorsResearched">
-        <NodeArray index="Use" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseShapedHull">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -236,7 +250,7 @@
         <NodeArray index="Use" Link="AP_CountUpgradeAuxiliaryMedBotsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_ExpandedHullResearched">
-        <NodeArray index="Use" Link="AP_CountUpgradeExpandedHullCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeExpandedHullCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnCaduceusReactor">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -267,6 +281,11 @@
     <CRequirement id="AP_HALORocketsResearched">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_AssaultModeHALORocketsResearched">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleVikingFighterCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnVikingMissileUpgrade">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
@@ -501,11 +520,16 @@
     </CRequirement>
     <CRequirement id="AP_HaveWidowMineDrillingClaws">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeDrillClawsCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeDrillClawsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveWidowMineImprovedConcealment">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeImprovedConcealmentCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeImprovedConcealmentCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveWidowMineImprovedConcealmentUnburrowed">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeImprovedConcealmentCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleWidowMineBurrowedCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_WidowMineArmed">
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
@@ -513,23 +537,23 @@
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnAirUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneAirUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneAirUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnDamageUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneLockOnRangeUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveCycloneRapidFireLaunchers">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveMagFieldLaunchers">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeMagFieldLaunchersCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagFieldLaunchersCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnCycloneLockOnAirUpgrade">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -1426,6 +1450,185 @@
     </CRequirement>
     <CRequirement id="AP_CommanderPrestigeAlarakMech">
         <NodeArray index="Show" Link="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ArmScarab">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_LTCountUnitScarabQueuedOrBetterAtUnit5"/>
+    </CRequirement>
+    <CRequirement id="AP_ScarabNotArmed">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_EqCountUnitScarabCompleteOnlyAtUnit0"/>
+    </CRequirement>
+    <CRequirement id="AP_AdeptPhaseShifting">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorAdeptPhaseShiftCasterCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveAlarakSupplicantMaxShields">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantMaxShieldsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSupplicantShieldArmor">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantShieldArmorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskBroodLord">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveInfestorSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveInfestorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSwarmHost">
+        <NodeArray index="Show" Link="AP_OrCountUpgradeHotSHaveSwarmHostCompleteOnlyCountUpgradeHotSHaveSwarmHostSplitACompleteOnlyCountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskBroodLordAndHaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskViperAndHaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSporeCrawler">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndCountUpgradeHotSHaveSporeCrawlerCompleteOnlyCountUnitEvolutionChamberCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndCountUpgradeHotSHaveSporeCrawlerCompleteOnlyCountUnitEvolutionChamberCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveAberration">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveAberrationCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveBansheeSpeed">
+        <NodeArray index="Show" Link="AP_CountUpgradeBansheeSpeedCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemBanshee">
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemBansheeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_TankModeHaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemSiegeTank">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemSiegeTankCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveImprovedSiegeMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_TankModeHaveImprovedSiegeMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVikingMagWeapon">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_FighterModeHaveVikingMagWeapon">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleVikingAssaultCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveMedivacSpeedBoost">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_MedivacSpeedBoostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHHWidowMineAttackRange">
+        <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHHWidowMineAttackRangeUnburrowed">
+        <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotPossibleWidowMineBurrowedCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHHWidowMineDeathBlossom">
+        <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineDeathBlossomCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemLiberator">
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemLiberatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_GhostSCBWLockdown" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_MedicSCBWRestoration" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_MedicSCBWOpticFlare" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_HaveValkyrieEnhancedClusterLaunchers">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieEnhancedClusterLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieShapedHull">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieShapedHullCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieBurstLasers">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieBurstLasersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveValkyrieSpeedBoost">
+        <NodeArray index="Show" Link="AP_CountUpgradeValkyrieSpeedBoostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveWraithAdvancedLaserTechnology">
+        <NodeArray index="Show" Link="AP_CountUpgradeWraithAdvancedLaserTechnologyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseHyperfluxor">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHyperfluxorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVultureIonThrusters">
+        <NodeArray index="Show" Link="AP_CountUpgradeVultureIonThrustersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVultureAutoLaunchers">
+        <NodeArray index="Show" Link="AP_CountUpgradeVultureAutoLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpiderMineDamage">
+        <NodeArray index="Show" Link="AP_CountUpgradeSpiderMineDamageCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveImpalerRounds">
+        <NodeArray index="Show" Link="AP_CountUpgradeImpalerRoundsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ScienceVesselSCBWEMPShockwave" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_ScienceVesselSCBWDefensiveMatrix" parent="AP_SCBW_AbilReq"/>
+    <CRequirement id="AP_HaveFusionCore">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveOptimizedLogisticsFirebat">
+        <NodeArray index="Show" Link="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShield">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAHeroicShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHeroicShieldCleanUp">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHeroicShieldCleanUpCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShieldCooldownBehavior">
+        <EditorCategories value="TechType:Ability,Race:Protoss"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCyberneticsCore">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitCyberneticsCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveTemplarArchives">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitTemplarArchiveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveDarkShrine">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitDarkShrineCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperiorWarpGates">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperiorWarpGatesCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveHotSMetabolicBoost">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>

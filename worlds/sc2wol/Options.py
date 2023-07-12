@@ -12,6 +12,16 @@ class GameDifficulty(Choice):
     option_hard = 2
     option_brutal = 3
 
+class GameSpeed(Choice):
+    """Optional setting to override difficulty-based game speed."""
+    display_name = "Game Speed"
+    option_default = 0
+    option_slower = 1
+    option_slow = 2
+    option_normal = 3
+    option_fast = 4
+    option_faster = 5
+    default = option_default
 
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
@@ -167,19 +177,10 @@ class ExcludedMissions(OptionSet):
     display_name = "Excluded Missions"
     valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
-class SC2ItemSet(Choice):
-    """Set of items available in world
-
-    Basic: Only units/upgrades/abilities present in SC2 WoL vanilla campaign
-    Extended: Added some SC1 and other units"""
-    display_name = "Item set"
-    option_basic = 0
-    option_extended = 1
-    default = option_basic
-
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
+    "game_speed": GameSpeed,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
@@ -194,7 +195,6 @@ sc2wol_options: Dict[str, Option] = {
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,
-    "item_set": SC2ItemSet
 }
 
 
