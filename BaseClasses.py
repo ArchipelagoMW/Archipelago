@@ -41,7 +41,7 @@ class ThreadBarrierProxy:
             return getattr(self.obj, name)
         else:
             raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
-                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+                               "Please use World.random or randomize ahead of output.")
 
 
 class MultiWorld():
@@ -81,9 +81,9 @@ class MultiWorld():
 
     game: Dict[int, str]
 
-    random: random.Random
+    _random: random.Random
     per_slot_randoms: Dict[int, random.Random]
-    """Deprecated. Please use `self.random` instead."""
+    """Deprecated. Please use `World.random` instead."""
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -94,7 +94,7 @@ class MultiWorld():
 
     def __init__(self, players: int):
         # world-local random state is saved for multiple generations running concurrently
-        self.random = ThreadBarrierProxy(random.Random())
+        self._random = ThreadBarrierProxy(random.Random())
         self.players = players
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
@@ -185,6 +185,12 @@ class MultiWorld():
         self.worlds = {}
         self.per_slot_randoms = {}
         self.plando_options = PlandoOptions.none
+    
+    @property
+    def random(self) -> random.Random:
+        """Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead."""
+        logging.warning("Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead.")
+        return self._random
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
