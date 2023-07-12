@@ -508,6 +508,17 @@
         <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/AP_ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSHaveRaptorSwarmling">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_RaptorSwarmling"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_RaptorSwarmling"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingRange">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
     <CUpgrade id="AP_HotsKeneticMitosis">
         <AffectedUnitArray value="AP_BroodLord"/>
         <AffectedUnitArray value="AP_Broodling"/>
@@ -4830,6 +4841,67 @@
         <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train8].Charge.CountMax" Value="2"/>
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_WarpGate"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMetabolicBoost">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Zergling,Speed" Value="1.746000"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingFrenzy">
+        <EffectArray Reference="Weapon,AP_Claws,RateMultiplier" Value="0.5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingFury">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingHealth">
+        <EffectArray Reference="Unit,AP_Zergling,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_ZerglingBurrowed,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Zergling,LifeStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_ZerglingBurrowed,LifeStart" Value="10"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingSunder">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_K5ZerglingRespawn">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveRaptor">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_Raptor"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_Raptor"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Mover" Value="CliffJumper"/>
+        <EffectArray Reference="Effect,AP_Claws,Amount" Value="2"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSwarmling">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_Swarmling"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_Swarmling"/>
+        <EffectArray Reference="Effect,AP_K5DropPodZerglings,SpawnCount" Value="4"/>
+        <EffectArray Reference="Effect,AP_ZerglingRespawnTooltipDummy,SpawnCount" Value="5"/>
+        <EffectArray Reference="Unit,AP_SwarmQueen,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenBurrowed,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenMorphing,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_LargeSwarmQueen,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_LargeSwarmQueenBurrowed,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenMorphingLarge,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_HugeSwarmQueen,Food" Value="5"/>
+        <EffectArray Reference="Unit,AP_HugeSwarmQueenBurrowed,Food" Value="5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+        <AffectedUnitArray value="AP_SwarmQueen"/>
+        <AffectedUnitArray value="AP_SwarmQueenBurrowed"/>
+        <AffectedUnitArray value="AP_SwarmQueenMorphing"/>
+        <AffectedUnitArray value="AP_LargeSwarmQueen"/>
+        <AffectedUnitArray value="AP_LargeSwarmQueenBurrowed"/>
+        <AffectedUnitArray value="AP_SwarmQueenMorphingLarge"/>
+        <AffectedUnitArray value="AP_HugeSwarmQueen"/>
+        <AffectedUnitArray value="AP_HugeSwarmQueenBurrowed"/>
     </CUpgrade>
     <CUpgrade id="AP_SOAAutoAssimilator">
         <Flags index="UpgradeCheat" value="0"/>

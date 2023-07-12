@@ -293,3 +293,4 @@ Button/Hotkey/AP_Stalker=S
 Button/Hotkey/AP_UpgradeToWarpGate=G
 Button/Hotkey/AP_WarpInReplicant=E
 Button/Hotkey/AP_Zealot=Z
+Button/Hotkey/AP_RespawnZergling=Z

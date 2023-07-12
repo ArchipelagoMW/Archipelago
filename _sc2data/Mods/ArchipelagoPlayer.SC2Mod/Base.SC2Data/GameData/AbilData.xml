@@ -3040,6 +3040,53 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_BurrowZerglingDown">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_ZerglingBurrowed" RandomDelayMax="0.3703">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.333"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="0.5556"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BurrowZerglingUp">
+        <AbilSetId value="BrwU"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowUp">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_Zergling" RandomDelayMax="0.5">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="1.0625"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastRange value="2"/>
+        <AutoCastCountMin value="1"/>
+    </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4455,6 +4502,41 @@
         <Range value="15"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_LightningBomb"/>
     </CAbilEffectTarget>
+    <CAbilTrain id="AP_MorphZerglingToBaneling">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="BanelingAspect"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <MorphUnit value="AP_BanelingCocoon"/>
+        <InfoArray index="Train1" Time="10" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="Baneling" Requirements="AP_HotSHaveBaneling">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_Baneling"/>
+            <Flags index="IgnorePlacement" value="1"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
+    <CAbilAugment id="AP_HotSRaptorCharge">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_HotSRaptorCharge" Requirements="AP_HaveHotSHaveRaptor"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <TargetType value="UnitOrPoint"/>
+        <Cost>
+            <Cooldown Link="AP_HotSRaptorCharge" Location="Unit" TimeUse="2"/>
+        </Cost>
+        <Effect value="AP_HotSRaptorLeap"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilEffectTarget id="AP_OracleRevelation">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="AP_OracleRevelationSearch"/>
@@ -5738,6 +5820,84 @@
         <AINotifyEffect value="ChronoBoost"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="TimeWarp"/>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_ZerglingRespawn">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ZerglingRespawnTrainCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="UpdateChargesOnLevelChange" value="0"/>
+        <Cost>
+            <Charge CountMax="1000" CountUse="1" Location="Player"/>
+            <Cooldown Location="Player" TimeUse="30"/>
+        </Cost>
+        <AutoCastFilters value="Visible;-"/>
+        <AutoCastRange value="16"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RespawnZergling" Requirements="AP_HaveZerglingRespawnPrimaryAndUpgrade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_ZerglingRespawnCounter">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ZerglingRespawnCounterSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="UpdateChargesOnLevelChange" value="0"/>
+        <Cost>
+            <Charge>
+                <CountMax value="1000"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AP_ZerglingRespawn"/>
+                <Location value="Player"/>
+            </Charge>
+        </Cost>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RespawnZergling" Requirements="AP_HaveZerglingRespawnPrimaryAndUpgrade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_ZerglingRespawnDeath">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ZerglingRespawnDeathCharge"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Charge>
+                <CountMax value="1000"/>
+                <CountUse value="-1"/>
+                <Link value="Abil/AP_ZerglingRespawn"/>
+                <Location value="Player"/>
+            </Charge>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RespawnZergling"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_ZerglingRespawnPrimary">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ZerglingRespawnPrimarySet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ZerglingRespawnPrimary" State="Suppressed" Requirements="AP_DontHaveZerglingRespawnPrimary"/>
+    </CAbilEffectInstant>
+    <CAbilTrain id="AP_ZerglingRespawnTrain">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="AutoCastOffOwnerLeave" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <InfoArray index="Train1" Effect="AP_ZerglingRespawnTrainSet">
+            <Resource index="Minerals" value="-25"/>
+            <Charge>
+                <CountMax value="1000"/>
+                <CountUse value="1"/>
+                <Link value="Abil/AP_ZerglingRespawn"/>
+                <Location value="Player"/>
+            </Charge>
+            <Button DefaultButtonFace="Zergling"/>
+            <Unit value="AP_Zergling"/>
+        </InfoArray>
+        <Alert value="AP_ZerglingReconstitution"/>
+    </CAbilTrain>
     <CAbilEffectTarget id="AP_VoidSentryBlackHole">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Effect index="0" value="AP_VoidSentryBlackHolePersistent"/>

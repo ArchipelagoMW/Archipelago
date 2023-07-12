@@ -2189,6 +2189,54 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_HotSMetabolicBoost">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hotsmetabolicboost.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hotsmetabolicboost.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSRedundantMembranes">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hardenedcarapace.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hardenedcarapace.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSZerglingFrenzy">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-adrenaloverload.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MorphtoHunter">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <Hotkey value="Button/Hotkey/Baneling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Baneling"/>
+    </CButton>
+    <CButton id="AP_MorphtoSplitterling">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <Hotkey value="Button/Hotkey/Baneling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Baneling"/>
+    </CButton>
+    <CButton id="AP_RespawnZergling">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-zerglingreconstitution.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RaptorCliffJumper">
+        <Icon value="Assets\Textures\btn-ability-zerg-cliffjump-zergling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-cliffjump-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RaptorPassive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmlingPassive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-rapidgenesis.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-rapidgenesis.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
     <CButton id="AP_ActivateStasisWard">
         <Icon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>

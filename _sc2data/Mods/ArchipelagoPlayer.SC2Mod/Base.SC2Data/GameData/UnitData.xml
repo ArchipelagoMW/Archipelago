@@ -742,10 +742,10 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_NovaMultiTaskMAFServosHellion" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
-            <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="1" Column="3"/>
             <LayoutButtons Face="StimMarauder" Type="AbilCmd" AbilCmd="AP_StimpackHellbat,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackHellbat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -13181,6 +13181,10 @@
         <GlossaryPriority value="22"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
     </CUnit>
+    <CUnit id="AP_HotSRaptorChargeMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
     <CUnit id="AP_Assimilator">
         <DeathRevealRadius value="3"/>
         <Facing value="315"/>
@@ -17250,5 +17254,169 @@
         <TechAliasArray value="Alias_Gateway"/>
         <GlossaryPriority value="24"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+    </CUnit>
+    <CUnit id="AP_Zergling">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="35"/>
+        <LifeMax value="35"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="2.9531"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-0.5"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="5"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="AP_BurrowZerglingDown"/>
+        <AbilArray Link="AP_MorphZerglingToBaneling"/>
+        <AbilArray Link="AP_HotSRaptorCharge"/>
+        <BehaviorArray Link="AP_ZerglingRespawnDeath"/>
+        <BehaviorArray Link="AP_HotSRaptorJump"/>
+        <WeaponArray Link="AP_Claws"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Baneling" Type="AbilCmd" AbilCmd="AP_MorphZerglingToBaneling,0" Row="2" Column="0"/>
+            <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="AP_BurrowZerglingDown,0" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_HotSRedundantMembranes" Type="Passive" Requirements="AP_HaveHotSZerglingHealth" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_HotSZerglingFrenzy" Type="Passive" Requirements="AP_HaveHotSZerglingFrenzy" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HotSMetabolicBoost" Type="Passive" Requirements="AP_HaveHotSMetabolicBoost" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_SwarmlingPassive" Type="Passive" Requirements="AP_HaveHotSHaveSwarmling" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_RaptorPassive" Type="Passive" Requirements="AP_HaveHotSHaveRaptor" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_RaptorCliffJumper" Type="Passive" Requirements="AP_HaveHotSHaveRaptor" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <CargoSize value="1"/>
+        <ScoreMake value="25"/>
+        <ScoreKill value="25"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="8"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Zergling"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="50"/>
+        <GlossaryStrongArray value="Marauder"/>
+        <GlossaryStrongArray value="Hydralisk"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryWeakArray value="Hellion"/>
+        <GlossaryWeakArray value="Baneling"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+        <TauntDuration index="Cheer" value="5"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="AP_ZerglingBurrowed">
+        <Name value="Unit/Name/AP_Zergling"/>
+        <Description value="Button/Tooltip/AP_Zergling"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="35"/>
+        <LifeMax value="35"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Burrowed"/>
+        <Sight value="4"/>
+        <Food value="-0.5"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="5"/>
+        <AbilArray Link="AP_BurrowZerglingUp"/>
+        <BehaviorArray Link="AP_ZerglingRespawnDeath"/>
+        <CardLayouts>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowZerglingUp,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_HotSRedundantMembranes" Type="Passive" Requirements="AP_HaveHotSZerglingHealth" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_HotSZerglingFrenzy" Type="Passive" Requirements="AP_HaveHotSZerglingFrenzy" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HotSMetabolicBoost" Type="Passive" Requirements="AP_HaveHotSMetabolicBoost" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_SwarmlingPassive" Type="Passive" Requirements="AP_HaveHotSHaveSwarmling" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_RaptorPassive" Type="Passive" Requirements="AP_HaveHotSHaveRaptor" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_RaptorCliffJumper" Type="Passive" Requirements="AP_HaveHotSHaveRaptor" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0"/>
+        <ScoreKill value="25"/>
+        <SubgroupPriority value="8"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="ZerglingBurrowed"/>
+        <LeaderAlias value="AP_Zergling"/>
+        <HotkeyAlias value="AP_Zergling"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <AIEvaluateAlias value="AP_Zergling"/>
+    </CUnit>
+    <CUnit id="AP_ZerglingRespawnControllerUnit">
+        <Race value="Zerg"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="CreateVisible" value="1"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <EditorFlags index="NoPlacement" value="1"/>
+        <Response value="Nothing"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <BehaviorArray Link="AP_ZerglingRespawnControllerSearch"/>
+        <BehaviorArray Link="AP_ZerglingRespawnControllerRebirth"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_ZerglingRespawnWeapon" parent="MISSILE">
+        <Race value="Zerg"/>
+        <Mover value="LarvaReleaseMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
 </Catalog>

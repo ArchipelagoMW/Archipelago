@@ -4,6 +4,10 @@
         <?token id="x" type="CUpgradeLink" value="Research"?>
         <Count Link="##x##" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveRaptorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSHaveRaptor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementAllowUnit id="AP_AllowUnitMarine">
         <Link value="AP_Marine"/>
     </CRequirementAllowUnit>
@@ -2021,6 +2025,24 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSImpalerCompleteOnly">
         <Count Link="AP_HotSImpaler" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAllowAbil id="AP_AllowAbilZerglingRespawn0">
+        <Tooltip value=""/>
+        <Link value="AP_ZerglingRespawn"/>
+    </CRequirementAllowAbil>
+    <CRequirementAnd id="AP_AndCountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnitCountUpgradeK5ZerglingRespawnCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray value="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnit"/>
+        <OperandArray value="AP_CountUpgradeK5ZerglingRespawnCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountBehavior id="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ZerglingRespawnPrimary" State="CompleteOnly"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountBehavior id="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_ZerglingRespawnPrimary" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
     <CRequirementCountUnit id="CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat">
         <Count Link="AP_LurkerDen" State="CompleteOnly"/>
     </CRequirementCountUnit>
@@ -2620,6 +2642,47 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeSuperiorWarpGatesCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_SuperiorWarpGates" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingFrenzyCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSZerglingFrenzy" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingFuryCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSZerglingFury" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingHealthCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSZerglingHealth" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingRangeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSZerglingRange" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSZerglingSunderCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSZerglingSunder" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeK5ZerglingRespawnCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_K5ZerglingRespawn" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountBehaviorZerglingRespawnPrimaryCompleteOnly">
+        <OperandArray index="0" value="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitBanelingNestCompleteOnlyTechTreeCheat">
+        <Count Link="AP_BanelingNest" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSHaveSwarmling" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMetabolicBoostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSMetabolicBoost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeSOAAutoAssimilatorCompleteOnly">
         <Count Link="AP_SOAAutoAssimilator" State="CompleteOnly"/>

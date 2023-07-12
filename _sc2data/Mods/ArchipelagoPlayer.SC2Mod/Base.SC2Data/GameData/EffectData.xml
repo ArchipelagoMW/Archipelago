@@ -11213,4 +11213,419 @@
         <ResourcesHarvestedFraction value="1"/>
         <LaunchUnit Value="Caster"/>
     </CEffectModifyUnit>
+    <CEffectDamage id="AP_Claws" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSZerglingClaws">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingFrenzy"/>
+        <EffectArray value="AP_ZerglingFurySwitch"/>
+        <EffectArray value="AP_ZerglingSunder"/>
+        <EffectArray value="AP_ZerglingRangeReapply"/>
+        <EffectArray value="AP_Claws"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ZerglingFrenzy">
+        <ValidatorArray value="AP_HaveHotSZerglingFrenzy"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingFury1AB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingFury1"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ZerglingFury1RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ZerglingFury1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingFury2AB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingFury2"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ZerglingFury2RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ZerglingFury2"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingFury3AB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingFury3"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ZerglingFury3RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ZerglingFury3"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingFury4AB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingFury4"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ZerglingFury4RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ZerglingFury4"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingFury5AB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingFury5"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ZerglingFury5RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ZerglingFury5"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_ZerglingFurySwitch0">
+        <EffectArray value="AP_ZerglingFury1AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingFurySwitch1">
+        <EffectArray value="AP_ZerglingFury1RB"/>
+        <EffectArray value="AP_ZerglingFury2AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingFurySwitch2">
+        <EffectArray value="AP_ZerglingFury2RB"/>
+        <EffectArray value="AP_ZerglingFury3AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingFurySwitch3">
+        <EffectArray value="AP_ZerglingFury3RB"/>
+        <EffectArray value="AP_ZerglingFury4AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingFurySwitch4">
+        <EffectArray value="AP_ZerglingFury4RB"/>
+        <EffectArray value="AP_ZerglingFury5AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingFurySwitch5">
+        <EffectArray value="AP_ZerglingFury5AB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MakePrecursorZR">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_PrecursorZR"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_RemovePrecursorZR">
+        <EditorCategories value="Race:Zerg"/>
+        <BehaviorLink value="AP_PrecursorZR"/>
+    </CEffectRemoveBehavior>
+    <CEffectSwitch id="AP_ZerglingFurySwitch">
+        <ValidatorArray value="AP_HaveHotSZerglingFury"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="AP_HaveHotSZerglingFury1" Effect="AP_ZerglingFurySwitch1"/>
+        <CaseArray Validator="AP_HaveHotSZerglingFury2" Effect="AP_ZerglingFurySwitch2"/>
+        <CaseArray Validator="AP_HaveHotSZerglingFury3" Effect="AP_ZerglingFurySwitch3"/>
+        <CaseArray Validator="AP_HaveHotSZerglingFury4" Effect="AP_ZerglingFurySwitch4"/>
+        <CaseArray Validator="AP_HaveHotSZerglingFury5" Effect="AP_ZerglingFurySwitch5"/>
+        <CaseDefault value="AP_ZerglingFurySwitch0"/>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="AP_ZerglingRangeApply">
+        <ValidatorArray index="0" value="AP_ZerglingRangeWait"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingRange"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingRangeReapply">
+        <ValidatorArray index="0" value="AP_HaveZerglingRangeBehavior"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingRange"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingRangeWaitCounter">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ZerglingRangeCounter"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_ZerglingRespawnAddCharge">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactUnit Value="Source"/>
+        <Cost Abil="AP_ZerglingRespawnDeath,Execute" ChargeCountUse="-1"/>
+    </CEffectModifyUnit>
+    <CEffectModifyPlayer id="AP_ZerglingRespawnAddChargePlayer">
+        <EditorCategories value=""/>
+        <WhichPlayer Value="Origin"/>
+        <Cost Abil="AP_ZerglingRespawn">
+            <Charge>
+                <CountMax value="1000"/>
+                <CountUse value="-1"/>
+                <Link value="Abil/AP_ZerglingRespawn"/>
+                <Location value="Player"/>
+            </Charge>
+        </Cost>
+    </CEffectModifyPlayer>
+    <CEffectCreateUnit id="AP_ZerglingRespawnControllerRebirthCU">
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnUnit value="AP_ZerglingRespawnControllerUnit"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_ZerglingRespawnCounterSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingRespawnRefundChargeOrder"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingRespawnDeathCharge">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingRespawnDeathSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingRespawnRB"/>
+        <EffectArray value="AP_ZerglingRespawnAddChargePlayer"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingRespawnEggBirth"/>
+    <CEffectSet id="AP_ZerglingRespawnEggCheck"/>
+    <CEffectApplyBehavior id="AP_ZerglingRespawnPrimaryAB">
+        <ValidatorArray value="IsTownHall"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_ZerglingRespawnPrimary"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_HotSRaptorCharge">
+        <ValidatorArray value="CliffLevelEqual"/>
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="AP_HotSRaptorChargeSet"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_HotSRaptorChargeApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HotSRaptorCharging"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_HotSRaptorChargeDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AreaArray Radius="1" Fraction="1"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSRaptorChargeImpactSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_HotSRaptorChargeDamage"/>
+        <EffectArray value="AP_HotSRaptorChargeRemoveBehavior"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_HotSRaptorChargeLM">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="OriginPoint"/>
+        <ImpactLocation Value="CasterUnitOrPoint"/>
+        <ImpactEffect value="AP_HotSRaptorChargeImpactSet"/>
+        <AmmoUnit value="AP_HotSRaptorChargeMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectRemoveBehavior id="AP_HotSRaptorChargeRemoveBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_HotSRaptorCharging"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_HotSRaptorChargeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_HotSRaptorChargeApplyBehavior"/>
+        <EffectArray value="AP_HotSRaptorChargeTeleport"/>
+        <EffectArray value="AP_HotSRaptorChargeLM"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectTeleport id="AP_HotSRaptorChargeTeleport">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="6"/>
+        <Range value="6"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+    </CEffectTeleport>
+    <CEffectCreateUnit id="AP_HotSRaptorLeap">
+        <ValidatorArray value="ChargeMinTriggerDistance"/>
+        <ValidatorArray value="HasVision"/>
+        <ValidatorArray value="AP_HotSRaptorChargeMaxDistance"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_HotSRaptorLeapSet"/>
+        <SpawnUnit value="AP_Zergling"/>
+        <SpawnRange value="1"/>
+        <SpawnOffset value="0,-1"/>
+    </CEffectCreateUnit>
+    <CEffectLaunchMissile id="AP_HotSRaptorLeapLM">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_HotSRaptorLeapRemove"/>
+        <Movers Link="AP_HotSRaptorChargeMissile"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_HotSRaptorLeapRemove">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSRaptorLeapSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_HotSRaptorLeapSwitch"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_TempTimeout"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_HotSRaptorLeapSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="TargetIsPathable" Effect="AP_HotSRaptorLeapLM"/>
+        <CaseDefault value="AP_HotSRaptorLeapRemove"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSwitch>
+    <CEffectEnumArea id="AP_RaptorDeath">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="CasterPoint"/>
+        <SearchFilters value="Ground;Ally,Neutral,Enemy,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="AP_RaptorDeathApplyBehavior"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_RaptorDeathApplyBehavior">
+        <ValidatorArray index="0" value="AP_RaptorDeathValidators"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_RaptorFrenzy"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_ZerglingRespawnPrimaryDeathSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <SearchFilters value="-;Self,Ally,Neutral,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="300" Effect="AP_ZerglingRespawnPrimaryAB"/>
+    </CEffectEnumArea>
+    <CEffectRemoveBehavior id="AP_ZerglingRespawnPrimaryRB">
+        <EditorCategories value="Race:Zerg"/>
+        <BehaviorLink value="AP_ZerglingRespawnPrimary"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="AP_ZerglingRespawnPrimaryRemoveOthers">
+        <ValidatorArray value="IsTownHall"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray/>
+        <SearchFilters value="-;Enemy,Missile,Dead"/>
+        <AreaArray Radius="300" Effect="AP_ZerglingRespawnPrimaryRB"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ZerglingRespawnPrimarySet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingRespawnPrimaryRemoveOthers"/>
+        <EffectArray value="AP_ZerglingRespawnPrimaryAB"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_ZerglingRespawnRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <BehaviorLink value="AP_ZerglingRespawnDeath"/>
+    </CEffectRemoveBehavior>
+    <CEffectIssueOrder id="AP_ZerglingRespawnRefundChargeOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_ZerglingRespawnDeath"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectCreateUnit id="AP_ZerglingRespawnTooltipDummy">
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnOwner Value="Creator"/>
+        <SpawnUnit value="AP_Zergling"/>
+        <SpawnCount value="10"/>
+    </CEffectCreateUnit>
+    <CEffectCreatePersistent id="AP_ZerglingRespawnTrainCP">
+        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="NotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <InitialEffect value="AP_ZerglingRespawnTrainInitialSet"/>
+        <PeriodCount value="30"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggCheck"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrderSwarmling"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrderSwarmling"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrderSwarmling"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrderSwarmling"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrder"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnTrainOrderSwarmling"/>
+        <PeriodicEffectArray value="AP_ZerglingRespawnEggBirth"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="2"/>
+        <PeriodicPeriodArray value="1"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_ZerglingRespawnTrainImpactSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorZR"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ZerglingRespawnTrainInitialSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingRespawnRefundChargeOrder"/>
+        <EffectArray value="AP_ZerglingRespawnWorkingAB"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_ZerglingRespawnTrainLM">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_ZerglingRespawnTrainImpactSet"/>
+        <AmmoUnit value="AP_ZerglingRespawnWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrder">
+        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_ZerglingRespawnTrain"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrderSwarmling">
+        <ValidatorArray value="AP_HaveHotSHaveSwarmling"/>
+        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_ZerglingRespawnTrain"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_ZerglingRespawnTrainSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_ZerglingRespawnTrainLM"/>
+        <EffectArray value="AP_MakePrecursorZR"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ZerglingRespawnWorkingAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_ZerglingRespawnWorkingTimer"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ZerglingSunder">
+        <ValidatorArray value="AP_HaveHotSZerglingSunder"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_TempTimeout">
+        <Behavior value="AP_TempTimeout"/>
+    </CEffectApplyBehavior>
 </Catalog>

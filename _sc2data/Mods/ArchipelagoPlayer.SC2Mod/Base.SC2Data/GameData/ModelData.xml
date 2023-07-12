@@ -11853,4 +11853,86 @@
         <Model value="Assets\Buildings\Resources\GasCube\GasCube.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_ZerglingFuryImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\ZerglingFrenzy\ZerglingFrenzy.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnEgg" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Zerg\ZerglingRespawnEgg\ZerglingRespawnEgg.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnEggImpactModel" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\CreepBombExplosion\CreepBombExplosion.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Events>
+            <Anim value="Birth"/>
+            <Name value="Egg_Explode"/>
+            <Type value="Sound"/>
+            <Payload value="Egg_Explode"/>
+        </Events>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\ZerglingRespawnEgg\ZerglingRespawnEgg.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HotSRaptorDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingEx1ADeath\ZerglingEx1ADeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSRaptorUpgradeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingUpgradeDeath\ZerglingUpgradeDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmling" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\ZerglingEx1B\ZerglingEx1B.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Zergling_SwarmAnims\Zergling_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="1"/>
+            <Keys index="Work" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.300000"/>
+        <ScaleMax value="0.770000,0.770000,0.770000"/>
+        <ScaleMin value="0.770000,0.770000,0.770000"/>
+        <SelectionRadius value="0.441400"/>
+        <ShadowRadius value="0.441400"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.400000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmlingDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingEx1BDeath\ZerglingEx1BDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmlingUpgradeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingUpgradeDeath\ZerglingUpgradeDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RaptorPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\ZerglingPortrait\ZerglingPortrait.m3"/>
+        <Image value="Assets\Textures\ZerglingPortrait_Static.dds"/>
+        <Lighting value="AP_RaptorPortrait"/>
+    </CModel>
+    <CModel id="AP_SwarmlingPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\ZerglingPortrait\ZerglingPortrait.m3"/>
+        <Image value="Assets\Textures\ZerglingPortrait_Static.dds"/>
+        <Lighting value="AP_SwarmlingPortrait"/>
+    </CModel>
 </Catalog>

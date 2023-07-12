@@ -9,4 +9,10 @@
         <Voice value="Ready"/>
         <Peripheral value="MorphComplete"/>
     </CAlert>
+    <CAlert id="AP_ZerglingReconstitution">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-zerglingreconstitution.dds"/>
+        <Sound value="TrainComplete_Zerg"/>
+        <Voice value="Ready"/>
+        <Peripheral value="TrainComplete"/>
+    </CAlert>
 </Catalog>
