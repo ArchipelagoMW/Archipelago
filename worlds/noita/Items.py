@@ -28,9 +28,7 @@ def create_fixed_item_pool() -> List[str]:
 
 
 def create_orb_items(victory_condition: VictoryCondition, extra_orbs: ExtraOrbs) -> List[str]:
-    orb_count = 0
-    if victory_condition != VictoryCondition.option_greed_ending:
-        orb_count = extra_orbs.value
+    orb_count = extra_orbs.value
     if victory_condition == VictoryCondition.option_pure_ending:
         orb_count = orb_count + 11
     elif victory_condition == VictoryCondition.option_peaceful_ending:

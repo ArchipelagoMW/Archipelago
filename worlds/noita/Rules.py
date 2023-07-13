@@ -131,7 +131,8 @@ def biome_unlock_conditions(multiworld: MultiWorld, player: int):
     magical_entrances = multiworld.get_region("Magical Temple", player).entrances
     wizard_entrances = multiworld.get_region("Wizards' Den", player).entrances
     for entrance in lukki_entrances:
-        entrance.access_rule = lambda state: state.has("Melee Immunity Perk", player) and state.has("All-Seeing Eye Perk", player)
+        entrance.access_rule = lambda state: state.has("Melee Immunity Perk", player) and\
+                                             state.has("All-Seeing Eye Perk", player)
     for entrance in magical_entrances:
         entrance.access_rule = lambda state: state.has("All-Seeing Eye Perk", player)
     for entrance in wizard_entrances:

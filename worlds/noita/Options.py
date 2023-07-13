@@ -81,7 +81,7 @@ class ExtraOrbs(Range):
     """Add extra orbs to your item pool, to prevent you from needing to wait as long
     for the last orb you need for your victory condition.
     Extra orbs received past your victory condition's amount will be received as hearts instead.
-    Does not affect the Greed victory condition."""
+    Can be turned on for the Greed Ending goal, but will only really make it harder."""
     display_name = "Extra Orbs"
     range_start = 0
     range_end = 10
@@ -89,7 +89,8 @@ class ExtraOrbs(Range):
 
 
 class ShopPrice(Choice):
-    """Reduce the costs of Archipelago items in shops."""
+    """Reduce the costs of Archipelago items in shops.
+    By default, the price of Archipelago items matches the price of wands at that shop."""
     display_name = "Shop Price Reduction"
     option_full_price = 100
     option_25_percent_off = 75

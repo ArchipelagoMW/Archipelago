@@ -98,7 +98,7 @@ noita_connections: Dict[str, Set[str]] = {
     "Abyss Orb Room": {"Lava Lake"},
     "Below Lava Lake": {"Snowy Depths"},
     "Dark Cave": {"Collapsed Mines"},
-    "Ancient Laboratory": {"Dark Cave"},
+    "Ancient Laboratory": {"Coal Pits"},
 
     ###
     "Coal Pits Holy Mountain": {"Coal Pits"},
