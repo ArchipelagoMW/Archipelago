@@ -1,3 +1,5 @@
+from typing import Union
+
 from BaseClasses import MultiWorld
 from .world_checks import get_all_item_names, get_all_location_names
 from .. import SVTestBase
