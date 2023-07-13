@@ -54,14 +54,23 @@ class LoreChecks(Toggle):
     display_name = "Lore Checks"
 
 
-class BossRando(Toggle):
-    "Shuffles the positions of all bosses."
+class BossRando(Choice):
+    "Wheter all boss locations are shuffled, and if their damage/hp should be scaled."
     display_name = "Boss Randomization"
+    option_off = 0
+    option_scaled = 1
+    option_unscaled = 2
+    alias_true = 1
 
 
-class BossScaling(DefaultOnToggle):
-    "When Boss Rando is enabled, scales the bosses' HP, XP, and ATK to the stats of the location they replace (Reccomended)"
-    display_name = "Scale Random Boss Stats"
+class EnemyRando(Choice):
+    "Wheter enemies will be randomized, and if their damage/hp should be scaled."
+    display_name = "Enemy Randomization"
+    option_off = 0
+    option_scaled = 1
+    option_unscaled = 2
+    option_ryshia = 3
+    alias_true = 1
 
 
 class DamageRando(Choice):
@@ -389,7 +398,8 @@ class Traps(OptionList):
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
-    display_name = "PresentAccessWithWheelAndSpindle"
+    display_name = "Past Wheel & Spindle Warp"
+
 
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
@@ -404,7 +414,7 @@ timespinner_options: Dict[str, Option] = {
     "Cantoran": Cantoran,
     "LoreChecks": LoreChecks,
     "BossRando": BossRando,
-    "BossScaling": BossScaling,
+    "EnemyRando": EnemyRando,
     "DamageRando": DamageRando,
     "DamageRandoOverrides": DamageRandoOverrides,
     "HpCap": HpCap,

@@ -1,4 +1,4 @@
-from typing import Tuple, Dict, Union
+from typing import Tuple, Dict, Union, List
 from BaseClasses import MultiWorld
 from .Options import timespinner_options, is_option_enabled, get_option_value
 
@@ -52,28 +52,27 @@ class PreCalculatedWeights:
             self.flood_lab = False
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
-            self.get_pyramid_keys_unlocks(world, player, self.flood_maw)
+            self.get_pyramid_keys_unlocks(world, player, self.flood_maw, self.flood_xarion)
 
     @staticmethod
-    def get_pyramid_keys_unlocks(world: MultiWorld, player: int, is_maw_flooded: bool) -> Tuple[str, str, str, str]:
-        present_teleportation_gates: Tuple[str, ...] = (
+    def get_pyramid_keys_unlocks(world: MultiWorld, player: int, is_maw_flooded: bool, is_xarion_flooded: bool) -> Tuple[str, str, str, str]:
+        present_teleportation_gates: List[str] = [
             "GateKittyBoss",
             "GateLeftLibrary",
             "GateMilitaryGate",
             "GateSealedCaves",
             "GateSealedSirensCave",
-            "GateLakeDesolation",
-            "GateXarion"
-        )
+            "GateLakeDesolation"
+        ]
 
-        past_teleportation_gates: Tuple[str, ...] = (
+        past_teleportation_gates: List[str] = [
             "GateLakeSereneRight",
             "GateAccessToPast",
             "GateCastleRamparts",
             "GateCastleKeep",
             "GateRoyalTowers",
             "GateCavesOfBanishment"
-        )
+        ]
 
         ancient_pyramid_teleportation_gates: Tuple[str, ...] = (
             "GateGyre",
@@ -90,7 +89,10 @@ class PreCalculatedWeights:
             )
 
         if not is_maw_flooded:
-            past_teleportation_gates += ("GateMaw", )
+            past_teleportation_gates.append("GateMaw")
+
+        if not is_xarion_flooded:
+            present_teleportation_gates.append("GateXarion")
 
         if is_option_enabled(world, player, "Inverted"):
             all_gates: Tuple[str, ...] = present_teleportation_gates
