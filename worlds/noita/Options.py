@@ -95,6 +95,7 @@ class ShopPrice(Choice):
     option_25_percent_off = 75
     option_50_percent_off = 50
     option_75_percent_off = 25
+    default = 100
 
 
 noita_options: Dict[str, AssembleOptions] = {
