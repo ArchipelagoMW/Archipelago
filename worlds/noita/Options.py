@@ -91,10 +91,10 @@ class ExtraOrbs(Range):
 class ShopPrice(Choice):
     """Reduce the costs of Archipelago items in shops."""
     display_name = "Shop Price Reduction"
-    option_full_price = 0
-    option_25_percent_off = 1
-    option_50_percent_off = 2
-    option_75_percent_off = 3
+    option_full_price = 100
+    option_25_percent_off = 75
+    option_50_percent_off = 50
+    option_75_percent_off = 25
 
 
 noita_options: Dict[str, AssembleOptions] = {
