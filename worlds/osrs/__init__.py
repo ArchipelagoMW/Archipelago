@@ -95,13 +95,8 @@ class OSRSWorld(World):
                 for resource_region in region_info.resources:
                     # Resource nodes have no rules to access unless they're in extra conditions
                     # TODO add skill requirements and brutal grind options
-                    if resource_region in region_info.extra_conditions(self.player):
-                        exit_rules[resource_region] = lambda state: (region_info.extra_conditions(self.player)[
-                            connected_region])
-                    else:
-                        # If there's no extra, the rule is whatever the target location's rule is
-                        exit_rules[resource_region] = lambda _: True
-
+                    exit_rules[resource_region] = region_info.build_extra_condition(self.player, resource_region)
+                    
                 region.add_exits(exits, exit_rules)
 
     def create_items(self) -> None:

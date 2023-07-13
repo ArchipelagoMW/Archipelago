@@ -23,6 +23,12 @@ class RegionInfo(typing.NamedTuple):
             exits_dict[resource] = f"{self.name}->{resource}"
         return exits_dict
 
+    def build_extra_condition(self, player, region):
+        condition_dict = self.extra_conditions(player)
+        if region in condition_dict:
+            return condition_dict[region]
+        else:
+            return lambda _: True
 
 all_regions = [
     RegionInfo("Menu",
@@ -388,19 +394,19 @@ all_regions = [
                lambda player: ({
                    RegionNames.Bronze_Ores:
                        lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
-                           RegionNames.Ice_Mountain,None, player),
+                           RegionNames.Ice_Mountain, None, player),
                    RegionNames.Clay_Rock:
-                       lambda state: state.can_reach(RegionNames.Monastery,None, player) or state.can_reach(
-                           RegionNames.Ice_Mountain,None, player),
+                       lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
+                           RegionNames.Ice_Mountain, None, player),
                    RegionNames.Coal_Rock:
-                       lambda state: state.can_reach(RegionNames.Monastery,None, player) or state.can_reach(
-                           RegionNames.Ice_Mountain,None, player),
+                       lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
+                           RegionNames.Ice_Mountain, None, player),
                    RegionNames.Iron_Rock:
-                       lambda state: state.can_reach(RegionNames.Monastery,None, player) or state.can_reach(
-                           RegionNames.Ice_Mountain,None, player),
+                       lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
+                           RegionNames.Ice_Mountain, None, player),
                    RegionNames.Gold_Rock:
-                       lambda state: state.can_reach(RegionNames.Monastery,None, player) or state.can_reach(
-                           RegionNames.Ice_Mountain,None, player),
+                       lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
+                           RegionNames.Ice_Mountain, None, player),
                    RegionNames.Anvil:
                        lambda state: state.has(ItemNames.QP_Dorics_Quest,None, player)
                })
@@ -471,7 +477,7 @@ all_regions = [
                    RegionNames.Silver_Rock:
                        lambda state: state.can_reach(RegionNames.Central_Varrock, None, player),
                    RegionNames.Gold_Rock:
-                       lambda state: state.can_reach(RegionNames.Central_Varrock, None, player),
+                       lambda state: state.can_reach(RegionNames.Central_Varrock, None, player)
                })
                ),
     RegionInfo(RegionNames.Rimmington,
