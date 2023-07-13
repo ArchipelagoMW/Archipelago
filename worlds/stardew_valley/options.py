@@ -179,14 +179,14 @@ class SeasonRandomization(Choice):
     option_progressive = 3
 
 
-class SeedShuffle(Choice):
-    """Should seeds be randomized?
+class Cropsanity(Choice):
+    """Formerly named "Seed Shuffle"
     Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
-    Disabled: All the seeds will be unlocked from the start.
-    Shuffled: The seeds will be unlocked as Archipelago items
+    Disabled: All the seeds are unlocked from the start, there are no location checks for growing and harvesting crops
+    Shuffled: Seeds are unlocked as archipelago item, for each seed there is a location check for growing and harvesting that crop
     """
-    internal_name = "seed_shuffle"
-    display_name = "Seed Shuffle"
+    internal_name = "cropsanity"
+    display_name = "Cropsanity"
     default = 1
     option_disabled = 0
     option_shuffled = 1
@@ -561,7 +561,7 @@ stardew_valley_option_classes = [
     BundlePrice,
     EntranceRandomization,
     SeasonRandomization,
-    SeedShuffle,
+    Cropsanity,
     BackpackProgression,
     ToolProgression,
     SkillProgression,

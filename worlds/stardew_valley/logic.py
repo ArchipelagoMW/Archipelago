@@ -757,7 +757,7 @@ class StardewLogic:
         return self.has_max_fishing_rod() & skill_rule
 
     def can_buy_seed(self, seed: SeedItem) -> StardewRule:
-        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+        if self.options[options.Cropsanity] == options.Cropsanity.option_disabled:
             item_rule = True_()
         else:
             item_rule = self.received(seed.name)
@@ -775,7 +775,7 @@ class StardewLogic:
                           Fruit.peach: 6000,
                           Fruit.pomegranate: 6000, Fruit.banana: 0, Fruit.mango: 0}
         received_sapling = self.received(f"{fruit} Sapling")
-        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+        if self.options[options.Cropsanity] == options.Cropsanity.option_disabled:
             allowed_buy_sapling = True_()
         else:
             allowed_buy_sapling = received_sapling

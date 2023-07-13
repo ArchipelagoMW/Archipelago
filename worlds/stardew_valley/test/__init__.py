@@ -34,7 +34,7 @@ class SVTestBase(WorldTestBase):
     def minimal_locations_maximal_items(self):
         min_max_options = {
             options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-            options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
+            options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
             options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
             options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
             options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
@@ -57,7 +57,7 @@ class SVTestBase(WorldTestBase):
             options.BundleRandomization.internal_name: options.BundleRandomization.option_shuffled,
             options.BundlePrice.internal_name: options.BundlePrice.option_expensive,
             options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized,
-            options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
+            options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
             options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
             options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
             options.SkillProgression.internal_name: options.SkillProgression.option_progressive,

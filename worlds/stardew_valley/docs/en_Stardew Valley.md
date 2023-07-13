@@ -56,8 +56,8 @@ A player can enable some settings that will add some items to the pool that are 
 - Seasons Randomizer:
   - All 4 seasons will be items, and one of them will be selected randomly and be added to the player's start inventory
   - At the end of each month, the player can choose the next season, instead of following the vanilla season order. On Seasons Randomizer, they can only choose from the seasons they have received.
-- Seed Shuffle:
-  - Every single seed in the game starts off locked and cannot be purchased from any merchant. Their unlocks are received as multiworld items.
+- Cropsanity:
+  - Every single seed in the game starts off locked and cannot be purchased from any merchant. Their unlocks are received as multiworld items. Growing each seed and harvesting the resulting crop sends a location check
   - The way merchants sell seeds is considerably changed. Pierre sells fewer seeds at a high price, while Joja sells unlimited seeds but in huge discount packs, not individually.
 - Museumsanity:
   - The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the magic rock candy, are duplicated for convenience.

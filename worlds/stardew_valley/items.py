@@ -45,7 +45,7 @@ class Group(enum.Enum):
     ORE = enum.auto()
     FERTILIZER = enum.auto()
     SEED = enum.auto()
-    SEED_SHUFFLE = enum.auto()
+    CROPSANITY = enum.auto()
     FISHING_RESOURCE = enum.auto()
     SEASON = enum.auto()
     TRAVELING_MERCHANT_DAY = enum.auto()
@@ -392,11 +392,11 @@ def create_seasons(item_factory: StardewItemFactory, world_options: StardewOptio
 
 
 def create_seeds(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
-    if world_options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+    if world_options[options.Cropsanity] == options.Cropsanity.option_disabled:
         return
 
     include_ginger_island = world_options[options.ExcludeGingerIsland] != options.ExcludeGingerIsland.option_true
-    seed_items = [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE] if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
+    seed_items = [item_factory(item) for item in items_by_group[Group.CROPSANITY] if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
     items.extend(seed_items)
 
 
