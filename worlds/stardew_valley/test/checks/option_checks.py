@@ -6,7 +6,7 @@ from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
 
-def get_stardew_world(multiworld: MultiWorld) -> StardewValleyWorld | None:
+def get_stardew_world(multiworld: MultiWorld) -> Union[StardewValleyWorld, None]:
     for world_key in multiworld.worlds:
         world = multiworld.worlds[world_key]
         if isinstance(world, StardewValleyWorld):
