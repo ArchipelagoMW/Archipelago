@@ -39,8 +39,23 @@ class LinksAwakeningSettings(settings.Group):
         description = "LADX ROM File"
         md5s = [LADXDeltaPatch.hash]
 
-    rom_file: RomFile = RomFile(RomFile.copy_to)
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+                    true  for operating system default program
+        Alternatively, a path to a program to open the .gbc file with
+        Examples:
+           Retroarch:
+        rom_start: "C:/RetroArch-Win64/retroarch.exe -L sameboy"
+           BizHawk:
+        rom_start: "C:/BizHawk-2.9-win-x64/EmuHawk.exe --lua=data/lua/connector_ladx_bizhawk.lua"
+        """
 
+    class DisplayMsgs(settings.Bool):
+        """Display message inside of Bizhawk"""
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -451,11 +466,9 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_name = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+        rom_name = Rom.get_base_rom_path()
         out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.player_name[self.player]}.gbc"
         out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
-
-
 
         parser = get_parser()
         args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
