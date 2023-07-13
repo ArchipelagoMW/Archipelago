@@ -136,6 +136,7 @@ hook_branch 0x802A2B8, 0x802A2C8, 0x802A32E, LoadRandomItemAnimation ;  CD
 hook_branch 0x802A378, 0x802A388, 0x802A3E6, LoadRandomItemAnimation ;  Full health
 
 .autoregion
+.align 2
 LoadRandomItemAnimation:
     push r4-r6, lr
     ldr r4, =CurrentEnemyData

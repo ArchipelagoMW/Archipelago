@@ -5,6 +5,7 @@ hook 0x8000728, 0x8000738, PreGamePrep
 
 ; Initialize randomizer variables
 .autoregion
+.align 2
 PreGamePrep:
 ; Copy deathlink option from ROM
     ldr r0, =DeathLinkFlag
@@ -37,6 +38,7 @@ PreGamePrep:
 .word PyramidScreen
 
 .autoregion
+.align 2
 ; Receive multiworld items (level select)
 PyramidScreen:
     push {r4}
@@ -67,6 +69,7 @@ PyramidScreen:
 .word LevelScreen
 
 .autoregion
+.align 2
 ; Receive multiworld items and collect junk (in level)
 LevelScreen:
     push {r4}

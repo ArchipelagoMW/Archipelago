@@ -3,7 +3,7 @@
 ; Functions for applying junk items and traps to Wario's status
 
 .autoregion
-
+.align 2
 
 CollectJunkItems:
     push {lr}
