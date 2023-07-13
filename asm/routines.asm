@@ -15,7 +15,7 @@ PreGamePrep:
 
 ; Reset incoming item sender
     ldr r4, =IncomingItemSender
-    mov r0, #0xFF
+    mov r0, #0xFE
     strb r0, [r4]
 
 ; Replaced code

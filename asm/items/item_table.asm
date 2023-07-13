@@ -19,20 +19,20 @@ ItemLocationTable:
     CDLocationTable:     .fill @levels, invalid_item
     HealthLocationTable: .fill @levels, invalid_item
 
-; Maps locations to the 8-bit player ID of the item's owner.
+; Maps locations to pointers toward the item's multiworld data.
 .align 4
-ItemDestinationTable:
-    Jewel1DestinationTable: .fill @levels, -1
-    Jewel2DestinationTable: .fill @levels, -1
-    Jewel3DestinationTable: .fill @levels, -1
-    Jewel4DestinationTable: .fill @levels, -1
-    CDDestinationTable:     .fill @levels, -1
-    HealthDestinationTable: .fill @levels, -1
+ItemExtDataTable:
+    Jewel1ExtDataTable: .fill @levels * 4, 0
+    Jewel2ExtDataTable: .fill @levels * 4, 0
+    Jewel3ExtDataTable: .fill @levels * 4, 0
+    Jewel4ExtDataTable: .fill @levels * 4, 0
+    CDExtDataTable:     .fill @levels * 4, 0
+    HealthExtDataTable: .fill @levels * 4, 0
 
 
 .align 2
-; Retrieve the item and player ID at the location specified in r0 in this level.
-; Return the encoded ID in r0 and the player ID in r1
+; Retrieve the item and multiworld pointer at the location specified in r0 in this level.
+; Return the encoded ID in r0 and the multiworld pointer in r1
 GetItemAtLocation:
     ; r1 = boxtype * 6
     lsl r1, r0, #1
@@ -55,10 +55,13 @@ GetItemAtLocation:
     add r2, r1, r3
     ldrb r0, [r2]
 
-    ; r1 = player ID
-    ldr r1, =ItemDestinationTable
+    ; r3 = locationID * 4
+    lsl r3, r3, #2
+
+    ; r1 = multiworld pointer
+    ldr r1, =ItemExtDataTable
     add r2, r1, r3
-    ldrb r1, [r2]
+    ldr r1, [r2]
 
     mov pc, lr
 .pool

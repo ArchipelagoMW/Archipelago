@@ -39,11 +39,11 @@ ItemReceivedFeedbackSound:
 ReceiveNextItem:
     ldr r2, =IncomingItemSender
     ldrb r0, [r2]
-    cmp r0, #0xFF
+    cmp r0, #0xFE
     beq @@Return
 
 ; Reset incoming item sender
-    mov r1, #0xFF
+    mov r1, #0xFE
     strb r1, [r2]
 
 ; Increment received item counter
