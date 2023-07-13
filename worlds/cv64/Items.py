@@ -13,9 +13,9 @@ class CV64Item(Item):
 tier1_junk_table = {
     IName.red_jewel_s:        0xC64002,
     IName.red_jewel_l:        0xC64003,
-    IName.five_hundred_gold:  0xC6401A,
-    IName.three_hundred_gold: 0xC6401B,
-    IName.one_hundred_gold:   0xC6401C
+    IName.five_hundred_gold:  0xC64027,
+    IName.three_hundred_gold: 0xC64028,
+    IName.one_hundred_gold:   0xC64029
 }
 
 tier2_junk_table = {
@@ -32,19 +32,19 @@ tier2_junk_table = {
 key_table = {
     IName.magical_nitro:        0xC64015,
     IName.mandragora:           0xC64016,
-    IName.archives_key:         0xC6401D,
-    IName.left_tower_key:       0xC6401E,
-    IName.storeroom_key:        0xC6401F,
-    IName.garden_key:           0xC64020,
-    IName.copper_key:           0xC64021,
-    IName.chamber_key:          0xC64022,
-    IName.execution_key:        0xC64023,
-    IName.science_key_one:      0xC64024,
-    IName.science_key_two:      0xC64025,
-    IName.science_key_three:    0xC64026,
-    IName.clocktower_key_one:   0xC64027,
-    IName.clocktower_key_two:   0xC64028,
-    IName.clocktower_key_three: 0xC64029,
+    IName.archives_key:         0xC6401A,
+    IName.left_tower_key:       0xC6401B,
+    IName.storeroom_key:        0xC6401C,
+    IName.garden_key:           0xC6401D,
+    IName.copper_key:           0xC6401E,
+    IName.chamber_key:          0xC6401F,
+    IName.execution_key:        0xC64020,
+    IName.science_key_one:      0xC64021,
+    IName.science_key_two:      0xC64022,
+    IName.science_key_three:    0xC64023,
+    IName.clocktower_key_one:   0xC64024,
+    IName.clocktower_key_two:   0xC64025,
+    IName.clocktower_key_three: 0xC64026,
     IName.victory:              None
 }
 
@@ -54,10 +54,34 @@ special_table = {
 }
 
 sub_weapon_table = {
-    IName.holy_water: 0xC6400D,
-    IName.cross:      0xC6400E,
-    IName.axe:        0xC6400F,
-    IName.knife:      0xC64010
+    IName.knife:      0xC6400D,
+    IName.holy_water: 0xC6400E,
+    IName.cross:      0xC6400F,
+    IName.axe:        0xC64010,
+}
+
+# For some reason, KCEK gave every item pickup actor in this table a different ID from its actual item code.
+pickup_item_discrepancies = {
+    IName.holy_water:           0x0D,
+    IName.cross:                0x0E,
+    IName.axe:                  0x0F,
+    IName.knife:                0x10,
+    IName.archives_key:         0x1D,
+    IName.left_tower_key:       0x1E,
+    IName.storeroom_key:        0x1F,
+    IName.garden_key:           0x20,
+    IName.copper_key:           0x21,
+    IName.chamber_key:          0x22,
+    IName.execution_key:        0x23,
+    IName.science_key_one:      0x24,
+    IName.science_key_two:      0x25,
+    IName.science_key_three:    0x26,
+    IName.clocktower_key_one:   0x27,
+    IName.clocktower_key_two:   0x28,
+    IName.clocktower_key_three: 0x29,
+    IName.five_hundred_gold:    0x1A,
+    IName.three_hundred_gold:   0x1B,
+    IName.one_hundred_gold:     0x1C
 }
 
 # Complete item table.

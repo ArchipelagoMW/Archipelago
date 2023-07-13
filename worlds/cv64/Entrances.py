@@ -129,6 +129,15 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.ck_main, RName.ck_drac_chamber)
     ]
 
+    # Figure out the active farm regions for shopsanity logic
+    farmable_regions = [RName.forest_start, RName.forest_mid, RName.cw_start, RName.cw_ltower, RName.villa_main,
+                        RName.villa_maze, RName.tunnel_start, RName.tunnel_end, RName.uw_main, RName.cc_lower,
+                        RName.cc_upper, RName.cc_elev_top, RName.tosor_main, RName.ct_middle, RName.ct_end]
+    active_farm_regions = []
+    for region in farmable_regions:
+        if region in active_regions:
+            active_farm_regions.append(region)
+
     # Set up the starting stage and warp entrances
     for i in range(len(active_warp_list)):
         if i == 0:
@@ -159,20 +168,6 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
             if data.target_region == RName.renon and multiworld.shop_prices_total[player] != 0:
                 # Make sure there are any farm-able regions accessible before expecting players to farm money.
                 created_entrance.access_rule = lambda state: \
-                    any([state.can_reach(RName.forest_start, "Region", player),
-                         state.can_reach(RName.forest_mid, "Region", player),
-                         state.can_reach(RName.cw_start, "Region", player),
-                         state.can_reach(RName.cw_ltower, "Region", player),
-                         state.can_reach(RName.villa_main, "Region", player),
-                         state.can_reach(RName.villa_maze, "Region", player),
-                         state.can_reach(RName.tunnel_start, "Region", player),
-                         state.can_reach(RName.tunnel_end, "Region", player),
-                         state.can_reach(RName.uw_main, "Region", player),
-                         state.can_reach(RName.cc_lower, "Region", player),
-                         state.can_reach(RName.cc_upper, "Region", player),
-                         state.can_reach(RName.cc_elev_top, "Region", player),
-                         state.can_reach(RName.tosor_main, "Region", player),
-                         state.can_reach(RName.ct_middle, "Region", player),
-                         state.can_reach(RName.ct_end, "Region", player)])
+                    any([state.can_reach(farm_region, "Region", player) for farm_region in active_farm_regions])
             created_entrance.connect(active_regions[data.target_region])
             active_regions[data.parent_region].exits.append(created_entrance)

@@ -6,7 +6,8 @@ import threading
 import copy
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table, sub_weapon_table
+from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table, \
+    sub_weapon_table, pickup_item_discrepancies
 from .Locations import CV64Location, all_locations, create_locations, boss_table
 from .Entrances import create_entrances
 from .Options import cv64_options
@@ -15,6 +16,8 @@ from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, \
     rom_looping_music_fade_ins
+
+
 # import math
 
 
@@ -80,18 +83,18 @@ class CV64World(World):
             self.active_stage_list.remove(RName.underground_waterway)
             self.active_stage_list.remove(RName.tower_of_science)
             self.active_stage_list.remove(RName.tower_of_sorcery)
-            del(self.active_stage_exits[RName.underground_waterway])
-            del(self.active_stage_exits[RName.tower_of_science])
-            del(self.active_stage_exits[RName.tower_of_sorcery])
+            del (self.active_stage_exits[RName.underground_waterway])
+            del (self.active_stage_exits[RName.tower_of_science])
+            del (self.active_stage_exits[RName.tower_of_sorcery])
             self.active_stage_exits[RName.villa][2] = RName.tunnel
             self.active_stage_exits[RName.castle_center][2] = RName.duel_tower
         elif self.multiworld.character_stages[self.player].value == 3:
             self.active_stage_list.remove(RName.tunnel)
             self.active_stage_list.remove(RName.duel_tower)
             self.active_stage_list.remove(RName.tower_of_execution)
-            del(self.active_stage_exits[RName.tunnel])
-            del(self.active_stage_exits[RName.duel_tower])
-            del(self.active_stage_exits[RName.tower_of_execution])
+            del (self.active_stage_exits[RName.tunnel])
+            del (self.active_stage_exits[RName.duel_tower])
+            del (self.active_stage_exits[RName.tower_of_execution])
             self.active_stage_exits[RName.villa][1] = RName.underground_waterway
             self.active_stage_exits[RName.castle_center][1] = RName.tower_of_science
 
@@ -106,7 +109,7 @@ class CV64World(World):
         # Create a list of warps from the active stage list. They are in a random order by default and will never
         # include the starting stage.
         possible_warps = self.active_stage_list.copy()
-        del(possible_warps[0])
+        del (possible_warps[0])
         self.active_warp_list = self.multiworld.random.sample(possible_warps, 7)
 
         if self.multiworld.warp_shuffle[self.player].value == 0:
@@ -345,7 +348,7 @@ class CV64World(World):
                 self.multiworld.local_early_items[self.player][IName.science_key_two] = 1
         elif self.active_stage_list[0] == RName.clock_tower:
             if (self.multiworld.special1s_per_warp[self.player].value > 2 and
-                    self.multiworld.multi_hit_breakables[self.player].value == 0) or \
+                self.multiworld.multi_hit_breakables[self.player].value == 0) or \
                     (self.multiworld.special1s_per_warp[self.player].value > 8 and
                      self.multiworld.multi_hit_breakables[self.player].value == 1):
                 self.multiworld.local_early_items[self.player][IName.clocktower_key_one] = 1
@@ -429,62 +432,68 @@ class CV64World(World):
 
             rom = LocalRom(get_base_rom_path())
 
-            # Figure out the item location and Countdown bytes
             active_locations = self.multiworld.get_locations(self.player)
-            countdown_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            shop_list = []
+            countdown_list = [0 for i in range(15)]
+            shop_name_list = []
+            shop_desc_list = []
 
             for loc in active_locations:
-                if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
-                    if loc.item.player == self.player:
+                # If the Location is an event, skip it.
+                if loc.address is None:
+                    continue
+
+                # Figure out the item ID bytes to put in each Location here.
+                if loc.item.player == self.player:
+                    if loc.cv64_loc_type not in ["npc", "shop"] and loc.item.name in pickup_item_discrepancies:
+                        offsets_to_ids[loc.cv64_rom_offset] = pickup_item_discrepancies[loc.item.name]
+                    else:
                         offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
-                        if loc.cv64_loc_type == "npc" or loc.parent_region.name == RName.renon:
-                            if 0x19 < offsets_to_ids[loc.cv64_rom_offset] < 0x1D:
-                                offsets_to_ids[loc.cv64_rom_offset] += 0x0D
-                            elif 0x10 == offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
-                                offsets_to_ids[loc.cv64_rom_offset] -= 0x03
-                            elif offsets_to_ids[loc.cv64_rom_offset] in [0x0D, 0x0E, 0x0F]:
-                                offsets_to_ids[loc.cv64_rom_offset] += 0x01
-                        # Figure out the shopsanity list here
-                        if loc.parent_region.name == RName.renon:
-                            shop_list.append([offsets_to_ids[loc.cv64_rom_offset], None])
+                else:
+                    if loc.item.advancement:
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x11
+                    else:
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x12
+
+                # Figure out the list of shop names and descriptions here.
+                if loc.parent_region.name == RName.renon:
+
+                    shop_name = loc.item.name
+                    if len(shop_name) > 18:
+                        shop_name = shop_name[0:18]
+                    shop_name_list.append(shop_name)
+
+                    if loc.item.player == self.player:
+                        shop_desc_list.append([loc.item.code - 0xC64000, None])
+                    elif loc.item.game == "Castlevania 64":
+                        shop_desc_list.append([loc.item.code - 0xC64000,
+                                               self.multiworld.get_player_name(loc.item.player)])
                     else:
                         if loc.item.advancement:
-                            offsets_to_ids[loc.cv64_rom_offset] = 0x11
-                            if loc.parent_region.name == RName.renon:
-                                shop_list.append(["prog", self.multiworld.get_player_name(loc.item.player)])
-                        elif loc.item.classification == ItemClassification.filler:
-                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
-                            if loc.parent_region.name == RName.renon:
-                                shop_list.append(["common", self.multiworld.get_player_name(loc.item.player)])
+                            shop_desc_list.append(["prog", self.multiworld.get_player_name(loc.item.player)])
                         elif loc.item.classification == ItemClassification.useful:
-                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
-                            if loc.parent_region.name == RName.renon:
-                                shop_list.append(["useful", self.multiworld.get_player_name(loc.item.player)])
+                            shop_desc_list.append(["useful", self.multiworld.get_player_name(loc.item.player)])
                         elif loc.item.classification == ItemClassification.trap:
-                            offsets_to_ids[loc.cv64_rom_offset] = 0x12
-                            if loc.parent_region.name == RName.renon:
-                                shop_list.append(["trap", self.multiworld.get_player_name(loc.item.player)])
+                            shop_desc_list.append(["trap", self.multiworld.get_player_name(loc.item.player)])
+                        else:
+                            shop_desc_list.append(["common", self.multiworld.get_player_name(loc.item.player)])
 
-                    if loc.address is not None and loc.cv64_stage is not None:
-                        if self.multiworld.countdown[self.player].value == 2 or \
-                                (self.multiworld.countdown[self.player].value == 1 and
-                                 (loc.item.classification == ItemClassification.progression or
-                                  loc.item.classification == ItemClassification.progression_skip_balancing)):
-                            if loc.parent_region.name in [RName.villa_maze, RName.villa_crypt]:
-                                countdown_list[13] += 1
-                            elif loc.parent_region.name in [RName.cc_upper, RName.cc_library]:
-                                countdown_list[14] += 1
-                            else:
-                                countdown_list[vanilla_stage_order.index(loc.cv64_stage)] += 1
+                # Figure out the Countdown numbers here.
+                if loc.cv64_stage is not None:
+                    if self.multiworld.countdown[self.player].value == 2 or \
+                            (self.multiworld.countdown[self.player].value == 1 and loc.item.advancement):
+                        if loc.parent_region.name in [RName.villa_maze, RName.villa_crypt]:
+                            countdown_list[13] += 1
+                        elif loc.parent_region.name in [RName.cc_upper, RName.cc_library]:
+                            countdown_list[14] += 1
+                        else:
+                            countdown_list[vanilla_stage_order.index(loc.cv64_stage)] += 1
 
-            # Figure out the sub-weapon bytes
+            # Figure out the sub-weapon bytes if shuffling sub-weapons in their own pool.
             if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
                 for offset, sub_id in sub_weapon_dict.items():
                     offsets_to_ids[offset] = sub_id
 
             # Figure out the loading zone bytes
-
             if self.multiworld.stage_shuffle[self.player]:
                 offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
             for stage in self.active_stage_exits:
@@ -499,7 +508,7 @@ class CV64World(World):
                     # Change CC's end-spawn ID to put you at Carrie's exit if appropriate
                     if self.active_stage_exits[stage][0] == RName.castle_center:
                         if self.multiworld.character_stages[self.player].value == 3 or \
-                                (self.active_stage_list[self.active_stage_list.index(RName.castle_center) + 3] == stage
+                                (self.active_stage_exits[RName.castle_center][2] == stage
                                  and self.multiworld.character_stages[self.player].value == 0):
                             offsets_to_ids[stage_info[stage].startzone_spawn_offset] += 1
 
@@ -519,7 +528,7 @@ class CV64World(World):
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
                       self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list, countdown_list,
-                      shop_list)
+                      shop_name_list, shop_desc_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
@@ -529,7 +538,7 @@ class CV64World(World):
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
-            patch = CV64DeltaPatch(os.path.splitext(rompath)[0]+CV64DeltaPatch.patch_file_ending, player=player,
+            patch = CV64DeltaPatch(os.path.splitext(rompath)[0] + CV64DeltaPatch.patch_file_ending, player=player,
                                    player_name=world.player_name[player], patched_path=rompath)
             patch.write()
         except:

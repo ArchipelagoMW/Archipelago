@@ -162,7 +162,7 @@ rom_looping_music_fade_ins = {
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 renon_item_dialogue = {
-    0x02: "More Sub-weapon uses.\n"
+    0x02: "More Sub-weapon uses!\n"
           "Just what you need!",
     0x03: "Galamoth told me it's\n"
           "a heart in other times.",
@@ -177,29 +177,29 @@ renon_item_dialogue = {
     0x08: "Don't tell Geneva\n"
           "about this...",
     0x09: "If this existed in 1094,\n"
-          "then that whip...",
+          "that whip wouldn't...",
     0x0A: "For when some lizard\n"
           "brain spits on your ego.",
-    0x0C: "Don't lose it too\n"
-          "quickly!",
-    0x0D: "Night Creatures handle\n"
-          "carefully!",
-    0x0E: "Or Banshee Boomerang,\n"
-          "according to some.",
-    0x0F: "No weapon triangle\n"
-          "advantages with this.",
-    0x10: "Arthur was far better\n"
+    0x0C: "It'd be a shame if you\n"
+          "lost it immediately...",
+    0x0D: "Arthur was far better\n"
           "with it than you!",
+    0x0E: "Night Creatures handle\n"
+          "carefully!",
+    0x0F: "Or Banshee Boomerang,\n"
+          "according to some.",
+    0x10: "No weapon triangle\n"
+          "advantages with this.",
     0x15: "This non-volatile kind\n"
           "is safe to handle.",
     0x16: "If you can soul-wield,\n"
           "they have a good one!",
     0x17: "Calls the morning sun\n"
           "to vanquish the night.",
-    0x18: "On-demand horrible\n"
-          "nights. Devils love it!",
-    0x1A: "Pay me for a study\n"
-          "session here.",
+    0x18: "1 on-demand horrible\n"
+          "night. Demons love it!",
+    0x1A: "Want to study here?\n"
+          "It will cost you.",
     0x1B: "\"Let them eat cake!\"\n"
           "Said no princess ever.",
     0x1C: "Why do I suspect this\n"
@@ -217,25 +217,25 @@ renon_item_dialogue = {
     0x22: "The key 2 exploring\n"
           "both Science halves!",
     0x23: "This warehouse can\n"
-          "be yours for a fee!",
+          "be yours for a fee.",
     0x24: "Long road ahead if you\n"
-          "don't have the rest.",
-    0x25: "Beware of a curse of\n"
-          "eternal burning...",
+          "don't have the others.",
+    0x25: "Will you get the curse\n"
+          "of eternal burning?",
     0x26: "What's beyond time?\n"
           "Find out yourself!",
     0x27: "Want to take out a\n"
           "loan? By all means!",
     0x28: "The bag is green,\n"
           "so it must be lucky!",
-    0x29: "(Does this fool\n"
-          "realize?) Oh, sorry.",
-    "prog":   "They'll likely need\n"
-              "it before long!",
-    "useful": "This would be very\n"
-              "useful to have!",
-    "common": "It doesn't look\n"
-              "important to me...",
+    0x29: "(Does this fool realize?)\n"
+          "Oh, sorry.",
+    "prog":   "They will absolutely\n"
+              "need it in time!",
+    "useful": "Now, this would be\n"
+              "useful to send...",
+    "common": "Every last little bit\n"
+              "helps, right?",
     "trap":   "I'll teach this fool\n"
               "a lesson for a price!"
 }
@@ -307,7 +307,7 @@ class LocalRom(object):
 
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
-              required_s2s, music_list, countdown_list, shop_list):
+              required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -804,21 +804,24 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
         rom.write_int32s(0xBFD8D0, Patches.shopsanity_stuff)
         rom.write_int32(0xBD828, 0x0C0FF643)     # JAL	0x803FD90C
         rom.write_int32(0xBD5B8, 0x0C0FF651)     # JAL	0x803FD944
-        rom.write_int32(0xD04F8, 0x0C0FF65F)     # JAL	0x803FD97C
-        rom.write_int32(0xD14C4, 0x0C0FF66B)     # JAL	0x803FD9AC
-        rom.write_int32(0xD1754, 0x0C0FF66B)     # JAL	0x803FD9AC
+        rom.write_int32(0xB0610, 0x0C0FF665)     # JAL	0x803FD994
         rom.write_int32s(0xBD24C, [0x0C0FF677,   # J  	0x803FD9DC
                                    0x00000000])  # NOP
         rom.write_int32(0xBD618, 0x0C0FF684)     # JAL	0x803FDA10
 
-        shopsanity_text = []
-        for i in range(len(shop_list)):
-            shopsanity_text += [0xA0, i]
-            if shop_list[i][1] is not None:
-                player_name = "For " + shop_list[i][1] + ".\n"
-                shopsanity_text += cv64_text_converter(player_name, False)
-            shopsanity_text += cv64_text_converter(renon_item_dialogue[shop_list[i][0]], False)
-        rom.write_bytes(0x1A800, shopsanity_text)
+        shopsanity_name_text = []
+        shopsanity_desc_text = []
+        for i in range(len(shop_name_list)):
+            shopsanity_name_text += [0xA0, i]
+            shopsanity_name_text += cv64_text_converter(shop_name_list[i], False)
+
+            shopsanity_desc_text += [0xA0, i]
+            if shop_desc_list[i][1] is not None:
+                player_name = "For " + shop_desc_list[i][1] + ".\n"
+                shopsanity_desc_text += cv64_text_converter(player_name, False, False)
+            shopsanity_desc_text += cv64_text_converter(renon_item_dialogue[shop_desc_list[i][0]], False)
+        rom.write_bytes(0x1AD00, shopsanity_name_text)
+        rom.write_bytes(0x1A800, shopsanity_desc_text)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
@@ -869,7 +872,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def cv64_text_converter(cv64text: str, a_advance: bool) -> list:
+def cv64_text_converter(cv64text: str, a_advance: bool, append_end: bool = True) -> list:
     char_dict = {"\n": 0x01, " ": 0x02, "!": 0x03, '"': 0x04, "#": 0x05, "$": 0x06, "%": 0x07, "&": 0x08, "'": 0x09,
                  "(": 0x0A, ")": 0x0B, "*": 0x0C, "+": 0x0D, ",": 0x0E, "-": 0x0F, ".": 0x10, "/": 0x11, "0": 0x12,
                  "1": 0x13, "2": 0x14, "3": 0x15, "4": 0x16, "5": 0x17, "6": 0x18, "7": 0x19, "8": 0x1A, "9": 0x1B,
@@ -893,10 +896,11 @@ def cv64_text_converter(cv64text: str, a_advance: bool) -> list:
             if i in char_dict:
                 text_bytes.append(char_dict[i])
             else:
-                text_bytes.append(0x02)
+                text_bytes.append(0x21)
     if a_advance:
         text_bytes.append(0xA3)
         text_bytes.append(0x00)
-    text_bytes.append(0xFF)
-    text_bytes.append(0xFF)
+    if append_end:
+        text_bytes.append(0xFF)
+        text_bytes.append(0xFF)
     return text_bytes

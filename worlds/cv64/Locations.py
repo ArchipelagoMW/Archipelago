@@ -427,13 +427,13 @@ empty_breakables_table = {
 }
 
 renon_shop_table = {
-    LName.renon1: LocationData(0xC6415A, 0xBFD8E5, RName.renon),
-    LName.renon2: LocationData(0xC6415B, 0xBFD8E7, RName.renon),
-    LName.renon3: LocationData(0xC6415C, 0xBFD8E9, RName.renon),
-    LName.renon4: LocationData(0xC6415D, 0xBFD8EB, RName.renon),
-    LName.renon5: LocationData(0xC6415E, 0xBFD8ED, RName.renon),
-    LName.renon6: LocationData(0xC6415F, 0xBFD907, RName.renon),
-    LName.renon7: LocationData(0xC64160, 0xBFD909, RName.renon),
+    LName.renon1: LocationData(0xC6415A, 0xBFD8E5, RName.renon, "shop"),
+    LName.renon2: LocationData(0xC6415B, 0xBFD8E7, RName.renon, "shop"),
+    LName.renon3: LocationData(0xC6415C, 0xBFD8E9, RName.renon, "shop"),
+    LName.renon4: LocationData(0xC6415D, 0xBFD8EB, RName.renon, "shop"),
+    LName.renon5: LocationData(0xC6415E, 0xBFD8ED, RName.renon, "shop"),
+    LName.renon6: LocationData(0xC6415F, 0xBFD907, RName.renon, "shop"),
+    LName.renon7: LocationData(0xC64160, 0xBFD909, RName.renon, "shop"),
 }
 
 boss_table = {

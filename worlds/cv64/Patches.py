@@ -1913,34 +1913,32 @@ shopsanity_stuff = [
     0x01802021,  # ADDU  A0, T4, R0
     0x0804F180,  # J     0x8013C600
     0x00000000,  # NOP
+    # Replacement item names table start.
+    0x00010203,
+    0x04000000,
+    0x00000000,
+    0x00000000,
+    0x00050600,
+    0x00000000,
     # Switches the vanilla item name in the shop menu with the randomized item if the randomized item isn't purchased.
-    # For scrolling up/down in the item list page.
     0x3C088040,  # LUI   T0, 0x8040
-    0x01054021,  # ADDU  T0, T0, A1
+    0x01064021,  # ADDU  T0, T0, A2
     0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
     0x3C0B8039,  # LUI   T3, 0x8039
     0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
     0x01495024,  # AND   T2, T2, T1
-    0x15400003,  # BNEZ  T2,     [forward 0x03]
-    0x01054021,  # ADDU  T0, T0, A1
-    0x9505D8D8,  # LHU   A1, 0xD8D8 (T0)
-    0x30A500FF,  # ANDI  A1, A1, 0x00FF
-    0x00400008,  # JR    V0
+    0x15400004,  # BNEZ  T2,     [forward 0x04]
     0x00000000,  # NOP
-    # Switches the vanilla item name in the shop menu with the randomized item if the randomized item isn't purchased.
-    # For opening the initial item list page.
-    0x3C088040,  # LUI   T0, 0x8040
-    0x01054021,  # ADDU  T0, T0, A1
-    0x9109D8CA,  # LBU   T1, 0xD8CA (T0)
-    0x3C0B8039,  # LUI   T3, 0x8039
-    0x916A9C1D,  # LBU   T2, 0x9C1D (T3)
-    0x01495024,  # AND   T2, T2, T1
-    0x15400003,  # BNEZ  T2,     [forward 0x03]
-    0x01054021,  # ADDU  T0, T0, A1
-    0x9505D8D8,  # LHU   A1, 0xD8D8 (T0)
-    0x30A500FF,  # ANDI  A1, A1, 0x00FF
-    0x03200008,  # JR    T9
+    0x9105D976,  # LBU   A1, 0xD976 (T0)
+    0x3C048001,  # LUI   A0, 8001
+    0x3484A100,  # ORI   A0, A0, 0xA100
+    0x0804B39F,  # J     0x8012CE7C
     0x00000000,  # NOP
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
     # Displays "Not purchased." if the selected randomized item is nor purchased, or the current holding amount of that
     # slot's vanilla item if it is.
     0x3C0C8040,  # LUI   T4, 0x8040
