@@ -9,6 +9,10 @@ def get_all_item_names(multiworld: MultiWorld) -> List[str]:
     return [item.name for item in multiworld.itempool]
 
 
+def get_all_location_names(multiworld: MultiWorld) -> List[str]:
+    return [location.name for location in multiworld.get_locations() if not location.event]
+
+
 def assert_victory_exists(tester: SVTestBase, multiworld: MultiWorld):
     tester.assertIn(StardewItem("Victory", ItemClassification.progression, None, 1), multiworld.get_items())
 

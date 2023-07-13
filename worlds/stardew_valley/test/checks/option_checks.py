@@ -1,7 +1,8 @@
 from BaseClasses import MultiWorld
-from .world_checks import get_all_item_names
+from .world_checks import get_all_item_names, get_all_location_names
 from .. import SVTestBase
-from ... import StardewValleyWorld, options
+from ... import StardewValleyWorld, options, item_table, Group, location_table
+from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
 
@@ -19,6 +20,10 @@ def is_setting(multiworld: MultiWorld, setting_name: str, setting_value: int) ->
         return False
     current_value = stardew_world.options[setting_name]
     return current_value == setting_value
+
+
+def is_not_setting(multiworld: MultiWorld, setting_name: str, setting_value: int) -> bool:
+    return not is_setting(multiworld, setting_name, setting_value)
 
 
 def assert_is_setting(tester: SVTestBase, multiworld: MultiWorld, setting_name: str, setting_value: int) -> bool:
@@ -47,3 +52,35 @@ def assert_can_reach_island_if_should(tester: SVTestBase, multiworld: MultiWorld
         assert_can_reach_island(tester, multiworld)
     else:
         assert_cannot_reach_island(tester, multiworld)
+
+
+def assert_cropsanity_same_number_items_and_locations(tester: SVTestBase, multiworld: MultiWorld):
+    is_cropsanity = is_setting(multiworld, options.Cropsanity.internal_name, options.Cropsanity.option_shuffled)
+    if not is_cropsanity:
+        return
+
+    all_item_names = set(get_all_item_names(multiworld))
+    all_location_names = set(get_all_location_names(multiworld))
+    all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups}
+    all_cropsanity_location_names = {location_name for location_name in all_location_names if LocationTags.CROPSANITY in location_table[location_name].tags}
+    tester.assertEquals(len(all_cropsanity_item_names), len(all_cropsanity_location_names))
+
+
+def assert_all_rarecrows_exist(tester: SVTestBase, multiworld: MultiWorld):
+    for rarecrow_number in range(1, 9):
+        tester.assertIn(f"Rarecrow #{rarecrow_number}", [item.name for item in multiworld.itempool])
+
+
+def assert_has_deluxe_scarecrow_recipe(tester: SVTestBase, multiworld: MultiWorld):
+    tester.assertIn(f"Deluxe Scarecrow Recipe", [item.name for item in multiworld.itempool])
+
+
+def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiworld: MultiWorld):
+    has_festivals = is_not_setting(multiworld, options.FestivalLocations.internal_name, options.FestivalLocations.option_disabled)
+    if not has_festivals:
+        return
+
+    assert_all_rarecrows_exist(tester, multiworld)
+    assert_has_deluxe_scarecrow_recipe(tester, multiworld)
+
+

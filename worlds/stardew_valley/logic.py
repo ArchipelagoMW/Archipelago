@@ -487,6 +487,7 @@ class StardewLogic:
             FestivalCheck.lupini_land_of_clay: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
             FestivalCheck.secret_santa: self.has_season(Season.winter) & self.can_reach_region(Region.town) & self.has_any_universal_love(),
             FestivalCheck.legend_of_the_winter_star: self.has_season(Season.winter) & self.can_reach_region(Region.town),
+            FestivalCheck.all_rarecrows: self.can_reach_region(Region.farm) & self.has_all_rarecrows(),
         })
 
         self.special_order_rules.update({
@@ -1576,4 +1577,10 @@ class StardewLogic:
         if self.options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
             return self.can_complete_special_order("Prismatic Jelly")
         return self.received("Monster Musk Recipe")
+
+    def has_all_rarecrows(self) -> StardewRule:
+        rules = []
+        for rarecrow_number in range(1, 9):
+            rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
+        return And(rules)
 

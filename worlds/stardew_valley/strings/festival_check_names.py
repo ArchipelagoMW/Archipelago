@@ -29,3 +29,4 @@ class FestivalCheck:
     smashing_stone = "Smashing Stone"
     spirit_eve_maze = "Spirit's Eve Maze"
     strawberry_seeds = "Egg Festival: Strawberry Seeds"
+    all_rarecrows = "Collect All Rarecrows"

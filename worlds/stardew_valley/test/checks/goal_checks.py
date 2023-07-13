@@ -32,11 +32,6 @@ def is_not_perfection(multiworld: MultiWorld) -> bool:
     return not is_perfection(multiworld)
 
 
-def assert_all_rarecrows_exist(tester: SVTestBase, multiworld: MultiWorld):
-    for rarecrow_number in range(1, 9):
-        tester.assertIn(f"Rarecrow #{rarecrow_number}", [item.name for item in multiworld.itempool])
-
-
 def assert_ginger_island_is_included(tester: SVTestBase, multiworld: MultiWorld):
     assert_is_setting(tester, multiworld, options.ExcludeGingerIsland.internal_name, options.ExcludeGingerIsland.option_false)
 
@@ -52,7 +47,6 @@ def assert_perfection_world_is_valid(tester: SVTestBase, multiworld: MultiWorld)
     if is_not_perfection(multiworld):
         return
 
-    assert_all_rarecrows_exist(tester, multiworld)
     assert_ginger_island_is_included(tester, multiworld)
 
 
