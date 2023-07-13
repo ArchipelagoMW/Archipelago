@@ -46,6 +46,8 @@ class RegionNames:
     Anvil = "Anvil"
     Oak_Tree = "Oak Tree"
     Willow_Tree = "Willow Tree"
+    Shrimp = "Shrimp Spot"
+    Fly_Fish = "Fly Fishing Spot"
 
 
 class ItemNames:
