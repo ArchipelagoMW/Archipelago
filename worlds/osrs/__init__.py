@@ -37,10 +37,13 @@ class OSRSWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
 
     starting_area_item = None
+    allow_brutal_grinds = False
 
     def generate_early(self) -> None:
         rnd = self.multiworld.per_slot_randoms[self.player]
         starting_area = self.multiworld.starting_area[self.player]
+        allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
+
         if starting_area.value < 8:
             self.starting_area_item = starting_area_dict[starting_area.value]
         elif starting_area.value == 8:
@@ -94,9 +97,8 @@ class OSRSWorld(World):
                         exit_rules[connected_region] = default_access_rule
                 for resource_region in region_info.resources:
                     # Resource nodes have no rules to access unless they're in extra conditions
-                    # TODO add skill requirements and brutal grind options
                     exit_rules[resource_region] = region_info.build_extra_condition(self.player, resource_region)
-                    
+
                 region.add_exits(exits, exit_rules)
 
     def create_items(self) -> None:
@@ -430,3 +432,56 @@ class OSRSWorld(World):
             if state.has(qp_event, self.player):
                 qp += int(qp_event[0])
         return qp
+
+    """
+    Ensures a target level can be reached with available resources
+    """
+
+    def can_reach(self, state, skill, level):
+        match skill:
+            case "fishing":
+            case "mining":
+                can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) or state.can_reach(
+                    RegionNames.Clay_Rock)
+                if not self.allow_brutal_grinds:
+                    # Iron is the best way to train all the way to 99, so having access to iron is all you need
+                    if level >= 15:
+                        can_train = can_train and state.can_reach(RegionNames.Iron_Rock, None, self.player)
+                return can_train
+            case "woodcutting":
+                # Trees are literally everywhere and you start with an axe
+                if self.allow_brutal_grinds:
+                    return True
+                else:
+                    can_train = True
+                    if level >= 15:
+                        can_train = state.can_reach(RegionNames.Oak_Tree, None, self.player)
+                    if level >= 30:
+                        can_train = can_train and state.can_reach(RegionNames.Willow_Tree, None, self.player)
+                    return can_train
+            case "smithing":
+                can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) and state.can_reach(
+                    RegionNames.Furnace, None, self.player)
+                if not self.allow_brutal_grinds:
+                    if level < 15:
+                        # The special bronze-only anvil in Lumbridge makes this a bit more tricky
+                        can_train = can_train and state.can_reach(RegionNames.Anvil, None,
+                                                                  self.player) or state.can_reach(RegionNames.Lumbridge,
+                                                                                                  None, self.player)
+                    if level >= 15:
+                        can_train = can_train and state.can_reach(RegionNames.Anvil, None,
+                                                                  self.player) and state.can_reach(
+                            RegionNames.Iron_Rock, None, self.player)
+                    if level >= 30:
+                        # We already know we can reach anvils and iron rocks from before. Just add coal for steel
+                        can_train = can_train and state.can_reach(RegionNames.Coal_Rock, None, self.player)
+                return can_train
+            case "crafting":
+                # There are many ways to start training
+                can_spin = state.can_reach(RegionNames.Sheep, None, self.player) and state.can_reach(RegionNames.Spinning_Wheel, None, self.player)
+                can_pot = state.can_reach(RegionNames.Clay_Rock, None, self.player) and state.can_reach(RegionNames.Barbarian_Village, None, self.player)
+                can_tan = state.can_reach(RegionNames.Milk, None, self.player) and state.can_reach(RegionNames.Al_Kharid, None, self.player)
+                can_train = can_spin or can_pot or can_tan
+                return can_train
+            case "cooking":
+        pass
