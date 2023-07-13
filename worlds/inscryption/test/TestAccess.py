@@ -24,7 +24,7 @@ class AccessTest(InscryptionTestBase):
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
              "Act 2 - Battle Pike Mage", "Act 2 - Battle Goobert", "Act 2 - Battle Lonely Wizard",
              "Act 2 - Battle Inspector", "Act 2 - Battle Melter", "Act 2 - Battle Dredger",
-             "Act 2 - Tower Chest 1", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3",
+             "Act 2 - Tower Chest 1", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3", "Act 2 - Forest Burrow Chest",
              "Act 2 - Tentacle", "Act 2 - Factory Trash Can", "Act 2 - Factory Drawer 1",
              "Act 2 - Factory Drawer 2", "Act 2 - Factory Chest 1", "Act 2 - Factory Chest 2",
              "Act 2 - Factory Chest 3", "Act 2 - Factory Chest 4", "Act 2 - Monocle", "Act 2 - Boss Leshy",
@@ -44,7 +44,7 @@ class AccessTest(InscryptionTestBase):
     def testForestItems(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
-             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key"],
+             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key", "Act 2 - Forest Burrow Chest"],
             [["Camera Replica", "Pile Of Meat"]]
         )
 

@@ -34,6 +34,7 @@ class InscryptionRules:
             "Act 2 - Battle Inspector": self.has_act2_bridge_requirements,
             "Act 2 - Battle Melter": self.has_act2_bridge_requirements,
             "Act 2 - Battle Dredger": self.has_act2_bridge_requirements,
+            "Act 2 - Forest Burrow Chest": self.has_camera_and_meat,
             "Act 2 - Tower Chest 1": self.has_act2_bridge_requirements,
             "Act 2 - Tower Chest 2": self.has_tower_requirements,
             "Act 2 - Tower Chest 3": self.has_tower_requirements,
