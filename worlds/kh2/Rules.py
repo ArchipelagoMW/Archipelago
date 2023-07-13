@@ -91,8 +91,15 @@ class KH2Rules:
             RegionName.Master:             lambda state: self.multi_form_region_access(state),
             RegionName.Final:              lambda state: self.final_form_region_access(state),
 
-            RegionName.AtlanticaSongThree: lambda state:self.at_three_unlocked(state),
-            RegionName.AtlanticaSongFour:  lambda state:self.at_four_unlocked(state),
+            RegionName.AtlanticaSongThree: lambda state: self.at_three_unlocked(state),
+            RegionName.AtlanticaSongFour:  lambda state: self.at_four_unlocked(state),
+
+            RegionName.Ha1:                lambda state: True,
+            RegionName.Ha2:                lambda state: self.hundred_acre_unlocked(state, 1),
+            RegionName.Ha3:                lambda state: self.hundred_acre_unlocked(state, 2),
+            RegionName.Ha4:                lambda state: self.hundred_acre_unlocked(state, 3),
+            RegionName.Ha5:                lambda state: self.hundred_acre_unlocked(state, 4),
+            RegionName.Ha6:                lambda state: self.hundred_acre_unlocked(state, 5),
         }
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
@@ -139,6 +146,9 @@ class KH2Rules:
 
     def at_four_unlocked(self, state: CollectionState) -> bool:
         return state.has(ItemName.ThunderElement, self.player, 3)
+
+    def hundred_acre_unlocked(self, state: CollectionState, amount) -> bool:
+        return state.has(ItemName.TornPages, self.player, amount)
 
     def final_form_region_access(self, state: CollectionState) -> bool:
         """
