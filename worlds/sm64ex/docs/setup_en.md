@@ -45,7 +45,7 @@ First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT I
 
 After launching msys2, and update by entering `pacman -Syuu` in the command prompt. Next, install the relevant dependencies by entering `pacman -S unzip mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
-After this, obtain the code base by cloning the relevant repository manually via `git clone --recursive https://github.com/N00byKing/sm64ex`. Ready your ROM by copying your legally dumped rom into your sm64ex folder (which is usually located at `msys64/home/user`). The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
+After this, obtain the code base by cloning the relevant repository manually via `git clone --recursive https://github.com/N00byKing/sm64ex`. Ready your ROM by copying your legally dumped rom into your sm64ex folder (if you are not sure where your folder is located, do a quick Windows search for sm64ex). The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
 
 After all these preparatory steps have succeeded, type `make` in your command prompt and get ready to wait for a bit. If you want to speed up compilation, tell the compiler how many CPU cores to use by using `make -jn` where n is the number of cores you want.
 
