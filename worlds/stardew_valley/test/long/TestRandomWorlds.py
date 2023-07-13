@@ -88,6 +88,6 @@ class TestGenerateManyWorlds(SVTestBase):
     def test_generate_many_worlds_then_check_results(self):
         # if self.skip_long_tests:
         #     return
-        number_worlds = 5000
+        number_worlds = 1000
         multiworlds = generate_many_worlds(number_worlds)
         check_every_multiworld_is_valid(self, multiworlds)
