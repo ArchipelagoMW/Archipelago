@@ -34,6 +34,7 @@ class LocationTags(enum.Enum):
     TRASH_CAN_UPGRADE = enum.auto()
     FISHING_ROD_UPGRADE = enum.auto()
     THE_MINES_TREASURE = enum.auto()
+    SEED_SHUFFLE = enum.auto()
     ELEVATOR = enum.auto()
     SKILL_LEVEL = enum.auto()
     FARMING_LEVEL = enum.auto()
@@ -130,6 +131,15 @@ def initialize_groups():
 
 
 initialize_groups()
+
+
+def extend_seed_shuffle_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+        return
+
+    seed_shuffle_locations = locations_by_tag[LocationTags.SEED_SHUFFLE]
+    seed_shuffle_locations = filter_ginger_island(world_options, seed_shuffle_locations)
+    randomized_locations.extend(seed_shuffle_locations)
 
 
 def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_number_of_quests: int):
@@ -308,6 +318,7 @@ def create_locations(location_collector: StardewLocationCollector,
     if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
+    extend_seed_shuffle_locations(randomized_locations, world_options)
     extend_help_wanted_quests(randomized_locations, world_options[options.HelpWantedLocations])
     extend_fishsanity_locations(randomized_locations, world_options, random)
     extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)

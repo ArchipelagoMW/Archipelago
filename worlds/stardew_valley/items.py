@@ -147,8 +147,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
         if item in unique_items:
             unique_items.remove(item)
 
-    assert len(unique_items) <= locations_count, \
-        "There should be at least as many locations as there are mandatory items"
+    assert len(unique_items) <= locations_count, f"There should be at least as many locations [{locations_count}] as there are mandatory items [{len(unique_items)}]"
     items += unique_items
     logger.debug(f"Created {len(unique_items)} unique items")
 

@@ -41,6 +41,7 @@ class SVTestBase(WorldTestBase):
             options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
             options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
             options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
+            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
             options.HelpWantedLocations.internal_name: 0,
             options.Fishsanity.internal_name: options.Fishsanity.option_none,
             options.Museumsanity.internal_name: options.Museumsanity.option_none,

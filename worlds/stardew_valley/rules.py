@@ -5,6 +5,7 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
+from .data.crops_data import crops_by_name
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
     DeepWoodsEntrance, AlecEntrance, MagicEntrance
 from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
@@ -92,6 +93,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
             MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
                                      logic.building_rules[building.name.replace(" Blueprint", "")].simplify())
 
+    set_seed_shuffle_rules(all_location_names, logic, multi_world, player, world_options)
     set_story_quests_rules(all_location_names, logic, multi_world, player, world_options)
     set_special_order_rules(all_location_names, logic, multi_world, player, world_options)
     set_help_wanted_quests_rules(logic, multi_world, player, world_options)
@@ -312,6 +314,19 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
                              has_20_walnut & logic.received("Island Farmhouse"))
     MultiWorldRules.add_rule(multi_world.get_location(Transportation.parrot_express, player),
                              has_10_walnut)
+
+
+def set_seed_shuffle_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
+    if world_options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
+        return
+
+    harvest_prefix = "Harvest "
+    harvest_prefix_length = len(harvest_prefix)
+    for harvest_location in locations.locations_by_tag[LocationTags.SEED_SHUFFLE]:
+        if harvest_location.name in all_location_names and (harvest_location.mod_name is None or harvest_location.mod_name in world_options[options.Mods]):
+            crop_name = harvest_location.name[harvest_prefix_length:]
+            MultiWorldRules.set_rule(multi_world.get_location(harvest_location.name, player),
+                                     logic.has(crop_name).simplify())
 
 
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
