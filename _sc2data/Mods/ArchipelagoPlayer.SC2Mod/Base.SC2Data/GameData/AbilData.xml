@@ -2925,7 +2925,36 @@
     </CAbilEffectInstant>
     <CAbilResearch id="AP_CyberneticsCoreResearch">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
-        <!-- TODO: Protoss Air weapon/armor upgrades -->
+        <InfoArray index="Research1" Time="160" Upgrade="AP_ProtossAirWeaponsLevel1">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="100"/>
+            <Button DefaultButtonFace="AP_ProtossAirWeaponsLevel1" State="Restricted" Requirements="AP_LearnProtossAirWeapon1"/>
+        </InfoArray>
+        <InfoArray index="Research2" Time="190" Upgrade="AP_ProtossAirWeaponsLevel2">
+            <Resource index="Minerals" value="175"/>
+            <Resource index="Vespene" value="175"/>
+            <Button DefaultButtonFace="AP_ProtossAirWeaponsLevel2" State="Restricted" Requirements="AP_LearnProtossAirWeapon2"/>
+        </InfoArray>
+        <InfoArray index="Research3" Time="220" Upgrade="AP_ProtossAirWeaponsLevel3">
+            <Resource index="Minerals" value="250"/>
+            <Resource index="Vespene" value="250"/>
+            <Button DefaultButtonFace="AP_ProtossAirWeaponsLevel3" State="Restricted" Requirements="AP_LearnProtossAirWeapon3"/>
+        </InfoArray>
+        <InfoArray index="Research4" Time="160" Upgrade="AP_ProtossAirArmorsLevel1">
+            <Resource index="Minerals" value="150"/>
+            <Resource index="Vespene" value="150"/>
+            <Button DefaultButtonFace="AP_ProtossAirArmorLevel1" State="Restricted" Requirements="AP_LearnProtossAirArmor1"/>
+        </InfoArray>
+        <InfoArray index="Research5" Time="190" Upgrade="AP_ProtossAirArmorsLevel2">
+            <Resource index="Minerals" value="225"/>
+            <Resource index="Vespene" value="225"/>
+            <Button DefaultButtonFace="AP_ProtossAirArmorLevel2" State="Restricted" Requirements="AP_LearnProtossAirArmor2"/>
+        </InfoArray>
+        <InfoArray index="Research6" Time="220" Upgrade="AP_ProtossAirArmorsLevel3">
+            <Resource index="Minerals" value="300"/>
+            <Resource index="Vespene" value="300"/>
+            <Button DefaultButtonFace="AP_ProtossAirArmorLevel3" State="Restricted" Requirements="AP_LearnProtossAirArmor3"/>
+        </InfoArray>
     </CAbilResearch>
     <CAbilRally id="AP_DarkShrineRally">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
@@ -4428,7 +4457,51 @@
     </CAbilEffectTarget>
     <CAbilResearch id="AP_ForgeResearch">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
-        <!-- TODO: Upgrades -->
+        <InfoArray index="Research1" Time="160" Upgrade="AP_ProtossGroundWeaponsLevel1">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="100"/>
+            <Button DefaultButtonFace="ProtossGroundWeaponsLevel1" State="Restricted" Requirements="AP_LearnProtossGroundWeapon1"/>
+        </InfoArray>
+        <InfoArray index="Research2" Time="190" Upgrade="AP_ProtossGroundWeaponsLevel2">
+            <Resource index="Minerals" value="175"/>
+            <Resource index="Vespene" value="175"/>
+            <Button DefaultButtonFace="ProtossGroundWeaponsLevel2" State="Restricted" Requirements="AP_LearnProtossGroundWeapon2"/>
+        </InfoArray>
+        <InfoArray index="Research3" Time="220" Upgrade="AP_ProtossGroundWeaponsLevel3">
+            <Resource index="Minerals" value="250"/>
+            <Resource index="Vespene" value="250"/>
+            <Button DefaultButtonFace="ProtossGroundWeaponsLevel3" State="Restricted" Requirements="AP_LearnProtossGroundWeapon3"/>
+        </InfoArray>
+        <InfoArray index="Research4" Time="160" Upgrade="AP_ProtossGroundArmorsLevel1">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="100"/>
+            <Button DefaultButtonFace="ProtossGroundArmorLevel1" State="Restricted" Requirements="AP_LearnProtossGroundArmor1"/>
+        </InfoArray>
+        <InfoArray index="Research5" Time="190" Upgrade="AP_ProtossGroundArmorsLevel2">
+            <Resource index="Minerals" value="175"/>
+            <Resource index="Vespene" value="175"/>
+            <Button DefaultButtonFace="ProtossGroundArmorLevel2" State="Restricted" Requirements="AP_LearnProtossGroundArmor2"/>
+        </InfoArray>
+        <InfoArray index="Research6" Time="220" Upgrade="AP_ProtossGroundArmorsLevel3">
+            <Resource index="Minerals" value="250"/>
+            <Resource index="Vespene" value="250"/>
+            <Button DefaultButtonFace="ProtossGroundArmorLevel3" State="Restricted" Requirements="AP_LearnProtossGroundArmor3"/>
+        </InfoArray>
+        <InfoArray index="Research7" Time="160" Upgrade="AP_ProtossShieldsLevel1">
+            <Resource index="Minerals" value="200"/>
+            <Resource index="Vespene" value="200"/>
+            <Button DefaultButtonFace="ProtossShieldsLevel1" State="Restricted" Requirements="AP_LearnProtossShield1"/>
+        </InfoArray>
+        <InfoArray index="Research8" Time="190" Upgrade="AP_ProtossShieldsLevel2">
+            <Resource index="Minerals" value="300"/>
+            <Resource index="Vespene" value="300"/>
+            <Button DefaultButtonFace="ProtossShieldsLevel2" State="Restricted" Requirements="AP_LearnProtossShield2"/>
+        </InfoArray>
+        <InfoArray index="Research9" Time="220" Upgrade="AP_ProtossShieldsLevel3">
+            <Resource index="Minerals" value="400"/>
+            <Resource index="Vespene" value="400"/>
+            <Button DefaultButtonFace="ProtossShieldsLevel3" State="Restricted" Requirements="AP_LearnProtossShield3"/>
+        </InfoArray>
     </CAbilResearch>
     <CAbilEffectTarget id="AP_NexusInvulnerability">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>

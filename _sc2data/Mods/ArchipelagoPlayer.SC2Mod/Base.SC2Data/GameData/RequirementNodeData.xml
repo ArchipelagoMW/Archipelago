@@ -2725,4 +2725,240 @@
     <CRequirementCountUnit id="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat">
         <Count Link="Alias_RoboticsFacility" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirArmorsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirArmorsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirArmorsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirArmorsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirArmorsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirWeaponsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundArmorsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundArmorsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundArmorsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundArmorsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundArmorsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundArmorsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundWeaponsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundWeaponsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundWeaponsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossShieldsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossShieldsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossShieldsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossShieldsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossShieldsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeProtossShieldsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirArmorsLevel1CompleteOnly">
+        <Count Link="AP_ProtossAirArmorsLevel1" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirArmorsLevel1QueuedOrBetter">
+        <Count Link="AP_ProtossAirArmorsLevel1" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirArmorsLevel2CompleteOnly">
+        <Count Link="AP_ProtossAirArmorsLevel2" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirArmorsLevel2QueuedOrBetter">
+        <Count Link="AP_ProtossAirArmorsLevel2" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirArmorsLevel3QueuedOrBetter">
+        <Count Link="AP_ProtossAirArmorsLevel3" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirWeaponsLevel1CompleteOnly">
+        <Count Link="AP_ProtossAirWeaponsLevel1" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirWeaponsLevel1QueuedOrBetter">
+        <Count Link="AP_ProtossAirWeaponsLevel1" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirWeaponsLevel2CompleteOnly">
+        <Count Link="AP_ProtossAirWeaponsLevel2" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirWeaponsLevel2QueuedOrBetter">
+        <Count Link="AP_ProtossAirWeaponsLevel2" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossAirWeaponsLevel3QueuedOrBetter">
+        <Count Link="AP_ProtossAirWeaponsLevel3" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundArmorsLevel1CompleteOnly">
+        <Count Link="AP_ProtossGroundArmorsLevel1" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundArmorsLevel1QueuedOrBetter">
+        <Count Link="AP_ProtossGroundArmorsLevel1" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundArmorsLevel2CompleteOnly">
+        <Count Link="AP_ProtossGroundArmorsLevel2" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundArmorsLevel2QueuedOrBetter">
+        <Count Link="AP_ProtossGroundArmorsLevel2" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundArmorsLevel3QueuedOrBetter">
+        <Count Link="AP_ProtossGroundArmorsLevel3" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundWeaponsLevel1CompleteOnly">
+        <Count Link="AP_ProtossGroundWeaponsLevel1" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundWeaponsLevel1QueuedOrBetter">
+        <Count Link="AP_ProtossGroundWeaponsLevel1" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundWeaponsLevel2CompleteOnly">
+        <Count Link="AP_ProtossGroundWeaponsLevel2" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundWeaponsLevel2QueuedOrBetter">
+        <Count Link="AP_ProtossGroundWeaponsLevel2" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossGroundWeaponsLevel3QueuedOrBetter">
+        <Count Link="AP_ProtossGroundWeaponsLevel3" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossShieldsLevel1CompleteOnly">
+        <Count Link="AP_ProtossShieldsLevel1" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossShieldsLevel1QueuedOrBetter">
+        <Count Link="AP_ProtossShieldsLevel1" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossShieldsLevel2CompleteOnly">
+        <Count Link="AP_ProtossShieldsLevel2" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossShieldsLevel2QueuedOrBetter">
+        <Count Link="AP_ProtossShieldsLevel2" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProtossShieldsLevel3QueuedOrBetter">
+        <Count Link="AP_ProtossShieldsLevel3" State="QueuedOrBetter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirArmorsLevel2QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirArmorsLevel2QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirArmorsLevel3QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirArmorsLevel3QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirWeaponsLevel2QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirWeaponsLevel2QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0">
+        <Tooltip value=""/>
+        <OperandArray value="AP_EqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundWeaponsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundWeaponsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundWeaponsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundWeaponsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundArmorsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundArmorsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossGroundArmorsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossGroundArmorsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossShieldsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossShieldsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeProtossShieldsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossShieldsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirArmorsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeProtossAirArmorsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirArmorsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirArmorsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirArmorsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeProtossAirArmorsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirArmorsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirArmorsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirWeaponsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeProtossAirWeaponsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirWeaponsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementAnd id="AP_AndEqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
 </Catalog>

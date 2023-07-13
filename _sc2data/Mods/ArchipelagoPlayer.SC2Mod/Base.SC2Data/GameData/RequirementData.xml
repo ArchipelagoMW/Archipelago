@@ -1725,4 +1725,74 @@
     <CRequirement id="AP_HaveRoboticsFa">
         <NodeArray index="Use" Link="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundArmorsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundArmorsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossShieldsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossShieldsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0"/>
+    </CRequirement>
 </Catalog>
