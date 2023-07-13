@@ -30,13 +30,13 @@ class RegionInfo(typing.NamedTuple):
         else:
             return lambda _: True
 
+
 all_regions = [
     RegionInfo("Menu",
                lambda _: lambda _: True,
                [],
                [],
                [
-                   LocationNames.Catch_Lobster,
                    LocationNames.Cut_Sapphire,
                    LocationNames.Cut_Emerald,
                    LocationNames.Cut_Ruby,
@@ -75,6 +75,7 @@ all_regions = [
                    RegionNames.Imp,
                    RegionNames.Oak_Tree,
                    RegionNames.Willow_Tree,
+                   RegionNames.Fly_Fish
                ],
                [
                    LocationNames.Q_Cooks_Assistant,
@@ -95,7 +96,8 @@ all_regions = [
                ],
                [
                    RegionNames.Bronze_Ores,
-                   RegionNames.Coal_Rock
+                   RegionNames.Coal_Rock,
+                   RegionNames.Shrimp
                ],
                [
                    LocationNames.Q_Misthalin_Mystery,
@@ -149,7 +151,8 @@ all_regions = [
                    RegionNames.Imp,
                    RegionNames.Anvil,
                    RegionNames.Oak_Tree,
-                   RegionNames.Willow_Tree
+                   RegionNames.Willow_Tree,
+                   RegionNames.Shrimp
                ],
                [
                    LocationNames.Q_Vampyre_Slayer,
@@ -193,7 +196,8 @@ all_regions = [
                    RegionNames.Iron_Rock,
                    RegionNames.Silver_Rock,
                    RegionNames.Gold_Rock,
-                   RegionNames.Furnace
+                   RegionNames.Furnace,
+                   RegionNames.Shrimp
                ],
                [
                    LocationNames.Q_Prince_Ali_Rescue,
@@ -335,15 +339,17 @@ all_regions = [
                [
                    RegionNames.Spinning_Wheel,
                    RegionNames.Coal_Rock,
-                   RegionNames.Anvil],
+                   RegionNames.Anvil,
+                   RegionNames.Fly_Fish
+               ],
                [],
                ),
     RegionInfo(RegionNames.Monastery,
                lambda player: lambda state: state.has(ItemNames.Monastery, player),
                [RegionNames.Edgeville,
-                   RegionNames.Dwarven_Mines,
-                   RegionNames.Ice_Mountain,
-                   RegionNames.Wilderness],
+                RegionNames.Dwarven_Mines,
+                RegionNames.Ice_Mountain,
+                RegionNames.Wilderness],
                [
                    RegionNames.Sheep
                ],
@@ -408,7 +414,7 @@ all_regions = [
                        lambda state: state.can_reach(RegionNames.Monastery, None, player) or state.can_reach(
                            RegionNames.Ice_Mountain, None, player),
                    RegionNames.Anvil:
-                       lambda state: state.has(ItemNames.QP_Dorics_Quest,None, player)
+                       lambda state: state.has(ItemNames.QP_Dorics_Quest, None, player)
                })
                ),
     RegionInfo(RegionNames.Falador,
@@ -496,7 +502,8 @@ all_regions = [
                    RegionNames.Clay_Rock,
                    RegionNames.Iron_Rock,
                    RegionNames.Gold_Rock,
-                   RegionNames.Willow_Tree
+                   RegionNames.Willow_Tree,
+                   RegionNames.Shrimp
                ],
                [
                    LocationNames.Q_Witchs_Potion,
@@ -521,7 +528,8 @@ all_regions = [
                ],
                lambda player: ({
                    RegionNames.Crandor:
-                       lambda state: (state.can_reach(RegionNames.South_Of_Varrock, None, player) and
+                       lambda state: (state.has(ItemNames.Crandor, player) and
+                                      state.can_reach(RegionNames.South_Of_Varrock, None, player) and
                                       state.can_reach(RegionNames.Edgeville, None, player) and
                                       state.can_reach(RegionNames.Lumbridge, None, player) and
                                       state.can_reach(RegionNames.Rimmington, None, player) and
@@ -546,7 +554,8 @@ all_regions = [
                [],
                lambda player: ({
                    RegionNames.Karamja:
-                       lambda state: state.can_reach(RegionNames.Port_Sarim, None, player)
+                       lambda state: state.has(ItemNames.Karamja, player) and
+                                     state.can_reach(RegionNames.Port_Sarim, None, player)
                })
                ),
     RegionInfo(RegionNames.Karamja,
@@ -556,7 +565,9 @@ all_regions = [
                ],
                [
                    RegionNames.Imp,
-                   RegionNames.Gold_Rock
+                   RegionNames.Gold_Rock,
+                   RegionNames.Shrimp,
+                   RegionNames.Lobster
                ],
                [],
                ),
@@ -566,7 +577,8 @@ all_regions = [
                    RegionNames.Rimmington
                ],
                [
-                   RegionNames.Anvil
+                   RegionNames.Anvil,
+                   RegionNames.Shrimp
                ],
                [
                    LocationNames.K_Ogress_Shaman,
@@ -586,14 +598,17 @@ all_regions = [
                    RegionNames.Coal_Rock,
                    RegionNames.Iron_Rock,
                    RegionNames.Furnace,
-                   RegionNames.Anvil
+                   RegionNames.Anvil,
+                   RegionNames.Shrimp,
+                   RegionNames.Lobster
                ],
                [],
                lambda player: ({
                    # Can't walk through walls
                    RegionNames.Varrock_Palace:
-                       lambda state: state.can_reach(RegionNames.East_Of_Varrock,None, player) or state.can_reach(
-                           RegionNames.West_Varrock,None, player)
+                       lambda state: state.has(ItemNames.Varrock_Palace, player) and
+                                     state.can_reach(RegionNames.East_Of_Varrock, None, player) or state.can_reach(
+                           RegionNames.West_Varrock, None, player)
                })
                ),
     RegionInfo(RegionNames.Crandor,
@@ -642,7 +657,11 @@ all_regions = [
     RegionInfo(RegionNames.Willow_Tree,
                lambda _: lambda _: True,
                [], [], [LocationNames.Willow_Log]),
-
+    RegionInfo(RegionNames.Shrimp, lambda _: lambda _: True, [], [], []),
+    RegionInfo(RegionNames.Fly_Fish, lambda _: lambda _: True, [], [], []),
+    RegionInfo(RegionNames.Lobster,
+               lambda _: lambda _: True,
+               [], [], [LocationNames.Catch_Lobster]),
 ]
 
 regions_by_name: typing.Dict[str, RegionInfo] = {region.name: region for region in all_regions}

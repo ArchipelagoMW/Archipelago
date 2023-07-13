@@ -12,6 +12,7 @@ class LocationData(typing.NamedTuple):
     id: int
     name: str
     qp: int = 0
+    skill_reqs: typing.Dict[str,int] = {}
 
 
 Quest_Locations = [
@@ -39,25 +40,25 @@ Quest_Locations = [
 ]
 
 Skill_Locations = [
-    LocationData(0x070015, LocationNames.Guppy),
-    LocationData(0x070016, LocationNames.Cavefish),
-    LocationData(0x070017, LocationNames.Tetra),
-    LocationData(0x070018, LocationNames.Barronite_Deposit),
-    LocationData(0x070019, LocationNames.Oak_Log),
-    LocationData(0x07001A, LocationNames.Willow_Log),
-    LocationData(0x07001B, LocationNames.Catch_Lobster),
-    LocationData(0x07001C, LocationNames.Mine_Silver),
-    LocationData(0x07001D, LocationNames.Mine_Coal),
-    LocationData(0x07001E, LocationNames.Mine_Gold),
-    LocationData(0x07001F, LocationNames.Smelt_Silver),
-    LocationData(0x070020, LocationNames.Smelt_Steel),
-    LocationData(0x070021, LocationNames.Smelt_Gold),
-    LocationData(0x070022, LocationNames.Cut_Sapphire),
-    LocationData(0x070023, LocationNames.Cut_Emerald),
-    LocationData(0x070024, LocationNames.Cut_Ruby),
-    LocationData(0x070025, LocationNames.Bake_Apple_Pie),
-    LocationData(0x070026, LocationNames.Bake_Cake),
-    LocationData(0x070027, LocationNames.Bake_Meat_Pizza)
+    LocationData(0x070015, LocationNames.Guppy, skill_reqs={"fishing": 5}),
+    LocationData(0x070016, LocationNames.Cavefish, skill_reqs={"fishing": 20}),
+    LocationData(0x070017, LocationNames.Tetra, skill_reqs={"fishing": 33}),
+    LocationData(0x070018, LocationNames.Barronite_Deposit, skill_reqs={"mining": 14}),
+    LocationData(0x070019, LocationNames.Oak_Log, skill_reqs={"woodcutting": 15}),
+    LocationData(0x07001A, LocationNames.Willow_Log, skill_reqs={"woodcutting": 30}),
+    LocationData(0x07001B, LocationNames.Catch_Lobster, skill_reqs={"fishing": 40}),
+    LocationData(0x07001C, LocationNames.Mine_Silver, skill_reqs={"mining": 20}),
+    LocationData(0x07001D, LocationNames.Mine_Coal, skill_reqs={"mining": 30}),
+    LocationData(0x07001E, LocationNames.Mine_Gold, skill_reqs={"mining": 40}),
+    LocationData(0x07001F, LocationNames.Smelt_Silver, skill_reqs={"smithing": 20}),
+    LocationData(0x070020, LocationNames.Smelt_Steel, skill_reqs={"smithing": 30}),
+    LocationData(0x070021, LocationNames.Smelt_Gold, skill_reqs={"smithing": 40}),
+    LocationData(0x070022, LocationNames.Cut_Sapphire, skill_reqs={"crafting": 20}),
+    LocationData(0x070023, LocationNames.Cut_Emerald, skill_reqs={"crafting": 27}),
+    LocationData(0x070024, LocationNames.Cut_Ruby, skill_reqs={"crafting": 34}),
+    LocationData(0x070025, LocationNames.Bake_Apple_Pie, skill_reqs={"cooking": 30}),
+    LocationData(0x070026, LocationNames.Bake_Cake, skill_reqs={"cooking": 40}),
+    LocationData(0x070027, LocationNames.Bake_Meat_Pizza, skill_reqs={"cooking": 45})
 ]
 
 Misc_Locations = [
