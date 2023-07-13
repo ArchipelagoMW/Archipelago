@@ -4444,10 +4444,10 @@
     <CAbilTrain id="AP_NexusTrain">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
-        <!--        <InfoArray index="Train1" Time="17">-->
-        <!--            <Button DefaultButtonFace="Probe"/>-->
-        <!--            <Unit value="Probe"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="17">
+            <Button DefaultButtonFace="AP_Probe"/>
+            <Unit value="AP_Probe"/>
+        </InfoArray>
         <Alert value="TrainWorkerComplete"/>
     </CAbilTrain>
     <CAbilTrain id="AP_NexusTrainMothership">

@@ -1279,7 +1279,7 @@ Button/Tooltip/AP_FireOnTheMove=The Diamondback can fire its Rail Gun while movi
 Button/Tooltip/AP_Firebat=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_FleetBeacon=Carrier tech structure.
 Button/Tooltip/AP_ForceField=Barrier that lasts <d time="15"/> and impedes movement of ground units. Massive units will shatter Force Fields on contact.
-Button/Tooltip/AP_Forge=Contains weapon and armor upgrades for Protoss ground units and shield upgrades for all Protoss units and structures.<n/><n/><c val="ffff8a">Enables:</c><n/>- Photon Cannons from Probes
+Button/Tooltip/AP_Forge=Contains weapon and armor upgrades for Protoss ground units and shield upgrades for all Protoss units and structures.
 Button/Tooltip/AP_FortifiedBunker=Bunkers are fortified and have more life.
 Button/Tooltip/AP_FusionCore=Contains Battlecruiser upgrades. <n/><n/><c val="ffff8a">Enables:</c><n/>- Battlecruisers at the Starport<n/>- Hercules at the Starport
 Button/Tooltip/AP_Gateway=Warps in Protoss ground units.
@@ -1449,7 +1449,6 @@ Button/Tooltip/AP_MutaliskViperPassiveGreater=Viper Strain<n/><n/>Greater Spire 
 Button/Tooltip/AP_NPSwarm=Target unit is permanently controlled by the Swarm.
 Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
 Button/Tooltip/AP_NeoSteelFrame=Increases the number of Bunker slots by 2.
-Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- Probes
 Button/Tooltip/AP_NovaArmorBlinkSuitBlink=Teleports Nova to a nearby target location. Ability can only be used once every <d ref="Abil,AP_NovaArmorBlinkSuitBlink,Cost[0].Cooldown[0].TimeUse"/> seconds. Nova is cloaked for <d ref="Behavior,AP_NovaArmorBlinkSuitBlinkCloaked,Duration"/> seconds after teleporting.
 Button/Tooltip/AP_NovaArmorJumpSuit=Allows Nova to jump up and down cliffs.
 Button/Tooltip/AP_NovaArmorMoebiusSuit=Psionic amplification suit. Increases both energy regeneration rate and maximum energy.
@@ -1787,10 +1786,8 @@ Button/Tooltip/AP_AutomatedAssimilator=Warped in over a Vespene Geyser to allow 
 Button/Tooltip/AP_CyberneticsCore=Contains weapon and armor upgrades for Protoss air units.
 Button/Tooltip/AP_DarkShrine=Dark Templar tech structure.
 Button/Tooltip/AP_FleetBeacon=Carrier tech structure.
-Button/Tooltip/AP_Forge=Contains weapon and armor upgrades for Protoss ground units and shield upgrades for all Protoss units and structures.<n/><n/><c val="ffff8a">Enables:</c><n/>- Photon Cannons from Probes
-Button/Tooltip/AP_Gateway=Warps in Protoss ground units.<n/><n/><c val="ffff8a">Enables:</c><n/>- Zealots
 Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
-Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- Probes
+Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.
 Button/Tooltip/AP_PhotonCannon=Primary defensive structure.<n/><n/><c val="ffff8a">Can attack ground and air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_Pylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
 Button/Tooltip/AP_RoboticsBay=Colossus tech structure.
