@@ -51,7 +51,7 @@ class AccessTest(InscryptionTestBase):
     def testMonocle(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Goobert", "Act 2 - Battle Pike Mage", "Act 2 - Battle Lonely Wizard",
-             "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3"],
+             "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3", "Act 2 - Tentacle"],
             [["Monocle"]]
         )
 
