@@ -1703,7 +1703,26 @@
         <NodeArray index="Use" Link="AP_CountUnitBanelingNestCompleteOnlyTechTreeCheat"/>
         <!-- NodeArray index="Show" Link="AndNotCountUpgradeHotSHaveSplitterlingCompleteOnlyNotCountUpgradeHotSHunterCompleteOnly"/ -->
     </CRequirement>
-    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
-        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
-    </CRequirementNot>
+    <CRequirement id="AP_HaveNexusAndNotHaveSOAWarpTech">
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNexus">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveStargate">
+        <NodeArray index="Use" Link="AP_CountUnitAlias_StargateCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveForge">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitForgeCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGateway">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_GatewayCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoboticsFa">
+        <NodeArray index="Use" Link="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

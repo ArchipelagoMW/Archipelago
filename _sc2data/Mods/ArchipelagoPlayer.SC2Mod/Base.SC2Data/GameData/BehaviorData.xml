@@ -4550,4 +4550,10 @@
         <IdealHarvesterCount value="3"/>
         <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGasProtoss"/>
     </CBehaviorResource>
+    <CBehaviorBuff id="AP_ProbeGlowingBehavior">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
 </Catalog>

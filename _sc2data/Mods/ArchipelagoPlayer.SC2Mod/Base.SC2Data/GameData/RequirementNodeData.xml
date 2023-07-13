@@ -2700,4 +2700,29 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_Nexus" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitNexusCompleteOnlyTechTreeCheat">
+        <Count Link="AP_Nexus" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUpgradeSOAWarpTechCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitAlias_StargateCompleteOnlyTechTreeCheat">
+        <!-- Stargate or Warp Stargate -->
+        <Tooltip value="Unit/Name/Stargate"/>
+        <Count Link="Alias_Stargate" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitForgeCompleteOnlyTechTreeCheat">
+        <Count Link="AP_Forge" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitAlias_GatewayCompleteOnlyTechTreeCheat">
+        <Tooltip value="Unit/Name/Gateway"/>
+        <Count Link="Alias_Gateway" State="CompleteOnly" Unlock="Gateway"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat">
+        <Count Link="Alias_RoboticsFacility" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

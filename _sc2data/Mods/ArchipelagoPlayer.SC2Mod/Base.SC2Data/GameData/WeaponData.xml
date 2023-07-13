@@ -2086,6 +2086,9 @@
         <DisplayName value="Weapon/Name/AP_WraithG"/>
         <Options index="Disabled" value="1"/>
         <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_WraithGU"/>
@@ -2093,9 +2096,6 @@
         <Period value="1.694"/>
         <Effect value="AP_WraithGLaunchMissile"/>
         <AllowedMovement value="Slowing"/>
-        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
-        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="0"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="AP_ImpalerTentacle">
         <EditorCategories value="Race:Zerg"/>
@@ -2158,5 +2158,13 @@
         <Range value="0.1"/>
         <Period value="0.696"/>
         <Effect value="AP_HotSZerglingClaws"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ParticleBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.5"/>
     </CWeaponLegacy>
 </Catalog>

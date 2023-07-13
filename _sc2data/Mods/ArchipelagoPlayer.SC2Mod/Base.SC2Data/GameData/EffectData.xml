@@ -11625,7 +11625,9 @@
         <ValidatorArray value="AP_HaveHotSZerglingSunder"/>
         <EditorCategories value="Race:Zerg"/>
     </CEffectApplyBehavior>
-    <CEffectApplyBehavior id="AP_TempTimeout">
-        <Behavior value="AP_TempTimeout"/>
-    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_TempTimeout"/>
+    <CEffectDamage id="AP_ParticleBeam" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="5"/>
+    </CEffectDamage>
 </Catalog>

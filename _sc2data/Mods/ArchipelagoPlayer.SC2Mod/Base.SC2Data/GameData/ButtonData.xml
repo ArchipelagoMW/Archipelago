@@ -3024,4 +3024,106 @@
         <AlertIcon value="Assets\Textures\btn-ability-spearofadun-orbitalassimilator.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_Assimilator">
+        <Icon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_AutomatedAssimilator">
+        <Icon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Assimilator"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Assimilator"/>
+    </CButton>
+    <CButton id="AP_CyberneticsCore">
+        <Icon value="Assets\Textures\btn-building-protoss-CyberneticsCore.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-CyberneticsCore.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_DarkShrine">
+        <Icon value="Assets\Textures\btn-building-protoss-darkshrine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-darkshrine.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_FleetBeacon">
+        <Icon value="Assets\Textures\btn-building-protoss-fleetbeacon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-fleetbeacon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Forge">
+        <Icon value="Assets\Textures\btn-building-protoss-forge.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-forge.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Gateway">
+        <Icon value="Assets\Textures\btn-building-protoss-gateway.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-gateway.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_KhaydarinMonolith">
+        <Icon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
+    </CButton>
+    <CButton id="AP_Nexus">
+        <Icon value="Assets\Textures\btn-building-protoss-nexus.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-nexus.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhotonCannon">
+        <Icon value="Assets\Textures\btn-building-protoss-photoncannon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-photoncannon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Pylon">
+        <Icon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RoboticsBay">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RoboticsFacility">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ShieldBattery">
+        <Icon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Stargate">
+        <Icon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_TemplarArchive">
+        <Icon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_WarpInRoboticsWarpFacility">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticswarpfacility.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticswarpfacility.dds"/>
+        <Hotkey value="Button/Hotkey/AP_RoboticsFacility"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_RoboticsFacility"/>
+    </CButton>
+    <CButton id="AP_WarpInStarWarpGate">
+        <Icon value="Assets\Textures\btn-building-protoss-starwarpgate.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-starwarpgate.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Stargate"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Stargate"/>
+    </CButton>
+    <CButton id="AP_WarpInWarpGate">
+        <Icon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Gateway"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Gateway"/>
+    </CButton>
 </Catalog>

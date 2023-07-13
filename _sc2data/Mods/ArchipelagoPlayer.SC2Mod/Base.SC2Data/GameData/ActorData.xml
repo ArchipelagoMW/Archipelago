@@ -12848,6 +12848,45 @@
             <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
+    <CActorModel id="AP_PhotonCannonBuild" parent="ProtossBuildingBuild">
+        <Model value="PhotonCannonBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_ForgeBuild" parent="ProtossBuildingBuild">
+        <Model value="ForgeBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_CyberneticsCoreBuild" parent="ProtossBuildingBuild">
+        <Model value="CyberneticsCoreBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_GatewayBuild" parent="ProtossBuildingBuild">
+        <Model value="GatewayBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_AssimilatorBuild" parent="ProtossBuildingBuild">
+        <Model value="AssimilatorBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_AssimilatorRichBuild" parent="ProtossBuildingBuild">
+        <Model value="AssimilatorBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_NexusBuild" parent="ProtossBuildingBuild">
+        <Model value="NexusBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_TemplarArchiveBuild" parent="ProtossBuildingBuild">
+        <Model value="TemplarArchiveBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_DarkShrineBuild" parent="ProtossBuildingBuild">
+        <Model value="DarkShrineBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_FleetBeaconBuild" parent="ProtossBuildingBuild">
+        <Model value="FleetBeaconBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_RoboticsBayBuild" parent="ProtossBuildingBuild">
+        <Model value="RoboticsBayBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_RoboticsFacilityBuild" parent="ProtossBuildingBuild">
+        <Model value="RoboticsFacilityBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_StargateBuild" parent="ProtossBuildingBuild">
+        <Model value="StargateBuild"/>
+    </CActorModel>
     <CActorLookAt id="AP_PhotonCannonTurretLookAt" parent="UnitTurret">
         <Types Id="DefaultLookAtTurret">
             <Start Group="Turret_Right" Weight="1" Time="250"/>
@@ -14434,7 +14473,6 @@
         <DeathArray index="Normal" ModelLink="GatewayDeath" SoundLink="Gateway_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="GatewayDeathUnderConstruction" SoundLink="Gateway_Explode"/>
         <DeathCustoms ModelLink="Gateway_Taldarim_Death" Name="DarkProtoss"/>
-        <DeathActorModel value="GatewayDeath"/>
         <PlacementModel value="GatewayPlacement"/>
         <PortraitModel value="GatewayPortrait"/>
         <BarOffset value="140"/>
@@ -14475,6 +14513,114 @@
         <On Terms="AbilMorph.AP_MorphBackToGateway.Pause" Send="SoundSetPaused 1"/>
         <On Terms="AbilMorph.AP_MorphBackToGateway.Resume" Send="SoundSetPaused"/>
     </CActorSound>
+    <CActorUnit id="AP_Probe" parent="GenericUnitStandard" unitName="AP_Probe">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="CarryAnim"/>
+        <Macros value="BuildAnim"/>
+        <Macros value="MacroWorkerHat"/>
+        <Macros value="CarryTerrazineNodeAnim"/>
+        <Macros value="CarryAnimCampaign"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Abil.AP_ProbeHarvest.Start" Send="AnimPlay Work Work PlayForever"/>
+        <On Terms="Abil.AP_ProbeHarvest.Stop" Send="AnimClear Work"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.AP_ProbeHarvest.Start" Send="StatusSet CloakSound 1"/>
+        <On Terms="Behavior.CarryHarvestableVespeneGeyserGasProtoss.Create" Send="StatusSet CloakSound 1"/>
+        <On Terms="Confirmation.AP_Probe.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
+        <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
+        <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkProbe"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkProbe"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+<!--        <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>-->
+<!--        <On Terms="Behavior.OracleCloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>-->
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Probe_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="Behavior.AP_ProbeGlowingBehavior.On" Send="GlowStart"/>
+        <On Terms="Behavior.AP_ProbeGlowingBehavior.Off" Send="GlowStop"/>
+        <Model value="Probe"/>
+        <AnimBlendTime value="0.250000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ProtossGenericWarpInOut"/>
+        <DeathArray index="Normal" ModelLink="ProbeDeath" SoundLink="Probe_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <DeathCustoms ModelLink="DarkProbeDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="ProbeDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdoll" ModelLink="ProbeDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PlacementModel value="Probe"/>
+        <PortraitModel value="ProbePortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <ErrorArray Error="MustTargetUnit" Sound="Alert_ProtossPlaceOnVespeneGeyser"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Probe.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-probe.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Probe_Ready"/>
+        <SoundArray index="Help" value="Alert_ProtossEconomyUnderAttack"/>
+        <SoundArray index="What" value="Probe_What"/>
+        <SoundArray index="Yes" value="Probe_Yes"/>
+        <SoundArray index="Pissed" value="Probe_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-probe.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Probe.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Probe-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Probe-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Probe-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Probe_Land" parent="SoundOneShot">
+        <Sound value="Probe_Land"/>
+    </CActorSound>
+    <CActorAction id="AP_ProbeAttack" parent="GenericAttack" effectAttack="AP_ParticleBeam">
+        <Beam value="AP_ProbeAttackBeam"/>
+        <ImpactMap index="None" Model="ProbeAttackImpact" Sound="Probe_AttackImpact"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_ProbeAttackBeam" parent="GenericAttackBeam">
+        <Model value="ProbeAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_ProtossBuildingStartSound" parent="SoundOneShot">
+        <Sound value="Protoss_BuildingWarpStart"/>
+        <On Terms="Abil.AP_ProtossBuild.BuiltStart" Send="Create"/>
+    </CActorSound>
+    <CActorProgress id="ProtossConstruction">
+        <!-- Override -->
+        <On Terms="Abil.AP_ProtossBuild.BuiltStart" Send="Create"/>
+    </CActorProgress>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -14492,6 +14638,9 @@
         <!-- Override -->
         <!-- Add AP buildings -->
         <On Terms="UnitCreation.AP_Assimilator" Send="Create"/>
+        <On Terms="UnitCreation.AP_AssimilatorRich" Send="Create"/>
+        <On Terms="UnitCreation.AP_AutomatedAssimilator" Send="Create"/>
+        <On Terms="UnitCreation.AP_AutomatedAssimilatorRich" Send="Create"/>
         <On Terms="UnitCreation.AP_TemplarArchive" Send="Create"/>
         <!--        <On Terms="UnitCreation.AP_TwilightCouncil" Send="Create"/>-->
         <On Terms="UnitCreation.AP_CyberneticsCore" Send="Create"/>
@@ -14501,6 +14650,25 @@
         <On Terms="UnitCreation.AP_FleetBeacon" Send="Create"/>
         <On Terms="UnitCreation.AP_KhaydarinMonolith" Send="Create"/>
     </CActorStateMonitor>
+    <CActorStateMonitor id="ProtossFlamesLargeBuilding">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitCreation.AP_Nexus" Send="Create"/>
+        <On Terms="UnitCreation.AP_Gateway" Send="Create"/>
+        <On Terms="UnitCreation.AP_WarpGate" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorModel id="ProtossBuildingBirth">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitConstruction.AP_ShieldBattery.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_AutomatedAssimilator.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_AutomatedAssimilatorRich.Start" Send="Create"/>
+<!--        <On Terms="UnitConstruction.SoACaster.Start" Send="Create"/>-->
+        <On Terms="UnitConstruction.AP_KhaydarinMonolith.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_WarpGate.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_RoboticsFacilityWarp.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_StargateWarp.Start" Send="Create"/>
+    </CActorModel>
     <CActorUnit id="AP_Pylon" parent="ProtossBuildingEx" unitName="AP_Pylon">
         <Aliases value="_UnitLarge"/>
         <On Terms="ActorCreation; PlayerHasReward PylonSkin" Send="StatusSet CE 1"/>
@@ -14983,7 +15151,7 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_Stargate; MorphTo AP_StargateWarp; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale GL_BSD 0.200000"/>
         <ModelFlags index="AutomateGlobalLoops" value="0"/>
         <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
-        <BuildModel value="WarpStargateBirth"/>
+        <BuildModel value="AP_WarpStargateBirth"/>
         <DeathArray index="Normal" ModelLink="AP_StargatewarpDeath" SoundLink="Stargate_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Stargate_Explode"/>
         <DeathCustoms ModelLink="AP_StargateWarpDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
@@ -16980,10 +17148,10 @@
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap ShieldBatteryTaldarim"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
-        <Model value="ShieldBattery"/>
+        <Model value="AP_ShieldBattery"/>
         <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
         <CreepHeightClass value="Tiny"/>
-        <BuildModel value="ShieldBatteryBirth"/>
+        <BuildModel value="AP_ShieldBatteryBirth"/>
         <DeathArray index="Normal" ModelLink="ShieldBatteryDeath" SoundLink="Obelisk_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Obelisk_Explode"/>
         <DeathCustoms ModelLink="ShieldBatteryTaldarimDeath" Name="DarkProtoss"/>
@@ -17428,19 +17596,7 @@
         <Macros value="VoidMPUnpoweredAnim"/>
         <Macros value="QueueAnim"/>
         <Macros value="GlobalLoopMacro"/>
-        <Remove Terms="ActorCreation" Send="AnimGroupApply Superior"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkDiffuse"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkSpecular"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GatewayDarkEmissive"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
-        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkDiffuse"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkSpecular"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GatewayDarkEmissive"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
-        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <Remove Terms="UnitConstruction.AP_WarpGate.Start" Send="Create AP_WarpGateBuild"/>
         <On Terms="ActorCreation" Send="AnimGroupApply Superior"/>
         <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimBracketStart Unpowered Unpowered,Start Unpowered Unpowered,End"/>
         <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Send="AnimBracketStop Queuing Instant"/>

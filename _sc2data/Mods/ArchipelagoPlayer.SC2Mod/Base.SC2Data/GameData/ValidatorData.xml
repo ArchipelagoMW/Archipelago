@@ -2953,7 +2953,7 @@
         <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
         <Behavior value="AP_TimeWarpProduction"/>
     </CValidatorUnitCompareBehaviorCount>
-    <CValidatorCombine id="IsNotChronoBoosted">
+    <CValidatorCombine id="IsNotChronoBoosted" parent="CValidatorCombine">
         <!-- Override -->
         <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
         <Type value="And"/>

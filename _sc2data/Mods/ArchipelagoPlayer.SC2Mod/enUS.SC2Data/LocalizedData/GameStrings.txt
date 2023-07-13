@@ -14,6 +14,8 @@ Abil/Name/AP_ArmSiloWithNuke=Arm Magazine (Nuke)
 Abil/Name/AP_ArmoryResearch=Research (Armory)
 Abil/Name/AP_AscendantSacrifice=Ascendant Sacrifice
 Abil/Name/AP_AssaultMode=Assault Mode
+Abil/Name/AP_AssimilatorPipesMorph=Assimilator Pipes Morph
+Abil/Name/AP_AssimilatorToAutomatedAssimilator=Assimilator To Automated Assimilator
 Abil/Name/AP_AttackRedirect=Attack Redirect
 Abil/Name/AP_BansheeCloak=Cloaking Field
 Abil/Name/AP_BarracksAddOns=AddOns
@@ -101,6 +103,7 @@ Abil/Name/AP_ForceFieldMonitor=Force Field
 Abil/Name/AP_ForgeResearch=Research (Forge)
 Abil/Name/AP_FungalGrowth=Fungal Growth
 Abil/Name/AP_FusionCoreResearch=Research
+Abil/Name/AP_GatewayTrain=Train (Gateway)
 Abil/Name/AP_GatherSpecialObject=Gather Chrysalis Egg
 Abil/Name/AP_GhostCloak=Personal Cloaking
 Abil/Name/AP_GhostWeaponsFree=Weapons Free
@@ -137,6 +140,7 @@ Abil/Name/AP_MedivacTransport=Load-Unload (Medivac)
 Abil/Name/AP_Mergeable=Mergeable
 Abil/Name/AP_MindControl=Mind Control
 Abil/Name/AP_MissilePods=Hurricane Missile Pods
+Abil/Name/AP_MorphBackToGateway=Back To Gateway
 Abil/Name/AP_MorphBackToRoboticsFacility=Morph Back To Robotics Facility
 Abil/Name/AP_MorphHydraliskToLurker=Morph Hydralisk To Lurker
 Abil/Name/AP_MorphRoachToImpaler=Morph Roach to Primal Lurker
@@ -196,6 +200,8 @@ Abil/Name/AP_PhasingMode=Phasing Mode
 Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
 Abil/Name/AP_PoisonNova=Toxic Blast
+Abil/Name/AP_ProbeHarvest=Gather (Probe)
+Abil/Name/AP_ProtossBuild=Build (Probe)
 Abil/Name/AP_PsiStorm=Psi Storm
 Abil/Name/AP_PsiStormShakuras=Psi Storm
 Abil/Name/AP_PurificationNovaMorphBack=Purification Nova Morph Back
@@ -323,14 +329,7 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_AssimilatorPipesMorph=Assimilator Pipes Morph
-Abil/Name/AP_AssimilatorPipesMorph=Assimilator Pipes Morph
-Abil/Name/AP_AssimilatorToAutomatedAssimilator=Assimilator To Automated Assimilator
-Abil/Name/AP_GatewayTrain=Train (Gateway)
 Abil/Name/MercCompoundResearch=Research
-Abil/Name/AP_MorphBackToGateway=Back To Gateway
-Abil/Name/AP_Stimpack=Stimpack
-Abil/Name/AP_StimpackRedirect=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -410,8 +409,8 @@ Behavior/Name/AP_PhaseBlinkDamage=Phase Blink
 Behavior/Name/AP_PredatorCloaking=Cloak
 Behavior/Name/AP_PsiDisruption=Psi Disruption
 Behavior/Name/AP_PsiStorm=Psionic Storm
-Behavior/Name/AP_RaptorDeath=Raptor Death
 Behavior/Name/AP_PurificationNova=Phased
+Behavior/Name/AP_RaptorDeath=Raptor Death
 Behavior/Name/AP_RavenScramblerMissile=Interference Matrix
 Behavior/Name/AP_RavenShredderMissileArmorReduction=Anti-Armor Missile Targeting
 Behavior/Name/AP_RavenShredderMissileArmorReductionUIAdd=Armor Reduction
@@ -922,6 +921,7 @@ Button/Name/AP_RoachCorpserPassive=Roach
 Button/Name/AP_RoachPassive=Roach
 Button/Name/AP_RoachVilePassive=Roach
 Button/Name/AP_RuptureUpgrade=Rupture
+Button/Name/AP_SOAAutoAssimilator=Orbital Assimilator
 Button/Name/AP_SOAMothershipBlink=Blink
 Button/Name/AP_SOAMothershipLineAttack=Thermal Lance
 Button/Name/AP_SOAQuatro=Quatro
@@ -1107,7 +1107,25 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_SOAAutoAssimilator=Orbital Assimilator
+Button/Name/AP_Assimilator=Warp In Assimilator
+Button/Name/AP_AutomatedAssimilator=Orbital Assimilator
+Button/Name/AP_CyberneticsCore=Warp In Cybernetics Core
+Button/Name/AP_DarkShrine=Warp In Dark Shrine
+Button/Name/AP_FleetBeacon=Warp In Fleet Beacon
+Button/Name/AP_Forge=Warp In Forge
+Button/Name/AP_Gateway=Warp In Gateway
+Button/Name/AP_KhaydarinMonolith=Warp In Khaydarin Monolith
+Button/Name/AP_Nexus=Warp In Nexus
+Button/Name/AP_PhotonCannon=Warp In Photon Cannon
+Button/Name/AP_Pylon=Warp In Pylon
+Button/Name/AP_RoboticsBay=Warp In Robotics Bay
+Button/Name/AP_RoboticsFacility=Warp In Robotics Facility
+Button/Name/AP_ShieldBattery=Warp in Shield Battery
+Button/Name/AP_Stargate=Warp In Stargate
+Button/Name/AP_TemplarArchive=Warp In Templar Archives
+Button/Name/AP_WarpInRoboticsWarpFacility=Warp In Warp Robotics Facility
+Button/Name/AP_WarpInStarWarpGate=Warp In Warp Stargate
+Button/Name/AP_WarpInWarpGate=Warp In Warp Gate
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1134,15 +1152,18 @@ Button/Tooltip/AP_AresClassWeaponsSystemviking=Increases missile range by 2 and 
 Button/Tooltip/AP_ArmorpiercingMode=Activates the Thor's 250mm Punisher Cannons. Punisher cannons strike a single air target for heavy damage.
 Button/Tooltip/AP_Armory=Contains weapon and armor upgrades for Factory and Starport structures. <n/><n/><c val="ffff8a">Enables:</c><n/>- Thors at the Factory
 Button/Tooltip/AP_AscendantSacrifice=Reduces target friendly unit to <d ref="Effect,AP_AscendantSacrificeDamage,Amount"/> life (shields are not affected).<n/><n/>Grants the Ascendant <d ref="Effect,AP_AscendantSacrificeDamage5,LeechFraction[Energy]"/> energy for each life point reduced, up to its maximum energy.<n/><n/><c val="#ColorAttackInfo">Can only target friendly units.</c>
+Button/Tooltip/AP_Assimilator=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/AP_AssimilatorRich=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_AttackChampions=Orders selected units to move to the target point, fighting nearby enemies along the way. Targeting a unit with the Attack command orders that it be attacked until it is destroyed.
 Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_AutomatedAssimilator=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/AP_AutomatedAssimilatorTextKicker4=<s val="Kicker_Refinery">+4</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
+Button/Tooltip/AP_AutomatedAssimilatorTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
 Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker5=<s val="Kicker_Refinery">+5</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
-Button/Tooltip/AP_AutomatedAssimilatorTextKicker4=<s val="Kicker_Refinery">+4</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
-Button/Tooltip/AP_AutomatedAssimilatorTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
 Button/Tooltip/AP_Baneling=Suicide unit. Does damage over a small area on death. <n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_BanelingCocoon=This cocoon contains a Zergling that is morphing into a Baneling.
 Button/Tooltip/AP_BanelingCorrosiveBile=Increases base attack damage against primary target by 100%. Splash damage remains the same.
@@ -1545,6 +1566,7 @@ Button/Tooltip/AP_RoboticsFacility=Warps in Protoss robotic units.
 Button/Tooltip/AP_RoboticsFacilityWarp=Warps in Protoss robotic units.
 Button/Tooltip/AP_RuptureUpgrade=Blast radius increased by 50%.
 Button/Tooltip/AP_SCV=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_SOAAutoAssimilator=Vespene Gas is automatically harvested from Assimilators without requiring Probes.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_SOAMothershipBlink=Teleports the Mothership to target location.
 Button/Tooltip/AP_SOAMothershipLineAttack=Deals <d ref="Effect,AP_SOAMothershipLineAttackDamage,Amount"/> damage to all enemies in a straight line up to 10 range away.
 Button/Tooltip/AP_SOAQuatro=Your units now begin missions with one level of Weapon, Armor and Shield upgrades. Weapon upgrades increase damage by 10% to 15%.<n/><n/>An additional level of upgrades are now available, allowing units to reach 4 levels of upgrades.<n/><n/><c val="ffff8a">Passive ability.</c>
@@ -1744,6 +1766,7 @@ Button/Tooltip/AP_Zealot=Powerful melee warrior. Can use Charge.<n/><n/><c val="
 Button/Tooltip/AP_ZealotAiur=Aiur Faction<n/>Powerful melee warrior. Has Charge and Whirlwind abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ZealotPurifier=Purifier Faction<n/>Powerful melee warrior. Has Charge and Reconstruction abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ZealotShakuras=Nerazim Faction<n/>Powerful melee warrior. Has Shadow Charge and Darkcoil abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_Zergling=Fast melee creature. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
 Button/Tooltip/AP_zergflyerarmor1=Upgrades the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerarmor2=Further upgrades the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
@@ -1760,10 +1783,24 @@ Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ra
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_Assimilator=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
-Button/Tooltip/AP_AssimilatorRich=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_AutomatedAssimilator=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
-Button/Tooltip/AP_SOAAutoAssimilator=Vespene Gas is automatically harvested from Assimilators without requiring Probes.<n/><n/><c val="ffff8a">Passive ability.</c>
-Button/Tooltip/AP_Zergling=Fast melee creature. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
+Button/Tooltip/AP_CyberneticsCore=Contains weapon and armor upgrades for Protoss air units.
+Button/Tooltip/AP_DarkShrine=Dark Templar tech structure.
+Button/Tooltip/AP_FleetBeacon=Carrier tech structure.
+Button/Tooltip/AP_Forge=Contains weapon and armor upgrades for Protoss ground units and shield upgrades for all Protoss units and structures.<n/><n/><c val="ffff8a">Enables:</c><n/>- Photon Cannons from Probes
+Button/Tooltip/AP_Gateway=Warps in Protoss ground units.<n/><n/><c val="ffff8a">Enables:</c><n/>- Zealots
+Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
+Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- Probes
+Button/Tooltip/AP_PhotonCannon=Primary defensive structure.<n/><n/><c val="ffff8a">Can attack ground and air units.</c><n/><c val="FFE303">Detector</c>
+Button/Tooltip/AP_Pylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
+Button/Tooltip/AP_RoboticsBay=Colossus tech structure.
+Button/Tooltip/AP_RoboticsFacility=Warps in Protoss robotic units.
+Button/Tooltip/AP_ShieldBattery=Restores shields to nearby friendly units and structures.
+Button/Tooltip/AP_Stargate=Warps in Protoss air units.
+Button/Tooltip/AP_TemplarArchive=High Templar tech structure.
+Button/Tooltip/AP_WarpInRoboticsWarpFacility=Enables warp in of Protoss robotic units.
+Button/Tooltip/AP_WarpInStarWarpGate=Enables warp in of Protoss air units.
+Button/Tooltip/AP_WarpInWarpGate=Enables warp in of Protoss ground units.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1839,11 +1876,14 @@ Effect/Name/AP_ArcliteShockCannonFriendlyDamage=Arclite Shock Cannon (Friendly D
 Effect/Name/AP_ArcliteShockCannonSet=Arclite Shock Cannon Set
 Effect/Name/AP_AscendantSacrifice=Ascendant Sacrifice
 Effect/Name/AP_AscendantSacrificeDamage=Ascendant Sacrifice Damage
+Effect/Name/AP_AssimilatorMorph=Assimilator Morph
+Effect/Name/AP_AutoHarvestVespene4=Auto Harvest Vespene 4
 Effect/Name/AP_AutoHarvestVespeneTerran=Auto Harvest Vespene
 Effect/Name/AP_AutoTurretRelease=Auto Turret Release
 Effect/Name/AP_AutoTurretReleaseLM=Auto Turret Release
 Effect/Name/AP_AutoTurretReleaseLaunch=Auto Turret Release Launch
 Effect/Name/AP_AutoTurretSet=Auto Turret (Set)
+Effect/Name/AP_AutomatedAssimilatorMorph=Automated Assimilator Morph
 Effect/Name/AP_AutoturretTimedLife=Auto turret Timed Life
 Effect/Name/AP_BacklashRockets=Backlash Rockets
 Effect/Name/AP_BacklashRocketsLM=Backlash Rockets
@@ -2540,6 +2580,7 @@ Effect/Name/AP_OracleWeaponDamage=Oracle Weapon Damage
 Effect/Name/AP_P38ScytheGuassPistol=P-38 Scythe Guass Pistol
 Effect/Name/AP_P38ScytheGuassPistolBurst=P-38 Scythe Guass Pistol
 Effect/Name/AP_ParalyticSpines=Paralytic Spines
+Effect/Name/AP_ParticleBeam=Particle Beam
 Effect/Name/AP_ParticleDisruptors=Entropy Lance (LM)
 Effect/Name/AP_ParticleDisruptorsU=Entropy Lance (Damage)
 Effect/Name/AP_PerditionTurretBurrowOrder=Perdition Turret Burrow Order
@@ -2989,6 +3030,13 @@ Effect/Name/AP_YoinkStartCreatePlaceholderVikingGround=Yoink Start Create Placeh
 Effect/Name/AP_YoinkStartSet=Yoink Start Set
 Effect/Name/AP_YoinkStartSetVikingAir=Yoink Start Set Viking Air
 Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
+Effect/Name/AP_ZealotAiurWeapon=Zealot Aiur Weapon
+Effect/Name/AP_ZealotAiurWeaponBurst=Zealot Aiur Weapon Burst
+Effect/Name/AP_ZealotAiurWeaponCleaveSet=Zealot Aiur Weapon Cleave Set
+Effect/Name/AP_ZealotPsiBladesCleaveSet=Zealot Psi Blades (Cleave Set)
+Effect/Name/AP_ZergBuildingNotOnCreepDamage=Zerg Building Not On Creep Damage
+Effect/Name/AP_ZergBuildingSpawnBroodling6=Zerg Building Spawn Broodling 6
+Effect/Name/AP_ZergBuildingSpawnBroodling6Delay=Zerg Building Spawn Broodling 6 (Delay)
 Effect/Name/AP_ZerglingFrenzy=Zergling Frenzy
 Effect/Name/AP_ZerglingFury1AB=Zergling Fury1 AB
 Effect/Name/AP_ZerglingFury1RB=Zergling Fury1 RB
@@ -3035,17 +3083,7 @@ Effect/Name/AP_ZerglingRespawnTrainOrderSwarmling=Zergling Respawn Train Order S
 Effect/Name/AP_ZerglingRespawnTrainSet=Zergling Respawn Train Set
 Effect/Name/AP_ZerglingRespawnWorkingAB=Zergling Respawn Working AB
 Effect/Name/AP_ZerglingSunder=Zergling Sunder
-Effect/Name/AP_ZealotAiurWeapon=Zealot Aiur Weapon
-Effect/Name/AP_ZealotAiurWeaponBurst=Zealot Aiur Weapon Burst
-Effect/Name/AP_ZealotAiurWeaponCleaveSet=Zealot Aiur Weapon Cleave Set
-Effect/Name/AP_ZealotPsiBladesCleaveSet=Zealot Psi Blades (Cleave Set)
-Effect/Name/AP_ZergBuildingNotOnCreepDamage=Zerg Building Not On Creep Damage
-Effect/Name/AP_ZergBuildingSpawnBroodling6=Zerg Building Spawn Broodling 6
-Effect/Name/AP_ZergBuildingSpawnBroodling6Delay=Zerg Building Spawn Broodling 6 (Delay)
 Effect/Name/AP_heal=Heal
-Effect/Name/AP_AssimilatorMorph=Assimilator Morph
-Effect/Name/AP_AutoHarvestVespene4=Auto Harvest Vespene 4
-Effect/Name/AP_AutomatedAssimilatorMorph=Automated Assimilator Morph
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
@@ -3114,8 +3152,14 @@ Unit/Name/AP_Armory=Armory
 Unit/Name/AP_AscendantSacrificeWeapon1=AscendantSacrificeWeapon1
 Unit/Name/AP_AscendantSacrificeWeapon2=AscendantSacrificeWeapon2
 Unit/Name/AP_AscendantSacrificeWeapon3=AscendantSacrificeWeapon3
+Unit/Name/AP_Assimilator=Assimilator
+Unit/Name/AP_AssimilatorProtossGeyser=Assimilator
+Unit/Name/AP_AssimilatorPurifierGeyser=Assimilator
+Unit/Name/AP_AssimilatorRich=Assimilator
+Unit/Name/AP_AssimilatorShakurasGeyser=Assimilator
 Unit/Name/AP_AutoTurret=Auto-Turret
 Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
+Unit/Name/AP_AutomatedAssimilator=Orbital Assimilator
 Unit/Name/AP_AutomatedRefinery=Automated Refinery
 Unit/Name/AP_AutomatedRefineryRich=Automated Refinery
 Unit/Name/AP_BacklashRocketsLMWeapon=Backlash Rockets
@@ -3295,6 +3339,7 @@ Unit/Name/AP_PointDefenseDrone=Point Defense Drone
 Unit/Name/AP_PointDefenseDroneReleaseWeapon=Point Defense Drone Release
 Unit/Name/AP_Predator=Predator
 Unit/Name/AP_PreviewBunkerUpgraded=Bunker
+Unit/Name/AP_Probe=Probe
 Unit/Name/AP_PsiDisruptor=Psi Disrupter
 Unit/Name/AP_PunisherGrenadesLMWeapon=Punisher Grenades
 Unit/Name/AP_Pylon=Pylon
@@ -3408,17 +3453,11 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_ZealotAiur=Zealot
+Unit/Name/AP_ZealotShakuras=Centurion
 Unit/Name/AP_Zergling=Zergling
 Unit/Name/AP_ZerglingRespawnControllerUnit=Zergling Reconstitution Controller Unit
 Unit/Name/AP_ZerglingRespawnWeapon=Zergling Reconstitution Weapon
-Unit/Name/AP_ZealotAiur=Zealot
-Unit/Name/AP_ZealotShakuras=Centurion
-Unit/Name/AP_Assimilator=Assimilator
-Unit/Name/AP_AssimilatorProtossGeyser=Assimilator
-Unit/Name/AP_AssimilatorPurifierGeyser=Assimilator
-Unit/Name/AP_AssimilatorRich=Assimilator
-Unit/Name/AP_AssimilatorShakurasGeyser=Assimilator
-Unit/Name/AP_AutomatedAssimilator=Orbital Assimilator
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
@@ -3846,6 +3885,7 @@ Weapon/Name/AP_NovaWeaponPlasmaRifle=Plasma Rifle
 Weapon/Name/AP_NovaWeaponPsiBlade=Monomolecular Blade
 Weapon/Name/AP_Oracle=Pulsar Beam
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
+Weapon/Name/AP_ParticleBeam=Particle Beam
 Weapon/Name/AP_ParticleDisruptors=Particle Disruptors
 Weapon/Name/AP_PerditionTurretFlamethrower=Perdition Turret Flamethrower
 Weapon/Name/AP_PhaseDisruptersAir=Phase Disruptors (Air)

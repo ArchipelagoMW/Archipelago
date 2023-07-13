@@ -4980,6 +4980,83 @@
         </InfoArray>
         <Alert value="MorphComplete"/>
     </CAbilMorph>
+    <CAbilHarvest id="AP_ProbeHarvest">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+    </CAbilHarvest>
+    <CAbilBuild id="AP_ProtossBuild">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <FlagArray index="PeonDisableCollision" value="1"/>
+        <FlagArray index="PeonMaintained" value="0"/>
+        <InfoArray index="Build1" Unit="AP_Nexus" Time="100">
+            <Button DefaultButtonFace="AP_Nexus"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_Pylon" Time="25">
+            <Button DefaultButtonFace="AP_Pylon"/>
+        </InfoArray>
+        <InfoArray index="Build3" Unit="AP_Assimilator" Time="30">
+            <Button DefaultButtonFace="AP_Assimilator" Requirements="AP_NotHaveSOAAutoAssimilator"/>
+            <ValidatorArray value="HasVespene"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_Gateway" Time="65">
+            <Button DefaultButtonFace="AP_Gateway" State="Restricted" Requirements="AP_HaveNexusAndNotHaveSOAWarpTech"/>
+        </InfoArray>
+        <InfoArray index="Build5" Unit="AP_Forge" Time="45">
+            <Button DefaultButtonFace="AP_Forge" Requirements="AP_HaveNexus"/>
+        </InfoArray>
+        <InfoArray index="Build6" Unit="AP_FleetBeacon" Time="60">
+            <Button DefaultButtonFace="AP_FleetBeacon" State="Restricted" Requirements="AP_HaveStargate"/>
+        </InfoArray>
+        <InfoArray index="Build8" Unit="AP_PhotonCannon" Time="40">
+            <Button DefaultButtonFace="AP_PhotonCannon" State="Restricted" Requirements="AP_HaveForge"/>
+        </InfoArray>
+        <InfoArray index="Build9" Time="25"/>
+        <InfoArray index="Build10" Unit="AP_Stargate" Time="60">
+            <Button DefaultButtonFace="AP_Stargate" State="Restricted" Requirements="AP_HaveNexusAndNotHaveSOAWarpTech"/>
+        </InfoArray>
+        <InfoArray index="Build11" Unit="AP_TemplarArchive" Time="50">
+            <Button DefaultButtonFace="AP_TemplarArchive" State="Restricted" Requirements="AP_HaveGateway"/>
+        </InfoArray>
+        <InfoArray index="Build12" Unit="AP_DarkShrine" Time="50">
+            <Button DefaultButtonFace="AP_DarkShrine" State="Restricted" Requirements="AP_HaveGateway"/>
+        </InfoArray>
+        <InfoArray index="Build13" Unit="AP_RoboticsBay" Time="65">
+            <Button DefaultButtonFace="AP_RoboticsBay" State="Restricted" Requirements="AP_HaveRoboticsFa"/>
+        </InfoArray>
+        <InfoArray index="Build14" Unit="AP_RoboticsFacility" Time="65">
+            <Button DefaultButtonFace="AP_RoboticsFacility" State="Restricted" Requirements="AP_HaveNexusAndNotHaveSOAWarpTech"/>
+        </InfoArray>
+        <InfoArray index="Build15" Unit="AP_CyberneticsCore" Time="50">
+            <Button DefaultButtonFace="AP_CyberneticsCore" State="Restricted" Requirements="AP_HaveGateway"/>
+        </InfoArray>
+<!--        <InfoArray index="Build20" Unit="PsionicAmplifier" Time="40">-->
+<!--            <Button DefaultButtonFace="PsionicAmplifier" State="Restricted"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Build21" Unit="VoidPylon" Time="60">-->
+<!--            <Button DefaultButtonFace="VoidPylon"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Build22" Unit="AP_ShieldBattery" Time="30">
+            <Button DefaultButtonFace="AP_ShieldBattery" Requirements="AP_HaveNexus"/>
+        </InfoArray>
+<!--        <InfoArray index="Build23" Unit="SoACaster" Time="40">-->
+<!--            <Button DefaultButtonFace="WarpinSoACaster" Requirements="NoSoACaster"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Build24" Unit="AP_AutomatedAssimilator" Time="30">
+            <Button DefaultButtonFace="AP_AutomatedAssimilator" Requirements="AP_HaveSOAAutoAssimilator"/>
+        </InfoArray>
+        <InfoArray index="Build25" Unit="AP_KhaydarinMonolith" Time="80">
+            <Button DefaultButtonFace="AP_KhaydarinMonolith" State="Restricted" Requirements="AP_HaveForge"/>
+        </InfoArray>
+        <InfoArray index="Build26" Unit="AP_WarpGate" Time="65">
+            <Button DefaultButtonFace="AP_WarpInWarpGate" State="Restricted" Requirements="AP_HaveNexusAndHaveSOAWarpTech"/>
+        </InfoArray>
+        <InfoArray index="Build27" Unit="AP_StargateWarp" Time="60">
+            <Button DefaultButtonFace="AP_WarpInStarWarpGate" State="Restricted" Requirements="AP_HaveNexusAndHaveSOAWarpTech"/>
+        </InfoArray>
+        <InfoArray index="Build28" Unit="AP_RoboticsFacilityWarp" Time="65">
+            <Button DefaultButtonFace="AP_WarpInRoboticsWarpFacility" State="Restricted" Requirements="AP_HaveNexusAndHaveSOAWarpTech"/>
+        </InfoArray>
+        <ConstructionMover value="Construction"/>
+    </CAbilBuild>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

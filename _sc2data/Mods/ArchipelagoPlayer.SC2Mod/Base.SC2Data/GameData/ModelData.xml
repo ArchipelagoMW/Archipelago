@@ -11935,4 +11935,30 @@
         <Image value="Assets\Textures\ZerglingPortrait_Static.dds"/>
         <Lighting value="AP_SwarmlingPortrait"/>
     </CModel>
+    <CModel id="AP_WarpStargateBirth" parent="AP_StargateWarp">
+        <Model value="Assets\Buildings\Protoss\StarWarpGate_WarpIn\StarWarpGate_WarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.466600"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_ShieldBattery" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\ProtossShield_Battery\ProtossShield_Battery.m3"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_ShieldBatteryBirth" parent="AP_ShieldBattery">
+        <Model value="Assets\Buildings\Protoss\ProtossShield_Battery_WarpIn\ProtossShield_Battery_WarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.200000"/>
+        </Events>
+    </CModel>
 </Catalog>

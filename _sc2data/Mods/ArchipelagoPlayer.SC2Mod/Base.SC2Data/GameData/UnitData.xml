@@ -13645,6 +13645,117 @@
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ProtossStory"/>
     </CUnit>
+    <CUnit id="AP_Probe">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Worker" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <DefaultAcquireLevel value="Defensive"/>
+        <Response value="Flee"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="20"/>
+        <LifeMax value="20"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="20"/>
+        <ShieldsMax value="20"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.8125"/>
+        <Acceleration value="2.5"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-1"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AIOverideTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_ProtossBuild"/>
+        <AbilArray Link="AP_ProbeHarvest"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_ParticleBeam"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="AttackWorker" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="GatherProt" Type="AbilCmd" AbilCmd="AP_ProbeHarvest,0" Row="1" Column="0"/>
+            <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="AP_ProbeHarvest,1" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="ProtossBuild"/>
+                <Type value="Submenu"/>
+                <AbilCmd value="255,255"/>
+                <SubmenuCardId value="PBl1"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="ProtossBuildAdvanced"/>
+                <Type value="Submenu"/>
+                <AbilCmd value="255,255"/>
+                <SubmenuCardId value="PBl2"/>
+                <Row value="2"/>
+                <Column value="1"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <CardLayouts CardId="PBl1">
+            <LayoutButtons Face="AP_Nexus" Type="AbilCmd" AbilCmd="AP_ProtossBuild,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_Assimilator" Type="AbilCmd" AbilCmd="AP_ProtossBuild,2" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_Pylon" Type="AbilCmd" AbilCmd="AP_ProtossBuild,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_Gateway" Type="AbilCmd" AbilCmd="AP_ProtossBuild,3" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_Forge" Type="AbilCmd" AbilCmd="AP_ProtossBuild,4" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_CyberneticsCore" Type="AbilCmd" AbilCmd="AP_ProtossBuild,14" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_PhotonCannon" Type="AbilCmd" AbilCmd="AP_ProtossBuild,7" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_AutomatedAssimilator" Type="AbilCmd" AbilCmd="AP_ProtossBuild,23" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_WarpInWarpGate" Type="AbilCmd" AbilCmd="AP_ProtossBuild,25" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_KhaydarinMonolith" Type="AbilCmd" AbilCmd="AP_ProtossBuild,24" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_ShieldBattery" Type="AbilCmd" AbilCmd="AP_ProtossBuild,21" Row="1" Column="2"/>
+        </CardLayouts>
+        <CardLayouts CardId="PBl2">
+            <LayoutButtons Face="AP_Stargate" Type="AbilCmd" AbilCmd="AP_ProtossBuild,9" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TemplarArchive" Type="AbilCmd" AbilCmd="AP_ProtossBuild,10" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_RoboticsFacility" Type="AbilCmd" AbilCmd="AP_ProtossBuild,13" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_FleetBeacon" Type="AbilCmd" AbilCmd="AP_ProtossBuild,5" Row="1" Column="1"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_DarkShrine" Type="AbilCmd" AbilCmd="AP_ProtossBuild,11" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_RoboticsBay" Type="AbilCmd" AbilCmd="AP_ProtossBuild,12" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_WarpInStarWarpGate" Type="AbilCmd" AbilCmd="AP_ProtossBuild,26" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_WarpInRoboticsWarpFacility" Type="AbilCmd" AbilCmd="AP_ProtossBuild,27" Row="0" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="1"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="50"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
