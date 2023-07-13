@@ -138,6 +138,10 @@ level_names = {
     "Iceberg": 5,
 }
 
+level_names_inverse = {
+    level_names[level]: level for level in level_names
+}
+
 # Boss Names
 boss_names = {
         "Whispy Woods": 0x770200,

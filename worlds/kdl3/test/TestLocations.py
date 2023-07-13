@@ -29,6 +29,7 @@ class TestLocations(KDL3TestBase):
         self.run_location_test(LocationName.cloudy_park_pick, ["Rick"])
         self.run_location_test(LocationName.iceberg_kogoesou, ["Burning"])
         self.run_location_test(LocationName.iceberg_samus, ["Ice"])
+        self.run_location_test(LocationName.iceberg_name, ["Burning", "Coo", "ChuChu"])
         self.run_location_test(LocationName.iceberg_angel, ["Cutter", "Burning", "Spark", "Parasol", "Needle", "Clean", "Stone", "Ice"])
 
     def run_location_test(self, location: str, itempool: typing.List[str]):
@@ -38,32 +39,6 @@ class TestLocations(KDL3TestBase):
             self.collect_by_name(itempool.pop())
         assert self.can_reach_location(location)
         self.remove(self.get_items_by_name(items))
-
-
-class TestName(KDL3TestBase):
-    options = {
-        "plando_connections": [
-            [],
-            [
-                PlandoConnection("Grass Land 1", "Grass Land 4", "both"),
-                PlandoConnection("Grass Land 2", "Iceberg 4", "both"),
-                PlandoConnection("Grass Land 3", "Sand Canyon 5", "both"),
-                PlandoConnection("Grass Land 4", "Grass Land 3", "both")
-            ]],
-        "stage_shuffle": "shuffled",
-        "plando_options": "connections"
-    }
-
-    def testName(self):
-        assert not self.can_reach_location("Iceberg 4 - Name")
-        self.collect_by_name("Coo")
-        self.collect_by_name("ChuChu")
-        self.collect_by_name("Burning")
-        assert not self.can_reach_location("Iceberg 4 - Name")
-        # despite Name only requiring Burning/ChuChu/Coo for logic, it cannot be in logic because our
-        # three accessible stages do not actually give the player access to Coo, thus we need Cutter to pass 3-5
-        self.collect_by_name("Cutter")
-        assert self.can_reach_location("Iceberg 4 - Name")
 
 
 class TestShiro(KDL3TestBase):

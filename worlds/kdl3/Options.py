@@ -113,6 +113,19 @@ class BossShuffleAllowBB(Choice):
     default = 0
 
 
+class AnimalRandomization(Choice):
+    """
+    Disabled: all animal positions will be vanilla.
+    Shuffled: all animal positions will be shuffled amongst each other.
+    Full: random animals will be placed across the levels. At least one of each animal is guaranteed.
+    """
+    display_name = "Animal Randomization"
+    option_disabled = 0
+    option_shuffled = 1
+    option_full = 2
+    default = 0
+
+
 class StrictBosses(DefaultOnToggle):
     """
     If enabled, one will not be able to move onto the next world until the previous world's boss has been purified.
@@ -331,6 +344,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
     "allow_bb": BossShuffleAllowBB,
+    "animal_randomization": AnimalRandomization,
     "strict_bosses": StrictBosses,
     "open_world": OpenWorld,
     "ow_boss_requirement": OpenWorldBossRequirement,

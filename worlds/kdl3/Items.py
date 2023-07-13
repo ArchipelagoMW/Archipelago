@@ -33,6 +33,15 @@ animal_friend_table = {
     "Pitch": ItemData(0x770015, True)
 }
 
+animal_friend_spawn_table = {
+    "Rick Spawn": ItemData(None, True),
+    "Kine Spawn": ItemData(None, True),
+    "Coo Spawn": ItemData(None, True),
+    "Nago Spawn": ItemData(None, True),
+    "ChuChu Spawn": ItemData(None, True),
+    "Pitch Spawn": ItemData(None, True)
+}
+
 misc_item_table = {
     "Heart Star": ItemData(0x770020, True, True),
     "1-Up": ItemData(0x770021, False),
@@ -56,6 +65,7 @@ filler_item_weights = {
 item_table = {
     **copy_ability_table,
     **animal_friend_table,
+    **animal_friend_spawn_table,
     **misc_item_table,
     **trap_item_table
 }

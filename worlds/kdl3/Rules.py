@@ -1,6 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, level_consumables
-from .Names import LocationName
+from .Names import LocationName, AnimalFriendSpawns
 from .Items import copy_ability_table
 import typing
 from BaseClasses import MultiWorld
@@ -10,115 +10,62 @@ if typing.TYPE_CHECKING:
     from BaseClasses import CollectionState
 
 
-def can_reach_level(state: "CollectionState", player: int, level: int, player_levels: dict, open_world: bool,
+def can_reach_level(state: "CollectionState", player: int, level: int, open_world: bool,
                     ow_boss_req: int):
     if level == 1:
         return True
     else:
         if open_world:
-            finishable_stages = 0
-            for stage in player_levels[level - 1]:
-                if state.can_reach(location_table[stage], "Location", player):
-                    finishable_stages += 1
-            if finishable_stages >= ow_boss_req:
-                return True
-            else:
-                return False
+            return state.has(f"{LocationName.level_names_inverse[level-1]} - Stage Completion", player, ow_boss_req)
         else:
-            return state.can_reach(location_table[player_levels[level - 1][5]], "Location", player)
+            return state.has(f"{LocationName.level_names_inverse[level-1]} 6 - Stage Completion", player)
 
-#def can_reach_rick(state: "CollectionState", multiworld: MultiWorld, player: int) -> bool:
+
+def can_reach_rick(state: "CollectionState", player: int) -> bool:
+    return state.has("Rick", player) and state.has("Rick Spawn", player)
+
+
+def can_reach_kine(state: "CollectionState", player: int) -> bool:
+    return state.has("Kine", player) and state.has("Kine Spawn", player)
+
 
 def can_reach_coo(state: "CollectionState", player: int) -> bool:
-    return state.can_reach("Grass Land 3 - Complete", "Location", player) or \
-        state.can_reach("Grass Land 5 - Complete", "Location", player) or \
-        state.can_reach("Grass Land 6 - Complete", "Location", player) or \
-        state.can_reach("Ripple Field 2 - Complete", "Location", player) or \
-        state.can_reach("Ripple Field 6 - Complete", "Location", player) or \
-        state.can_reach("Sand Canyon 2 - Complete", "Location", player) or \
-        state.can_reach("Sand Canyon 3 - Complete", "Location", player) or \
-        state.can_reach("Sand Canyon 6 - Complete", "Location", player) or \
-        state.can_reach("Cloudy Park 1 - Complete", "Location", player) or \
-        state.can_reach("Cloudy Park 4 - Complete", "Location", player) or \
-        state.can_reach("Cloudy Park 5 - Complete", "Location", player) or \
-        state.can_reach("Cloudy Park 6 - Complete", "Location", player) or \
-        state.can_reach("Iceberg 3 - Complete", "Location", player) or \
-        state.can_reach("Iceberg 5 - Complete", "Location", player) or \
-        state.can_reach("Iceberg 6 - Complete", "Location", player)
-    #  We purposefully leave out Iceberg 4 here, since access to Coo is conditional
-    #  on having either Coo and Burning, or potentially Nago and Burning
+    return state.has("Coo", player) and state.has("Coo Spawn", player)
 
 
 def can_reach_nago(state: "CollectionState", player: int) -> bool:
-    return state.can_reach(LocationName.grass_land_1, "Location", player) \
-        or state.can_reach(LocationName.grass_land_5, "Location", player) \
-        or state.can_reach(LocationName.grass_land_6, "Location", player) \
-        or state.can_reach(LocationName.ripple_field_1, "Location", player) \
-        or state.can_reach(LocationName.ripple_field_4, "Location", player) \
-        or state.can_reach(LocationName.ripple_field_6, "Location", player) \
-        or state.can_reach(LocationName.sand_canyon_4, "Location", player) \
-        or state.can_reach(LocationName.sand_canyon_6, "Location", player) \
-        or state.can_reach(LocationName.cloudy_park_1, "Location", player) \
-        or state.can_reach(LocationName.cloudy_park_2, "Location", player) \
-        or state.can_reach(LocationName.cloudy_park_6, "Location", player) \
-        or state.can_reach(LocationName.iceberg_2, "Location", player) \
-        or state.can_reach(LocationName.iceberg_3, "Location", player) \
-        or state.can_reach(LocationName.iceberg_6, "Location", player)
+    return state.has("Nago", player) and state.has("Nago Spawn", player)
+
+
+def can_reach_chuchu(state: "CollectionState", player: int) -> bool:
+    return state.has("ChuChu", player) and state.has("ChuChu Spawn", player)
+
+
+def can_reach_pitch(state: "CollectionState", player: int) -> bool:
+    return state.has("Pitch", player) and state.has("Pitch Spawn", player)
 
 
 def set_rules(world: "KDL3World") -> None:
-    if not world.multiworld.open_world[world.player]:
-        for level in range(1, len(world.player_levels[world.player]) + 1):
-            for stage in range(len(world.player_levels[world.player][level])):
-                if stage != 6:
-                    # Cannot complete stage if we cannot complete the stage before it
-                    set_rule(
-                        world.multiworld.get_location(location_table[world.player_levels[world.player][level][stage]],
-                                                      world.player),
-                        lambda state, level=level, stage=stage: True if stage == 0
-                        else state.can_reach(
-                            location_table[world.player_levels[world.player][level][stage - 1]], "Location",
-                            world.player))
-                    # Cannot complete stage's heart star if we cannot complete the stage before it
-                    set_rule(
-                        world.multiworld.get_location(
-                            location_table[world.player_levels[world.player][level][stage] + 0x100], world.player),
-                        lambda state, level=level, stage=stage: True if stage == 0
-                        else state.can_reach(
-                            location_table[world.player_levels[world.player][level][stage - 1]], "Location",
-                            world.player))
-                    if world.multiworld.consumables[world.player]:
-                        stage_idx = world.player_levels[world.player][level][stage] & 0xFF
-                        if stage_idx in level_consumables:
-                            for consumable in level_consumables[stage_idx]:
-                                set_rule(
-                                    world.multiworld.get_location(
-                                        location_table[0x770300 + consumable],
-                                        world.player),
-                                    lambda state, level=level, stage=stage: True if stage == 0
-                                    else state.can_reach(
-                                        location_table[world.player_levels[world.player][level][stage - 1]], "Location",
-                                        world.player))
 
     # Level 1
     add_rule(world.multiworld.get_location(LocationName.grass_land_muchi, world.player),
-             lambda state: state.has("ChuChu", world.player))
+             lambda state: can_reach_chuchu(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.grass_land_chao, world.player),
              lambda state: state.has("Stone", world.player))
     add_rule(world.multiworld.get_location(LocationName.grass_land_mine, world.player),
-             lambda state: state.has("Kine", world.player))
+             lambda state: can_reach_kine(state, world.player))
 
     # Level 2
     add_rule(world.multiworld.get_location(LocationName.ripple_field_5, world.player),
-             lambda state: state.has("Kine", world.player))
+             lambda state: can_reach_kine(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_kamuribana, world.player),
-             lambda state: state.has("Pitch", world.player) and state.has("Clean", world.player))
+             lambda state: can_reach_pitch(state, world.player) and state.has("Clean", world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_bakasa, world.player),
-             lambda state: state.has("Kine", world.player) and state.has("Parasol", world.player))
+             lambda state: can_reach_kine(state, world.player) and state.has("Parasol", world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_toad, world.player),
              lambda state: state.has("Needle", world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
-             lambda state: state.has("Pitch", world.player) and state.has("Kine", world.player)
+             lambda state: can_reach_pitch(state, world.player) and can_reach_kine(state, world.player)
                            and state.has("Burning", world.player) and state.has("Stone", world.player))
 
     # Level 3
@@ -161,6 +108,7 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
              lambda state: state.has_all([ability for ability in copy_ability_table.keys()], world.player))
     # cleaner than writing out 8 ands
+
 
     # Consumables
     if world.multiworld.consumables[world.player]:
@@ -209,22 +157,19 @@ def set_rules(world: "KDL3World") -> None:
                                           range(1, 6)):
         set_rule(world.multiworld.get_location(boss_flag, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and (True if world.multiworld.open_world[world.player] else
-                                         state.can_reach(location_table[world.player_levels[world.player][i][5]],
-                                                         "Location",
-                                                         world.player)))
+                                    and can_reach_level(state, world.player, i+1,
+                                                        world.multiworld.open_world[world.player],
+                                                        world.multiworld.ow_boss_requirement[world.player]))
         set_rule(world.multiworld.get_location(purification, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and (True if world.multiworld.open_world[world.player] else
-                                         state.can_reach(location_table[world.player_levels[world.player][i][5]],
-                                                         "Location",
-                                                         world.player)))
+                                    and can_reach_level(state, world.player, i+1,
+                                                        world.multiworld.open_world[world.player],
+                                                        world.multiworld.ow_boss_requirement[world.player]))
 
     if world.multiworld.strict_bosses[world.player]:
         for level in range(2, 6):
             add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
-                     lambda state, i=level: state.has("Heart Star", world.player,
-                                                      world.boss_requirements[world.player][i - 2]))
+                     lambda state, i=level: state.has(f"Level {i - 1} Boss Purified", world.player))
 
     set_rule(world.multiworld.get_entrance("To Level 6", world.player),
              lambda state: state.has("Heart Star", world.player, world.required_heart_stars[world.player]))
@@ -232,14 +177,10 @@ def set_rules(world: "KDL3World") -> None:
     for level in range(2, 6):
         add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
                  lambda state, i=level: can_reach_level(state, world.player, i,
-                                                        world.player_levels[world.player],
                                                         world.multiworld.open_world[world.player],
                                                         world.multiworld.ow_boss_requirement[world.player]))
 
     if world.multiworld.goal_speed[world.player] == 0:
         add_rule(world.multiworld.get_entrance("To Level 6", world.player),
-                 lambda state: state.has("Level 1 Boss Purified", world.player)
-                               and state.has("Level 2 Boss Purified", world.player)
-                               and state.has("Level 3 Boss Purified", world.player)
-                               and state.has("Level 4 Boss Purified", world.player)
-                               and state.has("Level 5 Boss Purified", world.player))
+                 lambda state: state.has_all(["Level 1 Boss Purified", "Level 2 Boss Purified", "Level 3 Boss Purified",
+                                              "Level 4 Boss Purified", "Level 5 Boss Purified"], world.player))

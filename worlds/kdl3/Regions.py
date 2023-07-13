@@ -1,9 +1,16 @@
+import json
+import os
 import typing
+from pkgutil import get_data
+
 from BaseClasses import Entrance, Region
 from worlds.AutoWorld import World
 from .Locations import KDL3Location, location_table, level_consumables
 from .Names import LocationName
+from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Options import BossShuffle
+from .Room import Room
+from ..generic.Rules import add_item_rule, add_rule
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -31,7 +38,86 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
         return new_stage
 
 
-#def generate_rooms(world: World, door_shuffle: bool, )
+def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[int, Region]):
+    level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
+    room_data = json.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
+    rooms: typing.Dict[str, Room] = dict()
+    for room_entry in room_data:
+        room = Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
+                    room_entry["room"], room_entry["pointer"], room_entry["music"], room_entry["default_exits"])
+        room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
+        None for location in room_entry["locations"] if not any([x in location for x in ["1-Up", "Maxim"]]) or
+                            world.multiworld.consumables[world.player]}, KDL3Location)
+        rooms[room.name] = room
+    world.multiworld.regions.extend([rooms[room] for room in rooms])
+    # fill animals, and set item rule
+    animal_friends = dict()
+    if world.multiworld.animal_randomization[world.player] == 1:
+        animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
+                       if spawn != "Ripple Field 5 - Animal 2"]
+        if world.multiworld.accessibility[world.player] == 2:
+            animal_pool.append("Pitch Spawn")
+        world.multiworld.per_slot_randoms[world.player].shuffle(
+            animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
+        if world.multiworld.accessibility[world.player] != 2:
+            animal_pool.insert(28, "Pitch Spawn")
+        # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-minimal and non-door rando
+        animal_friends = dict(zip(animal_friend_spawns.keys(), animal_pool))
+    elif world.multiworld.animal_randomization[world.player] == 2:
+        animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
+        animal_pool = [world.multiworld.per_slot_randoms[world.player].choice(animal_base)
+                       for _ in range(len(animal_friend_spawns) -
+                                      (7 if world.multiworld.accessibility[world.player] < 2 else 6))]
+        # have to guarantee one of each animal
+        animal_pool.extend(animal_base)
+        world.multiworld.per_slot_randoms[world.player].shuffle(
+            animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
+        if world.multiworld.accessibility[world.player] != 2:
+            animal_pool.insert(28, "Pitch Spawn")
+        animal_friends = dict(zip(animal_friend_spawns.keys(), animal_pool))
+    else:
+        animal_friends = animal_friend_spawns.copy()
+    for name in rooms:
+        room = rooms[name]
+        for location in room.locations:
+            if "Animal" in location.name:
+                add_item_rule(location, lambda item: item.name in {
+                    "Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"
+                })
+                location.place_locked_item(world.create_item(animal_friends[location.name]))
+    first_rooms: typing.Dict[int, Room] = dict()
+    if not door_shuffle:
+        for name in rooms:
+            room = rooms[name]
+            if room.room == 0:
+                if room.stage == 7:
+                    first_rooms[0x770200 + room.level - 1] = room
+                else:
+                    first_rooms[0x770000 + ((room.level - 1) * 6) + room.stage] = room
+            exits = dict()
+            for def_exit in room.default_exits:
+                target = f"{level_names[room.level]} {room.stage} - {def_exit['room']}"
+                access_rule = tuple(def_exit["access_rule"])
+                exits[target] = lambda state, rule=access_rule: state.has_all(rule, world.player)
+            room.add_exits(
+                exits.keys(),
+                exits
+            )
+            if any(["Complete" in location.name for location in room.locations]):
+                room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None}, KDL3Location)
+
+    for level in world.player_levels[world.player]:
+        for stage in range(6):
+            proper_stage = world.player_levels[world.player][level][stage]
+            level_regions[level].add_exits([first_rooms[proper_stage].name],
+                                           {first_rooms[proper_stage].name:
+                                            (lambda state: True) if world.multiworld.open_world[world.player] or
+                                            stage == 0 else lambda state, level=level, stage=stage: state.has(
+                                                    f"{LocationName.level_names_inverse[level]} "
+                                                    f"{f'{stage}'}"
+                                                    f" - Stage Completion", world.player)})
+        else:
+            level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 
 
 def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bool) -> dict:
@@ -169,16 +255,7 @@ def create_levels(world: World) -> None:
             level_shuffle == 2)
     else:
         world.player_levels[world.player] = default_levels.copy()
-    for level in levels:
-        levels[level].add_locations(generate_locations_from_stages(world.player_levels[world.player][level],
-                                                                   world.multiworld.consumables[world.player]),
-                                    KDL3Location)
-
-    for boss_flag, idx, level in zip(["Level 1 Boss", "Level 2 Boss",
-                                      "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
-                                     [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
-                                     [level1, level2, level3, level4, level5]):
-        level.add_locations({boss_flag: None, location_table[idx]: idx, }, KDL3Location)
+    generate_rooms(world, False, levels)
 
     level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
 

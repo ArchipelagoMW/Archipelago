@@ -19,11 +19,12 @@ import math
 import threading
 import base64
 from Main import __version__ as APVersion
-logger = logging.getLogger("Kirby's Dream Land 3")
 
+logger = logging.getLogger("Kirby's Dream Land 3")
 
 if APVersion == "0.4.2":
     import settings
+
 
     class KDL3Settings(settings.Group):
         class RomFile(settings.SNESRomPath):
@@ -147,6 +148,15 @@ class KDL3World(World):
         itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
         self.multiworld.itempool += itempool
 
+        for level in self.player_levels[self.player]:
+            for stage in range(0, 6):
+                self.multiworld.get_location(location_table[self.player_levels[self.player][level][stage]]
+                                             .replace("Complete", "Stage Completion"), self.player) \
+                    .place_locked_item(KDL3Item(
+                    f"{LocationName.level_names_inverse[level]}"
+                    f"{f' {stage + 1} ' if not self.multiworld.open_world[self.player] else ' '}- Stage Completion",
+                    ItemClassification.progression, None, self.player))
+
     set_rules = set_rules
 
     def generate_basic(self) -> None:
@@ -156,13 +166,15 @@ class KDL3World(World):
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
             self.multiworld.get_location(f"Level {level} Boss", self.player) \
-                .place_locked_item(KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
+                .place_locked_item(
+                KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
         self.boss_butch_bosses[self.player] = [False for _ in range(6)]
         if self.multiworld.allow_bb[self.player]:
             for i in range(6):
                 if self.multiworld.allow_bb[self.player] == 1:
-                    self.boss_butch_bosses[self.player][i] = self.multiworld.per_slot_randoms[self.player].choice([True, False])
+                    self.boss_butch_bosses[self.player][i] = self.multiworld.per_slot_randoms[self.player].choice(
+                        [True, False])
                 else:
                     self.boss_butch_bosses[self.player][i] = True
 
