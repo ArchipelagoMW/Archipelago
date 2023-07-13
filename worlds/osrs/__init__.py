@@ -1,7 +1,9 @@
-from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
+import typing
+
+from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance, CollectionState
 from worlds.AutoWorld import WebWorld, World
 
-from .Regions import all_regions
+from .Regions import all_regions, regions_by_name
 from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location_Items, \
     chunksanity_starting_chunks, QP_Items
 from .Locations import OSRSLocation, all_locations
@@ -56,7 +58,7 @@ class OSRSWorld(World):
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
         during generate_early or basic as well.
         """
-        name_to_region = {}
+        name_to_region: typing.Dict[str, Region] = {}
         # Gotta loop through once and make all the region objects
         for region_info in all_regions:
             region = Region(region_info.name, self.player, self.multiworld)
@@ -77,9 +79,30 @@ class OSRSWorld(World):
                 entrance.connect(connection_region)
                 region.exits.append(entrance)
             else:
-                # FIXME These dictionaries are backwards but there's a ton of them pls fix
-                invert_exits = dict((v, k) for k, v in region_info.exits.items())
-                region.add_exits(invert_exits, region_info.conditionGenerator(self.player))
+                exits = region_info.build_exits_dict()
+                exit_rules: typing.Dict[str, typing.Callable[[CollectionState], bool]] = {}
+
+                for connected_region in region_info.connects_to:
+                    default_access_rule = regions_by_name[connected_region].access_rule(self.player)
+                    # If there's extra rules, combine them with the region's global access rule
+                    if connected_region in region_info.extra_conditions(self.player):
+                        special_rule = region_info.extra_conditions(self.player)[connected_region]
+                        exit_rules[connected_region] = lambda state: (
+                                default_access_rule(state) and special_rule(state))
+                    else:
+                        # If there's no extra, the rule is whatever the target location's rule is
+                        exit_rules[connected_region] = default_access_rule
+                for resource_region in region_info.resources:
+                    # Resource nodes have no rules to access unless they're in extra conditions
+                    # TODO add skill requirements and brutal grind options
+                    if resource_region in region_info.extra_conditions(self.player):
+                        exit_rules[resource_region] = lambda state: (region_info.extra_conditions(self.player)[
+                            connected_region])
+                    else:
+                        # If there's no extra, the rule is whatever the target location's rule is
+                        exit_rules[resource_region] = lambda _: True
+
+                region.add_exits(exits, exit_rules)
 
     def create_items(self) -> None:
         for item in all_items:
