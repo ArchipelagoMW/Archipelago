@@ -51,7 +51,7 @@ item_table: List[ItemDict] = [
     {'name': "Magnificus Eye",
      'count': 1,
      'classification': ItemClassification.progression},
-    {'name': "Clover Plant",
+    {'name': "Oil Painting's Clover Plant",
      'count': 1,
      'classification': ItemClassification.useful},
     {'name': "Extra Candle",
@@ -130,6 +130,9 @@ item_table: List[ItemDict] = [
      'count': 1,
      'classification': ItemClassification.useful},
     {'name': "Salmon Card",
+     'count': 1,
+     'classification': ItemClassification.useful},
+    {'name': "Dock's Clover Plant",
      'count': 1,
      'classification': ItemClassification.useful},
 ]

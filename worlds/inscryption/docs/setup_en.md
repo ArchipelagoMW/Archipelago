@@ -51,7 +51,7 @@
 4. Open the fourth tab and fill the text boxes with the multiworld server information (if the server is hosted on the website, leave the host name as "archipelago.gg").
 5. Click the "connect" button. If successful, the status on the top-right should change to "connected". If not, a red error message should appear.
 6. Return to the main menu and start the game.
-7. Everything you've written in the text boxes are saved. There is no need to rewrite everything when you re-open the game if the port or anything else hasn't changed. Just select "continue" the next time and it will automatically connect you with the saved information.
+7. Everything you've written in the text boxes are saved. There is no need to rewrite anything when you re-open the game. Just select "continue" the next time and it will automatically connect you with the saved information.
 
 ## Troubleshooting
 ### There is no fourth tab in the settings.

@@ -103,7 +103,7 @@ location_table: List[LocDict] = [
      'region': "Act 2"},
     {'name': "Act 2 - Tower Chest 3",
      'region': "Act 2"},
-    {'name': "Act 2 - Tower Bath",
+    {'name': "Act 2 - Tentacle",
      'region': "Act 2"},
     {'name': "Act 2 - Factory Trash Can",
      'region': "Act 2"},
