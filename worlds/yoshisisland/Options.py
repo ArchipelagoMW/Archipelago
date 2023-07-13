@@ -104,18 +104,9 @@ class FinalBossBosses(Range):
     range_end = 11
     default = 0
 
-class BossShuffle(Choice):
-    """This will randomize which boss room each boss door connects to. Baby Bowser will only appear in 6-8, and no other boss can appear there.
-        Normal: All bosses will be in their normal level.
-        Shuffled: Bosses will be shuffled amongst each other, with each guranteed to appear once.
-        Randomized: Bosses will be shuffled, possibly duplicating bosses.
-        Singularity: All bosses will be replaced with the same boss."""
-    display_name = "Boss Randomization"
-    option_none = 0
-    option_shuffled = 1
-    option_randomized = 2
-    option_singularity = 3
-    default = 0
+class BossShuffle(Toggle):
+    """This whill shuffle which boss each boss door will lead to. Each boss can only appear once, and Baby Bowser is left alone."""
+    display_name = "Boss Shuffle"
 
 class YoshiColors(Choice):
     """Sets the Yoshi color for each level.
@@ -187,7 +178,7 @@ yoshi_options: Dict[str, Option] ={
     "softlock_prevention": SoftlockPrevention,
     "castle_open_condition": FinalLevelBosses,
     "castle_clear_condition": FinalBossBosses,
-    "boss_randomizer": BossShuffle,
+    "boss_shuffle": BossShuffle,
     "yoshi_colors": YoshiColors,
     "yoshi_singularity_color": SinguColor,
     "baby_mario_sound": BabySound,

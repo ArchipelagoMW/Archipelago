@@ -53,8 +53,8 @@ class YIWorld(World):
     bowser_bosses: int
     baby_mario_sfx: int
     leader_color: int
-    burt_boss: int
     boss_order: list
+    boss_burt: int
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -81,6 +81,19 @@ class YIWorld(World):
             slot_data[option_name] = option.value
 
         return slot_data
+
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        spoiler_handle.write(f"Burt The Bashful's Boss Door:      {self.boss_order[0]}\n")
+        spoiler_handle.write(f"Salvo The Slime's Boss Door:       {self.boss_order[1]}\n")
+        spoiler_handle.write(f"Bigger Boo's Boss Door:            {self.boss_order[2]}\n")
+        spoiler_handle.write(f"Roger The Ghost's Boss Door:       {self.boss_order[3]}\n")
+        spoiler_handle.write(f"Prince Froggy's Boss Door:         {self.boss_order[4]}\n")
+        spoiler_handle.write(f"Naval Piranha's Boss Door:         {self.boss_order[5]}\n")
+        spoiler_handle.write(f"Marching Milde's Boss Door:        {self.boss_order[6]}\n")
+        spoiler_handle.write(f"Hookbill The Koopa's Boss Door:    {self.boss_order[7]}\n")
+        spoiler_handle.write(f"Sluggy The Unshaven's Boss Door:   {self.boss_order[8]}\n")
+        spoiler_handle.write(f"Raphael The Raven's Boss Door:     {self.boss_order[9]}\n")
+        spoiler_handle.write(f"Tap-Tap The Red Nose's Boss Door:  {self.boss_order[10]}\n")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -283,7 +296,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     else:
         self.baby_mario_sfx = 0x44
 
-    boss_list = ["Burt The Bashful's Boss Room", "Salvo The Slime's Boss Room",
+    self.boss_list = ["Burt The Bashful's Boss Room", "Salvo The Slime's Boss Room",
                  "Bigger Boo's Boss Room", "Roger The Ghost's Boss Room",
                 "Prince Froggy's Boss Room", "Naval Piranha's Boss Room",
                 "Marching Milde's Boss Room", "Hookbill The Koopa's Boss Room",
@@ -292,7 +305,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
 
     self.boss_order = []
 
-    if world.boss_randomizer[player].value == 0:
+    if world.boss_shuffle[player].value == 0:
         self.boss_order.append("Burt The Bashful's Boss Room")
         self.boss_order.append("Salvo The Slime's Boss Room")
         self.boss_order.append("Bigger Boo's Boss Room")
@@ -304,80 +317,86 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         self.boss_order.append("Sluggy The Unshaven's Boss Room")
         self.boss_order.append("Raphael The Raven's Boss Room")
         self.boss_order.append("Tap-Tap The Red Nose's Boss Room")
-    elif world.boss_randomizer[player] == 1:
+    elif world.boss_shuffle[player] == 1:
         for i in range(11):
-            self.boss_order.append(world.random.shuffle(boss_list))
-    elif world.boss_shuffle[player] == 2:
-        self.burt_boss = world.random.choice(boss_list)
-        self.slime_boss = world.random.choice(boss_list)
-        self.boo_boss = world.random.choice(boss_list)
-        self.pot_boss = world.random.choice(boss_list)
-        self.frog_boss = world.random.choice(boss_list)
-        self.plant_boss = world.random.choice(boss_list)
-        self.milde_boss = world.random.choice(boss_list)
-        self.koopa_boss = world.random.choice(boss_list)
-        self.slug_boss = world.random.choice(boss_list)
-        self.raven_boss = world.random.choice(boss_list)
-        self.taptap_boss = world.random.choice(boss_list)
+            world.random.shuffle(self.boss_list)
+            self.boss_order = self.boss_list
 
+    self.burt_pointers = [0x3D, 0x05, 0x63, 0x00]
+    self.slime_pointers = [0x70, 0x04, 0x78, 0x00]
+    self.boo_pointers = [0x74, 0xBB, 0x7A, 0x00]
+    self.pot_pointers = [0xBE, 0x18, 0x4A, 0x00]
+    self.frog_pointers = [0xBF, 0x12, 0x62, 0x04]
+    self.plant_pointers = [0x7F, 0x0D, 0x42, 0x00]
+    self.milde_pointers = [0x82, 0x06, 0x64, 0x00]
+    self.koop_pointers = [0x86, 0x0D, 0x78, 0x00]
+    self.slug_pointers = [0x8A, 0x09, 0x7A, 0x00]
+    self.raph_points = [0xC4, 0x03, 0x4B, 0x05]
+    self.tap_pointers = [0xCC, 0x49, 0x64, 0x02]
 
-    boss_burt = [0x3D, 0x05, 0x63, 0x00],
-    boss_slime = [0x70, 0x04, 0x78, 0x00],
-    boss_boo = [0xCE, 0x02, 0x76, 0x00],
-    boss_pot = [0xBE, 0x18, 0x4A, 0x00],
-    boss_frog = [0xBF, 0x12, 0x62, 0x04],
-    boss_plant = [0x7F, 0x0D, 0x42, 0x00],
-    boss_milde = [0x82, 0x06, 0x64, 0x00],
-    boss_koop = [0x86, 0x0D, 0x78, 0x00],
-    boss_slug = [0x8A, 0x09, 0x7A, 0x00],
-    boss_raph = [0xC4, 0x03, 0x4B, 0x05],
-    boss_tap = [0xCC, 0x49, 0x64, 0x02]
+    pointer_dict = {
+        0: self.burt_pointers,
+        1: self.slime_pointers,
+        2: self.boo_pointers,
+        3: self.pot_pointers,
+        4: self.frog_pointers,
+        5: self.plant_pointers,
+        6: self.milde_pointers,
+        7: self.koop_pointers,
+        8: self.slug_pointers,
+        9: self.raph_points,
+        10: self.tap_pointers
+    }
 
+    boss_room_idlist = {
+        "Burt The Bashful's Boss Room": 0,
+        "Salvo The Slime's Boss Room": 1,
+        "Bigger Boo's Boss Room": 2,
+        "Roger The Ghost's Boss Room": 3,
+        "Prince Froggy's Boss Room": 4,
+        "Naval Piranha's Boss Room": 5,
+        "Marching Milde's Boss Room": 6,
+        "Hookbill The Koopa's Boss Room": 7,
+        "Sluggy The Unshaven's Boss Room": 8,
+        "Raphael The Raven's Boss Room": 9,
+        "Tap-Tap The Red Nose's Boss Room": 10,
+    }
 
-    self.boss_burt_data = []
-    self.boss_slime_data = []
-    self.boss_boo_data = []
-    self.boss_pot_data = []
-    self.boss_frog_data = []
-    self.boss_plant_data = []
-    self.boss_milde_data = []
-    self.boss_koop_data = []
-    self.boss_slug_data = []
-    self.boss_raph_data = []
-    self.boss_tap_data = []
 
     for i in range(4):
-        self.boss_burt_data.append(boss_burt[0])
+        self.boss_burt_data = (pointer_dict[self.boss_order.index("Burt The Bashful's Boss Room")])
 
     for i in range(4):
-        self.boss_slime_data.append(boss_slime[0])
+        self.boss_slime_data = (pointer_dict[self.boss_order.index("Salvo The Slime's Boss Room")])
 
     for i in range(4):
-        self.boss_boo_data.append(boss_boo)
+        self.boss_boo_data = (pointer_dict[self.boss_order.index("Bigger Boo's Boss Room")])
 
     for i in range(4):
-        self.boss_pot_data.append(boss_pot)
+        self.boss_pot_data = (pointer_dict[self.boss_order.index("Roger The Ghost's Boss Room")])
 
     for i in range(4):
-        self.boss_frog_data.append(boss_frog)
+        self.boss_frog_data = (pointer_dict[self.boss_order.index("Prince Froggy's Boss Room")])
 
     for i in range(4):
-        self.boss_plant_data.append(boss_plant)
+        self.boss_plant_data = (pointer_dict[self.boss_order.index("Naval Piranha's Boss Room")])
 
     for i in range(4):
-        self.boss_milde_data.append(boss_milde)
+        self.boss_milde_data = (pointer_dict[self.boss_order.index("Marching Milde's Boss Room")])
 
     for i in range(4):
-        self.boss_koop_data.append(boss_koop)
+        self.boss_koop_data = (pointer_dict[self.boss_order.index("Hookbill The Koopa's Boss Room")])
 
     for i in range(4):
-        self.boss_slug_data.append(boss_slug)
+        self.boss_slug_data = (pointer_dict[self.boss_order.index("Sluggy The Unshaven's Boss Room")])
 
     for i in range(4):
-        self.boss_raph_data.append(boss_raph)
+        self.boss_raph_data = (pointer_dict[self.boss_order.index("Raphael The Raven's Boss Room")])
 
     for i in range(4):
-        self.boss_tap_data.append(boss_tap)
+        self.boss_tap_data = (pointer_dict[self.boss_order.index("Tap-Tap The Red Nose's Boss Room")])
+
+    self.boss_room_id = [boss_room_idlist[roomnum] for roomnum in self.boss_order]
 
 
 
