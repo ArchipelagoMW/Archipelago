@@ -271,17 +271,14 @@ class PokemonRedBlueWorld(World):
             if not self.multiworld.door_shuffle[self.player] not in ("off", "simple"):
                 badges = [item for item in progitempool if "Badge" in item.name and item.player == self.player]
                 for badge in badges:
+                    self.multiworld.itempool.remove(badge)
                     progitempool.remove(badge)
                 for _ in range(5):
-                    badgelocs = []
-                    for loc in [self.multiworld.get_location(loc, self.player) for loc in [
-                            "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
-                            "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
-                            "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
-                            "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]]:
-                        if loc in fill_locations:
-                            fill_locations.remove(loc)
-                            badgelocs.append(loc)
+                    badgelocs = [self.multiworld.get_location(loc, self.player) for loc in [
+                        "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
+                        "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
+                        "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                        "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]]
                     state = self.multiworld.get_all_state(False)
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
@@ -294,7 +291,11 @@ class PokemonRedBlueWorld(World):
                                 badges.append(location.item)
                                 location.item = None
                         continue
-                    break
+                    else:
+                        for location in badgelocs:
+                            if location.item:
+                                fill_locations.remove(location)
+                        break
                 else:
                     raise FillError(f"Failed to place badges for player {self.player}")
 
