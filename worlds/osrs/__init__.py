@@ -32,7 +32,7 @@ class OSRSWorld(World):
     topology_present = True
     web = OSRSWeb()
 
-    data_version = 1
+    data_version = 0
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
