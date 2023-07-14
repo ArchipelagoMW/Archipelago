@@ -35,15 +35,6 @@ class TestHard(KH2TestBase):
         self.testAllStateCanReachEverything()
 
 
-class TestNothing(KH2TestBase):
-    options = {
-        "FightLogic": 3
-    }
-
-    def testEverything(self):
-        self.collect_all_but([ItemName.Victory])
-        self.assertBeatable(True)
-        self.testAllStateCanReachEverything()
 
 
 

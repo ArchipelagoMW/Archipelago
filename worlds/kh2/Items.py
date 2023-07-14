@@ -21,7 +21,7 @@ class ItemData(typing.NamedTuple):
 
 # 0x130000
 Reports_Table = {
-    ItemName.SecretAnsemsReport1:  ItemData(1, 26, 0x36C4, 6),
+    ItemName.SecretAnsemsReport1:  ItemData(1, 226, 0x36C4, 6),
     ItemName.SecretAnsemsReport2:  ItemData(1, 227, 0x36C4, 7),
     ItemName.SecretAnsemsReport3:  ItemData(1, 228, 0x36C5, 0),
     ItemName.SecretAnsemsReport4:  ItemData(1, 229, 0x36C5, 1),
@@ -251,7 +251,7 @@ SupportAbility_Table = {
     ItemName.MPHastega:        ItemData(1, 422, 0x1A6, 0, True),
     ItemName.Defender:         ItemData(2, 414, 0x19E, 0, True),
     ItemName.DamageControl:    ItemData(2, 542, 0x21E, 0, True),
-    ItemName.NoExperience:     ItemData(1, 404, 0x194, 0, True),
+    ItemName.NoExperience:     ItemData(0, 404, 0x194, 0, True), # quantity changed to 0 because the player starts with one always.
     ItemName.LightDarkness:    ItemData(1, 541, 0x21D, 0, True),
     ItemName.MagicLock:        ItemData(1, 403, 0x193, 0, True),
     ItemName.LeafBracer:       ItemData(1, 402, 0x192, 0, True),
@@ -301,7 +301,7 @@ DonaldAbility_Table = {
     ItemName.DonaldCure:          ItemData(1, 168, 0xA8, 0, True),
     ItemName.Fantasia:            ItemData(1, 199, 0xC7, 0, True),
     ItemName.FlareForce:          ItemData(1, 200, 0xC8, 0, True),
-    ItemName.DonaldMPRage:        ItemData(3, 412, 0x19C, 0, True),
+    ItemName.DonaldMPRage:        ItemData(1, 412, 0x19C, 0, True),  # originally 3 but swapped to 1 because crit checks
     ItemName.DonaldJackpot:       ItemData(1, 406, 0x196, 0, True),
     ItemName.DonaldLuckyLucky:    ItemData(3, 407, 0x197, 0, True),
     ItemName.DonaldFireBoost:     ItemData(2, 408, 0x198, 0, True),
@@ -317,6 +317,7 @@ DonaldAbility_Table = {
     ItemName.DonaldDamageControl: ItemData(2, 542, 0x21E, 0, True),
     ItemName.DonaldDraw:          ItemData(1, 405, 0x195, 0, True),
 }
+
 GoofyAbility_Table = {
     ItemName.GoofyTornado:       ItemData(1, 423, 0x1A7, 0, True),
     ItemName.GoofyTurbo:         ItemData(1, 425, 0x1A9, 0, True),
@@ -329,7 +330,7 @@ GoofyAbility_Table = {
     ItemName.GoofyItemBoost:     ItemData(2, 411, 0x19B, 0, True),
     ItemName.GoofyMPRage:        ItemData(2, 412, 0x19C, 0, True),
     ItemName.GoofyDefender:      ItemData(2, 414, 0x19E, 0, True),
-    ItemName.GoofyDamageControl: ItemData(3, 542, 0x21E, 0, True),
+    ItemName.GoofyDamageControl: ItemData(1, 542, 0x21E, 0, True),  # originally 3 but swapped to 1 because crit checks
     ItemName.GoofyAutoLimit:     ItemData(1, 417, 0x1A1, 0, True),
     ItemName.GoofySecondChance:  ItemData(1, 415, 0x19F, 0, True),
     ItemName.GoofyOnceMore:      ItemData(1, 416, 0x1A0, 0, True),
@@ -501,12 +502,10 @@ progression_set = {
             ItemName.ComboMaster,
             ItemName.ComboPlus,
             ItemName.AirComboPlus,
-            ItemName.ReactionBoost,
             ItemName.FinishingPlus,
             ItemName.NegativeCombo,
             ItemName.BerserkCharge,
             ItemName.FormBoost,
-            ItemName.DriveConverter,
             ItemName.LightDarkness,
             ItemName.OnceMore,
             ItemName.SecondChance,
@@ -613,7 +612,7 @@ exclusion_item_table = {
         ItemName.ItemSlotUp,
     },
     "Ability": {
-        item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in keys
+        item_name for keys in [SupportAbility_Table.keys(), ActionAbility_Table.keys(), Movement_Table.keys()] for item_name in keys
     }
 }
 

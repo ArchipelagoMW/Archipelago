@@ -1,6 +1,7 @@
 from BaseClasses import Tutorial, ItemClassification
 import logging
 
+from Fill import fill_restrictive
 from .Rules import *
 from .Items import *
 from .Locations import *
@@ -32,6 +33,9 @@ class KH2World(World):
     game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
     data_version = 1
+    # TODO: remove this before release
+    topology_present = True
+
     required_client_version = (0, 4, 0)
     option_definitions = KH2_Options
     item_name_to_id = {item: item_id
@@ -42,6 +46,12 @@ class KH2World(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
+        self.keyblade_ability_pool = None
+        self.goofy_get_bonus_abilities = None
+        self.goofy_weapon_abilities = None
+        self.donald_get_bonus_abilities = None
+        self.donald_weapon_abilities = None
+
         self.valid_abilities = None
         self.visitlocking_dict = None
         self.plando_locations = None
@@ -53,8 +63,7 @@ class KH2World(World):
         self.RandomSuperBoss = list()
         self.filler_items = list()
         self.item_quantity_dict = {}
-        self.donald_ability_pool = list()
-        self.goofy_ability_pool = list()
+
         self.sora_keyblade_ability_pool = list()
         self.keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
         self.keyblade_slot_copy.remove(LocationName.KingdomKeySlot)
@@ -163,7 +172,8 @@ class KH2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
-        # Item Quantity Map
+        # Item: Quantity Map
+        # Example. Quick Run: 4
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
@@ -197,10 +207,10 @@ class KH2World(World):
                 self.RandomSuperBoss.remove(randomBoss)
                 self.total_locations -= 1
 
-        self.donald_fill()
-        self.goofy_fill()
-        self.keyblade_fill()
-
+        self.donald_gen_early()
+        self.goofy_gen_early()
+        self.keyblade_gen_early()
+        # self.keyblade_fill()
         if self.multiworld.FinalXemnas[self.player]:
             self.plando_locations[LocationName.FinalXemnas] = ItemName.Victory
         else:
@@ -212,13 +222,14 @@ class KH2World(World):
 
         self.level_subtraction()
 
-        # subtraction from final xemnas
-        self.total_locations -= 2
-
     def pre_fill(self):
         """
-        Plandoing Items to their locations.
+        Plandoing Events and Fill_Restrictive for donald,goofy and sora
         """
+        self.donald_pre_fill()
+        self.goofy_pre_fill()
+        self.keyblade_pre_fill()
+
         self.item_name_to_id.update({event_name: None for event_name in Events_Table})
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
@@ -237,9 +248,8 @@ class KH2World(World):
         """
         universal_logic = Rules.KH2Rules(self)
         form_logic = Rules.KH2FormRules(self)
-        if self.multiworld.FightLogic[self.player].value != 3:
-            fight_rules = Rules.KH2FightRules(self)
-            fight_rules.set_kh2_fight_rules()
+        fight_rules = Rules.KH2FightRules(self)
+        fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
 
@@ -249,113 +259,89 @@ class KH2World(World):
         """
         patch_kh2(self, output_directory)
 
-    def donald_fill(self):
+    def donald_gen_early(self):
+        random_prog_ability = self.multiworld.per_slot_randoms[self.player].choice([ItemName.Fantasia, ItemName.FlareForce])
+        donald_master_ability = [donald_ability for donald_ability in DonaldAbility_Table.keys() for _ in range(self.item_quantity_dict[donald_ability]) if donald_ability != random_prog_ability]
+        self.donald_weapon_abilities = []
+        self.donald_get_bonus_abilities = []
+        # fill goofy weapons first
+        for _ in range(15):
+            random_ability = self.multiworld.per_slot_randoms[self.player].choice(donald_master_ability)
+            donald_master_ability.remove(random_ability)
+            self.donald_weapon_abilities += [self.create_item(random_ability)]
+            self.item_quantity_dict[random_ability] -= 1
+
+        if self.multiworld.PartyGetBonusLock[self.player]:
+            self.total_locations -= 31
+            self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
+            for item_name in donald_master_ability:
+                self.donald_get_bonus_abilities += [self.create_item(item_name)]
+                self.item_quantity_dict[item_name] -= 1
+        else:
+            self.total_locations -= 16
+
+    def goofy_gen_early(self):
+        random_prog_ability = self.multiworld.per_slot_randoms[self.player].choice([ItemName.Teamwork, ItemName.TornadoFusion])
+        goofy_master_ability = [goofy_ability for goofy_ability in GoofyAbility_Table.keys() for _ in range(self.item_quantity_dict[goofy_ability]) if goofy_ability != random_prog_ability]
+        self.goofy_weapon_abilities = []
+        self.goofy_get_bonus_abilities = []
+        # fill goofy weapons first
+        for _ in range(15):
+            random_ability = self.multiworld.per_slot_randoms[self.player].choice(goofy_master_ability)
+            goofy_master_ability.remove(random_ability)
+            self.goofy_weapon_abilities += [self.create_item(random_ability)]
+            self.item_quantity_dict[random_ability] -= 1
+
+        if self.multiworld.PartyGetBonusLock[self.player]:
+            self.total_locations -= 32
+            self.goofy_get_bonus_abilities += [self.create_item(random_prog_ability)]
+            for item_name in goofy_master_ability:
+                self.goofy_get_bonus_abilities += [self.create_item(item_name)]
+                self.item_quantity_dict[item_name] -= 1
+        else:
+            self.total_locations -= 16
+
+        if len(self.goofy_weapon_abilities) <= 3:
+            raise Exception("uh oh")
+
+    def keyblade_gen_early(self):
+        self.keyblade_ability_pool = [self.create_item(ability) for ability in SupportAbility_Table.keys() if ability not in progression_set]
+        self.total_locations -= 26
+
+    def goofy_pre_fill(self):
         """
         Removes donald locations from the location pool maps random donald items to be plandoded.
         """
-        for item in DonaldAbility_Table:
-            data = self.item_quantity_dict[item]
-            for _ in range(data):
-                self.donald_ability_pool.append(item)
-            self.item_quantity_dict[item] = 0
-            # 32 is the amount of donald abilities
-        while len(self.donald_ability_pool) < 32:
-            self.donald_ability_pool.append(
-                    self.multiworld.per_slot_randoms[self.player].choice(self.donald_ability_pool))
-            # Placing Donald Abilities on donald locations
-        for donaldLocation in Locations.Donald_Checks.keys():
-            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.donald_ability_pool)
-            self.plando_locations[donaldLocation] = random_ability
-            self.total_locations -= 1
-            self.donald_ability_pool.remove(random_ability)
+        goofy_weapon_location_list = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml == "Keyblade"]
 
-    def goofy_fill(self):
-        """
-        Removes donald locations from the location pool maps random donald items to be plandoded.
-        """
-        for item in GoofyAbility_Table.keys():
-            data = self.item_quantity_dict[item]
-            for _ in range(data):
-                self.goofy_ability_pool.append(item)
-            self.item_quantity_dict[item] = 0
-            # 33 is the amount of goofy abilities
-        while len(self.goofy_ability_pool) < 33:
-            self.goofy_ability_pool.append(
-                    self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool))
-        # Placing Goofy Abilities on goofy locations
-        for goofyLocation in Locations.Goofy_Checks.keys():
-            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool)
-            self.plando_locations[goofyLocation] = random_ability
-            self.total_locations -= 1
-            self.goofy_ability_pool.remove(random_ability)
+        # take one of the 2 out
+        # randomize the list with only
+        state = self.multiworld.get_all_state(False)
+        fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities, True, True, allow_excluded=True)
+        if self.multiworld.PartyGetBonusLock:
+            goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
+            state2 = self.multiworld.get_all_state(False)
+            fill_restrictive(self.multiworld, state2, goofy_get_bonus_location_pool, self.goofy_get_bonus_abilities, True, True)
 
-    def keyblade_fill(self):
+    def donald_pre_fill(self):
+        donald_weapon_location_list = [self.multiworld.get_location(location, self.player) for location in Donald_Checks.keys() if Donald_Checks[location].yml == "Keyblade"]
+
+        # take one of the 2 out
+        # randomize the list with only
+        state = self.multiworld.get_all_state(False)
+        fill_restrictive(self.multiworld, state, donald_weapon_location_list, self.donald_weapon_abilities, allow_excluded=True)
+        if self.multiworld.PartyGetBonusLock:
+            donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Donald_Checks.keys() if Donald_Checks[location].yml != "Keyblade"]
+            state2 = self.multiworld.get_all_state(False)
+            fill_restrictive(self.multiworld, state2, donald_get_bonus_location_pool, self.donald_get_bonus_abilities, True, True)
+
+    def keyblade_pre_fill(self):
         """
         Fills keyblade slots with abilities determined on player's setting
         """
-        if self.multiworld.KeybladeAbilities[self.player] == "support":
-            self.sora_keyblade_ability_pool = {
-                **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
-                **{
-                    ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
-                    ItemName.FinishingPlus: 1
-                }
-            }
-
-        elif self.multiworld.KeybladeAbilities[self.player] == "action":
-            self.sora_keyblade_ability_pool = {item: data for item, data in self.item_quantity_dict.items() if
-                                               item in ActionAbility_Table}
-            # there are too little action abilities so 2 random support abilities are placed
-            for _ in range(3):
-                randomSupportAbility = self.multiworld.per_slot_randoms[self.player].choice(
-                        list(SupportAbility_Table.keys()))
-                while randomSupportAbility in self.sora_keyblade_ability_pool:
-                    randomSupportAbility = self.multiworld.per_slot_randoms[self.player].choice(
-                            list(SupportAbility_Table.keys()))
-                self.sora_keyblade_ability_pool[randomSupportAbility] = 1
-        else:
-            # both action and support on keyblades.
-            # TODO: make option to just exclude scom
-            self.sora_keyblade_ability_pool = {
-                **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
-                **{item: data for item, data in self.item_quantity_dict.items() if item in ActionAbility_Table},
-                **{
-                    ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
-                    ItemName.FinishingPlus: 1
-                }
-            }
-
-        for ability in self.multiworld.BlacklistKeyblade[self.player].value:
-            if ability in self.sora_keyblade_ability_pool:
-                self.sora_keyblade_ability_pool.pop(ability)
-
-        # magic number for amount of keyblades
-        if sum(self.sora_keyblade_ability_pool.values()) < 28:
-            raise Exception(
-                    f"{self.multiworld.get_file_safe_player_name(self.player)} has too little Keyblade Abilities in the Keyblade Pool")
-
-        self.valid_abilities = list(self.sora_keyblade_ability_pool.keys())
-        #  Kingdom Key cannot have No Experience so plandoed here instead of checking 26 times if its kingdom key
-        random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.valid_abilities)
-        while random_ability == ItemName.NoExperience:
-            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.valid_abilities)
-        self.plando_locations[LocationName.KingdomKeySlot] = random_ability
-        self.item_quantity_dict[random_ability] -= 1
-        self.sora_keyblade_ability_pool[random_ability] -= 1
-        if self.sora_keyblade_ability_pool[random_ability] == 0:
-            self.valid_abilities.remove(random_ability)
-            self.sora_keyblade_ability_pool.pop(random_ability)
-
-        # plando keyblades because they can only have abilities
-        for keyblade in self.keyblade_slot_copy:
-            random_ability = self.multiworld.per_slot_randoms[self.player].choice(self.valid_abilities)
-            self.plando_locations[keyblade] = random_ability
-            self.item_quantity_dict[random_ability] -= 1
-            self.sora_keyblade_ability_pool[random_ability] -= 1
-            if self.sora_keyblade_ability_pool[random_ability] == 0:
-                self.valid_abilities.remove(random_ability)
-                self.sora_keyblade_ability_pool.pop(random_ability)
-            self.total_locations -= 1
+        keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
+        state = self.multiworld.get_all_state(False)
+        fill_restrictive(self.multiworld, state, keyblade_locations, self.keyblade_ability_pool, True, True)
 
     def starting_invo_verify(self):
         """

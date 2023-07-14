@@ -13,10 +13,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.GardenofAssemblageMap,
             LocationName.GoALostIllusion,
             LocationName.ProofofNonexistence,
-            LocationName.DonaldStarting1,
-            LocationName.DonaldStarting2,
-            LocationName.GoofyStarting1,
-            LocationName.GoofyStarting2],
+            # LocationName.DonaldStarting1,
+            # LocationName.DonaldStarting2,
+            # LocationName.GoofyStarting1,
+            # LocationName.GoofyStarting2
+        ],
         RegionName.LoD:                   [
             LocationName.BambooGroveDarkShard,
             LocationName.BambooGroveEther,

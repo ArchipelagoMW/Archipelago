@@ -749,8 +749,8 @@ Donald_Checks = {
     LocationName.WisdomWand:             LocationData(92, "Keyblade", "Donald"),
     LocationName.Centurion2:             LocationData(151, "Keyblade", "Donald"),
     LocationName.DonaldAbuEscort:        LocationData(42, "Get Bonus", "Donald", 2),
-    LocationName.DonaldStarting1:        LocationData(2, "Critical", "Donald"),
-    LocationName.DonaldStarting2:        LocationData(2, "Critical", "Donald"),
+   #LocationName.DonaldStarting1:        LocationData(2, "Critical", "Donald"),
+   #LocationName.DonaldStarting2:        LocationData(2, "Critical", "Donald"),
 }
 
 Goofy_Checks = {
@@ -786,8 +786,8 @@ Goofy_Checks = {
     LocationName.OgreShield:              LocationData(102, "Keyblade", "Goofy"),
     LocationName.SaveTheKing2:            LocationData(147, "Keyblade", "Goofy"),
     LocationName.UltimateMushroom:        LocationData(163, "Keyblade", "Goofy"),
-    LocationName.GoofyStarting1:          LocationData(3, "Critical", "Goofy"),
-    LocationName.GoofyStarting2:          LocationData(3, "Critical", "Goofy"),
+    #LocationName.GoofyStarting1:          LocationData(3, "Critical", "Goofy"),
+    #LocationName.GoofyStarting2:          LocationData(3, "Critical", "Goofy"),
 }
 
 Atlantica_Checks = {

@@ -2,7 +2,7 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, CollectionState
 from .logic import *
-from .Items import exclusion_item_table
+from .Items import exclusion_item_table, visit_locking_dict
 from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
 from ..generic.Rules import add_rule, forbid_items, set_rule
@@ -100,6 +100,17 @@ class KH2Rules:
             RegionName.Ha4:                lambda state: self.hundred_acre_unlocked(state, 3),
             RegionName.Ha5:                lambda state: self.hundred_acre_unlocked(state, 4),
             RegionName.Ha6:                lambda state: self.hundred_acre_unlocked(state, 5),
+
+            RegionName.LevelsVS1:          lambda state: self.level_locking_unlock(state, 1),
+            RegionName.LevelsVS3:          lambda state: self.level_locking_unlock(state, 3),
+            RegionName.LevelsVS6:          lambda state: self.level_locking_unlock(state, 6),
+            RegionName.LevelsVS9:          lambda state: self.level_locking_unlock(state, 9),
+            RegionName.LevelsVS12:         lambda state: self.level_locking_unlock(state, 12),
+            RegionName.LevelsVS15:         lambda state: self.level_locking_unlock(state, 15),
+            RegionName.LevelsVS18:         lambda state: self.level_locking_unlock(state, 18),
+            RegionName.LevelsVS21:         lambda state: self.level_locking_unlock(state, 21),
+            RegionName.LevelsVS24:         lambda state: self.level_locking_unlock(state, 24),
+            RegionName.LevelsVS26:         lambda state: self.level_locking_unlock(state, 26),
         }
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
@@ -203,6 +214,9 @@ class KH2Rules:
         }
         return state.has_any(multi_form_region_access, self.player)
 
+    def level_locking_unlock(self, state: CollectionState, amount):
+        return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
+
     def set_kh2_rules(self) -> None:
         world = self.world.multiworld
         player = self.player
@@ -218,7 +232,8 @@ class KH2Rules:
 
         #  Forbid Abilities on popups due to game limitations
         for location in list(popups_set):
-            forbid_items(world.get_location(location, player), exclusion_item_table["Ability"])
+            # location = world.get_location(location, player)
+            # forbid_items(location, exclusion_item_table["Ability"])
             forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
         for location in STT_Checks:
@@ -629,7 +644,7 @@ class KH2FightRules(KH2Rules):
         return future_pete_rules[self.fight_logic]
 
     def get_data_marluxia_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,final 7,firaga,refletera,donald limit, guard
+        # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
         # normal:one gap closer,final 5,fira,reflect, donald limit,guard
         # hard:defensive tool,gap closer
         easy_data_marluxia_tools = {

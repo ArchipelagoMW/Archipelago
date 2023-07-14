@@ -114,18 +114,19 @@ class Visitlocking(Choice):
 
 class FightLogic(Choice):
     """
-    The level of logic to use when determining what fights in your world are beatable.
-    Easy: Requires the notable tools when you reach the boss in vanilla.
-    Normal: Requires some of the notable tools when you reach the boss in vanilla.
-    Hard: Requires the minimal tools for the archipelago developer to beat the fight.
-    None: Fights don't require any logic and assumed always beatable.
+    The level of logic to use when determining what fights in each KH2 world are beatable.
+
+    Easy: For Players not very comfortable doing things without a lot of tools.
+
+    Normal: For Players somewhat comfortable doing fights with some of the tools.
+
+    Hard: For Players comfortable doing fights with almost no tools.
     """
     display_name = "Fight Logic"
     option_easy = 0
     option_normal = 1
     option_hard = 2
-    option_none = 3
-    default = 0
+    default = 1
 
 
 class FinalFormLogic(Choice):
@@ -172,7 +173,7 @@ class Cups(Choice):
     option_no_cups = 0
     option_cups = 1
     option_cups_and_hades_paradox = 2
-    default = 2
+    default = 1
 
 
 class LevelDepth(Choice):
@@ -194,30 +195,15 @@ class LevelDepth(Choice):
     default = 0
 
 
+class PartyGetBonusLock(Toggle):
+    """Toggles if Donald and Goofy's Get Bonuses locations have to be their own abilities"""
+    default = True
+
+
 class PromiseCharm(Toggle):
     """Add Promise Charm to the Pool"""
     display_name = "Promise Charm"
     default = False
-
-
-class KeybladeAbilities(Choice):
-    """
-    Action: Action Abilities in the Keyblade Slot Pool.
-
-    Support: Support Abilities in the Keyblade Slot Pool.
-
-    Both: Action and Support Abilities in the Keyblade Slot Pool."""
-    display_name = "Keyblade Abilities"
-    option_support = 0
-    option_action = 1
-    option_both = 2
-    default = 0
-
-
-class BlacklistKeyblade(OptionSet):
-    """Black List these Abilities on Keyblades"""
-    display_name = "Blacklist Keyblade Abilities"
-    valid_keys = set(SupportAbility_Table.keys()).union(ActionAbility_Table.keys())
 
 
 class Goal(Choice):
@@ -304,11 +290,10 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "FightLogic":             FightLogic,
     "FinalFormLogic":         FinalFormLogic,
     "AutoFormLogic":          AutoFormLogic,
+    "PartyGetBonusLock":      PartyGetBonusLock,
     "Visitlocking":           Visitlocking,
     "RandomVisitLockingItem": RandomVisitLockingItem,
     "SuperBosses":            SuperBosses,
-    "KeybladeAbilities":      KeybladeAbilities,
-    "BlacklistKeyblade":      BlacklistKeyblade,
     "Cups":                   Cups,
 
 }
