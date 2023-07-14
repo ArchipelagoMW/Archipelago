@@ -65,7 +65,7 @@ def assert_cropsanity_same_number_items_and_locations(tester: SVTestBase, multiw
     all_location_names = set(get_all_location_names(multiworld))
     all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups}
     all_cropsanity_location_names = {location_name for location_name in all_location_names if LocationTags.CROPSANITY in location_table[location_name].tags}
-    tester.assertEquals(len(all_cropsanity_item_names), len(all_cropsanity_location_names))
+    tester.assertEqual(len(all_cropsanity_item_names), len(all_cropsanity_location_names))
 
 
 def assert_all_rarecrows_exist(tester: SVTestBase, multiworld: MultiWorld):
