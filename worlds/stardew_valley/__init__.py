@@ -65,9 +65,10 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: Dict[str, Bundle]
     randomized_entrances: Dict[str, str]
-    all_progression_items: Set[str] = set()
+    all_progression_items: Set[str]
 
     def generate_early(self):
+        self.all_progression_items = set()
         self.options = fetch_options(self.multiworld, self.player)
         self.force_change_options_if_incompatible()
 

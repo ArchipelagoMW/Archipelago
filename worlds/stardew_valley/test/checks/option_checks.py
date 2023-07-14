@@ -33,7 +33,7 @@ def assert_is_setting(tester: SVTestBase, multiworld: MultiWorld, setting_name: 
     if not stardew_world:
         return False
     current_value = stardew_world.options[setting_name]
-    tester.assertEquals(current_value, setting_value)
+    tester.assertEqual(current_value, setting_value)
 
 
 def assert_can_reach_island(tester: SVTestBase, multiworld: MultiWorld):

@@ -41,6 +41,7 @@ def generate_random_world_options(world_id: int) -> Dict[str, int]:
         world_options[option.internal_name] = chosen_option_value
     return world_options
 
+
 def get_number_log_steps(number_worlds: int) -> int:
     if number_worlds <= 10:
         return 2

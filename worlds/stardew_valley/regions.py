@@ -473,10 +473,9 @@ def randomize_connections(random: Random, world_options: StardewOptions, regions
             randomized_data_for_mod[connection.name] = connection.name
             randomized_data_for_mod[connection.reverse] = connection.reverse
         return final_connections, randomized_data_for_mod
-    exclude_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
-    if exclude_island:
-        connections_to_randomize = [connection for connection in connections_to_randomize if
-                                    RandomizationFlag.GINGER_ISLAND not in connection.flag]
+
+    connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
+
     random.shuffle(connections_to_randomize)
     destination_pool = list(connections_to_randomize)
     random.shuffle(destination_pool)
@@ -489,6 +488,17 @@ def randomize_connections(random: Random, world_options: StardewOptions, regions
     randomized_data_for_mod = create_data_for_mod(randomized_connections, connections_to_randomize)
 
     return randomized_connections_for_generation, randomized_data_for_mod
+
+
+def remove_excluded_entrances(connections_to_randomize, world_options):
+    exclude_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+    exclude_sewers = world_options[options.Museumsanity] == options.Museumsanity.option_none
+    if exclude_island:
+        connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
+    if exclude_sewers:
+        connections_to_randomize = [connection for connection in connections_to_randomize if Region.sewer not in connection.name or Region.sewer not in connection.reverse]
+
+    return connections_to_randomize
 
 
 def exclude_island_if_necessary(connections_to_randomize: List[ConnectionData], world_options) -> List[ConnectionData]:
