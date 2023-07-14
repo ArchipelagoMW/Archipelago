@@ -28,7 +28,7 @@ def set_randomizer_locs(cs: CollectionState, p: int, zz_r: Randomizer) -> int:
             if isinstance(z_loc.item, ZillionItem) and z_loc.item.player == p \
             else zz_empty
         zz_r.locations[zz_name].item = zz_item
-        _hash += hash(zz_name) ^ hash(zz_item)
+        _hash += (hash(zz_name) * (z_loc.zz_loc.req.gun + 2)) ^ hash(zz_item)
     return _hash
 
 
@@ -42,6 +42,7 @@ def item_counts(cs: CollectionState, p: int) -> Tuple[Tuple[str, int], ...]:
 
 
 LogicCacheType = Dict[int, Tuple[_Counter[Tuple[str, int]], FrozenSet[Location]]]
+""" { hash: (cs.prog_items, accessible_locations) } """
 
 
 def cs_to_zz_locs(cs: CollectionState, p: int, zz_r: Randomizer, id_to_zz_item: Dict[int, Item]) -> FrozenSet[Location]:

@@ -27,20 +27,18 @@ class WitnessRegions:
         )
 
     def connect(self, world: MultiWorld, player: int, source: str, target: str, player_logic: WitnessPlayerLogic,
-                panel_hex_to_solve_set=frozenset({frozenset()})):
+                panel_hex_to_solve_set=frozenset({frozenset()}), backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
         source_region = world.get_region(source, player)
         target_region = world.get_region(target, player)
 
-        #print(source_region)
-        #print(target_region)
-        #print("---")
+        backwards = " Backwards" if backwards else ""
 
         connection = Entrance(
             player,
-            source + " to " + target,
+            source + " to " + target + backwards,
             source_region
         )
 
@@ -92,10 +90,18 @@ class WitnessRegions:
                     self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue
 
+                backwards_connections = set()
+
                 for subset in connection[1]:
                     if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
                         if all({reference_logic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
-                            self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
+                            backwards_connections.add(subset)
+
+                if backwards_connections:
+                    self.connect(
+                        world, player, connection[0], region_name, player_logic,
+                        frozenset(backwards_connections), True
+                    )
 
                 self.connect(world, player, region_name, connection[0], player_logic, connection[1])
 

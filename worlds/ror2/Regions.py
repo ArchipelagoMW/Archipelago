@@ -33,7 +33,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Sulfur Pools":                         RoRRegionData([], ["OrderedStage_3"])
     }
     other_regions: Dict[str, RoRRegionData] = {
-        "Commencement":                         RoRRegionData(None, ["Victory"]),
+        "Commencement":                         RoRRegionData(None, ["Victory", "Petrichor V"]),
         "OrderedStage_5":                       RoRRegionData(None, ["Hidden Realm: A Moment, Fractured", "Commencement"]),
         "OrderedStage_1":                       RoRRegionData(None, ["Hidden Realm: Bazaar Between Time",
                                                 "Hidden Realm: Gilded Coast", "Abandoned Aqueduct", "Wetland Aspect"]),
@@ -50,8 +50,8 @@ def create_regions(multiworld: MultiWorld, player: int):
         "Hidden Realm: Gilded Coast":           RoRRegionData(None, None)
     }
     dlc_other_regions: Dict[str, RoRRegionData] = {
-        "The Planetarium": RoRRegionData(None, ["Victory"]),
-        "Void Locus": RoRRegionData(None, ["The Planetarium"])
+        "The Planetarium":                      RoRRegionData(None, ["Victory"]),
+        "Void Locus":                           RoRRegionData(None, ["The Planetarium"])
     }
     # Totals of each item
     chests = int(multiworld.chests_per_stage[player])
@@ -90,9 +90,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     # DLC Locations
     if multiworld.dlc_sotv[player]:
         non_dlc_regions["Menu"].region_exits.append("Siphoned Forest")
-        other_regions["OrderedStage_2"].region_exits.append("Aphelian Sanctuary")
-        other_regions["OrderedStage_3"].region_exits.append("Sulfur Pools")
-        other_regions["Commencement"].region_exits.append("The Planetarium")
+        other_regions["OrderedStage_1"].region_exits.append("Aphelian Sanctuary")
+        other_regions["OrderedStage_2"].region_exits.append("Sulfur Pools")
         other_regions["Void Fields"].region_exits.append("Void Locus")
         regions_pool: Dict = {**all_location_regions, **other_regions, **dlc_other_regions}
 

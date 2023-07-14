@@ -77,49 +77,34 @@ def read_apmc_file(apmc_file):
         return json.loads(b64decode(f.read()))
 
 
-def update_mod(forge_dir, minecraft_version: str, get_prereleases=False):
+def update_mod(forge_dir, url: str):
     """Check mod version, download new mod from GitHub releases page if needed. """
     ap_randomizer = find_ap_randomizer_jar(forge_dir)
-
-    client_releases_endpoint = "https://api.github.com/repos/KonoTyran/Minecraft_AP_Randomizer/releases"
-    resp = requests.get(client_releases_endpoint)
-    if resp.status_code == 200:  # OK
-        try:
-            latest_release = next(filter(lambda release: (not release['prerelease'] or get_prereleases) and
-                (minecraft_version in release['assets'][0]['name']),
-                resp.json()))
-            if ap_randomizer != latest_release['assets'][0]['name']:
-                logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
-                             f"{latest_release['assets'][0]['name']}")
-                if ap_randomizer is not None:
-                    logging.info(f"Your current mod is {ap_randomizer}.")
-                else:
-                    logging.info(f"You do not have the AP randomizer mod installed.")
-                if prompt_yes_no("Would you like to update?"):
-                    old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
-                    new_ap_mod = os.path.join(forge_dir, 'mods', latest_release['assets'][0]['name'])
-                    logging.info("Downloading AP randomizer mod. This may take a moment...")
-                    apmod_resp = requests.get(latest_release['assets'][0]['browser_download_url'])
-                    if apmod_resp.status_code == 200: 
-                        with open(new_ap_mod, 'wb') as f:
-                            f.write(apmod_resp.content)
-                            logging.info(f"Wrote new mod file to {new_ap_mod}")
-                        if old_ap_mod is not None:
-                            os.remove(old_ap_mod)
-                            logging.info(f"Removed old mod file from {old_ap_mod}")
-                    else:
-                        logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
-                        logging.error(f"Please report this issue on the Archipelago Discord server.")
-                        sys.exit(1)
-        except StopIteration:
-            logging.warning(f"No compatible mod version found for {minecraft_version}.")
-            if not prompt_yes_no("Run server anyway?"):
-                sys.exit(0)
+    os.path.basename(url)
+    if ap_randomizer is not None:
+        logging.info(f"Your current mod is {ap_randomizer}.")
     else:
-        logging.error(f"Error checking for randomizer mod updates (status code {resp.status_code}).")
-        logging.error(f"If this was not expected, please report this issue on the Archipelago Discord server.")
-        if not prompt_yes_no("Continue anyways?"):
-            sys.exit(0)
+        logging.info(f"You do not have the AP randomizer mod installed.")
+
+    if ap_randomizer != os.path.basename(url):
+        logging.info(f"A new release of the Minecraft AP randomizer mod was found: "
+                     f"{os.path.basename(url)}")
+        if prompt_yes_no("Would you like to update?"):
+            old_ap_mod = os.path.join(forge_dir, 'mods', ap_randomizer) if ap_randomizer is not None else None
+            new_ap_mod = os.path.join(forge_dir, 'mods', os.path.basename(url))
+            logging.info("Downloading AP randomizer mod. This may take a moment...")
+            apmod_resp = requests.get(url)
+            if apmod_resp.status_code == 200:
+                with open(new_ap_mod, 'wb') as f:
+                    f.write(apmod_resp.content)
+                    logging.info(f"Wrote new mod file to {new_ap_mod}")
+                if old_ap_mod is not None:
+                    os.remove(old_ap_mod)
+                    logging.info(f"Removed old mod file from {old_ap_mod}")
+            else:
+                logging.error(f"Error retrieving the randomizer mod (status code {apmod_resp.status_code}).")
+                logging.error(f"Please report this issue on the Archipelago Discord server.")
+                sys.exit(1)
 
 
 def check_eula(forge_dir):
@@ -264,8 +249,13 @@ def get_minecraft_versions(version, release_channel="release"):
             return next(filter(lambda entry: entry["version"] == version, data[release_channel]))
         else:
             return resp.json()[release_channel][0]
-    except StopIteration:
-        logging.error(f"No compatible mod version found for client version {version}.")
+    except (StopIteration, KeyError):
+        logging.error(f"No compatible mod version found for client version {version} on \"{release_channel}\" channel.")
+        if release_channel != "release":
+            logging.error("Consider switching \"release_channel\" to \"release\" in your Host.yaml file")
+        else:
+            logging.error("No suitable mod found on the \"release\" channel. Please Contact us on discord to report this error.")
+        sys.exit(0)
 
 
 def is_correct_forge(forge_dir) -> bool:
@@ -286,6 +276,8 @@ if __name__ == '__main__':
                         help="specify java version.")
     parser.add_argument('--forge', '-f', metavar='1.18.2-40.1.0', dest='forge', type=str, default=False, action='store',
                         help="specify forge version. (Minecraft Version-Forge Version)")
+    parser.add_argument('--version', '-v', metavar='9', dest='data_version', type=int, action='store',
+                        help="specify Mod data version to download.")
 
     args = parser.parse_args()
     apmc_file = os.path.abspath(args.apmc_file) if args.apmc_file else None
@@ -296,21 +288,22 @@ if __name__ == '__main__':
     options = Utils.get_options()
     channel = args.channel or options["minecraft_options"]["release_channel"]
     apmc_data = None
-    data_version = None
+    data_version = args.data_version or None
 
     if apmc_file is None and not args.install:
         apmc_file = Utils.open_filename('Select APMC file', (('APMC File', ('.apmc',)),))
 
-    if apmc_file is not None:
+    if apmc_file is not None and data_version is None:
         apmc_data = read_apmc_file(apmc_file)
         data_version = apmc_data.get('client_version', '')
 
     versions = get_minecraft_versions(data_version, channel)
 
-    forge_dir = Utils.user_path(options["minecraft_options"]["forge_directory"])
+    forge_dir = options["minecraft_options"]["forge_directory"]
     max_heap = options["minecraft_options"]["max_heap_size"]
     forge_version = args.forge or versions["forge"]
     java_version = args.java or versions["java"]
+    mod_url = versions["url"]
     java_dir = find_jdk_dir(java_version)
 
     if args.install:
@@ -344,7 +337,7 @@ if __name__ == '__main__':
     if not max_heap_re.match(max_heap):
         raise Exception(f"Max heap size {max_heap} in incorrect format. Use a number followed by M or G, e.g. 512M or 2G.")
 
-    update_mod(forge_dir, f"MC{forge_version.split('-')[0]}", channel != "release")
+    update_mod(forge_dir, mod_url)
     replace_apmc_files(forge_dir, apmc_file)
     check_eula(forge_dir)
     server_process = run_forge_server(forge_dir, java_version, max_heap)

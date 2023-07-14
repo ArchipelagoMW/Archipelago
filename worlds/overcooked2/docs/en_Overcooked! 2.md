@@ -52,7 +52,7 @@ The following items were invented for Randomizer:
 
 ### Overworld
 - Unlock Kevin Level (x8)
-- Ramp Button
+- Ramp Buttons (x7)
 - Bonus Star (Filler Item*)
 
 **Note: Bonus star count varies with settings*

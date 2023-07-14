@@ -1,6 +1,7 @@
 import os
 import typing
 import math
+import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
@@ -10,11 +11,21 @@ from .Options import smw_options
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
-from ..generic.Rules import add_rule, exclusion_rules
+from worlds.generic.Rules import add_rule, exclusion_rules
 from .Names import ItemName, LocationName
 from .Client import SMWSNIClient
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
+
+
+class SMWSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the SMW US rom"""
+        description = "Super Mario World (USA) ROM File"
+        copy_to = "Super Mario World (USA).sfc"
+        md5s = [SMWDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class SMWWeb(WebWorld):
@@ -40,6 +51,7 @@ class SMWWorld(World):
     """
     game: str = "Super Mario World"
     option_definitions = smw_options
+    settings: typing.ClassVar[SMWSettings]
     topology_present = False
     data_version = 3
     required_client_version = (0, 3, 5)

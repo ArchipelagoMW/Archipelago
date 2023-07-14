@@ -1,6 +1,7 @@
-from typing import Dict
+from typing import Dict, FrozenSet, Union
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
+from .MissionTables import vanilla_mission_req_table
 
 
 class GameDifficulty(Choice):
@@ -110,6 +111,7 @@ class ExcludedMissions(OptionSet):
     Only applies on shortened mission orders.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
+    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
 
 # noinspection PyTypeChecker
@@ -130,19 +132,10 @@ sc2wol_options: Dict[str, Option] = {
 }
 
 
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> int:
-    option = getattr(multiworld, name, None)
+def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
+    if multiworld is None:
+        return sc2wol_options[name].default
 
-    if option is None:
-        return 0
+    player_option = getattr(multiworld, name)[player]
 
-    return int(option[player].value)
-
-
-def get_option_set_value(multiworld: MultiWorld, player: int, name: str) -> set:
-    option = getattr(multiworld, name, None)
-
-    if option is None:
-        return set()
-
-    return option[player].value
+    return player_option.value

@@ -15,7 +15,7 @@ class ZillionRegion(Region):
                  name: str,
                  hint: str,
                  player: int,
-                 multiworld: Optional[MultiWorld] = None) -> None:
+                 multiworld: MultiWorld) -> None:
         super().__init__(name, player, multiworld, hint)
         self.zz_r = zz_r
 

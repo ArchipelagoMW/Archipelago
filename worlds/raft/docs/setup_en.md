@@ -9,7 +9,7 @@
 
 ## Installation Procedures
 
-1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.08) should be compatible.
+1. Install Raft. The currently-supported Raft version is Version 1.0: The Final Chapter. Any minor version (such as 1.09) should be compatible.
 
 2. Install RML.
 
