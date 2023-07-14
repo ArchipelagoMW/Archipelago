@@ -65,16 +65,14 @@ SpawnRandomizedItemFromBox:
     ldr r6, =Jewel1BoxContents
     ldr r7, =Jewel1BoxExtData
     add r6, r6, r0
-    lsl r0, r0, #2
-    add r7, r7, r0
+    lsl r1, r0, #2
+    add r7, r7, r1
     bl GetItemAtLocation
     strb r0, [r6]
-    strb r1, [r7]
+    str r1, [r7]
 
 ; If it's your own junk item, always release it
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@CheckCollectionStatus
     lsr r0, r0, #6
     cmp r0, #1
@@ -124,7 +122,7 @@ SpawnRandomizedItemFromBox:
 
 @@Return:
     add sp, sp, #4
-    pop r4-r6, pc
+    pop r4-r7, pc
 
 .pool
 .endautoregion
@@ -271,12 +269,10 @@ CollectRandomItem:
     lsl r0, r5, #2
     add r2, r0, r2
     ldrb r5, [r1]
-    ldrb r1, [r2]
+    ldr r1, [r2]
 
 ; Multiplayer items
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@MultiplayerItem
 
 ; Junk items
@@ -296,9 +292,21 @@ CollectRandomItem:
     bne @@CD
     mov r0, #0  ; a1
     bl SpawnCollectionIndicator
+    b @@JewelPiece
 
-; Jewel piece or other world's item
 @@MultiplayerItem:
+    ldr r0, [r1, #4]
+    ldr r1, =TilesItemA12
+    mov r2, #12
+    bl LoadSpriteString
+    ldr r1, =TilesItemB8
+    mov r2, #8
+    bl LoadSpriteString
+    ldr r1, =TilesItemC8
+    mov r2, #8
+    bl LoadSpriteString
+
+@@JewelPiece:
     ldr r0, =0x13B  ; a1
     b @@PlayCollectionSound
 

@@ -510,10 +510,10 @@ TextTileEl:
 TextTileFl:
     .word 0x03333330
     .word 0x03111130
-    .word 0x03333130
+    .word 0x03333133
+    .word 0x00311113
     .word 0x00333133
-    .word 0x00311110
-    .word 0x00333133
+    .word 0x00003130
     .word 0x00003130
     .word 0x00003330
 

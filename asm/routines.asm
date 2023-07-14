@@ -13,9 +13,9 @@ PreGamePrep:
     ldr r4, =DeathlinkEnabled
     strb r0, [r4]
 
-; Reset incoming item sender
-    ldr r4, =IncomingItemSender
-    mov r0, #0xFE
+; Reset incoming item
+    ldr r4, =IncomingItemExists
+    mov r0, #0
     strb r0, [r4]
 
 ; Replaced code
@@ -97,6 +97,7 @@ LevelScreen:
     bl SetTreasurePalette
     lsr r0, r4, #5
     bl SpawnCollectionIndicator
+    bl LoadReceivedText
 
 @@CollectJunk:
     bl CollectJunkItems

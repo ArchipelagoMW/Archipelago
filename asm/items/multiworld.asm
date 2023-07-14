@@ -37,13 +37,16 @@ ItemReceivedFeedbackSound:
 ; ID in r1.
 ; If nothing was received, return 0xFF
 ReceiveNextItem:
-    ldr r2, =IncomingItemSender
+    ldr r2, =IncomingItemExists
     ldrb r0, [r2]
-    cmp r0, #0xFE
-    beq @@Return
+    cmp r0, #0
+    bne @@GotItem
+    mov r0, #0xFF
+    b @@Return
 
-; Reset incoming item sender
-    mov r1, #0xFE
+@@GotItem:
+; Reset incoming item
+    mov r1, #0x00
     strb r1, [r2]
 
 ; Increment received item counter
@@ -70,5 +73,27 @@ ReceiveNextItem:
     mov pc, lr
 .pool
 
+LoadReceivedText:
+    push {lr}
+
+    ldr r0, =StrItemReceived
+    ldr r1, =TilesReceived8
+    mov r2, #8
+    bl LoadSpriteString
+    ldr r0, =StrItemFrom
+    ldr r1, =TilesFrom4
+    mov r2, #4
+    bl LoadSpriteString
+    
+    ldr r0, =IncomingItemSender
+    ldr r1, =TilesSenderA8
+    mov r2, #8
+    bl LoadSpriteString
+    ldr r1, =TilesSenderB8
+    mov r2, #8
+    bl LoadSpriteString
+
+    pop {pc}
+.pool
 
 .endautoregion

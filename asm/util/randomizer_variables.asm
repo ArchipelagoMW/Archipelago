@@ -1,5 +1,14 @@
 .gba
 
+; Object tiles in VRAM
+.definelabel TilesReceived8, 0x06012180
+.definelabel TilesFrom4, 0x06012280
+.definelabel TilesSenderA8, 0x06012600
+.definelabel TilesSenderB8, 0x06012A00
+.definelabel TilesItemA12, 0x06012180
+.definelabel TilesItemB8, 0x06012600
+.definelabel TilesItemC8, 0x06012A00
+
 ; This is the upper halfword of entry passage level 3.
 ; This level doesn't actually exist, so we can sneak this bit of extra save data
 ; in there.
@@ -10,14 +19,15 @@
 
 ; Items can be received one at a time w/o issue
 .definelabel IncomingItemID, UnusedRamStart + 1  ; byte
-.definelabel IncomingItemSender, UnusedRamStart + 2 ; 17 bytes
+.definelabel IncomingItemExists, UnusedRamStart + 2
+.definelabel IncomingItemSender, UnusedRamStart + 3 ; 17 bytes
 
 ; The jewel piece or CD that you've most recently received or grabbed from a box
-.definelabel LastCollectedItemID, UnusedRamStart + 19  ; byte
+.definelabel LastCollectedItemID, UnusedRamStart + 20  ; byte
 ; Same values as "Has X" variables
-.definelabel LastCollectedItemStatus, UnusedRamStart + 20  ; byte
+.definelabel LastCollectedItemStatus, UnusedRamStart + 21  ; byte
 
-.definelabel DeathlinkEnabled, UnusedRamStart + 21  ; byte
+.definelabel DeathlinkEnabled, UnusedRamStart + 22  ; byte
 
 .definelabel QueuedJunk, UnusedRamStart + 24  ; bytes
     .definelabel QueuedFullHealthItem, QueuedJunk + 0
