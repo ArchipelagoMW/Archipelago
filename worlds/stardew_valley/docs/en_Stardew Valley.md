@@ -43,6 +43,7 @@ There also are a number of location checks that are optional, and individual pla
 - Help Wanted quests
 - Participating in Festivals
 - Special Orders from the town board, or from Mr Qi
+- Cropsanity: Growing and harvesting individual crop types
 - Fishsanity: Catching individual fish
 - Museumsanity: Donating individual items to the museum, or reaching the museum milestones for donations
 - Friendsanity: Reaching specific friendship levels with NPCs

@@ -58,15 +58,16 @@ def get_number_log_steps(number_worlds: int) -> int:
     return 100
 
 
-def generate_many_worlds(number_worlds: int) -> Dict[int, MultiWorld]:
+def generate_many_worlds(number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
     num_steps = get_number_log_steps(number_worlds)
     log_step = number_worlds / num_steps
     multiworlds = dict()
-    print(f"Generating {number_worlds} Solo Multiworlds for Stardew Valley...")
-    for world_number in range(1, number_worlds + 1):
-        multiworld = generate_random_multiworld(world_number)
-        multiworlds[world_number] = multiworld
-        if world_number % log_step == 0:
+    print(f"Generating {number_worlds} Solo Multiworlds [Start Seed: {start_index}] for Stardew Valley...")
+    for world_number in range(0, number_worlds + 1):
+        world_id = world_number + start_index
+        multiworld = generate_random_multiworld(world_id)
+        multiworlds[world_id] = multiworld
+        if world_number > 0 and world_number % log_step == 0:
             print(f"Generated {world_number}/{number_worlds} worlds [{(world_number * 100) // number_worlds}%]")
     print(f"Finished generating {number_worlds} Solo Multiworlds for Stardew Valley")
     return multiworlds
@@ -92,6 +93,7 @@ class TestGenerateManyWorlds(SVTestBase):
     def test_generate_many_worlds_then_check_results(self):
         if self.skip_long_tests:
             return
-        number_worlds = 10000
-        multiworlds = generate_many_worlds(number_worlds)
+        number_worlds = 1000
+        start_index = random.Random().randint(0, 9999999999)
+        multiworlds = generate_many_worlds(number_worlds, start_index)
         check_every_multiworld_is_valid(self, multiworlds)
