@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any, Iterable, Optional, Union, Set
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from . import rules, logic, options
 from .bundles import get_all_bundles, Bundle
@@ -67,8 +67,11 @@ class StardewValleyWorld(World):
     randomized_entrances: Dict[str, str]
     all_progression_items: Set[str]
 
-    def generate_early(self):
+    def __init__(self, world: MultiWorld, player: int):
+        super().__init__(world, player)
         self.all_progression_items = set()
+
+    def generate_early(self):
         self.options = fetch_options(self.multiworld, self.player)
         self.force_change_options_if_incompatible()
 
