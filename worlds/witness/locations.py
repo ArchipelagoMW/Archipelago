@@ -40,8 +40,8 @@ class StaticWitnessLocations:
         "Symmetry Island Left 7",
         "Symmetry Island Upper Panel",
         "Symmetry Island Scenery Outlines 5",
-        "Symmetry Island Yellow 3",
-        "Symmetry Island Blue 3",
+        "Symmetry Island Laser Yellow 3",
+        "Symmetry Island Laser Blue 3",
         "Symmetry Island Laser Panel",
 
         "Orchard Apple Tree 5",
@@ -98,7 +98,7 @@ class StaticWitnessLocations:
 
         "Town Cargo Box Discard",
         "Town Tall Hexagonal",
-        "Town Church Entry Panel"
+        "Town Church Entry Panel",
         "Town Church Lattice",
         "Town Maze Stair Control",
         "Town Rooftop Discard",
@@ -113,7 +113,7 @@ class StaticWitnessLocations:
         "Town RGB Room Right",
         "Town Sound Room Right",
 
-        "Theater Entry Panel",
+        "Windmill Theater Entry Panel",
         "Theater Exit Left Panel",
         "Theater Exit Right Panel",
         "Theater Tutorial Video",
@@ -439,8 +439,8 @@ class StaticWitnessLocations:
         "Mountain Floor 2 Elevator Discard",
         "Mountain Bottom Floor Giant Puzzle",
 
-        "Mountain Final Room Entry Left",
-        "Mountain Final Room Entry Right",
+        "Mountain Bottom Floor Final Room Entry Left",
+        "Mountain Bottom Floor Final Room Entry Right",
 
         "Mountain Bottom Floor Caves Entry",
 
