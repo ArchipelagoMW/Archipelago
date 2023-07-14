@@ -4,48 +4,45 @@
 
 .autoregion
 
+.align 4
 LetterToSpriteGraphic:
-    .word TextTile0
-    .word TextTile1
-    .word TextTile2
-    .word TextTile3
-    .word TextTile4
-    .word TextTile5
-    .word TextTile6
-    .word TextTile7
-    .word TextTile8
-    .word TextTile9
-    .word TextTileA
-    .word TextTileB
-    .word TextTileC
-    .word TextTileD
-    .word TextTileE
-    .word TextTileF
-    .word TextTileG
-    .word TextTileH
-    .word TextTileI
-    .word TextTileJ
-    .word TextTileK
-    .word TextTileL
-    .word TextTileM
-    .word TextTileN
-    .word TextTileO
-    .word TextTileP
-    .word TextTileQ
-    .word TextTileR
-    .word TextTileS
-    .word TextTileT
-    .word TextTileU
-    .word TextTileV
-    .word TextTileW
-    .word TextTileX
-    .word TextTileY
-    .word TextTileZ
+    .word TextTile0,  TextTile1,  TextTile2,  TextTile3,  TextTile4,  TextTile5,  TextTile6,  TextTile7
+    .word TextTile8,  TextTile9,  TextTileA,  TextTileB,  TextTileC,  TextTileD,  TextTileE,  TextTileF
+    .word TextTileG,  TextTileH,  TextTileI,  TextTileJ,  TextTileK,  TextTileL,  TextTileM,  TextTileN
+    .word TextTileO,  TextTileP,  TextTileQ,  TextTileR,  TextTileS,  TextTileT,  TextTileU,  TextTileV
+    .word TextTileW,  TextTileX,  TextTileY,  TextTileZ,  TextTileAl, TextTileBl, TextTileCl, TextTileDl
+    .word TextTileEl, TextTileFl, TextTileGl, TextTileHl, TextTileIl, TextTileJl, TextTileKl, TextTileLl
+    .word TextTileMl, TextTileNl, TextTileOl, TextTilePl, TextTileQl, TextTileRl, TextTileSl, TextTileTl
+    .word TextTileUl, TextTileVl, TextTileWl, TextTileXl, TextTileYl, TextTileZl, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileTsu, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileTsuS, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileLP, TextTileRP, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileHyp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, 0, TextTileSp
 
-ItemSent: .string "Sent "
-ItemTo: .string " to "
-ItemReceived: .string "Received "
-ItemFrom: .string " from "
+ItemSent: .string "Sent"
+ItemTo: .string "to"
+ItemReceived: .string "Received"
+ItemFrom: .string "from"
 
 ; The ExtData tables will point into this area, which is intended to take up the
 ; rest of the space in the ROM.

@@ -10,6 +10,8 @@ hook 0x8029D06, 0x8029D24, SpawnRandomizedItemFromBox  ; CD
 hook 0x8029F02, 0x8029F2A, SpawnRandomizedItemFromBox  ; Full health item
 
 .autoregion
+.align 2
+
 @oam_animation_pointer equ 0x04
 @y_pos equ 0x08
 @x_pos equ 0x0A
@@ -229,6 +231,7 @@ hook 0x802A2CA, 0x802A31E, CollectRandomItem  ; CD
 hook 0x802A38A, 0x802A3C4, CollectRandomItem  ; Full health item
 
 .autoregion
+.align 2
 CollectRandomItem:
     push r4-r6, lr
 
