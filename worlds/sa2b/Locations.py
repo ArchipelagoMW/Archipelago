@@ -1445,6 +1445,35 @@ chao_animal_part_location_table = {
     LocationName.chao_phoenix_wings:    0xFF12B7,
 }
 
+chao_kindergarten_location_table = {
+    LocationName.chao_kindergarten_drawing_1: 0xFF12D0,
+    LocationName.chao_kindergarten_drawing_2: 0xFF12D1,
+    LocationName.chao_kindergarten_drawing_3: 0xFF12D2,
+    LocationName.chao_kindergarten_drawing_4: 0xFF12D3,
+    LocationName.chao_kindergarten_drawing_5: 0xFF12D4,
+
+    LocationName.chao_kindergarten_shake_dance: 0xFF12D8,
+    LocationName.chao_kindergarten_spin_dance:  0xFF12D9,
+    LocationName.chao_kindergarten_step_dance:  0xFF12DA,
+    LocationName.chao_kindergarten_gogo_dance:  0xFF12DB,
+    LocationName.chao_kindergarten_exercise:    0xFF12DC,
+
+    LocationName.chao_kindergarten_song_1: 0xFF12E0,
+    LocationName.chao_kindergarten_song_2: 0xFF12E1,
+    LocationName.chao_kindergarten_song_3: 0xFF12E2,
+    LocationName.chao_kindergarten_song_4: 0xFF12E3,
+    LocationName.chao_kindergarten_song_5: 0xFF12E4,
+
+    LocationName.chao_kindergarten_bell:       0xFF12E8,
+    LocationName.chao_kindergarten_castanets:  0xFF12E9,
+    LocationName.chao_kindergarten_cymbals:    0xFF12EA,
+    LocationName.chao_kindergarten_drum:       0xFF12EB,
+    LocationName.chao_kindergarten_flute:      0xFF12EC,
+    LocationName.chao_kindergarten_maracas:    0xFF12ED,
+    LocationName.chao_kindergarten_trumpet:    0xFF12EE,
+    LocationName.chao_kindergarten_tambourine: 0xFF12EF,
+}
+
 kart_race_beginner_location_table = {
     LocationName.kart_race_beginner_sonic: 0xFF0A00,
     LocationName.kart_race_beginner_tails: 0xFF0A01,
@@ -1535,6 +1564,7 @@ all_locations = {
     **chao_stat_luck_table,
     **chao_stat_intelligence_table,
     **chao_animal_part_location_table,
+    **chao_kindergarten_location_table,
 }
 
 boss_gate_set = [
@@ -1678,6 +1708,9 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
         if world.chao_animal_parts[player]:
             location_table.update({**chao_animal_part_location_table})
+
+        if world.chao_kindergarten[player]:
+            location_table.update({**chao_kindergarten_location_table})
 
         for x in range(len(boss_gate_set)):
             if x < world.number_of_level_gates[player].value:

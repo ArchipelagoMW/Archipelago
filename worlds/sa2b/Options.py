@@ -379,6 +379,14 @@ class ChaoAnimalParts(Toggle):
     display_name = "Chao Animal Parts"
 
 
+class ChaoKindergarten(Toggle):
+    """
+    Determines whether learning the lessons from the Kindergarten Classroom grants checks
+    (23 Locations)
+    """
+    display_name = "Chao Kindergarten"
+
+
 class ShuffleStartingChaoEggs(DefaultOnToggle):
     """
     Determines whether the starting Chao eggs in the gardens are random
@@ -727,6 +735,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
     "chao_animal_parts": ChaoAnimalParts,
+    "chao_kindergarten": ChaoKindergarten,
     "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
 
     "junk_fill_percentage": JunkFillPercentage,

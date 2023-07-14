@@ -1277,6 +1277,36 @@ chao_phoenix_legs     = "Chao - Phoenix Legs"
 chao_phoenix_tail     = "Chao - Phoenix Tail"
 chao_phoenix_wings    = "Chao - Phoenix Wings"
 
+# Chao Kindergarten Locations
+chao_kindergarten_drawing_1 = "Chao Kindergarten - Drawing 1"
+chao_kindergarten_drawing_2 = "Chao Kindergarten - Drawing 2"
+chao_kindergarten_drawing_3 = "Chao Kindergarten - Drawing 3"
+chao_kindergarten_drawing_4 = "Chao Kindergarten - Drawing 4"
+chao_kindergarten_drawing_5 = "Chao Kindergarten - Drawing 5"
+
+chao_kindergarten_shake_dance = "Chao Kindergarten - Shake Dance"
+chao_kindergarten_spin_dance  = "Chao Kindergarten - Spin Dance"
+chao_kindergarten_step_dance  = "Chao Kindergarten - Step Dance"
+chao_kindergarten_gogo_dance  = "Chao Kindergarten - Go-Go Dance"
+chao_kindergarten_exercise    = "Chao Kindergarten - Exercise"
+
+chao_kindergarten_song_1 = "Chao Kindergarten - Song 1"
+chao_kindergarten_song_2 = "Chao Kindergarten - Song 2"
+chao_kindergarten_song_3 = "Chao Kindergarten - Song 3"
+chao_kindergarten_song_4 = "Chao Kindergarten - Song 4"
+chao_kindergarten_song_5 = "Chao Kindergarten - Song 5"
+
+chao_kindergarten_bell       = "Chao Kindergarten - Bell"
+chao_kindergarten_castanets  = "Chao Kindergarten - Castanets"
+chao_kindergarten_cymbals    = "Chao Kindergarten - Cymbals"
+chao_kindergarten_drum       = "Chao Kindergarten - Drum"
+chao_kindergarten_flute      = "Chao Kindergarten - Flute"
+chao_kindergarten_maracas    = "Chao Kindergarten - Maracas"
+chao_kindergarten_trumpet    = "Chao Kindergarten - Trumpet"
+chao_kindergarten_tambourine = "Chao Kindergarten - Tambourine"
+
+
+# Chao Goal Locations
 chaos_chao        = "Chaos Chao"
 chaos_chao_region = "Chaos Chao"
 
@@ -1390,6 +1420,8 @@ grand_prix_region = "Grand Prix"
 chao_garden_beginner_region     = "Chao Garden - Beginner"
 chao_garden_intermediate_region = "Chao Garden - Intermediate"
 chao_garden_expert_region       = "Chao Garden - Expert"
+
+chao_kindergarten_region = "Chao Kindergarten"
 
 kart_race_beginner_region = "Kart Race - Beginner"
 kart_race_standard_region = "Kart Race - Intermediate"

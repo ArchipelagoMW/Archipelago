@@ -6,7 +6,8 @@ from .Items import SA2BItem
 from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
                                      chao_stat_power_table, chao_stat_stamina_table,\
-                                     chao_stat_luck_table, chao_stat_intelligence_table, chao_animal_event_location_table
+                                     chao_stat_luck_table, chao_stat_intelligence_table, chao_animal_event_location_table,\
+                                     chao_kindergarten_location_table
 from .Names import LocationName, ItemName
 from .GateBosses import get_boss_name, all_gate_bosses_table, king_boom_boo
 
@@ -1400,203 +1401,231 @@ def create_regions(world, player: int, active_locations):
     chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
                                               chao_garden_expert_region_locations)
 
-    animal_penguin_region_locations = [
-        LocationName.animal_penguin,
-        LocationName.chao_penguin_arms,
-        LocationName.chao_penguin_forehead,
-        LocationName.chao_penguin_legs,
-    ]
-    animal_penguin_region = create_region(world, player, active_locations, LocationName.animal_penguin,
-                                          animal_penguin_region_locations)
+    if world.goal[player] == 7 or world.chao_animal_parts[player]:
+        animal_penguin_region_locations = [
+            LocationName.animal_penguin,
+            LocationName.chao_penguin_arms,
+            LocationName.chao_penguin_forehead,
+            LocationName.chao_penguin_legs,
+        ]
+        animal_penguin_region = create_region(world, player, active_locations, LocationName.animal_penguin,
+                                              animal_penguin_region_locations)
+        conditional_regions += [animal_penguin_region]
 
-    animal_seal_region_locations = [
-        LocationName.animal_seal,
-        LocationName.chao_seal_arms,
-        LocationName.chao_seal_tail,
-    ]
-    animal_seal_region = create_region(world, player, active_locations, LocationName.animal_seal,
-                                       animal_seal_region_locations)
+        animal_seal_region_locations = [
+            LocationName.animal_seal,
+            LocationName.chao_seal_arms,
+            LocationName.chao_seal_tail,
+        ]
+        animal_seal_region = create_region(world, player, active_locations, LocationName.animal_seal,
+                                           animal_seal_region_locations)
+        conditional_regions += [animal_seal_region]
 
-    animal_otter_region_locations = [
-        LocationName.animal_otter,
-        LocationName.chao_otter_arms,
-        LocationName.chao_otter_ears,
-        LocationName.chao_otter_legs,
-        LocationName.chao_otter_tail,
-    ]
-    animal_otter_region = create_region(world, player, active_locations, LocationName.animal_otter,
-                                        animal_otter_region_locations)
+        animal_otter_region_locations = [
+            LocationName.animal_otter,
+            LocationName.chao_otter_arms,
+            LocationName.chao_otter_ears,
+            LocationName.chao_otter_legs,
+            LocationName.chao_otter_tail,
+        ]
+        animal_otter_region = create_region(world, player, active_locations, LocationName.animal_otter,
+                                            animal_otter_region_locations)
+        conditional_regions += [animal_otter_region]
 
-    animal_rabbit_region_locations = [
-        LocationName.animal_rabbit,
-        LocationName.chao_rabbit_arms,
-        LocationName.chao_rabbit_ears,
-        LocationName.chao_rabbit_legs,
-        LocationName.chao_rabbit_tail,
-    ]
-    animal_rabbit_region = create_region(world, player, active_locations, LocationName.animal_rabbit,
-                                         animal_rabbit_region_locations)
+        animal_rabbit_region_locations = [
+            LocationName.animal_rabbit,
+            LocationName.chao_rabbit_arms,
+            LocationName.chao_rabbit_ears,
+            LocationName.chao_rabbit_legs,
+            LocationName.chao_rabbit_tail,
+        ]
+        animal_rabbit_region = create_region(world, player, active_locations, LocationName.animal_rabbit,
+                                             animal_rabbit_region_locations)
+        conditional_regions += [animal_rabbit_region]
 
-    animal_cheetah_region_locations = [
-        LocationName.animal_cheetah,
-        LocationName.chao_cheetah_arms,
-        LocationName.chao_cheetah_ears,
-        LocationName.chao_cheetah_legs,
-        LocationName.chao_cheetah_tail,
-    ]
-    animal_cheetah_region = create_region(world, player, active_locations, LocationName.animal_cheetah,
-                                          animal_cheetah_region_locations)
+        animal_cheetah_region_locations = [
+            LocationName.animal_cheetah,
+            LocationName.chao_cheetah_arms,
+            LocationName.chao_cheetah_ears,
+            LocationName.chao_cheetah_legs,
+            LocationName.chao_cheetah_tail,
+        ]
+        animal_cheetah_region = create_region(world, player, active_locations, LocationName.animal_cheetah,
+                                              animal_cheetah_region_locations)
+        conditional_regions += [animal_cheetah_region]
 
-    animal_warthog_region_locations = [
-        LocationName.animal_warthog,
-        LocationName.chao_warthog_arms,
-        LocationName.chao_warthog_ears,
-        LocationName.chao_warthog_face,
-        LocationName.chao_warthog_legs,
-        LocationName.chao_warthog_tail,
-    ]
-    animal_warthog_region = create_region(world, player, active_locations, LocationName.animal_warthog,
-                                          animal_warthog_region_locations)
+        animal_warthog_region_locations = [
+            LocationName.animal_warthog,
+            LocationName.chao_warthog_arms,
+            LocationName.chao_warthog_ears,
+            LocationName.chao_warthog_face,
+            LocationName.chao_warthog_legs,
+            LocationName.chao_warthog_tail,
+        ]
+        animal_warthog_region = create_region(world, player, active_locations, LocationName.animal_warthog,
+                                              animal_warthog_region_locations)
+        conditional_regions += [animal_warthog_region]
 
-    animal_bear_region_locations = [
-        LocationName.animal_bear,
-        LocationName.chao_bear_arms,
-        LocationName.chao_bear_ears,
-        LocationName.chao_bear_legs,
-    ]
-    animal_bear_region = create_region(world, player, active_locations, LocationName.animal_bear,
-                                       animal_bear_region_locations)
+        animal_bear_region_locations = [
+            LocationName.animal_bear,
+            LocationName.chao_bear_arms,
+            LocationName.chao_bear_ears,
+            LocationName.chao_bear_legs,
+        ]
+        animal_bear_region = create_region(world, player, active_locations, LocationName.animal_bear,
+                                           animal_bear_region_locations)
+        conditional_regions += [animal_bear_region]
 
-    animal_tiger_region_locations = [
-        LocationName.animal_tiger,
-        LocationName.chao_tiger_arms,
-        LocationName.chao_tiger_ears,
-        LocationName.chao_tiger_legs,
-        LocationName.chao_tiger_tail,
-    ]
-    animal_tiger_region = create_region(world, player, active_locations, LocationName.animal_tiger,
-                                        animal_tiger_region_locations)
+        animal_tiger_region_locations = [
+            LocationName.animal_tiger,
+            LocationName.chao_tiger_arms,
+            LocationName.chao_tiger_ears,
+            LocationName.chao_tiger_legs,
+            LocationName.chao_tiger_tail,
+        ]
+        animal_tiger_region = create_region(world, player, active_locations, LocationName.animal_tiger,
+                                            animal_tiger_region_locations)
+        conditional_regions += [animal_tiger_region]
 
-    animal_gorilla_region_locations = [
-        LocationName.animal_gorilla,
-        LocationName.chao_gorilla_arms,
-        LocationName.chao_gorilla_ears,
-        LocationName.chao_gorilla_forehead,
-        LocationName.chao_gorilla_legs,
-    ]
-    animal_gorilla_region = create_region(world, player, active_locations, LocationName.animal_gorilla,
-                                          animal_gorilla_region_locations)
+        animal_gorilla_region_locations = [
+            LocationName.animal_gorilla,
+            LocationName.chao_gorilla_arms,
+            LocationName.chao_gorilla_ears,
+            LocationName.chao_gorilla_forehead,
+            LocationName.chao_gorilla_legs,
+        ]
+        animal_gorilla_region = create_region(world, player, active_locations, LocationName.animal_gorilla,
+                                              animal_gorilla_region_locations)
+        conditional_regions += [animal_gorilla_region]
 
-    animal_peacock_region_locations = [
-        LocationName.animal_peacock,
-        LocationName.chao_peacock_forehead,
-        LocationName.chao_peacock_legs,
-        LocationName.chao_peacock_tail,
-        LocationName.chao_peacock_wings,
-    ]
-    animal_peacock_region = create_region(world, player, active_locations, LocationName.animal_peacock,
-                                          animal_peacock_region_locations)
+        animal_peacock_region_locations = [
+            LocationName.animal_peacock,
+            LocationName.chao_peacock_forehead,
+            LocationName.chao_peacock_legs,
+            LocationName.chao_peacock_tail,
+            LocationName.chao_peacock_wings,
+        ]
+        animal_peacock_region = create_region(world, player, active_locations, LocationName.animal_peacock,
+                                              animal_peacock_region_locations)
+        conditional_regions += [animal_peacock_region]
 
-    animal_parrot_region_locations = [
-        LocationName.animal_parrot,
-        LocationName.chao_parrot_forehead,
-        LocationName.chao_parrot_legs,
-        LocationName.chao_parrot_tail,
-        LocationName.chao_parrot_wings,
-    ]
-    animal_parrot_region = create_region(world, player, active_locations, LocationName.animal_parrot,
-                                         animal_parrot_region_locations)
+        animal_parrot_region_locations = [
+            LocationName.animal_parrot,
+            LocationName.chao_parrot_forehead,
+            LocationName.chao_parrot_legs,
+            LocationName.chao_parrot_tail,
+            LocationName.chao_parrot_wings,
+        ]
+        animal_parrot_region = create_region(world, player, active_locations, LocationName.animal_parrot,
+                                             animal_parrot_region_locations)
+        conditional_regions += [animal_parrot_region]
 
-    animal_condor_region_locations = [
-        LocationName.animal_condor,
-        LocationName.chao_condor_ears,
-        LocationName.chao_condor_legs,
-        LocationName.chao_condor_tail,
-        LocationName.chao_condor_wings,
-    ]
-    animal_condor_region = create_region(world, player, active_locations, LocationName.animal_condor,
-                                         animal_condor_region_locations)
+        animal_condor_region_locations = [
+            LocationName.animal_condor,
+            LocationName.chao_condor_ears,
+            LocationName.chao_condor_legs,
+            LocationName.chao_condor_tail,
+            LocationName.chao_condor_wings,
+        ]
+        animal_condor_region = create_region(world, player, active_locations, LocationName.animal_condor,
+                                             animal_condor_region_locations)
+        conditional_regions += [animal_condor_region]
 
-    animal_skunk_region_locations = [
-        LocationName.animal_skunk,
-        LocationName.chao_skunk_arms,
-        LocationName.chao_skunk_forehead,
-        LocationName.chao_skunk_legs,
-        LocationName.chao_skunk_tail,
-    ]
-    animal_skunk_region = create_region(world, player, active_locations, LocationName.animal_skunk,
-                                        animal_skunk_region_locations)
+        animal_skunk_region_locations = [
+            LocationName.animal_skunk,
+            LocationName.chao_skunk_arms,
+            LocationName.chao_skunk_forehead,
+            LocationName.chao_skunk_legs,
+            LocationName.chao_skunk_tail,
+        ]
+        animal_skunk_region = create_region(world, player, active_locations, LocationName.animal_skunk,
+                                            animal_skunk_region_locations)
+        conditional_regions += [animal_skunk_region]
 
-    animal_sheep_region_locations = [
-        LocationName.animal_sheep,
-        LocationName.chao_sheep_arms,
-        LocationName.chao_sheep_ears,
-        LocationName.chao_sheep_legs,
-        LocationName.chao_sheep_horn,
-        LocationName.chao_sheep_tail,
-    ]
-    animal_sheep_region = create_region(world, player, active_locations, LocationName.animal_sheep,
-                                        animal_sheep_region_locations)
+        animal_sheep_region_locations = [
+            LocationName.animal_sheep,
+            LocationName.chao_sheep_arms,
+            LocationName.chao_sheep_ears,
+            LocationName.chao_sheep_legs,
+            LocationName.chao_sheep_horn,
+            LocationName.chao_sheep_tail,
+        ]
+        animal_sheep_region = create_region(world, player, active_locations, LocationName.animal_sheep,
+                                            animal_sheep_region_locations)
+        conditional_regions += [animal_sheep_region]
 
-    animal_raccoon_region_locations = [
-        LocationName.animal_raccoon,
-        LocationName.chao_raccoon_arms,
-        LocationName.chao_raccoon_ears,
-        LocationName.chao_raccoon_legs,
-    ]
-    animal_raccoon_region = create_region(world, player, active_locations, LocationName.animal_raccoon,
-                                          animal_raccoon_region_locations)
+        animal_raccoon_region_locations = [
+            LocationName.animal_raccoon,
+            LocationName.chao_raccoon_arms,
+            LocationName.chao_raccoon_ears,
+            LocationName.chao_raccoon_legs,
+        ]
+        animal_raccoon_region = create_region(world, player, active_locations, LocationName.animal_raccoon,
+                                              animal_raccoon_region_locations)
+        conditional_regions += [animal_raccoon_region]
 
-    animal_halffish_region_locations = [
-        LocationName.animal_halffish,
-    ]
-    animal_halffish_region = create_region(world, player, active_locations, LocationName.animal_halffish,
-                                           animal_halffish_region_locations)
+        animal_halffish_region_locations = [
+            LocationName.animal_halffish,
+        ]
+        animal_halffish_region = create_region(world, player, active_locations, LocationName.animal_halffish,
+                                               animal_halffish_region_locations)
+        conditional_regions += [animal_halffish_region]
 
-    animal_skeleton_dog_region_locations = [
-        LocationName.animal_skeleton_dog,
-    ]
-    animal_skeleton_dog_region = create_region(world, player, active_locations, LocationName.animal_skeleton_dog,
-                                               animal_skeleton_dog_region_locations)
+        animal_skeleton_dog_region_locations = [
+            LocationName.animal_skeleton_dog,
+        ]
+        animal_skeleton_dog_region = create_region(world, player, active_locations, LocationName.animal_skeleton_dog,
+                                                   animal_skeleton_dog_region_locations)
+        conditional_regions += [animal_skeleton_dog_region]
 
-    animal_bat_region_locations = [
-        LocationName.animal_bat,
-    ]
-    animal_bat_region = create_region(world, player, active_locations, LocationName.animal_bat,
-                                      animal_bat_region_locations)
+        animal_bat_region_locations = [
+            LocationName.animal_bat,
+        ]
+        animal_bat_region = create_region(world, player, active_locations, LocationName.animal_bat,
+                                          animal_bat_region_locations)
+        conditional_regions += [animal_bat_region]
 
-    animal_dragon_region_locations = [
-        LocationName.animal_dragon,
-        LocationName.chao_dragon_arms,
-        LocationName.chao_dragon_ears,
-        LocationName.chao_dragon_legs,
-        LocationName.chao_dragon_horn,
-        LocationName.chao_dragon_tail,
-        LocationName.chao_dragon_wings,
-    ]
-    animal_dragon_region = create_region(world, player, active_locations, LocationName.animal_dragon,
-                                         animal_dragon_region_locations)
+        animal_dragon_region_locations = [
+            LocationName.animal_dragon,
+            LocationName.chao_dragon_arms,
+            LocationName.chao_dragon_ears,
+            LocationName.chao_dragon_legs,
+            LocationName.chao_dragon_horn,
+            LocationName.chao_dragon_tail,
+            LocationName.chao_dragon_wings,
+        ]
+        animal_dragon_region = create_region(world, player, active_locations, LocationName.animal_dragon,
+                                             animal_dragon_region_locations)
+        conditional_regions += [animal_dragon_region]
 
-    animal_unicorn_region_locations = [
-        LocationName.animal_unicorn,
-        LocationName.chao_unicorn_arms,
-        LocationName.chao_unicorn_ears,
-        LocationName.chao_unicorn_forehead,
-        LocationName.chao_unicorn_legs,
-        LocationName.chao_unicorn_tail,
-    ]
-    animal_unicorn_region = create_region(world, player, active_locations, LocationName.animal_unicorn,
-                                          animal_unicorn_region_locations)
+        animal_unicorn_region_locations = [
+            LocationName.animal_unicorn,
+            LocationName.chao_unicorn_arms,
+            LocationName.chao_unicorn_ears,
+            LocationName.chao_unicorn_forehead,
+            LocationName.chao_unicorn_legs,
+            LocationName.chao_unicorn_tail,
+        ]
+        animal_unicorn_region = create_region(world, player, active_locations, LocationName.animal_unicorn,
+                                              animal_unicorn_region_locations)
+        conditional_regions += [animal_unicorn_region]
 
-    animal_phoenix_region_locations = [
-        LocationName.animal_phoenix,
-        LocationName.chao_phoenix_forehead,
-        LocationName.chao_phoenix_legs,
-        LocationName.chao_phoenix_tail,
-        LocationName.chao_phoenix_wings,
-    ]
-    animal_phoenix_region = create_region(world, player, active_locations, LocationName.animal_phoenix,
-                                          animal_phoenix_region_locations)
+        animal_phoenix_region_locations = [
+            LocationName.animal_phoenix,
+            LocationName.chao_phoenix_forehead,
+            LocationName.chao_phoenix_legs,
+            LocationName.chao_phoenix_tail,
+            LocationName.chao_phoenix_wings,
+        ]
+        animal_phoenix_region = create_region(world, player, active_locations, LocationName.animal_phoenix,
+                                              animal_phoenix_region_locations)
+        conditional_regions += [animal_phoenix_region]
+
+    if world.chao_kindergarten[player]:
+        chao_kindergarten_region_locations = list(chao_kindergarten_location_table.keys())
+        chao_kindergarten_region = create_region(world, player, active_locations, LocationName.chao_kindergarten_region,
+                                                 chao_kindergarten_region_locations)
+        conditional_regions += [chao_kindergarten_region]
 
     kart_race_beginner_region_locations = []
     if world.kart_race_checks[player] == 2:
@@ -1725,27 +1754,6 @@ def create_regions(world, player: int, active_locations):
         kart_race_beginner_region,
         kart_race_standard_region,
         kart_race_expert_region,
-        animal_penguin_region,
-        animal_seal_region,
-        animal_otter_region,
-        animal_rabbit_region,
-        animal_cheetah_region,
-        animal_warthog_region,
-        animal_bear_region,
-        animal_tiger_region,
-        animal_gorilla_region,
-        animal_peacock_region,
-        animal_parrot_region,
-        animal_condor_region,
-        animal_skunk_region,
-        animal_sheep_region,
-        animal_raccoon_region,
-        animal_halffish_region,
-        animal_skeleton_dog_region,
-        animal_bat_region,
-        animal_dragon_region,
-        animal_unicorn_region,
-        animal_phoenix_region,
     ]
 
     world.regions += conditional_regions
@@ -1889,6 +1897,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_0_region, LocationName.chao_kindergarten_region)
     elif gates_len == 2:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
@@ -1897,6 +1908,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 3:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
@@ -1905,6 +1919,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 4:
         connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
@@ -1913,6 +1930,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_2_region, LocationName.chao_kindergarten_region)
     elif gates_len == 5:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
@@ -1921,6 +1941,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_3_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_3_region, LocationName.chao_kindergarten_region)
     elif gates_len >= 6:
         connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
@@ -1929,6 +1952,9 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
         connect(world, player, names, LocationName.gate_4_region, LocationName.kart_race_expert_region)
+
+        if world.chao_kindergarten[player]:
+            connect(world, player, names, LocationName.gate_3_region, LocationName.chao_kindergarten_region)
 
     stat_checks_per_gate = world.chao_stats[player].value / (gates_len)
     for index in range(1, world.chao_stats[player].value + 1):

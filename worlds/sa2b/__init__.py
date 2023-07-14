@@ -100,6 +100,7 @@ class SA2BWorld(World):
             "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
             "ChaoStats": self.multiworld.chao_stats[self.player].value,
             "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
+            "ChaoKindergarten": self.multiworld.chao_kindergarten[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
