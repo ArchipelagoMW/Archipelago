@@ -32,7 +32,7 @@ class KH2World(World):
     """
     game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 1
+    data_version = 0
     # TODO: remove this before release
     topology_present = True
 
