@@ -69,12 +69,14 @@ def assert_cropsanity_same_number_items_and_locations(tester: SVTestBase, multiw
 
 
 def assert_all_rarecrows_exist(tester: SVTestBase, multiworld: MultiWorld):
+    all_item_names = set(get_all_item_names(multiworld))
     for rarecrow_number in range(1, 9):
-        tester.assertIn(f"Rarecrow #{rarecrow_number}", [item.name for item in multiworld.itempool])
+        tester.assertIn(f"Rarecrow #{rarecrow_number}", all_item_names)
 
 
 def assert_has_deluxe_scarecrow_recipe(tester: SVTestBase, multiworld: MultiWorld):
-    tester.assertIn(f"Deluxe Scarecrow Recipe", [item.name for item in multiworld.itempool])
+    all_item_names = set(get_all_item_names(multiworld))
+    tester.assertIn(f"Deluxe Scarecrow Recipe", all_item_names)
 
 
 def assert_festivals_give_access_to_deluxe_scarecrow(tester: SVTestBase, multiworld: MultiWorld):
