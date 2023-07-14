@@ -223,6 +223,7 @@ class LinksAwakeningWorld(World):
                     if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
+                        location.show_in_spoiler = False
                         continue
 
                     if isinstance(item.item_data, DungeonItemData):
@@ -487,7 +488,8 @@ class LinksAwakeningWorld(World):
             rnd=self.multiworld.per_slot_randoms[self.player],
             player_name=name_for_rom,
             player_names=all_names,
-            player_id = self.player)
+            player_id = self.player,
+            multiworld=self.multiworld)
       
         with open(out_path, "wb") as handle:
             rom.save(handle, name="LADXR")
