@@ -48,6 +48,7 @@
 .definelabel TKakeraIconDsp_Sub, 0x8078D98
 .definelabel WarioVoiceSet, 0x8088620
 .definelabel MiniRandomCreate, 0x8089B80
+.definelabel MojiCreate, 0x80904DC
 .definelabel modsi3, 0x8094ED0
 .definelabel WarioChng_React, 0x82DECA0
 
