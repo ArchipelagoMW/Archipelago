@@ -89,7 +89,8 @@ class StardewValleyWorld(World):
         if goal_is_island_related and exclude_ginger_island:
             self.options[options.ExcludeGingerIsland] = options.ExcludeGingerIsland.option_false
             goal = options.Goal.name_lookup[self.options[options.Goal]]
-            logging.warning(f"Goal '{goal}' requires Ginger Island. Exclude Ginger Island setting forced to 'False'")
+            player_name = self.multiworld.player_name[self.player]
+            logging.warning(f"Goal '{goal}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
