@@ -22,9 +22,9 @@ from logging import warning
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
-    get_symbol_shuffle_list, get_door_panel_shuffle_list, get_doors_complex_list, get_doors_max_list, \
-    get_doors_simple_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, get_ep_no_eclipse, \
-    get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos
+    get_symbol_shuffle_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, get_ep_no_eclipse, \
+    get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos, get_complex_door_panels, get_complex_additional_panels, \
+    get_simple_doors, get_complex_doors
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -281,16 +281,18 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_ep_no_mountain())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
-            adjustment_linesets_in_order.append(get_door_panel_shuffle_list())
+            adjustment_linesets_in_order.append(get_complex_door_panels())
+            adjustment_linesets_in_order.append(get_complex_additional_panels())
 
         if get_option_value(world, player, "shuffle_doors") == 2:
-            adjustment_linesets_in_order.append(get_doors_simple_list())
+            adjustment_linesets_in_order.append(get_simple_doors())
 
         if get_option_value(world, player, "shuffle_doors") == 3:
-            adjustment_linesets_in_order.append(get_doors_complex_list())
+            adjustment_linesets_in_order.append(get_complex_doors())
 
         if get_option_value(world, player, "shuffle_doors") == 4:
-            adjustment_linesets_in_order.append(get_doors_max_list())
+            adjustment_linesets_in_order.append(get_complex_doors())
+            adjustment_linesets_in_order.append(get_complex_additional_panels())
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())

@@ -115,20 +115,20 @@ def get_symbol_shuffle_list():
     return get_adjustment_file("settings/Symbol_Shuffle.txt")
 
 
-def get_door_panel_shuffle_list():
-    return get_adjustment_file("settings/Door_Panel_Shuffle.txt")
+def get_complex_doors():
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Doors.txt")
 
 
-def get_doors_simple_list():
-    return get_adjustment_file("settings/Doors_Simple.txt")
+def get_simple_doors():
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Doors.txt")
 
 
-def get_doors_complex_list():
-    return get_adjustment_file("settings/Doors_Complex.txt")
+def get_complex_door_panels():
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
 
 
-def get_doors_max_list():
-    return get_adjustment_file("settings/Doors_Max.txt")
+def get_complex_additional_panels():
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
 
 
 def get_laser_shuffle():
