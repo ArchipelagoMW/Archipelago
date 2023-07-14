@@ -22,9 +22,9 @@ from logging import warning
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
-    get_symbol_shuffle_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, get_ep_no_eclipse, \
-    get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos, get_complex_door_panels, get_complex_additional_panels, \
-    get_simple_doors, get_complex_doors
+    get_symbol_shuffle_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, \
+    get_ep_no_eclipse, get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos, get_complex_door_panels,\
+    get_complex_additional_panels, get_simple_doors, get_complex_doors
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 

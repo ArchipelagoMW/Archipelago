@@ -469,8 +469,8 @@ Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Triangles & Dots & Full Dots
 158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Triangles & Dots & Full Dots
 Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
-158225 - 0x28998 (Tinted Glass Door Panel) - True - Stars & Rotated Shapers & Stars + Same Colored Symbol
-Door - 0x28A61 (Tinted Glass Door) - 0x28A0D
+158225 - 0x28998 (RGB House Entry Panel) - True - Stars & Rotated Shapers & Stars + Same Colored Symbol
+Door - 0x28A61 (RGB House Entry) - 0x28A0D
 158226 - 0x28A0D (Church Entry Panel) - 0x28998 - Stars
 Door - 0x03BB0 (Church Entry) - 0x03C08
 158228 - 0x28A79 (Maze Stair Control) - True - True

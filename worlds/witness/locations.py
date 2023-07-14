@@ -106,7 +106,7 @@ class StaticWitnessLocations:
         "Town Wooden Roof Lower Row 5",
         "Town Wooden Rooftop",
         "Town Windmill Entry Panel",
-        "Town Tinted Glass Door Panel",
+        "Town RGB House Entry Panel",
         "Town Laser Panel",
 
         "Town RGB Room Left",

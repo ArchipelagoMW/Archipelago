@@ -45,7 +45,7 @@ Monastery Entry Outer (Door)
 Monastery Garden Entry (Door)
 Town Cargo Box Entry (Door)
 Town Wooden Roof Stairs (Door)
-Town Tinted Glass Door
+Town RGB House Entry (Door)
 Town Church Entry (Door)
 Town Maze Stairs (Door)
 Town Windmill Entry (Door)
@@ -139,7 +139,7 @@ Monastery Entry Right
 Monastery Outside 3
 Town Cargo Box Entry Panel
 Town Wooden Roof Lower Row 5
-Town Tinted Glass Door Panel
+Town RGB House Entry Panel
 Town Church Entry Panel
 Town Maze Stair Control
 Town Windmill Entry Panel

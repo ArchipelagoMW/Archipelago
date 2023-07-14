@@ -128,7 +128,7 @@ def get_complex_door_panels():
 
 
 def get_complex_additional_panels():
-    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
+    return get_adjustment_file("settings/Door_Shuffle/Complex_Additional_Panels.txt")
 
 
 def get_laser_shuffle():
