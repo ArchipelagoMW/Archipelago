@@ -19,22 +19,29 @@ class StaticWitnessLocations:
         "Tutorial Front Left",
         "Tutorial Back Left",
         "Tutorial Back Right",
+        "Tutorial Patio Floor",
         "Tutorial Gate Open",
 
         "Outside Tutorial Vault Box",
         "Outside Tutorial Discard",
         "Outside Tutorial Shed Row 5",
         "Outside Tutorial Tree Row 9",
+        "Outside Tutorial Outpost Entry Panel",
+        "Outside Tutorial Outpost Exit Panel",
 
         "Glass Factory Discard",
         "Glass Factory Back Wall 5",
         "Glass Factory Front 3",
         "Glass Factory Melting 3",
 
+        "Symmetry Island Lower Panel",
         "Symmetry Island Right 5",
         "Symmetry Island Back 6",
         "Symmetry Island Left 7",
+        "Symmetry Island Upper Panel",
         "Symmetry Island Scenery Outlines 5",
+        "Symmetry Island Yellow 3",
+        "Symmetry Island Blue 3",
         "Symmetry Island Laser Panel",
 
         "Orchard Apple Tree 5",
@@ -49,8 +56,13 @@ class StaticWitnessLocations:
         "Desert Final Bent 3",
         "Desert Laser Panel",
 
+        "Quarry Entry 1 Panel",
+        "Quarry Entry 2 Panel",
+        "Quarry Stoneworks Entry Left Panel",
+        "Quarry Stoneworks Entry Right Panel",
         "Quarry Stoneworks Lower Row 6",
         "Quarry Stoneworks Upper Row 8",
+        "Quarry Stoneworks Control Room Left",
         "Quarry Stoneworks Control Room Right",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
@@ -86,13 +98,29 @@ class StaticWitnessLocations:
 
         "Town Cargo Box Discard",
         "Town Tall Hexagonal",
+        "Town Church Entry Panel"
         "Town Church Lattice",
+        "Town Maze Stair Control",
         "Town Rooftop Discard",
         "Town Red Rooftop 5",
         "Town Wooden Roof Lower Row 5",
         "Town Wooden Rooftop",
+        "Town Windmill Entry Panel",
+        "Town Tinted Glass Door Panel",
         "Town Laser Panel",
 
+        "Town RGB Room Left",
+        "Town RGB Room Right",
+        "Town Sound Room Right",
+
+        "Theater Entry Panel",
+        "Theater Exit Left Panel",
+        "Theater Exit Right Panel",
+        "Theater Tutorial Video",
+        "Theater Desert Video",
+        "Theater Jungle Video",
+        "Theater Shipwreck Video",
+        "Theater Mountain Video",
         "Theater Discard",
 
         "Jungle Discard",
@@ -102,24 +130,32 @@ class StaticWitnessLocations:
         "Jungle Laser Panel",
 
         "River Vault Box",
+        "River Monastery Shortcut Panel",
 
+        "Bunker Entry Panel",
         "Bunker Intro Left 5",
         "Bunker Intro Back 4",
         "Bunker Glass Room 3",
         "Bunker UV Room 2",
         "Bunker Laser Panel",
 
+        "Swamp Entry Panel",
         "Swamp Intro Front 6",
         "Swamp Intro Back 8",
         "Swamp Between Bridges Near Row 4",
         "Swamp Cyan Underwater 5",
         "Swamp Platform Row 4",
+        "Swamp Platform Shortcut Right Panel",
         "Swamp Between Bridges Far Row 4",
         "Swamp Red Underwater 4",
+        "Swamp Purple Underwater",
         "Swamp Beyond Rotating Bridge 4",
         "Swamp Blue Underwater 5",
         "Swamp Laser Panel",
 
+        "Treehouse First Door Panel",
+        "Treehouse Second Door Panel",
+        "Treehouse Third Door Panel",
         "Treehouse Yellow Bridge 9",
         "Treehouse First Purple Bridge 5",
         "Treehouse Second Purple Bridge 7",
@@ -129,22 +165,11 @@ class StaticWitnessLocations:
         "Treehouse Laser Discard",
         "Treehouse Right Orange Bridge 12",
         "Treehouse Laser Panel",
+        "Treehouse Bridge Control",
 
         "Mountainside Discard",
         "Mountainside Vault Box",
-
         "Mountaintop River Shape",
-        "Tutorial Patio Floor",
-        "Quarry Stoneworks Control Room Left",
-        "Theater Tutorial Video",
-        "Theater Desert Video",
-        "Theater Jungle Video",
-        "Theater Shipwreck Video",
-        "Theater Mountain Video",
-        "Town RGB Room Left",
-        "Town RGB Room Right",
-        "Town Sound Room Right",
-        "Swamp Purple Underwater",
 
         "First Hallway EP",
         "Tutorial Cloud EP",
@@ -378,6 +403,9 @@ class StaticWitnessLocations:
         "Caves Left Upstairs Single",
         "Caves Left Upstairs Left Row 5",
 
+        "Caves Challenge Entry Panel",
+        "Challenge Tunnels Entry",
+
         "Tunnels Vault Box",
         "Theater Challenge Video",
 
@@ -389,6 +417,8 @@ class StaticWitnessLocations:
 
     MOUNTAIN_UNREACHABLE_FROM_BEHIND = {
         "Mountaintop Trap Door Triple Exit",
+
+        "Mountain Floor 1 Light Bridge Controller",
 
         "Mountain Floor 1 Right Row 5",
         "Mountain Floor 1 Left Row 7",
@@ -408,6 +438,11 @@ class StaticWitnessLocations:
     MOUNTAIN_REACHABLE_FROM_BEHIND = {
         "Mountain Floor 2 Elevator Discard",
         "Mountain Bottom Floor Giant Puzzle",
+
+        "Mountain Final Room Entry Left",
+        "Mountain Final Room Entry Right",
+
+        "Mountain Bottom Floor Caves Entry",
 
         "Mountain Final Room Left Pillar 4",
         "Mountain Final Room Right Pillar 4",

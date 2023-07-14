@@ -112,12 +112,12 @@ Door - 0x18269 (Upper) - 0x1C349
 159000 - 0x0332B (Glass Factory Black Line Reflection EP) - True - True
 
 Symmetry Island Upper (Symmetry Island):
-158065 - 0x00A52 (Yellow 1) - True - Symmetry & Colored Dots
-158066 - 0x00A57 (Yellow 2) - 0x00A52 - Symmetry & Colored Dots
-158067 - 0x00A5B (Yellow 3) - 0x00A57 - Symmetry & Colored Dots
-158068 - 0x00A61 (Blue 1) - 0x00A52 - Symmetry & Colored Dots
-158069 - 0x00A64 (Blue 2) - 0x00A61 & 0x00A52 - Symmetry & Colored Dots
-158070 - 0x00A68 (Blue 3) - 0x00A64 & 0x00A57 - Symmetry & Colored Dots
+158065 - 0x00A52 (Laser Yellow 1) - True - Symmetry & Colored Dots
+158066 - 0x00A57 (Laser Yellow 2) - 0x00A52 - Symmetry & Colored Dots
+158067 - 0x00A5B (Laser Yellow 3) - 0x00A57 - Symmetry & Colored Dots
+158068 - 0x00A61 (Laser Blue 1) - 0x00A52 - Symmetry & Colored Dots
+158069 - 0x00A64 (Laser Blue 2) - 0x00A61 & 0x00A52 - Symmetry & Colored Dots
+158070 - 0x00A68 (Laser Blue 3) - 0x00A64 & 0x00A57 - Symmetry & Colored Dots
 158700 - 0x0360D (Laser Panel) - 0x00A68 - True
 Laser - 0x00509 (Laser) - 0x0360D
 159001 - 0x03367 (Glass Factory Black Line EP) - True - True
