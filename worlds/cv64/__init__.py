@@ -15,7 +15,7 @@ from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, 
 from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, \
-    rom_looping_music_fade_ins
+    rom_looping_music_fade_ins, rom_axe_cross_lower_values
 
 
 # import math
@@ -437,6 +437,8 @@ class CV64World(World):
             shop_name_list = []
             shop_desc_list = []
 
+            inv_setting = self.multiworld.invisible_items[self.player].value
+
             for loc in active_locations:
                 # If the Location is an event, skip it.
                 if loc.address is None:
@@ -450,9 +452,28 @@ class CV64World(World):
                         offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
                 else:
                     if loc.item.advancement:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x11
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x11  # Wooden stakes are majors
                     else:
-                        offsets_to_ids[loc.cv64_rom_offset] = 0x12
+                        offsets_to_ids[loc.cv64_rom_offset] = 0x12  # Roses are minors
+
+                    # If it's another CV64 player's item, change the multiworld item's model to match what it is.
+                    if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "npc":
+                        offsets_to_ids[loc.cv64_rom_offset - 1] = loc.item.code - 0xC64000
+
+                # Apply the invisibility variable depending on the "invisible items" setting.
+                if (inv_setting == 1 and loc.cv64_loc_type == "inv") or \
+                        (inv_setting == 2 and loc.cv64_loc_type not in ["npc", "shop"]):
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
+                elif inv_setting == 3 and loc.cv64_loc_type not in ["npc", "shop"]:
+                    invisible = random.randint(0, 1)
+                    if invisible:
+                        offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
+
+                # If it's an Axe or Cross in a higher freestanding location, lower it into grab range.
+                # KCEK made these spawn 3.2 units higher for some reason.
+                if loc.address in rom_axe_cross_lower_values and loc.item.code in [0xC6400F, 0xC64010]:
+                    offsets_to_ids[rom_axe_cross_lower_values[loc.address][0]] = \
+                        rom_axe_cross_lower_values[loc.address][1]
 
                 # Figure out the list of shop names and descriptions here.
                 if loc.parent_region.name == RName.renon:

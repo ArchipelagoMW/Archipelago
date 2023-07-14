@@ -116,8 +116,29 @@ rom_empty_breakables_flags = {
 
     0x10CF9F: 0x08,  # Room of Clocks flags
     0x10CFA7: 0x01,
-    0xBFCB27: 0x04,  # Room of Clocks candle property IDs
-    0xBFCB2B: 0x05,
+    0xBFCB37: 0x04,  # Room of Clocks candle property IDs
+    0xBFCB3B: 0x05,
+}
+
+rom_axe_cross_lower_values = {
+    0xC6400A: [0x7C7F97, 0x07],  # Forest
+    0xC64015: [0x7C7FA6, 0xF9],
+
+    0xC64041: [0x83A60A, 0x71],  # Villa hallway
+    0xC64042: [0x83A617, 0x26],
+    0xC6403F: [0x83A624, 0x6E],
+
+    0xC64049: [0x850FE6, 0x07],  # Villa maze
+
+    0xC64089: [0x8C44D3, 0x08],  # CC factory floor
+    0xC6408D: [0x8C44E1, 0x08],
+
+    0xC64091: [0x8DF77C, 0x07],  # CC invention area
+    0xC640A8: [0x90FD37, 0x43],
+    0xC6409C: [0xBFCC23, 0x43],
+    0xC640A5: [0x90FBA1, 0x51],
+    0xC640A3: [0x90FBAD, 0x50],
+    0xC6409D: [0x90FE56, 0x43]
 }
 
 rom_looping_music_fade_ins = {
@@ -480,6 +501,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Disable spinning on the Special1 and 2 pickup models so colorblind people can more easily identify them
     rom.write_byte(0xEE4F5, 0x00)  # Special1
     rom.write_byte(0xEE505, 0x00)  # Special2
+    # Make the Special2 the same size as a Red jewel(L) to further distinguish them
+    rom.write_int32(0xEE4FC, 0x3FA66666)
 
     # Prevent the vanilla Magical Nitro transport's "can explode" flag from setting
     rom.write_int32(0xB5D7AA, 0x00000000)  # NOP
@@ -591,14 +614,14 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Dracula's chamber condition
     rom.write_int32(0xE2FDC, 0x0804AB25)  # J 0x8012AC78
     rom.write_int32s(0xADE84, Patches.special_goal_checker)
-    rom.write_bytes(0xBFCC3C, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
+    rom.write_bytes(0xBFCC40, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
     if multiworld.draculas_condition[player] == 1:
         rom.write_int32(0x6C8A54, 0x0C0FF089)  # JAL 0x803FC224
         rom.write_int32s(0xBFC224, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
-        rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
+        rom.write_bytes(0xBFCC66, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need the power\n"
                                                       f"of the basement crystal\n"
                                                       f"to undo the seal.", True))
