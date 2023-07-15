@@ -35,6 +35,7 @@ class TestBase(unittest.TestCase):
         # Thus, "postgame" regions are made entirely unreachable. These are the postgame regions in default settings.
 
         "The Witness": {
+            "Mountain Bottom Floor Rock",
             "Mountain Path to Caves",
             "Caves",
             "Path to Challenge",
