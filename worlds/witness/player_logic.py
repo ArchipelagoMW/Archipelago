@@ -243,25 +243,26 @@ class WitnessPlayerLogic:
 
         mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
 
-        if not (earlyutm or doors):
-            adjustment_linesets_in_order.append(get_caves_exclusion_list())
-            if not victory == 1:
-                adjustment_linesets_in_order.append(get_path_to_challenge_exclusion_list())
-                adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
+        if not is_option_enabled(world, player, "shuffle_postgame"):
+            if not (earlyutm or doors):
+                adjustment_linesets_in_order.append(get_caves_exclusion_list())
+                if not victory == 1:
+                    adjustment_linesets_in_order.append(get_path_to_challenge_exclusion_list())
+                    adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
-        if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers))):
-            adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
-            if not victory == 1:
-                adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
+            if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers))):
+                adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
+                if not victory == 1:
+                    adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
-        if not(doors or mountain_enterable_from_top):
-            adjustment_linesets_in_order.append(get_mountain_lower_exclusion_list())
+            if not(doors or mountain_enterable_from_top):
+                adjustment_linesets_in_order.append(get_mountain_lower_exclusion_list())
 
-        if not mountain_enterable_from_top:
-            adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
+            if not mountain_enterable_from_top:
+                adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
 
-        if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors)):
-            adjustment_linesets_in_order.append(get_11_lasers_exclusion_list())
+            if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors)):
+                adjustment_linesets_in_order.append(get_11_lasers_exclusion_list())
 
         # Victory Condition
 
