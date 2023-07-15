@@ -372,7 +372,6 @@ function process_request (req)
 
     elseif req["type"] == "WRITE" then
         res["type"] = "WRITE_RESPONSE"
-        print(base64.decode(req["value"]))
         memory.write_bytes_as_array(req["address"], base64.decode(req["value"]), req["domain"])
 
     elseif req["type"] == "DISPLAY_MESSAGE" then
