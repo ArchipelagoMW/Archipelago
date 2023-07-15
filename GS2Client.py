@@ -14,9 +14,9 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from NetUtils import ClientStatus
-from worlds.GS2.Items import items_by_id
-from worlds.GS2.Rom import get_base_rom_path
-from worlds.GS2.Locations import all_locations, scoutable_locations
+from worlds.gstla.Items import items_by_id
+from worlds.gstla.Rom import get_base_rom_path
+from worlds.gstla.Locations import all_locations, scoutable_locations
 
 SYSTEM_MESSAGE_ID = 0
 
