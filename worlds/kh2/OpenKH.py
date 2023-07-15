@@ -344,17 +344,20 @@ def patch_kh2(self, output_directory):
         'title':  'Randomizer Seed'
     }
     goal_to_text = {
+        0: "Three Proofs",
         1: "Lucky Emblem",
         2: "Hitlist",
         3: "Lucky Emblem and Hitlist",
     }
     lucky_emblem_text = {
+        0: "Your Goal is not Lucky Emblem is it Hitlist or Three Proofs.",
         1: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}",
-        2: f"Your Goal is not Lucky Emblem is it Hitlist.",
+        2: "Your Goal is not Lucky Emblem is it Hitlist or Three Proofs.",
         3: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}"
     }
     hitlist_text = {
-        1: "Your Goal is not Hitlist. It is Lucky Emblem",
+        0: "Your Goal is not Hitlist. It is Lucky Emblem or Three Proofs",
+        1: "Your Goal is not Hitlist. It is Lucky Emblem or Three Proofs",
         2: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
         3: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
     }
