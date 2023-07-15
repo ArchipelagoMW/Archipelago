@@ -33,9 +33,10 @@ ItemReceivedFeedbackSound:
 .pool
 
 
-; Get the next incoming item and return it in r0, and return this game's player
-; ID in r1.
-; If nothing was received, return 0xFF
+; Get the next incoming item. If nothing was received, return 0xFF.
+;
+; Returns:
+;   r0: Item ID received
 ReceiveNextItem:
     ldr r2, =MultiworldState
     ldrb r0, [r2]

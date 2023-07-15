@@ -69,6 +69,10 @@ GetItemAtLocation:
 ; Collect the item in r0. If the item is this player's junk, it will be stored
 ; and given to Wario later.
 ;
+; Parameters:
+;   r0: Item ID
+;   r1: Pointer to multiworld data
+;
 ; See Items.py
 GiveItem:
     push {r4-r5, lr}
@@ -78,9 +82,7 @@ GiveItem:
     beq @@Return
 
 ; If another world's item, it'll be handled outside the game
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@Return
 
     lsr r1, r0, #6

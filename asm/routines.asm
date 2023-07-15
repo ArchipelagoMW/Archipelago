@@ -45,8 +45,9 @@ PreGamePrep:
 PyramidScreen:
     push {r4}
 
-    bl ReceiveNextItem
+    bl ReceiveNextItem  ; a1
     mov r4, r0
+    mov r1, #0  ; a2
     bl GiveItem
     mov r0, r4
 
@@ -82,9 +83,14 @@ LevelScreen:
     cmp r0, #0
     bne @@Return
 
-    bl ReceiveNextItem
+    bl ReceiveNextItem  ; a1
     mov r4, r0
+    mov r1, #0  ; a2
     bl GiveItem
+
+    cmp r4, #0xFF
+    beq @@Return
+    bl LoadReceivedText
 
 ; If we get treasure, tell the player
     lsl r0, r4, #31-6
@@ -99,7 +105,6 @@ LevelScreen:
     bl SetTreasurePalette
     lsr r0, r4, #5
     bl SpawnCollectionIndicator
-    bl LoadReceivedText
 
 @@CollectJunk:
     bl CollectJunkItems
