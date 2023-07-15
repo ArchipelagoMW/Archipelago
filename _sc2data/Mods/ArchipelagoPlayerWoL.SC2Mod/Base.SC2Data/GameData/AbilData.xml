@@ -15,4 +15,12 @@
         <!-- Exclude AP_Starport from all Factory-like so for AP_Starport AP_FactoryReactorMorph is called instead -->
         <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
     </CAbilMorph>
+    <CAbilWarpTrain id="AP_SuperWarpGateTrain">
+        <SharedFlags index="SkipPreload" value="1"/>
+        <InfoArray index="Train2" Time="5" Unit="AP_StalkerShakuras">
+            <Resource index="Minerals" value="-125"/>
+            <Resource index="Vespene" value="-50"/>
+            <Button DefaultButtonFace="Stalker"/>
+        </InfoArray>
+    </CAbilWarpTrain>
 </Catalog>

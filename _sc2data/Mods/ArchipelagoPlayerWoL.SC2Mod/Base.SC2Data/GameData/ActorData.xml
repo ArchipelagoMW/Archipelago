@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Catalog>
+    <CActorProgress id="ProtossWarpIn">
+        <!-- Override -->
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="ActorCreation; !ValidateUnit SuperPower" Target="_Unit" Send="$Birth 0 0.000000 0.000000 16.000000 AsDuration"/>
+        <On Terms="ActorCreation; ValidateUnit SuperPower" Target="_Unit" Send="$Birth 0 0.000000 0.000000 5.000000 AsDuration"/>
+        <StageArray AnimProps="Stand"/>
+    </CActorProgress>
+    <CActorModel id="WarpTrainModel">
+        <!-- Override -->
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStop" Send="AnimBracketStop BSD"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+    </CActorModel>
+    <CActorSound id="WarpTrainStart">
+        <!-- Override -->
+        <Sound value="WarpGate_TrainStart"/>
+        <Host Subject="_Selectable"/>
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="WarpTrainLoop">
+        <!-- Override -->
+        <Sound value="WarpGate_TrainLoop"/>
+        <Host Subject="_Selectable"/>
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStop" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="WarpTrainStop">
+        <!-- Override -->
+        <Sound value="WarpGate_TrainFinish"/>
+        <Host Subject="_Selectable"/>
+        <On Terms="Abil.AP_SuperWarpGateTrain.TargetStop" Send="Create"/>
+    </CActorSound>
+</Catalog>

@@ -2820,14 +2820,6 @@ void libABFE498B_gf_AP_Triggers_giveProtossDefaultTech (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VoidPhoenixDoubleGraviton", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SlayerConfig", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AlarakStalkerPhasingArmor", 1);
-    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SOAWarpTech", 1);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockPhotonCannon(lp_player);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockObserver(lp_player);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockGroundWeapons(lp_player, 3);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockGroundArmor(lp_player, 3);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockShields(lp_player, 3);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockAirWeapons(lp_player, 3);
-    libABFE498B_gf_AP_Triggers_Protoss_unlockAirArmor(lp_player, 3);
 }
 
 void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgrade, string lp_newUpgrade) {
@@ -2980,6 +2972,14 @@ bool libABFE498B_gt_AP_Triggers_giveProtossTech_Func (bool testConds, bool runAc
         lv_currentPlayer = PlayerGroupNextPlayer(auto67EC4BC5_g, lv_currentPlayer);
         if (lv_currentPlayer < 0) { break; }
         libABFE498B_gf_AP_Triggers_unlockProtossUnits(lv_currentPlayer, StringToInt(lv_unitValue));
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_currentPlayer, "AP_SOAWarpTech", 1);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockPhotonCannon(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockObserver(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockGroundWeapons(lv_currentPlayer, 3);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockGroundArmor(lv_currentPlayer, 3);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockShields(lv_currentPlayer, 3);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockAirWeapons(lv_currentPlayer, 3);
+        libABFE498B_gf_AP_Triggers_Protoss_unlockAirArmor(lv_currentPlayer, 3);
     }
     return true;
 }

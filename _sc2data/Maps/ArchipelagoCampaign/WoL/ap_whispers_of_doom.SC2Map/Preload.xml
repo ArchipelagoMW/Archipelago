@@ -116,7 +116,6 @@
 <Soundtrack id="TZeratul01MusicOutro"/>
 <Terrain id="Ulaan"/>
 <Unit id="Zealot"/>
-<Unit id="Stalker"/>
 <Unit id="WarpPrism"/>
 <Unit id="Hatchery"/>
 <Unit id="RoachWarren"/>
@@ -153,4 +152,5 @@
 <Unit id="SuperWarpGate"/>
 <Unit id="XelNagaShrine"/>
 <Unit id="Food1000"/>
+<Unit id="AP_StalkerShakuras"/>
 </Preload>
