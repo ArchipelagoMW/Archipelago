@@ -21,10 +21,7 @@ from logging import warning
 
 from BaseClasses import MultiWorld
 from .static_logic import StaticWitnessLogic, DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
-from .utils import define_new_region, get_disable_unrandomized_list, parse_lambda, get_early_utm_list, \
-    get_symbol_shuffle_list, get_laser_shuffle, get_ep_all_individual, get_ep_obelisks, get_ep_easy, \
-    get_ep_no_eclipse, get_ep_no_caves, get_ep_no_mountain, get_ep_no_videos, get_complex_door_panels,\
-    get_complex_additional_panels, get_simple_doors, get_complex_doors
+from .utils import *
 from .Options import is_option_enabled, get_option_value, the_witness_options
 
 
@@ -236,6 +233,33 @@ class WitnessPlayerLogic:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
 
+        # Postgame
+
+        doors = get_option_value(world, player, "shuffle_doors") >= 2
+        earlyutm = is_option_enabled(world, player, "early_secret_area")
+        victory = get_option_value(world, player, "victory_condition")
+        mount_lasers = get_option_value(world, player, "mountain_lasers")
+        chal_lasers = get_option_value(world, player, "challenge_lasers")
+
+        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
+
+        if not (earlyutm or doors):
+            adjustment_linesets_in_order.append(get_caves_exclusion_list())
+
+        if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers))):
+            adjustment_linesets_in_order.append(get_challenge_exclusion_list())
+
+        if not(doors or mountain_enterable_from_top):
+            adjustment_linesets_in_order.append(get_mountain_lower_exclusion_list())
+
+        if not mountain_enterable_from_top:
+            adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
+
+        if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors)):
+            adjustment_linesets_in_order.append(get_11_lasers_exclusion_list())
+
+        # Victory Condition
+
         if get_option_value(world, player, "victory_condition") == 0:
             self.VICTORY_LOCATION = "0x3D9A9"
         elif get_option_value(world, player, "victory_condition") == 1:
@@ -264,21 +288,6 @@ class WitnessPlayerLogic:
 
         if not is_option_enabled(world, player, "shuffle_vault_boxes"):
             adjustment_linesets_in_order.append(get_ep_no_videos())
-
-        doors = get_option_value(world, player, "shuffle_doors") >= 2
-        earlyutm = is_option_enabled(world, player, "early_secret_area")
-        victory = get_option_value(world, player, "victory_condition")
-        mount_lasers = get_option_value(world, player, "mountain_lasers")
-        chal_lasers = get_option_value(world, player, "challenge_lasers")
-
-        excluse_postgame = not is_option_enabled(world, player, "shuffle_postgame")
-
-        if excluse_postgame and not (earlyutm or doors):
-            adjustment_linesets_in_order.append(get_ep_no_caves())
-
-        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
-        if excluse_postgame and not mountain_enterable_from_top:
-            adjustment_linesets_in_order.append(get_ep_no_mountain())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_complex_door_panels())
@@ -396,7 +405,8 @@ class WitnessPlayerLogic:
                             continue
 
                         if self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
-                            self.EVENT_PANELS_FROM_REGIONS.add(panel)
+                            if not panel in self.COMPLETELY_DISABLED_CHECKS:
+                                self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_REGIONS)
@@ -539,8 +549,6 @@ class WitnessPlayerLogic:
             "0x0C2B2": "Bunker Laser Activation",
             "0x00BF6": "Swamp Laser Activation",
             "0x028A4": "Treehouse Laser Activation",
-            "0x09F7F": "Mountaintop Trap Door Turns On",
-            "0x17C34": "Mountain Access",
         }
 
         self.make_options_adjustments(world, player)

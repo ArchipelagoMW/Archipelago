@@ -64,6 +64,7 @@ class StaticWitnessLocations:
         "Quarry Stoneworks Upper Row 8",
         "Quarry Stoneworks Control Room Left",
         "Quarry Stoneworks Control Room Right",
+        "Quarry Stoneworks Stair Control",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
         "Quarry Boathouse Front Row 5",
@@ -378,9 +379,7 @@ class StaticWitnessLocations:
         "Town Obelisk Side 4",
         "Town Obelisk Side 5",
         "Town Obelisk Side 6",
-    }
 
-    CAVES_LOCATIONS = {
         "Caves Blue Tunnel Right First 4",
         "Caves Blue Tunnel Left First 1",
         "Caves Blue Tunnel Left Second 5",
@@ -413,9 +412,7 @@ class StaticWitnessLocations:
         "Challenge Water EP",
         "Tunnels Theater Flowers EP",
         "Tutorial Gate EP",
-    }
 
-    MOUNTAIN_UNREACHABLE_FROM_BEHIND = {
         "Mountaintop Trap Door Triple Exit",
 
         "Mountain Floor 1 Light Bridge Controller",
@@ -433,9 +430,7 @@ class StaticWitnessLocations:
         "Mountain Bottom Floor Yellow Bridge EP",
         "Mountain Bottom Floor Blue Bridge EP",
         "Mountain Floor 2 Pink Bridge EP",
-    }
 
-    MOUNTAIN_REACHABLE_FROM_BEHIND = {
         "Mountain Floor 2 Elevator Discard",
         "Mountain Bottom Floor Giant Puzzle",
 
@@ -500,38 +495,6 @@ class WitnessPlayerLocations:
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
-        doors = get_option_value(world, player, "shuffle_doors") >= 2
-        earlyutm = is_option_enabled(world, player, "early_secret_area")
-        victory = get_option_value(world, player, "victory_condition")
-        mount_lasers = get_option_value(world, player, "mountain_lasers")
-        chal_lasers = get_option_value(world, player, "challenge_lasers")
-        # laser_shuffle = get_option_value(world, player, "shuffle_lasers")
-
-        postgame = set()
-        postgame = postgame | StaticWitnessLocations.CAVES_LOCATIONS
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
-        postgame = postgame | StaticWitnessLocations.MOUNTAIN_EXTRAS
-
-        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | postgame
-
-        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
-
-        if earlyutm or doors:  # in non-doors, there is no way to get symbol-locked by the final pillars (currently)
-            postgame -= StaticWitnessLocations.CAVES_LOCATIONS
-
-        if (doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers)):
-            postgame -= {"Challenge Vault Box", "Theater Challenge Video"}
-
-        if doors or mountain_enterable_from_top:
-            postgame -= StaticWitnessLocations.MOUNTAIN_REACHABLE_FROM_BEHIND
-
-        if mountain_enterable_from_top:
-            postgame -= StaticWitnessLocations.MOUNTAIN_UNREACHABLE_FROM_BEHIND
-
-        if (victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors):
-            postgame -= {"Mountain Bottom Floor Discard"}
-
         if is_option_enabled(world, player, "shuffle_discarded_panels"):
             self.PANEL_TYPES_TO_SHUFFLE.add("Discard")
 
@@ -549,9 +512,6 @@ class WitnessPlayerLocations:
                     self.CHECK_LOCATIONS.discard(obelisk_loc)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
-
-        if not is_option_enabled(world, player, "shuffle_postgame"):
-            self.CHECK_LOCATIONS -= postgame
 
         self.CHECK_LOCATIONS -= {
             StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"]

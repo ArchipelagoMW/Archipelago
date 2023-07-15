@@ -155,16 +155,28 @@ def get_ep_no_eclipse():
     return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
 
 
-def get_ep_no_caves():
-    return get_adjustment_file("settings/EP_Shuffle/EP_NoCavesEPs.txt")
-
-
-def get_ep_no_mountain():
-    return get_adjustment_file("settings/EP_Shuffle/EP_NoMountainEPs.txt")
-
-
 def get_ep_no_videos():
     return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
+
+
+def get_caves_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Caves.txt")
+
+
+def get_challenge_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Beat_Challenge.txt")
+
+
+def get_11_lasers_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
+
+
+def get_mountain_upper_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
+
+
+def get_mountain_lower_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
 
 
 def get_sigma_normal_logic():

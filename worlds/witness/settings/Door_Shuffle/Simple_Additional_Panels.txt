@@ -6,6 +6,6 @@ Quarry Boathouse Control Panels
 Monastery Shutters Control (Panel)
 Town Control Panels
 Windmill/Theater Control Panels
-Bunker Elevator Control (Panel)
+Bunker Control Panels
 Swamp Control Panels
-Mountain Control Panels
+Mountain&Caves Control Panels
