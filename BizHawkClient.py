@@ -344,6 +344,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
             if not await _try_connect(ctx):
                 continue
 
+            showed_no_handler_message = False
+
             script_version = (await send_requests(ctx, [{"type": "SCRIPT_VERSION"}]))[0]["value"]
 
             if script_version[0] != EXPECTED_SCRIPT_VERSION[0] or script_version[1] < EXPECTED_SCRIPT_VERSION[1]:
