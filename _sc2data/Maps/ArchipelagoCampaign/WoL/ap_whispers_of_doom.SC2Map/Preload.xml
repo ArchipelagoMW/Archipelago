@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Achievement id="Anniversary_TZeratul01"/>
+<Achievement id="TZeratul01_1"/>
+<Achievement id="TZeratul01_2"/>
+<Achievement id="TZeratul01_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniBlueLarge"/>
+<Actor id="LightOmniCyan"/>
+<Actor id="LightOmniCyanLarge"/>
+<Actor id="LightOmniPurple"/>
+<Actor id="LightOmniPurpleLarge"/>
+<Actor id="CreepBlocker1x1Doodad"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="PathingBlocker2x2Doodad"/>
+<Actor id="BrokenGroundEdging" Variations="0,1,2,3"/>
+<Actor id="CloudsUlaan"/>
+<Actor id="FogBlue"/>
+<Actor id="FogStormDeep"/>
+<Actor id="ShakurasCliffGapFiller"/>
+<Actor id="Spires" Variations="0,1,2,3,4,5,6,7,8"/>
+<Actor id="SpiresLarge" Variations="0,1,2,3"/>
+<Actor id="UlaanDestructibleBridge" Variations="0,3"/>
+<Actor id="XelNagaTornPlates" Variations="1,2"/>
+<Actor id="ZhakulDasObelisk" Variations="0"/>
+<Actor id="XelNagaCliffWallRuins" Variations="1,2,3"/>
+<Actor id="XelNagaCliffWallSpires" Variations="0,2,3,4,5"/>
+<Actor id="XelNagaDebris" Variations="0,1,2"/>
+<Actor id="TOZhakulDasPassageADoodad"/>
+<Behavior id="SpawnLarva"/>
+<Behavior id="PsytrousOxide"/>
+<Behavior id="KerriganWalk"/>
+<Behavior id="Read"/>
+<Behavior id="InstallationZergWander"/>
+<Behavior id="SuppressCloak"/>
+<Behavior id="ScanRangeBonus"/>
+<Light id="Ulaan"/>
+<Model id="PingArrow"/>
+<Model id="PingObjective"/>
+<Model id="PingSimple"/>
+<Model id="BlinkStopModel"/>
+<Model id="BriefingUnitSelectProtoss"/>
+<Model id="BriefingUnitSelectProtossSmall"/>
+<Model id="ZeratulBlinkIn"/>
+<Model id="ShieldTransferImpact"/>
+<Model id="VC_Zeratul1_Sky"/>
+<Sound id="TemplarArchive_What" Variations="0"/>
+<Sound id="Hydralisk_Ready"/>
+<Sound id="Mutalisk_Attack" Variations="0,2,3,4,9"/>
+<Sound id="NydusWorm_Unload"/>
+<Sound id="NydusWorm_Birth"/>
+<Sound id="Ultralisk_Attack" Variations="0"/>
+<Sound id="Protoss_PowerUpSmall" Variations="1"/>
+<Sound id="Uni_RockExplosionLarge" Variations="1"/>
+<Sound id="HighTemplar_PlasmaSurge"/>
+<Sound id="UI_DoorMenu_Popup" Variations="2"/>
+<Sound id="UI_TerranRescueUnit" Variations="0"/>
+<Sound id="VoidSeeker_Load"/>
+<Sound id="TZeratul01Zeratul00003"/>
+<Sound id="TZeratul01Kerrigan00011"/>
+<Sound id="TZeratul01Zeratul00012"/>
+<Sound id="TZeratul01Kerrigan00013"/>
+<Sound id="TZeratul01Zeratul00015" Variations="0"/>
+<Sound id="TZeratul01Zeratul00023" Variations="0"/>
+<Sound id="TZeratul01Zeratul00027" Variations="0"/>
+<Sound id="TZeratul01Zeratul00028"/>
+<Sound id="TZeratul01Stalker00029"/>
+<Sound id="TZeratul01Zeratul00030"/>
+<Sound id="TZeratul01Zeratul00031" Variations="0"/>
+<Sound id="TZeratul01Zeratul00033"/>
+<Sound id="TZeratul01Zeratul00034"/>
+<Sound id="TZeratul01Kerrigan00035"/>
+<Sound id="TZeratul01Zeratul00036"/>
+<Sound id="TZeratul01Zeratul00040" Variations="0"/>
+<Sound id="TZeratul01Zeratul00041" Variations="0"/>
+<Sound id="TZeratul01Zeratul00042" Variations="0"/>
+<Sound id="TZeratul01Zeratul00043" Variations="0"/>
+<Sound id="TZeratul01Zeratul00044"/>
+<Sound id="TZeratul01Zeratul00046"/>
+<Sound id="TZeratul01Zeratul00047"/>
+<Sound id="TZeratul01Zeratul00048"/>
+<Sound id="TZeratul01Stalker00049"/>
+<Sound id="TZeratul01Stalker00050"/>
+<Sound id="TZeratul01Zeratul00051"/>
+<Sound id="TZeratul01Karass00053" Variations="0"/>
+<Sound id="TZeratul01Zeratul00054" Variations="0"/>
+<Sound id="TZeratul01Karass00055" Variations="0"/>
+<Sound id="TZeratul01Karass00056"/>
+<Sound id="TZeratul01Karass00057" Variations="0"/>
+<Sound id="TZeratul01Zeratul00058"/>
+<Sound id="TZeratul01Karass00059"/>
+<Sound id="TZeratul01Zeratul00060" Variations="0"/>
+<Sound id="TZeratul01Karass00062"/>
+<Sound id="TZeratul01Zeratul00063"/>
+<Sound id="TZeratul01Zeratul00064"/>
+<Sound id="TZeratul01Zeratul00065"/>
+<Sound id="TZeratul01Karass00066" Variations="0"/>
+<Sound id="TZeratul01Stalker00067" Variations="0"/>
+<Sound id="TZeratul01Zeratul00068"/>
+<Sound id="TZeratul01Zeratul00069"/>
+<Sound id="TZeratul01Zeratul00070"/>
+<Sound id="TZeratul01Zeratul00071"/>
+<Sound id="TZeratul01Zeratul00072" Variations="0"/>
+<Sound id="TZeratul01Zeratul00073" Variations="0"/>
+<Sound id="TZeratul01Zeratul00074"/>
+<Sound id="TZeratul01Karass00075"/>
+<Sound id="TZeratul01Zeratul00076"/>
+<Sound id="TZeratul01Karass00077"/>
+<Sound id="TZeratul01BriefingZeratul00004"/>
+<Sound id="TZeratul01BriefingZeratul00009"/>
+<Soundtrack id="Ambience_Aiur"/>
+<Soundtrack id="TZeratul01MusicEventA"/>
+<Soundtrack id="TZeratul01MusicEventB"/>
+<Soundtrack id="TZeratul01MusicEventC"/>
+<Soundtrack id="TZeratul01MusicMain"/>
+<Soundtrack id="TZeratul01MusicOutro"/>
+<Terrain id="Ulaan"/>
+<Unit id="Zealot"/>
+<Unit id="Stalker"/>
+<Unit id="WarpPrism"/>
+<Unit id="Hatchery"/>
+<Unit id="RoachWarren"/>
+<Unit id="SpineCrawler"/>
+<Unit id="SporeCrawler"/>
+<Unit id="Zergling"/>
+<Unit id="Overlord"/>
+<Unit id="Hydralisk"/>
+<Unit id="Mutalisk"/>
+<Unit id="Ultralisk"/>
+<Unit id="Roach"/>
+<Unit id="BroodLord"/>
+<Unit id="BanelingBurrowed"/>
+<Unit id="HydraliskBurrowed"/>
+<Unit id="RoachBurrowed"/>
+<Unit id="ZerglingBurrowed"/>
+<Unit id="Overseer"/>
+<Unit id="UltraliskBurrowed"/>
+<Unit id="CreepTumorBurrowed"/>
+<Unit id="SpineCrawlerUprooted"/>
+<Unit id="SporeCrawlerUprooted"/>
+<Unit id="NydusCanal"/>
+<Unit id="Beacon_Protoss"/>
+<Unit id="DestructibleRock6x6"/>
+<Unit id="PathingBlocker2x2"/>
+<Unit id="KerriganChar"/>
+<Unit id="Zeratul"/>
+<Unit id="XelNagaTempleDoor"/>
+<Unit id="XelNagaTempleDoorURDL"/>
+<Unit id="Scourge"/>
+<Unit id="VoidSeeker"/>
+<Unit id="Karass"/>
+<Unit id="InvisiblePylon"/>
+<Unit id="SuperWarpGate"/>
+<Unit id="XelNagaShrine"/>
+<Unit id="Food1000"/>
+</Preload>
