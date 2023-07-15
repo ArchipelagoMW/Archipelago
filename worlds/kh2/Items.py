@@ -251,7 +251,7 @@ SupportAbility_Table = {
     ItemName.MPHastega:        ItemData(1, 422, 0x1A6, 0, True),
     ItemName.Defender:         ItemData(2, 414, 0x19E, 0, True),
     ItemName.DamageControl:    ItemData(2, 542, 0x21E, 0, True),
-    ItemName.NoExperience:     ItemData(0, 404, 0x194, 0, True), # quantity changed to 0 because the player starts with one always.
+    ItemName.NoExperience:     ItemData(0, 404, 0x194, 0, True),  # quantity changed to 0 because the player starts with one always.
     ItemName.LightDarkness:    ItemData(1, 541, 0x21D, 0, True),
     ItemName.MagicLock:        ItemData(1, 403, 0x193, 0, True),
     ItemName.LeafBracer:       ItemData(1, 402, 0x192, 0, True),
@@ -352,6 +352,27 @@ Wincon_Table = {
     ItemName.Bounty:      ItemData(0, 461, 0x365E),  # Dummy 14
     # ItemName.UniversalKey:ItemData(,365,0x363F,0)#Tournament Poster
 }
+
+Consumable_Table = {
+    ItemName.Potion:            ItemData(1, 127, 0x36B8),  # 1, 0x3580, piglets house map
+    ItemName.HiPotion:          ItemData(1, 126, 0x36B9),  # 2, 0x03581, rabbits house map
+    ItemName.Ether:             ItemData(1, 128, 0x36BA),  # 3, 0x3582, kangas house
+    ItemName.Elixir:            ItemData(1, 129, 0x36BB),  # 4, 0x3583, spooky cave map
+    ItemName.Megalixir:         ItemData(1, 124, 0x36BC),  # 7, 0x3586, starry hill map
+    ItemName.Tent:              ItemData(1, 512, 0x36BD),  # 131,0x35E1, savannah map
+    ItemName.DriveRecovery:     ItemData(1, 252, 0x36BE),  # 274,0x3664, pride rock map
+    ItemName.HighDriveRecovery: ItemData(1, 511, 0x36BF),  # 275,0x3665, oasis map
+}
+
+Misc_Table={}
+# KH2Item(127, "Piglet's House Map", itemType.MAP),
+# KH2Item(126, "Rabbit's House Map", itemType.MAP),
+# KH2Item(128, "Kanga's House Map", itemType.MAP),
+# KH2Item(129, "Spooky Cave Map", itemType.MAP),
+# KH2Item(124, "Starry Hill Map", itemType.MAP),
+# KH2Item(512, "Savannah Map", itemType.MAP),
+# KH2Item(252, "Pride Rock Map", itemType.MAP),
+# KH2Item(511, "Oasis Map", itemType.MAP),
 
 Events_Table = {
     ItemName.HostileProgramEvent,
@@ -637,6 +658,7 @@ item_dictionary_table = {
     **Boosts_Table,
     **DonaldAbility_Table,
     **GoofyAbility_Table,
+    **Consumable_Table
 }
 
 item_groups: typing.Dict[str, list] = {

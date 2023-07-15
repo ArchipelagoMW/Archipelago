@@ -763,6 +763,9 @@ class KH2Context(CommonContext):
                 if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][itemName] and amountOfBoostsInInvo < 255:
                     self.kh2_write_byte(self.Save + itemData.memaddr, amountOfBoostsInInvo)
 
+            if self.generator_version.build > 1  and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.2
+                self.kh2_write_byte(self.Save + 0x3607, 1)
+
         except Exception as e:
             logger.info("Line 573")
             if self.kh2connected:
