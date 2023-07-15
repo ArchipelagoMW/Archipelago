@@ -201,22 +201,23 @@ class PartyGetBonusLock(Toggle):
 
 
 class PromiseCharm(Toggle):
-    """Add Promise Charm to the Pool"""
+    """Add Promise Charm to the pool"""
     display_name = "Promise Charm"
     default = False
 
 
 class Goal(Choice):
     """Win Condition
-    Three Proofs: Get a Gold Crown on Sora's Head.
+    Lucky Emblem Hunt: Find required amount of Lucky Emblems.
 
-    Lucky Emblem Hunt: Find Required Amount of Lucky Emblems .
+    Hitlist (Bounty Hunt): Find required amount of Bounties.
 
-    Hitlist (Bounty Hunt): Find Required Amount of Bounties"""
+    Lucky Emblem and Hitlist: Find the required amount of Lucky Emblems and Bounties."""
     display_name = "Goal"
-    option_three_proofs = 0
+    # option_three_proofs = 0
     option_lucky_emblem_hunt = 1
     option_hitlist = 2
+    option_hitlist_and_lucky_emblem = 3
     default = 1
 
 
@@ -228,43 +229,43 @@ class FinalXemnas(Toggle):
 
 
 class LuckyEmblemsRequired(Range):
-    """Number of Lucky Emblems to collect to Win/Unlock Final Xemnas Door.
+    """Number of Lucky Emblems to collect to Win/Unlock Final Xemnas' Door.
 
-    If Goal is not Lucky Emblem Hunt this does nothing."""
+    If Goal is not Lucky Emblem Hunt or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Lucky Emblems Required"
     range_start = 1
-    range_end = 60
-    default = 30
+    range_end = 90
+    default = 60
 
 
 class LuckyEmblemsAmount(Range):
     """Number of Lucky Emblems that are in the pool.
 
-    If Goal is not Lucky Emblem Hunt this does nothing."""
+    If Goal is not Lucky Emblem Hunt or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Lucky Emblems Available"
     range_start = 1
-    range_end = 60
-    default = 40
+    range_end = 90
+    default = 70
 
 
 class BountyRequired(Range):
     """Number of Bounties to collect to Win/Unlock Final Xemnas Door.
 
-    If Goal is not Hitlist this does nothing."""
+    If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Required"
     range_start = 1
-    range_end = 24
+    range_end = 25
     default = 7
 
 
 class BountyAmount(Range):
     """Number of Bounties that are in the pool.
 
-    If Goal is not Hitlist this does nothing."""
+    If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Available"
     range_start = 1
-    range_end = 24
-    default = 13
+    range_end = 25
+    default = 10
 
 
 KH2_Options: typing.Dict[str, type(Option)] = {

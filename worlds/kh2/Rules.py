@@ -48,7 +48,7 @@ class KH2Rules:
             RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
             RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
 
-            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 1),
+            RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
             # These will be swapped and First Visit lock for twtnw is in development.
             # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
 
@@ -244,17 +244,8 @@ class KH2Rules:
             forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
     def set_kh2_goal(self):
-        if self.world.multiworld.Goal[self.player] == "three_proofs":
-            add_rule(
-                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: self.kh2_has_all(three_proofs, state)
-            )
-            if self.world.multiworld.FinalXemnas[self.player]:
-                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
-            else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
         # lucky emblem hunt
-        elif self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
+        if self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
             add_rule(
                     self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
                     lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
@@ -262,8 +253,7 @@ class KH2Rules:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
-        # hitlist if == 2
-        else:
+        elif self.world.multiworld.Goal[self.player] == "hitlist":
             add_rule(
                     self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
                     lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value))
@@ -271,6 +261,18 @@ class KH2Rules:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value)
+            # else == hitlist+lucky emblem
+        else:
+            add_rule(
+                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
+                                  state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
+            if self.world.multiworld.FinalXemnas[self.player]:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.world.multiworld.completion_condition[self.player] = lambda state: \
+                    state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
+                    state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
 
     def kh2_set_count_sum(self, item_name_set: set, state: CollectionState) -> int:
         """
@@ -480,7 +482,7 @@ class KH2FightRules(KH2Rules):
             RegionName.Axel2:                 lambda state: self.get_axel_two_rules(),
             RegionName.DataRoxas:             lambda state: self.get_data_roxas_rules(state),
             RegionName.DataAxel:              lambda state: self.get_data_axel_rules(state),
-            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state),
+            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
             RegionName.Xigbar:                lambda state: self.get_xigbar_rules(state),
             RegionName.Luxord:                lambda state: self.get_luxord_rules(state),
             RegionName.Saix:                  lambda state: self.get_saix_rules(state),
@@ -1627,6 +1629,6 @@ class KH2FightRules(KH2Rules):
         data_xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
             "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "hard": self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
+            "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
         }
         return data_xemnas_rules[self.fight_logic]

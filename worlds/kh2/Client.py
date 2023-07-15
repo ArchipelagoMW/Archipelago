@@ -802,9 +802,10 @@ def finishedGame(ctx: KH2Context, message):
             return True
         return False
     elif ctx.kh2slotdata['Goal'] == 2:
-        for boss in ctx.kh2slotdata["hitlist"]:
-            if boss in message[0]["locations"]:
-                ctx.amountOfPieces += 1
+        if "hitlist" in ctx.kh2slotdata:
+            for boss in ctx.kh2slotdata["hitlist"]:
+                if boss in message[0]["locations"]:
+                    ctx.amountOfPieces += 1
         if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
             ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)

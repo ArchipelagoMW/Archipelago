@@ -243,75 +243,136 @@ def patch_kh2(self, output_directory):
     self.mod_yml = {
         "assets": [
             {
-                "method": "binarc",
-                "name":   "00battle.bin",
-                "source": [
+                'method': 'binarc',
+                'name':   '00battle.bin',
+                'source': [
                     {
-                        "method": "listpatch",
-                        "name":   "fmlv",
-                        "source": [
+                        'method': 'listpatch',
+                        'name':   'fmlv',
+                        'source': [
                             {
-                                "name": "FmlvList.yml",
-                                "type": "fmlv"
+                                'name': 'FmlvList.yml',
+                                'type': 'fmlv'
                             }
                         ],
-                        "type":   "List"
+                        'type':   'List'
                     },
                     {
-                        "method": "listpatch",
-                        "name":   "lvup",
-                        "source": [
+                        'method': 'listpatch',
+                        'name':   'lvup',
+                        'source': [
                             {
-                                "name": "LvupList.yml",
-                                "type": "lvup"
+                                'name': 'LvupList.yml',
+                                'type': 'lvup'
                             }
                         ],
-                        "type":   "List"
+                        'type':   'List'
                     },
                     {
-                        "method": "listpatch",
-                        "name":   "bons",
-                        "source": [
+                        'method': 'listpatch',
+                        'name':   'bons',
+                        'source': [
                             {
-                                "name": "BonsList.yml",
-                                "type": "bons"
+                                'name': 'BonsList.yml',
+                                'type': 'bons'
                             }
                         ],
-                        "type":   "List"
+                        'type':   'List'
                     }
                 ]
             },
             {
-                "method": "binarc",
-                "name":   "03system.bin",
-                "source": [
+                'method': 'binarc',
+                'name':   '03system.bin',
+                'source': [
                     {
-                        "method": "listpatch",
-                        "name":   "trsr",
-                        "source": [
+                        'method': 'listpatch',
+                        'name':   'trsr',
+                        'source': [
                             {
-                                "name": "TrsrList.yml",
-                                "type": "trsr"
+                                'name': 'TrsrList.yml',
+                                'type': 'trsr'
                             }
                         ],
-                        "type":   "List"
+                        'type':   'List'
                     },
                     {
-                        "method": "listpatch",
-                        "name":   "item",
-                        "source": [
+                        'method': 'listpatch',
+                        'name':   'item',
+                        'source': [
                             {
-                                "name": "ItemList.yml",
-                                "type": "item"
+                                'name': 'ItemList.yml',
+                                'type': 'item'
                             }
                         ],
-                        "type":   "List"
+                        'type':   'List'
                     }
                 ]
-            }
+            },
+            {
+                'name':   'msg/us/po.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/po.bar'
+                    },
+                    {
+                        'name': 'msg/gr/po.bar'
+                    },
+                    {
+                        'name': 'msg/it/po.bar'
+                    },
+                    {
+                        'name': 'msg/sp/po.bar'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'po',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'po.yml',
+                                'language': 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
-        "title":  "Randomizer Seed"
+        'title':  'Randomizer Seed'
     }
+    goal_to_text = {
+        1: "Lucky Emblem",
+        2: "Hitlist",
+        3: "Lucky Emblem and Hitlist",
+    }
+    lucky_emblem_text = {
+        1: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}",
+        2: f"Your Goal is not Lucky Emblem is it Hitlist.",
+        3: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}"
+    }
+    hitlist_text = {
+        1: "Your Goal is not Hitlist. It is Lucky Emblem",
+        2: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
+        3: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
+    }
+
+    self.pooh_text = [
+        {
+            'id': 18326,
+            'en': f"Your goal is {goal_to_text[self.multiworld.Goal[self.player].value]}"
+        },
+        {
+            'id': 18327,
+            'en': lucky_emblem_text[self.multiworld.Goal[self.player].value]
+        },
+        {
+            'id': 18328,
+            'en': hitlist_text[self.multiworld.Goal[self.player].value]
+        }
+    ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     openkhmod = {
@@ -320,7 +381,8 @@ def patch_kh2(self, output_directory):
         "BonsList.yml": yaml.dump(self.formattedBons, line_break="\n"),
         "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
-        "mod.yml":yaml.dump(self.mod_yml, line_break="\n")
+        "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
+        "po.yml":       yaml.dump(self.pooh_text, line_break="\n")
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,

@@ -53,7 +53,7 @@ Progression_Table = {
     ItemName.MembershipCard:      ItemData(2, 369, 0x3643),
     ItemName.IceCream:            ItemData(3, 375, 0x3649),
     # Changed to 3 instead of one poster, picture and ice cream respectively
-    ItemName.WaytotheDawn:        ItemData(1, 73, 0x35C1),
+    ItemName.WaytotheDawn:        ItemData(2, 73, 0x35C1),
     # currently first visit locking doesn't work for twtnw.When goa is updated should be 2
     ItemName.IdentityDisk:        ItemData(2, 74, 0x35C2),
     ItemName.TornPages:           ItemData(5, 32, 0x3598),
@@ -364,16 +364,6 @@ Consumable_Table = {
     ItemName.HighDriveRecovery: ItemData(1, 511, 0x36BF),  # 275,0x3665, oasis map
 }
 
-Misc_Table={}
-# KH2Item(127, "Piglet's House Map", itemType.MAP),
-# KH2Item(126, "Rabbit's House Map", itemType.MAP),
-# KH2Item(128, "Kanga's House Map", itemType.MAP),
-# KH2Item(129, "Spooky Cave Map", itemType.MAP),
-# KH2Item(124, "Starry Hill Map", itemType.MAP),
-# KH2Item(512, "Savannah Map", itemType.MAP),
-# KH2Item(252, "Pride Rock Map", itemType.MAP),
-# KH2Item(511, "Oasis Map", itemType.MAP),
-
 Events_Table = {
     ItemName.HostileProgramEvent,
     ItemName.McpEvent,
@@ -618,7 +608,7 @@ visit_locking_dict = {
         ItemName.SkillandCrossbones: 2,
         ItemName.Scimitar:           2,
         ItemName.MembershipCard:     2,
-        ItemName.WaytotheDawn:       1,
+        ItemName.WaytotheDawn:       2,
         ItemName.IdentityDisk:       2,
         ItemName.IceCream:           3,
         ItemName.NamineSketches:     1,

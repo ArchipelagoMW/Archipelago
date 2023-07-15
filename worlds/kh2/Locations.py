@@ -867,7 +867,7 @@ event_location_to_item = {
     LocationName.Axel2EventLocation:                 ItemName.Axel2Event,
     LocationName.DataRoxasEventLocation:             ItemName.DataRoxasEvent,
 }
-AllWeaponSlot = {
+all_weapon_slot = {
     LocationName.FAKESlot,
     LocationName.DetectionSaberSlot,
     LocationName.EdgeofUltimaSlot,
@@ -1365,6 +1365,7 @@ exclusion_table = {
         LocationName.TransporttoRemembrance,
         LocationName.OrichalcumPlusGoddessofFateCup,
         LocationName.HadesCupTrophyParadoxCups,
+        LocationName.MusicalOrichalcumPlus,
     ],
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
