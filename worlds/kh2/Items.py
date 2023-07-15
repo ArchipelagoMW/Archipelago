@@ -499,6 +499,7 @@ progression_set = {
         Staffs_Table.keys(),
         Shields_Table.keys(),
         [
+            ItemName.AerialRecovery,
             ItemName.ComboMaster,
             ItemName.ComboPlus,
             ItemName.AirComboPlus,

@@ -305,8 +305,14 @@ class KH2World(World):
             raise Exception("uh oh")
 
     def keyblade_gen_early(self):
-        self.keyblade_ability_pool = [self.create_item(ability) for ability in SupportAbility_Table.keys() if ability not in progression_set]
-        self.total_locations -= 26
+        keyblade_master_ability = [ability for ability in SupportAbility_Table.keys() if ability not in progression_set for _ in range(self.item_quantity_dict[ability])]
+        self.keyblade_ability_pool = []
+        for _ in range(len(Keyblade_Slots)):
+            random_ability = self.multiworld.per_slot_randoms[self.player].choice(keyblade_master_ability)
+            keyblade_master_ability.remove(random_ability)
+            self.keyblade_ability_pool += [self.create_item(random_ability)]
+            self.item_quantity_dict[random_ability] -= 1
+        self.total_locations -= 27
 
     def goofy_pre_fill(self):
         """

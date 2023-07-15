@@ -1,11 +1,11 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 from .logic import *
 from .Items import exclusion_item_table, visit_locking_dict
 from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
-from ..generic.Rules import add_rule, forbid_items, set_rule
+from ..generic.Rules import add_rule, forbid_items
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
@@ -281,7 +281,7 @@ class KH2Rules:
                  state.count(item_name, self.player)]
         )
 
-    def kh2_set_any_sum(self, list_of_item_name_list: list, state: CollectionState) -> int:
+    def kh2_list_any_sum(self, list_of_item_name_list: list, state: CollectionState) -> int:
         """
         Returns sum that increments by 1 if state.has_any
         """
@@ -335,10 +335,10 @@ class KH2Rules:
     def kh2_has_any(self, items: list, state: CollectionState):
         return state.has_any(set(items), self.player)
 
-    def drive_form_unlock(self, state: CollectionState, drive_form, level_required, fight_logic=False) -> bool:
-        form_access = {drive_form}
+    def drive_form_unlock(self, state: CollectionState, parent_drive_form, level_required, fight_logic=False) -> bool:
+        form_access = {parent_drive_form}
         if self.world.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player) and not fight_logic:
-            form_access.add(self.auto_form_dict[drive_form])
+            form_access.add(self.auto_form_dict[parent_drive_form])
         return state.has_any(form_access, self.player) \
             and self.get_form_level_requirement(state, level_required)
 
@@ -512,9 +512,9 @@ class KH2FightRules(KH2Rules):
         # normal: 2 out of easy
         # hard: defensive tool or drive form
         shan_yu_rules = {
-            "easy":   self.kh2_set_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_set_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool, drive_form], state) >= 1
+            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
+            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, drive_form], state) >= 1
         }
         return shan_yu_rules[self.fight_logic]
 
@@ -523,8 +523,8 @@ class KH2FightRules(KH2Rules):
         # normal: defensive tool and (gap closer/ground finisher/limit form)
         # hard: defensive tool or limit form
         ansem_riku_rules = {
-            "easy":   self.kh2_set_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 3,
-            "normal": self.kh2_set_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 2,
+            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 3,
+            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, [ItemName.LimitForm], ground_finisher], state) >= 2,
             "hard":   self.kh2_has_any([ItemName.ReflectElement, ItemName.Guard, ItemName.LimitForm], state),
         }
         return ansem_riku_rules[self.fight_logic]
@@ -534,15 +534,15 @@ class KH2FightRules(KH2Rules):
         # normal: has 3 of those things
         # hard: has 2 of those things 
         storm_rider_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 4,
-            "normal": self.kh2_set_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 3,
-            "hard":   self.kh2_set_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 2,
+            "easy":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 4,
+            "normal": self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 3,
+            "hard":   self.kh2_list_any_sum([defensive_tool, party_limit, aerial_move, drive_form], state) >= 2,
         }
         return storm_rider_rules[self.fight_logic]
 
     def get_data_xigbar_rules(self, state: CollectionState) -> bool:
         # easy:final 7,firaga,2 air combo plus,air gap closer, finishing plus,guard,reflega,horizontal slash,donald limit
-        # normal:final 7,firraga,finishing plus,guard,reflect horizontal slash,donald limit
+        # normal:final 7,firaga,finishing plus,guard,reflect horizontal slash,donald limit
         # hard:((final 5, fira) or donald limit), finishing plus,guard/reflect
         easy_data_xigbar_tools = {
             ItemName.FinishingPlus:   1,
@@ -575,9 +575,9 @@ class KH2FightRules(KH2Rules):
         # hard:2 of those things
         # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
         fire_lords_rules = {
-            "easy":   self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
+            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
+            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
+            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
         }
         return fire_lords_rules[self.fight_logic]
 
@@ -587,9 +587,9 @@ class KH2FightRules(KH2Rules):
         # hard:2 of those things
         # duplicate of the other because in boss rando there will be to bosses in arena and these bosses can be split.
         blizzard_lords_rules = {
-            "easy":   self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
-            "normal": self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
-            "hard":   self.kh2_set_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
+            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 4,
+            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 3,
+            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, black_magic, party_limit], state) >= 2,
         }
         return blizzard_lords_rules[self.fight_logic]
 
@@ -598,14 +598,14 @@ class KH2FightRules(KH2Rules):
         # normal: defensive tool, ground finisher,finishing plus
         # hard: defensive tool,finishing plus
         genie_jafar_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, black_magic, ground_finisher, {ItemName.FinishingPlus}], state) >= 4,
-            "normal": self.kh2_set_any_sum([defensive_tool, ground_finisher, {ItemName.FinishingPlus}], state) >= 3,
-            "hard":   self.kh2_set_any_sum([defensive_tool, {ItemName.FinishingPlus}], state) >= 2,
+            "easy":   self.kh2_list_any_sum([defensive_tool, black_magic, ground_finisher, {ItemName.FinishingPlus}], state) >= 4,
+            "normal": self.kh2_list_any_sum([defensive_tool, ground_finisher, {ItemName.FinishingPlus}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([defensive_tool, {ItemName.FinishingPlus}], state) >= 2,
         }
         return genie_jafar_rules[self.fight_logic]
 
     def get_data_lexaeus_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,final 7,firaga,refletera,donald limit, guard
+        # easy:both gap closers,final 7,firaga,reflera,donald limit, guard
         # normal:one gap closer,final 5,fira,reflect, donald limit,guard
         # hard:defensive tool,gap closer
         easy_data_lex_tools = {
@@ -621,9 +621,9 @@ class KH2FightRules(KH2Rules):
             ItemName.ReflectElement: 1,
         }
         data_lexaues_rules = {
-            "easy":   self.kh2_dict_count(easy_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_lex_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer], state) >= 2,
         }
         return data_lexaues_rules[self.fight_logic]
 
@@ -637,9 +637,9 @@ class KH2FightRules(KH2Rules):
         # norma:2 of those things
         # hard 1 of those things
         future_pete_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, gap_closer, drive_form], state) >= 3,
-            "normal": self.kh2_set_any_sum([defensive_tool, gap_closer, drive_form], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool, gap_closer, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, drive_form], state) >= 1,
         }
         return future_pete_rules[self.fight_logic]
 
@@ -652,17 +652,19 @@ class KH2FightRules(KH2Rules):
             ItemName.FireElement:    3,
             ItemName.ReflectElement: 2,
             ItemName.SlideDash:      1,
-            ItemName.FlashStep:      1
+            ItemName.FlashStep:      1,
+            ItemName.AerialRecovery: 1,
         }
         normal_data_marluxia_tools = {
             ItemName.Guard:          1,
             ItemName.FireElement:    3,
             ItemName.ReflectElement: 1,
+            ItemName.AerialRecovery: 1,
         }
         data_marluxia_rules = {
-            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_marluxia_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, gap_closer, [ItemName.AerialRecovery]], state) >= 3,
         }
         return data_marluxia_rules[self.fight_logic]
 
@@ -706,19 +708,19 @@ class KH2FightRules(KH2Rules):
         }
         terra_rules = {
             "easy":   self.kh2_dict_count(easy_terra_tools, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_terra_tools, state) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "hard":   self.kh2_dict_count(hard_terra_tools, state) and self.kh2_set_any_sum([gap_closer], state) >= 1,
+            "normal": self.kh2_dict_count(normal_terra_tools, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "hard":   self.kh2_dict_count(hard_terra_tools, state) and self.kh2_list_any_sum([gap_closer], state) >= 1,
         }
         return terra_rules[self.fight_logic]
 
     def get_barbosa_rules(self, state: CollectionState) -> bool:
-        # easy:blizzara and thundera or one of each,defensive tool
+        # easy:blizzara and thundara or one of each,defensive tool
         # normal:(blizzard or thunder) and defensive tool
         # hard: defensive tool
         barbosa_rules = {
-            "easy":   self.kh2_set_count_sum({ItemName.BlizzardElement, ItemName.ThunderElement}, state) >= 2 and self.kh2_set_any_sum([defensive_tool], state) >= 1,
-            "normal": self.kh2_set_any_sum([defensive_tool, {ItemName.BlizzardElement, ItemName.ThunderElement}], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool], state) >= 1,
+            "easy":   self.kh2_set_count_sum({ItemName.BlizzardElement, ItemName.ThunderElement}, state) >= 2 and self.kh2_list_any_sum([defensive_tool], state) >= 1,
+            "normal": self.kh2_list_any_sum([defensive_tool, {ItemName.BlizzardElement, ItemName.ThunderElement}], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
         }
         return barbosa_rules[self.fight_logic]
 
@@ -732,14 +734,14 @@ class KH2FightRules(KH2Rules):
         # normal:master form/stitch,thunder,defensive option
         # hard:any black magic,defensive option.
         gr2_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.ThunderElement}], state) >= 2,
-            "normal": self.kh2_set_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.Stitch}, {ItemName.ThunderElement}], state) >= 3,
-            "hard":   self.kh2_set_any_sum([black_magic, defensive_tool], state) >= 2
+            "easy":   self.kh2_list_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.ThunderElement}], state) >= 2,
+            "normal": self.kh2_list_any_sum([defensive_tool, {ItemName.MasterForm, ItemName.Stitch}, {ItemName.ThunderElement}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool], state) >= 2
         }
         return gr2_rules[self.fight_logic]
 
     def get_data_luxord_rules(self, state: CollectionState) -> bool:
-        # easy:gap closers,reflega,aerial dodgle lvl 2,glide lvl 2,guard
+        # easy:gap closers,reflega,aerial dodge lvl 2,glide lvl 2,guard
         # normal:1 gap closer,reflect,aerial dodge lvl 1,glide lvl 1,guard
         # hard:quick run,defensive option
         easy_data_luxord_tools = {
@@ -753,7 +755,7 @@ class KH2FightRules(KH2Rules):
         data_luxord_rules = {
             "easy":   self.kh2_dict_count(easy_data_luxord_tools, state),
             "normal": self.kh2_has_all([ItemName.ReflectElement, ItemName.AerialDodge, ItemName.Glide, ItemName.Guard], state) and self.kh2_has_any(defensive_tool, state),
-            "hard":   self.kh2_set_any_sum([{ItemName.QuickRun}, defensive_tool], state)
+            "hard":   self.kh2_list_any_sum([{ItemName.QuickRun}, defensive_tool], state)
         }
         return data_luxord_rules[self.fight_logic]
 
@@ -761,8 +763,8 @@ class KH2FightRules(KH2Rules):
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         cerberus_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, black_magic], state) >= 2,
-            "normal": self.kh2_set_any_sum([defensive_tool, black_magic], state) >= 2,
+            "easy":   self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2,
+            "normal": self.kh2_list_any_sum([defensive_tool, black_magic], state) >= 2,
             "hard":   self.kh2_has_any(defensive_tool, state),
         }
         return cerberus_rules[self.fight_logic]
@@ -805,17 +807,17 @@ class KH2FightRules(KH2Rules):
         return self.kh2_has_all([ItemName.Oc_pain_and_panic_cupEvent, ItemName.Oc_cerberus_cupEvent, ItemName.Oc2_titan_cupEvent], state)
 
     def get_hades_cup_rules(self, state: CollectionState) -> bool:
-        # can beat goddes of fate cup
+        # can beat goddess of fate cup
         return state.has(ItemName.Oc2_gof_cupEvent, self.player)
 
     def get_olympus_pete_rules(self, state: CollectionState) -> bool:
         # easy:gap closer,defensive option,drive form
-        # normal:2 of those thigns
+        # normal:2 of those things
         # hard:1 of those things
         olympus_pete_rules = {
-            "easy":   self.kh2_set_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_set_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_set_any_sum([gap_closer, defensive_tool, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 3,
+            "normal": self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 2,
+            "hard":   self.kh2_list_any_sum([gap_closer, defensive_tool, drive_form], state) >= 1,
         }
         return olympus_pete_rules[self.fight_logic]
 
@@ -824,9 +826,9 @@ class KH2FightRules(KH2Rules):
         # normal 2 of those things
         # hard: one of those things
         hydra_rules = {
-            "easy":   self.kh2_set_any_sum([black_magic, defensive_tool, drive_form], state) >= 3,
-            "normal": self.kh2_set_any_sum([black_magic, defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_set_any_sum([black_magic, defensive_tool, drive_form], state) >= 1,
+            "easy":   self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 3,
+            "normal": self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 2,
+            "hard":   self.kh2_list_any_sum([black_magic, defensive_tool, drive_form], state) >= 1,
         }
         return hydra_rules[self.fight_logic]
 
@@ -835,15 +837,15 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard:2 of those things
         hades_rules = {
-            "easy":   self.kh2_set_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 4,
-            "normal": self.kh2_set_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 3,
-            "hard":   self.kh2_set_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 2,
+            "easy":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 4,
+            "normal": self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 3,
+            "hard":   self.kh2_list_any_sum([gap_closer, summons, defensive_tool, drive_form], state) >= 2,
         }
         return hades_rules[self.fight_logic]
 
     def get_data_zexion_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, refelga,guard,2 gap closers,quick run level 3
-        # normal:final 7,firaga, donald limit, refelga,guard,1 gap closers,quick run level 3
+        # easy: final 7,firaga,scom,both donald limits, Reflega ,guard,2 gap closers,quick run level 3
+        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,quick run level 3
         # hard:final 5,fira, donald limit, reflect,gap closer,quick run level 2
         easy_data_zexion = {
             ItemName.FireElement:    3,
@@ -870,8 +872,8 @@ class KH2FightRules(KH2Rules):
         }
         data_zexion_rules = {
             "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
+            "normal": self.kh2_dict_count(normal_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_zexion, state) and self.drive_form_unlock(state, ItemName.FinalForm, 3, True) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
         }
         return data_zexion_rules[self.fight_logic]
 
@@ -880,9 +882,9 @@ class KH2FightRules(KH2Rules):
         # normal:2 of those things
         # hard:defensive tool or drive form
         thresholder_rules = {
-            "easy":   self.kh2_set_any_sum([drive_form, black_magic, defensive_tool], state) >= 3,
-            "normal": self.kh2_set_any_sum([drive_form, black_magic, defensive_tool], state) >= 2,
-            "hard":   self.kh2_set_any_sum([drive_form, defensive_tool], state) >= 1,
+            "easy":   self.kh2_list_any_sum([drive_form, black_magic, defensive_tool], state) >= 3,
+            "normal": self.kh2_list_any_sum([drive_form, black_magic, defensive_tool], state) >= 2,
+            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool], state) >= 1,
         }
         return thresholder_rules[self.fight_logic]
 
@@ -896,9 +898,9 @@ class KH2FightRules(KH2Rules):
         # normal:drive form,defensive tool
         # hard:defensive tool
         dark_thorn_rules = {
-            "easy":   self.kh2_set_any_sum([drive_form, gap_closer, defensive_tool], state) >= 3,
-            "normal": self.kh2_set_any_sum([drive_form, defensive_tool], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool], state) >= 1,
+            "easy":   self.kh2_list_any_sum([drive_form, gap_closer, defensive_tool], state) >= 3,
+            "normal": self.kh2_list_any_sum([drive_form, defensive_tool], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
         }
         return dark_thorn_rules[self.fight_logic]
 
@@ -907,8 +909,8 @@ class KH2FightRules(KH2Rules):
         # normal:guard,1 aerial modifier
         # hard:guard
         xaldin_rules = {
-            "easy":   self.kh2_set_any_sum([[ItemName.Guard], [ItemName.ValorForm, ItemName.MasterForm, ItemName.FinalForm]], state) >= 2 and self.kh2_set_count_sum(aerial_move, state) >= 2,
-            "normal": self.kh2_set_any_sum([aerial_move], state) >= 1 and state.has(ItemName.Guard, self.player),
+            "easy":   self.kh2_list_any_sum([[ItemName.Guard], [ItemName.ValorForm, ItemName.MasterForm, ItemName.FinalForm]], state) >= 2 and self.kh2_set_count_sum(aerial_move, state) >= 2,
+            "normal": self.kh2_list_any_sum([aerial_move], state) >= 1 and state.has(ItemName.Guard, self.player),
             "hard":   state.has(ItemName.Guard, self.player),
         }
         return xaldin_rules[self.fight_logic]
@@ -971,9 +973,9 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard: 2 of those things
         hostile_program_rules = {
-            "easy":   self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
+            "easy":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
         }
         return hostile_program_rules[self.fight_logic]
 
@@ -982,15 +984,15 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard: 2 of those things
         mcp_rules = {
-            "easy":   self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
-            "hard":   self.kh2_set_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
+            "easy":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 3,
+            "hard":   self.kh2_list_any_sum([donald_limit, drive_form, summons, {ItemName.ReflectElement}], state) >= 2,
         }
         return mcp_rules[self.fight_logic]
 
     def get_data_larxene_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, refelga,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
-        # normal:final 7,firaga, donald limit, refelga,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
+        # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
+        # normal:final 7,firaga, donald limit, Reflega ,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3
         # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2
         easy_data_larxene = {
             ItemName.FireElement:    3,
@@ -1023,8 +1025,8 @@ class KH2FightRules(KH2Rules):
         }
         data_larxene_rules = {
             "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_set_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_set_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
+            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
         }
         return data_larxene_rules[self.fight_logic]
 
@@ -1033,9 +1035,9 @@ class KH2FightRules(KH2Rules):
         # normal:two of those things
         # hard:one of those things
         prison_keeper_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
-            "normal": self.kh2_set_any_sum([defensive_tool, drive_form, party_limit], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool, drive_form, party_limit], state) >= 1,
+            "easy":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 1,
         }
         return prison_keeper_rules[self.fight_logic]
 
@@ -1049,15 +1051,15 @@ class KH2FightRules(KH2Rules):
         # normal:3 of those things
         # hard 2 of those things
         experiment_rules = {
-            "easy":   self.kh2_set_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 4,
-            "normal": self.kh2_set_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 3,
-            "hard":   self.kh2_set_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 2,
+            "easy":   self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 4,
+            "normal": self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 3,
+            "hard":   self.kh2_list_any_sum([drive_form, defensive_tool, party_limit, summons], state) >= 2,
         }
         return experiment_rules[self.fight_logic]
 
     def get_data_vexen_rules(self, state: CollectionState) -> bool:
-        # easy: final 7,firaga,scom,both donald limits, refelga,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
-        # normal:final 7,firaga, donald limit, refelga,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+        # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+        # normal:final 7,firaga, donald limit, Reflega,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
         # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2,dodge roll 2,quick run 2
         easy_data_vexen = {
             ItemName.FireElement:    3,
@@ -1096,19 +1098,19 @@ class KH2FightRules(KH2Rules):
         }
         data_vexen_rules = {
             "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_set_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
-            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_set_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
+            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5, True),
+            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 3, True),
         }
         return data_vexen_rules[self.fight_logic]
 
     def get_demyx_rules(self, state: CollectionState) -> bool:
         # defensive option,drive form,party limit
-        # defrnsive option,drive form
+        # defensive option,drive form
         # defensive option
         demyx_rules = {
-            "easy":   self.kh2_set_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
-            "normal": self.kh2_set_any_sum([defensive_tool, drive_form], state) >= 2,
-            "hard":   self.kh2_set_any_sum([defensive_tool], state) >= 1,
+            "easy":   self.kh2_list_any_sum([defensive_tool, drive_form, party_limit], state) >= 3,
+            "normal": self.kh2_list_any_sum([defensive_tool, drive_form], state) >= 2,
+            "hard":   self.kh2_list_any_sum([defensive_tool], state) >= 1,
         }
         return demyx_rules[self.fight_logic]
 
@@ -1136,7 +1138,7 @@ class KH2FightRules(KH2Rules):
     def get_data_demyx_rules(self, state: CollectionState) -> bool:
         # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
         # normal:remove form boost and scom
-        # hard:wisdom 6,relfect,guard,duck flare,fira,finishing plus
+        # hard:wisdom 6,reflect,guard,duck flare,fira,finishing plus
         easy_data_demyx = {
             ItemName.FormBoost:      1,
             ItemName.ReflectElement: 2,
@@ -1201,9 +1203,9 @@ class KH2FightRules(KH2Rules):
             ItemName.FinishingPlus:  1,
         }
         sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
         }
         return sephiroth_rules[self.fight_logic]
 
@@ -1310,8 +1312,8 @@ class KH2FightRules(KH2Rules):
         }
         easy_data_rules = {
             "easy":   self.kh2_dict_count(easy_data_saix, state) and self.drive_form_unlock(state, ItemName.FinalForm, 5),
-            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_set_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5),
-            "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2
+            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher, donald_limit], state) >= 3 and self.drive_form_unlock(state, ItemName.FinalForm, 5),
+            "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return easy_data_rules[self.fight_logic]
 
@@ -1360,9 +1362,9 @@ class KH2FightRules(KH2Rules):
             ItemName.FinishingPlus:  1,
         }
         data_roxas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2
+            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return data_roxas_rules[self.fight_logic]
 
@@ -1402,9 +1404,9 @@ class KH2FightRules(KH2Rules):
             ItemName.BlizzardElement: 2,
         }
         data_axel_rules = {
-            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum([donald_limit, gap_closer], state) >= 2,
-            "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2
+            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return data_axel_rules[self.fight_logic]
 
@@ -1493,7 +1495,7 @@ class KH2FightRules(KH2Rules):
         }
         luxord_rules = {
             "easy":   self.kh2_dict_count(easy_luxord_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2,
+            "normal": self.kh2_dict_count(normal_luxord_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
             "hard":   self.kh2_has_all([ItemName.Guard, ItemName.QuickRun], state)
         }
         return luxord_rules[self.fight_logic]
@@ -1521,7 +1523,7 @@ class KH2FightRules(KH2Rules):
         }
         saix_rules = {
             "easy":   self.kh2_dict_count(easy_saix_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_saix_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2,
+            "normal": self.kh2_dict_count(normal_saix_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
             "hard":   self.kh2_has_all([ItemName.Guard], state)
         }
         return saix_rules[self.fight_logic]
@@ -1549,7 +1551,7 @@ class KH2FightRules(KH2Rules):
         }
         xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_xemnas_tools, state) and self.kh2_has_any(ground_finisher, state),
-            "normal": self.kh2_dict_count(normal_xemnas_tools, state) and self.kh2_set_any_sum([gap_closer, ground_finisher], state) >= 2,
+            "normal": self.kh2_dict_count(normal_xemnas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
             "hard":   self.kh2_has_all([ItemName.Guard], state)
         }
         return xemnas_rules[self.fight_logic]
@@ -1559,8 +1561,8 @@ class KH2FightRules(KH2Rules):
         # normal:reflect,gap closer,ground finisher
         # hard:reflect
         armored_xemnas_one_rules = {
-            "easy":   self.kh2_set_any_sum([donald_limit, gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 4,
-            "normal": self.kh2_set_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
+            "easy":   self.kh2_list_any_sum([donald_limit, gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
             "hard":   state.has(ItemName.ReflectElement, self.player),
         }
         return armored_xemnas_one_rules[self.fight_logic]
@@ -1570,8 +1572,8 @@ class KH2FightRules(KH2Rules):
         # normal:reflect,gap closer,ground finisher
         # hard:reflect
         armored_xemnas_two_rules = {
-            "easy":   self.kh2_set_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}, {ItemName.ThunderElement}], state) >= 4,
-            "normal": self.kh2_set_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
+            "easy":   self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}, {ItemName.ThunderElement}], state) >= 4,
+            "normal": self.kh2_list_any_sum([gap_closer, ground_finisher, {ItemName.ReflectElement}], state) >= 3,
             "hard":   state.has(ItemName.ReflectElement, self.player),
         }
         return armored_xemnas_two_rules[self.fight_logic]
@@ -1625,6 +1627,6 @@ class KH2FightRules(KH2Rules):
         data_xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
             "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_set_any_sum([ground_finisher, gap_closer], state) >= 2
+            "hard": self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
         }
         return data_xemnas_rules[self.fight_logic]
