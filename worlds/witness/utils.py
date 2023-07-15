@@ -163,8 +163,8 @@ def get_caves_exclusion_list():
     return get_adjustment_file("settings/Postgame/Caves.txt")
 
 
-def get_challenge_exclusion_list():
-    return get_adjustment_file("settings/Postgame/Beat_Challenge.txt")
+def get_beyond_challenge_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
 
 
 def get_11_lasers_exclusion_list():
@@ -173,6 +173,14 @@ def get_11_lasers_exclusion_list():
 
 def get_mountain_upper_exclusion_list():
     return get_adjustment_file("settings/Postgame/Mountain_Upper.txt")
+
+
+def get_challenge_vault_box_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Challenge_Vault_Box.txt")
+
+
+def get_path_to_challenge_exclusion_list():
+    return get_adjustment_file("settings/Postgame/Path_To_Challenge.txt")
 
 
 def get_mountain_lower_exclusion_list():
