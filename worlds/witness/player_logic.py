@@ -249,6 +249,7 @@ class WitnessPlayerLogic:
                 if not victory == 1:
                     adjustment_linesets_in_order.append(get_path_to_challenge_exclusion_list())
                     adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
+                    adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
 
             if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers))):
                 adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
