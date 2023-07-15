@@ -50,7 +50,10 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     @abc.abstractmethod
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         """Runs on a loop with the approximate interval `ctx.watcher_timeout`. The currently loaded ROM is guaranteed
-        to have passed your validator when this function is called, and the emulator is very likely to be connected."""
+        to have passed your validator when this function is called, and the emulator is very likely to be connected.
+        
+        Your client is also expected to send `Connect` from here. Make sure you don't send them repeatedly and check the
+        server connection first."""
         ...
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:

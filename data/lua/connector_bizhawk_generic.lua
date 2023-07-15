@@ -1,9 +1,243 @@
+--[[
+This script expects to receive JSON and will send JSON back. A message should
+be a list of 1 or more requests which will be executed in order. Each request
+will have a corresponding response in the same order.
+
+Every individual request and response is a JSON object with at minimum one
+field `type`. The value of `type` determines what other fields may exist.
+
+#### Ex. 1
+
+Request: `[{"type": "PING"}]`
+
+Response: `[{"type": "PONG"}]`
+
+---
+
+#### Ex. 2
+
+Request: `[{"type": "LOCK"}, {"type": "HASH"}]`
+
+Response: `[{"type": "LOCKED"}, {"type": "HASH_RESPONSE", "value": "F7D18982"}]`
+
+---
+
+#### Ex. 3
+
+Request:
+
+```json
+[
+    {"type": "GUARD", "address": 100, "expected_data": "aGVsbG8=", "domain": "System Bus"},
+    {"type": "READ", "address": 500, "size": 4, "domain": "ROM"}
+]
+```
+
+Response:
+
+```json
+[
+    {"type": "GUARD_RESPONSE", "address": 100, "value": true},
+    {"type": "READ_RESPONSE", "value": "dGVzdA=="}
+]
+```
+
+---
+
+#### Ex. 4
+
+Request:
+
+```json
+[
+    {"type": "GUARD", "address": 100, "expected_data": "aGVsbG8=", "domain": "System Bus"},
+    {"type": "READ", "address": 500, "size": 4, "domain": "ROM"}
+]
+```
+
+Response:
+
+```json
+[
+    {"type": "GUARD_RESPONSE", "address": 100, "value": false},
+    {"type": "GUARD_RESPONSE", "address": 100, "value": false}
+]
+```
+
+---
+
+### Supported Request Types
+
+- `PING`  
+    Does nothing; resets timeout.
+
+    Expected Response Type: `PONG`
+
+- `SYSTEM`  
+    Returns the system of the currently loaded ROM (N64, GBA, etc...).
+
+    Expected Response Type: `SYSTEM_RESPONSE`
+
+- `PREFERRED_CORES`  
+    Returns the user's default cores for systems with multiple cores. If the
+    current ROM's system has multiple cores, the one that is currently
+    running is very probably the preferred core.
+
+    Expected Response Type: `PREFERRED_CORES_RESPONSE`
+
+- `SCRIPT_VERSION`  
+    Returns the version of this script.
+
+    Expected Response Type: `SCRIPT_VERSION_RESPONSE`
+
+- `HASH`  
+    Returns the hash of the currently loaded ROM calculated by BizHawk.
+
+    Expected Response Type: `HASH_RESPONSE`
+
+- `GUARD`  
+    Checks a section of memory against `expected_data`. If the bytes starting
+    at `address` do not match `expected_data`, the response will have `value`
+    set to `false`, and all subsequent requests will not be executed and
+    receive the same `GUARD_RESPONSE`.
+
+    Expected Response Type: `GUARD_RESPONSE`
+
+    Additional Fields:
+    - `address`: The address of the memory to check
+    - `expected_data`: A base64 string of contiguous data
+    - `domain`: The name of the memory domain the address corresponds to
+
+- `LOCK`  
+    Halts emulation and blocks on incoming requests until an `UNLOCK` request
+    is received or the client times out. All requests processed while locked
+    will happen on the same frame.
+
+    Expected Response Type: `LOCKED`
+
+- `UNLOCK`  
+    Resumes emulation after the current list of requests is done being
+    executed.
+
+    Expected Response Type: `UNLOCKED`
+
+- `READ`  
+    Reads an array of bytes at the provided address.
+
+    Expected Response Type: `READ_RESPONSE`
+
+    Additional Fields:
+    - `address`: The address of the memory to read
+    - `size`: The number of bytes to read
+    - `domain`: The name of the memory domain the address corresponds to
+
+- `WRITE`  
+    Writes an array of bytes to the provided address.
+
+    Expected Response Type: `WRITE_RESPONSE`
+
+    Additional Fields:
+    - `address`: The address of the memory to write to
+    - `value`: A base64 string representing the data to write
+    - `domain`: The name of the memory domain the address corresponds to
+
+- `DISPLAY_MESSAGE`  
+    Adds a message to the message queue which will be displayed using
+    `gui.addmessage` according to the message interval.
+
+    Expected Response Type: `DISPLAY_MESSAGE_RESPONSE`
+
+    Additional Fields:
+    - `message`: The string to display
+
+- `SET_MESSAGE_INTERVAL`  
+    Sets the minimum amount of time to wait between displaying messages.
+    Potentially useful if you add many messages quickly but want players
+    to be able to read each of them.
+
+    Expected Response Type: `SET_MESSAGE_INTERVAL_RESPONSE`
+
+    Additional Fields:
+    - `value`: The number of seconds to set the interval to
+
+
+### Response Types
+
+- `PONG`  
+    Acknowledges `PING`.
+
+- `SYSTEM_RESPONSE`  
+    Contains the name of the system for currently running ROM.
+
+    Additional Fields:
+    - `value`: The returned system name
+
+- `PREFERRED_CORES_RESPONSE`  
+    Contains the user's preferred cores for systems with multiple supported
+    cores. Currently includes NES, SNES, GB, GBC, DGB, SGB, PCE, PCECD, and
+    SGX.
+
+    Additional Fields:
+    - `value`: A dictionary map from system name to core name
+
+- `SCRIPT_VERSION_RESPONSE`  
+    Contains the version of this script as a tuple. For example, v1.2.0 would
+    be `[1, 2, 0]`.
+
+    Additional Fields:
+    - `value`: The version tuple as [major, minor, patch].
+
+- `HASH_RESPONSE`  
+    Contains the hash of the currently loaded ROM calculated by BizHawk.
+
+    Additional Fields:
+    - `value`: The returned hash
+
+- `GUARD_RESPONSE`  
+    The result of an attempted `GUARD` request.
+
+    Additional Fields:
+    - `value`: true if the memory was validated, false if not
+    - `address`: The address of the memory that was invalid (the same address
+    provided by the `GUARD`, not the address of the individual invalid byte)
+
+- `LOCKED`  
+    Acknowledges `LOCK`.
+
+- `UNLOCKED`  
+    Acknowledges `UNLOCK`.
+
+- `READ_RESPONSE`  
+    Contains the result of a `READ` request.
+
+    Additional Fields:
+    - `value`: A base64 string representing the read data
+
+- `WRITE_RESPONSE`  
+    Acknowledges `WRITE`.
+
+- `DISPLAY_MESSAGE_RESPONSE`  
+    Acknowledges `DISPLAY_MESSAGE`.
+
+- `SET_MESSAGE_INTERVAL_RESPONSE`  
+    Acknowledges `SET_MESSAGE_INTERVAL`.
+
+- `ERROR`  
+    Signifies that something has gone wrong while processing a request.
+
+    Additional Fields:
+    - `err`: A description of the problem
+]]
+
+local base64 = require("base64")
 local socket = require("socket")
 local json = require("json")
 
 -- Set to log incoming requests
 -- Will cause lag due to large console output
 local DEBUG = false
+
+local SCRIPT_VERSION = {1, 0, 333}
 
 local SOCKET_PORT = 43055
 
@@ -77,32 +311,78 @@ end
 
 function process_request (req)
     local res = {}
+
     if req["type"] == "PING" then
         res["type"] = "PONG"
+
     elseif req["type"] == "SYSTEM" then
         res["type"] = "SYSTEM_RESPONSE"
         res["value"] = emu.getsystemid()
+
+    elseif req["type"] == "PREFERRED_CORES" then
+        local preferred_cores = client.getconfig().PreferredCores
+        res["type"] = "PREFERRED_CORES_RESPONSE"
+        res["value"] = {}
+        res["value"]["NES"] = preferred_cores.NES
+        res["value"]["SNES"] = preferred_cores.SNES
+        res["value"]["GB"] = preferred_cores.GB
+        res["value"]["GBC"] = preferred_cores.GBC
+        res["value"]["DGB"] = preferred_cores.DGB
+        res["value"]["SGB"] = preferred_cores.SGB
+        res["value"]["PCE"] = preferred_cores.PCE
+        res["value"]["PCECD"] = preferred_cores.PCECD
+        res["value"]["SGX"] = preferred_cores.SGX
+
+    elseif req["type"] == "SCRIPT_VERSION" then
+        res["type"] = "SCRIPT_VERSION_RESPONSE"
+        res["value"] = SCRIPT_VERSION
+
     elseif req["type"] == "HASH" then
         res["type"] = "HASH_RESPONSE"
         res["value"] = rom_hash
+
+    elseif req["type"] == "GUARD" then
+        res["type"] = "GUARD_RESPONSE"
+        expected_data = base64.decode(req["expected_data"])
+
+        actual_data = memory.read_bytes_as_array(req["address"], #expected_data, req["domain"])
+
+        data_is_validated = true
+        for i, byte in ipairs(actual_data) do
+            if (byte ~= expected_data[i]) then
+                data_is_validated = false
+                break
+            end
+        end
+
+        res["value"] = data_is_validated
+        res["address"] = req["address"]
+
     elseif req["type"] == "LOCK" then
         res["type"] = "LOCKED"
         lock()
+
     elseif req["type"] == "UNLOCK" then
         res["type"] = "UNLOCKED"
         unlock()
+
     elseif req["type"] == "READ" then
         res["type"] = "READ_RESPONSE"
-        res["value"] = memory.read_bytes_as_array(req["address"], req["size"], req["domain"])
+        res["value"] = base64.encode(memory.read_bytes_as_array(req["address"], req["size"], req["domain"]))
+
     elseif req["type"] == "WRITE" then
         res["type"] = "WRITE_RESPONSE"
-        memory.write_bytes_as_array(req["address"], req["value"], req["domain"])
+        print(base64.decode(req["value"]))
+        memory.write_bytes_as_array(req["address"], base64.decode(req["value"]), req["domain"])
+
     elseif req["type"] == "DISPLAY_MESSAGE" then
         res["type"] = "DISPLAY_MESSAGE_RESPONSE"
         message_queue:push(req["message"])
+
     elseif req["type"] == "SET_MESSAGE_INTERVAL" then
         res["type"] = "SET_MESSAGE_INTERVAL_RESPONSE"
         message_interval = req["value"]
+
     else
         res["type"] = "ERROR"
         res["err"] = "Unknown command: "..req["type"]
@@ -142,13 +422,23 @@ function send_receive ()
 
     local data = json.decode(message)
     local res = {}
+    local failed_guard_response = nil
     for i, req in ipairs(data) do
-        -- An error is more likely to cause an NLua exception than to return an error here
-        local status, response = pcall(process_request, req)
-        if (status) then
-            res[i] = response
+        if (failed_guard_response ~= nil) then
+            res[i] = failed_guard_response
         else
-            res[i] = {type = "ERROR", err = response}
+            -- An error is more likely to cause an NLua exception than to return an error here
+            local status, response = pcall(process_request, req)
+            if (status) then
+                res[i] = response
+
+                -- If the GUARD validation failed, skip the remaining commands
+                if (response["type"] == "GUARD_RESPONSE" and not response["value"]) then
+                    failed_guard_response = response
+                end
+            else
+                res[i] = {type = "ERROR", err = response}
+            end
         end
     end
 
@@ -157,7 +447,7 @@ end
 
 function main ()
     if (bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7)) then
-        print("Must use a version of bizhawk 2.7.0 or higher")
+        print("Must use BizHawk 2.7.0 or newer")
         return
     elseif (bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)) then
         print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
