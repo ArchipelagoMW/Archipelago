@@ -179,13 +179,13 @@ class KH2World(World):
 
         self.set_excluded_locations()
 
-        if self.multiworld.Goal[self.player].value != "hitlist":
+        if self.multiworld.Goal[self.player].current_key not in ["hitlist", "three_proof"]:
             self.lucky_emblem_amount = self.multiworld.LuckyEmblemsAmount[self.player].value
             self.lucky_emblem_required = self.multiworld.LuckyEmblemsRequired[self.player].value
             self.emblem_verify()
 
         # hitlist
-        if self.multiworld.Goal[self.player] != "lucky_emblem_hunt":
+        if self.multiworld.Goal[self.player].current_key not in ["lucky_emblem_hunt", "three_proof"]:
             self.hitlist_verify()
 
         self.donald_gen_early()
@@ -215,7 +215,7 @@ class KH2World(World):
         self.donald_pre_fill()
         self.goofy_pre_fill()
         self.keyblade_pre_fill()
-        if self.multiworld.Goal[self.player] != "lucky_emblem_hunt":
+        if self.multiworld.Goal[self.player].current_key not in ["lucky_emblem_hunt", "three_proof"]:
             self.hitlist_fill_res()
 
     def create_regions(self):
@@ -260,7 +260,7 @@ class KH2World(World):
             self.donald_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
 
-        if self.multiworld.PartyGetBonusLock[self.player]:
+        if self.multiworld.DonaldGoofyStatsanity[self.player]:
             self.total_locations -= 31
             self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
             self.item_quantity_dict[random_prog_ability] -= 1
@@ -282,7 +282,7 @@ class KH2World(World):
             self.goofy_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
 
-        if self.multiworld.PartyGetBonusLock[self.player]:
+        if self.multiworld.DonaldGoofyStatsanity[self.player]:
             self.total_locations -= 32
             self.goofy_get_bonus_abilities += [self.create_item(random_prog_ability)]
             for item_name in goofy_master_ability:
@@ -311,7 +311,7 @@ class KH2World(World):
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
         fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities, True, True, allow_excluded=True)
-        if self.multiworld.PartyGetBonusLock:
+        if self.multiworld.DonaldGoofyStatsanity:
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
             state2 = self.multiworld.get_all_state(False)
             fill_restrictive(self.multiworld, state2, goofy_get_bonus_location_pool, self.goofy_get_bonus_abilities, True, True)
@@ -323,7 +323,7 @@ class KH2World(World):
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
         fill_restrictive(self.multiworld, state, donald_weapon_location_list, self.donald_weapon_abilities, True, True, allow_excluded=True)
-        if self.multiworld.PartyGetBonusLock:
+        if self.multiworld.DonaldGoofyStatsanity:
             donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Donald_Checks.keys() if Donald_Checks[location].yml != "Keyblade"]
             state2 = self.multiworld.get_all_state(False)
             fill_restrictive(self.multiworld, state2, donald_get_bonus_location_pool, self.donald_get_bonus_abilities, True, True)

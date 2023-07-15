@@ -792,9 +792,9 @@ def finishedGame(ctx: KH2Context, message):
     elif ctx.kh2slotdata['Goal'] == 1:
         if ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                    ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                    ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                    ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True

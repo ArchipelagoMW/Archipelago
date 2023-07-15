@@ -10,6 +10,16 @@ class TestDefault(KH2TestBase):
         self.assertBeatable(True)
 
 
+class TestThreeProof(KH2TestBase):
+    options = {
+        "Goal": 1,
+    }
+
+    def testEverything(self):
+        self.collect_all_but([ItemName.ProofofConnection, ItemName.ProofofNonexistence, ItemName.ProofofPeace])
+        self.assertBeatable(True)
+
+
 class TestLuckyEmblem(KH2TestBase):
     options = {
         "Goal": 1,

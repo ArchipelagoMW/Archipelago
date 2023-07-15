@@ -244,8 +244,17 @@ class KH2Rules:
             forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
     def set_kh2_goal(self):
+        if self.world.multiworld.Goal[self.player] == "three_proofs":
+            add_rule(
+                    self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                    lambda state: self.kh2_has_all(three_proofs, state)
+            )
+            if self.world.multiworld.FinalXemnas[self.player]:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
+            else:
+                self.world.multiworld.completion_condition[self.player] = lambda state: self.kh2_has_all(three_proofs, state)
         # lucky emblem hunt
-        if self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
+        elif self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
             add_rule(
                     self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
                     lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
@@ -1212,12 +1221,22 @@ class KH2FightRules(KH2Rules):
         return sephiroth_rules[self.fight_logic]
 
     def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy: schmovement-dodge roll and reflera and 3 summons and donald limit and magnera and thundara
+        easy_cor_tools = {
+            ItemName.HighJump:       1,
+            ItemName.Glide:          1,
+            ItemName.AerialDodge:    1,
+            ItemName.QuickRun:       2,
+            ItemName.MagnetElement:  2,
+            ItemName.ThunderElement: 2,
+            ItemName.ReflectElement: 2
         }
-        return _rules[self.fight_logic]
+        cor_first_fight_rules = {
+            "easy":   self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
+            "normal": self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
+            "hard":   self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
+        }
+        return cor_first_fight_rules[self.fight_logic]
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules

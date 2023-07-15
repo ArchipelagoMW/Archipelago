@@ -195,8 +195,8 @@ class LevelDepth(Choice):
     default = 0
 
 
-class PartyGetBonusLock(Toggle):
-    """Toggles if Donald and Goofy's Get Bonuses locations have to be their own abilities"""
+class DonaldGoofyStatsanity(Toggle):
+    """Toggles if on Donald and Goofy's Get Bonus locations can be any item"""
     default = True
 
 
@@ -208,13 +208,15 @@ class PromiseCharm(Toggle):
 
 class Goal(Choice):
     """Win Condition
+    Three Proofs: Find the 3 Proofs to unlock the final door.
+
     Lucky Emblem Hunt: Find required amount of Lucky Emblems.
 
     Hitlist (Bounty Hunt): Find required amount of Bounties.
 
     Lucky Emblem and Hitlist: Find the required amount of Lucky Emblems and Bounties."""
     display_name = "Goal"
-    # option_three_proofs = 0
+    option_three_proofs = 0
     option_lucky_emblem_hunt = 1
     option_hitlist = 2
     option_hitlist_and_lucky_emblem = 3
@@ -291,7 +293,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "FightLogic":             FightLogic,
     "FinalFormLogic":         FinalFormLogic,
     "AutoFormLogic":          AutoFormLogic,
-    "PartyGetBonusLock":      PartyGetBonusLock,
+    "DonaldGoofyStatsanity":      DonaldGoofyStatsanity,
     "Visitlocking":           Visitlocking,
     "RandomVisitLockingItem": RandomVisitLockingItem,
     "SuperBosses":            SuperBosses,
