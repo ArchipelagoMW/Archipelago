@@ -6,6 +6,9 @@ will have a corresponding response in the same order.
 Every individual request and response is a JSON object with at minimum one
 field `type`. The value of `type` determines what other fields may exist.
 
+To get the script version, instead of JSON, send "VERSION" to get the script
+version directly (e.g. "1.2.0").
+
 #### Ex. 1
 
 Request: `[{"type": "PING"}]`
@@ -84,11 +87,6 @@ Response:
     running is very probably the preferred core.
 
     Expected Response Type: `PREFERRED_CORES_RESPONSE`
-
-- `SCRIPT_VERSION`  
-    Returns the version of this script.
-
-    Expected Response Type: `SCRIPT_VERSION_RESPONSE`
 
 - `HASH`  
     Returns the hash of the currently loaded ROM calculated by BizHawk.
@@ -180,13 +178,6 @@ Response:
     Additional Fields:
     - `value`: A dictionary map from system name to core name
 
-- `SCRIPT_VERSION_RESPONSE`  
-    Contains the version of this script as a tuple. For example, v1.2.0 would
-    be `[1, 2, 0]`.
-
-    Additional Fields:
-    - `value`: The version tuple as [major, minor, patch].
-
 - `HASH_RESPONSE`  
     Contains the hash of the currently loaded ROM calculated by BizHawk.
 
@@ -237,7 +228,7 @@ local json = require("json")
 -- Will cause lag due to large console output
 local DEBUG = false
 
-local SCRIPT_VERSION = {1, 0, 333}
+local SCRIPT_VERSION = {1, 0, 0}
 
 local SOCKET_PORT = 43055
 
@@ -333,10 +324,6 @@ function process_request (req)
         res["value"]["PCECD"] = preferred_cores.PCECD
         res["value"]["SGX"] = preferred_cores.SGX
 
-    elseif req["type"] == "SCRIPT_VERSION" then
-        res["type"] = "SCRIPT_VERSION_RESPONSE"
-        res["value"] = SCRIPT_VERSION
-
     elseif req["type"] == "HASH" then
         res["type"] = "HASH_RESPONSE"
         res["value"] = rom_hash
@@ -419,29 +406,32 @@ function send_receive ()
         print("Received Message ["..emu.framecount().."]: "..'"'..message..'"')
     end
 
-    local data = json.decode(message)
-    local res = {}
-    local failed_guard_response = nil
-    for i, req in ipairs(data) do
-        if (failed_guard_response ~= nil) then
-            res[i] = failed_guard_response
-        else
-            -- An error is more likely to cause an NLua exception than to return an error here
-            local status, response = pcall(process_request, req)
-            if (status) then
-                res[i] = response
-
-                -- If the GUARD validation failed, skip the remaining commands
-                if (response["type"] == "GUARD_RESPONSE" and not response["value"]) then
-                    failed_guard_response = response
-                end
+    if (message == "VERSION") then
+        local result, err client_socket:send(SCRIPT_VERSION[1].."."..SCRIPT_VERSION[2].."."..SCRIPT_VERSION[3].."\n")
+    else
+        local res = {}
+        local data = json.decode(message)
+        local failed_guard_response = nil
+        for i, req in ipairs(data) do
+            if (failed_guard_response ~= nil) then
+                res[i] = failed_guard_response
             else
-                res[i] = {type = "ERROR", err = response}
+                -- An error is more likely to cause an NLua exception than to return an error here
+                local status, response = pcall(process_request, req)
+                if (status) then
+                    res[i] = response
+
+                    -- If the GUARD validation failed, skip the remaining commands
+                    if (response["type"] == "GUARD_RESPONSE" and not response["value"]) then
+                        failed_guard_response = response
+                    end
+                else
+                    res[i] = {type = "ERROR", err = response}
+                end
             end
         end
+        local result, err client_socket:send(json.encode(res).."\n")
     end
-
-    local result, err client_socket:send(json.encode(res).."\n")
 end
 
 function main ()
