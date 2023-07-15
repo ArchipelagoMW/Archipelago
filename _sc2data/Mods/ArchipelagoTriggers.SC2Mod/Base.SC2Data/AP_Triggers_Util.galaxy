@@ -181,59 +181,59 @@ void ap_triggers_processUpgrades(
     level = ModI(bitArrayValue, 4);
     upgrade0handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade1handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade2handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade3handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade4handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade5handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade6handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade7handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade8handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade9handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade10handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade11handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade12handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade13handler(player, level);
 
-    bitArrayValue = bitArrayValue / 4;
+    bitArrayValue = bitArrayValue >> 2;
     level = ModI(bitArrayValue, 4);
     upgrade14handler(player, level);
 }

@@ -2715,6 +2715,10 @@
         <Tooltip value="Unit/Name/Stargate"/>
         <Count Link="Alias_Stargate" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementOr id="AP_OrCountUnitAlias_GatewayCompleteOnlyTechTreeCheatCountUnitAlias_StargateCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_CountUnitAlias_StargateCompleteOnlyTechTreeCheat"/>
+        <OperandArray value="AP_CountUnitAlias_GatewayCompleteOnlyTechTreeCheat"/>
+    </CRequirementOr>
     <CRequirementCountUnit id="AP_CountUnitForgeCompleteOnlyTechTreeCheat">
         <Count Link="AP_Forge" State="CompleteOnly"/>
     </CRequirementCountUnit>

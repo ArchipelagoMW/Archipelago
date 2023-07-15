@@ -491,6 +491,46 @@ void libABFE498B_gf_AP_Triggers_unlockTerranProgressiveUpgrades (int lp_player, 
     );
 }
 
+void libABFE498B_gf_AP_Triggers_unlockProtossUnits (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Protoss_unlockAiurZealot, // 0
+        libABFE498B_gf_AP_Triggers_Protoss_unlockStalkerShakuras, // 1
+        libABFE498B_gf_AP_Triggers_Protoss_unlockHighTemplarAiur, // 2
+        libABFE498B_gf_AP_Triggers_Protoss_unlockDarkTemplarShakuras, // 3
+        libABFE498B_gf_AP_Triggers_Protoss_unlockImmortalAiur, // 4
+        libABFE498B_gf_AP_Triggers_Protoss_unlockColossusPurifier, // 5
+        libABFE498B_gf_AP_Triggers_Protoss_unlockPhoenixAiur, // 6
+        libABFE498B_gf_AP_Triggers_Protoss_unlockVoidRayShakuras, // 7
+        libABFE498B_gf_AP_Triggers_Protoss_unlockCarrierAiur, // 8
+        ap_triggers_PlayerConsumer_sig, // 9
+        ap_triggers_PlayerConsumer_sig, // 10
+        ap_triggers_PlayerConsumer_sig, // 11
+        ap_triggers_PlayerConsumer_sig, // 12
+        ap_triggers_PlayerConsumer_sig, // 13
+        ap_triggers_PlayerConsumer_sig, // 14
+        ap_triggers_PlayerConsumer_sig, // 15
+        ap_triggers_PlayerConsumer_sig, // 16
+        ap_triggers_PlayerConsumer_sig, // 17
+        ap_triggers_PlayerConsumer_sig, // 18
+        ap_triggers_PlayerConsumer_sig, // 19
+        ap_triggers_PlayerConsumer_sig, // 20
+        ap_triggers_PlayerConsumer_sig, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
 bool libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock () {
     // Automatic Variable Declarations
     // Implementation
@@ -961,9 +1001,9 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_
     // Automatic Variable Declarations
     // Implementation
     if ((lp_level >= 1)) {
-        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackFirebat", 1);
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_FirebatStimpack", 1);
         if ((lp_level >= 2)) {
-            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_FirebatStimpack", 1);
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackFirebat", 1);
         }
 
     }
@@ -2429,6 +2469,367 @@ void libABFE498B_gf_AP_Triggers_giveTerranDefaultTech (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_NovaBaseSuitEnhancements", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAiurZealot (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGateway(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_ZealotAiur", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockStalkerShakuras (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGateway(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_CyberneticsCore", true);
+    TechTreeUnitAllow(lp_player, "AP_StalkerShakuras", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockHighTemplarAiur (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGateway(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_TemplarArchive", true);
+    TechTreeUnitAllow(lp_player, "AP_HighArchonTemplar", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockDarkTemplarShakuras (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGateway(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_DarkShrine", true);
+    TechTreeUnitAllow(lp_player, "AP_DarkTemplarShakuras", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockObserver (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_Observer", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockWarpPrism (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_WarpPrism", true);
+    TechTreeUnitAllow(lp_player, "AP_WarpPrismPhasing", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockImmortalAiur (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_ImmortalAiur", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockColossusPurifier (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_RoboticsBay", true);
+    TechTreeUnitAllow(lp_player, "AP_ColossusPurifier", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockPhoenixAiur (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockStargate(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_PhoenixAiur", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockVoidRayShakuras (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockStargate(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_VoidRayShakuras", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockCarrierAiur (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gf_AP_Triggers_Protoss_unlockStargate(lp_player);
+    TechTreeUnitAllow(lp_player, "AP_FleetBeacon", true);
+    TechTreeUnitAllow(lp_player, "AP_CarrierAiur", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGateway (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_Gateway", true);
+    TechTreeUnitAllow(lp_player, "AP_WarpGate", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_RoboticsFacility", true);
+    TechTreeUnitAllow(lp_player, "AP_RoboticsFacilityWarp", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockStargate (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_Stargate", true);
+    TechTreeUnitAllow(lp_player, "AP_StargateWarp", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockPhotonCannon (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_Forge", true);
+    TechTreeUnitAllow(lp_player, "AP_PhotonCannon", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockKhaydarinMonolith (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_Forge", true);
+    TechTreeUnitAllow(lp_player, "AP_KhaydarinMonolith", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockShieldBattery (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_ShieldBattery", true);
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGroundWeapons (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock() == true)) {
+        if ((lp_level >= 1)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundWeaponsLevel1", 1);
+            if ((lp_level >= 2)) {
+                libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundWeaponsLevel2", 1);
+                if ((lp_level >= 3)) {
+                    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundWeaponsLevel3", 1);
+                }
+
+            }
+
+        }
+
+    }
+    else {
+        if ((lp_level >= 1)) {
+            TechTreeUnitAllow(lp_player, "AP_Forge", true);
+            TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel1", true);
+            if ((lp_level >= 2)) {
+                TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel2", true);
+                if ((lp_level >= 3)) {
+                    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel3", true);
+                }
+
+            }
+
+        }
+
+    }
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGroundArmor (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock() == true)) {
+        if ((lp_level >= 1)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundArmorsLevel1", 1);
+            if ((lp_level >= 2)) {
+                libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundArmorsLevel2", 1);
+                if ((lp_level >= 3)) {
+                    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossGroundArmorsLevel3", 1);
+                }
+
+            }
+
+        }
+
+    }
+    else {
+        if ((lp_level >= 1)) {
+            TechTreeUnitAllow(lp_player, "AP_Forge", true);
+            TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel1", true);
+            if ((lp_level >= 2)) {
+                TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel2", true);
+                if ((lp_level >= 3)) {
+                    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel3", true);
+                }
+
+            }
+
+        }
+
+    }
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockShields (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock() == true)) {
+        if ((lp_level >= 1)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossShieldsLevel1", 1);
+            if ((lp_level >= 2)) {
+                libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossShieldsLevel2", 1);
+                if ((lp_level >= 3)) {
+                    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossShieldsLevel3", 1);
+                }
+
+            }
+
+        }
+
+    }
+    else {
+        if ((lp_level >= 1)) {
+            TechTreeUnitAllow(lp_player, "AP_Forge", true);
+            TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel1", true);
+            if ((lp_level >= 2)) {
+                TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel2", true);
+                if ((lp_level >= 3)) {
+                    TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel3", true);
+                }
+
+            }
+
+        }
+
+    }
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAirWeapons (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock() == true)) {
+        if ((lp_level >= 1)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirWeaponsLevel1", 1);
+            if ((lp_level >= 2)) {
+                libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirWeaponsLevel2", 1);
+                if ((lp_level >= 3)) {
+                    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirWeaponsLevel3", 1);
+                }
+
+            }
+
+        }
+
+    }
+    else {
+        if ((lp_level >= 1)) {
+            libABFE498B_gf_AP_Triggers_Protoss_unlockStargate(lp_player);
+            TechTreeUnitAllow(lp_player, "AP_CyberneticsCore", true);
+            TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel1", true);
+            if ((lp_level >= 2)) {
+                TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel2", true);
+                if ((lp_level >= 3)) {
+                    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel3", true);
+                }
+
+            }
+
+        }
+
+    }
+}
+
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAirArmor (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock() == true)) {
+        if ((lp_level >= 1)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirArmorsLevel1", 1);
+            if ((lp_level >= 2)) {
+                libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirArmorsLevel2", 1);
+                if ((lp_level >= 3)) {
+                    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ProtossAirArmorsLevel3", 1);
+                }
+
+            }
+
+        }
+
+    }
+    else {
+        if ((lp_level >= 1)) {
+            libABFE498B_gf_AP_Triggers_Protoss_unlockStargate(lp_player);
+            TechTreeUnitAllow(lp_player, "AP_CyberneticsCore", true);
+            TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel1", true);
+            if ((lp_level >= 2)) {
+                TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel2", true);
+                if ((lp_level >= 3)) {
+                    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel3", true);
+                }
+
+            }
+
+        }
+
+    }
+}
+
+void libABFE498B_gf_AP_Triggers_clearProtossTech (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    TechTreeUnitAllow(lp_player, "AP_ZealotAiur", false);
+    TechTreeUnitAllow(lp_player, "AP_StalkerShakuras", false);
+    TechTreeUnitAllow(lp_player, "AP_SentryAiur", false);
+    TechTreeUnitAllow(lp_player, "AP_HighArchonTemplar", false);
+    TechTreeUnitAllow(lp_player, "AP_DarkTemplarShakuras", false);
+    TechTreeUnitAllow(lp_player, "AP_WarpPrism", false);
+    TechTreeUnitAllow(lp_player, "AP_Observer", false);
+    TechTreeUnitAllow(lp_player, "AP_ImmortalAiur", false);
+    TechTreeUnitAllow(lp_player, "AP_ColossusPurifier", false);
+    TechTreeUnitAllow(lp_player, "AP_PhoenixAiur", false);
+    TechTreeUnitAllow(lp_player, "AP_VoidRayShakuras", false);
+    TechTreeUnitAllow(lp_player, "AP_CarrierAiur", false);
+    TechTreeUnitAllow(lp_player, "AP_Gateway", false);
+    TechTreeUnitAllow(lp_player, "AP_WarpGate", false);
+    TechTreeUnitAllow(lp_player, "AP_CyberneticsCore", false);
+    TechTreeUnitAllow(lp_player, "AP_TemplarArchive", false);
+    TechTreeUnitAllow(lp_player, "AP_DarkShrine", false);
+    TechTreeUnitAllow(lp_player, "AP_Forge", false);
+    TechTreeUnitAllow(lp_player, "AP_PhotonCannon", false);
+    TechTreeUnitAllow(lp_player, "AP_KhaydarinMonolith", false);
+    TechTreeUnitAllow(lp_player, "AP_ShieldBattery", false);
+    TechTreeUnitAllow(lp_player, "AP_RoboticsFacility", false);
+    TechTreeUnitAllow(lp_player, "AP_RoboticsFacilityWarp", false);
+    TechTreeUnitAllow(lp_player, "AP_RoboticsBay", false);
+    TechTreeUnitAllow(lp_player, "AP_Stargate", false);
+    TechTreeUnitAllow(lp_player, "AP_StargateWarp", false);
+    TechTreeUnitAllow(lp_player, "AP_FleetBeacon", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel1", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel2", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundWeaponsLevel3", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel1", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel2", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossGroundArmorsLevel3", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel1", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel2", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossShieldsLevel3", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel1", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel2", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirWeaponsLevel3", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel1", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel2", false);
+    TechTreeUpgradeAllow(lp_player, "AP_ProtossAirArmorsLevel3", false);
+    TechTreeAbilityAllow(lp_player, AbilityCommand("AP_TimeWarp", 0), false);
+}
+
+void libABFE498B_gf_AP_Triggers_giveProtossDefaultTech (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VoidPhoenixGravitonCampaignVersion", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_VoidPhoenixDoubleGraviton", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SlayerConfig", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AlarakStalkerPhasingArmor", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SOAWarpTech", 1);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockPhotonCannon(lp_player);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockObserver(lp_player);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGroundWeapons(lp_player, 3);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockGroundArmor(lp_player, 3);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockShields(lp_player, 3);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockAirWeapons(lp_player, 3);
+    libABFE498B_gf_AP_Triggers_Protoss_unlockAirArmor(lp_player, 3);
+}
+
 void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgrade, string lp_newUpgrade) {
     // Automatic Variable Declarations
     // Implementation
@@ -2554,6 +2955,42 @@ void libABFE498B_gt_AP_Triggers_giveTerranTech_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: AP_Triggers_giveProtossTech
+//--------------------------------------------------------------------------------------------------
+bool libABFE498B_gt_AP_Triggers_giveProtossTech_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+    string lv_unitValue;
+
+    // Automatic Variable Declarations
+    playergroup auto67EC4BC5_g;
+
+    // Variable Initialization
+    lv_unitValue = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_unitValue = StringWord(EventChatMessage(false), 2);
+    auto67EC4BC5_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto67EC4BC5_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libABFE498B_gf_AP_Triggers_unlockProtossUnits(lv_currentPlayer, StringToInt(lv_unitValue));
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libABFE498B_gt_AP_Triggers_giveProtossTech_Init () {
+    libABFE498B_gt_AP_Triggers_giveProtossTech = TriggerCreate("libABFE498B_gt_AP_Triggers_giveProtossTech_Func");
+    TriggerAddEventChatMessage(libABFE498B_gt_AP_Triggers_giveProtossTech, c_playerAny, "?GiveProtossTech", false);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: AP_Triggers_techTreeInit
 //--------------------------------------------------------------------------------------------------
 bool libABFE498B_gt_AP_Triggers_techTreeInit_Func (bool testConds, bool runActions) {
@@ -2576,7 +3013,9 @@ bool libABFE498B_gt_AP_Triggers_techTreeInit_Func (bool testConds, bool runActio
         lv_currentPlayer = PlayerGroupNextPlayer(auto469AFECB_g, lv_currentPlayer);
         if (lv_currentPlayer < 0) { break; }
         libABFE498B_gf_AP_Triggers_clearTerranTech(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_clearProtossTech(lv_currentPlayer);
         libABFE498B_gf_AP_Triggers_giveTerranDefaultTech(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_giveProtossDefaultTech(lv_currentPlayer);
     }
     return true;
 }
@@ -2589,6 +3028,7 @@ void libABFE498B_gt_AP_Triggers_techTreeInit_Init () {
 void libABFE498B_InitTriggers () {
     libABFE498B_gt_AP_Triggers_setOptions_Init();
     libABFE498B_gt_AP_Triggers_giveTerranTech_Init();
+    libABFE498B_gt_AP_Triggers_giveProtossTech_Init();
     libABFE498B_gt_AP_Triggers_techTreeInit_Init();
 }
 

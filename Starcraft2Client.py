@@ -719,6 +719,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
                 start_items[5], start_items[6], start_items[12], start_items[13], start_items[14]))
+            await self.chat_send("?GiveProtossTech {}".format(start_items[7]))
             await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
@@ -744,6 +745,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
                     current_items[5], current_items[6], current_items[12], current_items[13], current_items[14]))
+                await self.chat_send("?GiveProtossTech {}".format(current_items[7]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:

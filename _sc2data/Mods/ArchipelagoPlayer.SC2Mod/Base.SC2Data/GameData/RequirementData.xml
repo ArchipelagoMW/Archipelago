@@ -1722,6 +1722,9 @@
         <EditorCategories value="Race:Protoss,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitAlias_GatewayCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveGatewayOrStargate">
+        <NodeArray index="Use" Link="AP_OrCountUnitAlias_GatewayCompleteOnlyTechTreeCheatCountUnitAlias_StargateCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
     <CRequirement id="AP_HaveRoboticsFa">
         <NodeArray index="Use" Link="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat"/>
     </CRequirement>

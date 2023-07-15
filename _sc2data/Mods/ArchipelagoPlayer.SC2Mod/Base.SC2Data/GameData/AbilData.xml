@@ -5099,7 +5099,7 @@
             <Button DefaultButtonFace="AP_RoboticsFacility" State="Restricted" Requirements="AP_HaveNexusAndNotHaveSOAWarpTech"/>
         </InfoArray>
         <InfoArray index="Build15" Unit="AP_CyberneticsCore" Time="50">
-            <Button DefaultButtonFace="AP_CyberneticsCore" State="Restricted" Requirements="AP_HaveGateway"/>
+            <Button DefaultButtonFace="AP_CyberneticsCore" State="Restricted" Requirements="AP_HaveGatewayOrStargate"/>
         </InfoArray>
 <!--        <InfoArray index="Build20" Unit="PsionicAmplifier" Time="40">-->
 <!--            <Button DefaultButtonFace="PsionicAmplifier" State="Restricted"/>-->
