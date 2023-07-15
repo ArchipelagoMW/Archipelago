@@ -28,6 +28,18 @@ class TestBase(unittest.TestCase):
             "Ceres",
             "Gauntlet Top",
             "Mama Turtle"
+        },
+
+        # The Witness has a setting called "shuffle_postgame". What is "postgame" depends heavily on the settings.
+        # To catch errors in generation related to "shuffle_postgame", I decided it should fail "loudly".
+        # Thus, "postgame" regions are made entirely unreachable. These are the postgame regions in default settings.
+
+        "The Witness": {
+            "Mountain Path to Caves",
+            "Caves",
+            "Path to Challenge",
+            "Challenge",
+            "Tunnels",
         }
     }
 
