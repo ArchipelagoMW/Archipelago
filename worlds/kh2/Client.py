@@ -763,7 +763,7 @@ class KH2Context(CommonContext):
                 if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][itemName] and amountOfBoostsInInvo < 255:
                     self.kh2_write_byte(self.Save + itemData.memaddr, amountOfBoostsInInvo)
 
-            if self.generator_version.build > 1  and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.2
+            if self.generator_version.build > 1 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.2
                 self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
@@ -790,11 +790,11 @@ def finishedGame(ctx: KH2Context, message):
             return True
         return False
     elif ctx.kh2slotdata['Goal'] == 1:
-        if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= \
-                ctx.kh2slotdata['LuckyEmblemsRequired']:
-            ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-            ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-            ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+        if ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
+            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
+                    ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+                    ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+                    ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
@@ -802,14 +802,29 @@ def finishedGame(ctx: KH2Context, message):
             return True
         return False
     elif ctx.kh2slotdata['Goal'] == 2:
+        # for backwards compat
         if "hitlist" in ctx.kh2slotdata:
             for boss in ctx.kh2slotdata["hitlist"]:
                 if boss in message[0]["locations"]:
                     ctx.amountOfPieces += 1
         if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
-            ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-            ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-            ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
+                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+            if ctx.kh2slotdata['FinalXemnas'] == 1:
+                if ctx.finalxemnas:
+                    return True
+                return False
+            return True
+        return False
+    elif ctx.kh2slotdata["Goal"] == 3:
+        if ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"] and \
+                ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
+            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
+                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
+                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
