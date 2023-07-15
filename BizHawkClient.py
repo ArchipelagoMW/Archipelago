@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 BIZHAWK_SOCKET_PORT = 43055
-EXPECTED_SCRIPT_VERSION = (1, 0, 0)
+EXPECTED_SCRIPT_VERSION = 1
 
 
 class BizHawkConnectionStatus(IntEnum):
@@ -111,7 +111,7 @@ class BizHawkSyncError(Exception):
     pass
 
 
-async def _get_script_version(ctx: BizHawkClientContext) -> Tuple[int, int, int]:
+async def _get_script_version(ctx: BizHawkClientContext) -> int:
     if ctx.bizhawk_streams is None:
         raise NotConnectedError("You tried to send a request before a connection to BizHawk was made")
 
@@ -120,7 +120,7 @@ async def _get_script_version(ctx: BizHawkClientContext) -> Tuple[int, int, int]
         writer.write("VERSION".encode("utf-8") + b"\n")
         await asyncio.wait_for(writer.drain(), timeout=5)
 
-        version = (await asyncio.wait_for(reader.readline(), timeout=5)).decode("ascii")
+        version = await asyncio.wait_for(reader.readline(), timeout=5)
 
         if version == b"":
             logger.info("Connection to BizHawk closed")
@@ -129,7 +129,7 @@ async def _get_script_version(ctx: BizHawkClientContext) -> Tuple[int, int, int]
             ctx.bizhawk_connection_status = BizHawkConnectionStatus.NOT_CONNECTED
             raise RequestFailedError("Connection closed")
 
-        return tuple(map(int, version.strip("\n").split(".")))
+        return int(version.decode("ascii"))
     except asyncio.TimeoutError:
         logger.info("Connection to BizHawk timed out")
         writer.close()
@@ -379,12 +379,10 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
             showed_no_handler_message = False
 
-            script_version = (await _get_script_version(ctx))
+            script_version = await _get_script_version(ctx)
 
-            if script_version[0] != EXPECTED_SCRIPT_VERSION[0] or script_version < EXPECTED_SCRIPT_VERSION:
-                script_version_str = f"v{script_version[0]}.{script_version[1]}.{script_version[2]}"
-                expected_script_version_str = f"v{EXPECTED_SCRIPT_VERSION[0]}.{EXPECTED_SCRIPT_VERSION[1]}.{EXPECTED_SCRIPT_VERSION[2]}"
-                logger.info(f"Connector script is incompatible. Expected version {expected_script_version_str} but got {script_version_str}. Disconnecting.")
+            if script_version != EXPECTED_SCRIPT_VERSION:
+                logger.info(f"Connector script is incompatible. Expected version {EXPECTED_SCRIPT_VERSION} but got {script_version}. Disconnecting.")
 
                 ctx.bizhawk_streams[1].close()
                 ctx.bizhawk_streams = None

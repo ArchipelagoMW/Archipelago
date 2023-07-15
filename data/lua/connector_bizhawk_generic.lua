@@ -228,7 +228,7 @@ local json = require("json")
 -- Will cause lag due to large console output
 local DEBUG = false
 
-local SCRIPT_VERSION = {1, 0, 0}
+local SCRIPT_VERSION = 1
 
 local SOCKET_PORT = 43055
 
@@ -407,7 +407,7 @@ function send_receive ()
     end
 
     if (message == "VERSION") then
-        local result, err client_socket:send(SCRIPT_VERSION[1].."."..SCRIPT_VERSION[2].."."..SCRIPT_VERSION[3].."\n")
+        local result, err client_socket:send(tostring(SCRIPT_VERSION))
     else
         local res = {}
         local data = json.decode(message)
