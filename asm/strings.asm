@@ -5,6 +5,85 @@
 .autoregion
 .align 2
 
+; Create OAM data for text
+; Arguments:
+;   r0: No gaps between objects if 0; otherwise, add spaces around the third object
+CreateTextOAM:
+    push {r4-r6, lr}
+    mov r6, r0
+    ldr r0, =0x4098  ; Y position 7:0
+    ldr r1, =0x4000  ; X position 8:0
+    ldr r2, =0x010C  ; Index      9:0
+    ldr r3, =ucCntObj
+    ldr r4, =OamBuf
+    
+    ldrb r5, [r3]
+    lsl r5, r5, #3
+    add r4, r4, r5
+    
+; 1st
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+; 2nd
+    add r1, #32
+    add r2, #4
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+; 3rd
+    cmp r6, #0
+    beq @@NoSpace3
+    add r1, #8
+@@NoSpace3:
+    add r1, #32
+    add r2, #4
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+    ; 4th
+    cmp r6, #0
+    beq @@NoSpace4
+    add r1, #8
+@@NoSpace4:
+    add r1, #32
+    add r2, #0x130-0x114
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+; 5th
+    add r1, #32
+    add r2, #4
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+; 6th
+    add r1, #32
+    add r2, #0x20-4
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+; 7th
+    add r1, #32
+    add r2, #4
+    add r4, #8
+    strh r0, [r4]
+    strh r1, [r4, #2]
+    strh r2, [r4, #4]
+
+    ldrb r5, [r3]
+    add r5, #7
+    strb r5, [r3]
+    
+    pop {r4-r6, pc}
+.pool
+
+
 ; Copy text sprites into the sprite table. On encountering 0xFE, blank spaces
 ; will be copied into the remaining space.
 ; Parameters:

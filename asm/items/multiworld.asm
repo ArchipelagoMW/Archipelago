@@ -37,17 +37,22 @@ ItemReceivedFeedbackSound:
 ; ID in r1.
 ; If nothing was received, return 0xFF
 ReceiveNextItem:
-    ldr r2, =IncomingItemExists
+    ldr r2, =MultiworldState
     ldrb r0, [r2]
-    cmp r0, #0
-    bne @@GotItem
+    cmp r0, #1
+    beq @@GotItem
     mov r0, #0xFF
     b @@Return
 
 @@GotItem:
-; Reset incoming item
-    mov r1, #0x00
+; Set multiworld state
+    mov r1, #0x02
     strb r1, [r2]
+
+; Set text timer
+    ldr r1, =TextTimer
+    mov r2, #90
+    strb r2, [r1]
 
 ; Increment received item counter
     ldr r1, =ReceivedItemCount

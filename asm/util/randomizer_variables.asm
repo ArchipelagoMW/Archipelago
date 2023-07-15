@@ -19,7 +19,13 @@
 
 ; Items can be received one at a time w/o issue
 .definelabel IncomingItemID, UnusedRamStart + 1  ; byte
-.definelabel IncomingItemExists, UnusedRamStart + 2
+
+; 0 = Nothing
+; 1 = Just received item
+; 2 = Displaying text after receiving item
+; 3 = Displaying text after collecting someone else's item
+.definelabel MultiworldState, UnusedRamStart + 2  ; byte
+
 .definelabel IncomingItemSender, UnusedRamStart + 3 ; 17 bytes
 
 ; The jewel piece or CD that you've most recently received or grabbed from a box
@@ -28,6 +34,8 @@
 .definelabel LastCollectedItemStatus, UnusedRamStart + 21  ; byte
 
 .definelabel DeathlinkEnabled, UnusedRamStart + 22  ; byte
+
+.definelabel TextTimer, UnusedRamStart + 23  ; byte
 
 .definelabel QueuedJunk, UnusedRamStart + 24  ; bytes
     .definelabel QueuedFullHealthItem, QueuedJunk + 0

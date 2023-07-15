@@ -6,6 +6,7 @@
 .definelabel CurrentRoomId, 0x3000024
 .definelabel ucFlashLoop, 0x3000044
 .definelabel ucTimeUp, 0x3000047
+.definelabel OamBuf, 0x3001444
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
 .definelabel LevelStatusTable, 0x3000A68
@@ -21,6 +22,7 @@
 .definelabel KeyPressContinuous, 0x3001844
 .definelabel KeyPressPrevious, 0x3001846
 .definelabel usTrg_KeyPress1Frame, 0x3001848
+.definelabel ucCntObj, 0x300184A
 .definelabel Wario_ucReact, 0x3001898
 .definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
@@ -31,8 +33,11 @@
 
 ; Functions
 .definelabel MainGameLoop, 0x80001CC
+.definelabel ClearOamBuf, 0x8000A0C
 .definelabel m4aSongNumStart, 0x8001DA4
 .definelabel WarioHitMain, 0x801009c
+.definelabel GmWarioCreate, 0x801C5D8
+.definelabel EnemyDisplayMain, 0x801D8C4
 .definelabel EnemyChildSet, 0x801E328
 .definelabel ChangeWarioReact_Fire, 0x801EA3C
 .definelabel ChangeWarioReact_Fat, 0x801EA64
@@ -42,6 +47,7 @@
 .definelabel KillChildWhenParentDies, 0x80268DC
 .definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
+.definelabel GmapSceneCreate, 0x806C794
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8
 .definelabel TKakeraComp_SE_Set, 0x8078D60

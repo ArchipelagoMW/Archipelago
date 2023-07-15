@@ -24,14 +24,13 @@ hook 0x808134C, 0x808135C, CheckLocations
     ldr r0, =LocationTable
     add r1, r0, r4  ; get entry for this level
     ldrb r0, [r1]  ; a1
-    ldr r1, =ItemExtDataTable + (LocationTable - ItemLocationTable)
+    ldr r1, =ItemExtDataTable + 4 * (LocationTable - ItemLocationTable)
     lsl r2, r4, #2
-    add r1, r2, r4
+    add r1, r1, r2
     ldr r1, [r1]  ; a2
 
 ; Skip your junk items
-    mov r2, #0
-    cmp r1, r2
+    cmp r1, #0
     bne @@Give
     lsr r2, r0, #6
     cmp r2, #1

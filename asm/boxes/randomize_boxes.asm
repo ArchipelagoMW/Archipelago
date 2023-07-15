@@ -306,6 +306,13 @@ CollectRandomItem:
     mov r2, #8
     bl LoadSpriteString
 
+    ldr r0, =MultiworldState
+    mov r1, #3
+    strb r1, [r0] 
+    ldr r0, =TextTimer
+    mov r1, #90
+    strb r1, [r0]
+
 @@JewelPiece:
     ldr r0, =0x13B  ; a1
     b @@PlayCollectionSound
