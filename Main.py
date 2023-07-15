@@ -24,6 +24,7 @@ __all__ = ["main"]
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
     if not baked_server_options:
         baked_server_options = get_settings().server_options.as_dict()
+    assert isinstance(baked_server_options, dict)
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
