@@ -178,6 +178,10 @@ class Group:
                         # upcast, i.e. int -> IntEnum, str -> Path
                         setattr(self, k, cls.__call__(v))
                         break
+                    if issubclass(cls, (tuple, set)) and isinstance(v, list):
+                        # convert or upcast from list
+                        setattr(self, k, cls.__call__(v))
+                        break
                 else:
                     # assign scalar and hope for the best
                     setattr(self, k, v)
@@ -192,16 +196,16 @@ class Group:
         }
 
     @classmethod
-    def _dump_value(cls, value: Any, f: TextIO, level: int):
+    def _dump_value(cls, value: Any, f: TextIO, indent: str) -> None:
         """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
-        indent = '  ' * level
-        yaml_line = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        yaml_line: str = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        assert yaml_line.count("\n") == 1, f"Unexpected input for yaml dumper: {value}"
         f.write(f"{indent}{yaml_line}")
 
     @classmethod
-    def _dump_item(cls, name: str, attr: object, f: TextIO, level: int) -> None:
-        """Write a dict/group item to f, where attr can be a scalar or a collection"""
+    def _dump_item(cls, name: Optional[str], attr: object, f: TextIO, level: int) -> None:
+        """Write a group, dict or sequence item to f, where attr can be a scalar or a collection"""
         from Utils import Dumper as BaseDumper
         from yaml import ScalarNode, MappingNode
 
@@ -226,24 +230,34 @@ class Group:
             if cls is not Group:
                 cls._dumper = Group._dumper
 
+        indent = "  " * level
+        start = f"{indent}-\n" if name is None else f"{indent}{name}:\n"
         if isinstance(attr, Group):
-            indent = '  ' * level
-            f.write(f"{indent}{name}:\n")
+            # handle group
+            f.write(start)
             attr.dump(f, level=level+1)
-        elif isinstance(attr, (list, tuple, set)):
-            # TODO: special handling for iterables
-            raise NotImplementedError()
+        elif isinstance(attr, (list, tuple, set)) and attr:
+            # handle non-empty sequence; empty use one-line [] syntax
+            f.write(start)
+            for value in attr:
+                cls._dump_item(None, value, f, level=level + 1)
         elif isinstance(attr, dict) and attr:
-            # special handling for non-empty dicts; empty one-line {} syntax
-            indent = '  ' * level
-            f.write(f"{indent}{name}:\n")
+            # handle non-empty dict; empty use one-line {} syntax
+            f.write(start)
             for dict_key, value in attr.items():
                 # not dumping doc string here, since there is no way to upcast it after dumping
+                assert dict_key is not None, "Key None is reserved for sequences"
                 cls._dump_item(dict_key, value, f, level=level + 1)
         else:
-            cls._dump_value({name: _to_builtin(attr)}, f, level=level)
+            # dump scalar or empty sequence or mapping item
+            line = [_to_builtin(attr)] if name is None else {name: _to_builtin(attr)}
+            cls._dump_value(line, f, indent=indent)
 
     def dump(self, f: TextIO, level: int = 0) -> None:
+        """Dump Group to stream f at given indentation level"""
+        # There is no easy way to generate extra lines into default,
+        # so we format part of it by hand using an odd recursion here and in _dump_*.
+
         self._dumping = True
         try:
             # fetch class to avoid going through getattr
