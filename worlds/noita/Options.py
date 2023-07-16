@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Range
+from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool
 
 
 class PathOption(Choice):
@@ -100,6 +100,7 @@ class ShopPrice(Choice):
 
 
 noita_options: Dict[str, AssembleOptions] = {
+    "start_inventory_from_pool": StartInventoryPool,
     "death_link": DeathLink,
     "bad_effects": Traps,
     "victory_condition": VictoryCondition,
