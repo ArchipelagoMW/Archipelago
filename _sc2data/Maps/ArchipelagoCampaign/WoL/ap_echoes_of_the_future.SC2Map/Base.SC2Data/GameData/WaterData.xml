@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="MarSara">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="5.000000"/>
+            <Color value="0.137255,0.282353,0.407843,0.044000"/>
+            <ColorFallOff value="0.169000"/>
+            <CausticsFallOff value="0.095000"/>
+            <Specularity value="63.000000"/>
+            <SpecularScaler value="0.080000"/>
+            <UvRate value="-0.000928,-0.000371,0.000000,0.000000"/>
+            <UvRotate value="5.018345"/>
+            <MeshRoughness value="0.438000"/>
+            <TextureRoughness value="0.887000"/>
+            <ReflectionDistortion value="0.036000"/>
+            <RefractionDistortion value="0.002200"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.302000"/>
+            <ReflectivityPower value="9.360000"/>
+        </State>
+    </CWater>
+</Catalog>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CGame id="Dflt">
+        <CameraMarginAspectAdjust index="1" Margin="3,0,3,0"/>
+        <CameraMarginAspectAdjust index="2" Margin="3,0,3,0"/>
+    </CGame>
+</Catalog>

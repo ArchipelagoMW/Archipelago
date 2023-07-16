@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="3">
+        <name value="Overmind Graveyard Vision"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="98.3586,82.0068"/>
+            <radius value="11.8691"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.3352,88.0676"/>
+            <radius value="2.5983"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.4333,81.2294"/>
+            <radius value="3.0292"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.0993,70.717"/>
+            <radius value="3.5913"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.669,88.6364"/>
+            <radius value="2.29"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.9687,79.4433"/>
+            <radius value="2.7172"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.6047,92.022"/>
+            <radius value="2.7951"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.985,76.254"/>
+            <radius value="1.7973"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.3647,74.8803"/>
+            <radius value="3.0605"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.6862,95.6047"/>
+            <radius value="6.0002"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.0561,96.5798"/>
+            <radius value="8.08"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.8195,71.4321"/>
+            <radius value="1.9731"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.0268,76.1247"/>
+            <radius value="1.9731"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.0273,75.5053"/>
+            <radius value="1.9731"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.089,76.5017"/>
+            <radius value="1.7973"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.7124,70.6843"/>
+            <radius value="1.7973"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.5065,73.7043"/>
+            <radius value="1.8803"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.962,73.6137"/>
+            <radius value="1.8803"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.0571,70.3923"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.269,68.1118"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.605,68.477"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.9384,67.2602"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.7036,65.4638"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.3522,68.0656"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.997,66.308"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.9492,67.5485"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.293,68.3037"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.091,87.077"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.984,94.568"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.186,86.2373"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.4191,87.9775"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.4201,66.3098"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.7072,72.0266"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.6684,73.4526"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.5053,66.1625"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.34,66.5356"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.8603,66.8144"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.6567,67.4067"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.6965,66.563"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.0227,65.0688"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.1977,65.5815"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.2817,63.9277"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.401,74.784"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.809,73.4606"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.6823,71.7756"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.5031,65.347"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.497,72.716"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.3293,72.773"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.432,78.087"/>
+            <radius value="1.0424"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.0283,108.2675"/>
+            <radius value="4.455"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Intro Zerg Wander"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="121.4301,86.508"/>
+            <radius value="8.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.4645,84.831"/>
+            <radius value="8.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.2458,81.9768"/>
+            <radius value="8.5"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Pathing Blockers"/>
+        <shape type="circle">
+            <center value="31.511,73.5112"/>
+            <radius value="17.522"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Warp Gates South"/>
+        <shape type="circle">
+            <center value="95.0593,59.0002"/>
+            <radius value="8.3437"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Warp Gates North"/>
+        <shape type="circle">
+            <center value="58.7966,94.2995"/>
+            <radius value="8.585"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Victory Cine 2 - Zergling Spawn 1"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="151.5207,133.4733"/>
+            <radius value="2.262"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Cinematic Main Area"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="162.7194,135.464"/>
+            <radius value="17.2692"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Player Base"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="62.5134,40.6286"/>
+            <radius value="10.2736"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.3415,36.9047"/>
+            <radius value="10.2736"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.1804,29.969"/>
+            <radius value="10.2736"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Victory Cine 2 - Space Spawn Area"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="128.6743,119.7258"/>
+            <radius value="18.2731"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.3271,138.6384"/>
+            <radius value="9.7963"/>
+        </shape>
+        <shape type="circle">
+            <center value="142.268,133.6525"/>
+            <radius value="9.548"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Observer Found"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="30.9553,50.659"/>
+            <radius value="8.656"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.0393,46.5825"/>
+            <radius value="5.6938"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Initial Landing Visibility"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="26.3354,28.1425"/>
+            <radius value="7.828"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Activate Colossus"/>
+        <shape type="circle">
+            <center value="53.272,38.834"/>
+            <radius value="1.6455"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Overlord Wander Zone"/>
+        <shape type="circle">
+            <center value="99.0412,86.9365"/>
+            <radius value="13.273"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Circle of Power SW"/>
+        <shape type="circle">
+            <center value="89.4272,66.3208"/>
+            <radius value="1.7248"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Circle of Power NW"/>
+        <shape type="circle">
+            <center value="84.4714,105.384"/>
+            <radius value="1.6181"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Circle of Power NE"/>
+        <shape type="circle">
+            <center value="110.2512,113.639"/>
+            <radius value="1.9755"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Circle of Power SE"/>
+        <shape type="circle">
+            <center value="117.7883,84.1882"/>
+            <radius value="1.6562"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Briefing - Overlord Spawn Area"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="164.3857,137.301"/>
+            <radius value="6.0341"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Briefing - Hydra Spawn 3"/>
+        <shape type="circle">
+            <center value="164.7194,129.6193"/>
+            <radius value="1.9912"/>
+        </shape>
+        <shape type="circle">
+            <center value="161.04,131.355"/>
+            <radius value="2.0476"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Briefing - Hydra Spawn 2"/>
+        <shape type="circle">
+            <center value="157.0537,137.5224"/>
+            <radius value="2.081"/>
+        </shape>
+        <shape type="circle">
+            <center value="158.6821,141.4687"/>
+            <radius value="1.8784"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Briefing - Hydra Spawn 1"/>
+        <shape type="circle">
+            <center value="172.5527,136.1193"/>
+            <radius value="2.0817"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Victory Cine 3 - Egg Spawn 3"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="167.8837,143.706"/>
+            <radius value="3.1337"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Victory Cine 3 - Egg Spawn 2"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="161.2065,142.3144"/>
+            <radius value="3.0144"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Victory Cine 3 - Egg Spawn 1"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="165.3754,135.577"/>
+            <radius value="2.5588"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Nydus Worm Spawn North"/>
+        <shape type="circle">
+            <center value="65.5585,66.1657"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.773,66.605"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.5708,70.271"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.9558,72.2546"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.0427,74.9807"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.2326,61.3928"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.2446,61.016"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.387,56.6892"/>
+            <radius value="3.0354"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.0615,54.7148"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.6726,62.8188"/>
+            <radius value="3.0354"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.5012,76.523"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.5803,78.623"/>
+            <radius value="3.624"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.5356,74.1484"/>
+            <radius value="3.624"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Nydus Worm Spawn East"/>
+        <shape type="circle">
+            <center value="80.3247,35.9433"/>
+            <radius value="7.7995"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.137,41.282"/>
+            <radius value="3.3532"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0866,41.0278"/>
+            <radius value="3.3532"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.6042,37.5761"/>
+            <radius value="6.1938"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.0083,34.7492"/>
+            <radius value="3.3532"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Stage 1 Active Area"/>
+        <color value="255,255,255,255"/>
+        <shape type="rect">
+            <quad value="10.0808,7.9667,75.2275,63.1247"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Stage 1 Inactive Area"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10.081,63.174,174.426,148.0078"/>
+        </shape>
+        <shape type="rect">
+            <quad value="75.362,8.0183,174.1503,63.1953"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Stage 2 Active Area"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10.0485,7.9858,174.0642,147.988"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Victory Cine - Zerg Spawn 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="86.223,116.0632"/>
+            <radius value="1.974"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Victory Cine - Zerg Spawn 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="81.5708,120.35"/>
+            <radius value="1.974"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Victory Cine - Zerg Spawn 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="73.6645,116.3366"/>
+            <radius value="2.036"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Victory Cine - Zerg Spawn 4"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="76.0603,109.2526"/>
+            <radius value="2.036"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Victory Cine - Zerg Hidden"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.697,109.0712"/>
+            <radius value="12.9936"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Victory Cine - Zerg Burrow Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="85.2304,107.5253"/>
+            <radius value="1.9956"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.092,108.4577"/>
+            <radius value="1.869"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.3422,105.361"/>
+            <radius value="2.0041"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Nydus Worm West Outside"/>
+        <shape type="circle">
+            <center value="45.61,51.465"/>
+            <radius value="3.65"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.4716,55.2246"/>
+            <radius value="3.65"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.7922,52.2832"/>
+            <radius value="3.65"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.3254,58.533"/>
+            <radius value="3.33"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.1125,54.9433"/>
+            <radius value="4.6547"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.182,50.6384"/>
+            <radius value="3.33"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Briefing - Zerglings"/>
+        <shape type="circle">
+            <center value="118.4042,85.8242"/>
+            <radius value="3.0485"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.2192,80.448"/>
+            <radius value="2.308"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.1401,89.771"/>
+            <radius value="2.9387"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.52,79.2104"/>
+            <radius value="2.3557"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Victory Cine 2 - Larva Spawn"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="160.8625,133.9694"/>
+            <radius value="1.1904"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Victory Cine 4 - Zerg Movers Spawn"/>
+        <shape type="circle">
+            <center value="143.5197,146.9458"/>
+            <radius value="2.7651"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.4062,145.339"/>
+            <radius value="2.7651"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.9572,142.675"/>
+            <radius value="2.7651"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.4184,139.9611"/>
+            <radius value="2.7651"/>
+        </shape>
+    </region>
+</Regions>
