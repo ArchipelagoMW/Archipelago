@@ -172,6 +172,16 @@ fruits_table = {
     ItemName.grapes_fruit:         ItemData(0xFF0217, False),
 }
 
+seeds_table = {
+    ItemName.strong_seed:   ItemData(0xFF0300, False),
+    ItemName.tasty_seed:    ItemData(0xFF0301, False),
+    ItemName.hero_seed:     ItemData(0xFF0302, False),
+    ItemName.dark_seed:     ItemData(0xFF0303, False),
+    ItemName.round_seed:    ItemData(0xFF0304, False),
+    ItemName.triangle_seed: ItemData(0xFF0305, False),
+    ItemName.square_seed:   ItemData(0xFF0306, False),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -185,6 +195,7 @@ item_table = {
     **emeralds_table,
     **eggs_table,
     **fruits_table,
+    **seeds_table,
     **event_table,
 }
 
@@ -194,6 +205,7 @@ item_groups: typing.Dict[str, str] = {
     "Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()],
     "Eggs":           [item_name for item_name, data in eggs_table.items()],
     "Fruits":         [item_name for item_name, data in fruits_table.items()],
+    "Seeds":          [item_name for item_name, data in seeds_table.items()],
 }
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"

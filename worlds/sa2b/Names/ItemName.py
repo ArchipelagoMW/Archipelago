@@ -147,5 +147,16 @@ super_mushroom_fruit = "Super Mushroom"
 mint_candy_fruit     = "Mint Candy"
 grapes_fruit         = "Grapes"
 
+
+# Chao Seeds
+strong_seed   = "Strong Seed"
+tasty_seed    = "Tasty Seed"
+hero_seed     = "Hero Seed"
+dark_seed     = "Dark Seed"
+round_seed    = "Round Seed"
+triangle_seed = "Triangle Seed"
+square_seed   = "Square Seed"
+
+
 # Goal Item
 maria = "What Maria Wanted"
