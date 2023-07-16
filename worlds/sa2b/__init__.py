@@ -2,7 +2,8 @@ import typing
 import math
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups
+from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
+                   eggs_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -167,6 +168,12 @@ class SA2BWorld(World):
             # Turn off everything else for Grand Prix goal
             self.multiworld.number_of_level_gates[self.player].value = 0
             self.multiworld.emblem_percentage_for_cannons_core[self.player].value = 0
+
+            self.multiworld.chao_garden_difficulty[self.player].value = 0
+            self.multiworld.chao_stats[self.player].value = 0
+            self.multiworld.chao_animal_parts[self.player].value = 0
+            self.multiworld.chao_kindergarten[self.player].value = 0
+
             self.multiworld.junk_fill_percentage[self.player].value = 100
             self.multiworld.trap_fill_percentage[self.player].value = 100
             self.multiworld.omochao_trap_weight[self.player].value = 0
@@ -176,9 +183,9 @@ class SA2BWorld(World):
             self.multiworld.gravity_trap_weight[self.player].value = 0
             self.multiworld.ice_trap_weight[self.player].value = 0
             self.multiworld.slow_trap_weight[self.player].value = 0
+            self.multiworld.cutscene_trap_weight[self.player].value = 0
 
             valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + \
-                                 self.multiworld.cutscene_trap_weight[self.player].value + \
                                  self.multiworld.pong_trap_weight[self.player].value
 
             if valid_trap_weights == 0:
@@ -310,11 +317,21 @@ class SA2BWorld(World):
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
         junk_count -= trap_count
 
+        chao_active = self.any_chao_locations_active()
         junk_pool = []
         junk_keys = list(junk_table.keys())
+        eggs_keys = list(eggs_table.keys())
+        eggs_count = 0
         for i in range(junk_count):
-            junk_item = self.multiworld.random.choice(junk_keys)
-            junk_pool.append(self.create_item(junk_item))
+            junk_type = self.random.randint(0, len(junk_keys) + 0)
+
+            if chao_active and junk_type == len(junk_keys) + 0 and eggs_count < 20:
+                junk_item = self.multiworld.random.choice(eggs_keys)
+                junk_pool.append(self.create_item(junk_item))
+                eggs_count += 1
+            else:
+                junk_item = self.multiworld.random.choice(junk_keys)
+                junk_pool.append(self.create_item(junk_item))
 
         itempool += junk_pool
 
@@ -540,3 +557,12 @@ class SA2BWorld(World):
         if world.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)
+
+    def any_chao_locations_active(self) -> bool:
+        if self.multiworld.chao_garden_difficulty[self.player].value > 0 or \
+           self.multiworld.chao_stats[self.player].value > 0 or \
+           self.multiworld.chao_animal_parts[self.player] or \
+           self.multiworld.chao_kindergarten[self.player]:
+            return True;
+
+        return False

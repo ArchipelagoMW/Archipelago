@@ -96,6 +96,53 @@ emeralds_table = {
     ItemName.blue_emerald:   ItemData(0xFF0046, True),
 }
 
+eggs_table = {
+    ItemName.normal_egg:              ItemData(0xFF0100, False),
+    ItemName.yellow_monotone_egg:     ItemData(0xFF0101, False),
+    ItemName.white_monotone_egg:      ItemData(0xFF0102, False),
+    ItemName.brown_monotone_egg:      ItemData(0xFF0103, False),
+    ItemName.sky_blue_monotone_egg:   ItemData(0xFF0104, False),
+    ItemName.pink_monotone_egg:       ItemData(0xFF0105, False),
+    ItemName.blue_monotone_egg:       ItemData(0xFF0106, False),
+    ItemName.grey_monotone_egg:       ItemData(0xFF0107, False),
+    ItemName.green_monotone_egg:      ItemData(0xFF0108, False),
+    ItemName.red_monotone_egg:        ItemData(0xFF0109, False),
+    ItemName.lime_green_monotone_egg: ItemData(0xFF010A, False),
+    ItemName.purple_monotone_egg:     ItemData(0xFF010B, False),
+    ItemName.orange_monotone_egg:     ItemData(0xFF010C, False),
+    ItemName.black_monotone_egg:      ItemData(0xFF010D, False),
+
+    ItemName.yellow_twotone_egg:     ItemData(0xFF010E, False),
+    ItemName.white_twotone_egg:      ItemData(0xFF010F, False),
+    ItemName.brown_twotone_egg:      ItemData(0xFF0110, False),
+    ItemName.sky_blue_twotone_egg:   ItemData(0xFF0111, False),
+    ItemName.pink_twotone_egg:       ItemData(0xFF0112, False),
+    ItemName.blue_twotone_egg:       ItemData(0xFF0113, False),
+    ItemName.grey_twotone_egg:       ItemData(0xFF0114, False),
+    ItemName.green_twotone_egg:      ItemData(0xFF0115, False),
+    ItemName.red_twotone_egg:        ItemData(0xFF0116, False),
+    ItemName.lime_green_twotone_egg: ItemData(0xFF0117, False),
+    ItemName.purple_twotone_egg:     ItemData(0xFF0118, False),
+    ItemName.orange_twotone_egg:     ItemData(0xFF0119, False),
+    ItemName.black_twotone_egg:      ItemData(0xFF011A, False),
+
+    ItemName.normal_shiny_egg:     ItemData(0xFF011B, False),
+    ItemName.yellow_shiny_egg:     ItemData(0xFF011C, False),
+    ItemName.white_shiny_egg:      ItemData(0xFF011D, False),
+    ItemName.brown_shiny_egg:      ItemData(0xFF011E, False),
+    ItemName.sky_blue_shiny_egg:   ItemData(0xFF011F, False),
+    ItemName.pink_shiny_egg:       ItemData(0xFF0120, False),
+    ItemName.blue_shiny_egg:       ItemData(0xFF0121, False),
+    ItemName.grey_shiny_egg:       ItemData(0xFF0122, False),
+    ItemName.green_shiny_egg:      ItemData(0xFF0123, False),
+    ItemName.red_shiny_egg:        ItemData(0xFF0124, False),
+    ItemName.lime_green_shiny_egg: ItemData(0xFF0125, False),
+    ItemName.purple_shiny_egg:     ItemData(0xFF0126, False),
+    ItemName.orange_shiny_egg:     ItemData(0xFF0127, False),
+    ItemName.black_shiny_egg:      ItemData(0xFF0128, False),
+
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -107,12 +154,16 @@ item_table = {
     **junk_table,
     **trap_table,
     **emeralds_table,
+    **eggs_table,
     **event_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
 
-item_groups: typing.Dict[str, str] = {"Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()]}
+item_groups: typing.Dict[str, str] = {
+    "Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()],
+    "Eggs":           [item_name for item_name, data in eggs_table.items()],
+}
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.shadow_air_shoes].code] = "and the Soap Shoes"
