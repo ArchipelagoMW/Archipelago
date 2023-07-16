@@ -43,5 +43,6 @@ normally would.
 ## Commands
 
 While playing Archipelago, you can interact with the server using the commands listed in the
-[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter "/ap",
+[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter `/ap`,
+followed by the command you want to send. For example, `ap !help`.
 followed by the command you want to send. For example, "/ap !help".
