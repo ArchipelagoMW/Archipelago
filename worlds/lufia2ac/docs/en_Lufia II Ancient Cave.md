@@ -49,8 +49,9 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 - Customize the multiworld item pool. (By default, your pool is filled with random blue chest items, but you can place
   any cave item you want instead)
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice
-- Adjust how much EXP is gained from enemies
+- Adjust how much EXP and gold is gained from enemies
 - Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
+- Option to make shops appear in the cave so that you have a way to spend your hard-earned gold
 - Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
   find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
   by using the character items from your inventory
