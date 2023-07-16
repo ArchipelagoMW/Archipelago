@@ -183,7 +183,7 @@ class TerrariaWorld(World):
 
         for location in self.ter_locations:
             _, flags, _, _ = rules[rule_indices[location]]
-            if not "Location" in flags and not "Achievement" in flags:
+            if "Location" not in flags and "Achievement" not in flags:
                 if location in progression:
                     classification = ItemClassification.progression
                 else:
