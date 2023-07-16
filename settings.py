@@ -142,13 +142,21 @@ class Group:
                 if k not in self.__dict__:
                     attr = attr.__class__()  # make a copy of default
                     setattr(self, k, attr)
-                attr.update(v)
+                if isinstance(v, dict):
+                    attr.update(v)
+                else:
+                    warnings.warn(f"{self.__class__.__name__}.{k} "
+                                  f"tried to update Group from {type(v)}")
             elif isinstance(attr, dict):
                 # update dict
                 if k not in self.__dict__:
                     attr = attr.copy()  # make a copy of default
                     setattr(self, k, attr)
-                attr.update(v)
+                if isinstance(v, dict):
+                    attr.update(v)
+                else:
+                    warnings.warn(f"{self.__class__.__name__}.{k} "
+                                  f"tried to update dict from {type(v)}")
             else:
                 # assign value, try to upcast to type hint
                 annotation = self.get_type_hints().get(k, None)
