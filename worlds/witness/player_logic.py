@@ -210,9 +210,6 @@ class WitnessPlayerLogic:
         if adj_type == "Disabled Locations":
             panel_hex = line[:7]
 
-            if StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["panelType"] == "EP":
-                self.PRECOMPLETED_LOCATIONS.add(panel_hex)
-
             self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
 
             return
