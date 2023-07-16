@@ -12,7 +12,7 @@ import os
 
 text_folder = Path(__file__).parents[3]
 
-def openFile(resource: str, mode: str = "r", encoding: None = None):
+def openFile(resource: str, mode: str = "r", encoding: str = None):
     filename = sys.modules[__name__].__file__
     apworldExt = ".apworld"
     game = "smz3/"
@@ -25,7 +25,7 @@ def openFile(resource: str, mode: str = "r", encoding: None = None):
             else:
                 return io.TextIOWrapper(zf.open(zipFilePath, 'r'), encoding)
     else:
-        return open(os.path.join(text_folder, resource), mode)
+        return open(os.path.join(text_folder, resource), mode, encoding=encoding)
 
 class Texts:
     @staticmethod
@@ -36,7 +36,7 @@ class Texts:
 
     @staticmethod        
     def ParseTextScript(resource: str):
-        with openFile(resource, 'r') as file:
+        with openFile(resource, 'r', encoding="utf-8-sig") as file:
             return [text.rstrip('\n') for text in file.read().replace("\r", "").split("---\n") if text]
 
     scripts: Any = ParseYamlScripts.__func__("smz3/TotalSMZ3/Text/Scripts/General.yaml")

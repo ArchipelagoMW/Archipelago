@@ -279,7 +279,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
 
-def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_directory):
+def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
+    player = world.player
+    multiworld = world.multiworld
     check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
@@ -287,18 +289,18 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': world.enemy_shuffle[player].value,
+        'RandomizeEnemies': multiworld.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
-        'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
+        'RandomizeBushEnemyChance': multiworld.bush_shuffle[player].value,
+        'RandomizeEnemyHealthRange': multiworld.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            world.enemy_health[player]],
+            multiworld.enemy_health[player]],
         'OHKO': False,
-        'RandomizeEnemyDamage': world.enemy_damage[player] != 'default',
+        'RandomizeEnemyDamage': multiworld.enemy_damage[player] != 'default',
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
-        'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': world.mode[player] == "standard",
+        'ShuffleEnemyDamageGroups': multiworld.enemy_damage[player] != 'default',
+        'EnemyDamageChaosMode': multiworld.enemy_damage[player] == 'chaos',
+        'EasyModeEscape': multiworld.mode[player] == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
@@ -327,7 +329,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.pot_shuffle[player].value,
+        'RandomizePots': multiworld.pot_shuffle[player].value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -340,7 +342,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.killable_thieves[player].value,
+        'AllowKillableThief': multiworld.killable_thieves[player].value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -352,26 +354,26 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'DebugShowRoomIdInRupeeCounter': False,
         'UseManualBosses': True,
         'ManualBosses': {
-            'EasternPalace': world.get_dungeon("Eastern Palace", player).boss.enemizer_name,
-            'DesertPalace': world.get_dungeon("Desert Palace", player).boss.enemizer_name,
-            'TowerOfHera': world.get_dungeon("Tower of Hera", player).boss.enemizer_name,
+            'EasternPalace': world.dungeons["Eastern Palace"].boss.enemizer_name,
+            'DesertPalace': world.dungeons["Desert Palace"].boss.enemizer_name,
+            'TowerOfHera': world.dungeons["Tower of Hera"].boss.enemizer_name,
             'AgahnimsTower': 'Agahnim',
-            'PalaceOfDarkness': world.get_dungeon("Palace of Darkness", player).boss.enemizer_name,
-            'SwampPalace': world.get_dungeon("Swamp Palace", player).boss.enemizer_name,
-            'SkullWoods': world.get_dungeon("Skull Woods", player).boss.enemizer_name,
-            'ThievesTown': world.get_dungeon("Thieves Town", player).boss.enemizer_name,
-            'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
-            'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
-            'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'PalaceOfDarkness': world.dungeons["Palace of Darkness"].boss.enemizer_name,
+            'SwampPalace': world.dungeons["Swamp Palace"].boss.enemizer_name,
+            'SkullWoods': world.dungeons["Skull Woods"].boss.enemizer_name,
+            'ThievesTown': world.dungeons["Thieves Town"].boss.enemizer_name,
+            'IcePalace': world.dungeons["Ice Palace"].boss.enemizer_name,
+            'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
+            'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
             'GanonsTower1':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['bottom'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
             'GanonsTower2':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['middle'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
             'GanonsTower3':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['top'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
         }
@@ -384,7 +386,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.per_slot_randoms[player].randint(0, 999999999))
+        enemizer_seed = str(multiworld.per_slot_randoms[player].randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -414,7 +416,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            world.per_slot_randoms[player].randint(0, 999999999)
+            multiworld.per_slot_randoms[player].randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -422,7 +424,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
 
-    if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind":
+    if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
         rom.write_byte(0x04DE81, 6)
         rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
 
@@ -760,7 +762,9 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
 
-def get_nonnative_item_sprite(item: str) -> int:
+def get_nonnative_item_sprite(code: int) -> int:
+    if 84173 >= code >= 84007:  # LttP item in SMZ3
+        return code - 84000
     return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
@@ -783,7 +787,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                     if location.item.trap:
                         itemid = 0x5A  # Nothing, which disguises
                     else:
-                        itemid = get_nonnative_item_sprite(location.item.name)
+                        itemid = get_nonnative_item_sprite(location.item.code)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -1658,7 +1662,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
     # set rom name
     # 21 bytes
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
@@ -1737,7 +1741,7 @@ def write_custom_shops(rom, world, player):
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
-                item_code = get_nonnative_item_sprite(item['item'])
+                item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:

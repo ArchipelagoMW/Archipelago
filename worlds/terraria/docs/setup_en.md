@@ -9,9 +9,14 @@ and [TModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Stea
 
 Subscribe to [the mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2922217554) on Steam.
 
-This mod might not work with mods that significantly alter progression, and is very unlikely to work
-with mods that significantly modify vanilla features. Feel free to use your preferred utility mods
-to speed up gameplay.
+This mod might not work with mods that significantly alter progression or vanilla features. It is
+highly recommended to use utility mods and features to speed up gameplay, such as:
+
+- Journey Mode
+- Ore Excavator
+- Magic Storage
+- Alchemist NPC Lite
+- Reduced Grinding
 
 ## Configuring your YAML File
 
@@ -34,14 +39,14 @@ on the Archipelago website to generate a YAML using a graphical interface.
     digit number.
     - If you're not hosting your game on the Archipelago website, change "Address" to the server's
     URL or IP address
-3. Create a new character and world as normal (or use an existing one if you prefer). Terraria may
-be significantly more difficult with this mod, so consider choosing a lower difficulty than you
-normally would.
+3. Create a new character and world as normal (or use an existing one if you prefer). Terraria is
+usually significantly more difficult with this mod, so it is recommended to choose a lower
+difficulty than you normally would.
 4. Open the world in single player or multiplayer
-5. When you're ready, open chat, and enter "/apstart" to start the game
+5. When you're ready, open chat, and enter `/apstart` to start the game.
    
 ## Commands
 
 While playing Archipelago, you can interact with the server using the commands listed in the
-[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter "/ap",
-followed by the command you want to send. For example, "/ap !help".
+[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter `/ap`,
+followed by the command you want to send. For example, `/ap !help`.

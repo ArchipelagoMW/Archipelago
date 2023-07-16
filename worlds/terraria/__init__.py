@@ -1,5 +1,6 @@
 # Look at `Rules.dsv` first to get an idea for how this works
 
+from typing import Union, Tuple, List, Dict, Set
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
 from .Checks import (
@@ -31,7 +32,7 @@ class TerrariaWeb(WebWorld):
     tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
-            "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld",
+            "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld.",
             "English",
             "setup_en.md",
             "setup/en",
@@ -46,7 +47,7 @@ class TerrariaWorld(World):
     Features 18 bosses and 4 classes.
     """
 
-    game: str = "Terraria"
+    game = "Terraria"
     web = TerrariaWeb()
     option_definitions = options
 
@@ -57,6 +58,16 @@ class TerrariaWorld(World):
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
+
+    # Turn into an option when calamity is supported in the mod
+    calamity = False
+
+    ter_items: List[str]
+    ter_locations: List[str]
+
+    ter_goals: Dict[str, str]
+    goal_items: Set[str]
+    goal_locations: Set[str]
 
     def generate_early(self) -> None:
         goal, goal_locations = goals[self.multiworld.goal[self.player].value]
@@ -178,30 +189,32 @@ class TerrariaWorld(World):
 
             self.multiworld.itempool.append(self.create_item(name))
 
-        self.locked_items = {}
+        locked_items = {}
 
         for location in self.ter_locations:
             _, flags, _, _ = rules[rule_indices[location]]
-            if not "Location" in flags and not "Achievement" in flags:
+            if "Location" not in flags and "Achievement" not in flags:
                 if location in progression:
                     classification = ItemClassification.progression
                 else:
                     classification = ItemClassification.useful
 
-                self.locked_items[location] = TerrariaItem(
+                locked_items[location] = TerrariaItem(
                     location, classification, None, self.player
                 )
 
         for item, location in self.ter_goals.items():
-            self.locked_items[location] = self.create_item(item)
+            locked_items[location] = self.create_item(item)
+        for location, item in locked_items.items():
+            self.multiworld.get_location(location, self.player).place_locked_item(item)
 
     def check_condition(
         self,
         state,
         sign: bool,
         ty: int,
-        condition,  #: str | tuple[bool | None, list],
-        arg,  #: str | int | None,
+        condition: Union[str, Tuple[Union[bool, None], list]],
+        arg: Union[str, int, None],
     ) -> bool:
         if ty == COND_ITEM:
             _, flags, _, _ = rules[rule_indices[condition]]
@@ -286,8 +299,15 @@ class TerrariaWorld(World):
     def check_conditions(
         self,
         state,
-        operator,  #: bool | None,
-        conditions,  #: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]],
+        operator: Union[bool, None],
+        conditions: List[
+            Tuple[
+                bool,
+                int,
+                Union[str, Tuple[Union[bool, None], list]],
+                Union[str, int, None],
+            ]
+        ],
     ) -> bool:
         if operator is None:
             if len(conditions) == 0:
@@ -317,12 +337,8 @@ class TerrariaWorld(World):
             self.goal_items, self.player
         )
 
-    def generate_basic(self) -> None:
-        for location, item in self.locked_items.items():
-            self.multiworld.get_location(location, self.player).place_locked_item(item)
-
-    def fill_slot_data(self):  # -> dict[str, object]:
+    def fill_slot_data(self) -> Dict[str, object]:
         return {
             "goal": list(self.goal_locations),
-            "deathlink": bool(self.multiworld.deathlink[self.player]),
+            "deathlink": bool(self.multiworld.death_link[self.player]),
         }
