@@ -4348,7 +4348,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="78" Position="61,48,0" Scale="1,1,1" UnitType="PhotonCannon" Player="10"/>
+    <ObjectUnit Id="78" Position="61,48,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="10"/>
     <ObjectUnit Id="618" Position="108.9465,125.1086,0" Rotation="5.6462" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4496,7 +4496,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="88" Position="59.5,94.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="WarpGate" Player="10"/>
+    <ObjectUnit Id="88" Position="59.5,94.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_WarpGate" Player="10"/>
     <ObjectUnit Id="413" Position="103.5168,76.1835,0" Rotation="3.647" Scale="1,1,1" UnitType="Overlord" Player="5">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
@@ -4540,7 +4540,7 @@
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="1147" Variation="1" Position="157,34,0" Rotation="3.9538" Scale="1,1,1" UnitType="InfestationSpire" Player="2"/>
-    <ObjectUnit Id="29" Position="46.5,85.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="RoboticsFacility" Player="10"/>
+    <ObjectUnit Id="29" Position="46.5,85.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_RoboticsFacility" Player="10"/>
     <ObjectUnit Id="435" Position="118.7785,40.279,0" Rotation="5.6704" Scale="1,1,1" UnitType="InfestedTerranCampaign" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4701,7 +4701,7 @@
     <ObjectUnit Id="899" Variation="1" Position="43,120.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1200"/>
     <ObjectUnit Id="557" Position="140.9807,17.465,0" Rotation="6.1796" Scale="1,1,1" UnitType="Food1000" Player="10"/>
     <ObjectUnit Id="582" Position="129.8422,123.2753,0" Rotation="1.1291" Scale="1,1,1" UnitType="Drone" Player="2"/>
-    <ObjectUnit Id="98" Position="56.5,43.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Forge" Player="10"/>
+    <ObjectUnit Id="98" Position="56.5,43.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Forge" Player="10"/>
     <ObjectUnit Id="9" Position="45.746,105.1945,0" Rotation="0.3876" Scale="1,1,1" UnitType="RoachBurrowed" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4715,7 +4715,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="76" Position="62.5,41.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="10"/>
+    <ObjectUnit Id="76" Position="62.5,41.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Gateway" Player="10"/>
     <ObjectUnit Id="393" Variation="1" Position="130.095,56.2373,0" Rotation="4.2917" Scale="1,1,1" UnitType="InfestedCivilian" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4846,7 +4846,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1537" Position="61.917,24.3762,0" Rotation="2.618" Scale="1,1,1" UnitType="Probe" Player="10"/>
+    <ObjectUnit Id="1537" Position="61.917,24.3762,0" Rotation="2.618" Scale="1,1,1" UnitType="AP_Probe" Player="10"/>
     <ObjectUnit Id="390" Variation="1" Position="128.63,54.8083,0" Rotation="5.6406" Scale="1,1,1" UnitType="InfestedCivilian" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4899,7 +4899,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="90" Position="65.0385,40.985,0" Rotation="2.461" Scale="1,1,1" UnitType="Observer" Player="10"/>
+    <ObjectUnit Id="90" Position="65.0385,40.985,0" Rotation="2.461" Scale="1,1,1" UnitType="AP_Observer" Player="10"/>
     <ObjectUnit Id="1560" Position="148,91,0" Scale="1,1,1" UnitType="SpineCrawler" Player="4">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4963,7 +4963,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="387" Position="54.333,23.3208,0" Rotation="6.1738" Scale="1,1,1" UnitType="Probe" Player="10"/>
+    <ObjectUnit Id="387" Position="54.333,23.3208,0" Rotation="6.1738" Scale="1,1,1" UnitType="AP_Probe" Player="10"/>
     <ObjectUnit Id="45" Position="91.5,143.5,0" Scale="1,1,1" UnitType="Hive" Player="3">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -5171,14 +5171,14 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="174" Position="78.5,84.5,0" Scale="1,1,1" UnitType="RoboticsBay" Player="10"/>
+    <ObjectUnit Id="174" Position="78.5,84.5,0" Scale="1,1,1" UnitType="AP_RoboticsBay" Player="10"/>
     <ObjectUnit Id="256" Variation="2" Position="122.6118,44.3093,0" Rotation="5.5988" Scale="1,1,1" UnitType="InfestedCivilian" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1671" Position="66,49,0" Scale="1,1,1" UnitType="PhotonCannon" Player="10"/>
+    <ObjectUnit Id="1671" Position="66,49,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="10"/>
     <ObjectUnit Id="650" Position="39,68,0" Rotation="1.937" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="847" Position="88.7214,58.393,0" Rotation="2.2607" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -5458,7 +5458,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1672" Position="69,34,0" Scale="1,1,1" UnitType="PhotonCannon" Player="10"/>
+    <ObjectUnit Id="1672" Position="69,34,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="10"/>
     <ObjectUnit Id="645" Position="31,70,0" Rotation="1.937" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="161" Position="111.8942,39.2387,0" Rotation="0.8303" Scale="1,1,1" UnitType="InfestedCivilian" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -5771,7 +5771,7 @@
     <ObjectUnit Id="166" Position="82.5,113.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="355" Position="28.9768,45.4702,0" Rotation="5.5136" Scale="1,1,1" UnitType="Observer" Player="10"/>
+    <ObjectUnit Id="355" Position="28.9768,45.4702,0" Rotation="5.5136" Scale="1,1,1" UnitType="AP_Observer" Player="10"/>
     <ObjectUnit Id="205" Variation="3" Position="56,29.5,0" Scale="1,1,1" UnitType="MineralField"/>
     <ObjectUnit Id="136" Variation="3" Position="57,125,0" Rotation="3.5893" Scale="1,1,1" UnitType="InfestationSpire" Player="2"/>
     <ObjectUnit Id="294" Position="143.3466,53.4111,0" Rotation="2.9648" Scale="1,1,1" UnitType="Drone" Player="2">
@@ -6043,7 +6043,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="644" Position="37,68,0" Rotation="1.937" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
-    <ObjectUnit Id="1673" Position="48.5,37.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CyberneticsCore" Player="10"/>
+    <ObjectUnit Id="1673" Position="48.5,37.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CyberneticsCore" Player="10"/>
     <ObjectUnit Id="687" Position="135.5297,56.2,0" Scale="1,1,1" UnitType="Overseer" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6410,7 +6410,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="170" Position="120.5,36.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="RoboticsFacility" Player="10"/>
+    <ObjectUnit Id="170" Position="120.5,36.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_RoboticsFacility" Player="10"/>
     <ObjectUnit Id="367" Position="75,142,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -6700,7 +6700,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="649" Position="35,66,0" Rotation="1.937" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
-    <ObjectUnit Id="173" Position="94.5,59.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="WarpGate" Player="10"/>
+    <ObjectUnit Id="173" Position="94.5,59.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_WarpGate" Player="10"/>
     <ObjectUnit Id="198" Position="34.5,50.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6788,7 +6788,7 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="154" Position="26.5932,76.0834,0" Rotation="0.8364" Scale="1,1,1" UnitType="Colossus" Player="1">
+    <ObjectUnit Id="154" Position="26.5932,76.0834,0" Rotation="0.8364" Scale="1,1,1" UnitType="AP_ColossusPurifier" Player="1">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="308" Variation="9" Position="143,50.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1750"/>
@@ -6968,7 +6968,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1535" Position="52.5974,24.8962,0" Rotation="2.6501" Scale="1,1,1" UnitType="Probe" Player="10"/>
+    <ObjectUnit Id="1535" Position="52.5974,24.8962,0" Rotation="2.6501" Scale="1,1,1" UnitType="AP_Probe" Player="10"/>
     <ObjectUnit Id="92" Position="113.3383,41.116,0" Rotation="3.9533" Scale="1,1,1" UnitType="InfestedTerranCampaign" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7054,7 +7054,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1538" Position="59.511,22.7248,0" Rotation="0.7326" Scale="1,1,1" UnitType="Probe" Player="10"/>
+    <ObjectUnit Id="1538" Position="59.511,22.7248,0" Rotation="0.7326" Scale="1,1,1" UnitType="AP_Probe" Player="10"/>
     <ObjectUnit Id="929" Position="84.4211,105.3447,0" Scale="1,1,1" UnitType="Beacon_Protoss">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -7130,7 +7130,7 @@
     <ObjectUnit Id="622" Position="44.1257,108.5998,0" Rotation="0.3745" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="74" Variation="5" Position="76,60.5,0" Scale="1,1,1" UnitType="MineralField" Resources="975"/>
     <ObjectUnit Id="399" Variation="3" Position="113,52,0" Rotation="5.6306" Scale="1,1,1" UnitType="InfestationSpire" Player="2"/>
-    <ObjectUnit Id="33" Position="50.5,32.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Assimilator" Player="10"/>
+    <ObjectUnit Id="33" Position="50.5,32.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Assimilator" Player="10"/>
     <ObjectUnit Id="100" Position="140.5534,66.7551,0" Rotation="5.4958" Scale="1,1,1" UnitType="Infestor" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7347,7 +7347,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="589" Position="111.7194,34.5996,0" Rotation="2.548" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="455" Position="28.722,69.8115,0" Rotation="0.6315" Scale="1,1,1" UnitType="Colossus" Player="1">
+    <ObjectUnit Id="455" Position="28.722,69.8115,0" Rotation="0.6315" Scale="1,1,1" UnitType="AP_ColossusPurifier" Player="1">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="105" Position="92.655,56.0747,0" Rotation="0.0432" Scale="1,1,1" UnitType="Zergling" Player="2">
@@ -7360,7 +7360,7 @@
     <ObjectUnit Id="1482" Position="27.0227,76.0334,0" Rotation="1.9377" Scale="1,1,1" UnitType="PathingBlocker2x2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2" Position="57.5,36.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Nexus" Player="10"/>
+    <ObjectUnit Id="2" Position="57.5,36.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Nexus" Player="10"/>
     <ObjectUnit Id="44" Position="61.5,142.5,0" Scale="1,1,1" UnitType="Hive" Player="3">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -7412,7 +7412,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1536" Position="56.5085,23.1552,0" Rotation="1.608" Scale="1,1,1" UnitType="Probe" Player="10"/>
+    <ObjectUnit Id="1536" Position="56.5085,23.1552,0" Rotation="1.608" Scale="1,1,1" UnitType="AP_Probe" Player="10"/>
     <ObjectUnit Id="525" Position="122.9011,88.458,0" Rotation="3.5307" Scale="1,1,1" UnitType="UltraliskBurrowed" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7649,7 +7649,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="77" Position="70,39,0" Scale="1,1,1" UnitType="PhotonCannon" Player="10"/>
+    <ObjectUnit Id="77" Position="70,39,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="10"/>
     <ObjectUnit Id="38" Position="110.1425,113.6096,0" Scale="1,1,1" UnitType="Beacon_Protoss">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>

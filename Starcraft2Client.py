@@ -583,7 +583,7 @@ maps_table = [
     "ap_smash_and_grab", "ap_the_dig", "ap_the_moebius_factor", "ap_supernova", "ap_maw_of_the_void",
     "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
     "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_piercing_the_shroud",
-    "ap_whispers_of_doom", "ap_a_sinister_turn", "ap_tzeratul03", "ap_tzeratul04",
+    "ap_whispers_of_doom", "ap_a_sinister_turn", "ap_echoes_of_the_future", "ap_tzeratul04",
     "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_shatter_the_sky", "ap_all_in"
 ]
 
