@@ -366,6 +366,10 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
+        for entity_id in self.COMPLETELY_DISABLED_CHECKS:
+            if entity_id in self.DOOR_ITEMS_BY_ID:
+                del self.DOOR_ITEMS_BY_ID[entity_id]
+
     def make_dependency_reduced_checklist(self):
         """
         Turns dependent check set into semi-independent check set
