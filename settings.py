@@ -239,10 +239,7 @@ class Group:
             f.write(f"{indent}{name}:\n")
             for dict_key, value in attr.items():
                 # not dumping doc string here, since there is no way to upcast it after dumping
-                if isinstance(value, (Group, dict, list, tuple, set)):
-                    cls._dump_item(dict_key, value, f, level=level + 1)
-                else:
-                    cls._dump_value({dict_key: _to_builtin(value)}, f, level=level+1)
+                cls._dump_item(dict_key, value, f, level=level + 1)
         else:
             cls._dump_value({name: _to_builtin(attr)}, f, level=level)
 
