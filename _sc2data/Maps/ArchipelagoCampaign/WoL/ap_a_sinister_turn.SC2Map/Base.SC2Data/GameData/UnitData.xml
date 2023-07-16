@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="Nexus">
+        <AbilArray index="1" Link="que5"/>
+        <AbilArray index="2" Link="NexusTrain"/>
+        <AbilArray index="3" Link="NexusTrainMothership"/>
+        <AbilArray index="4" Link="RallyNexus"/>
+        <AbilArray index="5" removed="1"/>
+    </CUnit>
+    <CUnit id="ShieldBattery">
+        <LifeStart value="750"/>
+        <LifeMax value="750"/>
+        <ShieldsStart value="750"/>
+        <ShieldsMax value="750"/>
+    </CUnit>
+</Catalog>

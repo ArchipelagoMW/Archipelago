@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CLight id="ZhakulDas"/>
+    <CLight id="MarSara">
+        <ToDInfoArray index="0" AmbientColor="0.525490,0.466667,0.400000" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationBrightness" value="1.088000"/>
+            <Param index="ColorizationContrast" value="1.244000"/>
+            <Param index="ColorizationHue" value="-0.338000"/>
+            <Param index="ColorizationSaturation" value="0.194000"/>
+            <Param index="ColorizationBlend" value="0.486000"/>
+            <Param index="SSAONoOcclusion" value="3.000000"/>
+            <DirectionalLight index="Key" Color="0.760784,0.925490,1.000000" ColorMultiplier="1.660000"/>
+            <DirectionalLight index="Fill" Color="0.000000,1.000000,0.000000" ColorMultiplier="1.995000" Direction="-0.809013,-0.524978,0.264378"/>
+            <DirectionalLight index="Back" Color="0.000000,1.000000,0.858824" Direction="0.851951,-0.329766,-0.406736"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

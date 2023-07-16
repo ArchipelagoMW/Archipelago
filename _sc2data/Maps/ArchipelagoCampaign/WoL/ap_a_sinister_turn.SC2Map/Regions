@@ -1,0 +1,1602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="1">
+        <name value="Harvest"/>
+        <shape type="circle">
+            <center value="42.836,139.149"/>
+            <radius value="4.349"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.5312,141.1166"/>
+            <radius value="4.349"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Probe for Harvest Minerals"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="55.1113,135.1013"/>
+            <radius value="2.198"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.6271,135.8012"/>
+            <radius value="0.8923"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Probes All"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="51.0002,133.0002"/>
+            <radius value="6.2443"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="PrisonArea"/>
+        <shape type="circle">
+            <center value="109.221,38.4746"/>
+            <radius value="11.8618"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="DarkTemplarArea"/>
+        <shape type="circle">
+            <center value="86.967,139.024"/>
+            <radius value="6.8447"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="HybridAreaWarp-inZone"/>
+        <shape type="circle">
+            <center value="109.6928,38.4243"/>
+            <radius value="13.028"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Region Bridge Area"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="83.133,62.6623"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.2912,66.6308"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.6867,67.8684"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.4602,64.8942"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.9755,53.9375"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.1337,57.906"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.5292,59.1435"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.3027,56.1694"/>
+            <radius value="4.467"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.9694,52.0937"/>
+            <radius value="4.527"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.5917,50.533"/>
+            <radius value="4.3913"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.2587,48.0981"/>
+            <radius value="4.3913"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="DarkTemplarAreaSmall"/>
+        <color value="255,128,0,255"/>
+        <shape type="circle">
+            <center value="86.7514,138.909"/>
+            <radius value="5.705"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="RegionTemplarEndCin"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="108.889,38.4587"/>
+            <radius value="6.3542"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="TemplarArchivesArea"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="118.2551,95.9978"/>
+            <radius value="4.9968"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="TwilightArea"/>
+        <color value="255,128,0,255"/>
+        <shape type="circle">
+            <center value="29.5136,103.9274"/>
+            <radius value="7.4941"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.9362,99.1975"/>
+            <radius value="6.6091"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.273,106.802"/>
+            <radius value="6.6091"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.9311,102.984"/>
+            <radius value="2.5781"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="DialogueAtTwilightCouncil"/>
+        <color value="255,128,0,255"/>
+        <shape type="circle">
+            <center value="28.637,103.7287"/>
+            <radius value="5.705"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Animation Main Entrance Area"/>
+        <shape type="circle">
+            <center value="62.3681,83.2836"/>
+            <radius value="6.1525"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Zealot01"/>
+        <shape type="circle">
+            <center value="18.5776,64.32"/>
+            <radius value="1.2885"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Zealot02"/>
+        <shape type="circle">
+            <center value="18.604,61.1091"/>
+            <radius value="1.2885"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="HighTemplar01Abandoned"/>
+        <shape type="circle">
+            <center value="119.6486,97.5588"/>
+            <radius value="1.2885"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Starting Area"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="53.6345,135.9296"/>
+            <radius value="24.558"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Probe for Harvest Gas"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="51.7031,133.747"/>
+            <radius value="1.5334"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Assimilator"/>
+        <shape type="circle">
+            <center value="42.485,132.7678"/>
+            <radius value="2.0566"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="VisibilityPrisonsInitiate"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="106.546,39.2021"/>
+            <radius value="17.4736"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="HybridRespawnSpot"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="109.0415,38.0341"/>
+            <radius value="1.3405"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Lib01"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="66.621,68.8698"/>
+            <radius value="5.596"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Lib02"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="68.82,76.1242"/>
+            <radius value="6.3127"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Lib03"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="76.2553,77.066"/>
+            <radius value="6.5224"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Lib04"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="84.091,53.9013"/>
+            <radius value="5.874"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Lib05"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="91.6472,60.3728"/>
+            <radius value="5.7612"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Lib06"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="90.9362,116.0698"/>
+            <radius value="5.8225"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Lib07"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="53.0178,61.0393"/>
+            <radius value="5.5837"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="BridgeKillZone"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="79.9892,64.8991"/>
+            <radius value="6.8723"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Lib08"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="99.7587,129.7084"/>
+            <radius value="6.5063"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Lib09"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="52.6892,82.7453"/>
+            <radius value="5.718"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Region 001"/>
+        <shape type="circle">
+            <center value="42.1286,145.4262"/>
+            <radius value="2.3393"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Visi01"/>
+        <color value="255,173,91,255"/>
+        <shape type="circle">
+            <center value="35.3645,152.1203"/>
+            <radius value="11.016"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.3847,155.0905"/>
+            <radius value="11.016"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.3488,152.0231"/>
+            <radius value="11.016"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.6223,150.091"/>
+            <radius value="11.016"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.306,138.8864"/>
+            <radius value="11.016"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.5847,128.3015"/>
+            <radius value="11.016"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Visi27"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="23.8952,92.4985"/>
+            <radius value="5.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.635,86.4475"/>
+            <radius value="5.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.929,89.753"/>
+            <radius value="5.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.0402,101.6877"/>
+            <radius value="5.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.9394,107.9636"/>
+            <radius value="5.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.2856,111.343"/>
+            <radius value="5.764"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.8007,110.9794"/>
+            <radius value="7.8464"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Visi23"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="66.772,113.3344"/>
+            <radius value="6.4287"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7531,110.2775"/>
+            <radius value="6.4287"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Visi23Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="62.3837,119.5495"/>
+            <radius value="6.4287"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.365,116.4926"/>
+            <radius value="6.4287"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Visi24"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="63.293,107.6481"/>
+            <radius value="6.3376"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.765,99.777"/>
+            <radius value="5.3767"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.2712,102.3132"/>
+            <radius value="4.367"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Visi24Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="54.0544,105.518"/>
+            <radius value="4.7812"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.3754,102.2712"/>
+            <radius value="4.537"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Visi26"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="47.9665,92.7387"/>
+            <radius value="6.563"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Visi26Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="47.5844,92.1577"/>
+            <radius value="10.0876"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Visi25Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="57.866,95.0683"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.8542,95.6396"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.3405,98.8315"/>
+            <radius value="4.4501"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="Visi18Activate"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="76.569,102.5273"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.681,104.908"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.1733,110.5122"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0927,114.4936"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.2336,113.094"/>
+            <radius value="4.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.3803,113.9567"/>
+            <radius value="4.4501"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Visi18"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="76.709,107.7761"/>
+            <radius value="5.383"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.8435,110.757"/>
+            <radius value="5.383"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.0041,107.6972"/>
+            <radius value="5.383"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.7395,111.2387"/>
+            <radius value="5.383"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.0947,105.687"/>
+            <radius value="5.383"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Visi25"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="59.1796,98.3005"/>
+            <radius value="4.298"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.2673,99.5842"/>
+            <radius value="5.1645"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.6333,102.8732"/>
+            <radius value="5.1645"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Visi02"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="84.131,148.0021"/>
+            <radius value="9.1821"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.3403,152.0527"/>
+            <radius value="8.4172"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Visi03"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="103.8645,140.8137"/>
+            <radius value="6.8337"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.2478,143.6125"/>
+            <radius value="6.8337"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="Visi03Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="98.4477,139.7788"/>
+            <radius value="2.6484"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.0856,148.1975"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.0773,145.6064"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.7541,142.345"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.332,135.8395"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.3864,134.1062"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.929,136.228"/>
+            <radius value="2.6613"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.1396,138.6848"/>
+            <radius value="2.6613"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Visi04"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="114.042,128.9763"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.44,126.2551"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.0671,124.4763"/>
+            <radius value="3.559"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Visi04Activate"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="108.8234,124.3017"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.2214,121.5805"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.8486,119.8017"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.1474,125.0556"/>
+            <radius value="2.2641"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Visi05Activate"/>
+        <color value="255,0,128,255"/>
+        <shape type="circle">
+            <center value="119.654,116.4423"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.052,113.7211"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.6791,111.9423"/>
+            <radius value="3.559"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.4206,110.3154"/>
+            <radius value="3.5566"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.2456,107.0971"/>
+            <radius value="3.5566"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Visi05"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="126.9621,114.96"/>
+            <radius value="3.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.6464,110.6372"/>
+            <radius value="3.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="127.7468,112.2768"/>
+            <radius value="3.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.9936,106.3752"/>
+            <radius value="3.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.49,119.9396"/>
+            <radius value="3.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.9982,117.154"/>
+            <radius value="3.7907"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="visi06"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="130.7951,102.408"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.586,97.2763"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.869,92.4147"/>
+            <radius value="2.7277"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.872,94.4882"/>
+            <radius value="2.7277"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Visi06Activate"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="125.7187,102.422"/>
+            <radius value="2.5588"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.751,99.124"/>
+            <radius value="2.5588"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.681,96.1755"/>
+            <radius value="2.5588"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.5107,92.8427"/>
+            <radius value="2.5588"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Visi07"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="128.6862,85.7753"/>
+            <radius value="5.3154"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.2546,80.0046"/>
+            <radius value="5.3154"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.803,80.3698"/>
+            <radius value="5.3154"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.8637,84.5498"/>
+            <radius value="5.3154"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.6625,88.1643"/>
+            <radius value="3.1958"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Region 020"/>
+        <shape type="circle">
+            <center value="115.3146,75.982"/>
+            <radius value="2.2861"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="Visi01Activate"/>
+        <shape type="circle">
+            <center value="64.4746,135.4003"/>
+            <radius value="10.889"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.251,133.091"/>
+            <radius value="10.889"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.587,127.174"/>
+            <radius value="10.889"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.8562,134.7368"/>
+            <radius value="10.889"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Visi02Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="97.3554,146.7763"/>
+            <radius value="2.6113"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.5053,141.1052"/>
+            <radius value="4.7551"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.98,145.5424"/>
+            <radius value="4.7551"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.1965,149.507"/>
+            <radius value="2.6113"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.9267,139.4587"/>
+            <radius value="4.7551"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Visi07Activate"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="111.2097,91.479"/>
+            <radius value="4.1594"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.4494,92.413"/>
+            <radius value="4.1594"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.7443,86.3288"/>
+            <radius value="4.1594"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.8032,90.1044"/>
+            <radius value="4.1594"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Visi08"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="105.8828,86.4521"/>
+            <radius value="3.6323"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.7084,89.4877"/>
+            <radius value="3.6323"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.165,89.1428"/>
+            <radius value="3.6323"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.3095,93.3432"/>
+            <radius value="1.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.4965,95.122"/>
+            <radius value="1.1083"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Visi09"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="94.752,87.2712"/>
+            <radius value="5.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.8894,86.5788"/>
+            <radius value="5.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.3283,83.4685"/>
+            <radius value="5.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.3254,79.616"/>
+            <radius value="5.049"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Visi08Activate"/>
+        <shape type="circle">
+            <center value="107.0424,93.0368"/>
+            <radius value="3.0104"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.8054,97.0424"/>
+            <radius value="3.0104"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.6262,96.878"/>
+            <radius value="3.0104"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.1516,94.1247"/>
+            <radius value="3.0104"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.8886,90.4638"/>
+            <radius value="2.996"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Visi09Activate"/>
+        <shape type="circle">
+            <center value="96.2416,92.8347"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.9367,92.8327"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.08,92.7607"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.3054,90.9421"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.1386,87.7604"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.1784,84.4582"/>
+            <radius value="2.7746"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.002,82.017"/>
+            <radius value="2.7746"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Visi22"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="83.5275,76.9072"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.9816,73.011"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.0561,76.2968"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.5656,72.9843"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.5698,74.9946"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.6804,69.614"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.0893,70.236"/>
+            <radius value="3.2253"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.295,66.0473"/>
+            <radius value="2.527"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.1604,72.4758"/>
+            <radius value="2.527"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.4045,74.0688"/>
+            <radius value="2.527"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="Visi10"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="71.9562,62.5556"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.8356,59.93"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.9924,58.0334"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.4477,60.4953"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.7543,57.6296"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.9113,58.0756"/>
+            <radius value="3.648"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.571,57.827"/>
+            <radius value="3.5053"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.5051,55.07"/>
+            <radius value="3.138"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.57,55.6313"/>
+            <radius value="2.6066"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="Visi11"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="60.5688,54.5734"/>
+            <radius value="4.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7985,53.3964"/>
+            <radius value="4.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.9875,48.321"/>
+            <radius value="3.8527"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.8098,44.9316"/>
+            <radius value="3.8527"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.2922,38.7524"/>
+            <radius value="3.8527"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="Visi12"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="47.06,38.42"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.1748,36.4985"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.3781,36.593"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.1743,32.9982"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.9196,29.3906"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.6071,28.333"/>
+            <radius value="4.1271"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.3088,33.3906"/>
+            <radius value="4.1271"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Visi13"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="64.054,33.8828"/>
+            <radius value="4.416"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.9648,32.0854"/>
+            <radius value="4.416"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.6982,31.9321"/>
+            <radius value="4.416"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="Visi14"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="80.601,35.0075"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.4421,33.869"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.3044,29.8962"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.545,32.7917"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.1894,29.401"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.1267,27.9023"/>
+            <radius value="3.5405"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.8232,30.8967"/>
+            <radius value="3.5405"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Visi15"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="90.7426,30.8088"/>
+            <radius value="3.299"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.8281,27.056"/>
+            <radius value="3.299"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.0517,24.2961"/>
+            <radius value="3.299"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.4194,22.6926"/>
+            <radius value="3.299"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.542,20.5715"/>
+            <radius value="3.299"/>
+        </shape>
+    </region>
+    <region id="74">
+        <name value="Visi16"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="120.8857,54.5122"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.0202,51.2468"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.9562,47.4223"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.0773,56.5234"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.5227,52.0554"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.6572,48.79"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.5932,44.9655"/>
+            <radius value="4.3085"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.7143,54.0666"/>
+            <radius value="4.3085"/>
+        </shape>
+    </region>
+    <region id="75">
+        <name value="Visi17"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="113.6286,21.9077"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.439,24.6174"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.4323,27.0163"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.5407,29.3303"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.7026,31.8732"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.5417,34.4511"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.6772,36.277"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.0378,22.7363"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.8481,25.446"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.8415,27.845"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.95,30.159"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.1118,32.702"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.951,35.2797"/>
+            <radius value="3.5932"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.0864,37.1057"/>
+            <radius value="3.5932"/>
+        </shape>
+    </region>
+    <region id="76">
+        <name value="Visi19"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="121.9304,72.6362"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.5383,68.7988"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.0285,65.2873"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.1413,61.8041"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.988,64.5144"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.0483,59.4697"/>
+            <radius value="3.8623"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.0026,64.6501"/>
+            <radius value="1.4421"/>
+        </shape>
+    </region>
+    <region id="77">
+        <name value="Visi21"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="91.0334,37.2058"/>
+            <radius value="5.554"/>
+        </shape>
+    </region>
+    <region id="78">
+        <name value="Visi20"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="111.6213,54.4218"/>
+            <radius value="5.554"/>
+        </shape>
+    </region>
+    <region id="79">
+        <name value="Visi22Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="78.8796,81.764"/>
+            <radius value="3.2844"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.0961,77.6806"/>
+            <radius value="3.2844"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.9,75.0905"/>
+            <radius value="3.2844"/>
+        </shape>
+    </region>
+    <region id="80">
+        <name value="Visi10Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="70.6684,69.879"/>
+            <radius value="3.305"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.7387,67.6542"/>
+            <radius value="3.305"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.7055,67.5402"/>
+            <radius value="3.305"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7998,66.8657"/>
+            <radius value="3.305"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7275,62.9636"/>
+            <radius value="2.622"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.177,55.1223"/>
+            <radius value="3.1208"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.4436,52.8222"/>
+            <radius value="3.1208"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.035,50.3544"/>
+            <radius value="3.1208"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.685,50.9274"/>
+            <radius value="3.1208"/>
+        </shape>
+    </region>
+    <region id="81">
+        <name value="Visi11Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="60.0957,61.6267"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.3918,61.107"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.2202,58.63"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.9345,55.6428"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.9936,51.5334"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.8283,50.8605"/>
+            <radius value="2.9245"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.8225,45.8061"/>
+            <radius value="3.5888"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.157,50.8046"/>
+            <radius value="2.9577"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.1494,46.3046"/>
+            <radius value="2.9577"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.4492,42.808"/>
+            <radius value="2.9577"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.8176,40.8122"/>
+            <radius value="2.9577"/>
+        </shape>
+    </region>
+    <region id="82">
+        <name value="Visi12Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="56.0498,43.6774"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.4958,43.3681"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.1467,43.9406"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.5546,41.1"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.366,37.6374"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.451,34.1701"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.3691,30.2036"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.1215,25.6901"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.0932,23.7282"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.1374,23.6274"/>
+            <radius value="3.1596"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.724,25.0317"/>
+            <radius value="3.1596"/>
+        </shape>
+    </region>
+    <region id="83">
+        <name value="Visi13Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="68.5864,40.101"/>
+            <radius value="2.7785"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.8808,39.0688"/>
+            <radius value="2.7785"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.236,39.248"/>
+            <radius value="2.7785"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.802,39.538"/>
+            <radius value="2.7785"/>
+        </shape>
+    </region>
+    <region id="84">
+        <name value="Visi14Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="82.569,39.685"/>
+            <radius value="3.1035"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.541,38.7285"/>
+            <radius value="3.1035"/>
+        </shape>
+    </region>
+    <region id="85">
+        <name value="Visi21Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="91.425,36.8933"/>
+            <radius value="8.018"/>
+        </shape>
+    </region>
+    <region id="86">
+        <name value="Visi20Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="111.4265,54.4113"/>
+            <radius value="8.018"/>
+        </shape>
+    </region>
+    <region id="87">
+        <name value="Visi16Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="112.662,48.8156"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.6704,46.853"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.0268,44.5397"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.643,42.2082"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.576,40.4472"/>
+            <radius value="3.1303"/>
+        </shape>
+    </region>
+    <region id="88">
+        <name value="Visi15Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="94.61,32.3247"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.6184,30.362"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.9748,28.0488"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.591,25.7172"/>
+            <radius value="3.1303"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.524,23.9562"/>
+            <radius value="3.1303"/>
+        </shape>
+    </region>
+    <region id="89">
+        <name value="Visi17Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="120.4028,38.7656"/>
+            <radius value="3.5864"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.8066,36.2321"/>
+            <radius value="3.5864"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.1445,33.4997"/>
+            <radius value="3.5864"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.7011,30.7463"/>
+            <radius value="3.5864"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.3664,28.5532"/>
+            <radius value="3.5864"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.7055,26.9687"/>
+            <radius value="3.5864"/>
+        </shape>
+    </region>
+    <region id="90">
+        <name value="Visi19Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="114.9377,71.1213"/>
+            <radius value="3.2377"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.901,68.1752"/>
+            <radius value="3.2377"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.2814,63.2062"/>
+            <radius value="3.2377"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.9724,60.5895"/>
+            <radius value="3.2377"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Visi27Activate"/>
+        <color value="255,128,255,255"/>
+        <shape type="circle">
+            <center value="28.6806,103.465"/>
+            <radius value="7.6057"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="StalkerDialogue"/>
+        <shape type="circle">
+            <center value="51.6337,119.023"/>
+            <radius value="2.6425"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="StalkerBecomeEnemy"/>
+        <shape type="circle">
+            <center value="46.1445,110.1081"/>
+            <radius value="7.7175"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="RegionPylonPlace01"/>
+        <color value="255,0,255,0"/>
+        <shape type="rect">
+            <quad value="47.844,125.8454,50.1437,128.1452"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="RegionPylonPlace02"/>
+        <color value="255,0,255,0"/>
+        <shape type="rect">
+            <quad value="55.8281,128.8134,58.1276,131.113"/>
+        </shape>
+    </region>
+    <region id="92">
+        <name value="RegionHideUnitsMidCin"/>
+        <shape type="circle">
+            <center value="108.5595,38.1408"/>
+            <radius value="12.7216"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.9045,76.617"/>
+            <radius value="12.7216"/>
+        </shape>
+    </region>
+</Regions>
