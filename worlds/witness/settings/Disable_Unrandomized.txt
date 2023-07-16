@@ -1,5 +1,5 @@
 Event Items:
-Monastery Laser Activation - 0x00A5B,0x17CE7,0x17FA9
+Monastery Laser Activation - 0x00A5B,0x17CE7,0x17FA9,0x17CA4
 Bunker Laser Activation - 0x00061,0x17D01,0x17C42
 Shadows Laser Activation - 0x00021,0x17D28,0x17C71
 
@@ -7,7 +7,7 @@ Requirement Changes:
 0x17C65 - 0x00A5B | 0x17CE7 | 0x17FA9
 0x0C2B2 - 0x00061 | 0x17D01 | 0x17C42
 0x181B3 - 0x00021 | 0x17D28 | 0x17C71
-0x28B39 - True - Reflection
+0x28B39 - True - True
 0x17CAB - True - True
 0x2779A - True - 0x17CFB | 0x3C12B | 0x17CF7
 
@@ -65,12 +65,10 @@ Disabled Locations:
 0x193AA (Monastery Inside 2)
 0x193AB (Monastery Inside 3)
 0x193A6 (Monastery Inside 4)
-0x17CA4 (Monastery Laser)
 0x18590 (Transparent) - True - Symmetry & Environment
 0x28AE3 (Vines) - 0x18590 - Shadows Follow & Environment
 0x28938 (Apple Tree) - 0x28AE3 - Environment
 0x079DF (Triple Exit) - 0x28938 - Shadows Avoid & Environment & Reflection
-0x28B39 (Tall Hexagonal) - 0x079DF & 0x2896A - Reflection
 0x03553 (Theater Tutorial Video)
 0x03552 (Theater Desert Video)
 0x0354E (Theater Jungle Video)
