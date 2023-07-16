@@ -15,19 +15,44 @@ booster_contents = {
         "Sangan",
         "Castle of Dark Illusions",
         "Soul Release",
-        "Magician of Faith"
+        "Magician of Faith",
+        "Dark Elf",
+        "Summoned Skull",
+        "Sangan",
+        "7 Colored Fish"
     },
-    "PHARAOH'S SERVANT": {},
+    "PHARAOH'S SERVANT": {
+        "Beast of Talwar",
+        "Jinzo",
+        "Gearfried the Iron Knight",
+        "Harpie's Brother"
+    },
     "PHARAONIC GUARDIAN": {
         "Don Zaloog",
         "Reasoning",
         "Dark Snake Syndrome",
-        "Helpoemer"
+        "Helpoemer",
+        "Newdoria",
+        "Spirit Reaper",
+        "Yomi Ship",
+        "Pyramid Turtle",
+        "Master Kyonshee",
+        "Book of Life",
+        "Call of the Mummy",
+        "Gravekeeper's Spy",
+        "Gravekeeper's Guard"
     },
     "SPELL RULER": {
         "Ritual",
         "Messenger of Peace",
-        "Megamorph"
+        "Megamorph",
+        "Shining Angel",
+        "Mystic Tomato",
+        "Giant Rat",
+        "Mother Grizzly",
+        "UFO Turtle",
+        "Flying Kamakiri 1",
+        "Giant Germ"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -41,11 +66,31 @@ booster_contents = {
         "Aqua Spirit",
         "Rock Spirit",
         "Spirit of Flames",
-        "Garuda the Wind Spirit"
+        "Garuda the Wind Spirit",
+        "Hysteric Fairy",
+        "Kycoo the Ghost Destroyer",
+        "Gemini Elf",
+        "Amphibian Beast",
+        "Revival Jam",
+        "Dancing Fairy"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
-        "Yata-Garasu"
+        "Yata-Garasu",
+        "Opticlops",
+        "Dark Ruler Ha Des",
+        "Exiled Force",
+        "Injection Fairy Lily",
+        "Spear Dragon",
+        "Luster Dragon #2",
+        "Twin-Headed Behemoth",
+        "Airknight Parshath",
+        "Freed the Matchless General",
+        "Marauding Captain",
+        "Reinforcement of the Army",
+        "Cave Dragon",
+        "Troop Dragon",
+        "Stamping Destruction"
     },
     "MAGICIAN'S FORCE": {
         "Huge Revolution",
@@ -67,7 +112,15 @@ booster_contents = {
         "Wave-Motion Cannon",
         "Ritual",
         "Magical Merchant",
-        "Poison of the Old Man"
+        "Poison of the Old Man",
+        "Chaos Command Magician",
+        "Skilled Dark Magician",
+        "Dark Blade",
+        "Great Angus",
+        "Luster Dragon",
+        "Breaker the magical Warrior",
+        "Old Vindictive Magician",
+        "Apprentice Magician"
     },
     "DARK CRISIS": {
         "Final Countdown",
@@ -78,7 +131,19 @@ booster_contents = {
         "Dark Scorpion - Gorg the Strong",
         "Ritual",
         "Tsukuyomi",
-        "Ojama Trio"
+        "Ojama Trio",
+        "Kaiser Glider",
+        "D.D. Warrior Lady",
+        "Archfiend Soldier",
+        "Skull Archfiend of Lightning",
+        "Blindly Loyal Goblin",
+        "Gagagigo",
+        "Nin-Ken Dog",
+        "Zolga",
+        "Kelbek",
+        "Mudora",
+        "Cestus of Dagla",
+        "Vampire Lord"
     },
     "INVASION OF CHAOS": {
         "Ojama Delta Hurricane",
@@ -91,72 +156,202 @@ booster_contents = {
         "Dimension Fusion",
         "Gigantes",
         "Inferno",
-        "Silpheed"
+        "Silpheed",
+        "Mad Dog of Darkness",
+        "Ryu Kokki",
+        "Berserk Gorilla",
+        "Neo Bug",
+        "Dark Driceratops",
+        "Hyper Hammerhead",
+        "Sea Serpent Warrior of Darkness",
+        "Giga Gagagigo",
+        "Terrorking Salmon",
+        "Blazing Inpachi"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
         "Wall of Revealing Light",
-        "Mystik Wok"
+        "Mystik Wok",
+        "The Agent of Judgment - Saturn",
+        "Zaborg the Thunder Monarch",
+        "Regenerating Mummy",
+        "The End of Anubis",
+        "Solar Flare Dragon"
     },
-    "SOUL OF THE DUELIST": {},
-    "RISE OF DESTINY": {},
-    "FLAMING ETERNITY": {},
+    "SOUL OF THE DUELIST": {
+        "Ninja Grandmaster Sasuke",
+        "Mystic Swordsman LV2",
+        "Enraged Muka Muka",
+        "Mobius the Frost Monarch",
+        "Horus the Black Flame Dragon LV6",
+        "Ultimate Baseball Kid",
+        "Armed Dragon LV3",
+        "Armed Dragon LV5",
+        "Masked Dragon",
+        "Element Dragon",
+        "Horus the Black Flame Dragon LV4"
+    },
+    "RISE OF DESTINY": {
+        "Homunculus the Alchemic Being",
+        "Thestalos the Firestorm Monarch",
+        "Roc from the Valley of Haze",
+        "Harpie Lady 1"
+    },
+    "FLAMING ETERNITY": {
+        "Insect Knight",
+        "Chiron the Mage",
+        "Granmarg the Rock Monarch",
+        "Silent Swordsman Lv5"
+    },
     "THE LOST MILLENIUM": {
         "Ritual",
-        "Megarock Dragon"
+        "Megarock Dragon",
+        "D.D. Survivor",
+        "Hieracosphinx"
     },
     "CYBERNETIC REVOLUTION": {
         "Power Bond",
-        "Cyber Twin Dragon"
+        "Cyber Dragon",
+        "Cyber Twin Dragon",
+        "Cybernetic Magician"
     },
-    "ELEMENTAL ENERGY": {},
+    "ELEMENTAL ENERGY": {
+        "Zure, Knight of Dark World",
+        "Brron, Mad King of Dark World",
+        "Familiar-Possessed - Aussa",
+        "Familiar-Possessed - Eria",
+        "Familiar-Possessed - Hiita",
+        "Familiar-Possessed - Wynn",
+        "Oxygeddon"
+    },
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
         "Uria, Lord of Searing Flames",
         "Ritual",
-        "Treeborn Frog"
+        "Treeborn Frog",
+        "Saber Beetle",
+        "Tenkabito Shien"
     },
     "GAME GIFT COLLECTION": {
         "Valkyrion the Magna Warrior",
         "Alpha the Magnet Warrior",
         "Beta the Magnet Warrior",
         "Gamma the Magnet Warrior",
-        "Magical Blast"
+        "Magical Blast",
+        "Dunames Dark Witch",
+        "Vorse Raider",
+        "Exarion Universe",
+        "Abyss Soldier",
+        "Slate Warrior",
+        "Cyber-Tech Alligator",
+        "D.D. Assailant",
+        "Goblin Zombie"
     },
     "Special Gift Collection": {
         "Gate Guardian",
-        "Scapegoat"
+        "Scapegoat",
+        "Gil Garth",
+        "La Jinn the Mystical Genie of the Lamp",
+        "Summoned Skull",
+        "Inferno Hammer",
+        "Gemini Elf",
+        "Cyber Harpie Lady",
+        "Dandylion",
+        "Blade Knight",
+        "Curse of Vampire"
     },
     "Fairy Collection": {
-        "Silpheed"
+        "Silpheed",
+        "Dunames Dark Witch",
+        "Hysteric Fairy",
+        "The Agent of Judgment - Saturn",
+        "Shining Angel",
+        "Airknight Parshath",
+        "Dancing Fairy",
+        "Zolga",
+        "Kelbek",
+        "Mudora"
     },
     "Dragon Collection": {
         "Victory D",
-        "Chaos Emperor Dragon - Envoy of the End"
+        "Chaos Emperor Dragon - Envoy of the End",
+        "Kaiser Glider",
+        "Horus the Black Flame Dragon LV6",
+        "Luster Dragon",
+        "Luster Dragon #2"
+        "Spear Dragon",
+        "Armed Dragon LV3",
+        "Armed Dragon LV5",
+        "Twin-Headed Behemoth",
+        "Cave Dragon",
+        "Masked Dragon",
+        "Element Dragon",
+        "Troop Dragon",
+        "Horus the Black Flame Dragon LV4"
     },
     "Warrior Collection A": {
-        "Gate Guardian"
+        "Gate Guardian",
+        "Gearfried the Iron Knight",
+        "Dimensional Warrior",
+        "Command Knight"
     },
     "Warrior Collection B": {
         "Don Zaloog",
         "Dark Scorpion - Chick the Yellow",
         "Dark Scorpion - Meanae the Thorn",
         "Dark Scorpion - Gorg the Strong",
-        "Dark Scorpion - Cliff the Trap Remover"
+        "Dark Scorpion - Cliff the Trap Remover",
+        "Ninja Grandmaster Sasuke",
+        "D.D. Warrior Lady",
+        "Mystic Swordsman LV2",
+        "Dark Blade",
+        "Blindly Loyal Goblin",
+        "Exiled Force",
+        "Ultimate Baseball Kid",
+        "Freed the Matchless General",
+        "Holy Knight Ishzark",
+        "Silent Swordsman Lv5",
+        "Warrior Lady of the Wasteland",
+        "D.D. Assailant",
+        "Blade Knight",
+        "Marauding Captain"
     },
     "Fiend Collection A": {
         "Sangan",
         "Castle of Dark Illusions",
-        "Barox"
+        "Barox",
+        "La Jinn the Mystical Genie of the Lamp",
+        "Summoned Skull",
+        "Beast of Talwar",
+        "Sangan",
+        "Giant Germ"
     },
     "Fiend Collection B": {
         "Raviel, Lord of Phantasms",
         "Yata-Garasu",
-        "Helpoemer"
+        "Helpoemer",
+        "Archfiend Soldier",
+        "Skull Descovery Knight",
+        "Gil Garth",
+        "Opticlops",
+        "Zure, Knight of Dark World",
+        "Brron, Mad King of Dark World",
+        "D.D. Survivor",
+        "Skull Archfiend of Lightning",
+        "The End of Anubis",
+        "Dark Ruler Ha Des",
+        "Inferno Hammer",
+        "Legendary Fiend",
+        "Newdoria",
+        "Slate Warrior"
     },
     "Machine Collection A": {
-        "Cyber-Stein"
+        "Cyber-Stein",
+        "Mechanicalchaser",
+        "Jinzo",
+        "UFO Turtle",
+        "Cyber-Tech Alligator"
     },
     "Machine Collection B": {
         "X-Head Cannon",
@@ -170,7 +365,11 @@ booster_contents = {
         "W-Wing Catapult",
         "VW-Tiger Catapult",
         "VWXYZ-Dragon Catapult Cannon",
-        "Cyber Twin Dragon"
+        "Cyber Dragon",
+        "Cyber Twin Dragon",
+        "Green Gadget",
+        "Red Gadget",
+        "Yellow Gadget"
     },
     "Spellcaster Collection A": {
         "Exodia",
@@ -178,14 +377,43 @@ booster_contents = {
         "Dark Magician",
         "Time Wizard",
         "Kazejin",
-        "Magician of Faith"
+        "Magician of Faith",
+        "Dark Elf",
+        "Gemini Elf",
+        "Injection Fairy Lily"
     },
     "Spellcaster Collection B": {
         "Jowgen the Spiritualist",
         "Tsukuyomi",
-        "Manticore of Darkness"
+        "Manticore of Darkness",
+        "Chaos Command Magician",
+        "Cybernetic Magician",
+        "Skilled Dark Magician",
+        "Kycoo the Ghost Destroyer",
+        "Toon Gemini Elf",
+        "Familiar-Possessed - Aussa",
+        "Familiar-Possessed - Eria",
+        "Familiar-Possessed - Hiita",
+        "Familiar-Possessed - Wynn",
+        "Breaker the magical Warrior",
+        "Breaker the magical Warrior",
+        "The Tricky",
+        "Gravekeeper's Spy",
+        "Gravekeeper's Guard",
+        "Summon Priest",
+        "Old Vindictive Magician",
+        "Apprentice Magician"
     },
-    "Zombie Collection": {},
+    "Zombie Collection": {
+        "Regenerating Mummy",
+        "Ryu Kokki",
+        "Spirit Reaper",
+        "Pyramid Turtle",
+        "Master Kyonshee",
+        "Curse of Vampire",
+        "Vampire Lord",
+        "Goblin Zombie"
+    },
     "Special Monsters A": {
         "X-Head Cannon",
         "Y-Dragon Head",
@@ -193,20 +421,36 @@ booster_contents = {
         "V-Tiger Jet",
         "W-Wing Catapult",
         "Yata-Garasu",
-        "Tsukuyomi"
+        "Tsukuyomi",
+        "Dark Blade",
+        "Toon Gemini Elf"
     },
     "Special Monsters B": {
-        "Polymerization"
+        "Polymerization",
+        "Mystic Swordsman LV2",
+        "Horus the Black Flame Dragon LV6",
+        "Horus the Black Flame Dragon LV4",
+        "Armed Dragon LV3"
+        "Armed Dragon LV5",
+        "Silent Swordsman Lv5"
     },
     "Reverse Collection": {
         "Magical Merchant",
         "Castle of Dark Illusions",
         "Magician of Faith",
-        "Penguin Soldier"
+        "Penguin Soldier",
+        "Blade Knight",
+        "Gravekeeper's Spy",
+        "Gravekeeper's Guard",
+        "Old Vindictive Magician"
     },
     "LP Recovery Collection": {
         "Mystik Wok",
-        "Poison of the Old Man"
+        "Poison of the Old Man",
+        "Hysteric Fairy",
+        "Dancing Fairy",
+        "Zolga",
+        "Cestus of Dagla"
     },
     "Special Summon Collection A": {
         "Perfectly Ultimate Great Moth",
@@ -218,7 +462,18 @@ booster_contents = {
         "Aqua Spirit",
         "Rock Spirit",
         "Spirit of Flames",
-        "Garuda the Wind Spirit"
+        "Garuda the Wind Spirit",
+        "Shining Angel",
+        "Mystic Tomato",
+        "Giant Rat",
+        "Mother Grizzly",
+        "UFO Turtle",
+        "Flying Kamakiri 1",
+        "Giant Germ",
+        "Revival Jam",
+        "Pyramid Turtle",
+        "Troop Dragon",
+        "Gravekeeper's Spy"
     },
     "Special Summon Collection B": {
         "Monster Gate",
@@ -228,16 +483,36 @@ booster_contents = {
         "Return from the Different Dimension",
         "Gigantes",
         "Inferno",
-        "Silpheed"
+        "Silpheed",
+        "Mystic Swordsman LV2",
+        "Skilled Dark Magician",
+        "Horus the Black Flame Dragon LV6",
+        "Armed Dragon LV3",
+        "Armed Dragon LV5",
+        "Marauding Captain",
+        "Masked Dragon",
+        "The Tricky",
+        "Magical Dimension"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
         "Uria, Lord of Searing Flames",
-        "Treeborn Frog"
+        "Treeborn Frog",
+        "Cyber Dragon",
+        "Familiar-Possessed - Aussa",
+        "Familiar-Possessed - Eria",
+        "Familiar-Possessed - Hiita",
+        "Familiar-Possessed - Wynn",
+        "Silent Swordsman Lv5",
+        "Warrior Lady of the Wasteland",
+        "Dandylion",
+        "Curse of Vampire",
+        "Summon Priest"
     },
     "Equipment Collection": {
-        "Megamorph"
+        "Megamorph",
+        "Cestus of Dagla"
     },
     "Continuous Spell/Trap A": {
         "Destiny Board",
@@ -255,26 +530,59 @@ booster_contents = {
         "Wave-Motion Cannon",
         "Heart of the Underdog",
         "Wall of Revealing Light",
-        "Dark Snake Syndrome"
+        "Dark Snake Syndrome",
+        "Call of the Mummy"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
         "Poison of the Old Man",
-        "Scapegoat"
+        "Scapegoat",
+        "Magical Dimension"
     },
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
         "Chaos Emperor Dragon - Envoy of the End",
         "Dark Snake Syndrome",
-        "Inferno"
+        "Inferno",
+        "Exarion Universe",
+        "Kycoo the Ghost Destroyer",
+        "Giant Germ",
+        "Familiar-Possessed - Aussa",
+        "Familiar-Possessed - Eria",
+        "Familiar-Possessed - Hiita",
+        "Familiar-Possessed - Wynn",
+        "Dark Driceratops",
+        "Saber Beetle",
+        "Thestalos the Firestorm Monarch",
+        "Solar Flare Dragon",
+        "Ultimate Baseball Kid",
+        "Spear Dragon",
+        "Oxygeddon",
+        "Airknight Parshath",
+        "Vampire Lord",
+        "Stamping Destruction"
     },
     "Direct Attack Collection": {
         "Victory D",
-        "Dark Scorpion Combination"
+        "Dark Scorpion Combination",
+        "Spirit Reaper"
     },
     "Monster Destroy Collection": {
         "Hamon, Lord of Striking Thunder",
-        "Inferno"
+        "Inferno",
+        "Ninja Grandmaster Sasuke",
+        "Zaborg the Thunder Monarch",
+        "Mystic Swordsman LV2",
+        "Skull Descovery Knight",
+        "Inferno Hammer",
+        "Ryu Kokki",
+        "Newdoria",
+        "Exiled Force",
+        "Yomi Ship",
+        "Armed Dragon LV5",
+        "Element Dragon",
+        "Old Vindictive Magician",
+        "Magical Dimension"
     },
 }
 

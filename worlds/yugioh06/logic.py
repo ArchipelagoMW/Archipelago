@@ -61,7 +61,7 @@ class YuGiOh06Logic(LogicMixin):
                 self.has_all(["Mystik Wok", "Barox", "Cyber-Stein", "Poison of the Old Man"], player)) and\
                 self.yugioh06_difficulty(player, 8)
 
-    def yugioh06_has_some(self, items: Set[str], player: int):
+    def yugioh06_has_individual(self, items: Set[str], player: int):
         amount = 0
         for item in items:
             if self.has(item, player):
