@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from ..generic.Rules import add_rule
+from worlds.generic.Rules import add_rule
 from .Locations import food_locations, shop_locations
 from .ItemPool import dangerous_weapon_locations
 from .Options import StartingPosition

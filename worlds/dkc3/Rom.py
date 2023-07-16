@@ -667,7 +667,7 @@ def patch_rom(world, rom, player, active_level_list):
     rom.write_bytes(0x32A5DF, bytearray([0x41, 0x52, 0x43, 0x48, 0x49, 0x50, 0x45, 0x4C, 0x41, 0x47, 0x4F, 0x20, 0x4D, 0x4F, 0xC4])) # "ARCHIPELAGO MOD"
     rom.write_bytes(0x32A5EE, bytearray([0x00, 0x03, 0x50, 0x4F, 0x52, 0x59, 0x47, 0x4F, 0x4E, 0xC5])) # "PORYGONE"
 
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'D3{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)

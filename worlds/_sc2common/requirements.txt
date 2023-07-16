@@ -1,0 +1,6 @@
+s2clientprotocol>=5.0.11.90136.0
+mpyq>=0.2.5
+portpicker>=1.5.2
+aiohttp>=3.8.4
+loguru>=0.7.0
+protobuf==3.20.3
