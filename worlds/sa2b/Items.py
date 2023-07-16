@@ -140,7 +140,36 @@ eggs_table = {
     ItemName.purple_shiny_egg:     ItemData(0xFF0126, False),
     ItemName.orange_shiny_egg:     ItemData(0xFF0127, False),
     ItemName.black_shiny_egg:      ItemData(0xFF0128, False),
+}
 
+fruits_table = {
+    ItemName.chao_garden_fruit: ItemData(0xFF0200, False),
+    ItemName.hero_garden_fruit: ItemData(0xFF0201, False),
+    ItemName.dark_garden_fruit: ItemData(0xFF0202, False),
+
+    ItemName.strong_fruit:   ItemData(0xFF0203, False),
+    ItemName.tasty_fruit:    ItemData(0xFF0204, False),
+    ItemName.hero_fruit:     ItemData(0xFF0205, False),
+    ItemName.dark_fruit:     ItemData(0xFF0206, False),
+    ItemName.round_fruit:    ItemData(0xFF0207, False),
+    ItemName.triangle_fruit: ItemData(0xFF0208, False),
+    ItemName.square_fruit:   ItemData(0xFF0209, False),
+    ItemName.heart_fruit:    ItemData(0xFF020A, False),
+    ItemName.chao_fruit:     ItemData(0xFF020B, False),
+    ItemName.smart_fruit:    ItemData(0xFF020C, False),
+
+    ItemName.orange_fruit: ItemData(0xFF020D, False),
+    ItemName.blue_fruit:   ItemData(0xFF020E, False),
+    ItemName.pink_fruit:   ItemData(0xFF020F, False),
+    ItemName.green_fruit:  ItemData(0xFF0210, False),
+    ItemName.purple_fruit: ItemData(0xFF0211, False),
+    ItemName.yellow_fruit: ItemData(0xFF0212, False),
+    ItemName.red_fruit:    ItemData(0xFF0213, False),
+
+    ItemName.mushroom_fruit:       ItemData(0xFF0214, False),
+    ItemName.super_mushroom_fruit: ItemData(0xFF0215, False),
+    ItemName.mint_candy_fruit:     ItemData(0xFF0216, False),
+    ItemName.grapes_fruit:         ItemData(0xFF0217, False),
 }
 
 event_table = {
@@ -155,6 +184,7 @@ item_table = {
     **trap_table,
     **emeralds_table,
     **eggs_table,
+    **fruits_table,
     **event_table,
 }
 
@@ -163,6 +193,7 @@ lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, 
 item_groups: typing.Dict[str, str] = {
     "Chaos Emeralds": [item_name for item_name, data in emeralds_table.items()],
     "Eggs":           [item_name for item_name, data in eggs_table.items()],
+    "Fruits":         [item_name for item_name, data in fruits_table.items()],
 }
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"

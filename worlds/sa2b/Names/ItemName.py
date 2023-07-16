@@ -36,6 +36,8 @@ rouge_pick_nails     = "Rouge - Pick Nails"
 rouge_treasure_scope = "Rouge - Treasure Scope"
 rouge_iron_boots     = "Rouge - Iron Boots"
 
+
+# Junk
 five_rings      = "Five Rings"
 ten_rings       = "Ten Rings"
 twenty_rings    = "Twenty Rings"
@@ -44,6 +46,8 @@ shield          = "Shield"
 magnetic_shield = "Magnetic Shield"
 invincibility   = "Invincibility"
 
+
+# Traps
 omochao_trap    = "OmoTrap"
 timestop_trap   = "Chaos Control Trap"
 confuse_trap    = "Confusion Trap"
@@ -57,6 +61,8 @@ cutscene_trap   = "Cutscene Trap"
 
 pong_trap       = "Pong Trap"
 
+
+# Chaos Emeralds
 white_emerald  = "White Chaos Emerald"
 red_emerald    = "Red Chaos Emerald"
 cyan_emerald   = "Cyan Chaos Emerald"
@@ -65,6 +71,8 @@ green_emerald  = "Green Chaos Emerald"
 yellow_emerald = "Yellow Chaos Emerald"
 blue_emerald   = "Blue Chaos Emerald"
 
+
+# Chao Eggs
 normal_egg              = "Normal Egg"
 yellow_monotone_egg     = "Yellow Mono-Tone Egg"
 white_monotone_egg      = "White Mono-Tone Egg"
@@ -109,4 +117,35 @@ purple_shiny_egg     = "Purple Shiny Egg"
 orange_shiny_egg     = "Orange Shiny Egg"
 black_shiny_egg      = "Black Shiny Egg"
 
+
+# Chao Fruit
+chao_garden_fruit = "Chao Garden Fruit"
+hero_garden_fruit = "Hero Garden Fruit"
+dark_garden_fruit = "Dark Garden Fruit"
+
+strong_fruit   = "Strong Fruit"
+tasty_fruit    = "Tasty Fruit"
+hero_fruit     = "Hero Fruit"
+dark_fruit     = "Dark Fruit"
+round_fruit    = "Round Fruit"
+triangle_fruit = "Triangle Fruit"
+square_fruit   = "Square Fruit"
+heart_fruit    = "Heart Fruit"
+chao_fruit     = "Chao Fruit"
+smart_fruit    = "Smart Fruit"
+
+orange_fruit = "Orange Fruit"
+blue_fruit   = "Blue Fruit"
+pink_fruit   = "Pink Fruit"
+green_fruit  = "Green Fruit"
+purple_fruit = "Purple Fruit"
+yellow_fruit = "Yellow Fruit"
+red_fruit    = "Red Fruit"
+
+mushroom_fruit       = "Mushroom"
+super_mushroom_fruit = "Super Mushroom"
+mint_candy_fruit     = "Mint Candy"
+grapes_fruit         = "Grapes"
+
+# Goal Item
 maria = "What Maria Wanted"

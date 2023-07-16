@@ -3,7 +3,7 @@ import math
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
-                   eggs_table
+                   eggs_table, fruits_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -321,14 +321,18 @@ class SA2BWorld(World):
         junk_pool = []
         junk_keys = list(junk_table.keys())
         eggs_keys = list(eggs_table.keys())
+        fruits_keys = list(fruits_table.keys())
         eggs_count = 0
         for i in range(junk_count):
-            junk_type = self.random.randint(0, len(junk_keys) + 0)
+            junk_type = self.random.randint(0, len(junk_keys) + 1)
 
             if chao_active and junk_type == len(junk_keys) + 0 and eggs_count < 20:
                 junk_item = self.multiworld.random.choice(eggs_keys)
                 junk_pool.append(self.create_item(junk_item))
                 eggs_count += 1
+            elif chao_active and junk_type == len(junk_keys) + 1:
+                junk_item = self.multiworld.random.choice(fruits_keys)
+                junk_pool.append(self.create_item(junk_item))
             else:
                 junk_item = self.multiworld.random.choice(junk_keys)
                 junk_pool.append(self.create_item(junk_item))
