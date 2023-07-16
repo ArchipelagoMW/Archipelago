@@ -10,7 +10,8 @@ from Options import Toggle, DefaultOnToggle, Range, Choice
 class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
-    The lasers for those areas will be activated as you solve optional puzzles throughout the island."""
+    The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
+    Additionally, the panels activating Monastery Laser and Jungle Popup Wall will be on from the start."""
     display_name = "Disable non randomized puzzles"
 
 
