@@ -38,7 +38,7 @@ on the Archipelago website to generate a YAML using a graphical interface.
 be significantly more difficult with this mod, so consider choosing a lower difficulty than you
 normally would.
 4. Open the world in single player or multiplayer
-5. When you're ready, open chat, and enter "/apstart" to start the game
+5. When you're ready, open chat, and enter `/apstart` to start the game.
    
 ## Commands
 
