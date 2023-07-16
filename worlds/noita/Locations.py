@@ -208,8 +208,8 @@ def generate_location_entries(locname: str, locinfo: LocationData) -> Dict[str, 
     return {locname: locinfo.id}
 
 
-# can't just initiate sets with {} since that's for dicts
-location_name_groups: Dict[str, Set[str]] = {"shop": {""}, "orb": {""}, "boss": {""}, "chest": {""}, "pedestal": {""}}
+location_name_groups: Dict[str, Set[str]] = {"shop": set(), "orb": set(), "boss": set(), "chest": set(),
+                                             "pedestal": set()}
 location_name_to_id: Dict[str, int] = {}
 
 
