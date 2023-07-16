@@ -46,7 +46,7 @@ class TerrariaWorld(World):
     Features 18 bosses and 4 classes.
     """
 
-    game: str = "Terraria"
+    game = "Terraria"
     web = TerrariaWeb()
     option_definitions = options
 
