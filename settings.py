@@ -55,6 +55,7 @@ class Group:
     _dumping: bool = False
     _has_attr: bool = False
     _changed: bool = False
+    _dumper: ClassVar[type]
 
     def __getitem__(self, key: str) -> Any:
         try:
@@ -190,24 +191,62 @@ class Group:
             for name in self if not args or name in args
         }
 
-    def dump(self, f: TextIO, level: int = 0) -> None:
+    @classmethod
+    def _dump_value(cls, value: Any, f: TextIO, level: int):
+        """Write a single yaml line to f"""
         from Utils import dump, Dumper as BaseDumper
+        indent = '  ' * level
+        yaml_line = dump(value, Dumper=cast(BaseDumper, cls._dumper))
+        f.write(f"{indent}{yaml_line}")
+
+    @classmethod
+    def _dump_item(cls, name: str, attr: object, f: TextIO, level: int) -> None:
+        """Write a dict/group item to f, where attr can be a scalar or a collection"""
+        from Utils import Dumper as BaseDumper
         from yaml import ScalarNode, MappingNode
 
-        class Dumper(BaseDumper):
-            def represent_mapping(self, tag: str, mapping: Any, flow_style: Any = None) -> MappingNode:
-                res: MappingNode = super().represent_mapping(tag, mapping, flow_style)
-                pairs = cast(List[Tuple[ScalarNode, Any]], res.value)
-                for k, v in pairs:
-                    k.style = None  # remove quotes from keys
-                return res
+        # lazy construction of yaml Dumper to avoid loading Utils early
+        if not hasattr(cls, "_dumper"):
+            if cls is Group or not hasattr(Group, "_dumper"):
+                class Dumper(BaseDumper):
+                    def represent_mapping(self, tag: str, mapping: Any, flow_style: Any = None) -> MappingNode:
+                        from yaml import ScalarNode
+                        res: MappingNode = super().represent_mapping(tag, mapping, flow_style)
+                        pairs = cast(List[Tuple[ScalarNode, Any]], res.value)
+                        for k, v in pairs:
+                            k.style = None  # remove quotes from keys
+                        return res
 
-            def represent_str(self, data: str) -> ScalarNode:
-                # default double quote all strings
-                return self.represent_scalar("tag:yaml.org,2002:str", data, style='"')
+                    def represent_str(self, data: str) -> ScalarNode:
+                        # default double quote all strings
+                        return self.represent_scalar("tag:yaml.org,2002:str", data, style='"')
 
-        Dumper.add_representer(str, Dumper.represent_str)
+                Dumper.add_representer(str, Dumper.represent_str)
+                Group._dumper = Dumper
+            if cls is not Group:
+                cls._dumper = Group._dumper
 
+        if isinstance(attr, Group):
+            indent = '  ' * level
+            f.write(f"{indent}{name}:\n")
+            attr.dump(f, level=level+1)
+        elif isinstance(attr, (list, tuple, set)):
+            # TODO: special handling for iterables
+            raise NotImplementedError()
+        elif isinstance(attr, dict) and attr:
+            # special handling for non-empty dicts; empty one-line {} syntax
+            indent = '  ' * level
+            f.write(f"{indent}{name}:\n")
+            for dict_key, value in attr.items():
+                # not dumping doc string here, since there is no way to upcast it after dumping
+                if isinstance(value, (Group, dict, list, tuple, set)):
+                    cls._dump_item(dict_key, value, f, level=level + 1)
+                else:
+                    cls._dump_value({dict_key: _to_builtin(value)}, f, level=level+1)
+        else:
+            cls._dump_value({name: _to_builtin(attr)}, f, level=level)
+
+    def dump(self, f: TextIO, level: int = 0) -> None:
         self._dumping = True
         try:
             # fetch class to avoid going through getattr
@@ -226,16 +265,7 @@ class Group:
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":
                     f.write(fmt_doc(attr_cls, level=level) + "\n")
-                indent = '  ' * level
-                if isinstance(attr, Group):
-                    f.write(f"{indent}{name}:\n")
-                    attr.dump(f, level=level+1)
-                elif isinstance(attr, (dict, list, tuple, set)):
-                    # TODO: special handling for dicts and iterables
-                    raise NotImplementedError()
-                else:
-                    yaml_line = dump({name: _to_builtin(attr)}, Dumper=Dumper)
-                    f.write(f"{indent}{yaml_line}")
+                self._dump_item(name, attr, f, level=level)
             self._changed = False
         finally:
             self._dumping = False
