@@ -133,7 +133,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_VISITED_MOSSDEEP_CITY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_SKY -> REGION_SOOTOPOLIS_CITY/MAIN", player),
+        multiworld.get_entrance("REGION_SKY -> REGION_SOOTOPOLIS_CITY/EAST", player),
         lambda state: state.has("EVENT_VISITED_SOOTOPOLIS_CITY", player)
     )
     set_rule(
@@ -847,8 +847,20 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Sootopolis City
     set_rule(
-        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/MAIN -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN", player),
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/WATER -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN", player),
         can_dive
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/EAST -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/WEST -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/ISLAND -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
     )
     set_rule(
         multiworld.get_entrance("MAP_SOOTOPOLIS_CITY:3/MAP_CAVE_OF_ORIGIN_ENTRANCE:0", player),
