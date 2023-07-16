@@ -38,10 +38,11 @@ on the Archipelago website to generate a YAML using a graphical interface.
 be significantly more difficult with this mod, so consider choosing a lower difficulty than you
 normally would.
 4. Open the world in single player or multiplayer
-5. When you're ready, open chat, and enter "/apstart" to start the game
+5. When you're ready, open chat, and enter `/apstart` to start the game.
    
 ## Commands
 
 While playing Archipelago, you can interact with the server using the commands listed in the
-[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter "/ap",
+[commands guide](/tutorial/Archipelago/commands/en). To send a command, open chat, and enter `/ap`,
+followed by the command you want to send. For example, `ap !help`.
 followed by the command you want to send. For example, "/ap !help".

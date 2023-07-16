@@ -53,5 +53,5 @@ options: typing.Dict[str, type(Option)] = {  # type: ignore
     "goal": Goal,
     "achievements": Achievements,
     "fill_extra_checks_with": FillExtraChecksWith,
-    "deathlink": DeathLink,
+    "death_link": DeathLink,
 }

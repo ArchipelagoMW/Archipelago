@@ -32,7 +32,7 @@ class TerrariaWeb(WebWorld):
     tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
-            "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld",
+            "A guide to setting up the Terraria randomizer connected to an Archipelago Multiworld.",
             "English",
             "setup_en.md",
             "setup/en",
@@ -47,7 +47,7 @@ class TerrariaWorld(World):
     Features 18 bosses and 4 classes.
     """
 
-    game: str = "Terraria"
+    game = "Terraria"
     web = TerrariaWeb()
     option_definitions = options
 
@@ -191,7 +191,7 @@ class TerrariaWorld(World):
 
         for location in self.ter_locations:
             _, flags, _, _ = rules[rule_indices[location]]
-            if not "Location" in flags and not "Achievement" in flags:
+            if "Location" not in flags and "Achievement" not in flags:
                 if location in progression:
                     classification = ItemClassification.progression
                 else:
@@ -338,5 +338,5 @@ class TerrariaWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         return {
             "goal": list(self.goal_locations),
-            "deathlink": bool(self.multiworld.deathlink[self.player]),
+            "deathlink": bool(self.multiworld.death_link[self.player]),
         }
