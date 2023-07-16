@@ -1,18 +1,16 @@
-from test.TestBase import WorldTestBase
-from worlds.pokemon_emerald.util import location_name_to_label
-from worlds.pokemon_emerald.options import NormanRequirement
+from . import PokemonEmeraldTestBase
+from ..util import location_name_to_label
+from ..options import NormanRequirement
 from Options import Toggle
 
-class TestBasic(WorldTestBase):
-    game = "Pokemon Emerald"
 
+class TestBasic(PokemonEmeraldTestBase):
     def testAlwaysAccessible(self):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_102_POTION")))
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_SUPER_POTION")))
 
 
-class TestSurf(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestSurf(PokemonEmeraldTestBase):
     options = {
         "npc_gifts": Toggle.option_true
     }
@@ -37,8 +35,30 @@ class TestSurf(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_4")))
 
 
-class TestFerry(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestFreeFly(PokemonEmeraldTestBase):
+    options = {
+        "npc_gifts": Toggle.option_true,
+        "free_fly_location": Toggle.option_true
+    }
+
+    def setUp(self) -> None:
+        super(PokemonEmeraldTestBase, self).setUp()
+
+        # Swap free fly to Sootopolis
+        free_fly_location = self.multiworld.get_location("FREE_FLY_LOCATION", 1)
+        free_fly_location.item = None
+        free_fly_location.place_locked_item(self.multiworld.worlds[1].create_event("EVENT_VISITED_SOOTOPOLIS_CITY"))
+
+    def testSootopolisGiftInaccessibleWithNoSurf(self):
+        self.collect_by_name(["HM02 Fly", "Feather Badge"])
+        self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
+
+    def testSootopolisGiftAccessibleWithSurf(self):
+        self.collect_by_name(["HM03 Surf", "Balance Badge", "HM02 Fly", "Feather Badge"])
+        self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
+
+
+class TestFerry(PokemonEmeraldTestBase):
     options = {
         "npc_gifts": Toggle.option_true,
         "enable_ferry": Toggle.option_true
@@ -59,8 +79,7 @@ class TestFerry(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
 
 
-class TestExtraBouldersOn(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestExtraBouldersOn(PokemonEmeraldTestBase):
     options = {
         "extra_boulders": Toggle.option_true
     }
@@ -77,8 +96,7 @@ class TestExtraBouldersOn(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
 
-class TestExtraBouldersOff(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestExtraBouldersOff(PokemonEmeraldTestBase):
     options = {
         "extra_boulders": Toggle.option_false
     }
@@ -91,8 +109,7 @@ class TestExtraBouldersOff(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_ROUTE_115_PP_UP")))
 
 
-class TestNormanRequirement1(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestNormanRequirement1(PokemonEmeraldTestBase):
     options = {
         "norman_requirement": NormanRequirement.option_badges,
         "norman_count": 0
@@ -102,8 +119,7 @@ class TestNormanRequirement1(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
-class TestNormanRequirement2(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestNormanRequirement2(PokemonEmeraldTestBase):
     options = {
         "norman_requirement": NormanRequirement.option_badges,
         "norman_count": 4
@@ -117,8 +133,7 @@ class TestNormanRequirement2(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
-class TestNormanRequirement3(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestNormanRequirement3(PokemonEmeraldTestBase):
     options = {
         "norman_requirement": NormanRequirement.option_gyms,
         "norman_count": 0
@@ -128,8 +143,7 @@ class TestNormanRequirement3(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
-class TestNormanRequirement4(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestNormanRequirement4(PokemonEmeraldTestBase):
     options = {
         "norman_requirement": NormanRequirement.option_gyms,
         "norman_count": 4
@@ -144,8 +158,7 @@ class TestNormanRequirement4(WorldTestBase):
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
-class TestVictoryRoad(WorldTestBase):
-    game = "Pokemon Emerald"
+class TestVictoryRoad(PokemonEmeraldTestBase):
     options = {
         "elite_four_requirement": NormanRequirement.option_badges,
         "elite_four_count": 0,
