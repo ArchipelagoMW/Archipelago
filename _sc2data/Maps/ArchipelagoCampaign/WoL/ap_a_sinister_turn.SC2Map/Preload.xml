@@ -112,13 +112,11 @@
 <Unit id="PhotonCannon"/>
 <Unit id="Stargate"/>
 <Unit id="TemplarArchive"/>
-<Unit id="DarkShrine"/>
 <Unit id="RoboticsFacility"/>
 <Unit id="CyberneticsCore"/>
 <Unit id="Zealot"/>
 <Unit id="Stalker"/>
 <Unit id="HighTemplar"/>
-<Unit id="DarkTemplar"/>
 <Unit id="Sentry"/>
 <Unit id="Carrier"/>
 <Unit id="VoidRay"/>
@@ -141,4 +139,16 @@
 <Unit id="PreserverA"/>
 <Unit id="PreserverB"/>
 <Unit id="PreserverC"/>
+<Unit id="AP_RoboticsFacility"/>
+<Unit id="AP_ImmortalAiur"/>
+<Unit id="AP_PhotonCannon"/>
+<Unit id="AP_Probe"/>
+<Unit id="AP_HighArchonTemplar"/>
+<Unit id="AP_DarkTemplarShakuras"/>
+<Unit id="AP_Gateway"/>
+<Unit id="AP_Nexus"/>
+<Unit id="AP_Forge"/>
+<Unit id="AP_TemplarArchive"/>
+<Unit id="AP_DarkShrine"/>
+<Unit id="AP_CyberneticsCore"/>
 </Preload>

@@ -6598,7 +6598,7 @@
                 <Flags index="EnableChargeTimeQueuing" value="1"/>
             </Charge>
             <Cooldown Link="AP_WarpGateTrain"/>
-            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="HaveDarkShrine"/>
+            <Button DefaultButtonFace="AP_DarkTemplarShakuras" State="Restricted" Requirements="AP_HaveDarkShrine"/>
         </InfoArray>
         <InfoArray index="Train6" Time="5" Unit="AP_SentryAiur">
             <Charge>

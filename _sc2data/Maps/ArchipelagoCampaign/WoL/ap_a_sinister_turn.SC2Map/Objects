@@ -3925,7 +3925,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="11" Position="50,122,0" Scale="1,1,1" UnitType="PhotonCannon" Player="5"/>
+    <ObjectUnit Id="11" Position="50,122,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="5"/>
     <ObjectUnit Id="623" Position="108,119,0" Scale="1,1,1" UnitType="PhotonCannon" Player="4">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -3962,7 +3962,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="563" Position="28.5,104.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="RoboticsFacility" Player="5"/>
+    <ObjectUnit Id="563" Position="28.5,104.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_RoboticsFacility" Player="5"/>
     <ObjectUnit Id="600" Position="38,66,0" Scale="1,1,1" UnitType="Pylon" Player="6">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -3989,7 +3989,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="4" Position="49.5,132.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Nexus" Player="1"/>
+    <ObjectUnit Id="4" Position="49.5,132.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Nexus" Player="1"/>
     <ObjectUnit Id="544" Position="108.0253,64.7207,0" Rotation="5.3635" Scale="1,1,1" UnitType="Zealot" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -4037,7 +4037,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="179" Position="87,139,0" Scale="1,1,1" UnitType="DarkShrine" Player="5"/>
+    <ObjectUnit Id="179" Position="87,139,0" Scale="1,1,1" UnitType="AP_DarkShrine" Player="5"/>
     <ObjectUnit Id="285" Position="78,67,0" Rotation="3.774" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="216" Position="109,101,0" Scale="1,1,1" UnitType="Pylon" Player="4">
         <AIRebuild Index="2" Value="14"/>
@@ -4077,7 +4077,6 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="162" Position="43.5,128.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="TwilightCouncil" Player="5"/>
     <ObjectUnit Id="98" Position="106.6713,67.502,0" Rotation="0.621" Scale="1,1,1" UnitType="Probe" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -4252,7 +4251,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="55" Variation="7" Position="108,77.5,0" Scale="1,1,1" UnitType="MineralField"/>
-    <ObjectUnit Id="25" Position="56.5,124.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="5"/>
+    <ObjectUnit Id="25" Position="56.5,124.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Gateway" Player="5"/>
     <ObjectUnit Id="662" Position="35,47,0" Scale="1,1,1" UnitType="PhotonCannon" Player="6">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -4260,9 +4259,6 @@
     <ObjectUnit Id="114" Position="107.9204,67.917,0" Rotation="1.1535" Scale="1,1,1" UnitType="Probe" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1395143087" Position="108.723,21.2778,0" Rotation="4.0231" Scale="1,1,1" UnitType="CampaignRead" Player="1">
-        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="598" Position="29.5,58.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="TwilightCouncil" Player="6">
         <AIRebuild Index="2" Value="14"/>
@@ -4300,7 +4296,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="43" Position="118.5,95.5,0" Rotation="0.7851" Scale="1,1,1" UnitType="TemplarArchive" Player="5"/>
+    <ObjectUnit Id="43" Position="118.5,95.5,0" Rotation="0.7851" Scale="1,1,1" UnitType="AP_TemplarArchive" Player="5"/>
     <ObjectUnit Id="128" Position="82,48,0" Scale="1,1,1" UnitType="Pylon" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -4462,7 +4458,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="10" Position="45.5,124.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CyberneticsCore" Player="5"/>
+    <ObjectUnit Id="10" Position="45.5,124.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CyberneticsCore" Player="5"/>
     <ObjectUnit Id="896" Position="1.9792,1.9377,0" Rotation="5.4975" Scale="1,1,1" UnitType="SuperWarpGate" Player="7">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -4530,7 +4526,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="199" Position="62,129,0" Scale="1,1,1" UnitType="PhotonCannon" Player="5"/>
+    <ObjectUnit Id="199" Position="62,129,0" Scale="1,1,1" UnitType="AP_PhotonCannon" Player="5"/>
     <ObjectUnit Id="7" Position="53,61,0" Scale="1,1,1" UnitType="ZhakulDasLibraryUnit"/>
     <ObjectUnit Id="648" Variation="2" Position="117,119.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1347"/>
     <ObjectUnit Id="108" Position="105.3786,75.1323,0" Rotation="1.6762" Scale="1,1,1" UnitType="Probe" Player="3">
@@ -4657,7 +4653,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="17" Position="59.5,134.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Forge" Player="5"/>
+    <ObjectUnit Id="17" Position="59.5,134.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Forge" Player="5"/>
     <ObjectUnit Id="84" Position="108.98,103.73,0" Rotation="5.4787" Scale="1,1,1" UnitType="Immortal" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>

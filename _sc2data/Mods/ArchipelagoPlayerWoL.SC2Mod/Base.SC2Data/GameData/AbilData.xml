@@ -22,5 +22,15 @@
             <Resource index="Vespene" value="-50"/>
             <Button DefaultButtonFace="Stalker"/>
         </InfoArray>
+        <InfoArray index="Train3" Time="5" Unit="AP_ImmortalAiur">
+            <Resource index="Minerals" value="-250"/>
+            <Resource index="Vespene" value="-100"/>
+            <Button DefaultButtonFace="Immortal"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="5" Unit="AP_HighArchonTemplar">
+            <Resource index="Minerals" value="-50"/>
+            <Resource index="Vespene" value="-150"/>
+            <Button DefaultButtonFace="HighTemplar"/>
+        </InfoArray>
     </CAbilWarpTrain>
 </Catalog>

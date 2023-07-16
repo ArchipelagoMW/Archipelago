@@ -26,7 +26,7 @@
             <cliffDoodad name="TOZhakulDasPassageB1" pos="92.000000 122.000000 0.000000 " rot="0"/>
             <cliffDoodad name="TOZhakulDasLibraryPit1" pos="92.000000 132.000000 0.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.023302e+00" quantizeScale="2.946804e-04" standardHeight="7.997973e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.023452e+00" quantizeScale="2.946804e-04" standardHeight="7.997973e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="ZhakulDas"/>
