@@ -735,9 +735,17 @@ class Settings(Group):
     def save(self, location: Optional[str] = None) -> None:  # as above
         location = location or self._filename
         assert location, "No file specified"
+        temp_location = location + ".tmp"  # not using tempfile to test expected file access
+        # remove old temps
+        if os.path.exists(temp_location):
+            os.unlink(temp_location)
         # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
-        with open(location, "w", encoding="utf-8") as f:
+        with open(temp_location, "w", encoding="utf-8") as f:
             self.dump(f)
+        # replace old with new
+        if os.path.exists(location):
+            os.unlink(location)
+        os.rename(temp_location, location)
         self._filename = location
 
     def dump(self, f: TextIO, level: int = 0) -> None:
