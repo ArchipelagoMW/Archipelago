@@ -13,8 +13,6 @@ class GSTLAItem(Item):
    game: str = "Golden Sun The Lost Age"
 
 key_item_list: typing.List[ItemData] = [
-   # ItemData(1, ItemName.Unknown, ItemClassification.filler, 729956, 17),
-
    # Golden Sun 1 Items
    # ItemData(6, ItemName.Hermes_Water, ItemClassification.filler, 738052, 0),
    # ItemData(7, ItemName.Empty_Bottle, ItemClassification.filler, 738096, 0),
@@ -48,6 +46,7 @@ key_item_list: typing.List[ItemData] = [
 ]
 
 consumables_list: typing.List[ItemData] = [
+   ItemData(1, ItemName.Empty, ItemClassification.filler, 729956, 17),
    ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, 3),
    ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, 8),
    ItemData(4, ItemName.Vial, ItemClassification.filler, 737964, 8),
@@ -444,5 +443,34 @@ class_item_list: typing.List[ItemData] = [
 ]
 
 
-all_items: typing.List[ItemData] = key_item_list + consumables_list + trading_items + forgeables + weapon_list + armor_list + shield_list + helm_list + psynergy_list + psyenergy_as_item_list + elemental_star_list + shirt_list + boots_list + ring_list + class_item_list
+testitems: typing.List[ItemData] = [
+   ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, 6),
+   ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, 1),
+   ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, 1),
+   ItemData(8, ItemName.Psy_Crystal, ItemClassification.filler, 738140, 1),
+   ItemData(61, ItemName.Sea_Gods_Tear, ItemClassification.filler, 750108, 1),
+   ItemData(371, ItemName.Mysterious_Card, ItemClassification.filler, 749448, 1),
+   ItemData(313, ItemName.Lash_Pebble, ItemClassification.progression, 738668, 1),
+   ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, 1),
+   ItemData(10, ItemName.Elixir, ItemClassification.filler, 738228, 2),
+   ItemData(17, ItemName.Mint, ItemClassification.filler, 738536, 1),
+   ItemData(142, ItemName.Themis_Axe, ItemClassification.filler, 743200, 1),
+   ItemData(218, ItemName.Full_Metal_Vest, ItemClassification.filler, 744916, 1),
+   ItemData(314, ItemName.Pound_Cube, ItemClassification.filler, 738712, 1),
+   ItemData(9, ItemName.Antidote, ItemClassification.filler, 738184, 1),
+   ItemData(325, ItemName.Cyclone_Chip, ItemClassification.progression, 739196, 1),
+   ItemData(300, ItemName.Nurses_Cap, ItemClassification.filler, 746808, 1),
+
+   ItemData(62, ItemName.Ruin_Key, ItemClassification.filler, 750152, 1),
+   ItemData(323, ItemName.Tremor_Bit, ItemClassification.filler, 739108, 1),
+   ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, 1),
+   ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, 1),
+   ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, 1),
+]
+
+
+all_items: typing.List[ItemData] = testitems
+
+
+all_all_items: typing.List[ItemData] = key_item_list + consumables_list + trading_items + forgeables + weapon_list + armor_list + shield_list + helm_list + psynergy_list + psyenergy_as_item_list + elemental_star_list + shirt_list + boots_list + ring_list + class_item_list
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}

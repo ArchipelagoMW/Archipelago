@@ -1,6 +1,6 @@
 class ItemName():
    ##KeyItem
-   Unknown = "???"
+   Empty = "???"
    Herb = "Herb"
    Nut = "Nut"
    Vial = "Vial"
@@ -394,3 +394,5 @@ class ItemName():
    Mind_Read = "Mind Read"
    Reveal = "Reveal"
    Blaze = "Blaze"
+
+   Victory = "Victory"

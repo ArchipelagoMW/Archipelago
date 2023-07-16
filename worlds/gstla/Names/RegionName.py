@@ -1,0 +1,10 @@
+class RegionName():
+    Menu = "Menu"
+    EasternSea = "Eastern Sea"
+    WesternSea = "Western Sea"
+    Idejima = "Idejima"
+    Daila = "Daila"
+    KandoreamTemple = "Kandoream Temple"
+    DehkanPlateau = "Dehkan Plateau"
+    Madra = "Madra"
+    MadraCatacombs = "Madra Catacombs"

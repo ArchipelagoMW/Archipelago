@@ -335,3 +335,4 @@ class LocationName():
     Mars_Lighthouse_Mimic = "Mars_Lighthouse - Mimic"
     Mars_Lighthouse_Psy_Crystal = "Mars_Lighthouse - Psy_Crystal"
     Shaman_Village_Elixir = "Shaman_Village - Elixir"
+    DoomDragonDefeated = "Doom Dragon Defeated"
