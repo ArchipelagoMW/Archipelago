@@ -210,6 +210,9 @@ class WitnessPlayerLogic:
         if adj_type == "Disabled Locations":
             panel_hex = line[:7]
 
+            if StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["panelType"] == "EP":
+                self.PRECOMPLETED_LOCATIONS.add(panel_hex)
+
             self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
 
             return
@@ -238,10 +241,10 @@ class WitnessPlayerLogic:
         doors = get_option_value(world, player, "shuffle_doors") >= 2
         earlyutm = is_option_enabled(world, player, "early_secret_area")
         victory = get_option_value(world, player, "victory_condition")
-        mount_lasers = get_option_value(world, player, "mountain_lasers")
+        mnt_lasers = get_option_value(world, player, "mountain_lasers")
         chal_lasers = get_option_value(world, player, "challenge_lasers")
 
-        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mount_lasers)
+        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mnt_lasers)
 
         if not is_option_enabled(world, player, "shuffle_postgame"):
             if not (earlyutm or doors):
@@ -251,7 +254,7 @@ class WitnessPlayerLogic:
                     adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
                     adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
 
-            if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mount_lasers > chal_lasers))):
+            if not ((doors or earlyutm) and (victory == 0 or (victory == 2 and mnt_lasers > chal_lasers))):
                 adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
                 if not victory == 1:
                     adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
@@ -262,8 +265,22 @@ class WitnessPlayerLogic:
             if not mountain_enterable_from_top:
                 adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
 
-            if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mount_lasers > chal_lasers and doors)):
-                adjustment_linesets_in_order.append(get_11_lasers_exclusion_list())
+            if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mnt_lasers > chal_lasers and doors)):
+                adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+
+        # Exclude Discards / Vaults
+
+        if not is_option_enabled(world, player, "shuffle_discards"):
+            if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
+                adjustment_linesets_in_order.append(get_discard_exclusion_list())
+
+            if doors:
+                adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+
+        if not is_option_enabled(world, player, "shuffle_vault_boxes"):
+            adjustment_linesets_in_order.append(get_vault_exclusion_list())
+            if not victory == 1:
+                adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
 
@@ -292,9 +309,6 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(get_ep_easy())
         elif get_option_value(world, player, "EP_difficulty") == 1:
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
-
-        if not is_option_enabled(world, player, "shuffle_vault_boxes"):
-            adjustment_linesets_in_order.append(get_ep_no_videos())
 
         if get_option_value(world, player, "shuffle_doors") == 1:
             adjustment_linesets_in_order.append(get_complex_door_panels())

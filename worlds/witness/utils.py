@@ -104,7 +104,7 @@ def get_adjustment_file(adjustment_file):
 
 
 def get_disable_unrandomized_list():
-    return get_adjustment_file("settings/Disable_Unrandomized.txt")
+    return get_adjustment_file("settings/Exclusions/Disable_Unrandomized.txt")
 
 
 def get_early_utm_list():
@@ -155,8 +155,12 @@ def get_ep_no_eclipse():
     return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
 
 
-def get_ep_no_videos():
-    return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
+def get_vault_exclusion_list():
+    return get_adjustment_file("settings/Exclusions/Vaults.txt")
+
+
+def get_discard_exclusion_list():
+    return get_adjustment_file("settings/Exclusions/Discards.txt")
 
 
 def get_caves_exclusion_list():
@@ -167,7 +171,7 @@ def get_beyond_challenge_exclusion_list():
     return get_adjustment_file("settings/Postgame/Beyond_Challenge.txt")
 
 
-def get_11_lasers_exclusion_list():
+def get_bottom_floor_discard_exclusion_list():
     return get_adjustment_file("settings/Postgame/Bottom_Floor_Discard.txt")
 
 
