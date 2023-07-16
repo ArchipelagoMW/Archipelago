@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Shakuras">
+        <FogColor value="255,145,90,30"/>
+        <FogStartingHeight value="-3.000000"/>
+        <FogDensity value="1.000000"/>
+        <FogFalloff value="0.300000"/>
+    </CTerrain>
+</Catalog>
