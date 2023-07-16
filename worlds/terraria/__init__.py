@@ -53,13 +53,10 @@ class TerrariaWorld(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 2
+    data_version = 3
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
-
-    # Turn into an option when calamity is supported in the mod
-    calamity = False
 
     def generate_early(self) -> None:
         goal, goal_locations = goals[self.multiworld.goal[self.player].value]
@@ -70,6 +67,8 @@ class TerrariaWorld(World):
             item = flags.get("Item") or f"Post-{location}"
             ter_goals[item] = location
             goal_items.add(item)
+
+        self.calamity = self.multiworld.calamity[self.player].value
 
         achievements = self.multiworld.achievements[self.player].value
         location_count = 0

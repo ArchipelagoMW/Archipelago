@@ -2,24 +2,31 @@ from Options import Choice, Option, Toggle
 import typing
 
 
+class Calamity(Toggle):
+    """Calamity mod bosses and events are shuffled"""
+
+    display_name = "Calamity Mod Integration"
+    default = False
+
+
 class Goal(Choice):
     """The victory condition for your run. Stuff after the goal will not be shuffled."""
 
     display_name = "Goal"
     option_mechanical_bosses = 0
-    # option_calamitas_clone = 1
+    option_calamitas_clone = 1
     option_plantera = 2
     option_golem = 3
     option_empress_of_light = 4
     option_lunatic_cultist = 5
-    # option_astrum_deus = 6
+    option_astrum_deus = 6
     option_moon_lord = 7
-    # option_providence_the_profaned_goddess = 8
-    # option_devourer_of_gods = 9
-    # option_yharon_dragon_of_rebirth = 10
+    option_providence_the_profaned_goddess = 8
+    option_devourer_of_gods = 9
+    option_yharon_dragon_of_rebirth = 10
     option_zenith = 11
-    # option_calamity_final_bosses = 12
-    # option_adult_eidolon_wyrm = 13
+    option_calamity_final_bosses = 12
+    option_adult_eidolon_wyrm = 13
     default = 0
 
 
@@ -57,6 +64,7 @@ class Deathlink(Toggle):
 
 
 options: typing.Dict[str, type(Option)] = {  # type: ignore
+    "calamity": Calamity,
     "goal": Goal,
     "achievements": Achievements,
     "fill_extra_checks_with": FillExtraChecksWith,

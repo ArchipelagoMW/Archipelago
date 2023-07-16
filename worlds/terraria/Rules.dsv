@@ -82,7 +82,7 @@ Obsidian Skull;                     ;                                           
 There are Some Who Call Him...;     Achievement | Grindy;
 Lava Charm;
 Demonite Ore;
-Demonite Bar;                       ;                                           Demonite Ore | (@calamity & #Calamity Evil Boss);
+Demonite Bar;                       ;                                           Demonite Ore;
 Evil Sword;                         ;                                           Demonite Bar;
 
 // Underground Ice
@@ -195,8 +195,9 @@ Witch Doctor;                       Npc;                                        
 Pygmy Necklace;                     Minions(1);                                 Witch Doctor;
 
 // Calamity Evil Boss
-Calamity Evil Boss;                 Calamity | Location | Item;
-Aerialite Ore;                      Calamity;                                   Calamity Evil Boss & @pickaxe(65);
+The Hive Mind;                      Calamity | Location | Item;
+The Perforators;                    Calamity | Location | Item;
+Aerialite Ore;                      Calamity;                                   (The Hive Mind | The Perforators) & @pickaxe(65);
 Aerialite Bar;                      Calamity;                                   Aerialite Ore;
 Aerial Hamaxe;                      Calamity | Hammer(70);                      Aerialite Bar;
 Skyfringe Pickaxe;                  Calamity | Pickaxe(75);                     Aerialite Bar;
@@ -257,11 +258,11 @@ Stardust;                           Calamity;                                   
 Trapper Bulb;                       Calamity;                                   Wall of Flesh;
 Titan Heart;                        Calamity;                                   Astral Infection;
 Essence of Sunlight;                Calamity;                                   Wall of Flesh | Golem;
-Essence of Eleum;                   Calamity;                                   Wall of Flesh | Cryogen | #Cryogen; // TODO Check
+Essence of Eleum;                   Calamity;                                   Wall of Flesh | Cryogen | #Cryogen;
 Essence of Havoc;                   Calamity;                                   Wall of Flesh | #Calamitas Clone | #Brimstone Elemental;
+Dreadnautilus;                      Calamity | Location | Item;                 Wall of Flesh;
 Don't Dread on Me;                  Achievement;                                Wall of Flesh;
-Earth Elemental;                    Calamity | Location | Item;                 Wall of Flesh;
-Cloud Elemental;                    Calamity | Location | Item;                 Wall of Flesh;
+Hardmode Giant Clam;                Calamity | Location | Item;                 #Giant Clam & Wall of Flesh;
 Truffle;                            Npc;                                        Wall of Flesh;
 It Can Talk?!;                      Achievement;                                Truffle;
 The First Shadowflame;              Calamity | Minions(1);                      Goblin Army | Wall of Flesh;
@@ -284,15 +285,15 @@ Adamantite Bar;                     ;                                           
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
 Forbidden Armor;                    ArmorMinions(2);                            Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
 Aquatic Scourge;                    Calamity | Location | Item;
+Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
+Nuclear Rod;                        Calamity | Minions(1);                      #Cragmaw Mire;
+Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
 The Twins;                          Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Light;
 Brimstone Elemental;                Calamity | Location | Item;                 Soul of Night & Essence of Havoc & Unholy Core;
 The Destroyer;                      Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night;
 Cryogen;                            Calamity | Location | Item;                 Soul of Night & Soul of Light & Essence of Eleum;
 Skeletron Prime;                    Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
 # mechanical_bosses
-Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
-Nuclear Rod;                        Calamity | Minions(1);                      #Cragmaw Mire;
-Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Aquatic Scourge;
 
 // The Twins
 Soul of Sight;                      ;                                           The Twins;
@@ -379,7 +380,6 @@ Rainbows and Unicorns;              Achievement;                                
 Perennial Ore;                      Calamity;                                   Plantera;
 Perennial Bar;                      Calamity;                                   Hardmode Forge & Perennial Ore;
 Beastial Pickaxe;                   Calamity | Pickaxe(200);                    Hardmode Anvil & Perennial Bar;
-Armored Digger;                     Calamity | Location | Item;                 Plantera; // TODO Check
 
 // Solar Eclipse
 Temple Raider;                      Achievement;                                #Plantera;
@@ -418,7 +418,6 @@ Influx Waver;                       ;                                           
 
 // The Plaguebringer Goliath
 Plague Cell Canister;               Calamity;                                   Golem;
-Plaguebringer;                      Calamity | Location | Item;                 Golem;
 The Plaguebringer Goliath;          Calamity | Location | Item;                 Hardmode Anvil & Plague Cell Canister;
 
 // Duke Fishron
@@ -491,7 +490,7 @@ Star Wrath;                         ;                                           
 Exodium Cluster;                    Calamity;                                   Moon Lord & @pickaxe(225);
 Normality Relocator;                Calamity;                                   Ancient Manipulator & Rod of Discord & Exodium Cluster & Fragment;
 Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess;
-Phantoplasm;                        Calamity;                                   Moon Lord & (Wall of Flesh | Dungeon); // TODO Check
+Phantoplasm;                        Calamity;                                   (Moon Lord & (Wall of Flesh | Dungeon)) | #Polterghast; // TODO Check
 Eldritch Soul Artifact;             Calamity;                                   Exodium Cluster & Navyplate & Phantoplasm;
 
 // Profaned Guardians
@@ -524,15 +523,12 @@ Twisting Nether;                    Calamity;                                   
 
 // Polterghast
 Polterghast;                        Calamity | Location | Item;                 Dungeon & ((Ancient Manipulator & Phantoplasm) | Moon Lord);
-Colossal Squid;                     Calamity | Location | Item;
-Reaper Shark;                       Calamity | Location | Item;
-Eidolon Wyrm;                       Calamity | Location | Item;
 
 // The Old Duke
-Mauler;                             Calamity | Location | Item;                 #Acid Rain Tier 3;
-Nuclear Terror;                     Calamity | Location | Item;                 #Acid Rain Tier 3;
-Acid Rain Tier 3;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & Polterghast; // TODO Check
-The Old Duke;                       Calamity | Location | Item;                 #Acid Rain Tier 3 | (Bug Net & Moon Lord) | (Amidias & The Old Duke);
+Mauler;                             Calamity | Location | Item;                 Acid Rain Tier 3;
+Nuclear Terror;                     Calamity | Location | Item;                 Acid Rain Tier 3;
+Acid Rain Tier 3;                   Calamity;                                   #Acid Rain Tier 1 & Polterghast; // TODO Check
+The Old Duke;                       Calamity | Location | Item;                 Acid Rain Tier 3 | (Bug Net & Moon Lord) | (Amidias & The Old Duke);
 
 // The Devourer of Gods
 The Devourer of Gods;               Calamity | Location | Item | Goal;          Ancient Manipulator & ((Armored Shell & Twisting Nether & Dark Plasma) | (Luminite Bar & Galactica Singularity & Phantoplasm));
@@ -568,6 +564,9 @@ Shadowspec Bar;                     Calamity;                                   
 Crystyl Crusher;                    Calamity | Pickaxe(1000);                   Draedon's Forge & Luminite Pickaxe & Blossom Pickaxe & Shadowspec Bar;
 Angelic Alliance;                   Calamity | Minions(2);                      Draedon's Forge & Hallowed Armor & Paladin's Shield & True Excalibur & Cross Necklace & Shadowspec Bar;
 
-// Adult Eidolon Wyrm;
+// Adult Eidolon Wyrm
 Adult Eidolon Wyrm;                 Calamity | Location | Item | Goal;          Rod of Discord | Normality Relocator;
 # adult_eidolon_wyrm
+
+// Boss Rush
+Boss Rush;                          Calamity | Location; // >:D
