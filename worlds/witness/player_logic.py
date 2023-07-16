@@ -345,7 +345,7 @@ class WitnessPlayerLogic:
 
             loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["panelType"] == "EP" and get_option_value(world, player, "shuffle_EPs") == 2:
+            if loc_obj["panelType"] == "EP" and get_option_value(world, player, "shuffle_EPs") != 0:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
             if loc_obj["panelType"] in {"EP", "General"}:

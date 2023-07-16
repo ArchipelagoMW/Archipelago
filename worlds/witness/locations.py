@@ -511,16 +511,11 @@ class WitnessPlayerLocations:
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
-        self.CHECK_LOCATIONS -= {
-            StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"]
-            for panel in player_logic.PRECOMPLETED_LOCATIONS
-        }
-
         self.CHECK_LOCATIONS.discard(StaticWitnessLogic.CHECKS_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
-            for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS
+            for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS | player_logic.PRECOMPLETED_LOCATIONS
         }
 
         self.CHECK_PANELHEX_TO_ID = {
