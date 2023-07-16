@@ -1798,4 +1798,8 @@
         <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1"/>
         <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0"/>
     </CRequirement>
+    <CRequirement id="AP_HaveNexusAndHaveSOAWarpTech">
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -17,6 +17,10 @@
     </CAbilMorph>
     <CAbilWarpTrain id="AP_SuperWarpGateTrain">
         <SharedFlags index="SkipPreload" value="1"/>
+        <InfoArray index="Train1" Time="5" Unit="AP_ZealotAiur">
+            <Resource index="Minerals" value="-100"/>
+            <Button DefaultButtonFace="Zealot"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="5" Unit="AP_StalkerShakuras">
             <Resource index="Minerals" value="-125"/>
             <Resource index="Vespene" value="-50"/>
@@ -31,6 +35,21 @@
             <Resource index="Minerals" value="-50"/>
             <Resource index="Vespene" value="-150"/>
             <Button DefaultButtonFace="HighTemplar"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="5" Unit="AP_CarrierAiur">
+            <Resource index="Minerals" value="-350"/>
+            <Resource index="Vespene" value="-250"/>
+            <Button DefaultButtonFace="Carrier"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="5" Unit="AP_PhoenixAiur">
+            <Resource index="Minerals" value="-150"/>
+            <Resource index="Vespene" value="-100"/>
+            <Button DefaultButtonFace="Phoenix"/>
+        </InfoArray>
+        <InfoArray index="Train9" Time="5" Unit="AP_VoidRayShakuras">
+            <Resource index="Minerals" value="-250"/>
+            <Resource index="Vespene" value="-150"/>
+            <Button DefaultButtonFace="VoidRay"/>
         </InfoArray>
     </CAbilWarpTrain>
 </Catalog>

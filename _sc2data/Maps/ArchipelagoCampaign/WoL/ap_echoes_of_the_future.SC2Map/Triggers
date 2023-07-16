@@ -171,12 +171,32 @@
     </Element>
     <Element Type="Trigger" Id="CCCDFE7C">
         <Event Type="FunctionCall" Id="4DBF9BC8"/>
+        <Action Type="FunctionCall" Id="167604A4"/>
         <Action Type="FunctionCall" Id="F5D7659E"/>
         <Action Type="FunctionCall" Id="15227F43"/>
         <Action Type="FunctionCall" Id="D737C20D"/>
     </Element>
     <Element Type="FunctionCall" Id="4DBF9BC8">
         <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000120"/>
+    </Element>
+    <Element Type="FunctionCall" Id="167604A4">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000116"/>
+        <Parameter Type="Param" Id="EFE92640"/>
+        <Parameter Type="Param" Id="58834E69"/>
+        <Parameter Type="Param" Id="C0470C80"/>
+    </Element>
+    <Element Type="Param" Id="EFE92640">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="00000183"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="00000065"/>
+    </Element>
+    <Element Type="Param" Id="58834E69">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="00000184"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="00000068"/>
+    </Element>
+    <Element Type="Param" Id="C0470C80">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="00000182"/>
+        <ValueType Type="trigger"/>
+        <ValueElement Type="Trigger" Library="88187CC2" Id="47A04D43"/>
     </Element>
     <Element Type="FunctionCall" Id="F5D7659E">
         <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000116"/>

@@ -8,237 +8,9 @@
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
 include "TriggerLibs/CampaignLib"
-include "LibC6542F50"
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// Structures
-struct lib1_gs_chatbox {
-    int lv_mainpanel;
-    int lv_chatpanel;
-    int lv_chatlabel;
-    int lv_scrollupbtn;
-    int lv_scrolldownbtn;
-    int lv_scrollbottonbtn;
-    int lv_maxmessages;
-    int lv_scrollstrength;
-    text[50] lv_chatmessage;
-};
-
-// Variable Declarations
-lib1_gs_chatbox lib1_gv_chatbox;
-
-// Function Declarations
-text lib1_gf_getchatboxcontent ();
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible);
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message);
-
-// Trigger Declarations
-trigger lib1_gt_updatechatbox;
-trigger lib1_gt_chatboxscrolling;
-
-// Library Initialization
-void lib1_InitVariables ();
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// External Library Initialization
-void lib1_InitLibraries () {
-    libNtve_InitVariables();
-}
-
-// Variable Initialization
-bool lib1_InitVariables_completed = false;
-
-void lib1_InitVariables () {
-    if (lib1_InitVariables_completed) {
-        return;
-    }
-
-    lib1_InitVariables_completed = true;
-
-    lib1_gv_chatbox.lv_mainpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatlabel = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollupbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrolldownbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollbottonbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_maxmessages = 50;
-    lib1_gv_chatbox.lv_scrollstrength = 20;
-}
-
-// Functions
-text lib1_gf_getchatboxcontent () {
-    // Variable Declarations
-    int lv_index;
-    text lv_tmptext;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Implementation
-    while ((lv_index < lib1_gv_chatbox.lv_maxmessages)) {
-        lv_tmptext = (lib1_gv_chatbox.lv_chatmessage[lv_index] + StringExternal("Param/Value/lib_1_1BF9F758") + lv_tmptext);
-        lv_index += 1;
-    }
-    return lv_tmptext;
-}
-
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety) {
-    // Variable Declarations
-    int lv_btnsize;
-    int lv_btnxoffset;
-    int lv_chatlblsizex;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_btnsize = 35;
-    lv_btnxoffset = 35;
-    lv_chatlblsizex = (lp_sizex - 110);
-
-    // Implementation
-    DialogCreate(lp_sizex, lp_sizey, lp_anchor, lp_offsetx, lp_offsety, true);
-    DialogSetTitle(DialogLastCreated(), StringExternal("Param/Value/lib_1_71F92085"));
-    lib1_gv_chatbox.lv_mainpanel = DialogLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 30, StringExternal("Param/Value/lib_1_FB15887C"), StringExternal("Param/Value/lib_1_A52FB36E"), "");
-    lib1_gv_chatbox.lv_scrollbottonbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 65, StringExternal("Param/Value/lib_1_A91983FA"), StringExternal("Param/Value/lib_1_21E8CC9A"), "");
-    lib1_gv_chatbox.lv_scrolldownbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 90, StringExternal("Param/Value/lib_1_8717A4C6"), StringExternal("Param/Value/lib_1_CCCD5CB5"), "");
-    lib1_gv_chatbox.lv_scrollupbtn = DialogControlLastCreated();
-    DialogCreate(lv_chatlblsizex, (lp_sizey - 100), lp_anchor, lp_offsetx, lp_offsety, true);
-    lib1_gv_chatbox.lv_chatpanel = DialogLastCreated();
-    DialogSetImageVisible(DialogLastCreated(), false);
-    DialogSetPositionRelative(DialogLastCreated(), c_anchorBottomLeft, lib1_gv_chatbox.lv_mainpanel, c_anchorBottomLeft, lv_btnxoffset, -30);
-    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 10000, c_anchorBottom, 0, 0, StringToText(""), Color(100,100,100), false, 2.0);
-    lib1_gv_chatbox.lv_chatlabel = DialogControlLastCreated();
-    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomLeft", PlayerGroupAll());
-}
-
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible) {
-    // Variable Declarations
-    playergroup lv_pg;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_pg = PlayerGroupSingle(lp_player);
-
-    // Implementation
-    DialogSetVisible(lib1_gv_chatbox.lv_mainpanel, lv_pg, true);
-    DialogSetVisible(lib1_gv_chatbox.lv_chatpanel, lv_pg, true);
-}
-
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message) {
-    // Variable Declarations
-    int lv_index;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_index = (lib1_gv_chatbox.lv_maxmessages - 1);
-
-    // Implementation
-    while ((lv_index > 0)) {
-        lib1_gv_chatbox.lv_chatmessage[lv_index] = lib1_gv_chatbox.lv_chatmessage[(lv_index - 1)];
-        lv_index -= 1;
-    }
-    lib1_gv_chatbox.lv_chatmessage[0] = StringToText(lp_message);
-    libNtve_gf_SetDialogItemText(lib1_gv_chatbox.lv_chatlabel, lib1_gf_getchatboxcontent(), PlayerGroupAll());
-}
-
-// Triggers
-//--------------------------------------------------------------------------------------------------
-// Trigger: update chatbox
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_updatechatbox_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lib1_gf_sendchatmessage(EventPlayer(), StringSub(EventChatMessage(false), 13, StringLength(EventChatMessage(false))));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_updatechatbox_Init () {
-    lib1_gt_updatechatbox = TriggerCreate("lib1_gt_updatechatbox_Func");
-    TriggerAddEventChatMessage(lib1_gt_updatechatbox, c_playerAny, "SendMessage", false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: chatbox scrolling
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_chatboxscrolling_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_currentoffsety;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Conditions
-    if (testConds) {
-        if (!((DialogControlGetDialog(EventDialogControl()) == lib1_gv_chatbox.lv_mainpanel))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollbottonbtn)) {
-        DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, 0);
-    }
-    else {
-        lv_currentoffsety = DialogControlGetOffsetY(EventDialogControl(), EventPlayer());
-        if ((EventDialogControl() == lib1_gv_chatbox.lv_scrolldownbtn)) {
-            if ((lv_currentoffsety < 0)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety + lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-        else {
-            if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollupbtn)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety - lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_chatboxscrolling_Init () {
-    lib1_gt_chatboxscrolling = TriggerCreate("lib1_gt_chatboxscrolling_Func");
-    TriggerAddEventDialogControl(lib1_gt_chatboxscrolling, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
-}
-
-void lib1_InitTriggers () {
-    lib1_gt_updatechatbox_Init();
-    lib1_gt_chatboxscrolling_Init();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Library Initialization
-//--------------------------------------------------------------------------------------------------
-bool lib1_InitLib_completed = false;
-
-void lib1_InitLib () {
-    if (lib1_InitLib_completed) {
-        return;
-    }
-
-    lib1_InitLib_completed = true;
-
-    lib1_InitLibraries();
-    lib1_InitVariables();
-    lib1_InitTriggers();
-}
+include "Lib88187CC2"
+include "Lib5BD4895D"
+include "LibABFE498B"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -247,8 +19,9 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
-    libC6542F50_InitLib();
-    lib1_InitLib();
+    lib88187CC2_InitLib();
+    lib5BD4895D_InitLib();
+    libABFE498B_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,9 +125,7 @@ void gf_SpawnNydusWormZerglings (region lp_region);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
-trigger gt_ArchipelagoInitialization;
 trigger gt_ArchInit;
-trigger gt_PostLoadTechSet;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -523,7 +294,7 @@ bool gf_AreaIsBeingHarvested (region lp_region) {
         return false;
     }
     else {
-        if ((UnitGroupCount(UnitGroup("Nexus", gv_p01_PLAYER, lp_region, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
+        if ((UnitGroupCount(UnitGroup("AP_Nexus", gv_p01_PLAYER, lp_region, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
             return true;
         }
         else {
@@ -548,63 +319,6 @@ void gf_SpawnNydusWormZerglings (region lp_region) {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Archipelago Initialization
-//--------------------------------------------------------------------------------------------------
-bool gt_ArchipelagoInitialization_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_difficulty;
-
-    // Automatic Variable Declarations
-    playergroup auto2ABC0105_g;
-    int auto2ABC0105_var;
-
-    // Variable Initialization
-    lv_difficulty = 2;
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lv_difficulty = libC6542F50_gf_APSetDifficulty(StringWord(EventChatMessage(false), 2), UnitGroupFromId(1), UnitGroupFromId(1), UnitGroupFromId(1), UnitGroupFromId(1));
-    libC6542F50_gv_aPOptions = StringToInt(StringWord(EventChatMessage(false), 13));
-    auto2ABC0105_g = PlayerGroupAll();
-    auto2ABC0105_var = -1;
-    while (true) {
-        auto2ABC0105_var = PlayerGroupNextPlayer(auto2ABC0105_g, auto2ABC0105_var);
-        if (auto2ABC0105_var < 0) { break; }
-        PlayerSetDifficulty(auto2ABC0105_var, lv_difficulty);
-    }
-    TriggerExecute(libC6542F50_gt_APPreInitMap, true, true);
-    TechTreeRestrictionsEnable(1, true);
-    TriggerExecute(gt_Initialization, true, true);
-    lib1_gf_initchatbox(c_anchorTopRight, 500, 350, 0, 200);
-    lib1_gf_showhidechatbox(1, true);
-    TriggerExecute(libC6542F50_gt_APClearTech, true, false);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupBaseSCV, 1);
-    libC6542F50_gf_APUnlockUnits(StringWord(EventChatMessage(false), 3), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockUpgrades(StringWord(EventChatMessage(false), 4), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory1(StringWord(EventChatMessage(false), 5), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory2(StringWord(EventChatMessage(false), 6), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockBuildings(StringWord(EventChatMessage(false), 7), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockMercenaries(StringWord(EventChatMessage(false), 8), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockLaboratory(StringWord(EventChatMessage(false), 9), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockProtoss(StringWord(EventChatMessage(false), 10), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_GiveMineralsAndVespene(StringToInt(StringWord(EventChatMessage(false), 11)), StringToInt(StringWord(EventChatMessage(false), 12)), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gv_aPOptions = StringToInt(StringWord(EventChatMessage(false), 13));
-    TriggerExecute(libC6542F50_gt_APSetInitFinished, true, true);
-    libC6542F50_gf_APArchipelagoSendData(0);
-    TriggerEnable(TriggerGetCurrent(), false);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ArchipelagoInitialization_Init () {
-    gt_ArchipelagoInitialization = TriggerCreate("gt_ArchipelagoInitialization_Func");
-    TriggerAddEventChatMessage(gt_ArchipelagoInitialization, c_playerAny, "ArchipelagoLoad", false);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Arch Init
 //--------------------------------------------------------------------------------------------------
 bool gt_ArchInit_Func (bool testConds, bool runActions) {
@@ -614,7 +328,14 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor, true, false);
     TriggerExecute(gt_Init02Players, true, false);
+    libABFE498B_gf_AP_Triggers_clearProtossTech(gv_p01_PLAYER);
+    UnitBehaviorRemove(UnitFromId(15), "AP_TimeWarpProduction", 1);
+    UnitBehaviorRemove(UnitFromId(36), "AP_TimeWarpProduction", 1);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition(c_anchorTopRight, 500, 350, 0, 160);
+    lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers(PlayerGroupSingle(gv_p01_PLAYER));
     return true;
 }
 
@@ -622,42 +343,6 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
 void gt_ArchInit_Init () {
     gt_ArchInit = TriggerCreate("gt_ArchInit_Func");
     TriggerAddEventMapInit(gt_ArchInit);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Post Load Tech Set
-//--------------------------------------------------------------------------------------------------
-bool gt_PostLoadTechSet_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    TechTreeUpgradeAllow(1, "ProtossGroundWeaponsLevel1", true);
-    TechTreeUpgradeAllow(1, "ProtossGroundWeaponsLevel2", true);
-    TechTreeUpgradeAllow(1, "ProtossGroundWeaponsLevel3", true);
-    TechTreeUpgradeAllow(1, "ProtossGroundArmorsLevel1", true);
-    TechTreeUpgradeAllow(1, "ProtossGroundArmorsLevel2", true);
-    TechTreeUpgradeAllow(1, "ProtossGroundArmorsLevel3", true);
-    TechTreeUpgradeAllow(1, "ProtossShieldsLevel1", true);
-    TechTreeUpgradeAllow(1, "ProtossShieldsLevel2", true);
-    TechTreeUpgradeAllow(1, "ProtossShieldsLevel3", true);
-    TechTreeUpgradeAllow(1, "ProtossAirArmorsLevel1", true);
-    TechTreeUpgradeAllow(1, "ProtossAirArmorsLevel2", true);
-    TechTreeUpgradeAllow(1, "ProtossAirArmorsLevel3", true);
-    TechTreeUpgradeAllow(1, "ProtossAirWeaponsLevel1", true);
-    TechTreeUpgradeAllow(1, "ProtossAirWeaponsLevel2", true);
-    TechTreeUpgradeAllow(1, "ProtossAirWeaponsLevel3", true);
-    TechTreeAbilityAllow(1, AbilityCommand("ForgeResearch", 3), true);
-    TechTreeUnitAllow(1, "FleetBeacon", true);
-    TechTreeUnitAllow(1, "TemplarArchive", true);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_PostLoadTechSet_Init () {
-    gt_PostLoadTechSet = TriggerCreate("gt_PostLoadTechSet_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -670,15 +355,12 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTZeratul04);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init03Units, true, true);
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
     TriggerExecute(gt_IntroQ, true, false);
     return true;
 }
@@ -698,45 +380,12 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "Charge", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "BlinkTech", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "PsiStormTech", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "HighTemplarKhaydarinAmulet", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "ObserverGraviticBooster", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "ExtendedThermalLance", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "VoidRaySpeedUpgrade", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "CarrierLaunchSpeedUpgrade", 1);
-    TechTreeUpgradeAddLevel(gv_p01_PLAYER, "WarpGateResearch", 1);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("UpgradeToWarpGate", 0), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 0), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 1), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 2), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 3), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 4), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 5), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 6), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 7), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("ForgeResearch", 8), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 0), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 1), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 2), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 3), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 4), true);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("CyberneticsCoreResearch", 5), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 0), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 1), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 2), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 7), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 8), true);
-    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("SuperWarpGateTrain", 6), true);
-    TechTreeUpgradeAddLevel(1, "CarrierLaunchSpeedUpgrade", 1);
-    TechTreeUpgradeAddLevel(1, "ExtendedThermalLance", 1);
-    TechTreeUpgradeAddLevel(1, "VoidRaySpeedUpgrade", 1);
-    TechTreeUpgradeAddLevel(1, "Charge", 1);
-    TechTreeUpgradeAddLevel(1, "HighTemplarKhaydarinAmulet", 1);
-    TechTreeAbilityAllow(1, AbilityCommand("ArchonWarp", 0), true);
-    TechTreeAbilityAllow(1, AbilityCommand("ArchonWarp", 1), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 0), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 1), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 2), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 7), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 8), true);
+    TechTreeAbilityAllow(gv_p10_REINFORCEMENTPROTOSS, AbilityCommand("AP_SuperWarpGateTrain", 6), true);
     return true;
 }
 
@@ -863,7 +512,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         if (auto9F375F4C_var == null) { break; }
         UnitSetCustomValue(auto9F375F4C_var, 0, UnitGetPropertyFixed(auto9F375F4C_var, c_unitPropResources, c_unitPropCurrent));
     }
-    autoB773B14B_g = UnitGroup("Assimilator", c_playerAny, RegionFromId(34), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoB773B14B_g = UnitGroup("AP_Assimilator", c_playerAny, RegionFromId(34), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoB773B14B_u = UnitGroupCount(autoB773B14B_g, c_unitCountAll);
     for (;; autoB773B14B_u -= 1) {
         autoB773B14B_var = UnitGroupUnitFromEnd(autoB773B14B_g, autoB773B14B_u);
@@ -1349,17 +998,17 @@ bool gt_NewTech01PhoenixQ_Func (bool testConds, bool runActions) {
     gv_reinforcementAutoMove = true;
     TriggerQueueEnter();
     libCamp_gf_CreateTipFromConversationState("StoryTips|Zeratul04_Stargate", libNtve_ge_TipType_NewStructure, PlayerGroupAll());
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Stargate", c_unitCreateConstruct, gv_p01_PLAYER, RegionGetCenter(RegionFromId(80)));
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Stargate", c_unitCreateConstruct, gv_p01_PLAYER, RegionGetCenter(RegionFromId(80)));
     UnitSetProgressComplete(UnitLastCreated(), 1, 95);
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "Stargate", c_unitCreateConstruct, gv_p01_PLAYER, RegionGetCenter(RegionFromId(81)));
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Stargate", c_unitCreateConstruct, gv_p01_PLAYER, RegionGetCenter(RegionFromId(81)));
     UnitSetProgressComplete(UnitLastCreated(), 1, 95);
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 11), PointFromId(57)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(630)), c_orderQueueAddToEnd);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(631)), c_orderQueueAddToEnd);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(632)), c_orderQueueAddToEnd);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(634)), c_orderQueueAddToEnd);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(109)), c_orderQueueAddToEnd);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(124)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(630)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(631)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(632)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(634)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(109)), c_orderQueueAddToEnd);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(124)), c_orderQueueAddToEnd);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/8403F3B6"), null, UnitGetPosition(UnitFromId(639)));
@@ -1412,15 +1061,15 @@ bool gt_NewTech02VoidRayQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 12), PointFromId(57)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(630)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(631)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(632)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(634)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(677)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(630)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(631)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(632)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(634)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(677)), c_orderQueueReplace);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/5DAFE246"), null, UnitGetPosition(UnitFromId(639)));
@@ -1473,16 +1122,16 @@ bool gt_NewTech03CarriersQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 13), PointFromId(57)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(630)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(631)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(109)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(124)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 2), PointFromId(681)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 2), PointFromId(682)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(630)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(631)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(109)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(124)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 2), PointFromId(681)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 2), PointFromId(682)), c_orderQueueReplace);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/7D557C0A"), null, UnitGetPosition(UnitFromId(639)));
@@ -1537,21 +1186,21 @@ bool gt_NewTech04MothershipQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
     TriggerExecute(gt_MothershipSpawn, true, false);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(630)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 7), PointFromId(631)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(109)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 6), PointFromId(124)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(632)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 8), PointFromId(634)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 0), PointFromId(677)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 1), PointFromId(680)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 1), PointFromId(681)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 1), PointFromId(682)), c_orderQueueReplace);
-    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("SuperWarpGateTrain", 1), PointFromId(679)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(630)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 7), PointFromId(631)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(109)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 6), PointFromId(124)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(632)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 8), PointFromId(634)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(675)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(676)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(672)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(678)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 0), PointFromId(677)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 1), PointFromId(680)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 1), PointFromId(681)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 1), PointFromId(682)), c_orderQueueReplace);
+    UnitIssueOrder(gv_superWarpGate_P10, OrderTargetingPoint(AbilityCommand("AP_SuperWarpGateTrain", 1), PointFromId(679)), c_orderQueueReplace);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/718CB62A"), null, UnitGetPosition(UnitFromId(639)));
@@ -1596,12 +1245,8 @@ bool gt_ReinforcementBehavior_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitGetType(EventUnitProgressUnit()) == "Carrier")) {
-        UnitMagazineArm(EventUnitProgressUnit(), AbilityCommand("CarrierHangar", 0), 4);
-    }
-
-    if ((UnitGetType(EventUnitProgressUnit()) == "Phoenix")) {
-        UnitSetPropertyFixed(EventUnitProgressUnit(), c_unitPropEnergyPercent, 100.0);
+    if ((UnitGetType(EventUnitProgressUnit()) == "AP_CarrierAiur")) {
+        UnitMagazineArm(EventUnitProgressUnit(), AbilityCommand("AP_CarrierAiurHanger", 0), 4);
     }
 
     if ((UnitGetType(EventUnitProgressUnit()) == "Urun")) {
@@ -1630,7 +1275,7 @@ bool gt_ReinforcementBehavior_Func (bool testConds, bool runActions) {
         UnitSetTeamColorIndex(EventUnitProgressUnit(), 6);
     }
 
-    if (((UnitGetType(EventUnitProgressUnit()) == "Zealot") || (UnitGetType(EventUnitProgressUnit()) == "Stalker") || (UnitGetType(EventUnitProgressUnit()) == "Immortal") || (UnitGetType(EventUnitProgressUnit()) == "Phoenix") || (UnitGetType(EventUnitProgressUnit()) == "VoidRay") || (UnitGetType(EventUnitProgressUnit()) == "Carrier"))) {
+    if (((UnitGetType(EventUnitProgressUnit()) == "AP_ZealotAiur") || (UnitGetType(EventUnitProgressUnit()) == "AP_StalkerShakuras") || (UnitGetType(EventUnitProgressUnit()) == "AP_ImmortalAiur") || (UnitGetType(EventUnitProgressUnit()) == "AP_PhoenixAiur") || (UnitGetType(EventUnitProgressUnit()) == "AP_VoidRayShakuras") || (UnitGetType(EventUnitProgressUnit()) == "AP_CarrierAiur"))) {
         UnitSetOwner(EventUnitProgressUnit(), gv_p01_PLAYER, true);
         UnitSetTeamColorIndex(EventUnitProgressUnit(), 7);
         UnitSetState(EventUnitProgressUnit(), c_unitStateUsingSupply, false);
@@ -1681,7 +1326,6 @@ bool gt_MothershipSpawn_Func (bool testConds, bool runActions) {
     UnitSetOwner(gv_heroMothership, gv_p01_PLAYER, false);
     UnitSetTeamColorIndex(gv_heroMothership, 6);
     UnitFlashSelection(gv_heroMothership, 1.0);
-    TechTreeAbilityAllow(gv_p01_PLAYER, AbilityCommand("NexusTrainMothership", 0), true);
     MinimapPing(PlayerGroupAll(), UnitGetPosition(gv_heroMothership), 6.0, Color(0.00, 100.00, 0.00));
     UIAlertUnit("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/507D82B7"), null, UnitLastCreated());
     return true;
@@ -5384,8 +5028,9 @@ bool gt_VictoryDefeatforPlayer_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libC6542F50_gf_APArchipelagoSendData(1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     gv_gameOver = true;
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveSurviveUntilYouDie);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     if ((gv_killCount >= gv_sTAGE_01_KILL_QUOTA)) {
         libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
@@ -5598,7 +5243,7 @@ bool gt_ObjectiveSurvivePrimaryComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libC6542F50_gf_APArchipelagoSendData(3);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(2);
     TriggerExecute(gt_ObjectiveSurviveCreateQ, true, false);
     ObjectiveSetName(gv_objectiveKillPrimary, (TextReplaceWord(StringExternal("Param/Value/93FAEACE"), StringExternal("Param/Value/5FE97FBF"), IntToText(gv_sTAGE_01_KILL_QUOTA), c_stringReplaceAll, c_stringCase) + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectKill1500Zerg, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
@@ -5711,7 +5356,7 @@ bool gt_ObjectiveProtectArchiveComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libC6542F50_gf_APArchipelagoSendData(2);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(1);
     if ((UnitIsAlive(UnitFromId(716)) == true)) {
         gv_statArchiveResearchPoints = libCamp_gf_StoryResearchObjectReward(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchCategory_ResearchCategoryProtoss);
         libNtve_gf_MakeUnitInvulnerable(UnitFromId(716), true);
@@ -5723,6 +5368,7 @@ bool gt_ObjectiveProtectArchiveComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_ObjectiveProtectArchiveFailed, false);
     TriggerExecute(gt_ObjectiveProtectArchiveCreateQ, true, false);
     ObjectiveSetName(gv_objectiveProtectArchive, (StringExternal("Param/Value/BE65AF3D") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 1)));
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveProtectArchive);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -5768,6 +5414,7 @@ bool gt_ObjectiveProtectArchiveFailed_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_ObjectiveProtectArchiveUpdate, false);
     TriggerExecute(gt_ObjectiveProtectArchiveCreateQ, true, false);
     ObjectiveSetName(gv_objectiveProtectArchive, (StringExternal("Param/Value/00B96633") + StringExternal("Param/Value/6A188D0E") + StringExternal("Param/Value/D1FBA455") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectProtecttheArchive, libCamp_ge_StoryResearchObjectiveTextStyle_Lumpsum, 1, 0)));
+    lib5BD4895D_gf_AP_Core_setObjectiveFailed(gv_objectiveProtectArchive);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -6487,7 +6134,7 @@ bool gt_IntroCleanup_Func (bool testConds, bool runActions) {
     GameTimeOfDayPause(true);
     PlayerSetState(gv_p01_PLAYER, c_playerStateXPGain, true);
     AITimePause(false);
-    autoDCDF987B_g = UnitGroup("Assimilator", c_playerAny, RegionFromId(34), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoDCDF987B_g = UnitGroup("AP_Assimilator", c_playerAny, RegionFromId(34), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoDCDF987B_u = UnitGroupCount(autoDCDF987B_g, c_unitCountAll);
     for (;; autoDCDF987B_u -= 1) {
         autoDCDF987B_var = UnitGroupUnitFromEnd(autoDCDF987B_g, autoDCDF987B_u);
@@ -7175,9 +6822,7 @@ void gt_VictoryHybridExplosion_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
-    gt_ArchipelagoInitialization_Init();
     gt_ArchInit_Init();
-    gt_PostLoadTechSet_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
