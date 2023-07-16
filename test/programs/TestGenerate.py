@@ -73,13 +73,21 @@ class TestGenerateMain(unittest.TestCase):
 
     def test_generate_yaml(self):
         # override host.yaml
-        defaults = Generate.Utils.get_options()["generator"]
-        defaults["player_files_path"] = str(self.yaml_input_dir)
-        defaults["players"] = 0
-
-        sys.argv = [sys.argv[0], '--seed', '0',
-                    '--outputpath', self.output_tempdir.name]
-        print(f'Testing Generate.py {sys.argv} in {os.getcwd()}, player_files_path={self.yaml_input_dir}')
-        Generate.main()
+        from settings import get_settings
+        from Utils import user_path, local_path
+        settings = get_settings()
+        # NOTE: until/unless we override settings.Group's setattr, we have to upcast the input dir here
+        settings.generator.player_files_path = settings.generator.PlayerFilesPath(self.yaml_input_dir)
+        settings.generator.players = 0
+        settings._filename = None  # don't write to disk
+        user_path_backup = user_path.cached_path
+        user_path.cached_path = local_path()  # test yaml is actually in local_path
+        try:
+            sys.argv = [sys.argv[0], '--seed', '0',
+                        '--outputpath', self.output_tempdir.name]
+            print(f'Testing Generate.py {sys.argv} in {os.getcwd()}, player_files_path={self.yaml_input_dir}')
+            Generate.main()
+        finally:
+            user_path.cached_path = user_path_backup
 
         self.assertOutput(self.output_tempdir.name)

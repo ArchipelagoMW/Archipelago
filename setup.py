@@ -67,7 +67,6 @@ non_apworlds: set = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Blasphemous",
     "ChecksFinder",
     "Clique",
     "DLCQuest",
@@ -192,7 +191,7 @@ exes = [
     ) for c in components if c.script_name and c.frozen_name
 ]
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
@@ -418,14 +417,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for extra_exe in extra_exes:
                 if extra_exe.is_file():
                     extra_exe.chmod(0o755)
-            # rewrite windows-specific things in host.yaml
-            host_yaml = self.buildfolder / 'host.yaml'
-            with host_yaml.open('r+b') as f:
-                data = f.read()
-                data = data.replace(b'factorio\\\\bin\\\\x64\\\\factorio', b'factorio/bin/x64/factorio')
-                f.seek(0, os.SEEK_SET)
-                f.write(data)
-                f.truncate()
 
 
 class AppImageCommand(setuptools.Command):
