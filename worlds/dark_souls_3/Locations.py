@@ -16,6 +16,7 @@ class DS3LocationCategory(IntEnum):
     MISC = 8
     HEALTH = 9
     PROGRESSIVE_ITEM = 10
+    EVENT = 11
 
 
 class DS3LocationData(NamedTuple):
