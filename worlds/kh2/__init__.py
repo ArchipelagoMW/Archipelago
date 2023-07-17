@@ -430,15 +430,18 @@ class KH2World(World):
         elif self.multiworld.Cups[self.player] == "cups":
             self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
 
+        if not self.multiworld.AtlanticaToggle[self.player]:
+            for loc in exclusion_table["Atlantica"]:
+                self.multiworld.exclude_locations[self.player].value.add(loc)
+
     def level_subtraction(self):
         """
         Determine how many locations are on sora's levels.
         """
-        # there are levels but level 1 is there for the yamls
-        if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
-            # level 99 sanity
-            pass
-        elif self.multiworld.LevelDepth[self.player] == "level_50_sanity":
+        # if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
+        #    # level 99 sanity
+        #    pass
+        if self.multiworld.LevelDepth[self.player] == "level_50_sanity":
             # level 50 sanity
             self.total_locations -= 49
         elif self.multiworld.LevelDepth[self.player] == "level_1":

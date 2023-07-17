@@ -1096,6 +1096,7 @@ exclusion_table = {
         LocationName.ZexionDataLostIllusion,
         LocationName.ZexionBonus,
         LocationName.ZexionASBookofShadows,
+        LocationName.GoofyZexion,
     },
 
     # 23 checks spread through 50 levels
@@ -1289,6 +1290,12 @@ exclusion_table = {
         LocationName.FatalCrestGoddessofFateCup,
         LocationName.OrichalcumPlusGoddessofFateCup,
         LocationName.HadesCupTrophyParadoxCups,
+    },
+    "Atlantica":{
+        LocationName.MysteriousAbyss,
+        LocationName.MusicalOrichalcumPlus,
+        LocationName.MusicalBlizzardElement,
+        LocationName.UnderseaKingdomMap,
     },
     "WeaponSlots":   {
         LocationName.FAKESlot:            ItemName.ValorForm,

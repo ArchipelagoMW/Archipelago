@@ -200,6 +200,11 @@ class DonaldGoofyStatsanity(Toggle):
     default = True
 
 
+class AtlanticaToggle(Toggle):
+    """Atlantica Toggle"""
+    default = False
+
+
 class PromiseCharm(Toggle):
     """Add Promise Charm to the pool"""
     display_name = "Promise Charm"
@@ -293,10 +298,11 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "FightLogic":             FightLogic,
     "FinalFormLogic":         FinalFormLogic,
     "AutoFormLogic":          AutoFormLogic,
-    "DonaldGoofyStatsanity":      DonaldGoofyStatsanity,
+    "DonaldGoofyStatsanity":  DonaldGoofyStatsanity,
     "Visitlocking":           Visitlocking,
     "RandomVisitLockingItem": RandomVisitLockingItem,
     "SuperBosses":            SuperBosses,
     "Cups":                   Cups,
+    "AtlanticaToggle":        AtlanticaToggle,
 
 }
