@@ -453,7 +453,7 @@ class SA2BWorld(World):
         # Default Egg Color Shuffle
         if self.multiworld.shuffle_starting_chao_eggs[self.player]:
             egglist_o = list(range(0, 4))
-            egglist_s = self.multiworld.per_slot_randoms[self.player].sample(range(0,67), 4)
+            egglist_s = self.multiworld.per_slot_randoms[self.player].sample(range(0,54), 4)
 
             self.default_egg_map = dict(zip(egglist_o, egglist_s))
         else:
@@ -464,7 +464,7 @@ class SA2BWorld(World):
             self.default_egg_map = dict(zip(egglist_o, egglist_s))
 
         # Default Chao Names
-        number_of_names = 4
+        number_of_names = 30
         name_list_o = list(range(number_of_names * 7))
         name_list_s = []
 
@@ -476,6 +476,7 @@ class SA2BWorld(World):
             name_list_base = self.multiworld.per_slot_randoms[self.player].sample(name_list_copy, number_of_names)
         else:
             name_list_base = name_list_copy
+            self.multiworld.random.shuffle(name_list_base)
 
             name_list_base += self.multiworld.per_slot_randoms[self.player].sample(sample_chao_names, number_of_names - len(name_list_base))
 
