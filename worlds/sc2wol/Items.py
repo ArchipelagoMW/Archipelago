@@ -90,8 +90,8 @@ item_table = {
     "Laser Targeting System (Marine)": ItemData(220 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 8, classification=ItemClassification.filler, parent_item="Marine", origin="nco"), # Freed slot from Stimpack
     "Magrail Munitions (Marine)": ItemData(221 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 20, parent_item="Marine", origin="nco"),
     "Optimized Logistics (Marine)": ItemData(222 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 21, classification=ItemClassification.filler, parent_item="Marine", origin="nco"),
-    "Restoration (Medic)": ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, classification=ItemClassification.filler, parent_item="Medic", origin="ext"),
-    "Optical Flare (Medic)": ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, classification=ItemClassification.filler, parent_item="Medic", origin="ext"),
+    "Restoration (Medic)": ItemData(223 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 22, classification=ItemClassification.filler, parent_item="Medic", origin="bw"),
+    "Optical Flare (Medic)": ItemData(224 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 23, classification=ItemClassification.filler, parent_item="Medic", origin="bw"),
     "Optimized Logistics (Medic)": ItemData(225 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 24, classification=ItemClassification.filler, parent_item="Medic", origin="nco"),
     "Progressive Stimpack (Firebat)": ItemData(226 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 6, parent_item="Firebat", quantity=2, origin="bw"),
     "Optimized Logistics (Firebat)": ItemData(227 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 25, parent_item="Firebat", origin="nco"),
@@ -105,7 +105,7 @@ item_table = {
     "Laser Targeting System (Reaper)": ItemData(251 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 0, classification=ItemClassification.filler, parent_item="Reaper", origin="nco"),
     "Advanced Cloaking Field (Reaper)": ItemData(252 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 1, parent_item="Reaper", origin="nco"),
     "Spider Mines (Reaper)": ItemData(253 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 2, classification=ItemClassification.filler, parent_item="Reaper", origin="nco"),
-    "Combat Drugs (Reaper)": ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, classification=ItemClassification.filler, parent_item="Reaper", origin="nco"),
+    "Combat Drugs (Reaper)": ItemData(254 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, classification=ItemClassification.filler, parent_item="Reaper", origin="ext"),
     "Hellbat Aspect (Hellion)": ItemData(255 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 4, parent_item="Hellion", origin="nco"),
     "Smart Servos (Hellion)": ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 5, parent_item="Hellion", origin="nco"),
     "Optimized Logistics (Hellion)": ItemData(257 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 6, classification=ItemClassification.filler, parent_item="Hellion", origin="nco"),
@@ -160,8 +160,8 @@ item_table = {
     "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, classification=ItemClassification.filler, parent_item="Thor"),
     "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, classification=ItemClassification.filler, parent_item="Thor"),
     # Items from EE
-    "Advanced Ballistics (Liberator)": ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator"),
-    "Raid Artillery (Liberator)": ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator", origin="ext"),
+    "Advanced Ballistics (Liberator)": ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator", origin="nco"),
+    "Raid Artillery (Liberator)": ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator", origin="nco"),
     "Drilling Claws (Widow Mine)": ItemData(328 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, classification=ItemClassification.filler, parent_item="Widow Mine", origin="ext"),
     "Concealment (Widow Mine)": ItemData(329 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, classification=ItemClassification.progression, parent_item="Widow Mine", origin="ext"),
 
@@ -174,10 +174,10 @@ item_table = {
     "ATX Laser Battery (Battlecruiser)": ItemData(355 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 5, classification=ItemClassification.progression, parent_item="Battlecruiser", origin="nco"),
     "Optimized Logistics (Battlecruiser)": ItemData(356 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 6, classification=ItemClassification.filler, parent_item="Battlecruiser", origin="nco"),
     "Internal Tech Module (Battlecruiser)": ItemData(357 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, classification=ItemClassification.filler, parent_item="Battlecruiser", origin="nco"),
-    "EMP Rounds (Ghost)": ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, parent_item="Ghost", origin="bw"),
+    "EMP Rounds (Ghost)": ItemData(358 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 8, parent_item="Ghost", origin="ext"),
     "Lockdown (Ghost)": ItemData(359 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 9, parent_item="Ghost", origin="bw"),
     "Impaler Rounds (Spectre)": ItemData(360 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 10, parent_item="Spectre", origin="ext"),
-    "Progressive High Impact Payload (Thor)": ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 14, parent_item="Thor", quantity=2, origin="nco"),  # L2 is Smart Servos
+    "Progressive High Impact Payload (Thor)": ItemData(361 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 14, parent_item="Thor", quantity=2, origin="ext"),  # L2 is Smart Servos
     "Bio Mechanical Repair Drone (Raven)": ItemData(363 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 13, parent_item="Raven", origin="nco"),
     "Spider Mines (Raven)": ItemData(364 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 14, parent_item="Raven", origin="nco"),
     "Railgun Turret (Raven)": ItemData(365 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 15, parent_item="Raven", origin="nco"),
@@ -322,7 +322,8 @@ progressive_if_nco = {
     "Progressive Stimpack (Marine)",
     "Progressive Stimpack (Firebat)",
     "Progressive Cross-Spectrum Dampeners (Banshee)",
-    "Progressive Regenerative Bio-Steel"
+    "Progressive Regenerative Bio-Steel",
+    "Progressive High Impact Payload (Thor)"
 }
 
 # 'number' values of upgrades for upgrade bundle items
