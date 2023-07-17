@@ -261,7 +261,7 @@ class BountyRequired(Range):
     If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Required"
     range_start = 1
-    range_end = 25
+    range_end = 26
     default = 7
 
 
@@ -271,7 +271,7 @@ class BountyAmount(Range):
     If Goal is not Hitlist or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Bounties Available"
     range_start = 1
-    range_end = 25
+    range_end = 26
     default = 10
 
 

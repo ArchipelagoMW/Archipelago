@@ -1284,6 +1284,7 @@ exclusion_table = {
         LocationName.Limitlvl7,
         LocationName.Masterlvl7,
         LocationName.Finallvl7,
+        LocationName.Summonlvl7,
         LocationName.TransporttoRemembrance,
         LocationName.OrichalcumPlusGoddessofFateCup,
         LocationName.HadesCupTrophyParadoxCups,
