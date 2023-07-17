@@ -6,8 +6,8 @@ from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
 from .Items import GSTLAItem, item_table, all_items
-from .Locations import GSTLALocation, all_locations
-from .Regions import regions
+from .Locations import GSTLALocation, all_locations, location_name_to_id
+from .Regions import create_regions
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from .Names.RegionName import RegionName
@@ -23,7 +23,7 @@ class GSTLAWorld(World):
     data_version = 1
 
     item_name_to_id = {item.itemName: item.id for item in all_items }
-    location_name_to_id = {location.name: location.id for location in all_locations}
+    location_name_to_id = location_name_to_id
     web = GSTLAWeb()
 
 
@@ -32,21 +32,7 @@ class GSTLAWorld(World):
 
 
     def create_regions(self) -> None:
-        name_to_region = {}
-        for region_info in regions:
-            region = Region(region_info.name, self.player, self.multiworld)
-            name_to_region[region_info.name] = region
-            for location in region_info.locations:
-                loc = GSTLALocation(self.player, location, self.location_name_to_id.get(location, None), region)
-                region.locations.append(loc)
-            self.multiworld.regions.append(region)
-        for region_info in regions:
-            region = name_to_region[region_info.name]
-            for connection in region_info.connections:
-                connection_region = name_to_region[connection]
-                entrance = Entrance(self.player, connection, region)
-                entrance.connect(connection_region)
-                region.exits.append(entrance)
+        create_regions(self.multiworld, self.player)
 
 
     def create_items(self) -> None:

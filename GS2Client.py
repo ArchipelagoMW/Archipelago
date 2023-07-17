@@ -206,7 +206,7 @@ def check_location_scouted(location, memory):
 async def gba_sync_task(ctx: GS2Context):
     logger.info("Starting GBA connector. Use /gba for status information.")
     if ctx.patching_error:
-        logger.error('Unable to Patch ROM. No ROM provided or ROM does not match US GBA Blue Version.')
+        logger.error('Unable to Patch ROM. No ROM provided or ROM does not match Golden Sun The Lost Age Version.')
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:

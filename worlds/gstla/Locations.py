@@ -343,3 +343,4 @@ filler = [
 ]
 
 all_locations: typing.List[LocationData] = hidden_items + summon_tablets + major_items + key_items + filler
+location_name_to_id: typing.Dict[str, int] =  {location.name: location.id for location in all_locations}
