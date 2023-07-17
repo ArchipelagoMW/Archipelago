@@ -350,9 +350,9 @@ def patch_kh2(self, output_directory):
         3: "Lucky Emblem and Hitlist",
     }
     lucky_emblem_text = {
-        0: "Your Goal is not Lucky Emblem is it Hitlist or Three Proofs.",
+        0: "Your Goal is not Lucky Emblem. It is Hitlist or Three Proofs.",
         1: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}",
-        2: "Your Goal is not Lucky Emblem is it Hitlist or Three Proofs.",
+        2: "Your Goal is not Lucky Emblem. It is Hitlist or Three Proofs.",
         3: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}"
     }
     hitlist_text = {

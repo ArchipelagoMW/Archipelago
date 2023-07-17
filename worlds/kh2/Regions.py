@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import KH2Location, RegionTable
+from .Locations import KH2Location
 from .Names import LocationName, ItemName, RegionName
 
 

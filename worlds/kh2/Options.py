@@ -236,8 +236,8 @@ class LuckyEmblemsRequired(Range):
     If Goal is not Lucky Emblem Hunt or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Lucky Emblems Required"
     range_start = 1
-    range_end = 90
-    default = 60
+    range_end = 60
+    default = 35
 
 
 class LuckyEmblemsAmount(Range):
@@ -246,8 +246,8 @@ class LuckyEmblemsAmount(Range):
     If Goal is not Lucky Emblem Hunt or Lucky Emblem and Hitlist this does nothing."""
     display_name = "Lucky Emblems Available"
     range_start = 1
-    range_end = 90
-    default = 70
+    range_end = 60
+    default = 40
 
 
 class BountyRequired(Range):

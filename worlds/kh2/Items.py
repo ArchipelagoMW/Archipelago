@@ -441,7 +441,7 @@ Events_Table = {
 # Equipped abilities have an offset of 0x8000 so check for if whatever || whatever+0x8000
 CheckDupingItems = {
     "Items":          {
-        item_name for keys in [Progression_Table.keys(), Wincon_Table.keys(), [ItemName.MickyMunnyPouch,
+        item_name for keys in [Progression_Table.keys(), Wincon_Table.keys(),Consumable_Table, [ItemName.MickyMunnyPouch,
                                                                                ItemName.OletteMunnyPouch,
                                                                                ItemName.HadesCupTrophy,
                                                                                ItemName.UnknownDisk,

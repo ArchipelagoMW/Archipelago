@@ -262,6 +262,7 @@ class KH2Rules:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
+        # hitlist if == 2
         elif self.world.multiworld.Goal[self.player] == "hitlist":
             add_rule(
                     self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
@@ -270,18 +271,17 @@ class KH2Rules:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value)
-            # else == hitlist+lucky emblem
         else:
             add_rule(
                     self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
-                    lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
+                    lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and
                                   state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value))
+
             if self.world.multiworld.FinalXemnas[self.player]:
                 self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
-                self.world.multiworld.completion_condition[self.player] = lambda state: \
-                    state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
-                    state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.multiworld.BountyRequired[self.player].value) and \
+                                                                                        state.has(ItemName.LuckyEmblem, self.player, self.world.multiworld.LuckyEmblemsRequired[self.player].value)
 
     def kh2_set_count_sum(self, item_name_set: set, state: CollectionState) -> int:
         """
@@ -491,7 +491,7 @@ class KH2FightRules(KH2Rules):
             RegionName.Axel2:                 lambda state: self.get_axel_two_rules(),
             RegionName.DataRoxas:             lambda state: self.get_data_roxas_rules(state),
             RegionName.DataAxel:              lambda state: self.get_data_axel_rules(state),
-            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
+            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state,1),
             RegionName.Xigbar:                lambda state: self.get_xigbar_rules(state),
             RegionName.Luxord:                lambda state: self.get_luxord_rules(state),
             RegionName.Saix:                  lambda state: self.get_saix_rules(state),
@@ -1221,22 +1221,12 @@ class KH2FightRules(KH2Rules):
         return sephiroth_rules[self.fight_logic]
 
     def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
-        # easy: schmovement-dodge roll and reflera and 3 summons and donald limit and magnera and thundara
-        easy_cor_tools = {
-            ItemName.HighJump:       1,
-            ItemName.Glide:          1,
-            ItemName.AerialDodge:    1,
-            ItemName.QuickRun:       2,
-            ItemName.MagnetElement:  2,
-            ItemName.ThunderElement: 2,
-            ItemName.ReflectElement: 2
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
-        cor_first_fight_rules = {
-            "easy":   self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
-            "normal": self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
-            "hard":   self.kh2_dict_count(easy_cor_tools, state) and self.kh2_set_count_sum(summons, state) >= 3,
-        }
-        return cor_first_fight_rules[self.fight_logic]
+        return _rules[self.fight_logic]
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
@@ -1648,6 +1638,6 @@ class KH2FightRules(KH2Rules):
         data_xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
             "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
+            "hard": self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
         }
         return data_xemnas_rules[self.fight_logic]
