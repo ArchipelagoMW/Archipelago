@@ -1,0 +1,3012 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="24">
+        <name value="Runout - Spawn Zerglings Right"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="49.5776,73.372"/>
+            <radius value="4.369"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="God Vision Blink Teach - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="161.0207,47.1516"/>
+            <radius value="4.8977"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Zeratul - Cloaking Tip"/>
+        <shape type="circle">
+            <center value="151.3417,29.425"/>
+            <radius value="4.8977"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="God Vision Blink Teach - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="153.5751,55.5302"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="155.7937,55.2124"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="159.6352,55.5512"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="160.2011,57.1506"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="153.6386,58.544"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="154.0273,61.0063"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.2658,62.464"/>
+            <radius value="2.7111"/>
+        </shape>
+        <shape type="circle">
+            <center value="157.9953,59.0795"/>
+            <radius value="2.7111"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Rumble - Nydus Spawn 05 (AX)"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="20.0786,86.864"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Rumble - Nydus Spawn 02"/>
+        <shape type="circle">
+            <center value="22.772,84.779"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="Rumble - Nydus Spawn 03"/>
+        <shape type="circle">
+            <center value="26.6691,88.8417"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Rumble - Nydus Spawn 01"/>
+        <shape type="circle">
+            <center value="25.175,79.538"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="81">
+        <name value="Runout - Spawn Zerglings Left"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="37.767,70.4912"/>
+            <radius value="4.6687"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Zeratul - Void Prison Intro"/>
+        <shape type="circle">
+            <center value="135.8476,50.8764"/>
+            <radius value="5.3325"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.7556,49.2177"/>
+            <radius value="5.3325"/>
+        </shape>
+        <shape type="circle">
+            <center value="136.7214,49.123"/>
+            <radius value="5.3325"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.164,48.2458"/>
+            <radius value="3.2983"/>
+        </shape>
+        <shape type="circle">
+            <center value="134.6787,43.7434"/>
+            <radius value="3.2983"/>
+        </shape>
+        <shape type="circle">
+            <center value="131.1462,45.0173"/>
+            <radius value="3.2983"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="God Vision Scurrying Zerg - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="120.3583,63.0583"/>
+            <radius value="4.125"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.5622,62.575"/>
+            <radius value="4.125"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.8234,63.3767"/>
+            <radius value="4.125"/>
+        </shape>
+    </region>
+    <region id="83">
+        <name value="God Vision Scurrying Zerg - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="125.993,72.9816"/>
+            <radius value="4.7573"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.5888,74.2712"/>
+            <radius value="4.7573"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.793,72.2368"/>
+            <radius value="4.1105"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.3305,75.0317"/>
+            <radius value="2.401"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.2104,69.6877"/>
+            <radius value="1.368"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.1938,68.9191"/>
+            <radius value="0.92"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Shrine 1 - Get Lore"/>
+        <shape type="circle">
+            <center value="163.047,107.9377"/>
+            <radius value="1.4377"/>
+        </shape>
+        <shape type="rect">
+            <quad value="162.9594,107.5251,166.9926,111.5407"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Shrine 2 - Get Lore"/>
+        <shape type="circle">
+            <center value="78.0632,29.183"/>
+            <radius value="1.4377"/>
+        </shape>
+        <shape type="rect">
+            <quad value="74.224,29.098,77.9672,33.3271"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Shrine 3 - Get Lore"/>
+        <shape type="circle">
+            <center value="22.7426,96.097"/>
+            <radius value="1.5"/>
+        </shape>
+        <shape type="rect">
+            <quad value="18.065,96.316,22.5117,100.8198"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Runout - Constant Nydus Spawn 01"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="42.239,76.2797"/>
+            <radius value="1.8393"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Runout - Constant Nydus Spawn 02"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="38.7182,67.9414"/>
+            <radius value="1.8393"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Rumble - Nydus Spawn 06 (X)"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="23.1352,88.7192"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="God Vision Blink Reminder - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="151.6354,77.8986"/>
+            <radius value="2.0295"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.2875,76.2058"/>
+            <radius value="2.9868"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.8691,78.8774"/>
+            <radius value="1.7692"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.3273,77.1381"/>
+            <radius value="1.7692"/>
+        </shape>
+        <shape type="circle">
+            <center value="151.927,81.5954"/>
+            <radius value="1.1623"/>
+        </shape>
+        <shape type="circle">
+            <center value="151.2324,79.906"/>
+            <radius value="1.504"/>
+        </shape>
+        <shape type="circle">
+            <center value="153.7922,78.2246"/>
+            <radius value="0.7624"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="God Vision Blink Reminder - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="155.4777,72.165"/>
+            <radius value="4.1896"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Runout - Camera Bounds"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="24.9958,67.989,89.9914,134.0024"/>
+        </shape>
+    </region>
+    <region id="78">
+        <name value="Zeratul - Blink Tip Fallback Region"/>
+        <color value="255,128,128,64"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="149.2392,41.2668"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="159.7087,41.2136"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="159.6936,30.1816"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.1425,37.5856"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.5498,31.0114"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.893,33.6206"/>
+            <radius value="6.5686"/>
+        </shape>
+        <shape type="circle">
+            <center value="153.5373,27.001"/>
+            <radius value="4.8615"/>
+        </shape>
+        <shape type="circle">
+            <center value="139.1667,27.7248"/>
+            <radius value="1.5034"/>
+        </shape>
+    </region>
+    <region id="86">
+        <name value="Runout - Nydus Infinite Respawn"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="37.1833,67.4533,51.8835,78.0451"/>
+        </shape>
+        <shape type="rect">
+            <quad value="41.2143,78.0278,56.1774,84.2075"/>
+        </shape>
+        <shape type="rect">
+            <quad value="32.576,64.236,47.0446,67.4731"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Cinematic Zergling Spawn"/>
+        <shape type="circle">
+            <center value="36.0703,72.8493"/>
+            <radius value="6.4577"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.4582,77.2177"/>
+            <radius value="6.4577"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.5935,70.2436"/>
+            <radius value="6.4577"/>
+        </shape>
+    </region>
+    <region id="92">
+        <name value="Shrine 1 - Remove Dynamic Blockers"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="148.3996,106.331,161.2194,118.7888"/>
+        </shape>
+    </region>
+    <region id="93">
+        <name value="Shrine 2 - Remove Dynamic Blockers"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="71.2524,37.4924,85.0805,49.9274"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Stalker Intro - Encircle"/>
+        <shape type="circle">
+            <center value="125.491,109.44"/>
+            <radius value="6.1423"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.6713,104.9367"/>
+            <radius value="6.1423"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.9455,103.9382"/>
+            <radius value="6.1423"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Shrine Door 1 Opened - Extra Revealer"/>
+        <shape type="circle">
+            <center value="155.7924,111.8115"/>
+            <radius value="3.842"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="God Vision Post Stalker Intro - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="115.5236,109.0397"/>
+            <radius value="3.6765"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.416,107.569"/>
+            <radius value="3.6765"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.222,111.571"/>
+            <radius value="3.6765"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="God Vision Hatchery 1 Dual Overseers - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="97.4211,41.6933"/>
+            <radius value="11.209"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.1433,39.3144"/>
+            <radius value="11.209"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.7685,32.787"/>
+            <radius value="11.209"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.583,53.1032"/>
+            <radius value="6.474"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.2114,50.0932"/>
+            <radius value="4.3796"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.1086,50.178"/>
+            <radius value="1.2485"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.0463,49.2573"/>
+            <radius value="1.2485"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.101,48.2875"/>
+            <radius value="1.2485"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.3073,47.3627"/>
+            <radius value="1.2485"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.0278,31.0583"/>
+            <radius value="1.2485"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="God Vision Guarded Spore - Reveal/Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="87.7727,113.1672"/>
+            <radius value="3.2612"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.1784,111.9377"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.9406,104.583"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.8742,100.4338"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.1713,101.9436"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0307,107.768"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.648,110.23"/>
+            <radius value="3.3955"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.4133,113.2482"/>
+            <radius value="1.6823"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.4172,115.3535"/>
+            <radius value="1.6823"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.7731,106.3552"/>
+            <radius value="3.762"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.509,100.2487"/>
+            <radius value="1.917"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.3474,99.473"/>
+            <radius value="1.917"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.5627,116.4147"/>
+            <radius value="2.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.8227,110.0351"/>
+            <radius value="2.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.8117,95.7336"/>
+            <radius value="4.3896"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.9226,97.4348"/>
+            <radius value="2.6223"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.15,98.1325"/>
+            <radius value="4.3896"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.6035,102.9663"/>
+            <radius value="4.3896"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.3251,105.604"/>
+            <radius value="2.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.4794,106.861"/>
+            <radius value="2.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.2985,99.51"/>
+            <radius value="2.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.397,100.226"/>
+            <radius value="0.94"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.0456,100.0256"/>
+            <radius value="0.94"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.2231,99.8967"/>
+            <radius value="0.94"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.9804,103.8417"/>
+            <radius value="0.6113"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.1767,116.8354"/>
+            <radius value="2.6987"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.3564,115.2734"/>
+            <radius value="2.6987"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Hatchery Puzzle Guards"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="103.8664,39.7578"/>
+            <radius value="8.6555"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.4306,45.272"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.2893,48.4438"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.6228,48.3286"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.3918,45.607"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.4096,41.0961"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.1774,39.5178"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.4406,34.3964"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.1821,31.1865"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.1906,39.84"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.843,33.9116"/>
+            <radius value="2.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.9226,32.9118"/>
+            <radius value="2.2832"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="God Vision Intro Overseer - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="149.1713,103.417"/>
+            <radius value="3.3581"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.8786,101.4648"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="154.6501,97.0837"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.6887,99.5556"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="158.193,95.373"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="160.317,97.9348"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="163.5996,95.3718"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="163.5273,98.057"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="155.1784,101.7058"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.3161,103.9658"/>
+            <radius value="3.118"/>
+        </shape>
+        <shape type="circle">
+            <center value="157.941,92.2775"/>
+            <radius value="2.9406"/>
+        </shape>
+        <shape type="circle">
+            <center value="162.1882,91.0698"/>
+            <radius value="2.9406"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="God Vision Heavy Hitter Puzzle - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="66.7802,43.0808"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.2104,47.2656"/>
+            <radius value="3.5451"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.7636,41.9003"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.4936,42.668"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.2934,35.124"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.8481,30.9482"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.2736,36.4152"/>
+            <radius value="5.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.535,48.8332"/>
+            <radius value="3.4038"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.6691,46.2175"/>
+            <radius value="3.4038"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.5876,43.805"/>
+            <radius value="3.4038"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.9875,37.2917"/>
+            <radius value="2.8146"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.5793,33.418"/>
+            <radius value="2.8146"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.7614,39.518"/>
+            <radius value="2.8146"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.0246,40.763"/>
+            <radius value="2.8146"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.9755,25.3352"/>
+            <radius value="5.0002"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.8215,24.4191"/>
+            <radius value="5.0002"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Baneling Corkscrew - Bullies"/>
+        <shape type="circle">
+            <center value="29.3813,28.056"/>
+            <radius value="5.7172"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.8312,35.6223"/>
+            <radius value="5.7172"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Rumble - Meet Karass"/>
+        <color value="255,0,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="65.085,85.1423"/>
+            <radius value="9.2224"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.8994,75.6623"/>
+            <radius value="2.8425"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.665,74.7397"/>
+            <radius value="2.8425"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Shrine 3 - Remove Dynamic Blockers"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="36.1518,92.294,48.2055,103.9458"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="God Vision Intro Overseer - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="153.8496,87.8283"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.236,91.5588"/>
+            <radius value="1.9267"/>
+        </shape>
+        <shape type="circle">
+            <center value="144.9772,92.4992"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="151.9931,89.623"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="151.093,87.4055"/>
+            <radius value="1.9267"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.644,88.4567"/>
+            <radius value="1.9267"/>
+        </shape>
+        <shape type="circle">
+            <center value="146.2973,90.3493"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="146.5314,92.8398"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.923,94.1953"/>
+            <radius value="1.8967"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.1145,94.7836"/>
+            <radius value="3.3864"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.264,85.7724"/>
+            <radius value="1.933"/>
+        </shape>
+        <shape type="circle">
+            <center value="150.2058,93.7504"/>
+            <radius value="2.0222"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Shrine 1 - Kerrigan Taunt"/>
+        <shape type="circle">
+            <center value="163.2277,108.0922"/>
+            <radius value="12.5"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="163.121,107.8928"/>
+            <radius value="2.3315"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="God Vision Hatchery 3 Rumble - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="20.212,51.8422"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.3266,52.1887"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="19.722,49.2946"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.3376,49.1325"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="26.9645,57.3776"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.5646,62.2065"/>
+            <radius value="4.666"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.1,57.9895"/>
+            <radius value="2.4746"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.3972,57.196"/>
+            <radius value="2.4746"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.4106,60.6911"/>
+            <radius value="2.4746"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.9934,63.197"/>
+            <radius value="2.4746"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.967,58.6408"/>
+            <radius value="2.4746"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.6486,63.358"/>
+            <radius value="1.5051"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.3007,64.731"/>
+            <radius value="1.5051"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="God Vision Crawler - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="52.586,61.4604"/>
+            <radius value="3.16"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.224,58.0195"/>
+            <radius value="6.436"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.4326,61.4426"/>
+            <radius value="6.436"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.456,62.5363"/>
+            <radius value="6.436"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.1481,62.688"/>
+            <radius value="1.9992"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.7583,64.0441"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.351,66.211"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.2614,66.6547"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.972,67.0952"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.5483,68.0041"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.6711,68.333"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.3066,69.2631"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.932,68.261"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.4284,66.0856"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.8483,66.7897"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.9538,63.2724"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.1127,59.0197"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.8862,57.4604"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.8776,57.5053"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.3452,55.2153"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.7221,55.6682"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.183,52.0002"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.051,58.9685"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.93,56.414"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.6635,54.236"/>
+            <radius value="2.52"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.5126,68.935"/>
+            <radius value="1.8867"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.4338,70.9113"/>
+            <radius value="1.6665"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.057,60.1794"/>
+            <radius value="1.72"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.548,58.3828"/>
+            <radius value="1.72"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.7785,57.0207"/>
+            <radius value="1.72"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.1958,55.4792"/>
+            <radius value="1.72"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.068,55.5834"/>
+            <radius value="1.72"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="God Vision Stalker Cliff Pew - Trigger"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="110.4521,115.1174"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.872,120.1862"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.1821,118.139"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.478,117.3161"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.5141,120.6967"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.7155,121.0944"/>
+            <radius value="3.2385"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.158,118.3012"/>
+            <radius value="3.2431"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.5205,112.8137"/>
+            <radius value="2.283"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.6418,123.6071"/>
+            <radius value="1.092"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.0815,123.2468"/>
+            <radius value="5.1171"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="God Vision Stalker Cliff Pew - Reveal"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="104.9916,112.108"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.3627,113.7136"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.7333,115.2277"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.5756,115.5441"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.5034,112.9633"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.327,112.0083"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.5307,110.4721"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.8964,108.9436"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.2375,107.5661"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.1152,109.6894"/>
+            <radius value="3.7912"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.2778,108.7905"/>
+            <radius value="1.6691"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.3112,110.7482"/>
+            <radius value="1.6691"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Shrine 2 - Extra Grey Mask"/>
+        <shape type="circle">
+            <center value="78.4394,42.7094"/>
+            <radius value="3.842"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.239,37.1894"/>
+            <radius value="4.6567"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.6303,44.1826"/>
+            <radius value="1.9724"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.1171,42.6254"/>
+            <radius value="1.9724"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.7678,40.1994"/>
+            <radius value="1.9724"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="God Vision Overseer Intro - Reveal"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="141.0634,89.039"/>
+            <radius value="5.562"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="God Vision Guarded Spore - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="130.6323,86.1591"/>
+            <radius value="2.341"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.573,83.7478"/>
+            <radius value="2.341"/>
+        </shape>
+        <shape type="circle">
+            <center value="134.3227,81.286"/>
+            <radius value="2.341"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Stalker - Reinforcements 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="93.4306,94.926"/>
+            <radius value="6.5415"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Stalker - Reinforcements 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="89.7551,56.3254"/>
+            <radius value="6.5415"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Stalker - Reinforcements 4"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="80.1584,40.7695"/>
+            <radius value="6.5415"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="God Vision Air Assault - Trigger"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="99.0251,74.8337"/>
+            <radius value="4.9672"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.465,68.7385"/>
+            <radius value="4.9672"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.279,75.973"/>
+            <radius value="4.9672"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.6157,66.1247"/>
+            <radius value="4.9672"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.3344,71.0351"/>
+            <radius value="2.8312"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.4191,66.7656"/>
+            <radius value="5.2275"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.7302,69.994"/>
+            <radius value="1.4255"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="God Vision Post Air Assault - Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="89.9885,55.7705"/>
+            <radius value="3.557"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.6804,57.2358"/>
+            <radius value="3.557"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.1225,53.104"/>
+            <radius value="2.4516"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.0852,57.971"/>
+            <radius value="3.557"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.7385,61.1887"/>
+            <radius value="2.1916"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.8215,59.7727"/>
+            <radius value="2.1916"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.4035,58.8942"/>
+            <radius value="2.1916"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="God Vision Broodlord Patrol - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="110.759,90.7814"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.0642,88.7844"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.4348,89.203"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.085,92.8405"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.2326,91.0793"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.2065,88.565"/>
+            <radius value="3.9663"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.3435,86.0095"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.0976,83.8005"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.847,86.6076"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.8974,89.7512"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.8481,91.9475"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.9028,95.631"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.8183,96.9011"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.7836,98.4787"/>
+            <radius value="4.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.9577,102.5173"/>
+            <radius value="2.4206"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.5551,100.738"/>
+            <radius value="2.4206"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.8251,100.1643"/>
+            <radius value="2.4045"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.242,98.4514"/>
+            <radius value="2.4045"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.1145,97.1757"/>
+            <radius value="2.4045"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.4626,96.6613"/>
+            <radius value="4.4655"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.126,93.081"/>
+            <radius value="4.4655"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.7705,96.7692"/>
+            <radius value="2.4604"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.8767,94.709"/>
+            <radius value="2.4604"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.865,91.6481"/>
+            <radius value="2.4604"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.9943,89.3085"/>
+            <radius value="2.4604"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.9553,103.2878"/>
+            <radius value="1.6672"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.4794,100.5544"/>
+            <radius value="1.6672"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="God Vision Air Assault - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="90.6987,79.3664"/>
+            <radius value="1.298"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.226,81.1364"/>
+            <radius value="1.298"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.8544,76.139"/>
+            <radius value="1.298"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.633,68.3583"/>
+            <radius value="7.4472"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.6091,66.8317"/>
+            <radius value="7.4472"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.5686,62.8337"/>
+            <radius value="3.1791"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.9614,61.302"/>
+            <radius value="3.1791"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.5605,70.2316"/>
+            <radius value="4.353"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.5168,65.9011"/>
+            <radius value="3.0607"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.7307,73.4982"/>
+            <radius value="4.353"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.1003,76.9433"/>
+            <radius value="4.957"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.814,75.749"/>
+            <radius value="4.957"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.8146,77.0405"/>
+            <radius value="4.957"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.8315,76.1115"/>
+            <radius value="4.957"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.5168,79.4694"/>
+            <radius value="3.2644"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.9003,79.6391"/>
+            <radius value="3.2644"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="God Vision Zerg Rumble - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="63.9147,90.014"/>
+            <radius value="4.6408"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.6064,84.5256"/>
+            <radius value="4.6408"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.6437,82.349"/>
+            <radius value="4.6408"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.3466,79.897"/>
+            <radius value="4.6408"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.4711,76.748"/>
+            <radius value="4.6408"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.5417,74.987"/>
+            <radius value="7.5573"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.112,82.9521"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.7177,87.454"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.6123,85.0441"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.9453,83.131"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.6442,80.924"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.774,72.4372"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.9396,77.84"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.1611,81.6826"/>
+            <radius value="5.6462"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.3896,71.233"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.6635,69.8913"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.1892,66.8061"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.4853,65.1047"/>
+            <radius value="3.7187"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.3288,63.8808"/>
+            <radius value="2.0717"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.1848,66.6228"/>
+            <radius value="2.0717"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.6813,65.0437"/>
+            <radius value="2.0717"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.549,61.5241"/>
+            <radius value="0.85"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.5866,72.1728"/>
+            <radius value="7.5573"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.6987,81.0498"/>
+            <radius value="7.5573"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.6562,86.7546"/>
+            <radius value="7.5573"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.2734,91.426"/>
+            <radius value="7.5573"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.622,88.1396"/>
+            <radius value="4.2358"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.9821,83.0986"/>
+            <radius value="2.679"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.5625,79.6582"/>
+            <radius value="2.679"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.1491,77.621"/>
+            <radius value="2.679"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.8881,91.4833"/>
+            <radius value="3.0336"/>
+        </shape>
+        <shape type="circle">
+            <center value="18.7763,89.7478"/>
+            <radius value="2.5156"/>
+        </shape>
+        <shape type="circle">
+            <center value="17.4394,90.339"/>
+            <radius value="2.5156"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.926,92.078"/>
+            <radius value="2.5156"/>
+        </shape>
+        <shape type="circle">
+            <center value="21.5605,93.1616"/>
+            <radius value="2.5156"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.918,99.069"/>
+            <radius value="3.761"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.568,98.458"/>
+            <radius value="2.514"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.8828,96.5314"/>
+            <radius value="2.514"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.895,100.6867"/>
+            <radius value="2.514"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.821,87.6464"/>
+            <radius value="2.2673"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.6147,84.6997"/>
+            <radius value="2.2673"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.6567,86.1574"/>
+            <radius value="2.2673"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.9328,78.24"/>
+            <radius value="3.2233"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.5654,73.1975"/>
+            <radius value="3.2233"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.645,80.1547"/>
+            <radius value="3.2233"/>
+        </shape>
+        <shape type="circle">
+            <center value="18.4155,82.7346"/>
+            <radius value="3.2233"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.264,85.1948"/>
+            <radius value="4.9941"/>
+        </shape>
+        <shape type="circle">
+            <center value="11.6911,92.5493"/>
+            <radius value="3.8247"/>
+        </shape>
+        <shape type="circle">
+            <center value="15.7255,92.1513"/>
+            <radius value="3.8247"/>
+        </shape>
+        <shape type="circle">
+            <center value="16.112,94.9047"/>
+            <radius value="3.8247"/>
+        </shape>
+    </region>
+    <region id="74">
+        <name value="Rumble - Force Start Push 1"/>
+        <shape type="circle">
+            <center value="55.9384,80.3454"/>
+            <radius value="4.399"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.493,75.5505"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.495,77.9025"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.9187,80.845"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.2604,83.8757"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.9384,85.4582"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.925,86.757"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.43,83.7236"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.7268,80.1538"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.133,77.0605"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.7158,75.141"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.2497,73.1308"/>
+            <radius value="2.5236"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.6896,75.4895"/>
+            <radius value="1.1743"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.3686,73.0168"/>
+            <radius value="1.4633"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Shrine 2 - Kerrigan Taunt"/>
+        <shape type="circle">
+            <center value="78.0446,29.435"/>
+            <radius value="12.5"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="77.938,29.2355"/>
+            <radius value="2.3315"/>
+        </shape>
+    </region>
+    <region id="75">
+        <name value="Crawler - Bullies"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="46.7458,52.2717,61.0114,64.8388"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Rumble - Trigger Air"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="35.1938,77.9943"/>
+            <radius value="3.9956"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.3747,72.2856"/>
+            <radius value="3.9956"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.8066,66.951"/>
+            <radius value="3.9956"/>
+        </shape>
+    </region>
+    <region id="79">
+        <name value="Rumble - Stalker High Ground Hint"/>
+        <color value="255,0,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="29.2834,82.9675"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.313,81.036"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.3212,84.829"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.87,86.553"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.7314,82.2551"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.0571,84.5068"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.9836,86.9616"/>
+            <radius value="2.8222"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.523,87.2724"/>
+            <radius value="2.8222"/>
+        </shape>
+    </region>
+    <region id="80">
+        <name value="Rumble - Flyers"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="17.491,78.8984"/>
+            <radius value="5.483"/>
+        </shape>
+    </region>
+    <region id="82">
+        <name value="Runout - Event 1"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="59.8332,100.34"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="84">
+        <name value="Runout - Event 2"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="46.9082,111.084"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.5966,114.808"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="85">
+        <name value="Runout - Event Center"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="40.7626,117.9968"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.0646,114.9877"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="rect">
+            <quad value="31.7824,111.7902,33.5424,117.1865"/>
+        </shape>
+        <shape type="rect">
+            <quad value="45.088,115.6403,46.798,120.3425"/>
+        </shape>
+        <shape type="rect">
+            <quad value="38.9084,122.2187,44.8325,124.1474"/>
+        </shape>
+        <shape type="rect">
+            <quad value="35.7304,109.609,40.3327,110.718"/>
+        </shape>
+    </region>
+    <region id="87">
+        <name value="Runout - Event 3"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="32.6054,107.31"/>
+            <radius value="4.2136"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.4467,109.7236"/>
+            <radius value="4.2136"/>
+        </shape>
+    </region>
+    <region id="89">
+        <name value="Runout - Event 7"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="61.097,121.1826"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.619,122.0654"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7006,118.5456"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.6403,121.5524"/>
+            <radius value="1.6354"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.2531,129.9025"/>
+            <radius value="1.2392"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.4694,127.5578"/>
+            <radius value="1.6628"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.7016,122.6381"/>
+            <radius value="1.7695"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.5742,113.1496"/>
+            <radius value="2.0214"/>
+        </shape>
+    </region>
+    <region id="90">
+        <name value="Runout - Event 8"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="77.8593,122.8122"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.3183,124.1892"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.1213,126.238"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Runout - Event 4"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="27.7915,119.306"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="94">
+        <name value="Runout - Event 6"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="54.9294,129.314"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.595,132.9687"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.7761,127.5954"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.9941,126.5397"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Runout - Nydus Spawn 01"/>
+        <shape type="circle">
+            <center value="44.7866,100.4326"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Runout - Nydus Spawn 02"/>
+        <shape type="circle">
+            <center value="55.3698,114.0102"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Runout - Nydus Spawn Center"/>
+        <shape type="circle">
+            <center value="43.9995,118.782"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Runout - Nydus Spawn 03"/>
+        <shape type="circle">
+            <center value="41.5026,106.1452"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Runout - Event 6 Air"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="19.9592,130.3676"/>
+            <radius value="2.6296"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Guarded Spore"/>
+        <shape type="circle">
+            <center value="141.1872,89.2807"/>
+            <radius value="6.381"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.8937,92.4174"/>
+            <radius value="6.381"/>
+        </shape>
+        <shape type="circle">
+            <center value="146.6152,88.0734"/>
+            <radius value="6.381"/>
+        </shape>
+    </region>
+    <region id="77">
+        <name value="Rumble - Reinforcements"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="67.0278,88.1181"/>
+            <radius value="4.603"/>
+        </shape>
+    </region>
+    <region id="95">
+        <name value="Air Assault - Player Check L"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="91.9555,71.8217"/>
+            <radius value="9.372"/>
+        </shape>
+    </region>
+    <region id="96">
+        <name value="Air Assault - Player Check R"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="108.9975,71.8015"/>
+            <radius value="8.1381"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.8088,64.9128"/>
+            <radius value="5.6225"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.8461,64.2744"/>
+            <radius value="4.145"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Runout - Nydus Spawn 06"/>
+        <shape type="circle">
+            <center value="61.6997,116.821"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Runout - Nydus Spawn 07"/>
+        <shape type="circle">
+            <center value="74.4711,130.6306"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="97">
+        <name value="Runout - Nydus Spawn 04"/>
+        <shape type="circle">
+            <center value="34.4865,114.0405"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="98">
+        <name value="Runout - Nydus Spawn 05"/>
+        <shape type="circle">
+            <center value="31.757,126.9143"/>
+            <radius value="1.4211"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Stalker - Reinforcements 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="109.1572,75.106"/>
+            <radius value="6.5415"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="God Vision Baneling Puzzle - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="47.4755,27.9587"/>
+            <radius value="4.3481"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.105,29.372"/>
+            <radius value="4.3481"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.3166,32.7543"/>
+            <radius value="8.294"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.6745,24.1186"/>
+            <radius value="4.2832"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.2954,27.5751"/>
+            <radius value="6.168"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.9956,33.5654"/>
+            <radius value="6.168"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.3708,40.0261"/>
+            <radius value="4.9355"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.6928,42.7087"/>
+            <radius value="2.744"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.5437,40.6372"/>
+            <radius value="2.744"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.731,36.9282"/>
+            <radius value="2.744"/>
+        </shape>
+    </region>
+    <region id="100">
+        <name value="Shrine 1 - Extra Grey Mask"/>
+        <shape type="circle">
+            <center value="156.8925,113.9584"/>
+            <radius value="5.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.889,110.373"/>
+            <radius value="5.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="160.761,108.6701"/>
+            <radius value="5.4985"/>
+        </shape>
+    </region>
+    <region id="102">
+        <name value="Shrine 3 - Extra Grey Mask"/>
+        <shape type="circle">
+            <center value="38.965,95.0788"/>
+            <radius value="4.6591"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.6774,93.8974"/>
+            <radius value="4.6591"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.0344,89.4943"/>
+            <radius value="1.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.7414,90.7214"/>
+            <radius value="1.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.8134,90.9272"/>
+            <radius value="1.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.584,90.5686"/>
+            <radius value="1.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.9345,92.4228"/>
+            <radius value="1.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.2346,98.0546"/>
+            <radius value="1.5617"/>
+        </shape>
+    </region>
+    <region id="103">
+        <name value="Baneling Corkscrew - Baneling Movement"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="42.702,43.8105"/>
+            <radius value="4.313"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.209,40.864"/>
+            <radius value="6.8674"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.5063,40.7307"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.2475,29.1894"/>
+            <radius value="12.5556"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.919,23.954"/>
+            <radius value="7.1696"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.7177,45.739"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.0302,46.7946"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.8034,52.2543"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.631,52.9133"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.2702,47.5422"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.505,42.9587"/>
+            <radius value="3.9816"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.1684,34.7592"/>
+            <radius value="6.8674"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.8476,27.235"/>
+            <radius value="6.8674"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.2114,37.1127"/>
+            <radius value="1.9284"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.9223,51.2673"/>
+            <radius value="2.3896"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Runout - Grey Mask"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="45.6391,100.828"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.1606,96.5654"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.9868,99.6115"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.102,101.1391"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.91,106.3024"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.4304,110.5825"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.971,111.3752"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.3071,115.9887"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.4313,107.2751"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.9216,112.163"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.061,115.2592"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.1596,122.1225"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.8166,127.6525"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.9504,124.9663"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.7502,131.037"/>
+            <radius value="4.7312"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.869,135.0134"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.8596,131.4934"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.0395,127.529"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.917,128.8745"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.5866,122.2087"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.6301,117.1284"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.8618,116.3027"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.1586,119.912"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.7268,124.3"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.412,129.9462"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.5532,128.9863"/>
+            <radius value="6.3261"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.8835,132.3784"/>
+            <radius value="6.3261"/>
+        </shape>
+    </region>
+    <region id="105">
+        <name value="Runout - Constant Nydus Spawn 03"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="42.296,71.8671"/>
+            <radius value="1.8393"/>
+        </shape>
+    </region>
+    <region id="88">
+        <name value="Runout - Event 5"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="38.725,129.0727"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.589,129.3828"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.4497,133.0666"/>
+            <radius value="5.4096"/>
+        </shape>
+    </region>
+    <region id="106">
+        <name value="Intro Rocks"/>
+        <shape type="circle">
+            <center value="142.788,73.987"/>
+            <radius value="5.0205"/>
+        </shape>
+        <shape type="circle">
+            <center value="139.8276,73.1501"/>
+            <radius value="5.0205"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.7463,68.759"/>
+            <radius value="3.9824"/>
+        </shape>
+        <shape type="circle">
+            <center value="143.7558,69.151"/>
+            <radius value="3.9824"/>
+        </shape>
+    </region>
+    <region id="108">
+        <name value="Ambience - Scourge Group 1"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="151.9196,132.5822"/>
+            <radius value="5.1074"/>
+        </shape>
+    </region>
+    <region id="107">
+        <name value="Ambience - Scourge Flyby 1"/>
+        <color value="255,255,128,64"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="145.077,122.255"/>
+            <radius value="3.4138"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.0231,120.667"/>
+            <radius value="3.4138"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.0224,124.8137"/>
+            <radius value="3.4138"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Ambience - Scourge Group 2"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="97.9191,108.4963"/>
+            <radius value="5.1074"/>
+        </shape>
+    </region>
+    <region id="109">
+        <name value="Ambience - Scourge Flyby 2"/>
+        <color value="255,255,128,64"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="116.009,94.261"/>
+            <radius value="7.677"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.0815,87.5578"/>
+            <radius value="7.677"/>
+        </shape>
+    </region>
+    <region id="99">
+        <name value="Ambush - Start"/>
+        <shape type="circle">
+            <center value="36.0632,47.691"/>
+            <radius value="5.6728"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.4187,47.2614"/>
+            <radius value="2.0412"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.3046,42.879"/>
+            <radius value="2.0412"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.3471,50.1018"/>
+            <radius value="6.0227"/>
+        </shape>
+    </region>
+    <region id="76">
+        <name value="Ambush - Player Check"/>
+        <shape type="circle">
+            <center value="40.991,51.152"/>
+            <radius value="5.6616"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.9995,52.0012"/>
+            <radius value="5.6616"/>
+        </shape>
+    </region>
+    <region id="104">
+        <name value="Rumble - Zergling Flank 2"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="51.1533,82.6992"/>
+            <radius value="5.3874"/>
+        </shape>
+    </region>
+    <region id="110">
+        <name value="Rumble - Zergling Flank 1"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="50.9997,72.666"/>
+            <radius value="5.3874"/>
+        </shape>
+    </region>
+    <region id="111">
+        <name value="Rumble - Push 1 Bullies"/>
+        <color value="255,192,192,192"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="46.1516,75.9653"/>
+            <radius value="10.441"/>
+        </shape>
+    </region>
+    <region id="112">
+        <name value="Rumble - Push 2 Bullies"/>
+        <color value="255,192,192,192"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="32.8803,74.2446"/>
+            <radius value="7.7172"/>
+        </shape>
+    </region>
+    <region id="113">
+        <name value="Rumble - Push 3 Bullies"/>
+        <color value="255,192,192,192"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="23.5732,91.9577"/>
+            <radius value="7.7172"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Rumble - Start Push 2"/>
+        <shape type="circle">
+            <center value="36.0634,84.5087"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.603,77.9958"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.8,72.2084"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.8432,66.9653"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.5092,83.7268"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.0488,77.2138"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.2458,71.4265"/>
+            <radius value="4.6367"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.289,66.1833"/>
+            <radius value="4.6367"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="God Vision Hatchery 2 Banelings - Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="15.8518,18.9226"/>
+            <radius value="5.4841"/>
+        </shape>
+        <shape type="circle">
+            <center value="8.5192,33.7453"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="10.8828,19.9052"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.1091,25.6115"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="19.934,33.3237"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="18.0981,34.9992"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="13.66,33.942"/>
+            <radius value="2.9252"/>
+        </shape>
+        <shape type="circle">
+            <center value="16.2465,29.1115"/>
+            <radius value="6.225"/>
+        </shape>
+        <shape type="circle">
+            <center value="11.85,23.4592"/>
+            <radius value="1.8972"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Shrine Door 2 Opened - Extra Revealer"/>
+        <shape type="circle">
+            <center value="77.7495,43.5578"/>
+            <radius value="3.842"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Baneling Corkscrew - Rock Bridge"/>
+        <shape type="circle">
+            <center value="29.357,26.0068"/>
+            <radius value="4.2902"/>
+        </shape>
+        <shape type="circle">
+            <center value="26.1787,19.9504"/>
+            <radius value="4.2902"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.4963,22.3806"/>
+            <radius value="4.2902"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="God Vision Broodlord Patrol - Extra Trigger"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="92.6157,95.7468"/>
+            <radius value="5.9052"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.4182,89.334"/>
+            <radius value="3.56"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Ambience - Scourge Group 3"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="35.0275,127.101"/>
+            <radius value="5.1074"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Ambience - Scourge Flyby 3"/>
+        <color value="255,255,128,64"/>
+        <shape type="circle">
+            <center value="61.5944,106.2592"/>
+            <radius value="3.4138"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.6643,108.5056"/>
+            <radius value="3.4138"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.5373,109.7658"/>
+            <radius value="3.4138"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Crawlers - Karass is nearby reveal"/>
+        <shape type="circle">
+            <center value="79.7216,70.6291"/>
+            <radius value="3.045"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.4445,74.3176"/>
+            <radius value="4.3432"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.477,79.6071"/>
+            <radius value="4.3432"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.6323,83.676"/>
+            <radius value="4.3432"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.2001,84.5075"/>
+            <radius value="4.3432"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.6347,84.2841"/>
+            <radius value="4.3432"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.9143,82.6687"/>
+            <radius value="2.6252"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0764,78.7077"/>
+            <radius value="2.6252"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.0126,80.4291"/>
+            <radius value="2.6252"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.3203,75.2541"/>
+            <radius value="1.718"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.204,88.4614"/>
+            <radius value="2.9763"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.9243,89.7792"/>
+            <radius value="2.9763"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.1755,88.0175"/>
+            <radius value="2.9763"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.599,80.8117"/>
+            <radius value="2.9763"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.3342,77.565"/>
+            <radius value="2.9763"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="God Vision Stalker Rain - Trigger/Reveal"/>
+        <color value="255,0,64,0"/>
+        <shape type="circle">
+            <center value="95.0285,114.2058"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.581,112.0266"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.6381,110.1723"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.9167,113.5104"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.6198,114.1857"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.621,116.25"/>
+            <radius value="3.152"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.7353,116.6823"/>
+            <radius value="3.152"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="RevealAutoEnd"/>
+        <shape type="circle">
+            <center value="81.057,137.1865"/>
+            <radius value="5.756"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.7185,142.6596"/>
+            <radius value="5.756"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.902,142.3225"/>
+            <radius value="5.756"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.4467,139.0822"/>
+            <radius value="5.756"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.2868,141.8916"/>
+            <radius value="2.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.3671,145.5693"/>
+            <radius value="2.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.7331,142.851"/>
+            <radius value="2.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.264,144.5231"/>
+            <radius value="6.4426"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.6833,146.2988"/>
+            <radius value="6.4426"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.8376,145.5478"/>
+            <radius value="6.4426"/>
+        </shape>
+    </region>
+    <region id="101">
+        <name value="AutoRevealEndChasmArea"/>
+        <shape type="circle">
+            <center value="74.3125,117.502"/>
+            <radius value="2.5617"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.9982,122.803"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.4572,124.18"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.2602,126.2287"/>
+            <radius value="5.4096"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.4243,132.409"/>
+            <radius value="4.8312"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.8996,129.7043"/>
+            <radius value="4.948"/>
+        </shape>
+    </region>
+    <region id="114">
+        <name value="Stalker Rain Hydras"/>
+        <shape type="circle">
+            <center value="98.0727,111.8276"/>
+            <radius value="6.5102"/>
+        </shape>
+    </region>
+    <region id="116">
+        <name value="UnhideZealotsBigFight"/>
+        <shape type="circle">
+            <center value="58.014,86.4565"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.7851,84.0078"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.7985,82.273"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.673,80.6911"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.4411,79.0964"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.3637,77.482"/>
+            <radius value="1.8708"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.395,76.0988"/>
+            <radius value="1.8708"/>
+        </shape>
+    </region>
+    <region id="117">
+        <name value="Runout Stalker Start"/>
+        <shape type="circle">
+            <center value="33.1296,92.622"/>
+            <radius value="1.4084"/>
+        </shape>
+    </region>
+    <region id="118">
+        <name value="Cinematic Zealots"/>
+        <shape type="circle">
+            <center value="20.333,90.4594"/>
+            <radius value="3.239"/>
+        </shape>
+    </region>
+    <region id="119">
+        <name value="Cinematic Stalkers"/>
+        <shape type="circle">
+            <center value="29.383,96.0368"/>
+            <radius value="2.875"/>
+        </shape>
+    </region>
+    <region id="120">
+        <name value="Baneling Autosave"/>
+        <shape type="circle">
+            <center value="49.1062,21.3273"/>
+            <radius value="1.4724"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.276,22.7282"/>
+            <radius value="1.4724"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.9013,22.4177"/>
+            <radius value="4.0476"/>
+        </shape>
+    </region>
+    <region id="121">
+        <name value="Overseer Retreat Region"/>
+        <shape type="circle">
+            <center value="137.5385,134.7653"/>
+            <radius value="3.3388"/>
+        </shape>
+    </region>
+    <region id="122">
+        <name value="Crawler Autosave"/>
+        <shape type="circle">
+            <center value="49.7683,56.0112"/>
+            <radius value="1.4724"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.3127,57.46"/>
+            <radius value="1.4724"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.2465,54.4357"/>
+            <radius value="1.4724"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.321,57.0544"/>
+            <radius value="4.3737"/>
+        </shape>
+    </region>
+    <region id="123">
+        <name value="Hatchery03RoachEggs"/>
+        <shape type="circle">
+            <center value="17.9433,52.6877"/>
+            <radius value="6.2504"/>
+        </shape>
+    </region>
+    <region id="124">
+        <name value="Hatchery03VisibilityHelper"/>
+        <color value="255,128,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="16.7541,81.493"/>
+            <radius value="6.19"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.354,76.395"/>
+            <radius value="6.19"/>
+        </shape>
+        <shape type="circle">
+            <center value="18.4802,76.3635"/>
+            <radius value="6.19"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.2985,86.1901"/>
+            <radius value="4.3457"/>
+        </shape>
+        <shape type="circle">
+            <center value="21.9775,81.2792"/>
+            <radius value="4.3457"/>
+        </shape>
+        <shape type="circle">
+            <center value="26.7243,82.6767"/>
+            <radius value="4.3457"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.3706,73.7832"/>
+            <radius value="3.7531"/>
+        </shape>
+    </region>
+    <region id="126">
+        <name value="Rumble - Enemy Attack Region - Left"/>
+        <color value="255,192,192,192"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="21.8674,91.1894"/>
+            <radius value="5.1872"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.4594,95.3703"/>
+            <radius value="5.1872"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.142,92.1157"/>
+            <radius value="5.1872"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.7963,92.8376"/>
+            <radius value="3.7805"/>
+        </shape>
+    </region>
+    <region id="127">
+        <name value="Rumble - Enemy Attack Region - Right"/>
+        <color value="255,192,192,192"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="64.9526,84.0424"/>
+            <radius value="7.3012"/>
+        </shape>
+    </region>
+    <region id="128">
+        <name value="Rumble - Nydus Worm Spawning Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="24.1325,85.7546"/>
+            <radius value="16.2248"/>
+        </shape>
+    </region>
+    <region id="129">
+        <name value="Rumble Flyer Retreat Region"/>
+        <shape type="circle">
+            <center value="9.7153,51.949"/>
+            <radius value="2.0541"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="ZeratulAheadOfRockArea01"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="27.8083,119.2087"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.306,125.837"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.322,130.5017"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.4411,132.4682"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.7546,131.6782"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.8493,128.155"/>
+            <radius value="5.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.5395,121.94"/>
+            <radius value="5.831"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.5686,115.8286"/>
+            <radius value="5.831"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.3398,122.015"/>
+            <radius value="5.831"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.4904,125.7814"/>
+            <radius value="5.831"/>
+        </shape>
+    </region>
+    <region id="115">
+        <name value="ZeratulAheadOfRockArea02"/>
+        <shape type="circle">
+            <center value="63.4267,122.3693"/>
+            <radius value="5.457"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.599,115.7304"/>
+            <radius value="5.457"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.4785,121.5322"/>
+            <radius value="5.9531"/>
+        </shape>
+    </region>
+    <region id="125">
+        <name value="ZeratulAheadOfRockArea03"/>
+        <shape type="circle">
+            <center value="74.0212,116.2514"/>
+            <radius value="4.162"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.3852,120.4274"/>
+            <radius value="4.162"/>
+        </shape>
+    </region>
+</Regions>

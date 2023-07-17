@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="Shakuras">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.150000"/>
+            <Color value="0.196078,0.054902,0.349020,0.105000"/>
+            <ColorFallOff value="0.209000"/>
+            <CausticsFallOff value="0.668000"/>
+            <Specularity value="311.000000"/>
+            <SpecularScaler value="1.200000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="1.000000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.020000"/>
+            <RefractionDistortion value="0.001000"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.000000"/>
+            <ReflectivityPower value="7.560000"/>
+        </State>
+    </CWater>
+</Catalog>

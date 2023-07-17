@@ -2189,6 +2189,54 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_HotSMetabolicBoost">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hotsmetabolicboost.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hotsmetabolicboost.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSRedundantMembranes">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hardenedcarapace.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hardenedcarapace.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSZerglingFrenzy">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-adrenaloverload.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MorphtoHunter">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <Hotkey value="Button/Hotkey/Baneling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Baneling"/>
+    </CButton>
+    <CButton id="AP_MorphtoSplitterling">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <Hotkey value="Button/Hotkey/Baneling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Baneling"/>
+    </CButton>
+    <CButton id="AP_RespawnZergling">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-zerglingreconstitution.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RaptorCliffJumper">
+        <Icon value="Assets\Textures\btn-ability-zerg-cliffjump-zergling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-cliffjump-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RaptorPassive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmlingPassive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-rapidgenesis.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-rapidgenesis.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
     <CButton id="AP_ActivateStasisWard">
         <Icon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>
@@ -2792,5 +2840,290 @@
         <AlertIcon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
         <EditorCategories value="Race:Terran"/>
         <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_VoidZealotWhirlwind">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-Whirlwind.dds"/>
+    </CButton>
+    <CButton id="AP_VoidZealotShadowCharge">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-ShadowCharge.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-ShadowCharge.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidZealotShadowChargeStun">
+        <Icon value="Assets\Textures\btn-upgrade-vorazun-shadowstun.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-vorazun-shadowstun.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_DarkTemplar">
+        <Icon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_DarkTemplarAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-darktemplar-aiur.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-darktemplar-aiur.dds"/>
+        <Hotkey value="Button/Hotkey/AP_DarkTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="DarkTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_DarkTemplarShakuras">
+        <Icon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <Hotkey value="Button/Hotkey/AP_DarkTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="DarkTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_DarkTemplarTaldarim">
+        <Icon value="Assets\Textures\btn-unit-protoss-darktemplar-taldarim.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-darktemplar-taldarim.dds"/>
+        <Hotkey value="Button/Hotkey/AP_DarkTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="DarkTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Dragoon">
+        <Icon value="Assets\Textures\btn-unit-protoss-dragoon-void.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-dragoon-void.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_HighTemplar">
+        <Icon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_HighTemplarAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <Hotkey value="Button/Hotkey/AP_HighTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="HighTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_HighTemplarShakuras">
+        <Icon value="Assets\Textures\talent-vorazun-level05-unlockdarkarchon.dds"/>
+        <AlertIcon value="Assets\Textures\talent-vorazun-level05-unlockdarkarchon.dds"/>
+        <Hotkey value="Button/Hotkey/AP_HighTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="HighTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_HighTemplarTaldarim">
+        <Icon value="Assets\Textures\btn-unit-protoss-hightemplar-dark.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-hightemplar-dark.dds"/>
+        <Hotkey value="Button/Hotkey/HighTemplar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="HighTemplar"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Monitor">
+        <Icon value="Assets\Textures\btn-unit-protoss-sentry-taldarim.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-sentry-taldarim.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Sentry"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Sentry"/>
+    </CButton>
+    <CButton id="AP_Sentry">
+        <Icon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SentryAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-sentry.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Sentry"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Sentry"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SentryPurifier">
+        <Icon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-sentry-purifier.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Sentry"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Sentry"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Stalker">
+        <Icon value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_StalkerAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-dragoon-void.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-dragoon-void.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Stalker"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Stalker"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_StalkerShakuras">
+        <Icon value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Stalker"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Stalker"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SuperiorWarpGates">
+        <Icon value="Assets\Textures\talent-artanis-level03-warpgatecharges.dds"/>
+    </CButton>
+    <CButton id="AP_UpgradeToWarpGate">
+        <Icon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_WarpInAdept">
+        <Icon value="Assets\Textures\btn-unit-protoss-adept-purifier.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-adept-purifier.dds"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_WarpInReplicant">
+        <Icon value="Assets\Textures\btn-unit-protoss-replicant.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-replicant.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Zealot">
+        <Icon value="Assets\Textures\btn-unit-protoss-zealot.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-zealot.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ZealotAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Zealot"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Zealot"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ZealotPurifier">
+        <Icon value="Assets\Textures\btn-unit-protoss-zealot-purifier.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-zealot-purifier.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Zealot"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Zealot"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ZealotShakuras">
+        <Icon value="Assets\Textures\btn-unit-protoss-zealot-nerazim.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-zealot-nerazim.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Zealot"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Zealot"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SOAAutoAssimilator">
+        <Icon value="Assets\Textures\btn-ability-spearofadun-orbitalassimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-spearofadun-orbitalassimilator.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Assimilator">
+        <Icon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_AutomatedAssimilator">
+        <Icon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-assimilator.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Assimilator"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Assimilator"/>
+    </CButton>
+    <CButton id="AP_CyberneticsCore">
+        <Icon value="Assets\Textures\btn-building-protoss-CyberneticsCore.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-CyberneticsCore.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_DarkShrine">
+        <Icon value="Assets\Textures\btn-building-protoss-darkshrine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-darkshrine.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_FleetBeacon">
+        <Icon value="Assets\Textures\btn-building-protoss-fleetbeacon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-fleetbeacon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Forge">
+        <Icon value="Assets\Textures\btn-building-protoss-forge.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-forge.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Gateway">
+        <Icon value="Assets\Textures\btn-building-protoss-gateway.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-gateway.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_KhaydarinMonolith">
+        <Icon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-khaydarinmonolith.dds"/>
+    </CButton>
+    <CButton id="AP_Nexus">
+        <Icon value="Assets\Textures\btn-building-protoss-nexus.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-nexus.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhotonCannon">
+        <Icon value="Assets\Textures\btn-building-protoss-photoncannon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-photoncannon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Pylon">
+        <Icon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RoboticsBay">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RoboticsFacility">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ShieldBattery">
+        <Icon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-shieldbattery.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Stargate">
+        <Icon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_TemplarArchive">
+        <Icon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_WarpInRoboticsWarpFacility">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticswarpfacility.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticswarpfacility.dds"/>
+        <Hotkey value="Button/Hotkey/AP_RoboticsFacility"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_RoboticsFacility"/>
+    </CButton>
+    <CButton id="AP_WarpInStarWarpGate">
+        <Icon value="Assets\Textures\btn-building-protoss-starwarpgate.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-starwarpgate.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Stargate"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Stargate"/>
+    </CButton>
+    <CButton id="AP_WarpInWarpGate">
+        <Icon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Building-Protoss-WarpGate.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Gateway"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_Gateway"/>
     </CButton>
 </Catalog>

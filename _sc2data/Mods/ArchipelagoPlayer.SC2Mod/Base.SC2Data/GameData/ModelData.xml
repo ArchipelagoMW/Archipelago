@@ -1938,22 +1938,28 @@
             <Payload value="OrbitalCommand_DropPodDeathB"/>
         </Events>
     </CModel>
+    <CModel id="AP_SOAHeroicShieldLongModel">
+        <Model value="Assets\Effects\Protoss\SOA_GuardianShell_Long\SOA_GuardianShell_Long.m3"/>
+    </CModel>
+    <CModel id="AP_SOAHeroicShieldModel">
+        <Model value="Assets\Effects\Protoss\SOA_GuardianShell\SOA_GuardianShell.m3"/>
+    </CModel>
+    <CModel id="AP_SOAHeroicShieldTallModel">
+        <Model value="Assets\Effects\Protoss\SOA_GuardianShell_Tall\SOA_GuardianShell_Tall.m3"/>
+    </CModel>
+    <CModel id="AP_VoidZealotWhirlwindImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\Zealot_Aiur_Whirlwind_Impact\Zealot_Aiur_Whirlwind_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidZealotWhirlwindSearchModel" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\Zealot_Aiur_Whirlwind\Zealot_Aiur_Whirlwind.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="1.500000,1.500000,1.500000"/>
+        <ScaleMin value="1.500000,1.500000,1.500000"/>
+    </CModel>
     <CModel id="AP_ZealotAiur">
         <Model value="Assets\Units\Protoss\Zealot_Aiur\Zealot_Aiur.m3"/>
         <RequiredAnims value="Assets\Units\Protoss\Zealot_SwarmAnims\Zealot_SwarmAnims.m3a"/>
-        <Occlusion value="Show"/>
-        <ScaleMax value="0.900000,0.900000,0.900000"/>
-        <ScaleMin value="0.900000,0.900000,0.900000"/>
-        <SelectionRadius value="0.416500"/>
-        <SquibTypeDefault value="Metal"/>
-        <Radius value="0.375000"/>
-        <TechPurchaseCamera value="Star2CameraMid05"/>
-        <UnitGlossaryCamera value="Star2CameraMid05"/>
-        <PlanetPanelCamera value="Star2CameraMid05"/>
-        <ShadowRadius value="0.416500"/>
-        <TextureDeclares Prefix="zealot_">
-            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
-        </TextureDeclares>
         <Events>
             <Anim value="Attack,00"/>
             <Name value="ZealotAiur_AttackSweetener"/>
@@ -1975,6 +1981,137 @@
             <Time value="0.012000"/>
             <Payload value="ZealotAiur_AttackSweetener"/>
         </Events>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.375000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <TextureDeclares Prefix="zealot_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_ZealotAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ZealotDeath\ZealotDeath.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="ZealotAiur_DeathSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.024000"/>
+            <Payload value="AP_ZealotAiur_DeathSweetener"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="ZealotAiur_DeathSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.024000"/>
+            <Payload value="AP_ZealotAiur_DeathSweetener"/>
+        </Events>
+        <Events>
+            <Anim value="Death,04"/>
+            <Name value="ZealotAiur_DeathSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.024000"/>
+            <Payload value="AP_ZealotAiur_DeathSweetener"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_ZealotAiurPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Zealot_Aiur_Placement\Zealot_Aiur_Placement.m3"/>
+        <Lighting value="Zealot"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+    </CModel>
+    <CModel id="AP_ZealotAiurPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Aiur_ZealotEx2_Portrait\Aiur_ZealotEx2_Portrait.m3"/>
+        <Image value="Assets\Textures\aiurzealotportrait_static.dds"/>
+    </CModel>
+    <CModel id="AP_ZealotAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Zealot_Aiur_WarpIn\Zealot_Aiur_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_HybridSlowDebuff" parent="BuffFX">
+        <Model value="Assets\Effects\Terran\PsiDisruptorImpact\PsiDisruptorImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+        <SelectionRadius value="0.400000"/>
+        <ShadowRadius value="0.400000"/>
+    </CModel>
+    <CModel id="AP_GenericStunOverheadModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Neutral\Stun_Void\Stun_Void.m3"/>
+        <ScaleMax value="1.500000,1.500000,1.500000"/>
+        <ScaleMin value="1.500000,1.500000,1.500000"/>
+    </CModel>
+    <CModel id="AP_VoidZealotShadowChargeImpactModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Zealot_Nerazim_PhaseChargeStun_Impact\Zealot_Nerazim_PhaseChargeStun_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="1.500000,1.500000,1.500000"/>
+        <ScaleMin value="1.500000,1.500000,1.500000"/>
+    </CModel>
+    <CModel id="AP_ZealotShakuras">
+        <Model value="Assets\Units\Protoss\Zealot_Shakuras\Zealot_Shakuras.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Zealot_SwarmAnims\Zealot_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.375000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <TextureDeclares Prefix="zealot_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_ZealotShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\PrisonZealotDeath\PrisonZealotDeath.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_ZealotShakurasPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Zealot_Shakuras_Placement\Zealot_Shakuras_Placement.m3"/>
+        <Lighting value="Zealot"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+    </CModel>
+    <CModel id="AP_ZealotShakurasPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Shakuras_ZealotEx2_Portrait\Shakuras_ZealotEx2_Portrait.m3"/>
+        <Image value="Assets\Textures\shakuraszealotportrait_static.dds"/>
+    </CModel>
+    <CModel id="AP_ZealotShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Zealot_Nerazim_WarpIn\Zealot_Nerazim_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
     </CModel>
     <CModel id="AP_RoachCorpserAcidSalivaWeapon" parent="MissileFX">
         <Model value="Assets\Effects\Zerg\RoachMissileEx1\RoachMissileEx1.m3"/>
@@ -11696,5 +11833,132 @@
         <ScaleMin value="0.900000,0.900000,0.900000"/>
         <SelectionRadius value="0.555400"/>
         <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_AutomatedAssimilator" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\Assimilator\Assimilator.m3"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.250000"/>
+        <ShadowRadius value="2.250000"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_AutomatedAssimilatorDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Protoss\AssimilatorDeath\AssimilatorDeath.m3"/>
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SOAVespeneBeamVespene" parent="FX">
+        <Model value="Assets\Buildings\Resources\GasCube\GasCube.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ZerglingFuryImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\ZerglingFrenzy\ZerglingFrenzy.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnEgg" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Zerg\ZerglingRespawnEgg\ZerglingRespawnEgg.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnEggImpactModel" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\CreepBombExplosion\CreepBombExplosion.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Events>
+            <Anim value="Birth"/>
+            <Name value="Egg_Explode"/>
+            <Type value="Sound"/>
+            <Payload value="Egg_Explode"/>
+        </Events>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
+    <CModel id="AP_ZerglingRespawnWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\ZerglingRespawnEgg\ZerglingRespawnEgg.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HotSRaptorDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingEx1ADeath\ZerglingEx1ADeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSRaptorUpgradeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingUpgradeDeath\ZerglingUpgradeDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmling" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\ZerglingEx1B\ZerglingEx1B.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Zergling_SwarmAnims\Zergling_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="1"/>
+            <Keys index="Work" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.300000"/>
+        <ScaleMax value="0.770000,0.770000,0.770000"/>
+        <ScaleMin value="0.770000,0.770000,0.770000"/>
+        <SelectionRadius value="0.441400"/>
+        <ShadowRadius value="0.441400"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.400000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmlingDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingEx1BDeath\ZerglingEx1BDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HotSSwarmlingUpgradeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\ZerglingUpgradeDeath\ZerglingUpgradeDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RaptorPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\ZerglingPortrait\ZerglingPortrait.m3"/>
+        <Image value="Assets\Textures\ZerglingPortrait_Static.dds"/>
+        <Lighting value="AP_RaptorPortrait"/>
+    </CModel>
+    <CModel id="AP_SwarmlingPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\ZerglingPortrait\ZerglingPortrait.m3"/>
+        <Image value="Assets\Textures\ZerglingPortrait_Static.dds"/>
+        <Lighting value="AP_SwarmlingPortrait"/>
+    </CModel>
+    <CModel id="AP_WarpStargateBirth" parent="AP_StargateWarp">
+        <Model value="Assets\Buildings\Protoss\StarWarpGate_WarpIn\StarWarpGate_WarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.466600"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_ShieldBattery" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\ProtossShield_Battery\ProtossShield_Battery.m3"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_ShieldBatteryBirth" parent="AP_ShieldBattery">
+        <Model value="Assets\Buildings\Protoss\ProtossShield_Battery_WarpIn\ProtossShield_Battery_WarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.200000"/>
+        </Events>
     </CModel>
 </Catalog>

@@ -18,6 +18,10 @@
         <NodeArray index="Use" Link="AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSHaveRaptor">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveRaptorCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_HaveHotSMutaliskViper">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
@@ -1435,9 +1439,6 @@
         <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeAlarakStalkerPhasingArmorCompleteOnly"/>
     </CRequirement>
-    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
-        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
-    </CRequirementNot>
     <CRequirement id="AP_HaveAlarakLightningStrikes">
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantSacrificeLightningStrikesCompleteOnly"/>
@@ -1600,5 +1601,205 @@
     </CRequirement>
     <CRequirement id="AP_HaveOptimizedLogisticsFirebat">
         <NodeArray index="Show" Link="AP_CountUpgradeOptimizedLogisticsFirebatCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShield">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAHeroicShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHeroicShieldCleanUp">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHeroicShieldCleanUpCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAHeroicShieldCooldownBehavior">
+        <EditorCategories value="TechType:Ability,Race:Protoss"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCyberneticsCore">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitCyberneticsCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveTemplarArchives">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitTemplarArchiveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveDarkShrine">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitDarkShrineCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperiorWarpGates">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperiorWarpGatesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCinematicMode">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCinematicModeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAAutoAssimilator">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAAutoAssimilatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveSOAAutoAssimilator">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeSOAAutoAssimilatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveNexus">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_NotCountUnitNexusCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMetabolicBoost">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMetabolicBoostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingFrenzy">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingFrenzyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingFury">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingFuryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingHealth">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingHealthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingRange">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingRangeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSZerglingSunder">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSZerglingSunderCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveK5ZerglingRespawn">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5ZerglingRespawnCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveZerglingRespawnPrimary">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveZerglingRespawnPrimaryAndUpgrade">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndCountBehaviorZerglingRespawnPrimaryCompleteOnlyAtUnitCountUpgradeK5ZerglingRespawnCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ZerglingRespawnEnabled">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AllowAbilZerglingRespawn0"/>
+    </CRequirement>
+    <CRequirement id="AP_ZerglingRespawnPrimaryNotActive">
+        <EditorCategories value="TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorZerglingRespawnPrimaryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveZerglingRespawnPrimary">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountBehaviorZerglingRespawnPrimaryCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSHaveSwarmling">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveBaneling">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitBanelingNestCompleteOnlyTechTreeCheat"/>
+        <!-- NodeArray index="Show" Link="AndNotCountUpgradeHotSHaveSplitterlingCompleteOnlyNotCountUpgradeHotSHunterCompleteOnly"/ -->
+    </CRequirement>
+    <CRequirement id="AP_HaveNexusAndNotHaveSOAWarpTech">
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNexus">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveStargate">
+        <NodeArray index="Use" Link="AP_CountUnitAlias_StargateCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveForge">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitForgeCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGateway">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_GatewayCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGatewayOrStargate">
+        <NodeArray index="Use" Link="AP_OrCountUnitAlias_GatewayCompleteOnlyTechTreeCheatCountUnitAlias_StargateCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoboticsFa">
+        <NodeArray index="Use" Link="AP_CountUnitAlias_RoboticsFacilityCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundWeapon3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundWeaponsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundArmorsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossGroundArmor3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossGroundArmorsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossGroundArmorsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossShieldsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossShield3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_EqCountUpgradeProtossShieldsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_EqCountUpgradeProtossShieldsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirArmor3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirArmorsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon1">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon2">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel1CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel2QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnProtossAirWeapon3">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel2CompleteOnly1"/>
+        <NodeArray index="Show" Link="AP_AndEqCountUpgradeProtossAirWeaponsLevel3QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNexusAndHaveSOAWarpTech">
+        <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAWarpTechCompleteOnly"/>
     </CRequirement>
 </Catalog>

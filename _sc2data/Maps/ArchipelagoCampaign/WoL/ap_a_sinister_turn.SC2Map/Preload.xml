@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Achievement id="TZeratul02_1"/>
+<Achievement id="TZeratul02_2"/>
+<Achievement id="TZeratul02_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniCyanLarge"/>
+<Actor id="LightOmniGreenLarge"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="PathingBlocker2x2Doodad"/>
+<Actor id="AiurProtossBuildingsSmallWrecked" Variations="1"/>
+<Actor id="AiurProtossBuildingsWrecked" Variations="0,1"/>
+<Actor id="AiurTempleBuildings" Variations="0,1,2,3,4,5"/>
+<Actor id="BrokenGroundEdging" Variations="0,1,2,3"/>
+<Actor id="CloudsWhite"/>
+<Actor id="DecalProtoss" Variations="0,1,2,3,4,5"/>
+<Actor id="MonlythStonePieces" Variations="5"/>
+<Actor id="Rock" Variations="0"/>
+<Actor id="RockTower" Variations="0,1,2"/>
+<Actor id="ShakurasCliffGapFiller"/>
+<Actor id="TempleColumn" Variations="5,6,8,17,18"/>
+<Actor id="TempleDebris" Variations="0,1,2,3,4,5,6,7,8"/>
+<Actor id="TempleGate" Variations="2,3,6"/>
+<Actor id="TempleStatue" Variations="0,1,2,3,4,7"/>
+<Actor id="XelNagaTornPlates" Variations="0,1,2,3"/>
+<Actor id="ZhakulDasFoliage" Variations="0,1,2,3,4,5"/>
+<Actor id="ZhakulDasTree" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="ZhakulDasShrine" Variations="0,1,2"/>
+<Actor id="ZhakulDasObelisk" Variations="0,1,2"/>
+<Actor id="XelNagaCliffWallRuins" Variations="0,3"/>
+<Actor id="XelNagaCliffWallSpires" Variations="0,3,4,5"/>
+<Actor id="TerrainObjectZhakulLibraryLargeDoodad"/>
+<Actor id="ProtossSummoning"/>
+<Actor id="TOZhakulDasLibraryPitDoodad" Variations="0,1,2"/>
+<Actor id="TOZhakulDasPassageADoodad"/>
+<Actor id="TOZhakulDasPassageBDoodad"/>
+<Actor id="ZhakulDasLightBridge45Left"/>
+<Behavior id="SuppressCloak"/>
+<Behavior id="HybridDontDie"/>
+<Light id="ZhakulDas"/>
+<Light id="VC_Zeratul2_Planet"/>
+<Model id="PingBoss"/>
+<Model id="PingObjective"/>
+<Model id="GatewayPlacement"/>
+<Model id="TalkIcon"/>
+<Model id="BriefingUnitSelectProtoss"/>
+<Model id="HybridWarpIn"/>
+<Model id="HybridProtossFinalDeath"/>
+<Model id="HybridCDeath"/>
+<Model id="PylonPlacementTZeratul02"/>
+<Model id="VC_Zeratul2_Planet"/>
+<Sound id="HybringMovePing" Variations="0"/>
+<Sound id="TZeratul02Zeratul00001" Variations="0"/>
+<Sound id="TZeratul02Stalker00004" Variations="0"/>
+<Sound id="TZeratul02Zeratul00006" Variations="0"/>
+<Sound id="TZeratul02Zeratul00007" Variations="0"/>
+<Sound id="TZeratul02Zeratul00008" Variations="0"/>
+<Sound id="TZeratul02Zeratul00009" Variations="0"/>
+<Sound id="TZeratul02Zeratul00012" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00014" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00015" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00016" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00018" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00019" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00020" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00021" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00022" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00023" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00024" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00025" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00026" Variations="0"/>
+<Sound id="TZeratul02Zeratul00027" Variations="0"/>
+<Sound id="TZeratul02Zeratul00029" Variations="0"/>
+<Sound id="TZeratul02Zeratul00031" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00032" Variations="0"/>
+<Sound id="TZeratul02Zeratul00034" Variations="0"/>
+<Sound id="TZeratul02Zeratul00037" Variations="0"/>
+<Sound id="TZeratul02Preserver100039" Variations="0"/>
+<Sound id="TZeratul02Preserver200040" Variations="0"/>
+<Sound id="TZeratul02Preserver300041" Variations="0"/>
+<Sound id="TZeratul02Preserver100042" Variations="0"/>
+<Sound id="TZeratul02Preserver200043" Variations="0"/>
+<Sound id="TZeratul02Zeratul00044" Variations="0"/>
+<Sound id="TZeratul02DarkTemplar00045" Variations="0"/>
+<Sound id="TZeratul02Zeratul00046" Variations="0"/>
+<Sound id="TZeratul02DarkTemplar00047" Variations="0"/>
+<Sound id="TZeratul02Zeratul00054" Variations="0"/>
+<Sound id="TZeratul02HybridProtoss00055" Variations="0"/>
+<Sound id="TZeratul02HighTemplar00061" Variations="0"/>
+<Sound id="TZeratul02Preserver300062" Variations="0"/>
+<Sound id="TZeratul02Zeratul00063" Variations="0"/>
+<Sound id="TZeratul02Immortal00070" Variations="0"/>
+<Sound id="TZeratul02BriefingZeratul00003" Variations="0"/>
+<Soundtrack id="TZeratul02MusicEventB"/>
+<Soundtrack id="TZeratul02MusicAlt"/>
+<Soundtrack id="TZeratul02MusicEventA"/>
+<Soundtrack id="TZeratul02MusicIntro"/>
+<Soundtrack id="TZeratul02MusicMain"/>
+<Soundtrack id="TZeratul02MusicOutro"/>
+<Terrain id="ZhakulDas"/>
+<TerrainObject id="ZhakulDasBridge45LeftTerrainObject2High"/>
+<TerrainObject id="TOZhakulDasLibraryPit1"/>
+<TerrainObject id="TOZhakulDasPassageA1"/>
+<TerrainObject id="TOZhakulDasPassageB1"/>
+<TerrainObject id="TerrainObjectZhakulLibraryLarge2"/>
+<Unit id="Nexus"/>
+<Unit id="Pylon"/>
+<Unit id="Assimilator"/>
+<Unit id="Gateway"/>
+<Unit id="Forge"/>
+<Unit id="TwilightCouncil"/>
+<Unit id="PhotonCannon"/>
+<Unit id="Stargate"/>
+<Unit id="TemplarArchive"/>
+<Unit id="RoboticsFacility"/>
+<Unit id="CyberneticsCore"/>
+<Unit id="Zealot"/>
+<Unit id="Stalker"/>
+<Unit id="HighTemplar"/>
+<Unit id="Sentry"/>
+<Unit id="Carrier"/>
+<Unit id="VoidRay"/>
+<Unit id="WarpPrism"/>
+<Unit id="Immortal"/>
+<Unit id="Probe"/>
+<Unit id="Archon"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="PathingBlocker1x1"/>
+<Unit id="PathingBlocker2x2"/>
+<Unit id="Zeratul"/>
+<Unit id="ZhakulDasLibraryUnit"/>
+<Unit id="VoidSeeker"/>
+<Unit id="InvisiblePylon"/>
+<Unit id="Maar"/>
+<Unit id="SuperWarpGate"/>
+<Unit id="Food1000"/>
+<Unit id="PreserverPrison"/>
+<Unit id="PreserverA"/>
+<Unit id="PreserverB"/>
+<Unit id="PreserverC"/>
+<Unit id="AP_RoboticsFacility"/>
+<Unit id="AP_ImmortalAiur"/>
+<Unit id="AP_PhotonCannon"/>
+<Unit id="AP_Probe"/>
+<Unit id="AP_HighArchonTemplar"/>
+<Unit id="AP_DarkTemplarShakuras"/>
+<Unit id="AP_Gateway"/>
+<Unit id="AP_Nexus"/>
+<Unit id="AP_Forge"/>
+<Unit id="AP_TemplarArchive"/>
+<Unit id="AP_DarkShrine"/>
+<Unit id="AP_CyberneticsCore"/>
+</Preload>

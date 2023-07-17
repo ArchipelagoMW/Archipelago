@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Ulaan">
+        <FogColor value="255,38,137,235"/>
+        <FogDensity value="0.250000"/>
+        <FogFalloff value="0.280000"/>
+    </CTerrain>
+</Catalog>

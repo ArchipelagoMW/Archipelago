@@ -694,4 +694,348 @@
         <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeStart" Value="1.05"/>
         <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
     </CUpgrade>
+    <CUpgrade id="AP_BaseProtossGroundWeapons">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsQuatro">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsPreplacedNoBuild">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,Zeratul,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,Zeratul,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Zeratul,Level" Value="1"/>
+        <EffectArray Reference="Effect,Zeratul,Amount" Value="5"/>
+        <EffectArray Operation="Set" Reference="Weapon,Zeratul,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseProtossGroundArmors">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsQuatro">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsPreplacedNoBuild">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseProtossAirWeapons">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsQuatro">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Weapon,UrunEnergyBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,MohandarPrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,ArtanisBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,SelendisInterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Weapon,UrunEnergyBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,MohandarPrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,ArtanisBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,SelendisInterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>
+        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Weapon,UrunEnergyBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,MohandarPrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,ArtanisBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,SelendisInterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseProtossAirArmors">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsQuatro">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Urun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Urun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Urun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseProtossShields">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsQuatro">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsPreplacedNoBuild">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Urun,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Urun,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel3">
+        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>
+
+        <EffectArray Operation="Set" Reference="Actor,Zeratul,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Urun,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Mohandar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Artanis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Selendis,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,SelendisInterceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+    </CUpgrade>
 </Catalog>

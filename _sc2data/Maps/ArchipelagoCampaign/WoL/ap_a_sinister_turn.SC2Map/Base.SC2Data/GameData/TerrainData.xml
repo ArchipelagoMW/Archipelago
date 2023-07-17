@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="ZhakulDas">
+        <FogColor value="255,38,213,65"/>
+        <FogDensity value="0.150000"/>
+        <FogFalloff value="0.340000"/>
+        <WindTurbulenceSpeed value="0.200000"/>
+        <WindSpeed value="0.200000"/>
+    </CTerrain>
+</Catalog>

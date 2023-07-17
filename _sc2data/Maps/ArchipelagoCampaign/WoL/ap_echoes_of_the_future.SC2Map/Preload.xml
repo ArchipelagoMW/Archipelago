@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Achievement id="Anniversary_TZeratul03"/>
+<Achievement id="TZeratul03_1"/>
+<Achievement id="TZeratul03_2"/>
+<Achievement id="TZeratul03_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="CreepBlocker1x1Doodad"/>
+<Actor id="AiurFoliage" Variations="0,1,2,3,4,5"/>
+<Actor id="AiurTree" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="AiurProtossBuildingsSmallWrecked" Variations="0,2"/>
+<Actor id="AiurRuinedShips" Variations="0,3"/>
+<Actor id="AiurTempleBuildings" Variations="0,1,2,3,4,5"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="BelShirCliffGapFiller"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="Bush" Variations="0,1,2,3,4"/>
+<Actor id="CharBlisterEgg"/>
+<Actor id="CharGlowingPods" Variations="0,1,2"/>
+<Actor id="ColonistShipWrecked" Variations="2,3"/>
+<Actor id="CommandCenterWrecked"/>
+<Actor id="Fish"/>
+<Actor id="FogGrey"/>
+<Actor id="RainEmitterMedium"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,8,9,10"/>
+<Actor id="RockWaterfall" Variations="2,6"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4,5,19,22"/>
+<Actor id="SmokePillarsTall"/>
+<Actor id="Vines" Variations="2"/>
+<Actor id="WreckedBattlecruiser"/>
+<Actor id="WreckedVehicles" Variations="0"/>
+<Actor id="ZergCliffWeb" Variations="0,1,2"/>
+<Actor id="ZergSpire" Variations="0,1"/>
+<Actor id="ZergSpireDead" Variations="0,1,2,3,4"/>
+<Actor id="ZergSpireLarge" Variations="0,1,2,3,4"/>
+<Actor id="ZergThornSpire" Variations="0,1,2,3,4,6,7"/>
+<Actor id="WaterDrops"/>
+<Actor id="WaterSplash"/>
+<Actor id="AiurOvermindDoodad"/>
+<Actor id="AiurOvermindSpire" Variations="0,1,3"/>
+<Actor id="AiurOvermindIntestines" Variations="0,1,2"/>
+<Actor id="AiurOvermindProng" Variations="0,1,2,3,4,5"/>
+<Actor id="CreepWebbing" Variations="1,3,4"/>
+<Actor id="DeadTendrils" Variations="3,4"/>
+<Actor id="ZergedCliff" Variations="8,9"/>
+<Behavior id="VoidSeekerDock"/>
+<Behavior id="Read"/>
+<Behavior id="ColonistWander"/>
+<Behavior id="SuppressCloak"/>
+<Behavior id="ColonyInfestation"/>
+<Behavior id="CreepMove3"/>
+<Light id="Aiur"/>
+<Light id="AiurFlashback"/>
+<Light id="AiurFlashbackStart"/>
+<Light id="AiurSpaceCinematic"/>
+<Model id="PingAlert"/>
+<Model id="PingObjective"/>
+<Model id="BriefingUnitSelectProtoss"/>
+<Model id="BriefingUnitSelectProtossSmall"/>
+<Model id="AiurSkybox"/>
+<Model id="AvernusSkybox"/>
+<Model id="BraxisAlphaSkyBox"/>
+<Model id="BraxisAlphaSkyParallax"/>
+<Model id="ShieldTransferImpact"/>
+<Sound id="Egg_Explode"/>
+<Sound id="Colossus_Ready" Variations="0"/>
+<Sound id="Observer_Pissed" Variations="3"/>
+<Sound id="Zerg_BurrowLarge"/>
+<Sound id="NydusWorm_Unload"/>
+<Sound id="NydusWorm_Birth"/>
+<Sound id="Protoss_PowerUpSmall" Variations="1"/>
+<Sound id="UI_TerranRescueUnit" Variations="0"/>
+<Sound id="TZeratul03Zeratul00001"/>
+<Sound id="TZeratul03Zeratul00004"/>
+<Sound id="TZeratul03HighTemplar00005"/>
+<Sound id="TZeratul03Zeratul00006"/>
+<Sound id="TZeratul03Zeratul00007"/>
+<Sound id="TZeratul03Zeratul00034"/>
+<Sound id="TZeratul03Zeratul00035"/>
+<Sound id="TZeratul03Zeratul00036"/>
+<Sound id="TZeratul03Zeratul00037"/>
+<Sound id="TZeratul03Zeratul00038"/>
+<Sound id="TZeratul03Zeratul00040"/>
+<Sound id="TZeratul03Zeratul00041"/>
+<Sound id="TZeratul03Zeratul00042"/>
+<Sound id="TZeratul03Zeratul00043"/>
+<Sound id="TZeratul03Zeratul00044"/>
+<Sound id="TZeratul03Zeratul00045"/>
+<Sound id="TZeratul03Zeratul00046"/>
+<Sound id="TZeratul03Zeratul00047"/>
+<Sound id="TZeratul03Zeratul00048"/>
+<Sound id="TZeratul03Zeratul00049"/>
+<Sound id="TZeratul03Zeratul00050"/>
+<Sound id="TZeratul03Zeratul00052" Variations="0"/>
+<Sound id="TZeratul03Tassadar00053" Variations="0"/>
+<Sound id="TZeratul03Zeratul00054" Variations="0"/>
+<Sound id="TZeratul03Tassadar00055" Variations="0"/>
+<Sound id="TZeratul03Zeratul00056" Variations="0"/>
+<Sound id="TZeratul03Tassadar00057" Variations="0"/>
+<Sound id="TZeratul03Zeratul00058" Variations="0"/>
+<Sound id="TZeratul03Tassadar00059" Variations="0"/>
+<Sound id="TZeratul03Zeratul00060" Variations="0"/>
+<Sound id="TZeratul03Tassadar00061" Variations="0"/>
+<Sound id="TZeratul03Zeratul00062" Variations="0"/>
+<Sound id="TZeratul03Tassadar00073" Variations="0"/>
+<Sound id="TZeratul03Tassadar00074" Variations="0"/>
+<Sound id="TZeratul03Tassadar00075" Variations="0"/>
+<Sound id="TZeratul03BriefingZeratul00002"/>
+<Sound id="TZeratul03BriefingZeratul00004"/>
+<Sound id="TZeratul03BriefingZeratul00006"/>
+<Sound id="TZeratul03BriefingZeratul00007"/>
+<Sound id="TZeratul03BriefingZeratul00008"/>
+<Soundtrack id="Ambience_Aiur"/>
+<Soundtrack id="Ambience_Char"/>
+<Soundtrack id="Ambience_BraxisAlpha"/>
+<Soundtrack id="TZeratul03MusicEventA"/>
+<Soundtrack id="TZeratul03MusicIntro"/>
+<Soundtrack id="TZeratul03MusicMain"/>
+<Soundtrack id="TZeratul03MusicOutro"/>
+<Terrain id="Aiur"/>
+<Unit id="Colossus"/>
+<Unit id="Baneling"/>
+<Unit id="Hatchery"/>
+<Unit id="Extractor"/>
+<Unit id="SpawningPool"/>
+<Unit id="EvolutionChamber"/>
+<Unit id="HydraliskDen"/>
+<Unit id="Spire"/>
+<Unit id="UltraliskCavern"/>
+<Unit id="InfestationPit"/>
+<Unit id="BanelingNest"/>
+<Unit id="RoachWarren"/>
+<Unit id="SpineCrawler"/>
+<Unit id="SporeCrawler"/>
+<Unit id="Lair"/>
+<Unit id="Hive"/>
+<Unit id="GreaterSpire"/>
+<Unit id="Egg"/>
+<Unit id="Drone"/>
+<Unit id="Zergling"/>
+<Unit id="Overlord"/>
+<Unit id="Hydralisk"/>
+<Unit id="Mutalisk"/>
+<Unit id="Ultralisk"/>
+<Unit id="Roach"/>
+<Unit id="Infestor"/>
+<Unit id="BroodLord"/>
+<Unit id="BanelingBurrowed"/>
+<Unit id="DroneBurrowed"/>
+<Unit id="HydraliskBurrowed"/>
+<Unit id="RoachBurrowed"/>
+<Unit id="ZerglingBurrowed"/>
+<Unit id="Overseer"/>
+<Unit id="UltraliskBurrowed"/>
+<Unit id="CreepTumorBurrowed"/>
+<Unit id="NydusCanal"/>
+<Unit id="Larva"/>
+<Unit id="Beacon_Protoss"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="PathingBlocker2x2"/>
+<Unit id="InfestedCivilian" Variations="0,1,2"/>
+<Unit id="Zeratul"/>
+<Unit id="InfestedTerranCampaignBurrowed"/>
+<Unit id="InfestedTerranCampaign"/>
+<Unit id="Obelisk"/>
+<Unit id="Tassadar"/>
+<Unit id="Scourge"/>
+<Unit id="KerriganEgg"/>
+<Unit id="Overmind"/>
+<Unit id="OvermindRemains"/>
+<Unit id="VoidSeeker"/>
+<Unit id="Kerrigan"/>
+<Unit id="InvisiblePylon"/>
+<Unit id="SuperWarpGate"/>
+<Unit id="NaturalGas"/>
+<Unit id="NaturalMinerals"/>
+<Unit id="InfestedBarracks"/>
+<Unit id="InfestedBunker"/>
+<Unit id="InfestedCC"/>
+<Unit id="InfestedEngBay"/>
+<Unit id="InfestedSupply"/>
+<Unit id="Food1000"/>
+<Unit id="InfestationSpire" Variations="0,1,3,4"/>
+<Unit id="AP_Assimilator"/>
+<Unit id="AP_RoboticsFacility"/>
+<Unit id="AP_Observer"/>
+<Unit id="AP_PhotonCannon"/>
+<Unit id="AP_Probe"/>
+<Unit id="AP_StalkerShakuras"/>
+<Unit id="AP_HighArchonTemplar"/>
+<Unit id="AP_Gateway"/>
+<Unit id="AP_Nexus"/>
+<Unit id="AP_Forge"/>
+<Unit id="AP_RoboticsBay"/>
+<Unit id="AP_CyberneticsCore"/>
+<Unit id="AP_WarpGate"/>
+</Preload>

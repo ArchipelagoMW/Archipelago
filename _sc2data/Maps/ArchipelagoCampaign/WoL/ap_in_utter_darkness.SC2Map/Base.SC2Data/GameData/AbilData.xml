@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilMerge id="ArchonWarp">
+        <CmdButtonArray index="SelectedUnits" State="Available"/>
+        <CmdButtonArray index="WithTarget" State="Available"/>
+    </CAbilMerge>
+    <CAbilResearch id="CyberneticsCoreResearch">
+        <InfoArray index="Research1">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research2">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research3">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research4">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research5">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research6">
+            <Button State="Available"/>
+        </InfoArray>
+    </CAbilResearch>
+    <CAbilResearch id="ForgeResearch">
+        <InfoArray index="Research1">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research2">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research3">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research4">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research5">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research6">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research7">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research8">
+            <Button State="Available"/>
+        </InfoArray>
+        <InfoArray index="Research9">
+            <Button State="Available"/>
+        </InfoArray>
+    </CAbilResearch>
+    <CAbilMorph id="UpgradeToWarpGate">
+        <CmdButtonArray index="Execute" State="Available"/>
+    </CAbilMorph>
+</Catalog>

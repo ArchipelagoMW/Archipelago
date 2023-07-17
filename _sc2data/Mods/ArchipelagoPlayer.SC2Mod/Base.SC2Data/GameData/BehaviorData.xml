@@ -1190,7 +1190,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_MindControl">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\ui_debuff_hivemindemulator.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -1816,7 +1816,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_NovaDomination">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\BTN-Ability-Nova-Domination.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -3434,7 +3434,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DarkArchonMindControl">
         <!-- Not to be dispelled by Restoration -->
-<!--        <Alignment value="Negative"/>-->
+        <!--        <Alignment value="Negative"/>-->
         <InfoIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <BehaviorCategories index="User8" value="1"/>
@@ -3532,6 +3532,160 @@
         <Modification>
             <DamageDealtFraction index="Ranged" value="1"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFrenzy">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFury1">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <Duration value="5"/>
+        <Modification AttackSpeedMultiplier="1.15"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFury2">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <Duration value="5"/>
+        <Modification AttackSpeedMultiplier="1.3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFury3">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <Duration value="5"/>
+        <Modification AttackSpeedMultiplier="1.45"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFury4">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <Duration value="5"/>
+        <Modification AttackSpeedMultiplier="1.6"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingFury5">
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <Duration value="5"/>
+        <Modification AttackSpeedMultiplier="1.75"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRange">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.9"/>
+        <Modification WeaponRange="0.9"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRangeCounter">
+        <InfoFlags index="Hidden" value="1"/>
+        <MaxStackCount value="10"/>
+        <Duration value="5.1"/>
+        <InitialEffect value="AP_ZerglingRangeApply"/>
+        <ExpireEffect value="AP_ZerglingRangeApply"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRangeWait">
+        <InfoFlags index="Hidden" value="1"/>
+        <DisableValidatorArray value="AP_ZerglingRangeAttackValidators"/>
+        <DisableValidatorArray value="AP_HaveHotSZerglingRange"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_ZerglingRangeWaitCounter"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRespawnControllerRebirth">
+        <Alignment value="Positive"/>
+        <FinalEffect value="AP_ZerglingRespawnControllerRebirthCU"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRespawnControllerSearch">
+        <Alignment value="Positive"/>
+        <Requirements value="AP_ZerglingRespawnPrimaryNotActive"/>
+        <Period value="3"/>
+        <PeriodicEffect value="AP_ZerglingRespawnPrimaryDeathSearch"/>
+        <FinalEffect value="AP_ZerglingRespawnControllerRebirth"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRespawnDeath">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Requirements value="AP_ZerglingRespawnEnabled"/>
+        <DamageResponse Fatal="1" Handled="AP_ZerglingRespawnDeathSet">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRespawnPrimary">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="NotHidden"/>
+        <Modification SubgroupPriority="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingRespawnWorkingTimer">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <BuffFlags index="Countdown" value="0"/>
+        <Duration value="29.6"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ZerglingSunder">
+        <InfoIcon value="Assets\Textures\abilityicon_corrosivespores_square.dds"/>
+        <Duration value="10"/>
+        <DamageResponse ModifyFraction="1.3">
+            <Kind index="Spell" value="0"/>
+            <Kind index="Melee" value="0"/>
+            <Kind index="Splash" value="0"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PrecursorZR">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HotSRaptorCharging">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-charge.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Modification MoveSpeedMultiplier="0.01">
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <AbilClassEnableArray index="CAbilMove" value="1"/>
+            <AbilLinkEnableArray value="attack"/>
+            <AbilLinkEnableArray value="stop"/>
+            <WeaponDisableArray value="AP_Claws"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorJump id="AP_HotSRaptorJump">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveHotSHaveRaptor"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="0.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="AP_RaptorJumpUp"/>
+        <MoverDown value="AP_RaptorJumpDown"/>
+        <DurationMoveOut value="0.6"/>
+        <Placeholder value="AP_HotSRaptorPlaceholder"/>
+        <LandAdjustmentUp value="1.5"/>
+        <LandAdjustmentDown value="1.5"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+    </CBehaviorJump>
+    <CBehaviorBuff id="AP_RaptorDeath">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DamageResponse Fatal="1" Handled="AP_RaptorDeath">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RaptorFrenzy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="3"/>
+        <Modification MoveSpeedMultiplier="1.25" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_TempTimeout">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <ExpireEffect value="AP_SuicideRemove"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_OracleRevelation">
         <Alignment value="Negative"/>
@@ -4100,8 +4254,8 @@
             <ModifyFlags index="Detected" value="1"/>
             <ModifyFlags index="SuppressMoving" value="1"/>
             <ModifyFlags index="SuppressTurning" value="1"/>
-            <StateFlags index="SuppressDetection" value="1"/>
             <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
         </Modification>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
@@ -4199,5 +4353,207 @@
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Duration value="0.1"/>
         <ExpireEffect value="AP_MercFirebatOptimizedLogisticsMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAHeroicShieldImmunity">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-spearofadun-guardianshell.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <ExpireEffect value="AP_SOAHeroicShieldWeaknessApply"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAHeroicShieldProcBuff">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-shield-protoss-plasmashields.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveSOAHeroicShield"/>
+        <RemoveValidatorArray value="AP_NotHaveHeroicShieldCleanUp"/>
+        <DamageResponse Fatal="1" Handled="AP_SOAHeroicShieldInvulnerableApply" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAHeroicShieldWeakness">
+        <Alignment value="Negative"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-tomahawkpowercell.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="60"/>
+        <Modification>
+            <BehaviorLinkDisableArray value="AP_SOAHeroicShieldProcBuff"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotWhirlwind">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_CasterNotStunned"/>
+        <Duration value="3"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_VoidZealotWhirlwindBehaviorSet"/>
+        <FinalEffect value="AP_VoidZealotWhirlwindCancelMove"/>
+        <Modification>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <WeaponArray Link="VoidZealotWhirlwindFakeWeapon"/>
+            <WeaponDisableArray value="PsiBlades"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAHeroicShield">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-spearofadun-guardianshell.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_SOAHeroicShieldSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAHeroicShieldCooldownDummy">
+        <Cost>
+            <Cooldown TimeStart="1"/>
+        </Cost>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotTerazineFuryWeakness">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-tomahawkpowercell.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Duration value="30"/>
+        <Modification>
+            <BehaviorLinkDisableArray value="VoidZealotTerazineFury"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ShadowCharging">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-charge.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="ChargeMinDistance"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Duration value="3.5"/>
+        <Modification MoveSpeedMultiplier="6.8">
+            <StateFlags index="Cloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotShadowChargeSlow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <Modification MoveSpeedMultiplier="0.5" AttackSpeedMultiplier="0.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotShadowChargeStun">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Charging">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-charge.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="3.5"/>
+        <Modification MoveSpeedMultiplier="2.2"/>
+        <Alignment value="Positive"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <RemoveValidatorArray value="ChargeTargetAttacked"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UpgradeToWarpGateInstant">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <ExpireEffect value="AP_UpgradeToWarpGateInstant"/>
+        <Requirements value="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech"/>
+        <Duration value="0.1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <RemoveValidatorArray value="AP_GameTimeGreaterthan5Seconds"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveSOAAutoAssimilator"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorMorphRich">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveSOAAutoAssimilator"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorMorphRich"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AssimilatorPipesMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AssimilatorPipesMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarryHarvestableVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Capacity value="2500"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableVespeneGeyserGasProtoss"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneProtoss">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="2.1"/>
+        <!--Period value="1.68"/-->
+        <PeriodicEffect value="AP_AutoHarvestVespene4"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestProtoss"/>
+        <DisableValidatorArray value="AP_HaveCinematicModeDisabled"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneProtossRich">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="2.1"/>
+        <!--Period value="1.68"/-->
+        <PeriodicEffect value="AP_AutoHarvestVespene8"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestProtoss"/>
+        <DisableValidatorArray value="AP_HaveCinematicModeDisabled"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutomatedAssimilatorBeam">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_AutomatedAssimilatorBeam"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableRichVespeneGeyserGasProtoss">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGasProtoss"/>
+    </CBehaviorResource>
+    <CBehaviorBuff id="AP_ProbeGlowingBehavior">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
 </Catalog>

@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="7">
+        <name value="Player 10 Dummy Vision"/>
+        <shape type="circle">
+            <center value="45.9301,41.6904"/>
+            <radius value="7.706"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Map Edge Spawn P05"/>
+        <shape type="rect">
+            <quad value="93.7583,103.9877,107.006,108.4924"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Map Edge Spawn P06"/>
+        <shape type="rect">
+            <quad value="151.7026,53.8625,155.9,62.2875"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Nydus Moment B 1"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="49.2827,61.8071"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Nydus Moment B 2"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="43.296,54.9475"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Nydus Moment B 3"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="43.1794,49.231"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Nydus Moment B 4"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="65.5314,45.0234"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Nydus Moment B 5"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="52.15,46.6394"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Nydus Moment B 6"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="56.9711,40.6118"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Nydus Moment B 8"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="32.8796,42.9265"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Nydus Moment B 7"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="56.7355,36.6911"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Nydus Moment A 1"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="68.638,66.0864"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Nydus Moment A 2"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="61.319,65.8854"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Nydus Moment A 3"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="70.5437,58.1501"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Nydus Moment A 4"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="54.2456,60.0546"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Nydus Moment A 5"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="61.3,56.567"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Nydus Moment A 6"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="63.7426,50.329"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="P06 Wave Spawn"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="113.485,24.176"/>
+            <radius value="4.9404"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="P04 Wave Spawn"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="33.8745,119.9443"/>
+            <radius value="6.798"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="P05  Wave Spawn"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="101.5461,111.532"/>
+            <radius value="4.7846"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Mid Cine - Zerg Spawn 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="88.8991,126.517"/>
+            <radius value="4.0961"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Mid Cine - Zerg Spawn 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="123.95,111.704"/>
+            <radius value="4.0961"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Mid Cine - Spawn"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="101.866,118.4843"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.5974,114.079"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.2907,119.235"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.37,131.6203"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.7951,132.3713"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.6872,129.0585"/>
+            <radius value="4.144"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.8173,124.46"/>
+            <radius value="4.144"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Nydus Moment A 4 (Hard/Insane)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="77.7822,74.379"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Nydus Moment A 5 (Hard/Insane)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="63.9216,84.6406"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Nydus Moment A 6 (Hard)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="87.98,59.8464"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Nydus Moment B 4 (Hard/Insane)"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="68.2646,50.173"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Nydus Moment B 5 (Hard/Insane)"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="51.27,50.5488"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Nydus Moment B 6 (Hard/Insane)"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="53.4042,41.8723"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Nydus Moment B 8 (Hard/Insane)"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="51.009,34.7893"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Nydus Moment B 7 (Hard/Insane)"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="52.6872,38.384"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="NE High Yield Expansion W"/>
+        <shape type="circle">
+            <center value="26.4592,82.161"/>
+            <radius value="13.2133"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Nydus Moment Gank Expansion W 1 (Hard/Insane)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="23.202,87.904"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="Nydus Moment Gank Expansion W 2 (Hard/Insane)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="29.0415,76.2746"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="Nydus Moment A 6 (Insane)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="73.703,55.8466"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Nydus Moment A 7 (All)"/>
+        <color value="255,128,0,0"/>
+        <shape type="circle">
+            <center value="54.2287,64.239"/>
+            <radius value="1.725"/>
+        </shape>
+    </region>
+    <region id="80">
+        <name value="Stargate 1 Warp-in"/>
+        <shape type="rect">
+            <quad value="27.9982,40.005,30.9797,43.0505"/>
+        </shape>
+    </region>
+    <region id="81">
+        <name value="Stargate 2 Warp-in"/>
+        <shape type="rect">
+            <quad value="43.029,22.0173,46.0104,25.063"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Victory Cine - Drone Spawn"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="36.8515,127.5971,48.474,132.1701"/>
+        </shape>
+    </region>
+    <region id="93">
+        <name value="Victory Cine - Zerg Spawn Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="41.956,124.9616"/>
+            <radius value="21.0192"/>
+        </shape>
+    </region>
+    <region id="83">
+        <name value="Briefing Zerg"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="90.4472,104.5703"/>
+            <radius value="7.4296"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.1914,110.9968"/>
+            <radius value="2.7668"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.9396,97.8317"/>
+            <radius value="7.0124"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.731,103.978"/>
+            <radius value="6.703"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.333,106.773"/>
+            <radius value="6.1506"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.625,114.826"/>
+            <radius value="6.4958"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.1938,106.0043"/>
+            <radius value="5.8532"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.474,115.3032"/>
+            <radius value="5.8208"/>
+        </shape>
+        <shape type="circle">
+            <center value="98,129.8493"/>
+            <radius value="5.9694"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.037,125.0415"/>
+            <radius value="6.5031"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.2551,132.897"/>
+            <radius value="5.382"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.4458,100.7048"/>
+            <radius value="3.6894"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.3703,131.1303"/>
+            <radius value="3.4072"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.3503,127.5603"/>
+            <radius value="3.4116"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.209,132.6862"/>
+            <radius value="2.8945"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Briefing Hybrid Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="109.1076,121.2021"/>
+            <radius value="5.4721"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Debriefing Kerrigan Zerg"/>
+        <shape type="circle">
+            <center value="140.6296,50.4946"/>
+            <radius value="14.3066"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="141.3627,50.487"/>
+            <radius value="2"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="135.5463,54.5185"/>
+            <radius value="3.3747"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="145.5385,56.39"/>
+            <radius value="3.3747"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="135.5207,45.4516"/>
+            <radius value="3.3747"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Player 1 Harvest"/>
+        <shape type="circle">
+            <center value="23.7895,26.766"/>
+            <radius value="5.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.9147,19.9775"/>
+            <radius value="5.7907"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.5017,17.0273"/>
+            <radius value="4.187"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.2905,21.0754"/>
+            <radius value="4.187"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.3256,30.2773"/>
+            <radius value="4.187"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.8754,15.9248"/>
+            <radius value="4.187"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Creep Tumor Corruption Region"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="31.579,26.6647"/>
+            <radius value="13.6091"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.2094,37.8828"/>
+            <radius value="7.711"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.078,46.2668"/>
+            <radius value="4.533"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.5515,52.9775"/>
+            <radius value="4.533"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.2321,49.9582"/>
+            <radius value="4.0183"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.6518,29.9238"/>
+            <radius value="5.5478"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.0827,21.2478"/>
+            <radius value="4.2583"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.6972,33.0925"/>
+            <radius value="4.6525"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.7207,34.9548"/>
+            <radius value="2.0622"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.2348,38.923"/>
+            <radius value="3.0126"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.1682,48.9968"/>
+            <radius value="4.938"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.9252,63.2001"/>
+            <radius value="4.938"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.065,69.8762"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.6691,71.464"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.7795,70.4282"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.4235,65.1137"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.8212,60.0827"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.1198,50.1923"/>
+            <radius value="5.6684"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.0446,52.1496"/>
+            <radius value="3.3903"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.8964,67.5678"/>
+            <radius value="3.3903"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.578,81.0908"/>
+            <radius value="3.3903"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.1577,82.0803"/>
+            <radius value="3.3903"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.1452,75.398"/>
+            <radius value="2.3083"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.2836,42.083"/>
+            <radius value="2.3083"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Camera Map Bounds"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="21.995,14.9943,96.9875,91.9982"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Map Edge Spawn P04"/>
+        <shape type="rect">
+            <quad value="24.4077,117.6228,43.0087,124.4492"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Region 002"/>
+        <shape type="circle">
+            <center value="101.4443,109.893"/>
+            <radius value="12"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Region 002 Copy"/>
+        <shape type="circle">
+            <center value="113.8237,89.633"/>
+            <radius value="12"/>
+        </shape>
+    </region>
+</Regions>

@@ -2086,6 +2086,9 @@
         <DisplayName value="Weapon/Name/AP_WraithG"/>
         <Options index="Disabled" value="1"/>
         <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_WraithGU"/>
@@ -2093,9 +2096,6 @@
         <Period value="1.694"/>
         <Effect value="AP_WraithGLaunchMissile"/>
         <AllowedMovement value="Slowing"/>
-        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
-        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="0"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="AP_ImpalerTentacle">
         <EditorCategories value="Race:Zerg"/>
@@ -2117,5 +2117,54 @@
         <RangeSlop value="0"/>
         <Period value="0.8608"/>
         <Effect value="AP_SporeCrawler"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SolariteReaper">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ZealotAiurWeapon"/>
+        <DisplayAttackCount value="1"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Marker Link="Weapon/PsiBlades"/>
+        <Cost>
+            <Cooldown Link="Weapon/PsiBlades"/>
+        </Cost>
+        <Period value="1.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_ZealotAiurWeaponCleaveSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_CenturionWarpBlades">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_PsiBlades"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Marker Link="Weapon/PsiBlades"/>
+        <Cost>
+            <Cooldown Link="Weapon/PsiBlades"/>
+        </Cost>
+        <Period value="1.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_ZealotPsiBladesCleaveSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Claws">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="0.696"/>
+        <Effect value="AP_HotSZerglingClaws"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ParticleBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.5"/>
     </CWeaponLegacy>
 </Catalog>

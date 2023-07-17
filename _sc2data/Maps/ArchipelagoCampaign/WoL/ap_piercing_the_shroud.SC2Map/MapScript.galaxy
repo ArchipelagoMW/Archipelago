@@ -86,6 +86,7 @@ const int gv_computer06SecurityCam = 36;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+bool gv_mapFullyInitialized;
 bool gv_gameOver;
 bool gv_inCinematic;
 bool gv_inSecondHalf;
@@ -166,6 +167,7 @@ int gv_buttonHackingProgress02TwoDot;
 int gv_buttonHackingProgress01ThreeDot;
 int gv_buttonHackingProgress02ThreeDot;
 sound gv_soundHackingLoop;
+bool gv_computer02HasBeenAccessed;
 int gv_buttonComputer02SecurityCam;
 int gv_buttonComputer02ReleaseZealots;
 int gv_buttonComputer02ReleaseZerg;
@@ -451,6 +453,7 @@ trigger gt_EnemyGroupDies;
 trigger gt_AllTurretsDead;
 trigger gt_LeftTurretsDead;
 trigger gt_RightTurretsDead;
+trigger gt_Computer02Near;
 trigger gt_Computer02Enter;
 trigger gt_Computer02Leave;
 trigger gt_Computer02CameraButtonDisplay;
@@ -957,6 +960,7 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
     libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
     TechTreeAbilityAllow(gv_p01_USER, AbilityCommand("TossGrenade", 0), false);
+    gv_mapFullyInitialized = true;
     return true;
 }
 
@@ -4114,6 +4118,33 @@ void gt_RightTurretsDead_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Computer02Near
+//--------------------------------------------------------------------------------------------------
+bool gt_Computer02Near_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_p01_USER))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_computer02HasBeenAccessed = true;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Computer02Near_Init () {
+    gt_Computer02Near = TriggerCreate("gt_Computer02Near_Func");
+    TriggerAddEventUnitRegion(gt_Computer02Near, null, RegionFromId(152), true);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Computer02 Enter
 //--------------------------------------------------------------------------------------------------
 bool gt_Computer02Enter_Func (bool testConds, bool runActions) {
@@ -4489,6 +4520,7 @@ bool gt_Computer02ReleasePrisonersCombined_Func (bool testConds, bool runActions
         return true;
     }
 
+    gv_computer02HasBeenAccessed = true;
     gv_lab02DominionUnitGroup = UnitGroup(null, gv_p02_DOMINION, RegionFromId(80), UnitFilter(0, 0, 0, 0), 0);
     SoundPlay(SoundLink("TUIWarningPing", 0), PlayerGroupAll(), 100.0, 0.0);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
@@ -4625,6 +4657,14 @@ bool gt_Lab02alldead_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((gv_computer02HasBeenAccessed == true))) {
+            return false;
+        }
+
+        if (!((gv_mapFullyInitialized == true))) {
+            return false;
+        }
+
         if (!((UnitGroupCount(gv_lab02PrisonerUnitGroup, c_unitCountAlive) <= 0))) {
             return false;
         }
@@ -4669,6 +4709,14 @@ bool gt_Lab02alldeadCintriggerwithoutcamerasafety_Func (bool testConds, bool run
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((gv_mapFullyInitialized == true))) {
+            return false;
+        }
+
+        if (!((gv_computer02HasBeenAccessed == true))) {
+            return false;
+        }
+
         if (!((UnitGroupCount(gv_lab02DominionUnitGroup, c_unitCountAlive) <= 0))) {
             return false;
         }
@@ -13237,6 +13285,7 @@ void InitTriggers () {
     gt_AllTurretsDead_Init();
     gt_LeftTurretsDead_Init();
     gt_RightTurretsDead_Init();
+    gt_Computer02Near_Init();
     gt_Computer02Enter_Init();
     gt_Computer02Leave_Init();
     gt_Computer02CameraButtonDisplay_Init();

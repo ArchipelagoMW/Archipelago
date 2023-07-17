@@ -499,6 +499,535 @@
         <EffectArray Reference="Weapon,AP_Predator,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_TyphoonMissilePod,RateMultiplier" Value="0.05"/>
     </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseProtossGroundWeapons">
+        <!--  Zealot -->
+        <EffectArray Reference="Weapon,AP_PsiBlades,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_PsiBlades,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_ZealotAiurWeapon,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_SolariteReaper,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_CenturionWarpBlades,Level" Value="1"/>
+        <!--  Sentry -->
+        <EffectArray Reference="Weapon,AP_DisruptionBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_DisruptionBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_EnergizerWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SanitizationBeamDamage,Amount" Value="1"/>
+        <!--  Stalker -->
+        <EffectArray Reference="Weapon,AP_ParticleDisruptors,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ParticleDisruptorsU,Amount" Value="1.000000"/>
+        <!--  Immortal -->
+        <EffectArray Reference="Weapon,AP_PhaseDisruptors,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_PhaseDisruptors,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_PhaseDisruptors,AttributeBonus[Armored]" Value="3"/>
+        <EffectArray Reference="Weapon,AP_PhaseDisruptersAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ImmortalTaldarimWeaponDamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_ImmortalTaldarimWeaponDamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Reference="Weapon,AP_ImmortalTaldarim,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_AnnihilatorParticleDisruptors,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_AnnihilatorParticleDisruptors,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_AnnihilatorParticleDisruptors,AttributeBonus[Armored]" Value="2"/>
+        <!--  Dark Templar -->
+        <EffectArray Reference="Weapon,AP_WarpBlades,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WarpBlades,Amount" Value="5"/>
+        <EffectArray Reference="Effect,AP_DarkTemplarShakurasDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DarkTemplarShakuras,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DarkTemplarTaldarim,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_AvengerWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_AvengerWeapon,Amount" Value="5"/>
+        <!--  Archon -->
+        <EffectArray Reference="Weapon,AP_PsionicShockwave,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,Amount" Value="3.000000"/>
+        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,AttributeBonus[Biological]" Value="1.000000"/>
+        <!--  Colossus -->
+        <EffectArray Reference="Weapon,AP_ThermalLances,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ThermalLancesMU,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_ThermalLancesFriendlyDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_ThermalLanceAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ThermalLancesMUAir,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_ColossusPurifierThermalLances,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ColossusPurifierThermalLancesDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_ColossusTaldarimChargedBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ColossusTaldarimDamage,Amount" Value="10"/>
+        <!-- Adept -->
+        <EffectArray Reference="Weapon,AP_Adept,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_AdeptDamage,Amount" Value="2"/>
+        <!-- Reaver -->
+        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,Amount" Value="5"/>
+        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,AP_ReaverScarabsLaunch,Level" Value="1"/>
+        <!-- Dragoon -->
+        <EffectArray Reference="Effect,AP_DragoonDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_Dragoon,Level" Value="1"/>
+        <!-- Disruptor -->
+        <EffectArray Reference="Effect,AP_DisruptorWeaponDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DisruptorWeapon,Level" Value="1"/>
+        <!-- High Templar -->
+        <EffectArray Reference="Effect,AP_HighTemplarWeaponDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_HighTemplarWeapon,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_AscendantWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_AscendantWeaponDamage,Amount" Value="1"/>
+        <!-- Dark Archon -->
+        <EffectArray Reference="Effect,AP_DarkArchonWeaponDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_DarkArchonWeapon,Level" Value="1"/>
+        <!-- Supplicant -->
+        <EffectArray Reference="Weapon,AP_SupplicantWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SupplicantDamage,Amount" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseProtossGroundArmors">
+        <!--  Probe -->
+        <EffectArray Reference="Unit,AP_Probe,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Probe,LifeArmor" Value="1"/>
+        <!--  Zealot -->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_ZealotAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotAiur,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,LifeArmor" Value="1"/>
+        <!--  Sentry -->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmor" Value="1.000000"/>-->
+        <EffectArray Reference="Unit,AP_SentryAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryAiur,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Monitor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Monitor,LifeArmor" Value="1"/>
+        <!--  Stalker -->
+        <EffectArray Reference="Unit,AP_Stalker,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Stalker,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Slayer,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Slayer,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,LifeArmor" Value="1"/>
+        <!--  Immortal -->
+        <EffectArray Reference="Unit,AP_Immortal,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Immortal,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ImmortalBarrier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalBarrier,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,LifeArmor" Value="1"/>
+        <!--  High Templar -->
+        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighArchonTemplar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighArchonTemplar,LifeArmor" Value="1"/>
+        <!--  Dark Templar -->
+        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,LifeArmor" Value="1"/>
+        <!--  Archon -->
+        <EffectArray Reference="Unit,AP_Archon,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Archon,LifeArmor" Value="1"/>
+        <!--  Colossus -->
+        <EffectArray Reference="Unit,AP_Colossus,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Colossus,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusTaldarim,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusTaldarim,LifeArmor" Value="1"/>
+        <!-- Adept -->
+        <EffectArray Reference="Unit,AP_Adept,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Adept,LifeArmorLevel" Value="1"/>
+        <!-- Disruptor -->
+        <EffectArray Reference="Unit,AP_Disruptor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DisruptorPhased,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Disruptor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DisruptorPhased,LifeArmor" Value="1"/>
+        <!-- Reaver -->
+        <EffectArray Reference="Unit,AP_Reaver,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Reaver,LifeArmor" Value="1"/>
+        <!-- Dragoon -->
+        <EffectArray Reference="Unit,AP_Dragoon,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Dragoon,LifeArmor" Value="1"/>
+        <!-- Dark Archon -->
+        <EffectArray Reference="Unit,AP_DarkArchon,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkArchon,LifeArmor" Value="1"/>
+        <!-- Supplicant -->
+        <EffectArray Reference="Unit,AP_Supplicant,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Supplicant,LifeArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseProtossAirWeapons">
+        <!--  Void Ray -->
+        <!--        <EffectArray Reference="Weapon,AP_PrismaticBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx1,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx2,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,AttributeBonus[Armored]" Value="1.000000"/>-->
+        <EffectArray Reference="Weapon,AP_VoidRayChargeBeamBase,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBaseDamageCharge1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBaseDamageCharge2,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBaseDamageCharge3,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_VoidRayChargeBeamBounce,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBounceDamageCharge1,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBounceDamageCharge2,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_VoidRayChargeBeamBounceDamageCharge3,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_VoidRayChargeBeamRange,Level" Value="1"/>
+        <!--  Carrier -->
+        <EffectArray Reference="Weapon,AP_InterceptorLaunch,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_InterceptorBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_InterceptorBeamDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_InterceptorsDummy,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_InterceptorAiurLaunch,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_InterceptorAiurBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_InterceptorAiurBeamDamage,Amount" Value="1"/>
+        <!--  Mothership -->
+        <EffectArray Reference="Weapon,AP_MothershipBeam,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_MothershipBeamDamage,Amount" Value="1.000000"/>
+        <EffectArray Reference="Weapon,AP_SOAMothershipv4Weapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SOAMothershipv4BeamDamage,Amount" Value="4"/>
+        <!-- Phoenix -->
+        <EffectArray Reference="Effect,AP_IonCannonsULeft,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_IonCannonsURight,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_IonCannons,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_IonCannonsU,Amount" Value="1"/>
+        <!-- Scout -->
+        <EffectArray Reference="Weapon,AP_ScoutMPGround,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ScoutMPGround,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ScoutMPAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ScoutMPAirU,Amount" Value="1"/>
+        <!-- Hero units -->
+        <!--        <EffectArray Reference="Weapon,UrunEnergyBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,UrunEnergyBeamDamage,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Weapon,MohandarPrismaticBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,MohandarMUx1,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,MohandarMUx2,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Effect,MohandarMUx3,Amount" Value="4"/>-->
+        <!--        <EffectArray Reference="Weapon,ArtanisBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,ArtanisBeamDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,SelendisInterceptorBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,SelendisInterceptorU,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,SelendisInterceptor,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,MothershipAiur06BeamDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,MothershipAiur06Weapon,Level" Value="1"/>-->
+        <!-- Arbiter -->
+        <EffectArray Reference="Weapon,AP_ArbiterMPWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ArbiterMPWeaponDamage,Amount" Value="1"/>
+        <!-- Corsair -->
+        <EffectArray Reference="Weapon,AP_NeutronFlare,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_NeutronFlare,Amount" Value="1"/>
+        <!-- Tempest -->
+        <EffectArray Reference="Weapon,AP_TempestPurifier,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_TempestPurifierGround,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_TempestPurifierDamage,Amount" Value="5"/>
+        <EffectArray Reference="Effect,AP_TempestPurifierDamageGround,Amount" Value="5"/>
+        <!-- Oracle -->
+        <EffectArray Reference="Weapon,AP_Oracle,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_OracleWeaponDamage,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_OracleWeaponDamage,AttributeBonus[Light]" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseProtossAirArmors">
+        <!--  Observer -->
+        <EffectArray Reference="Unit,AP_Observer,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Observer,LifeArmor" Value="1"/>
+        <!--  Warp Prism -->
+        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmor" Value="1"/>
+        <!--  Warp Prism (Phasing) -->
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmor" Value="1"/>
+        <!--  Phoenix -->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_PhoenixAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixAiur,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,LifeArmor" Value="1"/>
+        <!--  Void Ray -->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,LifeArmor" Value="1"/>
+        <!--        <EffectArray Reference="Unit,VoidRayAiur,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,VoidRayAiur,LifeArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_VoidRayTaldarim,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_VoidRayTaldarim,LifeArmor" Value="1"/>
+        <!--  Carrier -->
+        <EffectArray Reference="Unit,AP_Carrier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Carrier,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,LifeArmor" Value="1"/>
+        <!--  Interceptor -->
+        <EffectArray Reference="Unit,AP_Interceptor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Interceptor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,LifeArmor" Value="1"/>
+        <!--  Mothership -->
+        <!--        <EffectArray Reference="Unit,Mothership,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Mothership,LifeArmor" Value="1.000000"/>-->
+        <EffectArray Reference="Unit,AP_SOAMothershipv4,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SOAMothershipv4,LifeArmor" Value="1"/>
+        <!-- Oracle -->
+        <EffectArray Reference="Unit,AP_Oracle,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Oracle,LifeArmorLevel" Value="1"/>
+        <!-- Scout -->
+        <EffectArray Reference="Unit,AP_ScoutMP,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ScoutMP,LifeArmorLevel" Value="1"/>
+        <!-- Hero units -->
+        <!--        <EffectArray Reference="Unit,Urun,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Urun,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Mohandar,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Mohandar,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Selendis,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Selendis,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Artanis,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Artanis,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,SelendisInterceptor,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,MothershipAiur06,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,MothershipAiur06,LifeArmor" Value="1"/>-->
+        <!-- Arbiter -->
+        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmor" Value="1"/>
+        <!-- Corsair -->
+        <EffectArray Reference="Unit,AP_CorsairMP,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,LifeArmor" Value="1"/>
+        <!-- Tempest -->
+        <EffectArray Reference="Unit,AP_TempestPurifier,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_TempestPurifier,LifeArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseProtossShields">
+        <!--  Probe -->
+        <EffectArray Reference="Unit,AP_Probe,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Probe,ShieldArmor" Value="1"/>
+        <!--  Zealot -->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_ZealotAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,ShieldArmor" Value="1"/>
+        <!--  Sentry -->
+        <!--        <EffectArray Reference="Unit,Sentry,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Sentry,ShieldArmor" Value="1.000000"/>-->
+        <EffectArray Reference="Unit,AP_SentryAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Monitor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Monitor,ShieldArmor" Value="1"/>
+        <!--  Stalker -->
+        <EffectArray Reference="Unit,AP_Stalker,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Stalker,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Slayer,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Slayer,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,ShieldArmor" Value="1"/>
+        <!-- Adept -->
+        <EffectArray Reference="Unit,AP_Adept,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldArmorLevel" Value="1"/>
+        <!-- Dragoon -->
+        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmor" Value="1"/>
+        <!--  Immortal -->
+        <EffectArray Reference="Unit,AP_Immortal,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Immortal,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ImmortalBarrier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalBarrier,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,ShieldArmor" Value="1"/>
+        <!--  High Templar -->
+        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighArchonTemplar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HighArchonTemplar,ShieldArmor" Value="1"/>
+        <!--  Dark Templar -->
+        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,ShieldArmor" Value="1"/>
+        <!--  Archon -->
+        <EffectArray Reference="Unit,AP_Archon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Archon,ShieldArmor" Value="1"/>
+        <!-- Dark Archon -->
+        <EffectArray Reference="Unit,AP_DarkArchon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkArchon,ShieldArmor" Value="1"/>
+        <!--  Observer -->
+        <EffectArray Reference="Unit,AP_Observer,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Observer,ShieldArmor" Value="1"/>
+        <!--  Warp Prism -->
+        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmor" Value="1"/>
+        <!--  Warp Prism (Phasing) -->
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmor" Value="1"/>
+        <!--  Reaver -->
+        <EffectArray Reference="Unit,AP_Reaver,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Reaver,ShieldArmor" Value="1"/>
+        <!--  Colossus -->
+        <EffectArray Reference="Unit,AP_Colossus,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Colossus,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusTaldarim,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ColossusTaldarim,ShieldArmor" Value="1"/>
+        <!-- Disruptor -->
+        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DisruptorPhased,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DisruptorPhased,ShieldArmorLevel" Value="1"/>
+        <!--  Phoenix -->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_PhoenixAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,ShieldArmor" Value="1"/>
+        <!--  Void Ray -->
+        <!--        <EffectArray Reference="Unit,VoidRay,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,VoidRay,ShieldArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,ShieldArmor" Value="1"/>
+        <!--        <EffectArray Reference="Unit,VoidRayAiur,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,VoidRayAiur,ShieldArmor" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_VoidRayTaldarim,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_VoidRayTaldarim,ShieldArmor" Value="1"/>
+        <!--  Carrier -->
+        <EffectArray Reference="Unit,AP_Carrier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Carrier,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,ShieldArmor" Value="1"/>
+        <!--  Mothership -->
+        <!--        <EffectArray Reference="Unit,Mothership,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Mothership,ShieldArmorLevel" Value="1"/>-->
+        <EffectArray Reference="Unit,AP_SOAMothershipv4,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SOAMothershipv4,ShieldArmor" Value="1"/>
+        <!-- Oracle -->
+        <EffectArray Reference="Unit,AP_Oracle,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Oracle,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_OracleStasisTrap,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_OracleStasisTrap,ShieldArmorLevel" Value="1"/>
+        <!-- Scout-->
+        <EffectArray Reference="Unit,AP_ScoutMP,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ScoutMP,ShieldArmorLevel" Value="1"/>
+        <!-- Arbiter -->
+        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmor" Value="1"/>
+        <!-- Corsair -->
+        <EffectArray Reference="Unit,AP_CorsairMP,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,ShieldArmor" Value="1"/>
+        <!-- Tempest -->
+        <EffectArray Reference="Unit,AP_TempestPurifier,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_TempestPurifier,ShieldArmor" Value="1"/>
+        <!-- Supplicant -->
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldArmor" Value="1"/>
+        <!--  Nexus -->
+        <EffectArray Reference="Unit,AP_Nexus,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Nexus,ShieldArmor" Value="1"/>
+        <!--  Assimilator -->
+        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_AssimilatorRich,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_AssimilatorRich,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_AutomatedAssimilator,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_AutomatedAssimilator,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_AutomatedAssimilatorRich,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_AutomatedAssimilatorRich,ShieldArmor" Value="1"/>
+        <!--  Pylon -->
+        <EffectArray Reference="Unit,AP_Pylon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Pylon,ShieldArmor" Value="1"/>
+        <!--  Gateway -->
+        <EffectArray Reference="Unit,AP_Gateway,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Gateway,ShieldArmor" Value="1"/>
+        <!--  Warp Gate -->
+        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmor" Value="1"/>
+        <!--  Forge -->
+        <EffectArray Reference="Unit,AP_Forge,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Forge,ShieldArmor" Value="1"/>
+        <!--  Photon Cannon -->
+        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmor" Value="1"/>
+        <!--  Cybernetics Core -->
+        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmorLevel" Value="1"/>
+        <!--  Templar Archive -->
+        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmor" Value="1"/>
+        <!--  Dark Obelisk -->
+        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmor" Value="1"/>
+        <!--  Robotics Facility -->
+        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacilityWarp,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacilityWarp,ShieldArmor" Value="1"/>
+        <!--  Robotics Support Bay -->
+        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmor" Value="1"/>
+        <!--  Stargate -->
+        <EffectArray Reference="Unit,AP_Stargate,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Stargate,ShieldArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_StargateWarp,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_StargateWarp,ShieldArmor" Value="1"/>
+        <!-- Fleet Beacon -->
+        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmor" Value="1"/>
+        <!-- Khaydarin Monolith -->
+        <EffectArray Reference="Unit,AP_KhaydarinMonolith,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_KhaydarinMonolith,ShieldArmor" Value="1"/>
+        <!-- Shield Battery -->
+        <EffectArray Reference="Unit,AP_ShieldBattery,ShieldArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ShieldBattery,ShieldArmor" Value="1"/>
+        <!-- Heroes -->
+        <!--        <EffectArray Reference="Unit,Zeratul,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Zeratul,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Urun,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Urun,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Mohandar,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Mohandar,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Selendis,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Selendis,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Artanis,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Artanis,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,SelendisInterceptor,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,Karass,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,Karass,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,MothershipAiur06,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,MothershipAiur06,ShieldArmor" Value="1"/>-->
+    </CUpgrade>
     <CUpgrade id="AP_330mmBarrageCannons">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
@@ -507,6 +1036,17 @@
         <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/AP_ThorUpgraded"/>
         <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/AP_ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveRaptorSwarmling">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_RaptorSwarmling"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_RaptorSwarmling"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingRange">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Zergling"/>
     </CUpgrade>
     <CUpgrade id="AP_HotsKeneticMitosis">
         <AffectedUnitArray value="AP_BroodLord"/>
@@ -1484,14 +2024,14 @@
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[9]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[10]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[11]" Value="0.294"/>
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
@@ -4530,18 +5070,18 @@
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveInfestor">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveSwarmHost">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveSporeCrawler">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HotSHaveAberration">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
     </CUpgrade>
     <CUpgrade id="AP_BansheeSpeed">
         <Icon value="Assets\Textures\btn-upgrade-terran-hyperflightrotors.dds"/>
@@ -4670,7 +5210,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireWhileInAttackOrder]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[OnlyFireAtAttackOrderTarget]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Options[LinkedCooldown]" Value="0"/>
-<!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Arc" Value="90"/>-->
         <AffectedUnitArray value="AP_ValkyrieSCBW"/>
     </CUpgrade>
     <CUpgrade id="AP_ValkyrieSpeedBoost"/>
@@ -4768,13 +5308,13 @@
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsFirebat">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Firebat,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Firebat,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Firebat,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_FirebatOptimizedLogistics,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_FirebatOptimizedLogistics,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDog,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_DevilDog,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDog,Food" Value="1"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_DevilDogOptimizedLogistics,CostResource[Minerals]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDogOptimizedLogistics,Food" Value="1"/>
         <AffectedUnitArray value="AP_Firebat"/>
         <AffectedUnitArray value="AP_FirebatOptimizedLogistics"/>
         <AffectedUnitArray value="AP_DevilDog"/>
@@ -4782,18 +5322,752 @@
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsPredator">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Predator,CostResource[Vespene]" Value="75"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Predator,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Predator,Food" Value="1"/>
         <AffectedUnitArray value="AP_Predator"/>
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsMedic">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_Medic,CostResource[Vespene]" Value="25"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Medic,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Medic,Food" Value="1"/>
         <AffectedUnitArray value="AP_Medic"/>
     </CUpgrade>
     <CUpgrade id="AP_OptimizedLogisticsDiamondback">
         <EffectArray Operation="Subtract" Reference="Unit,AP_Diamondback,CostResource[Vespene]" Value="50"/>
-        <EffectArray Operation="Add" Reference="Unit,AP_Diamondback,Food" Value="1"/>
+        <EffectArray Reference="Unit,AP_Diamondback,Food" Value="1"/>
         <AffectedUnitArray value="AP_Diamondback"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CinematicMode">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Gateway"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+        <AffectedUnitArray value="AP_RoboticsBay"/>
+        <AffectedUnitArray value="AP_PhotonCannon"/>
+        <AffectedUnitArray value="AP_DarkShrine"/>
+        <AffectedUnitArray value="AP_Forge"/>
+        <AffectedUnitArray value="AP_TemplarArchive"/>
+        <AffectedUnitArray value="AP_FleetBeacon"/>
+        <AffectedUnitArray value="AP_StargateWarp"/>
+        <AffectedUnitArray value="AP_RoboticsFacilityWarp"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SOAHeroicShield">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_SoACaster"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HeroicShieldCleanUp">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SuperiorWarpGates">
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train1].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train2].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train3].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train4].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train5].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train6].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train7].Charge.CountMax" Value="2"/>
+        <EffectArray Reference="Abil,AP_WarpGateTrain,InfoArray[Train8].Charge.CountMax" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMetabolicBoost">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Zergling,Speed" Value="1.746000"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingFrenzy">
+        <EffectArray Reference="Weapon,AP_Claws,RateMultiplier" Value="0.5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingFury">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingHealth">
+        <EffectArray Reference="Unit,AP_Zergling,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_ZerglingBurrowed,LifeMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Zergling,LifeStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_ZerglingBurrowed,LifeStart" Value="10"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSZerglingSunder">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_K5ZerglingRespawn">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveRaptor">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_Raptor"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_Raptor"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Mover" Value="CliffJumper"/>
+        <EffectArray Reference="Effect,AP_Claws,Amount" Value="2"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSwarmling">
+        <EffectArray Operation="Set" Reference="Unit,AP_Zergling,Subtitle" Value="AP_Swarmling"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ZerglingBurrowed,Subtitle" Value="AP_Swarmling"/>
+        <EffectArray Reference="Effect,AP_K5DropPodZerglings,SpawnCount" Value="4"/>
+        <EffectArray Reference="Effect,AP_ZerglingRespawnTooltipDummy,SpawnCount" Value="5"/>
+        <EffectArray Reference="Unit,AP_SwarmQueen,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenBurrowed,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenMorphing,Food" Value="2"/>
+        <EffectArray Reference="Unit,AP_LargeSwarmQueen,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_LargeSwarmQueenBurrowed,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_SwarmQueenMorphingLarge,Food" Value="3"/>
+        <EffectArray Reference="Unit,AP_HugeSwarmQueen,Food" Value="5"/>
+        <EffectArray Reference="Unit,AP_HugeSwarmQueenBurrowed,Food" Value="5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_ZerglingBurrowed"/>
+        <AffectedUnitArray value="AP_Zergling"/>
+        <AffectedUnitArray value="AP_SwarmQueen"/>
+        <AffectedUnitArray value="AP_SwarmQueenBurrowed"/>
+        <AffectedUnitArray value="AP_SwarmQueenMorphing"/>
+        <AffectedUnitArray value="AP_LargeSwarmQueen"/>
+        <AffectedUnitArray value="AP_LargeSwarmQueenBurrowed"/>
+        <AffectedUnitArray value="AP_SwarmQueenMorphingLarge"/>
+        <AffectedUnitArray value="AP_HugeSwarmQueen"/>
+        <AffectedUnitArray value="AP_HugeSwarmQueenBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SOAAutoAssimilator">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsQuatro" parent="AP_BaseProtossAirArmors"/>
+    <CUpgrade id="AP_ProtossAirArmorsLevel1" parent="AP_BaseProtossAirArmors">
+        <Name value="Upgrade/Name/ProtossAirArmorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <ScoreAmount value="300"/>
+        <ScoreValue value="ArmorTechnologyValue"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsLevel2" parent="AP_BaseProtossAirArmors">
+        <Name value="Upgrade/Name/ProtossAirArmorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <ScoreAmount value="300"/>
+        <ScoreValue value="ArmorTechnologyValue"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirArmorsLevel3" parent="AP_BaseProtossAirArmors">
+        <Name value="Upgrade/Name/ProtossAirArmorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <ScoreAmount value="300"/>
+        <ScoreValue value="ArmorTechnologyValue"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-airarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsQuatro" parent="AP_BaseProtossAirWeapons"/>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel1" parent="AP_BaseProtossAirWeapons">
+        <Name value="Upgrade/Name/ProtossAirWeaponsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_IonCannons,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,PrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,MothershipBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArbiterMPWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBase,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBounce,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamRange,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_NeutronFlare,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SOAMothershipv4Weapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifier,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifierGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel2" parent="AP_BaseProtossAirWeapons">
+        <Name value="Upgrade/Name/ProtossAirWeaponsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_IonCannons,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,PrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,MothershipBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArbiterMPWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBase,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBounce,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamRange,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_NeutronFlare,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SOAMothershipv4Weapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifier,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifierGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossAirWeaponsLevel3" parent="AP_BaseProtossAirWeapons">
+        <Name value="Upgrade/Name/ProtossAirWeaponsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_IonCannons,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,PrismaticBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Weapon,MothershipBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorAiurBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArbiterMPWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ScoutMPAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBase,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamBounce,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_VoidRayChargeBeamRange,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_NeutronFlare,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SOAMothershipv4Weapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifier,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TempestPurifierGround,Icon" Value="Assets\Textures\btn-upgrade-protoss-airweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsQuatro" parent="AP_BaseProtossGroundArmors"/>
+    <CUpgrade id="AP_ProtossGroundArmorsPreplacedNoBuild" parent="AP_BaseProtossGroundArmors">
+        <MaxLevel value="127"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel1" parent="AP_BaseProtossGroundArmors">
+        <Name value="Upgrade/Name/ProtossGroundArmorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <ScoreAmount value="400"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Zealot,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Sentry,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel2" parent="AP_BaseProtossGroundArmors">
+        <Name value="Upgrade/Name/ProtossGroundArmorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <ScoreAmount value="400"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Zealot,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Sentry,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundArmorsLevel3" parent="AP_BaseProtossGroundArmors">
+        <Name value="Upgrade/Name/ProtossGroundArmorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <ScoreAmount value="400"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Zealot,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Sentry,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsQuatro" parent="AP_BaseProtossGroundWeapons"/>
+    <CUpgrade id="AP_ProtossGroundWeaponsPreplacedNoBuild" parent="AP_BaseProtossGroundWeapons">
+        <MaxLevel value="127"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel1" parent="AP_BaseProtossGroundWeapons">
+        <Name value="Upgrade/Name/ProtossGroundWeaponsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsiBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptionBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsionicShockwave,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLanceAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptersAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Adept,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusPurifierThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusTaldarimChargedBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ReaverScarabsLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Dragoon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptorWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HighTemplarWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarShakuras,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SolariteReaper,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkArchonWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ImmortalTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AnnihilatorParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_EnergizerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AvengerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AscendantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CenturionWarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SupplicantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel2" parent="AP_BaseProtossGroundWeapons">
+        <Name value="Upgrade/Name/ProtossGroundWeaponsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsiBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptionBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsionicShockwave,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLanceAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptersAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Adept,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusPurifierThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusTaldarimChargedBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ReaverScarabsLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Dragoon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptorWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HighTemplarWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarShakuras,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SolariteReaper,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkArchonWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ImmortalTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AnnihilatorParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_EnergizerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AvengerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AscendantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CenturionWarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SupplicantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossGroundWeaponsLevel3" parent="AP_BaseProtossGroundWeapons">
+        <Name value="Upgrade/Name/ProtossGroundWeaponsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsiBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptionBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PsionicShockwave,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThermalLanceAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PhaseDisruptersAir,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Adept,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusPurifierThermalLances,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ColossusTaldarimChargedBeam,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ReaverScarabsLaunch,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Dragoon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DisruptorWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HighTemplarWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarShakuras,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkTemplarTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SolariteReaper,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DarkArchonWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ImmortalTaldarim,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AnnihilatorParticleDisruptors,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_EnergizerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AvengerWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AscendantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CenturionWarpBlades,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SupplicantWeapon,Icon" Value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsQuatro" parent="AP_BaseProtossShields"/>
+    <CUpgrade id="AP_ProtossShieldsPreplacedNoBuild" parent="AP_BaseProtossShields">
+        <MaxLevel value="127"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel1" parent="AP_BaseProtossShields">
+        <Name value="Upgrade/Name/ProtossShieldsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <ScoreAmount value="300"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Zealot,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,Sentry,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Nexus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Assimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Pylon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Gateway,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpGate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Forge,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhotonCannon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CyberneticsCore,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TemplarArchive,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkShrine,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsBay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacility,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stargate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_FleetBeacon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_OracleStasisTrap,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KhaydarinMonolith,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StargateWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacilityWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ShieldBattery,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel2" parent="AP_BaseProtossShields">
+        <Name value="Upgrade/Name/ProtossShieldsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <ScoreAmount value="300"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Zealot,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,Sentry,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Nexus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Assimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Pylon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Gateway,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpGate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Forge,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhotonCannon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CyberneticsCore,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TemplarArchive,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkShrine,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsBay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacility,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stargate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_FleetBeacon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_OracleStasisTrap,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KhaydarinMonolith,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StargateWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacilityWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ShieldBattery,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProtossShieldsLevel3" parent="AP_BaseProtossShields">
+        <Name value="Upgrade/Name/ProtossShieldsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <ScoreAmount value="300"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Probe,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Zealot,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,Sentry,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Stalker,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Immortal,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalBarrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Archon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Observer,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrism,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpPrismPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Colossus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Phoenix,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Carrier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Interceptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,Mothership,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_Nexus,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Assimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Pylon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Gateway,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WarpGate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Forge,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhotonCannon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CyberneticsCore,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TemplarArchive,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkShrine,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsBay,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacility,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Stargate,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_FleetBeacon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Oracle,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScoutMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_OracleStasisTrap,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Adept,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Disruptor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CarrierAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_InterceptorAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StalkerPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SentryPhasing,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkTemplarTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ColossusTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaver,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Dragoon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ArbiterMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KhaydarinMonolith,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CorsairMP,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,VoidRayAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>-->
+        <EffectArray Operation="Set" Reference="Actor,AP_VoidRayTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Supplicant,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighArchonTemplar,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DarkArchon,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixAiur,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalShakuras,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ImmortalTaldarim,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SOAMothershipv4,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Monitor,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilator,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_AutomatedAssimilatorRich,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_StargateWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_RoboticsFacilityWarp,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ShieldBattery,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
     </CUpgrade>
 </Catalog>

@@ -44,6 +44,7 @@ void libABFE498B_gf_AP_Triggers_unlockTerranMercenaries (int lp_player, int lp_b
 void libABFE498B_gf_AP_Triggers_unlockTerranBuildings (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranUpgrades (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranProgressiveUpgrades (int lp_player, int lp_bitArrayValue);
+void libABFE498B_gf_AP_Triggers_unlockProtossUnits (int lp_player, int lp_bitArrayValue);
 bool libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock ();
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarine (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedic (int lp_player);
@@ -250,11 +251,36 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockNovaGadgetIonicForceField (int lp_p
 void libABFE498B_gf_AP_Triggers_Terran_unlockNovaGadgetHoloDecoy (int lp_player);
 void libABFE498B_gf_AP_Triggers_clearTerranTech (int lp_player);
 void libABFE498B_gf_AP_Triggers_giveTerranDefaultTech (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAiurZealot (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockStalkerShakuras (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockHighTemplarAiur (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockDarkTemplarShakuras (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockObserver (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockWarpPrism (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockImmortalAiur (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockColossusPurifier (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockPhoenixAiur (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockVoidRayShakuras (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockCarrierAiur (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGateway (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockRoboticsFacility (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockStargate (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockPhotonCannon (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockKhaydarinMonolith (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockShieldBattery (int lp_player);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGroundWeapons (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockGroundArmor (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockShields (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAirWeapons (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Protoss_unlockAirArmor (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_clearProtossTech (int lp_player);
+void libABFE498B_gf_AP_Triggers_giveProtossDefaultTech (int lp_player);
 void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgrade, string lp_newUpgrade);
 
 // Trigger Declarations
 trigger libABFE498B_gt_AP_Triggers_setOptions;
 trigger libABFE498B_gt_AP_Triggers_giveTerranTech;
+trigger libABFE498B_gt_AP_Triggers_giveProtossTech;
 trigger libABFE498B_gt_AP_Triggers_techTreeInit;
 
 // Library Initialization
