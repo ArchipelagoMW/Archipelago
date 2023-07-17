@@ -172,7 +172,7 @@ def patch_kh2(self, output_directory):
                 "GrowthAbilityLevel": 0,
             })
 
-    # Summons have no checks on them so done fully locally
+    # Summons have no acutal locations so done down here.
     self.formattedFmlv["Summon"] = []
     for x in range(1, 7):
         self.formattedFmlv["Summon"].append({

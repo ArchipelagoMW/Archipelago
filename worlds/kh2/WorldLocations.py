@@ -750,6 +750,15 @@ FinalLevels = {
     LocationName.Finallvl7: WorldLocationData(0x33D6, 7),
 
 }
+SummonLevels = {
+    LocationName.Summonlvl2: WorldLocationData(0x3526, 2),
+    LocationName.Summonlvl3: WorldLocationData(0x3526, 3),
+    LocationName.Summonlvl4: WorldLocationData(0x3526, 4),
+    LocationName.Summonlvl5: WorldLocationData(0x3526, 5),
+    LocationName.Summonlvl6: WorldLocationData(0x3526, 6),
+    LocationName.Summonlvl7: WorldLocationData(0x3526, 7),
+
+}
 weaponSlots = {
     LocationName.AdamantShield:       WorldLocationData(0x35E6, 1),
     LocationName.AkashicRecord:       WorldLocationData(0x35ED, 1),

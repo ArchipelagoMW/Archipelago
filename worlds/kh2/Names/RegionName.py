@@ -14,7 +14,7 @@ Wisdom = "Wisdom Form"
 Limit = "Limit Form"
 Master = "Master Form"
 Final = "Final Form"
-
+Summon = "Summons"
 # sp
 Sp = "Space Paranoids"
 HostileProgram = "Hostile Program"

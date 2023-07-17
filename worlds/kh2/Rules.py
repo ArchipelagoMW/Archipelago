@@ -217,6 +217,9 @@ class KH2Rules:
     def level_locking_unlock(self, state: CollectionState, amount):
         return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
+    def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
+        return amount <= sum([state.count(item_name, self.player) for item_name in summons])
+
     def set_kh2_rules(self) -> None:
         world = self.world.multiworld
         player = self.player
@@ -408,6 +411,13 @@ class KH2FormRules(KH2Rules):
             LocationName.Finallvl5:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 3),
             LocationName.Finallvl6:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 4),
             LocationName.Finallvl7:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 5),
+            LocationName.Summonlvl2: lambda state: self.summon_levels_unlocked(state, 1),
+            LocationName.Summonlvl3: lambda state: self.summon_levels_unlocked(state, 1),
+            LocationName.Summonlvl4: lambda state: self.summon_levels_unlocked(state, 2),
+            LocationName.Summonlvl5: lambda state: self.summon_levels_unlocked(state, 3),
+            LocationName.Summonlvl6: lambda state: self.summon_levels_unlocked(state, 4),
+            LocationName.Summonlvl7: lambda state: self.summon_levels_unlocked(state, 4),
+
         }
 
     def set_kh2_form_rules(self):
@@ -491,7 +501,7 @@ class KH2FightRules(KH2Rules):
             RegionName.Axel2:                 lambda state: self.get_axel_two_rules(),
             RegionName.DataRoxas:             lambda state: self.get_data_roxas_rules(state),
             RegionName.DataAxel:              lambda state: self.get_data_axel_rules(state),
-            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state,1),
+            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state) and self.twtnw_unlocked(state, 1),
             RegionName.Xigbar:                lambda state: self.get_xigbar_rules(state),
             RegionName.Luxord:                lambda state: self.get_luxord_rules(state),
             RegionName.Saix:                  lambda state: self.get_saix_rules(state),
@@ -1638,6 +1648,6 @@ class KH2FightRules(KH2Rules):
         data_xemnas_rules = {
             "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
             "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_set_count_sum(ground_finisher, state) >= 2 and self.kh2_can_reach(LocationName.Limitlvl5, state),
-            "hard": self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
+            "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
         }
         return data_xemnas_rules[self.fight_logic]

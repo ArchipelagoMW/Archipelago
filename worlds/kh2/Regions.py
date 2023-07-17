@@ -849,6 +849,14 @@ def create_regions(world, player: int, active_locations):
             LocationName.Finallvl6,
             LocationName.Finallvl7
         ],
+        RegionName.Summon:                [
+            LocationName.Summonlvl2,
+            LocationName.Summonlvl3,
+            LocationName.Summonlvl4,
+            LocationName.Summonlvl5,
+            LocationName.Summonlvl6,
+            LocationName.Summonlvl7,
+        ],
         RegionName.Keyblade:              [
             LocationName.FAKESlot,
             LocationName.DetectionSaberSlot,
@@ -1017,7 +1025,7 @@ def connect_regions(world: MultiWorld, player: int):
                                         RegionName.Dc, RegionName.Stt,
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final, RegionName.AtlanticaSongOne},
+                                        RegionName.Final, RegionName.Summon,RegionName.AtlanticaSongOne},
         RegionName.LoD:                {RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},

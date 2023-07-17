@@ -643,6 +643,14 @@ Finallvl5                                    ="Final level 5"
 Finallvl6                                    ="Final level 6"
 Finallvl7                                    ="Final level 7"
 
+Summonlvl2="Summon level 2"
+Summonlvl3="Summon level 3"
+Summonlvl4="Summon level 4"
+Summonlvl5="Summon level 5"
+Summonlvl6="Summon level 6"
+Summonlvl7="Summon level 7"
+
+
 GardenofAssemblageMap                        ="Garden of Assemblage Map"
 GoALostIllusion                              ="GoA Lost Illusion"
 ProofofNonexistence                          ="Proof of Nonexistence Location"
@@ -761,6 +769,9 @@ FenrirSlot                ="Fenrir Slot"
 UltimaWeaponSlot          ="Ultima Weapon Slot"
 WinnersProofSlot          ="Winner's Proof Slot"
 PurebloodSlot             ="Pureblood Slot"
+
+
+
 
 HostileProgramEventLocation = "Hostile Program Event Location"
 McpEventLocation = "Master Control Program Event Location"

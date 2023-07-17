@@ -266,6 +266,7 @@ class KH2Context(CommonContext):
                         "LimitLevel":  0,
                         "MasterLevel": 0,
                         "FinalLevel":  0,
+                        "SummonLevel": 0,
                     },
                     "SoldEquipment":    [],
                     "SoldBoosts":       {
@@ -365,16 +366,18 @@ class KH2Context(CommonContext):
                     self.sending = self.sending + [(int(locationId))]
             formDict = {
                 0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
-                3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels]
+                3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels], 5: ["SummonLevel", SummonLevels]
             }
-            for i in range(5):
+            # TODO: remove formDict[i][0] in self.kh2seedsave["Levels"].keys() after 4.3
+            for i in range(6):
                 for location, data in formDict[i][1].items():
                     formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
                     locationId = kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked \
-                            and formlevel >= data.bitIndex:
-                        if formlevel > self.kh2seedsave["Levels"][formDict[i][0]]:
-                            self.kh2seedsave["Levels"][formDict[i][0]] = formlevel
+                            and formlevel >= data.bitIndex \
+                            and formDict[i][0] in self.kh2seedsave["Levels"].keys() \
+                            and formlevel > self.kh2seedsave["Levels"][formDict[i][0]]:
+                        self.kh2seedsave["Levels"][formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             logger.info("Line 312")
@@ -393,7 +396,7 @@ class KH2Context(CommonContext):
 
             for location, data in formSlots.items():
                 locationId = kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked:
+                if locationId not in self.locations_checked and self.kh2_read_byte(self.Save + 0x06B2) == 0:
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         # self.locations_checked
                         self.sending = self.sending + [(int(locationId))]
@@ -807,7 +810,7 @@ def finishedGame(ctx: KH2Context, message):
             for boss in ctx.kh2slotdata["hitlist"]:
                 if boss in message[0]["locations"]:
                     ctx.amountOfPieces += 1
-        if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
+        if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
@@ -819,7 +822,7 @@ def finishedGame(ctx: KH2Context, message):
             return True
         return False
     elif ctx.kh2slotdata["Goal"] == 3:
-        if ctx.kh2seedsave["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"] and \
+        if ctx.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"] and \
                 ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
