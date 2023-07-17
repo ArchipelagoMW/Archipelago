@@ -45,7 +45,7 @@ item_table = {
     "Spectre": ItemData(16 + SC2WOL_ITEM_ID_OFFSET, "Unit", 16, classification=ItemClassification.progression),
     "Thor": ItemData(17 + SC2WOL_ITEM_ID_OFFSET, "Unit", 17, classification=ItemClassification.progression),
     # EE units
-    "Liberator": ItemData(18 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression, origin={"nco"}),
+    "Liberator": ItemData(18 + SC2WOL_ITEM_ID_OFFSET, "Unit", 18, classification=ItemClassification.progression, origin={"nco", "ext"}),
     "Valkyrie": ItemData(19 + SC2WOL_ITEM_ID_OFFSET, "Unit", 19, classification=ItemClassification.progression, origin={"bw"}),
     "Widow Mine": ItemData(20 + SC2WOL_ITEM_ID_OFFSET, "Unit", 20, classification=ItemClassification.progression, origin={"ext"}),
     "Cyclone": ItemData(21 + SC2WOL_ITEM_ID_OFFSET, "Unit", 21, classification=ItemClassification.progression, origin={"ext"}),
@@ -160,7 +160,7 @@ item_table = {
     "330mm Barrage Cannon (Thor)": ItemData(324 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 24, classification=ItemClassification.filler, parent_item="Thor"),
     "Immortality Protocol (Thor)": ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 25, classification=ItemClassification.filler, parent_item="Thor"),
     # Items from EE
-    "Advanced Ballistics (Liberator)": ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator", origin={"nco"}),
+    "Advanced Ballistics (Liberator)": ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 26, parent_item="Liberator", origin={"nco", "ext"}),
     "Raid Artillery (Liberator)": ItemData(327 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 27, classification=ItemClassification.progression, parent_item="Liberator", origin={"nco"}),
     "Drilling Claws (Widow Mine)": ItemData(328 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, classification=ItemClassification.filler, parent_item="Widow Mine", origin={"ext"}),
     "Concealment (Widow Mine)": ItemData(329 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, classification=ItemClassification.progression, parent_item="Widow Mine", origin={"ext"}),
