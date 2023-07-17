@@ -171,18 +171,20 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
 
     # Include items from outside Wings of Liberty
-    include_nco = get_option_value(multiworld, player, 'nco_items')
-    include_bw = get_option_value(multiworld, player, 'bw_items')
-    include_ext = get_option_value(multiworld, player, 'ext_items')
+    item_sets = {'wol'}
+    if get_option_value(multiworld, player, 'nco_items'):
+        item_sets.add('nco')
+    if get_option_value(multiworld, player, 'bw_items'):
+        item_sets.add('bw')
+    if get_option_value(multiworld, player, 'ext_items'):
+        item_sets.add('ext')
 
     def allowed_quantity(name: str, data: ItemData) -> int:
         if name in excluded_items \
                 or data.type == "Upgrade" and (not include_upgrades or name not in upgrade_included_names[upgrade_items]) \
-                or data.origin == 'nco' and not include_nco \
-                or data.origin == 'bw' and not include_bw \
-                or data.origin == 'ext' and not include_ext:
+                or not data.origin.intersection(item_sets):
             return 0
-        elif name in progressive_if_nco and not include_nco:
+        elif name in progressive_if_nco and 'nco' not in item_sets:
             return 1
         else:
             return data.quantity
