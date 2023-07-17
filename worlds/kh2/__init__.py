@@ -271,7 +271,7 @@ class KH2World(World):
             self.donald_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
 
-        if self.multiworld.DonaldGoofyStatsanity[self.player]:
+        if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             self.total_locations -= 31
             self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
             for item_name in donald_master_ability:
@@ -292,7 +292,7 @@ class KH2World(World):
             self.goofy_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
 
-        if self.multiworld.DonaldGoofyStatsanity[self.player]:
+        if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             self.total_locations -= 32
             self.goofy_get_bonus_abilities += [self.create_item(random_prog_ability)]
             for item_name in goofy_master_ability:
@@ -324,7 +324,7 @@ class KH2World(World):
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
         fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities, True, True, allow_excluded=True)
-        if self.multiworld.DonaldGoofyStatsanity:
+        if not self.multiworld.DonaldGoofyStatsanity:
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
             state2 = self.multiworld.get_all_state(False)
             fill_restrictive(self.multiworld, state2, goofy_get_bonus_location_pool, self.goofy_get_bonus_abilities, True, True)
@@ -336,7 +336,7 @@ class KH2World(World):
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
         fill_restrictive(self.multiworld, state, donald_weapon_location_list, self.donald_weapon_abilities, allow_excluded=True)
-        if self.multiworld.DonaldGoofyStatsanity:
+        if not self.multiworld.DonaldGoofyStatsanity:
             donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Donald_Checks.keys() if Donald_Checks[location].yml != "Keyblade"]
             state2 = self.multiworld.get_all_state(False)
             fill_restrictive(self.multiworld, state2, donald_get_bonus_location_pool, self.donald_get_bonus_abilities, True, True)

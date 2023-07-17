@@ -422,7 +422,7 @@ class KH2FormRules(KH2Rules):
 
     def set_kh2_form_rules(self):
         # could use comprehension for getting a list of the region objects
-        drive_form_set = {RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master, RegionName.Final}
+        drive_form_set = {RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master, RegionName.Final, RegionName.Summon}
         for region in self.world.multiworld.get_regions(self.player):
             if region.name in drive_form_set:
                 for loc in region.locations:
