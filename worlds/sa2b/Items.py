@@ -182,6 +182,25 @@ seeds_table = {
     ItemName.square_seed:   ItemData(0xFF0306, False),
 }
 
+hats_table = {
+    ItemName.pumpkin_hat:       ItemData(0xFF0401, False),
+    ItemName.skull_hat:         ItemData(0xFF0402, False),
+    ItemName.apple_hat:         ItemData(0xFF0403, False),
+    ItemName.bucket_hat:        ItemData(0xFF0404, False),
+    ItemName.empty_can_hat:     ItemData(0xFF0405, False),
+    ItemName.cardboard_box_hat: ItemData(0xFF0406, False),
+    ItemName.flower_pot_hat:    ItemData(0xFF0407, False),
+    ItemName.paper_bag_hat:     ItemData(0xFF0408, False),
+    ItemName.pan_hat:           ItemData(0xFF0409, False),
+    ItemName.stump_hat:         ItemData(0xFF040A, False),
+    ItemName.watermelon_hat:    ItemData(0xFF040B, False),
+
+    ItemName.red_wool_beanie_hat:   ItemData(0xFF040C, False),
+    ItemName.blue_wool_beanie_hat:  ItemData(0xFF040D, False),
+    ItemName.black_wool_beanie_hat: ItemData(0xFF040E, False),
+    ItemName.pacifier_hat:          ItemData(0xFF040F, False),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -196,6 +215,7 @@ item_table = {
     **eggs_table,
     **fruits_table,
     **seeds_table,
+    **hats_table,
     **event_table,
 }
 
@@ -206,6 +226,7 @@ item_groups: typing.Dict[str, str] = {
     "Eggs":           [item_name for item_name, data in eggs_table.items()],
     "Fruits":         [item_name for item_name, data in fruits_table.items()],
     "Seeds":          [item_name for item_name, data in seeds_table.items()],
+    "Hats":           [item_name for item_name, data in hats_table.items()],
 }
 
 ALTTPWorld.pedestal_credit_texts[item_table[ItemName.sonic_light_shoes].code] = "and the Soap Shoes"

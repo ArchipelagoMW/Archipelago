@@ -158,5 +158,24 @@ triangle_seed = "Triangle Seed"
 square_seed   = "Square Seed"
 
 
+# Chao Hats
+pumpkin_hat       = "Pumpkin"
+skull_hat         = "Skull"
+apple_hat         = "Apple"
+bucket_hat        = "Bucket"
+empty_can_hat     = "Empty Can"
+cardboard_box_hat = "Cardboard Box"
+flower_pot_hat    = "Flower Pot"
+paper_bag_hat     = "Paper Bag"
+pan_hat           = "Pan"
+stump_hat         = "Stump"
+watermelon_hat    = "Watermelon"
+
+red_wool_beanie_hat   = "Red Wool Beanie"
+blue_wool_beanie_hat  = "Blue Wool Beanie"
+black_wool_beanie_hat = "Black Wool Beanie"
+pacifier_hat          = "Pacifier"
+
+
 # Goal Item
 maria = "What Maria Wanted"
