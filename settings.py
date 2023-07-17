@@ -206,10 +206,10 @@ class Group:
     @classmethod
     def _dump_item(cls, name: Optional[str], attr: object, f: TextIO, level: int) -> None:
         """Write a group, dict or sequence item to f, where attr can be a scalar or a collection"""
-        from Utils import Dumper as BaseDumper
-        from yaml import ScalarNode, MappingNode
 
         # lazy construction of yaml Dumper to avoid loading Utils early
+        from Utils import Dumper as BaseDumper
+        from yaml import ScalarNode, MappingNode
         if not hasattr(cls, "_dumper"):
             if cls is Group or not hasattr(Group, "_dumper"):
                 class Dumper(BaseDumper):
@@ -255,7 +255,7 @@ class Group:
 
     def dump(self, f: TextIO, level: int = 0) -> None:
         """Dump Group to stream f at given indentation level"""
-        # There is no easy way to generate extra lines into default,
+        # There is no easy way to generate extra lines into default yaml output,
         # so we format part of it by hand using an odd recursion here and in _dump_*.
 
         self._dumping = True
