@@ -20662,6 +20662,7 @@
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="31B3C583"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="CAC1B456"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="15B412ED"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="57D9067B"/>
         </Element>
         <Element Type="ParamDef" Id="D4FD714A">
             <ParameterType>
@@ -20775,6 +20776,27 @@
         <Element Type="Param" Id="13BF5E1D">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_NovaBaseSuitEnhancements</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionCall" Id="57D9067B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="9B90C86A"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B9DB494C"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="07AC0487"/>
+        </Element>
+        <Element Type="Param" Id="9B90C86A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="D4FD714A"/>
+        </Element>
+        <Element Type="Param" Id="B9DB494C">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="07AC0487">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ReaperSpeed</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

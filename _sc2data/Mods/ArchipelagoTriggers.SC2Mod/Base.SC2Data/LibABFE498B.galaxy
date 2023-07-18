@@ -2467,6 +2467,7 @@ void libABFE498B_gf_AP_Triggers_giveTerranDefaultTech (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_BansheeCloak", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_YamatoCannon", 1);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_NovaBaseSuitEnhancements", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ReaperSpeed", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Protoss_unlockAiurZealot (int lp_player) {
