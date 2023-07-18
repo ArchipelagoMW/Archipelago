@@ -303,7 +303,8 @@ class PokemonRedBlueWorld(World):
             return
 
         tms = [item for item in usefulitempool + filleritempool if item.name.startswith("TM") and (item.player ==
-               self.player or self.player in self.multiworld.groups[item.player]["players"])]
+               self.player or (item.player in self.multiworld.groups and self.player in
+                               self.multiworld.groups[item.player]["players"]))]
         if len(tms) > 7:
             for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
                                ("Celadon Gym-C", "Erika"), ("Fuchsia Gym", "Koga"), ("Saffron Gym-C", "Sabrina"),
