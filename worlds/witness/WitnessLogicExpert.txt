@@ -243,7 +243,7 @@ Door - 0x275FF (Side Exit) - 0x275ED
 Door - 0x17CE8 (Roof Exit) - 0x17CAC
 
 Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Ground Floor - 0x03675 - Quarry Stoneworks Upper Floor - 0x03679:
-158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
+158125 - 0x00E0C (Lower Row 1) - True - Triangles & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Triangles & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Triangles & Eraser
 158128 - 0x014D9 (Lower Row 4) - 0x0148A - Triangles & Eraser
