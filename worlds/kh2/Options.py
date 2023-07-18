@@ -197,11 +197,13 @@ class LevelDepth(Choice):
 
 class DonaldGoofyStatsanity(Toggle):
     """Toggles if on Donald and Goofy's Get Bonus locations can be any item"""
+    display_name = "Donald & Goofy Statsanity"
     default = True
 
 
 class AtlanticaToggle(Toggle):
     """Atlantica Toggle"""
+    display_name = "Atlantica Toggle"
     default = False
 
 
@@ -230,7 +232,10 @@ class Goal(Choice):
 
 class FinalXemnas(Toggle):
     """Kill Final Xemnas to Beat the Game.
-    This is in addition to your Goal. I.E. get three proofs+kill final Xemnas"""
+
+    This is in addition to your Goal.
+
+    I.E. get three proofs+kill final Xemnas"""
     display_name = "Final Xemnas"
     default = True
 
@@ -275,34 +280,48 @@ class BountyAmount(Range):
     default = 10
 
 
+class BountyStartHint(Toggle):
+    """Start with Bounties Hinted"""
+    display_name = "Start with Bounties Hinted"
+    default = False
+
+
+class WeaponSlotStartHint(Toggle):
+    """Start with Weapon Slots' Hinted"""
+    display_name = "Start with Weapon Slots Hinted"
+    default = True
+
+
 KH2_Options: typing.Dict[str, type(Option)] = {
-    "LevelDepth":             LevelDepth,
-    "Sora_Level_EXP":         SoraEXP,
-    "Valor_Form_EXP":         ValorEXP,
-    "Wisdom_Form_EXP":        WisdomEXP,
-    "Limit_Form_EXP":         LimitEXP,
-    "Master_Form_EXP":        MasterEXP,
-    "Final_Form_EXP":         FinalEXP,
-    "Summon_EXP":             SummonEXP,
-    "Schmovement":            Schmovement,
-    "RandomGrowth":           RandomGrowth,
-    "Promise_Charm":          PromiseCharm,
-    "Goal":                   Goal,
-    "FinalXemnas":            FinalXemnas,
-    "LuckyEmblemsAmount":     LuckyEmblemsAmount,
-    "LuckyEmblemsRequired":   LuckyEmblemsRequired,
-    "BountyAmount":           BountyAmount,
-    "BountyRequired":         BountyRequired,
-    "Keyblade_Minimum":       KeybladeMin,
-    "Keyblade_Maximum":       KeybladeMax,
-    "FightLogic":             FightLogic,
-    "FinalFormLogic":         FinalFormLogic,
-    "AutoFormLogic":          AutoFormLogic,
-    "DonaldGoofyStatsanity":  DonaldGoofyStatsanity,
-    "Visitlocking":           Visitlocking,
-    "RandomVisitLockingItem": RandomVisitLockingItem,
-    "SuperBosses":            SuperBosses,
-    "Cups":                   Cups,
-    "AtlanticaToggle":        AtlanticaToggle,
+    "LevelDepth":               LevelDepth,
+    "Sora_Level_EXP":           SoraEXP,
+    "Valor_Form_EXP":           ValorEXP,
+    "Wisdom_Form_EXP":          WisdomEXP,
+    "Limit_Form_EXP":           LimitEXP,
+    "Master_Form_EXP":          MasterEXP,
+    "Final_Form_EXP":           FinalEXP,
+    "Summon_EXP":               SummonEXP,
+    "Schmovement":              Schmovement,
+    "RandomGrowth":             RandomGrowth,
+    "Promise_Charm":            PromiseCharm,
+    "Goal":                     Goal,
+    "FinalXemnas":              FinalXemnas,
+    "LuckyEmblemsAmount":       LuckyEmblemsAmount,
+    "LuckyEmblemsRequired":     LuckyEmblemsRequired,
+    "BountyAmount":             BountyAmount,
+    "BountyRequired":           BountyRequired,
+    "BountyStartingHintToggle": BountyStartHint,
+    "Keyblade_Minimum":         KeybladeMin,
+    "Keyblade_Maximum":         KeybladeMax,
+    "WeaponSlotStartHint":      WeaponSlotStartHint,
+    "FightLogic":               FightLogic,
+    "FinalFormLogic":           FinalFormLogic,
+    "AutoFormLogic":            AutoFormLogic,
+    "DonaldGoofyStatsanity":    DonaldGoofyStatsanity,
+    "Visitlocking":             Visitlocking,
+    "RandomVisitLockingItem":   RandomVisitLockingItem,
+    "SuperBosses":              SuperBosses,
+    "Cups":                     Cups,
+    "AtlanticaToggle":          AtlanticaToggle,
 
 }
