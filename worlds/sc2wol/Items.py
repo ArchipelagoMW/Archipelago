@@ -322,8 +322,7 @@ progressive_if_nco = {
     "Progressive Stimpack (Marine)",
     "Progressive Stimpack (Firebat)",
     "Progressive Cross-Spectrum Dampeners (Banshee)",
-    "Progressive Regenerative Bio-Steel",
-    "Progressive High Impact Payload (Thor)"
+    "Progressive Regenerative Bio-Steel"
 }
 
 # 'number' values of upgrades for upgrade bundle items
