@@ -35,16 +35,29 @@ class ShuffleLasers(Toggle):
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors will require their respective "keys".
-    If set to "panels", those keys will unlock the panels on doors.
-    In "doors_simple" and "doors_complex", the doors will magically open by themselves upon receiving the key.
-    The last option, "max", is a combination of "doors_complex" and "panels"."""
+    """If on, opening doors, moving bridges etc. will require a "key".
+    If set to "panels", the panel on the door will be locked until receiving its corresponding key.
+    If set to "doors", the door will open immediately upon receiving its key. Door panels are added as location checks.
+    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels"."""
     display_name = "Shuffle Doors"
-    option_none = 0
+    option_off = 0
     option_panels = 1
-    option_doors_simple = 2
-    option_doors_complex = 3
-    option_max = 4
+    option_doors = 2
+    option_mixed = 3
+
+
+class DoorGroupings(Choice):
+    """If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
+    If set to "regional", all doors in the same general region will open at once with a single key,
+    reducing the amount of door items and complexity."""
+    display_name = "Door Groupings"
+    option_off = 0
+    option_regional = 1
+
+
+class ShuffleBoat(DefaultOnToggle):
+    """If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat."""
+    display_name = "Shuffle Boat"
 
 
 class ShuffleDiscardedPanels(Toggle):
@@ -55,7 +68,7 @@ class ShuffleDiscardedPanels(Toggle):
 
 
 class ShuffleVaultBoxes(Toggle):
-    """Vault Boxes will have items on them."""
+    """Add Vault Boxes to the location pool."""
     display_name = "Shuffle Vault Boxes"
 
 
@@ -169,6 +182,8 @@ the_witness_options: Dict[str, type] = {
     "puzzle_randomization": PuzzleRandomization,
     "shuffle_symbols": ShuffleSymbols,
     "shuffle_doors": ShuffleDoors,
+    "door_groupings": DoorGroupings,
+    "shuffle_boat": ShuffleBoat,
     "shuffle_lasers": ShuffleLasers,
     "disable_non_randomized_puzzles": DisableNonRandomizedPuzzles,
     "shuffle_discarded_panels": ShuffleDiscardedPanels,

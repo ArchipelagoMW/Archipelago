@@ -307,19 +307,26 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "EP_difficulty") == 1:
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if get_option_value(world, player, "shuffle_doors") == 1:
-            adjustment_linesets_in_order.append(get_complex_door_panels())
-            adjustment_linesets_in_order.append(get_complex_additional_panels())
+        if get_option_value(world, player, "door_groupings") == 1:
+            if get_option_value(world, player, "shuffle_doors") == 1:
+                adjustment_linesets_in_order.append(get_simple_panels())
+            elif get_option_value(world, player, "shuffle_doors") == 2:
+                adjustment_linesets_in_order.append(get_simple_doors())
+            elif get_option_value(world, player, "shuffle_doors") == 3:
+                adjustment_linesets_in_order.append(get_simple_doors())
+                adjustment_linesets_in_order.append(get_simple_additional_panels())
+        else:
+            if get_option_value(world, player, "shuffle_doors") == 1:
+                adjustment_linesets_in_order.append(get_complex_door_panels())
+                adjustment_linesets_in_order.append(get_complex_additional_panels())
+            elif get_option_value(world, player, "shuffle_doors") == 2:
+                adjustment_linesets_in_order.append(get_complex_doors())
+            elif get_option_value(world, player, "shuffle_doors") == 3:
+                adjustment_linesets_in_order.append(get_complex_doors())
+                adjustment_linesets_in_order.append(get_complex_additional_panels())
 
-        if get_option_value(world, player, "shuffle_doors") == 2:
-            adjustment_linesets_in_order.append(get_simple_doors())
-
-        if get_option_value(world, player, "shuffle_doors") == 3:
-            adjustment_linesets_in_order.append(get_complex_doors())
-
-        if get_option_value(world, player, "shuffle_doors") == 4:
-            adjustment_linesets_in_order.append(get_complex_doors())
-            adjustment_linesets_in_order.append(get_complex_additional_panels())
+        if is_option_enabled(world, player, "shuffle_boat"):
+            adjustment_linesets_in_order.append(get_boat())
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())

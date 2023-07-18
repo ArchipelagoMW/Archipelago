@@ -131,6 +131,17 @@ def get_complex_additional_panels():
     return get_adjustment_file("settings/Door_Shuffle/Complex_Additional_Panels.txt")
 
 
+def get_simple_panels():
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Panels.txt")
+
+
+def get_simple_additional_panels():
+    return get_adjustment_file("settings/Door_Shuffle/Simple_Additional_Panels.txt")
+
+
+def get_boat():
+    return get_adjustment_file("settings/Door_Shuffle/Boat.txt")
+
 def get_laser_shuffle():
     return get_adjustment_file("settings/Laser_Shuffle.txt")
 

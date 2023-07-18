@@ -42,6 +42,7 @@ Doors:
 1110 - Desert Light Room Entry (Panel) - 0x0C339
 1111 - Desert Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 1112 - Desert Light Control (Panel) - 0x09FAA
+1113 - Desert Flood Room Entry (Panel) - 0x0A249
 1115 - Quarry Elevator Control (Panel) - 0x17CC4
 1117 - Quarry Entry 1 (Panel) - 0x09E57
 1118 - Quarry Entry 2 (Panel) - 0x17C09
@@ -62,7 +63,9 @@ Doors:
 1167 - Town Maze Rooftop Bridge Control (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
 1182 - Windmill Turn Control (Panel) - 0x17D02
+1183 - Theater Entry (Panel) - 0x17F89
 1185 - Theater Video Input (Panel) - 0x00815
+1188 - Theater Exit (Panel) - 0x0A168,0x33AB2
 1200 - Treehouse First & Second Doors (Panel) - 0x0288C,0x02886
 1202 - Treehouse Third Door (Panel) - 0x0A182
 1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x17CBC
@@ -85,7 +88,7 @@ Doors:
 1240 - Caves Entry (Panel) - 0x00FF8
 1242 - Caves Elevator Control (Panel) - 0x335AB,0x335AC,0x3369D
 1245 - Challenge Entry (Panel) - 0x0A16E
-1250 - Challenge Tunnels Entry (Panel) - 0x039B4
+1250 - Tunnels Entry (Panel) - 0x039B4
 1255 - Tunnels Town Shortcut (Panel) - 0x09E85
 
 
@@ -231,10 +234,26 @@ Lasers:
 1510 - Treehouse Laser - 0x028A4
 
 2000 - Desert Control Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
-2005 - Quarry Stoneworks Control Panels - 0x17CC4,0x01E5A,0x01E59
+2005 - Quarry Stoneworks Control Panels - 0x03678,0x03676,0x03679,0x03675
 2010 - Quarry Boathouse Control Panels - 0x03852,0x03858,0x275FA
 2015 - Town Control Panels - 0x2896A,0x334D8
 2020 - Windmill/Theater Control Panels - 0x17D02,0x00815
 2025 - Bunker Control Panels - 0x34BC5,0x34BC6,0x0A079
 2030 - Swamp Control Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07
 2035 - Mountain&Caves Control Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB,0x335AB,0x335AC,0x3369D
+
+2100 - Symmetry Island Panels - 0x1C349,0x000B0
+2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249
+2110 - Quarry Outside Panels - 0x17C09,0x09E57,0x17CC4
+2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675
+2120 - Quarry Boathouse Panels - 0x2769B,0x27163,0x17C50,0x3865F,0x03852,0x03858,0x275FA
+2125 - Monastery Panels - 0x09D9B,0x00C92,0x00B10
+2130 - Town Church & RGB House Panels - 0x28998,0x28A0D,0x334D8
+2135 - Town Maze Panels - 0x2896A,0x28A79
+2140 - Town Windmill & Theater Panels - 0x17D02,0x00815,0x17F5F,0x17F89,0x0A168,0x33AB2
+2145 - Treehouse Panels - 0x0A182,0x0288C,0x02886,0x2700B,0x17CBC,0x037FF
+2150 - Bunker Panels - 0x34BC5,0x34BC6,0x0A079,0x0A099,0x17C2E
+2155 - Swamp Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07,0x17C0D,0x0056E
+2160 - Mountain Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB,0x335AB,0x335AC
+2165 - Caves Panels - 0x3369D,0x00FF8,0x0A16E
+2170 - Tunnels Panels - 0x09E85,0x039B4

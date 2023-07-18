@@ -1,0 +1,19 @@
+Items:
+Symmetry Island Panels
+Desert Panels
+Quarry Outside Panels
+Quarry Stoneworks Panels
+Quarry Boathouse Panels
+Monastery Panels
+Town Church & RGB House Panels
+Town Maze Panels
+Town Windmill & Theater Panels
+Treehouse Panels
+Bunker Panels
+Swamp Panels
+Mountain Panels
+Caves Panels
+Tunnels Panels
+Glass Factory Entry (Panel)
+Shadows Door Timer (Panel)
+Jungle Popup Wall (Panel)
