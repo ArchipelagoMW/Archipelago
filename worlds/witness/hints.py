@@ -141,9 +141,8 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
     }
 
     if is_option_enabled(multiworld, player, "shuffle_lasers"):
-        lasers = {
+        lasers = [
             "Symmetry Laser",
-            "Desert Laser",
             "Town Laser",
             "Keep Laser",
             "Swamp Laser",
@@ -153,14 +152,14 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
             "Quarry Laser",
             "Bunker Laser",
             "Shadows Laser",
-        }
+        ]
 
-        if get_option_value(multiworld, player, "doors") >= 2:
+        if get_option_value(multiworld, player, "shuffle_doors") >= 2:
             priority.add("Desert Laser")
-            lasers.remove("Desert Laser")
             priority.update(multiworld.per_slot_randoms[player].sample(lasers, 5))
 
         else:
+            lasers.append("Desert Laser")
             priority.update(multiworld.per_slot_randoms[player].sample(lasers, 6))
 
     return priority
