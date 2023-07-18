@@ -201,6 +201,37 @@ hats_table = {
     ItemName.pacifier_hat:          ItemData(0xFF040F, False),
 }
 
+animals_table = {
+    ItemName.animal_penguin:      ItemData(0xFF0500, False),
+    ItemName.animal_seal:         ItemData(0xFF0501, False),
+    ItemName.animal_otter:        ItemData(0xFF0502, False),
+    ItemName.animal_rabbit:       ItemData(0xFF0503, False),
+    ItemName.animal_cheetah:      ItemData(0xFF0504, False),
+    ItemName.animal_warthog:      ItemData(0xFF0505, False),
+    ItemName.animal_bear:         ItemData(0xFF0506, False),
+    ItemName.animal_tiger:        ItemData(0xFF0507, False),
+    ItemName.animal_gorilla:      ItemData(0xFF0508, False),
+    ItemName.animal_peacock:      ItemData(0xFF0509, False),
+    ItemName.animal_parrot:       ItemData(0xFF050A, False),
+    ItemName.animal_condor:       ItemData(0xFF050B, False),
+    ItemName.animal_skunk:        ItemData(0xFF050C, False),
+    ItemName.animal_sheep:        ItemData(0xFF050D, False),
+    ItemName.animal_raccoon:      ItemData(0xFF050E, False),
+    ItemName.animal_halffish:     ItemData(0xFF050F, False),
+    ItemName.animal_skeleton_dog: ItemData(0xFF0510, False),
+    ItemName.animal_bat:          ItemData(0xFF0511, False),
+    ItemName.animal_dragon:       ItemData(0xFF0512, False),
+    ItemName.animal_unicorn:      ItemData(0xFF0513, False),
+    ItemName.animal_phoenix:      ItemData(0xFF0514, False),
+}
+
+chaos_drives_table = {
+    ItemName.chaos_drive_yellow: ItemData(0xFF0515, False),
+    ItemName.chaos_drive_green:  ItemData(0xFF0516, False),
+    ItemName.chaos_drive_red:    ItemData(0xFF0517, False),
+    ItemName.chaos_drive_purple: ItemData(0xFF0518, False),
+}
+
 event_table = {
     ItemName.maria: ItemData(0xFF001D, True),
 }
@@ -216,6 +247,8 @@ item_table = {
     **fruits_table,
     **seeds_table,
     **hats_table,
+    **animals_table,
+    **chaos_drives_table,
     **event_table,
 }
 

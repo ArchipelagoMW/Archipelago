@@ -3,7 +3,7 @@ import math
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
-                   eggs_table, fruits_table, seeds_table, hats_table
+                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
 from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
@@ -320,6 +320,10 @@ class SA2BWorld(World):
         chao_active = self.any_chao_locations_active()
         junk_pool = []
         junk_keys = list(junk_table.keys())
+
+        # Chao Junk
+        if chao_active:
+            junk_keys += list(chaos_drives_table.keys())
         eggs_keys = list(eggs_table.keys())
         fruits_keys = list(fruits_table.keys())
         seeds_keys = list(seeds_table.keys())
@@ -327,6 +331,7 @@ class SA2BWorld(World):
         eggs_count = 0
         seeds_count = 0
         hats_count = 0
+
         for i in range(junk_count):
             junk_type = self.random.randint(0, len(junk_keys) + 3)
 

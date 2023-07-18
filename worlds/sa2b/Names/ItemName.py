@@ -177,5 +177,34 @@ black_wool_beanie_hat = "Black Wool Beanie"
 pacifier_hat          = "Pacifier"
 
 
+# Animal Items
+animal_penguin      = "Penguin"
+animal_seal         = "Seal"
+animal_otter        = "Otter"
+animal_rabbit       = "Rabbit"
+animal_cheetah      = "Cheetah"
+animal_warthog      = "Warthog"
+animal_bear         = "Bear"
+animal_tiger        = "Tiger"
+animal_gorilla      = "Gorilla"
+animal_peacock      = "Peacock"
+animal_parrot       = "Parrot"
+animal_condor       = "Condor"
+animal_skunk        = "Skunk"
+animal_sheep        = "Sheep"
+animal_raccoon      = "Raccoon"
+animal_halffish     = "HalfFish"
+animal_skeleton_dog = "Skeleton Dog"
+animal_bat          = "Bat"
+animal_dragon       = "Dragon"
+animal_unicorn      = "Unicorn"
+animal_phoenix      = "Phoenix"
+
+chaos_drive_yellow = "Yellow Chaos Drive"
+chaos_drive_green  = "Green Chaos Drive"
+chaos_drive_red    = "Red Chaos Drive"
+chaos_drive_purple = "Purple Chaos Drive"
+
+
 # Goal Item
 maria = "What Maria Wanted"
