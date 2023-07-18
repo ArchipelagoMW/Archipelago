@@ -802,7 +802,9 @@
         <ShowProgressArray index="Channel" value="1"/>
         <UninterruptibleArray index="Channel" value="1"/>
         <ProgressButtonArray index="Channel" value="AP_Hyperjump"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Hyperjump" Requirements="AP_UseHyperjump"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Hyperjump" Requirements="AP_UseHyperjump">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
     </CAbilEffectTarget>
     <CAbilBehavior id="AP_BattlecruiserCloak">
         <AbilSetId value="Clok"/>
