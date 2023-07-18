@@ -555,7 +555,7 @@ def set_magic_spell_rules(logic: StardewLogic, multi_world: MultiWorld, player: 
                                  (logic.can_mine_perfectly() & magic.can_use_altar(logic)).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Analyze: Haste", player),
                                  (logic.has("Coffee") & magic.can_use_altar(logic)).simplify())
-    MultiWorldRules.add_rule(multi_world.get_location("Analyze: Haste", player),
+    MultiWorldRules.add_rule(multi_world.get_location("Analyze: Heal", player),
                                  (logic.has("Life Elixir") & magic.can_use_altar(logic)).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Analyze All Life School Locations", player),
                                  (logic.has("Coffee") & logic.has("Life Elixir")
