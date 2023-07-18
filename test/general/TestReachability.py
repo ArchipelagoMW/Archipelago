@@ -44,7 +44,10 @@ class TestBase(unittest.TestCase):
                             self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                 for region in world.get_regions():
-                    if region.name not in unreachable_regions:
+                    if region.name in unreachable_regions:
+                        with self.subTest("Region should be unreachable", region=region):
+                            self.assertFalse(region.can_reach(state))
+                    else:
                         with self.subTest("Region should be reached", region=region):
                             self.assertTrue(region.can_reach(state))
 
