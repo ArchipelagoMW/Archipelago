@@ -128,61 +128,9 @@ class APContainer:
             "player_name": self.player_name,
             "game": self.game,
             # minimum version of patch system expected for patching to be successful
-            "compatible_version": 5,
+            "compatible_version": 6,
             "version": current_patch_version,
         }
-
-
-class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
-    """An APContainer that additionally has delta.bsdiff4
-    containing a delta patch to get the desired file, often a rom."""
-
-    hash: Optional[str]  # base checksum of source file
-    patch_file_ending: str = ""
-    delta: Optional[bytes] = None
-    result_file_ending: str = ".sfc"
-    source_data: bytes
-
-    def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:
-        self.patched_path = patched_path
-        super(APDeltaPatch, self).__init__(*args, **kwargs)
-
-    def get_manifest(self) -> Dict[str, Any]:
-        manifest = super(APDeltaPatch, self).get_manifest()
-        manifest["base_checksum"] = self.hash
-        manifest["result_file_ending"] = self.result_file_ending
-        manifest["patch_file_ending"] = self.patch_file_ending
-        return manifest
-
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        """Get Base data"""
-        raise NotImplementedError()
-
-    @classmethod
-    def get_source_data_with_cache(cls) -> bytes:
-        if not hasattr(cls, "source_data"):
-            cls.source_data = cls.get_source_data()
-        return cls.source_data
-
-    def write_contents(self, opened_zipfile: zipfile.ZipFile):
-        super(APDeltaPatch, self).write_contents(opened_zipfile)
-        # write Delta
-        opened_zipfile.writestr("delta.bsdiff4",
-                                bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()),
-                                compress_type=zipfile.ZIP_STORED)  # bsdiff4 is a format with integrated compression
-
-    def read_contents(self, opened_zipfile: zipfile.ZipFile):
-        super(APDeltaPatch, self).read_contents(opened_zipfile)
-        self.delta = opened_zipfile.read("delta.bsdiff4")
-
-    def patch(self, target: str):
-        """Base + Delta -> Patched"""
-        if not self.delta:
-            self.read()
-        result = bsdiff4.patch(self.get_source_data_with_cache(), self.delta)
-        with open(target, "wb") as f:
-            f.write(result)
 
 
 class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
@@ -208,13 +156,12 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
             cls.source_data = cls.get_source_data()
         return cls.source_data
 
-    def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any):
+    def __init__(self, *args: Any, **kwargs: Any):
         super(APProcedurePatch, self).__init__(*args, **kwargs)
         self.tokens = list()
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APProcedurePatch, self).get_manifest()
-        manifest["compatible_version"] = 6
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending
         manifest["patch_file_ending"] = self.patch_file_ending
@@ -237,7 +184,8 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         super(APProcedurePatch, self).write_contents(opened_zipfile)
         for file in self.files:
-            opened_zipfile.writestr(file, self.files[file])
+            opened_zipfile.writestr(file, self.files[file],
+                                    compress_type=zipfile.ZIP_STORED if file.endswith(".bsdiff4") else None)
 
     def get_file(self, file: str) -> bytes:
         if file not in self.files:
@@ -275,6 +223,25 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
                 raise NotImplementedError(f"Unknown procedure {step} for {self.game}.")
         with open(target, 'wb') as f:
             f.write(base_data)
+
+
+class APDeltaPatch(APProcedurePatch):
+    """An APContainer that additionally has delta.bsdiff4
+    containing a delta patch to get the desired file, often a rom."""
+
+    source_data: bytes
+    procedure = [
+        ("apply_bsdiff4", ["delta.bsdiff4"])
+    ]
+
+    def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:
+        super(APDeltaPatch, self).__init__(*args, **kwargs)
+        self.patched_path = patched_path
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+        self.write_file("delta.bsdiff4",
+                        bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()))
+        super(APDeltaPatch, self).write_contents(opened_zipfile)
 
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):

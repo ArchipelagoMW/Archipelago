@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Tuple, Optional, TypedDict, Union
+from typing import Tuple, Optional, TypedDict
 
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from worlds.Files import AutoPatchRegister, APDeltaPatch, APProcedurePatch
+from worlds.Files import AutoPatchRegister, APProcedurePatch
 
 
 class RomMeta(TypedDict):
@@ -20,7 +20,7 @@ class RomMeta(TypedDict):
 def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     auto_handler = AutoPatchRegister.get_handler(patch_file)
     if auto_handler:
-        handler: Union[APDeltaPatch, APProcedurePatch] = auto_handler(patch_file)
+        handler: APProcedurePatch = auto_handler(patch_file)
         target = os.path.splitext(patch_file)[0]+handler.result_file_ending
         handler.patch(target)
         return {"server": handler.server,
