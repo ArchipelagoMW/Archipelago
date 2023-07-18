@@ -227,8 +227,8 @@ class PokemonRedBlueWorld(World):
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
 
         self.dexsanity_table = [
-            *[True for _ in range(round(self.multiworld.dexsanity[self.player].value * 1.51))],
-            *[False for _ in range(151 - round(self.multiworld.dexsanity[self.player].value * 1.51))]
+            *(True for _ in range(round(self.multiworld.dexsanity[self.player].value * 1.51))),
+            *(False for _ in range(151 - round(self.multiworld.dexsanity[self.player].value * 1.51)))
         ]
         self.multiworld.random.shuffle(self.dexsanity_table)
 
