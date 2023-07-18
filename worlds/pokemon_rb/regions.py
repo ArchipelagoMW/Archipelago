@@ -2248,9 +2248,10 @@ def create_regions(self):
 
         starting_entrances = len(entrances)
         dc_connected = []
+        event_locations = self.multiworld.get_filled_locations(player)
         while entrances:
             state.update_reachable_regions(player)
-            state.sweep_for_events(player=player)
+            state.sweep_for_events(locations=event_locations)
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
             assert reachable_entrances, \
