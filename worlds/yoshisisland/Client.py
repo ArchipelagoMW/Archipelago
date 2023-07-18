@@ -31,6 +31,7 @@ GAME_MODE = WRAM_START + 0x0118
 YOSHI_STATE = SRAM_START + 0x00AC
 YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
 DEATHMUSIC_FLAG = WRAM_START + 0x004F
+DEATHFLAG = WRAM_START + 0x00DB
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
@@ -77,9 +78,10 @@ class YISNIClient(SNIClient):
         yoshi_state = await snes_read(ctx, YOSHI_STATE, 0x1)
         item_received = await snes_read(ctx, ITEM_RECEIVED, 0x1)
         game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
+        death_flag = await snes_read(ctx, DEATHFLAG, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            currently_dead = game_music[0] == 0x07 or game_mode[0] == 0x12
+            currently_dead = game_music[0] == 0x07 or game_mode[0] == 0x12 or (death_flag [0] == 0x00 and game_mode[0] == 0x11)
             await ctx.handle_deathlink_state(currently_dead)
 
         if game_mode is None:

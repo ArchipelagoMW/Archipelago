@@ -11,7 +11,7 @@ from .Locations import get_locations, EventId
 from .LogicExtensions import YoshiLogic
 from .Options import yoshi_options, get_option_value
 from .Regions import create_regions
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .Client import YISNIClient
 from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch
 import Patch
@@ -325,13 +325,13 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     self.burt_pointers = [0x3D, 0x05, 0x63, 0x00]
     self.slime_pointers = [0x70, 0x04, 0x78, 0x00]
     self.boo_pointers = [0x74, 0xBB, 0x7A, 0x00]
-    self.pot_pointers = [0xBE, 0x18, 0x4A, 0x00]
+    self.pot_pointers = [0xCF, 0x04, 0x4D, 0x00]
     self.frog_pointers = [0xBF, 0x12, 0x62, 0x04]
     self.plant_pointers = [0x7F, 0x0D, 0x42, 0x00]
     self.milde_pointers = [0x82, 0x06, 0x64, 0x00]
     self.koop_pointers = [0x86, 0x0D, 0x78, 0x00]
     self.slug_pointers = [0x8A, 0x09, 0x7A, 0x00]
-    self.raph_points = [0xC4, 0x03, 0x4B, 0x05]
+    self.raph_pointers = [0xC4, 0x03, 0x4B, 0x05]
     self.tap_pointers = [0xCC, 0x49, 0x64, 0x02]
 
     pointer_dict = {
@@ -344,9 +344,11 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         6: self.milde_pointers,
         7: self.koop_pointers,
         8: self.slug_pointers,
-        9: self.raph_points,
+        9: self.raph_pointers,
         10: self.tap_pointers
     }
+
+    boss_levels = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
 
     boss_room_idlist = {
         "Burt The Bashful's Boss Room": 0,
@@ -362,41 +364,42 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         "Tap-Tap The Red Nose's Boss Room": 10,
     }
 
-
-    for i in range(4):
-        self.boss_burt_data = (pointer_dict[self.boss_order.index("Burt The Bashful's Boss Room")])
-
-    for i in range(4):
-        self.boss_slime_data = (pointer_dict[self.boss_order.index("Salvo The Slime's Boss Room")])
-
-    for i in range(4):
-        self.boss_boo_data = (pointer_dict[self.boss_order.index("Bigger Boo's Boss Room")])
-
-    for i in range(4):
-        self.boss_pot_data = (pointer_dict[self.boss_order.index("Roger The Ghost's Boss Room")])
-
-    for i in range(4):
-        self.boss_frog_data = (pointer_dict[self.boss_order.index("Prince Froggy's Boss Room")])
-
-    for i in range(4):
-        self.boss_plant_data = (pointer_dict[self.boss_order.index("Naval Piranha's Boss Room")])
-
-    for i in range(4):
-        self.boss_milde_data = (pointer_dict[self.boss_order.index("Marching Milde's Boss Room")])
-
-    for i in range(4):
-        self.boss_koop_data = (pointer_dict[self.boss_order.index("Hookbill The Koopa's Boss Room")])
-
-    for i in range(4):
-        self.boss_slug_data = (pointer_dict[self.boss_order.index("Sluggy The Unshaven's Boss Room")])
-
-    for i in range(4):
-        self.boss_raph_data = (pointer_dict[self.boss_order.index("Raphael The Raven's Boss Room")])
-
-    for i in range(4):
-        self.boss_tap_data = (pointer_dict[self.boss_order.index("Tap-Tap The Red Nose's Boss Room")])
-
     self.boss_room_id = [boss_room_idlist[roomnum] for roomnum in self.boss_order]
+    self.tap_tap_room = boss_levels[self.boss_room_id.index(10)]
+
+
+    for i in range(4):
+        self.boss_burt_data = (pointer_dict[self.boss_room_id[0]])
+
+    for i in range(4):
+        self.boss_slime_data = (pointer_dict[self.boss_room_id[1]])
+
+    for i in range(4):
+        self.boss_boo_data = (pointer_dict[self.boss_room_id[2]])
+
+    for i in range(4):
+        self.boss_pot_data = (pointer_dict[self.boss_room_id[3]])
+
+    for i in range(4):
+        self.boss_frog_data = (pointer_dict[self.boss_room_id[4]])
+
+    for i in range(4):
+        self.boss_plant_data = (pointer_dict[self.boss_room_id[5]])
+
+    for i in range(4):
+        self.boss_milde_data = (pointer_dict[self.boss_room_id[6]])
+
+    for i in range(4):
+        self.boss_koop_data = (pointer_dict[self.boss_room_id[7]])
+
+    for i in range(4):
+        self.boss_slug_data = (pointer_dict[self.boss_room_id[8]])
+
+    for i in range(4):
+        self.boss_raph_data = (pointer_dict[self.boss_room_id[9]])
+
+    for i in range(4):
+        self.boss_tap_data = (pointer_dict[self.boss_room_id[10]])
 
 
 
