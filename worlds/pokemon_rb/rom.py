@@ -3,7 +3,7 @@ import hashlib
 import Utils
 import bsdiff4
 from copy import deepcopy
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import location_data
