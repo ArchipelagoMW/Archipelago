@@ -48,6 +48,9 @@ YAML files may be generated on the Archipelago website by visiting the [games pa
 "Settings Page" link under the relevant game. Clicking "Export Settings" in a game's settings page will download the
 YAML to your system.
 
+Alternatively, you can run `ArchipelagoLauncher.exe` and click on `Generate Template Settings` to create a set of template 
+YAMLs for each game in your Archipelago install (including for APWorlds). These will be placed in your `Players/Templates` folder.
+
 In a multiworld there must be one YAML per world. Any number of players can play on each world using either the game's
 native coop system or using Archipelago's coop support. Each world will hold one slot in the multiworld and will have a
 slot name and, if the relevant game requires it, files to associate it with that multiworld.

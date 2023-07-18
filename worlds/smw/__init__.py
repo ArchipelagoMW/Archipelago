@@ -90,7 +90,12 @@ class SMWWorld(World):
         if self.multiworld.early_climb[self.player]:
             self.multiworld.local_early_items[self.player][ItemName.mario_climb] = 1
 
-    def generate_basic(self):
+
+    def create_regions(self):
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
+
+        # Not generate basic
         itempool: typing.List[SMWItem] = []
 
         self.active_level_dict = dict(zip(generate_level_list(self.multiworld, self.player), full_level_list))
@@ -246,10 +251,6 @@ class SMWWorld(World):
                     break
 
             hint_data[self.player] = er_hint_data
-
-    def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
