@@ -8,7 +8,7 @@ import bsdiff4
 
 from BaseClasses import MultiWorld
 from Options import Toggle
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 import Utils
 
 from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
