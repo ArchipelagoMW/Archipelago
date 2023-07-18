@@ -4,7 +4,7 @@ from typing import List, Set, Tuple, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import StarcraftWoLItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
-    get_basic_units, ItemData, upgrade_included_names
+    get_basic_units, ItemData, upgrade_included_names, progressive_if_nco
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value
@@ -170,19 +170,32 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
     include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
     upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
 
-    def item_allowed(name: str, data: ItemData) -> bool:
-        return name not in excluded_items and \
-            (data.type != "Upgrade" or (include_upgrades and \
-            name in upgrade_included_names[upgrade_items]))
+    # Include items from outside Wings of Liberty
+    item_sets = {'wol'}
+    if get_option_value(multiworld, player, 'nco_items'):
+        item_sets.add('nco')
+    if get_option_value(multiworld, player, 'bw_items'):
+        item_sets.add('bw')
+    if get_option_value(multiworld, player, 'ext_items'):
+        item_sets.add('ext')
+
+    def allowed_quantity(name: str, data: ItemData) -> int:
+        if name in excluded_items \
+                or data.type == "Upgrade" and (not include_upgrades or name not in upgrade_included_names[upgrade_items]) \
+                or not data.origin.intersection(item_sets):
+            return 0
+        elif name in progressive_if_nco and 'nco' not in item_sets:
+            return 1
+        else:
+            return data.quantity
 
     for name, data in get_item_table(multiworld, player).items():
-        if item_allowed(name, data):
-            for _ in range(data.quantity):
-                item = create_item_with_correct_settings(player, name)
-                if name in yaml_locked_items:
-                    locked_items.append(item)
-                else:
-                    pool.append(item)
+        for i in range(allowed_quantity(name, data)):
+            item = create_item_with_correct_settings(player, name)
+            if name in yaml_locked_items:
+                locked_items.append(item)
+            else:
+                pool.append(item)
 
     existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
     existing_names = [item.name for item in existing_items]

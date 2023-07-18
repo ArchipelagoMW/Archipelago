@@ -160,6 +160,21 @@ class GenericUpgradeItems(Choice):
     option_bundle_all = 3
 
 
+class NovaCovertOpsItems(Toggle):
+    """If turned on, the equipment upgrades from Nova Covert Ops may be present in the seed."""
+    display_name = "Nova Covert Ops Items"
+
+
+class BroodWarItems(Toggle):
+    """If turned on, returning items from StarCraft: Brood War may appear in the seed."""
+    display_name = "Brood War Items"
+
+
+class ExtendedItems(Toggle):
+    """If turned on, original items that did not appear in Campaign mode may appear in the seed."""
+    display_name = "Extended Items"
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -195,6 +210,9 @@ sc2wol_options: Dict[str, Option] = {
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,
     "excluded_missions": ExcludedMissions,
+    "nco_items": NovaCovertOpsItems,
+    "bw_items": BroodWarItems,
+    "ext_items": ExtendedItems
 }
 
 
