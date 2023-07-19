@@ -2,7 +2,6 @@ import unittest
 
 from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister
-
 from . import setup_solo_multiworld
 
 
@@ -34,25 +33,26 @@ class TestBase(unittest.TestCase):
 
     def testDefaultAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
-            if game_name not in {"Ori and the Blind Forest"}:  # TODO: fix Ori Logic
-                unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
-                with self.subTest("Game", game=game_name):
-                    world = setup_solo_multiworld(world_type)
-                    excluded = world.exclude_locations[1].value
-                    state = world.get_all_state(False)
-                    for location in world.get_locations():
-                        if location.name not in excluded:
-                            with self.subTest("Location should be reached", location=location):
-                                self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+            unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
+            with self.subTest("Game", game=game_name):
+                world = setup_solo_multiworld(world_type)
+                excluded = world.exclude_locations[1].value
+                state = world.get_all_state(False)
+                for location in world.get_locations():
+                    if location.name not in excluded:
+                        with self.subTest("Location should be reached", location=location):
+                            self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
-                    for region in world.get_regions():
-                        if region.name not in unreachable_regions:
-                            with self.subTest("Region should be reached", region=region):
-                                self.assertTrue(region.can_reach(state))
+                for region in world.get_regions():
+                    if region.name in unreachable_regions:
+                        with self.subTest("Region should be unreachable", region=region):
+                            self.assertFalse(region.can_reach(state))
+                    else:
+                        with self.subTest("Region should be reached", region=region):
+                            self.assertTrue(region.can_reach(state))
 
-                    with self.subTest("Completion Condition"):
-                        self.assertTrue(world.can_beat_game(state))
+                with self.subTest("Completion Condition"):
+                    self.assertTrue(world.can_beat_game(state))
 
     def testDefaultEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():

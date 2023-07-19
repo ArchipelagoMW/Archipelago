@@ -4,7 +4,7 @@ from typing import Any, Callable, List, Sequence
 import random
 import typing
 from BaseClasses import Location
-from .Item import Item, ItemType
+from .Item import Item, ItemType, lookup_id_to_name
 from .Location import LocationType
 from .Region import IReward, RewardType, SMRegion, Z3Region
 from .Regions.Zelda.EasternPalace import EasternPalace
@@ -84,6 +84,7 @@ class DropPrize(Enum):
 class Patch:
     Major = 11
     Minor = 3
+    Patch = 1
     allWorlds: List[World]
     myWorld: World
     seedGuid: str
@@ -122,7 +123,7 @@ class Patch:
 
         self.WriteGanonInvicible(config.Goal)
         self.WritePreOpenPyramid(config.Goal)
-        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals)
+        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals, config.Goal)
         self.WriteBossesNeeded(self.myWorld.TourianBossTokens)
         self.WriteRngBlock()
 
@@ -351,6 +352,29 @@ class Patch:
                 not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
             
             return value.value
+        elif (location.APLocation.item.game == "A Link to the Past"):
+            if location.APLocation.item.code + 84000 in lookup_id_to_name:
+                ALTTPBottleContentCodeToSMZ3ItemCode = {
+                    ItemType.RedContent.value: ItemType.BottleWithRedPotion.value,
+                    ItemType.GreenContent.value: ItemType.BottleWithGreenPotion.value,
+                    ItemType.BlueContent.value: ItemType.BottleWithBluePotion.value,
+                    ItemType.BeeContent.value: ItemType.BottleWithBee.value,
+                }
+                return ALTTPBottleContentCodeToSMZ3ItemCode.get(location.APLocation.item.code, location.APLocation.item.code)
+            else:
+                return ItemType.Something.value
+        elif (location.APLocation.item.game == "Super Metroid"):
+            SMNameToSMZ3Code = {
+                "Energy Tank": ItemType.ETank, "Missile": ItemType.Missile, "Super Missile": ItemType.Super,
+                "Power Bomb": ItemType.PowerBomb, "Bomb": ItemType.Bombs, "Charge Beam": ItemType.Charge,
+                "Ice Beam": ItemType.Ice, "Hi-Jump Boots": ItemType.HiJump, "Speed Booster": ItemType.SpeedBooster,
+                "Wave Beam": ItemType.Wave, "Spazer": ItemType.Spazer, "Spring Ball": ItemType.SpringBall,
+                "Varia Suit": ItemType.Varia, "Plasma Beam": ItemType.Plasma, "Grappling Beam": ItemType.Grapple,
+                "Morph Ball": ItemType.Morph, "Reserve Tank": ItemType.ReserveTank, "Gravity Suit": ItemType.Gravity,
+                "X-Ray Scope": ItemType.XRay, "Space Jump": ItemType.SpaceJump, "Screw Attack": ItemType.ScrewAttack,
+                "Nothing": ItemType.Something, "No Energy": ItemType.Something, "Generic": ItemType.Something
+            }
+            return SMNameToSMZ3Code.get(location.APLocation.item.name, ItemType.Something).value
         else:
             return ItemType.Something.value
 
@@ -592,7 +616,7 @@ class Patch:
                     "H" if self.myWorld.Config.SMLogic == Config.SMLogic.Hard else \
                     "X"
 
-        self.title = f"ZSM{Patch.Major}{Patch.Minor}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
+        self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
         self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
         self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
     
@@ -753,12 +777,15 @@ class Patch:
     def WriteBossesNeeded(self, tourianBossTokens):
         self.patches.append((Snes(0xF47200), getWordArray(tourianBossTokens)))
 
-    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals):
+    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals, goal: Goal):
         self.patches.append((Snes(0x30805E), [towerCrystals]))
         self.patches.append((Snes(0x30805F), [ganonCrystals]))
 
         self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
-        self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
+        if (goal == Goal.AllDungeonsDefeatMotherBrain):
+            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons and bosses to defeat Ganon.")
+        else:
+            self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 
     def WriteRngBlock(self):
         #/* Repoint RNG Block */

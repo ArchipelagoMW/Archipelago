@@ -128,20 +128,30 @@
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     {%- for area in ordered_areas -%}
-                                        {%- set checks_done = checks[area] -%}
-                                        {%- set checks_total = checks_in_area[player][area] -%}
-                                        {%- if checks_done == checks_total -%}
-                                            <td class="item-acquired center-column">
-                                                {{ checks_done }}/{{ checks_total }}</td>
-                                        {%- else -%}
-                                            <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
-                                        {%- endif -%}
-                                        {%- if area in key_locations -%}
-                                            <td class="center-column">{{ inventory[team][player][small_key_ids[area]] }}</td>
-                                        {%- endif -%}
-                                        {%- if area in big_key_locations -%}
-                                            <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
-                                        {%- endif -%}
+                                        {% if player in checks_in_area and area in checks_in_area[player] %}
+                                            {%- set checks_done = checks[area] -%}
+                                            {%- set checks_total = checks_in_area[player][area] -%}
+                                            {%- if checks_done == checks_total -%}
+                                                <td class="item-acquired center-column">
+                                                    {{ checks_done }}/{{ checks_total }}</td>
+                                            {%- else -%}
+                                                <td class="center-column">{{ checks_done }}/{{ checks_total }}</td>
+                                            {%- endif -%}
+                                            {%- if area in key_locations -%}
+                                                <td class="center-column">{{ inventory[team][player][small_key_ids[area]] }}</td>
+                                            {%- endif -%}
+                                            {%- if area in big_key_locations -%}
+                                                <td class="center-column">{% if inventory[team][player][big_key_ids[area]] %}✔️{% endif %}</td>
+                                            {%- endif -%}
+                                        {% else %}
+                                            <td class="center-column"></td>
+                                            {%- if area in key_locations -%}
+                                                <td class="center-column"></td>
+                                            {%- endif -%}
+                                            {%- if area in big_key_locations -%}
+                                                <td class="center-column"></td>
+                                            {%- endif -%}
+                                        {% endif %}
                                     {%- endfor -%}
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     {%- if activity_timers[(team, player)] -%}
@@ -155,34 +165,7 @@
                     </table>
                 </div>
             {% endfor %}
-            {% for team, hints in hints.items() %}
-                <div class="table-wrapper">
-                    <table id="hints-table" class="table non-unique-item-table" data-order='[[5, "asc"], [0, "asc"]]'>
-                        <thead>
-                        <tr>
-                            <th>Finder</th>
-                            <th>Receiver</th>
-                            <th>Item</th>
-                            <th>Location</th>
-                            <th>Entrance</th>
-                            <th>Found</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {%- for hint in hints -%}
-                            <tr>
-                                <td>{{ long_player_names[team, hint.finding_player] }}</td>
-                                <td>{{ long_player_names[team, hint.receiving_player] }}</td>
-                                <td>{{ hint.item|item_name }}</td>
-                                <td>{{ hint.location|location_name }}</td>
-                                <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
-                                <td>{% if hint.found %}✔{% endif %}</td>
-                            </tr>
-                        {%- endfor -%}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
+            {% include "hintTable.html" with context %}
         </div>
     </div>
 {% endblock %}
