@@ -6,7 +6,7 @@ from .Items import CliqueItem, item_data_table, item_table
 from .Locations import CliqueLocation, location_data_table, location_table, locked_locations
 from .Options import clique_options
 from .Regions import region_data_table
-from .Rules import has_unlocked_button
+from .Rules import get_button_rule
 
 
 class CliqueWebWorld(WebWorld):
@@ -76,9 +76,9 @@ class CliqueWorld(World):
 
     def set_rules(self) -> None:
         self.multiworld.get_location("The Big Red Button", self.player).access_rule =\
-            lambda state: has_unlocked_button(state, self.player)
+            get_button_rule(self.multiworld, self.player)
         self.multiworld.get_location("In the Player's Mind", self.player).access_rule =\
-            lambda state: has_unlocked_button(state, self.player)
+            get_button_rule(self.multiworld, self.player)
 
         # Do not allow button activations on buttons.
         self.multiworld.get_location("The Big Red Button", self.player).item_rule =\

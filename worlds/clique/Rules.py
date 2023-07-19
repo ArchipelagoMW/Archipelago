@@ -1,8 +1,10 @@
-from BaseClasses import CollectionState
+from typing import Callable
+
+from BaseClasses import CollectionState, MultiWorld
 
 
-def has_unlocked_button(state: CollectionState, player: int) -> bool:
-    if getattr(state.multiworld, "hard_mode")[player]:
-        return state.has("Button Activation", player)
+def get_button_rule(multiworld: MultiWorld, player: int) -> Callable[[CollectionState], bool]:
+    if getattr(multiworld, "hard_mode")[player]:
+        return lambda state: state.has("Button Activation", player)
 
-    return True
+    return lambda state: True
