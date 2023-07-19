@@ -1,18 +1,19 @@
 import logging
 import os
 import random
-import settings
 import threading
 import typing
 
-import Utils
-from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
-from .Dungeons import create_dungeons, Dungeon
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
-    indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
+import settings
+from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
+from worlds.AutoWorld import LogicMixin, WebWorld, World
+from .Client import ALTTPSNIClient
+from .Dungeons import Dungeon, create_dungeons
+from .EntranceShuffle import indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted, \
+    link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
-from .ItemPool import generate_itempool, difficulties
-from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
+from .ItemPool import difficulties, generate_itempool
+from .Items import GetBeemizerItem, item_init_table, item_name_groups, item_table
 from .Options import alttp_options, smallkey_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
@@ -20,10 +21,9 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
-from .SubClasses import ALttPItem, LTTPRegionType
-from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .Shops import Shop, ShopSlotFill, ShopType, create_shops, price_rate_display, price_type_display_name
 from .StateHelpers import can_buy_unlimited
+from .SubClasses import ALttPItem, LTTPRegionType
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -264,7 +264,7 @@ class ALTTPWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
         if multiworld.is_race:
-            import xxtea
+            pass
         for player in multiworld.get_game_players(cls.game):
             if multiworld.worlds[player].use_enemizer:
                 check_enemizer(multiworld.worlds[player].enemizer_path)
@@ -291,7 +291,7 @@ class ALTTPWorld(World):
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
             elif seed.startswith("group-") or world.is_race:
-                self.er_seed = get_same_seed(world.worlds[player], (
+                self.er_seed = get_same_seed(self, (
                     shuffle, seed, world.retro_caves[player], world.mode[player], world.logic[player]))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = seed
@@ -485,14 +485,14 @@ class ALTTPWorld(World):
             world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
-    def stage_pre_fill(cls, world):
+    def stage_pre_fill(cls, multiworld: MultiWorld):
         from .Dungeons import fill_dungeons_restrictive
-        fill_dungeons_restrictive(world)
+        fill_dungeons_restrictive(multiworld)
 
 
     @classmethod
     def stage_post_fill(cls, multiworld: MultiWorld):
-        ShopSlotFill(multiworld, multiworld.get_game_players(cls.game)[0])
+        ShopSlotFill(multiworld, multiworld.worlds[multiworld.get_game_players(cls.game)[0]].random)
 
     @property
     def use_enemizer(self) -> bool:

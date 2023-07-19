@@ -1,16 +1,16 @@
 from __future__ import annotations
-from enum import unique, IntEnum
-from typing import List, Optional, Set, NamedTuple, Dict
+
 import logging
+import random
+from enum import IntEnum, unique
+from typing import Dict, List, NamedTuple, Optional, Set
 
 from BaseClasses import MultiWorld
 from Utils import int16_as_bytes
-
-from .SubClasses import ALttPLocation
 from .EntranceShuffle import door_addresses
-from .Items import item_name_groups, item_table, ItemFactory, trap_replaceable, GetBeemizerItem
+from .Items import GetBeemizerItem, ItemFactory, item_name_groups, item_table, trap_replaceable
 from .Options import smallkey_shuffle
-
+from .SubClasses import ALttPLocation
 
 logger = logging.getLogger("Shops")
 
@@ -176,8 +176,7 @@ def FillDisabledShopSlots(world):
         location.locked = True
 
 
-def ShopSlotFill(multiworld: MultiWorld, player: int):
-    world = multiworld.worlds[player]
+def ShopSlotFill(multiworld: MultiWorld, shop_random: random.Random):
     shop_slots: Set[ALttPLocation] = {location for shop_locations in
                                       (shop.region.locations for shop in multiworld.shops if shop.type != ShopType.TakeAny)
                                       for location in shop_locations if location.shop_slot is not None}
@@ -229,7 +228,7 @@ def ShopSlotFill(multiworld: MultiWorld, player: int):
                 x = 0
             cumu_weights.append(len(current_candidates) + x)
 
-            world.random.shuffle(current_candidates)
+            shop_random.shuffle(current_candidates)
 
         del locations_per_sphere
 
@@ -238,7 +237,7 @@ def ShopSlotFill(multiworld: MultiWorld, player: int):
                 # getting all candidates and shuffling them feels cpu expensive, there may be a better method
                 candidates = [(location, i) for i, candidates in enumerate(candidates_per_sphere[i:], start=i)
                               for location in candidates]
-                world.random.shuffle(candidates)
+                shop_random.shuffle(candidates)
                 for location in current_shop_slots:
                     shop: Shop = location.parent_region.shop
                     for index, (c, swapping_sphere_id) in enumerate(candidates):  # chosen item locations
@@ -259,20 +258,20 @@ def ShopSlotFill(multiworld: MultiWorld, player: int):
                     item_name = location.item.name
                     if location.item.game != "A Link to the Past":
                         if location.item.advancement:
-                            price = world.random.randrange(8, 56)
+                            price = shop_random.randrange(8, 56)
                         elif location.item.useful:
-                            price = world.random.randrange(4, 28)
+                            price = shop_random.randrange(4, 28)
                         else:
-                            price = world.random.randrange(2, 14)
+                            price = shop_random.randrange(2, 14)
                     elif any(x in item_name for x in
                              ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
-                        price = world.random.randrange(1, 7)
+                        price = shop_random.randrange(1, 7)
                     elif any(x in item_name for x in ['Arrow', 'Bomb', 'Clock']):
-                        price = world.random.randrange(2, 14)
+                        price = shop_random.randrange(2, 14)
                     elif any(x in item_name for x in ['Small Key', 'Heart']):
-                        price = world.random.randrange(4, 28)
+                        price = shop_random.randrange(4, 28)
                     else:
-                        price = world.random.randrange(8, 56)
+                        price = shop_random.randrange(8, 56)
 
                     shop.push_inventory(location.shop_slot, item_name,
                                         min(int(price * multiworld.shop_price_modifier[location.player] / 100) * 5, 9999), 1,
@@ -339,7 +338,7 @@ def create_shops(multiworld: MultiWorld, player: int):
                 loc.locked = True
                 if single_purchase_slots.pop():
                     if multiworld.goal[player] != 'icerodhunt':
-                        if world.random.world.random() < chance_100:
+                        if world.random.random() < chance_100:
                             additional_item = 'Rupees (100)'
                         else:
                             additional_item = 'Rupees (50)'
@@ -412,57 +411,59 @@ shop_generation_types = {
 }
 
 
-def set_up_shops(world, player: int):
+def set_up_shops(multiworld: MultiWorld, player: int):
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
-
-    if world.retro_bow[player]:
-        rss = world.get_region('Red Shield Shop', player).shop
+    world = multiworld.worlds[player]
+    if multiworld.retro_bow[player]:
+        rss = multiworld.get_region('Red Shield Shop', player).shop
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
                              ['Blue Shield', 50], ['Small Heart',
                                                    10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+        if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
-        replacement_item = world.world.random.choice(replacement_items)
+        replacement_item = world.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal or world.retro_bow[player]:
-        for shop in world.world.random.sample([s for s in world.shops if
+    if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal or multiworld.retro_bow[player]:
+        for shop in world.random.sample([s for s in multiworld.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
-                                        5):
+                                             5):
             shop.locked = True
             slots = [0, 1, 2]
-            world.world.random.shuffle(slots)
+            world.random.shuffle(slots)
             slots = iter(slots)
-            if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if world.retro_bow[player]:
+            if multiworld.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
 
-def shuffle_shops(world, items, player: int):
-    option = world.shop_shuffle[player]
+def shuffle_shops(multiworld: MultiWorld, items: List[str], player: int):
+    option = multiworld.shop_shuffle[player]
+    world = multiworld.worlds[player]
+    
     if 'u' in option:
-        progressive = world.progressive[player]
-        progressive = world.world.random.choice([True, False]) if progressive == 'grouped_world.random' else progressive == 'on'
-        progressive &= world.goal == 'icerodhunt'
+        progressive = multiworld.progressive[player]
+        progressive = world.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
+        progressive &= multiworld.goal == 'icerodhunt'
         new_items = ["Bomb Upgrade (+5)"] * 6
         new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
 
-        if not world.retro_bow[player]:
+        if not multiworld.retro_bow[player]:
             new_items += ["Arrow Upgrade (+5)"] * 6
             new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
-        world.world.random.shuffle(new_items)  # Decide what gets tossed world.randomly if it can't insert everything.
+        world.random.shuffle(new_items)  # Decide what gets tossed randomly if it can't insert everything.
 
         capacityshop: Optional[Shop] = None
-        for shop in world.shops:
+        for shop in multiworld.shops:
             if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
                     shop.region.name == "Capacity Upgrade":
                 shop.clear_inventory()
                 capacityshop = shop
 
-        if world.goal[player] != 'icerodhunt':
+        if multiworld.goal[player] != 'icerodhunt':
             for i, item in enumerate(items):
                 if item.name in trap_replaceable:
                     items[i] = ItemFactory(new_items.pop(), player)
@@ -480,13 +481,13 @@ def shuffle_shops(world, items, player: int):
                     capacityshop.add_inventory(next(slots), 'Arrow Upgrade (+5)', 100, arrowupgrades)
         else:
             for item in new_items:
-                world.push_precollected(ItemFactory(item, player))
+                multiworld.push_precollected(ItemFactory(item, player))
 
     if any(setting in option for setting in 'ipP'):
         shops = []
         upgrade_shops = []
         total_inventory = []
-        for shop in world.shops:
+        for shop in multiworld.shops:
             if shop.region.player == player:
                 if shop.type == ShopType.UpgradeShop:
                     upgrade_shops.append(shop)
@@ -498,7 +499,7 @@ def shuffle_shops(world, items, player: int):
             def price_adjust(price: int) -> int:
                 # it is important that a base price of 0 always returns 0 as new price!
                 adjust = 2 if price < 100 else 5
-                return int((price / adjust) * (0.5 + world.world.random.world.random() * 1.5)) * adjust
+                return int((price / adjust) * (0.5 + world.random.random() * 1.5)) * adjust
 
             def adjust_item(item):
                 if item:
@@ -513,13 +514,13 @@ def shuffle_shops(world, items, player: int):
 
         if 'P' in option:
             for item in total_inventory:
-                price_to_funny_price(world, item, player)
+                price_to_funny_price(multiworld, item, player)
             # Don't apply to upgrade shops
             # Upgrade shop is only one place, and will generally be too easy to
             # replenish hearts and bombs
 
         if 'i' in option:
-            world.world.random.shuffle(total_inventory)
+            world.random.shuffle(total_inventory)
 
             i = 0
             for shop in shops:
@@ -608,8 +609,8 @@ def price_to_funny_price(multiworld: MultiWorld, item: dict, player: int):
             break
 
 
-def create_dynamic_shop_locations(world, player):
-    for shop in world.shops:
+def create_dynamic_shop_locations(multiworld: MultiWorld, player: int):
+    for shop in multiworld.shops:
         if shop.region.player == player:
             for i, item in enumerate(shop.inventory):
                 if item is None:
@@ -622,6 +623,6 @@ def create_dynamic_shop_locations(world, player):
                     if shop.type == ShopType.TakeAny:
                         loc.shop_slot_disabled = True
                     shop.region.locations.append(loc)
-                    world.clear_location_cache()
+                    multiworld.clear_location_cache()
 
                     loc.shop_slot = i

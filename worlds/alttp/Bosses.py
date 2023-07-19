@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional, Union, List, Tuple, Callable, Dict, TYPE_CHECKING
+from typing import Callable, Dict, List, Optional, TYPE_CHECKING, Tuple, Union
 
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
-from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, \
-    has_melee_weapon, has_fire_source
+from .StateHelpers import can_extend_magic, can_get_good_bee, can_shoot_arrows, has_beam_sword, has_fire_source, \
+    has_melee_weapon, has_sword
 
 if TYPE_CHECKING:
     from . import ALTTPWorld
@@ -188,7 +188,7 @@ boss_location_table: List[Tuple[str, str]] = [
 def place_plando_bosses(world: "ALTTPWorld", bosses: List[str]) -> Tuple[List[str], List[Tuple[str, str]]]:
     # Most to least restrictive order
     boss_locations = boss_location_table.copy()
-    world.world.random.shuffle(boss_locations)
+    world.random.shuffle(boss_locations)
     boss_locations.sort(key=lambda location: -int(restrictive_boss_locations[location]))
     already_placed_bosses: List[str] = []
 
