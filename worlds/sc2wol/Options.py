@@ -161,17 +161,17 @@ class GenericUpgradeItems(Choice):
 
 
 class NovaCovertOpsItems(Toggle):
-    """If turned on, the equipment upgrades from Nova Covert Ops may be present in the seed."""
+    """If turned on, the equipment upgrades from Nova Covert Ops may be present in the world."""
     display_name = "Nova Covert Ops Items"
 
 
 class BroodWarItems(Toggle):
-    """If turned on, returning items from StarCraft: Brood War may appear in the seed."""
+    """If turned on, returning items from StarCraft: Brood War may appear in the world."""
     display_name = "Brood War Items"
 
 
 class ExtendedItems(Toggle):
-    """If turned on, original items that did not appear in Campaign mode may appear in the seed."""
+    """If turned on, original items that did not appear in Campaign mode may appear in the world."""
     display_name = "Extended Items"
 
 
