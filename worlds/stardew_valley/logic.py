@@ -350,7 +350,7 @@ class StardewLogic:
             Ingredient.vinegar: self.can_spend_money_at(Region.pierre_store, 200),
             AnimalProduct.void_egg: self.can_spend_money_at(Region.sewer, 5000) | (self.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
             Loot.void_essence: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
-            ArtisanGood.void_mayonnaise: self.has(Machine.mayonnaise_machine) & self.has(AnimalProduct.void_egg),
+            ArtisanGood.void_mayonnaise: (self.can_reach_region(Region.witch_swamp) & self.can_fish()) | (self.has(Machine.mayonnaise_machine) & self.has(AnimalProduct.void_egg)),
             Ingredient.wheat_flour: self.can_spend_money_at(Region.pierre_store, 100) |
                                     (self.has_building(Building.mill) & self.has(Vegetable.wheat)),
             WaterItem.white_algae: self.can_fish() & self.can_reach_region(Region.mines_floor_20),
