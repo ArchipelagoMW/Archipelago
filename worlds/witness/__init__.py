@@ -78,7 +78,7 @@ class WitnessWorld(World):
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
             'precompleted_puzzles': [int(h, 16) for h in
                                      self.player_logic.EXCLUDED_LOCATIONS | self.player_logic.PRECOMPLETED_LOCATIONS],
-            'entity_to_name': self.static_logic.ENTITY_ID_TO_NAME,
+            'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
 
     def generate_early(self):
