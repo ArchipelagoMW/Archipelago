@@ -189,7 +189,8 @@ class MultiWorld():
     @property
     def random(self) -> random.Random:
         """Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead."""
-        logging.warning("Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead.")
+        if __debug__:
+            logging.warning("Calls to `MultiWorld.random` have been deprecated. Please use `World.random` instead.")
         return self._random
 
     def get_all_ids(self) -> Tuple[int, ...]:
