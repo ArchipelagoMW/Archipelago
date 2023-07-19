@@ -113,7 +113,7 @@ item_table = {
     "Progressive Stimpack (Hellion)": ItemData(259 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 12, parent_item="Hellion", quantity=2, origin={"nco"}),
     "Ion Thrusters (Vulture)": ItemData(260 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 8, classification=ItemClassification.filler, parent_item="Vulture", origin={"bw"}),
     "Auto Launchers (Vulture)": ItemData(261 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 9, parent_item="Vulture", origin={"bw"}),
-    "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10, origin={"ext"}),
+    "High Explosive Munition (Spider Mine)": ItemData(262 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 10, origin={"bw"}),
     "Jump Jets (Goliath)": ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 11, classification=ItemClassification.filler, parent_item="Goliath", origin={"nco"}),
     "Optimized Logistics (Goliath)": ItemData(264 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 12, classification=ItemClassification.filler, parent_item="Goliath", origin={"nco"}),
     "Hyperfluxor (Diamondback)": ItemData(265 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 13, parent_item="Diamondback", origin={"ext"}),
