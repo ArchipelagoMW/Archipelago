@@ -1,4 +1,5 @@
 import typing
+import settings
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -10,6 +11,17 @@ from .Names import ItemName, LocationName
 from .Options import wl4_options
 from .Regions import connect_regions, create_regions
 from .Rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom 
+
+
+class WL4Settings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Wario Land 4 NA/EU ROM"""
+        description = "Wario Land 4 (U/E) ROM File"
+        copy_to = "Wario Land 4 (UE) [!].gba"
+        md5s = [WL4DeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: bool = True
 
 
 class WL4Web(WebWorld):
@@ -36,6 +48,7 @@ class WL4World(World):
 
     game: str = "Wario Land 4"
     option_definitions = wl4_options
+    settings: typing.ClassVar[WL4Settings]
     topology_present = False
 
     data_version = 0
@@ -52,7 +65,10 @@ class WL4World(World):
             self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.sw] = 1
             self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.nw] = 1
 
-    def generate_basic(self) -> None:
+    def create_regions(self):
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
+
         itempool: typing.List[WL4Item] = []
 
         connect_regions(self.multiworld, self.player)
@@ -115,10 +131,6 @@ class WL4World(World):
         finally:
             if rompath.exists():
                 rompath.unlink()
-
-    def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
