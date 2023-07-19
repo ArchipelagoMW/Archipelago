@@ -1,4 +1,4 @@
-Progression:
+Symbols:
 0 - Dots
 1 - Colored Dots
 2 - Full Dots
@@ -18,16 +18,22 @@ Progression:
 200 - Progressive Dots - Dots,Full Dots
 260 - Progressive Stars - Stars,Stars + Same Colored Symbol
 
-Usefuls:
-101 - Functioning Brain - False
-510 - Puzzle Skip - True
+Useful:
+510 - Puzzle Skip
+#511 - Energy Capacity
 
-Boosts:
-500 - Speed Boost
+Filler:
+500 - Speed Boost - 1
+#501 - Energy Fill (Small) - 6
+#502 - Energy Fill - 3
+#503 - Energy Fill (Max) - 1
 
 Traps:
-600 - Slowness
-610 - Power Surge
+600 - Slowness - 8
+610 - Power Surge - 2
+
+Jokes:
+650 - Functioning Brain
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
@@ -62,18 +68,6 @@ Doors:
 1310 - Boat - 0x17CDF,0x17CC8,0x17CA6,0x09DB8,0x17C95,0x0A054
 
 1400 - Caves Mountain Shortcut (Door) - 0x2D73F
-
-1500 - Symmetry Laser - 0x00509
-1501 - Desert Laser - 0x012FB,0x01317
-1502 - Quarry Laser - 0x01539
-1503 - Shadows Laser - 0x181B3
-1504 - Keep Laser - 0x014BB
-1505 - Monastery Laser - 0x17C65
-1506 - Town Laser - 0x032F9
-1507 - Jungle Laser - 0x00274
-1508 - Bunker Laser - 0x0C2B2
-1509 - Swamp Laser - 0x00BF6
-1510 - Treehouse Laser - 0x028A4
 
 1600 - Outside Tutorial Outpost Path (Door) - 0x03BA2
 1603 - Outside Tutorial Outpost Entry (Door) - 0x0A170
@@ -198,3 +192,16 @@ Doors:
 1981 - Caves Doors to Challenge - 0x019A5,0x0A19A
 1984 - Caves Exits to Main Island - 0x2D859,0x2D73F
 1987 - Tunnels Doors - 0x27739,0x27263,0x09E87
+
+Lasers:
+1500 - Symmetry Laser - 0x00509
+1501 - Desert Laser - 0x012FB,0x01317
+1502 - Quarry Laser - 0x01539
+1503 - Shadows Laser - 0x181B3
+1504 - Keep Laser - 0x014BB
+1505 - Monastery Laser - 0x17C65
+1506 - Town Laser - 0x032F9
+1507 - Jungle Laser - 0x00274
+1508 - Bunker Laser - 0x0C2B2
+1509 - Swamp Laser - 0x00BF6
+1510 - Treehouse Laser - 0x028A4

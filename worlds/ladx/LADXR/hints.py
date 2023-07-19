@@ -49,16 +49,12 @@ useless_hint = [
 ]
 
 
-def addHints(rom, rnd, spots):
-    spots = list(sorted(filter(lambda spot: spot.item in hint_items, spots), key=lambda spot: spot.nameId))
+def addHints(rom, rnd, hint_generator):
     text_ids = hint_text_ids.copy()
     rnd.shuffle(text_ids)
     for text_id in text_ids:
-        if len(spots) > 0:
-            spot_index = rnd.randint(0, len(spots) - 1)
-            spot = spots.pop(spot_index)
-            hint = rnd.choice(hints).format("{%s}" % (spot.item), spot.metadata.area)
-        else:
+        hint = hint_generator()
+        if not hint:
             hint = rnd.choice(hints).format(*rnd.choice(useless_hint))
         rom.texts[text_id] = formatText(hint)
 
