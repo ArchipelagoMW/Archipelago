@@ -598,7 +598,7 @@ def swap_one_connection(regions_by_name, connections_by_name,randomized_connecti
 
     chosen_reachable_entrance = None
     while chosen_reachable_entrance is None or chosen_reachable_entrance not in randomized_connections_already_shuffled:
-        chosen_reachable_region_name = random.choice(tuple(reachable_regions))
+        chosen_reachable_region_name = random.choice(sorted(reachable_regions))
         chosen_reachable_region = regions_by_name[chosen_reachable_region_name]
         if not any(chosen_reachable_region.exits):
             continue
