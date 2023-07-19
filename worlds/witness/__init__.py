@@ -178,10 +178,7 @@ class WitnessWorld(World):
                     item_pool[random_early_item] -= 1
 
         # Generate the actual items.
-
-        item_pool = dict(sorted(item_pool.items()))
-
-        for item_name, quantity in item_pool.items():
+        for item_name, quantity in sorted(item_pool.items()):
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
