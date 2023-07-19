@@ -9971,8 +9971,8 @@
         <VisionHeight value="4"/>
         <Food value="-1"/>
         <CostCategory value="Army"/>
-        <CostResource index="Minerals" value="50"/>
-        <CostResource index="Vespene" value="100"/>
+        <CostResource index="Minerals" value="25"/>
+        <CostResource index="Vespene" value="75"/>
         <RepairTime value="40"/>
         <AttackTargetPriority value="20"/>
         <DamageDealtXP value="1"/>
