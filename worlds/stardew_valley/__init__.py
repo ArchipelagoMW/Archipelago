@@ -291,7 +291,7 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": modified_bundles,
             "client_version": "4.0.0",
-            "mod_versions": instance_mod_versions
+            "mod_versions": instance_mod_versions,
         })
 
         return slot_data
