@@ -97,8 +97,9 @@ class SA2BWorld(World):
             "OmochaoChecks": self.multiworld.omosanity[self.player].value,
             "AnimalChecks": self.multiworld.animalsanity[self.player].value,
             "KartRaceChecks": self.multiworld.kart_race_checks[self.player].value,
-            "ChaoRaceChecks": self.multiworld.chao_race_checks[self.player].value,
-            "ChaoGardenDifficulty": self.multiworld.chao_garden_difficulty[self.player].value,
+            "ChaoStadiumChecks": self.multiworld.chao_stadium_checks[self.player].value,
+            "ChaoRaceDifficulty": self.multiworld.chao_race_difficulty[self.player].value,
+            "ChaoKarateDifficulty": self.multiworld.chao_karate_difficulty[self.player].value,
             "ChaoStats": self.multiworld.chao_stats[self.player].value,
             "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
             "ChaoKindergarten": self.multiworld.chao_kindergarten[self.player].value,
@@ -169,7 +170,8 @@ class SA2BWorld(World):
             self.multiworld.number_of_level_gates[self.player].value = 0
             self.multiworld.emblem_percentage_for_cannons_core[self.player].value = 0
 
-            self.multiworld.chao_garden_difficulty[self.player].value = 0
+            self.multiworld.chao_race_difficulty[self.player].value = 0
+            self.multiworld.chao_karate_difficulty[self.player].value = 0
             self.multiworld.chao_stats[self.player].value = 0
             self.multiworld.chao_animal_parts[self.player].value = 0
             self.multiworld.chao_kindergarten[self.player].value = 0
@@ -555,9 +557,13 @@ class SA2BWorld(World):
         ]
         no_hint_region_names = [
             LocationName.cannon_core_region,
-            LocationName.chao_garden_beginner_region,
-            LocationName.chao_garden_intermediate_region,
-            LocationName.chao_garden_expert_region,
+            LocationName.chao_race_beginner_region,
+            LocationName.chao_race_intermediate_region,
+            LocationName.chao_race_expert_region,
+            LocationName.chao_karate_beginner_region,
+            LocationName.chao_karate_intermediate_region,
+            LocationName.chao_karate_expert_region,
+            LocationName.chao_karate_super_region,
         ]
         er_hint_data = {}
         for i in range(self.multiworld.number_of_level_gates[self.player].value + 1):
@@ -581,7 +587,8 @@ class SA2BWorld(World):
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)
 
     def any_chao_locations_active(self) -> bool:
-        if self.multiworld.chao_garden_difficulty[self.player].value > 0 or \
+        if self.multiworld.chao_race_difficulty[self.player].value > 0 or \
+           self.multiworld.chao_karate_difficulty[self.player].value > 0 or \
            self.multiworld.chao_stats[self.player].value > 0 or \
            self.multiworld.chao_animal_parts[self.player] or \
            self.multiworld.chao_kindergarten[self.player]:

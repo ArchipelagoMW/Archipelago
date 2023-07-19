@@ -1315,7 +1315,7 @@ def create_regions(world, player: int, active_locations):
     cannon_core_region = create_region(world, player, active_locations, LocationName.cannon_core_region,
                                        cannon_core_region_locations)
 
-    chao_garden_beginner_region_locations = [
+    chao_race_beginner_region_locations = [
         LocationName.chao_race_crab_pool_1,
         LocationName.chao_race_crab_pool_2,
         LocationName.chao_race_crab_pool_3,
@@ -1328,13 +1328,21 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_race_block_canyon_1,
         LocationName.chao_race_block_canyon_2,
         LocationName.chao_race_block_canyon_3,
-
-        LocationName.chao_beginner_karate,
     ]
-    chao_garden_beginner_region = create_region(world, player, active_locations, LocationName.chao_garden_beginner_region,
-                                                chao_garden_beginner_region_locations)
+    chao_race_beginner_region = create_region(world, player, active_locations, LocationName.chao_race_beginner_region,
+                                              chao_race_beginner_region_locations)
 
-    chao_garden_intermediate_region_locations = [
+    chao_karate_beginner_region_locations = [
+        LocationName.chao_beginner_karate_1,
+        LocationName.chao_beginner_karate_2,
+        LocationName.chao_beginner_karate_3,
+        LocationName.chao_beginner_karate_4,
+        LocationName.chao_beginner_karate_5,
+    ]
+    chao_karate_beginner_region = create_region(world, player, active_locations, LocationName.chao_karate_beginner_region,
+                                                chao_karate_beginner_region_locations)
+
+    chao_race_intermediate_region_locations = [
         LocationName.chao_race_challenge_1,
         LocationName.chao_race_challenge_2,
         LocationName.chao_race_challenge_3,
@@ -1357,13 +1365,21 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_race_dark_2,
         LocationName.chao_race_dark_3,
         LocationName.chao_race_dark_4,
-
-        LocationName.chao_standard_karate,
     ]
-    chao_garden_intermediate_region = create_region(world, player, active_locations, LocationName.chao_garden_intermediate_region,
-                                                    chao_garden_intermediate_region_locations)
+    chao_race_intermediate_region = create_region(world, player, active_locations, LocationName.chao_race_intermediate_region,
+                                                  chao_race_intermediate_region_locations)
 
-    chao_garden_expert_region_locations = [
+    chao_karate_intermediate_region_locations = [
+        LocationName.chao_standard_karate_1,
+        LocationName.chao_standard_karate_2,
+        LocationName.chao_standard_karate_3,
+        LocationName.chao_standard_karate_4,
+        LocationName.chao_standard_karate_5,
+    ]
+    chao_karate_intermediate_region = create_region(world, player, active_locations, LocationName.chao_karate_intermediate_region,
+                                                    chao_karate_intermediate_region_locations)
+
+    chao_race_expert_region_locations = [
         LocationName.chao_race_aquamarine_1,
         LocationName.chao_race_aquamarine_2,
         LocationName.chao_race_aquamarine_3,
@@ -1394,12 +1410,29 @@ def create_regions(world, player: int, active_locations):
         LocationName.chao_race_diamond_3,
         LocationName.chao_race_diamond_4,
         LocationName.chao_race_diamond_5,
-
-        LocationName.chao_expert_karate,
-        LocationName.chao_super_karate,
     ]
-    chao_garden_expert_region = create_region(world, player, active_locations, LocationName.chao_garden_expert_region,
-                                              chao_garden_expert_region_locations)
+    chao_race_expert_region = create_region(world, player, active_locations, LocationName.chao_race_expert_region,
+                                            chao_race_expert_region_locations)
+
+    chao_karate_expert_region_locations = [
+        LocationName.chao_expert_karate_1,
+        LocationName.chao_expert_karate_2,
+        LocationName.chao_expert_karate_3,
+        LocationName.chao_expert_karate_4,
+        LocationName.chao_expert_karate_5,
+    ]
+    chao_karate_expert_region = create_region(world, player, active_locations, LocationName.chao_karate_expert_region,
+                                              chao_karate_expert_region_locations)
+
+    chao_karate_super_region_locations = [
+        LocationName.chao_super_karate_1,
+        LocationName.chao_super_karate_2,
+        LocationName.chao_super_karate_3,
+        LocationName.chao_super_karate_4,
+        LocationName.chao_super_karate_5,
+    ]
+    chao_karate_super_region = create_region(world, player, active_locations, LocationName.chao_karate_super_region,
+                                             chao_karate_super_region_locations)
 
     if world.goal[player] == 7 or world.chao_animal_parts[player]:
         animal_penguin_region_locations = [
@@ -1748,9 +1781,13 @@ def create_regions(world, player: int, active_locations):
         route_280_region,
         mad_space_region,
         cannon_core_region,
-        chao_garden_beginner_region,
-        chao_garden_intermediate_region,
-        chao_garden_expert_region,
+        chao_race_beginner_region,
+        chao_karate_beginner_region,
+        chao_race_intermediate_region,
+        chao_karate_intermediate_region,
+        chao_race_expert_region,
+        chao_karate_expert_region,
+        chao_karate_super_region,
         kart_race_beginner_region,
         kart_race_standard_region,
         kart_race_expert_region,
@@ -1890,9 +1927,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.gate_5_region, shuffleable_regions[gates[5].gate_levels[i]])
 
     if gates_len == 1:
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
@@ -1901,9 +1943,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         if world.chao_kindergarten[player]:
             connect(world, player, names, LocationName.gate_0_region, LocationName.chao_kindergarten_region)
     elif gates_len == 2:
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_standard_region)
@@ -1912,9 +1959,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         if world.chao_kindergarten[player]:
             connect(world, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 3:
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
@@ -1923,9 +1975,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         if world.chao_kindergarten[player]:
             connect(world, player, names, LocationName.gate_1_region, LocationName.chao_kindergarten_region)
     elif gates_len == 4:
-        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_0_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_0_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_standard_region)
@@ -1934,9 +1991,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         if world.chao_kindergarten[player]:
             connect(world, player, names, LocationName.gate_2_region, LocationName.chao_kindergarten_region)
     elif gates_len == 5:
-        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)
@@ -1945,9 +2007,14 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
         if world.chao_kindergarten[player]:
             connect(world, player, names, LocationName.gate_3_region, LocationName.chao_kindergarten_region)
     elif gates_len >= 6:
-        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_garden_beginner_region)
-        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_garden_intermediate_region)
-        connect(world, player, names, LocationName.gate_4_region, LocationName.chao_garden_expert_region)
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_race_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_race_intermediate_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.chao_race_expert_region)
+
+        connect(world, player, names, LocationName.gate_1_region, LocationName.chao_karate_beginner_region)
+        connect(world, player, names, LocationName.gate_2_region, LocationName.chao_karate_intermediate_region)
+        connect(world, player, names, LocationName.gate_3_region, LocationName.chao_karate_expert_region)
+        connect(world, player, names, LocationName.gate_4_region, LocationName.chao_karate_super_region)
 
         connect(world, player, names, LocationName.gate_1_region, LocationName.kart_race_beginner_region)
         connect(world, player, names, LocationName.gate_2_region, LocationName.kart_race_standard_region)

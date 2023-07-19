@@ -310,15 +310,15 @@ class RequiredRank(Choice):
     default = 0
 
 
-class ChaoGardenDifficulty(Choice):
+class ChaoRaceDifficulty(Choice):
     """
-    Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
-    None: No Chao Garden Activities have checks
+    Determines the number of Chao Race difficulty levels included. Easier difficulty settings means fewer Chao Race checks
+    None: No Chao Races have checks
     Beginner: Beginner Races
     Intermediate: Beginner, Challenge, Hero, and Dark Races
     Expert: Beginner, Challenge, Hero, Dark and Jewel Races
     """
-    display_name = "Chao Garden Difficulty"
+    display_name = "Chao Race Difficulty"
     option_none = 0
     option_beginner = 1
     option_intermediate = 2
@@ -326,21 +326,27 @@ class ChaoGardenDifficulty(Choice):
     default = 0
 
 
-class IncludeChaoKarate(Toggle):
+class ChaoKarateDifficulty(Choice):
     """
-    Determines whether the Chao Karate should be included as checks (Note: This setting requires purchase of the "Battle" DLC)
+    Determines the number of Chao Karate difficulty levels included. (Note: This setting requires purchase of the "Battle" DLC)
     """
-    display_name = "Include Chao Karate"
+    display_name = "Chao Karate Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_standard = 2
+    option_expert = 3
+    option_super = 4
+    default = 0
 
 
-class ChaoRaceChecks(Choice):
+class ChaoStadiumChecks(Choice):
     """
-    Determines which Chao Races grant checks
-    All: Each individual race grants a check
+    Determines which Chao Stadium activities grant checks
+    All: Each individual race and karate fight grants a check
     Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and
-           12th Challenge Races, 2nd and 4th Hero and Dark Races)
+           12th Challenge Races, 2nd and 4th Hero and Dark Races, final fight of each Karate difficulty)
     """
-    display_name = "Chao Race Checks"
+    display_name = "Chao Stadium Checks"
     option_all = 0
     option_prize = 1
     default = 0
@@ -728,9 +734,9 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "level_gate_costs": LevelGateCosts,
     "max_emblem_cap": MaximumEmblemCap,
 
-    "chao_garden_difficulty": ChaoGardenDifficulty,
-    "include_chao_karate": IncludeChaoKarate,
-    "chao_race_checks": ChaoRaceChecks,
+    "chao_race_difficulty": ChaoRaceDifficulty,
+    "chao_karate_difficulty": ChaoKarateDifficulty,
+    "chao_stadium_checks": ChaoStadiumChecks,
     "chao_stats": ChaoStats,
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
