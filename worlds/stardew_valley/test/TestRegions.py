@@ -3,7 +3,7 @@ import sys
 import unittest
 
 from . import SVTestBase, setup_solo_multiworld
-from .. import StardewOptions, options, StardewValleyWorld, True_
+from .. import StardewOptions, options, StardewValleyWorld
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag
 
 connections_by_name = {connection.name for connection in vanilla_connections}
