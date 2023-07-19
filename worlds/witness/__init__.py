@@ -113,7 +113,7 @@ class WitnessWorld(World):
         pool_size: int = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
 
         # Fill mandatory items and remove precollected and/or starting items from the pool.
-        item_pool: dict[str, int] = self.items.get_mandatory_items()
+        item_pool: Dict[str, int] = self.items.get_mandatory_items()
 
         for precollected_item_name in [item.name for item in self.multiworld.precollected_items[self.player]]:
             if precollected_item_name in item_pool:
