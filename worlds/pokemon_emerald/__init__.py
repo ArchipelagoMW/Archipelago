@@ -2,7 +2,6 @@
 Archipelago World definition for Pokemon Emerald Version
 """
 import copy
-import hashlib
 import os
 from typing import Set, List, Dict, Optional, Tuple, ClassVar
 
