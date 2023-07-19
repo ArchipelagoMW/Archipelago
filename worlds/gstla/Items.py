@@ -19,6 +19,7 @@ class ItemType(str, Enum):
    Shirt = "shirt"
    Boots = "boots"
    Ring = "ring"
+   Djinn = "djinn"
 
 
 
@@ -487,6 +488,12 @@ testitems: typing.List[ItemData] = [
    ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, ItemType.Consumable, 1),
    ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 1),
    ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 1),
+
+   ItemData(400, ItemName.Echo, ItemClassification.progression, 738316, ItemType.Djinn, 1),
+   ItemData(401, ItemName.Fog, ItemClassification.progression, 738316, ItemType.Djinn, 1),
+   ItemData(402, ItemName.Breath, ItemClassification.progression, 738316, ItemType.Djinn, 1),
+   ItemData(403, ItemName.Iron, ItemClassification.progression, 738316, ItemType.Djinn, 1),
+   ItemData(404, ItemName.Cannon, ItemClassification.progression, 738316, ItemType.Djinn, 1),
 ]
 
 

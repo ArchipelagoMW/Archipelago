@@ -396,3 +396,10 @@ class ItemName():
    Blaze = "Blaze"
 
    Victory = "Victory"
+   DefeatChestbeaters = "DefeatChestbeaters"
+
+   Echo = "Echo"
+   Fog = "Fog"
+   Breath = "Breath"
+   Iron = "Iron"
+   Cannon = "Cannon"

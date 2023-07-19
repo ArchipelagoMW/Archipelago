@@ -1,18 +1,26 @@
-import typing
-from BaseClasses import Location
+from typing import Callable, List, Dict
+from enum import Enum
+from BaseClasses import Location, CollectionState
 from .Names.LocationName import LocationName
+
+class LocationType(str, Enum):
+   Item = "Item"
+   Event = "Event"
+
 
 class LocationData:
     id: int
     name: str
-    addresses: typing.List[int] = [0]
+    addresses: List[int] = [0]
     event_type: int
+    loc_type: LocationType
 
-    def __init__(self, id, name, addresses, event_type):
+    def __init__(self, id, name, addresses, event_type, loc_type = LocationType.Item):
         self.name = name
         self.id = id
         self.addresses = addresses
         self.event_type = event_type
+        self.loc_type = loc_type
 
 class GSTLALocation(Location):
     game: str = "Golden Sun The Lost Age"
@@ -339,8 +347,19 @@ filler = [
     LocationData(311, LocationName.Mars_Lighthouse_Apple, [994624], 128),
     LocationData(312, LocationName.Mars_Lighthouse_Mimic, [994644], 129),
     LocationData(313, LocationName.Mars_Lighthouse_Psy_Crystal, [994704], 128),
-    LocationData(314, LocationName.Shaman_Village_Elixir, [994832], 128)
+    LocationData(314, LocationName.Shaman_Village_Elixir, [994832], 128),
+    LocationData(None, LocationName.DoomDragonDefeated, [994832], 128, LocationType.Event),
+    LocationData(None, LocationName.DefeatChestBeaters, [994832], 128, LocationType.Event)
+
 ]
 
-all_locations: typing.List[LocationData] = hidden_items + summon_tablets + major_items + key_items + filler
-location_name_to_id: typing.Dict[str, int] =  {location.name: location.id for location in all_locations}
+djinn = [
+    LocationData(400, LocationName.Echo, [994832], 128),
+    LocationData(401, LocationName.Fog, [994832], 128),
+    LocationData(402, LocationName.Breath, [994832], 128),
+    LocationData(403, LocationName.Iron, [994832], 128),
+    LocationData(404, LocationName.Cannon, [994832], 128)
+]
+
+all_locations: List[LocationData] = hidden_items + summon_tablets + major_items + key_items + filler + djinn
+location_name_to_id: Dict[str, LocationData] =  {location.name: location for location in all_locations if location.loc_type != LocationType.Event}

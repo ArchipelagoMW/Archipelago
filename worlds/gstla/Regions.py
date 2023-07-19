@@ -7,7 +7,13 @@ from .Names.ItemName import ItemName
 def create_region(multiworld: MultiWorld, player: int, name: str, locations: typing.List[str]):
     region = Region(name, player, multiworld)
     for location in locations:
-        loc = GSTLALocation(player, location, location_name_to_id.get(location, None), region)
+
+        location_data = location_name_to_id.get(location, None)
+        if location_data is None:
+            loc = GSTLALocation(player, location, None, region)
+        else:
+            loc = GSTLALocation(player, location, location_data.id, region)
+
         region.locations.append(loc)
     multiworld.regions.append(region)
 
@@ -38,7 +44,11 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.Idejima, [])
 
-    create_region(multiworld, player, RegionName.EasternSea, [])
+    create_region(multiworld, player, RegionName.EasternSea,
+    [
+            LocationName.Echo,
+            LocationName.Breath
+    ])
 
     create_region(multiworld, player, RegionName.Daila,
     [
@@ -55,7 +65,9 @@ def create_regions(multiworld: MultiWorld, player: int):
     [
         LocationName.Kandorean_Temple_Mimic,
         LocationName.Kandorean_Temple_Lash_Pebble,
-        LocationName.Kandorean_Temple_Mysterious_Card
+        LocationName.Kandorean_Temple_Mysterious_Card,
+        LocationName.DefeatChestBeaters,
+        LocationName.Fog
     ])
 
     create_region(multiworld, player, RegionName.DehkanPlateau,
@@ -65,16 +77,18 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Dehkan_Plateau_Themis_Axe,
         LocationName.Dehkan_Plateau_Full_Metal_Vest,
         LocationName.Dehkan_Plateau_Mint,
-        LocationName.Dehkan_Plateau_Nut
+        LocationName.Dehkan_Plateau_Nut,
+        LocationName.Cannon
     ])
 
     create_region(multiworld, player, RegionName.Madra,
     [
-                      LocationName.Madra_Elixir,
-                      LocationName.Madra_Antidote,
-                      LocationName.Madra_Cyclone_Chip,
-                      LocationName.Madra_15_coins,
-                      LocationName.Madra_Nurses_Cap
+        LocationName.Madra_Elixir,
+        LocationName.Madra_Antidote,
+        LocationName.Madra_Cyclone_Chip,
+        LocationName.Madra_15_coins,
+        LocationName.Madra_Nurses_Cap,
+        LocationName.Iron
     ])
 
     create_region(multiworld, player, RegionName.MadraCatacombs,
