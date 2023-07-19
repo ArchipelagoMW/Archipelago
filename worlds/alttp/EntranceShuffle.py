@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
 from .OverworldGlitchRules import overworld_glitch_connections
 from .UnderworldGlitchRules import underworld_glitch_connections
 
-Caves = list[list[str] | tuple[str, str, str] | tuple[str, ...] | str | tuple[str, str]]
+Caves = typing.List[typing.Union[typing.List[str], typing.Tuple[str, str, str], typing.Tuple[str, ...], str, typing.Tuple[str, str]]]
 
 def link_entrances(multiworld: MultiWorld, player: int):
     world = multiworld.worlds[player]
