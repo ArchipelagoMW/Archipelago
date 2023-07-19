@@ -22,67 +22,81 @@ class TestLogic(unittest.TestCase):
     def test_given_bundle_item_then_is_available_in_logic(self):
         for bundle_item in all_bundle_items_except_money:
             with self.subTest(msg=bundle_item.item.name):
-                assert bundle_item.item.name in logic.item_rules
+                self.assertIn(bundle_item.item.name, logic.item_rules)
 
     def test_given_item_rule_then_can_be_resolved(self):
         for item in logic.item_rules.keys():
             with self.subTest(msg=item):
                 rule = logic.item_rules[item]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve item rule for {item} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve item rule for {item} {rule}")
 
     def test_given_building_rule_then_can_be_resolved(self):
         for building in logic.building_rules.keys():
             with self.subTest(msg=building):
                 rule = logic.building_rules[building]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve building rule for {building} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve building rule for {building} {rule}")
 
     def test_given_quest_rule_then_can_be_resolved(self):
         for quest in logic.quest_rules.keys():
             with self.subTest(msg=quest):
                 rule = logic.quest_rules[quest]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve quest rule for {quest} {rule}")
+
+    def test_given_special_order_rule_then_can_be_resolved(self):
+        for special_order in logic.special_order_rules.keys():
+            with self.subTest(msg=special_order):
+                rule = logic.special_order_rules[special_order]
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve special order rule for {special_order} {rule}")
 
     def test_given_tree_fruit_rule_then_can_be_resolved(self):
         for tree_fruit in logic.tree_fruit_rules.keys():
             with self.subTest(msg=tree_fruit):
                 rule = logic.tree_fruit_rules[tree_fruit]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve tree fruit rule for {tree_fruit} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve tree fruit rule for {tree_fruit} {rule}")
 
     def test_given_seed_rule_then_can_be_resolved(self):
         for seed in logic.seed_rules.keys():
             with self.subTest(msg=seed):
                 rule = logic.seed_rules[seed]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve seed rule for {seed} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve seed rule for {seed} {rule}")
 
     def test_given_crop_rule_then_can_be_resolved(self):
         for crop in logic.crop_rules.keys():
             with self.subTest(msg=crop):
                 rule = logic.crop_rules[crop]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve crop rule for {crop} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve crop rule for {crop} {rule}")
 
     def test_given_fish_rule_then_can_be_resolved(self):
         for fish in logic.fish_rules.keys():
             with self.subTest(msg=fish):
                 rule = logic.fish_rules[fish]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve fish rule for {fish} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve fish rule for {fish} {rule}")
 
     def test_given_museum_rule_then_can_be_resolved(self):
         for donation in logic.museum_rules.keys():
             with self.subTest(msg=donation):
                 rule = logic.museum_rules[donation]
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve museum rule for {donation} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve museum rule for {donation} {rule}")
+
+    def test_given_cooking_rule_then_can_be_resolved(self):
+        for cooking_rule in logic.cooking_rules.keys():
+            with self.subTest(msg=cooking_rule):
+                rule = logic.cooking_rules[cooking_rule]
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve cooking rule for {cooking_rule} {rule}")
 
     def test_given_location_rule_then_can_be_resolved(self):
         for location in multi_world.get_locations(1):
             with self.subTest(msg=location.name):
                 rule = location.access_rule
-                assert MISSING_ITEM not in repr(rule)
-                assert rule == False_() or rule(multi_world.state), f"Could not resolve location rule for {location} {rule}"
+                self.assertNotIn(MISSING_ITEM, repr(rule))
+                self.assertTrue(rule == False_() or rule(multi_world.state), f"Could not resolve location rule for {location} {rule}")
