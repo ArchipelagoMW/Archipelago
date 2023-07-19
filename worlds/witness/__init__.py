@@ -1,7 +1,7 @@
 """
 Archipelago init file for The Witness
 """
-import typing
+from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
@@ -253,7 +253,7 @@ class WitnessLocation(Location):
     game: str = "The Witness"
     check_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
+    def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1):
         super().__init__(player, name, address, parent)
         self.check_hex = ch_hex
 
