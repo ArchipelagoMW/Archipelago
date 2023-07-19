@@ -179,7 +179,7 @@ class WitnessWorld(World):
 
         # Generate the actual items.
 
-        item_pool = {k: v for k, v in sorted(item_pool.items(), key=lambda item: item[0])}
+        item_pool = dict(sorted(item_pool.items()))
 
         for item_name, quantity in item_pool.items():
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
