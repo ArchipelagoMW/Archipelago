@@ -89,6 +89,5 @@ class CliqueWorld(World):
 
     def fill_slot_data(self):
         return {
-            "hard_mode": bool(getattr(self.multiworld, "hard_mode")[self.player]),
             "color": getattr(self.multiworld, "color")[self.player].current_key
         }
