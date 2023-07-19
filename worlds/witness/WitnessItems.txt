@@ -63,9 +63,9 @@ Doors:
 1167 - Town Maze Rooftop Bridge Control (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
 1182 - Windmill Turn Control (Panel) - 0x17D02
-1183 - Theater Entry (Panel) - 0x17F89
+1184 - Theater Entry (Panel) - 0x17F89
 1185 - Theater Video Input (Panel) - 0x00815
-1188 - Theater Exit (Panel) - 0x0A168,0x33AB2
+1189 - Theater Exit (Panel) - 0x0A168,0x33AB2
 1200 - Treehouse First & Second Doors (Panel) - 0x0288C,0x02886
 1202 - Treehouse Third Door (Panel) - 0x0A182
 1205 - Treehouse Laser House Door Timer (Panel) - 0x2700B,0x17CBC
