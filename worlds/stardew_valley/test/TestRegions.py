@@ -2,7 +2,8 @@ import random
 import sys
 import unittest
 
-from .. import StardewOptions, options
+from . import SVTestBase, setup_solo_multiworld
+from .. import StardewOptions, options, StardewValleyWorld, True_
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag
 
 connections_by_name = {connection.name for connection in vanilla_connections}
@@ -47,9 +48,9 @@ class TestEntranceRando(unittest.TestCase):
                         connection_in_randomized = connection.name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
                         self.assertTrue(connection_in_randomized,
-                                      f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
+                                        f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
                         self.assertTrue(reverse_in_randomized,
-                                      f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+                                        f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization. Seed = {seed}")
@@ -71,9 +72,9 @@ class TestEntranceRando(unittest.TestCase):
                     if flag in connection.flag:
                         if RandomizationFlag.GINGER_ISLAND in connection.flag:
                             self.assertNotIn(connection.name, randomized_connections,
-                                          f"Connection {connection.name} should not be randomized but it is in the output. Seed = {seed}")
+                                             f"Connection {connection.name} should not be randomized but it is in the output. Seed = {seed}")
                             self.assertNotIn(connection.reverse, randomized_connections,
-                                          f"Connection {connection.reverse} should not be randomized but it is in the output. Seed = {seed}")
+                                             f"Connection {connection.reverse} should not be randomized but it is in the output. Seed = {seed}")
                         else:
                             self.assertIn(connection.name, randomized_connections,
                                           f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
@@ -82,3 +83,23 @@ class TestEntranceRando(unittest.TestCase):
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization. Seed = {seed}")
+
+
+class TestEntranceClassifications(SVTestBase):
+
+    def test_non_progression_are_all_accessible_with_empty_inventory(self):
+        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION)]:
+            seed = random.randrange(sys.maxsize)
+            with self.subTest(flag=flag, msg=f"Seed: {seed}"):
+                multiworld_options = {options.EntranceRandomization.internal_name: option}
+                multiworld = setup_solo_multiworld(multiworld_options, seed)
+                sv_world: StardewValleyWorld = multiworld.worlds[1]
+                ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
+                for randomized_entrance in sv_world.randomized_entrances:
+                    if randomized_entrance in ap_entrances:
+                        ap_entrance_origin = ap_entrances[randomized_entrance]
+                        self.assertTrue(ap_entrance_origin.access_rule(multiworld.state))
+                    if sv_world.randomized_entrances[randomized_entrance] in ap_entrances:
+                        ap_entrance_destination = multiworld.get_entrance(sv_world.randomized_entrances[randomized_entrance], 1)
+                        self.assertTrue(ap_entrance_destination.access_rule(multiworld.state))
