@@ -75,10 +75,9 @@ class CliqueWorld(World):
         return "A Cool Filler Item (No Satisfaction Guaranteed)"
 
     def set_rules(self) -> None:
-        self.multiworld.get_location("The Big Red Button", self.player).access_rule =\
-            get_button_rule(self.multiworld, self.player)
-        self.multiworld.get_location("In the Player's Mind", self.player).access_rule =\
-            get_button_rule(self.multiworld, self.player)
+        button_rule = get_button_rule(self.multiworld, self.player)
+        self.multiworld.get_location("The Big Red Button", self.player).access_rule = button_rule
+        self.multiworld.get_location("In the Player's Mind", self.player).access_rule = button_rule
 
         # Do not allow button activations on buttons.
         self.multiworld.get_location("The Big Red Button", self.player).item_rule =\
