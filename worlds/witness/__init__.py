@@ -178,13 +178,13 @@ class WitnessWorld(World):
                     item_pool[random_early_item] -= 1
 
         # Generate the actual items.
+
+        item_pool = {k: v for k, v in sorted(item_pool.items(), key=lambda item: item[0])}
+
         for item_name, quantity in item_pool.items():
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
-
-        # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        self.multiworld.itempool = sorted(self.multiworld.itempool, key=lambda item: item.name)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
