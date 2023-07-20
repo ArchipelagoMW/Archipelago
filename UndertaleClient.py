@@ -106,24 +106,8 @@ class UndertaleContext(CommonContext):
         self.tem_armor = False
         self.completed_count = 0
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
-        # self.game_communication_path: files go in this path to pass data between us and the actual game
-        if "localappdata" in os.environ:
-            self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
-        else:
-            # not windows. game is an exe so let's see if wine might be around to run it
-            if "WINEPREFIX" in os.environ:
-                wineprefix = os.environ["WINEPREFIX"]
-            elif shutil.which("wine") or shutil.which("wine-stable"):
-                wineprefix = os.path.expanduser("~/.wine") # default root of wine system data, deep in which is app data
-            else:
-                msg = "UndertaleClient couldn't detect system type. Unable to infer required save_game_folder"
-                logger.error("Error: " + msg)
-                Utils.messagebox("Error", msg, error=True)
-                sys.exit(1)
-            self.save_game_folder = os.path.join(
-                wineprefix,
-                "drive_c",
-                os.path.expandvars("users/$USER/Local Settings/Application Data/UNDERTALE"))
+        # self.save_game_folder: files go in this path to pass data between us and the actual game
+        self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
 
     def patch_game(self):
         with open(os.getcwd() + "/Undertale/data.win", "rb") as f:
@@ -449,7 +433,7 @@ async def game_watcher(ctx: UndertaleContext):
                             lines = f.readlines()
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
-                                sending = sending + [int(l)+12000]
+                                sending = sending + [int(l.rstrip('\n'))+12000]
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
                                                           "create_as_hint": int(2)}])
                     finally:
@@ -460,7 +444,7 @@ async def game_watcher(ctx: UndertaleContext):
                         with open(root+"/"+file, "r") as f:
                             lines = f.readlines()
                         for l in lines:
-                            sending = sending+[(int(l))+12000]
+                            sending = sending+[(int(l.rstrip('\n')))+12000]
                         message = [{"cmd": "LocationChecks", "locations": sending}]
                         await ctx.send_msgs(message)
                     finally:
