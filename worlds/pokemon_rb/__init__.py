@@ -438,17 +438,13 @@ class PokemonRedBlueWorld(World):
         if clear_cache:
             self.multiworld.clear_location_cache()
 
-
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
             if self.multiworld.dexsanity[self.player]:
-                for mon in poke_data.pokemon_data:
-                    try:
+                for i, mon in enumerate(poke_data.pokemon_data):
+                    if self.dexsanity_table[i]:
                         location = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                         add_item_rule(location, lambda item: item.name != "Oak's Parcel" or item.player != self.player)
-                    except KeyError:
-                        pass
-
 
         # Place local items in some locations to prevent save-scumming. Also Oak's PC to prevent an "AP Item" from
         # entering the player's inventory.
@@ -469,19 +465,15 @@ class PokemonRedBlueWorld(World):
                 + [" ".join(self.multiworld.get_location(
                 f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]
                 + ["Vaporeon", "Jolteon", "Flareon"]):
-            try:
+            if self.dexsanity_table[poke_data.pokemon_dex[mon] - 1]:
                 loc = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                 if loc.item is None:
                     locs.add(loc)
-            except KeyError:
-                pass
 
-        try:
+        if not self.multiworld.key_items_only[self.player]:
             loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
             if loc.item is None:
                 locs.add(loc)
-        except KeyError:
-            pass
 
         for loc in sorted(locs):
             if loc.name in self.multiworld.priority_locations[self.player].value:
@@ -526,6 +518,7 @@ class PokemonRedBlueWorld(World):
             for location in locations:
                 if not location.can_reach(all_state):
                     pokedex.locations.remove(location)
+                    self.dexsanity_table[poke_data.pokemon_dex[location.name.split(" - ")[1]] - 1] = False
                     remove_items += 1
 
             for _ in range(remove_items - 5):
@@ -676,13 +669,11 @@ class PokemonRedBlueWorld(World):
                     if mon.startswith("Static ") or mon.startswith("Missable "):
                         mon = " ".join(mon.split(" ")[1:])
                     mon_locations[mon].add(loc.name.split(" -")[0])
-            for mon in mon_locations:
-                if mon_locations[mon]:
-                    try:
-                        hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] =\
-                            ", ".join(mon_locations[mon])
-                    except KeyError:
-                        pass
+            for i, mon in enumerate(mon_locations):
+                if self.dexsanity_table[i] and mon_locations[mon]:
+                    hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] =\
+                        ", ".join(mon_locations[mon])
+
         if self.multiworld.door_shuffle[self.player]:
             for location in self.multiworld.get_locations(self.player):
                 if location.parent_region.entrance_hint and location.address:
