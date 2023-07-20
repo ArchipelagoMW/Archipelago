@@ -22,6 +22,7 @@ from shutil import which
 from typing import Sequence, Union, Optional
 
 import Utils
+import settings
 from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
 
 if __name__ == "__main__":
@@ -33,7 +34,8 @@ from Utils import is_frozen, user_path, local_path, init_logging, open_filename,
 
 
 def open_host_yaml():
-    file = user_path('host.yaml')
+    file = settings.get_settings().filename
+    assert file, "host.yaml missing"
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
               which('xdg-open') or which('gnome-open') or which('kde-open')
@@ -82,6 +84,11 @@ def open_folder(folder_path):
         subprocess.Popen([exe, folder_path])
     else:
         webbrowser.open(folder_path)
+
+
+def update_settings():
+    from settings import get_settings
+    get_settings().save()
 
 
 components.extend([
@@ -256,11 +263,13 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         if not component:
             logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
 
+    if args["update_settings"]:
+        update_settings()
     if 'file' in args:
         run_component(args["component"], args["file"], *args["args"])
     elif 'component' in args:
         run_component(args["component"], *args["args"])
-    else:
+    elif not args["update_settings"]:
         run_gui()
 
 
@@ -269,9 +278,13 @@ if __name__ == '__main__':
     Utils.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
-    parser.add_argument('Patch|Game|Component', type=str, nargs='?',
-                        help="Pass either a patch file, a generated game or the name of a component to run.")
-    parser.add_argument('args', nargs="*", help="Arguments to pass to component.")
+    run_group = parser.add_argument_group("Run")
+    run_group.add_argument("--update_settings", action="store_true",
+                           help="Update host.yaml and exit.")
+    run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
+                           help="Pass either a patch file, a generated game or the name of a component to run.")
+    run_group.add_argument("args", nargs="*",
+                           help="Arguments to pass to component.")
     main(parser.parse_args())
 
     from worlds.LauncherComponents import processes

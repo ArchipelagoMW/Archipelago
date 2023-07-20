@@ -3,6 +3,7 @@ import typing
 import math
 import threading
 
+import settings
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import DKC3Item, ItemData, item_table, inventory_table, junk_table
 from .Locations import DKC3Location, all_locations, setup_locations
@@ -15,6 +16,16 @@ from .Client import DKC3SNIClient
 from worlds.AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, DKC3DeltaPatch
 import Patch
+
+
+class DK3Settings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the DKC3 US rom"""
+        copy_to = "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc"
+        description = "DKC3 (US) ROM File"
+        md5s = [DKC3DeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class DKC3Web(WebWorld):
@@ -40,6 +51,7 @@ class DKC3World(World):
     """
     game: str = "Donkey Kong Country 3"
     option_definitions = dkc3_options
+    settings: typing.ClassVar[DK3Settings]
     topology_present = False
     data_version = 2
     #hint_blacklist = {LocationName.rocket_rush_flag}
@@ -74,7 +86,11 @@ class DKC3World(World):
 
         return slot_data
 
-    def generate_basic(self):
+    def create_regions(self):
+        location_table = setup_locations(self.multiworld, self.player)
+        create_regions(self.multiworld, self.player, location_table)
+
+        # Not generate basic
         self.topology_present = self.multiworld.level_shuffle[self.player].value
         itempool: typing.List[DKC3Item] = []
 
@@ -185,10 +201,6 @@ class DKC3World(World):
                     for location in level_region.locations:
                         er_hint_data[location.address] = world_names[world_index]
             multidata['er_hint_data'][self.player] = er_hint_data
-
-    def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]

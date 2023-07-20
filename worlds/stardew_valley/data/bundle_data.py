@@ -5,7 +5,6 @@ from .common_data import quality_dict
 from .game_item import GameItem
 from .museum_data import Mineral
 
-
 @dataclass(frozen=True)
 class BundleItem:
     item: GameItem
@@ -35,6 +34,9 @@ class BundleItem:
         if self.item.name in difficult_crops:
             amount = 1
         return self.as_gold_quality().as_amount(amount)
+
+    def is_gold_quality(self) -> bool:
+        return self.quality >= 2
 
     def __repr__(self):
         return f"{self.amount} {quality_dict[self.quality]} {self.item.name}"
