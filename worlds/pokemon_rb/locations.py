@@ -8,31 +8,40 @@ loc_id_start = 172000000
 def trainersanity(multiworld, player):
     return multiworld.trainersanity[player]
 
+
 def dexsanity(multiworld, player):
     include = multiworld.worlds[player].dexsanity_table.pop(0)
     multiworld.worlds[player].dexsanity_table.append(include)
     return include
 
+
 def hidden_items(multiworld, player):
     return multiworld.randomize_hidden_items[player]
+
 
 def hidden_moon_stones(multiworld, player):
     return multiworld.randomize_hidden_items[player] or multiworld.stonesanity[player]
 
+
 def tea(multiworld, player):
     return multiworld.tea[player]
+
 
 def extra_key_items(multiworld, player):
     return multiworld.extra_key_items[player]
 
+
 def always_on(multiworld, player):
     return True
+
 
 def prizesanity(multiworld, player):
     return multiworld.prizesanity[player]
 
+
 def split_card_key(multiworld, player):
     return multiworld.split_card_key[player].value > 0
+
 
 def not_stonesanity(multiworld, player):
     return not multiworld.stonesanity[player]

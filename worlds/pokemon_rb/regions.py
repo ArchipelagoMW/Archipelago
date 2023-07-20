@@ -1,6 +1,6 @@
-
+from copy import deepcopy
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
-from .items import item_table, generate_items
+from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from . import logic
 from . import poke_data
@@ -1459,26 +1459,6 @@ unreachable_outdoor_entrances = [
     "Cerulean City-Badge House Backyard to Cerulean Badge House"
 ]
 
-#
-# for region in warp_data:
-#     for entrance in warp_data[region]:
-#         m = entrance['to']["map"].split("-")[0]
-#         i = entrance['to']["id"]
-#         for region2 in warp_data:
-#             if region2.split("-")[0] == m:
-#                 for entrance2 in warp_data[region2]:
-#                     if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
-#                         # print(f"change {entrance} to {region2}")
-#                         #if entrance["to"]["map"] != region2:
-#                             #print(region + " changing " + entrance["to"]["map"] + " to " + region2)
-#                         entrance["to"]["map"] = region2
-#                         break
-#                 else:
-#                     continue
-#                 break
-#         else:
-#             breakpoint()
-
 
 def create_region(multiworld: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     ret = PokemonRBRegion(name, player, multiworld)
@@ -1505,6 +1485,23 @@ def create_regions(self):
     multiworld = self.multiworld
     player = self.player
     locations_per_region = {}
+
+    start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+    if self.multiworld.randomize_pokedex[self.player] == "start_with":
+        start_inventory["Pokedex"] = 1
+        self.multiworld.push_precollected(self.create_item("Pokedex"))
+    if self.multiworld.exp_all[self.player] == "start_with":
+        start_inventory["Exp. All"] = 1
+        self.multiworld.push_precollected(self.create_item("Exp. All"))
+
+    # locations = [location for location in location_data if location.type in ("Item", "Trainer Parties")]
+    self.item_pool = []
+    combined_traps = (self.multiworld.poison_trap_weight[self.player].value
+                      + self.multiworld.fire_trap_weight[self.player].value
+                      + self.multiworld.paralyze_trap_weight[self.player].value
+                      + self.multiworld.ice_trap_weight[self.player].value)
+    stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
+
     for location in location_data:
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
@@ -1512,17 +1509,85 @@ def create_regions(self):
                 not (self.multiworld.key_items_only[self.player] and item_table[location.original_item].classification
                 not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
                 location.event)):
-            locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
-                                                                           location.rom_address, location.type,
-                                                                           location.level, location.level_address))
+            location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
+                                                location.type, location.level, location.level_address)
+            locations_per_region[location.region].append(location_object)
+
+            if location.type in ("Item", "Trainer Parties"):
+                event = location.event
+
+                if location.original_item is None:
+                    item = self.create_filler()
+                elif location.original_item == "Exp. All" and self.multiworld.exp_all[self.player] == "remove":
+                    item = self.create_filler()
+                elif location.original_item == "Pokedex":
+                    if self.multiworld.randomize_pokedex[self.player] == "vanilla":
+                        self.multiworld.get_location(location.name, self.player).event = True
+                        event = True
+                    item = self.create_item("Pokedex")
+                elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
+                    stone = stones.pop()
+                    item = self.create_item(stone)
+                elif location.original_item.startswith("TM"):
+                    if self.multiworld.randomize_tm_moves[self.player]:
+                        item = self.create_item(location.original_item.split(" ")[0])
+                    else:
+                        item = self.create_item(location.original_item)
+                elif location.original_item == "Card Key" and self.multiworld.split_card_key[self.player] == "on":
+                    item = self.create_item("Card Key 3F")
+                elif "Card Key" in location.original_item and self.multiworld.split_card_key[self.player] == "progressive":
+                    item = self.create_item("Progressive Card Key")
+                else:
+                    item = self.create_item(location.original_item)
+                    if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
+                            <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
+                        item = self.create_item(self.select_trap())
+
+                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
+                    continue
+
+                if item.name in start_inventory and start_inventory[item.name] > 0 and \
+                        location.original_item in item_groups["Unique"]:
+                    start_inventory[location.original_item] -= 1
+                    item = self.create_filler()
+
+                if event:
+                    location_object.place_locked_item(item)
+                    if location.type == "Trainer Parties":
+                        # loc.item.classification = ItemClassification.filler
+                        location_object.party_data = deepcopy(location.party_data)
+                else:
+                    self.item_pool.append(item)
+
+    self.multiworld.random.shuffle(self.item_pool)
+    advancement_items = [item.name for item in self.item_pool if item.advancement] \
+                        + [item.name for item in self.multiworld.precollected_items[self.player] if
+                           item.advancement]
+    self.total_key_items = len(
+        # The stonesanity items are not checekd for here and instead just always added as the `+ 4`
+        # They will always exist, but if stonesanity is off, then only as events.
+        # We don't want to just add 4 if stonesanity is off while still putting them in this list in case
+        # the player puts stones in their start inventory, in which case they would be double-counted here.
+        [item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
+                           "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
+                           "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
+                           "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
+                           "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
+                           "Card Key 11F", "Exp. All", "Moon Stone"] if item in advancement_items]) + 4
+    if "Progressive Card Key" in advancement_items:
+        self.total_key_items += 10
+
+    self.multiworld.cerulean_cave_key_items_condition[self.player].total = \
+        int((self.total_key_items / 100) * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
+
+    self.multiworld.elite_four_key_items_condition[self.player].total = \
+        int((self.total_key_items / 100) * self.multiworld.elite_four_key_items_condition[self.player].value)
 
     regions = [create_region(multiworld, player, region, locations_per_region) for region in warp_data]
     multiworld.regions += regions
     if __debug__:
         for region in locations_per_region:
             assert not locations_per_region[region], f"locations not assigned to region {region}"
-
-    generate_items(self)
 
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
@@ -2147,11 +2212,10 @@ def create_regions(self):
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
         if not multiworld.badgesanity[player]:
-            badges = []
+            badges = [item for item in self.item_pool if "Badge" in item.name]
+            for badge in badges:
+               self.item_pool.remove(badge)
             badge_locs = []
-            for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
-                          "Marsh Badge", "Volcano Badge", "Earth Badge"]:
-                badges.append(self.create_item(badge))
             for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
                         "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
                         "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
@@ -2161,15 +2225,6 @@ def create_regions(self):
                 multiworld.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
-
-        placed_events = []
-
-        for location in location_data:
-            if location.event and location.type == "Item":
-                loc = multiworld.get_location(location.name, player)
-                loc.item = self.create_item(location.original_item)
-                loc.event = True
-                placed_events.append(loc)
 
         state = multiworld.state.copy()
         for item, data in item_table.items():
@@ -2305,11 +2360,6 @@ def create_regions(self):
                 dc_connected.append(entrance_a)
             else:
                 entrance_b.connect(entrance_a)
-
-        # So that we don't crash when trying to place these later
-        for loc in placed_events:
-            loc.item = None
-            loc.event = False
 
         if multiworld.door_shuffle[player] == "full":
             for pair in loop_out_interiors:
