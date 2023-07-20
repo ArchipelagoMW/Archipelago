@@ -1935,12 +1935,12 @@
     </CUpgrade>
     <CUpgrade id="AP_CloakingTechnologyLiberator">
         <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyMax" Value="200"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyStart" Value="50"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyRegenRate" Value=".5625"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyMax" Value="200"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyStart" Value="50"/>
-        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyRegenRate" Value=".5625"/>
+        <EffectArray Reference="Unit,AP_Liberator,EnergyMax" Value="200"/>
+        <EffectArray Reference="Unit,AP_Liberator,EnergyStart" Value="50"/>
+        <EffectArray Reference="Unit,AP_Liberator,EnergyRegenRate" Value=".5625"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,EnergyMax" Value="200"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,EnergyStart" Value="50"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,EnergyRegenRate" Value=".5625"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_DrillClaws">

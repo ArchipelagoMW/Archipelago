@@ -6861,6 +6861,7 @@
         <Condition Type="FunctionCall" Id="70740E19"/>
         <Action Type="FunctionCall" Id="59D0CFEE"/>
         <Action Type="FunctionCall" Id="064D0CAF"/>
+        <Action Type="FunctionCall" Id="3AAC8A87"/>
         <Action Type="FunctionCall" Id="A4AFD02C"/>
         <Action Type="FunctionCall" Id="5FF38960"/>
         <Action Type="FunctionCall" Id="01836BD9"/>
@@ -7018,6 +7019,15 @@
     <Element Type="Param" Id="FDB81104">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="68F925F6"/>
         <Variable Type="Variable" Id="C147B65E"/>
+    </Element>
+    <Element Type="FunctionCall" Id="3AAC8A87">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="520634E9"/>
+    </Element>
+    <Element Type="Param" Id="520634E9">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>3</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="A4AFD02C">
         <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000116"/>
@@ -25064,6 +25074,7 @@
         <Action Type="FunctionCall" Id="062D125A"/>
         <Action Type="FunctionCall" Id="BBFE316B"/>
         <Action Type="Comment" Id="240D507E"/>
+        <Action Type="FunctionCall" Id="BA0B3E5B"/>
         <Action Type="FunctionCall" Id="20F0DE43"/>
         <Action Type="Comment" Id="652BAB44"/>
         <Action Type="FunctionCall" Id="5CDF2D07"/>
@@ -25301,6 +25312,15 @@
         <Comment>
             Update Lab Research Points
         </Comment>
+    </Element>
+    <Element Type="FunctionCall" Id="BA0B3E5B">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="D42F5E4E"/>
+    </Element>
+    <Element Type="Param" Id="D42F5E4E">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>4</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="20F0DE43">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>
@@ -25620,6 +25640,7 @@
         <Action Type="FunctionCall" Id="9E7D239A"/>
         <Action Type="FunctionCall" Id="B5150533"/>
         <Action Type="Comment" Id="A219708C"/>
+        <Action Type="FunctionCall" Id="137FB6F1"/>
         <Action Type="FunctionCall" Id="935A3992"/>
         <Action Type="Comment" Id="A53DF212"/>
         <Action Type="FunctionCall" Id="B6B27E2A"/>
@@ -25857,6 +25878,15 @@
         <Comment>
             Update Lab Research Points
         </Comment>
+    </Element>
+    <Element Type="FunctionCall" Id="137FB6F1">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="66F3C067"/>
+    </Element>
+    <Element Type="Param" Id="66F3C067">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>7</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="935A3992">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>
@@ -26176,6 +26206,7 @@
         <Action Type="FunctionCall" Id="5ABC274F"/>
         <Action Type="FunctionCall" Id="F3FC8988"/>
         <Action Type="Comment" Id="5B4D1469"/>
+        <Action Type="FunctionCall" Id="CB3495B8"/>
         <Action Type="FunctionCall" Id="D783359E"/>
         <Action Type="Comment" Id="DA804A8F"/>
         <Action Type="FunctionCall" Id="6E393920"/>
@@ -26413,6 +26444,15 @@
         <Comment>
             Update Lab Research Points
         </Comment>
+    </Element>
+    <Element Type="FunctionCall" Id="CB3495B8">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="2095D40E"/>
+    </Element>
+    <Element Type="Param" Id="2095D40E">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>5</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="D783359E">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>
@@ -26732,6 +26772,7 @@
         <Action Type="FunctionCall" Id="2CC27AF8"/>
         <Action Type="FunctionCall" Id="86C54FBB"/>
         <Action Type="Comment" Id="DF7677EB"/>
+        <Action Type="FunctionCall" Id="C39907BA"/>
         <Action Type="FunctionCall" Id="128D84F5"/>
         <Action Type="Comment" Id="97592483"/>
         <Action Type="FunctionCall" Id="F721F401"/>
@@ -26969,6 +27010,15 @@
         <Comment>
             Update Lab Research Points
         </Comment>
+    </Element>
+    <Element Type="FunctionCall" Id="C39907BA">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="B5D3506C"/>
+    </Element>
+    <Element Type="Param" Id="B5D3506C">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>6</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="128D84F5">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>

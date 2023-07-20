@@ -13,236 +13,6 @@ include "Lib5BD4895D"
 include "LibABFE498B"
 
 //--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// Structures
-struct lib1_gs_chatbox {
-    int lv_mainpanel;
-    int lv_chatpanel;
-    int lv_chatlabel;
-    int lv_scrollupbtn;
-    int lv_scrolldownbtn;
-    int lv_scrollbottonbtn;
-    int lv_maxmessages;
-    int lv_scrollstrength;
-    text[50] lv_chatmessage;
-};
-
-// Variable Declarations
-lib1_gs_chatbox lib1_gv_chatbox;
-
-// Function Declarations
-text lib1_gf_getchatboxcontent ();
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible);
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message);
-
-// Trigger Declarations
-trigger lib1_gt_updatechatbox;
-trigger lib1_gt_chatboxscrolling;
-
-// Library Initialization
-void lib1_InitVariables ();
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// External Library Initialization
-void lib1_InitLibraries () {
-    libNtve_InitVariables();
-}
-
-// Variable Initialization
-bool lib1_InitVariables_completed = false;
-
-void lib1_InitVariables () {
-    if (lib1_InitVariables_completed) {
-        return;
-    }
-
-    lib1_InitVariables_completed = true;
-
-    lib1_gv_chatbox.lv_mainpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatlabel = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollupbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrolldownbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollbottonbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_maxmessages = 50;
-    lib1_gv_chatbox.lv_scrollstrength = 20;
-}
-
-// Functions
-text lib1_gf_getchatboxcontent () {
-    // Variable Declarations
-    int lv_index;
-    text lv_tmptext;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Implementation
-    while ((lv_index < lib1_gv_chatbox.lv_maxmessages)) {
-        lv_tmptext = (lib1_gv_chatbox.lv_chatmessage[lv_index] + StringExternal("Param/Value/lib_1_1BF9F758") + lv_tmptext);
-        lv_index += 1;
-    }
-    return lv_tmptext;
-}
-
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety) {
-    // Variable Declarations
-    int lv_btnsize;
-    int lv_btnxoffset;
-    int lv_chatlblsizex;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_btnsize = 35;
-    lv_btnxoffset = 35;
-    lv_chatlblsizex = (lp_sizex - 110);
-
-    // Implementation
-    DialogCreate(lp_sizex, lp_sizey, lp_anchor, lp_offsetx, lp_offsety, true);
-    DialogSetTitle(DialogLastCreated(), StringExternal("Param/Value/lib_1_71F92085"));
-    lib1_gv_chatbox.lv_mainpanel = DialogLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 30, StringExternal("Param/Value/lib_1_FB15887C"), StringExternal("Param/Value/lib_1_A52FB36E"), "");
-    lib1_gv_chatbox.lv_scrollbottonbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 65, StringExternal("Param/Value/lib_1_A91983FA"), StringExternal("Param/Value/lib_1_21E8CC9A"), "");
-    lib1_gv_chatbox.lv_scrolldownbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 90, StringExternal("Param/Value/lib_1_8717A4C6"), StringExternal("Param/Value/lib_1_CCCD5CB5"), "");
-    lib1_gv_chatbox.lv_scrollupbtn = DialogControlLastCreated();
-    DialogCreate(lv_chatlblsizex, (lp_sizey - 100), lp_anchor, lp_offsetx, lp_offsety, true);
-    lib1_gv_chatbox.lv_chatpanel = DialogLastCreated();
-    DialogSetImageVisible(DialogLastCreated(), false);
-    DialogSetPositionRelative(DialogLastCreated(), c_anchorBottomLeft, lib1_gv_chatbox.lv_mainpanel, c_anchorBottomLeft, lv_btnxoffset, -30);
-    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 10000, c_anchorBottom, 0, 0, StringToText(""), Color(100,100,100), false, 2.0);
-    lib1_gv_chatbox.lv_chatlabel = DialogControlLastCreated();
-    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomLeft", PlayerGroupAll());
-}
-
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible) {
-    // Variable Declarations
-    playergroup lv_pg;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_pg = PlayerGroupSingle(lp_player);
-
-    // Implementation
-    DialogSetVisible(lib1_gv_chatbox.lv_mainpanel, lv_pg, true);
-    DialogSetVisible(lib1_gv_chatbox.lv_chatpanel, lv_pg, true);
-}
-
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message) {
-    // Variable Declarations
-    int lv_index;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_index = (lib1_gv_chatbox.lv_maxmessages - 1);
-
-    // Implementation
-    while ((lv_index > 0)) {
-        lib1_gv_chatbox.lv_chatmessage[lv_index] = lib1_gv_chatbox.lv_chatmessage[(lv_index - 1)];
-        lv_index -= 1;
-    }
-    lib1_gv_chatbox.lv_chatmessage[0] = StringToText(lp_message);
-    libNtve_gf_SetDialogItemText(lib1_gv_chatbox.lv_chatlabel, lib1_gf_getchatboxcontent(), PlayerGroupAll());
-}
-
-// Triggers
-//--------------------------------------------------------------------------------------------------
-// Trigger: update chatbox
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_updatechatbox_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lib1_gf_sendchatmessage(EventPlayer(), StringSub(EventChatMessage(false), 13, StringLength(EventChatMessage(false))));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_updatechatbox_Init () {
-    lib1_gt_updatechatbox = TriggerCreate("lib1_gt_updatechatbox_Func");
-    TriggerAddEventChatMessage(lib1_gt_updatechatbox, c_playerAny, "SendMessage", false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: chatbox scrolling
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_chatboxscrolling_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_currentoffsety;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Conditions
-    if (testConds) {
-        if (!((DialogControlGetDialog(EventDialogControl()) == lib1_gv_chatbox.lv_mainpanel))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollbottonbtn)) {
-        DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, 0);
-    }
-    else {
-        lv_currentoffsety = DialogControlGetOffsetY(EventDialogControl(), EventPlayer());
-        if ((EventDialogControl() == lib1_gv_chatbox.lv_scrolldownbtn)) {
-            if ((lv_currentoffsety < 0)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety + lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-        else {
-            if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollupbtn)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety - lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_chatboxscrolling_Init () {
-    lib1_gt_chatboxscrolling = TriggerCreate("lib1_gt_chatboxscrolling_Func");
-    TriggerAddEventDialogControl(lib1_gt_chatboxscrolling, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
-}
-
-void lib1_InitTriggers () {
-    lib1_gt_updatechatbox_Init();
-    lib1_gt_chatboxscrolling_Init();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Library Initialization
-//--------------------------------------------------------------------------------------------------
-bool lib1_InitLib_completed = false;
-
-void lib1_InitLib () {
-    if (lib1_InitLib_completed) {
-        return;
-    }
-
-    lib1_InitLib_completed = true;
-
-    lib1_InitLibraries();
-    lib1_InitVariables();
-    lib1_InitTriggers();
-}
-
-//--------------------------------------------------------------------------------------------------
 // Library Initialization
 //--------------------------------------------------------------------------------------------------
 void InitLibs () {
@@ -252,7 +22,6 @@ void InitLibs () {
     lib88187CC2_InitLib();
     lib5BD4895D_InitLib();
     libABFE498B_InitLib();
-    lib1_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -346,6 +115,8 @@ int gv_statStructuresRazedAtNight;
 int gv_objectiveCleanseInfestation;
 int gv_researchObjectiveKilltheInfestors;
 int gv_infestorsKilled;
+int gv_infestedCommandCentersDestroyed;
+int gv_objectiveDestroyInfestedCommandCenters;
 unitgroup gv_briefingCinematicUnits;
 bool gv_victoryCinematicCompleted;
 unitgroup gv_victoryHiddenUnitGroup;
@@ -373,6 +144,7 @@ void InitGlobals () {
     gv_firstSightInfestedGroup = UnitGroupEmpty();
     gv_objectiveCleanseInfestation = c_invalidObjectiveId;
     gv_researchObjectiveKilltheInfestors = c_invalidObjectiveId;
+    gv_objectiveDestroyInfestedCommandCenters = c_invalidObjectiveId;
     gv_briefingCinematicUnits = UnitGroupEmpty();
     gv_victoryHiddenUnitGroup = UnitGroupEmpty();
 }
@@ -479,14 +251,19 @@ trigger gt_ObjectiveCleansetheInfestationFailed;
 trigger gt_ResearchObjectiveKilltheInfestorsCreateQ;
 trigger gt_ResearchObjectiveKilltheInfestorsUpdate;
 trigger gt_ResearchObjectiveKilltheInfestorsComplete;
+trigger gt_ObjectiveDestroyInfestedCommandCentersCreate;
+trigger gt_ObjectiveDestroyInfestedCommandCentersUpdate;
+trigger gt_ObjectiveDestroyInfestedCommandCentersComplete;
+trigger gt_NorthInfestedCommandCenter;
+trigger gt_SouthInfestedCommandCenter;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
 trigger gt_ArchInit;
-trigger gt_SpawnGas;
 trigger gt_RightInfestor;
 trigger gt_LeftInfestor;
+trigger gt_SpawnGas;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene01;
@@ -1047,6 +824,8 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerEnable(gt_InfestationFirstSight, true);
     Wait(3.0, c_timeReal);
     TriggerExecute(gt_ObjectiveCleansetheInfestationCreateQ, true, true);
+    Wait(3.0, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroyInfestedCommandCentersCreate, true, true);
     Wait(5.0, c_timeGame);
     TriggerExecute(gt_SensorTowerTipQ, true, false);
     Wait(15.0, c_timeGame);
@@ -4911,6 +4690,157 @@ void gt_ResearchObjectiveKilltheInfestorsComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Command Centers Create
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedCommandCentersCreate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/B46220FD") + IntToText((2 - gv_infestedCommandCentersDestroyed)) + StringExternal("Param/Value/AB70695C")), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveDestroyInfestedCommandCenters = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedCommandCentersCreate_Init () {
+    gt_ObjectiveDestroyInfestedCommandCentersCreate = TriggerCreate("gt_ObjectiveDestroyInfestedCommandCentersCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Command Centers Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedCommandCentersUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!(((UnitGetType(EventUnit()) == "InfestedCC")))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveDestroyInfestedCommandCentersCreate, true, false);
+    gv_infestedCommandCentersDestroyed += 1;
+    ObjectiveSetName(gv_objectiveDestroyInfestedCommandCenters, (StringExternal("Param/Value/8E19B1CD") + IntToText((2 - gv_infestedCommandCentersDestroyed)) + StringExternal("Param/Value/15172388")));
+    if ((gv_infestedCommandCentersDestroyed == 2)) {
+        TriggerExecute(gt_ObjectiveDestroyInfestedCommandCentersComplete, true, false);
+        TriggerEnable(TriggerGetCurrent(), false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedCommandCentersUpdate_Init () {
+    gt_ObjectiveDestroyInfestedCommandCentersUpdate = TriggerCreate("gt_ObjectiveDestroyInfestedCommandCentersUpdate_Func");
+    TriggerAddEventUnitDied(gt_ObjectiveDestroyInfestedCommandCentersUpdate, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Command Centers Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedCommandCentersComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroyInfestedCommandCentersCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyInfestedCommandCenters);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedCommandCentersComplete_Init () {
+    gt_ObjectiveDestroyInfestedCommandCentersComplete = TriggerCreate("gt_ObjectiveDestroyInfestedCommandCentersComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: North Infested Command Center
+//--------------------------------------------------------------------------------------------------
+bool gt_NorthInfestedCommandCenter_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((EventUnit() == UnitFromId(118)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NorthInfestedCommandCenter_Init () {
+    gt_NorthInfestedCommandCenter = TriggerCreate("gt_NorthInfestedCommandCenter_Func");
+    TriggerAddEventUnitDied(gt_NorthInfestedCommandCenter, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: South Infested Command Center
+//--------------------------------------------------------------------------------------------------
+bool gt_SouthInfestedCommandCenter_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((EventUnit() == UnitFromId(123)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SouthInfestedCommandCenter_Init () {
+    gt_SouthInfestedCommandCenter = TriggerCreate("gt_SouthInfestedCommandCenter_Func");
+    TriggerAddEventUnitDied(gt_SouthInfestedCommandCenter, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: onDifficultyCasual
 //--------------------------------------------------------------------------------------------------
 bool gt_onDifficultyCasual_Func (bool testConds, bool runActions) {
@@ -5068,33 +4998,6 @@ void gt_ArchInit_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Spawn Gas
-//--------------------------------------------------------------------------------------------------
-bool gt_SpawnGas_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Conditions
-    if (testConds) {
-        if (!((UnitGetType(EventUnit()) == "InfestedRefinery"))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    libNtve_gf_CreateUnitsWithDefaultFacing(1, "VespeneGeyser", 0, 0, UnitGetPosition(EventUnit()));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_SpawnGas_Init () {
-    gt_SpawnGas = TriggerCreate("gt_SpawnGas_Func");
-    TriggerAddEventUnitDied(gt_SpawnGas, null);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Right Infestor
 //--------------------------------------------------------------------------------------------------
 bool gt_RightInfestor_Func (bool testConds, bool runActions) {
@@ -5146,6 +5049,33 @@ bool gt_LeftInfestor_Func (bool testConds, bool runActions) {
 void gt_LeftInfestor_Init () {
     gt_LeftInfestor = TriggerCreate("gt_LeftInfestor_Func");
     TriggerAddEventUnitDied(gt_LeftInfestor, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Spawn Gas
+//--------------------------------------------------------------------------------------------------
+bool gt_SpawnGas_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "InfestedRefinery"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "VespeneGeyser", 0, 0, UnitGetPosition(EventUnit()));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SpawnGas_Init () {
+    gt_SpawnGas = TriggerCreate("gt_SpawnGas_Func");
+    TriggerAddEventUnitDied(gt_SpawnGas, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6074,14 +6004,19 @@ void InitTriggers () {
     gt_ResearchObjectiveKilltheInfestorsCreateQ_Init();
     gt_ResearchObjectiveKilltheInfestorsUpdate_Init();
     gt_ResearchObjectiveKilltheInfestorsComplete_Init();
+    gt_ObjectiveDestroyInfestedCommandCentersCreate_Init();
+    gt_ObjectiveDestroyInfestedCommandCentersUpdate_Init();
+    gt_ObjectiveDestroyInfestedCommandCentersComplete_Init();
+    gt_NorthInfestedCommandCenter_Init();
+    gt_SouthInfestedCommandCenter_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
     gt_ArchInit_Init();
-    gt_SpawnGas_Init();
     gt_RightInfestor_Init();
     gt_LeftInfestor_Init();
+    gt_SpawnGas_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene01_Init();

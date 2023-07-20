@@ -42,7 +42,7 @@ from MultiServer import mark_raw
 
 loop = asyncio.get_event_loop_policy().new_event_loop()
 nest_asyncio.apply(loop)
-max_bonus: int = 8
+max_bonus: int = 13
 victory_modulo: int = 100
 
 

@@ -226,6 +226,7 @@ class ValidInventory:
         self._sc2wol_has_protoss_medium_units = lambda world, player: SC2WoLLogic._sc2wol_has_protoss_medium_units(self, world, player)
         self._sc2wol_has_mm_upgrade = lambda world, player: SC2WoLLogic._sc2wol_has_mm_upgrade(self, world, player)
         self._sc2wol_welcome_to_the_jungle_requirement = lambda world, player: SC2WoLLogic._sc2wol_welcome_to_the_jungle_requirement(self, world, player)
+        self._sc2wol_can_respond_to_colony_infestations = lambda world, player: SC2WoLLogic._sc2wol_can_respond_to_colony_infestations(self, world, player)
         self._sc2wol_final_mission_requirements = lambda world, player: SC2WoLLogic._sc2wol_final_mission_requirements(self, world, player)
 
     def __init__(self, multiworld: MultiWorld, player: int,

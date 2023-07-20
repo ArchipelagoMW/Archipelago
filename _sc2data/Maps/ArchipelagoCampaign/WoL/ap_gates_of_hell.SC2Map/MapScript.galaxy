@@ -3049,6 +3049,18 @@ bool gt_PeriodicRescueCheck_Func (bool testConds, bool runActions) {
     }
     if ((UnitGroupCount(lv_unitGroup, c_unitCountAlive) >= 1)) {
         gv_statDropPodsRescued += 1;
+        if ((gv_statDropPodsRescued == 2)) {
+            lib5BD4895D_gf_AP_Core_sendLocationLocal(2);
+        }
+        else if ((gv_statDropPodsRescued == 4)) {
+            lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
+        }
+        else if ((gv_statDropPodsRescued == 6)) {
+            lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+        }
+        else if ((gv_statDropPodsRescued == 8)) {
+            lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+        }
         TriggerExecute(gt_AchievementRescuealldroppods, true, false);
         auto0250BEBB_g = lv_unitGroup;
         auto0250BEBB_u = UnitGroupCount(auto0250BEBB_g, c_unitCountAll);

@@ -190,7 +190,7 @@ starting_mission_locations = {
     "Whispers of Doom": "Whispers of Doom: Victory",
     "Belly of the Beast": "Belly of the Beast: Victory",
     "Zero Hour": "Zero Hour: First Group Rescued",
-    "Evacuation": "Evacuation: First Chysalis",
+    "Evacuation": "Evacuation: Reach Hanson",
     "Devil's Playground": "Devil's Playground: Tosh's Miners",
     "Smash and Grab": "Smash and Grab: First Relic",
     "The Great Train Robbery": "The Great Train Robbery: North Defiler"

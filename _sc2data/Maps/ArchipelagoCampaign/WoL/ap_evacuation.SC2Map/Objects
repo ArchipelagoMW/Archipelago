@@ -8390,8 +8390,8 @@
     </ObjectPoint>
     <ObjectPoint Id="3002" Position="125.1518,77.8713,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 008" Color="0,0,0,0"/>
     <ObjectPoint Id="2772" Position="91.6926,152.325,0" Scale="1,1,1" Type="Normal" Name="Victory Marine Rally" Color="0,0,0,0"/>
-    <ObjectPoint Id="1457" Position="106.8415,157.4196,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 3" Color="0,0,0,0"/>
     <ObjectPoint Id="856" Position="45.5434,45.2436,0" Rotation="4.3581" Scale="1,1,1" Type="Normal" Name="Colonist Lineup Waypoint" Color="255,172,255,0"/>
+    <ObjectPoint Id="1457" Position="106.8415,157.4196,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 3" Color="0,0,0,0"/>
     <ObjectPoint Id="3192" Position="84.0541,144.079,0" Rotation="5.4902" Scale="1,1,1" Type="Normal" Name="Boat Test" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
@@ -8406,10 +8406,10 @@
     <ObjectPoint Id="964" Position="78.0314,121.6191,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 03" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="2348" Position="80.652,144.6757,0" Rotation="2.1767" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 5" Color="255,255,255,0"/>
     <ObjectPoint Id="2662" Position="85.0798,46.72,0" Rotation="4.6848" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 3" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2348" Position="80.652,144.6757,0" Rotation="2.1767" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 5" Color="255,255,255,0"/>
     <ObjectPoint Id="3233" Position="45.2998,46.5598,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 4" Color="255,0,128,0"/>
     <ObjectPoint Id="559" Position="76.4653,117.7607,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 06 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
@@ -8424,36 +8424,36 @@
     <ObjectPoint Id="2659" Position="69.48,45.48,0" Scale="1,1,1" Type="Normal" Name="Action 1 Bunker Spawn" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3236" Position="46.7797,46.2597,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 10" Color="255,0,128,0"/>
     <ObjectPoint Id="2637" Position="73.0297,142.3098,0" Rotation="1.8962" Scale="1,1,1" Type="Normal" Name="Action 3 Hydralisk Spawn 1" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="3236" Position="46.7797,46.2597,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 10" Color="255,0,128,0"/>
     <ObjectPoint Id="165" Position="41.0598,65.95,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 017" Color="255,0,0,255"/>
     <ObjectPoint Id="14" Position="89.96,141.8398,0" Rotation="5.2375" Scale="1,1,1" Type="Normal" Name="Zerg Unburrow 06 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3219" Position="107.64,152.0998,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 4" Color="0,0,0,0"/>
     <ObjectPoint Id="2352" Position="86.2443,139.8735,0" Rotation="2.1755" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 8" Color="255,255,255,0"/>
+    <ObjectPoint Id="3219" Position="107.64,152.0998,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 4" Color="0,0,0,0"/>
     <ObjectPoint Id="1460" Position="107.2946,155.5195,0" Rotation="4.5573" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 3" Color="0,0,0,0"/>
     <ObjectPoint Id="377" Position="39.1806,50.5483,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 020" Color="255,0,0,255"/>
-    <ObjectPoint Id="2665" Position="87,45.5297,0" Rotation="4.725" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 6" Color="0,0,0,0">
+    <ObjectPoint Id="613" Position="70.7,140.24,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 06 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="613" Position="70.7,140.24,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 06 02" Color="255,255,0,128">
+    <ObjectPoint Id="2665" Position="87,45.5297,0" Rotation="4.725" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 6" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="779" Position="44.8447,86.2614,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 05 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1417" Position="73.5434,127.7702,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 06 03" Color="255,255,255,0"/>
     <ObjectPoint Id="42" Position="46.3684,73.325,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 016" Color="255,0,0,255"/>
+    <ObjectPoint Id="1417" Position="73.5434,127.7702,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 06 03" Color="255,255,255,0"/>
     <ObjectPoint Id="1581" Position="33.5,44.5,0" Scale="1,1,1" Type="StartLoc" Name="P04_COLONIST" Color="0,0,0,0"/>
-    <ObjectPoint Id="2631" Position="101.0627,159.465,0" Rotation="5.2998" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 1" Color="0,0,0,0"/>
     <ObjectPoint Id="1186" Position="95.7414,155.9731,0" Scale="1,1,1" Type="Normal" Name="Saved Marine Rally" Color="0,0,0,0"/>
+    <ObjectPoint Id="2631" Position="101.0627,159.465,0" Rotation="5.2998" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 1" Color="0,0,0,0"/>
+    <ObjectPoint Id="88" Position="99.9543,159.9033,0" Rotation="2.2697" Scale="1,1,1" Type="Normal" Name="Colonist Route 000" Color="255,64,0,64"/>
     <ObjectPoint Id="786" Position="62.4177,138.2124,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 05 03" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="88" Position="99.9543,159.9033,0" Rotation="2.2697" Scale="1,1,1" Type="Normal" Name="Colonist Route 000" Color="255,64,0,64"/>
     <ObjectPoint Id="2779" Position="78.3596,139.2236,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 06a 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
@@ -8462,23 +8462,23 @@
     </ObjectPoint>
     <ObjectPoint Id="3225" Position="46.13,45.5898,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 7" Color="255,0,128,0"/>
     <ObjectPoint Id="1649" Position="33.5185,41.6767,0" Scale="1,1,1" Type="Normal" Name="Hanson Colony Ping" Color="0,0,0,0"/>
-    <ObjectPoint Id="1406" Position="67.5852,140.6154,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 02 03" Color="255,255,255,0"/>
     <ObjectPoint Id="221" Position="76.9104,136.2365,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 04 06" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="1406" Position="67.5852,140.6154,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 02 03" Color="255,255,255,0"/>
     <ObjectPoint Id="2613" Position="101.5598,160.7697,0" Scale="1,1,1" Type="Normal" Name="Victory Zerg Rally 1" Color="0,0,0,0"/>
     <ObjectPoint Id="2654" Position="81.13,46.47,0" Rotation="4.6276" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 8" Color="255,0,0,255">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="2864" Position="99.271,166.1938,0" Rotation="2.3154" Scale="1,1,1" Type="Normal" Name="Transport Preload Rally 2" Color="0,0,0,0"/>
-    <ObjectPoint Id="2718" Position="125.2102,59.6408,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 01" Color="255,255,128,0">
-        <Flag Index="PointHidden" Value="1"/>
-    </ObjectPoint>
     <ObjectPoint Id="658" Position="68.5017,87.0747,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 04 02" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2907" Position="100.0324,26.4956,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 001" Color="0,0,0,0"/>
+    <ObjectPoint Id="2718" Position="125.2102,59.6408,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 01" Color="255,255,128,0">
+        <Flag Index="PointHidden" Value="1"/>
+    </ObjectPoint>
     <ObjectPoint Id="855" Position="99.3198,159.1198,0" Scale="1,1,1" Type="SoundEmitter" Name="StarportAmbience" Color="0,0,0,0" Sound="Emitter_StarportAmbience"/>
+    <ObjectPoint Id="2907" Position="100.0324,26.4956,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 001" Color="0,0,0,0"/>
     <ObjectPoint Id="3228" Position="47.49,45.4,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 13" Color="255,0,64,0"/>
     <ObjectPoint Id="1652" Position="127.4267,114.4123,0" Rotation="5.2985" Scale="1,1,1" Type="Normal" Name="Doomsday Zerg Spawn - East 2" Color="0,0,0,0"/>
     <ObjectPoint Id="2590" Position="44.4,100.43,0" Rotation="0.7297" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 1" Color="0,0,0,0">
@@ -8489,10 +8489,10 @@
     </ObjectPoint>
     <ObjectPoint Id="2608" Position="78.14,141.39,0" Rotation="2.0444" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 2" Color="255,255,255,0"/>
     <ObjectPoint Id="2910" Position="112.403,16.768,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 004" Color="0,0,0,0"/>
-    <ObjectPoint Id="2715" Position="99.3698,101.42,0" Scale="1,1,1" Type="Normal" Name="Gather Point - P3 Zerg" Color="0,0,0,0"/>
     <ObjectPoint Id="663" Position="83.0202,152.2155,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 04 04" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="2715" Position="99.3698,101.42,0" Scale="1,1,1" Type="Normal" Name="Gather Point - P3 Zerg" Color="0,0,0,0"/>
     <ObjectPoint Id="1645" Position="18.0356,78.8464,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 013" Color="0,0,0,0"/>
     <ObjectPoint Id="2668" Position="60.16,40.5197,0" Rotation="1.7622" Scale="1,1,1" Type="Normal" Name="Action 1 Marine Spawn 3" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8503,20 +8503,20 @@
     <ObjectPoint Id="1" Position="50.6074,79.9145,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 015" Color="255,0,0,255"/>
     <ObjectPoint Id="2150" Position="113.9272,49.277,0" Rotation="4.6232" Scale="1,1,1" Type="Normal" Name="Tactical Medic Move 2" Color="255,0,255,255"/>
     <ObjectPoint Id="858" Position="37.1127,48.9763,0" Scale="1,1,1" Type="Normal" Name="Center of Player Base" Color="0,0,0,0"/>
-    <ObjectPoint Id="3000" Position="128.0375,72.955,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 006" Color="0,0,0,0"/>
     <ObjectPoint Id="254" Position="98.541,158.6552,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 001" Color="255,0,0,255"/>
+    <ObjectPoint Id="3000" Position="128.0375,72.955,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 006" Color="0,0,0,0"/>
     <ObjectPoint Id="2593" Position="33.71,97.8498,0" Rotation="0.8886" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 4" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="3235" Position="46.3098,46.3498,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 8" Color="255,0,128,0"/>
+    <ObjectPoint Id="808" Position="23.64,44.0097,0" Scale="1,1,1" Type="Normal" Name="Town Left (Mutas)"/>
     <ObjectPoint Id="2158" Position="117.0646,49.2111,0" Rotation="4.6926" Scale="1,1,1" Type="Normal" Name="Tactical Drop 2" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="808" Position="23.64,44.0097,0" Scale="1,1,1" Type="Normal" Name="Town Left (Mutas)"/>
-    <ObjectPoint Id="2724" Position="97.3498,60.75,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 07" Color="255,255,128,0">
+    <ObjectPoint Id="680" Position="58.3234,133.0388,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 05 03" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="680" Position="58.3234,133.0388,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 05 03" Color="255,255,255,0">
+    <ObjectPoint Id="2724" Position="97.3498,60.75,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 07" Color="255,255,128,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="774" Position="57.98,84.4,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 04 03" Color="255,255,0,128">
@@ -8525,27 +8525,27 @@
     <ObjectPoint Id="1066" Position="79.8762,141.5925,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 06 03" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2091" Position="82.879,142.663,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 003" Color="255,0,0,255"/>
     <ObjectPoint Id="1412" Position="78.2514,133.0573,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 03 03" Color="255,255,255,0"/>
+    <ObjectPoint Id="2091" Position="82.879,142.663,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 003" Color="255,0,0,255"/>
     <ObjectPoint Id="231" Position="57.678,85.3854,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 014" Color="255,0,0,255"/>
+    <ObjectPoint Id="2350" Position="87.1616,141.7966,0" Rotation="2.1767" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 7" Color="255,255,255,0"/>
     <ObjectPoint Id="2660" Position="84.63,48.72,0" Rotation="4.7751" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 1" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2350" Position="87.1616,141.7966,0" Rotation="2.1767" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 7" Color="255,255,255,0"/>
-    <ObjectPoint Id="3238" Position="47.68,46.15,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 14" Color="255,0,64,0"/>
     <ObjectPoint Id="265" Position="74.3752,103.836,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 010" Color="255,0,0,255"/>
+    <ObjectPoint Id="3238" Position="47.68,46.15,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 14" Color="255,0,64,0"/>
     <ObjectPoint Id="1455" Position="94.5625,150.9895,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 1" Color="0,0,0,0"/>
     <ObjectPoint Id="1409" Position="47.209,64.867,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 05 01" Color="255,255,255,0"/>
-    <ObjectPoint Id="2721" Position="109.42,52.6198,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 04" Color="255,255,128,0">
-        <Flag Index="PointHidden" Value="1"/>
-    </ObjectPoint>
     <ObjectPoint Id="685" Position="27.7521,67.3537,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 02" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3208" Position="104.6477,160.3681,0" Rotation="5.2976" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 5" Color="0,0,0,0"/>
+    <ObjectPoint Id="2721" Position="109.42,52.6198,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 04" Color="255,255,128,0">
+        <Flag Index="PointHidden" Value="1"/>
+    </ObjectPoint>
     <ObjectPoint Id="2657" Position="80.7155,45.372,0" Rotation="5.1726" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 2" Color="255,0,0,255">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="3208" Position="104.6477,160.3681,0" Rotation="5.2976" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 5" Color="0,0,0,0"/>
     <ObjectPoint Id="1462" Position="101.9494,155.5754,0" Rotation="4.7792" Scale="1,1,1" Type="Normal" Name="Victory Colonist Marine 2" Color="0,0,0,0"/>
     <ObjectPoint Id="2646" Position="33.68,93.99,0" Rotation="0.8881" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 5" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8563,10 +8563,10 @@
     <ObjectPoint Id="6" Position="73.1606,115.3076,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 05 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="259" Position="74.4235,132.7751,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 005" Color="255,0,0,255"/>
     <ObjectPoint Id="2629" Position="69.71,143.7797,0" Rotation="1.1257" Scale="1,1,1" Type="Normal" Name="Action 3 Mutalisk Spawn 1" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="259" Position="74.4235,132.7751,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 005" Color="255,0,0,255"/>
     <ObjectPoint Id="2667" Position="57.9,48.8498,0" Rotation="1.4113" Scale="1,1,1" Type="Normal" Name="Action 1 Marine Spawn 1" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
@@ -8576,27 +8576,27 @@
     <ObjectPoint Id="2652" Position="76.71,46.15,0" Rotation="4.7097" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 1" Color="255,0,0,255">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1404" Position="84.7626,113.955,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 02 02" Color="255,255,255,0"/>
     <ObjectPoint Id="223" Position="25.075,173.9155,0" Rotation="5.7185" Scale="1,1,1" Type="Normal" Name="Doomsday Zerg Spawn - West" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="1404" Position="84.7626,113.955,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 02 02" Color="255,255,255,0"/>
     <ObjectPoint Id="3227" Position="47.0798,45.44,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 11" Color="255,0,64,0"/>
     <ObjectPoint Id="2610" Position="80.0297,139.0798,0" Rotation="2.178" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 4" Color="255,255,255,0"/>
+    <ObjectPoint Id="597" Position="73.0197,131.38,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 01 02" Color="255,255,255,0"/>
     <ObjectPoint Id="2649" Position="82.5998,45.2597,0" Rotation="5.18" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 5" Color="255,0,0,255">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="597" Position="73.0197,131.38,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 01 02" Color="255,255,255,0"/>
-    <ObjectPoint Id="2713" Position="100.66,160.43,0" Scale="1,1,1" Type="Normal" Name="Colonist Truck Rally (Starport)" Color="0,0,0,0"/>
     <ObjectPoint Id="661" Position="53.9216,127.526,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 03 03" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="2713" Position="100.66,160.43,0" Scale="1,1,1" Type="Normal" Name="Colonist Truck Rally (Starport)" Color="0,0,0,0"/>
     <ObjectPoint Id="2908" Position="107.8781,22.717,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 002" Color="0,0,0,0"/>
     <ObjectPoint Id="2841" Position="106.17,152.0397,0" Scale="1,1,1" Type="Normal" Name="Victory Zerg Rally 2" Color="0,0,0,0"/>
     <ObjectPoint Id="2780" Position="84.45,121.74,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 06a 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="958" Position="110.5297,105.43,0" Scale="1,1,1" Type="Normal" Name="Retreat Point - P3 Zerg" Color="0,0,0,0"/>
     <ObjectPoint Id="244" Position="55.307,29.4572,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 009" Color="0,0,0,0"/>
+    <ObjectPoint Id="958" Position="110.5297,105.43,0" Scale="1,1,1" Type="Normal" Name="Retreat Point - P3 Zerg" Color="0,0,0,0"/>
     <ObjectPoint Id="2588" Position="41.149,72.219,0" Rotation="2.03" Scale="1,1,1" Type="Normal" Name="Action 2 Marine Spawn 4" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
@@ -8605,11 +8605,11 @@
     </ObjectPoint>
     <ObjectPoint Id="3230" Position="48.2797,45.2897,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 17" Color="255,0,64,0"/>
     <ObjectPoint Id="1578" Position="116.5,123.5,0" Scale="1,1,1" Type="StartLoc" Name="P03_ZERG" Color="0,0,0,0"/>
-    <ObjectPoint Id="3241" Position="48.96,46.0798,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 20" Color="255,0,64,0"/>
+    <ObjectPoint Id="262" Position="77.9484,120.156,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 007" Color="255,0,0,255"/>
     <ObjectPoint Id="2624" Position="36.88,60.2897,0" Scale="1,1,1" Type="Normal" Name="Action 2 Zerg Rally 1" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="262" Position="77.9484,120.156,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 007" Color="255,0,0,255"/>
+    <ObjectPoint Id="3241" Position="48.96,46.0798,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 20" Color="255,0,64,0"/>
     <ObjectPoint Id="935" Position="114.0898,77.0898,0" Scale="1,1,1" Type="Normal" Name="Ridley Rally" Color="0,0,0,0"/>
     <ObjectPoint Id="2670" Position="61.23,45.4,0" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Rally 1" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8622,10 +8622,10 @@
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="3229" Position="47.8598,45.3598,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 15" Color="255,0,64,0"/>
-    <ObjectPoint Id="2591" Position="41.66,92.48,0" Rotation="0.9023" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 2" Color="0,0,0,0">
+    <ObjectPoint Id="2389" Position="99.9868,159.5556,0" Rotation="2.266" Scale="1,1,1" Type="Normal" Name="Action 3 Colonist Rally A" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2389" Position="99.9868,159.5556,0" Rotation="2.266" Scale="1,1,1" Type="Normal" Name="Action 3 Colonist Rally A" Color="0,0,0,0">
+    <ObjectPoint Id="2591" Position="41.66,92.48,0" Rotation="0.9023" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 2" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="2842" Position="90.94,165.65,0" Scale="1,1,1" Type="Normal" Name="Victory Zerg Rally 3" Color="0,0,0,0"/>
@@ -8640,8 +8640,8 @@
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="1644" Position="17.6657,70.989,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 012" Color="0,0,0,0"/>
-    <ObjectPoint Id="3242" Position="43.0898,46.92,0" Rotation="4.1318" Scale="1,1,1" Type="Normal" Name="Colonist Truck Rally" Color="255,172,255,0"/>
     <ObjectPoint Id="261" Position="75.2148,126.6496,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 006" Color="255,0,0,255"/>
+    <ObjectPoint Id="3242" Position="43.0898,46.92,0" Rotation="4.1318" Scale="1,1,1" Type="Normal" Name="Colonist Truck Rally" Color="255,172,255,0"/>
     <ObjectPoint Id="1577" Position="35.5,148.5,0" Scale="1,1,1" Type="StartLoc" Name="P02_ZERG" Color="0,0,0,0"/>
     <ObjectPoint Id="2792" Position="63.9587,140.4763,0" Rotation="5.2397" Scale="1,1,1" Type="Normal" Name="Zerg Unburrow 06 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
@@ -8667,10 +8667,10 @@
     <ObjectPoint Id="2865" Position="92.488,166.2258,0" Rotation="1.6813" Scale="1,1,1" Type="Normal" Name="Transport Preload Rally 1" Color="0,0,0,0"/>
     <ObjectPoint Id="2906" Position="55.46,39.4,0" Rotation="3.9265" Scale="1,1,1" Type="Normal" Name="Colonist Truck Spawn" Color="0,0,0,0"/>
     <ObjectPoint Id="1407" Position="54.3935,84.7416,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 03 01" Color="255,255,255,0"/>
-    <ObjectPoint Id="2655" Position="86.49,47.99,0" Rotation="5.0202" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 6" Color="255,0,0,255">
+    <ObjectPoint Id="281" Position="40.909,138.893,0" Scale="1,1,1" Type="Normal" Name="Retreat P2 Zerg" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="281" Position="40.909,138.893,0" Scale="1,1,1" Type="Normal" Name="Retreat P2 Zerg" Color="0,0,0,0">
+    <ObjectPoint Id="2655" Position="86.49,47.99,0" Rotation="5.0202" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 6" Color="255,0,0,255">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="183" Position="63.787,175.2226,0" Rotation="6.006" Scale="1,1,1" Type="Normal" Name="Zerg Instant Spawn - N Canyon" Color="0,0,0,0">
@@ -8679,10 +8679,10 @@
     <ObjectPoint Id="2658" Position="51.1098,44.0097,0" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Rally B" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2722" Position="116.5798,42.14,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 05" Color="255,255,128,0">
+    <ObjectPoint Id="686" Position="93.1745,134.7954,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 05 04" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="686" Position="93.1745,134.7954,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 05 04" Color="255,255,255,0">
+    <ObjectPoint Id="2722" Position="116.5798,42.14,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 05" Color="255,255,128,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="1410" Position="83.8684,113.0168,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 03 02" Color="255,255,255,0"/>
@@ -8696,28 +8696,28 @@
     <ObjectPoint Id="2645" Position="68.5197,146.39,0" Rotation="0.6384" Scale="1,1,1" Type="Normal" Name="Action 3 Mutalisk Spawn 2" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="125" Position="114.75,48.91,0" Scale="1,1,1" Type="Normal" Name="Start Game" Color="0,0,0,0"/>
     <ObjectPoint Id="2161" Position="31.72,42.1198,0" Scale="1,1,1" Type="Normal" Name="Command Center Rally" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="125" Position="114.75,48.91,0" Scale="1,1,1" Type="Normal" Name="Start Game" Color="0,0,0,0"/>
     <ObjectPoint Id="86" Position="86.8398,46.0798,0" Rotation="2.3542" Scale="1,1,1" Type="Normal" Name="Tactical Colonist Spawn" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="3223" Position="45.1098,45.7998,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 3" Color="255,0,128,0"/>
-    <ObjectPoint Id="2640" Position="74.93,134.2897,0" Rotation="2.126" Scale="1,1,1" Type="Normal" Name="Action 3 Roach Spawn 1" Color="255,255,0,0">
-        <Flag Index="PointHidden" Value="1"/>
-    </ObjectPoint>
     <ObjectPoint Id="604" Position="52.2983,76.8227,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 06 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2079" Position="55.1877,39.4477,0" Rotation="4.6997" Scale="1,1,1" Type="Normal" Name="Marine Spawn Point" Color="0,0,0,0">
+    <ObjectPoint Id="2640" Position="74.93,134.2897,0" Rotation="2.126" Scale="1,1,1" Type="Normal" Name="Action 3 Roach Spawn 1" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="1456" Position="99.3083,158.2,0" Scale="1,1,1" Type="Normal" Name="Victory Tumor 2" Color="0,0,0,0"/>
-    <ObjectPoint Id="2663" Position="88.5197,51.0698,0" Rotation="4.725" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 4" Color="0,0,0,0">
+    <ObjectPoint Id="2079" Position="55.1877,39.4477,0" Rotation="4.6997" Scale="1,1,1" Type="Normal" Name="Marine Spawn Point" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="2349" Position="82.3364,145.9543,0" Rotation="2.1767" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Spawn 6" Color="255,255,255,0"/>
+    <ObjectPoint Id="2663" Position="88.5197,51.0698,0" Rotation="4.725" Scale="1,1,1" Type="Normal" Name="Action 1 Zergling Spawn 4" Color="0,0,0,0">
+        <Flag Index="PointHidden" Value="1"/>
+    </ObjectPoint>
     <ObjectPoint Id="1638" Position="60.64,45.99,0" Scale="1,1,1" Type="Normal" Name="Ping Hanson Colony" Color="0,0,0,0"/>
     <ObjectPoint Id="2572" Position="43.4,73.3464,0" Rotation="2.725" Scale="1,1,1" Type="Normal" Name="Action 2 Marine Spawn " Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8727,10 +8727,10 @@
     <ObjectPoint Id="2727" Position="91.88,42.5798,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 10" Color="255,255,128,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1516" Position="25.4384,28.292,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 010" Color="0,0,0,0"/>
     <ObjectPoint Id="773" Position="42.0144,82.2126,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 04 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="1516" Position="25.4384,28.292,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 010" Color="0,0,0,0"/>
     <ObjectPoint Id="10" Position="33.5,45.5,0" Scale="1,1,1" Type="StartLoc" Name="P01_USER" Color="0,0,0,0"/>
     <ObjectPoint Id="2157" Position="115.6176,49.267,0" Rotation="4.534" Scale="1,1,1" Type="Normal" Name="Tactical Drop 1" Color="255,255,0,0"/>
     <ObjectPoint Id="161" Position="88.99,48.95,0" Rotation="2.353" Scale="1,1,1" Type="Normal" Name="Tactical Colonist Rally 1" Color="0,0,0,0">
@@ -8742,10 +8742,10 @@
     </ObjectPoint>
     <ObjectPoint Id="2909" Position="127.85,18.7238,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 003" Color="0,0,0,0"/>
     <ObjectPoint Id="1400" Position="40.6347,71.5058,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 04 01" Color="255,255,255,0"/>
-    <ObjectPoint Id="2611" Position="106.0498,154.19,0" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Rally" Color="0,0,0,0">
+    <ObjectPoint Id="2425" Position="83.42,59.18,0" Scale="1,1,1" Type="Normal" Name="Tactical Zergling Spawn Repeated 1" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2425" Position="83.42,59.18,0" Scale="1,1,1" Type="Normal" Name="Tactical Zergling Spawn Repeated 1" Color="0,0,0,0">
+    <ObjectPoint Id="2611" Position="106.0498,154.19,0" Scale="1,1,1" Type="Normal" Name="Action 3 Marine Rally" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="2648" Position="42.5,101.8098,0" Rotation="0.8881" Scale="1,1,1" Type="Normal" Name="Action 2 Roach Spawn 1" Color="0,0,0,0">
@@ -8763,8 +8763,8 @@
     <ObjectPoint Id="2781" Position="95.71,140.5397,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 06a 03" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3240" Position="48.47,46.0498,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 18" Color="255,0,64,0"/>
     <ObjectPoint Id="263" Position="78.6286,114.9287,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 008" Color="255,0,0,255"/>
+    <ObjectPoint Id="3240" Position="48.47,46.0498,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 18" Color="255,0,64,0"/>
     <ObjectPoint Id="2863" Position="106.2333,159.217,0" Rotation="2.2946" Scale="1,1,1" Type="Normal" Name="Transport Preload Rally 3" Color="0,0,0,0"/>
     <ObjectPoint Id="1098" Position="66.3698,37.7697,0" Scale="1,1,1" Type="Normal" Name="Town Right (Mutas)"/>
     <ObjectPoint Id="1646" Position="113.3496,50.455,0" Rotation="4.8046" Scale="1,1,1" Type="Normal" Name="Tactical Firebat Move 1" Color="255,0,255,255"/>
@@ -8778,26 +8778,26 @@
     <ObjectPoint Id="678" Position="93.3061,109.776,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 05 02" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2717" Position="75.4111,123.103,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 06 Copy" Color="255,255,255,0">
-        <Flag Index="PointHidden" Value="1"/>
-    </ObjectPoint>
     <ObjectPoint Id="657" Position="43.299,92.8352,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 04 01" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2653" Position="81.98,47.8598,0" Rotation="5.3708" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 3" Color="255,0,0,255">
+    <ObjectPoint Id="2717" Position="75.4111,123.103,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 06 Copy" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="283" Position="108.5104,103.9338,0" Scale="1,1,1" Type="Normal" Name="Retreat P3 Zerg" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1405" Position="86.7756,146.179,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 04 03" Color="255,255,255,0"/>
+    <ObjectPoint Id="2653" Position="81.98,47.8598,0" Rotation="5.3708" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 3" Color="255,0,0,255">
+        <Flag Index="PointHidden" Value="1"/>
+    </ObjectPoint>
     <ObjectPoint Id="222" Position="56.843,97.902,0" Scale="1,1,1" Type="Normal" Name="Zerg Drop Pod 05 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3226" Position="46.5898,45.5,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 9" Color="255,0,128,0"/>
+    <ObjectPoint Id="1405" Position="86.7756,146.179,0" Scale="1,1,1" Type="Normal" Name="Zerg Overlord Pod 04 03" Color="255,255,255,0"/>
     <ObjectPoint Id="2675" Position="129.47,108.15,0" Rotation="1.592" Scale="1,1,1" Type="Normal" Name="Zerg Instant Spawn - E Canyon" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
+    <ObjectPoint Id="3226" Position="46.5898,45.5,0" Rotation="4.6674" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 9" Color="255,0,128,0"/>
     <ObjectPoint Id="1650" Position="114.5297,50.055,0" Rotation="4.6252" Scale="1,1,1" Type="Normal" Name="Tactical Medic Move 1" Color="255,0,255,255"/>
     <ObjectPoint Id="1427" Position="34.5703,92.9482,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 03 01" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8805,11 +8805,11 @@
     <ObjectPoint Id="785" Position="89.4304,111.2414,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 05 02" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="3239" Position="48.0498,46.1098,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 16" Color="255,0,64,0"/>
+    <ObjectPoint Id="264" Position="77.2346,108.659,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 009" Color="255,0,0,255"/>
     <ObjectPoint Id="2638" Position="72.45,133.14,0" Rotation="2.1174" Scale="1,1,1" Type="Normal" Name="Action 3 Hydralisk Spawn 12" Color="255,255,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="264" Position="77.2346,108.659,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 009" Color="255,0,0,255"/>
+    <ObjectPoint Id="3239" Position="48.0498,46.1098,0" Rotation="4.6657" Scale="1,1,1" Type="Normal" Name="Generated Colonist Rally 16" Color="255,0,64,0"/>
     <ObjectPoint Id="1615" Position="115.5,23.5,0" Scale="1,1,1" Type="StartLoc" Name="P05_ZERG" Color="0,0,0,0"/>
     <ObjectPoint Id="3276" Position="56.3093,95.1445,0" Scale="1,1,1" Type="Normal" Name="SCV Repair" Color="0,0,0,0"/>
     <ObjectPoint Id="2656" Position="83.94,47.3598,0" Rotation="4.8774" Scale="1,1,1" Type="Normal" Name="Action 1 Colonist Spawn 9" Color="255,0,0,255">
@@ -8823,10 +8823,10 @@
     <ObjectPoint Id="2763" Position="44.2517,91.0986,0" Scale="1,1,1" Type="Normal" Name="Zerg Nydus 06a 01" Color="255,255,0,128">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="2720" Position="112.5197,59.69,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 03" Color="255,255,128,0">
+    <ObjectPoint Id="684" Position="57.1257,79.4992,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 01" Color="255,255,255,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="684" Position="57.1257,79.4992,0" Scale="1,1,1" Type="Normal" Name="Zerg Spooge Pod 06 01" Color="255,255,255,0">
+    <ObjectPoint Id="2720" Position="112.5197,59.69,0" Scale="1,1,1" Type="Normal" Name="Zerg Backdoor Spooge Pod 03" Color="255,255,128,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="2647" Position="37.2697,94.5097,0" Rotation="0.8881" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 6" Color="0,0,0,0">
@@ -8851,8 +8851,8 @@
     </ObjectPoint>
     <ObjectPoint Id="276" Position="36.333,60.3752,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 018" Color="255,0,0,255"/>
     <ObjectPoint Id="2077" Position="106.3698,151.3598,0" Rotation="1.6838" Scale="1,1,1" Type="Normal" Name="Transport Preload Rally 4" Color="0,0,0,0"/>
-    <ObjectPoint Id="3001" Position="124.6491,69.105,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 007" Color="0,0,0,0"/>
     <ObjectPoint Id="255" Position="87.1806,146.694,0" Scale="1,1,1" Type="Normal" Name="Colonist Route 002" Color="255,0,0,255"/>
+    <ObjectPoint Id="3001" Position="124.6491,69.105,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 007" Color="0,0,0,0"/>
     <ObjectPoint Id="8" Position="90.13,60.15,0" Rotation="2.3518" Scale="1,1,1" Type="Normal" Name="Tactical Colonist Rally 2" Color="0,0,0,0"/>
     <ObjectPoint Id="2592" Position="40.3298,103.1098,0" Rotation="0.7736" Scale="1,1,1" Type="Normal" Name="Action 2 Zergling Spawn 3" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
@@ -8902,6 +8902,17 @@
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
+    <ObjectCamera Id="178" Position="107.7265,150.2167,0" Rotation="3.14" Scale="1,1,1" Name="VCinematic 1.1.1 Starport" Color="255,192,192,192" CameraTarget="107.7265,150.2167">
+        <CameraValue Index="FieldOfView" Value="27.7998"/>
+        <CameraValue Index="NearClip" Value="0.0998"/>
+        <CameraValue Index="FarClip" Value="400"/>
+        <CameraValue Index="ShadowClip" Value="75"/>
+        <CameraValue Index="Distance" Value="34.07"/>
+        <CameraValue Index="Pitch" Value="56"/>
+        <CameraValue Index="Yaw" Value="179.9025"/>
+        <CameraValue Index="FocalDepth" Value="8"/>
+        <CameraValue Index="FalloffEnd" Value="8"/>
+    </ObjectCamera>
     <ObjectCamera Id="2599" Position="54.142,84.0424,0" Rotation="2.7585" Scale="1,1,1" Name="Action 2.1.2 Death" Color="255,255,0,0" CameraTarget="54.142,84.0424">
         <CameraValue Index="FieldOfView" Value="27.2995"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
@@ -8914,15 +8925,16 @@
         <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectCamera Id="178" Position="107.7265,150.2167,0" Rotation="3.14" Scale="1,1,1" Name="VCinematic 1.1.1 Starport" Color="255,192,192,192" CameraTarget="107.7265,150.2167">
-        <CameraValue Index="FieldOfView" Value="27.7998"/>
+    <ObjectCamera Id="21" Position="94.5334,155.1684,0" Rotation="3.125" Scale="1,1,1" Name="Action 3.1.3 Starport" Color="0,0,0,0" CameraTarget="94.5334,155.1684">
+        <CameraValue Index="FieldOfView" Value="27.2995"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
-        <CameraValue Index="FarClip" Value="400"/>
+        <CameraValue Index="FarClip" Value="100000"/>
         <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="34.07"/>
-        <CameraValue Index="Pitch" Value="56"/>
-        <CameraValue Index="Yaw" Value="179.9025"/>
+        <CameraValue Index="Distance" Value="39.6423"/>
+        <CameraValue Index="Pitch" Value="42.8784"/>
+        <CameraValue Index="Yaw" Value="179.0493"/>
         <CameraValue Index="FocalDepth" Value="8"/>
+        <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
     <ObjectCamera Id="2506" Position="32.9943,43.3156,0" Rotation="3.14" Scale="1,1,1" Name="Town Pan After Rescue" Color="0,0,0,0" CameraTarget="32.9943,43.3156">
@@ -8934,18 +8946,6 @@
         <CameraValue Index="Pitch" Value="56"/>
         <CameraValue Index="Yaw" Value="179.9025"/>
         <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffEnd" Value="8"/>
-    </ObjectCamera>
-    <ObjectCamera Id="21" Position="94.5334,155.1684,0" Rotation="3.125" Scale="1,1,1" Name="Action 3.1.3 Starport" Color="0,0,0,0" CameraTarget="94.5334,155.1684">
-        <CameraValue Index="FieldOfView" Value="27.2995"/>
-        <CameraValue Index="NearClip" Value="0.0998"/>
-        <CameraValue Index="FarClip" Value="100000"/>
-        <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="39.6423"/>
-        <CameraValue Index="Pitch" Value="42.8784"/>
-        <CameraValue Index="Yaw" Value="179.0493"/>
-        <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
     <ObjectCamera Id="2872" Position="116.444,159.6687,0" Rotation="3.14" Scale="1,1,1" Name="VCinematic 1.1.4 WiderShot" Color="0,0,0,0" CameraTarget="116.444,159.6687">
@@ -9006,20 +9006,20 @@
         <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectUnit Id="3222" Position="109.5,148.5,0" Rotation="3.7167" Scale="1,1,1" UnitType="PathingBlocker1x1">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="627" Position="120.8447,123.8156,0" Rotation="4.942" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="3222" Position="109.5,148.5,0" Rotation="3.7167" Scale="1,1,1" UnitType="PathingBlocker1x1">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="2751" Position="32.5041,41.5097,0" Rotation="0.0485" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="37" Position="63.5,175.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3215" Position="109.5,164.5,0" Rotation="4.48" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="618" Position="123,104,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="3215" Position="109.5,164.5,0" Rotation="4.48" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="2696" Position="76.8498,149.96,0" Rotation="1.7285" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -9030,10 +9030,10 @@
     <ObjectUnit Id="96" Position="29.5,49.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="4">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="3210" Position="109.5,159.5,0" Rotation="5.3354" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="623" Position="119.7185,128.3535,0" Rotation="5.7944" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3210" Position="109.5,159.5,0" Rotation="5.3354" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="2701" Position="76.0498,150.66,0" Rotation="1.7272" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -9095,24 +9095,24 @@
     <ObjectUnit Id="1083" Position="88.95,90.0097,0" Rotation="5.1665" Scale="1,1,1" UnitType="RoachBurrowed" Player="6">
         <AIRebuild Index="2" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="93" Position="45.0893,141.999,0" Rotation="0.389" Scale="1,1,1" UnitType="Zergling" Player="2">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="2843" Position="98.5,168.5,0" Rotation="3.3398" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1534" Position="58.136,119.3666,0" Rotation="3.8466" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="633" Position="121.3286,96.054,0" Rotation="4.5913" Scale="1,1,1" UnitType="Overlord" Player="3">
+    <ObjectUnit Id="2843" Position="98.5,168.5,0" Rotation="3.3398" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="93" Position="45.0893,141.999,0" Rotation="0.389" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2010" Position="91.5895,142.6618,0" Scale="1,1,1" UnitType="ChrysalisEgg" Player="6"/>
+    <ObjectUnit Id="633" Position="121.3286,96.054,0" Rotation="4.5913" Scale="1,1,1" UnitType="Overlord" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="530" Position="126.5,106.5,0" Rotation="5.7595" Scale="1,1,1" UnitType="InfestationPit" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3205" Position="103.5,170.5,0" Rotation="3.2697" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1987" Position="50,155,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="3205" Position="103.5,170.5,0" Rotation="3.2697" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1542" Position="22.4655,128.627,0" Rotation="3.9746" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9132,16 +9132,16 @@
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2418" Position="81.4533,42.255,0" Rotation="5.953" Scale="1,1,1" UnitType="Zergling" Player="5"/>
-    <ObjectUnit Id="3220" Position="108,148,0" Rotation="1.8513" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
-    <ObjectUnit Id="2002" Variation="4" Position="110.5,83.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Hut"/>
     <ObjectUnit Id="625" Position="121.3493,125.5827,0" Rotation="5.2546" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="85" Position="105.5,119.5,0" Scale="1,1,1" UnitType="SpawningPool" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
+    <ObjectUnit Id="2002" Variation="4" Position="110.5,83.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Hut"/>
+    <ObjectUnit Id="3220" Position="108,148,0" Rotation="1.8513" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="1526" Position="87.5898,115.5913,0" Rotation="3.0095" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="85" Position="105.5,119.5,0" Scale="1,1,1" UnitType="SpawningPool" Player="3">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2749" Position="30.489,43.4191,0" Rotation="6.2143" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="2774" Position="82.63,117.3298,0" Rotation="5.009" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
@@ -9204,12 +9204,15 @@
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="2041" Position="118.0361,83.4626,0" Rotation="6.2172" Scale="1,1,1" UnitType="PalletMinerals"/>
-    <ObjectUnit Id="3217" Position="110,153,0" Rotation="2.738" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="628" Position="122.1594,122.4782,0" Rotation="4.5937" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2838" Position="94.5,169.5,0" Rotation="3.2458" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="3217" Position="110,153,0" Rotation="2.738" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="80" Position="126.5,127.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="2838" Position="94.5,169.5,0" Rotation="3.2458" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="1120" Position="123.9785,109.021,0" Rotation="4.1423" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2693" Position="70.43,86.21,0" Rotation="3.813" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
@@ -9218,9 +9221,6 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1120" Position="123.9785,109.021,0" Rotation="4.1423" Scale="1,1,1" UnitType="Zergling" Player="3">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1583" Position="90.4196,144.283,0" Rotation="4.2861" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
@@ -9238,10 +9238,10 @@
     <ObjectUnit Id="1537" Position="58.7414,115.9365,0" Rotation="5.034" Scale="1,1,1" UnitType="PalletGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2752" Position="38.0981,137.2402,0" Rotation="1.158" Scale="1,1,1" UnitType="Ultralisk" Player="2">
+    <ObjectUnit Id="390" Position="37.21,152.8598,0" Rotation="5.101" Scale="1,1,1" UnitType="Infestor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="390" Position="37.21,152.8598,0" Rotation="5.101" Scale="1,1,1" UnitType="Infestor" Player="2">
+    <ObjectUnit Id="2752" Position="38.0981,137.2402,0" Rotation="1.158" Scale="1,1,1" UnitType="Ultralisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="40" Variation="6" Position="124,123.5,0" Scale="1,1,1" UnitType="MineralField">
@@ -9275,15 +9275,15 @@
     <ObjectUnit Id="1426" Position="23,140,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="1084" Position="122,101,0" Scale="1,1,1" UnitType="SporeCrawler" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2777" Position="69.8598,84.96,0" Rotation="3.9162" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1084" Position="122,101,0" Scale="1,1,1" UnitType="SporeCrawler" Player="3">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1529" Position="48.0131,151.11,0" Rotation="5.574" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -9303,24 +9303,24 @@
     <ObjectUnit Id="1125" Position="25.8886,149.7612,0" Rotation="5.6684" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2031" Position="61.5244,73.4414,0" Rotation="0.1164" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="588" Position="122,113,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2031" Position="61.5244,73.4414,0" Rotation="0.1164" Scale="1,1,1" UnitType="PalletGas"/>
-    <ObjectUnit Id="3207" Position="108,153,0" Rotation="1.944" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="2340" Variation="5" Position="72.5,55.5,0" Rotation="0.6665" Scale="1,1,1" UnitType="Hut">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="3207" Position="108,153,0" Rotation="1.944" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="70" Position="108.5,159.5,0" Rotation="0.0002" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="387" Variation="5" Position="58.5,51.5,0" Scale="1,1,1" UnitType="Hut" Player="4">
+        <AIRebuild Index="0" Value="0"/>
+    </ObjectUnit>
     <ObjectUnit Id="2757" Position="27.92,93.97,0" Rotation="1.2197" Scale="1,1,1" UnitType="RoachBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="387" Variation="5" Position="58.5,51.5,0" Scale="1,1,1" UnitType="Hut" Player="4">
-        <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1169" Position="38.0366,131.084,0" Rotation="2.0275" Scale="1,1,1" UnitType="Hydralisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -9332,19 +9332,19 @@
     <ObjectUnit Id="284" Position="116,95,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2444" Position="109.6132,110.693,0" Rotation="5.4294" Scale="1,1,1" UnitType="Zergling" Player="3">
+    <ObjectUnit Id="714" Position="29.5,142.5,0" Scale="1,1,1" UnitType="Hatchery" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="714" Position="29.5,142.5,0" Scale="1,1,1" UnitType="Hatchery" Player="2">
+    <ObjectUnit Id="2444" Position="109.6132,110.693,0" Rotation="5.4294" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="868" Position="46.0388,142.6374,0" Rotation="0.479" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="1794" Position="110.5,161.5,0" Rotation="1.488" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="673" Position="108.8876,97.9375,0" Rotation="4.1523" Scale="1,1,1" UnitType="Roach" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1794" Position="110.5,161.5,0" Rotation="1.488" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="842" Position="21.5,131.5,0" Rotation="5.7595" Scale="1,1,1" UnitType="InfestationPit" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9357,8 +9357,11 @@
     <ObjectUnit Id="676" Position="110.0366,120.9091,0" Rotation="0.961" Scale="1,1,1" UnitType="Hydralisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2441" Position="95.8437,54.1247,0" Rotation="1.1938" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="719" Variation="9" Position="27,149.5,0" Scale="1,1,1" UnitType="MineralField">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="2441" Position="95.8437,54.1247,0" Rotation="1.1938" Scale="1,1,1" UnitType="Zergling" Player="5"/>
+    <ObjectUnit Id="865" Position="36.7456,141.0373,0" Rotation="1.2937" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2087" Position="68.8164,68.4404,0" Rotation="1.6093" Scale="1,1,1" UnitType="Zergling" Player="6">
@@ -9367,9 +9370,6 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="865" Position="36.7456,141.0373,0" Rotation="1.2937" Scale="1,1,1" UnitType="Mutalisk" Player="2">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1254" Position="109,104,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -9386,14 +9386,14 @@
     <ObjectUnit Id="2146" Position="109.4477,81.8762,0" Rotation="6.215" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="2508" Position="67.3923,45.6955,0" Scale="1,1,1" UnitType="Beacon_Terran"/>
     <ObjectUnit Id="650" Position="121.3693,104.1638,0" Rotation="4.7763" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2508" Position="67.3923,45.6955,0" Scale="1,1,1" UnitType="Beacon_Terran"/>
+    <ObjectUnit Id="2471" Position="102.5,166.5,0" Rotation="4.5502" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="737" Position="40,144,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2471" Position="102.5,166.5,0" Rotation="4.5502" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1172" Position="41.2065,159.0114,0" Rotation="1.1008" Scale="1,1,1" UnitType="Hydralisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9406,10 +9406,10 @@
     <ObjectUnit Id="726" Position="42.5,165.5,0" Rotation="5.707" Scale="1,1,1" UnitType="RoachWarren" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="659" Position="112.1938,119.5634,0" Rotation="5.736" Scale="1,1,1" UnitType="Zergling" Player="3">
+    <ObjectUnit Id="2517" Position="34.9,140.8498,0" Rotation="1.215" Scale="1,1,1" UnitType="Baneling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2517" Position="34.9,140.8498,0" Rotation="1.215" Scale="1,1,1" UnitType="Baneling" Player="2">
+    <ObjectUnit Id="659" Position="112.1938,119.5634,0" Rotation="5.736" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2494" Position="57.0056,47.057,0" Rotation="1.0688" Scale="1,1,1" UnitType="Marine" Player="4">
@@ -9436,15 +9436,15 @@
     <ObjectUnit Id="138" Position="110.5,123.5,0" Rotation="5.8117" Scale="1,1,1" UnitType="HydraliskDen" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="768" Position="93.3698,143.94,0" Rotation="4.657" Scale="1,1,1" UnitType="Hydralisk" Player="6">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2118" Position="51.1833,111.7668,0" Rotation="1.6086" Scale="1,1,1" UnitType="Zergling" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="768" Position="93.3698,143.94,0" Rotation="4.657" Scale="1,1,1" UnitType="Hydralisk" Player="6">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2435" Position="32,49,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_BarracksTechLab" Player="4"/>
     <ObjectUnit Id="875" Position="43.189,133.0981,0" Rotation="1.208" Scale="1,1,1" UnitType="Zergling" Player="2">
@@ -9453,15 +9453,15 @@
     <ObjectUnit Id="640" Position="112.828,100.2053,0" Rotation="4.3271" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1792479593" Position="126.5922,31.8723,0" Rotation="3.7873" Scale="1,1,1" UnitType="CampaignRead" Player="1"/>
+    <ObjectUnit Id="1792479593" Position="126.5922,31.8723,0" Scale="1,1,1" UnitType="CampaignRead" Player="1"/>
+    <ObjectUnit Id="793" Position="18.902,170.2167,0" Rotation="5.516" Scale="1,1,1" UnitType="Food1000" Player="3"/>
     <ObjectUnit Id="2143" Position="95.42,141.766,0" Rotation="6.2753" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="793" Position="18.902,170.2167,0" Rotation="5.516" Scale="1,1,1" UnitType="Food1000" Player="3"/>
-    <ObjectUnit Id="882" Position="41.5202,150.881,0" Rotation="0.1423" Scale="1,1,1" UnitType="Zergling" Player="2">
+    <ObjectUnit Id="1745" Position="46.9084,146.7822,0" Rotation="3.79" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1745" Position="46.9084,146.7822,0" Rotation="3.79" Scale="1,1,1" UnitType="Corruptor" Player="2">
+    <ObjectUnit Id="882" Position="41.5202,150.881,0" Rotation="0.1423" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="147" Position="35.4143,136.6787,0" Rotation="0.5336" Scale="1,1,1" UnitType="Zergling" Player="2">
@@ -9476,10 +9476,10 @@
     <ObjectUnit Id="823" Position="28.9931,146.9375,0" Rotation="0.799" Scale="1,1,1" UnitType="Drone" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2097" Variation="5" Position="73.5,72.5,0" Scale="1,1,1" UnitType="Hut"/>
     <ObjectUnit Id="887" Position="39.4575,159.4602,0" Rotation="0.6723" Scale="1,1,1" UnitType="Hydralisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2097" Variation="5" Position="73.5,72.5,0" Scale="1,1,1" UnitType="Hut"/>
     <ObjectUnit Id="796" Position="50.6662,48.548,0" Rotation="1.4702" Scale="1,1,1" UnitType="Marine" Player="4">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -9508,15 +9508,15 @@
     <ObjectUnit Id="1257" Position="122.276,130.974,0" Rotation="0.6757" Scale="1,1,1" UnitType="Corruptor" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="878" Position="39.7985,141.0356,0" Rotation="0.7502" Scale="1,1,1" UnitType="Zergling" Player="2">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2088" Position="66.5427,71.7434,0" Rotation="2.0747" Scale="1,1,1" UnitType="Zergling" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="878" Position="39.7985,141.0356,0" Rotation="0.7502" Scale="1,1,1" UnitType="Zergling" Player="2">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="683" Position="105.9355,108.708,0" Rotation="5.5051" Scale="1,1,1" UnitType="Hydralisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -9548,20 +9548,20 @@
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1341" Variation="4" Position="113.5,65.5,0" Scale="1,1,1" UnitType="Hut"/>
-    <ObjectUnit Id="2556" Position="125.7111,98.7878,0" Rotation="5.4272" Scale="1,1,1" UnitType="Zergling" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="698" Position="109,162,0" Rotation="5.4975" Scale="1,1,1" UnitType="ColonistShip">
         <Texture TexSlot="decal" TexProps="03" TexLink="Decal_Number_03"/>
+    </ObjectUnit>
+    <ObjectUnit Id="2556" Position="125.7111,98.7878,0" Rotation="5.4272" Scale="1,1,1" UnitType="Zergling" Player="3">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1290" Position="32.4047,158.769,0" Rotation="2.4575" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="653" Position="120.2741,112.9982,0" Rotation="6.0671" Scale="1,1,1" UnitType="Zergling" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="2507" Position="26.5854,66.6684,0" Rotation="0.129" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="653" Position="120.2741,112.9982,0" Rotation="6.0671" Scale="1,1,1" UnitType="Zergling" Player="3">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2062" Position="91.1396,141.2321,0" Rotation="3.7253" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
@@ -9573,10 +9573,10 @@
     <ObjectUnit Id="675" Position="107.9311,107.0998,0" Rotation="5.8867" Scale="1,1,1" UnitType="Roach" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2080" Position="36,69,0" Scale="1,1,1" UnitType="AutoTurret" Player="4"/>
     <ObjectUnit Id="870" Position="33.1245,143.3896,0" Rotation="1.0327" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2080" Position="36,69,0" Scale="1,1,1" UnitType="AutoTurret" Player="4"/>
     <ObjectUnit Id="236" Position="33.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="4">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
@@ -9596,10 +9596,10 @@
     <ObjectUnit Id="2144" Position="92.745,111.9501,0" Rotation="6.2392" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2085" Position="29.016,131.9687,0" Rotation="6.2521" Scale="1,1,1" UnitType="Overseer" Player="2">
+    <ObjectUnit Id="867" Position="48.98,156.1293,0" Rotation="5.857" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="867" Position="48.98,156.1293,0" Rotation="5.857" Scale="1,1,1" UnitType="Mutalisk" Player="2">
+    <ObjectUnit Id="2085" Position="29.016,131.9687,0" Rotation="6.2521" Scale="1,1,1" UnitType="Overseer" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="717" Position="28,150.5,0" Scale="1,1,1" UnitType="MineralField">
@@ -9629,8 +9629,8 @@
     <ObjectUnit Id="642" Position="112.8417,102.2145,0" Rotation="4.818" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2154" Position="82.5302,41.7292,0" Rotation="6.0788" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="812" Variation="2" Position="54.5,55.5,0" Scale="1,1,1" UnitType="Hut" Player="4"/>
+    <ObjectUnit Id="2154" Position="82.5302,41.7292,0" Rotation="6.0788" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="136" Position="125.5,101.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="BanelingNest" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9656,14 +9656,14 @@
     <ObjectUnit Id="821" Position="30.5996,151.696,0" Rotation="0.8398" Scale="1,1,1" UnitType="Drone" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3198" Position="103.5,168.5,0" Rotation="2.615" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="667" Position="108.3718,113.811,0" Rotation="1.0571" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="3198" Position="103.5,168.5,0" Rotation="2.615" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="880" Position="38.9304,139.973,0" Rotation="0.9394" Scale="1,1,1" UnitType="Zergling" Player="2">
+    <ObjectUnit Id="1747" Position="22.8134,125.9228,0" Rotation="4.2812" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1747" Position="22.8134,125.9228,0" Rotation="4.2812" Scale="1,1,1" UnitType="Corruptor" Player="2">
+    <ObjectUnit Id="880" Position="38.9304,139.973,0" Rotation="0.9394" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="693" Position="109,151,0" Rotation="3.1533" Scale="1,1,1" UnitType="ColonistShip">
@@ -9672,20 +9672,20 @@
     <ObjectUnit Id="2141" Position="69.1665,107.2355,0" Rotation="0.1726" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="340" Position="94,161,0" Scale="1,1,1" UnitType="AutoTurret"/>
     <ObjectUnit Id="1271" Position="125,129,0" Scale="1,1,1" UnitType="SporeCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="340" Position="94,161,0" Scale="1,1,1" UnitType="AutoTurret"/>
     <ObjectUnit Id="1305" Position="91.97,85.41,0" Rotation="1.4328" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="816" Position="27.7258,147.2187,0" Rotation="0.573" Scale="1,1,1" UnitType="Drone" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="670" Position="115.8198,106.837,0" Rotation="4.5295" Scale="1,1,1" UnitType="Zergling" Player="3">
+    <ObjectUnit Id="2520" Position="115.5576,119.736,0" Rotation="5.749" Scale="1,1,1" UnitType="Baneling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2520" Position="115.5576,119.736,0" Rotation="5.749" Scale="1,1,1" UnitType="Baneling" Player="2">
+    <ObjectUnit Id="670" Position="115.8198,106.837,0" Rotation="4.5295" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="688" Position="124.3366,107.6945,0" Rotation="5.0434" Scale="1,1,1" UnitType="Mutalisk" Player="3">
@@ -9711,10 +9711,10 @@
     <ObjectUnit Id="681" Position="111.6755,112.2412,0" Rotation="5.9458" Scale="1,1,1" UnitType="Hydralisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="876" Position="41.2182,133.5654,0" Rotation="1.2546" Scale="1,1,1" UnitType="Zergling" Player="2">
+    <ObjectUnit Id="1743" Position="45.0903,145.338,0" Rotation="5.4855" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1743" Position="45.0903,145.338,0" Rotation="5.4855" Scale="1,1,1" UnitType="Corruptor" Player="2">
+    <ObjectUnit Id="876" Position="41.2182,133.5654,0" Rotation="1.2546" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="338" Position="25,139,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
@@ -9742,15 +9742,15 @@
     <ObjectUnit Id="1306" Position="91.22,92.2585,0" Rotation="4.0534" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="879" Position="37.9553,141.0893,0" Rotation="0.9018" Scale="1,1,1" UnitType="Zergling" Player="2">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2089" Position="49.2893,113.229,0" Rotation="4.7348" Scale="1,1,1" UnitType="Zergling" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="879" Position="37.9553,141.0893,0" Rotation="0.9018" Scale="1,1,1" UnitType="Zergling" Player="2">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="682" Position="113.1906,110.8227,0" Rotation="5.2873" Scale="1,1,1" UnitType="Hydralisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -9771,10 +9771,10 @@
     <ObjectUnit Id="1762" Position="56,168,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="644" Position="120.2224,104.9882,0" Rotation="5.1503" Scale="1,1,1" UnitType="Zergling" Player="3">
+    <ObjectUnit Id="1831" Position="26.1987,125.2565,0" Rotation="3.79" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1831" Position="26.1987,125.2565,0" Rotation="3.79" Scale="1,1,1" UnitType="Corruptor" Player="2">
+    <ObjectUnit Id="644" Position="120.2224,104.9882,0" Rotation="5.1503" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2156" Position="79.8906,40.246,0" Rotation="0.2246" Scale="1,1,1" UnitType="Zergling" Player="5"/>
@@ -9828,28 +9828,28 @@
     <ObjectUnit Id="677" Position="112.203,120.8725,0" Rotation="0.2622" Scale="1,1,1" UnitType="Hydralisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2086" Position="119.1616,109.5737,0" Rotation="6.2546" Scale="1,1,1" UnitType="Overseer" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="864" Position="32.4777,127.7878,0" Rotation="2.6892" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2440" Position="97.1667,47.6997,0" Rotation="3.4218" Scale="1,1,1" UnitType="Zergling" Player="5"/>
+    <ObjectUnit Id="2086" Position="119.1616,109.5737,0" Rotation="6.2546" Scale="1,1,1" UnitType="Overseer" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="718" Variation="4" Position="25,148.5,0" Scale="1,1,1" UnitType="MineralField">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2440" Position="97.1667,47.6997,0" Rotation="3.4218" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="651" Position="105.428,120.6218,0" Rotation="0.5986" Scale="1,1,1" UnitType="Mutalisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2147" Position="86.3417,50.5456,0" Rotation="0.3486" Scale="1,1,1" UnitType="Zergling" Player="5"/>
+    <ObjectUnit Id="2470" Position="103.5,167.5,0" Rotation="2.3945" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="736" Position="43,150,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2470" Position="103.5,167.5,0" Rotation="2.3945" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="2554" Position="126.5185,97.7348,0" Rotation="0.8366" Scale="1,1,1" UnitType="Zergling" Player="3">
+    <ObjectUnit Id="700" Position="112.6794,128.2841,0" Rotation="0.4736" Scale="1,1,1" UnitType="Mutalisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="700" Position="112.6794,128.2841,0" Rotation="0.4736" Scale="1,1,1" UnitType="Mutalisk" Player="3">
+    <ObjectUnit Id="2554" Position="126.5185,97.7348,0" Rotation="0.8366" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="889" Position="37.04,129.4667,0" Rotation="1.676" Scale="1,1,1" UnitType="Hydralisk" Player="2">
@@ -9867,15 +9867,15 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="1168" Position="39.4926,154.035,0" Rotation="0.3237" Scale="1,1,1" UnitType="Mutalisk" Player="2">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2677" Position="24.5468,96.2902,0" Rotation="3.7841" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1168" Position="39.4926,154.035,0" Rotation="0.3237" Scale="1,1,1" UnitType="Mutalisk" Player="2">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1275" Position="120.5664,128.6333,0" Rotation="0.919" Scale="1,1,1" UnitType="Corruptor" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -9886,11 +9886,11 @@
     <ObjectUnit Id="1296" Position="46.5,160.5,0" Scale="1,1,1" UnitType="Hive" Player="5">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="216" Position="112,96,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="1403" Position="102,169,0" Rotation="5.495" Scale="1,1,1" UnitType="ColonistShip">
         <Texture TexSlot="decal" TexProps="02" TexLink="Decal_Number_02"/>
+    </ObjectUnit>
+    <ObjectUnit Id="216" Position="112,96,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2567" Position="68.6198,83.89,0" Rotation="3.9145" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
@@ -9902,10 +9902,10 @@
     <ObjectUnit Id="869" Position="26.797,138.2756,0" Rotation="1.4404" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1896" Position="62,168,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
+    <ObjectUnit Id="715" Variation="8" Position="30,154.5,0" Scale="1,1,1" UnitType="MineralField">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="715" Variation="8" Position="30,154.5,0" Scale="1,1,1" UnitType="MineralField">
+    <ObjectUnit Id="1896" Position="62,168,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="741" Position="42,157,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
@@ -9926,6 +9926,9 @@
     <ObjectUnit Id="689" Position="118.6718,113.2346,0" Rotation="5.1401" Scale="1,1,1" UnitType="Mutalisk" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="884" Position="40.989,152.0034,0" Rotation="0.2333" Scale="1,1,1" UnitType="Zergling" Player="2">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2098" Position="47.9902,113.2673,0" Rotation="3.4367" Scale="1,1,1" UnitType="Zergling" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -9933,16 +9936,10 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="884" Position="40.989,152.0034,0" Rotation="0.2333" Scale="1,1,1" UnitType="Zergling" Player="2">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="730" Variation="3" Position="22,147.5,0" Scale="1,1,1" UnitType="MineralField">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1199" Position="90.9372,87.2287,0" Rotation="3.6811" Scale="1,1,1" UnitType="RoachBurrowed" Player="6">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="646" Position="120.597,103.039,0" Rotation="4.3754" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2496" Position="53.862,43.314,0" Rotation="2.0017" Scale="1,1,1" UnitType="Marine" Player="4">
@@ -9950,6 +9947,9 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="646" Position="120.597,103.039,0" Rotation="4.3754" Scale="1,1,1" UnitType="Zergling" Player="3">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="877" Position="42.4101,134.3464,0" Rotation="1.024" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -10003,11 +10003,11 @@
     <ObjectUnit Id="1309" Position="34.826,93.5944,0" Rotation="1.847" Scale="1,1,1" UnitType="PalletGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="881" Position="38.924,142.0834,0" Rotation="0.7414" Scale="1,1,1" UnitType="Zergling" Player="2">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="2103" Variation="4" Position="63.5,76.5,0" Rotation="0.815" Scale="1,1,1" UnitType="Hut">
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="881" Position="38.924,142.0834,0" Rotation="0.7414" Scale="1,1,1" UnitType="Zergling" Player="2">
+        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="735" Position="34,139,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -10035,10 +10035,10 @@
     <ObjectUnit Id="232" Position="35.246,134.4401,0" Rotation="0.987" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2442" Position="95.122,46.7663,0" Rotation="2.1218" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="716" Variation="1" Position="29,153.5,0" Scale="1,1,1" UnitType="MineralField">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2442" Position="95.122,46.7663,0" Rotation="2.1218" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="866" Position="44.053,142.3078,0" Rotation="0.2565" Scale="1,1,1" UnitType="Mutalisk" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -10048,17 +10048,17 @@
     <ObjectUnit Id="1303" Position="91.1384,90.2182,0" Rotation="2.157" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2518" Position="114.0217,103.0554,0" Rotation="4.9536" Scale="1,1,1" UnitType="Baneling" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="656" Position="110.1923,119.6164,0" Rotation="0.1743" Scale="1,1,1" UnitType="Zergling" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2518" Position="114.0217,103.0554,0" Rotation="4.9536" Scale="1,1,1" UnitType="Baneling" Player="3">
+    <ObjectUnit Id="891" Position="31.3913,127.003,0" Rotation="1.9484" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1752" Position="109.5415,109.4707,0" Rotation="5.3872" Scale="1,1,1" UnitType="Zergling" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="891" Position="31.3913,127.003,0" Rotation="1.9484" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="702" Position="112.6875,95.4248,0" Rotation="3.3837" Scale="1,1,1" UnitType="Mutalisk" Player="3">
@@ -10091,19 +10091,19 @@
     <ObjectUnit Id="1230" Position="41.0322,146.7355,0" Rotation="2.5773" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1163" Position="34.048,136.0214,0" Rotation="0.8395" Scale="1,1,1" UnitType="Zergling" Player="2">
+    <ObjectUnit Id="296" Position="85.665,88.5336,0" Rotation="3.3613" Scale="1,1,1" UnitType="Hydralisk" Player="6">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="296" Position="85.665,88.5336,0" Rotation="3.3613" Scale="1,1,1" UnitType="Hydralisk" Player="6">
+    <ObjectUnit Id="1163" Position="34.048,136.0214,0" Rotation="0.8395" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="674" Position="104.5085,106.863,0" Rotation="5.3764" Scale="1,1,1" UnitType="Roach" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2081" Position="44,61,0" Scale="1,1,1" UnitType="AutoTurret" Player="4"/>
     <ObjectUnit Id="871" Position="32.3312,125.8645,0" Rotation="2.2998" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2081" Position="44,61,0" Scale="1,1,1" UnitType="AutoTurret" Player="4"/>
     <ObjectUnit Id="2192" Position="79.49,41.5297,0" Rotation="6.176" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="632" Position="107.309,108.2744,0" Rotation="4.9357" Scale="1,1,1" UnitType="Overlord" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -10135,16 +10135,16 @@
     <ObjectUnit Id="2215" Position="78.8281,39.8051,0" Rotation="2.5776" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="107" Position="26.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="4" Resources="2860"/>
     <ObjectUnit Id="2755" Position="33.4953,41.5168,0" Rotation="0.004" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
-    <ObjectUnit Id="3201" Position="104.5,169.5,0" Rotation="4.6042" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="612" Position="88.4707,88.0336,0" Rotation="5.5744" Scale="1,1,1" UnitType="ChrysalisEgg" Player="6"/>
-    <ObjectUnit Id="2694" Position="75.7224,149.094,0" Rotation="5.3005" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
+    <ObjectUnit Id="3201" Position="104.5,169.5,0" Rotation="4.6042" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="1123" Position="26.858,95.5683,0" Rotation="4.2817" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1123" Position="26.858,95.5683,0" Rotation="4.2817" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
+    <ObjectUnit Id="2694" Position="75.7224,149.094,0" Rotation="5.3005" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
@@ -10183,10 +10183,10 @@
     </ObjectUnit>
     <ObjectUnit Id="2032" Position="56.099,65.5187,0" Rotation="3.71" Scale="1,1,1" UnitType="PalletMinerals"/>
     <ObjectUnit Id="1630" Variation="1" Position="62.5,51.5,0" Rotation="5.4216" Scale="1,1,1" UnitType="Hut" Player="4"/>
-    <ObjectUnit Id="3211" Position="110.5,160.5,0" Rotation="2.1933" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="622" Position="117.7583,127.624,0" Rotation="6.101" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3211" Position="110.5,160.5,0" Rotation="2.1933" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="74" Position="117.5,99.5,0" Scale="1,1,1" UnitType="Hatchery" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -10213,14 +10213,14 @@
     <ObjectUnit Id="1613" Position="30,156,0" Scale="1,1,1" UnitType="SporeCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2837" Position="93.5,169.5,0" Rotation="0.0996" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="83" Position="111.5,108.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="3218" Position="106.5,162.5,0" Rotation="0.0263" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
+    <ObjectUnit Id="2837" Position="93.5,169.5,0" Rotation="0.0996" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="631" Position="115.6228,100.0935,0" Rotation="4.1943" Scale="1,1,1" UnitType="Overlord" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="3218" Position="106.5,162.5,0" Rotation="0.0263" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="2420" Position="80.854,40.4284,0" Rotation="5.1035" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="2042" Position="68.9006,69.8315,0" Rotation="2.0756" Scale="1,1,1" UnitType="Zergling" Player="6">
         <AIRebuild Index="1" Value="0"/>
@@ -10280,15 +10280,15 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="112" Position="120,94,0" Rotation="5.4975" Scale="1,1,1" UnitType="Spire" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="2870" Position="29.2,97,0" Rotation="6.2131" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="112" Position="120,94,0" Rotation="5.4975" Scale="1,1,1" UnitType="Spire" Player="3">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="27" Position="105.5,161.5,0" Rotation="0.9116" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1586" Position="90.313,102.5788,0" Rotation="4.938" Scale="1,1,1" UnitType="PalletGas">
@@ -10388,21 +10388,21 @@
     <ObjectUnit Id="1622" Position="76.9995,71.2983,0" Rotation="5.672" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2040" Position="119.4714,82.973,0" Rotation="4.6555" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="603" Position="22.989,140.047,0" Rotation="1.8273" Scale="1,1,1" UnitType="Overlord" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2040" Position="119.4714,82.973,0" Rotation="4.6555" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="1597" Variation="4" Position="93.5,62.5,0" Scale="1,1,1" UnitType="Hut">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="2839" Position="101.5,166.5,0" Rotation="3.3386" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="3216" Position="106.5,161.5,0" Rotation="5.9355" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="629" Position="113.7565,127.5944,0" Rotation="0.6142" Scale="1,1,1" UnitType="Drone" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="2006" Position="79.75,68.5,0" Rotation="5.6477" Scale="1,1,1" UnitType="BanelingBurrowed" Player="6">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="629" Position="113.7565,127.5944,0" Rotation="0.6142" Scale="1,1,1" UnitType="Drone" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="3216" Position="106.5,161.5,0" Rotation="5.9355" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="987" Position="114.4711,91.5476,0" Rotation="2.8334" Scale="1,1,1" UnitType="Corruptor" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -10424,13 +10424,13 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="3221" Position="110,147,0" Rotation="3.6367" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
-    <ObjectUnit Id="2003" Variation="5" Position="102.5,55.5,0" Scale="1,1,1" UnitType="Hut">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="624" Position="120.6496,126.9914,0" Rotation="5.4665" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2003" Variation="5" Position="102.5,55.5,0" Scale="1,1,1" UnitType="Hut">
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="3221" Position="110,147,0" Rotation="3.6367" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="2699" Position="73.88,151.21,0" Rotation="2.403" Scale="1,1,1" UnitType="HydraliskBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10441,16 +10441,16 @@
     <ObjectUnit Id="1451" Position="23.9807,148.209,0" Rotation="4.283" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="2351" Position="40.9482,153.6545,0" Rotation="6.25" Scale="1,1,1" UnitType="Overseer" Player="2">
+        <AIRebuild Index="2" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="3212" Position="111,163,0" Rotation="5.0922" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
     <ObjectUnit Id="617" Position="28.578,95.5283,0" Rotation="0.9841" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="3212" Position="111,163,0" Rotation="5.0922" Scale="1,1,1" UnitType="PathingBlocker2x2"/>
-    <ObjectUnit Id="2351" Position="40.9482,153.6545,0" Rotation="6.25" Scale="1,1,1" UnitType="Overseer" Player="2">
-        <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="77" Position="102.5,119.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -10620,7 +10620,6 @@
         <GroupObject Id="390"/>
         <GroupObject Id="394"/>
         <GroupObject Id="530"/>
-        <GroupObject Id="662"/>
         <GroupObject Id="842"/>
         <GroupObject Id="959"/>
         <GroupObject Id="987"/>
@@ -10660,7 +10659,6 @@
         <GroupObject Id="2875"/>
     </Group>
     <Group Type="ObjectUnit" Name="Remove Brutal" Id="4">
-        <GroupObject Id="662"/>
         <GroupObject Id="1083"/>
         <GroupObject Id="2567"/>
         <GroupObject Id="2570"/>

@@ -68589,6 +68589,7 @@
     <Element Type="Trigger" Id="F197E7CE">
         <Condition Type="FunctionCall" Id="203DCF39"/>
         <Action Type="FunctionCall" Id="4A9272E0"/>
+        <Action Type="FunctionCall" Id="36907BC6"/>
         <Action Type="FunctionCall" Id="FFCCE85C"/>
     </Element>
     <Element Type="FunctionCall" Id="203DCF39">
@@ -68637,6 +68638,15 @@
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000177"/>
         <Preset Type="PresetValue" Library="Ntve" Id="00000545"/>
     </Element>
+    <Element Type="FunctionCall" Id="36907BC6">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="4A49E73C"/>
+    </Element>
+    <Element Type="Param" Id="4A49E73C">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>4</Value>
+        <ValueType Type="int"/>
+    </Element>
     <Element Type="FunctionCall" Id="FFCCE85C">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>
         <Parameter Type="Param" Id="8C12600C"/>
@@ -68659,6 +68669,7 @@
     <Element Type="Trigger" Id="48A41578">
         <Condition Type="FunctionCall" Id="CB3787DF"/>
         <Action Type="FunctionCall" Id="65A23462"/>
+        <Action Type="FunctionCall" Id="7119B27F"/>
         <Action Type="FunctionCall" Id="53428786"/>
     </Element>
     <Element Type="FunctionCall" Id="CB3787DF">
@@ -68707,6 +68718,15 @@
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000177"/>
         <Preset Type="PresetValue" Library="Ntve" Id="00000545"/>
     </Element>
+    <Element Type="FunctionCall" Id="7119B27F">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="88397F4F"/>
+    </Element>
+    <Element Type="Param" Id="88397F4F">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>5</Value>
+        <ValueType Type="int"/>
+    </Element>
     <Element Type="FunctionCall" Id="53428786">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>
         <Parameter Type="Param" Id="18149389"/>
@@ -68729,6 +68749,7 @@
     <Element Type="Trigger" Id="2CF5E3BA">
         <Condition Type="FunctionCall" Id="E3E2EF02"/>
         <Action Type="FunctionCall" Id="7472F31E"/>
+        <Action Type="FunctionCall" Id="6B7B5B65"/>
         <Action Type="FunctionCall" Id="608091B3"/>
     </Element>
     <Element Type="FunctionCall" Id="E3E2EF02">
@@ -68776,6 +68797,15 @@
     <Element Type="Param" Id="E3E3AE62">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000177"/>
         <Preset Type="PresetValue" Library="Ntve" Id="00000545"/>
+    </Element>
+    <Element Type="FunctionCall" Id="6B7B5B65">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <Parameter Type="Param" Id="51116A04"/>
+    </Element>
+    <Element Type="Param" Id="51116A04">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>6</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="608091B3">
         <FunctionDef Type="FunctionDef" Library="Camp" Id="7A68C50F"/>

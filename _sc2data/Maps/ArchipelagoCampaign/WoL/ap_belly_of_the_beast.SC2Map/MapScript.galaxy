@@ -35,6 +35,8 @@ const int gv_p5_EGGS = 5;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveRescudeDominionTeams;
+int gv_dominionTeamsRescued;
 bool gv_gameOver;
 bool gv_inCinematic;
 unit gv_tHEONERAYNOR;
@@ -157,6 +159,7 @@ doodad gv_cinematicFissureDoodad;
 bool gv_briefingActionMercDismissed;
 
 void InitGlobals () {
+    gv_objectiveRescudeDominionTeams = c_invalidObjectiveId;
     gv_tHEONEBROODMOTHER = UnitFromId(2318);
     gv_nonHeroicDudes = UnitGroupEmpty();
     gv__1BroodchamberAllUnits = UnitGroupEmpty();
@@ -225,6 +228,9 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_ObjectiveRescueDominionTeamsCreateQ;
+trigger gt_ObjectiveRescueDominionTeamsComplete;
+trigger gt_ObjectiveRescueDominionTeamsUpdate;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -696,6 +702,102 @@ void gf_CinematicDeployNukeWrapper (unit lp_unit) {
     // Implementation
     gv_cINEMATIC_NukeUnit = lp_unit;
     TriggerExecute(gt_CinematicDeployNuke, true, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Dominion Teams Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueDominionTeamsCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/642D64B0") + IntToText((3 - gv_dominionTeamsRescued)) + StringExternal("Param/Value/6CA2CDF1")), StringExternal("Param/Value/83FD56F1"), c_objectiveStateActive, false);
+    gv_objectiveRescudeDominionTeams = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueDominionTeamsCreateQ_Init () {
+    gt_ObjectiveRescueDominionTeamsCreateQ = TriggerCreate("gt_ObjectiveRescueDominionTeamsCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Dominion Teams Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueDominionTeamsComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveRescudeDominionTeams);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueDominionTeamsComplete_Init () {
+    gt_ObjectiveRescueDominionTeamsComplete = TriggerCreate("gt_ObjectiveRescueDominionTeamsComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Dominion Teams Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueDominionTeamsUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsCreateQ, true, false);
+    gv_dominionTeamsRescued += 1;
+    ObjectiveSetName(gv_objectiveRescudeDominionTeams, (StringExternal("Param/Value/4A9A53AF") + IntToText((3 - gv_dominionTeamsRescued)) + StringExternal("Param/Value/AE3A97ED")));
+    if ((gv_dominionTeamsRescued == 3)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveRescueDominionTeamsComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueDominionTeamsUpdate_Init () {
+    gt_ObjectiveRescueDominionTeamsUpdate = TriggerCreate("gt_ObjectiveRescueDominionTeamsUpdate_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2726,6 +2828,7 @@ bool gt__1CallforHelpQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerQueueEnter();
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsCreateQ, true, false);
     SoundPlay(SoundLink("IncomingTransmission", -1), PlayerGroupAll(), 100.0, 0.0);
     Wait(SoundLengthSync(SoundLink("IncomingTransmission", -1)), c_timeReal);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
@@ -2962,6 +3065,8 @@ bool gt__1SaveDominionQ_Func (bool testConds, bool runActions) {
 
     PingDestroy(gv__1RescueDominionPing);
     TriggerEnable(gt__1CallforHelpSNUFFED, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsUpdate, true, false);
     autoFEEFD5BB_g = gv__1RescuableDominionGroup;
     autoFEEFD5BB_u = UnitGroupCount(autoFEEFD5BB_g, c_unitCountAll);
     for (;; autoFEEFD5BB_u -= 1) {
@@ -5018,6 +5123,8 @@ bool gt__2SaveDominionQ_Func (bool testConds, bool runActions) {
 
     PingDestroy(gv__2RescueDominionPing);
     TriggerEnable(gt__2CallforHelpSNUFFED, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsUpdate, true, false);
     autoA409A568_g = gv__2RescuableDominionGroup;
     autoA409A568_u = UnitGroupCount(autoA409A568_g, c_unitCountAll);
     for (;; autoA409A568_u -= 1) {
@@ -7047,6 +7154,8 @@ bool gt__3SaveDominionQ_Func (bool testConds, bool runActions) {
 
     PingDestroy(gv__3RescueDominionPing);
     TriggerEnable(gt__3CallforHelpSNUFFED, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    TriggerExecute(gt_ObjectiveRescueDominionTeamsUpdate, true, false);
     auto70C592E4_g = gv__3RescuableDominionGroup;
     auto70C592E4_u = UnitGroupCount(auto70C592E4_g, c_unitCountAll);
     for (;; auto70C592E4_u -= 1) {
@@ -12882,6 +12991,9 @@ void gt_BriefingScene04_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_ObjectiveRescueDominionTeamsCreateQ_Init();
+    gt_ObjectiveRescueDominionTeamsComplete_Init();
+    gt_ObjectiveRescueDominionTeamsUpdate_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

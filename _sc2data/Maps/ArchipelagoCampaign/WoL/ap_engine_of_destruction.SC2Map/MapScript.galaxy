@@ -2397,6 +2397,7 @@ bool gt_P04BaseDestroyed_Func (bool testConds, bool runActions) {
     if ((UnitGroupCount(UnitGroup(null, gv_p04_DOMINION_INFANTRY_A, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         gv_baseDestroyedP04 = true;
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
         TriggerExecute(gt_ObjectiveDestroyDominionBasesUpdate, true, false);
     }
 
@@ -2644,6 +2645,7 @@ bool gt_P08BaseDestroyed_Func (bool testConds, bool runActions) {
     if ((UnitGroupCount(UnitGroup(null, gv_p08_DOMINION_INFANTRY_B, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         gv_baseDestroyedP08 = true;
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
         TriggerExecute(gt_ObjectiveDestroyDominionBasesUpdate, true, false);
     }
 
@@ -2909,6 +2911,7 @@ bool gt_P05BaseDestroyed_Func (bool testConds, bool runActions) {
     if ((UnitGroupCount(UnitGroup(null, gv_p05_DOMINION_FACTORY, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         gv_baseDestroyedP05 = true;
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
         TriggerExecute(gt_ObjectiveDestroyDominionBasesUpdate, true, false);
     }
 
@@ -3157,6 +3160,7 @@ bool gt_P06BaseDestroyed_Func (bool testConds, bool runActions) {
     if ((UnitGroupCount(UnitGroup(null, gv_p06_DOMINION_STARPORT_A, RegionEntireMap(), UnitFilter((1 << c_targetFilterPreventDefeat), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0)) {
         TriggerEnable(TriggerGetCurrent(), false);
         gv_baseDestroyedP06 = true;
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(9);
         TriggerExecute(gt_ObjectiveDestroyDominionBasesUpdate, true, false);
     }
 

@@ -1641,9 +1641,14 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol (int lp_play
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player) {
     // Variable Declarations
+    int lv_upgradeLevels;
     unit lv_currentUnit;
 
     // Automatic Variable Declarations
+    unitgroup auto3751A573_g;
+    int auto3751A573_u;
+    unitgroup autoDDCE3E73_g;
+    int autoDDCE3E73_u;
     unitgroup auto71AE7102_g;
     int auto71AE7102_u;
     unitgroup auto605CC692_g;
@@ -1652,24 +1657,46 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player) {
     // Variable Initialization
 
     // Implementation
+    lv_upgradeLevels = TechTreeUpgradeCount(lp_player, "AP_CloakingTechnologyLiberator", c_techCountQueuedOrBetter);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CloakingTechnologyLiberator", 1);
     if ((TechTreeUpgradeCount(lp_player, "AP_CellularReactors", c_techCountQueuedOrBetter) == 1)) {
         libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CellularReactorsLiberator", 1);
-    }
+        if ((lv_upgradeLevels == 0)) {
+            auto71AE7102_g = UnitGroup("AP_Liberator", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+            auto71AE7102_u = UnitGroupCount(auto71AE7102_g, c_unitCountAll);
+            for (;; auto71AE7102_u -= 1) {
+                lv_currentUnit = UnitGroupUnitFromEnd(auto71AE7102_g, auto71AE7102_u);
+                if (lv_currentUnit == null) { break; }
+                UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 150.0);
+            }
+            auto605CC692_g = UnitGroup("AP_LiberatorAG", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+            auto605CC692_u = UnitGroupCount(auto605CC692_g, c_unitCountAll);
+            for (;; auto605CC692_u -= 1) {
+                lv_currentUnit = UnitGroupUnitFromEnd(auto605CC692_g, auto605CC692_u);
+                if (lv_currentUnit == null) { break; }
+                UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 150.0);
+            }
+        }
 
-    auto71AE7102_g = UnitGroup("AP_Liberator", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    auto71AE7102_u = UnitGroupCount(auto71AE7102_g, c_unitCountAll);
-    for (;; auto71AE7102_u -= 1) {
-        lv_currentUnit = UnitGroupUnitFromEnd(auto71AE7102_g, auto71AE7102_u);
-        if (lv_currentUnit == null) { break; }
-        UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
     }
-    auto605CC692_g = UnitGroup("AP_LiberatorAG", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    auto605CC692_u = UnitGroupCount(auto605CC692_g, c_unitCountAll);
-    for (;; auto605CC692_u -= 1) {
-        lv_currentUnit = UnitGroupUnitFromEnd(auto605CC692_g, auto605CC692_u);
-        if (lv_currentUnit == null) { break; }
-        UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+    else {
+        if ((lv_upgradeLevels == 0)) {
+            auto3751A573_g = UnitGroup("AP_Liberator", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+            auto3751A573_u = UnitGroupCount(auto3751A573_g, c_unitCountAll);
+            for (;; auto3751A573_u -= 1) {
+                lv_currentUnit = UnitGroupUnitFromEnd(auto3751A573_g, auto3751A573_u);
+                if (lv_currentUnit == null) { break; }
+                UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+            }
+            autoDDCE3E73_g = UnitGroup("AP_LiberatorAG", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+            autoDDCE3E73_u = UnitGroupCount(autoDDCE3E73_g, c_unitCountAll);
+            for (;; autoDDCE3E73_u -= 1) {
+                lv_currentUnit = UnitGroupUnitFromEnd(autoDDCE3E73_g, autoDDCE3E73_u);
+                if (lv_currentUnit == null) { break; }
+                UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+            }
+        }
+
     }
 }
 
@@ -1788,6 +1815,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMissileTurretHellstormBatteries (in
 void libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterOrbitalCommand (int lp_player) {
     // Variable Declarations
     unit lv_currentUnit;
+    int lv_upgradeLevels;
 
     // Automatic Variable Declarations
     unitgroup auto40FA63AB_g;
@@ -1798,21 +1826,25 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterOrbitalCommand (int lp
     // Variable Initialization
 
     // Implementation
+    lv_upgradeLevels = TechTreeUpgradeCount(lp_player, "AP_OrbitalRelay", c_techCountQueuedOrBetter);
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_OrbitalRelay", 1);
-    auto40FA63AB_g = UnitGroup("AP_CommandCenter", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    auto40FA63AB_u = UnitGroupCount(auto40FA63AB_g, c_unitCountAll);
-    for (;; auto40FA63AB_u -= 1) {
-        lv_currentUnit = UnitGroupUnitFromEnd(auto40FA63AB_g, auto40FA63AB_u);
-        if (lv_currentUnit == null) { break; }
-        UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+    if ((lv_upgradeLevels == 0)) {
+        auto40FA63AB_g = UnitGroup("AP_CommandCenter", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        auto40FA63AB_u = UnitGroupCount(auto40FA63AB_g, c_unitCountAll);
+        for (;; auto40FA63AB_u -= 1) {
+            lv_currentUnit = UnitGroupUnitFromEnd(auto40FA63AB_g, auto40FA63AB_u);
+            if (lv_currentUnit == null) { break; }
+            UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+        }
+        autoFFE3B125_g = UnitGroup("AP_CommandCenterFlying", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        autoFFE3B125_u = UnitGroupCount(autoFFE3B125_g, c_unitCountAll);
+        for (;; autoFFE3B125_u -= 1) {
+            lv_currentUnit = UnitGroupUnitFromEnd(autoFFE3B125_g, autoFFE3B125_u);
+            if (lv_currentUnit == null) { break; }
+            UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
+        }
     }
-    autoFFE3B125_g = UnitGroup("AP_CommandCenterFlying", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
-    autoFFE3B125_u = UnitGroupCount(autoFFE3B125_g, c_unitCountAll);
-    for (;; autoFFE3B125_u -= 1) {
-        lv_currentUnit = UnitGroupUnitFromEnd(autoFFE3B125_g, autoFFE3B125_u);
-        if (lv_currentUnit == null) { break; }
-        UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
-    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterReactor (int lp_player) {

@@ -62,6 +62,7 @@
 <Actor id="TarsonisStation" Variations="0,1"/>
 <Actor id="TRaynor01RadarDish"/>
 <Behavior id="KillSquad"/>
+<Behavior id="AP_BurstCapacitorsDamageBuff"/>
 <Model id="PingArrow"/>
 <Model id="PingBoss"/>
 <Model id="PingObjective"/>

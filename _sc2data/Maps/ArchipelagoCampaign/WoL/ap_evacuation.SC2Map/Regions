@@ -759,4 +759,11 @@
             <radius value="3.841"/>
         </shape>
     </region>
+    <region id="53">
+        <name value="AP Secret Resource Stash"/>
+        <shape type="circle">
+            <center value="114.3586,79.843"/>
+            <radius value="7.5156"/>
+        </shape>
+    </region>
 </Regions>

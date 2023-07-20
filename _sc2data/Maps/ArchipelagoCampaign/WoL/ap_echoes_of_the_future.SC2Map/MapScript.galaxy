@@ -1151,6 +1151,7 @@ bool gt_ZeratulReachesNexus_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     PingDestroy(gv_beaconPingNexus);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     TriggerExecute(gt_ObjectiveReachtheNexusComplete, true, false);
     CameraLockInput(gv_p01_USER, true);
     CameraPan(gv_p01_USER, PointFromId(373), 2.0, -1, 10, false);
@@ -2987,6 +2988,7 @@ bool gt_OvermindTendrilBeaconZerglingsSW_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(36);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/24EE165C"), null, gv_zeratul);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
@@ -3050,6 +3052,7 @@ bool gt_OvermindTendrilBeaconMutalisksNW_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(929);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/40839C6C"), null, gv_zeratul);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
@@ -3113,6 +3116,7 @@ bool gt_OvermindTendrilBeaconLurkersSE_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(46);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/57A961AD"), null, gv_zeratul);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);
@@ -3176,6 +3180,7 @@ bool gt_OvermindTendrilBeaconBanelingsNE_Func (bool testConds, bool runActions) 
     TriggerEnable(TriggerGetCurrent(), false);
     lv_beacon = UnitFromId(38);
     UIAlertUnit("Trigger", gv_p01_USER, StringExternal("Param/Value/0FA47BA1"), null, gv_zeratul);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectOvermindTendrils, lv_beacon, gv_p01_USER);
     TriggerExecute(gt_TransmissionZeratulReachesTendrilsQ, true, false);
     UnitBehaviorAdd(gv_zeratul, "SuppressCloak", gv_zeratul, 1);

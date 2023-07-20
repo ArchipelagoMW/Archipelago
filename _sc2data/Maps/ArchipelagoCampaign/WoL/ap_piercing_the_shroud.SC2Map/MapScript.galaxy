@@ -374,6 +374,7 @@ void gf_SetUnitMaxStats (unit lp_unit, fixed lp_maxShields, fixed lp_maxLife);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_CalcRaynorVanadiumBonus;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -682,6 +683,36 @@ void gf_SetUnitMaxStats (unit lp_unit, fixed lp_maxShields, fixed lp_maxLife) {
     UnitSetPropertyFixed(lp_unit, c_unitPropShieldsPercent, 100.0);
     UnitSetPropertyFixed(lp_unit, c_unitPropLifeMax, lp_maxLife);
     UnitSetPropertyFixed(lp_unit, c_unitPropLifePercent, 100.0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: CalcRaynorVanadiumBonus
+//--------------------------------------------------------------------------------------------------
+bool gt_CalcRaynorVanadiumBonus_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((TechTreeUpgradeCount(gv_p01_USER, "AP_TerranInfantryArmorsVanadiumPlatingLevel1", c_techCountCompleteOnly) >= 1)) {
+        gv_raynorMaximumHP *= 1.05;
+    }
+
+    if ((TechTreeUpgradeCount(gv_p01_USER, "AP_TerranInfantryArmorsVanadiumPlatingLevel2", c_techCountCompleteOnly) >= 1)) {
+        gv_raynorMaximumHP *= 1.05;
+    }
+
+    if ((TechTreeUpgradeCount(gv_p01_USER, "AP_TerranInfantryArmorsVanadiumPlatingLevel3", c_techCountCompleteOnly) >= 1)) {
+        gv_raynorMaximumHP *= 1.05;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_CalcRaynorVanadiumBonus_Init () {
+    gt_CalcRaynorVanadiumBonus = TriggerCreate("gt_CalcRaynorVanadiumBonus_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1320,6 +1351,9 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     unitgroup auto8C370B87_g;
     int auto8C370B87_u;
     unit auto8C370B87_var;
+    unitgroup autoC787F1BD_g;
+    int autoC787F1BD_u;
+    unit autoC787F1BD_var;
     unitgroup auto39955CC4_g;
     int auto39955CC4_u;
     unit auto39955CC4_var;
@@ -1362,7 +1396,15 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
         if (auto8C370B87_var == null) { break; }
         UnitSetPropertyFixed(auto8C370B87_var, c_unitPropEnergyPercent, 100.0);
     }
+    autoC787F1BD_g = UnitGroup("AP_Medic", c_playerAny, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoC787F1BD_u = UnitGroupCount(autoC787F1BD_g, c_unitCountAll);
+    for (;; autoC787F1BD_u -= 1) {
+        autoC787F1BD_var = UnitGroupUnitFromEnd(autoC787F1BD_g, autoC787F1BD_u);
+        if (autoC787F1BD_var == null) { break; }
+        UnitSetPropertyFixed(autoC787F1BD_var, c_unitPropEnergyPercent, 100.0);
+    }
     gv_raynorMaximumHP = libNtve_gf_DifficultyValueFixed(500.0, 500.0, 350.0, 250.0);
+    TriggerExecute(gt_CalcRaynorVanadiumBonus, true, false);
     gv_brutaliskMaximumHP = libNtve_gf_DifficultyValueFixed(1000.0, 1500.0, 1500.0, 1500.0);
     auto39955CC4_g = UnitGroup("SentryGun", c_playerAny, null, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterHidden - 32))), 0);
     auto39955CC4_u = UnitGroupCount(auto39955CC4_g, c_unitCountAll);
@@ -3965,6 +4007,10 @@ bool gt_EnemyGroupDies_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
+            return false;
+        }
+
         if (!((libNtve_gf_UnitGroupIsDead(gv_enemyGroupTurretArea) == true))) {
             return false;
         }
@@ -3998,6 +4044,10 @@ bool gt_AllTurretsDead_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
+            return false;
+        }
+
         if (!((UnitIsAlive(gv_turret01) == false))) {
             return false;
         }
@@ -4048,6 +4098,10 @@ bool gt_LeftTurretsDead_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
+            return false;
+        }
+
         if (!((UnitIsAlive(gv_turret01) == false))) {
             return false;
         }
@@ -4086,6 +4140,10 @@ bool gt_RightTurretsDead_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
+            return false;
+        }
+
         if (!((UnitIsAlive(gv_turret04) == false))) {
             return false;
         }
@@ -6265,6 +6323,7 @@ bool gt_FusionReactorDestroyed_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_RestoreNormalGameplayUI, true, false);
     PingDestroy(gv_pingFusionCore);
     PingDestroy(gv_brutaliskPing);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
     TriggerExecute(gt_ObjectiveFusionReactorComplete, true, false);
     CameraShakeStart(gv_p01_USER, c_cameraPositionTarget, c_cameraDirectionZ, 0.5, 1.0, 100.0, 1.0);
     Wait(3.0, c_timeGame);
@@ -13206,6 +13265,7 @@ void gt_VictorySceneTiming_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_CalcRaynorVanadiumBonus_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

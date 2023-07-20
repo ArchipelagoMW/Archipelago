@@ -82,6 +82,8 @@ int gv_objectiveRescue;
 int gv_researchObjectiveKilltheBrutalisk;
 int gv_brutaliskKilled;
 unit gv_brutalisk;
+int gv_objectiveFindReaperGroups;
+int gv_reaperGroupsLeft;
 unit gv_briefing_SCV5;
 unit gv_briefing_SCV4;
 unit gv_briefing_SCV3;
@@ -119,6 +121,8 @@ void InitGlobals () {
     gv_objectiveCollect = c_invalidObjectiveId;
     gv_objectiveRescue = c_invalidObjectiveId;
     gv_researchObjectiveKilltheBrutalisk = c_invalidObjectiveId;
+    gv_objectiveFindReaperGroups = c_invalidObjectiveId;
+    gv_reaperGroupsLeft = 5;
     gv_victorySCV = UnitGroupEmpty();
     gv_victoryZergling = UnitGroupEmpty();
     gv_victoryMarines = UnitGroupEmpty();
@@ -230,6 +234,9 @@ trigger gt_ObjectiveRescuePartyCreateQ;
 trigger gt_ObjectiveRescuePartyComplete;
 trigger gt_ResearchObjectiveKilltheBrutaliskCreateQ;
 trigger gt_ResearchObjectiveKilltheBrutaliskUpdate;
+trigger gt_ObjectiveRescueRepaersCreateQ;
+trigger gt_ObjectiveRescueReapersUpdate;
+trigger gt_ObjectiveRescueReapersComplete;
 trigger gt_ArchInit;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
@@ -2236,6 +2243,7 @@ bool gt_IntroReapersChangeOwner_Func (bool testConds, bool runActions) {
         UnitIssueOrder(autoDFF77333_var, OrderTargetingPoint(AbilityCommand("move", 0), RegionGetCenter(RegionFromId(18))), c_orderQueueReplace);
     }
     TriggerExecute(gt_AchievementAllReapersFound, true, false);
+    TriggerExecute(gt_ObjectiveRescueRepaersCreateQ, true, false);
     return true;
 }
 
@@ -2286,6 +2294,7 @@ bool gt_IntroReapersChangeFailsafe_Func (bool testConds, bool runActions) {
         libNtve_gf_RescueUnit(auto2D9551B0_var, gv_p01_USER, true);
     }
     TriggerExecute(gt_AchievementAllReapersFound, true, false);
+    TriggerExecute(gt_ObjectiveRescueRepaersCreateQ, true, false);
     return true;
 }
 
@@ -2364,6 +2373,9 @@ bool gt_ReapersReinforcements01_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
 
+    gv_reaperGroupsLeft = (gv_reaperGroupsLeft - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    TriggerExecute(gt_ObjectiveRescueReapersUpdate, true, false);
     return true;
 }
 
@@ -2443,6 +2455,9 @@ bool gt_ReapersReinforcements02_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
 
+    gv_reaperGroupsLeft = (gv_reaperGroupsLeft - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    TriggerExecute(gt_ObjectiveRescueReapersUpdate, true, false);
     return true;
 }
 
@@ -2522,6 +2537,9 @@ bool gt_ReapersReinforcements03_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
 
+    gv_reaperGroupsLeft = (gv_reaperGroupsLeft - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    TriggerExecute(gt_ObjectiveRescueReapersUpdate, true, false);
     return true;
 }
 
@@ -2601,6 +2619,9 @@ bool gt_ReapersReinforcements04_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
 
+    gv_reaperGroupsLeft = (gv_reaperGroupsLeft - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
+    TriggerExecute(gt_ObjectiveRescueReapersUpdate, true, false);
     return true;
 }
 
@@ -2680,6 +2701,9 @@ bool gt_ReapersReinforcements05_Func (bool testConds, bool runActions) {
         TriggerExecute(gt_AchievementAllReapersFound, true, false);
     }
 
+    gv_reaperGroupsLeft = (gv_reaperGroupsLeft - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    TriggerExecute(gt_ObjectiveRescueReapersUpdate, true, false);
     return true;
 }
 
@@ -4708,6 +4732,89 @@ void gt_ResearchObjectiveKilltheBrutaliskUpdate_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Repaers Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueRepaersCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/A6F4145A") + IntToText(gv_reaperGroupsLeft) + StringExternal("Param/Value/B414C276")), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveFindReaperGroups = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueRepaersCreateQ_Init () {
+    gt_ObjectiveRescueRepaersCreateQ = TriggerCreate("gt_ObjectiveRescueRepaersCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Reapers Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueReapersUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveRescueRepaersCreateQ, true, false);
+    ObjectiveSetName(gv_objectiveFindReaperGroups, (StringExternal("Param/Value/7E7767A7") + IntToText(gv_reaperGroupsLeft) + StringExternal("Param/Value/E456BBBF")));
+    if ((gv_reaperGroupsLeft == 0)) {
+        TriggerExecute(gt_ObjectiveRescueReapersComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueReapersUpdate_Init () {
+    gt_ObjectiveRescueReapersUpdate = TriggerCreate("gt_ObjectiveRescueReapersUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rescue Reapers Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRescueReapersComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveRescueRepaersCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveFindReaperGroups);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRescueReapersComplete_Init () {
+    gt_ObjectiveRescueReapersComplete = TriggerCreate("gt_ObjectiveRescueReapersComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Arch Init
 //--------------------------------------------------------------------------------------------------
 bool gt_ArchInit_Func (bool testConds, bool runActions) {
@@ -5524,6 +5631,9 @@ void InitTriggers () {
     gt_ObjectiveRescuePartyComplete_Init();
     gt_ResearchObjectiveKilltheBrutaliskCreateQ_Init();
     gt_ResearchObjectiveKilltheBrutaliskUpdate_Init();
+    gt_ObjectiveRescueRepaersCreateQ_Init();
+    gt_ObjectiveRescueReapersUpdate_Init();
+    gt_ObjectiveRescueReapersComplete_Init();
     gt_ArchInit_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();

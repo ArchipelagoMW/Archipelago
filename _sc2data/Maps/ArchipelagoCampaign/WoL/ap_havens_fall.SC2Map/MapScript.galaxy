@@ -75,6 +75,7 @@ const int ge_UnitData_udEggColony = 2;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveKeepColonyBasesNotInfested;
 bool gv_gameOver;
 bool gv_inCinematic;
 int gv_zergInfestationCounter;
@@ -132,6 +133,7 @@ unitgroup gv_victoryHiddenUnitGroup;
 void InitGlobals () {
     int init_i;
 
+    gv_objectiveKeepColonyBasesNotInfested = c_invalidObjectiveId;
     gv_zergInfestationCounter = 3;
     gv_zergPlayers = PlayerGroupEmpty();
     for (init_i = 0; init_i <= 10; init_i += 1) {
@@ -195,6 +197,8 @@ trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
+trigger gt_ObjectiveKeepColonyBasesnotinfestedCreateQ;
+trigger gt_ObjectiveKeepColonyBasesnotinfestedUpdate;
 trigger gt_NorthHive;
 trigger gt_EastNexus;
 trigger gt_SouthNexus;
@@ -998,6 +1002,58 @@ void gt_onDifficultyBrutal_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Keep Colony Bases not infested Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveKeepColonyBasesnotinfestedCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    ObjectiveCreate((StringExternal("Param/Value/50BAA712") + IntToText(gv_stat_ColoniesSaved) + StringExternal("Param/Value/9E079098")), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveKeepColonyBasesNotInfested = ObjectiveLastCreated();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveKeepColonyBasesnotinfestedCreateQ_Init () {
+    gt_ObjectiveKeepColonyBasesnotinfestedCreateQ = TriggerCreate("gt_ObjectiveKeepColonyBasesnotinfestedCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Keep Colony Bases not infested Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveKeepColonyBasesnotinfestedUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveKeepColonyBasesnotinfestedCreateQ, true, false);
+    ObjectiveSetName(gv_objectiveKeepColonyBasesNotInfested, (StringExternal("Param/Value/0849C5B9") + IntToText(gv_stat_ColoniesSaved) + StringExternal("Param/Value/F3EC8C30")));
+    if ((gv_stat_ColoniesSaved == 0)) {
+        lib5BD4895D_gf_AP_Core_setObjectiveFailed(gv_objectiveKeepColonyBasesNotInfested);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveKeepColonyBasesnotinfestedUpdate_Init () {
+    gt_ObjectiveKeepColonyBasesnotinfestedUpdate = TriggerCreate("gt_ObjectiveKeepColonyBasesnotinfestedUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: North Hive
 //--------------------------------------------------------------------------------------------------
 bool gt_NorthHive_Func (bool testConds, bool runActions) {
@@ -1479,6 +1535,8 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_InfestColoniesForever, true, false);
     Wait(1.0, c_timeGame);
     TriggerExecute(gt_ObjectiveDestroyInfestationCreateQ, true, true);
+    Wait(1.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveKeepColonyBasesnotinfestedCreateQ, true, true);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_InitWarningPings, true, false);
     Wait(1.0, c_timeGame);
@@ -1789,6 +1847,7 @@ bool gt_VirophageConstructionEnds_Func (bool testConds, bool runActions) {
     libNtve_gf_PlayAnimationOnDoodadsInRegion(gv_infestationRegion[lv_colonyIndex], "CreepCloud", c_animNameDefault, "Stand", c_animFlagPlayForever, c_animTimeDefault);
     gv_infestationColonyLost[lv_colonyIndex] = true;
     gv_stat_ColoniesSaved -= 1;
+    TriggerExecute(gt_ObjectiveKeepColonyBasesnotinfestedUpdate, true, false);
     UnitForceStatusBar(EventUnitProgressUnit(), false);
     UnitSetInfoText(EventUnitProgressUnit(), StringToText(""), StringExternal("Param/Value/3096EE9E"), StringExternal("Param/Value/E181F205"));
     UnitSetState(EventUnitProgressUnit(), c_unitStateTooltipable, true);
@@ -3709,6 +3768,26 @@ bool gt_VictoryInfestationCleansedCompleted_Func (bool testConds, bool runAction
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    if ((gv_infestationColonyLost[ge_ColonyIndex_Base6Yellow] == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    }
+
+    if ((gv_infestationColonyLost[ge_ColonyIndex_Base3Purple] == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    }
+
+    if ((gv_infestationColonyLost[ge_ColonyIndex_Base5White] == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+
+    if ((gv_infestationColonyLost[ge_ColonyIndex_Base4Red] == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    }
+
+    if ((gv_infestationColonyLost[ge_ColonyIndex_Base1Green] == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+    }
+
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     Wait(1.0, c_timeGame);
     TimerPause(gv_aberrationStartTimer, true);
@@ -4981,6 +5060,8 @@ void InitTriggers () {
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
+    gt_ObjectiveKeepColonyBasesnotinfestedCreateQ_Init();
+    gt_ObjectiveKeepColonyBasesnotinfestedUpdate_Init();
     gt_NorthHive_Init();
     gt_EastNexus_Init();
     gt_SouthNexus_Init();

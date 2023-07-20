@@ -3627,85 +3627,73 @@
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectPoint Id="1142" Position="48.4047,66.041,0" Rotation="0.0114" Scale="1,1,1" Type="Normal" Name="Hellion Patrol B" Color="0,0,0,0"/>
-    <ObjectPoint Id="247" Position="76.7922,89.0222,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 001" Color="0,0,0,0"/>
     <ObjectPoint Id="338" Position="93.167,110.0424,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 003" Color="0,0,0,0"/>
+    <ObjectPoint Id="247" Position="76.7922,89.0222,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 001" Color="0,0,0,0"/>
     <ObjectPoint Id="16" Position="82.5,29.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 01 Raynor" Color="0,0,0,0"/>
     <ObjectPoint Id="1105" Position="81.9372,32.76,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 3" Color="0,0,0,0"/>
-    <ObjectPoint Id="496" Position="35.5498,60.1098,0" Scale="1,1,1" Type="Normal" Name="Hellion Gather" Color="0,0,0,0"/>
     <ObjectPoint Id="1306" Position="41.98,93.0197,0" Scale="1,1,1" Type="Normal" Name="Victory Marine Patrol 1" Color="0,0,0,0"/>
-    <ObjectPoint Id="178" Position="48.73,79.7998,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 006" Color="0,0,0,0" PathingRadiusSoft="4" PathingRadiusHard="3"/>
+    <ObjectPoint Id="496" Position="35.5498,60.1098,0" Scale="1,1,1" Type="Normal" Name="Hellion Gather" Color="0,0,0,0"/>
     <ObjectPoint Id="1112" Position="82.9367,35.7595,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 7" Color="0,0,0,0"/>
+    <ObjectPoint Id="178" Position="48.73,79.7998,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 006" Color="0,0,0,0" PathingRadiusSoft="4" PathingRadiusHard="3"/>
     <ObjectPoint Id="375" Position="53.456,53.6181,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 013" Color="0,0,0,0"/>
-    <ObjectPoint Id="364" Position="36.9086,118.1835,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 009" Color="0,0,0,0"/>
     <ObjectPoint Id="384" Position="17.442,14.5302,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 016" Color="0,0,0,0"/>
+    <ObjectPoint Id="364" Position="36.9086,118.1835,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 009" Color="0,0,0,0"/>
     <ObjectPoint Id="1096" Position="73.1318,101.252,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 035" Color="0,0,0,0"/>
-    <ObjectPoint Id="428" Position="62.19,87.5197,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 003" Color="0,0,0,0"/>
     <ObjectPoint Id="1350" Position="57.0397,93.8398,0" Scale="1,1,1" Type="SoundEmitter" Name="Sound Emitter 003" Color="0,0,0,0" Sound="Emitter_MarSaraMining"/>
+    <ObjectPoint Id="428" Position="62.19,87.5197,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 003" Color="0,0,0,0"/>
     <ObjectPoint Id="482" Position="68.8864,42.3972,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 032" Color="0,0,0,0"/>
     <ObjectPoint Id="489" Position="42.604,46.1962,0" Rotation="0.7702" Scale="1,1,1" Type="Normal" Name="Marine Waypoint 1" Color="0,0,0,0"/>
     <ObjectPoint Id="1348" Position="66.463,16.7792,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 005" Color="0,0,0,0" PathingRadiusSoft="1" PathingRadiusHard="0.5"/>
     <ObjectPoint Id="494" Position="46.0336,42.8041,0" Rotation="5.7167" Scale="1,1,1" Type="Normal" Name="Marine Waypoint 2" Color="0,0,0,0"/>
     <ObjectPoint Id="32" Position="87.0197,30.91,0" Scale="1,1,1" Type="Normal" Name="Supply Safety - Drop" Color="0,0,0,0"/>
     <ObjectPoint Id="1025" Position="83.9372,33.76,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 1" Color="0,0,0,0"/>
-    <ObjectPoint Id="487" Position="27.4816,54.4387,0" Rotation="0.77" Scale="1,1,1" Type="Normal" Name="Marine Attacker Spawn Point" Color="0,0,0,0"/>
     <ObjectPoint Id="577" Position="40.505,36.1076,0" Rotation="6.245" Scale="1,1,1" Type="Normal" Name="Rebel Base Ping" Color="0,0,0,0"/>
+    <ObjectPoint Id="487" Position="27.4816,54.4387,0" Rotation="0.77" Scale="1,1,1" Type="Normal" Name="Marine Attacker Spawn Point" Color="0,0,0,0"/>
     <ObjectPoint Id="1313" Position="83.863,88.6726,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 010" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="343" Position="19.358,58.7043,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 006" Color="0,0,0,0"/>
     <ObjectPoint Id="1309" Position="37.4821,80.9404,0" Rotation="1.7861" Scale="1,1,1" Type="Normal" Name="Victory Crane Marine 2" Color="0,0,0,0"/>
     <ObjectPoint Id="350" Position="18.8947,26.746,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 007" Color="0,0,0,0"/>
     <ObjectPoint Id="414" Position="108.3623,70.5463,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 027" Color="0,0,0,0"/>
-    <ObjectPoint Id="1110" Position="80.9372,34.76,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 5" Color="0,0,0,0"/>
     <ObjectPoint Id="1311" Position="43.139,68.1972,0" Rotation="2.7084" Scale="1,1,1" Type="Normal" Name="Victory Crane Marine 4" Color="0,0,0,0"/>
-    <ObjectPoint Id="292" Position="36.0786,86.3186,0" Scale="1,1,1" Type="Normal" Name="Gather Point - Dominion" Color="0,0,0,0"/>
+    <ObjectPoint Id="1110" Position="80.9372,34.76,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 5" Color="0,0,0,0"/>
     <ObjectPoint Id="622" Position="38.18,21.5397,0" Rotation="5.3813" Scale="1,1,1" Type="Normal" Name="Supply Attack Point" Color="0,0,0,0"/>
-    <ObjectPoint Id="166" Position="50.5898,34.39,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 004" Color="0,0,0,0" PathingRadiusSoft="1.5"/>
+    <ObjectPoint Id="292" Position="36.0786,86.3186,0" Scale="1,1,1" Type="Normal" Name="Gather Point - Dominion" Color="0,0,0,0"/>
     <ObjectPoint Id="495" Position="44.911,40.9626,0" Rotation="5.498" Scale="1,1,1" Type="Normal" Name="Marine Waypoint 3" Color="0,0,0,0"/>
+    <ObjectPoint Id="166" Position="50.5898,34.39,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 004" Color="0,0,0,0" PathingRadiusSoft="1.5"/>
     <ObjectPoint Id="553" Position="43.7797,94.9,0" Scale="1,1,1" Type="Normal" Name="Dominion Base Point" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
-    <ObjectPoint Id="111" Position="43.5,101.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 02 Dominion" Color="0,0,0,0"/>
-    <ObjectPoint Id="620" Position="49.322,47.748,0" Rotation="5.472" Scale="1,1,1" Type="Normal" Name="Mine Marine Target" Color="0,0,0,0"/>
     <ObjectPoint Id="1312" Position="46.8825,67.6345,0" Rotation="3.0563" Scale="1,1,1" Type="Normal" Name="Victory Crane Marine 5" Color="0,0,0,0"/>
+    <ObjectPoint Id="620" Position="49.322,47.748,0" Rotation="5.472" Scale="1,1,1" Type="Normal" Name="Mine Marine Target" Color="0,0,0,0"/>
+    <ObjectPoint Id="111" Position="43.5,101.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 02 Dominion" Color="0,0,0,0"/>
     <ObjectPoint Id="736" Position="35.5512,47.4538,0" Rotation="2.8481" Scale="1,1,1" Type="Normal" Name="Colonist Move Point" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="1026" Position="83.137,32.9597,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 2" Color="0,0,0,0"/>
     <ObjectPoint Id="493" Position="29.4724,52.481,0" Rotation="1.0527" Scale="1,1,1" Type="Normal" Name="Marine Attacker Gather" Color="0,0,0,0"/>
     <ObjectPoint Id="266" Position="43.5,101.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 05 Patrol" Color="0,0,0,0"/>
-    <ObjectPoint Id="1109" Position="81.137,33.5598,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 4" Color="0,0,0,0"/>
     <ObjectPoint Id="1308" Position="38.4655,85.5927,0" Rotation="0.8503" Scale="1,1,1" Type="Normal" Name="Victory Crane Marine 1" Color="0,0,0,0"/>
+    <ObjectPoint Id="1109" Position="81.137,33.5598,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 4" Color="0,0,0,0"/>
     <ObjectPoint Id="1303" Position="27,91.3498,0" Scale="1,1,1" Type="SoundEmitter" Name="Sound Emitter 001" Color="0,0,0,0" Sound="Emitter_MarSaraMining"/>
-    <ObjectPoint Id="378" Position="61.0261,25.5395,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 014" Color="0,0,0,0"/>
     <ObjectPoint Id="406" Position="32.8154,57.778,0" Rotation="0.012" Scale="1,1,1" Type="Normal" Name="Hellion Patrol A" Color="0,0,0,0"/>
-    <ObjectPoint Id="1111" Position="81.737,35.5598,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 6" Color="0,0,0,0"/>
+    <ObjectPoint Id="378" Position="61.0261,25.5395,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 014" Color="0,0,0,0"/>
     <ObjectPoint Id="1310" Position="38.227,73.7502,0" Rotation="2.1506" Scale="1,1,1" Type="Normal" Name="Victory Crane Marine 3" Color="0,0,0,0"/>
-    <ObjectPoint Id="472" Position="101.3137,8.6921,0" Rotation="3.8024" Scale="1,1,1" Type="Normal" Name="Reinforcement Spawn" Color="0,0,0,0"/>
+    <ObjectPoint Id="1111" Position="81.737,35.5598,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 6" Color="0,0,0,0"/>
     <ObjectPoint Id="1330" Position="33.3498,33.0598,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 002" Color="0,0,0,0" PathingRadiusSoft="1.5"/>
+    <ObjectPoint Id="472" Position="101.3137,8.6921,0" Rotation="3.8024" Scale="1,1,1" Type="Normal" Name="Reinforcement Spawn" Color="0,0,0,0"/>
     <ObjectPoint Id="340" Position="38.7363,10.0847,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 005" Color="0,0,0,0"/>
     <ObjectPoint Id="383" Position="65.6396,17.9875,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 015" Color="0,0,0,0"/>
     <ObjectPoint Id="1143" Position="37.4353,71.3044,0" Rotation="0.011" Scale="1,1,1" Type="Normal" Name="Hellion Patrol C" Color="0,0,0,0"/>
     <ObjectPoint Id="339" Position="106.118,15.2316,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 004" Color="0,0,0,0"/>
-    <ObjectPoint Id="688" Position="82.4643,34.2736,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement Drop" Color="0,0,0,0"/>
     <ObjectPoint Id="1113" Position="83.737,34.9597,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement 8" Color="0,0,0,0"/>
+    <ObjectPoint Id="688" Position="82.4643,34.2736,0" Scale="1,1,1" Type="Normal" Name="SCV Reinforcement Drop" Color="0,0,0,0"/>
     <ObjectPoint Id="1307" Position="34.8488,82.8632,0" Scale="1,1,1" Type="Normal" Name="Victory Marine Patrol 2" Color="0,0,0,0"/>
-    <ObjectPoint Id="374" Position="61.6677,82.0761,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 012" Color="0,0,0,0"/>
     <ObjectPoint Id="410" Position="105.8613,94.7641,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 026" Color="0,0,0,0"/>
+    <ObjectPoint Id="374" Position="61.6677,82.0761,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 012" Color="0,0,0,0"/>
     <ObjectPoint Id="337" Position="100.9233,90.45,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 002" Color="0,0,0,0"/>
-    <ObjectPoint Id="19" Position="51.5,18.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 03 Colonists" Color="0,0,0,0"/>
     <ObjectPoint Id="255" Position="47.5,21.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 04 Rebels" Color="0,0,0,0"/>
+    <ObjectPoint Id="19" Position="51.5,18.5,0" Scale="1,1,1" Type="StartLoc" Name="Start Location 03 Colonists" Color="0,0,0,0"/>
     <ObjectPoint Id="477" Position="95.7763,61.997,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 031" Color="0,0,0,0"/>
     <ObjectPoint Id="1351" Position="55.38,35.3698,0" Scale="1,1,1" Type="SoundEmitter" Name="Sound Emitter 004" Color="0,0,0,0" Sound="Emitter_MarSaraMiningSmallAoE"/>
     <ObjectPoint Id="358" Position="20.5187,109.8173,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 008" Color="0,0,0,0"/>
     <ObjectPoint Id="1349" Position="40.13,109.13,0" Scale="1,1,1" Type="SoundEmitter" Name="Sound Emitter 002" Color="0,0,0,0" Sound="Emitter_MarSaraMining"/>
     <ObjectPoint Id="392" Position="25.4531,94.5974,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 022" Color="0,0,0,0"/>
-    <ObjectCamera Id="194" Position="46.8115,76.9343,0" Rotation="2.5571" Scale="1,1,1" Name="Intro 3" Color="0,0,0,0" CameraTarget="46.8115,76.9343">
-        <CameraValue Index="FieldOfView" Value="27.2998"/>
-        <CameraValue Index="NearClip" Value="0.0998"/>
-        <CameraValue Index="FarClip" Value="98593.5703"/>
-        <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="32.8276"/>
-        <CameraValue Index="Pitch" Value="37.871"/>
-        <CameraValue Index="Yaw" Value="146.5126"/>
-        <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffStart" Value="3"/>
-        <CameraValue Index="FalloffEnd" Value="8"/>
-    </ObjectCamera>
     <ObjectCamera Id="579" Position="47.2985,75.7263,0" Rotation="3.149" Scale="1,1,1" Name="Victory 2" Color="0,0,0,0" CameraTarget="47.2985,75.7263">
         <CameraValue Index="FieldOfView" Value="27.2998"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
@@ -3714,6 +3702,18 @@
         <CameraValue Index="Distance" Value="36.32"/>
         <CameraValue Index="Pitch" Value="41.2097"/>
         <CameraValue Index="Yaw" Value="180.4201"/>
+        <CameraValue Index="FocalDepth" Value="8"/>
+        <CameraValue Index="FalloffStart" Value="3"/>
+        <CameraValue Index="FalloffEnd" Value="8"/>
+    </ObjectCamera>
+    <ObjectCamera Id="194" Position="46.8115,76.9343,0" Rotation="2.5571" Scale="1,1,1" Name="Intro 3" Color="0,0,0,0" CameraTarget="46.8115,76.9343">
+        <CameraValue Index="FieldOfView" Value="27.2998"/>
+        <CameraValue Index="NearClip" Value="0.0998"/>
+        <CameraValue Index="FarClip" Value="98593.5703"/>
+        <CameraValue Index="ShadowClip" Value="75"/>
+        <CameraValue Index="Distance" Value="32.8276"/>
+        <CameraValue Index="Pitch" Value="37.871"/>
+        <CameraValue Index="Yaw" Value="146.5126"/>
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
@@ -3862,13 +3862,16 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="591" Position="39,19,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="4"/>
     <ObjectUnit Id="1190" Position="40.946,33.062,0" Rotation="2.6203" Scale="1,1,1" UnitType="AP_Marine" Player="4">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="591" Position="39,19,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="4"/>
+    <ObjectUnit Id="11" Position="42,107.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2251">
+        <AIRebuild Index="0" Value="0"/>
+    </ObjectUnit>
     <ObjectUnit Id="430" Position="30.8422,78.6606,0" Rotation="0.66" Scale="1,1,1" UnitType="Hellion" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -3876,15 +3879,12 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="11" Position="42,107.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2251">
-        <AIRebuild Index="0" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="655" Position="42.13,94.3098,0" Rotation="5.5251" Scale="1,1,1" UnitType="Hellion" Player="2">
+    <ObjectUnit Id="96" Position="46.0297,106.3198,0" Rotation="5.8564" Scale="1,1,1" UnitType="SCV" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="96" Position="46.0297,106.3198,0" Rotation="5.8564" Scale="1,1,1" UnitType="SCV" Player="2">
+    <ObjectUnit Id="655" Position="42.13,94.3098,0" Rotation="5.5251" Scale="1,1,1" UnitType="Hellion" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -3915,7 +3915,6 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="737" Variation="1" Position="32.4357,41.631,0" Rotation="3.5288" Scale="1,1,1" UnitType="Civilian" Player="3"/>
     <ObjectUnit Id="14" Position="43,88,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
@@ -3923,10 +3922,11 @@
         <AIRebuild Index="3" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="89" Position="86.967,35.9448,0" Rotation="6.0327" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
+    <ObjectUnit Id="737" Variation="1" Position="32.4357,41.631,0" Rotation="3.5288" Scale="1,1,1" UnitType="Civilian" Player="3"/>
     <ObjectUnit Id="1119" Position="52.153,28.23,0" Rotation="4.8645" Scale="1,1,1" UnitType="PalletGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="89" Position="86.967,35.9448,0" Rotation="6.0327" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="822" Position="49.2282,93.3017,0" Rotation="5.9304" Scale="1,1,1" UnitType="Medic" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
@@ -3952,11 +3952,11 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="1300" Position="56.9953,99.9777,0" Rotation="5.7724" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
+    <ObjectUnit Id="1021" Position="86.5476,34.4306,0" Rotation="6.2158" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="600" Variation="1" Position="32.9013,42.5307,0" Rotation="5.5241" Scale="1,1,1" UnitType="Civilian" Player="3">
         <Texture TexSlot="main" TexProps="male,backpack,03" TexLink=""/>
     </ObjectUnit>
-    <ObjectUnit Id="1021" Position="86.5476,34.4306,0" Rotation="6.2158" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
-    <ObjectUnit Id="1300" Position="56.9953,99.9777,0" Rotation="5.7724" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="1314" Position="51.2897,23.75,0" Rotation="3.8581" Scale="1,1,1" UnitType="Civilian" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
         <Texture TexSlot="main" TexProps="male,helmet,03" TexLink=""/>
@@ -4002,12 +4002,12 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1301" Position="36.1813,106.9284,0" Rotation="0.8586" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="1020" Position="80.0007,25.933,0" Rotation="5.5966" Scale="1,1,1" UnitType="AP_SCV" Player="1">
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="1301" Position="36.1813,106.9284,0" Rotation="0.8586" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="1015" Position="87,79,0" Scale="1,1,1" UnitType="WarPig" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4025,8 +4025,8 @@
     <ObjectUnit Id="29" Variation="9" Position="41,108.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2845">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="761" Position="85.3024,33.3845,0" Rotation="2.2641" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="22" Position="79.5234,28.378,0" Rotation="4.731" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
+    <ObjectUnit Id="761" Position="85.3024,33.3845,0" Rotation="2.2641" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="403" Position="35.8098,98.39,0" Rotation="3.182" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
@@ -4038,28 +4038,28 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1342" Position="85.336,82.8476,0" Rotation="0.9387" Scale="1,1,1" UnitType="PalletMinerals"/>
     <ObjectUnit Id="157" Position="44,26,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_TechLab" Player="4"/>
+    <ObjectUnit Id="1342" Position="85.336,82.8476,0" Rotation="0.9387" Scale="1,1,1" UnitType="PalletMinerals"/>
     <ObjectUnit Id="179" Position="44.2282,106.603,0" Rotation="6.1525" Scale="1,1,1" UnitType="SCV" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="1214" Position="70.5981,63.3806,0" Rotation="5.2158" Scale="1,1,1" UnitType="Lyote"/>
     <ObjectUnit Id="599" Position="44.35,33.2436,0" Rotation="5.141" Scale="1,1,1" UnitType="Civilian" Player="3">
         <Texture TexSlot="main" TexProps="male,helmet,03" TexLink=""/>
     </ObjectUnit>
-    <ObjectUnit Id="1214" Position="70.5981,63.3806,0" Rotation="5.2158" Scale="1,1,1" UnitType="Lyote"/>
+    <ObjectUnit Id="24" Variation="4" Position="76,26.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1677">
+        <Resources Index="3" Value="1477"/>
+        <Resources Index="4" Value="1177"/>
+        <AIRebuild Index="0" Value="0"/>
+    </ObjectUnit>
     <ObjectUnit Id="445" Position="47.0898,47.99,0" Rotation="0.6823" Scale="1,1,1" UnitType="Marine" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="24" Variation="4" Position="76,26.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1677">
-        <Resources Index="3" Value="1477"/>
-        <Resources Index="4" Value="1177"/>
-        <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="825" Position="40.1503,105.578,0" Rotation="0.7905" Scale="1,1,1" UnitType="Hellion" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -4082,18 +4082,18 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="431" Position="29.3198,80.45,0" Rotation="6.174" Scale="1,1,1" UnitType="Hellion" Player="5">
-        <AIRebuild Index="1" Value="0"/>
-        <AIRebuild Index="2" Value="0"/>
-        <AIRebuild Index="3" Value="0"/>
-        <AIRebuild Index="4" Value="0"/>
-        <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
     <ObjectUnit Id="10" Position="49,98,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
+        <AIFlag Index="IsUseable" Value="0"/>
+    </ObjectUnit>
+    <ObjectUnit Id="431" Position="29.3198,80.45,0" Rotation="6.174" Scale="1,1,1" UnitType="Hellion" Player="5">
+        <AIRebuild Index="1" Value="0"/>
+        <AIRebuild Index="2" Value="0"/>
+        <AIRebuild Index="3" Value="0"/>
+        <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="654" Position="39.0197,97.24,0" Rotation="0.3867" Scale="1,1,1" UnitType="Hellion" Player="2">
@@ -4122,13 +4122,13 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="356" Position="32.789,88.2426,0" Rotation="5.2695" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="558" Position="38.5354,89.4973,0" Rotation="6.0283" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="356" Position="32.789,88.2426,0" Rotation="5.2695" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="123" Position="2.4956,2.4914,0" Rotation="2.255" Scale="1,1,1" UnitType="Food1000" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -4144,18 +4144,18 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="411" Position="35.0498,99.8198,0" Rotation="1.0312" Scale="1,1,1" UnitType="Marine" Player="2">
-        <AIRebuild Index="0" Value="0"/>
-        <AIRebuild Index="1" Value="0"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
-    </ObjectUnit>
     <ObjectUnit Id="1080" Position="47,88,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
+    </ObjectUnit>
+    <ObjectUnit Id="411" Position="35.0498,99.8198,0" Rotation="1.0312" Scale="1,1,1" UnitType="Marine" Player="2">
+        <AIRebuild Index="0" Value="0"/>
+        <AIRebuild Index="1" Value="0"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="53" Position="46.021,96.0537,0" Rotation="6.0593" Scale="1,1,1" UnitType="WarPig" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -4198,13 +4198,18 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="552" Variation="2" Position="49.7436,27.6413,0" Rotation="5.2626" Scale="1,1,1" UnitType="Civilian" Player="3">
-        <Texture TexSlot="main" TexProps="male,helmet,01" TexLink=""/>
-    </ObjectUnit>
     <ObjectUnit Id="199" Variation="3" Position="48.5,14.5,0" Rotation="0.7766" Scale="1,1,1" UnitType="Hut" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="552" Variation="2" Position="49.7436,27.6413,0" Rotation="5.2626" Scale="1,1,1" UnitType="Civilian" Player="3">
+        <Texture TexSlot="main" TexProps="male,helmet,01" TexLink=""/>
+    </ObjectUnit>
     <ObjectUnit Id="739" Position="48.2412,104.1855,0" Rotation="5.216" Scale="1,1,1" UnitType="SCV" Player="2">
+        <AIRebuild Index="1" Value="0"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="744" Position="40.2597,92.16,0" Rotation="5.9328" Scale="1,1,1" UnitType="Medic" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -4215,11 +4220,6 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="744" Position="40.2597,92.16,0" Rotation="5.9328" Scale="1,1,1" UnitType="Medic" Player="2">
-        <AIRebuild Index="1" Value="0"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="103" Position="48.1591,102.6447,0" Rotation="5.2" Scale="1,1,1" UnitType="SCV" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -4236,14 +4236,14 @@
     <ObjectUnit Id="30" Variation="2" Position="44,108.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2967">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="21" Position="78.529,29.3874,0" Rotation="4.7072" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
+    <ObjectUnit Id="762" Position="87.1547,33.0642,0" Rotation="3.5317" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="432" Position="48.6945,91.3085,0" Rotation="4.752" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="762" Position="87.1547,33.0642,0" Rotation="3.5317" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
-    <ObjectUnit Id="21" Position="78.529,29.3874,0" Rotation="4.7072" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1139" Position="87.5,77,0" Rotation="6.0554" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
@@ -4252,6 +4252,8 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="1302" Position="32.0678,102.2521,0" Rotation="0.3952" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
+    <ObjectUnit Id="1023" Position="88.0075,34.4711,0" Rotation="4.727" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="602" Position="41.4426,46.5268,0" Rotation="0.683" Scale="1,1,1" UnitType="Marine" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -4259,8 +4261,6 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1023" Position="88.0075,34.4711,0" Rotation="4.727" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
-    <ObjectUnit Id="1302" Position="32.0678,102.2521,0" Rotation="0.3952" Scale="1,1,1" UnitType="MinerMale" Player="3"/>
     <ObjectUnit Id="379" Variation="1" Position="55.5402,16.3598,0" Rotation="0.8127" Scale="1,1,1" UnitType="Civilian" Player="3">
         <Texture TexSlot="main" TexProps="male,backpack,02" TexLink=""/>
     </ObjectUnit>
@@ -4276,6 +4276,11 @@
         <Resources Index="4" Value="1237"/>
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="735" Position="38.735,92.833,0" Rotation="5.935" Scale="1,1,1" UnitType="Medic" Player="2">
+        <AIRebuild Index="1" Value="0"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="48" Position="43.5,101.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="2">
         <AIRebuild Index="0" Value="14"/>
         <AIRebuild Index="1" Value="0"/>
@@ -4283,10 +4288,11 @@
         <AIRebuild Index="3" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="735" Position="38.735,92.833,0" Rotation="5.935" Scale="1,1,1" UnitType="Medic" Player="2">
-        <AIRebuild Index="1" Value="0"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
+    <ObjectUnit Id="1024" Position="94,28,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
+    <ObjectUnit Id="6" Variation="2" Position="78,23.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1537">
+        <Resources Index="3" Value="1337"/>
+        <Resources Index="4" Value="1037"/>
+        <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="419" Position="47.5925,92.322,0" Rotation="0.1865" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIRebuild Index="0" Value="0"/>
@@ -4294,21 +4300,15 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="6" Variation="2" Position="78,23.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1537">
-        <Resources Index="3" Value="1337"/>
-        <Resources Index="4" Value="1037"/>
-        <AIRebuild Index="0" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1024" Position="94,28,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
-    <ObjectUnit Id="738" Position="47.8342,30.0634,0" Rotation="1.5817" Scale="1,1,1" UnitType="PalletMinerals">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="13" Position="45,90,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
+    </ObjectUnit>
+    <ObjectUnit Id="738" Position="47.8342,30.0634,0" Rotation="1.5817" Scale="1,1,1" UnitType="PalletMinerals">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="102" Position="81.5363,26.5297,0" Rotation="6.228" Scale="1,1,1" UnitType="AP_SCV" Player="1">
         <AIRebuild Index="3" Value="0"/>
@@ -4318,9 +4318,15 @@
     <ObjectUnit Id="264" Variation="3" Position="46,107.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2354">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1344" Position="92.5288,77.4123,0" Rotation="4.1647" Scale="1,1,1" UnitType="PalletMinerals"/>
     <ObjectUnit Id="227" Position="50.2578,24.756,0" Rotation="3.8925" Scale="1,1,1" UnitType="TerranBuggy" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="1344" Position="92.5288,77.4123,0" Rotation="4.1647" Scale="1,1,1" UnitType="PalletMinerals"/>
+    <ObjectUnit Id="519" Position="37.7258,90.4604,0" Rotation="0.0126" Scale="1,1,1" UnitType="Marine" Player="2">
+        <AIRebuild Index="0" Value="0"/>
+        <AIRebuild Index="1" Value="0"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="232" Position="53.49,42.42,0" Rotation="1.153" Scale="1,1,1" UnitType="Marine" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -4328,12 +4334,6 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="519" Position="37.7258,90.4604,0" Rotation="0.0126" Scale="1,1,1" UnitType="Marine" Player="2">
-        <AIRebuild Index="0" Value="0"/>
-        <AIRebuild Index="1" Value="0"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="35" Position="75,31.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1924">
         <Resources Index="3" Value="1724"/>
@@ -4352,17 +4352,17 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="20" Variation="3" Position="77,24.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1751">
+        <Resources Index="3" Value="1551"/>
+        <Resources Index="4" Value="1251"/>
+        <AIRebuild Index="0" Value="0"/>
+    </ObjectUnit>
     <ObjectUnit Id="433" Position="45.9,48.98,0" Rotation="0.7331" Scale="1,1,1" UnitType="Marine" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="20" Variation="3" Position="77,24.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1751">
-        <Resources Index="3" Value="1551"/>
-        <Resources Index="4" Value="1251"/>
-        <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="31" Variation="4" Position="50,104.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2446">
         <AIRebuild Index="0" Value="0"/>
@@ -4375,8 +4375,8 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1116" Position="92.5373,57.5278,0" Rotation="1.3437" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="90" Position="36,22,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="4"/>
+    <ObjectUnit Id="1116" Position="92.5373,57.5278,0" Rotation="1.3437" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="308" Variation="7" Position="76,28.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1756">
         <Resources Index="3" Value="1556"/>
         <Resources Index="4" Value="1256"/>
@@ -4397,12 +4397,12 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="606" Position="40.5012,36.3071,0" Scale="1,1,1" UnitType="Beacon_Terran" Player="4"/>
     <ObjectUnit Id="1019" Position="79.0236,27.0832,0" Rotation="5.192" Scale="1,1,1" UnitType="AP_SCV" Player="1">
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="606" Position="40.5012,36.3071,0" Scale="1,1,1" UnitType="Beacon_Terran" Player="4"/>
     <ObjectUnit Id="17" Variation="6" Position="48,106.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2574">
         <Flag Index="ForcePlacement" Value="1"/>
         <AIRebuild Index="0" Value="0"/>
@@ -4442,10 +4442,10 @@
     <ObjectUnit Id="237" Variation="3" Position="35.5297,31.5498,0" Rotation="5.453" Scale="1,1,1" UnitType="Hut" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="1673781068" Position="89.5,26.5,0" Scale="1,1,1" UnitType="VespeneGeyser" Resources="1627"/>
     <ObjectUnit Id="291" Variation="2" Position="55.1667,22.2985,0" Rotation="4.9445" Scale="1,1,1" UnitType="Civilian" Player="3">
         <Texture TexSlot="main" TexProps="male,helmet,03" TexLink=""/>
     </ObjectUnit>
+    <ObjectUnit Id="1673781068" Position="89.5,26.5,0" Scale="1,1,1" UnitType="VespeneGeyser" Resources="1627"/>
     <ObjectUnit Id="70" Position="43.0153,105.2397,0" Rotation="0.221" Scale="1,1,1" UnitType="SCV" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="14"/>

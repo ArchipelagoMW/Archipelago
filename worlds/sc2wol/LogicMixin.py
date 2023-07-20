@@ -123,6 +123,17 @@ class SC2WoLLogic(LogicMixin):
     def _sc2wol_has_nukes(self, multiworld: MultiWorld, player: int) -> bool:
         return get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'Ghost', 'Spectre'}, player)
 
+    def _sc2wol_can_respond_to_colony_infestations(self, multiworld: MultiWorld, player: int) -> bool:
+        return self._sc2wol_has_common_unit(multiworld, player) \
+            and self._sc2wol_has_competent_anti_air(multiworld, player) \
+            and \
+                (
+                    self._sc2wol_has_air_anti_air(multiworld, player) or
+                    self.has_any({'Battlecruiser', 'Valkyrie'}), player
+                ) \
+            and \
+            self._sc2wol_defense_rating(multiworld, player, True) >= 3
+
     def _sc2wol_final_mission_requirements(self, multiworld: MultiWorld, player: int):
         beats_kerrigan = self.has_any({'Marine', 'Banshee', 'Ghost'}, player) or get_option_value(multiworld, player, 'required_tactics') > 0
         if get_option_value(multiworld, player, 'all_in_map') == 0:

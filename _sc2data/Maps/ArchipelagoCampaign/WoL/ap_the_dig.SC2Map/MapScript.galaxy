@@ -4990,6 +4990,7 @@ bool gt_PrimaryObjectiveExploreCompleted_Func (bool testConds, bool runActions) 
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_PrimaryObjectiveExploreCreate, true, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_primaryObjectiveExplorePreviousExpedition);
     return true;
 }

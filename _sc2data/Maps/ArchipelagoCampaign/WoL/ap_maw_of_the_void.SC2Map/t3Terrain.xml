@@ -31,7 +31,7 @@
             <cliffDoodad name="TerrainObjectXelNagaWedges8x4_2_2" pos="58.000000 72.000000 2.000000 " rot="0"/>
             <cliffDoodad name="TerrainObjectXelNagaWedges6x6_2_2" pos="77.000000 81.000000 2.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.019462e+00" quantizeScale="2.971322e-04" standardHeight="8.000000e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.019611e+00" quantizeScale="2.971322e-04" standardHeight="8.000000e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="Ulnar"/>

@@ -19,17 +19,20 @@ MapInfo/Player08/Name=Preservers
 MapInfo/Player09/Name=Hybrid
 MapInfo/Player10/Name=Hybrid
 Param/Expression/634B8128=Dark Templar Kills = ~A~
-Param/Value/0E94037E= checks left
+Param/Value/0E94037E= checks left)
 Param/Value/0F7C25E0=Imprisoned Preserver
+Param/Value/11DBB57E=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures (
 Param/Value/1B84388A=Preserver Prison
 Param/Value/1BBFCC0E=/
 Param/Value/26FC9F8F=High Templar ally
 Param/Value/2704744A=Hybrid Attacks Survived
-Param/Value/2863B008= checks left
 Param/Value/34E4C5F5=All of your structures have been destroyed.
 Param/Value/3720851B=Robotics Facility
-Param/Value/44C85259=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures 
+Param/Value/3D0374EA= checks left)
+Param/Value/3F1C3961=Destroy the enemy support bases in order to provide more resources for our cause
+Param/Value/44C85259=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures (
 Param/Value/44D9EBCF=
+Param/Value/4825BABF= checks left)
 Param/Value/4A781515=/
 Param/Value/4D585342=Power-up the Abandoned Base (
 Param/Value/5315B1A8=Abandoned Structure
@@ -61,13 +64,16 @@ Param/Value/A425FBF3=Hybrid unleashed.
 Param/Value/A7E49313=
 Param/Value/B16AD9F3=Dark Templar allies
 Param/Value/B6424D18=Power-up the Abandoned Base (
+Param/Value/BD118B79= checks left)
 Param/Value/BF6654F6=The preservers have vital information about the Overmind and the origin of the zerg. Free them from their prisons before the knowledge is lost forever.
 Param/Value/C3C15A6E=)
+Param/Value/C9C5E6D3=<s val="ObjRewardSummary_Protoss">Destroy Enemy Support Bases (
 Param/Value/CB554689=Hybrid Wave Set to 4 
 Param/Value/CC2475B5=Free the Preservers (
 Param/Value/D0E36002=checks left
 Param/Value/D46EC28D=Abandoned Structures Powered
 Param/Value/D47D2BAC=/
+Param/Value/D4BA070A=<s val="ObjRewardSummary_Protoss">Destroy Enemy Support Bases (
 Param/Value/D50305AB=Free the Preservers (
 Param/Value/DE65E9D6=)
 Param/Value/DFFB989D=Dark Shrine
@@ -76,6 +82,5 @@ Param/Value/F78FFBD4=Power-up the Abandoned Base
 Param/Value/F974BE83=Power-up the abandoned protoss structures by warping in pylons near them. This will reveal lost technologies.
 Param/Value/FA59974F=Hybrid
 Param/Value/FC23C1AF=Destroy the Three Preserver Prisons
-Param/Value/FEA4BEDF=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures 
 Unit/Name/ShieldBattery=PH - Psi Dominator
 Water/Name/Template 1=Template 1

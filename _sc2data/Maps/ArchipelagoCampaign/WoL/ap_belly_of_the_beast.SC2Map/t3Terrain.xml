@@ -22,7 +22,7 @@
             <cliffDoodad name="TerrainObjectCharDestructibleFissure1" pos="99.000000 109.000000 0.000000 " rot="0"/>
             <cliffDoodad name="TerrainObjectCharDestructibleFissure1" pos="53.000000 131.000000 0.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.019898e+00" quantizeScale="4.160602e-04" standardHeight="7.999997e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.020105e+00" quantizeScale="4.160602e-04" standardHeight="7.999997e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="Char"/>

@@ -101,6 +101,7 @@ Trigger/Name/192BEF5B=Computer04 Back
 Trigger/Name/1A0F7FBC=Dialogue Warbot Limited Life Q
 Trigger/Name/1AD21C2C=Computer06 Brutalisk Released
 Trigger/Name/1BB77510=Computer06 Enter
+Trigger/Name/1BDB623E=CalcRaynorVanadiumBonus
 Trigger/Name/1C7E2A5D=Stasis03
 Trigger/Name/1CFC7E3B=Create Protoss Relics Objects
 Trigger/Name/1D87340D=Explosion02

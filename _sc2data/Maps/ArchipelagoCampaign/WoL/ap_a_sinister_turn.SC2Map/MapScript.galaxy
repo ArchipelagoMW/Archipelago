@@ -40,6 +40,8 @@ const int gv_p10_HYBRID_MANIFESTATIONS = 10;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveDestroySupportBases;
+int gv_supportBasesDestroyed;
 bool gv_gameOver;
 bool gv_inCinematic;
 unit gv_superWarpGate_Neutral;
@@ -162,6 +164,7 @@ unitgroup gv_victoryHiddenUnitGroup;
 unit gv_zeratul;
 
 void InitGlobals () {
+    gv_objectiveDestroySupportBases = c_invalidObjectiveId;
     gv_libraryHybrid = DoodadFromId(83);
     gv_prisonGroup = UnitGroupEmpty();
     gv_achievementHardTimer = TimerCreate();
@@ -216,6 +219,12 @@ unitgroup gf_EnemiesWithinRange (unit lp_unit, fixed lp_range, unitfilter lp_fil
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_ObjectiveDestroySupportBasesCreateQ;
+trigger gt_ObjectiveDestroySupportBasesComplete;
+trigger gt_ObjectiveDestroySupportBasesUpdate;
+trigger gt_NortheastNexus;
+trigger gt_SouthwestNexus;
+trigger gt_Maardiesforfirsttime;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -475,6 +484,171 @@ unitgroup gf_EnemiesWithinRange (unit lp_unit, fixed lp_range, unitfilter lp_fil
     // Automatic Variable Declarations
     // Implementation
     return UnitGroupAlliance(UnitGetOwner(lp_unit), c_unitAllianceEnemy, RegionCircle(UnitGetPosition(lp_unit), lp_range), lp_filter, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Support Bases Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroySupportBasesCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/C9C5E6D3") + IntToText((2 - gv_supportBasesDestroyed)) + StringExternal("Param/Value/3D0374EA")), StringExternal("Param/Value/3F1C3961"), c_objectiveStateActive, false);
+    gv_objectiveDestroySupportBases = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroySupportBasesCreateQ_Init () {
+    gt_ObjectiveDestroySupportBasesCreateQ = TriggerCreate("gt_ObjectiveDestroySupportBasesCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Support Bases Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroySupportBasesComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroySupportBasesCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroySupportBases);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroySupportBasesComplete_Init () {
+    gt_ObjectiveDestroySupportBasesComplete = TriggerCreate("gt_ObjectiveDestroySupportBasesComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Support Bases Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroySupportBasesUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveDestroySupportBasesCreateQ, true, false);
+    gv_supportBasesDestroyed += 1;
+    ObjectiveSetName(gv_objectiveDestroySupportBases, (StringExternal("Param/Value/D4BA070A") + IntToText((2 - gv_supportBasesDestroyed)) + StringExternal("Param/Value/BD118B79")));
+    if ((gv_supportBasesDestroyed == 2)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveDestroySupportBasesComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroySupportBasesUpdate_Init () {
+    gt_ObjectiveDestroySupportBasesUpdate = TriggerCreate("gt_ObjectiveDestroySupportBasesUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Northeast Nexus
+//--------------------------------------------------------------------------------------------------
+bool gt_NortheastNexus_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    TriggerExecute(gt_ObjectiveDestroySupportBasesUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NortheastNexus_Init () {
+    gt_NortheastNexus = TriggerCreate("gt_NortheastNexus_Func");
+    TriggerAddEventUnitDied(gt_NortheastNexus, UnitRefFromUnit(UnitFromId(151)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Southwest Nexus
+//--------------------------------------------------------------------------------------------------
+bool gt_SouthwestNexus_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    TriggerExecute(gt_ObjectiveDestroySupportBasesUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SouthwestNexus_Init () {
+    gt_SouthwestNexus = TriggerCreate("gt_SouthwestNexus_Func");
+    TriggerAddEventUnitDied(gt_SouthwestNexus, UnitRefFromUnit(UnitFromId(165)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Maar dies for first time
+//--------------------------------------------------------------------------------------------------
+bool gt_Maardiesforfirsttime_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_Maardiesforfirsttime_Init () {
+    gt_Maardiesforfirsttime = TriggerCreate("gt_Maardiesforfirsttime_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1682,6 +1856,7 @@ bool gt_HybridDies_Func (bool testConds, bool runActions) {
     gv_hybridWaves = (gv_hybridWaves + 1);
     gv_hybridRecharging = true;
     PingDestroy(gv_pingHybridBoss);
+    TriggerExecute(gt_Maardiesforfirsttime, true, false);
     libNtve_gf_CreateModelAtPoint("HybridCDeath", UnitGetPosition(gv_hybridPhysical));
     gv_actorHybridDeathEffect = libNtve_gf_ActorLastCreated();
     Wait(3.0, c_timeGame);
@@ -2719,7 +2894,7 @@ bool gt_PlayerBuildingPhotonCannonActivatesStalker_Func (bool testConds, bool ru
             return false;
         }
 
-        if (!((libNtve_gf_TriggeringProgressUnitType() == "PhotonCannon"))) {
+        if (!((libNtve_gf_TriggeringProgressUnitType() == "AP_PhotonCannon"))) {
             return false;
         }
 
@@ -4354,6 +4529,7 @@ bool gt_StalkerBecomesEnemyNearBase_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     libNtve_gf_SetAlliance(gv_p1_USER, gv_p2_PROTOSS_STALKER, libNtve_ge_AllianceSetting_Enemy);
+    TriggerExecute(gt_ObjectiveDestroySupportBasesCreateQ, true, false);
     return true;
 }
 
@@ -5902,6 +6078,7 @@ bool gt_Prison01Destroyed_Func (bool testConds, bool runActions) {
     UnitSetState(gv_archTemplar01, c_unitStateTargetable, false);
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar01, true);
     PingDestroy(gv_pingPrison01);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
     UnitSetScale(gv_archTemplar01, 120.0, 120.0, 120.0);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar01, gv_p1_USER);
     return true;
@@ -5937,6 +6114,7 @@ bool gt_Prison02Destroyed_Func (bool testConds, bool runActions) {
     UnitSetState(gv_archTemplar02, c_unitStateTargetable, false);
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar02, true);
     PingDestroy(gv_pingPrison02);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(9);
     UnitSetScale(gv_archTemplar02, 120.0, 120.0, 120.0);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar02, gv_p1_USER);
     return true;
@@ -5972,6 +6150,7 @@ bool gt_Prison03Destroyed_Func (bool testConds, bool runActions) {
     UnitSetState(gv_archTemplar03, c_unitStateTargetable, false);
     libNtve_gf_MakeUnitInvulnerable(gv_archTemplar03, true);
     PingDestroy(gv_pingPrison03);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
     UnitSetScale(gv_archTemplar03, 120.0, 120.0, 120.0);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectDestroythePreserverPrisons, gv_archTemplar03, gv_p1_USER);
     return true;
@@ -6127,7 +6306,7 @@ bool gt_ObjectivePowerupSecondaryUpdate_Func (bool testConds, bool runActions) {
 
     TriggerExecute(gt_ObjectivePowerSecondaryCreateQ, true, false);
     gv_obejctivePowerSecondaryBaseUpdate += 1;
-    ObjectiveSetName(gv_objectivePowerSecondaryBase, (StringExternal("Param/Value/FEA4BEDF") + IntToText((gv_obejctivePrisonsTotal - gv_obejctivePowerSecondaryBaseUpdate)) + StringExternal("Param/Value/2863B008")));
+    ObjectiveSetName(gv_objectivePowerSecondaryBase, (StringExternal("Param/Value/11DBB57E") + IntToText((gv_obejctivePrisonsTotal - gv_obejctivePowerSecondaryBaseUpdate)) + StringExternal("Param/Value/4825BABF")));
     if ((gv_obejctivePowerSecondaryBaseUpdate == gv_obejctivePowerSecondaryBaseTotal)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectivePowerSecondaryComplete, true, false);
@@ -7367,6 +7546,12 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_ObjectiveDestroySupportBasesCreateQ_Init();
+    gt_ObjectiveDestroySupportBasesComplete_Init();
+    gt_ObjectiveDestroySupportBasesUpdate_Init();
+    gt_NortheastNexus_Init();
+    gt_SouthwestNexus_Init();
+    gt_Maardiesforfirsttime_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

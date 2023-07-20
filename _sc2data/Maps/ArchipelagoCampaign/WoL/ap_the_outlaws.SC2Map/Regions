@@ -529,4 +529,11 @@
             <radius value="2.4396"/>
         </shape>
     </region>
+    <region id="7">
+        <name value="AP_NorthResourcePickups"/>
+        <shape type="circle">
+            <center value="87.4477,79.601"/>
+            <radius value="6.32"/>
+        </shape>
+    </region>
 </Regions>

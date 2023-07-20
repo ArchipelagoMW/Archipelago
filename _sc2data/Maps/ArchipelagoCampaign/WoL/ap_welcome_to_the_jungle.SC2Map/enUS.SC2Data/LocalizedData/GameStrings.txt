@@ -22,6 +22,7 @@ Param/Value/35F0325E=Protoss Relics Found
 Param/Value/3D598152=The protoss are sealing terrazine altars to prevent you from taking them. If they seal too many, you will be unable to complete the mission.
 Param/Value/3EB88A22=Protoss Can't Seal 7 Altars (
 Param/Value/3FE711A5=Gas Control = 
+Param/Value/438D1DDE=Destroy the Main Protoss Base (1 Check)
 Param/Value/4EC474D8=
 Param/Value/4F1E5374=
 Param/Value/505C291C=)
@@ -38,6 +39,7 @@ Param/Value/6D58251D= sealed)
 Param/Value/748DDD80=Harvesting node = 
 Param/Value/77033FDB=Use any ground unit to pickup.
 Param/Value/77DB2CB9=
+Param/Value/7B0FC11B=Giving those Tal'darim gys a 'lesson' would make our lives easier
 Param/Value/7C611772=
 Param/Value/7DAF9358=Third Terrazine Gathered
 Param/Value/81E96079=SCVs Lost
@@ -55,8 +57,10 @@ Param/Value/A1DD6009=Gather Terrazine (
 Param/Value/A9379847=SCV Lost
 Param/Value/AA8975D0=Protoss Can't Seal 7 Altars
 Param/Value/B283104A=
+Param/Value/B3607A04=A Tal'darim base occupies a spot with many resources. If we want to succeed in our mission we'd need additional resources
 Param/Value/C206B757=Sealing Attempts Stopped
 Param/Value/C87BC07E=Protoss Research Earned
+Param/Value/D2BCF230=Destroy the Protoss Base in the Middle (1 Check)
 Param/Value/D3D16072=)
 Param/Value/DD65E84C=Tosh has contracted you to gather terrazine gas for him. Use SCVs to collect the terrazine from the altars.
 Param/Value/E3E743A5=First Terrazine Gathered

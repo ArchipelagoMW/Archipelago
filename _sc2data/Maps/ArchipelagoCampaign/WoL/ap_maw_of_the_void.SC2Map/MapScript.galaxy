@@ -38,6 +38,9 @@ const int gv_pLAYER_07_Prisoners = 7;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveDestroyTheMothership;
+int gv_objectiveDestroyTheRipFieldGenerators;
+int gv_aliveRipGenerators;
 actor gv_outhouse;
 bool gv_inCinematic;
 bool gv_gameOver;
@@ -129,6 +132,9 @@ unitgroup gv_victoryHiddenUnitGroup;
 void InitGlobals () {
     int init_i;
 
+    gv_objectiveDestroyTheMothership = c_invalidObjectiveId;
+    gv_objectiveDestroyTheRipFieldGenerators = c_invalidObjectiveId;
+    gv_aliveRipGenerators = 7;
     gv_fORCEGOOD_GUYS = PlayerGroupEmpty();
     gv_fORCEBADGUYS = PlayerGroupEmpty();
     gv_gROUPPlayersStartingBASE = UnitGroupEmpty();
@@ -183,6 +189,18 @@ void gf_P03AttackWaveWaypointsRoute (int lp_player, bool lp_flank);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_ObjectiveMothershipCreateQ;
+trigger gt_ObjectiveMothershipComplete;
+trigger gt_ObjectiveRipFieldGeneratorsCreateQ;
+trigger gt_ObjectiveRipFieldGeneratorsUpdate;
+trigger gt_ObjectiveRipFieldGeneratorsComplete;
+trigger gt_ExpansionRipFieldGenerator;
+trigger gt_MiddleRipFieldGenerator;
+trigger gt_SoutheastRipFieldGenerator;
+trigger gt_StargateRipFieldGenerator;
+trigger gt_NorthwestRipFieldGenerator;
+trigger gt_WestRipFieldGenerator;
+trigger gt_SouthwestRipFieldGenerator;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -352,6 +370,308 @@ void gf_P03AttackWaveWaypointsRoute (int lp_player, bool lp_flank) {
         AIAttackWaveAddWaypoint(lp_player, PointFromId(336), false);
         AIAttackWaveAddWaypoint(lp_player, PointFromId(350), false);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Mothership Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMothershipCreateQ_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_iNT;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Conditions
+    if (testConds) {
+        if (!((TriggerGetExecCount(TriggerGetCurrent()) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/55209BE8"), StringExternal("Param/Value/B5C53F3B"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheMothership = ObjectiveLastCreated();
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMothershipCreateQ_Init () {
+    gt_ObjectiveMothershipCreateQ = TriggerCreate("gt_ObjectiveMothershipCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Mothership Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMothershipComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveMothershipCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheMothership);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMothershipComplete_Init () {
+    gt_ObjectiveMothershipComplete = TriggerCreate("gt_ObjectiveMothershipComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rip Field Generators Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRipFieldGeneratorsCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerGetExecCount(TriggerGetCurrent()) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/A4238139") + IntToText(gv_aliveRipGenerators) + StringExternal("Param/Value/BA5F9123")), StringExternal("Param/Value/75631DBD"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheRipFieldGenerators = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRipFieldGeneratorsCreateQ_Init () {
+    gt_ObjectiveRipFieldGeneratorsCreateQ = TriggerCreate("gt_ObjectiveRipFieldGeneratorsCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rip Field Generators Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRipFieldGeneratorsUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsCreateQ, true, false);
+    ObjectiveSetName(gv_objectiveDestroyTheRipFieldGenerators, (StringExternal("Param/Value/9001EFA5") + IntToText(gv_aliveRipGenerators) + StringExternal("Param/Value/106EDA36")));
+    if ((gv_aliveRipGenerators == 0)) {
+        TriggerExecute(gt_ObjectiveRipFieldGeneratorsComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRipFieldGeneratorsUpdate_Init () {
+    gt_ObjectiveRipFieldGeneratorsUpdate = TriggerCreate("gt_ObjectiveRipFieldGeneratorsUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Rip Field Generators Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveRipFieldGeneratorsComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheRipFieldGenerators);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveRipFieldGeneratorsComplete_Init () {
+    gt_ObjectiveRipFieldGeneratorsComplete = TriggerCreate("gt_ObjectiveRipFieldGeneratorsComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Expansion Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_ExpansionRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ExpansionRipFieldGenerator_Init () {
+    gt_ExpansionRipFieldGenerator = TriggerCreate("gt_ExpansionRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_ExpansionRipFieldGenerator, UnitRefFromUnit(UnitFromId(151)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Middle Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_MiddleRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MiddleRipFieldGenerator_Init () {
+    gt_MiddleRipFieldGenerator = TriggerCreate("gt_MiddleRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_MiddleRipFieldGenerator, UnitRefFromUnit(UnitFromId(137)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Southeast Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_SoutheastRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(9);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SoutheastRipFieldGenerator_Init () {
+    gt_SoutheastRipFieldGenerator = TriggerCreate("gt_SoutheastRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_SoutheastRipFieldGenerator, UnitRefFromUnit(UnitFromId(447)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Stargate Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_StargateRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(10);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_StargateRipFieldGenerator_Init () {
+    gt_StargateRipFieldGenerator = TriggerCreate("gt_StargateRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_StargateRipFieldGenerator, UnitRefFromUnit(UnitFromId(394)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Northwest Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_NorthwestRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(11);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NorthwestRipFieldGenerator_Init () {
+    gt_NorthwestRipFieldGenerator = TriggerCreate("gt_NorthwestRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_NorthwestRipFieldGenerator, UnitRefFromUnit(UnitFromId(20)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: West Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_WestRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(12);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_WestRipFieldGenerator_Init () {
+    gt_WestRipFieldGenerator = TriggerCreate("gt_WestRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_WestRipFieldGenerator, UnitRefFromUnit(UnitFromId(415)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Southwest Rip Field Generator
+//--------------------------------------------------------------------------------------------------
+bool gt_SouthwestRipFieldGenerator_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    gv_aliveRipGenerators = (gv_aliveRipGenerators - 1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(13);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SouthwestRipFieldGenerator_Init () {
+    gt_SouthwestRipFieldGenerator = TriggerCreate("gt_SouthwestRipFieldGenerator_Func");
+    TriggerAddEventUnitDied(gt_SouthwestRipFieldGenerator, UnitRefFromUnit(UnitFromId(297)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1042,6 +1362,7 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     PlayerPauseAllCharges(gv_pLAYER_01_USER, false);
     TriggerExecute(gt_StartWarpPrizmDrops, true, false);
     TriggerExecute(gt_ObjectiveArtifactCreateQ, true, true);
+    TriggerExecute(gt_ObjectiveRipFieldGeneratorsCreateQ, true, true);
     TriggerEnable(gt_AchievementDestroyallenemystructures, true);
     Wait(10.0, c_timeGame);
     TriggerExecute(gt_ResourcePickupDialogueQ, true, true);
@@ -2497,6 +2818,7 @@ bool gt_MothershipCreate_Func (bool testConds, bool runActions) {
     UnitSetPropertyFixed(gv_uNITDaMothership, c_unitPropEnergyPercent, 100.0);
     libNtve_gf_ShareVisionofUnit(gv_uNITDaMothership, true, gv_pLAYER_01_USER);
     libNtve_gf_SetTacticalAIThink(gv_pLAYER_02_ScriptedTOSS, "TalDarimMothership", "", true);
+    TriggerExecute(gt_ObjectiveMothershipCreateQ, true, false);
     return true;
 }
 
@@ -2859,6 +3181,8 @@ bool gt_MothershipDeathQ_Func (bool testConds, bool runActions) {
 
     UIAlertPoint("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/EBB89FB0"), null, UnitGetPosition(EventUnit()));
     PingDestroy(gv_pINGMothership);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    TriggerExecute(gt_ObjectiveMothershipComplete, true, false);
     TriggerQueueEnter();
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
     libLbty_gf_PlayTransmissionCueSound(PlayerGroupAll());
@@ -6384,6 +6708,18 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_ObjectiveMothershipCreateQ_Init();
+    gt_ObjectiveMothershipComplete_Init();
+    gt_ObjectiveRipFieldGeneratorsCreateQ_Init();
+    gt_ObjectiveRipFieldGeneratorsUpdate_Init();
+    gt_ObjectiveRipFieldGeneratorsComplete_Init();
+    gt_ExpansionRipFieldGenerator_Init();
+    gt_MiddleRipFieldGenerator_Init();
+    gt_SoutheastRipFieldGenerator_Init();
+    gt_StargateRipFieldGenerator_Init();
+    gt_NorthwestRipFieldGenerator_Init();
+    gt_WestRipFieldGenerator_Init();
+    gt_SouthwestRipFieldGenerator_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

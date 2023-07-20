@@ -479,11 +479,33 @@ bool auto_gf_RescueDiamondback_TriggerFunc (bool testConds, bool runActions) {
     Wait(1.5, c_timeGame);
     UIAlertUnit("Trigger", gv_pLAYER_01_USER, StringExternal("Param/Value/8DAA5783"), null, lp_diamondback);
     libNtve_gf_RescueUnit(lp_diamondback, gv_pLAYER_01_USER, true);
+    if ((TechTreeUpgradeCount(gv_pLAYER_01_USER, "AP_BurstCapacitors", c_techCountCompleteOnly) >= 1)) {
+        UnitBehaviorAdd(lp_diamondback, "AP_BurstCapacitorsDamageBuff", lp_diamondback, 1);
+    }
+
+    if ((lp_diamondback == UnitFromId(668))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    }
+    else if ((lp_diamondback == UnitFromId(667))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    }
+    else if ((lp_diamondback == UnitFromId(338))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+    else if ((lp_diamondback == UnitFromId(332))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    }
+    else if ((lp_diamondback == UnitFromId(463))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+    }
+    else if ((lp_diamondback == UnitFromId(1318))) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(9);
+    }
     gv_diamondbacksFound += 1;
     gv_diamondbacksUsed += 1;
     TriggerExecute(gt_ObjectiveLocateDiscover, true, true);
     if ((gv_diamondbacksFound <= gv_totalDiamondbacks)) {
-        ObjectiveSetName(gv_objective_Locate, (StringExternal("Param/Value/9669A7DF") + IntToText(gv_diamondbacksFound) + StringExternal("Param/Value/EE97202B") + IntToText(gv_totalDiamondbacks) + StringExternal("Param/Value/24F80960")));
+        ObjectiveSetName(gv_objective_Locate, (StringExternal("Param/Value/49E6E554") + IntToText(gv_diamondbacksFound) + StringExternal("Param/Value/E81650D3") + IntToText(gv_totalDiamondbacks) + StringExternal("Param/Value/DD069C95")));
     }
 
     if ((gv_diamondbacksFound == gv_totalDiamondbacks)) {

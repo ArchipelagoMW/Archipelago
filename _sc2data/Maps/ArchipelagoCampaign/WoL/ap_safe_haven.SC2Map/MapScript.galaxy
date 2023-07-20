@@ -46,6 +46,9 @@ const int ge_AttackWavePath_SouthBasetoWestChoke = 3;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+bool gv_firstTerrorFleetStopped;
+bool gv_secondTerrorFleetStopped;
+bool gv_thirdTerrorFleetStopped;
 bool gv_gameOver;
 bool gv_gameOn;
 bool gv_inCinematic;
@@ -5489,6 +5492,18 @@ bool gt_VictoryPurifierDestroyed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
+    if ((gv_firstFleetObjectiveFailed == false) && (gv_firstTerrorFleetStopped == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    }
+
+    if ((gv_secondFleetObjectiveFailed == false) && (gv_secondTerrorFleetStopped == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    }
+
+    if ((gv_thirdFleetObjectiveFailed == false) && (gv_thirdTerrorFleetStopped == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+
     Wait(1.0, c_timeGame);
     gv_gameOver = true;
     libNtve_gf_ShowHideBossBar(false, gv_purifierBossBar);
@@ -5894,6 +5909,8 @@ bool gt_ObjectiveDestroyFirstFleetComplete_Func (bool testConds, bool runActions
     TriggerEnable(TriggerGetCurrent(), false);
     ObjectiveShow(gv_bonusObjectiveDestroyFirstTerrorFleet, PlayerGroupAll(), true);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_bonusObjectiveDestroyFirstTerrorFleet);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    gv_firstTerrorFleetStopped = true;
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -5985,6 +6002,8 @@ bool gt_ObjectiveDestroySecondFleetComplete_Func (bool testConds, bool runAction
     TriggerEnable(TriggerGetCurrent(), false);
     ObjectiveShow(gv_bonusObjectiveDestroySecondTerrorFleet, PlayerGroupAll(), true);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_bonusObjectiveDestroySecondTerrorFleet);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    gv_secondTerrorFleetStopped = true;
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -6076,6 +6095,8 @@ bool gt_ObjectiveDestroyThirdFleetComplete_Func (bool testConds, bool runActions
     TriggerEnable(TriggerGetCurrent(), false);
     ObjectiveShow(gv_bonusObjectiveDestroyThirdTerrorFleet, PlayerGroupAll(), true);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_bonusObjectiveDestroyThirdTerrorFleet);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    gv_thirdTerrorFleetStopped = true;
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }

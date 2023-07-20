@@ -73,6 +73,8 @@ struct gs_RECORD_UnitArea04 {
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveDestroyHatcheries;
+int gv_hatcheriesDestroyed;
 bool gv_gameOver;
 bool gv_inCinematic;
 revealer gv_startingMapRevealer;
@@ -166,6 +168,7 @@ revealer gv_victoryRevealer;
 void InitGlobals () {
     int init_i;
 
+    gv_objectiveDestroyHatcheries = c_invalidObjectiveId;
     gv_hiddenUnits = UnitGroupEmpty();
     gv_pATHINGBLOCKERAREA01 = UnitGroupEmpty();
     gv_pATHINGBLOCKERAREA02 = UnitGroupEmpty();
@@ -204,6 +207,12 @@ void gf_AddUpgradeLevelforZergPlayerGroup (string lp_upgrade);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_ObjectiveDestroyHatcheriesCreateQ;
+trigger gt_ObjectiveDestroyHatcheriesComplete;
+trigger gt_ObjectiveDestroyHatcheriesUpdate;
+trigger gt_EastHatchery;
+trigger gt_NorthHatchery;
+trigger gt_MidHatchery;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -576,6 +585,165 @@ void gf_AddUpgradeLevelforZergPlayerGroup (string lp_upgrade) {
         if (auto4DB85A5D_var < 0) { break; }
         TechTreeUpgradeAddLevel(auto4DB85A5D_var, lp_upgrade, 1);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Hatcheries Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyHatcheriesCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/BF779107") + IntToText((3 - gv_hatcheriesDestroyed)) + StringExternal("Param/Value/E69BF1E8")), StringExternal("Param/Value/F7A0C2B9"), c_objectiveStateActive, false);
+    gv_objectiveDestroyHatcheries = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyHatcheriesCreateQ_Init () {
+    gt_ObjectiveDestroyHatcheriesCreateQ = TriggerCreate("gt_ObjectiveDestroyHatcheriesCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Hatcheries Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyHatcheriesComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyHatcheries);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyHatcheriesComplete_Init () {
+    gt_ObjectiveDestroyHatcheriesComplete = TriggerCreate("gt_ObjectiveDestroyHatcheriesComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Hatcheries Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyHatcheriesUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((gv_gameOver == false))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesCreateQ, true, false);
+    gv_hatcheriesDestroyed += 1;
+    ObjectiveSetName(gv_objectiveDestroyHatcheries, (StringExternal("Param/Value/1F4AD758") + IntToText((3 - gv_hatcheriesDestroyed)) + StringExternal("Param/Value/8397B923")));
+    if ((gv_hatcheriesDestroyed == 3)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveDestroyHatcheriesComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyHatcheriesUpdate_Init () {
+    gt_ObjectiveDestroyHatcheriesUpdate = TriggerCreate("gt_ObjectiveDestroyHatcheriesUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: East Hatchery
+//--------------------------------------------------------------------------------------------------
+bool gt_EastHatchery_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_EastHatchery_Init () {
+    gt_EastHatchery = TriggerCreate("gt_EastHatchery_Func");
+    TriggerAddEventUnitDied(gt_EastHatchery, UnitRefFromUnit(UnitFromId(1114)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: North Hatchery
+//--------------------------------------------------------------------------------------------------
+bool gt_NorthHatchery_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NorthHatchery_Init () {
+    gt_NorthHatchery = TriggerCreate("gt_NorthHatchery_Func");
+    TriggerAddEventUnitDied(gt_NorthHatchery, UnitRefFromUnit(UnitFromId(14)));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Mid Hatchery
+//--------------------------------------------------------------------------------------------------
+bool gt_MidHatchery_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MidHatchery_Init () {
+    gt_MidHatchery = TriggerCreate("gt_MidHatchery_Func");
+    TriggerAddEventUnitDied(gt_MidHatchery, UnitRefFromUnit(UnitFromId(18)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1398,6 +1566,7 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
 
     Wait(4.0, c_timeReal);
     TriggerExecute(gt_ObjectiveDestroyCoolantTowersCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveDestroyHatcheriesCreateQ, true, false);
     TriggerExecute(gt_ComsatStationQ, true, false);
     TriggerEnable(gt_PlatformInfestedLineQ, true);
     Wait(15.0, c_timeGame);
@@ -7481,6 +7650,12 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_ObjectiveDestroyHatcheriesCreateQ_Init();
+    gt_ObjectiveDestroyHatcheriesComplete_Init();
+    gt_ObjectiveDestroyHatcheriesUpdate_Init();
+    gt_EastHatchery_Init();
+    gt_NorthHatchery_Init();
+    gt_MidHatchery_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

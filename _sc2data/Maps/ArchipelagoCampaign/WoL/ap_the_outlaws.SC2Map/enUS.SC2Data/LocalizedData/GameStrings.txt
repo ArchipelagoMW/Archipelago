@@ -30,16 +30,19 @@ Param/Value/29FB49B3=Use any ground unit to collect 100 minerals.
 Param/Value/2C1A7BF3=Rescue the Rebels
 Param/Value/30C0C1F4=All of your structures have been destroyed.
 Param/Value/315FAFA9=Trains additional Marines.
+Param/Value/33DADAB2=Claim the North Resource Caches (1 Check)
 Param/Value/369CE5DF=
 Param/Value/3874BE18=
 Param/Value/3DED6760=<c val="00FF00">Barracks</c>
 Param/Value/426DB1C2=Anniversary_TRaynor_02
 Param/Value/436ADBC9=Increases maximum supply.
+Param/Value/43B9678C=Building an army needs resources. There's a large resouce cache nearby.
 Param/Value/459758FC=You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
 Param/Value/4CD2C215=
 Param/Value/4E851134=Use this SCV to build a Supply Depot.
 Param/Value/4FEBF75F=Allows more units to be trained.<n/>Built by SCVs.
 Param/Value/553C5320=
+Param/Value/58314BB8=Do a nice job clearing the Bunker (1 Check)
 Param/Value/5D83C509=Use any ground unit to collect 100 minerals.
 Param/Value/5DF05CC8=
 Param/Value/5E553DF6=The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
@@ -77,6 +80,7 @@ Param/Value/B32015BB=Structures give you the ability to train units and upgrade 
 Param/Value/B469D2B4=<c val="00FF00">Supply Depot</c>
 Param/Value/B796C5DF=Use any ground unit to collect 100 minerals.
 Param/Value/BAFF2804=
+Param/Value/BCFF634C=The Dominion is using a Bunker to block our path to their base. Destroy it in order to get access
 Param/Value/BE45965F=
 Param/Value/C2FBFDD1=Dominion Base
 Param/Value/C84857DE=

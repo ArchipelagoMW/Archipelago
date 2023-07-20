@@ -99,7 +99,7 @@
 <Unit id="Zealot"/>
 <Unit id="Stalker"/>
 <Unit id="HighTemplar"/>
-<Unit id="DarkTemplar" Variations="0,1"/>
+<Unit id="DarkTemplar"/>
 <Unit id="Sentry"/>
 <Unit id="Phoenix"/>
 <Unit id="Carrier"/>
@@ -140,6 +140,7 @@
 <Unit id="AP_CommandCenterFlying"/>
 <Unit id="AP_Starport"/>
 <Unit id="AP_StarportFlying"/>
+<Unit id="AP_DarkTemplarShakuras"/>
 <Unit id="AP_Battlecruiser"/>
 <Unit id="AP_Refinery"/>
 <Unit id="AP_MercCompound"/>

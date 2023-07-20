@@ -2973,6 +2973,7 @@ bool gt_OutpostCheck01_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_stage = 1;
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     TriggerExecute(gt_OutpostBuild01AutoSaveQ, true, false);
     TriggerExecute(gt_DefenseOutpost01Create, true, false);
     return true;
@@ -3086,6 +3087,7 @@ bool gt_OutpostCheck02_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     gv_stage = 2;
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     TriggerExecute(gt_OutpostBuild02AutoSaveQ, true, false);
     TriggerExecute(gt_DefenseOutpost02Create, true, false);
     return true;

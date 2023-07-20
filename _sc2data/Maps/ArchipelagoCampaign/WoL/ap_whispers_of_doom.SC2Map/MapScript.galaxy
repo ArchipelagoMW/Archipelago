@@ -8329,6 +8329,7 @@ bool gt_Shrine01_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectVisittheShrines, UnitFromId(1561), gv_p1_USER);
     return true;
 }
@@ -8356,6 +8357,7 @@ bool gt_Shrine02_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectVisittheShrines, UnitFromId(1406), gv_p1_USER);
     return true;
 }
@@ -8383,6 +8385,7 @@ bool gt_Shrine03_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
     libCamp_gf_DisplayResearchPointsGiventoPlayer(libCamp_ge_StoryResearchObject_ResearchObjectVisittheShrines, UnitFromId(1563), gv_p1_USER);
     return true;
 }

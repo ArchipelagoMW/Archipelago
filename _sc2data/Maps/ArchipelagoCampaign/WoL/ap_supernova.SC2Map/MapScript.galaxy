@@ -83,6 +83,8 @@ int gv_objectiveDestroyTheArtifactVault;
 int gv_researchObjectiveProtossRelics;
 int gv_protossRelicsFound;
 int gv_protossRelicsTotal;
+int gv_objectiveDestroyTheProtossBasesAtResourceSpots;
+int gv_protossBasesTrashed;
 unit gv_cinematic_WallOfFire;
 bool gv_midCinematicCompleted;
 unitgroup gv_midCineTempPlayerGroup;
@@ -109,6 +111,7 @@ void InitGlobals () {
     gv_objectiveClearTheLZ = c_invalidObjectiveId;
     gv_objectiveDestroyTheArtifactVault = c_invalidObjectiveId;
     gv_researchObjectiveProtossRelics = c_invalidObjectiveId;
+    gv_objectiveDestroyTheProtossBasesAtResourceSpots = c_invalidObjectiveId;
     gv_midCineTempPlayerGroup = UnitGroupEmpty();
     gv_geyser01 = UnitFromId(15);
     gv_geyser02 = UnitFromId(5);
@@ -204,10 +207,14 @@ trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
 trigger gt_ArchInit;
+trigger gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ;
+trigger gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate;
+trigger gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete;
 trigger gt_FirstProtossRelic;
 trigger gt_SecondProtossRelic;
 trigger gt_ThirdProtossRelic;
 trigger gt_FourthProtossRelic;
+trigger gt_SEBase;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
 trigger gt_BriefingScene01;
@@ -1544,7 +1551,7 @@ bool gt_WallofFireSpeedUp_Func (bool testConds, bool runActions) {
         auto17587D29_var = UnitGroupUnitFromEnd(auto17587D29_g, auto17587D29_u);
         if (auto17587D29_var == null) { break; }
         if ((PointGetX(UnitGetPosition(auto17587D29_var)) <= (PointGetX(UnitGetPosition(gv_wALLOFFIRE)) + 30.0))) {
-            if (((UnitGetType(auto17587D29_var) != "SupplyDepot") || (UnitGetType(auto17587D29_var) != "SupplyDepotLowered") || (UnitGetType(auto17587D29_var) != "Refinery") || (UnitGetType(auto17587D29_var) != "MercCompound"))) {
+            if (((UnitGetType(auto17587D29_var) != "AP_SupplyDepot") || (UnitGetType(auto17587D29_var) != "AP_SupplyDepotLowered") || (UnitGetType(auto17587D29_var) != "AP_Refinery") || (UnitGetType(auto17587D29_var) != "AP_MercCompound"))) {
                 return true;
             }
 
@@ -2319,6 +2326,7 @@ bool gt_TransmissionHornerP04ProtossBaseFoundQ_Func (bool testConds, bool runAct
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerQueueEnter();
+    TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ, true, false);
     MinimapPing(PlayerGroupAll(), RegionGetCenter(RegionFromId(6)), 3.0, Color(100.00, 100.00, 0.00));
     UIAlertPoint("Trigger", gv_pLAYER01_USER, StringExternal("Param/Value/26B5B50A"), null, RegionGetCenter(RegionFromId(6)));
     VisRevealArea(gv_pLAYER01_USER, RegionFromId(6), 6.0, true);
@@ -2371,6 +2379,9 @@ bool gt_TransmissionP04BaseDestroyedQ_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    gv_protossBasesTrashed = (gv_protossBasesTrashed + 1);
+    TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate, true, false);
     TriggerQueueEnter();
     MinimapPing(PlayerGroupAll(), PointFromId(218), 6.0, Color(100.00, 100.00, 0.00));
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Speech);
@@ -3112,6 +3123,7 @@ bool gt_ObjectiveCleartheLZComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveCleartheLZCreateQ, true, false);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveClearTheLZ);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -3476,7 +3488,7 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
 
     TriggerExecute(lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor, true, false);
     TriggerExecute(gt_Init02Players, true, false);
-    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Init06Difficulties);
     lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_pLAYER01_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
     libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
     return true;
@@ -3486,6 +3498,90 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
 void gt_ArchInit_Init () {
     gt_ArchInit = TriggerCreate("gt_ArchInit_Func");
     TriggerAddEventMapInit(gt_ArchInit);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Protoss Bases at Resource Spots Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/771E36E9") + IntToText((2 - gv_protossBasesTrashed)) + StringExternal("Param/Value/4F7E35C1")), StringExternal("Param/Value/F6A6AA15"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheProtossBasesAtResourceSpots = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ_Init () {
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ = TriggerCreate("gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Protoss Bases at Resource Spots Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ, true, false);
+    ObjectiveSetName(gv_objectiveDestroyTheProtossBasesAtResourceSpots, (StringExternal("Param/Value/C903167B") + IntToText((2 - gv_protossBasesTrashed)) + StringExternal("Param/Value/C5531497")));
+    if ((gv_protossBasesTrashed == 2)) {
+        TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate_Init () {
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate = TriggerCreate("gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Protoss Bases at Resource Spots Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheProtossBasesAtResourceSpots);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete_Init () {
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete = TriggerCreate("gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3594,6 +3690,28 @@ bool gt_FourthProtossRelic_Func (bool testConds, bool runActions) {
 void gt_FourthProtossRelic_Init () {
     gt_FourthProtossRelic = TriggerCreate("gt_FourthProtossRelic_Func");
     TriggerAddEventUnitAbility(gt_FourthProtossRelic, null, AbilityCommand("Pickup", 0), c_unitAbilStageExecute, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: SE Base
+//--------------------------------------------------------------------------------------------------
+bool gt_SEBase_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    gv_protossBasesTrashed = (gv_protossBasesTrashed + 1);
+    TriggerExecute(gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SEBase_Init () {
+    gt_SEBase = TriggerCreate("gt_SEBase_Func");
+    TriggerAddEventUnitDied(gt_SEBase, UnitRefFromUnit(UnitFromId(31)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4541,10 +4659,14 @@ void InitTriggers () {
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
     gt_ArchInit_Init();
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsCreateQ_Init();
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsUpdate_Init();
+    gt_ObjectiveDestroyProtossBasesatResourceSpotsComplete_Init();
     gt_FirstProtossRelic_Init();
     gt_SecondProtossRelic_Init();
     gt_ThirdProtossRelic_Init();
     gt_FourthProtossRelic_Init();
+    gt_SEBase_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();
     gt_BriefingScene01_Init();

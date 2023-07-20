@@ -118,7 +118,6 @@
 <Soundtrack id="TZeratul03MusicMain"/>
 <Soundtrack id="TZeratul03MusicOutro"/>
 <Terrain id="Aiur"/>
-<Unit id="Colossus"/>
 <Unit id="Baneling"/>
 <Unit id="Hatchery"/>
 <Unit id="Extractor"/>
@@ -185,6 +184,7 @@
 <Unit id="AP_Assimilator"/>
 <Unit id="AP_RoboticsFacility"/>
 <Unit id="AP_Observer"/>
+<Unit id="AP_ColossusPurifier"/>
 <Unit id="AP_PhotonCannon"/>
 <Unit id="AP_Probe"/>
 <Unit id="AP_StalkerShakuras"/>

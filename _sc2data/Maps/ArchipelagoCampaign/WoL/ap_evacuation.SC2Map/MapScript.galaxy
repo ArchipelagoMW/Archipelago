@@ -38,6 +38,7 @@ const int ge_PRESET_MissionPhase_Escort = 1;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveFindTheSecretResourceStash;
 int gv_p2_ZERG_ORANGE_NW;
 int gv_p3_ZERG_LIGHTBLUE_SE;
 int gv_p4_COLONISTS;
@@ -115,6 +116,7 @@ unitgroup gv_victoryHiddenUnitGroup;
 bool gv_victoryCinematicCompleted;
 
 void InitGlobals () {
+    gv_objectiveFindTheSecretResourceStash = c_invalidObjectiveId;
     gv_p2_ZERG_ORANGE_NW = 2;
     gv_p3_ZERG_LIGHTBLUE_SE = 3;
     gv_p4_COLONISTS = 4;
@@ -177,6 +179,9 @@ trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
+trigger gt_ObjectiveFindSecretresourceStashCreate;
+trigger gt_ObjectiveFindSecretresourceStashComplete;
+trigger gt_FindSecretResourceStashImpl;
 trigger gt_FirstChysalis;
 trigger gt_SecondChysalis;
 trigger gt_ThirdChysalis;
@@ -647,6 +652,96 @@ bool gt_onDifficultyBrutal_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void gt_onDifficultyBrutal_Init () {
     gt_onDifficultyBrutal = TriggerCreate("gt_onDifficultyBrutal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Find Secret resource Stash Create
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveFindSecretresourceStashCreate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    ObjectiveCreate(StringExternal("Param/Value/2F57DEE3"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveFindTheSecretResourceStash = ObjectiveLastCreated();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveFindSecretresourceStashCreate_Init () {
+    gt_ObjectiveFindSecretresourceStashCreate = TriggerCreate("gt_ObjectiveFindSecretresourceStashCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Find Secret resource Stash Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveFindSecretresourceStashComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveFindSecretresourceStashCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveFindTheSecretResourceStash);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveFindSecretresourceStashComplete_Init () {
+    gt_ObjectiveFindSecretresourceStashComplete = TriggerCreate("gt_ObjectiveFindSecretresourceStashComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Find SecretResource Stash Impl
+//--------------------------------------------------------------------------------------------------
+bool gt_FindSecretResourceStashImpl_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_p1_USER))) {
+            return false;
+        }
+
+        if (!(((UnitMoverExists(EventUnit(), "Ground") == true) || (UnitMoverExists(EventUnit(), "CliffJumper") == true) || (UnitMoverExists(EventUnit(), "Colossus") == true)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    TriggerExecute(gt_ObjectiveFindSecretresourceStashComplete, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_FindSecretResourceStashImpl_Init () {
+    gt_FindSecretResourceStashImpl = TriggerCreate("gt_FindSecretResourceStashImpl_Func");
+    TriggerAddEventUnitRegion(gt_FindSecretResourceStashImpl, null, RegionFromId(53), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1141,6 +1236,7 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     libNtve_gf_ShareVisionofUnit(UnitFromId(2442), true, gv_p1_USER);
     libNtve_gf_ShareVisionofUnit(UnitFromId(2441), true, gv_p1_USER);
     TriggerExecute(gt_MainObjectiveReachHansonDiscoverQ, true, false);
+    TriggerExecute(gt_ObjectiveFindSecretresourceStashCreate, true, false);
     Wait(9.0, c_timeGame);
     TriggerExecute(gt_SwanntalksaboutFirebatQ, true, false);
     Wait(7.0, c_timeGame);
@@ -1760,6 +1856,7 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
         }
 
     }
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     UnitSetPropertyFixed(UnitFromId(236), c_unitPropEnergy, 50.0);
     UnitIssueOrder(UnitFromId(236), OrderTargetingUnit(null, UnitFromId(236)), c_orderQueueReplace);
     auto338F5CC8_g = UnitGroup("AP_SCV", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -6760,6 +6857,9 @@ void InitTriggers () {
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
+    gt_ObjectiveFindSecretresourceStashCreate_Init();
+    gt_ObjectiveFindSecretresourceStashComplete_Init();
+    gt_FindSecretResourceStashImpl_Init();
     gt_FirstChysalis_Init();
     gt_SecondChysalis_Init();
     gt_ThirdChysalis_Init();

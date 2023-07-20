@@ -43,6 +43,8 @@ const int ge_PRESET_MultipleTerrazineSealingState_Completed = 2;
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveDestroyTheMiddleBase;
+int gv_objectiveDestroyTheMainBase;
 bool gv_gameOver;
 bool gv_inCinematic;
 unit gv_superWarpGateP3NoAI;
@@ -85,6 +87,8 @@ unit gv_victoryTerrazine;
 bool gv_victoryCinematicCompleted;
 
 void InitGlobals () {
+    gv_objectiveDestroyTheMiddleBase = c_invalidObjectiveId;
+    gv_objectiveDestroyTheMainBase = c_invalidObjectiveId;
     gv_protossPlayerGroup = PlayerGroupEmpty();
     gv_harvestingSpeedBumpNWBullies = UnitGroupEmpty();
     gv_harvestingSpeedBumpCentralBullies = UnitGroupEmpty();
@@ -118,6 +122,11 @@ trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
+trigger gt_ObjectiveMiddleBaseCreateQ;
+trigger gt_ObjectiveMiddleBaseComplete;
+trigger gt_ObjectiveMainBaseCreateQ;
+trigger gt_ObjectiveMainBaseComplete;
+trigger gt_MidBasehandler;
 trigger gt_CloseRelic;
 trigger gt_WestRelic;
 trigger gt_NorthEastRelic;
@@ -805,6 +814,167 @@ void gt_onDifficultyBrutal_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Middle Base - Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMiddleBaseCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/D2BCF230"), StringExternal("Param/Value/B3607A04"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheMiddleBase = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMiddleBaseCreateQ_Init () {
+    gt_ObjectiveMiddleBaseCreateQ = TriggerCreate("gt_ObjectiveMiddleBaseCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Middle Base - Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMiddleBaseComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveMiddleBaseCreateQ, true, false);
+    TriggerQueueEnter();
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheMiddleBase);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMiddleBaseComplete_Init () {
+    gt_ObjectiveMiddleBaseComplete = TriggerCreate("gt_ObjectiveMiddleBaseComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Main Base - Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMainBaseCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/438D1DDE"), StringExternal("Param/Value/7B0FC11B"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheMainBase = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMainBaseCreateQ_Init () {
+    gt_ObjectiveMainBaseCreateQ = TriggerCreate("gt_ObjectiveMainBaseCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Main Base - Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveMainBaseComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveMainBaseCreateQ, true, false);
+    TriggerQueueEnter();
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheMainBase);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveMainBaseComplete_Init () {
+    gt_ObjectiveMainBaseComplete = TriggerCreate("gt_ObjectiveMainBaseComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Mid Base handler
+//--------------------------------------------------------------------------------------------------
+bool gt_MidBasehandler_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_p3_PROTOSS_SCRIPTED))) {
+            return false;
+        }
+
+        if (!((UnitFilterMatch(EventUnit(), 1, UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterMissile), 0)) == true))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup(null, gv_p3_PROTOSS_SCRIPTED, RegionFromId(29), UnitFilter((1 << c_targetFilterStructure), 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    TriggerExecute(gt_ObjectiveMiddleBaseComplete, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MidBasehandler_Init () {
+    gt_MidBasehandler = TriggerCreate("gt_MidBasehandler_Func");
+    TriggerAddEventUnitDied(gt_MidBasehandler, null);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Close Relic
 //--------------------------------------------------------------------------------------------------
 bool gt_CloseRelic_Func (bool testConds, bool runActions) {
@@ -1270,6 +1440,10 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TimerStart(gv_protossAggroTimer, 180.0, false, c_timeGame);
     Wait(3.0, c_timeReal);
     TriggerExecute(gt_PrimaryObjectiveCollectTerrazineCreateQ, true, true);
+    Wait(3.0, c_timeReal);
+    TriggerExecute(gt_ObjectiveMiddleBaseCreateQ, true, true);
+    Wait(3.0, c_timeReal);
+    TriggerExecute(gt_ObjectiveMainBaseCreateQ, true, true);
     Wait(8.0, c_timeReal);
     TriggerExecute(gt_GoliathandGatherTerrazineTipsQ, true, false);
     Wait(8.0, c_timeReal);
@@ -3729,6 +3903,8 @@ bool gt_VictoryProtossDestroyed_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    TriggerExecute(gt_ObjectiveMainBaseComplete, true, false);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
         AchievementAward(gv_p1_USER, "FeatOfStrength_TTosh02");
     }
@@ -4641,6 +4817,11 @@ void InitTriggers () {
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
+    gt_ObjectiveMiddleBaseCreateQ_Init();
+    gt_ObjectiveMiddleBaseComplete_Init();
+    gt_ObjectiveMainBaseCreateQ_Init();
+    gt_ObjectiveMainBaseComplete_Init();
+    gt_MidBasehandler_Init();
     gt_CloseRelic_Init();
     gt_WestRelic_Init();
     gt_NorthEastRelic_Init();

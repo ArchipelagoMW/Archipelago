@@ -27,6 +27,7 @@ void InitLibs () {
 //--------------------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------------------
+int gv_objectiveCallTheSpecialDelivery;
 int gv_p1_USER;
 int gv_p2_DOMINION_RED;
 int gv_p3_RIKSVILLE_YELLOW;
@@ -118,6 +119,7 @@ unitgroup gv_victoryHiddenUnitGroup;
 void InitGlobals () {
     int init_i;
 
+    gv_objectiveCallTheSpecialDelivery = c_invalidObjectiveId;
     gv_p1_USER = 1;
     gv_p2_DOMINION_RED = 2;
     gv_p3_RIKSVILLE_YELLOW = 3;
@@ -162,6 +164,8 @@ void gf_OrderUnitToMoveThenTurnToTargetPointsFacing (unit lp_u, point lp_targetP
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_ObjectiveCallTheSpecialDeliveryCreate;
+trigger gt_ObjectiveCallTheSpecialDeliveryComplete;
 trigger gt_ArchInit;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
@@ -317,6 +321,64 @@ void gf_OrderUnitToMoveThenTurnToTargetPointsFacing (unit lp_u, point lp_targetP
     // Implementation
     UnitIssueOrder(lp_u, OrderTargetingPoint(AbilityCommand("move", 0), lp_targetPoint), lp_queue);
     UnitIssueOrder(lp_u, OrderTargetingPoint(AbilityCommand("move", 4), PointWithOffsetPolar(lp_targetPoint, 10.0, PointGetFacing(lp_targetPoint))), c_orderQueueAddToEnd);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Call The Special Delivery Create
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveCallTheSpecialDeliveryCreate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    ObjectiveCreate(StringExternal("Param/Value/FE84E5DE"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveCallTheSpecialDelivery = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveCallTheSpecialDeliveryCreate_Init () {
+    gt_ObjectiveCallTheSpecialDeliveryCreate = TriggerCreate("gt_ObjectiveCallTheSpecialDeliveryCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Call The Special Delivery Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveCallTheSpecialDeliveryComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveCallTheSpecialDeliveryCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveCallTheSpecialDelivery);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveCallTheSpecialDeliveryComplete_Init () {
+    gt_ObjectiveCallTheSpecialDeliveryComplete = TriggerCreate("gt_ObjectiveCallTheSpecialDeliveryComplete_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -980,6 +1042,7 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ObjectiveDestroyLogisticalHQCreateQ, true, true);
     TriggerExecute(gt_ObjectiveRaynorMustSurviveCreateQ, true, true);
     TriggerExecute(gt_TutorialReviewQ, true, true);
+    TriggerExecute(gt_ObjectiveCallTheSpecialDeliveryCreate, true, false);
     TriggerExecute(gt_OpeningLineQ, true, true);
     TriggerExecute(gt_TipUnitNewUnitMarinesQ, true, true);
     TriggerExecute(gt_TipThisisnotaherogameQ, true, true);
@@ -2126,6 +2189,7 @@ bool gt_RiksvilleTownSquareDropPods_Func (bool testConds, bool runActions) {
 
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Terran, PointFromId(1672), UnitLastCreatedGroup(), true);
     UnitGroupIssueOrder(gv_dropGroup, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(2177)), c_orderQueueReplace);
+    TriggerExecute(gt_ObjectiveCallTheSpecialDeliveryComplete, true, false);
     return true;
 }
 
@@ -6263,6 +6327,8 @@ void gt_VictoryRandomCheer_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_ObjectiveCallTheSpecialDeliveryCreate_Init();
+    gt_ObjectiveCallTheSpecialDeliveryComplete_Init();
     gt_ArchInit_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
