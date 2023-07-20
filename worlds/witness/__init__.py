@@ -1,7 +1,7 @@
 """
 Archipelago init file for The Witness
 """
-import typing
+from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
@@ -113,7 +113,7 @@ class WitnessWorld(World):
         pool_size: int = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
 
         # Fill mandatory items and remove precollected and/or starting items from the pool.
-        item_pool: dict[str, int] = self.items.get_mandatory_items()
+        item_pool: Dict[str, int] = self.items.get_mandatory_items()
 
         for precollected_item_name in [item.name for item in self.multiworld.precollected_items[self.player]]:
             if precollected_item_name in item_pool:
@@ -250,7 +250,7 @@ class WitnessLocation(Location):
     game: str = "The Witness"
     check_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
+    def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1):
         super().__init__(player, name, address, parent)
         self.check_hex = ch_hex
 
