@@ -264,7 +264,7 @@ class ALTTPWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
         if multiworld.is_race:
-            pass
+            import xxtea
         for player in multiworld.get_game_players(cls.game):
             if multiworld.worlds[player].use_enemizer:
                 check_enemizer(multiworld.worlds[player].enemizer_path)
