@@ -1906,7 +1906,7 @@ def scramble_holes(world, player):
         connect_entrance(world, drop, target, player)
 
 
-def scramble_inverted_holes(world, player):
+def scramble_inverted_holes(multiworld: MultiWorld, player: int):
     hole_entrances = [('Kakariko Well Cave', 'Kakariko Well Drop'),
                       ('Bat Cave Cave', 'Bat Cave Drop'),
                       ('North Fairy Cave', 'North Fairy Cave Drop'),
@@ -1920,9 +1920,9 @@ def scramble_inverted_holes(world, player):
                     ('Lost Woods Hideout Exit', 'Lost Woods Hideout (top)'),
                     ('Lumberjack Tree Exit', 'Lumberjack Tree (top)')]
 
-    if not world.shuffle_ganon:
-        connect_two_way(world, 'Inverted Pyramid Entrance', 'Pyramid Exit', player)
-        connect_entrance(world, 'Inverted Pyramid Hole', 'Pyramid', player)
+    if not multiworld.shuffle_ganon:
+        connect_two_way(multiworld, 'Inverted Pyramid Entrance', 'Pyramid Exit', player)
+        connect_entrance(multiworld, 'Inverted Pyramid Hole', 'Pyramid', player)
     else:
         hole_targets.append(('Pyramid Exit', 'Pyramid'))
 
@@ -1931,24 +1931,24 @@ def scramble_inverted_holes(world, player):
     hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
 
     # do not shuffle sanctuary into pyramid hole unless shuffle is crossed
-    if world.shuffle[player] == 'crossed':
+    if multiworld.shuffle[player] == 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
-    if world.shuffle_ganon:
-        world.random.shuffle(hole_targets)
+    if multiworld.shuffle_ganon:
+        multiworld.worlds[player].random.shuffle(hole_targets)
         exit, target = hole_targets.pop()
-        connect_two_way(world, 'Inverted Pyramid Entrance', exit, player)
-        connect_entrance(world, 'Inverted Pyramid Hole', target, player)
-    if world.shuffle[player] != 'crossed':
+        connect_two_way(multiworld, 'Inverted Pyramid Entrance', exit, player)
+        connect_entrance(multiworld, 'Inverted Pyramid Hole', target, player)
+    if multiworld.shuffle[player] != 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
-    world.random.shuffle(hole_targets)
+    multiworld.worlds[player].random.shuffle(hole_targets)
     for entrance, drop in hole_entrances:
         exit, target = hole_targets.pop()
-        connect_two_way(world, entrance, exit, player)
-        connect_entrance(world, drop, target, player)
+        connect_two_way(multiworld, entrance, exit, player)
+        connect_entrance(multiworld, drop, target, player)
 
 
-def connect_random(multiworld: MultiWorld, exitlist: typing.List[str], targetlist: typing.List[str], player, two_way=False):
+def connect_random(multiworld: MultiWorld, exitlist: typing.List[str], targetlist: typing.List[str], player: int, two_way=False):
     targetlist = list(targetlist)
     multiworld.worlds[player].random.shuffle(targetlist)
 

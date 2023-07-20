@@ -630,7 +630,7 @@ class ALTTPWorld(World):
                 pass
             elif 'triforcehunt' in world.goal[player] and ('local' in world.goal[player] or world.players == 1):
                 trash_counts[player] = world.worlds[player].random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                            world.crystals_needed_for_gt[player] * 4)
+                                                                           world.crystals_needed_for_gt[player] * 4)
             else:
                 trash_counts[player] = world.worlds[player].random.randint(0, world.crystals_needed_for_gt[player] * 2)
 

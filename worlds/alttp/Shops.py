@@ -428,7 +428,7 @@ def set_up_shops(multiworld: MultiWorld, player: int):
     if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal or multiworld.retro_bow[player]:
         for shop in world.random.sample([s for s in multiworld.shops if
                                          s.custom and not s.locked and s.type == ShopType.Shop and s.region.player == player],
-                                             5):
+                                        5):
             shop.locked = True
             slots = [0, 1, 2]
             world.random.shuffle(slots)
