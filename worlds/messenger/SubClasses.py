@@ -56,7 +56,8 @@ class MessengerShopLocation(MessengerLocation):
             cost *= 2
         can_afford = state.has("Shards", self.player, min(cost, world.total_shards))
         if "Figurine" in self.name:
-            return state.has("Money Wrench", self.player) and can_afford
+            return state.has("Money Wrench", self.player) and can_afford\
+                and state.can_reach("Money Wrench", "Location", self.player)
         return can_afford
 
 

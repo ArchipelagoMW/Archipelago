@@ -299,7 +299,7 @@ if __name__ == '__main__':
 
     versions = get_minecraft_versions(data_version, channel)
 
-    forge_dir = Utils.user_path(options["minecraft_options"]["forge_directory"])
+    forge_dir = options["minecraft_options"]["forge_directory"]
     max_heap = options["minecraft_options"]["max_heap_size"]
     forge_version = args.forge or versions["forge"]
     java_version = args.java or versions["java"]
