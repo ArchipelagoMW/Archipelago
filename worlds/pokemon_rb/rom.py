@@ -2,7 +2,8 @@ import os
 import hashlib
 import Utils
 import bsdiff4
-from Patch import APDeltaPatch
+from copy import deepcopy
+from worlds.Files import APDeltaPatch
 from .text import encode_text
 from .items import item_table
 from .pokemon import set_mon_palettes
