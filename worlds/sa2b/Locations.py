@@ -1727,17 +1727,18 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
                 location_table[key] = value
 
         for index in range(1, world.chao_stats[player].value + 1):
-            location_table[LocationName.chao_stat_swim_base    + str(index)] = chao_stat_swim_table[   LocationName.chao_stat_swim_base    + str(index)]
-            location_table[LocationName.chao_stat_fly_base     + str(index)] = chao_stat_fly_table[    LocationName.chao_stat_fly_base     + str(index)]
-            location_table[LocationName.chao_stat_run_base     + str(index)] = chao_stat_run_table[    LocationName.chao_stat_run_base     + str(index)]
-            location_table[LocationName.chao_stat_power_base   + str(index)] = chao_stat_power_table[  LocationName.chao_stat_power_base   + str(index)]
+            if (index % world.chao_stats_frequency[player].value) == (world.chao_stats[player].value % world.chao_stats_frequency[player].value):
+                location_table[LocationName.chao_stat_swim_base    + str(index)] = chao_stat_swim_table[   LocationName.chao_stat_swim_base    + str(index)]
+                location_table[LocationName.chao_stat_fly_base     + str(index)] = chao_stat_fly_table[    LocationName.chao_stat_fly_base     + str(index)]
+                location_table[LocationName.chao_stat_run_base     + str(index)] = chao_stat_run_table[    LocationName.chao_stat_run_base     + str(index)]
+                location_table[LocationName.chao_stat_power_base   + str(index)] = chao_stat_power_table[  LocationName.chao_stat_power_base   + str(index)]
 
-            if world.chao_stats_stamina[player]:
-                location_table[LocationName.chao_stat_stamina_base + str(index)] = chao_stat_stamina_table[LocationName.chao_stat_stamina_base + str(index)]
+                if world.chao_stats_stamina[player]:
+                    location_table[LocationName.chao_stat_stamina_base + str(index)] = chao_stat_stamina_table[LocationName.chao_stat_stamina_base + str(index)]
 
-            if world.chao_stats_hidden[player]:
-                location_table[LocationName.chao_stat_luck_base         + str(index)] = chao_stat_luck_table[        LocationName.chao_stat_luck_base         + str(index)]
-                location_table[LocationName.chao_stat_intelligence_base + str(index)] = chao_stat_intelligence_table[LocationName.chao_stat_intelligence_base + str(index)]
+                if world.chao_stats_hidden[player]:
+                    location_table[LocationName.chao_stat_luck_base         + str(index)] = chao_stat_luck_table[        LocationName.chao_stat_luck_base         + str(index)]
+                    location_table[LocationName.chao_stat_intelligence_base + str(index)] = chao_stat_intelligence_table[LocationName.chao_stat_intelligence_base + str(index)]
 
         if world.chao_animal_parts[player]:
             location_table.update({**chao_animal_part_location_table})

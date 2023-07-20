@@ -2025,45 +2025,46 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
 
     stat_checks_per_gate = world.chao_stats[player].value / (gates_len)
     for index in range(1, world.chao_stats[player].value + 1):
-        gate_val    = math.ceil(index / stat_checks_per_gate) - 1
-        gate_region = world.get_region("Gate " + str(gate_val), player)
+        if (index % world.chao_stats_frequency[player].value) == (world.chao_stats[player].value % world.chao_stats_frequency[player].value):
+            gate_val    = math.ceil(index / stat_checks_per_gate) - 1
+            gate_region = world.get_region("Gate " + str(gate_val), player)
 
-        loc_name_swim = LocationName.chao_stat_swim_base + str(index)
-        loc_id_swim   = chao_stat_swim_table[loc_name_swim]
-        location_swim = SA2BLocation(player, loc_name_swim, loc_id_swim, gate_region)
-        gate_region.locations.append(location_swim)
+            loc_name_swim = LocationName.chao_stat_swim_base + str(index)
+            loc_id_swim   = chao_stat_swim_table[loc_name_swim]
+            location_swim = SA2BLocation(player, loc_name_swim, loc_id_swim, gate_region)
+            gate_region.locations.append(location_swim)
 
-        loc_name_fly = LocationName.chao_stat_fly_base + str(index)
-        loc_id_fly   = chao_stat_fly_table[loc_name_fly]
-        location_fly = SA2BLocation(player, loc_name_fly, loc_id_fly, gate_region)
-        gate_region.locations.append(location_fly)
+            loc_name_fly = LocationName.chao_stat_fly_base + str(index)
+            loc_id_fly   = chao_stat_fly_table[loc_name_fly]
+            location_fly = SA2BLocation(player, loc_name_fly, loc_id_fly, gate_region)
+            gate_region.locations.append(location_fly)
 
-        loc_name_run = LocationName.chao_stat_run_base + str(index)
-        loc_id_run   = chao_stat_run_table[loc_name_run]
-        location_run = SA2BLocation(player, loc_name_run, loc_id_run, gate_region)
-        gate_region.locations.append(location_run)
+            loc_name_run = LocationName.chao_stat_run_base + str(index)
+            loc_id_run   = chao_stat_run_table[loc_name_run]
+            location_run = SA2BLocation(player, loc_name_run, loc_id_run, gate_region)
+            gate_region.locations.append(location_run)
 
-        loc_name_power = LocationName.chao_stat_power_base + str(index)
-        loc_id_power   = chao_stat_power_table[loc_name_power]
-        location_power = SA2BLocation(player, loc_name_power, loc_id_power, gate_region)
-        gate_region.locations.append(location_power)
+            loc_name_power = LocationName.chao_stat_power_base + str(index)
+            loc_id_power   = chao_stat_power_table[loc_name_power]
+            location_power = SA2BLocation(player, loc_name_power, loc_id_power, gate_region)
+            gate_region.locations.append(location_power)
 
-        if world.chao_stats_stamina[player]:
-            loc_name_stamina = LocationName.chao_stat_stamina_base + str(index)
-            loc_id_stamina   = chao_stat_stamina_table[loc_name_stamina]
-            location_stamina = SA2BLocation(player, loc_name_stamina, loc_id_stamina, gate_region)
-            gate_region.locations.append(location_stamina)
+            if world.chao_stats_stamina[player]:
+                loc_name_stamina = LocationName.chao_stat_stamina_base + str(index)
+                loc_id_stamina   = chao_stat_stamina_table[loc_name_stamina]
+                location_stamina = SA2BLocation(player, loc_name_stamina, loc_id_stamina, gate_region)
+                gate_region.locations.append(location_stamina)
 
-        if world.chao_stats_hidden[player]:
-            loc_name_luck = LocationName.chao_stat_luck_base + str(index)
-            loc_id_luck   = chao_stat_luck_table[loc_name_luck]
-            location_luck = SA2BLocation(player, loc_name_luck, loc_id_luck, gate_region)
-            gate_region.locations.append(location_luck)
+            if world.chao_stats_hidden[player]:
+                loc_name_luck = LocationName.chao_stat_luck_base + str(index)
+                loc_id_luck   = chao_stat_luck_table[loc_name_luck]
+                location_luck = SA2BLocation(player, loc_name_luck, loc_id_luck, gate_region)
+                gate_region.locations.append(location_luck)
 
-            loc_name_intelligence = LocationName.chao_stat_intelligence_base + str(index)
-            loc_id_intelligence   = chao_stat_intelligence_table[loc_name_intelligence]
-            location_intelligence = SA2BLocation(player, loc_name_intelligence, loc_id_intelligence, gate_region)
-            gate_region.locations.append(location_intelligence)
+                loc_name_intelligence = LocationName.chao_stat_intelligence_base + str(index)
+                loc_id_intelligence   = chao_stat_intelligence_table[loc_name_intelligence]
+                location_intelligence = SA2BLocation(player, loc_name_intelligence, loc_id_intelligence, gate_region)
+                gate_region.locations.append(location_intelligence)
 
     # Handle access to Animal Parts
     if world.goal[player] == 7 or world.chao_animal_parts[player]:

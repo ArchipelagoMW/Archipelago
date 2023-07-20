@@ -101,6 +101,7 @@ class SA2BWorld(World):
             "ChaoRaceDifficulty": self.multiworld.chao_race_difficulty[self.player].value,
             "ChaoKarateDifficulty": self.multiworld.chao_karate_difficulty[self.player].value,
             "ChaoStats": self.multiworld.chao_stats[self.player].value,
+            "ChaoStatsFrequency": self.multiworld.chao_stats_frequency[self.player].value,
             "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
             "ChaoKindergarten": self.multiworld.chao_kindergarten[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,

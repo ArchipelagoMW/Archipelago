@@ -354,13 +354,24 @@ class ChaoStadiumChecks(Choice):
 
 class ChaoStats(Range):
     """
-    Determines how many levels in each Chao Stat grant checks
+    Determines the highest level in each Chao Stat that grants checks
     (Swim, Fly, Run, Power)
     """
     display_name = "Chao Stats"
     range_start = 0
     range_end = 99
     default = 0
+
+
+class ChaoStatsFrequency(Range):
+    """
+    Determines how many levels in each Chao Stat grant checks (up to the maximum set in the `chao_stats` option)
+    `1` means every level is included, `2` means every other level is included, `3` means every third, and so on
+    """
+    display_name = "Chao Stats Frequency"
+    range_start = 1
+    range_end = 20
+    default = 5
 
 
 class ChaoStatsStamina(Toggle):
@@ -738,6 +749,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_karate_difficulty": ChaoKarateDifficulty,
     "chao_stadium_checks": ChaoStadiumChecks,
     "chao_stats": ChaoStats,
+    "chao_stats_frequency": ChaoStatsFrequency,
     "chao_stats_stamina": ChaoStatsStamina,
     "chao_stats_hidden": ChaoStatsHidden,
     "chao_animal_parts": ChaoAnimalParts,
