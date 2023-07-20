@@ -13,7 +13,7 @@ CreateTextOAM:
     mov r6, r0
     ldr r0, =attr0_wide | attr0_4bpp | attr0_y(152)
     ldr r1, =attr1_size(1) | attr1_x(0)
-    ldr r2, =attr2_palette(0) | attr2_priority(0) | attr2_id(0x10C)
+    ldr r2, =attr2_palette(3) | attr2_priority(0) | attr2_id(0x10C)
     ldr r3, =ucCntObj
     ldr r4, =OamBuf
     
@@ -83,6 +83,8 @@ CreateTextOAM:
     pop {r4-r6, pc}
 .pool
 
+.definelabel @ObjectPalette3, 0x5000260 
+
 
 ; Copy text sprites into the sprite table. On encountering 0xFE, blank spaces
 ; will be copied into the remaining space.
@@ -99,6 +101,12 @@ LoadSpriteString:
     mov r4, r0
     mov r5, r1
     mov r6, r2
+
+; Override OBP3 color 2 with white.
+; TODO: find where the overridden purple color is used and change methods if necessary
+    ldr r1, =@ObjectPalette3 + 4
+    ldr r0, =0x7FFF
+    strh r0, [r1]
 
 @@LoadFromString:
     ldrb r0, [r4]
@@ -144,38 +152,38 @@ LoadSpriteCharacter:
 
 .align 4
 LetterToSpriteTile:
-    .word TextTile0,  TextTile1,  TextTile2,  TextTile3,  TextTile4,  TextTile5,  TextTile6,  TextTile7
-    .word TextTile8,  TextTile9,  TextTileA,  TextTileB,  TextTileC,  TextTileD,  TextTileE,  TextTileF
-    .word TextTileG,  TextTileH,  TextTileI,  TextTileJ,  TextTileK,  TextTileL,  TextTileM,  TextTileN
-    .word TextTileO,  TextTileP,  TextTileQ,  TextTileR,  TextTileS,  TextTileT,  TextTileU,  TextTileV
-    .word TextTileW,  TextTileX,  TextTileY,  TextTileZ,  TextTileAl, TextTileBl, TextTileCl, TextTileDl
-    .word TextTileEl, TextTileFl, TextTileGl, TextTileHl, TextTileIl, TextTileJl, TextTileKl, TextTileLl
-    .word TextTileMl, TextTileNl, TextTileOl, TextTilePl, TextTileQl, TextTileRl, TextTileSl, TextTileTl
-    .word TextTileUl, TextTileVl, TextTileWl, TextTileXl, TextTileYl, TextTileZl, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileTsu, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileTsuS, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileLP, TextTileRP, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileHyp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
-    .word TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp, TextTileSp
+    .word Text8x8_0, Text8x8_1, Text8x8_2, Text8x8_3, Text8x8_4, Text8x8_5, Text8x8_6, Text8x8_7
+    .word Text8x8_8, Text8x8_9, Text8x8_A, Text8x8_B, Text8x8_C, Text8x8_D, Text8x8_E, Text8x8_F
+    .word Text8x8_G, Text8x8_H, Text8x8_I, Text8x8_J, Text8x8_K, Text8x8_L, Text8x8_M, Text8x8_N
+    .word Text8x8_O, Text8x8_P, Text8x8_Q, Text8x8_R, Text8x8_S, Text8x8_T, Text8x8_U, Text8x8_V
+    .word Text8x8_W, Text8x8_X, Text8x8_Y, Text8x8_Z, Text8x8_A, Text8x8_B, Text8x8_C, Text8x8_D
+    .word Text8x8_E, Text8x8_F, Text8x8_G, Text8x8_H, Text8x8_I, Text8x8_J, Text8x8_K, Text8x8_L
+    .word Text8x8_M, Text8x8_N, Text8x8_O, Text8x8_P, Text8x8_Q, Text8x8_R, Text8x8_S, Text8x8_T
+    .word Text8x8_U, Text8x8_V, Text8x8_W, Text8x8_X, Text8x8_Y, Text8x8_Z, Text8x8_Period, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, Text8x8_Comma, Text8x8_Period, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
 
 StrItemSent: .string "Sent"
 StrItemTo: .string "to"
