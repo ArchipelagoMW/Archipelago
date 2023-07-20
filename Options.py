@@ -1,4 +1,4 @@
-import typing
+from typing import Dict, Type
 from Options import Choice, Option, DefaultOnToggle, DeathLink
 
 
@@ -36,7 +36,7 @@ class MusicShuffle(Choice):
     default = 0
 
 
-wl4_options: typing.Dict[str, type[Option]] = {
+wl4_options: Dict[str, Type[Option]] = {
     "difficulty": Difficulty,
     "early_entry_jewels": EarlyEntryJewels,
     "death_link": DeathLink,
