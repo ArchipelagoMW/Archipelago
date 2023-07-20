@@ -54,7 +54,7 @@ class SA2BWorld(World):
     game: str = "Sonic Adventure 2 Battle"
     option_definitions = sa2b_options
     topology_present = False
-    data_version = 6
+    data_version = 7
 
     item_name_groups = item_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -113,6 +113,7 @@ class SA2BWorld(World):
             "GateCosts": self.gate_costs,
             "GateBosses": self.gate_bosses,
             "BossRushMap": self.boss_rush_map,
+            "PlayerNum": self.player,
         }
 
     def _create_items(self, name: str):
