@@ -293,7 +293,7 @@ class MaximumEmblemCap(Range):
     """
     display_name = "Max Emblem Cap"
     range_start = 50
-    range_end = 500
+    range_end = 1000
     default = 180
 
 
