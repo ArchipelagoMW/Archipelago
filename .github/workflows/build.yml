@@ -38,12 +38,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python setup.py build_exe --yes
-          $NAME="$(ls build)".Split('.',2)[1]
+          $NAME="$(ls build | Select-String -Pattern 'exe')".Split('.',2)[1]
           $ZIP_NAME="Archipelago_$NAME.7z"
+          echo "$NAME -> $ZIP_NAME"
           echo "ZIP_NAME=$ZIP_NAME" >> $Env:GITHUB_ENV
           New-Item -Path dist -ItemType Directory -Force
           cd build
-          Rename-Item exe.$NAME Archipelago
+          Rename-Item "exe.$NAME" Archipelago
           7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
       - name: Store 7z
         uses: actions/upload-artifact@v3

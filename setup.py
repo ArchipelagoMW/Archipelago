@@ -6,6 +6,7 @@ import shutil
 import sys
 import sysconfig
 import typing
+import warnings
 import zipfile
 import urllib.request
 import io
@@ -20,7 +21,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze==6.14.9'
+    requirement = 'cx-Freeze>=6.15.2'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -57,6 +58,7 @@ if __name__ == "__main__":
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
+from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
@@ -65,13 +67,10 @@ non_apworlds: set = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Blasphemous",
     "ChecksFinder",
     "Clique",
     "DLCQuest",
-    "Dark Souls III",
     "Final Fantasy",
-    "Hollow Knight",
     "Hylics 2",
     "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
@@ -90,6 +89,9 @@ non_apworlds: set = {
     "Zillion",
 }
 
+# LogicMixin is broken before 3.10 import revamp
+if sys.version_info < (3,10):
+    non_apworlds.add("Hollow Knight")
 
 def download_SNI():
     print("Updating SNI")
@@ -191,7 +193,7 @@ exes = [
     ) for c in components if c.script_name and c.frozen_name
 ]
 
-extra_data = ["LICENSE", "data", "EnemizerCLI", "host.yaml", "SNI"]
+extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
@@ -293,16 +295,37 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
         sni_thread.start()
 
-        # pre build steps
+        # pre-build steps
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
         ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
+        # auto-build cython modules
+        build_ext = self.distribution.get_command_obj("build_ext")
+        build_ext.inplace = False
+        self.run_command("build_ext")
+        # find remains of previous in-place builds, try to delete and warn otherwise
+        for path in build_ext.get_outputs():
+            parts = os.path.split(path)[-1].split(".")
+            pattern = parts[0] + ".*." + parts[-1]
+            for match in Path().glob(pattern):
+                try:
+                    match.unlink()
+                    print(f"Removed {match}")
+                except Exception as ex:
+                    warnings.warn(f"Could not delete old build output: {match}\n"
+                                  f"{ex}\nPlease close all AP instances and delete manually.")
+
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
+
+        # manually copy built modules to lib folder. cx_Freeze does not know they exist.
+        for src in build_ext.get_outputs():
+            print(f"copying {src} -> {self.libfolder}")
+            shutil.copy(src, self.libfolder, follow_symlinks=False)
 
         # need to finish download before copying
         sni_thread.join()
@@ -396,14 +419,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for extra_exe in extra_exes:
                 if extra_exe.is_file():
                     extra_exe.chmod(0o755)
-            # rewrite windows-specific things in host.yaml
-            host_yaml = self.buildfolder / 'host.yaml'
-            with host_yaml.open('r+b') as f:
-                data = f.read()
-                data = data.replace(b'factorio\\\\bin\\\\x64\\\\factorio', b'factorio/bin/x64/factorio')
-                f.seek(0, os.SEEK_SET)
-                f.write(data)
-                f.truncate()
 
 
 class AppImageCommand(setuptools.Command):
@@ -586,10 +601,10 @@ cx_Freeze.setup(
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
-    ext_modules=[],  # required to disable auto-discovery with setuptools>=61
+    ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["websockets", "worlds", "kivy"],
+            "packages": ["worlds", "kivy", "cymem"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
