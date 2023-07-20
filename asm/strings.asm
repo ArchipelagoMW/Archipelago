@@ -11,9 +11,9 @@
 CreateTextOAM:
     push {r4-r6, lr}
     mov r6, r0
-    ldr r0, =0x4098  ; Y position 7:0
-    ldr r1, =0x4000  ; X position 8:0
-    ldr r2, =0x010C  ; Index      9:0
+    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(152)
+    ldr r1, =attr1_size(1) | attr1_x(0)
+    ldr r2, =attr2_palette(0) | attr2_priority(0) | attr2_id(0x10C)
     ldr r3, =ucCntObj
     ldr r4, =OamBuf
     
@@ -135,7 +135,7 @@ LoadSpriteCharacter:
     str r0, [r2]
     mov r0, r1
     str r0, [r2, #4]
-    ldr r0, =0x84000008
+    ldr r0, =dma_enable | dma_words(8)
     str r0, [r2, #8]
     ldr r0, [r2, #8]
 

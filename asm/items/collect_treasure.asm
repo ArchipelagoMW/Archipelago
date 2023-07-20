@@ -139,7 +139,7 @@ SpawnCollectionIndicator:
     str r0, [r1]
     ldr r0, =TileId
     str r0, [r1, #4]
-    ldr r0, =0x80000010
+    ldr r0, =dma_enable | dma_halfwords(0x10)
     str r0, [r1, #8]
     ldr r0, [r1, #8]
 .endmacro
@@ -265,7 +265,7 @@ UpdateJewelIcon:
     str r0, [r1]  
     ldr r0, [r3, #4]  ; Destination (tilemap position)
     str r0, [r1, #4]
-    ldr r0, =0x80000010
+    ldr r0, =dma_enable | dma_halfwords(0x10)
     str r0, [r1, #8]
     ldr r0, [r1, #8]
 

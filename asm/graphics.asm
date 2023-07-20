@@ -26,7 +26,7 @@ SetTreasurePalette:
     str r0, [r1]
     ldr r0, =@ObjectPalette4 + 0x296 - 0x280
     str r0, [r1, #4]
-    ldr r0, =0x80000005
+    ldr r0, =dma_enable | dma_halfwords(5)
     str r0, [r1, #8]
     ldr r0, [r1, #8]
 

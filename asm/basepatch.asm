@@ -10,6 +10,7 @@ UnusedRomStart equ 0x0878F97C
 .include "asm/util/vanilla_labels.asm"
 .include "asm/util/randomizer_variables.asm"
 .include "asm/util/hook_macros.asm"
+.include "asm/util/bitfields.asm"
 
 
 ; Allocate space at ROM end
