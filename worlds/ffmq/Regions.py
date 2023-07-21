@@ -200,6 +200,9 @@ def set_rules(self) -> None:
         logic_coins = [16, 24, 32, 32, 38][self.multiworld.shattered_sky_coin_quantity[self.player].value]
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Fragment", self.player, logic_coins)
+    elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
+        self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
+            lambda state: state.has_all(["Flamerus Rex", "Dualhead Hydra", "Ice Golem", "Pazuzu"], self.player)
     elif self.multiworld.sky_coin_mode[self.player] in ("standard", "start_with"):
         self.multiworld.get_entrance("Focus Tower 1F - Sky Door", self.player).access_rule = \
             lambda state: state.has("Sky Coin", self.player)
