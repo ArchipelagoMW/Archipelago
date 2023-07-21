@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import struct
 import zipfile
+from enum import IntEnum
 
 from typing import ClassVar, Dict, Tuple, Any, Optional, Union, BinaryIO, List
 
@@ -138,7 +139,6 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
     An APContainer that defines a procedure to produce the desired file.
     """
     procedure: List[Tuple[str, List[Any]]]
-    tokens: List[Tuple[int, bytes]]
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
     patch_file_ending: str = ""
@@ -214,7 +214,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
         for step, args in self.procedure:
             if isinstance(patch_extender, List):
                 extension = next((item for item in [getattr(extender, step, None) for extender in patch_extender]
-                                 if item is not None), None)
+                                  if item is not None), None)
             else:
                 extension = getattr(patch_extender, step, None)
             if extension is not None:
@@ -244,6 +244,49 @@ class APDeltaPatch(APProcedurePatch):
         super(APDeltaPatch, self).write_contents(opened_zipfile)
 
 
+class APTokenTypes(IntEnum):
+    WRITE = 0
+    COPY = 1
+    RLE = 2
+    AND_8 = 3
+    OR_8 = 4
+    XOR_8 = 5
+
+
+class APTokenMixin:
+    """
+    A class that defines functions for generating a token binary, for use in patches.
+    """
+    tokens: List[
+        Tuple[int, int,
+        Union[
+            bytes,  # WRITE
+            Tuple[int, int],  # COPY, RLE
+            int  # AND_8, OR_8, XOR_8
+        ]]] = []
+
+    def get_token_binary(self) -> bytes:
+        data = bytearray()
+        data.extend(struct.pack("I", len(self.tokens)))
+        for type, offset, args in self.tokens:
+            data.append(type)
+            data.extend(struct.pack("I", offset))
+            if type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
+                data.extend(struct.pack("I", 1))
+                data.append(args)
+            elif type in [APTokenTypes.COPY, APTokenTypes.RLE]:
+                data.extend(struct.pack("I", 8))
+                data.extend(struct.pack("I", args[0]))
+                data.extend(struct.pack("I", args[1]))
+            else:
+                data.extend(struct.pack("I", len(args)))
+                data.extend(args)
+        return data
+
+    def write_token(self, type, offset, data):
+        self.tokens.append((type, offset, data))
+
+
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     game: str
     required_extensions: List[str] = list()
@@ -259,9 +302,29 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         token_count = struct.unpack("I", token_data[0:4])[0]
         bpr = 4
         for _ in range(token_count):
-            offset = struct.unpack("I", token_data[bpr:bpr + 4])[0]
-            size = struct.unpack("I", token_data[bpr + 4:bpr + 8])[0]
-            data = token_data[bpr + 8:bpr + 8 + size]
-            rom_data[offset:offset + len(data)] = data
-            bpr += 8 + size
+            type = token_data[bpr:bpr + 1][0]
+            offset = struct.unpack("I", token_data[bpr + 1:bpr + 5])[0]
+            size = struct.unpack("I", token_data[bpr + 5:bpr + 9])[0]
+            data = token_data[bpr + 9:bpr + 9 + size]
+            if type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
+                arg = data[0]
+                if type == APTokenTypes.AND_8:
+                    rom_data[offset] = rom_data[offset] & arg
+                elif type == APTokenTypes.OR_8:
+                    rom_data[offset] = rom_data[offset] | arg
+                else:
+                    rom_data[offset] = rom_data[offset] ^ arg
+            elif type in [APTokenTypes.COPY, APTokenTypes.RLE]:
+                args = struct.unpack("II", data)
+                if type == APTokenTypes.COPY:
+                    length = args[0]
+                    target = args[1]
+                    rom_data[offset: offset+length] = rom_data[target: target+length]
+                else:
+                    length = args[0]
+                    val = args[1]
+                    rom_data[offset: offset+length] = bytes([val] * length)
+            else:
+                rom_data[offset:offset + len(data)] = data
+            bpr += 9 + size
         return rom_data
