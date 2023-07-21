@@ -415,6 +415,7 @@ def create_walnut_purchase_rewards(item_factory: StardewItemFactory, world_optio
     items.extend([item_factory("Boat Repair"),
                   item_factory("Open Professor Snail Cave"),
                   item_factory("Ostrich Incubator Recipe"),
+                  item_factory("Treehouse"),
                   *[item_factory(item) for item in items_by_group[Group.WALNUT_PURCHASE]]])
 
 
