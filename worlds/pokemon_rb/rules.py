@@ -33,8 +33,8 @@ def set_rules(world, player):
         "Cerulean City - Bicycle Shop": lambda state: state.has("Bike Voucher", player)
             or location_item_name(state, "Cerulean City - Bicycle Shop", player) == ("Bike Voucher", player),
         "Lavender Town - Mr. Fuji": lambda state: state.has("Fuji Saved", player),
-        "Vermilion Gym - Lt. Surge 1": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
-        "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
+        "Vermilion Gym - Lt. Surge 1": lambda state: state.pokemon_rb_can_cut(player) or state.pokemon_rb_can_surf(player),
+        "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player) or state.pokemon_rb_can_surf(player),
         "Route 11 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_11[player].value + 5, player),
         "Celadon City - Stranded Man": lambda state: state.pokemon_rb_can_surf(player),
         "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
@@ -163,7 +163,7 @@ def set_rules(world, player):
         "S.S. Anne 1F - Hidden Item Kitchen Trash": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "S.S. Anne B1F - Hidden Item Under Pillow": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Route 10 - Hidden Item Behind Rock Tunnel Entrance Cuttable Tree": lambda
-            state: state.pokemon_rb_can_get_hidden_items(player),
+            state: state.pokemon_rb_can_get_hidden_items(player) and state.pokemon_rb_can_cut(player),
         "Route 10 - Hidden Item Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: state.pokemon_rb_can_get_hidden_items(player),
