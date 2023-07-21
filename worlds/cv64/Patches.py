@@ -347,12 +347,34 @@ overlay_modifiers = [
     0x03200008,  # JR    T9
     # Overwrite instructions in the Forest end cutscene script to store a spawn position ID instead of a cutscene ID.
     0x2409002E,  # ADDIU T1, R0, 0x002E
-    0x15090004,  # BNE   T0, T1, [forward 0x04]
+    0x15090005,  # BNE   T0, T1, [forward 0x05]
     0x3C0AA058,  # LUI   T2, 0xA058
     0x254A642B,  # ADDIU T2, T2, 0x642B
     0xAF2A0D88,  # SW    T2, 0x0D88 (T9)
     0xAF200D98,  # SW    R0, 0x0D98 (T9)
     0x03200008,  # JR    T9
+    # Disable the rapid flashing effect in the CC planetarium cutscene to ensure it won't trigger seizures.
+    0x2409003E,  # ADDIU T1, R0, 0x003E
+    0x1509000C,  # BNE   T0, T1, [forward 0x0C]
+    0x00000000,  # NOP
+    0xAF200C5C,  # SW    R0, 0x0C5C
+    0xAF200CD0,  # SW    R0, 0x0CD0
+    0xAF200C64,  # SW    R0, 0x0C64
+    0xAF200C74,  # SW    R0, 0x0C74
+    0xAF200C80,  # SW    R0, 0x0C80
+    0xAF200C88,  # SW    R0, 0x0C88
+    0xAF200C90,  # SW    R0, 0x0C90
+    0xAF200C9C,  # SW    R0, 0x0C9C
+    0xAF200CB4,  # SW    R0, 0x0CB4
+    0xAF200CC8,  # SW    R0, 0x0CC8
+    0x03200008,  # JR    T9
+    0x24090134,  # ADDIU T1, R0, 0x0134
+    0x15090004,  # BNE   T0, T1, [forward 0x04]
+    0x340B8040,  # ORI   T3, R0, 0x8040
+    0x340CDD20,  # ORI   T4, R0, 0xDD20
+    0xA72B1D1E,  # SH    T3, 0x1D1E (T9)
+    0xA72C1D22,  # SH    T4, 0x1D22 (T9)
+    0x03200008   # JR    T9
 ]
 
 double_component_checker = [
@@ -1138,9 +1160,15 @@ continue_cursor_start_checker = [
 
 savepoint_cursor_updater = [
     # Sets the value at 0x80389BC0 to 0x00 after saving to let the Game Over screen's "Continue" menu know to start the
-    # cursor on "Previously saved". Then jump to deathlink_counter_decrementer in the event we're loading a save from
-    # the Game Over screen.
+    # cursor on "Previously saved" as well as updates the entrance variable for B warping. It then jumps to
+    # deathlink_counter_decrementer in the event we're loading a save from the Game Over screen.
     0x3C088039,  # LUI    T0, 0x8039
+    0x91099C95,  # LBU    T1, 0x9C95 (T0)
+    0x000948C0,  # SLL    T1, T1, 3
+    0x3C0A8018,  # LUI    T2, 0x8018
+    0x01495021,  # ADDU   T2, T2, T1
+    0x914B17CF,  # LBU    T3, 0x17CF (T2)
+    0xA10B9EE3,  # SB     T3, 0x9EE3 (T0)
     0xA1009BC0,  # SB     R0, 0x9BC0 (T0)
     0x080FF052   # J   0x803FC148
 ]
@@ -1984,4 +2012,146 @@ shopsanity_stuff = [
     0x3C048002,  # LUI   A0, 0x8002
     0x24849C00,  # ADDIU A0, A0, 0x9C00
     0x0804B39F   # J     0x8012CE7C
+]
+
+special_sound_notifs = [
+    # Plays a distinct sound whenever you get enough Special1s to unlock a new location or enough Special2s to unlock
+    # Dracula's door.
+    0x3C088013,  # LUI   A0, 0x8013
+    0x9108AC9F,  # LBU   T0, 0xAC57 (T0)
+    0x3C098039,  # LUI   T1, 0x8039
+    0x91299C4C,  # LBU   T1, 0x9C4B (T1)
+    0x15090003,  # BNE   T0, T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x24040162,  # ADDIU A0, R0, 0x0162
+    0x0804F0BF,  # J     0x8013C2FC
+    0x00000000,  # NOP
+    0x3C088013,  # LUI   T0, 0x8013
+    0x9108AC57,  # LBU   T0, 0xAC57 (T0)
+    0x3C098039,  # LUI   T1, 0x8039
+    0x91299C4B,  # LBU   T1, 0x9C4B (T1)
+    0x0128001B,  # DIVU  T1, T0
+    0x00005010,  # MFHI
+    0x15400006,  # BNEZ  T2,     [forward 0x06]
+    0x00005812,  # MFLO  T3
+    0x296C0008,  # SLTI  T4, T3, 0x0008
+    0x11800003,  # BEQZ  T4,     [forward 0x03]
+    0x00000000,  # NOP
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x2404019E,  # ADDIU A0, R0, 0x019E
+    0x0804F0BF   # J     0x8013C2FC
+]
+
+map_text_redirector = [
+    # Checks for Map Texts 06 or 08 if in the Forest or Castle Wall Main maps respectively and redirects the text
+    # pointer to a blank string, skipping all the yes/no prompt text for pulling levers.
+    0x0002FFFF,  # Dummy text string
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x91689EE1,  # LBU   T0, 0x9EE1 (T3)
+    0x11000006,  # BEQZ  T0,     [forward 0x06]
+    0x24090006,  # ADDIU T1, R0, 0x0006
+    0x240A0002,  # ADDIU T2, R0, 0x0002
+    0x110A0003,  # BEQ   T0, T2, [forward 0x03]
+    0x24090008,  # ADDIU T1, R0, 0x0008
+    0x10000008,  # B     0x803FDB34
+    0x00000000,  # NOP
+    0x15250004,  # BNE   T1, A1, [forward 0x04]
+    0x00000000,  # NOP
+    0x3C04803F,  # LUI   A0, 0x803F
+    0x3484DAF0,  # ORI   A0, A0, 0xDAF0
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x0804B39F,  # J     0x8012CE7C
+    0x00000000,  # NOP
+    # Redirects to a custom message if you try placing the bomb ingredients at the bottom CC crack before deactivating
+    # the seal.
+    0x24090009,  # ADDIU T1, R0, 0x0009
+    0x15090009,  # BNE   T0, T1, [forward 0x09]
+    0x240A0002,  # ADDIU T2, R0, 0x0002
+    0x15450007,  # BNE   T2, A1, [forward 0x07]
+    0x916A9C18,  # LBU   T2, 0x9C18 (T3)
+    0x314A0001,  # ANDI  T2, T2, 0x0001
+    0x15400004,  # BNEZ  T2,     [forward 0x04]
+    0x00000000,  # NOP
+    0x3C04803F,  # LUI   A0, 0x803F
+    0x3484DBAC,  # ORI   A0, A0, 0xDBAC
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x0804B39F,  # J     0x8012CE7C
+    0x00000000,  # NOP
+    # Checks for Map Texts 02 or 00 if in the Villa hallway or CC lizard lab maps respectively and redirects the text
+    # pointer to a blank string, skipping all the NPC dialogue mandatory for checks.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
+    0x240A0005,  # ADDIU T2, R0, 0x0005
+    0x110A0006,  # BEQ   T0, T2, [forward 0x06]
+    0x24090002,  # ADDIU T1, R0, 0x0002
+    0x240A000C,  # ADDIU T2, R0, 0x000C
+    0x110A0003,  # BEQ   T0, T2, [forward 0x03]
+    0x24090000,  # ADDIU T1, R0, 0x0000
+    0x0804B39F,  # J     0x8012CE7C
+    0x00000000,  # NOP
+    0x15250004,  # BNE   T1, A1, [forward 0x04]
+    0x00000000,  # NOP
+    0x3C04803F,  # LUI   A0, 0x803F
+    0x3484DAF0,  # ORI   A0, A0, 0xDAF0
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x0804B39F   # J     0x8012CE7C
+]
+
+special_descriptions_redirector = [
+    # Redirects the menu description when looking at the Special1 and 2 items to different, custom strings that tell
+    # how many are needed per warp and to fight Dracula respectively, and how many there are of both in the whole seed.
+    0x240A0003,  # ADDIU T2, R0, 0x0003
+    0x10AA0005,  # BEQ   A1, T2, [forward 0x05]
+    0x240A0004,  # ADDIU T2, R0, 0x0004
+    0x10AA0003,  # BEQ   A1, T2, [forward 0x03]
+    0x00000000,  # NOP
+    0x0804B39F,  # J     0x8012CE7C
+    0x00000000,  # NOP
+    0x3C04803F,  # LUI   A0, 0x803F
+    0x3484DC5C,  # ORI   A0, A0, 0xDC5C
+    0x24A5FFFD,  # ADDIU A1, A1, 0xFFFD
+    0x0804B39F   # J     0x8012CE7C
+]
+
+cw_villa_intro_cs_player = [
+    # Plays the Castle Wall or Villa intro cutscene after transitioning to a different map if the map being transitioned
+    # to is the start of their levels respectively. Gets around the fact that they have to be set on the previous
+    # loading zone for them to play normally.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x8D099EE0,  # LW    T0, 0x9EE0 (T0)
+    0x3C0A0002,  # LUI   T2, 0x0002
+    0x112A0008,  # BEQ   T1, T2, [forward 0x08]
+    0x240B0004,  # ADDIU T3, R0, 0x0004
+    0x254A0007,  # ADDIU T2, T2, 0x0007
+    0x112A0005,  # BEQ   T1, T2, [forward 0x05]
+    0x3C0A0003,  # LUI   T2, 0x0003
+    0x112A0003,  # BEQ   T1, T2, [forward 0x03]
+    0x240B0000,  # ADDIU T3, R0, 0x0000
+    0x08005FAA,  # J     0x80017EA8
+    0x00000000,  # NOP
+    0x010B6021,  # ADDU  T4, T0, T3
+    0x918D9C0B,  # LBU   T5, 0x9C0B (T4)
+    0x31AF0001,  # ANDI  T7, T5, 0x0001
+    0x15E00004,  # BNEZ  T7,     [forward 0x04]
+    0x240E0009,  # ADDIU T6, R0, 0x0009
+    0x55600001,  # BNEZL T3,     [forward 0x01]
+    0x240E0004,  # ADDIU T6, R0, 0x0004
+    0xA10E9EFF,  # SB    T6, 0x9EFF (T0)
+    0x08005FAA   # J     0x80017EA8
+]
+
+map_id_resetter = [
+    # After transitioning to a different map, if this detects the map ID being transitioned to as FF, it will write back
+    # the past map ID so that the map will reset. Useful for getting around a bug wherein the camera fixes in place if
+    # you enter a loading zone that doesn't actually change the map, which can happen in a seed that gives you any
+    # character tower stage at the very start.
+    0x240800FF,  # ADDIU T0, R0, 0x00FF
+    0x110E0003,  # BEQ   T0, T6, [forward 0x03]
+    0x00000000,  # NOP
+    0x03E00008,  # JR    RA
+    0xA44E61D8,  # SH    T6, 0x61D8
+    0x904961D9,  # LBU   T1, 0x61D9
+    0xA0496429,  # SB    T1, 0x6429
+    0x03E00008   # JR    RA
 ]

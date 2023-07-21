@@ -327,8 +327,9 @@ class LocalRom(object):
             self.buffer = bytearray(stream.read())
 
 
-def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
-              required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list):
+def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, active_stage_list, active_stage_exits,
+              active_warp_list, required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list,
+              shop_price_list):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -357,9 +358,15 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Prevent Forest end cutscene flag from setting so it can be triggered infinitely
     rom.write_byte(0xEEA51, 0x01)
 
-    # Make the CW drawbridge always closed (since rando doesn't play the CW intro cutscene that closes it)
-    rom.write_int32(0x6C00EC, 0x240A0001)  # ADDIU T2, R0, 0x0001
-    rom.write_int32(0x6C0ADC, 0x240A0001)  # ADDIU T2, R0, 0x0001
+    # Hack to make the CW and Villa intro cutscenes play at the start of their levels no matter what map came before
+    rom.write_int32(0x97244, 0x803FDD60)
+    rom.write_int32s(0xBFDD60, Patches.cw_villa_intro_cs_player)
+
+    # Make changing the map ID to 0xFF reset the map. Helpful to work around a bug wherein the camera gets stuck when
+    # entering a loading zone that doesn't change the map.
+    rom.write_int32s(0x197B0, [0x0C0FF76F,   # JAL   0x803FDDBC
+                               0x24840008])  # ADDIU A0, A0, 0x0008
+    rom.write_int32s(0xBFDDBC, Patches.map_id_resetter)
 
     # Villa coffin time-of-day hack
     rom.write_byte(0xD9D83, 0x74)
@@ -412,6 +419,41 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_bytes(0xEFE4E, cv64_text_converter("Sent", False))
     # Capitalize the "k" in "Archives key" to be consistent with...literally every other key name!
     rom.write_byte(0xEFF21, 0x2D)
+
+    # Skip the "There is a white jewel" text so checking one saves the game instantly.
+    rom.write_int32s(0xEFC72, [0x00020002 for i in range(37)])
+    rom.write_int32(0xA8FC0, 0x24020001)  # ADDIU V0, R0, 0x0001
+    # Skip the yes/no prompts when pulling levers.
+    rom.write_int32s(0xBFDAF0, Patches.map_text_redirector)
+    rom.write_int32(0xA9084, 0x24020001)  # ADDIU V0, R0, 0x0001
+    rom.write_int32(0xBEBE8, 0x0C0FF6BD)  # JAL   0x803FDAF4
+    # Skip Vincent and Heinrich's mandatory-for-a-check dialogue
+    rom.write_int32(0xBED9C, 0x0C0FF6DA)  # JAL   0x803FDB68
+    # Skip the long yes/no prompt in the CC planetarium to set the pieces.
+    rom.write_int32(0xB5C5DF, 0x24030001)  # ADDIU	V1, R0, 0x0001
+
+    # Custom message if you try checking the downstairs CC crack before removing the seal.
+    rom.write_bytes(0xBFDBAC, cv64_text_converter("The Furious Nerd Curse\n"
+                                                  "prevents you from setting\n"
+                                                  "anything until the seal\n"
+                                                  "is removed!", True))
+
+    # Change the Special1 and 2 menu descriptions to tell you how many you need to unlock a warp and fight Dracula
+    # respectively.
+    if multiworld.draculas_condition[player].value == 0:
+        total_s2s = 0
+    elif multiworld.draculas_condition[player].value == 1:
+        total_s2s = 1
+    elif multiworld.draculas_condition[player].value == 2:
+        total_s2s = total_available_bosses
+    else:
+        total_s2s = multiworld.total_special2s[player]
+    special_text = cv64_text_converter(f"{multiworld.special1s_per_warp[player]} per warp unlock.\n"
+                                       f"{multiworld.total_special1s[player]} exist in total.", False) + \
+        cv64_text_converter(f"Need {required_s2s} to battle Dracula\n"
+                            f"out of {total_s2s} in total.", False)
+    rom.write_bytes(0xBFDC5C, special_text)
+    rom.write_int32s(0xBFDD20, Patches.special_descriptions_redirector)
 
     # Change the Stage Select menu options
     rom.write_int32s(0xADF64, Patches.warp_menu_rewrite)
@@ -513,12 +555,17 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Enable the Game Over's "Continue" menu starting the cursor on whichever checkpoint is most recent
     rom.write_int32(0xB4DDC, 0x0C060D58)  # JAL 0x80183560
     rom.write_int32s(0x106750, Patches.continue_cursor_start_checker)
-    rom.write_int32(0x1C444, 0x080FF090)  # J   0x803FC240
-    rom.write_int32(0x1C2A0, 0x080FF090)  # J   0x803FC240
-    rom.write_int32s(0xBFC240, Patches.savepoint_cursor_updater)
+    rom.write_int32(0x1C444, 0x080FF08A)  # J   0x803FC228
+    rom.write_int32(0x1C2A0, 0x080FF08A)  # J   0x803FC228
+    rom.write_int32s(0xBFC228, Patches.savepoint_cursor_updater)
     rom.write_int32(0x1C2D0, 0x080FF094)  # J   0x803FC250
     rom.write_int32s(0xBFC250, Patches.stage_start_cursor_updater)
     rom.write_byte(0xB585C8, 0xFF)
+
+    # Make the Special1 and 2 play sounds when you reach milestones with them.
+    rom.write_int32s(0xBFDA80, Patches.special_sound_notifs)
+    rom.write_int32(0xBF240, 0x080FF6A0)  # J 0x803FDA80
+    rom.write_int32(0xBF220, 0x080FF6AA)  # J 0x803FDAA0
 
     # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
     rom.write_int16s(0x104AC8, [0x0000, 0x0006,
@@ -720,6 +767,31 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Make the torch directly behind Dracula's chamber that normally doesn't set a flag set bitflag 0x08 in 0x80389BFA
     rom.write_byte(0x10CE9F, 0x01)
 
+    # Change the CC post-Behemoth boss depending on the option for Post-Behemoth Boss
+    if multiworld.post_behemoth_boss[player].value == 1:
+        rom.write_byte(0xEEDAD, 0x02)
+        rom.write_byte(0xEEDD9, 0x01)
+    elif multiworld.post_behemoth_boss[player].value == 2:
+        rom.write_byte(0xEEDAD, 0x00)
+        rom.write_byte(0xEEDD9, 0x03)
+    elif multiworld.post_behemoth_boss[player].value == 3:
+        rom.write_byte(0xEEDAD, 0x03)
+        rom.write_byte(0xEEDD9, 0x00)
+
+    # Change the RoC boss depending on the option for Room of Clocks Boss
+    if multiworld.post_behemoth_boss[player].value == 1:
+        rom.write_byte(0x109FB3, 0x56)
+        rom.write_byte(0x109FBF, 0x44)
+        rom.write_byte(0xD9D44, 0x14)
+        rom.write_byte(0xD9D4C, 0x14)
+    elif multiworld.post_behemoth_boss[player].value == 2:
+        rom.write_byte(0x109FB3, 0x56)
+        rom.write_byte(0xD9D45, 0x00)
+    elif multiworld.post_behemoth_boss[player].value == 3:
+        rom.write_byte(0x109FBF, 0x44)
+        rom.write_int32(0xD9D44, 0x00000000)
+        rom.write_byte(0xD9D4D, 0x00)
+
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
         rom.write_int32(0x14588, 0x08060D60)  # J 0x80183580
@@ -845,6 +917,11 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
             shopsanity_desc_text += cv64_text_converter(renon_item_dialogue[shop_desc_list[i][0]], False)
         rom.write_bytes(0x1AD00, shopsanity_name_text)
         rom.write_bytes(0x1A800, shopsanity_desc_text)
+
+        if multiworld.shop_prices[player]:
+            for i in range(len(shop_price_list)):
+                price_offset = 0x103D6E + (i*12)
+                rom.write_int16(price_offset, shop_price_list[i])
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

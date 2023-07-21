@@ -54,6 +54,7 @@ class CV64World(World):
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
     active_stage_exits: typing.Dict[str, typing.List]
+    total_available_bosses = 0
     required_s2s = 0
     web = CV64Web()
 
@@ -326,17 +327,18 @@ class CV64World(World):
                     continue
 
             # Verify enough bosses are available in the player's world. If there aren't, an exception will be raised.
-            total_available_bosses = 0
             for stage in self.active_stage_list:
-                total_available_bosses += stage_info[stage].boss_count
+                self.total_available_bosses += stage_info[stage].boss_count
 
             if self.multiworld.renon_fight_condition[self.player].value == 0:
-                total_available_bosses -= 1
+                self.total_available_bosses -= 1
             if self.multiworld.vincent_fight_condition[self.player].value == 0:
-                total_available_bosses -= 1
-            if self.required_s2s > total_available_bosses:
-                raise Exception(f"{self.required_s2s - total_available_bosses} more boss(es) required than there are "
+                self.total_available_bosses -= 1
+            if self.required_s2s > self.total_available_bosses:
+                raise Exception(f"{self.required_s2s - self.total_available_bosses} more boss(es) required than there are "
                                 f"for player {self.multiworld.get_player_name(self.player)}.")
+        elif self.multiworld.draculas_condition[self.player].value == 0:
+            self.required_s2s = 0
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
         self.multiworld.get_entrance(RName.ck_drac_chamber, self.player).access_rule = \
@@ -426,6 +428,16 @@ class CV64World(World):
                             # The fourth entry in the lighting table affects the lighting on some item pickups; skip it
                             offsets_to_ids[0x1091A0 + (entry * 28) + sub_entry] = \
                                 random.randint(0, 255)
+
+            # Handle randomized shop prices here.
+            shop_price_list = []
+            if self.multiworld.shop_prices[self.player].value == 1:
+                min_price = self.multiworld.minimum_gold_price[self.player].value
+                max_price = self.multiworld.maximum_gold_price[self.player].value
+                if min_price > max_price:
+                    min_price = random.randrange(0, max_price)
+
+                shop_price_list = [random.randrange(min_price * 100, max_price * 100) for i in range(7)]
 
             world = self.multiworld
             player = self.player
@@ -518,9 +530,11 @@ class CV64World(World):
             if self.multiworld.stage_shuffle[self.player]:
                 offsets_to_ids[0xB73308] = stage_info[self.active_stage_list[0]].start_map_id
             for stage in self.active_stage_exits:
+
                 # Start loading zones
                 if self.active_stage_exits[stage][0] == "Menu":
-                    offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[stage].start_map_id
+                    offsets_to_ids[stage_info[stage].startzone_map_offset] = 0xFF
+                    offsets_to_ids[stage_info[stage].startzone_spawn_offset] = 0x00
                 elif self.active_stage_exits[stage][0]:
                     offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[
                         self.active_stage_exits[stage][0]].end_map_id
@@ -547,9 +561,9 @@ class CV64World(World):
                     offsets_to_ids[stage_info[stage].altzone_spawn_offset] = stage_info[
                         self.active_stage_exits[stage][2]].start_spawn_id
 
-            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
-                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list, countdown_list,
-                      shop_name_list, shop_desc_list)
+            patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
+                      self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
+                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

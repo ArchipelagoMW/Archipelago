@@ -139,16 +139,56 @@ class LizardGeneratorItems(Toggle):
 
 class Shopsanity(Toggle):
     """Adds 7 one-time purchases from Renon's shop into the location pool. After buying an item from a slot, it will
-    revert back to whatever it is in the vanilla game."""
+    revert to whatever it is in the vanilla game."""
     display_name = "Shopsanity"
 
 
-class ShopPricesTotal(Range):
-    """The total sum of every randomized shop price added together. Set to -1 to not randomize prices."""
-    range_start = -1
-    range_end = 99999
-    default = 8200
+class ShopPrices(Choice):
+    """Randomizes the amount of gold each item costs in Renon's shop.
+    Use the below options to control how much or little an item can cost."""
+    display_name = "Shop Prices"
+    option_vanilla = 0
+    option_randomized = 1
+    default = 0
+
+
+class MinimumGoldPrice(Range):
+    """The lowest amount of gold an item can cost in Renon's shop, divided by 100.
+    Only applies if shop prices are randomized."""
     display_name = "Shop Prices Total"
+    range_start = 0
+    range_end = 50
+    default = 2
+
+
+class MaximumGoldPrice(Range):
+    """The highest amount of gold an item can cost in Renon's shop, divided by 100.
+    Only applies if shop prices are randomized."""
+    display_name = "Shop Prices Total"
+    range_start = 0
+    range_end = 50
+    default = 30
+
+
+class PostBehemothBoss(Choice):
+    """Sets which boss is fought in the vampire triplets' room
+    in Castle Center by which characters after defeating Behemoth."""
+    display_name = "Post-Behemoth Boss"
+    option_vanilla = 0
+    option_inverted = 1
+    option_always_rosa = 2
+    option_always_camilla = 3
+    default = 0
+
+
+class RoomOfClocksBoss(Choice):
+    """Sets which boss is fought at Room of Clocks by which characters."""
+    display_name = "Post-Behemoth Boss"
+    option_vanilla = 0
+    option_inverted = 1
+    option_always_death = 2
+    option_always_actrise = 3
+    default = 0
 
 
 class RenonFightCondition(Choice):
@@ -197,14 +237,14 @@ class LoadingZoneHeals(DefaultOnToggle):
 
 
 class InvisibleItems(Choice):
-    """Controls which items are visible and which are invisible until picked up. 'Chance' gives each item a 50/50 chance
-    of being visible or invisible."""
+    """Sets which items are visible in their locations and which are invisible until picked up. 'Chance' gives each item
+    a 50/50 chance of being visible or invisible."""
     display_name = "Invisible Items"
-    option_reveal_all = 0
-    option_vanilla = 1
+    option_vanilla = 0
+    option_reveal_all = 1
     option_hide_all = 2
     option_chance = 3
-    default = 1
+    default = 0
 
 
 class DropPreviousSubWeapon(Toggle):
@@ -271,7 +311,11 @@ cv64_options: Dict[str, Option] = {
     "empty_breakables": EmptyBreakables,
     "lizard_generator_items": LizardGeneratorItems,
     "shopsanity": Shopsanity,
-    "shop_prices_total": ShopPricesTotal,
+    "shop_prices": ShopPrices,
+    "minimum_gold_price": MinimumGoldPrice,
+    "maximum_gold_price": MaximumGoldPrice,
+    "post_behemoth_boss": PostBehemothBoss,
+    "room_of_clocks_boss": RoomOfClocksBoss,
     "renon_fight_condition": RenonFightCondition,
     "vincent_fight_condition": VincentFightCondition,
     "bad_ending_condition": BadEndingCondition,
