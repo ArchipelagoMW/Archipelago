@@ -138,7 +138,7 @@ def set_rules(multiworld, player):
         "S.S. Anne Kitchen - Hidden Item Kitchen Trash": lambda state: logic.can_get_hidden_items(state, player),
         "S.S. Anne B1F Rooms - Hidden Item Under Pillow": lambda state: logic.can_get_hidden_items(state, player),
         "Route 10 - Hidden Item Behind Rock Tunnel Entrance Cuttable Tree": lambda
-            state: logic.can_get_hidden_items(state, player),
+            state: logic.can_get_hidden_items(state, player) and logic.can_cut(state, player),
         "Route 10 - Hidden Item Bush": lambda state: logic.can_get_hidden_items(state, player),
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: logic.can_get_hidden_items(state, player),
         "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: logic.can_get_hidden_items(state, player),
