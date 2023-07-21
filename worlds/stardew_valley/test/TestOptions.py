@@ -67,8 +67,8 @@ class TestGenerateDynamicOptions(SVTestBase):
                 continue
             for value in option.options:
                 with self.subTest(f"{option.internal_name}: {value} [Seed: {seed}]"):
-                    choices = {option.internal_name: option.options[value]}
-                    multiworld = setup_solo_multiworld(choices, seed)
+                    world_options = {option.internal_name: option.options[value]}
+                    multiworld = setup_solo_multiworld(world_options, seed)
                     basic_checks(self, multiworld)
 
 
