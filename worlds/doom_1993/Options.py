@@ -86,7 +86,7 @@ options: typing.Dict[str, AssembleOptions] = {
     "random_pickups": RandomPickups,
     "allow_death_logic": AllowDeathLogic,
     "start_with_computer_area_maps": StartWithComputerAreaMaps,
-    "DeathLink": DeathLink,
+    "death_link": DeathLink,
     "episode1": Episode1,
     "episode2": Episode2,
     "episode3": Episode3
