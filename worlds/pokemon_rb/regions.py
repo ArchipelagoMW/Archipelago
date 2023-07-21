@@ -1522,7 +1522,7 @@ def create_regions(self):
                     item = self.create_filler()
                 elif location.original_item == "Pokedex":
                     if self.multiworld.randomize_pokedex[self.player] == "vanilla":
-                        self.multiworld.get_location(location.name, self.player).event = True
+                        location_object.event = True
                         event = True
                     item = self.create_item("Pokedex")
                 elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
