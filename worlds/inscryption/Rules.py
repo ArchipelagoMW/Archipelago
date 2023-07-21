@@ -54,7 +54,8 @@ class InscryptionRules:
             "Act 2 - Bone Lord Femur": self.has_obol,
             "Act 2 - Bone Lord Horn": self.has_obol,
             "Act 2 - Bone Lord Holo Key": self.has_obol,
-            "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items
+            "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items,
+            "Act 2 - Ancient Obol": self.has_act2_bridge_requirements,
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
