@@ -47,7 +47,6 @@ class UndertaleWorld(World):
     """
     game = "Undertale"
     option_definitions = undertale_options
-    topology_present = True
     web = UndertaleWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -107,9 +106,6 @@ class UndertaleWorld(World):
             self.multiworld.push_precollected(self.create_item("ITEM"))
         self.multiworld.push_precollected(self.create_item("FIGHT"))
         self.multiworld.push_precollected(self.create_item("ACT"))
-        chosen_key_start = self.multiworld.per_slot_randoms[self.player].choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
-        self.multiworld.push_precollected(self.create_item(chosen_key_start))
-        itempool.remove(chosen_key_start)
         self.multiworld.push_precollected(self.create_item("MERCY"))
         if self.multiworld.route_required[self.player] == "genocide":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and

@@ -38,6 +38,9 @@ you only need to spare Papyrus, Undyne, and Mettaton EX. Although you still cann
 You are also still required to do the date/hangout with Papyrus, the hangout with Undyne, and the date with Alphys, 
 in that order, before entering the True Lab.
 
+You now require custom items to Hangout with Papyrus, Undyne, to enter the True Lab, and to fight Mettaton EX/NEO. 
+Those being `Complete Skeleton`, `Fish`, `DT Extractor`, and `Mettaton Plush`.
+
 The Riverperson will only take you to locations you have actually seen the Riverperson at. 
 Meaning they will only take you to, for example, Waterfall, if you have seen the Riverperson at Waterfall at least once.
 
