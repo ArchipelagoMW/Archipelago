@@ -2267,10 +2267,11 @@ def create_regions(self):
             ]
 
         def adds_reachable_entrances(entrances_copy, item):
-            test_state = state.copy()
-            test_state.collect(item, False)
-            return len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
-                        entrance.parent_region.can_reach(test_state)]) > len(reachable_entrances)
+            state.collect(item, False)
+            ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
+                      entrance.parent_region.can_reach(state)]) > len(reachable_entrances)
+            state.remove(item)
+            return ret
 
         def dead_end(entrances_copy, e):
             region = e.parent_region
