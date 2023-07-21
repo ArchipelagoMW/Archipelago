@@ -241,6 +241,8 @@ class PokemonRedBlueWorld(World):
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             locs += world.local_locs
         for loc in sorted(locs):
+            if loc.item:
+                continue
             itempool = progitempool + usefulitempool + filleritempool
             multiworld.random.shuffle(itempool)
             unplaced_items = []
