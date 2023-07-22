@@ -225,13 +225,11 @@ class RLItemData:
 
 item_groups: Dict[str, Set[str]] = {
     "Vendor": {
-        "Enchantress",
         "Enchantress - Sword",
         "Enchantress - Helm",
         "Enchantress - Chest",
         "Enchantress - Limbs",
         "Enchantress - Cape",
-        "Blacksmith",
         "Blacksmith - Sword",
         "Blacksmith - Helm",
         "Blacksmith - Chest",
