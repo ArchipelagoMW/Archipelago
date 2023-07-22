@@ -455,8 +455,8 @@ Empress of Light;                   Location | Item | Goal;                     
 # empress_of_light
 
 // Lunatic Cultist
-Lunatic Cultist;                    Location | Item;                            (@calamity | (Dungeon & Golem)) & Wall of Flesh;
-Astrum Deus;                        Calamity | Location | Item;                 Titan Heart;
+Lunatic Cultist;                    Location | Item | Goal;                     (@calamity | (Dungeon & Golem)) & Wall of Flesh;
+Astrum Deus;                        Calamity | Location | Item | Goal;          Titan Heart;
 # lunatic_cultist
 # astrum_deus
 Ancient Manipulator;                ;                                           #Lunatic Cultist;
