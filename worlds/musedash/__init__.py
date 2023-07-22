@@ -119,13 +119,13 @@ class MuseDashWorld(World):
         starting_song_count = self.multiworld.starting_song_count[self.player].value
         additional_song_count = self.multiworld.additional_song_count[self.player].value
 
-        self.multiworld.random.shuffle(available_song_keys)
+        self.random.shuffle(available_song_keys)
 
         # First, we must double check if the player has included too many guaranteed songs
         included_song_count = len(self.included_songs)
         if included_song_count > additional_song_count:
             # If so, we want to thin the list, thus let's get the goal song and starter songs while we are at it.
-            self.multiworld.random.shuffle(self.included_songs)
+            self.random.shuffle(self.included_songs)
             self.victory_song_name = self.included_songs.pop()
             while len(self.included_songs) > additional_song_count:
                 next_song = self.included_songs.pop()
@@ -133,7 +133,7 @@ class MuseDashWorld(World):
                     self.starting_songs.append(next_song)
         else:
             # If not, choose a random victory song from the available songs
-            chosen_song = self.multiworld.random.randrange(0, len(available_song_keys) + included_song_count)
+            chosen_song = self.random.randrange(0, len(available_song_keys) + included_song_count)
             if chosen_song < included_song_count:
                 self.victory_song_name = self.included_songs[chosen_song]
                 del self.included_songs[chosen_song]
@@ -198,7 +198,7 @@ class MuseDashWorld(World):
         trap_list = self.get_available_traps()
         if len(trap_list) > 0 and trap_count > 0:
             for _ in range(0, trap_count):
-                index = self.multiworld.random.randrange(0, len(trap_list))
+                index = self.random.randrange(0, len(trap_list))
                 self.multiworld.itempool.append(self.create_item(trap_list[index]))
 
             item_count += trap_count
@@ -215,24 +215,17 @@ class MuseDashWorld(World):
                 continue
 
             # Otherwise add a random assortment of songs
-            self.multiworld.random.shuffle(song_keys_in_pool)
+            self.random.shuffle(song_keys_in_pool)
             for i in range(0, needed_item_count - item_count):
                 self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
 
             item_count = needed_item_count
 
     def create_regions(self) -> None:
-        # Basic Region Setup: Menu -> Song Select -> Songs
         menu_region = Region("Menu", self.player, self.multiworld)
         song_select_region = Region("Song Select", self.player, self.multiworld)
-
-        song_select_entrance = Entrance(self.player, "Song Select Entrance", menu_region)
-
-        menu_region.exits.append(song_select_entrance)
-        song_select_entrance.connect(song_select_region)
-
-        self.multiworld.regions.append(menu_region)
-        self.multiworld.regions.append(song_select_region)
+        self.multiworld.regions += [menu_region, song_select_region]
+        menu_region.connect(song_select_region)
 
         # Make a collection of all songs available for this rando.
         # 1. All starting songs
@@ -243,7 +236,7 @@ class MuseDashWorld(World):
         all_selected_locations = self.starting_songs.copy()
         included_song_copy = self.included_songs.copy()
 
-        self.multiworld.random.shuffle(included_song_copy)
+        self.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
 
         two_item_location_count = self.location_count - len(all_selected_locations)
@@ -252,33 +245,17 @@ class MuseDashWorld(World):
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
             region = Region(name, self.player, self.multiworld)
-
-            # 2 Locations are defined per song
-            location_name = name + "-0"
-            region.locations.append(MuseDashLocation(self.player, location_name,
-                                    self.md_collection.song_locations[location_name], region))
-
-            if i < two_item_location_count:
-                location_name = name + "-1"
-                region.locations.append(MuseDashLocation(self.player, location_name,
-                                        self.md_collection.song_locations[location_name], region))
-
-            region_exit = Entrance(self.player, name, song_select_region)
-            song_select_region.exits.append(region_exit)
-            region_exit.connect(region)
             self.multiworld.regions.append(region)
+            song_select_region.connect(region, name, lambda state, place=name: state.has(place, self.player))
+
+            # Up to 2 Locations are defined per song
+            region.add_locations({name + "-0": self.md_collection.song_locations[name + "-0"]}, MuseDashLocation)
+            if i < two_item_location_count:
+                region.add_locations({name + "-1": self.md_collection.song_locations[name + "-1"]}, MuseDashLocation)
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count())
-
-        for location in self.multiworld.get_locations(self.player):
-            item_name = location.name[0:(len(location.name) - 2)]
-            if item_name == self.victory_song_name:
-                set_rule(location, lambda state:
-                         state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
-            else:
-                set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
     def get_available_traps(self) -> List[str]:
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]

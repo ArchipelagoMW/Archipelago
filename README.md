@@ -1,4 +1,7 @@
-# [Archipelago](https://archipelago.gg) ![Discord Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) | [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
+# [Archipelago](https://archipelago.gg) ![Discord 
+# Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) 
+# | 
+# [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 Archipelago provides a generic framework for developing multiworld capability for game randomizers. In all cases, presently, Archipelago is also the randomizer itself.
 
@@ -50,6 +53,7 @@ Currently, the following games are supported:
 * Mega Man Battle Network 3: Blue Version
 * Muse Dash
 * DOOM 1993
+* Terraria
 * Pokémon Emerald
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
