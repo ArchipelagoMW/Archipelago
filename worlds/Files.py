@@ -158,7 +158,6 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
 
     def __init__(self, *args: Any, **kwargs: Any):
         super(APProcedurePatch, self).__init__(*args, **kwargs)
-        self.tokens = list()
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APProcedurePatch, self).get_manifest()
@@ -194,7 +193,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
 
     def write_file(self, file_name: str, file: bytes) -> None:
         self.files[file_name] = file
-        
+
     def patch(self, target: str):
         self.read()
         base_data = self.get_source_data_with_cache()
@@ -217,7 +216,6 @@ class APDeltaPatch(APProcedurePatch):
     """An APContainer that additionally has delta.bsdiff4
     containing a delta patch to get the desired file, often a rom."""
 
-    source_data: bytes
     procedure = [
         ("apply_bsdiff4", ["delta.bsdiff4"])
     ]
