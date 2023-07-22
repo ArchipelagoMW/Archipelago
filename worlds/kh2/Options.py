@@ -336,5 +336,6 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "SuperBosses":              SuperBosses,
     "Cups":                     Cups,
     "AtlanticaToggle":          AtlanticaToggle,
+    "CorSkipToggle":            CorSkipToggle,
 
 }
