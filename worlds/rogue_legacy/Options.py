@@ -1,6 +1,6 @@
 from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionSet, Range, StartInventoryPool, Toggle
 
 
 class StartingGender(Choice):
@@ -28,33 +28,17 @@ class StartingClass(Choice):
     option_miner = 5
     option_spellthief = 6
     option_lich = 7
+    option_dragon = 8
+    option_traitor = 9
     default = 0
 
 
-class NewGamePlus(Choice):
+class NewGamePlus(Toggle):
     """
     Puts the castle in new game plus mode which vastly increases enemy level, but increases gold gain by 50%. Not
     recommended for those inexperienced to Rogue Legacy!
     """
-    display_name = "New Game Plus"
-    option_normal = 0
-    option_new_game_plus = 1
-    option_new_game_plus_2 = 2
-    alias_hard = 1
-    alias_brutal = 2
-    default = 0
-
-
-class LevelScaling(Range):
-    """
-    A percentage modifier for scaling enemy level as you continue throughout the castle. 100 means enemies will have
-    100% level scaling (normal). Setting this too high will result in enemies with absurdly high levels, you have been
-    warned.
-    """
-    display_name = "Enemy Level Scaling Percentage"
-    range_start = 1
-    range_end = 300
-    default = 100
+    display_name = "New Game+ Mode"
 
 
 class FairyChestsPerZone(Range):
@@ -65,7 +49,7 @@ class FairyChestsPerZone(Range):
     display_name = "Fairy Chests Per Zone"
     range_start = 0
     range_end = 15
-    default = 1
+    default = 0
 
 
 class ChestsPerZone(Range):
@@ -74,35 +58,23 @@ class ChestsPerZone(Range):
     gold or stat bonuses can be found in Chests.
     """
     display_name = "Chests Per Zone"
-    range_start = 20
+    range_start = 25
     range_end = 50
-    default = 20
+    default = 25
 
 
 class UniversalFairyChests(Toggle):
     """
-    Determines if fairy chests should be combined into one pool instead of per zone, similar to Risk of Rain 2.
+    Determines if fairy chests should be combined into one pool instead of per zone.
     """
     display_name = "Universal Fairy Chests"
 
 
 class UniversalChests(Toggle):
     """
-    Determines if non-fairy chests should be combined into one pool instead of per zone, similar to Risk of Rain 2.
+    Determines if non-fairy chests should be combined into one pool instead of per zone.
     """
     display_name = "Universal Non-Fairy Chests"
-
-
-class Vendors(Choice):
-    """
-    Determines where to place the Blacksmith and Enchantress unlocks in logic (or start with them unlocked).
-    """
-    display_name = "Vendors"
-    option_start_unlocked = 0
-    option_early = 1
-    option_normal = 2
-    option_anywhere = 3
-    default = 1
 
 
 class Architect(Choice):
@@ -114,8 +86,7 @@ class Architect(Choice):
     option_early = 1
     option_anywhere = 2
     option_disabled = 3
-    alias_normal = 2
-    default = 2
+    default = 1
 
 
 class ArchitectFee(Range):
@@ -131,17 +102,46 @@ class ArchitectFee(Range):
 
 class DisableCharon(Toggle):
     """
-    Prevents Charon from taking your money when you re-enter the castle. Also removes Haggling from the Item Pool.
+    Prevents Charon from taking your money when you re-enter the castle.
+
+    This also removes the Haggling skill and Charon's Obol Shrine from the item pool.
     """
-    display_name = "Disable Charon"
+    display_name = "Remove Charon"
 
 
-class RequirePurchasing(DefaultOnToggle):
+class ShuffleBlacksmith(DefaultOnToggle):
+    """
+    Shuffles the types of items you can purchase from the Blacksmith into the item pool.
+
+    For example, to purchase Limbs-type equipment, you need to find the Blacksmith - Limbs item.
+    """
+    display_name = "Shuffle Blacksmith Specialties"
+
+
+class ShuffleEnchantress(DefaultOnToggle):
+    """
+    Shuffles the types of items you can purchase from the Enchantress into the item pool.
+
+    For example, to purchase Limbs-type runes, you need to find the Enchantress - Limbs item.
+    """
+    display_name = "Shuffle Enchantress Specialties"
+
+
+class RequireVendorPurchasing(DefaultOnToggle):
     """
     Determines where you will be required to purchase equipment and runes from the Blacksmith and Enchantress before
-    equipping them. If you disable require purchasing, Manor Renovations are scaled to take this into account.
+    equipping them.
     """
-    display_name = "Require Purchasing"
+    display_name = "Require Purchasing from Vendors"
+
+
+class RequireSkillPurchasing(DefaultOnToggle):
+    """
+    Determines if you will be required to purchase your skill upgrades in the manor when received.
+
+    If disabled, you will automatically obtain the skill levels.
+    """
+    display_name = "Require Purchasing from Skills"
 
 
 class ProgressiveBlueprints(Toggle):
@@ -165,42 +165,56 @@ class GoldGainMultiplier(Choice):
     default = 0
 
 
-class NumberOfChildren(Range):
+class SpendingRestrictions(DefaultOnToggle):
+    """
+    Prevents the player from spending more than a certain amount of gold per life without certain upgrades.
+
+    Tier 0: Can only spend up to 2,500 gold per life.
+    Tier 1: Can only spend up to 10,000 gold per life.
+    Tier 2: Can only spend up to 25,000 gold per life.
+    Tier 3: Can only spend up to 50,000 gold per life.
+    Tier 4: Can spend an unlimited amount of gold.
+    """
+    display_name = "Gold Spending Limits"
+
+
+class NumberOfChildren(Choice):
     """
     Determines the number of offspring you can choose from on the lineage screen after a death.
+
+    "Variable" means the number of children you can choose from will between randomly picked from 1 and 5 every
+    generation.
     """
     display_name = "Number of Children"
-    range_start = 1
-    range_end = 5
+    option_one = 1
+    option_two = 2
+    option_three = 3
+    option_four = 4
+    option_five = 5
+    option_variable = 6
+    alias_1 = 1
+    alias_2 = 2
+    alias_3 = 3
+    alias_4 = 4
+    alias_5 = 5
     default = 3
 
 
-class AdditionalNames(OptionSet):
+class CastleSize(Choice):
     """
-    Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
-    of names your children can have. The first value will also be your initial character's name depending on Starting
-    Gender.
-    """
-    display_name = "Additional Names"
+    Adjusts the scaling factor for how big a castle can be. Larger castles scale enemy levels quicker, but will take
+    longer to generate.
 
-
-class AllowDefaultNames(DefaultOnToggle):
+    Standard: Castle Hamson is the same size as in vanilla Rogue Legacy.
+    Large: Castle Hamson is 4x larger than vanilla Rogue Legacy.
+    Very Large: Castle Hamson is 8x larger than vanilla Rogue Legacy.
+    Labyrinth: Castle Hamson is 12x larger than vanilla Rogue Legacy.
     """
-    Determines if the default names defined in the vanilla game are allowed to be used. Warning: Your world will not
-    generate if the number of Additional Names defined is less than the Number of Children value.
-    """
-    display_name = "Allow Default Names"
-
-
-class CastleScaling(Range):
-    """
-    Adjusts the scaling factor for how big a castle can be. Larger castles scale enemies quicker and also take longer
-    to generate. 100 means normal castle size.
-    """
-    display_name = "Castle Size Scaling Percentage"
-    range_start = 50
-    range_end = 300
-    default = 100
+    display_name = "Castle Hamson Size"
+    option_standard = 0
+    option_large = 1
+    option_very_large = 2
+    option_labyrinth = 3
 
 
 class ChallengeBossKhidr(Choice):
@@ -323,41 +337,90 @@ class CritDamageUpPool(Range):
     default = 5
 
 
-class FreeDiaryOnGeneration(DefaultOnToggle):
+class FountainDoorRequirement(Choice):
     """
-    Allows the player to get a free diary check every time they regenerate the castle in the starting room.
+    Determines the requirements to open the door to the Fountain Room.
+
+    Adds Pieces of the Fountain to the pool if one of the chosen requirements requires them.
     """
-    display_name = "Free Diary On Generation"
+    display_name = "Fountain Door Requirement"
+    option_bosses = 0
+    option_fountain_pieces = 1
+    option_both = 2
+    default = 0
+
+
+class FountainPiecesAvailable(Range):
+    """
+    If Fountain Door Requirement requires Pieces of the Fountain, how many should exist to be found?
+    """
+    display_name = "Fountain Pieces Available"
+    range_start = 1
+    range_end = 50
+    default = 20
+
+
+class FountainPiecesRequired(Range):
+    """
+    If Fountain Door Requirement requires Pieces of the Fountain, what percentage of fountain pieces (minimum 1), should
+    be required to fulfil the Fountain Door Requirement?
+    """
+    display_name = "Required Fountain Pieces Percentage"
+    range_start = 25
+    range_end = 100
+    default = 75
 
 
 class AvailableClasses(OptionSet):
     """
     List of classes that will be in the item pool to find. The upgraded form of the class will be added with it.
-    The upgraded form of your starting class will be available regardless.
+
+    The upgraded form of your starting class will always be available.
     """
     display_name = "Available Classes"
-    default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
-    valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    default = {
+        "Knights",
+        "Mages",
+        "Barbarians",
+        "Knaves",
+        "Shinobis",
+        "Miners",
+        "Spellthieves",
+        "Liches",
+        "Dragons",
+        "Traitors",
+    }
+    valid_keys = default.copy()
+
+
+class IncludeTraps(Toggle):
+    """
+    Includes some items that only exist to make your life worse.
+    """
+    display_name = "Include Traps"
 
 
 rl_options: Dict[str, type(Option)] = {
+    "start_inventory": StartInventoryPool,
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
-    "available_classes": AvailableClasses,
     "new_game_plus": NewGamePlus,
-    "fairy_chests_per_zone": FairyChestsPerZone,
+    "universal_chests": UniversalChests,
     "chests_per_zone": ChestsPerZone,
     "universal_fairy_chests": UniversalFairyChests,
-    "universal_chests": UniversalChests,
-    "vendors": Vendors,
+    "fairy_chests_per_zone": FairyChestsPerZone,
     "architect": Architect,
     "architect_fee": ArchitectFee,
     "disable_charon": DisableCharon,
-    "require_purchasing": RequirePurchasing,
+    "shuffle_blacksmith": ShuffleBlacksmith,
+    "shuffle_enchantress": ShuffleEnchantress,
+    "require_vendor_purchasing": RequireVendorPurchasing,
+    "require_skill_purchasing": RequireSkillPurchasing,
     "progressive_blueprints": ProgressiveBlueprints,
     "gold_gain_multiplier": GoldGainMultiplier,
+    "spending_restrictions": SpendingRestrictions,
     "number_of_children": NumberOfChildren,
-    "free_diary_on_generation": FreeDiaryOnGeneration,
+    "castle_size": CastleSize,
     "khidr": ChallengeBossKhidr,
     "alexander": ChallengeBossAlexander,
     "leon": ChallengeBossLeon,
@@ -370,8 +433,10 @@ rl_options: Dict[str, type(Option)] = {
     "equip_pool": EquipUpPool,
     "crit_chance_pool": CritChanceUpPool,
     "crit_damage_pool": CritDamageUpPool,
-    "allow_default_names": AllowDefaultNames,
-    "additional_lady_names": AdditionalNames,
-    "additional_sir_names": AdditionalNames,
+    "fountain_door_requirement": FountainDoorRequirement,
+    "fountain_pieces_available": FountainPiecesAvailable,
+    "fountain_pieces_percentage": FountainPiecesRequired,
+    "include_traps": IncludeTraps,
+    "available_classes": AvailableClasses,
     "death_link": DeathLink,
 }

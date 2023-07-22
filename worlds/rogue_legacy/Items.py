@@ -1,111 +1,400 @@
-from typing import Dict, NamedTuple, Optional
+from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Set
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification, MultiWorld
+from .Options import Architect, FountainDoorRequirement, FountainPiecesAvailable, ShuffleBlacksmith, \
+    ShuffleEnchantress, SpendingRestrictions, StartingClass
+
+__all__ = ["RLItem", "RLItemData", "item_groups", "item_table", "filler_items"]
+
+ITEM_ID_OFFSET = 90_000
+
+
+def get_none(multiworld: MultiWorld, player: int) -> int:
+    """Returns no items, for items that should not generate automatically in `create_items`."""
+    return 0
+
+
+def get_one(multiworld: MultiWorld, player: int) -> int:
+    """Returns only a single item. Default for most items."""
+    return 1
+
+
+def get_architect_quantity(multiworld: MultiWorld, player: int) -> int:
+    """Returns the number of Architects to create."""
+    architect: Architect = getattr(multiworld, "architect")[player]
+    if architect == "start_unlocked" or architect == "disabled":
+        return 0
+
+    return 1
+
+
+def get_class_quantity(multiworld: MultiWorld, player: int, class_name: str, maximum: int = 1) -> int:
+    """Returns the number of classes to create."""
+    starting_class: StartingClass = getattr(multiworld, "starting_class")[player]
+    class_excluded = class_name in getattr(multiworld, "available_classes")[player].value
+
+    # Starting Knights
+    if class_name == "Knights" and starting_class == "knight":
+        return maximum - 1
+    # Starting Mages
+    if class_name == "Mages" and starting_class == "mage":
+        return maximum - 1
+    # Starting Barbarians
+    if class_name == "Barbarians" and starting_class == "barbarian":
+        return maximum - 1
+    # Starting Knaves
+    if class_name == "Knaves" and starting_class == "knave":
+        return maximum - 1
+    # Starting Miners
+    if class_name == "Miners" and starting_class == "miner":
+        return maximum - 1
+    # Starting Shinobis
+    if class_name == "Shinobis" and starting_class == "shinobi":
+        return maximum - 1
+    # Starting Liches
+    if class_name == "Liches" and starting_class == "lich":
+        return maximum - 1
+    # Starting Spellthieves
+    if class_name == "Spellthieves" and starting_class == "spellthief":
+        return maximum - 1
+    # Starting Dragons
+    if class_name == "Dragons" and starting_class == "dragon":
+        return maximum - 1
+    # Starting Traitors
+    if class_name == "Traitors" and starting_class == "traitor":
+        return maximum - 1
+
+    return 0 if class_excluded else maximum
+
+
+def get_knights_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Knights")
+
+
+def get_mages_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Mages")
+
+
+def get_barbarians_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Barbarians")
+
+
+def get_knaves_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Knaves")
+
+
+def get_shinobis_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Shinobis")
+
+
+def get_miners_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Miners")
+
+
+def get_liches_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Liches")
+
+
+def get_spellthieves_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Spellthieves")
+
+
+def get_dragons_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Dragons")
+
+
+def get_traitors_quantity(multiworld: MultiWorld, player: int) -> int:
+    return get_class_quantity(multiworld, player, "Traitors")
+
+
+def get_blueprints_quantity(multiworld: MultiWorld, player: int) -> int:
+    """Get the number of normal blueprints to create."""
+    if getattr(multiworld, "progressive_blueprints")[player]:
+        return 0
+
+    return 1
+
+
+def get_progressive_blueprints_quantity(multiworld: MultiWorld, player: int) -> int:
+    """Get the number of progressive blueprints to create."""
+    if not getattr(multiworld, "progressive_blueprints")[player]:
+        return 0
+
+    return 15  # There are 15 blueprints!
+
+
+def get_haggling_quantity(multiworld: MultiWorld, player: int) -> int:
+    return 0 if getattr(multiworld, "disable_charon")[player] else 1
+
+
+def get_health_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "health_pool")[player].value
+
+
+def get_mana_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "mana_pool")[player].value
+
+
+def get_attack_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "attack_pool")[player].value
+
+
+def get_magic_damage_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "magic_damage_pool")[player].value
+
+
+def get_armor_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "armor_pool")[player].value
+
+
+def get_equip_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "equip_pool")[player].value
+
+
+def get_crit_chance_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "crit_chance_pool")[player].value
+
+
+def get_crit_damage_quantity(multiworld: MultiWorld, player: int) -> int:
+    return getattr(multiworld, "crit_damage_pool")[player].value
+
+
+def get_fountain_pieces(multiworld: MultiWorld, player: int) -> int:
+    door_requirement: FountainDoorRequirement = getattr(multiworld, "fountain_door_requirement")[player]
+    available: FountainPiecesAvailable = getattr(multiworld, "fountain_pieces_available")[player]
+    if door_requirement == "bosses":
+        return 0
+
+    return available.value
+
+
+def get_wallet_quantity(multiworld: MultiWorld, player: int) -> int:
+    wallet_enabled: SpendingRestrictions = getattr(multiworld, "spending_restrictions")[player]
+    if wallet_enabled:
+        return 4
+
+    return 0
+
+
+def get_blacksmith_quantity(multiworld: MultiWorld, player: int) -> int:
+    shuffle_blacksmith: ShuffleBlacksmith = getattr(multiworld, "shuffle_blacksmith")[player]
+    if shuffle_blacksmith:
+        return 1
+
+    return 0
+
+
+def get_enchantress_quantity(multiworld: MultiWorld, player: int) -> int:
+    shuffle_enchantress: ShuffleEnchantress = getattr(multiworld, "shuffle_enchantress")[player]
+    if shuffle_enchantress:
+        return 1
+
+    return 0
 
 
 class RLItem(Item):
     game: str = "Rogue Legacy"
 
 
-class RLItemData(NamedTuple):
-    category: str
-    code: Optional[int] = None
-    classification: ItemClassification = ItemClassification.filler
-    max_quantity: int = 1
-    weight: int = 1
+@dataclass
+class RLItemData:
+    """A collection of metadata for each item prior to creation into an RLItem."""
+    name: str
+    classification: ItemClassification
+    code: Optional[int]
+    creation_quantity: Callable[[MultiWorld, int], int]
+    filler_item_weight: int
+
+    def __init__(
+            self,
+            classification: ItemClassification = ItemClassification.filler,
+            code: Optional[int] = None,
+            creation_quantity: Callable[[MultiWorld, int], int] = get_one,
+            filler_item_weight: int = 0):
+        self.classification = classification
+        self.code = code + ITEM_ID_OFFSET if code else None
+        self.creation_quantity = creation_quantity
+        self.filler_item_weight = filler_item_weight
+
+    @property
+    def event(self) -> bool:
+        """Returns True if this is an event item."""
+        return not self.code
 
 
-def get_items_by_category(category: str) -> Dict[str, RLItemData]:
-    item_dict: Dict[str, RLItemData] = {}
-    for name, data in item_table.items():
-        if data.category == category:
-            item_dict.setdefault(name, data)
-
-    return item_dict
-
+item_groups: Dict[str, Set[str]] = {
+    "Vendor": {
+        "Enchantress",
+        "Enchantress - Sword",
+        "Enchantress - Helm",
+        "Enchantress - Chest",
+        "Enchantress - Limbs",
+        "Enchantress - Cape",
+        "Blacksmith",
+        "Blacksmith - Sword",
+        "Blacksmith - Helm",
+        "Blacksmith - Chest",
+        "Blacksmith - Limbs",
+        "Blacksmith - Cape",
+    },
+    "Class": {
+        "Progressive Knights",
+        "Progressive Mages",
+        "Progressive Barbarians",
+        "Progressive Knaves",
+        "Progressive Shinobis",
+        "Progressive Miners",
+        "Progressive Liches",
+        "Progressive Spellthieves",
+        "Dragons",
+        "Traitors",
+    },
+    "Skill Progression": {
+        "Health Up",
+        "Mana Up",
+        "Attack Up",
+        "Magic Damage Up",
+    },
+}
 
 item_table: Dict[str, RLItemData] = {
     # Vendors
-    "Blacksmith":               RLItemData("Vendors",    90_000, ItemClassification.progression),
-    "Enchantress":              RLItemData("Vendors",    90_001, ItemClassification.progression),
-    "Architect":                RLItemData("Vendors",    90_002, ItemClassification.useful),
+    "Blacksmith":               RLItemData(ItemClassification.progression,    0, get_none),
+    "Enchantress":              RLItemData(ItemClassification.progression,    1, get_none),
+    "Architect":                RLItemData(ItemClassification.useful,         2, get_architect_quantity),
 
     # Classes
-    "Progressive Knights":      RLItemData("Classes",    90_003, ItemClassification.useful,                      2),
-    "Progressive Mages":        RLItemData("Classes",    90_004, ItemClassification.useful,                      2),
-    "Progressive Barbarians":   RLItemData("Classes",    90_005, ItemClassification.useful,                      2),
-    "Progressive Knaves":       RLItemData("Classes",    90_006, ItemClassification.useful,                      2),
-    "Progressive Shinobis":     RLItemData("Classes",    90_007, ItemClassification.useful,                      2),
-    "Progressive Miners":       RLItemData("Classes",    90_008, ItemClassification.useful,                      2),
-    "Progressive Liches":       RLItemData("Classes",    90_009, ItemClassification.useful,                      2),
-    "Progressive Spellthieves": RLItemData("Classes",    90_010, ItemClassification.useful,                      2),
-    "Dragons":                  RLItemData("Classes",    90_096, ItemClassification.progression),
-    "Traitors":                 RLItemData("Classes",    90_097, ItemClassification.useful),
+    "Progressive Knights":      RLItemData(ItemClassification.useful,         3, get_knights_quantity),
+    "Progressive Mages":        RLItemData(ItemClassification.useful,         4, get_mages_quantity),
+    "Progressive Barbarians":   RLItemData(ItemClassification.useful,         5, get_barbarians_quantity),
+    "Progressive Knaves":       RLItemData(ItemClassification.useful,         6, get_knaves_quantity),
+    "Progressive Shinobis":     RLItemData(ItemClassification.useful,         7, get_shinobis_quantity),
+    "Progressive Miners":       RLItemData(ItemClassification.useful,         8, get_miners_quantity),
+    "Progressive Liches":       RLItemData(ItemClassification.useful,         9, get_liches_quantity),
+    "Progressive Spellthieves": RLItemData(ItemClassification.useful,        10, get_liches_quantity),
+    "Dragons":                  RLItemData(ItemClassification.progression,   96, get_dragons_quantity),
+    "Traitors":                 RLItemData(ItemClassification.useful,        97, get_traitors_quantity),
 
     # Skills
-    "Health Up":                RLItemData("Skills",     90_013, ItemClassification.progression_skip_balancing, 15),
-    "Mana Up":                  RLItemData("Skills",     90_014, ItemClassification.progression_skip_balancing, 15),
-    "Attack Up":                RLItemData("Skills",     90_015, ItemClassification.progression_skip_balancing, 15),
-    "Magic Damage Up":          RLItemData("Skills",     90_016, ItemClassification.progression_skip_balancing, 15),
-    "Armor Up":                 RLItemData("Skills",     90_017, ItemClassification.useful,                     15),
-    "Equip Up":                 RLItemData("Skills",     90_018, ItemClassification.useful,                      5),
-    "Crit Chance Up":           RLItemData("Skills",     90_019, ItemClassification.useful,                      5),
-    "Crit Damage Up":           RLItemData("Skills",     90_020, ItemClassification.useful,                      5),
-    "Down Strike Up":           RLItemData("Skills",     90_021),
-    "Gold Gain Up":             RLItemData("Skills",     90_022),
-    "Potion Efficiency Up":     RLItemData("Skills",     90_023),
-    "Invulnerability Time Up":  RLItemData("Skills",     90_024),
-    "Mana Cost Down":           RLItemData("Skills",     90_025),
-    "Death Defiance":           RLItemData("Skills",     90_026, ItemClassification.useful),
-    "Haggling":                 RLItemData("Skills",     90_027, ItemClassification.useful),
-    "Randomize Children":       RLItemData("Skills",     90_028, ItemClassification.useful),
+    "Health Up":                RLItemData(ItemClassification.progression,   13, get_health_quantity),
+    "Mana Up":                  RLItemData(ItemClassification.progression,   14, get_mana_quantity),
+    "Attack Up":                RLItemData(ItemClassification.progression,   15, get_attack_quantity),
+    "Magic Damage Up":          RLItemData(ItemClassification.progression,   16, get_magic_damage_quantity),
+    "Armor Up":                 RLItemData(ItemClassification.useful,        17, get_armor_quantity),
+    "Equip Up":                 RLItemData(ItemClassification.useful,        18, get_equip_quantity),
+    "Crit Chance Up":           RLItemData(ItemClassification.useful,        19, get_crit_chance_quantity),
+    "Crit Damage Up":           RLItemData(ItemClassification.useful,        20, get_crit_damage_quantity),
+    "Down Strike Up":           RLItemData(ItemClassification.filler,        21),
+    "Gold Gain Up":             RLItemData(ItemClassification.filler,        22),
+    "Potion Efficiency Up":     RLItemData(ItemClassification.filler,        23),
+    "Invulnerability Time Up":  RLItemData(ItemClassification.filler,        24),
+    "Mana Cost Down":           RLItemData(ItemClassification.filler,        25),
+    "Death Defiance":           RLItemData(ItemClassification.useful,        26),
+    "Haggling":                 RLItemData(ItemClassification.useful,        27, get_haggling_quantity),
+    "Randomize Children":       RLItemData(ItemClassification.useful,        28),
 
     # Blueprints
-    "Progressive Blueprints":   RLItemData("Blueprints", 90_055, ItemClassification.useful,                     15),
-    "Squire Blueprints":        RLItemData("Blueprints", 90_040, ItemClassification.useful),
-    "Silver Blueprints":        RLItemData("Blueprints", 90_041, ItemClassification.useful),
-    "Guardian Blueprints":      RLItemData("Blueprints", 90_042, ItemClassification.useful),
-    "Imperial Blueprints":      RLItemData("Blueprints", 90_043, ItemClassification.useful),
-    "Royal Blueprints":         RLItemData("Blueprints", 90_044, ItemClassification.useful),
-    "Knight Blueprints":        RLItemData("Blueprints", 90_045, ItemClassification.useful),
-    "Ranger Blueprints":        RLItemData("Blueprints", 90_046, ItemClassification.useful),
-    "Sky Blueprints":           RLItemData("Blueprints", 90_047, ItemClassification.useful),
-    "Dragon Blueprints":        RLItemData("Blueprints", 90_048, ItemClassification.useful),
-    "Slayer Blueprints":        RLItemData("Blueprints", 90_049, ItemClassification.useful),
-    "Blood Blueprints":         RLItemData("Blueprints", 90_050, ItemClassification.useful),
-    "Sage Blueprints":          RLItemData("Blueprints", 90_051, ItemClassification.useful),
-    "Retribution Blueprints":   RLItemData("Blueprints", 90_052, ItemClassification.useful),
-    "Holy Blueprints":          RLItemData("Blueprints", 90_053, ItemClassification.useful),
-    "Dark Blueprints":          RLItemData("Blueprints", 90_054, ItemClassification.useful),
+    "Progressive Blueprints":   RLItemData(ItemClassification.useful,        55, get_progressive_blueprints_quantity),
+    "Squire Blueprints":        RLItemData(ItemClassification.useful,        40, get_blueprints_quantity),
+    "Silver Blueprints":        RLItemData(ItemClassification.useful,        41, get_blueprints_quantity),
+    "Guardian Blueprints":      RLItemData(ItemClassification.useful,        42, get_blueprints_quantity),
+    "Imperial Blueprints":      RLItemData(ItemClassification.useful,        43, get_blueprints_quantity),
+    "Royal Blueprints":         RLItemData(ItemClassification.useful,        44, get_blueprints_quantity),
+    "Knight Blueprints":        RLItemData(ItemClassification.useful,        45, get_blueprints_quantity),
+    "Ranger Blueprints":        RLItemData(ItemClassification.useful,        46, get_blueprints_quantity),
+    "Sky Blueprints":           RLItemData(ItemClassification.useful,        47, get_blueprints_quantity),
+    "Dragon Blueprints":        RLItemData(ItemClassification.useful,        48, get_blueprints_quantity),
+    "Slayer Blueprints":        RLItemData(ItemClassification.useful,        49, get_blueprints_quantity),
+    "Blood Blueprints":         RLItemData(ItemClassification.useful,        50, get_blueprints_quantity),
+    "Sage Blueprints":          RLItemData(ItemClassification.useful,        51, get_blueprints_quantity),
+    "Retribution Blueprints":   RLItemData(ItemClassification.useful,        52, get_blueprints_quantity),
+    "Holy Blueprints":          RLItemData(ItemClassification.useful,        53, get_blueprints_quantity),
+    "Dark Blueprints":          RLItemData(ItemClassification.useful,        54, get_blueprints_quantity),
 
     # Runes
-    "Vault Runes":              RLItemData("Runes",      90_060, ItemClassification.progression),
-    "Sprint Runes":             RLItemData("Runes",      90_061, ItemClassification.progression),
-    "Vampire Runes":            RLItemData("Runes",      90_062, ItemClassification.useful),
-    "Sky Runes":                RLItemData("Runes",      90_063, ItemClassification.progression),
-    "Siphon Runes":             RLItemData("Runes",      90_064, ItemClassification.useful),
-    "Retaliation Runes":        RLItemData("Runes",      90_065),
-    "Bounty Runes":             RLItemData("Runes",      90_066),
-    "Haste Runes":              RLItemData("Runes",      90_067),
-    "Curse Runes":              RLItemData("Runes",      90_068),
-    "Grace Runes":              RLItemData("Runes",      90_069),
-    "Balance Runes":            RLItemData("Runes",      90_070, ItemClassification.useful),
+    "Vault Runes":              RLItemData(ItemClassification.progression,   60),
+    "Sprint Runes":             RLItemData(ItemClassification.progression,   61),
+    "Vampire Runes":            RLItemData(ItemClassification.useful,        62),
+    "Sky Runes":                RLItemData(ItemClassification.progression,   63),
+    "Siphon Runes":             RLItemData(ItemClassification.useful,        64),
+    "Retaliation Runes":        RLItemData(ItemClassification.filler,        65),
+    "Bounty Runes":             RLItemData(ItemClassification.filler,        66),
+    "Haste Runes":              RLItemData(ItemClassification.filler,        67),
+    "Curse Runes":              RLItemData(ItemClassification.filler,        68),
+    "Grace Runes":              RLItemData(ItemClassification.filler,        69),
+    "Balance Runes":            RLItemData(ItemClassification.useful,        70),
 
-    # Junk
-    "Triple Stat Increase":     RLItemData("Filler",     90_030, weight=6),
-    "1000 Gold":                RLItemData("Filler",     90_031, weight=3),
-    "3000 Gold":                RLItemData("Filler",     90_032, weight=2),
-    "5000 Gold":                RLItemData("Filler",     90_033, weight=1),
+    # Specialties
+    "Enchantress - Sword":      RLItemData(ItemClassification.progression,  100, get_enchantress_quantity),
+    "Enchantress - Helm":       RLItemData(ItemClassification.progression,  101, get_enchantress_quantity),
+    "Enchantress - Chest":      RLItemData(ItemClassification.progression,  102, get_enchantress_quantity),
+    "Enchantress - Limbs":      RLItemData(ItemClassification.progression,  103, get_enchantress_quantity),
+    "Enchantress - Cape":       RLItemData(ItemClassification.progression,  104, get_enchantress_quantity),
+    "Blacksmith - Sword":       RLItemData(ItemClassification.useful,       105, get_blacksmith_quantity),
+    "Blacksmith - Helm":        RLItemData(ItemClassification.useful,       106, get_blacksmith_quantity),
+    "Blacksmith - Chest":       RLItemData(ItemClassification.useful,       107, get_blacksmith_quantity),
+    "Blacksmith - Limbs":       RLItemData(ItemClassification.useful,       108, get_blacksmith_quantity),
+    "Blacksmith - Cape":        RLItemData(ItemClassification.useful,       109, get_blacksmith_quantity),
+
+    # Free Relics
+    "Charon's Obol Shrine":     RLItemData(ItemClassification.useful,       160, get_haggling_quantity),
+    "Hyperion's Ring Shrine":   RLItemData(ItemClassification.useful,       161),
+    "Hermes' Boots Shrine":     RLItemData(ItemClassification.filler,       162),
+    "Helios' Blessing Shrine":  RLItemData(ItemClassification.filler,       163),
+    "Calypso's Compass Shrine": RLItemData(ItemClassification.progression,  164),
+    "Nerdy Glasses Shrine":     RLItemData(ItemClassification.progression,  165),
+    "Phar's Guidance Shrine":   RLItemData(ItemClassification.useful,       169),
+
+    # Fountain Pieces
+    "Piece of the Fountain":    RLItemData(ItemClassification.progression_skip_balancing, 180, get_fountain_pieces),
+
+    # Wallets
+    "Progressive Wallet":       RLItemData(ItemClassification.progression,  190, get_wallet_quantity),
+
+    # Filler and Traps - These will be generated automatically when filler items are needed.
+    "Triple Stat Increase":     RLItemData(ItemClassification.filler,        30, get_none, 5),
+    "1,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        31, get_none, 3),
+    "3,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        32, get_none, 2),
+    "5,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        33, get_none, 1),
+    "Random Teleport":          RLItemData(ItemClassification.trap,         150, get_none, 2),
+    "Hedgehog's Curse":         RLItemData(ItemClassification.trap,         151, get_none, 2),
+    "Vertigo":                  RLItemData(ItemClassification.trap,         152, get_none, 2),
+    "Genetic Lottery":          RLItemData(ItemClassification.trap,         153, get_none, 1),
+
+    # Events - These are automatically created and placed when their respective event location is made.
+    "Defeat Khidr":             RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Alexander":         RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Ponce de Leon":     RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Herodotus":         RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Neo Khidr":         RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Alexander IV":      RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Ponce de Freon":    RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat Astrodotus":        RLItemData(ItemClassification.progression, None, get_none),
+    "Open Fountain Room Door":  RLItemData(ItemClassification.progression, None, get_none),
+    "Defeat The Fountain":      RLItemData(ItemClassification.progression, None, get_none),
 }
 
-event_item_table: Dict[str, RLItemData] = {
-    "Defeat Khidr":             RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Alexander":         RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Ponce de Leon":     RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Herodotus":         RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Neo Khidr":         RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Alexander IV":      RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Ponce de Freon":    RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat Astrodotus":        RLItemData("Event", classification=ItemClassification.progression),
-    "Defeat The Fountain":      RLItemData("Event", classification=ItemClassification.progression),
+
+# Set the item name for each item based on key.
+for item_name, item_data in item_table.items():
+    item_data.name = item_name
+
+filler_items: Dict[str, List[Any]] = {
+    "names": [
+        item.name for item in item_table.values()
+        if item.filler_item_weight and item.classification != ItemClassification.trap
+    ],
+    "weights": [
+        item.filler_item_weight for item in item_table.values()
+        if item.filler_item_weight and item.classification != ItemClassification.trap
+    ],
+    "trap_names": [
+        item.name for item in item_table.values()
+        if item.filler_item_weight and item.classification == ItemClassification.trap
+    ],
+    "trap_weights": [
+        item.filler_item_weight for item in item_table.values()
+        if item.filler_item_weight and item.classification == ItemClassification.trap
+    ],
 }
