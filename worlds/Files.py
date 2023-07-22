@@ -194,19 +194,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
 
     def write_file(self, file_name: str, file: bytes) -> None:
         self.files[file_name] = file
-
-    def get_token_binary(self) -> bytes:
-        data = bytearray()
-        data.extend(struct.pack("I", len(self.tokens)))
-        for offset, bin_data in self.tokens:
-            data.extend(struct.pack("I", offset))
-            data.extend(struct.pack("I", len(bin_data)))
-            data.extend(bin_data)
-        return data
-
-    def write_token(self, offset, data):
-        self.tokens.append((offset, data))
-
+        
     def patch(self, target: str):
         self.read()
         base_data = self.get_source_data_with_cache()
