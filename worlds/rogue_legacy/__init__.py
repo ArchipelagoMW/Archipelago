@@ -41,9 +41,6 @@ class RLWorld(World):
     location_name_groups = location_groups
 
     def generate_early(self):
-        # Set starting items.
-        self.multiworld.push_precollected(self.create_item("Blacksmith"))
-        self.multiworld.push_precollected(self.create_item("Enchantress"))
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
         elif self.get_setting("architect") == "early":
