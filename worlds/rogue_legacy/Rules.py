@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, MultiWorld
-from worlds.rogue_legacy.Options import FountainDoorRequirement, FountainPiecesAvailable, FountainPiecesRequired
+from .Options import FountainDoorRequirement, FountainPiecesAvailable, FountainPiecesRequired
 
 
 def get_total_upgrades(multiworld: MultiWorld, player: int) -> int:
@@ -41,19 +41,31 @@ def has_fairy_progression(state: CollectionState, player: int) -> bool:
 
 
 def has_defeated_castle(state: CollectionState, player: int) -> bool:
-    return state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player)
+    return all([
+        state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player),
+        has_upgrades_percentage(state, player, 8),
+    ])
 
 
 def has_defeated_forest(state: CollectionState, player: int) -> bool:
-    return state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player)
+    return all([
+        state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player),
+        has_upgrades_percentage(state, player, 8),
+    ])
 
 
 def has_defeated_tower(state: CollectionState, player: int) -> bool:
-    return state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player)
+    return all([
+        state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player),
+        has_upgrades_percentage(state, player, 8),
+    ])
 
 
 def has_defeated_dungeon(state: CollectionState, player: int) -> bool:
-    return state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player)
+    return all([
+        state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player),
+        has_upgrades_percentage(state, player, 8),
+    ])
 
 
 def has_defeated_all_bosses(state: CollectionState, player: int) -> bool:
@@ -80,3 +92,14 @@ def can_open_door(state: CollectionState, player: int) -> bool:
             has_defeated_all_bosses(state, player),
             state.has("Piece of the Fountain", player, fountain_pieces_requirement),
         ])
+
+
+def can_access_secret_room(state: CollectionState, player: int) -> bool:
+    return all([
+        state.has("Calypso's Compass Shrine", player),
+        has_defeated_tower(state, player),
+    ])
+
+
+def can_cheat_cheapskate_elf(state: CollectionState, player: int) -> bool:
+    return state.has("Nerdy Glasses Shrine", player)

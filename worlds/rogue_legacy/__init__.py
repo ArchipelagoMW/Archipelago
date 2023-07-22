@@ -34,6 +34,7 @@ class RLWorld(World):
     data_version = 5
     required_client_version = (0, 4, 2)
     web = RLWeb()
+    topology_present = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if not data.event}
     location_name_to_id = {name: data.address for name, data in location_table.items() if not data.event}
@@ -43,7 +44,7 @@ class RLWorld(World):
     def generate_early(self):
         # Set starting items.
         self.multiworld.push_precollected(self.create_item("Blacksmith"))
-        self.multiworld.push_precollected(self.create_item("Enchantress"))
+        # self.multiworld.push_precollected(self.create_item("Enchantress"))
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
 
@@ -85,11 +86,13 @@ class RLWorld(World):
             location_data.create_location(self.multiworld, self.player)
 
         # Connect regions and set access rules.
-        for region_name, region_data in region_table.items():
+        for region_name, region_exits in region_table.items():
             region = self.multiworld.get_region(region_name, self.player)
-            region.add_exits(region_data.exits, {
-                exiting_region: lambda state: region_table[exiting_region].rules(state, self.player)
-                for exiting_region in region_data.exits
+            region.add_exits({
+                region_exit.region: f"{region_exit.region} Entrance" for region_exit in region_exits
+            }, {
+                region_exit.region: lambda state: region_exit.access_rule(state, self.player)
+                for region_exit in region_exits
             })
 
     # TODO: Replace calls to this function with #933's solution, once that PR is merged.
