@@ -32,9 +32,7 @@ class KH2World(World):
     """
     game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
-    data_version = 0
-    # TODO: remove this before release
-    # topology_present = True
+    data_version = 2
 
     required_client_version = (0, 4, 2)
     option_definitions = KH2_Options
@@ -332,7 +330,7 @@ class KH2World(World):
         # take one of the 2 out
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
-        fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities, True, True, allow_excluded=True)
+        fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities,single_player_placement=True, lock=True)
         if not self.multiworld.DonaldGoofyStatsanity:
             # plando goofy get bonuses
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
@@ -345,7 +343,7 @@ class KH2World(World):
         # take one of the 2 out
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
-        fill_restrictive(self.multiworld, state, donald_weapon_location_list, self.donald_weapon_abilities, allow_excluded=True)
+        fill_restrictive(self.multiworld, state, donald_weapon_location_list, self.donald_weapon_abilities, single_player_placement=True, lock=True)
         if not self.multiworld.DonaldGoofyStatsanity:
             # plando goofy get bonuses
             donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Donald_Checks.keys() if Donald_Checks[location].yml != "Keyblade"]
