@@ -299,12 +299,10 @@ class KH2Rules:
         """
         Returns sum that increments by 1 if state.has_any
         """
-        # if set in set_of_item_name_set:
         return sum(
                 [1 for item_list in list_of_item_name_list if
                  state.has_any(set(item_list), self.player)]
         )
-        # return 50
 
     def kh2_dict_count(self, item_name_to_count: dict, state: CollectionState) -> bool:
         """
@@ -314,7 +312,15 @@ class KH2Rules:
                 [state.count(item_name, self.player) >= item_amount for item_name, item_amount in
                  item_name_to_count.items() if item_name]
         )
-        # return True
+
+    def kh2_dict_one_count(self, item_name_to_count: dict, state: CollectionState) -> int:
+        """
+        simplifies count to a dictionary.
+        """
+        return sum(
+                [1 for item_name, item_amount in
+                 item_name_to_count.items() if state.count(item_name, self.player) >= item_amount]
+        )
 
     def kh2_can_reach_any(self, loc_set: list, state: CollectionState):
         """
@@ -344,6 +350,7 @@ class KH2Rules:
             return False
 
     def kh2_has_all(self, items: list, state: CollectionState):
+        """If state has at least one of all."""
         return state.has_all(set(items), self.player)
 
     def kh2_has_any(self, items: list, state: CollectionState):
@@ -436,6 +443,10 @@ class KH2FightRules(KH2Rules):
     region_rules: Dict[str, Callable[[CollectionState], bool]]
     location_rules: Dict[str, Callable[[CollectionState], bool]]
 
+    # cor logic
+    # have 3 things for the logic
+    # region:movement_rules and (fight_rules or skip rules)
+    # if skip rules are of return false
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
         self.fight_logic = self.world.multiworld.FightLogic[self.player].current_key
@@ -490,9 +501,9 @@ class KH2FightRules(KH2Rules):
             RegionName.ThousandHeartless:     lambda state: self.get_thousand_heartless_rules(state),
             RegionName.DataDemyx:             lambda state: self.get_data_demyx_rules(state),
             RegionName.Sephi:                 lambda state: self.get_sephiroth_rules(state),
-            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state),
-            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_rules(state) or self.get_cor_skip_second_rules(state),
-            RegionName.Transport:             lambda state: self.get_transport_rules(state),
+            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_movement_rules(state) or self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state),
+            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_movement_rules(state) or self.get_cor_second_fight_rules(state) or self.get_cor_skip_second_rules(state),
+            RegionName.Transport:             lambda state: self.get_transport_movement_rules(state),
             RegionName.Scar:                  lambda state: self.get_scar_rules(state),
             RegionName.GroundShaker:          lambda state: self.get_groundshaker_rules(state),
             RegionName.DataSaix:              lambda state: self.get_data_saix_rules(state),
@@ -1230,13 +1241,37 @@ class KH2FightRules(KH2Rules):
         }
         return sephiroth_rules[self.fight_logic]
 
-    def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+    def get_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
+        # easy: quick run 3 or wisdom 5 (wisdom has qr 3)
+        # normal: quick run 2 and aerial dodge 1 or wisdom 5 (wisdom has qr 3)
+        # hard: (quick run 1, aerial dodge 1) or (wisdom form and aerial dodge 1)
+        cor_first_fight_movement_rules = {
+            "easy":   state.has(ItemName.QuickRun, self.player, 3) or self.drive_form_unlock(state, ItemName.WisdomForm, 3, True),
+            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 1}, state) or self.drive_form_unlock(state, ItemName.WisdomForm, 3, True),
+            "hard":   self.kh2_has_all([ItemName.AerialDodge, ItemName.QuickRun], state) or self.kh2_has_all([ItemName.AerialDodge, ItemName.WisdomForm], state),
         }
-        return _rules[self.fight_logic]
+        return cor_first_fight_movement_rules[self.fight_logic]
+
+    def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
+        # easy:have 5 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
+        # normal:have 3 of these things (reflega,stitch and chicken,final form,magnera,explosion,thundara)
+        # hard: reflect,stitch or chicken,final form
+
+        easy_tools_dict = {
+            ItemName.ReflectElement: 3,
+            ItemName.Stitch:         1,
+            ItemName.ChickenLittle:  1,
+            ItemName.MagnetElement:  2,
+            ItemName.Explosion:      1,
+            ItemName.FinishingLeap:  1,
+            ItemName.ThunderElement: 2,
+        }
+        cor_first_fight_rules = {
+            "easy":   self.kh2_dict_one_count(easy_tools_dict, state) >= 5 or self.kh2_dict_one_count(easy_tools_dict, state) >= 4 and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
+            "normal": self.kh2_dict_one_count(easy_tools_dict, state) >= 3 or self.kh2_dict_one_count(easy_tools_dict, state) >= 2 and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
+            "hard":   state.has(ItemName.ReflectElement, self.player) and self.kh2_has_any([ItemName.Stitch, ItemName.ChickenLittle], state) and self.drive_form_unlock(state, ItemName.FinalForm, 1, True),
+        }
+        return cor_first_fight_rules[self.fight_logic]
 
     def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
         # if option is not allow skips return false else run rules
@@ -1264,6 +1299,20 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
+    def get_cor_second_fight_movement_rules(self, state: CollectionState) -> bool:
+        # easy: quick run 2, aerial dodge 3 or master form 5
+        # normal: quick run 2, aerial dodge 2 or master 5
+        # hard: (glide 1,aerial dodge 1 any magic) or (master 3 any magic) or glide 1 and aerial dodge 2
+
+        cor_second_fight_movement_rules = {
+            "easy":   self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 3}, state) or self.drive_form_unlock(state, ItemName.MasterForm, 3, True),
+            "normal": self.kh2_dict_count({ItemName.QuickRun: 2, ItemName.AerialDodge: 2}, state) or self.drive_form_unlock(state, ItemName.MasterForm, 3, True),
+            "hard":   (self.kh2_has_all([ItemName.Glide, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)) \
+                      or (state.has(ItemName.MasterForm, self.player) and self.kh2_has_any(magic, state)) \
+                      or (state.has(ItemName.Glide, self.player) and state.has(ItemName.AerialDodge, self.player, 2)),
+        }
+        return cor_second_fight_movement_rules[self.fight_logic]
+
     def get_transport_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
@@ -1271,6 +1320,20 @@ class KH2FightRules(KH2Rules):
             "hard":   self,
         }
         return _rules[self.fight_logic]
+
+    def get_transport_movement_rules(self, state: CollectionState) -> bool:
+        # easy:high jump 3,aerial dodge 3,glide 3
+        # normal: high jump 2,glide 3,aerial dodge 2
+        # hard: (hj 2,glide 2,ad 1,any magic) or hj 1,glide 2,ad 3 any magic or (any magic master form,ad) or hj lvl 1,glide 3,ad 1
+        transport_movement_rules = {
+            "easy":   self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3, ItemName.Glide: 3}, state),
+            "normal": self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2, ItemName.Glide: 3}, state),
+            "hard":   (self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 1, ItemName.Glide: 2}, state) and self.kh2_has_any(magic, state)) \
+                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 2, ItemName.AerialDodge: 3}, state) and self.kh2_has_any(magic, state)) \
+                      or (self.kh2_dict_count({ItemName.HighJump: 1, ItemName.Glide: 3, ItemName.AerialDodge: 1}, state)) \
+                      or (self.kh2_has_all([ItemName.MasterForm, ItemName.AerialDodge], state) and self.kh2_has_any(magic, state)),
+        }
+        return transport_movement_rules[self.fight_logic]
 
     def get_scar_rules(self, state: CollectionState) -> bool:
         # easy: reflect,thunder,fire

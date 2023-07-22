@@ -292,6 +292,19 @@ class WeaponSlotStartHint(Toggle):
     default = True
 
 
+class CorSkipToggle(Toggle):
+    """Toggle for Cor skip.
+
+    Tools depend on which difficulty was chosen on Fight Difficulty.
+
+    Toggle does not negate fight logic but is an alternative.
+
+    Final Chest is also can be put into logic with this skip.
+    """
+    display_name = "CoR Skip Toggle."
+    default = False
+
+
 KH2_Options: typing.Dict[str, type(Option)] = {
     "LevelDepth":               LevelDepth,
     "Sora_Level_EXP":           SoraEXP,

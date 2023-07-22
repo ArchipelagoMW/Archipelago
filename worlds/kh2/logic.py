@@ -55,6 +55,14 @@ black_magic = [
     ItemName.BlizzardElement,
     ItemName.ThunderElement
 ]
+magic = [
+    ItemName.FireElement,
+    ItemName.BlizzardElement,
+    ItemName.ThunderElement,
+    ItemName.ReflectElement,
+    ItemName.CureElement,
+    ItemName.MagnetElement
+]
 summons = [
     ItemName.ChickenLittle,
     ItemName.Stitch,

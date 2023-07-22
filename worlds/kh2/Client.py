@@ -861,9 +861,10 @@ async def kh2_watcher(ctx: KH2Context):
                             item = ctx.kh2slotdata["LocalItems"][str(location)]
                             await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
-            elif not ctx.kh2connected and ctx.serverconneced:
-                logger.info("Game is not open. Disconnecting from Server.")
-                await ctx.disconnect()
+            elif not ctx.kh2connected:
+                if ctx.serverconneced:
+                    logger.info("Game is not open. Disconnecting from Server.")
+                    await ctx.disconnect()
         except Exception as e:
             logger.info("Line 661")
             if ctx.kh2connected:
