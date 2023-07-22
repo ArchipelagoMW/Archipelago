@@ -98,7 +98,7 @@ class SC2WoLLogic(LogicMixin):
     def _sc2wol_has_protoss_medium_units(self, multiworld: MultiWorld, player: int) -> bool:
         return self._sc2wol_has_protoss_common_units(multiworld, player) and \
                self.has_any({'Stalker', 'Void Ray', 'Carrier'}, player) \
-               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has_any({'High Templar', 'Dark Templar'}, player)
+               or get_option_value(multiworld, player, 'required_tactics') > 0 and self.has('Dark Templar', player)
 
     def _sc2wol_beats_protoss_deathball(self, multiworld: MultiWorld, player: int) -> bool:
         return (self.has_any({'Banshee', 'Battlecruiser'}, player) or
