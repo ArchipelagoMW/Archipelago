@@ -130,6 +130,7 @@ trigger gt_MidBasehandler;
 trigger gt_CloseRelic;
 trigger gt_WestRelic;
 trigger gt_NorthEastRelic;
+trigger gt_AwardPlayerdependingonSealedNodes;
 trigger gt_ArchInit;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
@@ -1068,6 +1069,56 @@ bool gt_NorthEastRelic_Func (bool testConds, bool runActions) {
 void gt_NorthEastRelic_Init () {
     gt_NorthEastRelic = TriggerCreate("gt_NorthEastRelic_Func");
     TriggerAddEventUnitAbility(gt_NorthEastRelic, null, AbilityCommand("Pickup", 0), c_unitAbilStageExecute, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Award Player depending on Sealed Nodes
+//--------------------------------------------------------------------------------------------------
+bool gt_AwardPlayerdependingonSealedNodes_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    if ((gv_protossScore <= 0)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+
+    if ((gv_protossScore <= 1)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    }
+
+    if ((gv_protossScore <= 2)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+    }
+
+    if ((gv_protossScore <= 3)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(9);
+    }
+
+    if ((gv_protossScore <= 4)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(10);
+    }
+
+    if ((gv_protossScore <= 5)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(11);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_AwardPlayerdependingonSealedNodes_Init () {
+    gt_AwardPlayerdependingonSealedNodes = TriggerCreate("gt_AwardPlayerdependingonSealedNodes_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3902,6 +3953,7 @@ bool gt_VictoryProtossDestroyed_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_AwardPlayerdependingonSealedNodes, true, false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     TriggerExecute(gt_ObjectiveMainBaseComplete, true, false);
@@ -3964,6 +4016,7 @@ bool gt_VictoryTerrazineCollected_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(gt_AwardPlayerdependingonSealedNodes, true, false);
     gv_gameOver = true;
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     Wait(2.0, c_timeReal);
@@ -3987,6 +4040,7 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(gt_AwardPlayerdependingonSealedNodes, true, false);
     if ((ObjectiveGetState(gv_primaryObjectiveGetGas) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_primaryObjectiveStopProtossGas) == c_objectiveStateCompleted) && (ObjectiveGetState(gv_bonusObjectiveCollectRelics) == c_objectiveStateCompleted)) {
         AchievementAward(gv_p1_USER, "TTosh02_1");
     }
@@ -4825,6 +4879,7 @@ void InitTriggers () {
     gt_CloseRelic_Init();
     gt_WestRelic_Init();
     gt_NorthEastRelic_Init();
+    gt_AwardPlayerdependingonSealedNodes_Init();
     gt_ArchInit_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();

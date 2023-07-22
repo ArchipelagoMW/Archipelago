@@ -136,6 +136,7 @@ Trigger/Name/D4556B6D=Protoss seal 3 shrines Q
 Trigger/Name/D65913D3=Dropped terrazine cargo Q
 Trigger/Name/D88AAD74=SCV harvesting manually stopped
 Trigger/Name/D995100E=Briefing Scene 00
+Trigger/Name/DE24C842=Award Player depending on Sealed Nodes
 Trigger/Name/DF5A6E5E=onDifficultyCasual
 Trigger/Name/E2FFEF48=Victory Protoss Destroyed
 Trigger/Name/E746190E=Harvesting Speed Bumps - NWestern Territory

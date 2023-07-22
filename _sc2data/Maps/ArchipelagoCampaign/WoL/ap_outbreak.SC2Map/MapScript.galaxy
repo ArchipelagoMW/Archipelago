@@ -117,6 +117,8 @@ int gv_researchObjectiveKilltheInfestors;
 int gv_infestorsKilled;
 int gv_infestedCommandCentersDestroyed;
 int gv_objectiveDestroyInfestedCommandCenters;
+int gv_infestedBarsDestroyed;
+int gv_objectiveDestroyInfestedBars;
 unitgroup gv_briefingCinematicUnits;
 bool gv_victoryCinematicCompleted;
 unitgroup gv_victoryHiddenUnitGroup;
@@ -145,6 +147,7 @@ void InitGlobals () {
     gv_objectiveCleanseInfestation = c_invalidObjectiveId;
     gv_researchObjectiveKilltheInfestors = c_invalidObjectiveId;
     gv_objectiveDestroyInfestedCommandCenters = c_invalidObjectiveId;
+    gv_objectiveDestroyInfestedBars = c_invalidObjectiveId;
     gv_briefingCinematicUnits = UnitGroupEmpty();
     gv_victoryHiddenUnitGroup = UnitGroupEmpty();
 }
@@ -254,8 +257,14 @@ trigger gt_ResearchObjectiveKilltheInfestorsComplete;
 trigger gt_ObjectiveDestroyInfestedCommandCentersCreate;
 trigger gt_ObjectiveDestroyInfestedCommandCentersUpdate;
 trigger gt_ObjectiveDestroyInfestedCommandCentersComplete;
+trigger gt_ObjectiveDestroyInfestedBarsCreate;
+trigger gt_ObjectiveDestroyInfestedBarsUpdate;
+trigger gt_ObjectiveDestroyInfestedBarsComplete;
 trigger gt_NorthInfestedCommandCenter;
 trigger gt_SouthInfestedCommandCenter;
+trigger gt_NorthwestInfestedBar;
+trigger gt_NorthInfestedBar;
+trigger gt_SouthInfestedBar;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -826,6 +835,8 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ObjectiveCleansetheInfestationCreateQ, true, true);
     Wait(3.0, c_timeReal);
     TriggerExecute(gt_ObjectiveDestroyInfestedCommandCentersCreate, true, true);
+    Wait(3.0, c_timeReal);
+    TriggerExecute(gt_ObjectiveDestroyInfestedBarsCreate, true, true);
     Wait(5.0, c_timeGame);
     TriggerExecute(gt_SensorTowerTipQ, true, false);
     Wait(15.0, c_timeGame);
@@ -4787,6 +4798,103 @@ void gt_ObjectiveDestroyInfestedCommandCentersComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Bars Create
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedBarsCreate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/82AA661F") + IntToText((3 - gv_infestedBarsDestroyed)) + StringExternal("Param/Value/3F54D952")), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveDestroyInfestedBars = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedBarsCreate_Init () {
+    gt_ObjectiveDestroyInfestedBarsCreate = TriggerCreate("gt_ObjectiveDestroyInfestedBarsCreate_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Bars Update
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedBarsUpdate_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!(((UnitGetType(EventUnit()) == "InfestedMercHaven")))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(gt_ObjectiveDestroyInfestedBarsCreate, true, false);
+    gv_infestedBarsDestroyed += 1;
+    ObjectiveSetName(gv_objectiveDestroyInfestedBars, (StringExternal("Param/Value/548EC6B9") + IntToText((3 - gv_infestedBarsDestroyed)) + StringExternal("Param/Value/B654975F")));
+    if ((gv_infestedBarsDestroyed == 3)) {
+        TriggerExecute(gt_ObjectiveDestroyInfestedBarsComplete, true, false);
+        TriggerEnable(TriggerGetCurrent(), false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedBarsUpdate_Init () {
+    gt_ObjectiveDestroyInfestedBarsUpdate = TriggerCreate("gt_ObjectiveDestroyInfestedBarsUpdate_Func");
+    TriggerAddEventUnitDied(gt_ObjectiveDestroyInfestedBarsUpdate, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Destroy Infested Bars Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyInfestedBarsComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroyInfestedBarsCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyInfestedBars);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyInfestedBarsComplete_Init () {
+    gt_ObjectiveDestroyInfestedBarsComplete = TriggerCreate("gt_ObjectiveDestroyInfestedBarsComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: North Infested Command Center
 //--------------------------------------------------------------------------------------------------
 bool gt_NorthInfestedCommandCenter_Func (bool testConds, bool runActions) {
@@ -4803,6 +4911,7 @@ bool gt_NorthInfestedCommandCenter_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerEnable(TriggerGetCurrent(), false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     return true;
 }
@@ -4830,6 +4939,7 @@ bool gt_SouthInfestedCommandCenter_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerEnable(TriggerGetCurrent(), false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     return true;
 }
@@ -4838,6 +4948,90 @@ bool gt_SouthInfestedCommandCenter_Func (bool testConds, bool runActions) {
 void gt_SouthInfestedCommandCenter_Init () {
     gt_SouthInfestedCommandCenter = TriggerCreate("gt_SouthInfestedCommandCenter_Func");
     TriggerAddEventUnitDied(gt_SouthInfestedCommandCenter, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Northwest Infested Bar
+//--------------------------------------------------------------------------------------------------
+bool gt_NorthwestInfestedBar_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((EventUnit() == UnitFromId(14)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NorthwestInfestedBar_Init () {
+    gt_NorthwestInfestedBar = TriggerCreate("gt_NorthwestInfestedBar_Func");
+    TriggerAddEventUnitDied(gt_NorthwestInfestedBar, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: North Infested Bar
+//--------------------------------------------------------------------------------------------------
+bool gt_NorthInfestedBar_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((EventUnit() == UnitFromId(12)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_NorthInfestedBar_Init () {
+    gt_NorthInfestedBar = TriggerCreate("gt_NorthInfestedBar_Func");
+    TriggerAddEventUnitDied(gt_NorthInfestedBar, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: South Infested Bar
+//--------------------------------------------------------------------------------------------------
+bool gt_SouthInfestedBar_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((EventUnit() == UnitFromId(642)))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SouthInfestedBar_Init () {
+    gt_SouthInfestedBar = TriggerCreate("gt_SouthInfestedBar_Func");
+    TriggerAddEventUnitDied(gt_SouthInfestedBar, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6007,8 +6201,14 @@ void InitTriggers () {
     gt_ObjectiveDestroyInfestedCommandCentersCreate_Init();
     gt_ObjectiveDestroyInfestedCommandCentersUpdate_Init();
     gt_ObjectiveDestroyInfestedCommandCentersComplete_Init();
+    gt_ObjectiveDestroyInfestedBarsCreate_Init();
+    gt_ObjectiveDestroyInfestedBarsUpdate_Init();
+    gt_ObjectiveDestroyInfestedBarsComplete_Init();
     gt_NorthInfestedCommandCenter_Init();
     gt_SouthInfestedCommandCenter_Init();
+    gt_NorthwestInfestedBar_Init();
+    gt_NorthInfestedBar_Init();
+    gt_SouthInfestedBar_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

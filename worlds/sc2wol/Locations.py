@@ -47,6 +47,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Zero Hour", "Zero Hour: Third Group Rescued", SC2WOL_LOC_ID_OFFSET + 303,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, True) >= 2),
+        LocationData("Zero Hour", "Zero Hour: First Hatchery", SC2WOL_LOC_ID_OFFSET + 304,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Zero Hour", "Zero Hour: Second Hatchery", SC2WOL_LOC_ID_OFFSET + 305,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Zero Hour", "Zero Hour: Third Hatchery", SC2WOL_LOC_ID_OFFSET + 306,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Zero Hour", "Zero Hour: Fourth Hatchery", SC2WOL_LOC_ID_OFFSET + 307,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
@@ -58,6 +66,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_common_unit(multiworld, player)),
         LocationData("Evacuation", "Evacuation: Reach Hanson", SC2WOL_LOC_ID_OFFSET + 404),
         LocationData("Evacuation", "Evacuation: Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405),
+        LocationData("Evacuation", "Evacuation: Flawless", SC2WOL_LOC_ID_OFFSET + 406,
+                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                    or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500,
                      lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 4 and
                                    (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
@@ -71,6 +83,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
                                    (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
         LocationData("Outbreak", "Outbreak: South Infested Command Center", SC2WOL_LOC_ID_OFFSET + 504,
+                     lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
+                                   (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
+        LocationData("Outbreak", "Outbreak: Northwest Bar", SC2WOL_LOC_ID_OFFSET + 505,
+                     lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
+                                   (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
+        LocationData("Outbreak", "Outbreak: North Bar", SC2WOL_LOC_ID_OFFSET + 506,
+                     lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
+                                   (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
+        LocationData("Outbreak", "Outbreak: South Bar", SC2WOL_LOC_ID_OFFSET + 507,
                      lambda state: state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
                                    (state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
         LocationData("Safe Haven", "Safe Haven: Victory", SC2WOL_LOC_ID_OFFSET + 600,
@@ -134,6 +155,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
+        LocationData("Smash and Grab", "Smash and Grab: First Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 805,
+                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                    or state._sc2wol_has_competent_anti_air(multiworld, player))),
+        LocationData("Smash and Grab", "Smash and Grab: Second Forcefield Area Busted", SC2WOL_LOC_ID_OFFSET + 806,
+                     lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                                   (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
+                                    or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("The Dig", "The Dig: Victory", SC2WOL_LOC_ID_OFFSET + 900,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
                                    state._sc2wol_defense_rating(multiworld, player, False) >= 7),
@@ -166,6 +195,11 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Moebius Factor", "The Moebius Factor: Alive Inside Rescue", SC2WOL_LOC_ID_OFFSET + 1007,
                      lambda state: state._sc2wol_able_to_rescue(multiworld, player)),
         LocationData("The Moebius Factor", "The Moebius Factor: Brutalisk", SC2WOL_LOC_ID_OFFSET + 1008,
+                     lambda state: state._sc2wol_has_anti_air(multiworld, player) and
+                                   (state._sc2wol_has_air(multiworld, player)
+                                    or state.has_any({'Medivac', 'Hercules'}, player)
+                                    and state._sc2wol_has_common_unit(multiworld, player))),
+        LocationData("The Moebius Factor", "The Moebius Factor: 3rd Data Core", SC2WOL_LOC_ID_OFFSET + 1009,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
                                    (state._sc2wol_has_air(multiworld, player)
                                     or state.has_any({'Medivac', 'Hercules'}, player)
@@ -242,9 +276,27 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Main Base", SC2WOL_LOC_ID_OFFSET + 1405,
                      lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
                                     and state._sc2wol_beats_protoss_deathball(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: No Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1406,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
+                                    and state._sc2wol_has_competent_ground_to_air(multiworld, player)
+                                   and state._sc2wol_beats_protoss_deathball(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Up to 1 Terrazine Node Sealed", SC2WOL_LOC_ID_OFFSET + 1407,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
+                                   and state._sc2wol_has_competent_ground_to_air(multiworld, player)
+                                   and state._sc2wol_beats_protoss_deathball(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Up to 2 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1408,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
+                                   and state._sc2wol_beats_protoss_deathball(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Up to 3 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1409,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)
+                                   and state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Up to 4 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1410,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
+        LocationData("Welcome to the Jungle", "Welcome to the Jungle: Up to 5 Terrazine Nodes Sealed", SC2WOL_LOC_ID_OFFSET + 1411,
+                     lambda state: state._sc2wol_welcome_to_the_jungle_requirement(multiworld, player)),
         LocationData("Breakout", "Breakout: Victory", SC2WOL_LOC_ID_OFFSET + 1500),
         LocationData("Breakout", "Breakout: Diamondback Prison", SC2WOL_LOC_ID_OFFSET + 1501),
-        LocationData("Breakout", "Breakout: Siegetank Prison", SC2WOL_LOC_ID_OFFSET + 1502),
+        LocationData("Breakout", "Breakout: Siege Tank Prison", SC2WOL_LOC_ID_OFFSET + 1502),
         LocationData("Breakout", "Breakout: First Checkpoint", SC2WOL_LOC_ID_OFFSET + 1503),
         LocationData("Breakout", "Breakout: Second Checkpoint", SC2WOL_LOC_ID_OFFSET + 1504),
         LocationData("Ghost of a Chance", "Ghost of a Chance: Victory", SC2WOL_LOC_ID_OFFSET + 1600),
@@ -265,6 +317,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Great Train Robbery", "The Great Train Robbery: Northeast Diamondback", SC2WOL_LOC_ID_OFFSET + 1707),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Southwest Diamondback", SC2WOL_LOC_ID_OFFSET + 1708),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Southeast Diamondback", SC2WOL_LOC_ID_OFFSET + 1709),
+        LocationData("The Great Train Robbery", "The Great Train Robbery: Kill Team", SC2WOL_LOC_ID_OFFSET + 1710,
+                     lambda state: (logic_level > 0 or state._sc2wol_has_common_unit(multiworld, player)) and
+                                   state._sc2wol_has_train_killers(multiworld, player) and
+                                   state._sc2wol_has_anti_air(multiworld, player)),
         LocationData("Cutthroat", "Cutthroat: Victory", SC2WOL_LOC_ID_OFFSET + 1800,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
                                    (logic_level > 0 or state._sc2wol_has_anti_air)),
@@ -316,6 +372,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Media Blitz", "Media Blitz: Tower 3", SC2WOL_LOC_ID_OFFSET + 2003,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Media Blitz", "Media Blitz: Science Facility", SC2WOL_LOC_ID_OFFSET + 2004),
+        LocationData("Media Blitz", "Media Blitz: All Barracks", SC2WOL_LOC_ID_OFFSET + 2005,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Media Blitz", "Media Blitz: All Factories", SC2WOL_LOC_ID_OFFSET + 2006,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Media Blitz", "Media Blitz: All Starports", SC2WOL_LOC_ID_OFFSET + 2007,
+                     lambda state: logic_level > 0 or state._sc2wol_has_competent_comp(multiworld, player)),
+        LocationData("Media Blitz", "Media Blitz: Odin Not Trashed", SC2WOL_LOC_ID_OFFSET + 2008,
+                     lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100,
                      lambda state: state._sc2wol_has_mm_upgrade(multiworld, player)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Holding Cell Relic", SC2WOL_LOC_ID_OFFSET + 2101),
@@ -373,6 +437,13 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("In Utter Darkness", "In Utter Darkness: Protoss Archive", SC2WOL_LOC_ID_OFFSET + 2501,
                      lambda state: state._sc2wol_has_protoss_medium_units(multiworld, player)),
         LocationData("In Utter Darkness", "In Utter Darkness: Kills", SC2WOL_LOC_ID_OFFSET + 2502,
+                     lambda state: state._sc2wol_has_protoss_common_units(multiworld, player)),
+        LocationData("In Utter Darkness", "In Utter Darkness: Urun", SC2WOL_LOC_ID_OFFSET + 2503),
+        LocationData("In Utter Darkness", "In Utter Darkness: Mohandar", SC2WOL_LOC_ID_OFFSET + 2504,
+                     lambda state: state._sc2wol_has_protoss_common_units(multiworld, player)),
+        LocationData("In Utter Darkness", "In Utter Darkness: Selendis", SC2WOL_LOC_ID_OFFSET + 2505,
+                     lambda state: state._sc2wol_has_protoss_common_units(multiworld, player)),
+        LocationData("In Utter Darkness", "In Utter Darkness: Artanis", SC2WOL_LOC_ID_OFFSET + 2506,
                      lambda state: state._sc2wol_has_protoss_common_units(multiworld, player)),
         LocationData("Gates of Hell", "Gates of Hell: Victory", SC2WOL_LOC_ID_OFFSET + 2600,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player) and

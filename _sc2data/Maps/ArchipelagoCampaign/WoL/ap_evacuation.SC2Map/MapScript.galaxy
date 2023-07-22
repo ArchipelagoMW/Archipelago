@@ -5525,6 +5525,10 @@ bool gt_Victory_Func (bool testConds, bool runActions) {
         AchievementAward(gv_p1_USER, "THanson01_2");
     }
 
+    if ((gv_colonistsKilled == 0)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_structuresLost == 0)) {
         AchievementAward(gv_p1_USER, "THanson01_3");
     }

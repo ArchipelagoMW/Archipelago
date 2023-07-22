@@ -1014,6 +1014,7 @@ bool gt_NewTech01PhoenixQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/8403F3B6"), null, UnitGetPosition(UnitFromId(639)));
     // Transmission - SoundLink("TZeratul04Urun00002", -1)
     libCamp_gf_SendTransmissionCampaign(gv_heroPhoenix, SoundLink("TZeratul04Urun00002", 0), c_transmissionDurationAdd, 1.0, true);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     if ((UnitIsAlive(gv_zeratul) == true)) {
         // Transmission - SoundLink("TZeratul04Zeratul00003", -1)
         libCamp_gf_SendTransmissionCampaign(gv_zeratul, SoundLink("TZeratul04Zeratul00003", 0), c_transmissionDurationAdd, 1.0, true);
@@ -1075,6 +1076,7 @@ bool gt_NewTech02VoidRayQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/5DAFE246"), null, UnitGetPosition(UnitFromId(639)));
     // Transmission - SoundLink("TZeratul04Mohandar00004", -1)
     libCamp_gf_SendTransmissionCampaign(gv_heroVoidRay, SoundLink("TZeratul04Mohandar00004", 0), c_transmissionDurationAdd, 1.0, true);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     if ((UnitIsAlive(gv_zeratul) == true)) {
         // Transmission - SoundLink("TZeratul04Zeratul00005", -1)
         libCamp_gf_SendTransmissionCampaign(gv_zeratul, SoundLink("TZeratul04Zeratul00005", 0), c_transmissionDurationAdd, 1.0, true);
@@ -1137,6 +1139,7 @@ bool gt_NewTech03CarriersQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/7D557C0A"), null, UnitGetPosition(UnitFromId(639)));
     // Transmission - SoundLink("TZeratul04Selendis00006", -1)
     libCamp_gf_SendTransmissionCampaign(gv_heroCarrier, SoundLink("TZeratul04Selendis00006", 0), c_transmissionDurationAdd, 1.0, true);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     if ((UnitIsAlive(gv_zeratul) == true)) {
         // Transmission - SoundLink("TZeratul04Zeratul00007", -1)
         libCamp_gf_SendTransmissionCampaign(gv_zeratul, SoundLink("TZeratul04Zeratul00007", 0), c_transmissionDurationAdd, 1.0, true);
@@ -1206,6 +1209,7 @@ bool gt_NewTech04MothershipQ_Func (bool testConds, bool runActions) {
     UIAlertPoint("Trigger", gv_p01_PLAYER, StringExternal("Param/Value/718CB62A"), null, UnitGetPosition(UnitFromId(639)));
     // Transmission - SoundLink("TZeratul04Artanis00009", -1)
     libCamp_gf_SendTransmissionCampaign(gv_heroMothership, SoundLink("TZeratul04Artanis00009", 0), c_transmissionDurationAdd, 1.0, true);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
     libCamp_gf_SetAllSoundChannelVolumesCampaign(libNtve_ge_VolumeChannelMode_Game);
     ActorSend(ActorFromDoodad(DoodadFromId(482)), "AnimGroupRemove Work");
     Wait(1.0, c_timeGame);

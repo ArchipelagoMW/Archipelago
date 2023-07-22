@@ -41,19 +41,24 @@ Param/Value/63E47237=Secret Found
 Param/Value/64685A91=
 Param/Value/70C4D678=Broadcast Tower 3
 Param/Value/719688DC=Yes
+Param/Value/721BE5D9=Destroy all Dominion Factories (1 Check)
 Param/Value/7B03FE31=Access Broadcast Tower 2 (1 Check)
 Param/Value/7B98881E=<c val="00FF00">0%</c>
 Param/Value/7C54A1E1=Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7EDC17A5=
 Param/Value/7F6061D4=Broadcast Tower 1
 Param/Value/813608F7=
 Param/Value/8F359BA8=Security Outpost
 Param/Value/8F385175=<c val="00FF00">Upload Complete</c>
+Param/Value/9234F53A=Don't Trash Odin (1 Check)
 Param/Value/9293FAA1=<c val="00FF00">0%</c>
 Param/Value/9A97EDD4=Two Dominion Broadcast Towers accessed
 Param/Value/A5099609=Attack the Dominion to begin the surprise attack.
 Param/Value/A766779D=THorner04 Achievement Earned
 Param/Value/A9280EFD=Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
 Param/Value/AA6A68E5=These documents reference a secret<n/>Dominion lab.
+Param/Value/AAB16A57=
+Param/Value/B3049FFD=Destroy all Dominion Barracks (1 Check)
 Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">!</c></s>
 Param/Value/BAA72864=Keep any ground unit on the<n/>Beacon to upload the signal. 
 Param/Value/C2EAFB32=<c val="00FF00">
@@ -63,6 +68,7 @@ Param/Value/CB469595=
 Param/Value/CCA9A3B1=Broadcast Tower 2
 Param/Value/CE0A4A63=Access Broadcast Tower 3
 Param/Value/CF471179=Units Killed By Odin
+Param/Value/D4EBC9E0=Destroy all Dominion Starports (1 Check)
 Param/Value/D9C73D1B=Broadcast Tower 1
 Param/Value/DE6AF8A1=
 Param/Value/E10677B6=

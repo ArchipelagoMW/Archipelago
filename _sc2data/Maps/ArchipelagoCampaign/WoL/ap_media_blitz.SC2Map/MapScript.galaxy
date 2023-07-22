@@ -117,6 +117,10 @@ bool gv_midCinematicCompleted;
 unitgroup gv_midHiddenUnitGroup;
 bool gv_victoryCinematicCompleted;
 unitgroup gv_victoryHiddenUnitGroup;
+int gv_objectiveTrashAllBarracks;
+int gv_objectiveTrashAllFactories;
+int gv_objectiveTrashAllStarports;
+int gv_objectiveDontTrashOdin;
 
 void InitGlobals () {
     gv_dominionPlayers = PlayerGroupEmpty();
@@ -151,6 +155,10 @@ void InitGlobals () {
     gv_introHiddenUnitGroup = UnitGroupEmpty();
     gv_midHiddenUnitGroup = UnitGroupEmpty();
     gv_victoryHiddenUnitGroup = UnitGroupEmpty();
+    gv_objectiveTrashAllBarracks = c_invalidObjectiveId;
+    gv_objectiveTrashAllFactories = c_invalidObjectiveId;
+    gv_objectiveTrashAllStarports = c_invalidObjectiveId;
+    gv_objectiveDontTrashOdin = c_invalidObjectiveId;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,6 +182,7 @@ void gf_WaitForNextWave ();
 void gf_PlayUnitTalkIcon (unit lp_chosenUnit);
 void gf_TransmissionMengskStatuesQ (unit lp_currentStatue);
 void gf_CreateBriefingParadeUnit (string lp_unitType, int lp_player, fixed lp_polarDistance, fixed lp_polarRadius);
+int gf_countUnitInPlayerGoup (string lp_unitType, playergroup lp_playerGroup);
 
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
@@ -319,6 +328,18 @@ trigger gt_VictoryCinematic;
 trigger gt_VictoryCinematicEnd;
 trigger gt_VictoryCleanup;
 trigger gt_VictoryTowerScene;
+trigger gt_ObjectiveBarracksCreateQ;
+trigger gt_ObjectiveBarracksComplete;
+trigger gt_ObjectiveFactoriesCreateQ;
+trigger gt_ObjectiveFactoriesComplete;
+trigger gt_ObjectiveStarportsCreateQ;
+trigger gt_ObjectiveStarportsComplete;
+trigger gt_onBarracksDie;
+trigger gt_onFactoryDie;
+trigger gt_onStarportDie;
+trigger gt_ObjectiveOdinCreateQ;
+trigger gt_ObjectiveOdinComplete;
+trigger gt_ObjectiveOdinFailed;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
@@ -766,6 +787,27 @@ void gf_CreateBriefingParadeUnit (string lp_unitType, int lp_player, fixed lp_po
     }
 }
 
+int gf_countUnitInPlayerGoup (string lp_unitType, playergroup lp_playerGroup) {
+    // Variable Declarations
+    int lv_currentPlayer;
+    int lv_count;
+
+    // Automatic Variable Declarations
+    playergroup auto02526CF4_g;
+
+    // Variable Initialization
+
+    // Implementation
+    auto02526CF4_g = lp_playerGroup;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto02526CF4_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        lv_count += UnitGroupCount(UnitGroup(lp_unitType, lv_currentPlayer, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive);
+    }
+    return lv_count;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trigger: Initialization
 //--------------------------------------------------------------------------------------------------
@@ -1202,6 +1244,8 @@ bool gt_StartGameStage1_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_SCVBuildsSupplyDepot, true, false);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_ObjectiveDestroyCreateQ, true, false);
+    Wait(2.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveOdinCreateQ, true, false);
     Wait(2.0, c_timeReal);
     if ((gv_sneakAttackBegun == false)) {
         UIDisplayMessage(PlayerGroupAll(), c_messageAreaDirective, StringExternal("Param/Value/A5099609"));
@@ -1263,6 +1307,12 @@ bool gt_StartGameStage2_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ObjectiveAccessBroadcastTowersCreateQ, true, false);
     Wait(2.0, c_timeGame);
     TriggerExecute(gt_CreatePrimaryObjectiveLeaderboard, true, false);
+    Wait(2.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveBarracksCreateQ, true, false);
+    Wait(2.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveFactoriesCreateQ, true, false);
+    Wait(2.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveStarportsCreateQ, true, false);
     Wait(1.0, c_timeGame);
     TriggerExecute(gt_CreateBeaconsandMapPings, true, false);
     Wait(2.0, c_timeGame);
@@ -2546,6 +2596,7 @@ bool gt_OdinDiesMovetoStage2_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     gv_odinDead = true;
     gv_odinKillCount = libNtve_gf_UnitGetPropertyKills(gv_odin, c_unitPropCurrent);
+    TriggerExecute(gt_ObjectiveOdinFailed, true, false);
     TimerWindowShow(gv_distractionTimerWindow, PlayerGroupAll(), false);
     TimerPause(gv_distractionTimer, true);
     TimerPause(gv__30SecondWarning, true);
@@ -2690,6 +2741,7 @@ bool gt_OdinDiesQ_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     gv_odinDead = true;
     gv_odinKillCount = libNtve_gf_UnitGetPropertyKills(gv_odin, c_unitPropCurrent);
+    TriggerExecute(gt_ObjectiveOdinFailed, true, false);
     SoundPlay(SoundLink("Thor_Build", 0), PlayerGroupAll(), 100.0, 0.0);
     libNtve_gf_MakeUnitInvulnerable(gv_odin, true);
     UnitSetOwner(gv_odin, gv_p07_HORNERBASE, true);
@@ -4502,6 +4554,11 @@ bool gt_VictoryBroadcastTowersCompleted_Func (bool testConds, bool runActions) {
 
     TriggerEnable(TriggerGetCurrent(), false);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
+    if ((gv_odinDead == false)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(8);
+        TriggerExecute(gt_ObjectiveOdinComplete, true, false);
+    }
+
     gv_gameOver = true;
     if ((UnitIsAlive(gv_odin) == true)) {
         libNtve_gf_MakeUnitInvulnerable(gv_odin, true);
@@ -7274,6 +7331,383 @@ void gt_VictoryTowerScene_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Barracks Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveBarracksCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/B3049FFD"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveTrashAllBarracks = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveBarracksCreateQ_Init () {
+    gt_ObjectiveBarracksCreateQ = TriggerCreate("gt_ObjectiveBarracksCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Barracks Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveBarracksComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveBarracksCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllBarracks);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveBarracksComplete_Init () {
+    gt_ObjectiveBarracksComplete = TriggerCreate("gt_ObjectiveBarracksComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Factories Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveFactoriesCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/721BE5D9"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveTrashAllFactories = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveFactoriesCreateQ_Init () {
+    gt_ObjectiveFactoriesCreateQ = TriggerCreate("gt_ObjectiveFactoriesCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Factories Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveFactoriesComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveFactoriesCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllFactories);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveFactoriesComplete_Init () {
+    gt_ObjectiveFactoriesComplete = TriggerCreate("gt_ObjectiveFactoriesComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Starports Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveStarportsCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/D4EBC9E0"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveTrashAllStarports = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveStarportsCreateQ_Init () {
+    gt_ObjectiveStarportsCreateQ = TriggerCreate("gt_ObjectiveStarportsCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Starports Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveStarportsComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveStarportsCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllStarports);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveStarportsComplete_Init () {
+    gt_ObjectiveStarportsComplete = TriggerCreate("gt_ObjectiveStarportsComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onBarracksDie
+//--------------------------------------------------------------------------------------------------
+bool gt_onBarracksDie_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!((UnitGetType(EventUnit()) == "Barracks"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((gf_countUnitInPlayerGoup("Barracks", gv_dominionPlayers) == 0)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveBarracksComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onBarracksDie_Init () {
+    gt_onBarracksDie = TriggerCreate("gt_onBarracksDie_Func");
+    TriggerAddEventUnitDied(gt_onBarracksDie, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onFactoryDie
+//--------------------------------------------------------------------------------------------------
+bool gt_onFactoryDie_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!((UnitGetType(EventUnit()) == "Factory"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((gf_countUnitInPlayerGoup("Factory", gv_dominionPlayers) == 0)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveFactoriesComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onFactoryDie_Init () {
+    gt_onFactoryDie = TriggerCreate("gt_onFactoryDie_Func");
+    TriggerAddEventUnitDied(gt_onFactoryDie, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onStarportDie
+//--------------------------------------------------------------------------------------------------
+bool gt_onStarportDie_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+
+        if (!((UnitGetType(EventUnit()) == "Starport"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((gf_countUnitInPlayerGoup("Starport", gv_dominionPlayers) == 0)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        TriggerExecute(gt_ObjectiveStarportsComplete, true, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onStarportDie_Init () {
+    gt_onStarportDie = TriggerCreate("gt_onStarportDie_Func");
+    TriggerAddEventUnitDied(gt_onStarportDie, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Odin Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveOdinCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/9234F53A"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveDontTrashOdin = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveOdinCreateQ_Init () {
+    gt_ObjectiveOdinCreateQ = TriggerCreate("gt_ObjectiveOdinCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Odin Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveOdinComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveOdinCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDontTrashOdin);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveOdinComplete_Init () {
+    gt_ObjectiveOdinComplete = TriggerCreate("gt_ObjectiveOdinComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Odin Failed
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveOdinFailed_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveOdinCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveFailed(gv_objectiveDontTrashOdin);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveOdinFailed_Init () {
+    gt_ObjectiveOdinFailed = TriggerCreate("gt_ObjectiveOdinFailed_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: onDifficultyCasual
 //--------------------------------------------------------------------------------------------------
 bool gt_onDifficultyCasual_Func (bool testConds, bool runActions) {
@@ -7634,6 +8068,18 @@ void InitTriggers () {
     gt_VictoryCinematicEnd_Init();
     gt_VictoryCleanup_Init();
     gt_VictoryTowerScene_Init();
+    gt_ObjectiveBarracksCreateQ_Init();
+    gt_ObjectiveBarracksComplete_Init();
+    gt_ObjectiveFactoriesCreateQ_Init();
+    gt_ObjectiveFactoriesComplete_Init();
+    gt_ObjectiveStarportsCreateQ_Init();
+    gt_ObjectiveStarportsComplete_Init();
+    gt_onBarracksDie_Init();
+    gt_onFactoryDie_Init();
+    gt_onStarportDie_Init();
+    gt_ObjectiveOdinCreateQ_Init();
+    gt_ObjectiveOdinComplete_Init();
+    gt_ObjectiveOdinFailed_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();

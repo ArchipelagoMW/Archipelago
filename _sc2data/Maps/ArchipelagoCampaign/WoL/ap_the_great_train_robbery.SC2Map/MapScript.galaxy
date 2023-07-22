@@ -144,6 +144,7 @@ int gv_objective_Locate;
 int gv_objective_DefilerSkeletons;
 int gv_defilerSkeletonsFound;
 int gv_defilerSkeletonsNeeded;
+int gv_objectiveDestroyTheDominionKillTeam;
 bool gv_victoryCinematicCompleted;
 unitgroup gv_victoryHiddenUnitGroup;
 
@@ -185,6 +186,7 @@ void InitGlobals () {
     gv_objective_DontMissTrains = c_invalidObjectiveId;
     gv_objective_Locate = c_invalidObjectiveId;
     gv_objective_DefilerSkeletons = c_invalidObjectiveId;
+    gv_objectiveDestroyTheDominionKillTeam = c_invalidObjectiveId;
     gv_victoryHiddenUnitGroup = UnitGroupEmpty();
 }
 
@@ -305,9 +307,12 @@ trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
+trigger gt_ObjectiveDestroyTheKillTeamCreateQ;
+trigger gt_ObjectiveDestroyTheKillTeamComplete;
 trigger gt_NorthDefiler;
 trigger gt_MidDefiler;
 trigger gt_SouthDefiler;
+trigger gt_onKillTeamMemberDie;
 trigger gt_ArchInit;
 trigger gt_BriefingQ;
 trigger gt_BriefingScene00;
@@ -5747,6 +5752,66 @@ void gt_onDifficultyBrutal_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Destroy The Kill Team Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyTheKillTeamCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate((StringExternal("Param/Value/FD20DA05")), StringExternal("Param/Value/631BEDF2"), c_objectiveStateActive, false);
+    gv_objectiveDestroyTheDominionKillTeam = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeGame);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyTheKillTeamCreateQ_Init () {
+    gt_ObjectiveDestroyTheKillTeamCreateQ = TriggerCreate("gt_ObjectiveDestroyTheKillTeamCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective - Destroy The Kill Team - Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveDestroyTheKillTeamComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(10);
+    TriggerExecute(gt_ObjectiveDestroyTheKillTeamCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyTheDominionKillTeam);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveDestroyTheKillTeamComplete_Init () {
+    gt_ObjectiveDestroyTheKillTeamComplete = TriggerCreate("gt_ObjectiveDestroyTheKillTeamComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: North Defiler
 //--------------------------------------------------------------------------------------------------
 bool gt_NorthDefiler_Func (bool testConds, bool runActions) {
@@ -5837,6 +5902,42 @@ bool gt_SouthDefiler_Func (bool testConds, bool runActions) {
 void gt_SouthDefiler_Init () {
     gt_SouthDefiler = TriggerCreate("gt_SouthDefiler_Func");
     TriggerAddEventUnitAbility(gt_SouthDefiler, null, AbilityCommand("Pickup", 0), c_unitAbilStageExecute, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onKillTeamMemberDie
+//--------------------------------------------------------------------------------------------------
+bool gt_onKillTeamMemberDie_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_pLAYER_02_DOMINION))) {
+            return false;
+        }
+
+        if (!((UnitGetType(EventUnit()) == "DominionKillTeam"))) {
+            return false;
+        }
+
+        if (!((UnitGroupCount(UnitGroup("DominionKillTeam", gv_pLAYER_02_DOMINION, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveDestroyTheKillTeamComplete, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onKillTeamMemberDie_Init () {
+    gt_onKillTeamMemberDie = TriggerCreate("gt_onKillTeamMemberDie_Func");
+    TriggerAddEventUnitDied(gt_onKillTeamMemberDie, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -6425,9 +6526,12 @@ void InitTriggers () {
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
+    gt_ObjectiveDestroyTheKillTeamCreateQ_Init();
+    gt_ObjectiveDestroyTheKillTeamComplete_Init();
     gt_NorthDefiler_Init();
     gt_MidDefiler_Init();
     gt_SouthDefiler_Init();
+    gt_onKillTeamMemberDie_Init();
     gt_ArchInit_Init();
     gt_BriefingQ_Init();
     gt_BriefingScene00_Init();

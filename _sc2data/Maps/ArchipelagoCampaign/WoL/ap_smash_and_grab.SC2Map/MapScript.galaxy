@@ -203,6 +203,8 @@ trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
 trigger gt_onDifficultyHard;
 trigger gt_onDifficultyBrutal;
+trigger gt_FirstForcefieldAreaBusted;
+trigger gt_SecondForcefieldAreaBusted;
 trigger gt_FirstRelicObtained;
 trigger gt_SecondRelicObtained;
 trigger gt_ThirdRelicObtained;
@@ -715,8 +717,8 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     point lv_nullifier2Position;
     unit lv_stalker1;
     point lv_stalker1Position;
-    unit lv_AP_Slayer;
-    point lv_AP_SlayerPosition;
+    unit lv_aP_Stalker;
+    point lv_aP_StalkerPosition;
     point lv_stalkerTarget;
 
     // Automatic Variable Declarations
@@ -724,7 +726,7 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     lv_nullifier1 = UnitFromId(716);
     lv_nullifier2 = UnitFromId(717);
     lv_stalker1 = UnitFromId(90);
-    lv_AP_Slayer = UnitFromId(619);
+    lv_aP_Stalker = UnitFromId(619);
 
     // Actions
     if (!runActions) {
@@ -734,9 +736,9 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     lv_nullifier1Position = UnitGetPosition(lv_nullifier1);
     lv_nullifier2Position = UnitGetPosition(lv_nullifier2);
     lv_stalker1Position = UnitGetPosition(lv_stalker1);
-    lv_AP_SlayerPosition = UnitGetPosition(lv_AP_Slayer);
+    lv_aP_StalkerPosition = UnitGetPosition(lv_aP_Stalker);
     while (true) {
-        if ((UnitIsAlive(lv_nullifier1) == false) && (UnitIsAlive(lv_nullifier2) == false) && (UnitIsAlive(lv_stalker1) == false) && (UnitIsAlive(lv_AP_Slayer) == false)) {
+        if ((UnitIsAlive(lv_nullifier1) == false) && (UnitIsAlive(lv_nullifier2) == false) && (UnitIsAlive(lv_stalker1) == false) && (UnitIsAlive(lv_aP_Stalker) == false)) {
             return true;
         }
 
@@ -762,13 +764,13 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
         if ((UnitGroupCount(UnitGroupAlliance(gv_p3_TEMPLE, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_artifact), 13.0), UnitFilter(0, 0, (1 << c_targetFilterMissile) | (1 << c_targetFilterBuried) | (1 << c_targetFilterCloaked), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
             lv_stalkerTarget = UnitGetPosition(libNtve_gf_ClosestUnitToPoint(UnitGetPosition(gv_artifact), UnitGroupAlliance(gv_p3_TEMPLE, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_artifact), 14.0), UnitFilter(0, 0, (1 << c_targetFilterMissile) | (1 << c_targetFilterBuried) | (1 << c_targetFilterCloaked), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0)));
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
-            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
+            UnitIssueOrder(lv_aP_Stalker, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker1Position), c_orderQueueAddToEnd);
-            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_AP_SlayerPosition), c_orderQueueAddToEnd);
+            UnitIssueOrder(lv_aP_Stalker, OrderTargetingPoint(AbilityCommand("attack", 0), lv_aP_StalkerPosition), c_orderQueueAddToEnd);
         }
         else {
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker1Position), c_orderQueueReplace);
-            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_AP_SlayerPosition), c_orderQueueReplace);
+            UnitIssueOrder(lv_aP_Stalker, OrderTargetingPoint(AbilityCommand("attack", 0), lv_aP_StalkerPosition), c_orderQueueReplace);
         }
     }
     return true;
@@ -4922,6 +4924,70 @@ void gt_onDifficultyBrutal_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: First Forcefield Area Busted
+//--------------------------------------------------------------------------------------------------
+bool gt_FirstForcefieldAreaBusted_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_p1_USER))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_FirstForcefieldAreaBusted_Init () {
+    gt_FirstForcefieldAreaBusted = TriggerCreate("gt_FirstForcefieldAreaBusted_Func");
+    TriggerAddEventUnitRegion(gt_FirstForcefieldAreaBusted, null, RegionFromId(72), true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Second Forcefield Area Busted
+//--------------------------------------------------------------------------------------------------
+bool gt_SecondForcefieldAreaBusted_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetOwner(EventUnit()) == gv_p1_USER))) {
+            return false;
+        }
+
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_SecondForcefieldAreaBusted_Init () {
+    gt_SecondForcefieldAreaBusted = TriggerCreate("gt_SecondForcefieldAreaBusted_Func");
+    TriggerAddEventUnitRegion(gt_SecondForcefieldAreaBusted, null, RegionFromId(73), true);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: First Relic Obtained
 //--------------------------------------------------------------------------------------------------
 bool gt_FirstRelicObtained_Func (bool testConds, bool runActions) {
@@ -5554,6 +5620,8 @@ void InitTriggers () {
     gt_onDifficultyNormal_Init();
     gt_onDifficultyHard_Init();
     gt_onDifficultyBrutal_Init();
+    gt_FirstForcefieldAreaBusted_Init();
+    gt_SecondForcefieldAreaBusted_Init();
     gt_FirstRelicObtained_Init();
     gt_SecondRelicObtained_Init();
     gt_ThirdRelicObtained_Init();

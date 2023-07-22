@@ -8718,7 +8718,7 @@ bool gt_ObjectiveHatcheriesDestroyedQ_Func (bool testConds, bool runActions) {
     }
 
     gv_objectiveHatcheriesKilled += 1;
-    ObjectiveSetName(gv_objectiveHatcheries, (StringExternal("Param/Value/88CE24A2") + IntToText((gv_objectiveHatcheriesQuota - gv_objectiveHatcheriesKilled)) + StringExternal("Param/Value/9C1706C7")));
+    ObjectiveSetName(gv_objectiveHatcheries, (StringExternal("Param/Value/BB7EF222") + IntToText((gv_objectiveHatcheriesQuota - gv_objectiveHatcheriesKilled)) + StringExternal("Param/Value/49FC4AFF")));
     if ((gv_objectiveHatcheriesKilled == gv_objectiveHatcheriesQuota)) {
         TriggerEnable(TriggerGetCurrent(), false);
         TriggerExecute(gt_ObjectiveHatcheriesCompleteQ, true, false);

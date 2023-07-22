@@ -1040,4 +1040,18 @@
             <radius value="3.119"/>
         </shape>
     </region>
+    <region id="72">
+        <name value="First Forcefield Area"/>
+        <shape type="rect">
+            <quad value="119.5153,30.8833,123.4458,55.1308"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Second Forcefield Area"/>
+        <shape type="diamond">
+            <center value="163.655,44.2504"/>
+            <width value="3.1044"/>
+            <height value="9.062"/>
+        </shape>
+    </region>
 </Regions>

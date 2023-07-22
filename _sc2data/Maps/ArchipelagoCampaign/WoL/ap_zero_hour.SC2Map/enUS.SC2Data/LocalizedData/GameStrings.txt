@@ -29,6 +29,8 @@ Param/Value/28341DB3=Rescue the Rebels (
 Param/Value/28F3F94C=Rescued Marines
 Param/Value/36A98A35=
 Param/Value/375DF249=Weapon and Armor Upgrades
+Param/Value/3C261846=
+Param/Value/41BF7276=Destroy Zerg Hatcheries (up to 4 checks)
 Param/Value/424A3B35=
 Param/Value/43FACC21=<c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
 Param/Value/44A00372=<c val="00FF00">T Minus 1!</c>

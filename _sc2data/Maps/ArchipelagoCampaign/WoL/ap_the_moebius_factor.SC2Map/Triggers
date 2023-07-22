@@ -14839,6 +14839,8 @@
     <Element Type="Comment" Id="E93476C9">
         <Comment>
             3rd Data core looks like there was a function but no actual location
+            
+            FIXED - The location was added
         </Comment>
     </Element>
     <Element Type="FunctionCall" Id="7A271F84">

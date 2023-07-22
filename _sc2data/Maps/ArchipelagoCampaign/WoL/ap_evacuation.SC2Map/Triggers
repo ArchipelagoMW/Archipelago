@@ -43391,6 +43391,7 @@
         <Action Type="FunctionCall" Id="BD2A1B57"/>
         <Action Type="FunctionCall" Id="58E8066A"/>
         <Action Type="FunctionCall" Id="4F7C22EA"/>
+        <Action Type="FunctionCall" Id="5AB43E26"/>
         <Action Type="FunctionCall" Id="BB86D477"/>
         <Action Type="FunctionCall" Id="7B1C0C28"/>
         <Action Type="Comment" Id="267279D0"/>
@@ -43846,6 +43847,41 @@
         <Value>THanson01_2</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Achievement"/>
+    </Element>
+    <Element Type="FunctionCall" Id="5AB43E26">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>
+        <FunctionCall Type="FunctionCall" Id="DC4697B6"/>
+        <FunctionCall Type="FunctionCall" Id="FF8E6CEA"/>
+    </Element>
+    <Element Type="FunctionCall" Id="DC4697B6">
+        <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+        <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000003"/>
+        <Parameter Type="Param" Id="308F0413"/>
+        <Parameter Type="Param" Id="AC366E50"/>
+        <Parameter Type="Param" Id="0E50E7CB"/>
+    </Element>
+    <Element Type="Param" Id="308F0413">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+        <Variable Type="Variable" Id="E73A326D"/>
+    </Element>
+    <Element Type="Param" Id="AC366E50">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+    </Element>
+    <Element Type="Param" Id="0E50E7CB">
+        <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+        <Value>0</Value>
+        <ValueType Type="int"/>
+    </Element>
+    <Element Type="FunctionCall" Id="FF8E6CEA">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="DFB3A235"/>
+        <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+        <Parameter Type="Param" Id="9ACA7127"/>
+    </Element>
+    <Element Type="Param" Id="9ACA7127">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="3744452F"/>
+        <Value>6</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="BB86D477">
         <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>

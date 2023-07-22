@@ -142,6 +142,7 @@ actor gv_pingActorBunkerWest;
 unit gv_victoryHyperion;
 bool gv_victoryCinematicCompleted;
 unitgroup gv_victoryRemovedUnitGroup;
+int gv_objectiveDestroyHatcheries;
 
 void InitGlobals () {
     gv_pLAYER01_USER = 1;
@@ -182,6 +183,7 @@ void InitGlobals () {
     gv_objectiveHoldOut = c_invalidObjectiveId;
     gv_objectiveRescue = c_invalidObjectiveId;
     gv_victoryRemovedUnitGroup = UnitGroupEmpty();
+    gv_objectiveDestroyHatcheries = c_invalidObjectiveId;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,6 +318,8 @@ trigger gt_VictoryNydusSpawn03;
 trigger gt_VictoryNydusSpawn04;
 trigger gt_VictoryNydusSpawn05;
 trigger gt_VictoryNydusSpawn06;
+trigger gt_ObjectiveHatcheriesCreateQ;
+trigger gt_ObjectiveHatcheriesComplete;
 trigger gt_ArchInit;
 trigger gt_onDifficultyCasual;
 trigger gt_onDifficultyNormal;
@@ -883,6 +887,8 @@ bool gt_StartGame_Func (bool testConds, bool runActions) {
     CreepSetSpeed(c_creepSpeedGrowth, 100.0);
     Wait(3.0, c_timeGame);
     TriggerExecute(gt_TipBunkerQ, true, false);
+    Wait(3.0, c_timeGame);
+    TriggerExecute(gt_ObjectiveHatcheriesCreateQ, true, false);
     Wait(10.0, c_timeGame);
     TriggerExecute(gt_TipReactorQ, true, false);
     if ((libNtve_gf_DifficultyValueInt(0, 1, 1, 1) == 1)) {
@@ -4198,6 +4204,19 @@ bool gt_AchievementHatcheriesDestroyed_Func (bool testConds, bool runActions) {
     }
 
     gv_hatcheriesDestroyed += 1;
+    if ((gv_hatcheriesDestroyed == 1)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
+    }
+    else if ((gv_hatcheriesDestroyed == 2)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
+    }
+    else if ((gv_hatcheriesDestroyed == 3)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
+    }
+    else if ((gv_hatcheriesDestroyed == 4)) {
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
+        TriggerExecute(gt_ObjectiveHatcheriesComplete, true, false);
+    }
     if ((gv_hatcheriesDestroyed >= 4) && (libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1) && (gv_hatcheryAchievementUnlocked == false)) {
         gv_hatcheryAchievementUnlocked = true;
         AchievementAward(gv_pLAYER01_USER, "TRaynor03_3");
@@ -5849,6 +5868,66 @@ void gt_VictoryNydusSpawn06_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: Objective Hatcheries Create Q
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveHatcheriesCreateQ_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerQueueEnter();
+    ObjectiveCreate(StringExternal("Param/Value/41BF7276"), StringToText(""), c_objectiveStateActive, false);
+    gv_objectiveDestroyHatcheries = ObjectiveLastCreated();
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    TriggerQueueExit();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveHatcheriesCreateQ_Init () {
+    gt_ObjectiveHatcheriesCreateQ = TriggerCreate("gt_ObjectiveHatcheriesCreateQ_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Objective Hatcheries Complete
+//--------------------------------------------------------------------------------------------------
+bool gt_ObjectiveHatcheriesComplete_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((TriggerIsEnabled(TriggerGetCurrent()) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    TriggerExecute(gt_ObjectiveHatcheriesCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveDestroyHatcheries);
+    Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ObjectiveHatcheriesComplete_Init () {
+    gt_ObjectiveHatcheriesComplete = TriggerCreate("gt_ObjectiveHatcheriesComplete_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: Arch Init
 //--------------------------------------------------------------------------------------------------
 bool gt_ArchInit_Func (bool testConds, bool runActions) {
@@ -6127,6 +6206,8 @@ void InitTriggers () {
     gt_VictoryNydusSpawn04_Init();
     gt_VictoryNydusSpawn05_Init();
     gt_VictoryNydusSpawn06_Init();
+    gt_ObjectiveHatcheriesCreateQ_Init();
+    gt_ObjectiveHatcheriesComplete_Init();
     gt_ArchInit_Init();
     gt_onDifficultyCasual_Init();
     gt_onDifficultyNormal_Init();
