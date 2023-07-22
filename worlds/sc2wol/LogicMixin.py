@@ -66,7 +66,7 @@ class SC2WoLLogic(LogicMixin):
     def _sc2wol_has_competent_comp(self, multiworld: MultiWorld, player: int) -> bool:
         return \
                 (
-                        self.has('Marine', player) or self.has('Marauder', player)
+                        (self.has('Marine', player) or self.has('Marauder', player))
                         and self._sc2wol_has_competent_anti_air(multiworld, player)
                         and self.has_any({'Medivac', 'Medic'}, player)
                 ) \
