@@ -224,8 +224,8 @@ item_table = {
     "Science Vessel": ItemData(607 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 7, classification=ItemClassification.progression),
     "Tech Reactor": ItemData(608 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 8),
     "Orbital Strike": ItemData(609 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 9),
-    "Shrike Turret": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, parent_item="Bunker"),
-    "Fortified Bunker": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, parent_item="Bunker"),
+    "Shrike Turret (Bunker)": ItemData(610 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 10, parent_item="Bunker"),
+    "Fortified Bunker (Bunker)": ItemData(611 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 11, parent_item="Bunker"),
     "Planetary Fortress": ItemData(612 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, classification=ItemClassification.progression),
     "Perdition Turret": ItemData(613 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 13, classification=ItemClassification.progression),
     "Predator": ItemData(614 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 14, classification=ItemClassification.filler),
@@ -340,7 +340,7 @@ upgrade_included_names = [
         "Progressive Infantry Weapon",
         "Progressive Infantry Armor",
         "Progressive Vehicle Weapon",
-        "Progressive Vehicle Armor"
+        "Progressive Vehicle Armor",
         "Progressive Ship Weapon",
         "Progressive Ship Armor"
     },
