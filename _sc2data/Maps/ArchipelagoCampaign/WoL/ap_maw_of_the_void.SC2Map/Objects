@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PlacedObjects Version="27">
-    <ObjectDoodad Id="338" Position="155.5017,48.1396,7.9064" Rotation="4.471" Scale="1,1,1" Type="XelNagaHullPlate">
+    <ObjectDoodad Id="536" Variation="3" Position="159.9035,76.176,7.969" Rotation="0.4584" Scale="1.0798,1.0798,1.0798" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="536" Variation="3" Position="159.9035,76.176,7.969" Rotation="0.4584" Scale="1.0798,1.0798,1.0798" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="338" Position="155.5017,48.1396,7.9064" Rotation="4.471" Scale="1,1,1" Type="XelNagaHullPlate">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="60" Variation="1" Position="42.7087,76.467,-0.5175" Rotation="0.0112" Scale="1,1,1" Type="XelNagaHullWalls">
@@ -51,26 +51,26 @@
     <ObjectDoodad Id="554" Variation="2" Position="154.8234,73.8752,7.9702" Rotation="6.0705" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="577" Variation="1" Position="132.6657,86.7978,7.9624" Rotation="5.9023" Scale="1,1,1" Type="XelNagaTornPlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="267" Variation="4" Position="55.0573,33.6945,6.7856" Rotation="3.8334" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="577" Variation="1" Position="132.6657,86.7978,7.9624" Rotation="5.9023" Scale="1,1,1" Type="XelNagaTornPlates">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
-    <ObjectDoodad Id="641" Variation="5" Position="142.0866,53.8315,9.9663" Rotation="2.3591" Scale="1,1,1" Type="DecalProtoss">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="459" Position="89.983,23.9982,9.9057" Rotation="0.6037" Scale="1,1,1" Type="XelNagaTowerSmall">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="343" Position="143.0432,55.6071,10.779" Rotation="4.7097" Scale="1.0798,1.0798,1.0798" Type="XelNagaHalo">
-        <Flag Index="HeightOffset" Value="1"/>
+    <ObjectDoodad Id="641" Variation="5" Position="142.0866,53.8315,9.9663" Rotation="2.3591" Scale="1,1,1" Type="DecalProtoss">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="541" Variation="1" Position="78.948,62.1323,9.9392" Rotation="0.9345" Scale="1,1,1" Type="XelNagaTornPlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="343" Position="143.0432,55.6071,10.779" Rotation="4.7097" Scale="1.0798,1.0798,1.0798" Type="XelNagaHalo">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="508" Position="50.25,66.25,7.6838" Rotation="5.4914" Scale="0.5495,0.5495,0.5495" Type="XelNagaHullWalls">
@@ -167,32 +167,32 @@
     <ObjectDoodad Id="530" Variation="1" Position="199.883,52.917,9.993" Rotation="0.2763" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="285" Variation="1" Position="213,33,9.871" Rotation="4.1467" Scale="1,1,1" Type="XelNagaTurret">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="599" Position="71.9782,41.5156,9.8967" Rotation="3.333" Scale="1,1,1" Type="XelNagaTowerSmall">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectDoodad>
-    <ObjectDoodad Id="285" Variation="1" Position="213,33,9.871" Rotation="4.1467" Scale="1,1,1" Type="XelNagaTurret">
-        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="438" Variation="7" Position="203.9484,33.6254,9.57" Rotation="5.664" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="477" Variation="2" Position="186.1135,68.875,7.9611" Rotation="5.0751" Scale="1,1,1" Type="XelNagaTornPlates">
-        <Flag Index="HeightAbsolute" Value="1"/>
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="663" Variation="3" Position="185.9501,71.0378,8.0634" Rotation="5.4001" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="608" Variation="2" Position="189.8757,75.5483,7.958" Rotation="1.276" Scale="1,1,1" Type="BrokenGroundEdgingWide">
+    <ObjectDoodad Id="477" Variation="2" Position="186.1135,68.875,7.9611" Rotation="5.0751" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="298" Variation="3" Position="33.9997,85.0683,8.6794" Rotation="0.9606" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="608" Variation="2" Position="189.8757,75.5483,7.958" Rotation="1.276" Scale="1,1,1" Type="BrokenGroundEdgingWide">
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="239" Variation="1" Position="203,33,9.8715" Rotation="2.4904" Scale="1,1,1" Type="XelNagaTurret">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -205,12 +205,12 @@
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="654" Variation="4" Position="93.9335,75.332,8.5351" Rotation="4.7143" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="452" Position="74.403,64.3315,7.887" Rotation="1.5004" Scale="1,1,1" Type="XelNagaHullReactorConduit">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="654" Variation="4" Position="93.9335,75.332,8.5351" Rotation="4.7143" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="590" Variation="1" Position="81.802,78.8862,9.9321" Rotation="4.1994" Scale="1.5,1.5,1.5" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -219,10 +219,10 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="367" Position="200.5717,39.9912,8.3261" Rotation="5.4841" Scale="1,1,1" Type="XelNagaHullPlate">
+    <ObjectDoodad Id="549" Variation="2" Position="83.202,84.7045,3.6904" Rotation="5.1352" Scale="1.4,1.4,1.4" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="549" Variation="2" Position="83.202,84.7045,3.6904" Rotation="5.1352" Scale="1.4,1.4,1.4" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="367" Position="200.5717,39.9912,8.3261" Rotation="5.4841" Scale="1,1,1" Type="XelNagaHullPlate">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="446" Variation="1" Position="78.2363,72.865,10.0412" Rotation="3.273" Scale="1,1,1" Type="XelNagaTornPlates">
@@ -270,13 +270,13 @@
     <ObjectDoodad Id="579" Variation="3" Position="131.5827,86.819,7.9687" Rotation="5.1555" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="552" Position="77.1728,87.0908,10.2431" Scale="1,1,1" Type="XelNagaHullCliffWalls">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="354" Variation="5" Position="21.986,51.5031,8.3815" Rotation="4.982" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="552" Position="77.1728,87.0908,10.2431" Scale="1,1,1" Type="XelNagaHullCliffWalls">
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="457" Position="81.241,38.7248,9.768" Scale="0.75,0.75,1.25" Type="XelNagaHullPlate">
         <Flag Index="HeightOffset" Value="1"/>
@@ -312,11 +312,11 @@
     <ObjectDoodad Id="561" Variation="2" Position="152.784,73.957,7.969" Rotation="6.0705" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="341" Position="103.8161,52.4072,9.9958" Rotation="4.7121" Scale="1.0498,1.0498,1.0498" Type="XelNagaHalo">
+    <ObjectDoodad Id="543" Variation="1" Position="82.8994,67.975,10.0664" Rotation="1.2072" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="543" Variation="1" Position="82.8994,67.975,10.0664" Rotation="1.2072" Scale="1,1,1" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="341" Position="103.8161,52.4072,9.9958" Rotation="4.7121" Scale="1.0498,1.0498,1.0498" Type="XelNagaHalo">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
@@ -331,12 +331,12 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="649" Variation="4" Position="141.9658,48.7436,8.552" Rotation="4.7177" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="451" Variation="1" Position="75.0495,64.2983,7.9316" Scale="1,1,1" Type="XelNagaHullReactorConduit">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="649" Variation="4" Position="141.9658,48.7436,8.552" Rotation="4.7177" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="173" Variation="3" Position="31.3627,33.6591,6.8813" Rotation="2.5405" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
@@ -349,11 +349,11 @@
     <ObjectDoodad Id="546" Variation="2" Position="85.151,74.5942,9.97" Rotation="0.9262" Scale="1.4,1.4,1.4" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="326" Position="134.049,52.7778,7.7768" Scale="1,1,1" Type="XelNagaHullPlate">
-        <Flag Index="HeightOffset" Value="1"/>
+    <ObjectDoodad Id="524" Variation="1" Position="197.094,57.0183,7.9855" Rotation="0.294" Scale="1.0698,1.0698,1.0698" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="524" Variation="1" Position="197.094,57.0183,7.9855" Rotation="0.294" Scale="1.0698,1.0698,1.0698" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="326" Position="134.049,52.7778,7.7768" Scale="1,1,1" Type="XelNagaHullPlate">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="390" Position="100.6318,40.5256,9.0666" Scale="0.75,0.75,1.25" Type="XelNagaHullPlate">
@@ -402,10 +402,10 @@
     <ObjectDoodad Id="528" Variation="3" Position="197.6362,52.5253,7.9692" Rotation="5.324" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="652" Variation="2" Position="149.7502,57.037,8.0913" Rotation="3.1374" Scale="1,1,1" Type="DecalProtoss">
+    <ObjectDoodad Id="454" Variation="1" Position="219.893,63.4028,9.9768" Rotation="6.232" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="454" Variation="1" Position="219.893,63.4028,9.9768" Rotation="6.232" Scale="1,1,1" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="652" Variation="2" Position="149.7502,57.037,8.0913" Rotation="3.1374" Scale="1,1,1" Type="DecalProtoss">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="429" Variation="1" Position="221.5815,64.2246,9.9748" Rotation="0.6066" Scale="1,1,1" Type="XelNagaTornPlates">
@@ -493,13 +493,13 @@
     <ObjectDoodad Id="527" Variation="1" Position="197.646,54.0344,7.9692" Rotation="5.1137" Scale="1.0397,1.0397,1.0397" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="545" Variation="2" Position="83.5798,72.42,9.9726" Rotation="0.7216" Scale="1.4,1.4,1.4" Type="XelNagaTornPlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="363" Position="153.9506,66.0256,7.9042" Scale="1,1,1" Type="TerrainObjectXelNagaHullReactorDoodad">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectDoodad>
-    <ObjectDoodad Id="545" Variation="2" Position="83.5798,72.42,9.9726" Rotation="0.7216" Scale="1.4,1.4,1.4" Type="XelNagaTornPlates">
-        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="586" Variation="3" Position="139.7766,82.4455,7.9685" Rotation="5.626" Scale="0.88,0.88,0.88" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -530,19 +530,19 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
+    <ObjectDoodad Id="568" Position="77.2495,61.1347,9.921" Rotation="0.29" Scale="1,1,1" Type="XelNagaTornPlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
     <ObjectDoodad Id="370" Variation="1" Position="222.7812,66.0207,9.9692" Rotation="0.6066" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="568" Position="77.2495,61.1347,9.921" Rotation="0.29" Scale="1,1,1" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="595" Position="97.5,73.5,9.9204" Rotation="3.6052" Scale="1,1,1" Type="XelNagaTowerSmall">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="281" Variation="3" Position="54.5046,82.2656,8.886" Rotation="5.678" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectDoodad>
-    <ObjectDoodad Id="595" Position="97.5,73.5,9.9204" Rotation="3.6052" Scale="1,1,1" Type="XelNagaTowerSmall">
-        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="517" Variation="3" Position="62,41,9.9807" Rotation="1.7751" Scale="1,1,1" Type="XelNagaTurret">
         <Flag Index="HeightAbsolute" Value="1"/>
@@ -572,11 +572,11 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="342" Variation="4" Position="36.641,45.2937,8.891" Rotation="6.2585" Scale="1,1,1" Type="XelNagaLargePlate">
-        <Flag Index="HeightOffset" Value="1"/>
+    <ObjectDoodad Id="540" Position="73.352,60.9172,9.954" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="540" Position="73.352,60.9172,9.954" Scale="1,1,1" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="342" Variation="4" Position="36.641,45.2937,8.891" Rotation="6.2585" Scale="1,1,1" Type="XelNagaLargePlate">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="562" Variation="7" Position="163.5666,76.1457,6.7712" Rotation="2.1027" Scale="1,1,1" Type="XelNagaLargePlate">
@@ -602,11 +602,11 @@
     <ObjectDoodad Id="626" Variation="3" Position="143.5063,76.9252,7.969" Rotation="5.9123" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="339" Position="183.5505,57.1345,7.8825" Rotation="5.51" Scale="1,1,1" Type="XelNagaHullPlate">
-        <Flag Index="HeightOffset" Value="1"/>
+    <ObjectDoodad Id="537" Variation="1" Position="159.3862,75.2893,7.969" Rotation="0.8061" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="537" Variation="1" Position="159.3862,75.2893,7.969" Rotation="0.8061" Scale="1,1,1" Type="XelNagaTornPlates">
+    <ObjectDoodad Id="339" Position="183.5505,57.1345,7.8825" Rotation="5.51" Scale="1,1,1" Type="XelNagaHullPlate">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="445" Variation="1" Position="76.7492,71.4926,9.965" Rotation="3.972" Scale="1,1,1" Type="XelNagaTornPlates">
@@ -668,18 +668,18 @@
     <ObjectDoodad Id="550" Variation="2" Position="156.8432,73.6232,7.97" Rotation="6.073" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="263" Variation="4" Position="193.7734,39.8593,4.6562" Rotation="3.9497" Scale="1.131,1.131,1.131" Type="XelNagaCliffWallSpires">
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="589" Variation="1" Position="71.7504,60.9262,9.9665" Rotation="0.3027" Scale="1,1,1" Type="XelNagaTornPlates">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="653" Variation="4" Position="67.9897,38.668,8.2807" Rotation="4.716" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
+    <ObjectDoodad Id="263" Variation="4" Position="193.7734,39.8593,4.6562" Rotation="3.9497" Scale="1.131,1.131,1.131" Type="XelNagaCliffWallSpires">
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="455" Variation="1" Position="99.8742,25.8483,9.8994" Rotation="3.794" Scale="1,1,1" Type="XelNagaTurret">
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="653" Variation="4" Position="67.9897,38.668,8.2807" Rotation="4.716" Scale="0.8498,0.8498,0.8498" Type="DecalProtoss">
+        <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="428" Position="120.2641,73.029,6.587" Rotation="4.7155" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
@@ -818,20 +818,20 @@
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="556" Variation="3" Position="106.1052,71.5771,8.0935" Rotation="5.5275" Scale="1,1,1" Type="XelNagaHullCliffWalls">
-        <Flag Index="HeightOffset" Value="1"/>
-        <Flag Index="HeightAbsolute" Value="1"/>
-    </ObjectDoodad>
     <ObjectDoodad Id="358" Variation="7" Position="23.578,47.694,8.3808" Rotation="5.232" Scale="1,1,1" Type="XelNagaLargePlate">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
-    <ObjectDoodad Id="269" Position="90.778,30.7595,3.4167" Rotation="1.5705" Scale="1,1,1" Type="XelNagaHullWalls">
+    <ObjectDoodad Id="556" Variation="3" Position="106.1052,71.5771,8.0935" Rotation="5.5275" Scale="1,1,1" Type="XelNagaHullCliffWalls">
         <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="583" Variation="1" Position="136.0822,83.6772,7.9685" Rotation="5.9406" Scale="1,1,1" Type="XelNagaTornPlates">
+        <Flag Index="HeightAbsolute" Value="1"/>
+    </ObjectDoodad>
+    <ObjectDoodad Id="269" Position="90.778,30.7595,3.4167" Rotation="1.5705" Scale="1,1,1" Type="XelNagaHullWalls">
+        <Flag Index="HeightOffset" Value="1"/>
         <Flag Index="HeightAbsolute" Value="1"/>
     </ObjectDoodad>
     <ObjectDoodad Id="230" Position="88.8698,40.4194,9.9506" Scale="0.75,0.75,1.25" Type="XelNagaHullPlate">
@@ -859,13 +859,13 @@
     <ObjectPoint Id="336" Position="139.4606,81.643,0" Rotation="1.2866" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Expansion Flank" Color="255,255,0,0"/>
     <ObjectPoint Id="476" Position="105.5585,70.694,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 013" Color="0,0,0,0"/>
     <ObjectPoint Id="471" Position="151.293,42.8593,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 015" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
-    <ObjectPoint Id="185" Position="121.8698,75.71,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 008" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
     <ObjectPoint Id="284" Position="124.5432,63.458,0" Rotation="1.4611" Scale="1,1,1" Type="Normal" Name="POINT-Toss04 Gather" Color="255,128,0,128"/>
+    <ObjectPoint Id="185" Position="121.8698,75.71,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 008" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
     <ObjectPoint Id="573" Position="204.4914,54.0175,0" Rotation="2.2082" Scale="1,1,1" Type="Normal" Name="Intro Cine - Stalker 01 Spawn" Color="0,0,0,0"/>
     <ObjectPoint Id="217" Position="193.6967,58.1083,0" Scale="1,1,1" Type="Normal" Name="POINT-WarpPrismDrop-East Gather" Color="0,0,0,0"/>
     <ObjectPoint Id="364" Position="184.13,60.0598,0" Rotation="1.69" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Island North" Color="255,255,0,0"/>
-    <ObjectPoint Id="169" Position="76.868,56.9438,0" Scale="1,1,1" Type="Normal" Name="Briefing Rip Field Remove" Color="0,0,0,0"/>
     <ObjectPoint Id="480" Position="66.7502,83.7985,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 016" Color="0,0,0,0"/>
+    <ObjectPoint Id="169" Position="76.868,56.9438,0" Scale="1,1,1" Type="Normal" Name="Briefing Rip Field Remove" Color="0,0,0,0"/>
     <ObjectPoint Id="460" Position="199.4433,33.3264,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 001" Color="0,0,0,0"/>
     <ObjectPoint Id="482" Position="159.2651,46.2546,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 017" Color="0,0,0,0"/>
     <ObjectPoint Id="76" Position="202.7946,73.9965,0" Rotation="5.6853" Scale="1,1,1" Type="Normal" Name="POINT-Midtro Cruiser Spawn-2" Color="0,0,0,0"/>
@@ -874,21 +874,21 @@
     <ObjectPoint Id="462" Position="89.21,30.8098,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 006" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
     <ObjectPoint Id="96" Position="217.24,70.41,0" Scale="1,1,1" Type="Normal" Name="Intro SCV Spawn 2" Color="0,0,0,0"/>
     <ObjectPoint Id="199" Position="219.5244,75.4948,0" Rotation="5.432" Scale="1,1,1" Type="Normal" Name="POINT-Base LZ - Spawn Comm Center" Color="0,0,0,0"/>
-    <ObjectPoint Id="139" Position="93.9191,64.6335,0" Rotation="1.2604" Scale="1,1,1" Type="Normal" Name="Briefing Battlecruiser 1" Color="0,0,0,0"/>
     <ObjectPoint Id="648" Position="126.3598,85.2897,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 002 Copy" Color="0,0,0,0" PathingRadiusSoft="4" PathingRadiusHard="3"/>
-    <ObjectPoint Id="41" Position="182.8161,75.2954,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 004" Color="0,0,0,0" PathingRadiusSoft="4" PathingRadiusHard="3"/>
+    <ObjectPoint Id="139" Position="93.9191,64.6335,0" Rotation="1.2604" Scale="1,1,1" Type="Normal" Name="Briefing Battlecruiser 1" Color="0,0,0,0"/>
     <ObjectPoint Id="197" Position="26.0297,90.7897,0" Scale="1,1,1" Type="Normal" Name="Patrol End - North Fleet" Color="255,0,255,255"/>
+    <ObjectPoint Id="41" Position="182.8161,75.2954,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 004" Color="0,0,0,0" PathingRadiusSoft="4" PathingRadiusHard="3"/>
     <ObjectPoint Id="256" Position="203.0595,61.0251,0" Rotation="5.5146" Scale="1,1,1" Type="Normal" Name="POINT-Midtro-Starting Cruiser MoveTo 3" Color="0,0,0,0"/>
     <ObjectPoint Id="110" Position="198.261,62.2243,0" Rotation="5.5336" Scale="1,1,1" Type="Normal" Name="POINT-Midtro-Starting Cruiser MoveTo 1" Color="0,0,0,0"/>
-    <ObjectPoint Id="117" Position="196.9763,67.903,0" Rotation="5.5744" Scale="1,1,1" Type="Normal" Name="POINT-Midtro-Starting Cruiser MoveTo 2" Color="0,0,0,0"/>
     <ObjectPoint Id="464" Position="126.4055,46.1276,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 006 Copy" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
+    <ObjectPoint Id="117" Position="196.9763,67.903,0" Rotation="5.5744" Scale="1,1,1" Type="Normal" Name="POINT-Midtro-Starting Cruiser MoveTo 2" Color="0,0,0,0"/>
     <ObjectPoint Id="475" Position="51.5815,81.9484,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 012" Color="0,0,0,0"/>
     <ObjectPoint Id="570" Position="211.8198,66.3598,0" Rotation="2.668" Scale="1,1,1" Type="Normal" Name="Intro Cine - Stalker 02 Rally" Color="0,0,0,0"/>
     <ObjectPoint Id="473" Position="34.694,34.8276,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 010" Color="0,0,0,0"/>
+    <ObjectPoint Id="628" Position="193.2675,92.3107,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 003" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="4"/>
     <ObjectPoint Id="318" Position="90.5,62.5,0" Scale="1,1,1" Type="StartLoc" Name="Player_Start_Toss3" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="628" Position="193.2675,92.3107,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 003" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="4"/>
     <ObjectPoint Id="350" Position="189.9953,70.6157,0" Rotation="1.689" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Island North Flank" Color="255,255,0,0"/>
     <ObjectPoint Id="240" Position="120.39,54.5,0" Rotation="2.0607" Scale="1,1,1" Type="Normal" Name="Attack Waypoint South" Color="255,255,0,0"/>
     <ObjectPoint Id="215" Position="53.4082,57.62,0" Scale="1,1,1" Type="Normal" Name="POINT-Toss2 RoboFacility " Color="255,255,128,0"/>
@@ -898,8 +898,8 @@
     <ObjectPoint Id="109" Position="68.1301,53.6538,0" Scale="1,1,1" Type="Normal" Name="POINT-Toss03 Gather" Color="255,255,128,0"/>
     <ObjectPoint Id="205" Position="213.5195,69.5356,0" Rotation="5.509" Scale="1,1,1" Type="Normal" Name="POINT-Base LZ - Spawn Barracks" Color="0,0,0,0"/>
     <ObjectPoint Id="131" Position="217.16,68.41,0" Scale="1,1,1" Type="Normal" Name="Intro SCV Spawn 4" Color="0,0,0,0"/>
-    <ObjectPoint Id="232" Position="187.5598,45.1098,0" Rotation="2.404" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Island South" Color="255,255,0,0"/>
     <ObjectPoint Id="333" Position="209.13,67.0498,0" Rotation="5.683" Scale="1,1,1" Type="Normal" Name="POINT-Midtro Cruiser Spawn-3" Color="0,0,0,0"/>
+    <ObjectPoint Id="232" Position="187.5598,45.1098,0" Rotation="2.404" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Island South" Color="255,255,0,0"/>
     <ObjectPoint Id="196" Position="213.5,69.5,0" Scale="1,1,1" Type="StartLoc" Name="Player_Start_USER" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
@@ -918,20 +918,20 @@
     <ObjectPoint Id="533" Position="177.14,56.9,0" Scale="1,1,1" Type="Normal" Name="POINT-Observer Patrol 1" Color="0,0,0,0"/>
     <ObjectPoint Id="574" Position="49.1816,53.8371,0" Rotation="0.6923" Scale="1,1,1" Type="Normal" Name="Mid Cine - Mothership Rally" Color="0,0,0,0"/>
     <ObjectPoint Id="479" Position="99.97,77.3598,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 014" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
-    <ObjectPoint Id="95" Position="58.6013,42.3574,0" Scale="1,1,1" Type="Normal" Name="POINT-Toss2 Gateway" Color="255,255,128,0"/>
     <ObjectPoint Id="179" Position="96.4853,68.8151,0" Rotation="0.8464" Scale="1,1,1" Type="Normal" Name="Briefing Battlecruiser 2" Color="0,0,0,0"/>
+    <ObjectPoint Id="95" Position="58.6013,42.3574,0" Scale="1,1,1" Type="Normal" Name="POINT-Toss2 Gateway" Color="255,255,128,0"/>
     <ObjectPoint Id="572" Position="199.3205,75.1533,0" Rotation="0.7873" Scale="1,1,1" Type="Normal" Name="Intro Cine - Stalker 02 Spawn" Color="0,0,0,0"/>
     <ObjectPoint Id="115" Position="216.65,69.43,0" Scale="1,1,1" Type="Normal" Name="Intro SCV Spawn 3" Color="0,0,0,0"/>
-    <ObjectPoint Id="461" Position="217.518,32.669,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 005" Color="0,0,0,0"/>
     <ObjectPoint Id="647" Position="77.3598,88.95,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 002" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="4"/>
+    <ObjectPoint Id="461" Position="217.518,32.669,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 005" Color="0,0,0,0"/>
     <ObjectPoint Id="321" Position="41.9995,57.9978,0" Scale="1,1,1" Type="Normal" Name="POINT-Victory- Artifact" Color="0,0,0,0"/>
     <ObjectPoint Id="365" Position="53.4777,45.8276,0" Scale="1,1,1" Type="Normal" Name="POINT-Toss2-Stargate" Color="255,255,128,0"/>
     <ObjectPoint Id="168" Position="119.0097,74.0998,0" Rotation="1.489" Scale="1,1,1" Type="Normal" Name="Attack Waypoint North" Color="255,255,0,0"/>
     <ObjectPoint Id="296" Position="11.5505,55.8615,0" Rotation="1.5705" Scale="1,1,1" Type="Normal" Name="POINT-Mothership Entry" Color="0,0,0,0"/>
     <ObjectPoint Id="463" Position="98.8298,30.75,0" Scale="1,1,1" Type="NoFlyZone" Name="No Fly Zone 007" Color="0,0,0,0" PathingRadiusSoft="3" PathingRadiusHard="2"/>
     <ObjectPoint Id="77" Position="204.1894,68.1225,0" Rotation="5.482" Scale="1,1,1" Type="Normal" Name="POINT-Midtro Cruiser Spawn-1" Color="0,0,0,0"/>
-    <ObjectPoint Id="271" Position="157.4052,57.1352,0" Scale="1,1,1" Type="Normal" Name="Patrol End - East Land" Color="255,0,255,255"/>
     <ObjectPoint Id="483" Position="228.3642,60.4902,0" Scale="1,1,1" Type="Normal" Name="Starting Cruiser Destination 2" Color="0,0,0,0"/>
+    <ObjectPoint Id="271" Position="157.4052,57.1352,0" Scale="1,1,1" Type="Normal" Name="Patrol End - East Land" Color="255,0,255,255"/>
     <ObjectPoint Id="202" Position="208.5073,75.4916,0" Rotation="5.4968" Scale="1,1,1" Type="Normal" Name="POINT-Base LZ - Spawn Starport" Color="0,0,0,0"/>
     <ObjectPoint Id="193" Position="206.8894,70.0395,0" Rotation="4.7172" Scale="1,1,1" Type="Normal" Name="POINT-ClearLZPing" Color="0,0,0,0"/>
     <ObjectCamera Id="123" Position="206.19,64.1684,0" Rotation="2.297" Scale="1,1,1" Name="Intro Cine 01" Color="0,0,0,0" CameraTarget="206.19,64.1684">
@@ -945,17 +945,6 @@
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectCamera Id="86" Position="95.9921,70.2514,0" Rotation="3.8942" Scale="1,1,1" Name="Briefing 3" Color="0,0,0,0" CameraTarget="95.9921,70.2514">
-        <CameraValue Index="FieldOfView" Value="27.7995"/>
-        <CameraValue Index="NearClip" Value="0.0998"/>
-        <CameraValue Index="FarClip" Value="20000"/>
-        <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="23.1193"/>
-        <CameraValue Index="Pitch" Value="42.2797"/>
-        <CameraValue Index="Yaw" Value="223.1262"/>
-        <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffEnd" Value="8"/>
-    </ObjectCamera>
     <ObjectCamera Id="204" Position="123.5556,75.5666,0" Rotation="3.3916" Scale="1,1,1" Name="Mid Cine 02 - Dark Templar Prison 01" Color="255,0,255,255" CameraTarget="123.5556,75.5666">
         <CameraValue Index="FieldOfView" Value="27.7995"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
@@ -964,6 +953,17 @@
         <CameraValue Index="Distance" Value="37.59"/>
         <CameraValue Index="Pitch" Value="39.0698"/>
         <CameraValue Index="Yaw" Value="194.3244"/>
+        <CameraValue Index="FocalDepth" Value="8"/>
+        <CameraValue Index="FalloffEnd" Value="8"/>
+    </ObjectCamera>
+    <ObjectCamera Id="86" Position="95.9921,70.2514,0" Rotation="3.8942" Scale="1,1,1" Name="Briefing 3" Color="0,0,0,0" CameraTarget="95.9921,70.2514">
+        <CameraValue Index="FieldOfView" Value="27.7995"/>
+        <CameraValue Index="NearClip" Value="0.0998"/>
+        <CameraValue Index="FarClip" Value="20000"/>
+        <CameraValue Index="ShadowClip" Value="75"/>
+        <CameraValue Index="Distance" Value="23.1193"/>
+        <CameraValue Index="Pitch" Value="42.2797"/>
+        <CameraValue Index="Yaw" Value="223.1262"/>
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
@@ -1012,17 +1012,6 @@
         <CameraValue Index="FalloffStart" Value="3"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectCamera Id="130" Position="231.36,64.6828,0" Rotation="3.14" Scale="1,1,1" Name="Intro Cine 03" Color="0,0,0,0" CameraTarget="231.36,64.6828">
-        <CameraValue Index="FieldOfView" Value="27.7995"/>
-        <CameraValue Index="NearClip" Value="0.1"/>
-        <CameraValue Index="FarClip" Value="20000"/>
-        <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="30.2102"/>
-        <CameraValue Index="Pitch" Value="56"/>
-        <CameraValue Index="Yaw" Value="179.9025"/>
-        <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffEnd" Value="8"/>
-    </ObjectCamera>
     <ObjectCamera Id="207" Position="42.0993,56.8164,0" Rotation="3.1291" Scale="1,1,1" Name="Mid Cine 03 - Artifact 01" Color="255,0,255,255" CameraTarget="42.0993,56.8164">
         <CameraValue Index="FieldOfView" Value="27.2995"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
@@ -1033,6 +1022,17 @@
         <CameraValue Index="Yaw" Value="179.287"/>
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffStart" Value="3"/>
+        <CameraValue Index="FalloffEnd" Value="8"/>
+    </ObjectCamera>
+    <ObjectCamera Id="130" Position="231.36,64.6828,0" Rotation="3.14" Scale="1,1,1" Name="Intro Cine 03" Color="0,0,0,0" CameraTarget="231.36,64.6828">
+        <CameraValue Index="FieldOfView" Value="27.7995"/>
+        <CameraValue Index="NearClip" Value="0.1"/>
+        <CameraValue Index="FarClip" Value="20000"/>
+        <CameraValue Index="ShadowClip" Value="75"/>
+        <CameraValue Index="Distance" Value="30.2102"/>
+        <CameraValue Index="Pitch" Value="56"/>
+        <CameraValue Index="Yaw" Value="179.9025"/>
+        <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
     <ObjectCamera Id="314" Position="42.2863,55.673,0" Rotation="3.125" Scale="1,1,1" Name="CAMERA-Victory A" Color="255,255,0,0" CameraTarget="42.2863,55.673">
@@ -1079,17 +1079,6 @@
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectCamera Id="152" Position="48.4177,54.7695,0" Rotation="3.8703" Scale="1,1,1" Name="Mid Cine 03 - Mothership Arrival" Color="255,0,255,255" CameraTarget="48.4177,54.7695">
-        <CameraValue Index="FieldOfView" Value="27.7998"/>
-        <CameraValue Index="NearClip" Value="0.0998"/>
-        <CameraValue Index="FarClip" Value="20000"/>
-        <CameraValue Index="ShadowClip" Value="75"/>
-        <CameraValue Index="Distance" Value="34.0695"/>
-        <CameraValue Index="Pitch" Value="55.2385"/>
-        <CameraValue Index="Yaw" Value="221.7553"/>
-        <CameraValue Index="FocalDepth" Value="8"/>
-        <CameraValue Index="FalloffEnd" Value="8"/>
-    </ObjectCamera>
     <ObjectCamera Id="238" Position="123.5556,75.5666,0" Rotation="3.3916" Scale="1,1,1" Name="Mid Cine 02 - Dark Templar Prison 02" Color="255,0,255,255" CameraTarget="123.5556,75.5666">
         <CameraValue Index="FieldOfView" Value="27.7995"/>
         <CameraValue Index="NearClip" Value="0.0998"/>
@@ -1098,6 +1087,17 @@
         <CameraValue Index="Distance" Value="29.202"/>
         <CameraValue Index="Pitch" Value="39.0698"/>
         <CameraValue Index="Yaw" Value="194.3244"/>
+        <CameraValue Index="FocalDepth" Value="8"/>
+        <CameraValue Index="FalloffEnd" Value="8"/>
+    </ObjectCamera>
+    <ObjectCamera Id="152" Position="48.4177,54.7695,0" Rotation="3.8703" Scale="1,1,1" Name="Mid Cine 03 - Mothership Arrival" Color="255,0,255,255" CameraTarget="48.4177,54.7695">
+        <CameraValue Index="FieldOfView" Value="27.7998"/>
+        <CameraValue Index="NearClip" Value="0.0998"/>
+        <CameraValue Index="FarClip" Value="20000"/>
+        <CameraValue Index="ShadowClip" Value="75"/>
+        <CameraValue Index="Distance" Value="34.0695"/>
+        <CameraValue Index="Pitch" Value="55.2385"/>
+        <CameraValue Index="Yaw" Value="221.7553"/>
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
@@ -1124,14 +1124,14 @@
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectCamera Id="161" Position="223.1906,63.362,0" Rotation="3.1406" Scale="1,1,1" Name="Intro Cine 04" Color="0,0,0,0" CameraTarget="223.1906,63.362">
+    <ObjectCamera Id="161" Position="223.1906,63.362,0" Rotation="3.1403" Scale="1,1,1" Name="Intro Cine 04" Color="0,0,0,0" CameraTarget="223.1906,63.362">
         <CameraValue Index="FieldOfView" Value="27.7995"/>
         <CameraValue Index="NearClip" Value="0.1"/>
         <CameraValue Index="FarClip" Value="20000"/>
         <CameraValue Index="ShadowClip" Value="300"/>
         <CameraValue Index="Distance" Value="34"/>
         <CameraValue Index="Pitch" Value="56"/>
-        <CameraValue Index="Yaw" Value="179.9584"/>
+        <CameraValue Index="Yaw" Value="179.9443"/>
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
@@ -1146,14 +1146,14 @@
         <CameraValue Index="FocalDepth" Value="8"/>
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
-    <ObjectUnit Id="313" Position="115.3254,54.06,0" Rotation="1.3286" Scale="1,1,1" UnitType="NaturalMinerals">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="627" Position="75,80,0" Scale="1,1,1" UnitType="Pylon" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="2"/>
         <AIRebuild Index="3" Value="1"/>
         <AIRebuild Index="4" Value="2"/>
+    </ObjectUnit>
+    <ObjectUnit Id="313" Position="115.3254,54.06,0" Rotation="1.3286" Scale="1,1,1" UnitType="NaturalMinerals">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="151" Position="139,68,0" Rotation="3.1604" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
     <ObjectUnit Id="402" Variation="1" Position="124.8698,72.17,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
@@ -1194,6 +1194,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="559" Position="37,53,0" Scale="1,1,1" UnitType="Monolith" Player="2"/>
     <ObjectUnit Id="357" Position="125.1926,31.8422,0" Rotation="1.916" Scale="1,1,1" UnitType="Carrier" Player="4">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1201,7 +1202,6 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="559" Position="37,53,0" Scale="1,1,1" UnitType="Monolith" Player="2"/>
     <ObjectUnit Id="421" Position="212.6784,43.7565,0" Rotation="0.347" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="11" Position="142.5,74.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="2"/>
     <ObjectUnit Id="644" Position="62.211,54.6862,0" Rotation="0.4975" Scale="1,1,1" UnitType="Stalker" Player="3">
@@ -1228,13 +1228,13 @@
     <ObjectUnit Id="224" Position="130.2214,45.142,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="623" Position="160.3198,91.5515,0" Scale="1,1,1" UnitType="NaturalGas">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="293" Position="126.5798,55.24,0" Rotation="1.1452" Scale="1,1,1" UnitType="Stalker" Player="4">
         <AIRebuild Index="2" Value="2"/>
         <AIRebuild Index="3" Value="1"/>
         <AIRebuild Index="4" Value="2"/>
+    </ObjectUnit>
+    <ObjectUnit Id="623" Position="160.3198,91.5515,0" Scale="1,1,1" UnitType="NaturalGas">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="165" Position="13.2092,58.5834,0" Rotation="1.6098" Scale="1,1,1" UnitType="Scout" Player="2">
         <AIActive Index="1" Value="0"/>
@@ -1256,12 +1256,12 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="316" Position="128.7897,51.0654,0" Scale="1,1,1" UnitType="NaturalGas">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="630" Position="58,48,0" Scale="1,1,1" UnitType="Pylon" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="316" Position="128.7897,51.0654,0" Scale="1,1,1" UnitType="NaturalGas">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="146" Position="89.5,47.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CyberneticsCore" Player="4">
         <AIRebuild Index="2" Value="14"/>
@@ -1365,8 +1365,8 @@
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="349" Position="155.2766,42.486,0" Rotation="1.2297" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="310" Position="202.5517,42.5876,0" Scale="1,1,1" UnitType="NaturalGas"/>
     <ObjectUnit Id="636" Position="50.7282,86.0354,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
+    <ObjectUnit Id="310" Position="202.5517,42.5876,0" Scale="1,1,1" UnitType="NaturalGas"/>
     <ObjectUnit Id="221" Position="99.411,73.6135,0" Rotation="0.3483" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="569" Position="93.9738,90.051,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -1380,12 +1380,12 @@
     <ObjectUnit Id="408" Position="66.8015,43.135,0" Rotation="3.6333" Scale="1,1,1" UnitType="Zealot" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="633" Position="92.079,25.9416,0" Rotation="3.5158" Scale="1,1,1" UnitType="NaturalMinerals">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="307" Position="75.3166,58.4836,0" Rotation="1.9372" Scale="1,1,1" UnitType="Stalker" Player="4">
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
+    </ObjectUnit>
+    <ObjectUnit Id="633" Position="92.079,25.9416,0" Rotation="3.5158" Scale="1,1,1" UnitType="NaturalMinerals">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="344" Position="123.46,55.422,0" Rotation="0.3483" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="246" Position="28.5,63.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="FleetBeacon" Player="3">
@@ -1466,18 +1466,18 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="557" Position="19.84,72.0144,0" Rotation="1.4772" Scale="1,1,1" UnitType="WarpPrism" Player="3">
+        <AIRebuild Index="1" Value="14"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
+        <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="359" Position="76.076,52.8215,0" Rotation="0.9694" Scale="1,1,1" UnitType="VoidRay" Player="4">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="557" Position="19.84,72.0144,0" Rotation="1.4772" Scale="1,1,1" UnitType="WarpPrism" Player="3">
-        <AIRebuild Index="1" Value="14"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
-        <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="162" Variation="1" Position="93.1516,89.7163,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="268" Position="22.9846,67.967,0" Rotation="3.855" Scale="1,1,1" UnitType="Scout" Player="3">
@@ -1588,23 +1588,23 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="360" Position="156.1997,46.3142,0" Rotation="1.2297" Scale="1,1,1" UnitType="NaturalMinerals"/>
+    <ObjectUnit Id="615" Position="164.931,62,0" Rotation="6.2617" Scale="1,1,1" UnitType="ShipAlarm" Player="5"/>
     <ObjectUnit Id="301" Position="72.2521,72.2387,0" Rotation="5.4743" Scale="1,1,1" UnitType="Immortal" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="615" Position="164.931,62,0" Rotation="6.2617" Scale="1,1,1" UnitType="ShipAlarm" Player="5"/>
     <ObjectUnit Id="679" Position="114.559,28.2587,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="67" Position="103.5,47.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="4">
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="592" Position="98.6843,51.915,0" Rotation="0.1218" Scale="1,1,1" UnitType="Zealot" Player="4">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="282" Position="25.3198,55.5598,0" Scale="1,1,1" UnitType="HighTemplar" Player="3">
         <AIRebuild Index="4" Value="1"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="592" Position="98.6843,51.915,0" Rotation="0.1218" Scale="1,1,1" UnitType="Zealot" Player="4">
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="180" Position="84.5,51.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="TwilightCouncil" Player="4">
         <AIRebuild Index="2" Value="14"/>
@@ -1623,10 +1623,10 @@
     <ObjectUnit Id="154" Position="243.7907,102.2226,0" Scale="1,1,1" UnitType="Food1000" Player="3">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="638" Position="82.64,40.3642,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
+    <ObjectUnit Id="308" Position="184.2954,44.1171,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="308" Position="184.2954,44.1171,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals">
+    <ObjectUnit Id="638" Position="82.64,40.3642,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="241" Variation="1" Position="93.948,88.7658,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
@@ -1677,8 +1677,8 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="635" Position="56.7773,82.049,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="305" Position="202.5,68.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Starport" Player="1"/>
+    <ObjectUnit Id="635" Position="56.7773,82.049,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="104" Variation="3" Position="152,85.5,0" Scale="1,1,1" UnitType="MineralField" Resources="750"/>
     <ObjectUnit Id="3" Position="42,58,0" Scale="1,1,1" UnitType="XelNagaVault" Player="5"/>
     <ObjectUnit Id="195" Position="70,81,0" Scale="1,1,1" UnitType="PhotonCannon" Player="3">
@@ -1722,12 +1722,12 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="632" Position="81.7087,40.103,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="306" Position="55.5427,57.2353,0" Rotation="0.7375" Scale="1,1,1" UnitType="Immortal" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
+    <ObjectUnit Id="632" Position="81.7087,40.103,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
+        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="247" Position="58.5,62.5,0" Scale="1,1,1" UnitType="RoboticsBay" Player="3">
         <AIRebuild Index="2" Value="14"/>
@@ -1814,11 +1814,11 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="612" Position="106.0141,47.5227,0" Rotation="1.9836" Scale="1,1,1" UnitType="Archon" Player="4"/>
     <ObjectUnit Id="302" Position="59.8732,47.5434,0" Scale="1,1,1" UnitType="Sentry" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="612" Position="106.0141,47.5227,0" Rotation="1.9836" Scale="1,1,1" UnitType="Archon" Player="4"/>
     <ObjectUnit Id="128" Position="233.381,63.9147,0" Rotation="4.7082" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
     <ObjectUnit Id="650" Position="164.3037,86.0397,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -1832,7 +1832,6 @@
     <ObjectUnit Id="153" Position="242.501,102.282,0" Scale="1,1,1" UnitType="Food1000" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="637" Position="32.226,82.9916,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="311" Position="137.93,73.0185,0" Rotation="1.8234" Scale="1,1,1" UnitType="Stalker" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1840,6 +1839,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
+    <ObjectUnit Id="637" Position="32.226,82.9916,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="89" Position="66.8117,24.7363,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="50" Position="205.637,37.4633,0" Rotation="3.1713" Scale="1,1,1" UnitType="Zealot" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -1975,16 +1975,16 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="278" Position="142.0895,33.2102,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="604" Position="152.6765,40.388,0" Rotation="1.2304" Scale="1,1,1" UnitType="NaturalMinerals"/>
+    <ObjectUnit Id="278" Position="142.0895,33.2102,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="184" Position="235.9687,60.9604,0" Rotation="4.7102" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
+    <ObjectUnit Id="567" Position="67.9824,25.008,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
     <ObjectUnit Id="381" Position="41.6997,47.1984,0" Rotation="0.9426" Scale="1,1,1" UnitType="Carrier" Player="3">
         <AIRebuild Index="1" Value="1"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="567" Position="67.9824,25.008,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
-        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="211" Position="101.7036,73.0507,0" Rotation="0.31" Scale="1,1,1" UnitType="NaturalMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -2010,18 +2010,18 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="558" Position="23.3261,75.0541,0" Rotation="0.3071" Scale="1,1,1" UnitType="WarpPrism" Player="3">
+        <AIRebuild Index="1" Value="14"/>
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="3" Value="14"/>
+        <AIRebuild Index="4" Value="14"/>
+    </ObjectUnit>
     <ObjectUnit Id="356" Position="125.1484,35.194,0" Rotation="2.1435" Scale="1,1,1" UnitType="VoidRay" Player="4">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="558" Position="23.3261,75.0541,0" Rotation="0.3071" Scale="1,1,1" UnitType="WarpPrism" Player="3">
-        <AIRebuild Index="1" Value="14"/>
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="3" Value="14"/>
-        <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="112" Position="81.5,61.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Stargate" Player="4">
         <AIRebuild Index="2" Value="14"/>
@@ -2106,13 +2106,17 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="297" Position="43,31,0" Rotation="3.1413" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
     <ObjectUnit Id="611" Position="104.4531,55.7834,0" Rotation="1.6616" Scale="1,1,1" UnitType="Zealot" Player="4">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="297" Position="43,31,0" Rotation="3.1413" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
     <ObjectUnit Id="258" Position="96.0156,25.909,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
         <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
+    <ObjectUnit Id="547" Position="62.8554,70.9313,0" Scale="1,1,1" UnitType="Sentry" Player="3">
+        <AIRebuild Index="2" Value="14"/>
+        <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="361" Position="165,77,0" Scale="1,1,1" UnitType="PhotonCannon" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -2120,10 +2124,6 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="547" Position="62.8554,70.9313,0" Scale="1,1,1" UnitType="Sentry" Player="3">
-        <AIRebuild Index="2" Value="14"/>
-        <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="7" Position="139,78,0" Scale="1,1,1" UnitType="Pylon" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -2133,12 +2133,12 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="678" Position="115.4138,29.5388,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="614" Position="165,72,0" Rotation="6.2641" Scale="1,1,1" UnitType="ShipAlarm" Player="5"/>
     <ObjectUnit Id="300" Position="98.0324,69.0197,0" Rotation="5.3657" Scale="1,1,1" UnitType="Stalker" Player="4">
         <AIRebuild Index="2" Value="2"/>
         <AIRebuild Index="3" Value="1"/>
         <AIRebuild Index="4" Value="2"/>
     </ObjectUnit>
+    <ObjectUnit Id="614" Position="165,72,0" Rotation="6.2641" Scale="1,1,1" UnitType="ShipAlarm" Player="5"/>
     <ObjectUnit Id="30" Position="26,64,0" Scale="1,1,1" UnitType="Pylon" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -2146,11 +2146,11 @@
     <ObjectUnit Id="181" Variation="6" Position="221,73.5,0" Scale="1,1,1" UnitType="MineralField" Resources="599"/>
     <ObjectUnit Id="283" Position="187.7177,41.3784,0" Rotation="0.3476" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="222" Variation="1" Position="123.573,73.5083,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
-    <ObjectUnit Id="639" Position="94.1962,40.1667,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="309" Position="22.5,62.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Stargate" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
+    <ObjectUnit Id="639" Position="94.1962,40.1667,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="155" Position="245.014,102.2246,0" Scale="1,1,1" UnitType="Food1000" Player="4">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -2253,12 +2253,12 @@
     <ObjectUnit Id="209" Position="125.2795,49.9643,0" Rotation="5.7976" Scale="1,1,1" UnitType="NaturalMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
+    <ObjectUnit Id="565" Position="141.9787,33.8352,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
+        <Flag Index="ForcePlacement" Value="1"/>
+    </ObjectUnit>
     <ObjectUnit Id="383" Position="21.5,74.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="RoboticsFacility" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
-    </ObjectUnit>
-    <ObjectUnit Id="565" Position="141.9787,33.8352,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
-        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="186" Position="73,77,0" Scale="1,1,1" UnitType="PhotonCannon" Player="3">
         <AIRebuild Index="1" Value="0"/>
@@ -2354,7 +2354,6 @@
         <GroupObject Id="388"/>
         <GroupObject Id="395"/>
         <GroupObject Id="407"/>
-        <GroupObject Id="415"/>
         <GroupObject Id="486"/>
         <GroupObject Id="529"/>
         <GroupObject Id="557"/>

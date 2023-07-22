@@ -68,6 +68,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Evacuation", "Evacuation: Secret Resource Stash", SC2WOL_LOC_ID_OFFSET + 405),
         LocationData("Evacuation", "Evacuation: Flawless", SC2WOL_LOC_ID_OFFSET + 406,
                      lambda state: state._sc2wol_has_common_unit(multiworld, player) and
+                                   state._sc2wol_defense_rating(multiworld, player, True, False) >= 2 and
                                    (logic_level > 0 and state._sc2wol_has_anti_air(multiworld, player)
                                     or state._sc2wol_has_competent_anti_air(multiworld, player))),
         LocationData("Outbreak", "Outbreak: Victory", SC2WOL_LOC_ID_OFFSET + 500,
@@ -178,8 +179,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    (state._sc2wol_has_air(multiworld, player)
                                     or state.has_any({'Medivac', 'Hercules'}, player)
                                     and state._sc2wol_has_common_unit(multiworld, player))),
-        LocationData("The Moebius Factor", "The Moebius Factor: 1st Data Core", SC2WOL_LOC_ID_OFFSET + 1001,
-                     lambda state: True),
+        LocationData("The Moebius Factor", "The Moebius Factor: 1st Data Core", SC2WOL_LOC_ID_OFFSET + 1001),
         LocationData("The Moebius Factor", "The Moebius Factor: 2nd Data Core", SC2WOL_LOC_ID_OFFSET + 1002,
                      lambda state: (state._sc2wol_has_air(multiworld, player)
                                     or state.has_any({'Medivac', 'Hercules'}, player)
@@ -231,7 +231,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Maw of the Void", "Maw of the Void: Mothership", SC2WOL_LOC_ID_OFFSET + 1206,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Expansion Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1207,
-                     lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
+                     lambda state: logic_level > 0 or state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Middle Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1208,
                      lambda state: state._sc2wol_survives_rip_field(multiworld, player)),
         LocationData("Maw of the Void", "Maw of the Void: Southeast Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1209,
@@ -260,7 +260,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic_level > 0 or
                                    state._sc2wol_has_anti_air(multiworld, player) and (
                                            state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),
-        LocationData("Devil's Playground", "Devil's Playground: Northeast Reapers", SC2WOL_LOC_ID_OFFSET + 1307,
+        LocationData("Devil's Playground", "Devil's Playground: East Reapers", SC2WOL_LOC_ID_OFFSET + 1307,
                      lambda state: state._sc2wol_has_anti_air(multiworld, player) and
                                     (logic_level > 0 or
                                            state._sc2wol_has_common_unit(multiworld, player) or state.has("Reaper", player))),

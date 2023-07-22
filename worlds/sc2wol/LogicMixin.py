@@ -33,7 +33,7 @@ class SC2WoLLogic(LogicMixin):
                 and self._sc2wol_has_competent_ground_to_air(multiworld, player)
         ) or (
                 get_option_value(multiworld, player, 'required_tactics') > 0
-                and self.has('Marine', player)
+                and self.has_any({'Marine', 'Vulture'}, player)
                 and self._sc2wol_has_air_anti_air(multiworld, player)
         )
 

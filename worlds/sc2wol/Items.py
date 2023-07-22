@@ -302,7 +302,7 @@ defense_ratings = {
     "Vulture": 2,
     "Liberator": 2,
     "Widow Mine": 2
-    # "Concealment (Widow Mine)": 2
+    # "Concealment (Widow Mine)": 1
 }
 zerg_defense_ratings = {
     "Perdition Turret": 2,
