@@ -17,7 +17,7 @@ class PreCalculatedWeights:
     flood_moat: bool
     flood_courtyard: bool
     flood_lake_desolation: bool
-    dry_lake_serene: bool
+    flood_lake_serene: bool
     flood_lake_serene_bridge: bool
     flood_lab: bool
 
@@ -34,7 +34,7 @@ class PreCalculatedWeights:
             self.flood_moat, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleMoat")
             self.flood_courtyard, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleCourtyard")
             self.flood_lake_desolation, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
-            self.dry_lake_serene = not self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")[0]
+            self.flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
             self.flood_lake_serene_bridge, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSereneBridge")
             self.flood_lab, _ = self.roll_flood_setting(world, player, weights_overrrides, "Lab")
         else:
@@ -47,7 +47,7 @@ class PreCalculatedWeights:
             self.flood_moat = False
             self.flood_courtyard = False
             self.flood_lake_desolation = False
-            self.dry_lake_serene = False 
+            self.flood_lake_serene = True 
             self.flood_lake_serene_bridge = False
             self.flood_lab = False
 

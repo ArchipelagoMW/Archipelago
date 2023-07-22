@@ -110,7 +110,7 @@ class TimespinnerWorld(World):
         slot_data["CastleMoat"] = self.precalculated_weights.flood_moat
         slot_data["CastleCourtyard"] = self.precalculated_weights.flood_courtyard
         slot_data["LakeDesolation"] = self.precalculated_weights.flood_lake_desolation
-        slot_data["DryLakeSerene"] = self.precalculated_weights.dry_lake_serene
+        slot_data["DryLakeSerene"] = not self.precalculated_weights.flood_lake_serene
         slot_data["LakeSereneBridge"] = self.precalculated_weights.flood_lake_serene_bridge
         slot_data["Lab"] = self.precalculated_weights.flood_lab
 
@@ -148,11 +148,11 @@ class TimespinnerWorld(World):
                 flooded_areas.append("Castle Courtyard")
             if self.precalculated_weights.flood_lake_desolation:
                 flooded_areas.append("Lake Desolation")
-            if not self.precalculated_weights.dry_lake_serene:
+            if self.precalculated_weights.flood_lake_serene:
                 flooded_areas.append("Lake Serene")
-            if not self.precalculated_weights.flood_lake_serene_bridge:
+            if self.precalculated_weights.flood_lake_serene_bridge:
                 flooded_areas.append("Lake Serene Bridge")
-            if not self.precalculated_weights.flood_lab:
+            if self.precalculated_weights.flood_lab:
                 flooded_areas.append("Lab")
 
             if len(flooded_areas) == 0:
