@@ -49,7 +49,7 @@ require('common')
 udp:setsockname('127.0.0.1', 55355)
 udp:settimeout(0)
 
-function on_vblank()
+local function main()
     -- Attempt to lessen the CPU load by only polling the UDP socket every x frames.
     -- x = 10 is entirely arbitrary, very little thought went into it.
     -- We could try to make use of client.get_approx_framerate() here, but the values returned
@@ -63,82 +63,101 @@ function on_vblank()
     --    emu.frameadvance()
     --end
 
-    local data, msg_or_ip, port_or_nil = udp:receivefrom()
-    if data then
-        -- "data" format is "COMMAND [PARAMETERS] [...]"
-        local command = string.match(data, "%S+")
-        if command == "VERSION" then
-            -- 1.14 is the latest RetroArch release at the time of writing this, no other reason
-            -- for choosing this here.
-            udp:sendto("1.14.0\n", msg_or_ip, port_or_nil)
-        elseif command == "GET_STATUS" then
-            local status = "PLAYING"
-            if client.ispaused() then
-                status = "PAUSED"
-            end
-
-            if emu.getsystemid() == "GBC" then
-                -- Actual reply from RetroArch's API:
-                -- "GET_STATUS PLAYING game_boy,AP_62468482466172374046_P1_Lonk,crc32=3ecb7b6f"
-                -- CRC32 isn't readily available through the Lua API. We could calculate
-                -- it ourselves, but since LADXR doesn't make use of this field it is
-                -- simply replaced by the hash that EmuHawk _does_ make available.
-
-                udp:sendto(
-                    "GET_STATUS " .. status .. " game_boy," ..
-                    string.gsub(gameinfo.getromname(), "[%s,]", "_") ..
-                    ",romhash=" ..
-                    gameinfo.getromhash() .. "\n",
-                    msg_or_ip, port_or_nil
-                )
-            else -- No ROM loaded
-                -- NOTE: No newline is intentional here for 1:1 RetroArch compatibility
-                udp:sendto("GET_STATUS CONTENTLESS", msg_or_ip, port_or_nil)
-            end
-        elseif command == "READ_CORE_MEMORY" then
-            local _, address, length = string.match(data, "(%S+) (%S+) (%S+)")
-            address = stripPrefix(address, "0x")
-            address = tonumber(address, 16)
-            length = tonumber(length)
-
-            -- NOTE: mainmemory.read_bytes_as_array() would seem to be the obvious choice
-            --       here instead, but it isn't. At least for Sameboy and Gambatte, the "main"
-            --       memory differs (ROM vs WRAM).
-            --       Using memory.read_bytes_as_array() and explicitly using the System Bus
-            --       as the active memory domain solves this incompatibility, allowing us
-            --       to hopefully use whatever GB(C) emulator we want.
-            local mem = memory.read_bytes_as_array(address, length, "System Bus")
-            local hex_string = ""
-            for _, v in ipairs(mem) do
-                hex_string = hex_string .. string.format("%02X ", v)
-            end
-
-            hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
-            local reply = string.format("%s %02x %s\n", command, address, hex_string)
-            udp:sendto(reply, msg_or_ip, port_or_nil)
-        elseif command == "WRITE_CORE_MEMORY" then
-            local _, address = string.match(data, "(%S+) (%S+)")
-            address = stripPrefix(address, "0x")
-            address = tonumber(address, 16)
-
-            local to_write = {}
-            local i = 1
-            for byte_str in string.gmatch(data, "%S+") do
-                if i > 2 then
-                    byte_str = stripPrefix(byte_str, "0x")
-                    table.insert(to_write, tonumber(byte_str, 16))
+    while true do
+        local data, msg_or_ip, port_or_nil = udp:receivefrom()
+        if data then
+            -- "data" format is "COMMAND [PARAMETERS] [...]"
+            local command = string.match(data, "%S+")
+            if command == "VERSION" then
+                -- 1.14 is the latest RetroArch release at the time of writing this, no other reason
+                -- for choosing this here.
+                udp:sendto("1.14.0\n", msg_or_ip, port_or_nil)
+            elseif command == "GET_STATUS" then
+                local status = "PLAYING"
+                if client.ispaused() then
+                    status = "PAUSED"
                 end
-                i = i + 1
-            end
 
-            memory.write_bytes_as_array(address, to_write, "System Bus")
-            local reply = string.format("%s %02x %d\n", command, address, i - 3)
-            udp:sendto(reply, msg_or_ip, port_or_nil)
+                if emu.getsystemid() == "GBC" then
+                    -- Actual reply from RetroArch's API:
+                    -- "GET_STATUS PLAYING game_boy,AP_62468482466172374046_P1_Lonk,crc32=3ecb7b6f"
+                    -- CRC32 isn't readily available through the Lua API. We could calculate
+                    -- it ourselves, but since LADXR doesn't make use of this field it is
+                    -- simply replaced by the hash that EmuHawk _does_ make available.
+
+                    udp:sendto(
+                        "GET_STATUS " .. status .. " game_boy," ..
+                        string.gsub(gameinfo.getromname(), "[%s,]", "_") ..
+                        ",romhash=" ..
+                        gameinfo.getromhash() .. "\n",
+                        msg_or_ip, port_or_nil
+                    )
+                else -- No ROM loaded
+                    -- NOTE: No newline is intentional here for 1:1 RetroArch compatibility
+                    udp:sendto("GET_STATUS CONTENTLESS", msg_or_ip, port_or_nil)
+                end
+            elseif command == "READ_CORE_MEMORY" then
+                local _, address, length = string.match(data, "(%S+) (%S+) (%S+)")
+                address = stripPrefix(address, "0x")
+                address = tonumber(address, 16)
+                length = tonumber(length)
+
+                -- NOTE: mainmemory.read_bytes_as_array() would seem to be the obvious choice
+                --       here instead, but it isn't. At least for Sameboy and Gambatte, the "main"
+                --       memory differs (ROM vs WRAM).
+                --       Using memory.read_bytes_as_array() and explicitly using the System Bus
+                --       as the active memory domain solves this incompatibility, allowing us
+                --       to hopefully use whatever GB(C) emulator we want.
+                local mem = memory.read_bytes_as_array(address, length, "System Bus")
+                local hex_string = ""
+                for _, v in ipairs(mem) do
+                    hex_string = hex_string .. string.format("%02X ", v)
+                end
+
+                hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
+                local reply = string.format("%s %02x %s\n", command, address, hex_string)
+                udp:sendto(reply, msg_or_ip, port_or_nil)
+            elseif command == "WRITE_CORE_MEMORY" then
+                local _, address = string.match(data, "(%S+) (%S+)")
+                address = stripPrefix(address, "0x")
+                address = tonumber(address, 16)
+
+                local to_write = {}
+                local i = 1
+                for byte_str in string.gmatch(data, "%S+") do
+                    if i > 2 then
+                        byte_str = stripPrefix(byte_str, "0x")
+                        table.insert(to_write, tonumber(byte_str, 16))
+                    end
+                    i = i + 1
+                end
+
+                memory.write_bytes_as_array(address, to_write, "System Bus")
+                local reply = string.format("%s %02x %d\n", command, address, i - 3)
+                udp:sendto(reply, msg_or_ip, port_or_nil)
+            end
         end
+        coroutine.yield()
     end
 end
 
-event.onmemoryexecute(on_vblank, 0x40, "ap_connector_vblank")
+local main_co = coroutine.create(main)
+
+local function trigger_tick()
+    ret, co_error = coroutine.resume(main_co)
+    if not ret then
+        print("Error in frame handler:")
+        print(co_error)
+        main_co = coroutine.create(main)
+    end
+end
+
+local system_id = emu.getsystemid()
+if system_id == "GB" or system_id == "GBC" or system_id == "GBA" then
+    event.onmemoryexecute(trigger_tick, 0x40, "trigger_tick", "System Bus")
+else
+    event.onframeend(trigger_tick, "trigger_tick")
+end
 
 while true do
     emu.yield()
