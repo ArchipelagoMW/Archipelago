@@ -116,7 +116,8 @@ class MessengerWorld(World):
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.multiworld.total_seals[self.player].value)
             if total_seals < self.total_seals:
-                logging.warning(f"Not enough locations for total seals setting. Adjusting to {total_seals}")
+                logging.warning(f"Not enough locations for total seals setting "
+                                f"({self.multiworld.total_seals[self.player].value}). Adjusting to {total_seals}")
                 self.total_seals = total_seals
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
