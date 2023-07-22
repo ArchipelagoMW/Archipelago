@@ -1,34 +1,58 @@
-# Rogue Legacy (PC)
+# Rogue Legacy Randomizer
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings) contains most of the options you need to 
-configure and export a config file. Some settings can only be made in YAML, but an explanation can be found in the
-[template yaml here](../../../static/generated/configs/Rogue%20Legacy.yaml).
+The [player settings page for Rogue Legacy Randomizer](../player-settings) contains most of the options you need to 
+configure and export a config file. You can also visit the [weighted settings page](/weighted-settings) for the 
+remaining advanced options for Rogue Legacy, or download a 
+[template config file here](/static/generated/configs/Rogue%20Legacy.yaml).
 
-## What does randomization do to this game?
+## What does randomization mean for Rogue Legacy?
 
-Rogue Legacy Randomizer takes all the classes, skills, runes, and blueprints and spreads them out into chests, the manor
-upgrade screen, bosses, and some special individual locations. The goal is to become powerful enough to defeat the four
-zone bosses and then defeat The Fountain.
+Rogue Legacy Randomizer takes all the classes, skills, runes, blueprints, and other miscellaneous items and places them
+in random chests, the manor, and other special locations. The goal is to become powerful enough to defeat The Fountain.
 
-## What items and locations get shuffled?
-All the skill upgrades, class upgrades, runes packs, and equipment packs are shuffled in the manor upgrade screen, diary
-checks, chests and fairy chests, and boss rewards. Skill upgrades are also grouped in packs of 5 to make the finding of
-stats less of a chore. Runes and Equipment are also grouped together.
+## What items and locations can I find?
 
-Some additional locations that can contain items are the Jukebox, the Portraits, and the mini-game rewards.
+The following "things" are potential items you could find:
 
-## Which items can be in another player's world?
+* Every class upgrade.
+* Every skill upgrade (in groups of 5).
+* Every blueprint.
+* Every rune.
+* Free shrines that give a specific relic.
+* Various stat-increases and gold.
+* The slots for the Blacksmith and Enchantress (if shuffled).
+* The Architect (if shuffled).
+* Per life spending increases (if enabled).
+* Pieces of the Fountain to unlock the final boss room (if enabled).
+* Various unhelpful traps (if enabled).
 
-Any of the items which can be shuffled may also be placed into another player's world. It is possible to choose to limit
-certain items to your own world.
+You'll potentially find all of these (and other world items) in the following locations:
+
+* The Manor upgrades screen.
+* In chests in each zone (or any chest if **Universal Chests** are enabled).
+* In fairy chests in each zone (or any fairy chest if **Universal Fairy Chests** are enabled).
+* Inside the chests for each boss.
+* Inside the chests for each mini-boss.
+* As a reward from the Carnival mini-game and Cheapskate Elf mini-game.
+* Inside the chests in the secret room.
+* Beside the Jukebox.
+* Underneath the portrait of a previous Cellar Door Games project.
+* By reading one of the 25 diary entries.
+
 ## When the player receives an item, what happens?
 
-When the player receives an item, your character will hold the item above their head and display it to the world. It's
-good for business!
+You'll get an alert on the sidebar showing all the recent items that you have received. You can also pause and option
+your character card to see all items received.
+
+## What are Fountain pieces?
+
+As an alternative objective to beating the 4 main bosses, you can turn Rogue Legacy into a collect-a-thon where you need
+to find enough "fountain pieces" to open the door. You can also combine it with the normal goal if you still want to be
+required to defeat each boss.
 
 ## What do I do if I encounter a bug with the game?
 
-Please reach out to Phar#4444 on Discord or you can drop a bug report on the 
-[GitHub page for Rogue Legacy Randomizer](https://github.com/ThePhar/RogueLegacyRandomizer/issues/new?assignees=&labels=bug&template=report-an-issue---.md&title=%5BIssue%5D).
+Drop a bug report in the Archipelago Discord server and ping ***@thephar*** in the created thread. Be sure to include
+what actions you were taking and your crash log if applicable.
