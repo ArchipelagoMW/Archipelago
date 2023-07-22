@@ -170,9 +170,9 @@ class SpendingRestrictions(DefaultOnToggle):
     Prevents the player from spending more than a certain amount of gold per life without certain upgrades.
 
     Tier 0: Can only spend up to 2,500 gold per life.
-    Tier 1: Can only spend up to 10,000 gold per life.
-    Tier 2: Can only spend up to 25,000 gold per life.
-    Tier 3: Can only spend up to 50,000 gold per life.
+    Tier 1: Can only spend up to 5,000 gold per life.
+    Tier 2: Can only spend up to 10,000 gold per life.
+    Tier 3: Can only spend up to 20,000 gold per life.
     Tier 4: Can spend an unlimited amount of gold.
     """
     display_name = "Gold Spending Limits"
@@ -356,8 +356,8 @@ class FountainPiecesAvailable(Range):
     """
     display_name = "Fountain Pieces Available"
     range_start = 1
-    range_end = 50
-    default = 20
+    range_end = 25
+    default = 15
 
 
 class FountainPiecesRequired(Range):

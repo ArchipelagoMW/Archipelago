@@ -1,8 +1,9 @@
 from typing import Callable, Dict, List, NamedTuple
 
 from BaseClasses import CollectionState
-from .Rules import can_access_secret_room, can_cheat_cheapskate_elf, can_open_door, has_defeated_castle, \
-    has_defeated_forest, has_defeated_tower, has_fairy_progression
+from .Rules import can_access_secret_room, can_afford_tier2, can_afford_tier3, can_afford_tier4, \
+    can_cheat_cheapskate_elf, can_open_door, has_defeated_castle, has_defeated_forest, has_defeated_tower, \
+    has_fairy_progression
 
 __all__ = ["RegionExit", "region_table"]
 
@@ -17,9 +18,9 @@ region_table: Dict[str, List[RegionExit]] = {
     "Menu": [RegionExit("Manor - Tier 1"), RegionExit("Castle Hamson")],
 
     # Manor Renovation
-    "Manor - Tier 1": [RegionExit("Manor - Tier 2", has_defeated_castle)],
-    "Manor - Tier 2": [RegionExit("Manor - Tier 3", has_defeated_forest)],
-    "Manor - Tier 3": [RegionExit("Manor - Tier 4", has_defeated_tower)],
+    "Manor - Tier 1": [RegionExit("Manor - Tier 2", can_afford_tier2)],
+    "Manor - Tier 2": [RegionExit("Manor - Tier 3", can_afford_tier3)],
+    "Manor - Tier 3": [RegionExit("Manor - Tier 4", can_afford_tier4)],
     "Manor - Tier 4": [],
 
     # Main Zones

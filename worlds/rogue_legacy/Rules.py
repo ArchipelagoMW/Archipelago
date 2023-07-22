@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, MultiWorld
-from .Options import FountainDoorRequirement, FountainPiecesAvailable, FountainPiecesRequired
+from .Options import FountainDoorRequirement, FountainPiecesAvailable, FountainPiecesRequired, SpendingRestrictions
 
 
 def get_total_upgrades(multiworld: MultiWorld, player: int) -> int:
@@ -43,28 +43,28 @@ def has_fairy_progression(state: CollectionState, player: int) -> bool:
 def has_defeated_castle(state: CollectionState, player: int) -> bool:
     return all([
         state.has("Defeat Khidr", player) or state.has("Defeat Neo Khidr", player),
-        has_upgrades_percentage(state, player, 8),
+        has_upgrades_percentage(state, player, 30),
     ])
 
 
 def has_defeated_forest(state: CollectionState, player: int) -> bool:
     return all([
         state.has("Defeat Alexander", player) or state.has("Defeat Alexander IV", player),
-        has_upgrades_percentage(state, player, 8),
+        has_upgrades_percentage(state, player, 45),
     ])
 
 
 def has_defeated_tower(state: CollectionState, player: int) -> bool:
     return all([
         state.has("Defeat Ponce de Leon", player) or state.has("Defeat Ponce de Freon", player),
-        has_upgrades_percentage(state, player, 8),
+        has_upgrades_percentage(state, player, 60),
     ])
 
 
 def has_defeated_dungeon(state: CollectionState, player: int) -> bool:
     return all([
         state.has("Defeat Herodotus", player) or state.has("Defeat Astrodotus", player),
-        has_upgrades_percentage(state, player, 8),
+        has_upgrades_percentage(state, player, 75),
     ])
 
 
@@ -103,3 +103,36 @@ def can_access_secret_room(state: CollectionState, player: int) -> bool:
 
 def can_cheat_cheapskate_elf(state: CollectionState, player: int) -> bool:
     return state.has("Nerdy Glasses Shrine", player)
+
+
+def can_afford_tier2(state: CollectionState, player: int) -> bool:
+    restrictions: SpendingRestrictions = getattr(state.multiworld, "spending_restrictions")[player]
+    if not has_defeated_castle(state, player):
+        return False
+
+    if restrictions:
+        return state.has("Progressive Spending", player)
+
+    return True
+
+
+def can_afford_tier3(state: CollectionState, player: int) -> bool:
+    restrictions: SpendingRestrictions = getattr(state.multiworld, "spending_restrictions")[player]
+    if not has_defeated_forest(state, player):
+        return False
+
+    if restrictions:
+        return state.has("Progressive Spending", player, 2)
+
+    return True
+
+
+def can_afford_tier4(state: CollectionState, player: int) -> bool:
+    restrictions: SpendingRestrictions = getattr(state.multiworld, "spending_restrictions")[player]
+    if not has_defeated_tower(state, player):
+        return False
+
+    if restrictions:
+        return state.has("Progressive Spending", player, 3)
+
+    return True

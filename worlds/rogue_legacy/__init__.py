@@ -34,7 +34,6 @@ class RLWorld(World):
     data_version = 5
     required_client_version = (0, 4, 2)
     web = RLWeb()
-    topology_present = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if not data.event}
     location_name_to_id = {name: data.address for name, data in location_table.items() if not data.event}
@@ -47,10 +46,8 @@ class RLWorld(World):
         self.multiworld.push_precollected(self.create_item("Enchantress"))
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
-
-    # def generate_basic(self) -> None:
-    #     from Utils import visualize_regions
-    #     visualize_regions(self.multiworld.get_region("Menu", self.player), "rogue_legacy.puml")
+        elif self.get_setting("architect") == "early":
+            self.multiworld.early_items[self.player] = {"Architect": 1}
 
     def create_item(self, name: str) -> RLItem:
         item_data = item_table[name]
@@ -95,7 +92,7 @@ class RLWorld(World):
             region.add_exits({
                 region_exit.region: f"{region_exit.region} Entrance" for region_exit in region_exits
             }, {
-                region_exit.region: lambda state: region_exit.access_rule(state, self.player)
+                region_exit.region: lambda state, region_exit=region_exit: region_exit.access_rule(state, self.player)
                 for region_exit in region_exits
             })
 

@@ -350,7 +350,7 @@ item_table: Dict[str, RLItemData] = {
     "Piece of the Fountain":    RLItemData(ItemClassification.progression_skip_balancing, 180, get_fountain_pieces),
 
     # Wallets
-    "Progressive Wallet":       RLItemData(ItemClassification.progression,  190, get_wallet_quantity),
+    "Progressive Spending":     RLItemData(ItemClassification.progression,  190, get_wallet_quantity),
 
     # Filler and Traps - These will be generated automatically when filler items are needed.
     "Triple Stat Increase":     RLItemData(ItemClassification.filler,        30, get_none, 5),
