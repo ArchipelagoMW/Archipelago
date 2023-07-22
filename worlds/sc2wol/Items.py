@@ -241,7 +241,7 @@ item_table = {
     "Dark Templar": ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 3, classification=ItemClassification.progression),
     "Immortal": ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 4, classification=ItemClassification.progression),
     "Colossus": ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 5, classification=ItemClassification.progression),
-    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, classification=ItemClassification.progression),
+    "Phoenix": ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 6, classification=ItemClassification.filler),
     "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, classification=ItemClassification.progression),
     "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, classification=ItemClassification.progression),
 
