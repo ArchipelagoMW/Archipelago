@@ -44,9 +44,13 @@ class RLWorld(World):
     def generate_early(self):
         # Set starting items.
         self.multiworld.push_precollected(self.create_item("Blacksmith"))
-        # self.multiworld.push_precollected(self.create_item("Enchantress"))
+        self.multiworld.push_precollected(self.create_item("Enchantress"))
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
+
+    # def generate_basic(self) -> None:
+    #     from Utils import visualize_regions
+    #     visualize_regions(self.multiworld.get_region("Menu", self.player), "rogue_legacy.puml")
 
     def create_item(self, name: str) -> RLItem:
         item_data = item_table[name]
