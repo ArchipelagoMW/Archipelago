@@ -102,7 +102,7 @@ class MessengerWorld(World):
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
             # amount we need to put in the itempool and precollect based on that
             notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
-            self.multiworld.per_slot_randoms[self.player].shuffle(notes)
+            self.random.shuffle(notes)
             precollected_notes_amount = NotesNeeded.range_end - \
                 self.multiworld.notes_needed[self.player] - \
                 (len(NOTES) - len(notes))
@@ -116,7 +116,8 @@ class MessengerWorld(World):
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.multiworld.total_seals[self.player].value)
             if total_seals < self.total_seals:
-                logging.warning(f"Not enough locations for total seals setting. Adjusting to {total_seals}")
+                logging.warning(f"Not enough locations for total seals setting "
+                                f"({self.multiworld.total_seals[self.player].value}). Adjusting to {total_seals}")
                 self.total_seals = total_seals
             self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
@@ -129,7 +130,7 @@ class MessengerWorld(World):
         filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
         itempool += [self.create_item(filler_item)
                      for filler_item in
-                     self.multiworld.random.choices(
+                     self.random.choices(
                          list(filler_pool),
                          weights=list(filler_pool.values()),
                          k=remaining_fill

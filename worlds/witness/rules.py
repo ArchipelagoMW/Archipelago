@@ -156,15 +156,15 @@ class WitnessLogic(LogicMixin):
                     if not (direct_access or theater_from_town and tunnels_from_town):
                         valid_option = False
                         break
-
-
                 elif item in player_logic.EVENT_PANELS:
                     if not self._witness_can_solve_panel(item, world, player, player_logic, locat):
                         valid_option = False
                         break
                 elif not self.has(item, player):
-                    prog_dict = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE
-                    if not (item in prog_dict and self.has(prog_dict[item], player, player_logic.MULTI_AMOUNTS[item])):
+                    # The player doesn't have the item. Check to see if it's part of a progressive item and, if so, the
+                    #   player has enough of that.
+                    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+                    if prog_item is item or not self.has(prog_item, player, player_logic.MULTI_AMOUNTS[item]):
                         valid_option = False
                         break
 

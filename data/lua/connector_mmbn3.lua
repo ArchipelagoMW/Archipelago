@@ -354,7 +354,7 @@ end
 
 local getProgramColorIndex = function(program_id, program_color)
     -- The general case, most programs use white pink or yellow. This is the values the enums already have
-    if program_id >= 23 and program_id <= 47 then
+    if program_id >= 20 and program_id <= 47 then
         return program_color-1
     end
     --The final three programs only have a color index 0, so just return those
