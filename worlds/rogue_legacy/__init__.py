@@ -2,6 +2,7 @@ from typing import List
 
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from worlds.generic.Rules import allow_self_locking_items
 from .Items import RLItem, RLItemData, filler_items, item_groups, item_table
 from .Locations import RLLocation, location_groups, location_table
 from .Options import rl_options
@@ -69,6 +70,10 @@ class RLWorld(World):
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Defeat The Fountain", self.player)
+
+        # Special rules to allow self-locking for some regions... because why not.
+        allow_self_locking_items(self.multiworld.get_region("Cheapskate Elf", self.player), "Nerdy Glasses Shrine")
+        allow_self_locking_items(self.multiworld.get_region("The Secret Room", self.player), "Calypso's Compass Shrine")
 
     def create_regions(self):
         # Instantiate Regions
