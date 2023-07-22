@@ -1,8 +1,8 @@
 from typing import Dict
 
 from . import RLTestBase
-from worlds.rogue_legacy.Items import RLItemData, item_table
-from worlds.rogue_legacy.Locations import RLLocationData, location_table
+from ..Items import item_table
+from ..Locations import location_table
 
 
 class UniqueTest(RLTestBase):
@@ -10,6 +10,10 @@ class UniqueTest(RLTestBase):
     def test_item_ids_are_all_unique():
         item_ids: Dict[int, str] = {}
         for name, data in item_table.items():
+            # Ignore events.
+            if data.event:
+                continue
+
             assert data.code not in item_ids.keys(), f"'{name}': {data.code}, is not unique. " \
                                                      f"'{item_ids[data.code]}' also has this identifier."
             item_ids[data.code] = name
@@ -18,6 +22,10 @@ class UniqueTest(RLTestBase):
     def test_location_ids_are_all_unique():
         location_ids: Dict[int, str] = {}
         for name, data in location_table.items():
-            assert data.code not in location_ids.keys(), f"'{name}': {data.code}, is not unique. " \
-                                                         f"'{location_ids[data.code]}' also has this identifier."
-            location_ids[data.code] = name
+            # Ignore events.
+            if data.event:
+                continue
+
+            assert data.address not in location_ids.keys(), f"'{name}': {data.address}, is not unique. " \
+                                                            f"'{location_ids[data.address]}' also has this identifier."
+            location_ids[data.address] = name
