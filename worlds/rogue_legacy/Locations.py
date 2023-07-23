@@ -120,7 +120,7 @@ class RLLocationData:
     @property
     def event(self) -> bool:
         """Returns True if this is an event location."""
-        return not self.address
+        return self.address is None
 
     def create_location(self, multiworld: MultiWorld, player: int):
         """Creates the location from its location metadata and place in its appropriate region."""

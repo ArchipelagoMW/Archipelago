@@ -220,7 +220,7 @@ class RLItemData:
     @property
     def event(self) -> bool:
         """Returns True if this is an event item."""
-        return not self.code
+        return self.code is None
 
 
 item_groups: Dict[str, Set[str]] = {
