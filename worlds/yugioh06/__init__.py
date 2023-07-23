@@ -16,6 +16,7 @@ from .Rom import YGO06DeltaPatch, get_base_rom_path
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
+from .StructureDeck import get_deck_content_locations
 
 from ..LauncherComponents import Component, components, Type, SuffixIdentifier
 from .RomValues import structure_deck_selection, banlist_ids
@@ -128,7 +129,7 @@ class Yugioh06World(World):
 
         for opponent in get_opponents(self.multiworld, self.player):
             for location_name, event in get_opponent_locations(opponent).items():
-                if event is not None:
+                if event is not None and not isinstance(event, int):
                     item = Yugioh2006Item(
                         event,
                         ItemClassification.progression,
@@ -151,12 +152,27 @@ class Yugioh06World(World):
                 location.place_locked_item(item)
                 location.event = True
 
+        structure_deck = self.multiworld.StructureDeck[self.player].current_key
+        for location_name, content in get_deck_content_locations(structure_deck).items():
+            item = Yugioh2006Item(
+                content,
+                ItemClassification.progression,
+                None,
+                self.player
+            )
+            location = self.multiworld.get_location(location_name, self.player)
+            location.place_locked_item(item)
+            location.event = True
+
+
     def create_regions(self):
+        structure_deck = self.multiworld.StructureDeck[self.player]
         self.multiworld.regions += [
-            create_region(self, 'Menu', None, ['to Campaign', 'to Challenges', 'to Card Shop']),
+            create_region(self, 'Menu', None, ['to Deck Edit', 'to Campaign', 'to Challenges', 'to Card Shop']),
             create_region(self, 'Campaign', Bonuses | Campaign_Opponents),
             create_region(self, 'Challenges'),
-            create_region(self, 'Card Shop', Required_Cards)
+            create_region(self, 'Card Shop', Required_Cards),
+            create_region(self, 'Structure Deck', get_deck_content_locations(structure_deck.current_key))
         ]
 
         self.multiworld.get_entrance('to Campaign', self.player) \
@@ -165,6 +181,8 @@ class Yugioh06World(World):
             .connect(self.multiworld.get_region('Challenges', self.player))
         self.multiworld.get_entrance('to Card Shop', self.player) \
             .connect(self.multiworld.get_region('Card Shop', self.player))
+        self.multiworld.get_entrance('to Deck Edit', self.player) \
+            .connect(self.multiworld.get_region('Structure Deck', self.player))
 
         campaign = self.multiworld.get_region('Campaign', self.player)
         # Campaign Opponents
@@ -173,22 +191,9 @@ class Yugioh06World(World):
             region = create_region(self,
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
-            if opponent.tier == 5 and opponent.column == 3:
+            if opponent.tier == 5:
                 entrance.access_rule =\
-                    (lambda opp: lambda state:
-                     state.has("Challenge Beaten", self.player,
-                               self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value) and
-                               opp.rule(state))(opponent)
-            elif opponent.tier == 5 and opponent.column == 4:
-                entrance.access_rule =\
-                    (lambda opp: lambda state:
-                     state.has("Challenge Beaten", self.player,
-                               self.multiworld.FourthTier5CampaignBossChallenges[self.player].value) and
-                     opp.rule(state))(opponent)
-            elif opponent.tier == 5 and opponent.column == 5:
-                entrance.access_rule =\
-                    (lambda opp: lambda state: state.has("Challenge Beaten", self.player,
-                     self.multiworld.FinalCampaignBossChallenges[self.player].value) and opp.rule(state))(opponent)
+                    (lambda opp: lambda state: opp.rule(state))(opponent)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
                                         state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)

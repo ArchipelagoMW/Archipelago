@@ -256,10 +256,9 @@ def set_rules(world):
     # TODO: add more token cards
     add_rule(world.get_entrance("TD15 Token", player),
              lambda state: state.has_all(["Scapegoat", "Ojama Trio"], player) and state.yugioh06_difficulty(player, 5))
-    # TODO: map out union monsters
     add_rule(world.get_entrance("TD16 Union", player),
-             lambda state: state.yugioh06_has_all_xyz_dragon_cannon_fusions(player) and
-                           state.yugioh06_difficulty(player, 5))
+             lambda state: equip_unions(state, player) and
+                           state.yugioh06_difficulty(player, 2))
     # TODO: Map out quick-plays
     add_rule(world.get_entrance("TD17 10x Quick Spell", player),
              lambda state: state.has("Quick/Counter Collection", player) and
@@ -475,7 +474,8 @@ def only_fire(state, player):
     return state.yugioh06_has_individual([
         "Blazing Inpachi",
         "Familia-Possesed - Hiita",
-        "Great Angus"
+        "Great Angus",
+        "Fire Beaters"
     ], player) >= 2 and state.yugioh06_has_individual([
         "Thestalos the Firestorm Monarch",
         "Horus the Black Flame Dragon LV6"
@@ -533,13 +533,15 @@ def only_warrior(state, player):
         "Blindly Loyal Goblin",
         "D.D. Survivor",
         "Gearfried the Iron knight",
-        "Ninja Grandmaster Sasuke"
+        "Ninja Grandmaster Sasuke",
+        "Warrior Beaters"
     ], player) >= 1 and (state.yugioh06_has_individual([
         "Dark Blade",
         "Blindly Loyal Goblin",
         "D.D. Survivor",
         "Gearfried the Iron knight",
         "Ninja Grandmaster Sasuke",
+        "Warrior Beaters",
         "Warrior Lady of the Wasteland",
         "Exiled Force",
         "Mystic Swordsman LV2",
@@ -630,3 +632,21 @@ def only_spellcaster(state, player):
         "Chaos Command Magician",
         "Cybernetic Magician"
     ], player) >= 1)) >= 7
+
+
+def equip_unions(state, player):
+    return (state.has("Burning Beast", player) and state.has("Freezing Beast", player) and
+            state.has("Metallizing Parasite - Lunatite", player) and state.has("Mother Grizzly", player) or \
+            state.has("Dark Blade", player) and state.has("Pitch-Dark Dragon", player) and
+            state.has("Giant Orc", player) and state.has("Second Goblin", player) and
+            state.has("Mystic Tomato", player) or
+            state.has("Decayed Commander", player) and state.has("Zombie Tiger", player) and
+            state.has("Vampire Orchis", player) and state.has("Des Dendle", player) and
+            state.has("Giant Rat", player) or
+            state.has("Indomitable Fighter Lei Lei", player) and state.has("Protective Soul Ailin", player) and \
+            state.has("V-Tiger Jet", player) and state.has("W-Wing Catapult", player) and
+            state.has("Shining Angel", player) or
+            state.has("X-Head Cannon", player) and state.has("Y-Dragon Head", player) and
+            state.has("Z-Metal Tank", player) and state.has("Shining Angel", player)) and\
+            state.yugioh06_has_individual(["Frontline Base", "Formation Union", "Roll Out!"], player) > 0
+

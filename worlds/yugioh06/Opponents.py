@@ -1,6 +1,7 @@
 from typing import NamedTuple, Callable, List, Optional, Tuple
 
 from BaseClasses import CollectionState, MultiWorld
+from worlds.yugioh06.Locations import special
 
 
 class OpponentData(NamedTuple):
@@ -46,11 +47,15 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         OpponentData("Horus the Black Flame Dragon LV8", [], 5, 2,
                      lambda state: state.yugioh06_difficulty(player, 4)),
         OpponentData("Stronghold", [], 5, 3,
-                     lambda state: state.yugioh06_difficulty(player, 5)),
+                     lambda state: state.has("Challenge Beaten", player,
+                                             multiworld.ThirdTier5CampaignBossChallenges[
+                                                 player].value) and state.yugioh06_difficulty(player, 5)),
         OpponentData("Sacred Phoenix of Nephthys", [], 5, 4,
-                     lambda state: state.yugioh06_difficulty(player, 6)),
+                     lambda state: multiworld.FourthTier5CampaignBossChallenges[player].value and \
+                                   state.yugioh06_difficulty(player, 6)),
         OpponentData("Cyber End Dragon", ["Goal"], 5, 5,
-                     lambda state: state.yugioh06_difficulty(player, 7)),
+                     lambda state: multiworld.FinalCampaignBossChallenges[player].value \
+                                   and state.yugioh06_difficulty(player, 7)),
     ]
     return tuple(opponents_table)
 
@@ -60,8 +65,8 @@ def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
     if opponent.tier < 5:
         location[opponent.name + " Beaten"] = "Tier " + str(opponent.tier) + " Beaten"
     elif opponent.tier > 4 and opponent.column != 5:
-        location["Campaign Tier 5: Column " + str(opponent.column) + " Win"] = None
+        name = "Campaign Tier 5: Column " + str(opponent.column) + " Win"
+        location[name] = special[name]
     for info in opponent.campaignInfo:
         location[opponent.name + "-> " + info] = info
     return location
-

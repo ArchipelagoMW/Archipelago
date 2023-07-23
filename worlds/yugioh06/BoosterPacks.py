@@ -104,10 +104,6 @@ booster_contents = {
         "XZ-Tank Cannon",
         "YZ-Tank Dragon",
         "XYZ-Dragon Cannon",
-        "V-Tiger Jet",
-        "W-Wing Catapult",
-        "VW-Tiger Catapult",
-        "VWXYZ-Dragon Catapult Cannon",
         "Dark Scorpion - Cliff the Trap Remover",
         "Wave-Motion Cannon",
         "Ritual",
@@ -120,7 +116,18 @@ booster_contents = {
         "Luster Dragon",
         "Breaker the magical Warrior",
         "Old Vindictive Magician",
-        "Apprentice Magician"
+        "Apprentice Magician",
+        "Burning Beast",
+        "Freezing Beast",
+        "Pitch-Dark Dragon",
+        "Giant Orc",
+        "Second Goblin",
+        "Decayed Commander",
+        "Zombie Tiger",
+        "Vampire Orchis",
+        "Des Dendle",
+        "Frontline Base",
+        "Formation Union"
     },
     "DARK CRISIS": {
         "Final Countdown",
@@ -143,7 +150,8 @@ booster_contents = {
         "Kelbek",
         "Mudora",
         "Cestus of Dagla",
-        "Vampire Lord"
+        "Vampire Lord",
+        "Metallizing Parasite - Lunatite"
     },
     "INVASION OF CHAOS": {
         "Ojama Delta Hurricane",
@@ -213,16 +221,23 @@ booster_contents = {
         "Power Bond",
         "Cyber Dragon",
         "Cyber Twin Dragon",
-        "Cybernetic Magician"
+        "Cybernetic Magician",
+        "Indomitable Fighter Lei Lei",
+        "Protective Soul Ailin"
     },
     "ELEMENTAL ENERGY": {
+        "V-Tiger Jet",
+        "W-Wing Catapult",
+        "VW-Tiger Catapult",
+        "VWXYZ-Dragon Catapult Cannon",
         "Zure, Knight of Dark World",
         "Brron, Mad King of Dark World",
         "Familiar-Possessed - Aussa",
         "Familiar-Possessed - Eria",
         "Familiar-Possessed - Hiita",
         "Familiar-Possessed - Wynn",
-        "Oxygeddon"
+        "Oxygeddon",
+        "Roll Out!"
     },
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
@@ -271,7 +286,8 @@ booster_contents = {
         "Dancing Fairy",
         "Zolga",
         "Kelbek",
-        "Mudora"
+        "Mudora",
+        "Protective Soul Ailin"
     },
     "Dragon Collection": {
         "Victory D",
@@ -288,7 +304,8 @@ booster_contents = {
         "Masked Dragon",
         "Element Dragon",
         "Troop Dragon",
-        "Horus the Black Flame Dragon LV4"
+        "Horus the Black Flame Dragon LV4",
+        "Pitch-Dark Dragon"
     },
     "Warrior Collection A": {
         "Gate Guardian",
@@ -344,7 +361,9 @@ booster_contents = {
         "Inferno Hammer",
         "Legendary Fiend",
         "Newdoria",
-        "Slate Warrior"
+        "Slate Warrior",
+        "Giant Orc",
+        "Second Goblin"
     },
     "Machine Collection A": {
         "Cyber-Stein",
@@ -412,7 +431,9 @@ booster_contents = {
         "Master Kyonshee",
         "Curse of Vampire",
         "Vampire Lord",
-        "Goblin Zombie"
+        "Goblin Zombie",
+        "Decayed Commander",
+        "Zombie Tiger"
     },
     "Special Monsters A": {
         "X-Head Cannon",
@@ -423,7 +444,22 @@ booster_contents = {
         "Yata-Garasu",
         "Tsukuyomi",
         "Dark Blade",
-        "Toon Gemini Elf"
+        "Toon Gemini Elf",
+        "Burning Beast",
+        "Freezing Beast",
+        "Metallizing Parasite - Lunatite",
+        "Pitch-Dark Dragon",
+        "Giant Orc",
+        "Second Goblin",
+        "Decayed Commander",
+        "Zombie Tiger",
+        "Vampire Orchis",
+        "Des Dendle",
+        "Indomitable Fighter Lei Lei",
+        "Protective Soul Ailin",
+        "Frontline Base",
+        "Formation Union",
+        "Roll Out!"
     },
     "Special Monsters B": {
         "Polymerization",
@@ -473,7 +509,12 @@ booster_contents = {
         "Revival Jam",
         "Pyramid Turtle",
         "Troop Dragon",
-        "Gravekeeper's Spy"
+        "Gravekeeper's Spy",
+        "Pitch-Dark Dragon",
+        "Decayed Commander",
+        "Zombie Tiger",
+        "Vampire Orchis",
+        "Des Dendle"
     },
     "Special Summon Collection B": {
         "Monster Gate",
@@ -492,7 +533,9 @@ booster_contents = {
         "Marauding Captain",
         "Masked Dragon",
         "The Tricky",
-        "Magical Dimension"
+        "Magical Dimension",
+        "Frontline Base",
+        "Formation Union"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
@@ -531,7 +574,8 @@ booster_contents = {
         "Heart of the Underdog",
         "Wall of Revealing Light",
         "Dark Snake Syndrome",
-        "Call of the Mummy"
+        "Call of the Mummy",
+        "Frontline Base"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
@@ -560,7 +604,8 @@ booster_contents = {
         "Oxygeddon",
         "Airknight Parshath",
         "Vampire Lord",
-        "Stamping Destruction"
+        "Stamping Destruction",
+        "Decayed Commander"
     },
     "Direct Attack Collection": {
         "Victory D",
@@ -582,7 +627,8 @@ booster_contents = {
         "Armed Dragon LV5",
         "Element Dragon",
         "Old Vindictive Magician",
-        "Magical Dimension"
+        "Magical Dimension",
+        "Des Dendle"
     },
 }
 
