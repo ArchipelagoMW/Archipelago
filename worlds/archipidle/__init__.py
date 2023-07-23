@@ -1,5 +1,4 @@
 from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
-from Options import PerGameCommonOptions
 from .Items import item_table
 from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
@@ -37,8 +36,6 @@ class ArchipIDLEWorld(World):
     data_version = 5
     hidden = (datetime.now().month != 4)  # ArchipIDLE is only visible during April
     web = ArchipIDLEWebWorld()
-
-    options_dataclass = PerGameCommonOptions
 
     item_name_to_id = {}
     start_id = 9000
