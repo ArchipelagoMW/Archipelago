@@ -46,7 +46,7 @@ def generate_output(self, output_directory):
     option_writes = {
                    "enemies_density": cc(self.multiworld.enemies_density[self.player]),
                    "chests_shuffle": "Include",
-                   "shuffle_boxes_content": True if self.multiworld.brown_boxes[self.player] == "shuffle" else False,
+                   "shuffle_boxes_content": self.multiworld.brown_boxes[self.player] == "shuffle",
                    "npcs_shuffle": "Include",
                    "battlefields_shuffle": "Include",
                    "logic_options": cc(self.multiworld.logic[self.player]),

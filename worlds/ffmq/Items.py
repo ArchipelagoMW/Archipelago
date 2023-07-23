@@ -5,7 +5,7 @@ fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bo
 
 
 class ItemData:
-    def __init__(self, item_id, classification, groups=[], data_name=None):
+    def __init__(self, item_id, classification, groups=(), data_name=None):
         self.groups = groups
         self.classification = classification
         self.id = None
