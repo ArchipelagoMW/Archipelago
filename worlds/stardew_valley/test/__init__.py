@@ -109,6 +109,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
     multiworld = MultiWorld(1)
     multiworld.game[1] = StardewValleyWorld.game
     multiworld.player_name = {1: "Tester"}
+    multiworld.state = CollectionState(multiworld)
     multiworld.set_seed(seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
