@@ -1,11 +1,13 @@
-from typing import List
+from logging import warning
+from typing import Dict, List, Union
 
 from BaseClasses import Region, Tutorial
+from Options import Option
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import allow_self_locking_items
 from .Items import RLItem, RLItemData, filler_items, item_groups, item_table
 from .Locations import RLLocation, location_groups, location_table
-from .Options import rl_options
+from .Options import options_table
 from .Regions import region_table
 
 
@@ -31,7 +33,7 @@ class RLWorld(World):
     But that's OK, because no one is perfect, and you don't have to be to succeed.
     """
     game = "Rogue Legacy"
-    option_definitions = rl_options
+    option_definitions = options_table
     data_version = 5
     required_client_version = (0, 4, 2)
     web = RLWeb()
@@ -41,11 +43,34 @@ class RLWorld(World):
     item_name_groups = item_groups
     location_name_groups = location_groups
 
+    fountain_piece_requirement = 0
+
     def generate_early(self):
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
         elif self.get_setting("architect") == "early":
-            self.multiworld.early_items[self.player] = {"Architect": 1}
+            self.multiworld.early_items[self.player]["Architect"] = 1
+
+        # If shuffled, make at least one blacksmith and/or enchantress upgrade local "early."
+        if self.get_setting("shuffle_blacksmith"):
+            possible_items = [
+                "Blacksmith - Sword",
+                "Blacksmith - Helm",
+                "Blacksmith - Chest",
+                "Blacksmith - Limbs",
+                "Blacksmith - Cape",
+            ]
+            self.multiworld.local_early_items[self.player][self.random.choice(possible_items)] = 1
+
+        if self.get_setting("shuffle_enchantress"):
+            possible_items = [
+                "Enchantress - Sword",
+                "Enchantress - Helm",
+                "Enchantress - Chest",
+                "Enchantress - Limbs",
+                "Enchantress - Cape",
+            ]
+            self.multiworld.local_early_items[self.player][self.random.choice(possible_items)] = 1
 
     def create_item(self, name: str) -> RLItem:
         item_data = item_table[name]
@@ -54,6 +79,7 @@ class RLWorld(World):
     def create_items(self):
         item_pool: List[RLItem] = []
         location_count = len(self.multiworld.get_unfilled_locations(self.player))
+        self.fountain_piece_requirement = 0
 
         # Create each item we can create.
         for item_data in item_table.values():
@@ -61,6 +87,28 @@ class RLWorld(World):
                 self.create_item(item_data.name)
                 for _ in range(item_data.creation_quantity(self.multiworld, self.player))
             ]
+
+        # Handle fountain piece creation.
+        if self.get_setting("fountain_door_requirement") != "bosses":
+            maximum_fountain_pieces: int = self.get_setting("fountain_pieces_available").value
+            remaining_item_slots: int = location_count - len(item_pool)
+            fountain_pieces = [
+                self.create_item("Piece of the Fountain")
+                for _ in range(min(maximum_fountain_pieces, remaining_item_slots))
+            ]
+
+            # Calculate requirement and add to item pool.
+            percentage: int = self.get_setting("fountain_pieces_percentage").value
+            self.fountain_piece_requirement = round(max(len(fountain_pieces) * (percentage / 100), 1))
+            item_pool += fountain_pieces
+
+            # Log a warning if not enough locations were able to create requested pieces.
+            warning(
+                f"Not enough locations available in {self.multiworld.player_name[self.player]}'s RLWorld to create the"
+                f"requested amount of fountain pieces."
+                f"\n\tReducing available fountain pieces to: {len(fountain_pieces)}"
+                f"\n\tReducing required fountain pieces to:  {self.fountain_piece_requirement}"
+            )
 
         # If we didn't generate enough items to fill our locations, generate some filler!
         while len(item_pool) < location_count:
@@ -71,9 +119,8 @@ class RLWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Defeat The Fountain", self.player)
 
-        # Special rules to allow self-locking for some regions... because why not.
+        # Special rules to allow this specific region to "lock itself"... because why not.
         allow_self_locking_items(self.multiworld.get_region("Cheapskate Elf", self.player), "Nerdy Glasses Shrine")
-        allow_self_locking_items(self.multiworld.get_region("The Secret Room", self.player), "Calypso's Compass Shrine")
 
     def create_regions(self):
         # Instantiate Regions
@@ -91,15 +138,14 @@ class RLWorld(World):
         # Connect regions and set access rules.
         for region_name, region_exits in region_table.items():
             region = self.multiworld.get_region(region_name, self.player)
-            region.add_exits({
-                region_exit.region: f"{region_exit.region} Entrance" for region_exit in region_exits
-            }, {
+            exits = [region_exit.region for region_exit in region_exits]
+            region.add_exits(exits, {
                 region_exit.region: lambda state, region_exit=region_exit: region_exit.access_rule(state, self.player)
                 for region_exit in region_exits
             })
 
     # TODO: Replace calls to this function with #933's solution, once that PR is merged.
-    def get_setting(self, name: str):
+    def get_setting(self, name: str) -> Option:
         return getattr(self.multiworld, name)[self.player]
 
     def get_filler_item_name(self) -> str:
@@ -110,6 +156,33 @@ class RLWorld(World):
 
         return self.random.choices(filler_items["names"], filler_items["weights"], k=1)[0]
 
-    # TODO: Only set required slot data.
     def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in rl_options}
+        slot_data: Dict[str, Union[str, int, bool]] = {
+            "starting_gender":            self.get_setting("starting_gender").current_key,
+            "starting_class":             self.get_setting("starting_class").current_key,
+            "new_game_plus":              bool(self.get_setting("new_game_plus")),
+            "universal_chests":           bool(self.get_setting("universal_chests")),
+            "universal_fairy_chests":     bool(self.get_setting("universal_fairy_chests")),
+            "chests_per_zone":            self.get_setting("chests_per_zone").value,
+            "fairy_chests_per_zone":      self.get_setting("fairy_chests_per_zone").value,
+            "architect_fee":              self.get_setting("architect_fee").value,
+            "disable_charon":             bool(self.get_setting("disable_charon")),
+            "shuffle_blacksmith":         bool(self.get_setting("shuffle_blacksmith")),
+            "shuffle_enchantress":        bool(self.get_setting("shuffle_enchantress")),
+            "require_vendor_purchasing":  bool(self.get_setting("require_vendor_purchasing")),
+            "require_skill_purchasing":   bool(self.get_setting("require_skill_purchasing")),
+            "progressive_blueprints":     bool(self.get_setting("progressive_blueprints")),
+            "gold_gain_multiplier":       self.get_setting("gold_gain_multiplier").current_key,
+            "spending_restrictions":      bool(self.get_setting("spending_restrictions")),
+            "number_of_children":         self.get_setting("number_of_children").current_key,
+            "castle_size":                self.get_setting("castle_size").current_key,
+            "challenge_khidr":            bool(self.get_setting("khidr")),
+            "challenge_alexander":        bool(self.get_setting("alexander")),
+            "challenge_leon":             bool(self.get_setting("leon")),
+            "challenge_herodotus":        bool(self.get_setting("herodotus")),
+            "require_bosses":             bool(self.get_setting("fountain_door_requirement") != "fountain_pieces"),
+            "fountain_piece_requirement": self.fountain_piece_requirement,
+            "death_link":                 bool(self.get_setting("death_link")),
+        }
+
+        return slot_data

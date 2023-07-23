@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, MultiWorld
-from .Options import FountainDoorRequirement, FountainPiecesAvailable, FountainPiecesRequired, SpendingRestrictions
+from .Options import FountainDoorRequirement, SpendingRestrictions
 
 
 def get_total_upgrades(multiworld: MultiWorld, player: int) -> int:
@@ -79,18 +79,16 @@ def has_defeated_all_bosses(state: CollectionState, player: int) -> bool:
 
 def can_open_door(state: CollectionState, player: int) -> bool:
     objective: FountainDoorRequirement = getattr(state.multiworld, "fountain_door_requirement")[player]
-    available: FountainPiecesAvailable = getattr(state.multiworld, "fountain_pieces_available")[player].value
-    percentage: FountainPiecesRequired = getattr(state.multiworld, "fountain_pieces_percentage")[player].value
-    fountain_pieces_requirement = round(max(available * (percentage / 100), 1))
+    fountain_piece_requirement: int = state.multiworld.worlds[player].fountain_piece_requirement
 
     if objective == "bosses":
         return has_defeated_all_bosses(state, player)
     elif objective == "fountain_pieces":
-        return state.has("Piece of the Fountain", player, fountain_pieces_requirement)
+        return state.has("Piece of the Fountain", player, fountain_piece_requirement)
     else:
         return all([
             has_defeated_all_bosses(state, player),
-            state.has("Piece of the Fountain", player, fountain_pieces_requirement),
+            state.has("Piece of the Fountain", player, fountain_piece_requirement),
         ])
 
 

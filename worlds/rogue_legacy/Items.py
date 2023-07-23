@@ -213,7 +213,7 @@ class RLItemData:
             creation_quantity: Callable[[MultiWorld, int], int] = get_one,
             filler_item_weight: int = 0):
         self.classification = classification
-        self.code = code + ITEM_ID_OFFSET if code else None
+        self.code = code + ITEM_ID_OFFSET if code is not None else None
         self.creation_quantity = creation_quantity
         self.filler_item_weight = filler_item_weight
 
@@ -342,11 +342,11 @@ item_table: Dict[str, RLItemData] = {
     "Nerdy Glasses Shrine":     RLItemData(ItemClassification.progression,  165),
     "Phar's Guidance Shrine":   RLItemData(ItemClassification.useful,       169),
 
-    # Fountain Pieces
-    "Piece of the Fountain":    RLItemData(ItemClassification.progression_skip_balancing, 180, get_fountain_pieces),
-
     # Wallets
-    "Progressive Spending":     RLItemData(ItemClassification.progression,  190, get_wallet_quantity),
+    "Progressive Spending": RLItemData(ItemClassification.progression, 190, get_wallet_quantity),
+
+    # Fountain Pieces - Handled differently during `create_items` stage.
+    "Piece of the Fountain":    RLItemData(ItemClassification.progression_skip_balancing, 180, get_none),
 
     # Filler and Traps - These will be generated automatically when filler items are needed.
     "Triple Stat Increase":     RLItemData(ItemClassification.filler,        30, get_none, 5),

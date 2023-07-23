@@ -352,18 +352,20 @@ class FountainDoorRequirement(Choice):
 
 class FountainPiecesAvailable(Range):
     """
-    If Fountain Door Requirement requires Pieces of the Fountain, how many should exist to be found?
+    If Fountain Door Requirement requires Pieces of the Fountain, how many should exist to be found? If there are not
+    enough locations to hold all the requested fountain pieces, it will add as many as possible until locations are
+    filled.
     """
-    display_name = "Fountain Pieces Available"
+    display_name = "Maximum Fountain Pieces Available"
     range_start = 1
-    range_end = 25
+    range_end = 100
     default = 15
 
 
 class FountainPiecesRequired(Range):
     """
-    If Fountain Door Requirement requires Pieces of the Fountain, what percentage of fountain pieces (minimum 1), should
-    be required to fulfil the Fountain Door Requirement?
+    If Fountain Door Requirement requires Pieces of the Fountain, what percentage of available fountain pieces should
+    be required to fulfil the Fountain Door Requirement? There will always be at least 1 fountain piece in the pool.
     """
     display_name = "Required Fountain Pieces Percentage"
     range_start = 25
@@ -400,7 +402,7 @@ class IncludeTraps(Toggle):
     display_name = "Include Traps"
 
 
-rl_options: Dict[str, type(Option)] = {
+options_table: Dict[str, type(Option)] = {
     "start_inventory": StartInventoryPool,
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
