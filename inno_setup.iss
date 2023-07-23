@@ -2,7 +2,7 @@
 #define min_windows ReadIni(SourcePath + "\setup.ini", "Data", "min_windows")
 
 #define MyAppName "Archipelago"
-#define MyAppExeName "ArchipelagoServer.exe"
+#define MyAppExeName "ArchipelagoLauncher.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
 #define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoLauncher.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
