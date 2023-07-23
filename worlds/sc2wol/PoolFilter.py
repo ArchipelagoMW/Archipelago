@@ -195,7 +195,8 @@ class ValidInventory:
                 if cascade_failure:
                     for transient_item in transient_items:
                         if transient_item in inventory:
-                            inventory.remove(transient_item)
+                            for _ in range(inventory.count(transient_item)):
+                                inventory.remove(transient_item)
                         if transient_item not in locked_items:
                             for _ in range(get_item_quantity(transient_item)):
                                 locked_items.append(copy_item(transient_item))
