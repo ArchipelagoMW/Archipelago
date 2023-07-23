@@ -113,7 +113,7 @@ class RLLocationData:
             can_create: Callable[[MultiWorld, int], bool] = always_create,
             locked_item: Optional[Callable[[MultiWorld, int], str]] = None):
         self.region = region
-        self.address = address + LOCATION_ID_OFFSET if address else None
+        self.address = address + LOCATION_ID_OFFSET if address is not None else None
         self.can_create = can_create
         self.locked_item = locked_item
 
