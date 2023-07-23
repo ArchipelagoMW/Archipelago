@@ -140,7 +140,8 @@ class ValidInventory:
                 items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
                 for item in items_to_lock:
                     if item in inventory:
-                        inventory.remove(item)
+                        for _ in range(inventory.count(item)):
+                            inventory.remove(item)
                         for _ in range(get_item_quantity(item)):
                             locked_items.append(copy_item(item))
                     if item in existing_items:
