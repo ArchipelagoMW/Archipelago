@@ -104,7 +104,7 @@ class RLWorld(World):
 
             # Log a warning if not enough locations were able to create requested pieces.
             warning(
-                f"Not enough locations available in {self.multiworld.player_name[self.player]}'s RLWorld to create the"
+                f"Not enough locations available in {self.multiworld.player_name[self.player]}'s RLWorld to create the "
                 f"requested amount of fountain pieces."
                 f"\n\tReducing available fountain pieces to: {len(fountain_pieces)}"
                 f"\n\tReducing required fountain pieces to:  {self.fountain_piece_requirement}"
