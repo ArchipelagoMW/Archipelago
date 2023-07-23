@@ -160,7 +160,8 @@ class FFMQWorld(World):
 
     def get_filler_item_name(self):
         r = self.multiworld.random.randint(0, 201)
-        for item in fillers:
+        for item, count in fillers.items():
+            r -= count
             r -= fillers[item]
             if r <= 0:
                 return item
