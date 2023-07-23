@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Dict
-from schema import Schema, Or, And, Optional
 
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, OptionDict, StartInventoryPool,\
-    PerGameCommonOptions
+from schema import And, Optional, Or, Schema
+
+from Options import Accessibility, Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
+    StartInventoryPool, Toggle
 
 
 class MessengerAccessibility(Accessibility):

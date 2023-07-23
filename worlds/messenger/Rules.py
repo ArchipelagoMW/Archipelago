@@ -1,9 +1,9 @@
-from typing import Dict, Callable, TYPE_CHECKING
+from typing import Callable, Dict, TYPE_CHECKING
 
-from BaseClasses import CollectionState, MultiWorld
-from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
-from .Options import MessengerAccessibility, Goal
+from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
 from .Constants import NOTES, PHOBEKINS
+from .Options import Goal, MessengerAccessibility
 from .SubClasses import MessengerShopLocation
 
 if TYPE_CHECKING:
@@ -215,7 +215,7 @@ class MessengerHardRules(MessengerRules):
         for loc, rule in self.extra_rules.items():
             if not self.world.options.shuffle_seals and "Seal" in loc:
                 continue
-            if not self.world.multiworld.shuffle_shards[self.player] and "Shard" in loc:
+            if not self.world.options.shuffle_shards and "Shard" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 

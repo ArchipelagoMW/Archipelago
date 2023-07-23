@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Optional, cast
+from typing import Optional, TYPE_CHECKING, cast
 
-from BaseClasses import Region, Location, Item, ItemClassification, CollectionState
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from .Constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .Options import Goal
-from .Regions import REGIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
+from .Regions import MEGA_SHARDS, REGIONS, SEALS
+from .Shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
