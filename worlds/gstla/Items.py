@@ -466,7 +466,7 @@ class_item_list: typing.List[ItemData] = [
 
 
 testitems: typing.List[ItemData] = [
-   ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 6),
+   ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 8),
    ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 1),
    ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 1),
    ItemData(8, ItemName.Psy_Crystal, ItemClassification.filler, 738140, ItemType.Consumable, 1),
@@ -489,11 +489,11 @@ testitems: typing.List[ItemData] = [
    ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 1),
    ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 1),
 
-   ItemData(400, ItemName.Echo, ItemClassification.progression, 738316, ItemType.Djinn, 1),
-   ItemData(401, ItemName.Fog, ItemClassification.progression, 738316, ItemType.Djinn, 1),
-   ItemData(402, ItemName.Breath, ItemClassification.progression, 738316, ItemType.Djinn, 1),
-   ItemData(403, ItemName.Iron, ItemClassification.progression, 738316, ItemType.Djinn, 1),
-   ItemData(404, ItemName.Cannon, ItemClassification.progression, 738316, ItemType.Djinn, 1),
+   ItemData(400, ItemName.Echo, ItemClassification.progression, 16384014, ItemType.Djinn, 1),
+   ItemData(401, ItemName.Fog, ItemClassification.progression, 16384050, ItemType.Djinn, 1),
+   ItemData(402, ItemName.Breath, ItemClassification.progression, 16384122, ItemType.Djinn, 1),
+   ItemData(403, ItemName.Iron, ItemClassification.progression, 16384016, ItemType.Djinn, 1),
+   ItemData(404, ItemName.Cannon, ItemClassification.progression, 16384086, ItemType.Djinn, 1),
 ]
 
 

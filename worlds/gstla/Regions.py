@@ -86,6 +86,8 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Madra_Elixir,
         LocationName.Madra_Antidote,
         LocationName.Madra_Cyclone_Chip,
+        LocationName.Madra_Smoke_Bomb,
+        LocationName.Madra_Sleep_Bomb,
         LocationName.Madra_15_coins,
         LocationName.Madra_Nurses_Cap,
         LocationName.Iron

@@ -361,5 +361,43 @@ djinn = [
     LocationData(404, LocationName.Cannon, [994832], 128)
 ]
 
-all_locations: List[LocationData] = hidden_items + summon_tablets + major_items + key_items + filler + djinn
+test_locations = [
+    LocationData(1, LocationName.Daila_Herb, [991776, 991796], 2),
+    LocationData(2, LocationName.Daila_Smoke_Bomb, [991784, 991804], 3),
+    LocationData(3, LocationName.Daila_Psy_Crystal, [991812], 131),
+    LocationData(5, LocationName.Daila_Sleep_Bomb, [991832], 3),
+    LocationData(6, LocationName.Daila_3_coins, [991840], 2),
+    LocationData(7, LocationName.Daila_12_coins, [991848], 2),
+    LocationData(198, LocationName.Daila_Sea_Gods_Tear, [16384186], 128),
+
+    LocationData(97, LocationName.Dehkan_Plateau_Full_Metal_Vest, [991884], 128),
+    LocationData(98, LocationName.Dehkan_Plateau_Themis_Axe, [991916], 128),
+    LocationData(188, LocationName.Dehkan_Plateau_Pound_Cube, [16384162], 128),
+    LocationData(216, LocationName.Dehkan_Plateau_Mint, [991904], 128),
+    LocationData(217, LocationName.Dehkan_Plateau_Nut, [991928], 128),
+
+    LocationData(8, LocationName.Madra_Antidote, [991948], 13),
+    LocationData(9, LocationName.Madra_Cyclone_Chip, [16384166, 991956], 128),
+    LocationData(10, LocationName.Madra_Smoke_Bomb, [991968], 3),
+    LocationData(11, LocationName.Madra_15_coins, [991976], 13),
+    LocationData(12, LocationName.Madra_Sleep_Bomb, [991984], 2),
+    LocationData(13, LocationName.Madra_Elixir, [991996], 2),
+    LocationData(99, LocationName.Madra_Nurses_Cap, [991940], 128),
+
+    LocationData(84, LocationName.Madra_Catacombs_Moloch, [992068], 132),
+    LocationData(218, LocationName.Madra_Catacombs_Apple, [992008], 128),
+    LocationData(219, LocationName.Madra_Catacombs_Mist_Potion, [992016], 128),
+    LocationData(220, LocationName.Madra_Catacombs_Lucky_Medal, [992028], 128),
+    LocationData(170, LocationName.Madra_Cyclone_Chip, [16384166, 991956], 128),
+    LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128),
+    LocationData(172, LocationName.Madra_Catacombs_Tremor_Bit, [992060], 128),
+
+    LocationData(400, LocationName.Echo, [16384014], 128),
+    LocationData(401, LocationName.Fog, [16384050], 128),
+    LocationData(402, LocationName.Breath, [16384122], 128),
+    LocationData(403, LocationName.Iron, [16384016], 128),
+    LocationData(404, LocationName.Cannon, [16384086], 128)
+]
+
+all_locations: List[LocationData] = test_locations
 location_name_to_id: Dict[str, LocationData] =  {location.name: location for location in all_locations if location.loc_type != LocationType.Event}

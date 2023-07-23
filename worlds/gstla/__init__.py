@@ -1,6 +1,6 @@
 from worlds.AutoWorld import WebWorld, World
+import os
 
-import logging
 from typing import List
 
 from .Options import GSTLAOptions
@@ -13,6 +13,7 @@ from .Regions import create_regions
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from .Names.RegionName import RegionName
+from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
 
 
 class GSTLAWeb(WebWorld):
@@ -103,8 +104,35 @@ class GSTLAWorld(World):
         fill_restrictive(self.multiworld, all_state, [self.multiworld.get_location(LocationName.Kandorean_Temple_Lash_Pebble, self.player)], self.cyclonechip, True, True)
 
     def generate_output(self, output_directory: str):
-        pass
+        rom = LocalRom(get_base_rom_path())
+        world = self.multiworld
+        player = self.player
 
+        locations = location_name_to_id
+        for location in locations:
+            ap_location = world.get_location(location, player)
+            location_data = location_name_to_id[location]
+            ap_item = ap_location.item
+
+            item_data = item_table[ap_item.name]
+            if item_data.type == ItemType.Djinn:
+                rom.write_djinn(location_data, item_data)
+            else:
+                rom.write_item(location_data, item_data)
+
+        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
+
+        try:
+
+            patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
+                                    player_name=world.player_name[player], patched_path=rompath)
+            rom.write_to_file(rompath)
+            patch.write()
+        except:
+            raise()
+        finally:
+            if os.path.exists(rompath):
+                os.unlink(rompath)
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]
