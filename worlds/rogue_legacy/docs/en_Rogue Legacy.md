@@ -54,5 +54,5 @@ required to defeat each boss.
 
 ## What do I do if I encounter a bug with the game?
 
-Drop a bug report in the Archipelago Discord server and ping ***@thephar*** in the created thread. Be sure to include
+Drop a bug report in the Archipelago Discord server and ping **@thephar** in the created thread. Be sure to include
 what actions you were taking and your crash log if applicable.

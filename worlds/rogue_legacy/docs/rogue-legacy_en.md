@@ -41,4 +41,4 @@ game.
 ## So... what about `<insert inquiry here>`?
 
 If you have any questions, concerns, ~~or death threats~~, join the [Archipelago Discord](https://discord.gg/8Z65BR2) 
-server and post your comments in the **#rogue-legacy** channel. You can also directly ping ***@thephar*** in Discord. 
+server and post your comments in the **#rogue-legacy** channel. You can also directly ping **@thephar** in Discord. 
