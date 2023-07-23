@@ -98,7 +98,12 @@ class AutoLogicRegister(type):
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
-    return method(*args)
+    try:
+        ret = method(*args)
+    except Exception as e:
+        raise Exception(f"Exception in {method} for player {player}, named {multiworld.player_name[player]}.")
+    else:
+        return ret
 
 
 def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
