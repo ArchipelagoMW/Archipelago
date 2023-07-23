@@ -226,7 +226,7 @@ def create_elevators(item_factory: StardewItemFactory, world_options: StardewOpt
 
     items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
     if ModNames.deepwoods in world_options[options.Mods]:
-        items.extend([item_factory(item) for item in ["Progressive Wood Obelisk Sigils"] * 10])
+        items.extend([item_factory(item) for item in ["Progressive Woods Obelisk Sigils"] * 10])
     if ModNames.skull_cavern_elevator in world_options[options.Mods]:
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
