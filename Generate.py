@@ -86,7 +86,7 @@ def main(args=None, callback=ERmain):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
         except Exception as e:
-            raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.weights_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Weights: {args.weights_file_path} >> "
                      f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
 
@@ -94,7 +94,7 @@ def main(args=None, callback=ERmain):
         try:
             meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
-            raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
@@ -114,7 +114,7 @@ def main(args=None, callback=ERmain):
             try:
                 weights_cache[fname] = read_weights_yamls(path)
             except Exception as e:
-                raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
@@ -195,7 +195,7 @@ def main(args=None, callback=ERmain):
 
                     player += 1
             except Exception as e:
-                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
@@ -374,7 +374,7 @@ def roll_linked_options(weights: dict) -> dict:
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
         except Exception as e:
-            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+            raise ValueError(f"Linked option {option_set['name']} is invalid. "
                              f"Please fix your linked option.") from e
     return weights
 
@@ -404,7 +404,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
 
         except Exception as e:
-            raise ValueError(f"Your trigger number {i + 1} is destroyed. "
+            raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
     return weights
 
