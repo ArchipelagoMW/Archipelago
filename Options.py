@@ -912,15 +912,30 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *option_names: str) -> typing.Dict[str, typing.Any]:
+    def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
         """
-        Pass the option_names you would like returned as a dictionary as strings.
         Returns a dictionary of [str, Option.value]
+        
+        :param option_names: names of the options to return
+        :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
         """
         option_results = {}
         for option_name in option_names:
             if option_name in type(self).type_hints:
-                option_results[option_name] = getattr(self, option_name).value
+                if casing == "snake":
+                    display_name = option_name
+                elif casing == "camel":
+                    split_name = [name.title() for name in option_name.split("_")]
+                    split_name[0] = split_name[0].lower()
+                    display_name = "".join(split_name)
+                elif casing == "pascal":
+                    display_name = "".join([name.title() for name in option_name.split("_")])
+                elif casing == "kebab":
+                    display_name = option_name.replace("_", "-")
+                else:
+                    raise ValueError(f"{casing} is invalid casing for as_dict. "
+                                     "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
+                option_results[display_name] = getattr(self, option_name).value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
