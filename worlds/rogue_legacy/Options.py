@@ -135,7 +135,7 @@ class RequireVendorPurchasing(DefaultOnToggle):
     display_name = "Require Purchasing from Vendors"
 
 
-class RequireSkillPurchasing(DefaultOnToggle):
+class RequireSkillPurchasing(Toggle):
     """
     Determines if you will be required to purchase your skill upgrades in the manor when received.
 
@@ -165,7 +165,7 @@ class GoldGainMultiplier(Choice):
     default = 0
 
 
-class SpendingRestrictions(DefaultOnToggle):
+class SpendingRestrictions(Toggle):
     """
     Prevents the player from spending more than a certain amount of gold per life without certain upgrades.
 
@@ -221,7 +221,7 @@ class ChallengeBossKhidr(Choice):
     """
     Determines if Neo Khidr replaces Khidr in their boss room.
     """
-    display_name = "Khidr"
+    display_name = "Khidr Boss"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -231,7 +231,7 @@ class ChallengeBossAlexander(Choice):
     """
     Determines if Alexander the IV replaces Alexander in their boss room.
     """
-    display_name = "Alexander"
+    display_name = "Alexander Boss"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -241,7 +241,7 @@ class ChallengeBossLeon(Choice):
     """
     Determines if Ponce de Freon replaces Ponce de Leon in their boss room.
     """
-    display_name = "Ponce de Leon"
+    display_name = "Ponce de Leon Boss"
     option_vanilla = 0
     option_challenge = 1
     default = 0
@@ -251,7 +251,7 @@ class ChallengeBossHerodotus(Choice):
     """
     Determines if Astrodotus replaces Herodotus in their boss room.
     """
-    display_name = "Herodotus"
+    display_name = "Herodotus Boss"
     option_vanilla = 0
     option_challenge = 1
     default = 0
