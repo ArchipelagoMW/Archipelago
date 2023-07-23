@@ -5,7 +5,7 @@
 #define MyAppExeName "ArchipelagoServer.exe"
 #define MyAppIcon "data/icon.ico"
 #dim VersionTuple[4]
-#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoServer.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
+#define MyAppVersion GetVersionComponents(source_path + '\ArchipelagoLauncher.exe', VersionTuple[0], VersionTuple[1], VersionTuple[2], VersionTuple[3])
 #define MyAppVersionText Str(VersionTuple[0])+"."+Str(VersionTuple[1])+"."+Str(VersionTuple[2])
 
 
@@ -187,6 +187,7 @@ Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; Check: I
 Filename: "{app}\ArchipelagoLttPAdjuster"; Parameters: "--update_sprites"; StatusMsg: "Updating Sprite Library..."; Components: client/sni/lttp or generator/lttp
 Filename: "{app}\ArchipelagoMinecraftClient.exe"; Parameters: "--install"; StatusMsg: "Installing Forge Server..."; Components: client/minecraft
 Filename: "{app}\ArchipelagoLauncher"; Parameters: "--update_settings"; StatusMsg: "Updating host.yaml..."; Flags: runasoriginaluser runhidden
+Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringChange('Launcher', '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: dirifempty; Name: "{app}"
