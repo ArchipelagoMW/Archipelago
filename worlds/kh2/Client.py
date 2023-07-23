@@ -36,6 +36,7 @@ class KH2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
+        self.locations_checked_kh2 = None
         self.kh2LocalItems = None
         self.ability = None
         self.growthlevel = None
@@ -279,11 +280,71 @@ class KH2Context(CommonContext):
                 with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
                         'wt') as f:
                     pass
-                self.locations_checked = set()
+                self.locations_checked_kh2 = set()
             elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
                 with open(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json", 'r') as f:
                     self.kh2seedsave = json.load(f)
-                    self.locations_checked = set(self.kh2seedsave["LocationsChecked"])
+                    if self.kh2seedsave is None:
+                        self.kh2seedsave = {
+                            "itemIndex":        -1,
+                            # back of soras invo is 0x25E2. Growth should be moved there
+                            #  Character: [back of invo, front of invo]
+                            "SoraInvo":         [0x25D8, 0x2546],
+                            "DonaldInvo":       [0x26F4, 0x2658],
+                            "GoofyInvo":        [0x280A, 0x276C],
+                            "AmountInvo":       {
+                                "ServerItems": {
+                                    "Ability":      {},
+                                    "Amount":       {},
+                                    "Growth":       {
+                                        "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                                        "Aerial Dodge": 0,
+                                        "Glide":        0
+                                    },
+                                    "Bitmask":      [],
+                                    "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                                    "Equipment":    [],
+                                    "Magic":        {},
+                                    "StatIncrease": {},
+                                    "Boost":        {},
+                                },
+                                "LocalItems":  {
+                                    "Ability":      {},
+                                    "Amount":       {
+                                        "Bounty": 0,
+                                    },
+                                    "Growth":       {
+                                        "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                                        "Aerial Dodge": 0, "Glide": 0
+                                    },
+                                    "Bitmask":      [],
+                                    "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                                    "Equipment":    [],
+                                    "Magic":        {},
+                                    "StatIncrease": {},
+                                    "Boost":        {},
+                                }
+                            },
+                            #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
+                            "LocationsChecked": [],
+                            "Levels":           {
+                                "SoraLevel":   0,
+                                "ValorLevel":  0,
+                                "WisdomLevel": 0,
+                                "LimitLevel":  0,
+                                "MasterLevel": 0,
+                                "FinalLevel":  0,
+                                "SummonLevel": 0,
+                            },
+                            "SoldEquipment":    [],
+                            "SoldBoosts":       {
+                                "Power Boost":   0,
+                                "Magic Boost":   0,
+                                "Defense Boost": 0,
+                                "AP Boost":      0
+                            }
+                        }
+                    self.locations_checked_kh2 = set(self.kh2seedsave["LocationsChecked"])
             self.serverconneced = True
 
         if cmd in {"Connected"}:
@@ -294,11 +355,8 @@ class KH2Context(CommonContext):
                 logger.info("You are now auto-tracking")
                 self.kh2connected = True
             except Exception as e:
-                logger.info("Line 247")
                 if self.kh2connected:
-                    logger.info("Connection Lost")
                     self.kh2connected = False
-                logger.info(e)
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -344,22 +402,19 @@ class KH2Context(CommonContext):
                 for location, data in curworldid.items():
                     if location in kh2_loc_name_to_id.keys():
                         locationId = kh2_loc_name_to_id[location]
-                        if locationId not in self.locations_checked \
+                        if locationId not in self.locations_checked_kh2 \
                                 and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                             self.sending = self.sending + [(int(locationId))]
         except Exception as e:
-            logger.info("Line 285")
             if self.kh2connected:
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
     async def checkLevels(self):
         try:
             for location, data in SoraLevels.items():
                 currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
                 locationId = kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked \
+                if locationId not in self.locations_checked_kh2 \
                         and currentLevel >= data.bitIndex:
                     if self.kh2seedsave["Levels"]["SoraLevel"] < currentLevel:
                         self.kh2seedsave["Levels"]["SoraLevel"] = currentLevel
@@ -373,44 +428,36 @@ class KH2Context(CommonContext):
                 for location, data in formDict[i][1].items():
                     formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
                     locationId = kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
+                    if locationId not in self.locations_checked_kh2 \
                             and formlevel >= data.bitIndex \
                             and formDict[i][0] in self.kh2seedsave["Levels"].keys() \
                             and formlevel > self.kh2seedsave["Levels"][formDict[i][0]]:
                         self.kh2seedsave["Levels"][formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
-        except Exception as e:
-            logger.info("Line 312")
+        except Exception:
             if self.kh2connected:
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
     async def checkSlots(self):
         try:
             for location, data in weaponSlots.items():
                 locationId = kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked:
+                if locationId not in self.locations_checked_kh2:
                     if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
                         self.sending = self.sending + [(int(locationId))]
 
             for location, data in formSlots.items():
                 locationId = kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked and self.kh2_read_byte(self.Save + 0x06B2) == 0:
+                if locationId not in self.locations_checked_kh2 and self.kh2_read_byte(self.Save + 0x06B2) == 0:
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
-                        # self.locations_checked
                         self.sending = self.sending + [(int(locationId))]
-
         except Exception as e:
             if self.kh2connected:
-                logger.info("Line 333")
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
     async def verifyChests(self):
         try:
-            for location in self.locations_checked:
+            for location in self.locations_checked_kh2:
                 locationName = self.lookup_id_to_location[location]
                 if locationName in self.chest_set:
                     if locationName in self.location_name_to_worlddata.keys():
@@ -421,10 +468,7 @@ class KH2Context(CommonContext):
 
         except Exception as e:
             if self.kh2connected:
-                logger.info("Line 350")
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
     async def verifyLevel(self):
         for leveltype, anchor in {
@@ -512,10 +556,7 @@ class KH2Context(CommonContext):
 
         except Exception as e:
             if self.kh2connected:
-                logger.info("Line 398")
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -770,11 +811,8 @@ class KH2Context(CommonContext):
                 self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
-            logger.info("Line 573")
             if self.kh2connected:
-                logger.info("Connection Lost.")
                 self.kh2connected = False
-            logger.info(e)
 
 
 def finishedGame(ctx: KH2Context, message):
@@ -854,23 +892,25 @@ async def kh2_watcher(ctx: KH2Context):
                 location_ids = []
                 location_ids = [location for location in message[0]["locations"] if location not in location_ids]
                 for location in location_ids:
-                    if location not in ctx.locations_checked:
-                        ctx.locations_checked.add(location)
+                    if location not in ctx.locations_checked_kh2:
+                        ctx.locations_checked_kh2.add(location)
                         ctx.kh2seedsave["LocationsChecked"].append(location)
                         if location in ctx.kh2LocalItems:
                             item = ctx.kh2slotdata["LocalItems"][str(location)]
                             await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
-            elif not ctx.kh2connected:
-                if ctx.serverconneced:
-                    logger.info("Game is not open. Disconnecting from Server.")
-                    await ctx.disconnect()
+            elif not ctx.kh2connected and ctx.serverconneced:
+                logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
+                ctx.kh2 = None
+                while not ctx.kh2connected and ctx.serverconneced:
+                    await asyncio.sleep(15)
+                    ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                    if ctx.kh2 is not None:
+                        logger.info("You are now auto-tracking")
+                        ctx.kh2connected = True
         except Exception as e:
-            logger.info("Line 661")
             if ctx.kh2connected:
-                logger.info("Connection Lost.")
                 ctx.kh2connected = False
-            logger.info(e)
         await asyncio.sleep(0.5)
 
 
