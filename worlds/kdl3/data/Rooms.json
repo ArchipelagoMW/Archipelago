@@ -5,6 +5,7 @@
         "stage": 1,
         "room": 0,
         "pointer": 3434257,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -32,6 +33,7 @@
         "stage": 1,
         "room": 1,
         "pointer": 3368373,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -54,6 +56,10 @@
         "stage": 1,
         "room": 2,
         "pointer": 2960650,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -76,6 +82,7 @@
         "stage": 1,
         "room": 3,
         "pointer": 3478442,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -95,6 +102,7 @@
         "stage": 1,
         "room": 4,
         "pointer": 2978390,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -116,6 +124,7 @@
         "stage": 1,
         "room": 5,
         "pointer": 2890835,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 1 - Complete"
@@ -128,6 +137,7 @@
         "stage": 2,
         "room": 0,
         "pointer": 3293347,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -147,6 +157,10 @@
         "stage": 2,
         "room": 1,
         "pointer": 3059685,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -169,6 +183,7 @@
         "stage": 2,
         "room": 2,
         "pointer": 3432109,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -196,6 +211,7 @@
         "stage": 2,
         "room": 3,
         "pointer": 2970029,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -215,6 +231,7 @@
         "stage": 2,
         "room": 4,
         "pointer": 3578022,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -236,6 +253,7 @@
         "stage": 2,
         "room": 5,
         "pointer": 2966057,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -257,6 +275,7 @@
         "stage": 2,
         "room": 6,
         "pointer": 2887461,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 2 - Complete"
@@ -269,6 +288,7 @@
         "stage": 3,
         "room": 0,
         "pointer": 3149707,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -296,6 +316,7 @@
         "stage": 3,
         "room": 1,
         "pointer": 3204939,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -318,6 +339,7 @@
         "stage": 3,
         "room": 2,
         "pointer": 3200066,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -337,6 +359,7 @@
         "stage": 3,
         "room": 3,
         "pointer": 2959784,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -356,6 +379,10 @@
         "stage": 3,
         "room": 4,
         "pointer": 2979121,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -378,6 +405,7 @@
         "stage": 3,
         "room": 5,
         "pointer": 2997811,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -397,6 +425,7 @@
         "stage": 3,
         "room": 6,
         "pointer": 3084876,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -418,6 +447,7 @@
         "stage": 3,
         "room": 7,
         "pointer": 2891317,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 3 - Complete"
@@ -430,6 +460,7 @@
         "stage": 4,
         "room": 0,
         "pointer": 3471284,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -449,6 +480,7 @@
         "stage": 4,
         "room": 1,
         "pointer": 3436401,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -478,6 +510,7 @@
         "stage": 4,
         "room": 2,
         "pointer": 3039401,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -497,6 +530,7 @@
         "stage": 4,
         "room": 3,
         "pointer": 3722714,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -519,6 +553,7 @@
         "stage": 4,
         "room": 4,
         "pointer": 3304980,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -540,6 +575,7 @@
         "stage": 4,
         "room": 5,
         "pointer": 3498127,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -567,6 +603,7 @@
         "stage": 4,
         "room": 6,
         "pointer": 3160191,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -594,6 +631,7 @@
         "stage": 4,
         "room": 7,
         "pointer": 3035801,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -613,6 +651,7 @@
         "stage": 4,
         "room": 8,
         "pointer": 2989794,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -634,6 +673,10 @@
         "stage": 4,
         "room": 9,
         "pointer": 3043518,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -656,6 +699,7 @@
         "stage": 4,
         "room": 10,
         "pointer": 2888425,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 4 - Complete"
@@ -668,6 +712,7 @@
         "stage": 5,
         "room": 0,
         "pointer": 3303565,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -687,6 +732,7 @@
         "stage": 5,
         "room": 1,
         "pointer": 3048718,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -722,6 +768,7 @@
         "stage": 5,
         "room": 2,
         "pointer": 3327019,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -741,6 +788,10 @@
         "stage": 5,
         "room": 3,
         "pointer": 2966459,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -763,6 +814,10 @@
         "stage": 5,
         "room": 4,
         "pointer": 2973509,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -785,6 +840,7 @@
         "stage": 5,
         "room": 5,
         "pointer": 2962351,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -806,6 +862,7 @@
         "stage": 5,
         "room": 6,
         "pointer": 2886738,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 5 - Complete"
@@ -818,6 +875,7 @@
         "stage": 5,
         "room": 7,
         "pointer": 3255423,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -837,6 +895,7 @@
         "stage": 6,
         "room": 0,
         "pointer": 3376872,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -864,6 +923,7 @@
         "stage": 6,
         "room": 1,
         "pointer": 3395125,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -885,6 +945,7 @@
         "stage": 6,
         "room": 2,
         "pointer": 3375177,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -912,6 +973,7 @@
         "stage": 6,
         "room": 3,
         "pointer": 3322977,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -931,6 +993,7 @@
         "stage": 6,
         "room": 4,
         "pointer": 3490819,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -952,6 +1015,7 @@
         "stage": 6,
         "room": 5,
         "pointer": 3076769,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -973,6 +1037,10 @@
         "stage": 6,
         "room": 6,
         "pointer": 3047576,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -995,6 +1063,10 @@
         "stage": 6,
         "room": 7,
         "pointer": 3022909,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -1017,6 +1089,7 @@
         "stage": 6,
         "room": 8,
         "pointer": 2884569,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land 6 - Complete"
@@ -1029,6 +1102,7 @@
         "stage": 7,
         "room": 0,
         "pointer": 2984105,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Grass Land - Boss (Whispy Woods) Purified",
@@ -1042,6 +1116,7 @@
         "stage": 1,
         "room": 0,
         "pointer": 3279855,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -1061,6 +1136,7 @@
         "stage": 1,
         "room": 1,
         "pointer": 3588688,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -1104,6 +1180,10 @@
         "stage": 1,
         "room": 2,
         "pointer": 2955848,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -1126,6 +1206,7 @@
         "stage": 1,
         "room": 3,
         "pointer": 3558828,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -1145,6 +1226,7 @@
         "stage": 1,
         "room": 4,
         "pointer": 2974271,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -1166,6 +1248,7 @@
         "stage": 1,
         "room": 5,
         "pointer": 3051513,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -1185,6 +1268,7 @@
         "stage": 1,
         "room": 6,
         "pointer": 3049838,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -1204,6 +1288,7 @@
         "stage": 1,
         "room": 7,
         "pointer": 3066407,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -1223,6 +1308,7 @@
         "stage": 1,
         "room": 8,
         "pointer": 2889148,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 1 - Complete"
@@ -1235,6 +1321,7 @@
         "stage": 2,
         "room": 0,
         "pointer": 3342336,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -1254,6 +1341,10 @@
         "stage": 2,
         "room": 1,
         "pointer": 3084099,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 3,
@@ -1276,6 +1367,7 @@
         "stage": 2,
         "room": 2,
         "pointer": 3451207,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -1311,6 +1403,7 @@
         "stage": 2,
         "room": 3,
         "pointer": 3674327,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -1333,6 +1426,7 @@
         "stage": 2,
         "room": 4,
         "pointer": 2972744,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -1352,6 +1446,10 @@
         "stage": 2,
         "room": 5,
         "pointer": 3109710,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -1374,6 +1472,7 @@
         "stage": 2,
         "room": 6,
         "pointer": 2973127,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -1395,6 +1494,7 @@
         "stage": 2,
         "room": 7,
         "pointer": 2890353,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 2 - Complete"
@@ -1407,6 +1507,7 @@
         "stage": 3,
         "room": 0,
         "pointer": 3517254,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -1426,6 +1527,7 @@
         "stage": 3,
         "room": 1,
         "pointer": 3604480,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -1448,6 +1550,7 @@
         "stage": 3,
         "room": 2,
         "pointer": 3715428,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -1467,6 +1570,10 @@
         "stage": 3,
         "room": 3,
         "pointer": 3071919,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -1489,6 +1596,7 @@
         "stage": 3,
         "room": 4,
         "pointer": 2970810,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -1510,6 +1618,7 @@
         "stage": 3,
         "room": 5,
         "pointer": 2987502,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -1529,6 +1638,7 @@
         "stage": 3,
         "room": 6,
         "pointer": 2888666,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 3 - Complete"
@@ -1541,6 +1651,7 @@
         "stage": 3,
         "room": 7,
         "pointer": 3161120,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -1568,6 +1679,7 @@
         "stage": 4,
         "room": 0,
         "pointer": 3082540,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -1587,6 +1699,7 @@
         "stage": 4,
         "room": 1,
         "pointer": 2964846,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -1606,6 +1719,7 @@
         "stage": 4,
         "room": 2,
         "pointer": 3018503,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -1633,6 +1747,7 @@
         "stage": 4,
         "room": 3,
         "pointer": 2988166,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -1654,6 +1769,7 @@
         "stage": 4,
         "room": 4,
         "pointer": 2885533,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 4 - Complete"
@@ -1666,6 +1782,11 @@
         "stage": 4,
         "room": 5,
         "pointer": 3042349,
+        "animal_pointers": [
+            222,
+            230,
+            238
+        ],
         "default_exits": [
             {
                 "room": 6,
@@ -1713,6 +1834,7 @@
         "stage": 4,
         "room": 6,
         "pointer": 3234805,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -1756,6 +1878,7 @@
         "stage": 4,
         "room": 7,
         "pointer": 3155468,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -1783,6 +1906,7 @@
         "stage": 4,
         "room": 8,
         "pointer": 3350031,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -1826,6 +1950,7 @@
         "stage": 4,
         "room": 9,
         "pointer": 3050397,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -1847,6 +1972,7 @@
         "stage": 4,
         "room": 10,
         "pointer": 3052069,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -1868,6 +1994,7 @@
         "stage": 4,
         "room": 11,
         "pointer": 3386974,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -1887,6 +2014,7 @@
         "stage": 4,
         "room": 12,
         "pointer": 3168339,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -1914,6 +2042,7 @@
         "stage": 4,
         "room": 13,
         "pointer": 2958478,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -1935,6 +2064,7 @@
         "stage": 5,
         "room": 0,
         "pointer": 3240369,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -1954,6 +2084,7 @@
         "stage": 5,
         "room": 1,
         "pointer": 3547528,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -1973,6 +2104,7 @@
         "stage": 5,
         "room": 2,
         "pointer": 3611327,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -1992,6 +2124,7 @@
         "stage": 5,
         "room": 3,
         "pointer": 3926157,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -2022,6 +2155,9 @@
         "stage": 5,
         "room": 4,
         "pointer": 3026639,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 5,
@@ -2043,6 +2179,7 @@
         "stage": 5,
         "room": 5,
         "pointer": 3207333,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -2072,6 +2209,7 @@
         "stage": 5,
         "room": 6,
         "pointer": 3485896,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -2091,6 +2229,7 @@
         "stage": 5,
         "room": 7,
         "pointer": 3752698,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -2120,6 +2259,9 @@
         "stage": 5,
         "room": 8,
         "pointer": 3044682,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 3,
@@ -2141,6 +2283,7 @@
         "stage": 5,
         "room": 9,
         "pointer": 2963193,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -2162,6 +2305,7 @@
         "stage": 5,
         "room": 10,
         "pointer": 3042934,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -2181,6 +2325,7 @@
         "stage": 5,
         "room": 11,
         "pointer": 2886256,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 5 - Complete"
@@ -2193,6 +2338,7 @@
         "stage": 6,
         "room": 0,
         "pointer": 2949576,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -2212,6 +2358,11 @@
         "stage": 6,
         "room": 1,
         "pointer": 2971200,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 7,
@@ -2235,6 +2386,7 @@
         "stage": 6,
         "room": 2,
         "pointer": 3637749,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -2278,6 +2430,7 @@
         "stage": 6,
         "room": 3,
         "pointer": 3092564,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -2305,6 +2458,7 @@
         "stage": 6,
         "room": 4,
         "pointer": 3133247,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -2324,6 +2478,7 @@
         "stage": 6,
         "room": 5,
         "pointer": 3507762,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -2391,6 +2546,7 @@
         "stage": 6,
         "room": 6,
         "pointer": 3211264,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2410,6 +2566,7 @@
         "stage": 6,
         "room": 7,
         "pointer": 3586039,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2429,6 +2586,7 @@
         "stage": 6,
         "room": 8,
         "pointer": 3621483,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -2456,6 +2614,9 @@
         "stage": 6,
         "room": 9,
         "pointer": 2954523,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 8,
@@ -2477,6 +2638,7 @@
         "stage": 6,
         "room": 10,
         "pointer": 3069438,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -2498,6 +2660,7 @@
         "stage": 6,
         "room": 11,
         "pointer": 2886497,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field 6 - Complete"
@@ -2510,6 +2673,7 @@
         "stage": 7,
         "room": 0,
         "pointer": 3157370,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Ripple Field - Boss (Acro) Purified",
@@ -2523,6 +2687,7 @@
         "stage": 1,
         "room": 0,
         "pointer": 3524267,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2542,6 +2707,10 @@
         "stage": 1,
         "room": 1,
         "pointer": 3163860,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -2564,6 +2733,7 @@
         "stage": 1,
         "room": 2,
         "pointer": 3512532,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -2583,6 +2753,7 @@
         "stage": 1,
         "room": 3,
         "pointer": 3719146,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -2602,6 +2773,7 @@
         "stage": 1,
         "room": 4,
         "pointer": 3421212,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -2621,6 +2793,7 @@
         "stage": 1,
         "room": 5,
         "pointer": 3203325,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -2648,6 +2821,7 @@
         "stage": 1,
         "room": 6,
         "pointer": 3138524,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2669,6 +2843,7 @@
         "stage": 1,
         "room": 7,
         "pointer": 2988822,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -2690,6 +2865,7 @@
         "stage": 1,
         "room": 8,
         "pointer": 2885292,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 1 - Complete"
@@ -2702,6 +2878,7 @@
         "stage": 2,
         "room": 0,
         "pointer": 3668370,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -2729,6 +2906,10 @@
         "stage": 2,
         "room": 1,
         "pointer": 2952738,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -2751,6 +2932,7 @@
         "stage": 2,
         "room": 2,
         "pointer": 3531156,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -2770,6 +2952,7 @@
         "stage": 2,
         "room": 3,
         "pointer": 3263731,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -2813,6 +2996,7 @@
         "stage": 2,
         "room": 4,
         "pointer": 3076300,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -2850,6 +3034,7 @@
         "stage": 2,
         "room": 5,
         "pointer": 3302133,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -2893,6 +3078,7 @@
         "stage": 2,
         "room": 6,
         "pointer": 3800612,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2912,6 +3098,7 @@
         "stage": 2,
         "room": 7,
         "pointer": 3073888,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2939,6 +3126,7 @@
         "stage": 2,
         "room": 8,
         "pointer": 3061270,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -2958,6 +3146,7 @@
         "stage": 2,
         "room": 9,
         "pointer": 3453286,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -2979,6 +3168,7 @@
         "stage": 2,
         "room": 10,
         "pointer": 2994821,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -3000,6 +3190,7 @@
         "stage": 2,
         "room": 11,
         "pointer": 2891799,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 2 - Complete"
@@ -3012,6 +3203,7 @@
         "stage": 3,
         "room": 0,
         "pointer": 3544676,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -3055,6 +3247,11 @@
         "stage": 3,
         "room": 1,
         "pointer": 2965655,
+        "animal_pointers": [
+            212,
+            220,
+            228
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -3094,6 +3291,7 @@
         "stage": 3,
         "room": 2,
         "pointer": 3726270,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -3113,6 +3311,7 @@
         "stage": 3,
         "room": 3,
         "pointer": 3416806,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -3132,6 +3331,7 @@
         "stage": 3,
         "room": 4,
         "pointer": 3564419,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -3151,6 +3351,7 @@
         "stage": 3,
         "room": 5,
         "pointer": 2973891,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -3172,6 +3373,7 @@
         "stage": 3,
         "room": 6,
         "pointer": 3247969,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -3191,6 +3393,7 @@
         "stage": 3,
         "room": 7,
         "pointer": 2887702,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 3 - Complete"
@@ -3203,6 +3406,7 @@
         "stage": 3,
         "room": 8,
         "pointer": 2968057,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -3222,6 +3426,7 @@
         "stage": 4,
         "room": 0,
         "pointer": 3521954,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -3249,6 +3454,11 @@
         "stage": 4,
         "room": 1,
         "pointer": 2956289,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -3272,6 +3482,7 @@
         "stage": 4,
         "room": 2,
         "pointer": 3505360,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -3293,6 +3504,7 @@
         "stage": 4,
         "room": 3,
         "pointer": 3412361,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -3344,6 +3556,7 @@
         "stage": 4,
         "room": 4,
         "pointer": 3307804,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -3371,6 +3584,7 @@
         "stage": 4,
         "room": 5,
         "pointer": 2955407,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -3390,6 +3604,7 @@
         "stage": 4,
         "room": 6,
         "pointer": 3094851,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -3425,6 +3640,7 @@
         "stage": 4,
         "room": 7,
         "pointer": 3483428,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -3447,6 +3663,7 @@
         "stage": 4,
         "room": 8,
         "pointer": 3002086,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -3468,6 +3685,7 @@
         "stage": 4,
         "room": 9,
         "pointer": 2885774,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 4 - Complete"
@@ -3480,6 +3698,7 @@
         "stage": 5,
         "room": 0,
         "pointer": 3662486,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -3509,6 +3728,7 @@
         "stage": 5,
         "room": 1,
         "pointer": 3052622,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -3528,6 +3748,9 @@
         "stage": 5,
         "room": 2,
         "pointer": 3057544,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -3549,6 +3772,7 @@
         "stage": 5,
         "room": 3,
         "pointer": 3419011,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -3573,6 +3797,7 @@
         "stage": 5,
         "room": 4,
         "pointer": 3644149,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -3600,6 +3825,9 @@
         "stage": 5,
         "room": 5,
         "pointer": 3044100,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 4,
@@ -3621,6 +3849,7 @@
         "stage": 5,
         "room": 6,
         "pointer": 3373481,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -3640,6 +3869,7 @@
         "stage": 5,
         "room": 7,
         "pointer": 2964028,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -3661,6 +3891,7 @@
         "stage": 5,
         "room": 8,
         "pointer": 2890112,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 5 - Complete"
@@ -3673,6 +3904,7 @@
         "stage": 5,
         "room": 9,
         "pointer": 3647264,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -3702,6 +3934,7 @@
         "stage": 6,
         "room": 0,
         "pointer": 3314761,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -3721,6 +3954,11 @@
         "stage": 6,
         "room": 1,
         "pointer": 2976913,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 22,
@@ -3744,6 +3982,7 @@
         "stage": 6,
         "room": 2,
         "pointer": 2978757,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -3763,6 +4002,7 @@
         "stage": 6,
         "room": 3,
         "pointer": 3178082,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -3838,6 +4078,7 @@
         "stage": 6,
         "room": 4,
         "pointer": 3181563,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -3913,6 +4154,7 @@
         "stage": 6,
         "room": 5,
         "pointer": 3177209,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -3988,6 +4230,7 @@
         "stage": 6,
         "room": 6,
         "pointer": 3183291,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -4063,6 +4306,7 @@
         "stage": 6,
         "room": 7,
         "pointer": 3175453,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -4138,6 +4382,7 @@
         "stage": 6,
         "room": 8,
         "pointer": 3179826,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -4213,6 +4458,7 @@
         "stage": 6,
         "room": 9,
         "pointer": 3176334,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -4288,6 +4534,7 @@
         "stage": 6,
         "room": 10,
         "pointer": 3178954,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -4363,6 +4610,7 @@
         "stage": 6,
         "room": 11,
         "pointer": 2989149,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -4382,6 +4630,7 @@
         "stage": 6,
         "room": 12,
         "pointer": 3015947,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -4409,6 +4658,7 @@
         "stage": 6,
         "room": 13,
         "pointer": 2976539,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 23,
@@ -4428,6 +4678,7 @@
         "stage": 6,
         "room": 14,
         "pointer": 3030336,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 15,
@@ -4455,6 +4706,7 @@
         "stage": 6,
         "room": 15,
         "pointer": 2972361,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 14,
@@ -4474,6 +4726,7 @@
         "stage": 6,
         "room": 16,
         "pointer": 2953186,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 18,
@@ -4501,6 +4754,7 @@
         "stage": 6,
         "room": 17,
         "pointer": 2953633,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 18,
@@ -4528,6 +4782,7 @@
         "stage": 6,
         "room": 18,
         "pointer": 2991707,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 17,
@@ -4547,6 +4802,7 @@
         "stage": 6,
         "room": 19,
         "pointer": 2974651,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -4574,6 +4830,7 @@
         "stage": 6,
         "room": 20,
         "pointer": 2969638,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 19,
@@ -4593,6 +4850,11 @@
         "stage": 6,
         "room": 21,
         "pointer": 2976163,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 22,
@@ -4616,6 +4878,7 @@
         "stage": 6,
         "room": 22,
         "pointer": 2950938,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 38,
@@ -4651,6 +4914,7 @@
         "stage": 6,
         "room": 23,
         "pointer": 3311993,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 43,
@@ -4670,6 +4934,7 @@
         "stage": 6,
         "room": 24,
         "pointer": 3079078,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 39,
@@ -4705,6 +4970,7 @@
         "stage": 6,
         "room": 25,
         "pointer": 3065898,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 26,
@@ -4740,6 +5006,7 @@
         "stage": 6,
         "room": 26,
         "pointer": 3063347,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 41,
@@ -4775,6 +5042,7 @@
         "stage": 6,
         "room": 27,
         "pointer": 3066916,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 28,
@@ -4810,6 +5078,7 @@
         "stage": 6,
         "room": 28,
         "pointer": 3067425,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 29,
@@ -4845,6 +5114,7 @@
         "stage": 6,
         "room": 29,
         "pointer": 2950032,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 30,
@@ -4864,6 +5134,7 @@
         "stage": 6,
         "room": 30,
         "pointer": 2986500,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -4883,6 +5154,7 @@
         "stage": 6,
         "room": 31,
         "pointer": 3070930,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 32,
@@ -4918,6 +5190,7 @@
         "stage": 6,
         "room": 32,
         "pointer": 3054817,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 33,
@@ -4953,6 +5226,7 @@
         "stage": 6,
         "room": 33,
         "pointer": 3053173,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 34,
@@ -4988,6 +5262,7 @@
         "stage": 6,
         "room": 34,
         "pointer": 3053721,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 35,
@@ -5023,6 +5298,7 @@
         "stage": 6,
         "room": 35,
         "pointer": 3054269,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 37,
@@ -5058,6 +5334,7 @@
         "stage": 6,
         "room": 36,
         "pointer": 2986164,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -5077,6 +5354,7 @@
         "stage": 6,
         "room": 37,
         "pointer": 3074377,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 36,
@@ -5096,6 +5374,7 @@
         "stage": 6,
         "room": 38,
         "pointer": 2971589,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -5123,6 +5402,7 @@
         "stage": 6,
         "room": 39,
         "pointer": 3063858,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 40,
@@ -5158,6 +5438,7 @@
         "stage": 6,
         "room": 40,
         "pointer": 3064368,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 41,
@@ -5193,6 +5474,7 @@
         "stage": 6,
         "room": 41,
         "pointer": 3064878,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 42,
@@ -5228,6 +5510,7 @@
         "stage": 6,
         "room": 42,
         "pointer": 3068939,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 29,
@@ -5255,6 +5538,7 @@
         "stage": 6,
         "room": 43,
         "pointer": 2988495,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 44,
@@ -5276,6 +5560,7 @@
         "stage": 6,
         "room": 44,
         "pointer": 2886979,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon 6 - Complete"
@@ -5288,6 +5573,7 @@
         "stage": 7,
         "room": 0,
         "pointer": 2991389,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Sand Canyon - Boss (Pon & Con) Purified",
@@ -5301,6 +5587,7 @@
         "stage": 1,
         "room": 0,
         "pointer": 3172795,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -5320,6 +5607,9 @@
         "stage": 1,
         "room": 1,
         "pointer": 3078163,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -5341,6 +5631,7 @@
         "stage": 1,
         "room": 2,
         "pointer": 3285882,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -5360,6 +5651,9 @@
         "stage": 1,
         "room": 3,
         "pointer": 3062831,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 10,
@@ -5381,6 +5675,7 @@
         "stage": 1,
         "room": 4,
         "pointer": 3396729,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -5400,6 +5695,10 @@
         "stage": 1,
         "room": 5,
         "pointer": 3038805,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 6,
@@ -5422,6 +5721,7 @@
         "stage": 1,
         "room": 6,
         "pointer": 3535736,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -5441,6 +5741,9 @@
         "stage": 1,
         "room": 7,
         "pointer": 2954080,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 11,
@@ -5462,6 +5765,7 @@
         "stage": 1,
         "room": 8,
         "pointer": 3465407,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -5481,6 +5785,9 @@
         "stage": 1,
         "room": 9,
         "pointer": 3078621,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 4,
@@ -5502,6 +5809,7 @@
         "stage": 1,
         "room": 10,
         "pointer": 3281366,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -5521,6 +5829,7 @@
         "stage": 1,
         "room": 11,
         "pointer": 3519608,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -5543,6 +5852,7 @@
         "stage": 1,
         "room": 12,
         "pointer": 2958914,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 13,
@@ -5564,6 +5874,7 @@
         "stage": 1,
         "room": 13,
         "pointer": 2886015,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 1 - Complete"
@@ -5576,6 +5887,7 @@
         "stage": 2,
         "room": 0,
         "pointer": 3142443,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -5595,6 +5907,7 @@
         "stage": 2,
         "room": 1,
         "pointer": 3235925,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -5614,6 +5927,7 @@
         "stage": 2,
         "room": 2,
         "pointer": 3297758,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -5633,6 +5947,7 @@
         "stage": 2,
         "room": 3,
         "pointer": 3341087,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -5652,6 +5967,7 @@
         "stage": 2,
         "room": 4,
         "pointer": 3457404,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -5671,6 +5987,7 @@
         "stage": 2,
         "room": 5,
         "pointer": 3273878,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -5690,6 +6007,11 @@
         "stage": 2,
         "room": 6,
         "pointer": 2984453,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -5713,6 +6035,7 @@
         "stage": 2,
         "room": 7,
         "pointer": 2985482,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -5732,6 +6055,7 @@
         "stage": 2,
         "room": 8,
         "pointer": 2990753,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -5753,6 +6077,7 @@
         "stage": 2,
         "room": 9,
         "pointer": 2889630,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 2 - Complete"
@@ -5765,6 +6090,7 @@
         "stage": 3,
         "room": 0,
         "pointer": 3100859,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -5784,6 +6110,7 @@
         "stage": 3,
         "room": 1,
         "pointer": 3209719,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -5803,6 +6130,7 @@
         "stage": 3,
         "room": 2,
         "pointer": 3216185,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -5830,6 +6158,11 @@
         "stage": 3,
         "room": 3,
         "pointer": 2994208,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -5853,6 +6186,7 @@
         "stage": 3,
         "room": 4,
         "pointer": 3229151,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -5880,6 +6214,7 @@
         "stage": 3,
         "room": 5,
         "pointer": 2969244,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -5899,6 +6234,7 @@
         "stage": 3,
         "room": 6,
         "pointer": 4128530,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -5920,6 +6256,7 @@
         "stage": 3,
         "room": 7,
         "pointer": 2885051,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 3 - Complete"
@@ -5932,6 +6269,7 @@
         "stage": 4,
         "room": 0,
         "pointer": 3072905,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -5951,6 +6289,10 @@
         "stage": 4,
         "room": 1,
         "pointer": 3074863,
+        "animal_pointers": [
+            208,
+            224
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -5973,6 +6315,7 @@
         "stage": 4,
         "room": 2,
         "pointer": 3309209,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -5992,6 +6335,7 @@
         "stage": 4,
         "room": 3,
         "pointer": 3296291,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -6014,6 +6358,7 @@
         "stage": 4,
         "room": 4,
         "pointer": 3330996,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6033,6 +6378,7 @@
         "stage": 4,
         "room": 5,
         "pointer": 3332300,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -6052,6 +6398,7 @@
         "stage": 4,
         "room": 6,
         "pointer": 3253310,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -6071,6 +6418,7 @@
         "stage": 4,
         "room": 7,
         "pointer": 2967658,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -6090,6 +6438,7 @@
         "stage": 4,
         "room": 8,
         "pointer": 2981644,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -6109,6 +6458,7 @@
         "stage": 4,
         "room": 9,
         "pointer": 3008001,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -6130,6 +6480,7 @@
         "stage": 4,
         "room": 10,
         "pointer": 2888184,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 4 - Complete"
@@ -6142,6 +6493,7 @@
         "stage": 5,
         "room": 0,
         "pointer": 3192630,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -6161,6 +6513,7 @@
         "stage": 5,
         "room": 1,
         "pointer": 3050956,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -6182,6 +6535,10 @@
         "stage": 5,
         "room": 2,
         "pointer": 3604194,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 3,
@@ -6204,6 +6561,7 @@
         "stage": 5,
         "room": 3,
         "pointer": 3131242,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -6223,6 +6581,7 @@
         "stage": 5,
         "room": 4,
         "pointer": 2990116,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -6242,6 +6601,7 @@
         "stage": 5,
         "room": 5,
         "pointer": 2975410,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -6261,6 +6621,7 @@
         "stage": 5,
         "room": 6,
         "pointer": 3173683,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6280,6 +6641,7 @@
         "stage": 5,
         "room": 7,
         "pointer": 2992340,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -6301,6 +6663,7 @@
         "stage": 5,
         "room": 8,
         "pointer": 2891558,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 5 - Complete"
@@ -6313,6 +6676,7 @@
         "stage": 6,
         "room": 0,
         "pointer": 3269847,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -6332,6 +6696,7 @@
         "stage": 6,
         "room": 1,
         "pointer": 3252248,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -6351,6 +6716,7 @@
         "stage": 6,
         "room": 2,
         "pointer": 3028494,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 0,
@@ -6378,6 +6744,7 @@
         "stage": 6,
         "room": 3,
         "pointer": 3131911,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -6429,6 +6796,7 @@
         "stage": 6,
         "room": 4,
         "pointer": 3115416,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -6488,6 +6856,7 @@
         "stage": 6,
         "room": 5,
         "pointer": 3245809,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 15,
@@ -6507,6 +6876,7 @@
         "stage": 6,
         "room": 6,
         "pointer": 3237044,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6526,6 +6896,7 @@
         "stage": 6,
         "room": 7,
         "pointer": 3262705,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 13,
@@ -6561,6 +6932,7 @@
         "stage": 6,
         "room": 8,
         "pointer": 3027259,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -6582,6 +6954,7 @@
         "stage": 6,
         "room": 9,
         "pointer": 3089504,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -6601,6 +6974,11 @@
         "stage": 6,
         "room": 10,
         "pointer": 3132579,
+        "animal_pointers": [
+            242,
+            250,
+            258
+        ],
         "default_exits": [
             {
                 "room": 6,
@@ -6664,6 +7042,7 @@
         "stage": 6,
         "room": 11,
         "pointer": 3017866,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -6715,6 +7094,7 @@
         "stage": 6,
         "room": 12,
         "pointer": 3036404,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -6742,6 +7122,7 @@
         "stage": 6,
         "room": 13,
         "pointer": 2965251,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6761,6 +7142,7 @@
         "stage": 6,
         "room": 14,
         "pointer": 3077236,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6780,6 +7162,7 @@
         "stage": 6,
         "room": 15,
         "pointer": 3061794,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -6801,6 +7184,7 @@
         "stage": 6,
         "room": 16,
         "pointer": 2888907,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park 6 - Complete"
@@ -6813,6 +7197,7 @@
         "stage": 7,
         "room": 0,
         "pointer": 2998682,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Cloudy Park - Boss (Ado) Purified",
@@ -6826,6 +7211,7 @@
         "stage": 1,
         "room": 0,
         "pointer": 3363111,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -6845,6 +7231,7 @@
         "stage": 1,
         "room": 1,
         "pointer": 3596524,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -6864,6 +7251,7 @@
         "stage": 1,
         "room": 2,
         "pointer": 3288880,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -6891,6 +7279,10 @@
         "stage": 1,
         "room": 3,
         "pointer": 3068439,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -6913,6 +7305,7 @@
         "stage": 1,
         "room": 4,
         "pointer": 3233681,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -6932,6 +7325,7 @@
         "stage": 1,
         "room": 5,
         "pointer": 3406133,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -6951,6 +7345,7 @@
         "stage": 1,
         "room": 6,
         "pointer": 2985823,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -6972,6 +7367,7 @@
         "stage": 1,
         "room": 7,
         "pointer": 2892040,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 1 - Complete"
@@ -6984,6 +7380,7 @@
         "stage": 2,
         "room": 0,
         "pointer": 3106800,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -7003,6 +7400,7 @@
         "stage": 2,
         "room": 1,
         "pointer": 3334841,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7022,6 +7420,7 @@
         "stage": 2,
         "room": 2,
         "pointer": 3473408,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -7073,6 +7472,7 @@
         "stage": 2,
         "room": 3,
         "pointer": 3037006,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7092,6 +7492,7 @@
         "stage": 2,
         "room": 4,
         "pointer": 3035198,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7111,6 +7512,7 @@
         "stage": 2,
         "room": 5,
         "pointer": 3128551,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7130,6 +7532,7 @@
         "stage": 2,
         "room": 6,
         "pointer": 3270857,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -7149,6 +7552,7 @@
         "stage": 2,
         "room": 7,
         "pointer": 3212501,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -7168,6 +7572,7 @@
         "stage": 2,
         "room": 8,
         "pointer": 2994515,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -7189,6 +7594,10 @@
         "stage": 2,
         "room": 9,
         "pointer": 3058084,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -7211,6 +7620,7 @@
         "stage": 2,
         "room": 10,
         "pointer": 2887220,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 2 - Complete"
@@ -7223,6 +7633,7 @@
         "stage": 3,
         "room": 0,
         "pointer": 3455346,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -7250,6 +7661,11 @@
         "stage": 3,
         "room": 1,
         "pointer": 3019769,
+        "animal_pointers": [
+            192,
+            200,
+            208
+        ],
         "default_exits": [
             {
                 "room": 0,
@@ -7273,6 +7689,7 @@
         "stage": 3,
         "room": 2,
         "pointer": 3618121,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -7294,6 +7711,7 @@
         "stage": 3,
         "room": 3,
         "pointer": 3650368,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -7321,6 +7739,10 @@
         "stage": 3,
         "room": 4,
         "pointer": 3038208,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 3,
@@ -7343,6 +7765,7 @@
         "stage": 3,
         "room": 5,
         "pointer": 3013938,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -7362,6 +7785,7 @@
         "stage": 3,
         "room": 6,
         "pointer": 3624789,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -7381,6 +7805,7 @@
         "stage": 3,
         "room": 7,
         "pointer": 2989472,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -7402,6 +7827,7 @@
         "stage": 3,
         "room": 8,
         "pointer": 2889871,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 3 - Complete"
@@ -7414,6 +7840,7 @@
         "stage": 4,
         "room": 0,
         "pointer": 3274879,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -7433,6 +7860,7 @@
         "stage": 4,
         "room": 1,
         "pointer": 3371780,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7452,6 +7880,7 @@
         "stage": 4,
         "room": 2,
         "pointer": 3284378,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -7491,6 +7920,7 @@
         "stage": 4,
         "room": 3,
         "pointer": 3162957,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -7510,6 +7940,7 @@
         "stage": 4,
         "room": 4,
         "pointer": 3261679,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -7529,6 +7960,7 @@
         "stage": 4,
         "room": 5,
         "pointer": 3217398,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 6,
@@ -7548,6 +7980,7 @@
         "stage": 4,
         "room": 6,
         "pointer": 3108265,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -7567,6 +8000,7 @@
         "stage": 4,
         "room": 7,
         "pointer": 3346202,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -7606,6 +8040,7 @@
         "stage": 4,
         "room": 8,
         "pointer": 3055911,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -7625,6 +8060,7 @@
         "stage": 4,
         "room": 9,
         "pointer": 3056457,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -7644,6 +8080,7 @@
         "stage": 4,
         "room": 10,
         "pointer": 3257516,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -7671,6 +8108,7 @@
         "stage": 4,
         "room": 11,
         "pointer": 3083322,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -7690,6 +8128,7 @@
         "stage": 4,
         "room": 12,
         "pointer": 3147724,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 18,
@@ -7709,6 +8148,11 @@
         "stage": 4,
         "room": 13,
         "pointer": 3370077,
+        "animal_pointers": [
+            232,
+            240,
+            248
+        ],
         "default_exits": [
             {
                 "room": 15,
@@ -7764,6 +8208,7 @@
         "stage": 4,
         "room": 14,
         "pointer": 3057002,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 15,
@@ -7807,6 +8252,7 @@
         "stage": 4,
         "room": 15,
         "pointer": 3116124,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 13,
@@ -7842,6 +8288,9 @@
         "stage": 4,
         "room": 16,
         "pointer": 3069937,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -7863,6 +8312,9 @@
         "stage": 4,
         "room": 17,
         "pointer": 3072413,
+        "animal_pointers": [
+            192
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -7884,6 +8336,7 @@
         "stage": 4,
         "room": 18,
         "pointer": 3404593,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 19,
@@ -7903,6 +8356,7 @@
         "stage": 4,
         "room": 19,
         "pointer": 3075826,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 20,
@@ -7924,6 +8378,7 @@
         "stage": 4,
         "room": 20,
         "pointer": 2887943,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 4 - Complete"
@@ -7936,6 +8391,7 @@
         "stage": 5,
         "room": 0,
         "pointer": 3316135,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 30,
@@ -7955,6 +8411,7 @@
         "stage": 5,
         "room": 1,
         "pointer": 3037607,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 2,
@@ -7974,6 +8431,7 @@
         "stage": 5,
         "room": 2,
         "pointer": 3103842,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 25,
@@ -7993,6 +8451,7 @@
         "stage": 5,
         "room": 3,
         "pointer": 3135899,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -8012,6 +8471,7 @@
         "stage": 5,
         "room": 4,
         "pointer": 3180695,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -8031,6 +8491,7 @@
         "stage": 5,
         "room": 5,
         "pointer": 3106064,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 24,
@@ -8050,6 +8511,7 @@
         "stage": 5,
         "room": 6,
         "pointer": 3276800,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -8069,6 +8531,7 @@
         "stage": 5,
         "room": 7,
         "pointer": 3104585,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 26,
@@ -8088,6 +8551,7 @@
         "stage": 5,
         "room": 8,
         "pointer": 3195121,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -8107,6 +8571,7 @@
         "stage": 5,
         "room": 9,
         "pointer": 3087198,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 28,
@@ -8128,6 +8593,7 @@
         "stage": 5,
         "room": 10,
         "pointer": 3321612,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 32,
@@ -8147,6 +8613,7 @@
         "stage": 5,
         "room": 11,
         "pointer": 3139178,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -8168,6 +8635,7 @@
         "stage": 5,
         "room": 12,
         "pointer": 3118231,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 13,
@@ -8187,6 +8655,7 @@
         "stage": 5,
         "room": 13,
         "pointer": 3021658,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 27,
@@ -8206,6 +8675,7 @@
         "stage": 5,
         "room": 14,
         "pointer": 3025398,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 15,
@@ -8227,6 +8697,7 @@
         "stage": 5,
         "room": 15,
         "pointer": 3167445,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -8246,6 +8717,7 @@
         "stage": 5,
         "room": 16,
         "pointer": 3033990,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 33,
@@ -8265,6 +8737,7 @@
         "stage": 5,
         "room": 17,
         "pointer": 3100111,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 20,
@@ -8284,6 +8757,7 @@
         "stage": 5,
         "room": 18,
         "pointer": 3030947,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 17,
@@ -8303,6 +8777,7 @@
         "stage": 5,
         "room": 19,
         "pointer": 3105326,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 21,
@@ -8322,6 +8797,7 @@
         "stage": 5,
         "room": 20,
         "pointer": 3118928,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 19,
@@ -8341,6 +8817,7 @@
         "stage": 5,
         "room": 21,
         "pointer": 3202517,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 22,
@@ -8360,6 +8837,7 @@
         "stage": 5,
         "room": 22,
         "pointer": 3014656,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 23,
@@ -8379,6 +8857,7 @@
         "stage": 5,
         "room": 23,
         "pointer": 3166550,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 34,
@@ -8398,6 +8877,7 @@
         "stage": 5,
         "room": 24,
         "pointer": 3029110,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 31,
@@ -8417,6 +8897,7 @@
         "stage": 5,
         "room": 25,
         "pointer": 3156420,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -8436,6 +8917,7 @@
         "stage": 5,
         "room": 26,
         "pointer": 3127877,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -8455,6 +8937,7 @@
         "stage": 5,
         "room": 27,
         "pointer": 3256471,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 14,
@@ -8474,6 +8957,7 @@
         "stage": 5,
         "room": 28,
         "pointer": 3029723,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -8493,6 +8977,7 @@
         "stage": 5,
         "room": 29,
         "pointer": 3526568,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 36,
@@ -8512,6 +8997,10 @@
         "stage": 5,
         "room": 30,
         "pointer": 3022285,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 1,
@@ -8534,6 +9023,10 @@
         "stage": 5,
         "room": 31,
         "pointer": 3026019,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 6,
@@ -8556,6 +9049,10 @@
         "stage": 5,
         "room": 32,
         "pointer": 3039996,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 11,
@@ -8578,6 +9075,10 @@
         "stage": 5,
         "room": 33,
         "pointer": 3015302,
+        "animal_pointers": [
+            192,
+            200
+        ],
         "default_exits": [
             {
                 "room": 18,
@@ -8600,6 +9101,7 @@
         "stage": 5,
         "room": 34,
         "pointer": 3185868,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 35,
@@ -8619,6 +9121,7 @@
         "stage": 5,
         "room": 35,
         "pointer": 3865635,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 29,
@@ -8638,6 +9141,7 @@
         "stage": 5,
         "room": 36,
         "pointer": 3024154,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 37,
@@ -8659,6 +9163,7 @@
         "stage": 5,
         "room": 37,
         "pointer": 2890594,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 5 - Complete"
@@ -8671,6 +9176,7 @@
         "stage": 6,
         "room": 0,
         "pointer": 3385305,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 1,
@@ -8706,6 +9212,11 @@
         "stage": 6,
         "room": 1,
         "pointer": 3197599,
+        "animal_pointers": [
+            212,
+            220,
+            228
+        ],
         "default_exits": [
             {
                 "room": 2,
@@ -8745,6 +9256,7 @@
         "stage": 6,
         "room": 2,
         "pointer": 3097113,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 5,
@@ -8780,6 +9292,11 @@
         "stage": 6,
         "room": 3,
         "pointer": 3198422,
+        "animal_pointers": [
+            212,
+            220,
+            228
+        ],
         "default_exits": [
             {
                 "room": 6,
@@ -8819,6 +9336,7 @@
         "stage": 6,
         "room": 4,
         "pointer": 3210507,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 3,
@@ -8854,6 +9372,7 @@
         "stage": 6,
         "room": 5,
         "pointer": 3196776,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 4,
@@ -8892,6 +9411,7 @@
         "stage": 6,
         "room": 6,
         "pointer": 3208130,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 7,
@@ -8911,6 +9431,7 @@
         "stage": 6,
         "room": 7,
         "pointer": 3124478,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 8,
@@ -8930,6 +9451,7 @@
         "stage": 6,
         "room": 8,
         "pointer": 3110431,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 9,
@@ -8957,6 +9479,7 @@
         "stage": 6,
         "room": 9,
         "pointer": 3139832,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 10,
@@ -8976,6 +9499,7 @@
         "stage": 6,
         "room": 10,
         "pointer": 3119624,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 11,
@@ -8995,6 +9519,7 @@
         "stage": 6,
         "room": 11,
         "pointer": 3141139,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 12,
@@ -9014,6 +9539,7 @@
         "stage": 6,
         "room": 12,
         "pointer": 3123788,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 13,
@@ -9033,6 +9559,7 @@
         "stage": 6,
         "room": 13,
         "pointer": 3143741,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 14,
@@ -9052,6 +9579,7 @@
         "stage": 6,
         "room": 14,
         "pointer": 3120319,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 15,
@@ -9071,6 +9599,7 @@
         "stage": 6,
         "room": 15,
         "pointer": 3135238,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 16,
@@ -9090,6 +9619,7 @@
         "stage": 6,
         "room": 16,
         "pointer": 3123096,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 17,
@@ -9109,6 +9639,7 @@
         "stage": 6,
         "room": 17,
         "pointer": 3144389,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 18,
@@ -9128,6 +9659,7 @@
         "stage": 6,
         "room": 18,
         "pointer": 3121014,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 19,
@@ -9147,6 +9679,7 @@
         "stage": 6,
         "room": 19,
         "pointer": 3017228,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 20,
@@ -9166,6 +9699,7 @@
         "stage": 6,
         "room": 20,
         "pointer": 3121709,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 21,
@@ -9185,6 +9719,7 @@
         "stage": 6,
         "room": 21,
         "pointer": 3145036,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 22,
@@ -9204,6 +9739,7 @@
         "stage": 6,
         "room": 22,
         "pointer": 3116830,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 23,
@@ -9223,6 +9759,7 @@
         "stage": 6,
         "room": 23,
         "pointer": 3045263,
+        "animal_pointers": [],
         "default_exits": [
             {
                 "room": 24,
@@ -9244,6 +9781,7 @@
         "stage": 6,
         "room": 24,
         "pointer": 2889389,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg 6 - Complete"
@@ -9256,6 +9794,7 @@
         "stage": 7,
         "room": 0,
         "pointer": 2980207,
+        "animal_pointers": [],
         "default_exits": [],
         "locations": [
             "Iceberg - Boss (Dedede) Purified",

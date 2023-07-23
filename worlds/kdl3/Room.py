@@ -23,8 +23,9 @@ class Room(Region):
     room: int = 0
     music: int = 0
     default_exits: typing.List[typing.Dict[str, typing.Union[int, typing.List[str]]]]
+    animal_pointers: typing.List[int]
 
-    def __init__(self, name, player, multiworld, hint, level, stage, room, pointer, music, default_exits):
+    def __init__(self, name, player, multiworld, hint, level, stage, room, pointer, music, default_exits, animal_pointers):
         super().__init__(name, player, multiworld, hint)
         self.level = level
         self.stage = stage
@@ -32,33 +33,14 @@ class Room(Region):
         self.pointer = pointer
         self.music = music
         self.default_exits = default_exits
+        self.animal_pointers = animal_pointers
 
     def patch(self, rom: "RomData"):
         rom.write_byte(self.pointer + 2, self.music)
         animals = [x.item for x in self.locations if "Animal" in x.name]
         if len(animals) > 0:
-            entity_pointer = self.pointer + 168
-            while unpack("H", rom.read_bytes(entity_pointer, 2))[0] != 0xFFFF:
-                entity_pointer += 2
-            while unpack("H", rom.read_bytes(entity_pointer, 2))[0] != 0xFFFF:
-                entity_pointer += 2
-            # we have to move two lists before reaching entities
-            entity_count = unpack("H", rom.read_bytes(entity_pointer, 2))[0]
-            entity_pointer += 2
-            if entity_count == 0xFFFF:
-                return
-            entity_pointer += 2  # we don't need size
-            current_animal = 0
-            for _ in range(entity_count):
-                entity_pointer += 4
-                entity_type = struct.unpack("H", rom.read_bytes(entity_pointer, 2))[0]
-                entity_pointer += 2
-                if entity_type == 0x02:
-                    entity_pointer += 1  # don't need idx
-                    rom.write_byte(entity_pointer, animal_map[animals[current_animal]])
-                    entity_pointer += 1
-                else:
-                    entity_pointer += 2
+            for current_animal, address in zip(animals, self.animal_pointers):
+                rom.write_byte(address + 7, animal_map[animals[current_animal]])
 
 
 room_data = [
