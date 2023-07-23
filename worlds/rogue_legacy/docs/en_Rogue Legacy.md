@@ -52,6 +52,10 @@ As an alternative objective to beating the 4 main bosses, you can turn Rogue Leg
 to find enough "fountain pieces" to open the door. You can also combine it with the normal goal if you still want to be
 required to defeat each boss.
 
+## How do I set this up?
+
+Check out the [setup guides here](/tutorial/#Rogue%20Legacy) for more information.
+
 ## What do I do if I encounter a bug with the game?
 
 Drop a bug report in the Archipelago Discord server and ping **@thephar** in the created thread. Be sure to include
