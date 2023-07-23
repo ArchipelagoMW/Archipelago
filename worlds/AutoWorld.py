@@ -101,7 +101,7 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
     try:
         ret = method(*args)
     except Exception as e:
-        raise Exception(f"Exception in {method} for player {player}, named {multiworld.player_name[player]}.") from e
+        raise e.__class__(f"Exception in {method} for player {player}, named {multiworld.player_name[player]}.") from e
     else:
         return ret
 
