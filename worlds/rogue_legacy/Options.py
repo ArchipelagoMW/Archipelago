@@ -402,6 +402,23 @@ class IncludeTraps(Toggle):
     display_name = "Include Traps"
 
 
+class RLDeathLink(DeathLink):
+    """
+    When you die, everyone dies. Of course, the reverse is true too.
+
+    "Disabled": You will start with DeathLink disabled, but can turn it on in-game.
+    "Enabled": You will start with DeathLink enabled, but can turn it off in-game.
+    "Forced Disabled": You will start with DeathLink disabled and cannot turn it on in-game.
+    "Forced Enabled": You will start with DeathLink enabled and cannot turn it off in-game.
+    """
+    display_name = "Death Link"
+    option_disabled = 0
+    option_enabled = 1
+    option_forced_disabled = 2
+    option_forced_enabled = 3
+    default = 0
+
+
 options_table: Dict[str, type(Option)] = {
     "start_inventory": StartInventoryPool,
     "starting_gender": StartingGender,
@@ -440,5 +457,5 @@ options_table: Dict[str, type(Option)] = {
     "fountain_pieces_percentage": FountainPiecesRequired,
     "include_traps": IncludeTraps,
     "available_classes": AvailableClasses,
-    "death_link": DeathLink,
+    "death_link": RLDeathLink,
 }
