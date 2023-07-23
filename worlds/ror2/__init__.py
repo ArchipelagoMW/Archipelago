@@ -188,16 +188,9 @@ class RiskOfRainWorld(World):
         options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "total_locations",
                                       "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                       "scanner_per_stage", "altars_per_stage", "total_revivals", "start_with_revive",
-                                      "final_stage_death", "death_link")
-        cased_dict = {}
-        for key, value in options_dict.items():
-            split_name = [name.title() for name in key.split("_")]
-            split_name[0] = split_name[0].lower()
-            new_name = "".join(split_name)
-            cased_dict[new_name] = value
-
+                                      "final_stage_death", "death_link", casing="camel")
         return {
-            **cased_dict,
+            **options_dict,
             "seed": "".join(self.multiworld.per_slot_randoms[self.player].choice(string.digits) for _ in range(16)),
         }
 
