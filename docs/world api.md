@@ -142,7 +142,10 @@ Other classifications include
 * `filler`: a regular item or trash item
 * `useful`: generally quite useful, but not required for anything logical
 * `trap`: negative impact on the player
-* `skip_balancing`: add to `progression` to skip balancing; e.g. currency or tokens
+* `skip_balancing`: denotes that an item should not be moved to an earlier sphere for the purpose of balancing (to be
+  combined with `progression`; see below)
+* `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
+  will not be moved around by progression balancing; used, e.g., for currency or tokens
 
 ### Events
 

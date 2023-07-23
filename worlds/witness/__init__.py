@@ -1,7 +1,7 @@
 """
 Archipelago init file for The Witness
 """
-import typing
+from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
@@ -78,7 +78,7 @@ class WitnessWorld(World):
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
             'precompleted_puzzles': [int(h, 16) for h in
                                      self.player_logic.EXCLUDED_LOCATIONS | self.player_logic.PRECOMPLETED_LOCATIONS],
-            'entity_to_name': self.static_logic.ENTITY_ID_TO_NAME,
+            'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
 
     def generate_early(self):
@@ -113,7 +113,7 @@ class WitnessWorld(World):
         pool_size: int = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
 
         # Fill mandatory items and remove precollected and/or starting items from the pool.
-        item_pool: dict[str, int] = self.items.get_mandatory_items()
+        item_pool: Dict[str, int] = self.items.get_mandatory_items()
 
         for precollected_item_name in [item.name for item in self.multiworld.precollected_items[self.player]]:
             if precollected_item_name in item_pool:
@@ -178,13 +178,10 @@ class WitnessWorld(World):
                     item_pool[random_early_item] -= 1
 
         # Generate the actual items.
-        for item_name, quantity in item_pool.items():
+        for item_name, quantity in sorted(item_pool.items()):
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
-
-        # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        self.multiworld.itempool = sorted(self.multiworld.itempool, key=lambda item: item.name)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
@@ -253,7 +250,7 @@ class WitnessLocation(Location):
     game: str = "The Witness"
     check_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent, ch_hex: int = -1):
+    def __init__(self, player: int, name: str, address: Optional[int], parent, ch_hex: int = -1):
         super().__init__(player, name, address, parent)
         self.check_hex = ch_hex
 

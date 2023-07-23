@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import abc
 import logging
 from copy import deepcopy
@@ -6,10 +7,12 @@ from dataclasses import dataclass
 import functools
 import math
 import numbers
-import typing
 import random
+import typing
+from copy import deepcopy
 
-from schema import Schema, And, Or, Optional
+from schema import And, Optional, Or, Schema
+
 from Utils import get_fuzzy_results
 
 if typing.TYPE_CHECKING:
@@ -978,6 +981,7 @@ class DeathLink(Toggle):
 
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
+    display_name = "Item Links"
     default = []
     schema = Schema([
         {

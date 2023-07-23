@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict, List
 
 from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
     get_vanilla_logic
@@ -16,7 +17,7 @@ class ItemCategory(Enum):
     EVENT = 7
 
 
-CATEGORY_NAME_MAPPINGS: dict[str, ItemCategory] = {
+CATEGORY_NAME_MAPPINGS: Dict[str, ItemCategory] = {
     "Symbols:": ItemCategory.SYMBOL,
     "Doors:": ItemCategory.DOOR,
     "Lasers:": ItemCategory.LASER,
@@ -35,12 +36,12 @@ class ItemDefinition:
 
 @dataclass(frozen=True)
 class ProgressiveItemDefinition(ItemDefinition):
-    child_item_names: list[str]
+    child_item_names: List[str]
 
 
 @dataclass(frozen=True)
 class DoorItemDefinition(ItemDefinition):
-    panel_id_hexes: list[str]
+    panel_id_hexes: List[str]
 
 
 @dataclass(frozen=True)
@@ -178,8 +179,8 @@ class StaticWitnessLogicObj:
 
 class StaticWitnessLogic:
     # Item data parsed from WitnessItems.txt
-    all_items: dict[str, ItemDefinition] = {}
-    _progressive_lookup: dict[str, str] = {}
+    all_items: Dict[str, ItemDefinition] = {}
+    _progressive_lookup: Dict[str, str] = {}
 
     ALL_REGIONS_BY_NAME = dict()
     STATIC_CONNECTIONS_BY_REGION_NAME = dict()
@@ -200,7 +201,7 @@ class StaticWitnessLogic:
         Parses currently defined items from WitnessItems.txt
         """
 
-        lines: list[str] = get_items()
+        lines: List[str] = get_items()
         current_category: ItemCategory = ItemCategory.SYMBOL
 
         for line in lines:
@@ -217,7 +218,7 @@ class StaticWitnessLogic:
 
             item_code = int(line_split[0])
             item_name = line_split[1]
-            arguments: list[str] = line_split[2].split(",") if len(line_split) >= 3 else []
+            arguments: List[str] = line_split[2].split(",") if len(line_split) >= 3 else []
 
             if current_category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 # Map doors to IDs.
