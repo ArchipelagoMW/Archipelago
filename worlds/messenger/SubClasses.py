@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional, TYPE_CHECKING, cast
 
-from BaseClasses import Region, Location, Item, ItemClassification, CollectionState
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from .Constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .Options import Goal
-from .Regions import REGIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
+from .Regions import MEGA_SHARDS, REGIONS, SEALS
+from .Shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -29,7 +29,8 @@ class MessengerRegion(Region):
             locations += [seal_loc for seal_loc in SEALS[self.name]]
         if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
             locations += [shard for shard in MEGA_SHARDS[self.name]]
-        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None for loc in locations}
+        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None
+                    for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
         world.multiworld.regions.append(self)
 
@@ -51,15 +52,19 @@ class MessengerShopLocation(MessengerLocation):
         # short circuit figurines which all require demon's bane be purchased, but nothing else
         if "Figurine" in name:
             return world.figurine_prices[name] +\
-                world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost
+                cast(MessengerShopLocation, world.multiworld.get_location("The Shop - Demon's Bane", self.player)).cost
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:
             prereq_cost = 0
             if isinstance(shop_data.prerequisite, set):
                 for prereq in shop_data.prerequisite:
-                    prereq_cost += world.multiworld.get_location(f"The Shop - {prereq}", self.player).cost
+                    prereq_cost +=\
+                        cast(MessengerShopLocation,
+                             world.multiworld.get_location(prereq, self.player)).cost
             else:
-                prereq_cost += world.multiworld.get_location(f"The Shop - {shop_data.prerequisite}", self.player).cost
+                prereq_cost +=\
+                    cast(MessengerShopLocation,
+                         world.multiworld.get_location(shop_data.prerequisite, self.player)).cost
             return world.shop_prices[name] + prereq_cost
         return world.shop_prices[name]
 
@@ -87,4 +92,3 @@ class MessengerItem(Item):
         else:
             item_class = ItemClassification.filler
         super().__init__(name, item_class, item_id, player)
-
