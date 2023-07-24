@@ -40,7 +40,7 @@ class DOOM1993World(World):
     option_definitions = Options.options
     game = "DOOM 1993"
     web = DOOM1993Web()
-    data_version = 2
+    data_version = 3
     required_client_version = (0, 3, 9)
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
@@ -52,7 +52,8 @@ class DOOM1993World(World):
     starting_level_for_episode: List[str] = [
         "Hangar (E1M1)",
         "Deimos Anomaly (E2M1)",
-        "Hell Keep (E3M1)"
+        "Hell Keep (E3M1)",
+        "Hell Beneath (E4M1)"
     ]
 
     # Item ratio that scales depending on episode count. These are the ratio for 3 episode.
@@ -71,7 +72,7 @@ class DOOM1993World(World):
     }
 
     def __init__(self, world: MultiWorld, player: int):
-        self.included_episodes = [1, 1, 1]
+        self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
 
         super().__init__(world, player)
@@ -81,7 +82,7 @@ class DOOM1993World(World):
 
     def generate_early(self):
         # Cache which episodes are included
-        for i in range(3):
+        for i in range(4):
             self.included_episodes[i] = getattr(self.multiworld, f"episode{i + 1}")[self.player].value
 
         # If no episodes selected, select Episode 1
@@ -160,11 +161,6 @@ class DOOM1993World(World):
         item_id: int = self.item_name_to_id[name]
         return DOOM1993Item(name, Items.item_table[item_id]["classification"], item_id, self.player)
 
-    def place_locked_item_in_locations(self, item_name, locations):
-        location = self.multiworld.random.choice(locations)
-        self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(item_name))
-        self.location_count -= 1
-
     def create_items(self):
         is_only_first_episode: bool = self.get_episode_count() == 1 and self.included_episodes[0]
         itempool: List[DOOM1993Item] = []
@@ -183,9 +179,6 @@ class DOOM1993World(World):
 
             if item["name"] in {"BFG9000", "Plasma Gun"} and is_only_first_episode:
                 continue  # Don't include those guns if only first episode
-
-            if item["name"] in {"Warrens (E3M9) - Blue skull key", "Halls of the Damned (E2M6) - Yellow skull key"}:
-                continue
 
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
@@ -207,24 +200,6 @@ class DOOM1993World(World):
 
             self.multiworld.get_location(loc_name, self.player).place_locked_item(self.create_item(item_name))
             self.location_count -= 1
-
-        # Special case for E2M6 and E3M8, where you enter a normal door then get stuck behind with a key door.
-        # We need to put the key in the locations available behind this door.
-        if self.included_episodes[1]:
-            self.place_locked_item_in_locations("Halls of the Damned (E2M6) - Yellow skull key", [
-                "Halls of the Damned (E2M6) - Yellow skull key",
-                "Halls of the Damned (E2M6) - Partial invisibility 2"
-            ])
-        if self.included_episodes[2]:
-            self.place_locked_item_in_locations("Warrens (E3M9) - Blue skull key", [
-                "Warrens (E3M9) - Rocket launcher",
-                "Warrens (E3M9) - Rocket launcher 2",
-                "Warrens (E3M9) - Partial invisibility",
-                "Warrens (E3M9) - Invulnerability",
-                "Warrens (E3M9) - Supercharge",
-                "Warrens (E3M9) - Berserk",
-                "Warrens (E3M9) - Chaingun"
-            ])
 
         # Give starting levels right away
         for i in range(len(self.included_episodes)):
@@ -264,7 +239,7 @@ class DOOM1993World(World):
         remaining_loc = self.location_count - len(itempool)
         ep_count = self.get_episode_count()
 
-        # Was balanced for 3 episodes
+        # Was balanced for 3 episodes (We added 4th episode, but keep same ratio)
         count = min(remaining_loc, max(1, int(round(self.items_ratio[item_name] * ep_count / 3))))
         if count == 0:
             logger.warning("Warning, no ", item_name, " will be placed.")
@@ -274,4 +249,13 @@ class DOOM1993World(World):
             itempool.append(self.create_item(item_name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        slot_data = {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+
+        # E2M6 and E3M9 each have one way keydoor. You can enter, but required the keycard to get out.
+        # We used to force place the keycard behind those doors. Limiting the randomness for those items. A change
+        # was made to make those specific doors 2-ways keydoors. So the keycards are not shuffled in the pool like the
+        # rest. The client needs to know about this so it can modify the door. If the multiworld was generated with
+        # an older version, the player would end up stuck.
+        slot_data["two_ways_keydoors"] = True
+
+        return slot_data
