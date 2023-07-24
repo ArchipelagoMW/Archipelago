@@ -88,7 +88,7 @@ CreateTextOAM:
 
 ; Copy text sprites into the sprite table. On encountering 0xFE, blank spaces
 ; will be copied into the remaining space.
-; Parameters:
+; Arguments:
 ;   r0: Pointer to 0xFE-terminated string
 ;   r1: Pointer to first letter destination
 ;   r2: Number of characters to copy.
@@ -150,6 +150,29 @@ LoadSpriteCharacter:
     mov pc, lr
 .pool
 
+
+; Count up to the next 0xFE byte.
+; Arguments:
+;  r0: Pointer to a WL4 encoded, 0xFE-terminated string
+; Returns:
+;  r0: The length of the string
+StrLen:
+    mov r1, #0
+
+@@Next:
+    ldrb r2, [r0]
+    cmp r2, #0xFE
+    beq @@Return
+    add r0, #1
+    add r1, #1
+    b @@Next
+
+@@Return:
+    mov r0, r1
+    mov pc, lr
+.pool
+
+
 .align 4
 LetterToSpriteTile:
     .word Text8x8_0, Text8x8_1, Text8x8_2, Text8x8_3, Text8x8_4, Text8x8_5, Text8x8_6, Text8x8_7
@@ -185,10 +208,11 @@ LetterToSpriteTile:
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
 
-StrItemSent: .string "Sent"
-StrItemTo: .string "to"
-StrItemReceived: .string "Received"
-StrItemFrom: .string "from"
+StrScreenFiller: .fill (TextBoxCharCount - 9), 0xFF
+StrItemSent: .string "Sent "
+StrItemTo: .string " to "
+StrItemReceived: .string "Received "
+StrItemFrom: .string " from "
 
 ; The ExtData tables will point into this area, which is intended to take up the
 ; rest of the space in the ROM.

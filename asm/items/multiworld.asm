@@ -86,7 +86,7 @@ LoadReceivedText:
     ldr r1, =TilesReceived8
     mov r2, #8
     bl LoadSpriteString
-    ldr r0, =StrItemFrom
+    ldr r0, =StrItemFrom + 1  ; Skip leading space
     ldr r1, =TilesFrom4
     mov r2, #4
     bl LoadSpriteString

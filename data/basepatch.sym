@@ -26,6 +26,8 @@
 0300189C wario_ucmiss
 03001910 warioheart
 030019F6 uswarstopflg
+03003C39 ucseldemoseq
+03004A30 usmojicount
 03006280 hasfullhealthitem
 03006281 incomingitemid
 03006282 multiworldstate
@@ -110,6 +112,7 @@
 084045E8 hasjewel2tile
 08404608 hasjewel3tile
 08404628 hasjewel4tile
+0868B15C savetutorialtilemap
 0869FC88 text8x8_0
 0869FCA8 text8x8_1
 0869FCC8 text8x8_2
@@ -193,13 +196,18 @@
 0879072E settreasurepalette
 08790758 aplogoobj
 08790760 aplogoanm
-0879076E createtextoam
-087907F8 loadspritestring
-0879082C loadspritecharacter
-08790850 lettertospritetile
-08790C50 stritemsent
-08790C55 stritemto
-08790C58 stritemreceived
-08790C61 stritemfrom
-08790C68 multiworldstringdump
+0879076E resultsscreenshowitems
+08790794 resultsscreenmessagestate
+087907E0 resultsscreenshownextitem
+087908FA createtextoam
+08790984 loadspritestring
+087909B8 loadspritecharacter
+087909DC strlen
+087909F0 lettertospritetile
+08790DF0 strscreenfiller
+08790E2D stritemsent
+08790E33 stritemto
+08790E38 stritemreceived
+08790E42 stritemfrom
+08790E4C multiworldstringdump
 

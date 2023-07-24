@@ -6,7 +6,6 @@
 .definelabel CurrentRoomId, 0x3000024
 .definelabel ucFlashLoop, 0x3000044
 .definelabel ucTimeUp, 0x3000047
-.definelabel OamBuf, 0x3001444
 .definelabel EntityLeftOverStateList, 0x3000564
 .definelabel CurrentEnemyData, 0x3000A24
 .definelabel LevelStatusTable, 0x3000A68
@@ -19,6 +18,7 @@
 .definelabel HasKeyzer, 0x3000C0C
 .definelabel sGameSeq, 0x3000C3C
 .definelabel GlobalTimer, 0x3000C41
+.definelabel OamBuf, 0x3001444
 .definelabel KeyPressContinuous, 0x3001844
 .definelabel KeyPressPrevious, 0x3001846
 .definelabel usTrg_KeyPress1Frame, 0x3001848
@@ -27,6 +27,8 @@
 .definelabel Wario_ucMiss, 0x300189C
 .definelabel WarioHeart, 0x3001910
 .definelabel usWarStopFlg, 0x30019F6
+.definelabel ucSeldemoSeq, 0x3003C39
+.definelabel usMojiCount, 0x3004A30  ; ???
 
 ; I/O Registers
 .definelabel REG_DMA3SAD, 0x40000D4
@@ -80,3 +82,4 @@
 .definelabel HasJewel3Tile, 0x8404608
 .definelabel HasJewel4Tile, 0x8404628
 .definelabel EmptyCDTile, 0x8400FA8
+.definelabel SaveTutorialTilemap, 0x868B15C

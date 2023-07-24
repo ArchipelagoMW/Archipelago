@@ -30,6 +30,7 @@ DeathLinkFlag: .byte 0
 .include "asm/routines.asm"
 .include "asm/patches.asm"
 .include "asm/graphics.asm"
-.include "asm/strings.asm"
+.include "asm/messages/textboxes.asm"
+.include "asm/messages/strings.asm"
 
 .close
