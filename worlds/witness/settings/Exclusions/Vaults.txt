@@ -17,6 +17,7 @@ Disabled Locations:
 0x03549
 0x0354F
 0x03545
+0x03505
 
 Precompleted Locations:
 0x339B6
