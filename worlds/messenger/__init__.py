@@ -80,7 +80,7 @@ class MessengerWorld(World):
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
-        
+
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:
@@ -121,7 +121,8 @@ class MessengerWorld(World):
                 logging.warning(f"Not enough locations for total seals setting "
                                 f"({self.multiworld.total_seals[self.player].value}). Adjusting to {total_seals}")
                 self.total_seals = total_seals
-            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+            self.required_seals =\
+                int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):

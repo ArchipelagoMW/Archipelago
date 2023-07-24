@@ -89,7 +89,7 @@ def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str
 
     remaining_slots = [item for item in [*SHOP_ITEMS, *FIGURINES] if item not in shop_price_planned.value]
     for shop_item in remaining_slots:
-        shop_data = SHOP_ITEMS.get(shop_item, FIGURINES.get(shop_item))
+        shop_data = SHOP_ITEMS.get(shop_item, FIGURINES[shop_item])
         price = world.random.randint(shop_data.min_price, shop_data.max_price)
         adjusted_price = min(int(price * shop_price_mod / 100), 5000)
         if "Figurine" in shop_item:

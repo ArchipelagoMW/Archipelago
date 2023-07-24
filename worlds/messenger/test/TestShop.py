@@ -49,7 +49,7 @@ class ShopCostMinTest(ShopCostTest):
         "shop_price": "random",
         "shuffle_seals": "false",
     }
-    
+
     def testShopRules(self) -> None:
         if self.multiworld.worlds[self.player].total_shards:
             super().testShopRules()
