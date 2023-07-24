@@ -23,6 +23,7 @@
     "Puzzle Solved Gallows",
     "Puzzle Solved Mastermind",
     "Puzzle Solved Marble Flipper",
+    "Puzzle Solved Skull Dial Door",
     "Flashback Memory Obtained Beth's Ghost",
     "Flashback Memory Obtained Merrick's Ghost",
     "Flashback Memory Obtained Windlenot's Ghost",
@@ -67,7 +68,8 @@
     "Puzzle Hint Found: Gallows Information Plaque",
     "Puzzle Hint Found: Mastermind Information Plaque",
     "Puzzle Hint Found: Elevator Writing",
-    "Puzzle Hint Found: Tiki Security Camera"
+    "Puzzle Hint Found: Tiki Security Camera",
+    "Puzzle Hint Found: Tape Recorder Heard"
   ],
   "locations_by_region": {
     "Outside": [
@@ -97,7 +99,8 @@
     "Office": [
       "Flashback Memory Obtained Scrapbook",
       "Accessible: Storage: Desk Drawer",
-      "Puzzle Hint Found: Atlantis Map"
+      "Puzzle Hint Found: Atlantis Map",
+      "Puzzle Hint Found: Tape Recorder Heard"
     ],
     "Workshop": [
       "Puzzle Solved Workshop Drawers",
@@ -227,7 +230,8 @@
       "Accessible: Storage: Janitor Closet"
     ],
     "Skull Dial Bridge": [
-      "Accessible: Storage: Skull Bridge"
+      "Accessible: Storage: Skull Bridge",
+      "Puzzle Solved Skull Dial Door"
     ]
   },
   "future locations": [

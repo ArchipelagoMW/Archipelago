@@ -110,6 +110,7 @@ def get_rules_lookup(player: int):
             "To Projector Room": lambda state: state.has("Key for Projector Room", player),
             "To Generator": lambda state: state.has("Key for Generator Room", player),
             "To Egypt From Lobby": lambda state: state.has("Key for Egypt Room", player),
+            "To Janitor Closet": lambda state: state.has("Key for Janitor Closet", player),
             "To Tiki From Burial": lambda state: state.has("Key for Tiki Room", player),
             "To Inventions From UFO": lambda state: state.has("Key for UFO Room", player),
             "To UFO From Inventions": lambda state: state.has("Key for UFO Room", player),
