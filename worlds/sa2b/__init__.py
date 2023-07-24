@@ -586,8 +586,8 @@ class SA2BWorld(World):
         hint_data[self.player] = er_hint_data
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
-        if world.get_game_players("Sonic Adventure 2 Battle"):
+    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
+        if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)
 

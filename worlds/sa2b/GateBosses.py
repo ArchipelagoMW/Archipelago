@@ -1,4 +1,5 @@
 import typing
+from BaseClasses import MultiWorld
 
 speed_characters_1 = "Sonic vs Shadow 1"
 speed_characters_2 = "Sonic vs Shadow 2"
@@ -59,17 +60,17 @@ def boss_has_requirement(boss: int):
     return boss >= len(gate_bosses_no_requirements_table)
 
 
-def get_gate_bosses(world, player: int):
+def get_gate_bosses(multiworld: MultiWorld, player: int):
     selected_bosses: typing.List[int] = []
     boss_gates: typing.List[int] = []
     available_bosses: typing.List[str] = list(gate_bosses_no_requirements_table.keys())
-    world.random.shuffle(available_bosses)
+    multiworld.random.shuffle(available_bosses)
     halfway = False
 
-    for x in range(world.number_of_level_gates[player]):
-        if (not halfway) and ((x + 1) / world.number_of_level_gates[player]) > 0.5:
+    for x in range(multiworld.number_of_level_gates[player]):
+        if (not halfway) and ((x + 1) / multiworld.number_of_level_gates[player]) > 0.5:
             available_bosses.extend(gate_bosses_with_requirements_table)
-            world.random.shuffle(available_bosses)
+            multiworld.random.shuffle(available_bosses)
             halfway = True
         selected_bosses.append(all_gate_bosses_table[available_bosses[0]])
         boss_gates.append(x + 1)

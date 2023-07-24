@@ -1634,16 +1634,16 @@ chao_race_prize_set = [
 ]
 
 
-def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+def setup_locations(multiworld: MultiWorld, player: int, mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
     location_table = {}
     chao_location_table = {}
 
-    if world.goal[player] == 3:
-        if world.kart_race_checks[player] == 2:
+    if multiworld.goal[player] == 3:
+        if multiworld.kart_race_checks[player] == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
             location_table.update({**kart_race_expert_location_table})
-        elif world.kart_race_checks[player] == 1:
+        elif multiworld.kart_race_checks[player] == 1:
             location_table.update({**kart_race_mini_location_table})
         location_table.update({**grand_prix_location_table})
     else:
@@ -1659,95 +1659,95 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
 
         location_table.update({**upgrade_location_table})
 
-        if world.keysanity[player]:
+        if multiworld.keysanity[player]:
             location_table.update({**chao_key_location_table})
 
-        if world.whistlesanity[player].value == 1:
+        if multiworld.whistlesanity[player].value == 1:
             location_table.update({**pipe_location_table})
-        elif world.whistlesanity[player].value == 2:
+        elif multiworld.whistlesanity[player].value == 2:
             location_table.update({**hidden_whistle_location_table})
-        elif world.whistlesanity[player].value == 3:
+        elif multiworld.whistlesanity[player].value == 3:
             location_table.update({**pipe_location_table})
             location_table.update({**hidden_whistle_location_table})
 
-        if world.beetlesanity[player]:
+        if multiworld.beetlesanity[player]:
             location_table.update({**beetle_location_table})
 
-        if world.omosanity[player]:
+        if multiworld.omosanity[player]:
             location_table.update({**omochao_location_table})
 
-        if world.animalsanity[player]:
+        if multiworld.animalsanity[player]:
             location_table.update({**animal_location_table})
 
-        if world.kart_race_checks[player] == 2:
+        if multiworld.kart_race_checks[player] == 2:
             location_table.update({**kart_race_beginner_location_table})
             location_table.update({**kart_race_standard_location_table})
             location_table.update({**kart_race_expert_location_table})
-        elif world.kart_race_checks[player] == 1:
+        elif multiworld.kart_race_checks[player] == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.goal[player].value in [0, 2, 4, 5, 6]:
+        if multiworld.goal[player].value in [0, 2, 4, 5, 6]:
             location_table.update({**final_boss_location_table})
-        elif world.goal[player].value in [7]:
+        elif multiworld.goal[player].value in [7]:
             location_table.update({**chaos_chao_location_table})
 
-        if world.goal[player].value in [1, 2]:
+        if multiworld.goal[player].value in [1, 2]:
             location_table.update({**green_hill_location_table})
 
-            if world.keysanity[player]:
+            if multiworld.keysanity[player]:
                 location_table.update({**green_hill_chao_location_table})
 
-            if world.animalsanity[player]:
+            if multiworld.animalsanity[player]:
                 location_table.update({**green_hill_animal_location_table})
 
-        if world.goal[player].value in [4, 5, 6]:
+        if multiworld.goal[player].value in [4, 5, 6]:
             location_table.update({**boss_rush_location_table})
 
-        if world.chao_race_difficulty[player].value >= 1:
+        if multiworld.chao_race_difficulty[player].value >= 1:
             chao_location_table.update({**chao_race_beginner_location_table})
-        if world.chao_race_difficulty[player].value >= 2:
+        if multiworld.chao_race_difficulty[player].value >= 2:
             chao_location_table.update({**chao_race_intermediate_location_table})
-        if world.chao_race_difficulty[player].value >= 3:
+        if multiworld.chao_race_difficulty[player].value >= 3:
             chao_location_table.update({**chao_race_expert_location_table})
 
-        if world.chao_karate_difficulty[player].value >= 1:
+        if multiworld.chao_karate_difficulty[player].value >= 1:
             chao_location_table.update({**chao_karate_beginner_location_table})
-        if world.chao_karate_difficulty[player].value >= 2:
+        if multiworld.chao_karate_difficulty[player].value >= 2:
             chao_location_table.update({**chao_karate_intermediate_location_table})
-        if world.chao_karate_difficulty[player].value >= 3:
+        if multiworld.chao_karate_difficulty[player].value >= 3:
             chao_location_table.update({**chao_karate_expert_location_table})
-        if world.chao_karate_difficulty[player].value >= 4:
+        if multiworld.chao_karate_difficulty[player].value >= 4:
             chao_location_table.update({**chao_karate_super_location_table})
 
         for key, value in chao_location_table.items():
             if key not in chao_race_prize_set:
-                if world.chao_stadium_checks[player] == "all":
+                if multiworld.chao_stadium_checks[player] == "all":
                     location_table[key] = value
             else:
                 location_table[key] = value
 
-        for index in range(1, world.chao_stats[player].value + 1):
-            if (index % world.chao_stats_frequency[player].value) == (world.chao_stats[player].value % world.chao_stats_frequency[player].value):
+        for index in range(1, multiworld.chao_stats[player].value + 1):
+            if (index % multiworld.chao_stats_frequency[player].value) == (multiworld.chao_stats[player].value % multiworld.chao_stats_frequency[player].value):
                 location_table[LocationName.chao_stat_swim_base    + str(index)] = chao_stat_swim_table[   LocationName.chao_stat_swim_base    + str(index)]
                 location_table[LocationName.chao_stat_fly_base     + str(index)] = chao_stat_fly_table[    LocationName.chao_stat_fly_base     + str(index)]
                 location_table[LocationName.chao_stat_run_base     + str(index)] = chao_stat_run_table[    LocationName.chao_stat_run_base     + str(index)]
                 location_table[LocationName.chao_stat_power_base   + str(index)] = chao_stat_power_table[  LocationName.chao_stat_power_base   + str(index)]
 
-                if world.chao_stats_stamina[player]:
+                if multiworld.chao_stats_stamina[player]:
                     location_table[LocationName.chao_stat_stamina_base + str(index)] = chao_stat_stamina_table[LocationName.chao_stat_stamina_base + str(index)]
 
-                if world.chao_stats_hidden[player]:
+                if multiworld.chao_stats_hidden[player]:
                     location_table[LocationName.chao_stat_luck_base         + str(index)] = chao_stat_luck_table[        LocationName.chao_stat_luck_base         + str(index)]
                     location_table[LocationName.chao_stat_intelligence_base + str(index)] = chao_stat_intelligence_table[LocationName.chao_stat_intelligence_base + str(index)]
 
-        if world.chao_animal_parts[player]:
+        if multiworld.chao_animal_parts[player]:
             location_table.update({**chao_animal_part_location_table})
 
-        if world.chao_kindergarten[player]:
+        if multiworld.chao_kindergarten[player]:
             location_table.update({**chao_kindergarten_location_table})
 
         for x in range(len(boss_gate_set)):
-            if x < world.number_of_level_gates[player].value:
+            if x < multiworld.number_of_level_gates[player].value:
                 location_table[boss_gate_set[x]] = boss_gate_location_table[boss_gate_set[x]]
 
     return location_table
