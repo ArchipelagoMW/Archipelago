@@ -42,4 +42,3 @@ class TestBackpackEarlyProgressive(SVTestBase):
 
     def test_progressive_backpack_is_in_early_pool(self):
         self.assertIn("Progressive Backpack", self.multiworld.early_items[1])
-        
