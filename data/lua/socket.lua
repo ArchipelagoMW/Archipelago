@@ -46,10 +46,10 @@ function get_socket_path()
     local pwd = (io.popen and io.popen("cd"):read'*l') or "."
 	return pwd .. "/" .. arch .. "/socket-" .. the_os .. "-" .. get_lua_version() .. "." .. ext
 end
-
+local lua_version = get_lua_version()
 local socket_path = get_socket_path()
 local socket = assert(package.loadlib(socket_path, "luaopen_socket_core"))()
-
+local event = event
 -- http://lua-users.org/wiki/ModulesTutorial
 local M = {}
 if setfenv then
@@ -59,6 +59,20 @@ else
 end
 
 M.socket = socket
+-- Bizhawk <= 2.8 has an issue where resetting the lua doesn't close the socket
+-- ...to get around this, we register an exit handler to close the socket first
+if lua_version == '5-1' then
+    local old_udp = socket.udp
+    function udp(self)
+        s = old_udp(self)
+        function close_socket(self)
+            s:close()
+        end
+        event.onexit(close_socket)
+        return s
+    end
+    socket.udp = udp
+end
 
 -----------------------------------------------------------------------------
 -- Exported auxiliar functions
