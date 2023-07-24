@@ -93,7 +93,7 @@ class MessengerWorld(World):
             for item in self.item_name_to_id
             if item not in
             {
-                "Power Seal", *NOTES,
+                "Power Seal", *NOTES, *FIGURINES,
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]

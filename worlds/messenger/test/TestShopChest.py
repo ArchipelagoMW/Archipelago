@@ -74,9 +74,9 @@ class MaxSealsNoShards(MessengerTestBase):
     }
 
     def testSealsAmount(self) -> None:
-        """Should set total seals to 57 since shards aren't shuffled."""
+        """Should set total seals to 70 since shards aren't shuffled."""
         self.assertEqual(self.multiworld.total_seals[self.player], 85)
-        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 57)
+        self.assertEqual(self.multiworld.worlds[self.player].total_seals, 70)
 
 
 class MaxSealsWithShards(MessengerTestBase):
