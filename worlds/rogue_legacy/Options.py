@@ -1,6 +1,6 @@
 from typing import Dict
 
-from Options import Choice, DeathLink, DefaultOnToggle, Option, OptionSet, Range, StartInventoryPool, Toggle
+from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, StartInventoryPool, Toggle
 
 
 class StartingGender(Choice):
@@ -402,7 +402,7 @@ class IncludeTraps(Toggle):
     display_name = "Include Traps"
 
 
-class RLDeathLink(DeathLink):
+class RLDeathLink(Choice):
     """
     When you die, everyone dies. Of course, the reverse is true too.
 
