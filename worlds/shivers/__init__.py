@@ -1,3 +1,5 @@
+import random
+
 from .Items import item_table, ShiversItem
 from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location
@@ -72,20 +74,40 @@ class ShiversWorld(World):
         # Add keys
         keys = [self.create_item(name) for name, data in item_table.items() if data.type == 'key']
 
+        #Add abilities
+        abilities = [self.create_item(name) for name, data in item_table.items() if data.type == 'ability']
+
         #Add Filler
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(10)]
         filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
 
+        #Place library escape items. Choose a location to place the escape item
+        library_region = self.multiworld.get_region("Library", self.player)
+        librarylocation = self.multiworld.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:")])
+        
+        #Roll for which escape items will be placed in the Library
+        library_random = random.randint(1, 3)
+        if library_random == 1: 
+            librarylocation.place_locked_item(self.create_item("Crawling"))
+
+            abilities = [ability for ability in abilities if ability.name != "Crawling"]
+        elif library_random == 2: 
+            librarylocation.place_locked_item(self.create_item("Key for Library Room"))
+            
+            keys = [key for key in keys if key.name != "Key for Library Room"]
+        elif library_random == 3: 
+            librarylocation.place_locked_item(self.create_item("Key for Three Floor Elevator"))
+            
+            librarylocationkeytwo = self.multiworld.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:") and loc != librarylocation])
+            librarylocationkeytwo.place_locked_item(self.create_item("Key for Egypt Room"))
+            
+            keys = [key for key in keys if key.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
+                
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
+        self.multiworld.itempool += abilities
         self.multiworld.itempool += filler
-
-        #Place crawling locally in the library to prevent softlock
-        librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
-        while librarylocation.name.startswith("Accessible: "):
-            librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
-        librarylocation.place_locked_item(self.create_item("Crawling"))
 
         #Lobby acess:
         if get_option_value(self.multiworld, self.player, "lobby_access") == 1:

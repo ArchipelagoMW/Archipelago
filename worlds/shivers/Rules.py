@@ -68,13 +68,6 @@ def metal_capturable(state: CollectionState, player: int) -> bool:
         and state.has("Metal Pot Bottom DUPE", player) \
         and state.has("Metal Pot Top DUPE", player)
 
-#def lightning_capturable(state: CollectionState, player: int) -> bool:
-#    return state.can_reach("Generator", "Region", player) \
-#        and state.has("Lightning Pot Bottom", player) \
-#        and state.has("Lightning Pot Top", player) \
-#        and state.has("Lightning Pot Bottom DUPE", player) \
-#        and state.has("Lightning Pot Top DUPE", player)
-
 def lightning_capturable(state: CollectionState, player: int) -> bool:
     return beths_body_available(state, player) \
         and state.can_reach("Generator", "Region", player) \
