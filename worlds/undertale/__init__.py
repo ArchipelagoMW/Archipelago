@@ -75,6 +75,12 @@ class UndertaleWorld(World):
             "rando_item_button": bool(self.multiworld.rando_item_button[self.player].value)
         }
 
+    def pre_fill(self):
+        if self.multiworld.get_location("Starting Key", self.player).item == None:
+            chosen_key_start = self.multiworld.per_slot_randoms[self.player].choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
+            self.multiworld.get_location("Starting Key", self.player).place_locked_item(self.create_item(chosen_key_start))
+            self.multiworld.itempool.remove(self.create_item(chosen_key_start))
+
     def create_items(self):
         self.multiworld.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
         self.multiworld.get_location("Alphys Date", self.player).place_locked_item(self.create_item("Alphys Date"))
