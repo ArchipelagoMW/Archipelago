@@ -101,7 +101,12 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
     try:
         ret = method(*args)
     except Exception as e:
-        raise e.__class__(f"Exception in {method} for player {player}, named {multiworld.player_name[player]}.") from e
+        message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
+        if sys.version_info >= (3, 11, 0):
+            e.add_note(message)  # PEP 678
+        else:
+            logging.error(message)
+        raise e
     else:
         return ret
 
