@@ -56,9 +56,6 @@ class MessengerShopLocation(MessengerLocation):
             prereq_cost = 0
             if isinstance(shop_data.prerequisite, set):
                 for prereq in shop_data.prerequisite:
-                    # Rejuvenative Spirit and Centered Mind have the same prereq and demon's bane requires both
-                    if prereq == "Centered Mind":
-                        pass
                     prereq_cost += world.multiworld.get_location(f"The Shop - {prereq}", self.player).cost()
             else:
                 prereq_cost += world.multiworld.get_location(f"The Shop - {shop_data.prerequisite}", self.player).cost()

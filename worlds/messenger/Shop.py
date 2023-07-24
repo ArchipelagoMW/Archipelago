@@ -47,7 +47,7 @@ SHOP_ITEMS: Dict[str, ShopData] = {
     "Second Wind":          ShopData("AIR_RECOVER", 20, 350, "Strike of the Ninja"),
     "Currents Master":      ShopData("SWIM_DASH", 100, 600, "Second Wind"),
     "Aerobatics Warrior":   ShopData("GLIDE_ATTACK", 300, 800, "Currents Master"),
-    "Demon's Bane":         ShopData("CHARGED_ATTACK", 400, 1000, {"Rejuvenative Spirit", "Centered Mind", "Aerobatics Warrior"}),
+    "Demon's Bane":         ShopData("CHARGED_ATTACK", 400, 1000, {"Rejuvenative Spirit", "Aerobatics Warrior"}),
     "Devil's Due":          ShopData("QUARBLE_DISCOUNT_50", 20, 200),
     "Time Sense":           ShopData("TIME_WARP", 20, 300),
     "Power Sense":          ShopData("POWER_SEAL", 100, 800, "Time Sense"),
