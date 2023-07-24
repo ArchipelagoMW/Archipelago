@@ -55,7 +55,7 @@ To completely remove *OC2-Modding*, navigate to your game's installation folder 
 
 2. Export your yaml file and use it to generate a new randomized game
 
-*For instructions on how to generate an Archipelago game, refer to the [Archipelago Web Guide](../../../../tutorial/Archipelago/using_website/en)*
+*For instructions on how to generate an Archipelago game, refer to the [Archipelago Setup Guide](../../../../tutorial/Archipelago/setup/en)*
 
 ## Joining a MultiWorld Game
 

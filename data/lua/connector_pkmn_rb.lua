@@ -57,19 +57,22 @@ function generateLocationsChecked()
 	events = uRange(EventFlagAddress, 0x140)
 	missables = uRange(MissableAddress, 0x20)
 	hiddenitems = uRange(HiddenItemsAddress, 0x0E)
+	rod = {u8(RodAddress)}
 	dexsanity = uRange(DexSanityAddress, 19)
-	rod = u8(RodAddress)
+	
 
 	data = {}
 
-	table.foreach(events, function(k, v) table.insert(data, v) end)
-	table.foreach(missables, function(k, v) table.insert(data, v) end)
-	table.foreach(hiddenitems, function(k, v) table.insert(data, v) end)
-	table.insert(data, rod)
+    categories = {events, missables, hiddenitems, rod}
+    if compat > 1 then
+        table.insert(categories, dexsanity)
+    end
+    for _, category in ipairs(categories) do
+        for _, v in ipairs(category) do 
+            table.insert(data, v) 
+        end
+    end
 
- 	if compat > 1 then
-	    table.foreach(dexsanity, function(k, v) table.insert(data, v) end)
-     end
     return data
 end
 
@@ -164,7 +167,7 @@ function receive()
 end
 
 function main()
-    if not checkBizhawkVersion() then
+    if not checkBizHawkVersion() then
         return
     end
     server, error = socket.bind('localhost', 17242)

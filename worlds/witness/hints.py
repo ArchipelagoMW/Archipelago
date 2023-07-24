@@ -25,8 +25,8 @@ joke_hints = [
     "Have you tried Ocarina of Time?\nOne of the biggest randomizers, big inspiration for this one's features!",
     "Have you tried Raft?\nHaven't you always wanted to explore the ocean surrounding this island?",
     "Have you tried Risk of Rain 2?\nI haven't either. But I hear it's incredible!",
-    "Have you tried Rogue Legacy?\nAfter solving so many puzzles it's the perfect way to rest your brain.",
-    "Have you tried Secret of Evermore?\nI haven't either But I hear it's great!",
+    "Have you tried Rogue Legacy?\nAfter solving so many puzzles it's the perfect way to rest your \"thinking\" brain.",
+    "Have you tried Secret of Evermore?\nI haven't either. But I hear it's great!",
     "Have you tried Slay the Spire?\nExperience the thrill of combat without needing fast fingers!",
     "Have you tried SMZ3?\nWhy play one incredible game when you can play 2 at once?",
     "Have you tried Starcraft 2?\nUse strategy and management to crush your enemies!",
@@ -48,6 +48,24 @@ joke_hints = [
     "there aren't many games more energetic.",
 
     "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
+
+    "Have you tried Adventure?\n...Holy crud, that game is 17 years older than me.",
+    "Have you tried Muse Dash?\nRhythm game with cute girls!\n(Maybe skip if you don't like the Jungle panels)",
+    "Have you tried Clique?\nIt's certainly a lot less complicated than this game!",
+    "Have you tried Bumper Stickers?\nDecades after its inception, people are still inventing unique twists on the match-3 genre.",
+    "Have you tried DLC Quest?\nI know you all like parody games.\nI got way too many requests to make a randomizer for \"The Looker\".",
+    "Have you tried Doom?\nI wonder if a smart fridge can connect to Archipelago.",
+    "Have you tried Kingdom Hearts II?\nI'll wait for you to name a more epic crossover.",
+    "Have you tried Link's Awakening DX?\nHopefully, Link won't be obsessed with circles when he wakes up.",
+    "Have you tried The Messenger?\nOld ideas made new again. It's how all art is made.",
+    "Have you tried Mega Man Battle Network 3?\nIt's a Mega Man RPG. How could you not want to try that?",
+    "Have you tried Noita?\nIf you like punishing yourself, you will like it.",
+    "Have you tried Stardew Valley?\nThe Farming game that gave a damn. It's so easy to lose hours and days to it...",
+    "Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of \"adventure\" in video games.",
+    "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
+    "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
+    "Have you tried Blasphemous?\nYou haven't? Blasphemy!\n...Sorry. You should try it, though!",
+    
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
     "Where are you right now?\nI'm at soup!\nWhat do you mean you're at soup?",
@@ -96,31 +114,30 @@ joke_hints = [
 
 
 def get_always_hint_items(multiworld: MultiWorld, player: int):
-    priority = [
+    always = [
         "Boat",
-        "Mountain Bottom Floor Final Room Entry (Door)",
-        "Caves Mountain Shortcut (Door)",
-        "Caves Swamp Shortcut (Door)",
         "Caves Exits to Main Island",
         "Progressive Dots",
     ]
 
     difficulty = get_option_value(multiworld, player, "puzzle_randomization")
     discards = is_option_enabled(multiworld, player, "shuffle_discarded_panels")
+    wincon = get_option_value(multiworld, player, "victory_condition")
 
     if discards:
         if difficulty == 1:
-            priority.append("Arrows")
+            always.append("Arrows")
         else:
-            priority.append("Triangles")
+            always.append("Triangles")
 
-    return priority
+    if wincon == 0:
+        always.append("Mountain Bottom Floor Final Room Entry (Door)")
+
+    return always
 
 
 def get_always_hint_locations(multiworld: MultiWorld, player: int):
     return {
-        "Swamp Purple Underwater",
-        "Shipwreck Vault Box",
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
         "Theater Eclipse EP",
@@ -131,6 +148,8 @@ def get_always_hint_locations(multiworld: MultiWorld, player: int):
 
 def get_priority_hint_items(multiworld: MultiWorld, player: int):
     priority = {
+        "Caves Mountain Shortcut (Door)",
+        "Caves Swamp Shortcut (Door)",
         "Negative Shapers",
         "Sound Dots",
         "Colored Dots",
@@ -140,9 +159,8 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
     }
 
     if is_option_enabled(multiworld, player, "shuffle_lasers"):
-        lasers = {
+        lasers = [
             "Symmetry Laser",
-            "Desert Laser",
             "Town Laser",
             "Keep Laser",
             "Swamp Laser",
@@ -152,21 +170,23 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
             "Quarry Laser",
             "Bunker Laser",
             "Shadows Laser",
-        }
+        ]
 
-        if get_option_value(multiworld, player, "doors") >= 2:
+        if get_option_value(multiworld, player, "shuffle_doors") >= 2:
             priority.add("Desert Laser")
-            lasers.remove("Desert Laser")
-            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 2))
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 5))
 
         else:
-            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 3))
+            lasers.append("Desert Laser")
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 6))
 
     return priority
 
 
 def get_priority_hint_locations(multiworld: MultiWorld, player: int):
     return {
+        "Swamp Purple Underwater",
+        "Shipwreck Vault Box",
         "Town RGB Room Left",
         "Town RGB Room Right",
         "Treehouse Green Bridge 7",
@@ -177,6 +197,7 @@ def get_priority_hint_locations(multiworld: MultiWorld, player: int):
         "Mountainside Discard",
         "Tunnels Theater Flowers EP",
         "Boat Shipwreck Green EP",
+        "Quarry Stoneworks Control Room Left",
     }
 
 
@@ -264,7 +285,8 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
 
     multiworld.per_slot_randoms[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
 
-    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+    remaining_hints = hint_amount - len(hints)
+    priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
 
     prog_items_in_this_world = sorted(list(prog_items_in_this_world))
     locations_in_this_world = sorted(list(loc_in_this_world))
@@ -272,18 +294,21 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
     multiworld.per_slot_randoms[player].shuffle(prog_items_in_this_world)
     multiworld.per_slot_randoms[player].shuffle(locations_in_this_world)
 
+    priority_hint_list = list(priority_hint_pairs.items())
+    multiworld.per_slot_randoms[player].shuffle(priority_hint_list)
+    for _ in range(0, priority_hint_amount):
+        next_priority_hint = priority_hint_list.pop()
+        loc = next_priority_hint[0]
+        item = next_priority_hint[1]
+
+        if item[1]:
+            hints.append((f"{item[0]} can be found at {loc}.", item[2]))
+        else:
+            hints.append((f"{loc} contains {item[0]}.", item[2]))
+
+    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+
     while len(hints) < hint_amount:
-        if priority_hint_pairs:
-            loc = multiworld.per_slot_randoms[player].choice(list(priority_hint_pairs.keys()))
-            item = priority_hint_pairs[loc]
-            del priority_hint_pairs[loc]
-
-            if item[1]:
-                hints.append((f"{item[0]} can be found at {loc}.", item[2]))
-            else:
-                hints.append((f"{loc} contains {item[0]}.", item[2]))
-            continue
-
         if next_random_hint_is_item:
             if not prog_items_in_this_world:
                 next_random_hint_is_item = not next_random_hint_is_item

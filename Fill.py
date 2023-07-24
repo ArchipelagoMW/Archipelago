@@ -39,8 +39,9 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
+    cleanup_required = False
 
-    swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
+    swapped_items: typing.Counter[typing.Tuple[int, str, bool]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
     for item in item_pool:
         reachable_items.setdefault(item.player, deque()).append(item)
@@ -84,25 +85,28 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             else:
                 # we filled all reachable spots.
                 if swap:
-                    # try swapping this item with previously placed items
-                    for (i, location) in enumerate(placements):
+                    # try swapping this item with previously placed items in a safe way then in an unsafe way
+                    swap_attempts = ((i, location, unsafe)
+                                     for unsafe in (False, True)
+                                     for i, location in enumerate(placements))
+                    for (i, location, unsafe) in swap_attempts:
                         placed_item = location.item
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
                         # number of times we will swap an individual item to prevent this
-                        swap_count = swapped_items[placed_item.player,
-                                                   placed_item.name]
+                        swap_count = swapped_items[placed_item.player, placed_item.name, unsafe]
                         if swap_count > 1:
                             continue
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item])
-                        # swap_state assumes we can collect placed item before item_to_place
+                        swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [])
+                        # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
+                        # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
+                        # to clean that up later, so there is a chance generation fails.
                         if (not single_player_placement or location.player == item_to_place.player) \
                                 and location.can_fill(swap_state, item_to_place, perform_access_check):
 
-                            # Verify that placing this item won't reduce available locations, which could happen with rules
-                            # that want to not have both items. Left in until removal is proven useful.
+                            # Verify placing this item won't reduce available locations, which would be a useless swap.
                             prev_state = swap_state.copy()
                             prev_loc_count = len(
                                 world.get_reachable_locations(prev_state))
@@ -117,12 +121,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                                 spot_to_fill = placements.pop(i)
 
                                 swap_count += 1
-                                swapped_items[placed_item.player,
-                                              placed_item.name] = swap_count
+                                swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
 
                                 reachable_items[placed_item.player].appendleft(
                                     placed_item)
                                 item_pool.append(placed_item)
+
+                                # cleanup at the end to hopefully get better errors
+                                cleanup_required = True
 
                                 break
 
@@ -143,6 +149,16 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill.event = item_to_place.advancement
             if on_place:
                 on_place(spot_to_fill)
+
+    if cleanup_required:
+        # validate all placements and remove invalid ones
+        state = sweep_from_pool(base_state, [])
+        for placement in placements:
+            if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
+                placement.item.location = None
+                unplaced_items.append(placement.item)
+                placement.item = None
+                locations.append(placement)
 
     if allow_excluded:
         # check if partial fill is the result of excluded locations, in which case retry

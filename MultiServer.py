@@ -3,9 +3,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import copy
-import functools
-import logging
-import zlib
 import collections
 import datetime
 import functools
@@ -41,7 +38,7 @@ import NetUtils
 import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType
+    SlotType, LocationStore
 
 min_client_version = Version(0, 1, 6)
 colorama.init()
@@ -155,14 +152,16 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
-    locations: typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
+    locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
+    location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
+    hints_used: typing.Dict[typing.Tuple[int, int], int]
     groups: typing.Dict[int, typing.Set[int]]
     save_version = 2
     stored_data: typing.Dict[str, object]
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
     slot_info: typing.Dict[int, NetworkSlot]
-
+    generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
@@ -190,8 +189,6 @@ class Context:
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
         self.allow_releases = {}
-        #                          player          location_id     item_id  target_player_id
-        self.locations = {}
         self.host = host
         self.port = port
         self.server_password = server_password
@@ -226,7 +223,7 @@ class Context:
         self.save_dirty = False
         self.tags = ['AP']
         self.games: typing.Dict[int, str] = {}
-        self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
+        self.minimum_client_versions: typing.Dict[int, Version] = {}
         self.seed_name = ""
         self.groups = {}
         self.group_collected: typing.Dict[int, typing.Set[int]] = {}
@@ -287,6 +284,7 @@ class Context:
         except websockets.ConnectionClosed:
             logging.exception(f"Exception during send_msgs, could not send {msg}")
             await self.disconnect(endpoint)
+            return False
         else:
             if self.log_network:
                 logging.info(f"Outgoing message: {msg}")
@@ -300,6 +298,7 @@ class Context:
         except websockets.ConnectionClosed:
             logging.exception("Exception during send_encoded_msgs")
             await self.disconnect(endpoint)
+            return False
         else:
             if self.log_network:
                 logging.info(f"Outgoing message: {msg}")
@@ -314,6 +313,7 @@ class Context:
             websockets.broadcast(sockets, msg)
         except RuntimeError:
             logging.exception("Exception during broadcast_send_encoded_msgs")
+            return False
         else:
             if self.log_network:
                 logging.info(f"Outgoing broadcast: {msg}")
@@ -384,15 +384,17 @@ class Context:
 
     def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
               use_embedded_server_options: bool):
+
         self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
-        if mdata_ver > Utils.version_tuple:
+        if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
-                               f"however this server is of version {Utils.version_tuple}")
+                               f"however this server is of version {version_tuple}")
+        self.generator_version = Version(*decoded_obj["version"])
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
+            self.minimum_client_versions[player] = max(Version(*version), min_client_version)
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
@@ -414,7 +416,7 @@ class Context:
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
         self.connect_names = decoded_obj['connect_names']
-        self.locations = decoded_obj['locations']
+        self.locations = LocationStore(decoded_obj.pop("locations"))  # pre-emptively free memory
         self.slot_data = decoded_obj['slot_data']
         for slot, data in self.slot_data.items():
             self.read_data[f"slot_data_{slot}"] = lambda data=data: data
@@ -758,7 +760,8 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
-        'version': Utils.version_tuple,
+        'version': version_tuple,
+        'generator_version': ctx.generator_version,
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
@@ -902,11 +905,7 @@ def release_player(ctx: Context, team: int, slot: int):
 
 def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
-    all_locations = collections.defaultdict(set)
-    for source_slot, location_data in ctx.locations.items():
-        for location_id, values in location_data.items():
-            if values[1] == slot:
-                all_locations[source_slot].add(location_id)
+    all_locations = ctx.locations.get_for_player(slot)
 
     ctx.broadcast_text_all("%s (Team #%d) has collected their items from other worlds."
                            % (ctx.player_names[(team, slot)], team + 1),
@@ -925,11 +924,7 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
 
 
 def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[int]:
-    items = []
-    for location_id in ctx.locations[slot]:
-        if location_id not in ctx.location_checks[team, slot]:
-            items.append(ctx.locations[slot][location_id][0])  # item ID
-    return sorted(items)
+    return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
 def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem):
@@ -977,13 +972,12 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             slots.add(group_id)
 
     seeked_item_id = item if isinstance(item, int) else ctx.item_names_for_game(ctx.games[slot])[item]
-    for finding_player, check_data in ctx.locations.items():
-        for location_id, (item_id, receiving_player, item_flags) in check_data.items():
-            if receiving_player in slots and item_id == seeked_item_id:
-                found = location_id in ctx.location_checks[team, finding_player]
-                entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
-                hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                                           item_flags))
+    for finding_player, location_id, item_id, receiving_player, item_flags \
+            in ctx.locations.find_item(slots, seeked_item_id):
+        found = location_id in ctx.location_checks[team, finding_player]
+        entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
+        hints.append(NetUtils.Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
+                                   item_flags))
 
     return hints
 
@@ -1555,15 +1549,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
-    return [location_id for
-            location_id in ctx.locations[slot] if
-            location_id in ctx.location_checks[team, slot]]
+    return ctx.locations.get_checked(ctx.location_checks, team, slot)
 
 
 def get_missing_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
-    return [location_id for
-            location_id in ctx.locations[slot] if
-            location_id not in ctx.location_checks[team, slot]]
+    return ctx.locations.get_missing(ctx.location_checks, team, slot)
 
 
 def get_client_points(ctx: Context, client: Client) -> int:
@@ -1865,7 +1855,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        async_start(self.ctx.server.ws_server._close())
+        self.ctx.server.ws_server.close()
         if self.ctx.shutdown_task:
             self.ctx.shutdown_task.cancel()
         self.ctx.exit_event.set()
@@ -2145,7 +2135,7 @@ async def console(ctx: Context):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    defaults = Utils.get_options()["server_options"]
+    defaults = Utils.get_options()["server_options"].as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
@@ -2206,7 +2196,7 @@ async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            async_start(ctx.server.ws_server._close())
+            ctx.server.ws_server.close()
             ctx.exit_event.set()
             if to_cancel:
                 for task in to_cancel:
@@ -2217,7 +2207,7 @@ async def auto_shutdown(ctx, to_cancel=None):
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                async_start(ctx.server.ws_server._close())
+                ctx.server.ws_server.close()
                 ctx.exit_event.set()
                 if to_cancel:
                     for task in to_cancel:
@@ -2254,12 +2244,15 @@ async def main(args: argparse.Namespace):
                 if not isinstance(e, ImportError):
                     logging.error(f"Failed to load tkinter ({e})")
                 logging.info("Pass a multidata filename on command line to run headless.")
-                exit(1)
+                # when cx_Freeze'd the built-in exit is not available, so we import sys.exit instead
+                import sys
+                sys.exit(1)
             raise
 
         if not data_filename:
             logging.info("No file selected. Exiting.")
-            exit(1)
+            import sys
+            sys.exit(1)
 
     try:
         ctx.load(data_filename, args.use_embedded_options)
