@@ -203,7 +203,7 @@ LetterToSpriteTile:
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
-    .word EmptyTile, Text8x8_Comma, Text8x8_Period, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
+    .word EmptyTile, Emptytile, Text8x8_Comma, Text8x8_Period, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
     .word EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile, EmptyTile
