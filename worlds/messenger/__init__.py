@@ -80,6 +80,8 @@ class MessengerWorld(World):
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
+        
+        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -125,7 +127,7 @@ class MessengerWorld(World):
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
-        
+
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
         itempool += [self.create_item(filler_item)
@@ -139,8 +141,6 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
-
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:
             Rules.MessengerRules(self).set_messenger_rules()

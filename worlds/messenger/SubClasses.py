@@ -44,27 +44,28 @@ class MessengerLocation(Location):
 
 
 class MessengerShopLocation(MessengerLocation):
+    @property
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         world: MessengerWorld = self.parent_region.multiworld.worlds[self.player]
         # short circuit figurines which all require demon's bane be purchased, but nothing else
         if "Figurine" in name:
             return world.figurine_prices[name] +\
-                world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost()
+                world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:
             prereq_cost = 0
             if isinstance(shop_data.prerequisite, set):
                 for prereq in shop_data.prerequisite:
-                    prereq_cost += world.multiworld.get_location(f"The Shop - {prereq}", self.player).cost()
+                    prereq_cost += world.multiworld.get_location(f"The Shop - {prereq}", self.player).cost
             else:
-                prereq_cost += world.multiworld.get_location(f"The Shop - {shop_data.prerequisite}", self.player).cost()
+                prereq_cost += world.multiworld.get_location(f"The Shop - {shop_data.prerequisite}", self.player).cost
             return world.shop_prices[name] + prereq_cost
         return world.shop_prices[name]
 
     def can_afford(self, state: CollectionState) -> bool:
         world: MessengerWorld = state.multiworld.worlds[self.player]
-        cost = self.cost()
+        cost = self.cost
         can_afford = state.has("Shards", self.player, min(cost, world.total_shards))
         if "Figurine" in self.name:
             can_afford = state.has("Money Wrench", self.player) and can_afford\
