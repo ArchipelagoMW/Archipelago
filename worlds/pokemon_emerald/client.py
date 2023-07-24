@@ -7,7 +7,7 @@ from typing import Optional, Dict, Set, Tuple
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, gui_enabled, logger
 from NetUtils import ClientStatus
 import Patch
-from Utils import async_start, get_options
+from Utils import async_start, get_settings
 
 from .data import data, config
 from .options import Goal
@@ -249,7 +249,7 @@ async def gba_send_receive_task(ctx: GBAContext):
 
 
 async def run_game(rom_file_path):
-    auto_start = get_options()["pokemon_emerald_options"].get("rom_start", True)
+    auto_start = get_settings()["pokemon_emerald_settings"].get("rom_start", True)
     if auto_start is True:
         import webbrowser
         webbrowser.open(rom_file_path)
