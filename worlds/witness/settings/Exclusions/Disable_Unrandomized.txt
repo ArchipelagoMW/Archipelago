@@ -79,6 +79,7 @@ Disabled Locations:
 0x00038 (Monastery Outside 2)
 0x00037 (Monastery Outside 3)
 0x03750 (Garden Entry)
+0x09D9B (Monastery Shutters Control)
 0x193A7 (Monastery Inside 1)
 0x193AA (Monastery Inside 2)
 0x193AB (Monastery Inside 3)
