@@ -10,13 +10,16 @@ from .Locations import RLLocation, location_groups, location_table
 from .Options import options_table
 from .Regions import region_table
 
+# Before you use my world as a reference, just note this variable is only useful for Rogue Legacy; you don't need it. :P
+WORLD_VERSION = 2
+
 
 class RLWeb(WebWorld):
     theme = "stone"
     tutorials = [Tutorial(
         "Rogue Legacy Randomizer - Setup Guide",
-        "A guide to setting up the Rogue Legacy Randomizer software on your computer. This guide covers single-player, "
-        "multiworld, and related software.",
+        "A guide to setting up the Rogue Legacy Randomizer on your computer. This guide works for single-player and "
+        "multiworld.",
         "English",
         "rogue-legacy_en.md",
         "rogue-legacy/en",
@@ -91,7 +94,7 @@ class RLWorld(World):
         # Handle fountain piece creation.
         if self.get_setting("fountain_door_requirement") != "bosses":
             maximum_fountain_pieces: int = self.get_setting("fountain_pieces_available").value
-            remaining_item_slots: int = location_count - len(item_pool)
+            remaining_item_slots = location_count - len(item_pool)
             fountain_pieces = [
                 self.create_item("Piece of the Fountain")
                 for _ in range(min(maximum_fountain_pieces, remaining_item_slots))
@@ -158,6 +161,7 @@ class RLWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data: Dict[str, Union[str, int, bool]] = {
+            "world_version":              WORLD_VERSION,
             "starting_gender":            self.get_setting("starting_gender").current_key,
             "starting_class":             self.get_setting("starting_class").current_key,
             "new_game_plus":              bool(self.get_setting("new_game_plus")),
