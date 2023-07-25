@@ -397,6 +397,10 @@ class KH2Context(CommonContext):
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(0x0714DB8)
+            self.kh2slotdata["CurrentWorld"] = currentworldint
+            await self.send_msgs([{"cmd": "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                                  "default": 0, "want_reply": True, "operations": [{"operation": "replace",
+                                                                                    "value": currentworldint}]}])
             if currentworldint in self.worldid:
                 curworldid = self.worldid[currentworldint]
                 for location, data in curworldid.items():

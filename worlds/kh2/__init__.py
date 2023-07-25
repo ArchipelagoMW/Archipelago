@@ -92,7 +92,8 @@ class KH2World(World):
             "Goal":                 self.multiworld.Goal[self.player].value,
             "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
             "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
-            "BountyRequired":       self.multiworld.BountyRequired[self.player].value
+            "BountyRequired":       self.multiworld.BountyRequired[self.player].value,
+            "PoptrackerVersionCheck": 4.2
         }
 
     def create_item(self, name: str) -> Item:
