@@ -3,7 +3,7 @@ Defines progression, junk and event items for The Witness
 """
 import copy
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Dict, List
 
 from BaseClasses import Item, MultiWorld, ItemClassification
 from .Options import get_option_value, is_option_enabled, the_witness_options
@@ -39,12 +39,12 @@ class StaticWitnessItems:
     """
     Class that handles Witness items independent of world settings
     """
-    item_data: dict[str, ItemData] = {}
-    item_groups: dict[str, list[str]] = {}
+    item_data: Dict[str, ItemData] = {}
+    item_groups: Dict[str, List[str]] = {}
 
     # Useful items that are treated specially at generation time and should not be automatically added to the player's
     #   item list during get_progression_items.
-    special_usefuls: list[str] = ["Puzzle Skip"]
+    special_usefuls: List[str] = ["Puzzle Skip"]
 
     def __init__(self):
         for item_name, definition in StaticWitnessLogic.all_items.items():
@@ -76,8 +76,8 @@ class StaticWitnessItems:
                                                                classification, local_only)
 
     @staticmethod
-    def get_item_to_door_mappings() -> dict[int, list[int]]:
-        output: dict[int, list[int]] = {}
+    def get_item_to_door_mappings() -> Dict[int, List[int]]:
+        output: Dict[int, List[int]] = {}
         for item_name, item_data in {name: data for name, data in StaticWitnessItems.item_data.items()
                                      if isinstance(data.definition, DoorItemDefinition)}.items():
             item = StaticWitnessItems.item_data[item_name]
@@ -99,7 +99,7 @@ class WitnessPlayerItems:
         self._locations: WitnessPlayerLocations = locat
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
-        self.item_data: dict[str, ItemData] = copy.copy(StaticWitnessItems.item_data)
+        self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {name: data for (name, data) in self.item_data.items()
@@ -119,7 +119,7 @@ class WitnessPlayerItems:
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
-        self._mandatory_items: dict[str, int] = {}
+        self._mandatory_items: Dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
         for item_name, item_data in {name: data for (name, data) in self.item_data.items()
@@ -148,20 +148,20 @@ class WitnessPlayerItems:
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 
-    def get_mandatory_items(self) -> dict[str, int]:
+    def get_mandatory_items(self) -> Dict[str, int]:
         """
         Returns the list of items that must be in the pool for the game to successfully generate.
         """
         return self._mandatory_items
 
-    def get_filler_items(self, quantity: int) -> dict[str, int]:
+    def get_filler_items(self, quantity: int) -> Dict[str, int]:
         """
         Generates a list of filler items of the given length.
         """
         if quantity <= 0:
             return {}
 
-        output: dict[str, int] = {}
+        output: Dict[str, int] = {}
         remaining_quantity = quantity
 
         # Add joke items.
@@ -174,7 +174,7 @@ class WitnessPlayerItems:
         filler_weight = 1 - trap_weight
 
         # Add filler items to the list.
-        filler_items: dict[str, float]
+        filler_items: Dict[str, float]
         filler_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
                         for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.FILLER}
         filler_items = {name: base_weight * filler_weight / sum(filler_items.values())
@@ -188,16 +188,16 @@ class WitnessPlayerItems:
                                  for name, base_weight in trap_items.items() if base_weight > 0})
 
         # Get the actual number of each item by scaling the float weight values to match the target quantity.
-        int_weights: list[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
+        int_weights: List[int] = build_weighted_int_list(filler_items.values(), remaining_quantity)
         output.update(zip(filler_items.keys(), int_weights))
 
         return output
 
-    def get_early_items(self) -> list[str]:
+    def get_early_items(self) -> List[str]:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
-        output: list[str] = []
+        output: List[str] = []
         if "shuffle_symbols" not in the_witness_options.keys() \
                 or is_option_enabled(self._world, self._player_id, "shuffle_symbols"):
             if get_option_value(self._world, self._player_id, "shuffle_doors") > 0:
@@ -231,25 +231,25 @@ class WitnessPlayerItems:
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)
 
-    def get_door_ids_in_pool(self) -> list[int]:
+    def get_door_ids_in_pool(self) -> List[int]:
         """
         Returns the total set of all door IDs that are controlled by items in the pool.
         """
-        output: list[int] = []
+        output: List[int] = []
         for item_name, item_data in {name: data for name, data in self.item_data.items()
                                      if isinstance(data.definition, DoorItemDefinition)}.items():
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
         return output
 
-    def get_symbol_ids_not_in_pool(self) -> list[int]:
+    def get_symbol_ids_not_in_pool(self) -> List[int]:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
         return [data.ap_code for name, data in StaticWitnessItems.item_data.items()
                 if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL]
 
-    def get_progressive_item_ids_in_pool(self) -> dict[int, list[int]]:
-        output: dict[int, list[int]] = {}
+    def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
+        output: Dict[int, List[int]] = {}
         for item_name, quantity in {name: quantity for name, quantity in self._mandatory_items.items()}.items():
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):

@@ -81,6 +81,8 @@ class MessengerWorld(World):
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
 
+        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
             if region.name in REGION_CONNECTIONS:
@@ -93,7 +95,7 @@ class MessengerWorld(World):
             for item in self.item_name_to_id
             if item not in
             {
-                "Power Seal", *NOTES,
+                "Power Seal", *NOTES, *FIGURINES,
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
             } and "Time Shard" not in item
         ]
@@ -116,15 +118,17 @@ class MessengerWorld(World):
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.multiworld.total_seals[self.player].value)
             if total_seals < self.total_seals:
-                logging.warning(f"Not enough locations for total seals setting. Adjusting to {total_seals}")
+                logging.warning(f"Not enough locations for total seals setting "
+                                f"({self.multiworld.total_seals[self.player].value}). Adjusting to {total_seals}")
                 self.total_seals = total_seals
-            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+            self.required_seals =\
+                int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
-        
+
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
         itempool += [self.create_item(filler_item)
@@ -138,8 +142,6 @@ class MessengerWorld(World):
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
-
         logic = self.multiworld.logic_level[self.player]
         if logic == Logic.option_normal:
             Rules.MessengerRules(self).set_messenger_rules()
