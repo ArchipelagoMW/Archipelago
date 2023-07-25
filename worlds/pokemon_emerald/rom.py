@@ -3,6 +3,7 @@ Classes and functions related to creating a ROM patch
 """
 import os
 import pkgutil
+from typing import Tuple
 
 import bsdiff4
 
@@ -15,6 +16,7 @@ from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
 from .pokemon import get_random_species
+from .util import get_easter_egg
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -73,6 +75,8 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
 
+    easter_egg = get_easter_egg(multiworld.easter_egg[player].value)
+
     # Set start inventory
     start_inventory = multiworld.start_inventory[player].value.copy()
 
@@ -105,7 +109,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
 
     # Set species data
-    _set_species_info(modified_data, patched_rom)
+    _set_species_info(modified_data, patched_rom, easter_egg)
 
     # Set encounter tables
     if multiworld.wild_pokemon[player].value != RandomizeWildPokemon.option_vanilla:
@@ -113,7 +117,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
     # Set opponent data
     if multiworld.trainer_parties[player].value != RandomizeTrainerParties.option_vanilla:
-        _set_opponents(modified_data, patched_rom)
+        _set_opponents(modified_data, patched_rom, easter_egg)
 
     # Set static pokemon
     _set_static_encounters(modified_data, patched_rom)
@@ -122,7 +126,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_starters(modified_data, patched_rom)
 
     # Set TM moves
-    _set_tm_moves(modified_data, patched_rom)
+    _set_tm_moves(modified_data, patched_rom, easter_egg)
 
     # Set TM/HM compatibility
     _set_tmhm_compatibility(modified_data, patched_rom)
@@ -286,7 +290,7 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
                     _set_bytes_little_endian(rom, address, 2, species_id)
 
 
-def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for species in modified_data.species:
         if species is not None:
             _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
@@ -295,12 +299,19 @@ def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None
             _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
             _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])
 
+            if easter_egg[0] == 3:
+                _set_bytes_little_endian(rom, species.rom_address + 22, 1, easter_egg[1])
+                _set_bytes_little_endian(rom, species.rom_address + 23, 1, easter_egg[1])
+
             for i, learnset_move in enumerate(species.learnset):
                 level_move = learnset_move.level << 9 | learnset_move.move_id
+                if easter_egg[0] == 2:
+                    level_move = learnset_move.level << 9 | easter_egg[1]
+
                 _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
 
 
-def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for trainer in modified_data.trainers:
         party_address = trainer.party.rom_address
 
@@ -318,15 +329,27 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
 
             # Replace custom moves if applicable
             if trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
-                _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
-                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
-                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
-                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
+                if easter_egg[0] == 2:
+                    _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, easter_egg[1])
+                else:
+                    _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
             elif trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
-                _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
-                _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
-                _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
-                _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
+                if easter_egg[0] == 2:
+                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, easter_egg[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, easter_egg[1])
+                else:
+                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
+                    _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
 def _set_static_encounters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
@@ -343,7 +366,7 @@ def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     _set_bytes_little_endian(rom, address + 4, 2, starter_3)
 
 
-def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     tmhm_list_address = data.rom_addresses["sTMHMMoves"]
 
     for i, move in enumerate(modified_data.tmhm_moves):
@@ -352,6 +375,8 @@ def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
             break
 
         _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, move)
+        if easter_egg[0] == 2:
+            _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, easter_egg[1])
 
 
 def _set_tmhm_compatibility(modified_data: PokemonEmeraldData, rom: bytearray) -> None:

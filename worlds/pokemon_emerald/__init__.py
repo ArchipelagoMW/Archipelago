@@ -26,7 +26,7 @@ from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_eve
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
                     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
-from .util import int_to_bool_array, bool_array_to_int
+from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
 
 def launch_client(*args):
@@ -652,23 +652,19 @@ class PokemonEmeraldWorld(World):
                 get_random_species(self.random, self.modified_data.species, starter_bsts[2], starter_types[2], allow_legendaries)
             )
 
-            egg_code = self.multiworld.easter_egg[self.player].value
-            egg_check_1 = 0
-            egg_check_2 = 0
-
-            for i in egg_code:
-                egg_check_1 += ord(i)
-                egg_check_2 += egg_check_1 * egg_check_1
-
-            egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
-            if egg_check_2 == 0x14E03A and egg < 411 and egg > 0 and egg not in range(252, 277):
-                self.modified_data.starters = (egg, egg, egg)
-            else:
-                self.modified_data.starters = (
-                    new_starters[0].species_id,
-                    new_starters[1].species_id,
-                    new_starters[2].species_id
+            easter_egg_type, easter_egg_value = get_easter_egg(self.multiworld.easter_egg[self.player].value)
+            if easter_egg_type == 1:
+                new_starters = (
+                    self.modified_data.species[easter_egg_value],
+                    self.modified_data.species[easter_egg_value],
+                    self.modified_data.species[easter_egg_value],
                 )
+
+            self.modified_data.starters = (
+                new_starters[0].species_id,
+                new_starters[1].species_id,
+                new_starters[2].species_id
+            )
 
             # Putting the unchosen starter onto the rival's team
             rival_teams = [
