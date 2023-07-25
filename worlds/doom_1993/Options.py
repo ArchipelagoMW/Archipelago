@@ -69,15 +69,21 @@ class Episode1(DefaultOnToggle):
 
 
 class Episode2(DefaultOnToggle):
-    """The Shores of Hell
+    """The Shores of Hell.
     If none of the episodes are chosen, Episode 1 will be chosen by default."""
     display_name = "Episode 2"
 
 
 class Episode3(DefaultOnToggle):
-    """Inferno
+    """Inferno.
     If none of the episodes are chosen, Episode 1 will be chosen by default."""
     display_name = "Episode 3"
+
+
+class Episode4(DefaultOnToggle):
+    """Thy Flesh Consumed.
+    If none of the episodes are chosen, Episode 1 will be chosen by default."""
+    display_name = "Episode 4"
 
 
 options: typing.Dict[str, AssembleOptions] = {
@@ -89,5 +95,6 @@ options: typing.Dict[str, AssembleOptions] = {
     "death_link": DeathLink,
     "episode1": Episode1,
     "episode2": Episode2,
-    "episode3": Episode3
+    "episode3": Episode3,
+    "episode4": Episode4
 }
