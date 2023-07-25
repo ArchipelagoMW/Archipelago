@@ -5,8 +5,8 @@ from BaseClasses import Region, Tutorial
 from Options import Option
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import allow_self_locking_items
-from .Items import RLItem, RLItemData, filler_items, item_groups, item_table
-from .Locations import RLLocation, location_groups, location_table
+from .Items import RLItem, filler_items, item_groups, item_table
+from .Locations import location_groups, location_table
 from .Options import options_table
 from .Regions import region_table
 

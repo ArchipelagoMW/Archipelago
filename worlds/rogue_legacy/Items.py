@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import Architect, FountainDoorRequirement, FountainPiecesAvailable, ShuffleBlacksmith, \
+from .Options import Architect, ShuffleBlacksmith, \
     ShuffleEnchantress, SpendingRestrictions, StartingClass
 
 __all__ = ["RLItem", "RLItemData", "item_groups", "item_table", "filler_items"]
@@ -69,35 +69,35 @@ def get_class_quantity(multiworld: MultiWorld, player: int, class_name: str, max
 
 
 def get_knights_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Knights")
+    return get_class_quantity(multiworld, player, "Knights", 2)
 
 
 def get_mages_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Mages")
+    return get_class_quantity(multiworld, player, "Mages", 2)
 
 
 def get_barbarians_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Barbarians")
+    return get_class_quantity(multiworld, player, "Barbarians", 2)
 
 
 def get_knaves_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Knaves")
+    return get_class_quantity(multiworld, player, "Knaves", 2)
 
 
 def get_shinobis_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Shinobis")
+    return get_class_quantity(multiworld, player, "Shinobis", 2)
 
 
 def get_miners_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Miners")
+    return get_class_quantity(multiworld, player, "Miners", 2)
 
 
 def get_liches_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Liches")
+    return get_class_quantity(multiworld, player, "Liches", 2)
 
 
 def get_spellthieves_quantity(multiworld: MultiWorld, player: int) -> int:
-    return get_class_quantity(multiworld, player, "Spellthieves")
+    return get_class_quantity(multiworld, player, "Spellthieves", 2)
 
 
 def get_dragons_quantity(multiworld: MultiWorld, player: int) -> int:
@@ -158,15 +158,6 @@ def get_crit_chance_quantity(multiworld: MultiWorld, player: int) -> int:
 
 def get_crit_damage_quantity(multiworld: MultiWorld, player: int) -> int:
     return getattr(multiworld, "crit_damage_pool")[player].value
-
-
-def get_fountain_pieces(multiworld: MultiWorld, player: int) -> int:
-    door_requirement: FountainDoorRequirement = getattr(multiworld, "fountain_door_requirement")[player]
-    available: FountainPiecesAvailable = getattr(multiworld, "fountain_pieces_available")[player]
-    if door_requirement == "bosses":
-        return 0
-
-    return available.value
 
 
 def get_wallet_quantity(multiworld: MultiWorld, player: int) -> int:
@@ -343,7 +334,7 @@ item_table: Dict[str, RLItemData] = {
     "Phar's Guidance Shrine":   RLItemData(ItemClassification.useful,       169),
 
     # Wallets
-    "Progressive Spending": RLItemData(ItemClassification.progression, 190, get_wallet_quantity),
+    "Progressive Spending":     RLItemData(ItemClassification.progression,  190, get_wallet_quantity),
 
     # Fountain Pieces - Handled differently during `create_items` stage.
     "Piece of the Fountain":    RLItemData(ItemClassification.progression_skip_balancing, 180, get_none),
