@@ -473,7 +473,7 @@ Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 Door - 0x28A61 (RGB House Entry) - 0x28A0D
 158226 - 0x28A0D (Church Entry Panel) - 0x28998 - Stars
 Door - 0x03BB0 (Church Entry) - 0x03C08
-158228 - 0x28A79 (Maze Stair Control) - True - True
+158228 - 0x28A79 (Maze Panel) - True - True
 Door - 0x28AA2 (Maze Stairs) - 0x28A79
 158241 - 0x17F5F (Windmill Entry Panel) - True - Dots
 Door - 0x1845B (Windmill Entry) - 0x17F5F
@@ -802,7 +802,7 @@ Treehouse Right Orange Bridge (Treehouse) - Treehouse Bridge Platform - 0x17DA2:
 158402 - 0x17DA2 (Right Orange Bridge 12) - 0x17DB1 - Stars & Stars + Same Colored Symbol & Triangles
 
 Treehouse Bridge Platform (Treehouse) - Main Island - 0x0C32D:
-158404 - 0x037FF (Bridge Control) - True - Stars
+158404 - 0x037FF (Drawbridge Panel) - True - Stars
 Door - 0x0C32D (Drawbridge) - 0x037FF
 
 Treehouse Second Purple Bridge (Treehouse) - Treehouse Left Orange Bridge - 0x17DC6:

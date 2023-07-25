@@ -86,7 +86,7 @@ Town Cargo Box Entry Panel
 Town Wooden Roof Lower Row 5
 Town RGB House Entry Panel
 Town Church Entry Panel
-Town Maze Stair Control
+Town Maze Panel
 Town Windmill Entry Panel
 Town Sound Room Right
 Town Red Rooftop 5
@@ -116,7 +116,7 @@ Swamp Laser Shortcut Right Panel
 Treehouse First Door Panel
 Treehouse Second Door Panel
 Treehouse Third Door Panel
-Treehouse Bridge Control
+Treehouse Drawbridge Panel
 Treehouse Left Orange Bridge 15
 Treehouse Right Orange Bridge 12
 Treehouse Laser House Door Timer Outside Control

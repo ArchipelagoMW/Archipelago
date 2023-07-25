@@ -101,7 +101,7 @@ class StaticWitnessLocations:
         "Town Tall Hexagonal",
         "Town Church Entry Panel",
         "Town Church Lattice",
-        "Town Maze Stair Control",
+        "Town Maze Panel",
         "Town Rooftop Discard",
         "Town Red Rooftop 5",
         "Town Wooden Roof Lower Row 5",
@@ -166,7 +166,7 @@ class StaticWitnessLocations:
         "Treehouse Laser Discard",
         "Treehouse Right Orange Bridge 12",
         "Treehouse Laser Panel",
-        "Treehouse Bridge Control",
+        "Treehouse Drawbridge Panel",
 
         "Mountainside Discard",
         "Mountainside Vault Box",
