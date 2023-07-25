@@ -97,7 +97,7 @@ class StaticWitnessLocations:
         "Monastery Inside 4",
         "Monastery Laser Panel",
 
-        "Town Cargo Box Entry Panel"
+        "Town Cargo Box Entry Panel",
         "Town Cargo Box Discard",
         "Town Tall Hexagonal",
         "Town Church Entry Panel",
