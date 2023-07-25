@@ -24,7 +24,7 @@ The player can choose from a number of goals, using their YAML settings.
 - Get recognized as the [Greatest Walnut Hunter](https://stardewvalleywiki.com/Golden_Walnut) by Mr Qi, which requires finding all 130 golden walnuts on ginger island
 - Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
-## What are location check in Stardew Valley?
+## What are location checks in Stardew Valley?
 
 Location checks in Stardew Valley always include:
 - [Community Center Bundles](https://stardewvalleywiki.com/Bundles)
