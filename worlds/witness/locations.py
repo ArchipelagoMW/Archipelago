@@ -97,6 +97,7 @@ class StaticWitnessLocations:
         "Monastery Inside 4",
         "Monastery Laser Panel",
 
+        "Town Cargo Box Entry Panel"
         "Town Cargo Box Discard",
         "Town Tall Hexagonal",
         "Town Church Entry Panel",
@@ -153,6 +154,7 @@ class StaticWitnessLocations:
         "Swamp Beyond Rotating Bridge 4",
         "Swamp Blue Underwater 5",
         "Swamp Laser Panel",
+        "Swamp Laser Shortcut Right Panel",
 
         "Treehouse First Door Panel",
         "Treehouse Second Door Panel",
@@ -343,6 +345,9 @@ class StaticWitnessLocations:
         "Town Obelisk Side 5",
         "Town Obelisk Side 6",
 
+        "Caves Mountain Shortcut Panel",
+        "Caves Swamp Shortcut Panel",
+
         "Caves Blue Tunnel Right First 4",
         "Caves Blue Tunnel Left First 1",
         "Caves Blue Tunnel Left Second 5",
@@ -370,6 +375,8 @@ class StaticWitnessLocations:
 
         "Tunnels Vault Box",
         "Theater Challenge Video",
+
+        "Tunnels Town Shortcut Panel",
 
         "Caves Skylight EP",
         "Challenge Water EP",
