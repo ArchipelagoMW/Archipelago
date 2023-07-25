@@ -99,7 +99,7 @@ class WitnessPlayerItems:
         self._locations: WitnessPlayerLocations = locat
 
         # Duplicate the static item data, then make any player-specific adjustments to classification.
-        self.item_data: Dict[str, ItemData] = copy.copy(StaticWitnessItems.item_data)
+        self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
 
         # Remove all progression items that aren't actually in the game.
         self.item_data = {name: data for (name, data) in self.item_data.items()
