@@ -211,8 +211,7 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_wizard_basement, player),
                              logic.has_relationship(NPC.wizard, 4))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_leo_treehouse, player),
-                             logic.has_relationship(NPC.leo, 6) & logic.can_reach_region(Region.island_south) &
-                             logic.can_reach_region(Region.island_east) & logic.can_reach_region(Region.leo_hut))
+                             logic.received("Treehouse"))
     if ModNames.alec in world_options[options.Mods]:
         MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
                                  (logic.has_relationship(ModNPC.alec, 2) | magic.can_blink(logic)).simplify())

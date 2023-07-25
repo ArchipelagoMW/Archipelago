@@ -152,8 +152,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if cleanup_required:
         # validate all placements and remove invalid ones
+        state = sweep_from_pool(base_state, [])
         for placement in placements:
-            state = sweep_from_pool(base_state, [])
             if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)

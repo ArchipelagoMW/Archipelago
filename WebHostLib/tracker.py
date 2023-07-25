@@ -302,10 +302,15 @@ def get_static_room_data(room: Room):
             seed_checks_in_area[area] += len(checks)
         seed_checks_in_area["Total"] = 249
 
-    player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
-    if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
-                                            for areaname in ordered_areas}
-                             for playernumber in multidata["checks_in_area"]}
+    player_checks_in_area = {
+        playernumber: {
+            areaname: len(multidata["checks_in_area"][playernumber][areaname]) if areaname != "Total" else
+            multidata["checks_in_area"][playernumber]["Total"]
+            for areaname in ordered_areas
+        }
+        for playernumber in multidata["checks_in_area"]
+    }
+
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
                                for playernumber in multidata["checks_in_area"]}
     saving_second = get_saving_second(multidata["seed_name"])
@@ -1399,12 +1404,15 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
     for (team, player), data in multisave.get("video", []):
         video[team, player] = data
 
-    return dict(player_names=player_names, room=room, checks_done=checks_done,
-                percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
-                activity_timers=activity_timers, video=video, hints=hints,
-                long_player_names=long_player_names,
-                multisave=multisave, precollected_items=precollected_items, groups=groups,
-                locations=locations, games=games, states=states)
+    return dict(
+        player_names=player_names, room=room, checks_done=checks_done,
+        percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+        activity_timers=activity_timers, video=video, hints=hints,
+        long_player_names=long_player_names,
+        multisave=multisave, precollected_items=precollected_items, groups=groups,
+        locations=locations, games=games, states=states,
+        custom_locations=custom_locations, custom_items=custom_items,
+    )
 
 
 def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
