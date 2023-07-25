@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import Optional, TYPE_CHECKING, cast
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
@@ -45,7 +46,7 @@ class MessengerLocation(Location):
 
 
 class MessengerShopLocation(MessengerLocation):
-    @property
+    @cached_property
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         world: MessengerWorld = self.parent_region.multiworld.worlds[self.player]
