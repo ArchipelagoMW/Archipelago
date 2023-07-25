@@ -52,7 +52,7 @@ class UndertaleWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 6
+    data_version = 7
 
     def _get_undertale_data(self):
         return {
@@ -63,6 +63,7 @@ class UndertaleWorld(World):
             "client_version": self.required_client_version,
             "race": self.multiworld.is_race,
             "route": self.multiworld.route_required[self.player].current_key,
+            "starting_area": self.multiworld.starting_area[self.player].current_key,
             "temy_armor_include": bool(self.multiworld.temy_include[self.player].value),
             "only_flakes": bool(self.multiworld.only_flakes[self.player].value),
             "no_equips": bool(self.multiworld.no_equips[self.player].value),
@@ -74,12 +75,6 @@ class UndertaleWorld(World):
             "prog_weapons": bool(self.multiworld.prog_weapons[self.player].value),
             "rando_item_button": bool(self.multiworld.rando_item_button[self.player].value)
         }
-
-    def pre_fill(self):
-        if not self.multiworld.get_location("Starting Key", self.player).item:
-            chosen_key_start = self.random.choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
-            self.multiworld.get_location("Starting Key", self.player).place_locked_item(self.create_item(chosen_key_start))
-            self.multiworld.itempool.remove(self.create_item(chosen_key_start))
 
     def create_items(self):
         self.multiworld.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
@@ -159,6 +154,22 @@ class UndertaleWorld(World):
                             if item == "Heart Locket" else item for item in itempool]
         if self.multiworld.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
+
+        if self.multiworld.starting_area[self.player] == "ruins":
+            itempool = [item for item in itempool if item != "Ruins Key"]
+            self.multiworld.push_precollected(self.create_item("Ruins Key"))
+        elif self.multiworld.starting_area[self.player] == "snowdin":
+            itempool = [item for item in itempool if item != "Snowdin Key"]
+            self.multiworld.push_precollected(self.create_item("Snowdin Key"))
+        elif self.multiworld.starting_area[self.player] == "waterfall":
+            itempool = [item for item in itempool if item != "Waterfall Key"]
+            self.multiworld.push_precollected(self.create_item("Waterfall Key"))
+        elif self.multiworld.starting_area[self.player] == "hotland":
+            itempool = [item for item in itempool if item != "Hotland Key"]
+            self.multiworld.push_precollected(self.create_item("Hotland Key"))
+        elif self.multiworld.starting_area[self.player] == "core":
+            itempool = [item for item in itempool if item != "Core Key"]
+            self.multiworld.push_precollected(self.create_item("Core Key"))
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])

@@ -239,8 +239,6 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
             f.close()
-        message = [{"cmd": "LocationChecks", "locations": [79067]}]
-        await ctx.send_msgs(message)
     elif cmd == "LocationInfo":
         for l in args["locations"]:
             locationid = l.location

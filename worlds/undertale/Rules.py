@@ -234,11 +234,6 @@ def set_rules(multiworld: MultiWorld, player: int):
                 exp = 99999
     set_rule(multiworld.get_location("Snowman", player),
              lambda state: state.can_reach("Snowdin Town", "Region", player))
-    multiworld.get_location("Starting Key", player).item_rule = lambda item: False
-    add_item_rule(multiworld.get_location("Starting Key", player), lambda item: item.name == "Ruins Key" or
-                                                                                item.name == "Snowdin Key" or
-                                                                                item.name == "Waterfall Key" or
-                                                                                item.name == "Hotland Key", combine="or")
     set_rule(multiworld.get_location("Mettaton Plot", player),
              lambda state: state.can_reach("Core Exit", "Entrance", player))
     set_rule(multiworld.get_location("Bunny 1", player),
