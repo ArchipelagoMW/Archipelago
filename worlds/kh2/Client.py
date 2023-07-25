@@ -20,11 +20,6 @@ from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProc
 
 ModuleUpdate.update()
 
-kh2_loc_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
-kh2_loc_id_to_loc_name = {v: k for k, v in kh2_loc_name_to_id.items()}
-kh2_item_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["item_name_to_id"]
-kh2_item_id_to_name = {v: k for k, v in kh2_item_name_to_id.items()}
-
 
 # class KH2CommandProcessor(ClientCommandProcessor):
 
@@ -46,10 +41,10 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
-        self.kh2_loc_name_to_id = kh2_loc_name_to_id
-        self.kh2_item_name_to_id = kh2_item_name_to_id
-        self.lookup_id_to_item = kh2_item_id_to_name
-        self.lookup_id_to_location = kh2_loc_id_to_loc_name
+        self.kh2_loc_name_to_id = None
+        self.kh2_item_name_to_id = None
+        self.lookup_id_to_item = None
+        self.lookup_id_to_location = None
 
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
@@ -153,7 +148,7 @@ class KH2Context(CommonContext):
             "AP Boost":      0x24F8
         }
 
-        self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
+        self.AbilityCodeList = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
         self.bitmask_item_code = [
@@ -345,18 +340,12 @@ class KH2Context(CommonContext):
                             }
                         }
                     self.locations_checked_kh2 = set(self.kh2seedsave["LocationsChecked"])
-            self.serverconneced = True
+            # self.serverconneced = True
 
         if cmd in {"Connected"}:
+            asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
             self.kh2LocalItems = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
-            try:
-                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                logger.info("You are now auto-tracking")
-                self.kh2connected = True
-            except Exception as e:
-                if self.kh2connected:
-                    self.kh2connected = False
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -381,7 +370,7 @@ class KH2Context(CommonContext):
                     "StatIncrease": {},
                     "Boost":        {},
                 }
-            if start_index > self.kh2seedsave["itemIndex"]:
+            if start_index > self.kh2seedsave["itemIndex"] and self.serverconneced:
                 self.kh2seedsave["itemIndex"] = start_index
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item))
@@ -394,30 +383,54 @@ class KH2Context(CommonContext):
                 #                 location_id in self.kh2LocalItems.keys()]
                 self.checked_locations |= new_locations
 
+        if cmd == "DataPackage":
+            self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
+            self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
+            self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
+            self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
+            self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
+            try:
+                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                logger.info("You are now auto-tracking")
+                self.kh2connected = True
+
+            except Exception as e:
+                if self.kh2connected:
+                    self.kh2connected = False
+                logger.info("line 400")
+            self.serverconneced = True
+            asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(0x0714DB8)
             self.kh2slotdata["CurrentWorld"] = currentworldint
-            await self.send_msgs([{"cmd": "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                                  "default": 0, "want_reply": True, "operations": [{"operation": "replace",
-                                                                                    "value": currentworldint}]}])
+            await self.send_msgs([{
+                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                "default": 0, "want_reply": True, "operations": [{
+                    "operation": "replace",
+                    "value":     currentworldint
+                }]
+            }])
             if currentworldint in self.worldid:
                 curworldid = self.worldid[currentworldint]
                 for location, data in curworldid.items():
-                    if location in kh2_loc_name_to_id.keys():
-                        locationId = kh2_loc_name_to_id[location]
+                    if location in self.kh2_loc_name_to_id.keys():
+                        locationId = self.kh2_loc_name_to_id[location]
                         if locationId not in self.locations_checked_kh2 \
                                 and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                             self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 425")
 
     async def checkLevels(self):
         try:
             for location, data in SoraLevels.items():
                 currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
-                locationId = kh2_loc_name_to_id[location]
+                locationId = self.kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked_kh2 \
                         and currentLevel >= data.bitIndex:
                     if self.kh2seedsave["Levels"]["SoraLevel"] < currentLevel:
@@ -431,33 +444,39 @@ class KH2Context(CommonContext):
             for i in range(6):
                 for location, data in formDict[i][1].items():
                     formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
-                    locationId = kh2_loc_name_to_id[location]
+                    if location not in self.kh2_loc_name_to_id.keys():
+                        return
+                    locationId = self.kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked_kh2 \
                             and formlevel >= data.bitIndex \
                             and formDict[i][0] in self.kh2seedsave["Levels"].keys() \
                             and formlevel > self.kh2seedsave["Levels"][formDict[i][0]]:
                         self.kh2seedsave["Levels"][formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
-        except Exception:
+        except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 456")
 
     async def checkSlots(self):
         try:
             for location, data in weaponSlots.items():
-                locationId = kh2_loc_name_to_id[location]
+                locationId = self.kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked_kh2:
                     if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
                         self.sending = self.sending + [(int(locationId))]
 
             for location, data in formSlots.items():
-                locationId = kh2_loc_name_to_id[location]
+                locationId = self.kh2_loc_name_to_id[location]
                 if locationId not in self.locations_checked_kh2 and self.kh2_read_byte(self.Save + 0x06B2) == 0:
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 475")
 
     async def verifyChests(self):
         try:
@@ -473,6 +492,8 @@ class KH2Context(CommonContext):
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 491")
 
     async def verifyLevel(self):
         for leveltype, anchor in {
@@ -561,6 +582,8 @@ class KH2Context(CommonContext):
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 582")
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -817,11 +840,13 @@ class KH2Context(CommonContext):
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
+            logger.info(e)
+            logger.info("line 840")
 
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if not ctx.finalxemnas and kh2_loc_name_to_id[LocationName.FinalXemnas] in ctx.kh2seedsave["LocationsChecked"]:
+        if not ctx.finalxemnas and ctx.kh2_loc_name_to_id[LocationName.FinalXemnas] in ctx.kh2seedsave["LocationsChecked"]:
             ctx.finalxemnas = True
     # three proofs
     if ctx.kh2slotdata['Goal'] == 0:
@@ -915,6 +940,8 @@ async def kh2_watcher(ctx: KH2Context):
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
+            logger.info(e)
+            logger.info("line 940")
         await asyncio.sleep(0.5)
 
 
