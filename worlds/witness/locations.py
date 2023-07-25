@@ -366,7 +366,7 @@ class StaticWitnessLocations:
         "Caves Left Upstairs Left Row 5",
 
         "Caves Challenge Entry Panel",
-        "Challenge Tunnels Entry",
+        "Challenge Tunnels Entry Panel",
 
         "Tunnels Vault Box",
         "Theater Challenge Video",
