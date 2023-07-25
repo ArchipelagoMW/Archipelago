@@ -1,7 +1,4 @@
-# [Archipelago](https://archipelago.gg) ![Discord 
-# Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) 
-# | 
-# [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
+# [Archipelago](https://archipelago.gg) ![Discord Shield](https://discordapp.com/api/guilds/731205301247803413/widget.png?style=shield) | [Install](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 Archipelago provides a generic framework for developing multiworld capability for game randomizers. In all cases, presently, Archipelago is also the randomizer itself.
 
