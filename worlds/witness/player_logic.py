@@ -267,7 +267,7 @@ class WitnessPlayerLogic:
 
         # Exclude Discards / Vaults
 
-        if not is_option_enabled(world, player, "shuffle_discards"):
+        if not is_option_enabled(world, player, "shuffle_discarded_panels"):
             if not is_option_enabled(world, player, "disable_non_randomized_puzzles"):
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
