@@ -29,7 +29,7 @@ from .sanity_check import sanity_check
 from .util import int_to_bool_array, bool_array_to_int
 
 
-def launch_client():
+def launch_client(*args):
     from .client import launch
     launch_subprocess(launch, name="PokemonEmeraldClient")
 
