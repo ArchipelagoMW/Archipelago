@@ -801,7 +801,7 @@ class KH2Context(CommonContext):
                     amountOfItems += self.kh2seedsave["AmountInvo"]["LocalItems"]["Magic"][itemName]
                 if itemName in server_magic:
                     amountOfItems += self.kh2seedsave["AmountInvo"]["ServerItems"]["Magic"][itemName]
-                if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems and self.kh2_read_byte(0x741320) not in {10, 8}:
+                if self.kh2_read_byte(self.Save + itemData.memaddr) != amountOfItems and self.kh2_read_byte(0x741320) in {10, 8}:
                     self.kh2_write_byte(self.Save + itemData.memaddr, amountOfItems)
 
             for itemName in master_stat:
