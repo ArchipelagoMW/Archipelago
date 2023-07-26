@@ -159,7 +159,8 @@ class And(StardewRule):
         if rules is not None:
             rules_list.update(rules)
 
-        assert rules_list, "Can't create a And conditions without rules"
+        if len(rules_list) < 1:
+            rules_list.add(True_())
 
         new_rules = set()
         for rule in rules_list:
@@ -297,7 +298,7 @@ class Received(StardewRule):
 
     def __post_init__(self):
         assert item_table[self.item].classification & ItemClassification.progression, \
-            "Item has to be progression to be used in logic"
+            f"Item [{item_table[self.item].name}] has to be progression to be used in logic"
 
     def __call__(self, state: CollectionState) -> bool:
         return state.has(self.item, self.player, self.count)

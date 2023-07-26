@@ -1,11 +1,12 @@
 import logging
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld
+from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS
+from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
+from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
+from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -41,7 +42,6 @@ class MessengerWorld(World):
         "Crest": {"Sun Crest", "Moon Crest"},
         "Phobe": set(PHOBEKINS),
         "Phobekin": set(PHOBEKINS),
-        "Shuriken": {"Windmill Shuriken"},
     }
 
     option_definitions = messenger_options
@@ -49,35 +49,39 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
-    mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
     location_name_to_id = {location: location_id
                            for location_id, location in
                            enumerate([
                                *ALWAYS_LOCATIONS,
-                               *SEALS,
-                               *mega_shard_locs,
+                               *[seal for seals in SEALS.values() for seal in seals],
+                               *[shard for shards in MEGA_SHARDS.values() for shard in shards],
                                *BOSS_LOCATIONS,
+                               *[f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS],
+                               *FIGURINES,
+                               "Money Wrench",
                            ], base_offset)}
 
-    data_version = 2
-    required_client_version = (0, 3, 9)
+    data_version = 3
+    required_client_version = (0, 4, 0)
 
     web = MessengerWeb()
 
     total_seals: int = 0
     required_seals: int = 0
-    
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        for player in multiworld.get_game_players(cls.game):
-            player_name = multiworld.player_name[player] = multiworld.get_player_name(player).replace("_", " ")
-            if not all(c.isalnum() or c in "- " for c in player_name):
-                raise ValueError(f"Player name {player_name} is not alpha-numeric.")
+    total_shards: int
+    shop_prices: Dict[str, int]
+    figurine_prices: Dict[str, int]
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.total_shards = 0
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
+
+        self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -85,41 +89,55 @@ class MessengerWorld(World):
                 region.add_exits(REGION_CONNECTIONS[region.name])
 
     def create_items(self) -> None:
-        itempool: List[MessengerItem] = []
+        # create items that are always in the item pool
+        itempool = [
+            self.create_item(item)
+            for item in self.item_name_to_id
+            if item not in
+            {
+                "Power Seal", *NOTES, *FIGURINES,
+                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+            } and "Time Shard" not in item
+        ]
+
         if self.multiworld.goal[self.player] == Goal.option_open_music_box:
-            notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
-            precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
+            # make a list of all notes except those in the player's defined starting inventory, and adjust the
+            # amount we need to put in the itempool and precollect based on that
+            notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
+            self.random.shuffle(notes)
+            precollected_notes_amount = NotesNeeded.range_end - \
+                self.multiworld.notes_needed[self.player] - \
+                (len(NOTES) - len(notes))
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
-            itempool += [self.create_item(note) for note in notes[precollected_notes_amount:]]
+                notes = notes[precollected_notes_amount:]
+            itempool += [self.create_item(note) for note in notes]
 
-        itempool += [self.create_item(item)
-                     for item in self.item_name_to_id
-                     if item not in
-                     {
-                         "Power Seal", "Time Shard", *NOTES,
-                         *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-                         # this is a set and currently won't create items for anything that appears in here at all
-                         # if we get in a position where this can have duplicates of items that aren't Power Seals
-                         # or Time shards, this will need to be redone.
-                     }]
-
-        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+        elif self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.multiworld.total_seals[self.player].value)
             if total_seals < self.total_seals:
-                logging.warning(f"Not enough locations for total seals setting. Adjusting to {total_seals}")
+                logging.warning(f"Not enough locations for total seals setting "
+                                f"({self.multiworld.total_seals[self.player].value}). Adjusting to {total_seals}")
                 self.total_seals = total_seals
-            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+            self.required_seals =\
+                int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
 
-        itempool += [self.create_filler()
-                     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
+        remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+        filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
+        itempool += [self.create_item(filler_item)
+                     for filler_item in
+                     self.random.choices(
+                         list(filler_pool),
+                         weights=list(filler_pool.values()),
+                         k=remaining_fill
+                     )]
 
         self.multiworld.itempool += itempool
 
@@ -129,28 +147,23 @@ class MessengerWorld(World):
             Rules.MessengerRules(self).set_messenger_rules()
         elif logic == Logic.option_hard:
             Rules.MessengerHardRules(self).set_messenger_rules()
-        elif logic == Logic.option_challenging:
-            Rules.MessengerChallengeRules(self).set_messenger_rules()
         else:
             Rules.MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        locations: Dict[int, List[str]] = {}
-        for loc in self.multiworld.get_filled_locations(self.player):
-            if loc.item.code:
-                locations[loc.address] = [loc.item.name, self.multiworld.player_name[loc.item.player]]
+        shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
+        figure_prices = {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()}
 
         return {
             "deathlink": self.multiworld.death_link[self.player].value,
             "goal": self.multiworld.goal[self.player].current_key,
             "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
-            "locations": locations,
-            "settings": {
-                "Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced",
-                "Mega Shards": self.multiworld.shuffle_shards[self.player].value
-            },
+            "mega_shards": self.multiworld.shuffle_shards[self.player].value,
             "logic": self.multiworld.logic_level[self.player].current_key,
+            "shop": shop_prices,
+            "figures": figure_prices,
+            "max_price": self.total_shards,
         }
 
     def get_filler_item_name(self) -> str:
@@ -158,6 +171,21 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        override_prog = name in {"Windmill Shuriken"} and getattr(self, "multiworld") is not None \
-            and self.multiworld.logic_level[self.player] > Logic.option_normal
-        return MessengerItem(name, self.player, item_id, override_prog)
+        override_prog = getattr(self, "multiworld") is not None and \
+            name in {"Windmill Shuriken"} and \
+            self.multiworld.logic_level[self.player] > Logic.option_normal
+        count = 0
+        if "Time Shard " in name:
+            count = int(name.strip("Time Shard ()"))
+            count = count if count >= 100 else 0
+            self.total_shards += count
+        return MessengerItem(name, self.player, item_id, override_prog, count)
+
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+        if item.advancement and "Time Shard" in item.name:
+            shard_count = int(item.name.strip("Time Shard ()"))
+            if remove:
+                shard_count = -shard_count
+            state.prog_items["Shards", self.player] += shard_count
+
+        return super().collect_item(state, item, remove)
