@@ -36,15 +36,15 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
-@app.route('/weighted-settings')
-def weighted_settings():
-    return render_template(f"weighted-settings.html")
+@app.route('/weighted-options')
+def weighted_options():
+    return render_template(f"weighted-options.html")
 
 
-# Player settings pages
-@app.route('/games/<string:game>/player-settings')
-def player_settings(game):
-    return render_template(f"player-settings.html", game=game, theme=get_world_theme(game))
+# Player options pages
+@app.route('/games/<string:game>/player-options')
+def player_options(game):
+    return render_template(f"player-options.html", game=game, theme=get_world_theme(game))
 
 
 # Game Info Pages
@@ -171,6 +171,6 @@ def get_sitemap():
     available_games: List[Dict[str, Union[str, bool]]] = []
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            has_settings: bool = isinstance(world.web.settings_page, bool) and world.web.settings_page
+            has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })
     return render_template("siteMap.html", games=available_games)

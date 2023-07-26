@@ -20,12 +20,12 @@
             <span class="link-spacer">|</span>
             <a href="{{ url_for("tutorial_landing") }}#{{ game_name }}">Setup Guides</a>
             {% endif %}
-            {% if world.web.settings_page is string %}
+            {% if world.web.options_page is string %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.settings_page }}">Settings Page</a>
-            {% elif world.web.settings_page %}
+            <a href="{{ world.web.settings_page }}">Options Page</a>
+            {% elif world.web.options_page %}
             <span class="link-spacer">|</span>
-            <a href="{{ url_for("player_settings", game=game_name) }}">Settings Page</a>
+            <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>
             {% endif %}
             {% if world.web.bug_report_page %}
             <span class="link-spacer">|</span>

@@ -142,7 +142,7 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 class WebWorld:
     """Webhost integration"""
 
-    settings_page: Union[bool, str] = True
+    options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
     game_info_languages: List[str] = ['en']

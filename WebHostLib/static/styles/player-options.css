@@ -4,7 +4,7 @@ html{
     background-size: 650px 650px;
 }
 
-#player-settings{
+#player-options{
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -14,14 +14,14 @@ html{
     color: #eeffeb;
 }
 
-#player-settings #player-settings-button-row{
+#player-options #player-options-button-row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 15px;
 }
 
-#player-settings code{
+#player-options code{
     background-color: #d9cd8e;
     border-radius: 4px;
     padding-left: 0.25rem;
@@ -29,7 +29,7 @@ html{
     color: #000000;
 }
 
-#player-settings #user-message{
+#player-options #user-message{
     display: none;
     width: calc(100% - 8px);
     background-color: #ffe86b;
@@ -39,12 +39,12 @@ html{
     text-align: center;
 }
 
-#player-settings #user-message.visible{
+#player-options #user-message.visible{
     display: block;
     cursor: pointer;
 }
 
-#player-settings h1{
+#player-options h1{
     font-size: 2.5rem;
     font-weight: normal;
     width: 100%;
@@ -52,7 +52,7 @@ html{
     text-shadow: 1px 1px 4px #000000;
 }
 
-#player-settings h2{
+#player-options h2{
     font-size: 40px;
     font-weight: normal;
     width: 100%;
@@ -61,22 +61,22 @@ html{
     text-shadow: 1px 1px 2px #000000;
 }
 
-#player-settings h3, #player-settings h4, #player-settings h5, #player-settings h6{
+#player-options h3, #player-options h4, #player-options h5, #player-options h6{
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-#player-settings input:not([type]){
+#player-options input:not([type]){
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
     min-width: 150px;
 }
 
-#player-settings input:not([type]):focus{
+#player-options input:not([type]):focus{
     border: 1px solid #ffffff;
 }
 
-#player-settings select{
+#player-options select{
     border: 1px solid #000000;
     padding: 3px;
     border-radius: 3px;
@@ -84,72 +84,72 @@ html{
     background-color: #ffffff;
 }
 
-#player-settings #game-options, #player-settings #rom-options{
+#player-options #game-options, #player-options #rom-options{
     display: flex;
     flex-direction: row;
 }
 
-#player-settings .left, #player-settings .right{
+#player-options .left, #player-options .right{
     flex-grow: 1;
 }
 
-#player-settings .left{
+#player-options .left{
     margin-right: 10px;
 }
 
-#player-settings .right{
+#player-options .right{
     margin-left: 10px;
 }
 
-#player-settings table{
+#player-options table{
     margin-bottom: 30px;
     width: 100%;
 }
 
-#player-settings table .select-container{
+#player-options table .select-container{
     display: flex;
     flex-direction: row;
 }
 
-#player-settings table .select-container select{
+#player-options table .select-container select{
     min-width: 200px;
     flex-grow: 1;
 }
 
-#player-settings table select:disabled{
+#player-options table select:disabled{
     background-color: lightgray;
 }
 
-#player-settings table .range-container{
+#player-options table .range-container{
     display: flex;
     flex-direction: row;
 }
 
-#player-settings table .range-container input[type=range]{
+#player-options table .range-container input[type=range]{
     flex-grow: 1;
 }
 
-#player-settings table .range-value{
+#player-options table .range-value{
     min-width: 20px;
     margin-left: 0.25rem;
 }
 
-#player-settings table .special-range-container{
+#player-options table .special-range-container{
     display: flex;
     flex-direction: column;
 }
 
-#player-settings table .special-range-wrapper{
+#player-options table .special-range-wrapper{
     display: flex;
     flex-direction: row;
     margin-top: 0.25rem;
 }
 
-#player-settings table .special-range-wrapper input[type=range]{
+#player-options table .special-range-wrapper input[type=range]{
     flex-grow: 1;
 }
 
-#player-settings table .randomize-button {
+#player-options table .randomize-button {
     max-height: 24px;
     line-height: 16px;
     padding: 2px 8px;
@@ -159,18 +159,18 @@ html{
     border-radius: 3px;
 }
 
-#player-settings table .randomize-button.active {
+#player-options table .randomize-button.active {
     background-color: #ffef00; /* Same as .interactive in globalStyles.css */
 }
 
-#player-settings table label{
+#player-options table label{
     display: block;
     min-width: 200px;
     margin-right: 4px;
     cursor: default;
 }
 
-#player-settings th, #player-settings td{
+#player-options th, #player-options td{
     border: none;
     padding: 3px;
     font-size: 17px;
@@ -178,12 +178,12 @@ html{
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){
-    #player-settings #game-options{
+    #player-options #game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
     }
 
-    #player-settings .left, #player-settings .right{
+    #player-options .left, #player-options .right{
         flex-grow: unset;
     }
 

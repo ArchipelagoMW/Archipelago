@@ -168,7 +168,7 @@ def main(args=None, callback=ERmain):
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
-    erargs.player_settings = {}
+    erargs.player_options = {}
 
     player = 1
     while player <= args.multi:

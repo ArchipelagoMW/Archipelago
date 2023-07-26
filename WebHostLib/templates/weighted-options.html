@@ -1,26 +1,26 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    <title>{{ game }} Settings</title>
+    <title>{{ game }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weighted-settings.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weighted-options.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weighted-settings.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weighted-options.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/grassHeader.html' %}
     <div id="weighted-settings" class="markdown" data-game="{{ game }}">
         <div id="user-message"></div>
-        <h1>Weighted Settings</h1>
-        <p>Weighted Settings allows you to choose how likely a particular option is to be used in game generation.
+        <h1>Weighted Options</h1>
+        <p>Weighted options allows you to choose how likely a particular option is to be used in game generation.
             The higher an option is weighted, the more likely the option will be chosen. Think of them like
             entries in a raffle.</p>
 
         <p>Choose the games and options you would like to play with! You may generate a single-player game from
-            this page, or download a settings file you can use to participate in a MultiWorld.</p>
+            this page, or download a options file you can use to participate in a MultiWorld.</p>
 
         <p>A list of all games you have generated can be found on the <a href="/user-content">User Content</a>
             page.</p>

@@ -1,41 +1,41 @@
 let gameName = null;
 
 window.addEventListener('load', () => {
-  gameName = document.getElementById('player-settings').getAttribute('data-game');
+  gameName = document.getElementById('player-options').getAttribute('data-game');
 
   // Update game name on page
   document.getElementById('game-name').innerText = gameName;
 
-  fetchSettingData().then((results) => {
-    let settingHash = localStorage.getItem(`${gameName}-hash`);
-    if (!settingHash) {
+  fetchOptionData().then((results) => {
+    let optionHash = localStorage.getItem(`${gameName}-hash`);
+    if (!optionHash) {
       // If no hash data has been set before, set it now
-      settingHash = md5(JSON.stringify(results));
-      localStorage.setItem(`${gameName}-hash`, settingHash);
+      optionHash = md5(JSON.stringify(results));
+      localStorage.setItem(`${gameName}-hash`, optionHash);
       localStorage.removeItem(gameName);
     }
 
-    if (settingHash !== md5(JSON.stringify(results))) {
-      showUserMessage("Your settings are out of date! Click here to update them! Be aware this will reset " +
+    if (optionHash !== md5(JSON.stringify(results))) {
+      showUserMessage("Your options are out of date! Click here to update them! Be aware this will reset " +
         "them all to default.");
-      document.getElementById('user-message').addEventListener('click', resetSettings);
+      document.getElementById('user-message').addEventListener('click', resetOptions);
     }
 
     // Page setup
-    createDefaultSettings(results);
+    createDefaultOptions(results);
     buildUI(results);
     adjustHeaderWidth();
 
     // Event listeners
-    document.getElementById('export-settings').addEventListener('click', () => exportSettings());
+    document.getElementById('export-options').addEventListener('click', () => exportOptions());
     document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
     document.getElementById('generate-game').addEventListener('click', () => generateGame());
 
     // Name input field
-    const playerSettings = JSON.parse(localStorage.getItem(gameName));
+    const playerOptions = JSON.parse(localStorage.getItem(gameName));
     const nameInput = document.getElementById('player-name');
-    nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
-    nameInput.value = playerSettings.name;
+    nameInput.addEventListener('keyup', (event) => updateBaseOption(event));
+    nameInput.value = playerOptions.name;
   }).catch((e) => {
     console.error(e);
     const url = new URL(window.location.href);
@@ -43,13 +43,13 @@ window.addEventListener('load', () => {
   })
 });
 
-const resetSettings = () => {
+const resetOptions = () => {
   localStorage.removeItem(gameName);
   localStorage.removeItem(`${gameName}-hash`)
   window.location.reload();
 };
 
-const fetchSettingData = () => new Promise((resolve, reject) => {
+const fetchOptionData = () => new Promise((resolve, reject) => {
   const ajax = new XMLHttpRequest();
   ajax.onreadystatechange = () => {
     if (ajax.readyState !== 4) { return; }
@@ -60,54 +60,54 @@ const fetchSettingData = () => new Promise((resolve, reject) => {
     try{ resolve(JSON.parse(ajax.responseText)); }
     catch(error){ reject(error); }
   };
-  ajax.open('GET', `${window.location.origin}/static/generated/player-settings/${gameName}.json`, true);
+  ajax.open('GET', `${window.location.origin}/static/generated/player-options/${gameName}.json`, true);
   ajax.send();
 });
 
-const createDefaultSettings = (settingData) => {
+const createDefaultOptions = (optionData) => {
   if (!localStorage.getItem(gameName)) {
-    const newSettings = {
+    const newOptions = {
       [gameName]: {},
     };
-    for (let baseOption of Object.keys(settingData.baseOptions)){
-      newSettings[baseOption] = settingData.baseOptions[baseOption];
+    for (let baseOption of Object.keys(optionData.baseOptions)){
+      newOptions[baseOption] = optionData.baseOptions[baseOption];
     }
-    for (let gameOption of Object.keys(settingData.gameOptions)){
-      newSettings[gameName][gameOption] = settingData.gameOptions[gameOption].defaultValue;
+    for (let gameOption of Object.keys(optionData.gameOptions)){
+      newOptions[gameName][gameOption] = optionData.gameOptions[gameOption].defaultValue;
     }
-    localStorage.setItem(gameName, JSON.stringify(newSettings));
+    localStorage.setItem(gameName, JSON.stringify(newOptions));
   }
 };
 
-const buildUI = (settingData) => {
+const buildUI = (optionData) => {
   // Game Options
   const leftGameOpts = {};
   const rightGameOpts = {};
-  Object.keys(settingData.gameOptions).forEach((key, index) => {
-    if (index < Object.keys(settingData.gameOptions).length / 2) { leftGameOpts[key] = settingData.gameOptions[key]; }
-    else { rightGameOpts[key] = settingData.gameOptions[key]; }
+  Object.keys(optionData.gameOptions).forEach((key, index) => {
+    if (index < Object.keys(optionData.gameOptions).length / 2) { leftGameOpts[key] = optionData.gameOptions[key]; }
+    else { rightGameOpts[key] = optionData.gameOptions[key]; }
   });
   document.getElementById('game-options-left').appendChild(buildOptionsTable(leftGameOpts));
   document.getElementById('game-options-right').appendChild(buildOptionsTable(rightGameOpts));
 };
 
-const buildOptionsTable = (settings, romOpts = false) => {
-  const currentSettings = JSON.parse(localStorage.getItem(gameName));
+const buildOptionsTable = (options, romOpts = false) => {
+  const currentOptions = JSON.parse(localStorage.getItem(gameName));
   const table = document.createElement('table');
   const tbody = document.createElement('tbody');
 
-  Object.keys(settings).forEach((setting) => {
+  Object.keys(options).forEach((option) => {
     const tr = document.createElement('tr');
 
     // td Left
     const tdl = document.createElement('td');
     const label = document.createElement('label');
-    label.textContent = `${settings[setting].displayName}: `;
-    label.setAttribute('for', setting);
+    label.textContent = `${options[option].displayName}: `;
+    label.setAttribute('for', option);
 
     const questionSpan = document.createElement('span');
     questionSpan.classList.add('interactive');
-    questionSpan.setAttribute('data-tooltip', settings[setting].description);
+    questionSpan.setAttribute('data-tooltip', options[option].description);
     questionSpan.innerText = '(?)';
 
     label.appendChild(questionSpan);
@@ -120,36 +120,36 @@ const buildOptionsTable = (settings, romOpts = false) => {
 
     const randomButton = document.createElement('button');
 
-    switch(settings[setting].type){
+    switch(options[option].type){
       case 'select':
         element = document.createElement('div');
         element.classList.add('select-container');
         let select = document.createElement('select');
-        select.setAttribute('id', setting);
-        select.setAttribute('data-key', setting);
+        select.setAttribute('id', option);
+        select.setAttribute('data-key', option);
         if (romOpts) { select.setAttribute('data-romOpt', '1'); }
-        settings[setting].options.forEach((opt) => {
+        options[option].options.forEach((opt) => {
           const option = document.createElement('option');
           option.setAttribute('value', opt.value);
           option.innerText = opt.name;
-          if ((isNaN(currentSettings[gameName][setting]) &&
-            (parseInt(opt.value, 10) === parseInt(currentSettings[gameName][setting]))) ||
-            (opt.value === currentSettings[gameName][setting]))
+          if ((isNaN(currentOptions[gameName][option]) &&
+            (parseInt(opt.value, 10) === parseInt(currentOptions[gameName][option]))) ||
+            (opt.value === currentOptions[gameName][option]))
           {
             option.selected = true;
           }
           select.appendChild(option);
         });
-        select.addEventListener('change', (event) => updateGameSetting(event.target));
+        select.addEventListener('change', (event) => updateGameOption(event.target));
         element.appendChild(select);
 
         // Randomize button
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
-        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-key', option);
         randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(event, select));
-        if (currentSettings[gameName][setting] === 'random') {
+        if (currentOptions[gameName][option] === 'random') {
           randomButton.classList.add('active');
           select.disabled = true;
         }
@@ -163,30 +163,30 @@ const buildOptionsTable = (settings, romOpts = false) => {
 
         let range = document.createElement('input');
         range.setAttribute('type', 'range');
-        range.setAttribute('data-key', setting);
-        range.setAttribute('min', settings[setting].min);
-        range.setAttribute('max', settings[setting].max);
-        range.value = currentSettings[gameName][setting];
+        range.setAttribute('data-key', option);
+        range.setAttribute('min', options[option].min);
+        range.setAttribute('max', options[option].max);
+        range.value = currentOptions[gameName][option];
         range.addEventListener('change', (event) => {
-          document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event.target);
+          document.getElementById(`${option}-value`).innerText = event.target.value;
+          updateGameOption(event.target);
         });
         element.appendChild(range);
 
         let rangeVal = document.createElement('span');
         rangeVal.classList.add('range-value');
-        rangeVal.setAttribute('id', `${setting}-value`);
-        rangeVal.innerText = currentSettings[gameName][setting] !== 'random' ?
-          currentSettings[gameName][setting] : settings[setting].defaultValue;
+        rangeVal.setAttribute('id', `${option}-value`);
+        rangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
+          currentOptions[gameName][option] : options[option].defaultValue;
         element.appendChild(rangeVal);
 
         // Randomize button
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
-        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-key', option);
         randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(event, range));
-        if (currentSettings[gameName][setting] === 'random') {
+        if (currentOptions[gameName][option] === 'random') {
           randomButton.classList.add('active');
           range.disabled = true;
         }
@@ -200,11 +200,11 @@ const buildOptionsTable = (settings, romOpts = false) => {
 
         // Build the select element
         let specialRangeSelect = document.createElement('select');
-        specialRangeSelect.setAttribute('data-key', setting);
-        Object.keys(settings[setting].value_names).forEach((presetName) => {
+        specialRangeSelect.setAttribute('data-key', option);
+        Object.keys(options[option].value_names).forEach((presetName) => {
           let presetOption = document.createElement('option');
           presetOption.innerText = presetName;
-          presetOption.value = settings[setting].value_names[presetName];
+          presetOption.value = options[option].value_names[presetName];
           const words = presetOption.innerText.split("_");
           for (let i = 0; i < words.length; i++) {
             words[i] = words[i][0].toUpperCase() + words[i].substring(1);
@@ -217,8 +217,8 @@ const buildOptionsTable = (settings, romOpts = false) => {
         customOption.value = 'custom';
         customOption.selected = true;
         specialRangeSelect.appendChild(customOption);
-        if (Object.values(settings[setting].value_names).includes(Number(currentSettings[gameName][setting]))) {
-          specialRangeSelect.value = Number(currentSettings[gameName][setting]);
+        if (Object.values(options[option].value_names).includes(Number(currentOptions[gameName][option]))) {
+          specialRangeSelect.value = Number(currentOptions[gameName][option]);
         }
 
         // Build range element
@@ -226,17 +226,17 @@ const buildOptionsTable = (settings, romOpts = false) => {
         specialRangeWrapper.classList.add('special-range-wrapper');
         let specialRange = document.createElement('input');
         specialRange.setAttribute('type', 'range');
-        specialRange.setAttribute('data-key', setting);
-        specialRange.setAttribute('min', settings[setting].min);
-        specialRange.setAttribute('max', settings[setting].max);
-        specialRange.value = currentSettings[gameName][setting];
+        specialRange.setAttribute('data-key', option);
+        specialRange.setAttribute('min', options[option].min);
+        specialRange.setAttribute('max', options[option].max);
+        specialRange.value = currentOptions[gameName][option];
 
         // Build rage value element
         let specialRangeVal = document.createElement('span');
         specialRangeVal.classList.add('range-value');
-        specialRangeVal.setAttribute('id', `${setting}-value`);
-        specialRangeVal.innerText = currentSettings[gameName][setting] !== 'random' ?
-          currentSettings[gameName][setting] : settings[setting].defaultValue;
+        specialRangeVal.setAttribute('id', `${option}-value`);
+        specialRangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
+          currentOptions[gameName][option] : options[option].defaultValue;
 
         // Configure select event listener
         specialRangeSelect.addEventListener('change', (event) => {
@@ -244,18 +244,18 @@ const buildOptionsTable = (settings, romOpts = false) => {
 
           // Update range slider
           specialRange.value = event.target.value;
-          document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event.target);
+          document.getElementById(`${option}-value`).innerText = event.target.value;
+          updateGameOption(event.target);
         });
 
         // Configure range event handler
         specialRange.addEventListener('change', (event) => {
           // Update select element
           specialRangeSelect.value =
-            (Object.values(settings[setting].value_names).includes(parseInt(event.target.value))) ?
+            (Object.values(options[option].value_names).includes(parseInt(event.target.value))) ?
             parseInt(event.target.value) : 'custom';
-          document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event.target);
+          document.getElementById(`${option}-value`).innerText = event.target.value;
+          updateGameOption(event.target);
         });
 
         element.appendChild(specialRangeSelect);
@@ -266,12 +266,12 @@ const buildOptionsTable = (settings, romOpts = false) => {
         // Randomize button
         randomButton.innerText = '🎲';
         randomButton.classList.add('randomize-button');
-        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-key', option);
         randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(
             event, specialRange, specialRangeSelect)
         );
-        if (currentSettings[gameName][setting] === 'random') {
+        if (currentOptions[gameName][option] === 'random') {
           randomButton.classList.add('active');
           specialRange.disabled = true;
           specialRangeSelect.disabled = true;
@@ -281,7 +281,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         break;
 
       default:
-        console.error(`Ignoring unknown setting type: ${settings[setting].type} with name ${setting}`);
+        console.error(`Ignoring unknown option type: ${options[option].type} with name ${option}`);
         return;
     }
 
@@ -312,36 +312,36 @@ const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
     }
   }
 
-  updateGameSetting(randomButton);
+  updateGameOption(randomButton);
 };
 
-const updateBaseSetting = (event) => {
+const updateBaseOption = (event) => {
   const options = JSON.parse(localStorage.getItem(gameName));
   options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
     event.target.value : parseInt(event.target.value);
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
-const updateGameSetting = (settingElement) => {
+const updateGameOption = (optionElement) => {
   const options = JSON.parse(localStorage.getItem(gameName));
 
-  if (settingElement.classList.contains('randomize-button')) {
+  if (optionElement.classList.contains('randomize-button')) {
     // If the event passed in is the randomize button, then we know what we must do.
-    options[gameName][settingElement.getAttribute('data-key')] = 'random';
+    options[gameName][optionElement.getAttribute('data-key')] = 'random';
   } else {
-    options[gameName][settingElement.getAttribute('data-key')] = isNaN(settingElement.value) ?
-      settingElement.value : parseInt(settingElement.value, 10);
+    options[gameName][optionElement.getAttribute('data-key')] = isNaN(optionElement.value) ?
+      optionElement.value : parseInt(optionElement.value, 10);
   }
 
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
-const exportSettings = () => {
-  const settings = JSON.parse(localStorage.getItem(gameName));
-  if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
+const exportOptions = () => {
+  const options = JSON.parse(localStorage.getItem(gameName));
+  if (!options.name || options.name.toLowerCase() === 'player' || options.name.trim().length === 0) {
     return showUserMessage('You must enter a player name!');
   }
-  const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
+  const yamlText = jsyaml.safeDump(options, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
   download(`${document.getElementById('player-name').value}.yaml`, yamlText);
 };
 
@@ -357,14 +357,14 @@ const download = (filename, text) => {
 };
 
 const generateGame = (raceMode = false) => {
-  const settings = JSON.parse(localStorage.getItem(gameName));
-  if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
+  const options = JSON.parse(localStorage.getItem(gameName));
+  if (!options.name || options.name.toLowerCase() === 'player' || options.name.trim().length === 0) {
     return showUserMessage('You must enter a player name!');
   }
 
   axios.post('/api/generate', {
-    weights: { player: settings },
-    presetData: { player: settings },
+    weights: { player: options },
+    presetData: { player: options },
     playerCount: 1,
     spoiler: 3,
     race: raceMode ? '1' : '0',

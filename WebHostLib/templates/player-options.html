@@ -1,26 +1,26 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    <title>{{ game }} Settings</title>
+    <title>{{ game }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/player-settings.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/player-options.css") }}" />
     <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/player-settings.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/player-options.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
-    <div id="player-settings" class="markdown" data-game="{{ game }}">
+    <div id="player-options" class="markdown" data-game="{{ game }}">
         <div id="user-message"></div>
-        <h1><span id="game-name">Player</span> Settings</h1>
+        <h1><span id="game-name">Player</span> Options</h1>
         <p>Choose the options you would like to play with! You may generate a single-player game from this page,
-            or download a settings file you can use to participate in a MultiWorld.</p>
+            or download a options file you can use to participate in a MultiWorld.</p>
 
         <p>
-            A more advanced settings configuration for all games can be found on the
-            <a href="/weighted-settings">Weighted Settings</a> page.
+            A more advanced options configuration for all games can be found on the
+            <a href="/weighted-options">Weighted options</a> page.
             <br />
             A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
             <br />
@@ -39,8 +39,8 @@
             <div id="game-options-right" class="right"></div>
         </div>
 
-        <div id="player-settings-button-row">
-            <button id="export-settings">Export Settings</button>
+        <div id="player-options-button-row">
+            <button id="export-options">Export Options</button>
             <button id="generate-game">Generate Game</button>
             <button id="generate-race">Generate Race</button>
         </div>
