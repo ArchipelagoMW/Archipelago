@@ -63,14 +63,7 @@ class SuperMarioGalaxy(World):
     def create_items(self):
         # creates the green stars in each players itempool
         self.multiworld.itempool += [self.create_item("Green Star") for i in range(0,3)]
-        
-        grandstar1 = self.create_item("Grand Star Terrace")   
-        grandstar2 = self.create_item("Grand Star Fountain")  
-        grandstar3 = self.create_item("Grand Star Kitchen")
-        grandstar4 = self.create_item("Grand Star Bedroom")
-        grandstar5 = self.create_item("Grand Star Engine Room")          
-        self.multiworld.itempool += [grandstar1,grandstar2,grandstar3,grandstar4,grandstar5]    
-        
+        self.multiworld.itempool += [self.create_item("Progressive Grand Star") for i in range(0,5)]       
         self.multiworld.get_location("B: Bowser's Galaxy Reactor", self.player).place_locked_item(self.create_item("Peach"))
         
         # check to see what setting enable purple coin stars is on to see how many stars to create 
@@ -84,12 +77,6 @@ class SuperMarioGalaxy(World):
              self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,92)]
          
         # creates the grand stars in each players itempool
-             grandstar1 = self.create_item("Grand Star Terrace")   
-             grandstar2 = self.create_item("Grand Star Fountain")  
-             grandstar3 = self.create_item("Grand Star Kitchen")
-             grandstar4 = self.create_item("Grand Star Bedroom")
-             grandstar5 = self.create_item("Grand Star Engine Room")          
-             self.multiworld.itempool += [grandstar1,grandstar2,grandstar3,grandstar4,grandstar5]
 
         if self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_none:
            self.multiworld.get_location("TT: Luigi's Purple Coins", self.player).place_locked_item(self.create_item("Nothing"))

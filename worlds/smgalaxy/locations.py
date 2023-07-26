@@ -1,5 +1,12 @@
-from BaseClasses import Location
-from typing import NamedTuple, Optional, Dict
+from typing import Callable, Dict, NamedTuple, Optional
+
+from BaseClasses import Location, MultiWorld
+
+def purplecoinstar(multiworld, player):
+    return multiworld.enable_purple_coin_stars[player].value < 2
+
+def maingameonly(multiworld, player):
+    return multiworld.enable_purple_coin_stars[player].value == 1
 
 class SMGLocation(Location):
     game: str = "Super Mario Galaxy"
@@ -172,7 +179,7 @@ locHL_table = {
 }
 
 locPC_table = {
-    "TT: Luigi's Purple Coins": 170000091, 
+    "TT: Luigi's Purple Coins": 170000091,
     "DN: Battlestation's Purple Coins": 170000102,
     "MM: Red-Hot Purple Coins": 170000108,
     "DD: Plunder the Purple Coins": 170000096,
@@ -189,7 +196,6 @@ locPC_table = {
     "DDune: Purple Coin in the Desert": 170000070,
     "HH: The Honeyhive's Purple Coins": 170000011
 }
-
 location_table = { **locGE_table, **locHH_table, 
                    **locSJ_table, **locBR_table, **locBB_table, 
                    **locGG_table, **locFF_table, **locDDune_table, **locG_table, 
