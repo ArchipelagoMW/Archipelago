@@ -11,8 +11,8 @@
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    - For Supported mods (see related section in this page), it is recommend to install them from the mods archive available with the StardewArchipelago mod release
-    - It is **not** recommended to further mod Stardew Valley with unsupported mods, altough it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
+    - There are supported mods (see related section in this page), that you can add to your yaml and include them in the archipelago randomization
+    - It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
     - The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
 ## Configuring your YAML file
@@ -86,35 +86,36 @@ This section must be an array with the **exact** names of every mod you wish to 
 These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes a spell that allow a player to teleport, and, if included, teleporting can be required to reach checks.
 
 Furthermore, as mod development can be unpredictable, the generator and the StardewArchipelago client are designed and tested for a very specific version of any supported mod. When installing them, you must choose the correct version, or you will not be able to play.
+The StardewArchipelago mod will inform you if some of your supported mods have the wrong version, and tell you what version you need.
 
-A Zip archive of **every supported mod** is included in the [StardewArchipelago Mod Releases](https://github.com/agilbert1412/StardewArchipelago/releases) alongside the main mod, which should all have the correct versions available. The archive also contains recommended configs for customizable mods.
+Some supported mods have config files that can be customized, but sometimes, some settings are mandatory for compatibility with Archipelago. When that is the case, StardewArchipelago will override these settings.
 
-The archive also contains every dependency for these mods, but dependency versions are less strict.
+Most mosts also have dependencies to some library/utility mods. You will need to install these as well, but dependency versions are less strict.
 
 If you can load the supported mod on the correct version, the exact version of a dependency is not important.
 
 #### All supported mod exact names and required versions:
-  - "DeepWoods" -> 3.0.0-beta
-  - "Tractor Mod" -> 4.16.4
-  - "Bigger Backpack" -> 6.0.0
-  - "Skull Cavern Elevator" -> 1.5.0
-  - "Luck Skill" -> 1.2.4
-  - "Magic" -> 0.8.2
-  - "Socializing Skill" -> 1.1.5
-  - "Archaeology" -> 1.5.0
-  - "Cooking Skill" -> 1.4.5
-  - "Binning Skill" -> 1.2.7
-  - "Ayeisha - The Postal Worker (Custom NPC)" -> 0.5.0-alpha
-  - "Mister Ginger (cat npc)" -> 1.5.9
-  - "Juna - Roommate NPC" -> 2.1.3
-  - "Professor Jasper Thomas" -> 1.7.6
-  - "Alec Revisited" -> 2.1.0
-  - "Custom NPC - Yoba" -> 1.0.0
-  - "Custom NPC Eugene" -> 1.3.1
-  - "'Prophet' Wellwick" -> 1.0.0
-  - "Shiko - New Custom NPC" -> 1.1.0
-  - "Delores - Custom NPC" -> 1.1.2
-  - "Custom NPC - Riley" -> 1.2.2
+  - "DeepWoods"
+  - "Tractor Mod"
+  - "Bigger Backpack"
+  - "Skull Cavern Elevator"
+  - "Luck Skill"
+  - "Magic"
+  - "Socializing Skill"
+  - "Archaeology"
+  - "Cooking Skill"
+  - "Binning Skill"
+  - "Ayeisha - The Postal Worker (Custom NPC)"
+  - "Mister Ginger (cat npc)"
+  - "Juna - Roommate NPC"
+  - "Professor Jasper Thomas"
+  - "Alec Revisited"
+  - "Custom NPC - Yoba"
+  - "Custom NPC Eugene"
+  - "'Prophet' Wellwick"
+  - "Shiko - New Custom NPC"
+  - "Delores - Custom NPC"
+  - "Custom NPC - Riley"
 
 
 ### Multiplayer
