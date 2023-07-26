@@ -788,6 +788,12 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys):
 
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
+    
+    def items(self):
+        return self.value.items()
+    
+    def __getitem__(self, item):
+        return self.value[item]
 
     def __contains__(self, item):
         return item in self.value
