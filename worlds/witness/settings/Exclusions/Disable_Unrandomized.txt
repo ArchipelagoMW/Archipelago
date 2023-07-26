@@ -31,6 +31,9 @@ Disabled Locations:
 0x032FF (Orchard Apple Tree 5)
 0x334DB (Door Timer Outside)
 0x334DC (Door Timer Inside)
+0x19B24 (Timed Door) - 0x334DB
+0x194B2 (Laser Entry Right)
+0x19665 (Laser Entry Left)
 0x198B5 (Shadows Intro 1)
 0x198BD (Shadows Intro 2)
 0x198BF (Shadows Intro 3)
