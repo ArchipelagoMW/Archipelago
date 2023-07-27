@@ -7,11 +7,13 @@ class PathOption(Choice):
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes the Lukki Lair and Fungal Caverns. 9 biomes total.
     Main World includes the full world (excluding parallel worlds). 14 biomes total.
+    Beta Biome includes the main world and the new biome in the current beta. It is also very small.
     Note: The Collapsed Mines have been combined into the Mines as the biome is tiny."""
     display_name = "Path Option"
     option_main_path = 1
     option_side_path = 2
     option_main_world = 3
+    option_beta_biome = 5
     default = 1
 
 
@@ -99,9 +101,14 @@ class ShopPrice(Choice):
     default = 100
 
 
+class NoitaDeathLink(DeathLink):
+    """When you die, everyone dies. Of course the reverse is true too.
+    Note: Can be toggled off via a setting within the mod settings menu."""
+
+
 noita_options: Dict[str, AssembleOptions] = {
     "start_inventory_from_pool": StartInventoryPool,
-    "death_link": DeathLink,
+    "death_link": NoitaDeathLink,
     "bad_effects": Traps,
     "victory_condition": VictoryCondition,
     "path_option": PathOption,
