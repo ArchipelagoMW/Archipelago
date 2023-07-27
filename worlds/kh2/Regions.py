@@ -1012,7 +1012,7 @@ def create_regions(world, player: int, active_locations):
                                                  LocationName.Lvl99]
 
     for region, locations in KH2REGIONS.items():
-        world.regions += [create_region(world, player, active_locations, region, locations)]
+        world.regions += [create_region(world, player, active_locations, region, locations) for region, locations in KH2REGIONS.items()]
 
 
 def connect_regions(world: MultiWorld, player: int):
