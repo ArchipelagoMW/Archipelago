@@ -64,7 +64,7 @@ class StaticWitnessLocations:
         "Quarry Stoneworks Upper Row 8",
         "Quarry Stoneworks Control Room Left",
         "Quarry Stoneworks Control Room Right",
-        "Quarry Stoneworks Stair Control",
+        "Quarry Stoneworks Stairs Control",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
         "Quarry Boathouse Front Row 5",
@@ -407,7 +407,7 @@ class StaticWitnessLocations:
         "Mountain Bottom Floor Final Room Entry Left",
         "Mountain Bottom Floor Final Room Entry Right",
 
-        "Mountain Bottom Floor Caves Entry",
+        "Mountain Bottom Floor Caves Entry Panel",
 
         "Mountain Final Room Left Pillar 4",
         "Mountain Final Room Right Pillar 4",
