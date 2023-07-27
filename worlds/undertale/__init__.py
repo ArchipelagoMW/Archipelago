@@ -155,7 +155,10 @@ class UndertaleWorld(World):
         if self.multiworld.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
 
-        if self.multiworld.starting_area[self.player] == "ruins":
+        starting_key= self.multiworld.starting_area[self.player].current_key.title() + " Key"
+        itempool = [item for item in itempool]
+        itempool.remove(starting_key)
+        self.multiworld.push_precollected(self.create_item(starting_key))
             itempool = [item for item in itempool if item != "Ruins Key"]
             self.multiworld.push_precollected(self.create_item("Ruins Key"))
         elif self.multiworld.starting_area[self.player] == "snowdin":
