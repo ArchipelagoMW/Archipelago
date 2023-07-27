@@ -1114,6 +1114,8 @@ def connect_regions(world: MultiWorld, player: int):
 
     names: typing.Dict[str, int] = {}
     for source, target in KH2RegionConnections.items():
+        source_region = world.get_region(source, player)
+        source_region.add_exits(target)
         for region in target:
             connect(world, player, names, source, region)
 
