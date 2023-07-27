@@ -1,14 +1,12 @@
 import unittest
 
 from test.general import setup_solo_multiworld
-from . import KH2TestBase
-from .. import KH2World, all_locations, item_dictionary_table, CheckDupingItems, all_weapon_slot, KH2Item
+from .. import KH2World
 from ..Names import ItemName
-from ... import AutoWorldRegister
 from ...AutoWorld import call_all
 
 
-class TestLocalItems(KH2TestBase):
+class TestLocalItems(unittest.TestCase):
 
     def testSlotData(self):
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")

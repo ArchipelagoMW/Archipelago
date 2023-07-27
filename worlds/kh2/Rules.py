@@ -5,7 +5,7 @@ from .logic import *
 from .Items import exclusion_item_table, visit_locking_dict
 from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
-from ..generic.Rules import add_rule, forbid_items
+from worlds.generic.Rules import add_rule, forbid_items
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:

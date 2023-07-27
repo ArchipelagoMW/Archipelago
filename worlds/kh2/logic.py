@@ -1,5 +1,4 @@
 from .Names import ItemName, LocationName
-from ..AutoWorld import LogicMixin
 
 base_tools = [
     ItemName.FinishingPlus,

@@ -12,7 +12,7 @@ SecretAnsemsReport10 = "Secret Ansem's Report 10"
 SecretAnsemsReport11 = "Secret Ansem's Report 11"
 SecretAnsemsReport12 = "Secret Ansem's Report 12"
 SecretAnsemsReport13 = "Secret Ansem's Report 13"
-
+# proofs, visit unlocks and forms
 ProofofConnection = "Proof of Connection"
 ProofofNonexistence = "Proof of Nonexistence"
 ProofofPeace = "Proof of Peace"
@@ -332,7 +332,7 @@ Victory = "Victory"
 LuckyEmblem = "Lucky Emblem"
 Bounty = "Bounty"
 
-UniversalKey = "Universal Key"
+# UniversalKey = "Universal Key"
 # Keyblade Slots
 FAKESlot = "FAKE (Slot)"
 DetectionSaberSlot = "Detection Saber (Slot)"

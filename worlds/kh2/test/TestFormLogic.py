@@ -66,29 +66,22 @@ class TestDefaultForms(KH2TestFormBase):
     options = {"AutoFormLogic":  False,
                "FinalFormLogic": "light_and_darkness"}
 
-    def testNothing(self):
-        for form_location in self.allLevel2:
-            self.assertEqual((self.can_reach_location(form_location)), False, form_location)
-
-        for drive_form, loc_list in self.driveFormMap.items():
-            self.assertEqual((self.can_reach_location(loc_list[0])), False, loc_list)
-
     def testDefaultAutoFormLogic(self):
         allPossibleForms = self.allForms + self.autoForms
         # this tests with a light and darkness in the inventory.
         self.collect_all_but(allPossibleForms)
         for form in self.allForms:
-            self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), False, form)
+            self.assertFalse((self.can_reach_location(self.driveFormMap[form][0])), form)
             self.collect(self.get_item_by_name(self.driveToAuto[form]))
-            self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), False, form)
+            self.assertFalse((self.can_reach_location(self.driveFormMap[form][0])), form)
 
     def testDefaultFinalForm(self):
         allPossibleForms = self.allForms + self.autoForms
         self.collect_all_but(allPossibleForms)
         self.collect_by_name(ItemName.FinalForm)
-        self.assertEqual((self.can_reach_location(LocationName.Finallvl2)), True)
-        self.assertEqual((self.can_reach_location(LocationName.Finallvl3)), True)
-        self.assertEqual((self.can_reach_location(LocationName.Finallvl4)), False)
+        self.assertTrue((self.can_reach_location(LocationName.Finallvl2)))
+        self.assertTrue((self.can_reach_location(LocationName.Finallvl3)))
+        self.assertFalse((self.can_reach_location(LocationName.Finallvl4)))
 
     def testDefaultWithoutLnD(self):
         allPossibleForms = self.allForms
@@ -106,23 +99,23 @@ class TestDefaultForms(KH2TestFormBase):
             self.collect(self.get_item_by_name(form))
             for _ in range(self.count(ItemName.LightDarkness)):
                 self.remove(self.get_item_by_name(ItemName.LightDarkness))
-            self.assertEqual((self.can_reach_location(levels[0])), True, levels[0])
-            self.assertEqual((self.can_reach_location(levels[1])), True, levels[1])
-            self.assertEqual((self.can_reach_location(levels[2])), False, levels[2])
+            self.assertTrue((self.can_reach_location(levels[0])), levels[0])
+            self.assertTrue((self.can_reach_location(levels[1])), levels[1])
+            self.assertFalse((self.can_reach_location(levels[2])), levels[2])
             for i in range(3):
                 self.collect(self.get_item_by_name(allFormsCopy[i]))
                 # for some reason after collecting a form it can pick up light and darkness
                 for _ in range(self.count(ItemName.LightDarkness)):
                     self.remove(self.get_item_by_name(ItemName.LightDarkness))
 
-                self.assertEqual((self.can_reach_location(levels[2 + i])), True)
+                self.assertTrue((self.can_reach_location(levels[2 + i])))
                 if i < 2:
-                    self.assertEqual((self.can_reach_location(levels[3 + i])), False)
+                    self.assertFalse((self.can_reach_location(levels[3 + i])))
                 else:
                     self.collect(self.get_item_by_name(allFormsCopy[i + 1]))
                     for _ in range(self.count(ItemName.LightDarkness)):
                         self.remove(self.get_item_by_name(ItemName.LightDarkness))
-                    self.assertEqual((self.can_reach_location(levels[3 + i])), True)
+                    self.assertTrue((self.can_reach_location(levels[3 + i])))
 
     def testDefaultWithLnD(self):
         allPossibleForms = self.allForms
@@ -135,18 +128,18 @@ class TestDefaultForms(KH2TestFormBase):
                 allFormsCopy = self.allForms.copy()
                 allFormsCopy.remove(form)
                 self.collect(self.get_item_by_name(ItemName.LightDarkness))
-                self.assertEqual((self.can_reach_location(levels[0])), False)
+                self.assertFalse((self.can_reach_location(levels[0])))
                 self.collect(self.get_item_by_name(form))
 
-                self.assertEqual((self.can_reach_location(levels[0])), True)
-                self.assertEqual((self.can_reach_location(levels[1])), True)
-                self.assertEqual((self.can_reach_location(levels[2])), True)
-                self.assertEqual((self.can_reach_location(levels[3])), False)
+                self.assertTrue((self.can_reach_location(levels[0])))
+                self.assertTrue((self.can_reach_location(levels[1])))
+                self.assertTrue((self.can_reach_location(levels[2])))
+                self.assertFalse((self.can_reach_location(levels[3])))
                 for i in range(2):
                     self.collect(self.get_item_by_name(allFormsCopy[i]))
-                    self.assertEqual((self.can_reach_location(levels[i + 3])), True)
+                    self.assertTrue((self.can_reach_location(levels[i + 3])))
                     if i <= 2:
-                        self.assertEqual((self.can_reach_location(levels[i + 4])), False)
+                        self.assertFalse((self.can_reach_location(levels[i + 4])))
 
 
 class TestJustAForm(KH2TestFormBase):
@@ -156,10 +149,10 @@ class TestJustAForm(KH2TestFormBase):
 
     def testNothing(self):
         for form_location in self.allLevel2:
-            self.assertEqual((self.can_reach_location(form_location)), False, form_location)
+            self.assertFalse((self.can_reach_location(form_location)), form_location)
 
         for drive_form, loc_list in self.driveFormMap.items():
-            self.assertEqual((self.can_reach_location(loc_list[0])), False, loc_list)
+            self.assertFalse((self.can_reach_location(loc_list[0])), loc_list)
 
     def testJustAFormConnections(self):
         allPossibleForms = self.allForms
@@ -173,22 +166,22 @@ class TestJustAForm(KH2TestFormBase):
                 # reset the forms
                 allFormsCopy = self.allForms.copy()
                 allFormsCopy.remove(form)
-                self.assertEqual((self.can_reach_location(levels[0])), False)
+                self.assertFalse((self.can_reach_location(levels[0])))
                 self.collect(self.get_item_by_name(form))
-                self.assertEqual((self.can_reach_location(levels[0])), True)
-                self.assertEqual((self.can_reach_location(levels[1])), True)
-                self.assertEqual((self.can_reach_location(levels[2])), True)
+                self.assertTrue((self.can_reach_location(levels[0])))
+                self.assertTrue((self.can_reach_location(levels[1])))
+                self.assertTrue((self.can_reach_location(levels[2])))
 
                 # level 4 of a form. This tests if the player can unlock final form.
-                self.assertEqual((self.can_reach_location(levels[3])), False)
+                self.assertFalse((self.can_reach_location(levels[3])))
                 # amount of forms left in the pool are 3. 1 already collected and one is final form.
                 for i in range(3):
                     allFormsCopy.remove(allFormsCopy[0])
                     # so we don't accidentally collect another form like light and darkness in the above tests.
                     self.collect_all_but(allFormsCopy)
-                    self.assertEqual((self.can_reach_location(levels[3 + i])), True, levels[3 + i])
+                    self.assertTrue((self.can_reach_location(levels[3 + i])), levels[3 + i])
                     if i < 2:
-                        self.assertEqual((self.can_reach_location(levels[4 + i])), False, levels[4 + i])
+                        self.assertFalse((self.can_reach_location(levels[4 + i])), levels[4 + i])
 
 
 class TestAutoForms(KH2TestFormBase):
@@ -197,10 +190,10 @@ class TestAutoForms(KH2TestFormBase):
 
     def testNothing(self):
         for form_location in self.allLevel2:
-            self.assertEqual((self.can_reach_location(form_location)), False, form_location)
+            self.assertFalse((self.can_reach_location(form_location)), form_location)
 
         for drive_form, loc_list in self.driveFormMap.items():
-            self.assertEqual((self.can_reach_location(loc_list[0])), False, loc_list)
+            self.assertFalse((self.can_reach_location(loc_list[0])), loc_list)
 
     def testAutoFormsLevelProgression(self):
         allPossibleForms = self.allForms + [ItemName.LightDarkness]
@@ -216,8 +209,8 @@ class TestAutoForms(KH2TestFormBase):
             self.collect_all_but(allPossibleFormsCopy)
             for driveForm in self.allForms:
                 # +1 every iteration.
-                self.assertEqual((self.can_reach_location(self.driveFormMap[driveForm][i])), True, driveForm)
+                self.assertTrue((self.can_reach_location(self.driveFormMap[driveForm][i])), driveForm)
                 # making sure having the form still gives an extra drive level to its own form.
                 if driveForm in collectedDrives and i < 5:
-                    self.assertEqual((self.can_reach_location(self.driveFormMap[driveForm][i + 1])), True, driveForm)
+                    self.assertTrue((self.can_reach_location(self.driveFormMap[driveForm][i + 1])), driveForm)
             i += 1

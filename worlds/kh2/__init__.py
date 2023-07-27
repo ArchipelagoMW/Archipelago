@@ -57,7 +57,6 @@ class KH2World(World):
         self.lucky_emblem_required = None
         self.bounties_required = None
         self.bounties_amount = None
-        self.hitlist = None
         self.random_super_boss_list = list()
         self.filler_items = list()
         self.item_quantity_dict = {}
@@ -73,7 +72,7 @@ class KH2World(World):
         self.local_items = dict()
 
     def fill_slot_data(self) -> dict:
-        # localItems filling done here for the unit test.
+        # localItems filling done here instead of OpenKH for the unit test.
         for values in CheckDupingItems.values():
             if isinstance(values, set):
                 self.slot_data_duping = self.slot_data_duping.union(values)
@@ -87,7 +86,7 @@ class KH2World(World):
                             and location.name not in all_weapon_slot}
 
         return {
-            "hitlist":              self.hitlist,
+            "hitlist":              [],
             "LocalItems":           self.local_items,
             "Goal":                 self.multiworld.Goal[self.player].value,
             "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
