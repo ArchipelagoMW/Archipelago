@@ -31,7 +31,7 @@ class NoitaWorld(World):
 
     item_name_groups = Items.item_name_groups
     location_name_groups = Locations.location_name_groups
-    data_version = 2
+    data_version = 3
 
     web = NoitaWeb()
 
