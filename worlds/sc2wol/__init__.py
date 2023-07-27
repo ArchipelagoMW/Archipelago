@@ -197,6 +197,9 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
             else:
                 pool.append(item)
 
+    # Check the parent item integrity, exclude items
+    pool[:] = [item for item in pool if pool_contains_parent(item, pool)]
+
     existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
     existing_names = [item.name for item in existing_items]
     # Removing upgrades for excluded items
@@ -224,3 +227,13 @@ def create_item_with_correct_settings(player: int, name: str) -> Item:
     item = Item(name, data.classification, data.code, player)
 
     return item
+
+
+def pool_contains_parent(item: Item, pool: [Item]):
+    item_data = get_full_item_list().get(item.name)
+    if item_data.parent_item is None:
+        # The item has not associated parent, the item is valid
+        return True
+    parent_item = item_data.parent_item
+    # Check if the pool contains the parent item
+    return parent_item in [pool_item.name for pool_item in pool]
