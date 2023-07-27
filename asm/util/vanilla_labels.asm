@@ -31,7 +31,12 @@
 .definelabel usMojiCount, 0x3004A30  ; ???
 
 ; I/O Registers
+.definelabel REG_BG3CNT, 0x400000E
 .definelabel REG_DMA3SAD, 0x40000D4
+
+; PalRAM
+.definelabel ObjectPalette4, 0x5000280
+.definelabel ObjectPaletteF, 0x50003E0
 
 ; Functions
 .definelabel MainGameLoop, 0x80001CC
@@ -61,6 +66,8 @@
 .definelabel WarioChng_React, 0x82DECA0
 
 ; ROM data
+.definelabel BigBoardEntityTiles, 0x83644F0
+.definelabel BigBoardEntityPalettes, 0x83B1950
 .definelabel takara_Anm_00, 0x83B4BC8
 .definelabel takara_Anm_01, 0x83B4BD8
 .definelabel takara_Anm_02, 0x83B4C00
@@ -69,6 +76,7 @@
 .definelabel takara_Anm_05, 0x83B4C30
 .definelabel zako_takara_box_Anm_02, 0x83B4F34
 .definelabel zako_takara_box_Anm_11, 0x83B5004
+.definelabel CommonRoomEntityPalettes4, 0x8400A68
 .definelabel EmptyJewel4Tile, 0x84016E8
 .definelabel EmptyJewel1Tile, 0x8401708
 .definelabel EmptyJewel3Tile, 0x8401AE8
@@ -82,4 +90,10 @@
 .definelabel HasJewel3Tile, 0x8404608
 .definelabel HasJewel4Tile, 0x8404628
 .definelabel EmptyCDTile, 0x8400FA8
+.definelabel BasicElementTiles, 0x8400AE8
+.definelabel PortalTilemap3, 0x864BF58
+.definelabel PortalOBJTileset, 0x868269C
 .definelabel SaveTutorialTilemap, 0x868B15C
+.definelabel PortalTileset2, 0x868681C
+.definelabel PortalPaletteDTable, 0x0868A81C
+.definelabel PortalPaletteETable, 0x0868A8DC

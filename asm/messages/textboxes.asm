@@ -60,6 +60,234 @@ ResultsScreenMessageState:
 .pool
 
 
+; Load the text for the next item received message.
+PyramidScreenShowReceivedItem:
+    push {r6, lr}
+    ldr r6, =0x9000  ; Next tile
+
+    ; "Received "
+    mov r2, #9  ; a3 String length
+    lsl r3, r2, #6
+    mov r1, r6  ; a2
+    add r6, r3  ; Set next tile
+    ldr r0, =StrItemReceived  ; a1
+    call_using r3, MojiCreate
+
+    ; "from "
+    mov r2, #5  ; a3 String length
+    lsl r3, r2, #6
+    mov r1, r6  ; a2
+    add r6, r3  ; Set next tile
+    ldr r0, =StrItemFrom  ; a1
+    call_using r3, MojiCreate
+
+    ; Player name
+    ldr r0, =IncomingItemSender
+    bl StrLen
+    mov r2, r0  ; a3 String length
+    lsl r3, r2, #6
+    mov r1, r6  ; a2 Current tile
+    add r6, r3  ; Set next tile
+    ldr r0, =IncomingItemSender  ; a1
+    call_using r3, MojiCreate
+
+    ; Space filler
+    ldr r2, =0xA180
+    sub r2, r6
+    lsr r2, r2, #6  ; a3 String length
+    mov r1, r6  ; a2 Current tile
+    ldr r0, =StrScreenFiller  ; a1
+    call_using r3, MojiCreate
+
+; Sprite
+
+    ; Decode
+    ldr r3, =REG_DMA3SAD
+    ldr r0, =IncomingItemID
+    ldrb r0, [r0]
+
+    lsl r1, r0, #31-6
+    lsr r1, r1, #31
+    cmp r1, #1
+    beq @@JunkItem
+
+    ; Major item
+    lsl r2, r0, #31-4
+    lsr r2, r2, #31-2  ; Passage
+    lsl r2, r2, #5  ; r2: Passage * 32
+    lsl r1, r0, #31-5
+    lsr r1, r1, #31
+    cmp r1, #1
+    beq @@CD
+
+; Jewel piece
+
+    ; DMA in the palette
+    ldr r1, =PortalPaletteDTable  ; Palette set
+    add r1, r1, r2  ; Passage palette
+    str r1, [r3]
+    ldr r1, =ObjectPaletteF
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_halfwords(16)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    ; DMA in the tiles
+    lsl r1, r0, #31-1
+    lsr r1, r1, #31-1-1  ; Quadrant * 2
+    ldr r0, =@JewelPieceNE  ; Table
+    add r0, r0, r1  ; Entry
+    ldrh r1, [r0]  ; Tile offset
+    ldr r2, =PortalOBJTileset
+    add r1, r2, r1  ; Tile address
+    str r1, [r3]
+    ldr r1, =0x6014000
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_words(8 * 34)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    b @@Return
+
+@@CD:
+    ldr r1, =PortalPaletteETable
+    sub r1, #0x20  ; Palette set
+    add r1, r1, r2  ; Passage palette
+    str r1, [r3]
+    ldr r1, =ObjectPaletteF
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_halfwords(16)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    ldr r1, =PortalOBJTileset + tile_no_4b(0x4A)  ; Tile address
+    str r1, [r3]
+    ldr r1, =0x6014000
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_words(8 * 100)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    b @@Return
+
+@@JunkItem:
+    lsl r1, r0, #31-3
+    lsr r1, r1, #31-3-2
+    ldr r2, =@@JunkJumpTable
+    add r1, r2
+    ldr r6, [r1]
+    mov pc, r6
+
+.align 4
+@@JunkJumpTable:
+    .word @@FullHealthItem    
+    .word @@BigBoardTrap  ; Wario transform
+    .word @@Heart
+    .word @@BigBoardTrap  ; Lightning damage
+
+@@FullHealthItem:
+    ldr r1, =CommonRoomEntityPalettes4 + 0x40  ; 3rd palette (normally OBP6)
+    str r1, [r3]
+    ldr r1, =ObjectPaletteF
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_halfwords(16)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    ; Heart graphic
+    ldr r1, =BasicElementTiles + tile_coord_4b(24, 7)
+    str r1, [r3]
+    ldr r2, =0x6014000
+    str r2, [r3, #4]
+    ldr r0, =dma_enable | dma_words(8 * 34)
+    str r0, [r3, #8]
+    ldr r6, [r3, #8]
+
+    ; Crown graphic
+    ldr r1, =BasicElementTiles + tile_coord_4b(4, 1)
+    str r1, [r3]
+    add r2, #0x40
+    str r2, [r3, #4]
+    ldr r0, =dma_enable | dma_words(8 * 2)
+    str r0, [r3, #8]
+    ldr r0, [r3, #8]
+
+    b @@Return
+
+@@Heart:
+    ldr r1, =CommonRoomEntityPalettes4 + 0x60  ; 4th palette (normally OBP7)
+    str r1, [r3]
+    ldr r1, =ObjectPaletteF
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_halfwords(16)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+
+    ldr r1, =BasicElementTiles + tile_coord_4b(10, 3)
+    str r1, [r3]
+    ldr r2, =0x6014000
+    str r2, [r3, #4]
+    ldr r0, =dma_enable | dma_words(8 * 34)
+    str r0, [r3, #8]
+    ldr r6, [r3, #8]
+
+    b @@Return
+
+@@BigBoardTrap:
+    ldr r1, =BigBoardEntityPalettes + 0x20  ; Second palette of list
+    str r1, [r3]
+    ldr r1, =ObjectPaletteF
+    str r1, [r3, #4]
+    ldr r1, =dma_enable | dma_halfwords(16)
+    str r1, [r3, #8]
+    ldr r1, [r3, #8]
+    
+    ; Get trap types
+    ldr r6, =@WarioFormTrap
+    cmp r0, #0x43
+    bne @@Upper3x2
+    add r6, #4
+
+@@Upper3x2:
+    ldr r1, =BigBoardEntityTiles
+    ldrh r2, [r6]
+    add r2, r1
+    str r2, [r3]
+    ldr r0, =0x6014000
+    str r0, [r3, #4]
+    ldr r2, =dma_enable | dma_words(8 * 35)
+    str r2, [r3, #8]
+    ldr r2, [r3, #8]
+
+    ; Lower 4x1
+    ldrh r2, [r6, #2]
+    add r2, r1
+    str r2, [r3]
+    add r0, #0x60
+    str r0, [r3, #4]
+    ldr r2, =dma_enable | dma_words(8 * 4)
+    str r2, [r3, #8]
+    ldr r2, [r3, #8]
+
+@@Return:
+    pop {r6, lr}
+.pool
+
+
+.align 2
+; Offsets from PortalOBJTileset
+@JewelPieceNE:  .halfword tile_no_4b(0x31)
+@JewelPieceSE:  .halfword tile_no_4b(0x35)
+@JewelPieceSW:  .halfword tile_no_4b(0x39)
+@JewelPieceNW:  .halfword tile_no_4b(0x3D)
+@CD:            .halfword tile_no_4b(0x4A)
+
+.align 4
+; Pointer to palette :: 3x2 top offset, 4x1 bottom offset
+@WarioFormTrap: .halfword tile_coord_4b(22, 4), tile_coord_4b(28, 5)
+@DamageTrap:    .halfword tile_coord_4b(12, 4), tile_coord_4b(25, 4)
+
+
 ; Load the text for the next item collection message. If no items are left to
 ; show, start fading the results screen.
 ; Returns:

@@ -50,11 +50,6 @@ ReceiveNextItem:
     mov r1, #0x02
     strb r1, [r2]
 
-; Set text timer
-    ldr r1, =TextTimer
-    mov r2, #90
-    strb r2, [r1]
-
 ; Increment received item counter
     ldr r1, =ReceivedItemCount
     ldrh r2, [r1]
@@ -74,8 +69,6 @@ ReceiveNextItem:
     strb r2, [r1]
 
 @@Return:
-    ldr r1, =PlayerID
-    ldrb r1, [r1]
     mov pc, lr
 .pool
 
@@ -86,7 +79,7 @@ LoadReceivedText:
     ldr r1, =TilesReceived8
     mov r2, #8
     bl LoadSpriteString
-    ldr r0, =StrItemFrom + 1  ; Skip leading space
+    ldr r0, =StrItemFrom
     ldr r1, =TilesFrom4
     mov r2, #4
     bl LoadSpriteString

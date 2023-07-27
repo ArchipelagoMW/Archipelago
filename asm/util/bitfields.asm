@@ -33,6 +33,33 @@ dma_enable equ 1 << 0x1F
 .expfunc dma_words(n), dma_32 | dma_transfers(n)
 
 
+; Backgrounds
+; <size> [wrap] <sbb> <color> [mosaic] <cbb> <priority>
+; priority
+.expfunc bg_priority(prio), (prio & 3)
+; character base block
+.expfunc bg_cbb(cbb), (cbb & 3) << 2
+; mosaic flag
+bg_mosaic equ 1 << 6
+; color mode
+bg_4bpp equ 0
+bg_8bpp equ 1 << 7
+; screen base block
+.expfunc bg_sbb(sbb), (sbb & 0x1F) << 8
+; affine wrapping
+bg_wrap equ 1 << 0xD
+; size
+.expfunc bg_size(sz), (sz & 3) << 0xE
+bg_reg_32x32 equ bg_size(0)
+bg_reg_64x32 equ bg_size(1)
+bg_reg_32x64 equ bg_size(2)
+bg_reg_64x64 equ bg_size(3)
+bg_aff_16x16 equ bg_size(0)
+bg_aff_32x32 equ bg_size(1)
+bg_aff_64x64 equ bg_size(2)
+bg_aff_128x128 equ bg_size(3)
+
+
 ; OAM
 
 ; Attribute 0 - <shape> <bit depth> [mosaic] [gfx] [obj] <y>
