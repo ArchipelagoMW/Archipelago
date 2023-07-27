@@ -21,6 +21,7 @@ class LocationFlag(IntEnum):
     side_path = 2
     main_world = 3
     parallel_worlds = 4
+    beta_biome = 5
 
 
 # Mapping of items in each region.
@@ -114,11 +115,6 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Mines Chest":    LocationData(110046, LocationFlag.main_path, "chest"),
         "Mines Pedestal": LocationData(110066, LocationFlag.main_path, "pedestal"),
     },
-    # Collapsed Mines is a very small area, combining it with the Mines. Leaving this here in case we change our minds.
-    # "Collapsed Mines": {
-    #     "Collapsed Mines Chest":    LocationData(110086, LocationFlag.main_path, "chest"),
-    #     "Collapsed Mines Pedestal": LocationData(110106, LocationFlag.main_path, "pedestal"),
-    # },
     "Ancient Laboratory": {
         "Ylialkemisti": LocationData(110656, LocationFlag.side_path, "boss"),
     },
@@ -186,7 +182,9 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
         "Unohdettu":      LocationData(110653, LocationFlag.main_world, "boss"),
         "Snow Chasm Orb": LocationData(110667, LocationFlag.main_world, "orb"),
     },
-    "Deep Underground": {
+    "Meat Realm": {
+        "Meat Realm Chest": LocationData(110086, LocationFlag.beta_biome, "chest"),
+        "Meat Realm Pedestal": LocationData(110106, LocationFlag.beta_biome, "pedestal"),
         "Limatoukka": LocationData(110647, LocationFlag.main_world, "boss"),
     },
     "The Laboratory": {
