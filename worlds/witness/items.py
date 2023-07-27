@@ -229,7 +229,7 @@ class WitnessPlayerItems:
                         output -= plando_setting[item_setting_key]
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(list(output))
+        return sorted(output)
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
