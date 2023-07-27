@@ -11,7 +11,8 @@
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
     - (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    - There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md), that you can add to your yaml and include them in the archipelago randomization
+    - There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md) that you can add to your yaml to include them with the Archipelago randomization
+
     - It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
     - The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
