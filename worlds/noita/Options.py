@@ -7,7 +7,7 @@ class PathOption(Choice):
     Main Path includes the main 7 biomes you typically go through to get to the final boss.
     Side Path includes the Lukki Lair and Fungal Caverns. 9 biomes total.
     Main World includes the full world (excluding parallel worlds). 14 biomes total.
-    Beta Biome includes the Main World as well as the new beta biome. Note that it is fairly small.
+    Beta Biome includes the Main World as well as the new beta biome.
     Note: The Collapsed Mines have been combined into the Mines as the biome is tiny."""
     display_name = "Path Option"
     option_main_path = 1
