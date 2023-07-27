@@ -114,7 +114,10 @@ class PointerTable:
             rom.banks[ptr_bank][ptr_addr] = pointer & 0xFF
             rom.banks[ptr_bank][ptr_addr + 1] = (pointer >> 8) | 0x40
 
-        for n, s in enumerate(self.__data):
+        data = list(enumerate(self.__data))        
+        data.sort(key=lambda t: type(t[1]) == int or -len(t[1]))
+
+        for n, s in data:
             if isinstance(s, int):
                 pointer = s
             else:
@@ -152,7 +155,7 @@ class PointerTable:
                 rom.banks[pointers_bank][pointers_addr+n*2+1] = ((pointer >> 8) & 0xff) | 0x40
 
         space_left = sum(map(lambda n: n["end"] - n["start"], storage))
-        # print(self.__class__.__name__, "Space left:", space_left)
+        print(self.__class__.__name__, "Space left:", space_left)
         return storage
 
     def _readData(self, rom, bank_nr, pointer):
