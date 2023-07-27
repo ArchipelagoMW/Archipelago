@@ -314,17 +314,17 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    #if ap_settings["ap_title_screen"]:
-    buckets = defaultdict(list)
-    for n, data in enumerate(rom.texts._PointerTable__data):
-        if type(data) != int and data:
-            buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
-    for bucket in buckets.values():
-        shuffled = bucket.copy()
-        rnd.shuffle(bucket.copy())
-        for bucket_idx, (orig_idx, data) in enumerate(bucket):
-            rom.texts[shuffled[bucket_idx][0]] = data
-  
+    if ap_settings["ap_title_screen"]:
+        buckets = defaultdict(list)
+        for n, data in enumerate(rom.texts._PointerTable__data):
+            if type(data) != int and data:
+                buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
+        for bucket in buckets.values():
+            shuffled = bucket.copy()
+            rnd.shuffle(shuffled)
+            for bucket_idx, (orig_idx, data) in enumerate(bucket):
+                rom.texts[shuffled[bucket_idx][0]] = data
+    
 
 
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
