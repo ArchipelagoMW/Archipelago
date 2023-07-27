@@ -155,24 +155,10 @@ class UndertaleWorld(World):
         if self.multiworld.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
 
-        starting_key= self.multiworld.starting_area[self.player].current_key.title() + " Key"
+        starting_key = self.multiworld.starting_area[self.player].current_key.title() + " Key"
         itempool = [item for item in itempool]
         itempool.remove(starting_key)
         self.multiworld.push_precollected(self.create_item(starting_key))
-            itempool = [item for item in itempool if item != "Ruins Key"]
-            self.multiworld.push_precollected(self.create_item("Ruins Key"))
-        elif self.multiworld.starting_area[self.player] == "snowdin":
-            itempool = [item for item in itempool if item != "Snowdin Key"]
-            self.multiworld.push_precollected(self.create_item("Snowdin Key"))
-        elif self.multiworld.starting_area[self.player] == "waterfall":
-            itempool = [item for item in itempool if item != "Waterfall Key"]
-            self.multiworld.push_precollected(self.create_item("Waterfall Key"))
-        elif self.multiworld.starting_area[self.player] == "hotland":
-            itempool = [item for item in itempool if item != "Hotland Key"]
-            self.multiworld.push_precollected(self.create_item("Hotland Key"))
-        elif self.multiworld.starting_area[self.player] == "core":
-            itempool = [item for item in itempool if item != "Core Key"]
-            self.multiworld.push_precollected(self.create_item("Core Key"))
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])
