@@ -1,4 +1,4 @@
-from ..generic.Rules import add_item_rule, add_rule, location_item_name
+from worlds.generic.Rules import add_item_rule, add_rule, location_item_name
 from .items import item_groups
 from . import logic
 
