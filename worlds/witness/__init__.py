@@ -192,7 +192,7 @@ class WitnessWorld(World):
         credits_hint = (
             "This Randomizer is brought to you by",
             "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
+            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1
         )
 
         audio_logs = get_audio_logs().copy()
