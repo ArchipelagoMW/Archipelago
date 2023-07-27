@@ -402,6 +402,16 @@ class IncludeTraps(Toggle):
     display_name = "Include Traps"
 
 
+class FreeDiaryOnGeneration(Toggle):
+    """
+    Gives a free diary location check (up to 24) each generation. If disabled, you'll have to find the other 23
+    organically!
+
+    Note: The 25th diary is always before the final boss.
+    """
+    display_name = "Free Diary Per Generation"
+
+
 class RLDeathLink(Choice):
     """
     When you die, everyone dies. Of course, the reverse is true too.
@@ -428,6 +438,7 @@ options_table: Dict[str, type(Option)] = {
     "chests_per_zone": ChestsPerZone,
     "universal_fairy_chests": UniversalFairyChests,
     "fairy_chests_per_zone": FairyChestsPerZone,
+    "free_diary_per_generation": FreeDiaryOnGeneration,
     "architect": Architect,
     "architect_fee": ArchitectFee,
     "disable_charon": DisableCharon,
