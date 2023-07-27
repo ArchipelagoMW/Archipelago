@@ -49,6 +49,10 @@ class RLWorld(World):
     fountain_piece_requirement = 0
 
     def generate_early(self):
+        # Give these at the beginning so the updated client can connect to version 1 worlds.
+        self.multiworld.push_precollected(self.create_item("Blacksmith"))
+        self.multiworld.push_precollected(self.create_item("Enchantress"))
+
         if self.get_setting("architect") == "start_unlocked":
             self.multiworld.push_precollected(self.create_item("Architect"))
         elif self.get_setting("architect") == "early":

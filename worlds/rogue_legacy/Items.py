@@ -239,7 +239,7 @@ item_groups: Dict[str, Set[str]] = {
         "Dragons",
         "Traitors",
     },
-    "Skill Progression": {
+    "Skill": {
         "Health Up",
         "Mana Up",
         "Attack Up",
@@ -249,6 +249,8 @@ item_groups: Dict[str, Set[str]] = {
 
 item_table: Dict[str, RLItemData] = {
     # Vendors
+    "Blacksmith":               RLItemData(ItemClassification.useful,         0, get_none),
+    "Enchantress":              RLItemData(ItemClassification.useful,         1, get_none),
     "Architect":                RLItemData(ItemClassification.useful,         2, get_architect_quantity),
 
     # Classes
