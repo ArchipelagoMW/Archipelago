@@ -38,7 +38,7 @@
    * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
      time, but must do this step again to start new runs afterward.
 4. Enter connection info using the relevant option buttons
-   * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` `.**
+   * **The game is limited to alphanumerical characters, `.`, and `-`.**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
      website.
    * If using a name that cannot be entered in the in game menus, there is a config file (APConfig.toml) in the game
