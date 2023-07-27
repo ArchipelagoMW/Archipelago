@@ -84,7 +84,7 @@ Doors:
 1220 - Mountain Floor 1 Light Bridge (Panel) - 0x09E39
 1225 - Mountain Floor 2 Light Bridge Near (Panel) - 0x09E86
 1230 - Mountain Floor 2 Light Bridge Far (Panel) - 0x09ED8
-1235 - Mountain Floor 2 Elevator (Panel) - 0x09EEB
+1235 - Mountain Floor 2 Elevator Control (Panel) - 0x09EEB
 1240 - Caves Entry (Panel) - 0x00FF8
 1242 - Caves Elevator Control (Panel) - 0x335AB,0x335AC,0x3369D
 1245 - Challenge Entry (Panel) - 0x0A16E
