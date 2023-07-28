@@ -141,13 +141,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for location_name in world.priority_locations[player].value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
-    AutoWorld.call_all(world, "generate_basic")
-
+    # Set local and non-local item rules.
     if world.players > 1:
         locality_rules(world)
     else:
         world.non_local_items[1].value = set()
         world.local_items[1].value = set()
+    
+    AutoWorld.call_all(world, "generate_basic")
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
