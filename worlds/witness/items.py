@@ -219,7 +219,7 @@ class WitnessPlayerItems:
         #   regardless of whether or not they actually wind up being manually placed.
         for plando_setting in self._world.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
-                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
+                for item_setting_key in (key for key in ["item", "items"] if key in plando_setting):
                     if type(plando_setting[item_setting_key]) is str:
                         output.remove(plando_setting[item_setting_key])
                     elif type(plando_setting[item_setting_key]) is dict:
