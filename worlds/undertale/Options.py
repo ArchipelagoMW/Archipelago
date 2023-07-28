@@ -88,7 +88,7 @@ class RandoBattleOptions(Toggle):
 
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
-    "starting_area":                           StartingArea,
+    "starting_area":                            StartingArea,
     "key_hunt":                                 KeyHunt,
     "key_pieces":                               KeyPieces,
     "rando_love":                               RandomizeLove,
