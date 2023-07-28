@@ -71,14 +71,12 @@ non_apworlds: set = {
     "Clique",
     "DLCQuest",
     "Final Fantasy",
-    "Hollow Knight",
     "Hylics 2",
     "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",
     "Overcooked! 2",
-    "Pokemon Red and Blue",
     "Raft",
     "Secret of Evermore",
     "Slay the Spire",
@@ -90,6 +88,9 @@ non_apworlds: set = {
     "Zillion",
 }
 
+# LogicMixin is broken before 3.10 import revamp
+if sys.version_info < (3,10):
+    non_apworlds.add("Hollow Knight")
 
 def download_SNI():
     print("Updating SNI")
@@ -602,7 +603,7 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem"],
+            "packages": ["worlds", "kivy", "cymem", "websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

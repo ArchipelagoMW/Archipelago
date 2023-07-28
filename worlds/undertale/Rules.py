@@ -1,4 +1,4 @@
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from BaseClasses import MultiWorld, CollectionState
 
 
@@ -250,6 +250,10 @@ def set_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_entrance("??? Exit", player), lambda state: state.has("FIGHT", player))
     set_rule(multiworld.get_location("Snowman", player),
              lambda state: state.can_reach("Snowdin Town", "Region", player))
+    add_item_rule(multiworld.get_location("Starting Key", player), lambda item: item.name == "Ruins Key" or
+                                                                                item.name == "Snowdin Key" or
+                                                                                item.name == "Waterfall Key" or
+                                                                                item.name == "Hotland Key")
     if _undertale_is_route(multiworld.state, player, 1):
         set_rule(multiworld.get_location("Donut Sale", player),
                  lambda state: state.has("ACT", player) and state.has("MERCY", player))
