@@ -156,7 +156,6 @@ class UndertaleWorld(World):
             itempool = [item for item in itempool if item not in non_key_items]
 
         starting_key = self.multiworld.starting_area[self.player].current_key.title() + " Key"
-        itempool = [item for item in itempool]
         itempool.remove(starting_key)
         self.multiworld.push_precollected(self.create_item(starting_key))
         # Choose locations to automatically exclude based on settings
