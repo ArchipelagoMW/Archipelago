@@ -34,7 +34,7 @@ class InscryptionRules:
             "Act 2 - Battle Inspector": self.has_act2_bridge_requirements,
             "Act 2 - Battle Melter": self.has_act2_bridge_requirements,
             "Act 2 - Battle Dredger": self.has_act2_bridge_requirements,
-            "Act 2 - Forest Burrow Chest": self.has_camera_and_meat,
+            "Act 2 - Forest Meadow Chest": self.has_camera_and_meat,
             "Act 2 - Tower Chest 1": self.has_act2_bridge_requirements,
             "Act 2 - Tower Chest 2": self.has_tower_requirements,
             "Act 2 - Tower Chest 3": self.has_tower_requirements,
@@ -55,7 +55,16 @@ class InscryptionRules:
             "Act 2 - Bone Lord Horn": self.has_obol,
             "Act 2 - Bone Lord Holo Key": self.has_obol,
             "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items,
-            "Act 2 - Ancient Obol": self.has_act2_bridge_requirements,
+            "Act 2 - Ancient Obol": self.has_tower_requirements,
+            "Act 3 - Boss Photographer": self.has_inspectometer_battery,
+            "Act 3 - Boss Archivist": self.has_inspectometer_battery,
+            "Act 3 - Boss Unfinished": self.has_drone_and_battery,
+            "Act 3 - Boss G0lly": self.has_drone_and_battery,
+            "Act 3 - Trader 1": self.has_one_pelt,
+            "Act 3 - Trader 2": self.has_two_pelt,
+            "Act 3 - Trader 3": self.has_three_pelt,
+            "Act 3 - Trader 4": self.has_four_pelt,
+            "Act 3 - Trader 5": self.has_five_pelt,
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -98,19 +107,42 @@ class InscryptionRules:
         return self.has_camera_and_meat(state) or self.has_all_epitaph_pieces(state)
 
     def has_tower_requirements(self, state: CollectionState) -> bool:
-        return self.has_act2_bridge_requirements(state) and state.has("Monocle", self.player)
+        return self.has_act2_bridge_requirements(state) and self.has_monocle(state)
+
+    def has_inspectometer_battery(self, state: CollectionState) -> bool:
+        return state.has("Inspectometer Battery", self.player)
+
+    def has_drone_and_battery(self, state: CollectionState) -> bool:
+        return state.has("Gem Drone", self.player) and self.has_inspectometer_battery(state)
+
+    def has_pelts(self, state: CollectionState, count: int) -> bool:
+        return state.has("Holo Pelt", self.player, count)
+
+    def has_one_pelt(self, state: CollectionState) -> bool:
+        return self.has_pelts(state, 1)
+
+    def has_two_pelt(self, state: CollectionState) -> bool:
+        return self.has_pelts(state, 2)
+
+    def has_three_pelt(self, state: CollectionState) -> bool:
+        return self.has_pelts(state, 3)
+
+    def has_four_pelt(self, state: CollectionState) -> bool:
+        return self.has_pelts(state, 4)
+
+    def has_five_pelt(self, state: CollectionState) -> bool:
+        return self.has_pelts(state, 5)
 
     def has_act2_requirements(self, state: CollectionState) -> bool:
         return state.has("Film Roll", self.player)
 
     def has_act3_requirements(self, state: CollectionState) -> bool:
-        return self.has_act2_requirements(state) and \
-            self.has_all_epitaph_pieces(state) and \
-            self.has_camera_and_meat(state)
+        return self.has_act2_requirements(state) and self.has_all_epitaph_pieces(state) and \
+            self.has_camera_and_meat(state) and self.has_monocle(state)
 
     def has_epilogue_requirements(self, state: CollectionState) -> bool:
         # TODO Add the missing checks
-        return self.has_act3_requirements(state)
+        return self.has_act3_requirements(state) and self.has_drone_and_battery(state)
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld

@@ -3,60 +3,111 @@ from . import InscryptionTestBase
 
 class AccessTest(InscryptionTestBase):
 
-    def testDagger(self) -> None:
+    def test_dagger(self) -> None:
         self.assertAccessDependency(["Act 1 - Magnificus Eye"], [["Dagger"]])
 
-    def testCagedWolf(self) -> None:
+    def test_caged_wolf(self) -> None:
         self.assertAccessDependency(["Act 1 - Dagger"], [["Caged Wolf Card"]])
 
-    def testMagnificusEye(self) -> None:
+    def test_magnificus_eye(self) -> None:
         self.assertAccessDependency(["Act 1 - Clock Main Compartment"], [["Magnificus Eye"]])
 
-    def testWardrobeKey(self) -> None:
+    def test_wardrobe_key(self) -> None:
         self.assertAccessDependency(
             ["Act 1 - Wardrobe Drawer 1", "Act 1 - Wardrobe Drawer 2",
              "Act 1 - Wardrobe Drawer 3", "Act 1 - Wardrobe Drawer 4"],
             [["Wardrobe Key"]]
         )
 
-    def testEpitaphsAndForestItems(self) -> None:
+    def test_epitaphs_and_forest_items(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
              "Act 2 - Battle Pike Mage", "Act 2 - Battle Goobert", "Act 2 - Battle Lonely Wizard",
              "Act 2 - Battle Inspector", "Act 2 - Battle Melter", "Act 2 - Battle Dredger",
-             "Act 2 - Tower Chest 1", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3", "Act 2 - Forest Burrow Chest",
+             "Act 2 - Tower Chest 1", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3", "Act 2 - Forest Meadow Chest",
              "Act 2 - Tentacle", "Act 2 - Factory Trash Can", "Act 2 - Factory Drawer 1", "Act 2 - Ancient Obol",
              "Act 2 - Factory Drawer 2", "Act 2 - Factory Chest 1", "Act 2 - Factory Chest 2",
              "Act 2 - Factory Chest 3", "Act 2 - Factory Chest 4", "Act 2 - Monocle", "Act 2 - Boss Leshy",
-             "Act 2 - Boss Grimora", "Act 2 - Boss Magnificus", "Act 2 - Boss P03", "Act 2 - Mycologists Holo Key"],
+             "Act 2 - Boss Grimora", "Act 2 - Boss Magnificus", "Act 2 - Boss P03", "Act 2 - Mycologists Holo Key",
+             "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
+             "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Holo Pelt 1", "Act 3 - Holo Pelt 2",
+             "Act 3 - Holo Pelt 3", "Act 3 - Holo Pelt 4", "Act 3 - Holo Pelt 5", "Act 3 - Trader 1",
+             "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5", "Act 3 - Drawer 1",
+             "Act 3 - Drawer 2", "Act 3 - Clock", "Act 3 - Extra Battery", "Act 3 - Nano Armor Generator",
+             "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1",
+             "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
+             "Act 3 - Inspectometer Battery", "Act 3 - Gem Drone", "Act 3 - The Great Transcendence"],
             [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
               "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8",
               "Epitaph Piece 9", "Camera Replica", "Pile Of Meat"]]
         )
 
-    def testEpitaphs(self) -> None:
+    def test_epitaphs(self) -> None:
         self.assertAccessDependency(
-            ["Act 2 - Boss Grimora", "Act 2 - Mycologists Holo Key"],
+            ["Act 2 - Boss Grimora", "Act 2 - Mycologists Holo Key",
+             "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
+             "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Holo Pelt 1", "Act 3 - Holo Pelt 2",
+             "Act 3 - Holo Pelt 3", "Act 3 - Holo Pelt 4", "Act 3 - Holo Pelt 5", "Act 3 - Trader 1",
+             "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5", "Act 3 - Drawer 1",
+             "Act 3 - Drawer 2", "Act 3 - Clock", "Act 3 - Extra Battery", "Act 3 - Nano Armor Generator",
+             "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1",
+             "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
+             "Act 3 - Inspectometer Battery", "Act 3 - Gem Drone", "Act 3 - The Great Transcendence"],
             [["Epitaph Piece 1", "Epitaph Piece 2", "Epitaph Piece 3", "Epitaph Piece 4",
               "Epitaph Piece 5", "Epitaph Piece 6", "Epitaph Piece 7", "Epitaph Piece 8", "Epitaph Piece 9"]]
         )
 
-    def testForestItems(self) -> None:
+    def test_forest_items(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Prospector", "Act 2 - Battle Angler", "Act 2 - Battle Trapper",
-             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key", "Act 2 - Forest Burrow Chest"],
+             "Act 2 - Boss Leshy", "Act 2 - Mycologists Holo Key", "Act 2 - Forest Meadow Chest",
+             "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
+             "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Holo Pelt 1", "Act 3 - Holo Pelt 2",
+             "Act 3 - Holo Pelt 3", "Act 3 - Holo Pelt 4", "Act 3 - Holo Pelt 5", "Act 3 - Trader 1",
+             "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5", "Act 3 - Drawer 1",
+             "Act 3 - Drawer 2", "Act 3 - Clock", "Act 3 - Extra Battery", "Act 3 - Nano Armor Generator",
+             "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1",
+             "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
+             "Act 3 - Inspectometer Battery", "Act 3 - Gem Drone", "Act 3 - The Great Transcendence"],
             [["Camera Replica", "Pile Of Meat"]]
         )
 
-    def testMonocle(self) -> None:
+    def test_monocle(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Battle Goobert", "Act 2 - Battle Pike Mage", "Act 2 - Battle Lonely Wizard",
-             "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3", "Act 2 - Tentacle"],
+             "Act 2 - Boss Magnificus", "Act 2 - Tower Chest 2", "Act 2 - Tower Chest 3",
+             "Act 2 - Tentacle", "Act 2 - Ancient Obol",
+             "Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
+             "Act 3 - Boss Mycologists", "Act 3 - Bone Lord Room", "Act 3 - Holo Pelt 1", "Act 3 - Holo Pelt 2",
+             "Act 3 - Holo Pelt 3", "Act 3 - Holo Pelt 4", "Act 3 - Holo Pelt 5", "Act 3 - Trader 1",
+             "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5", "Act 3 - Drawer 1",
+             "Act 3 - Drawer 2", "Act 3 - Clock", "Act 3 - Extra Battery", "Act 3 - Nano Armor Generator",
+             "Act 3 - Chest", "Act 3 - Goobert's Painting", "Act 3 - Luke's File Entry 1",
+             "Act 3 - Luke's File Entry 2", "Act 3 - Luke's File Entry 3", "Act 3 - Luke's File Entry 4",
+             "Act 3 - Inspectometer Battery", "Act 3 - Gem Drone", "Act 3 - The Great Transcendence"],
             [["Monocle"]]
         )
 
-    def testAncientObol(self) -> None:
+    def test_ancient_obol(self) -> None:
         self.assertAccessDependency(
             ["Act 2 - Bone Lord Femur", "Act 2 - Bone Lord Horn", "Act 2 - Bone Lord Holo Key"],
             [["Ancient Obol"]]
+        )
+
+    def test_holo_pelt(self) -> None:
+        self.assertAccessDependency(
+            ["Act 3 - Trader 1", "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5"],
+            [["Holo Pelt"]]
+        )
+
+    def test_inspectometer_battery(self) -> None:
+        self.assertAccessDependency(
+            ["Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly"],
+            [["Inspectometer Battery"]]
+        )
+
+    def test_battery_and_gem_drone(self) -> None:
+        self.assertAccessDependency(
+            ["Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly"],
+            [["Inspectometer Battery", "Gem Drone"]]
         )

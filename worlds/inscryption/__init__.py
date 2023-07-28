@@ -54,12 +54,15 @@ class InscryptionWorld(World):
         return InscryptionItem(name, item_data['classification'], item_id, self.player)
 
     def create_items(self) -> None:
+        nb_items_added = 0
         unique_items = [item for item in item_table if item['classification'] != ItemClassification.filler]
         for item in unique_items:
-            new_item = self.create_item(item['name'])
-            self.multiworld.itempool.append(new_item)
+            for _ in range(item["count"]):
+                new_item = self.create_item(item['name'])
+                self.multiworld.itempool.append(new_item)
+                nb_items_added += 1
 
-        filler_count = len(location_table) - len(unique_items)
+        filler_count = len(location_table) - nb_items_added
         filler_items = [item for item in item_table if item not in unique_items]
         for i in range(filler_count):
             index = i % len(filler_items)
