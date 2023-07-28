@@ -138,7 +138,7 @@ def set_rules(multiworld: MultiWorld, player: int):
             if multiworld.rando_stats[player]:
                 set_rule(multiworld.get_location(("ATK "+str(maxlv)), player), lambda state: False)
                 set_rule(multiworld.get_location(("HP "+str(maxlv)), player), lambda state: False)
-                if maxlv == 5 or maxlv == 9 or maxlv == 13 or maxlv == 17:
+                if maxlv in {5, 9, 13, 17}:
                     set_rule(multiworld.get_location(("DEF "+str(maxlv)), player), lambda state: False)
         maxlv = 1
         while maxlv < 20:
