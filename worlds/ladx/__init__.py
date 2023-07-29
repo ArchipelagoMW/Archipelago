@@ -30,7 +30,7 @@ from .LADXR.locations.instrument import Instrument
 from .LADXR.locations.constants import CHEST_ITEMS
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options, EntranceShuffle
+from .Options import links_awakening_options, DungeonItemShuffle, EntranceShuffle
 from .Rom import LADXDeltaPatch
 
 
