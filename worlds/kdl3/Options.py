@@ -126,6 +126,18 @@ class AnimalRandomization(Choice):
     default = 0
 
 
+class CopyAbilityRandomization(Choice):
+    """
+    Disabled: enemies give regular copy abilities and health.
+    Enabled: all enemies (except minibosses) will have the copy ability received from them randomized.
+    Enabled Plus Minus: enemies can additionally give you anywhere from +3 health to -3 health when eaten.
+    """
+    display_name = "Copy Ability Randomization"
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_plus_minus = 2
+
+
 class StrictBosses(DefaultOnToggle):
     """
     If enabled, one will not be able to move onto the next world until the previous world's boss has been purified.
@@ -328,6 +340,20 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class VirtualConsoleChanges(Choice):
+    """
+    Adds the ability to enable 2 of the Virtual Console changes.
+    Flash Reduction: reduces the flashing during the Zero battle.
+    Color Changes: changes the color of the background within the Zero Boss Butch rematch.
+    """
+    display_name = "Virtual Console Changes"
+    option_none = 0
+    option_flash_reduction = 1
+    option_color_changes = 2
+    option_both = 3
+    default = 1
+
+
 kdl3_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
@@ -345,6 +371,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "boss_shuffle": BossShuffle,
     "allow_bb": BossShuffleAllowBB,
     "animal_randomization": AnimalRandomization,
+    "copy_ability_randomization": CopyAbilityRandomization,
     "strict_bosses": StrictBosses,
     "open_world": OpenWorld,
     "ow_boss_requirement": OpenWorldBossRequirement,
@@ -355,4 +382,5 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "gooey_flavor_preset": GooeyFlavorPreset,
     "gooey_flavor": GooeyFlavor,
     "music_shuffle": MusicShuffle,
+    "virtual_console": VirtualConsoleChanges,
 }

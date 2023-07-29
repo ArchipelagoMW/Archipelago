@@ -104,7 +104,7 @@ def set_rules(world: "KDL3World") -> None:
              lambda state: state.has("Coo", world.player) and state.has("Burning", world.player)
                            and state.has("ChuChu", world.player) and can_reach_coo(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
-             lambda state: state.has("Nago", world.player) and can_reach_nago(state, world.player))
+             lambda state: can_reach_nago(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
              lambda state: state.has_all([ability for ability in copy_ability_table.keys()], world.player))
     # cleaner than writing out 8 ands

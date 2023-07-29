@@ -2,10 +2,12 @@ import logging
 import typing
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
+from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
     trap_item_table
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
+from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Regions import create_levels
 from .Options import kdl3_options
 from .Names import LocationName
@@ -19,8 +21,11 @@ import math
 import threading
 import base64
 from Main import __version__ as APVersion
-
+from worlds.LauncherComponents import components
 logger = logging.getLogger("Kirby's Dream Land 3")
+
+#SNIComponent = next(x for x in components if x.display_name == "SNI Client")
+#SNIComponent.file_identifier.suffixes.append(".apkdl3")
 
 if APVersion == "0.4.2":
     import settings
@@ -111,6 +116,43 @@ class KDL3World(World):
             logger.warning(f"boss_requirement_random forced to false for player {self.player}" +
                            f" because of strict_bosses set to true")
             self.multiworld.boss_requirement_random[self.player] = False
+
+    def pre_fill(self) -> None:
+        # fill animals
+        if self.multiworld.animal_randomization[self.player] != 0:
+            self.multiworld.get_location("Iceberg 4 - Animal 1", self.player) \
+                .place_locked_item(self.create_item("ChuChu Spawn"))
+            # Not having ChuChu here makes the room impossible (since only she has vertical burning)
+            if self.multiworld.accessibility[self.player] < 2:
+                self.multiworld.get_location("Ripple Field 5 - Animal 2", self.player) \
+                    .place_locked_item(self.create_item("Pitch Spawn"))
+                # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-minimal and non-door rando
+            if self.multiworld.animal_randomization[self.player] == 1:
+                animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
+                               if spawn not in ["Ripple Field 5 - Animal 2", "Iceberg 4 - Animal 1"]]
+                if self.multiworld.accessibility[self.player] == 2:
+                    animal_pool.append("Pitch Spawn")
+            else:
+                animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
+                animal_pool = [self.multiworld.per_slot_randoms[self.player].choice(animal_base)
+                               for _ in range(len(animal_friend_spawns) -
+                                              (7 if self.multiworld.accessibility[self.player] < 2 else 6))]
+                # have to guarantee one of each animal
+                animal_pool.extend(animal_base)
+            self.multiworld.per_slot_randoms[self.player].shuffle(
+                animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
+            locations = [self.multiworld.get_location(animal, self.player) for animal in animal_friend_spawns.keys()]
+            items = [self.create_item(animal) for animal in animal_pool]
+            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, items)
+        else:
+            animal_friends = animal_friend_spawns.copy()
+            for animal in animal_friends:
+                self.multiworld.get_location(animal, self.player)\
+                    .place_locked_item(self.create_item(animal_friends[animal]))
+
+        # if self.multiworld.copy_ability_randomization[self.player]:
+
+
 
     def create_items(self) -> None:
         itempool = []

@@ -158,8 +158,78 @@ room_pointers = [
     2991071,  # BB PonCon
     2998969,  # BB Ado
     2980927,  # BB Dedede
-    2894290   # BB Zero
+    2894290  # BB Zero
 ]
+
+enemy_remap = {
+    "Waddle Dee": 0,
+    "Bronto Burt": 2,
+    "Rocky": 3,
+    "Bobo": 5,
+    "Chilly": 6,
+    "Poppy Bros Jr.": 7,
+    "Sparky": 8,
+    "Polof": 9,
+    "Broom Hatter": 11,
+    "Cappy": 12,
+    "Bouncy": 13,
+    "Nruff": 15,
+    "Glunk": 16,
+    "Togezo": 18,
+    "Kabu": 19,
+    "Mony": 20,
+    "Blipper": 21,
+    "Squishy": 22,
+    "Gabon": 24,
+    "Oro": 25,
+    "Galbo": 26,
+    "Sir Kibble": 27,
+    "Nidoo": 28,
+    "Kany": 29,
+    "Sasuke": 30,
+    "Yaban": 32,
+    "Boten": 33,
+    "Coconut": 34,
+    "Doka": 35,
+    "Icicle": 36,
+    "Pteran": 39,
+    "Loud": 40,
+    "Como": 41,
+    "Klinko": 42,
+    "Babut": 43,
+    "Wappa": 44,
+    "Mariel": 45,
+    "Tick": 48,
+    "Apolo": 49,
+    "Popon Ball": 50,
+    "KeKe": 51,
+    "Magoo": 53,
+    "Raft Waddle Dee": 57,
+    "Madoo": 58,
+    "Corori": 60,
+    "Kapar": 67,
+    "Batamon": 68,
+    "Peran": 72,
+    "Bobin": 73,
+    "Mopoo": 74,
+    "Gansan": 75,
+    "Bukiset (Burning)": 76,
+    "Bukiset (Stone)": 77,
+    "Bukiset (Ice)": 78,
+    "Bukiset (Needle)": 79,
+    "Bukiset (Clean)": 80,
+    "Bukiset (Parasol)": 81,
+    "Bukiset (Spark)": 82,
+    "Bukiset (Cutter)": 83,
+    "Waddle Dee Drawing": 84,
+    "Bronto Burt Drawing": 85,
+    "Bouncy Drawing": 86,
+    "Kabu (Dekabu)": 87,
+    "Wapod": 88,
+    "Propeller": 89,
+    "Dogon": 90,
+    "Joe": 91
+}
 
 
 class RomData:
@@ -984,7 +1054,8 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             music_map[5] = multiworld.per_slot_randoms[player].choice(music_choices)
             # Heart Star music doesn't work on regular stages
             music_map[8] = multiworld.per_slot_randoms[player].choice(music_choices)
-            for room in [region for region in multiworld.regions if region.player == player and isinstance(region, Room)]:
+            for room in [region for region in multiworld.regions if
+                         region.player == player and isinstance(region, Room)]:
                 room.patch(rom)
             for room in room_pointers:
                 old_music = rom.read_byte(room + 2)
@@ -1009,6 +1080,20 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             # Heart Star success and fail
             rom.write_byte(0x4A388, multiworld.per_slot_randoms[player].choice(music_choices))
             rom.write_byte(0x4A38D, multiworld.per_slot_randoms[player].choice(music_choices))
+
+    if multiworld.virtual_console[player] in [1, 3]:
+        # Flash Reduction
+        rom.write_byte(0x9AE68, 0x10)
+        rom.write_bytes(0x9AE8E, [0x08, 0x00, 0x22, 0x5D, 0xF7, 0x00, 0xA2, 0x08, ])
+        rom.write_byte(0x9AEA1, 0x08)
+        rom.write_byte(0x9AEC9, 0x01)
+        rom.write_bytes(0x9AED2, [0xA9, 0x1F])
+        rom.write_byte(0x9AEE1, 0x08)
+
+    if multiworld.virtual_console[player] in [2, 3]:
+        # Hyper Zone BB colors
+        rom.write_bytes(0x2C5E16, [0xEE, 0x1B, 0x18, 0x5B, 0xD3, 0x4A, 0xF4, 0x3B, ])
+        rom.write_bytes(0x2C8217, [0xFF, 0x1E, ])
 
     # boss requirements
     rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],

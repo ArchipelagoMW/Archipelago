@@ -24,8 +24,10 @@ class Room(Region):
     music: int = 0
     default_exits: typing.List[typing.Dict[str, typing.Union[int, typing.List[str]]]]
     animal_pointers: typing.List[int]
+    enemies: typing.List[str]
 
-    def __init__(self, name, player, multiworld, hint, level, stage, room, pointer, music, default_exits, animal_pointers):
+    def __init__(self, name, player, multiworld, hint, level, stage, room, pointer, music, default_exits,
+                 animal_pointers, enemies):
         super().__init__(name, player, multiworld, hint)
         self.level = level
         self.stage = stage
@@ -34,6 +36,7 @@ class Room(Region):
         self.music = music
         self.default_exits = default_exits
         self.animal_pointers = animal_pointers
+        self.enemies = enemies
 
     def patch(self, rom: "RomData"):
         rom.write_byte(self.pointer + 2, self.music)

@@ -4,6 +4,7 @@ import typing
 from pkgutil import get_data
 
 from BaseClasses import Entrance, Region
+from Fill import fill_restrictive
 from worlds.AutoWorld import World
 from .Locations import KDL3Location, location_table, level_consumables
 from .Names import LocationName
@@ -45,48 +46,26 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
     for room_entry in room_data:
         room = Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
                     room_entry["room"], room_entry["pointer"], room_entry["music"], room_entry["default_exits"],
-                    room_entry["animal_pointers"])
+                    room_entry["animal_pointers"], room_entry["enemies"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
         None for location in room_entry["locations"] if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.multiworld.consumables[world.player]}, KDL3Location)
         rooms[room.name] = room
-    world.multiworld.regions.extend([rooms[room] for room in rooms])
-    # fill animals, and set item rule
-    if world.multiworld.animal_randomization[world.player] == 1:
-        animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
-                       if spawn != "Ripple Field 5 - Animal 2"]
-        if world.multiworld.accessibility[world.player] == 2:
-            animal_pool.append("Pitch Spawn")
-        world.multiworld.per_slot_randoms[world.player].shuffle(
-            animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
-        if world.multiworld.accessibility[world.player] != 2:
-            animal_pool.insert(28, "Pitch Spawn")
-        # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-minimal and non-door rando
-        animal_friends = dict(zip(animal_friend_spawns.keys(), animal_pool))
-    elif world.multiworld.animal_randomization[world.player] == 2:
-        animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
-        animal_pool = [world.multiworld.per_slot_randoms[world.player].choice(animal_base)
-                       for _ in range(len(animal_friend_spawns) -
-                                      (7 if world.multiworld.accessibility[world.player] < 2 else 6))]
-        # have to guarantee one of each animal
-        animal_pool.extend(animal_base)
-        world.multiworld.per_slot_randoms[world.player].shuffle(
-            animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
-        if world.multiworld.accessibility[world.player] != 2:
-            animal_pool.insert(28, "Pitch Spawn")
-        animal_friends = dict(zip(animal_friend_spawns.keys(), animal_pool))
-    else:
-        animal_friends = animal_friend_spawns.copy()
-    for name in rooms:
-        room = rooms[name]
         for location in room.locations:
             if "Animal" in location.name:
                 add_item_rule(location, lambda item: item.name in {
                     "Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"
                 })
-                location.place_locked_item(world.create_item(animal_friends[location.name]))
+    world.multiworld.regions.extend([rooms[room] for room in rooms])
     first_rooms: typing.Dict[int, Room] = dict()
-    if not door_shuffle:
+    if door_shuffle:
+        # first, we need to generate the notable edge cases
+        # 5-6 is the first, being the most restrictive
+        # half of its rooms are required to be vanilla, but can be in different orders
+        # the room before it *must* contain the copy ability required to unlock the room's goal
+
+        raise NotImplementedError()
+    else:
         for name in rooms:
             room = rooms[name]
             if room.room == 0:
