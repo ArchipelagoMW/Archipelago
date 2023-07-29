@@ -322,12 +322,13 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             if type(data) != int and data and data != b'\xFF':
                 buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
         for bucket in buckets.values():
+            # For each bucket, make a copy and shuffle
             shuffled = bucket.copy()
             rnd.shuffle(shuffled)
+            # Then put new text in
             for bucket_idx, (orig_idx, data) in enumerate(bucket):
                 rom.texts[shuffled[bucket_idx][0]] = data
     
-
 
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 
