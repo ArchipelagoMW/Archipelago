@@ -42,6 +42,13 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     """
     ladxr_name = "tradequest"
 
+class Rooster(DefaultOnToggle, LADXROption):
+    """
+    [On] Adds the rooster to the item pool. 
+    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.
+    """
+    ladxr_name = "rooster"
+
 class Boomerang(Choice):
     """
     [Normal] requires Magnifying Lens to get the boomerang.
@@ -380,7 +387,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
     'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
     # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    # 'rooster': DefaultOnToggle, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
     'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
