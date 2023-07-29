@@ -68,8 +68,8 @@ and information to help you on your journey can be found at this
 
 This is the game contents of Stardew Valley. A lot more to look at here, but some key takeaways.
 Notice the .dll files which include “CSharp” in their name. This tells us that the game was made in C#, which is good
-news.
-More on that later.
+news. Many games made in C# can be modified using the same tools found in our Unity game hacking toolset; namely BepInEx
+and MonoMod.
 
 ### Gato Roboto
 
