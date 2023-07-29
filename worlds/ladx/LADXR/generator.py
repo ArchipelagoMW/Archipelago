@@ -317,8 +317,11 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     if ap_settings["ap_title_screen"]:
         buckets = defaultdict(list)
         for n, data in enumerate(rom.texts._PointerTable__data):
-            if type(data) != int and data:
+            if type(data) != int and data and data != b'\xFF':
                 buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
+                if b"BR" in data:
+                    print(data)
+                    print(                buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)])
         for bucket in buckets.values():
             shuffled = bucket.copy()
             rnd.shuffle(shuffled)

@@ -42,7 +42,7 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     """
     ladxr_name = "tradequest"
 
-class TextShuffle(DefaultOffToggle, LADXROption):
+class TextShuffle(DefaultOffToggle):
     """
     [On] Shuffles all the text in the game
     [Off] (default) doesn't shuffle them.
