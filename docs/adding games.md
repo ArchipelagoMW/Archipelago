@@ -119,7 +119,7 @@ The next step is to know what you need to make the game do now that you can modi
 - Be able to receive items from the server on the fly
 - Keep an index for items received in order to resync from disconnections
 - Add interface for connecting to the Archipelago server with passwords and sessions
-- Add commands for manually rewarding, re-syncing, forfeiting, and other actions
+- Add commands for manually rewarding, re-syncing, releasing, and other actions
   
 Refer to the [Network Protocol documentation](/docs/network%20protocol.md) for how to communicate with Archipelago's servers.  
   
@@ -219,10 +219,6 @@ imported at its base level within your world.
 and the following requirements:
   - Your items and locations need a `item_name_to_id` and `location_name_to_id`,
 respectively, mapping.
-    - The IDs that you take must not overlap with another game, but it's ok,
-and preferred, if your item and location mappings overlap with each other.
-    - Each game is able to claim 0x10000 IDs from their starting ID in the range
-of `0xAAAA0000`
   - An `option_definitions` mapping of your game options with the format
 `{name: Class}`, where `name` uses Python snake_case.
   - You must define your world's `create_item` method, because this may be called
@@ -234,8 +230,9 @@ adding to these lists is with either `append` or `extend`, where `append` is a
 single object and `extend` is a list.
     - Do not use `=` as this will delete other worlds' items and regions.
     - Regions are containers for holding your world's Locations.
-      - Locations are where players will "check" for items and must exist within
+    - Locations are where players will "check" for items and must exist within
 a region. It's also important for your world's submitted items to be the same as
 its submitted locations count.
     - You must always have a "Menu" Region from which the generation algorithm
 uses to enter the game and access locations.
+- Make sure to check out [world maintainer.md](./world%20maintainer.md) before publishing.

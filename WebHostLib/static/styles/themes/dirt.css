@@ -52,6 +52,7 @@ pre{
 
 pre code{
     border: none;
+    display: block;
 }
 
 code{

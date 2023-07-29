@@ -1,19 +1,20 @@
 import collections
-import typing
-from typing import Counter, Optional, Dict, Any, Tuple
-
-from flask import render_template
-from werkzeug.exceptions import abort
 import datetime
+import typing
+from typing import Counter, Optional, Dict, Any, Tuple, List
 from uuid import UUID
 
+from flask import render_template
+from jinja2 import pass_context, runtime
+from werkzeug.exceptions import abort
+
+from MultiServer import Context, get_saving_second
+from NetUtils import SlotType, NetworkSlot
+from Utils import restricted_loads
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
 from . import app, cache
-from .models import Room
-from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
-from MultiServer import Context
-from NetUtils import SlotType
+from .models import GameDataPackage, Room
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -82,9 +83,6 @@ alttp_icons = {
 def get_alttp_id(item_name):
     return Items.item_table[item_name][2]
 
-
-app.jinja_env.filters["location_name"] = lambda location: lookup_any_location_id_to_name.get(location, location)
-app.jinja_env.filters['item_name'] = lambda id: lookup_any_item_id_to_name.get(id, id)
 
 links = {"Bow": "Progressive Bow",
          "Silver Arrows": "Progressive Bow",
@@ -212,14 +210,6 @@ del data
 del item
 
 
-def attribute_item(inventory, team, recipient, item):
-    target_item = links.get(item, item)
-    if item in levels:  # non-progressive
-        inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
-    else:
-        inventory[team][recipient][target_item] += 1
-
-
 def attribute_item_solo(inventory, item):
     """Adds item to inventory counter, converts everything to progressive."""
     target_item = links.get(item, item)
@@ -235,6 +225,23 @@ def render_timedelta(delta: datetime.timedelta):
     hours = str(int(hours))
     minutes = str(int(minutes)).zfill(2)
     return f"{hours}:{minutes}"
+
+
+@pass_context
+def get_location_name(context: runtime.Context, loc: int) -> str:
+    # once all rooms embed data package, the chain lookup can be dropped
+    context_locations = context.get("custom_locations", {})
+    return collections.ChainMap(context_locations, lookup_any_location_id_to_name).get(loc, loc)
+
+
+@pass_context
+def get_item_name(context: runtime.Context, item: int) -> str:
+    context_items = context.get("custom_items", {})
+    return collections.ChainMap(context_items, lookup_any_item_id_to_name).get(item, item)
+
+
+app.jinja_env.filters["location_name"] = get_location_name
+app.jinja_env.filters["item_name"] = get_item_name
 
 
 _multidata_cache = {}
@@ -257,11 +264,34 @@ def get_static_room_data(room: Room):
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
-    names: Dict[int, Dict[int, str]] = multidata["names"]
+    names: List[List[str]] = multidata.get("names", [])
+    games = multidata.get("games", {})
     groups = {}
+    custom_locations = {}
+    custom_items = {}
     if "slot_info" in multidata:
-        groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
+        slot_info_dict: Dict[int, NetworkSlot] = multidata["slot_info"]
+        games = {slot: slot_info.game for slot, slot_info in slot_info_dict.items()}
+        groups = {slot: slot_info.group_members for slot, slot_info in slot_info_dict.items()
                   if slot_info.type == SlotType.group}
+        names = [[slot_info.name for slot, slot_info in sorted(slot_info_dict.items())]]
+        for game in games.values():
+            if game not in multidata["datapackage"]:
+                continue
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if network_data_package["games"].get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # network_data_package import could be skipped once all rooms embed data package
+                    del multidata["datapackage"][game]
+                    continue
+                else:
+                    game_data = restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
+            custom_locations.update(
+                {id_: name for name, id_ in game_data["location_name_to_id"].items()})
+            custom_items.update(
+                {id_: name for name, id_ in game_data["item_name_to_id"].items()})
+
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
@@ -272,24 +302,37 @@ def get_static_room_data(room: Room):
             seed_checks_in_area[area] += len(checks)
         seed_checks_in_area["Total"] = 249
 
-    player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
-    if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
-                                            for areaname in ordered_areas}
-                             for playernumber in range(1, len(names[0]) + 1)
-                             if playernumber not in groups}
-    player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
-                               for playernumber in range(1, len(names[0]) + 1)
-                               if playernumber not in groups}
+    player_checks_in_area = {
+        playernumber: {
+            areaname: len(multidata["checks_in_area"][playernumber][areaname]) if areaname != "Total" else
+            multidata["checks_in_area"][playernumber]["Total"]
+            for areaname in ordered_areas
+        }
+        for playernumber in multidata["checks_in_area"]
+    }
 
+    player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
+                               for playernumber in multidata["checks_in_area"]}
+    saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
-             multidata["precollected_items"], multidata["games"], multidata["slot_data"], groups
+             multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second, \
+             custom_locations, custom_items
     _multidata_cache[room.seed.id] = result
     return result
 
 
 @app.route('/tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+def get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool = False):
+    key = f"{tracker}_{tracked_team}_{tracked_player}_{want_generic}"
+    tracker_page = cache.get(key)
+    if tracker_page:
+        return tracker_page
+    timeout, tracker_page = _get_player_tracker(tracker, tracked_team, tracked_player, want_generic)
+    cache.set(key, tracker_page, timeout)
+    return tracker_page
+
+
+def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, want_generic: bool):
     # Team and player must be positive and greater than zero
     if tracked_team < 0 or tracked_player < 1:
         abort(404)
@@ -300,9 +343,10 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
 
     # Collect seed information and pare it down to a single player
     locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups = get_static_room_data(room)
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
-    location_to_area = player_location_to_area[tracked_player]
+    location_to_area = player_location_to_area.get(tracked_player, {})
     inventory = collections.Counter()
     checks_done = {loc_name: 0 for loc_name in default_locations}
 
@@ -334,25 +378,31 @@ def getPlayerTracker(tracker: UUID, tracked_team: int, tracked_player: int, want
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
-                        checks_done[location_to_area[location]] += 1
+                        area_name = location_to_area.get(location, None)
+                        if area_name:
+                            checks_done[area_name] += 1
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
-        return specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data[tracked_player])
+        tracker =  specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
+                                    seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
     else:
-        return __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done)
+        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player,
+                                          player_name, seed_checks_in_area, checks_done, saving_second,
+                                          custom_locations, custom_items)
+
+    return (saving_second - datetime.datetime.now().second) % 60 or 60, tracker
 
 
 @app.route('/generic_tracker/<suuid:tracker>/<int:tracked_team>/<int:tracked_player>')
 def get_generic_tracker(tracker: UUID, tracked_team: int, tracked_player: int):
-    return getPlayerTracker(tracker, tracked_team, tracked_player, True)
+    return get_player_tracker(tracker, tracked_team, tracked_player, True)
 
 
 def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                          inventory: Counter, team: int, player: int, player_name: str,
-                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                         seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                         saving_second: int) -> str:
 
     # Note the presence of the triforce item
     game_state = multisave.get("client_game_state", {}).get((team, player), 0)
@@ -414,7 +464,8 @@ def __renderAlttpTracker(multisave: Dict[str, Any], room: Room, locations: Dict[
 
 def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
-                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                             saving_second: int) -> str:
 
     icons = {
         "Wooden Pickaxe": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d2/Wooden_Pickaxe_JE3_BE3.png",
@@ -443,17 +494,23 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
         "Campfire": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/91/Campfire_JE2_BE2.gif",
         "Water Bottle": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/75/Water_Bottle_JE2_BE2.png",
         "Spyglass": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/c1/Spyglass_JE2_BE1.png",
+        "Dragon Egg Shard": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/38/Dragon_Egg_JE4.png",
+        "Lead": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/1/1f/Lead_JE2_BE2.png",
+        "Saddle": "https://i.imgur.com/2QtDyR0.png",
+        "Channeling Book": "https://i.imgur.com/J3WsYZw.png",
+        "Silk Touch Book": "https://i.imgur.com/iqERxHQ.png",
+        "Piercing IV Book": "https://i.imgur.com/OzJptGz.png",
     }
 
     minecraft_location_ids = {
-        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070, 
+        "Story": [42073, 42023, 42027, 42039, 42002, 42009, 42010, 42070,
                   42041, 42049, 42004, 42031, 42025, 42029, 42051, 42077],
         "Nether": [42017, 42044, 42069, 42058, 42034, 42060, 42066, 42076, 42064, 42071, 42021,
-                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42014],
+                   42062, 42008, 42061, 42033, 42011, 42006, 42019, 42000, 42040, 42001, 42015, 42104, 42014],
         "The End": [42052, 42005, 42012, 42032, 42030, 42042, 42018, 42038, 42046],
-        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42035, 42016, 42020,
-                      42048, 42054, 42068, 42043, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42099, 42100],
-        "Husbandry": [42065, 42067, 42078, 42022, 42007, 42079, 42013, 42028, 42036, 
+        "Adventure": [42047, 42050, 42096, 42097, 42098, 42059, 42055, 42072, 42003, 42109, 42035, 42016, 42020,
+                      42048, 42054, 42068, 42043, 42106, 42074, 42075, 42024, 42026, 42037, 42045, 42056, 42105, 42099, 42103, 42110, 42100],
+        "Husbandry": [42065, 42067, 42078, 42022, 42113, 42107, 42007, 42079, 42013, 42028, 42036, 42108, 42111, 42112,
                       42057, 42063, 42053, 42102, 42101, 42092, 42093, 42094, 42095],
         "Archipelago": [42080, 42081, 42082, 42083, 42084, 42085, 42086, 42087, 42088, 42089, 42090, 42091],
     }
@@ -482,7 +539,8 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
     # Multi-items
     multi_items = {
         "3 Ender Pearls": 45029,
-        "8 Netherite Scrap": 45015
+        "8 Netherite Scrap": 45015,
+        "Dragon Egg Shard": 45043
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
@@ -509,14 +567,15 @@ def __renderMinecraftTracker(multisave: Dict[str, Any], room: Room, locations: D
                             inventory=inventory, icons=icons,
                             acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
                                             id in lookup_any_item_id_to_name},
-                            player=player, team=team, room=room, player_name=playerName,
+                            player=player, team=team, room=room, player_name=playerName, saving_second = saving_second,
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
 
 def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                        inventory: Counter, team: int, player: int, playerName: str,
-                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                       seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                       saving_second: int) -> str:
 
     icons = {
         "Fairy Ocarina":            "https://static.wikia.nocookie.net/zelda_gamepedia_en/images/9/97/OoT_Fairy_Ocarina_Icon.png",
@@ -606,7 +665,7 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
         if base_name == "hookshot":
             display_data['hookshot_length'] = {0: '', 1: 'H', 2: 'L'}.get(level)
-        if base_name == "wallet": 
+        if base_name == "wallet":
             display_data['wallet_size'] = {0: '99', 1: '200', 2: '500', 3: '999'}.get(level)
 
     # Determine display for bottles. Show letter if it's obtained, determine bottle count
@@ -624,48 +683,51 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
     }
     for item_name, item_id in multi_items.items():
         base_name = item_name.split()[-1].lower()
-        count = inventory[item_id]
         display_data[base_name+"_count"] = inventory[item_id]
 
     # Gather dungeon locations
     area_id_ranges = {
-        "Overworld":                (67000, 67280),
-        "Deku Tree":                (67281, 67303),
-        "Dodongo's Cavern":         (67304, 67334),
-        "Jabu Jabu's Belly":        (67335, 67359),
-        "Bottom of the Well":       (67360, 67384),
-        "Forest Temple":            (67385, 67420),
-        "Fire Temple":              (67421, 67457),
-        "Water Temple":             (67458, 67484),
-        "Shadow Temple":            (67485, 67532),
-        "Spirit Temple":            (67533, 67582),
-        "Ice Cavern":               (67583, 67596),
-        "Gerudo Training Ground":   (67597, 67635),
-        "Thieves' Hideout":         (67259, 67263),
-        "Ganon's Castle":           (67636, 67673),
+        "Overworld":                ((67000, 67263), (67269, 67280), (67747, 68024), (68054, 68062)),
+        "Deku Tree":                ((67281, 67303), (68063, 68077)),
+        "Dodongo's Cavern":         ((67304, 67334), (68078, 68160)),
+        "Jabu Jabu's Belly":        ((67335, 67359), (68161, 68188)),
+        "Bottom of the Well":       ((67360, 67384), (68189, 68230)),
+        "Forest Temple":            ((67385, 67420), (68231, 68281)),
+        "Fire Temple":              ((67421, 67457), (68282, 68350)),
+        "Water Temple":             ((67458, 67484), (68351, 68483)),
+        "Shadow Temple":            ((67485, 67532), (68484, 68565)),
+        "Spirit Temple":            ((67533, 67582), (68566, 68625)),
+        "Ice Cavern":               ((67583, 67596), (68626, 68649)),
+        "Gerudo Training Ground":   ((67597, 67635), (68650, 68656)),
+        "Thieves' Hideout":         ((67264, 67268), (68025, 68053)),
+        "Ganon's Castle":           ((67636, 67673), (68657, 68705)),
     }
 
     def lookup_and_trim(id, area):
         full_name = lookup_any_location_id_to_name[id]
-        if id == 67673:
-            return full_name[13:]  # Ganons Tower Boss Key Chest
+        if 'Ganons Tower' in full_name:
+            return full_name
         if area not in ["Overworld", "Thieves' Hideout"]:
             # trim dungeon name. leaves an extra space that doesn't display, or trims fully for DC/Jabu/GC
             return full_name[len(area):]
         return full_name
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set()).intersection(set(locations[player]))
-    location_info = {area: {lookup_and_trim(id, area): id in checked_locations for id in range(min_id, max_id+1) if id in locations[player]} 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-    checks_done = {area: len(list(filter(lambda x: x, location_info[area].values()))) for area in area_id_ranges}
-    checks_in_area = {area: len([id for id in range(min_id, max_id+1) if id in locations[player]]) 
-        for area, (min_id, max_id) in area_id_ranges.items()}
-
-    # Remove Thieves' Hideout checks from Overworld, since it's in the middle of the range
-    checks_in_area["Overworld"] -= checks_in_area["Thieves' Hideout"]
-    checks_done["Overworld"] -= checks_done["Thieves' Hideout"]
-    for loc in location_info["Thieves' Hideout"]:
-        del location_info["Overworld"][loc]
+    location_info = {}
+    checks_done = {}
+    checks_in_area = {}
+    for area, ranges in area_id_ranges.items():
+        location_info[area] = {}
+        checks_done[area] = 0
+        checks_in_area[area] = 0
+        for r in ranges:
+            min_id, max_id = r
+            for id in range(min_id, max_id+1):
+                if id in locations[player]:
+                    checked = id in checked_locations
+                    location_info[area][lookup_and_trim(id, area)] = checked
+                    checks_in_area[area] += 1
+                    checks_done[area] += checked
 
     checks_done['Total'] = sum(checks_done.values())
     checks_in_area['Total'] = sum(checks_in_area.values())
@@ -676,25 +738,28 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
         if "GS" in lookup_and_trim(id, ''):
             display_data["token_count"] += 1
 
+    oot_y = '✔'
+    oot_x = '✕'
+
     # Gather small and boss key info
     small_key_counts = {
-        "Forest Temple":            inventory[66175],
-        "Fire Temple":              inventory[66176],
-        "Water Temple":             inventory[66177],
-        "Spirit Temple":            inventory[66178],
-        "Shadow Temple":            inventory[66179],
-        "Bottom of the Well":       inventory[66180],
-        "Gerudo Training Ground":   inventory[66181],
-        "Thieves' Hideout":         inventory[66182],
-        "Ganon's Castle":           inventory[66183],
+        "Forest Temple":            oot_y if inventory[66203] else inventory[66175],
+        "Fire Temple":              oot_y if inventory[66204] else inventory[66176],
+        "Water Temple":             oot_y if inventory[66205] else inventory[66177],
+        "Spirit Temple":            oot_y if inventory[66206] else inventory[66178],
+        "Shadow Temple":            oot_y if inventory[66207] else inventory[66179],
+        "Bottom of the Well":       oot_y if inventory[66208] else inventory[66180],
+        "Gerudo Training Ground":   oot_y if inventory[66209] else inventory[66181],
+        "Thieves' Hideout":         oot_y if inventory[66210] else inventory[66182],
+        "Ganon's Castle":           oot_y if inventory[66211] else inventory[66183],
     }
     boss_key_counts = {
-        "Forest Temple":            '✔' if inventory[66149] else '✕',
-        "Fire Temple":              '✔' if inventory[66150] else '✕',
-        "Water Temple":             '✔' if inventory[66151] else '✕',
-        "Spirit Temple":            '✔' if inventory[66152] else '✕',
-        "Shadow Temple":            '✔' if inventory[66153] else '✕',
-        "Ganon's Castle":           '✔' if inventory[66154] else '✕',
+        "Forest Temple":            oot_y if inventory[66149] else oot_x,
+        "Fire Temple":              oot_y if inventory[66150] else oot_x,
+        "Water Temple":             oot_y if inventory[66151] else oot_x,
+        "Spirit Temple":            oot_y if inventory[66152] else oot_x,
+        "Shadow Temple":            oot_y if inventory[66153] else oot_x,
+        "Ganon's Castle":           oot_y if inventory[66154] else oot_x,
     }
 
     # Victory condition
@@ -711,7 +776,8 @@ def __renderOoTTracker(multisave: Dict[str, Any], room: Room, locations: Dict[in
 
 def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                inventory: Counter, team: int, player: int, playerName: str,
-                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict[str, Any]) -> str:
+                               seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                               slot_data: Dict[str, Any], saving_second: int) -> str:
 
     icons = {
         "Timespinner Wheel":    "https://timespinnerwiki.com/mediawiki/images/7/76/Timespinner_Wheel.png",
@@ -746,7 +812,7 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
     }
 
     timespinner_location_ids = {
-        "Present": [ 
+        "Present": [
             1337000, 1337001, 1337002, 1337003, 1337004, 1337005, 1337006, 1337007, 1337008, 1337009,
             1337010, 1337011, 1337012, 1337013, 1337014, 1337015, 1337016, 1337017, 1337018, 1337019,
             1337020, 1337021, 1337022, 1337023, 1337024, 1337025, 1337026, 1337027, 1337028, 1337029,
@@ -767,20 +833,20 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
             1337150, 1337151, 1337152, 1337153, 1337154, 1337155,
                      1337171, 1337172, 1337173, 1337174, 1337175],
         "Ancient Pyramid": [
-                                                                  1337236, 
+                                                                  1337236,
                                                                   1337246, 1337247, 1337248, 1337249]
     }
 
     if(slot_data["DownloadableItems"]):
         timespinner_location_ids["Present"] += [
                                                                   1337156, 1337157,          1337159,
-            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169, 
+            1337160, 1337161, 1337162, 1337163, 1337164, 1337165, 1337166, 1337167, 1337168, 1337169,
             1337170]
     if(slot_data["Cantoran"]):
         timespinner_location_ids["Past"].append(1337176)
     if(slot_data["LoreChecks"]):
         timespinner_location_ids["Present"] += [
-                                                                           1337177, 1337178, 1337179, 
+                                                                           1337177, 1337178, 1337179,
             1337180, 1337181, 1337182, 1337183, 1337184, 1337185, 1337186, 1337187]
         timespinner_location_ids["Past"] += [
                                                                                     1337188, 1337189,
@@ -817,30 +883,31 @@ def __renderTimespinnerTracker(multisave: Dict[str, Any], room: Room, locations:
 
 def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                                 inventory: Counter, team: int, player: int, playerName: str,
-                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict) -> str:
+                                seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict,
+                                saving_second: int) -> str:
 
     icons = {
-        "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ETank.png",
-        "Missile":          "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Missile.png",
-        "Super Missile":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Super.png",
-        "Power Bomb":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/PowerBomb.png",
-        "Bomb":             "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Bomb.png",
-        "Charge Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Charge.png",
-        "Ice Beam":         "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Ice.png",
-        "Hi-Jump Boots":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/HiJump.png",
-        "Speed Booster":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpeedBooster.png",
-        "Wave Beam":        "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Wave.png",
-        "Spazer":           "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Spazer.png",
-        "Spring Ball":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpringBall.png",
-        "Varia Suit":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Varia.png",
-        "Plasma Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Plasma.png",
-        "Grappling Beam":   "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Grapple.png",
-        "Morph Ball":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Morph.png",
-        "Reserve Tank":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Reserve.png",
-        "Gravity Suit":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/Gravity.png",
-        "X-Ray Scope":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/XRayScope.png",
-        "Space Jump":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/SpaceJump.png",
-        "Screw Attack":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/ScrewAttack.png",
+        "Energy Tank":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/ETank.png",
+        "Missile":          "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Missile.png",
+        "Super Missile":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Super.png",
+        "Power Bomb":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/PowerBomb.png",
+        "Bomb":             "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Bomb.png",
+        "Charge Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Charge.png",
+        "Ice Beam":         "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Ice.png",
+        "Hi-Jump Boots":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/HiJump.png",
+        "Speed Booster":    "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpeedBooster.png",
+        "Wave Beam":        "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Wave.png",
+        "Spazer":           "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Spazer.png",
+        "Spring Ball":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpringBall.png",
+        "Varia Suit":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Varia.png",
+        "Plasma Beam":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Plasma.png",
+        "Grappling Beam":   "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Grapple.png",
+        "Morph Ball":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Morph.png",
+        "Reserve Tank":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Reserve.png",
+        "Gravity Suit":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/Gravity.png",
+        "X-Ray Scope":      "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/XRayScope.png",
+        "Space Jump":       "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/SpaceJump.png",
+        "Screw Attack":     "https://randommetroidsolver.pythonanywhere.com/solver/static/images/tracker/inventory/ScrewAttack.png",
         "Nothing":          "",
         "No Energy":        "",
         "Kraid":            "",
@@ -915,44 +982,389 @@ def __renderSuperMetroidTracker(multisave: Dict[str, Any], room: Room, locations
                             checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
                             **display_data)
 
+def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                          inventory: Counter, team: int, player: int, playerName: str,
+                          seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                          slot_data: Dict, saving_second: int) -> str:
+
+    SC2WOL_LOC_ID_OFFSET = 1000
+    SC2WOL_ITEM_ID_OFFSET = 1000
+
+    icons = {
+        "Starting Minerals": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-mineral-protoss.png",
+        "Starting Vespene": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-gas-terran.png",
+        "Starting Supply": "https://static.wikia.nocookie.net/starcraft/images/d/d3/TerranSupply_SC2_Icon1.gif",
+
+        "Infantry Weapons Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel1.png",
+        "Infantry Weapons Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel2.png",
+        "Infantry Weapons Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryweaponslevel3.png",
+        "Infantry Armor Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel1.png",
+        "Infantry Armor Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel2.png",
+        "Infantry Armor Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-infantryarmorlevel3.png",
+        "Vehicle Weapons Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel1.png",
+        "Vehicle Weapons Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel2.png",
+        "Vehicle Weapons Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleweaponslevel3.png",
+        "Vehicle Armor Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel1.png",
+        "Vehicle Armor Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel2.png",
+        "Vehicle Armor Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-vehicleplatinglevel3.png",
+        "Ship Weapons Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel1.png",
+        "Ship Weapons Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel2.png",
+        "Ship Weapons Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipweaponslevel3.png",
+        "Ship Armor Level 1": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel1.png",
+        "Ship Armor Level 2": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel2.png",
+        "Ship Armor Level 3": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/upgrades/btn-upgrade-terran-shipplatinglevel3.png",
+
+        "Bunker": "https://static.wikia.nocookie.net/starcraft/images/c/c5/Bunker_SC2_Icon1.jpg",
+        "Missile Turret": "https://static.wikia.nocookie.net/starcraft/images/5/5f/MissileTurret_SC2_Icon1.jpg",
+        "Sensor Tower": "https://static.wikia.nocookie.net/starcraft/images/d/d2/SensorTower_SC2_Icon1.jpg",
+
+        "Projectile Accelerator (Bunker)": "https://0rganics.org/archipelago/sc2wol/ProjectileAccelerator.png",
+        "Neosteel Bunker (Bunker)": "https://0rganics.org/archipelago/sc2wol/NeosteelBunker.png",
+        "Titanium Housing (Missile Turret)": "https://0rganics.org/archipelago/sc2wol/TitaniumHousing.png",
+        "Hellstorm Batteries (Missile Turret)": "https://0rganics.org/archipelago/sc2wol/HellstormBatteries.png",
+        "Advanced Construction (SCV)": "https://0rganics.org/archipelago/sc2wol/AdvancedConstruction.png",
+        "Dual-Fusion Welders (SCV)": "https://0rganics.org/archipelago/sc2wol/Dual-FusionWelders.png",
+        "Fire-Suppression System (Building)": "https://0rganics.org/archipelago/sc2wol/Fire-SuppressionSystem.png",
+        "Orbital Command (Building)": "https://0rganics.org/archipelago/sc2wol/OrbitalCommandCampaign.png",
+
+        "Marine": "https://static.wikia.nocookie.net/starcraft/images/4/47/Marine_SC2_Icon1.jpg",
+        "Medic": "https://static.wikia.nocookie.net/starcraft/images/7/74/Medic_SC2_Rend1.jpg",
+        "Firebat": "https://static.wikia.nocookie.net/starcraft/images/3/3c/Firebat_SC2_Rend1.jpg",
+        "Marauder": "https://static.wikia.nocookie.net/starcraft/images/b/ba/Marauder_SC2_Icon1.jpg",
+        "Reaper": "https://static.wikia.nocookie.net/starcraft/images/7/7d/Reaper_SC2_Icon1.jpg",
+
+        "Stimpack (Marine)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Combat Shield (Marine)": "https://0rganics.org/archipelago/sc2wol/CombatShieldCampaign.png",
+        "Advanced Medic Facilities (Medic)": "https://0rganics.org/archipelago/sc2wol/AdvancedMedicFacilities.png",
+        "Stabilizer Medpacks (Medic)": "https://0rganics.org/archipelago/sc2wol/StabilizerMedpacks.png",
+        "Incinerator Gauntlets (Firebat)": "https://0rganics.org/archipelago/sc2wol/IncineratorGauntlets.png",
+        "Juggernaut Plating (Firebat)": "https://0rganics.org/archipelago/sc2wol/JuggernautPlating.png",
+        "Concussive Shells (Marauder)": "https://0rganics.org/archipelago/sc2wol/ConcussiveShellsCampaign.png",
+        "Kinetic Foam (Marauder)": "https://0rganics.org/archipelago/sc2wol/KineticFoam.png",
+        "U-238 Rounds (Reaper)": "https://0rganics.org/archipelago/sc2wol/U-238Rounds.png",
+        "G-4 Clusterbomb (Reaper)": "https://0rganics.org/archipelago/sc2wol/G-4Clusterbomb.png",
+
+        "Hellion": "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
+        "Vulture": "https://static.wikia.nocookie.net/starcraft/images/d/da/Vulture_WoL.jpg",
+        "Goliath": "https://static.wikia.nocookie.net/starcraft/images/e/eb/Goliath_WoL.jpg",
+        "Diamondback": "https://static.wikia.nocookie.net/starcraft/images/a/a6/Diamondback_WoL.jpg",
+        "Siege Tank": "https://static.wikia.nocookie.net/starcraft/images/5/57/SiegeTank_SC2_Icon1.jpg",
+
+        "Twin-Linked Flamethrower (Hellion)": "https://0rganics.org/archipelago/sc2wol/Twin-LinkedFlamethrower.png",
+        "Thermite Filaments (Hellion)": "https://0rganics.org/archipelago/sc2wol/ThermiteFilaments.png",
+        "Cerberus Mine (Vulture)": "https://0rganics.org/archipelago/sc2wol/CerberusMine.png",
+        "Replenishable Magazine (Vulture)": "https://0rganics.org/archipelago/sc2wol/ReplenishableMagazine.png",
+        "Multi-Lock Weapons System (Goliath)": "https://0rganics.org/archipelago/sc2wol/Multi-LockWeaponsSystem.png",
+        "Ares-Class Targeting System (Goliath)": "https://0rganics.org/archipelago/sc2wol/Ares-ClassTargetingSystem.png",
+        "Tri-Lithium Power Cell (Diamondback)": "https://0rganics.org/archipelago/sc2wol/Tri-LithiumPowerCell.png",
+        "Shaped Hull (Diamondback)": "https://0rganics.org/archipelago/sc2wol/ShapedHull.png",
+        "Maelstrom Rounds (Siege Tank)": "https://0rganics.org/archipelago/sc2wol/MaelstromRounds.png",
+        "Shaped Blast (Siege Tank)": "https://0rganics.org/archipelago/sc2wol/ShapedBlast.png",
+
+        "Medivac": "https://static.wikia.nocookie.net/starcraft/images/d/db/Medivac_SC2_Icon1.jpg",
+        "Wraith": "https://static.wikia.nocookie.net/starcraft/images/7/75/Wraith_WoL.jpg",
+        "Viking": "https://static.wikia.nocookie.net/starcraft/images/2/2a/Viking_SC2_Icon1.jpg",
+        "Banshee": "https://static.wikia.nocookie.net/starcraft/images/3/32/Banshee_SC2_Icon1.jpg",
+        "Battlecruiser": "https://static.wikia.nocookie.net/starcraft/images/f/f5/Battlecruiser_SC2_Icon1.jpg",
+
+        "Rapid Deployment Tube (Medivac)": "https://0rganics.org/archipelago/sc2wol/RapidDeploymentTube.png",
+        "Advanced Healing AI (Medivac)": "https://0rganics.org/archipelago/sc2wol/AdvancedHealingAI.png",
+        "Tomahawk Power Cells (Wraith)": "https://0rganics.org/archipelago/sc2wol/TomahawkPowerCells.png",
+        "Displacement Field (Wraith)": "https://0rganics.org/archipelago/sc2wol/DisplacementField.png",
+        "Ripwave Missiles (Viking)": "https://0rganics.org/archipelago/sc2wol/RipwaveMissiles.png",
+        "Phobos-Class Weapons System (Viking)": "https://0rganics.org/archipelago/sc2wol/Phobos-ClassWeaponsSystem.png",
+        "Cross-Spectrum Dampeners (Banshee)": "https://0rganics.org/archipelago/sc2wol/Cross-SpectrumDampeners.png",
+        "Shockwave Missile Battery (Banshee)": "https://0rganics.org/archipelago/sc2wol/ShockwaveMissileBattery.png",
+        "Missile Pods (Battlecruiser)": "https://0rganics.org/archipelago/sc2wol/MissilePods.png",
+        "Defensive Matrix (Battlecruiser)": "https://0rganics.org/archipelago/sc2wol/DefensiveMatrix.png",
+
+        "Ghost": "https://static.wikia.nocookie.net/starcraft/images/6/6e/Ghost_SC2_Icon1.jpg",
+        "Spectre": "https://static.wikia.nocookie.net/starcraft/images/0/0d/Spectre_WoL.jpg",
+        "Thor": "https://static.wikia.nocookie.net/starcraft/images/e/ef/Thor_SC2_Icon1.jpg",
+
+        "Ocular Implants (Ghost)": "https://0rganics.org/archipelago/sc2wol/OcularImplants.png",
+        "Crius Suit (Ghost)": "https://0rganics.org/archipelago/sc2wol/CriusSuit.png",
+        "Psionic Lash (Spectre)": "https://0rganics.org/archipelago/sc2wol/PsionicLash.png",
+        "Nyx-Class Cloaking Module (Spectre)": "https://0rganics.org/archipelago/sc2wol/Nyx-ClassCloakingModule.png",
+        "330mm Barrage Cannon (Thor)": "https://0rganics.org/archipelago/sc2wol/330mmBarrageCannon.png",
+        "Immortality Protocol (Thor)": "https://0rganics.org/archipelago/sc2wol/ImmortalityProtocol.png",
+
+        "War Pigs": "https://static.wikia.nocookie.net/starcraft/images/e/ed/WarPigs_SC2_Icon1.jpg",
+        "Devil Dogs": "https://static.wikia.nocookie.net/starcraft/images/3/33/DevilDogs_SC2_Icon1.jpg",
+        "Hammer Securities": "https://static.wikia.nocookie.net/starcraft/images/3/3b/HammerSecurity_SC2_Icon1.jpg",
+        "Spartan Company": "https://static.wikia.nocookie.net/starcraft/images/b/be/SpartanCompany_SC2_Icon1.jpg",
+        "Siege Breakers": "https://static.wikia.nocookie.net/starcraft/images/3/31/SiegeBreakers_SC2_Icon1.jpg",
+        "Hel's Angel": "https://static.wikia.nocookie.net/starcraft/images/6/63/HelsAngels_SC2_Icon1.jpg",
+        "Dusk Wings": "https://static.wikia.nocookie.net/starcraft/images/5/52/DuskWings_SC2_Icon1.jpg",
+        "Jackson's Revenge": "https://static.wikia.nocookie.net/starcraft/images/9/95/JacksonsRevenge_SC2_Icon1.jpg",
+
+        "Ultra-Capacitors": "https://static.wikia.nocookie.net/starcraft/images/2/23/SC2_Lab_Ultra_Capacitors_Icon.png",
+        "Vanadium Plating": "https://static.wikia.nocookie.net/starcraft/images/6/67/SC2_Lab_VanPlating_Icon.png",
+        "Orbital Depots": "https://static.wikia.nocookie.net/starcraft/images/0/01/SC2_Lab_Orbital_Depot_Icon.png",
+        "Micro-Filtering": "https://static.wikia.nocookie.net/starcraft/images/2/20/SC2_Lab_MicroFilter_Icon.png",
+        "Automated Refinery": "https://static.wikia.nocookie.net/starcraft/images/7/71/SC2_Lab_Auto_Refinery_Icon.png",
+        "Command Center Reactor": "https://static.wikia.nocookie.net/starcraft/images/e/ef/SC2_Lab_CC_Reactor_Icon.png",
+        "Raven": "https://static.wikia.nocookie.net/starcraft/images/1/19/SC2_Lab_Raven_Icon.png",
+        "Science Vessel": "https://static.wikia.nocookie.net/starcraft/images/c/c3/SC2_Lab_SciVes_Icon.png",
+        "Tech Reactor": "https://static.wikia.nocookie.net/starcraft/images/c/c5/SC2_Lab_Tech_Reactor_Icon.png",
+        "Orbital Strike": "https://static.wikia.nocookie.net/starcraft/images/d/df/SC2_Lab_Orb_Strike_Icon.png",
+
+        "Shrike Turret": "https://static.wikia.nocookie.net/starcraft/images/4/44/SC2_Lab_Shrike_Turret_Icon.png",
+        "Fortified Bunker": "https://static.wikia.nocookie.net/starcraft/images/4/4f/SC2_Lab_FortBunker_Icon.png",
+        "Planetary Fortress": "https://static.wikia.nocookie.net/starcraft/images/0/0b/SC2_Lab_PlanetFortress_Icon.png",
+        "Perdition Turret": "https://static.wikia.nocookie.net/starcraft/images/a/af/SC2_Lab_PerdTurret_Icon.png",
+        "Predator": "https://static.wikia.nocookie.net/starcraft/images/8/83/SC2_Lab_Predator_Icon.png",
+        "Hercules": "https://static.wikia.nocookie.net/starcraft/images/4/40/SC2_Lab_Hercules_Icon.png",
+        "Cellular Reactor": "https://static.wikia.nocookie.net/starcraft/images/d/d8/SC2_Lab_CellReactor_Icon.png",
+        "Regenerative Bio-Steel": "https://static.wikia.nocookie.net/starcraft/images/d/d3/SC2_Lab_BioSteel_Icon.png",
+        "Hive Mind Emulator": "https://static.wikia.nocookie.net/starcraft/images/b/bc/SC2_Lab_Hive_Emulator_Icon.png",
+        "Psi Disrupter": "https://static.wikia.nocookie.net/starcraft/images/c/cf/SC2_Lab_Psi_Disruptor_Icon.png",
+
+        "Zealot": "https://static.wikia.nocookie.net/starcraft/images/6/6e/Icon_Protoss_Zealot.jpg",
+        "Stalker": "https://static.wikia.nocookie.net/starcraft/images/0/0d/Icon_Protoss_Stalker.jpg",
+        "High Templar": "https://static.wikia.nocookie.net/starcraft/images/a/a0/Icon_Protoss_High_Templar.jpg",
+        "Dark Templar": "https://static.wikia.nocookie.net/starcraft/images/9/90/Icon_Protoss_Dark_Templar.jpg",
+        "Immortal": "https://static.wikia.nocookie.net/starcraft/images/c/c1/Icon_Protoss_Immortal.jpg",
+        "Colossus": "https://static.wikia.nocookie.net/starcraft/images/4/40/Icon_Protoss_Colossus.jpg",
+        "Phoenix": "https://static.wikia.nocookie.net/starcraft/images/b/b1/Icon_Protoss_Phoenix.jpg",
+        "Void Ray": "https://static.wikia.nocookie.net/starcraft/images/1/1d/VoidRay_SC2_Rend1.jpg",
+        "Carrier": "https://static.wikia.nocookie.net/starcraft/images/2/2c/Icon_Protoss_Carrier.jpg",
+
+        "Nothing": "",
+    }
+
+    sc2wol_location_ids = {
+        "Liberation Day": [SC2WOL_LOC_ID_OFFSET + 100, SC2WOL_LOC_ID_OFFSET + 101, SC2WOL_LOC_ID_OFFSET + 102, SC2WOL_LOC_ID_OFFSET + 103, SC2WOL_LOC_ID_OFFSET + 104, SC2WOL_LOC_ID_OFFSET + 105, SC2WOL_LOC_ID_OFFSET + 106],
+        "The Outlaws": [SC2WOL_LOC_ID_OFFSET + 200, SC2WOL_LOC_ID_OFFSET + 201],
+        "Zero Hour": [SC2WOL_LOC_ID_OFFSET + 300, SC2WOL_LOC_ID_OFFSET + 301, SC2WOL_LOC_ID_OFFSET + 302, SC2WOL_LOC_ID_OFFSET + 303],
+        "Evacuation": [SC2WOL_LOC_ID_OFFSET + 400, SC2WOL_LOC_ID_OFFSET + 401, SC2WOL_LOC_ID_OFFSET + 402, SC2WOL_LOC_ID_OFFSET + 403],
+        "Outbreak": [SC2WOL_LOC_ID_OFFSET + 500, SC2WOL_LOC_ID_OFFSET + 501, SC2WOL_LOC_ID_OFFSET + 502],
+        "Safe Haven": [SC2WOL_LOC_ID_OFFSET + 600, SC2WOL_LOC_ID_OFFSET + 601, SC2WOL_LOC_ID_OFFSET + 602, SC2WOL_LOC_ID_OFFSET + 603],
+        "Haven's Fall": [SC2WOL_LOC_ID_OFFSET + 700, SC2WOL_LOC_ID_OFFSET + 701, SC2WOL_LOC_ID_OFFSET + 702, SC2WOL_LOC_ID_OFFSET + 703],
+        "Smash and Grab": [SC2WOL_LOC_ID_OFFSET + 800, SC2WOL_LOC_ID_OFFSET + 801, SC2WOL_LOC_ID_OFFSET + 802, SC2WOL_LOC_ID_OFFSET + 803, SC2WOL_LOC_ID_OFFSET + 804],
+        "The Dig": [SC2WOL_LOC_ID_OFFSET + 900, SC2WOL_LOC_ID_OFFSET + 901, SC2WOL_LOC_ID_OFFSET + 902, SC2WOL_LOC_ID_OFFSET + 903],
+        "The Moebius Factor": [SC2WOL_LOC_ID_OFFSET + 1000, SC2WOL_LOC_ID_OFFSET + 1003, SC2WOL_LOC_ID_OFFSET + 1004, SC2WOL_LOC_ID_OFFSET + 1005, SC2WOL_LOC_ID_OFFSET + 1006, SC2WOL_LOC_ID_OFFSET + 1007, SC2WOL_LOC_ID_OFFSET + 1008],
+        "Supernova": [SC2WOL_LOC_ID_OFFSET + 1100, SC2WOL_LOC_ID_OFFSET + 1101, SC2WOL_LOC_ID_OFFSET + 1102, SC2WOL_LOC_ID_OFFSET + 1103, SC2WOL_LOC_ID_OFFSET + 1104],
+        "Maw of the Void": [SC2WOL_LOC_ID_OFFSET + 1200, SC2WOL_LOC_ID_OFFSET + 1201, SC2WOL_LOC_ID_OFFSET + 1202, SC2WOL_LOC_ID_OFFSET + 1203, SC2WOL_LOC_ID_OFFSET + 1204, SC2WOL_LOC_ID_OFFSET + 1205],
+        "Devil's Playground": [SC2WOL_LOC_ID_OFFSET + 1300, SC2WOL_LOC_ID_OFFSET + 1301, SC2WOL_LOC_ID_OFFSET + 1302],
+        "Welcome to the Jungle": [SC2WOL_LOC_ID_OFFSET + 1400, SC2WOL_LOC_ID_OFFSET + 1401, SC2WOL_LOC_ID_OFFSET + 1402, SC2WOL_LOC_ID_OFFSET + 1403],
+        "Breakout": [SC2WOL_LOC_ID_OFFSET + 1500, SC2WOL_LOC_ID_OFFSET + 1501, SC2WOL_LOC_ID_OFFSET + 1502],
+        "Ghost of a Chance": [SC2WOL_LOC_ID_OFFSET + 1600, SC2WOL_LOC_ID_OFFSET + 1601, SC2WOL_LOC_ID_OFFSET + 1602, SC2WOL_LOC_ID_OFFSET + 1603, SC2WOL_LOC_ID_OFFSET + 1604, SC2WOL_LOC_ID_OFFSET + 1605],
+        "The Great Train Robbery": [SC2WOL_LOC_ID_OFFSET + 1700, SC2WOL_LOC_ID_OFFSET + 1701, SC2WOL_LOC_ID_OFFSET + 1702, SC2WOL_LOC_ID_OFFSET + 1703],
+        "Cutthroat": [SC2WOL_LOC_ID_OFFSET + 1800, SC2WOL_LOC_ID_OFFSET + 1801, SC2WOL_LOC_ID_OFFSET + 1802, SC2WOL_LOC_ID_OFFSET + 1803, SC2WOL_LOC_ID_OFFSET + 1804],
+        "Engine of Destruction": [SC2WOL_LOC_ID_OFFSET + 1900, SC2WOL_LOC_ID_OFFSET + 1901, SC2WOL_LOC_ID_OFFSET + 1902, SC2WOL_LOC_ID_OFFSET + 1903, SC2WOL_LOC_ID_OFFSET + 1904, SC2WOL_LOC_ID_OFFSET + 1905],
+        "Media Blitz": [SC2WOL_LOC_ID_OFFSET + 2000, SC2WOL_LOC_ID_OFFSET + 2001, SC2WOL_LOC_ID_OFFSET + 2002, SC2WOL_LOC_ID_OFFSET + 2003, SC2WOL_LOC_ID_OFFSET + 2004],
+        "Piercing the Shroud": [SC2WOL_LOC_ID_OFFSET + 2100, SC2WOL_LOC_ID_OFFSET + 2101, SC2WOL_LOC_ID_OFFSET + 2102, SC2WOL_LOC_ID_OFFSET + 2103, SC2WOL_LOC_ID_OFFSET + 2104, SC2WOL_LOC_ID_OFFSET + 2105],
+        "Whispers of Doom": [SC2WOL_LOC_ID_OFFSET + 2200, SC2WOL_LOC_ID_OFFSET + 2201, SC2WOL_LOC_ID_OFFSET + 2202, SC2WOL_LOC_ID_OFFSET + 2203],
+        "A Sinister Turn": [SC2WOL_LOC_ID_OFFSET + 2300, SC2WOL_LOC_ID_OFFSET + 2301, SC2WOL_LOC_ID_OFFSET + 2302, SC2WOL_LOC_ID_OFFSET + 2303],
+        "Echoes of the Future": [SC2WOL_LOC_ID_OFFSET + 2400, SC2WOL_LOC_ID_OFFSET + 2401, SC2WOL_LOC_ID_OFFSET + 2402],
+        "In Utter Darkness": [SC2WOL_LOC_ID_OFFSET + 2500, SC2WOL_LOC_ID_OFFSET + 2501, SC2WOL_LOC_ID_OFFSET + 2502],
+        "Gates of Hell": [SC2WOL_LOC_ID_OFFSET + 2600, SC2WOL_LOC_ID_OFFSET + 2601],
+        "Belly of the Beast": [SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2701, SC2WOL_LOC_ID_OFFSET + 2702, SC2WOL_LOC_ID_OFFSET + 2703],
+        "Shatter the Sky": [SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2801, SC2WOL_LOC_ID_OFFSET + 2802, SC2WOL_LOC_ID_OFFSET + 2803, SC2WOL_LOC_ID_OFFSET + 2804, SC2WOL_LOC_ID_OFFSET + 2805],
+    }
+
+    display_data = {}
+
+    # Determine display for progressive items
+    progressive_items = {
+        "Progressive Infantry Weapon": 100 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Infantry Armor": 102 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Vehicle Weapon": 103 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Vehicle Armor": 104 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Ship Weapon": 105 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Ship Armor": 106 + SC2WOL_ITEM_ID_OFFSET
+    }
+    progressive_names = {
+        "Progressive Infantry Weapon": ["Infantry Weapons Level 1", "Infantry Weapons Level 1", "Infantry Weapons Level 2", "Infantry Weapons Level 3"],
+        "Progressive Infantry Armor": ["Infantry Armor Level 1", "Infantry Armor Level 1", "Infantry Armor Level 2", "Infantry Armor Level 3"],
+        "Progressive Vehicle Weapon": ["Vehicle Weapons Level 1", "Vehicle Weapons Level 1", "Vehicle Weapons Level 2", "Vehicle Weapons Level 3"],
+        "Progressive Vehicle Armor": ["Vehicle Armor Level 1", "Vehicle Armor Level 1", "Vehicle Armor Level 2", "Vehicle Armor Level 3"],
+        "Progressive Ship Weapon": ["Ship Weapons Level 1", "Ship Weapons Level 1", "Ship Weapons Level 2", "Ship Weapons Level 3"],
+        "Progressive Ship Armor": ["Ship Armor Level 1", "Ship Armor Level 1", "Ship Armor Level 2", "Ship Armor Level 3"]
+    }
+    for item_name, item_id in progressive_items.items():
+        level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
+        display_name = progressive_names[item_name][level]
+        base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
+        display_data[base_name + "_level"] = level
+        display_data[base_name + "_url"] = icons[display_name]
+
+    # Multi-items
+    multi_items = {
+        "+15 Starting Minerals": 800 + SC2WOL_ITEM_ID_OFFSET,
+        "+15 Starting Vespene": 801 + SC2WOL_ITEM_ID_OFFSET,
+        "+2 Starting Supply": 802 + SC2WOL_ITEM_ID_OFFSET
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        if base_name == "supply":
+            count = count * 2
+            display_data[base_name + "_count"] = count
+        else:
+            count = count * 15
+            display_data[base_name + "_count"] = count
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    # Turn location IDs into mission objective counts
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {mission_name: {lookup_name(id): (id in checked_locations) for id in mission_locations if id in set(locations[player])} for mission_name, mission_locations in sc2wol_location_ids.items()}
+    checks_done = {mission_name: len([id for id in mission_locations if id in checked_locations and id in set(locations[player])]) for mission_name, mission_locations in sc2wol_location_ids.items()}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = {mission_name: len([id for id in mission_locations if id in set(locations[player])]) for mission_name, mission_locations in sc2wol_location_ids.items()}
+    checks_in_area['Total'] = sum(checks_in_area.values())
+
+    return render_template("sc2wolTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
+
+def __renderChecksfinder(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
+                             inventory: Counter, team: int, player: int, playerName: str,
+                             seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int], slot_data: Dict, saving_second: int) -> str:
+
+    icons = {
+        "Checks Available": "https://0rganics.org/archipelago/cf/spr_tiles_3.png",
+        "Map Width": "https://0rganics.org/archipelago/cf/spr_tiles_4.png",
+        "Map Height": "https://0rganics.org/archipelago/cf/spr_tiles_5.png",
+        "Map Bombs": "https://0rganics.org/archipelago/cf/spr_tiles_6.png",
+
+        "Nothing": "",
+    }
+
+    checksfinder_location_ids = {
+        "Tile 1": 81000,
+        "Tile 2": 81001,
+        "Tile 3": 81002,
+        "Tile 4": 81003,
+        "Tile 5": 81004,
+        "Tile 6": 81005,
+        "Tile 7": 81006,
+        "Tile 8": 81007,
+        "Tile 9": 81008,
+        "Tile 10": 81009,
+        "Tile 11": 81010,
+        "Tile 12": 81011,
+        "Tile 13": 81012,
+        "Tile 14": 81013,
+        "Tile 15": 81014,
+        "Tile 16": 81015,
+        "Tile 17": 81016,
+        "Tile 18": 81017,
+        "Tile 19": 81018,
+        "Tile 20": 81019,
+        "Tile 21": 81020,
+        "Tile 22": 81021,
+        "Tile 23": 81022,
+        "Tile 24": 81023,
+        "Tile 25": 81024,
+    }
+
+    display_data = {}
+
+    # Multi-items
+    multi_items = {
+        "Map Width": 80000,
+        "Map Height": 80001,
+        "Map Bombs": 80002
+    }
+    for item_name, item_id in multi_items.items():
+        base_name = item_name.split()[-1].lower()
+        count = inventory[item_id]
+        display_data[base_name + "_count"] = count
+        display_data[base_name + "_display"] = count + 5
+
+    # Get location info
+    checked_locations = multisave.get("location_checks", {}).get((team, player), set())
+    lookup_name = lambda id: lookup_any_location_id_to_name[id]
+    location_info = {tile_name: {lookup_name(tile_location): (tile_location in checked_locations)} for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in set(locations[player])}
+    checks_done = {tile_name: len([tile_location]) for tile_name, tile_location in checksfinder_location_ids.items() if tile_location in checked_locations and tile_location in set(locations[player])}
+    checks_done['Total'] = len(checked_locations)
+    checks_in_area = checks_done
+
+    # Calculate checks available
+    display_data["checks_unlocked"] = min(display_data["width_count"] + display_data["height_count"] + display_data["bombs_count"] + 5, 25)
+    display_data["checks_available"] = max(display_data["checks_unlocked"] - len(checked_locations), 0)
+
+    # Victory condition
+    game_state = multisave.get("client_game_state", {}).get((team, player), 0)
+    display_data['game_finished'] = game_state == 30
+
+    return render_template("checksfinderTracker.html",
+                            inventory=inventory, icons=icons,
+                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                            id in lookup_any_item_id_to_name},
+                            player=player, team=team, room=room, player_name=playerName,
+                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                            **display_data)
+
 def __renderGenericTracker(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                            inventory: Counter, team: int, player: int, playerName: str,
-                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int]) -> str:
+                           seed_checks_in_area: Dict[int, Dict[str, int]], checks_done: Dict[str, int],
+                           saving_second: int, custom_locations: Dict[int, str], custom_items: Dict[int, str]) -> str:
 
     checked_locations = multisave.get("location_checks", {}).get((team, player), set())
     player_received_items = {}
     if multisave.get('version', 0) > 0:
-        # add numbering to all items but starter_inventory
         ordered_items = multisave.get('received_items', {}).get((team, player, True), [])
     else:
         ordered_items = multisave.get('received_items', {}).get((team, player), [])
 
+    # add numbering to all items but starter_inventory
     for order_index, networkItem in enumerate(ordered_items, start=1):
         player_received_items[networkItem.item] = order_index
 
     return render_template("genericTracker.html",
-                            inventory=inventory,
-                            player=player, team=team, room=room, player_name=playerName,
-                            checked_locations=checked_locations,
-                            not_checked_locations=set(locations[player]) - checked_locations,
-                            received_items=player_received_items)
+                           inventory=inventory,
+                           player=player, team=team, room=room, player_name=playerName,
+                           checked_locations=checked_locations,
+                           not_checked_locations=set(locations[player]) - checked_locations,
+                           received_items=player_received_items, saving_second=saving_second,
+                           custom_items=custom_items, custom_locations=custom_locations)
 
 
-@app.route('/tracker/<suuid:tracker>')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def getTracker(tracker: UUID):
+def get_enabled_multiworld_trackers(room: Room, current: str):
+    enabled = [
+        {
+            "name": "Generic",
+            "endpoint": "get_multiworld_tracker",
+            "current": current == "Generic"
+         }
+    ]
+    for game_name, endpoint in multi_trackers.items():
+        if any(slot.game == game_name for slot in room.seed.slots) or current == game_name:
+            enabled.append({
+                "name": game_name,
+                "endpoint": endpoint.__name__,
+                "current": current == game_name}
+            )
+    return enabled
+
+
+def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[str, typing.Any]]:
     room: Room = Room.get(tracker=tracker)
     if not room:
-        abort(404)
-    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
-        precollected_items, games, slot_data, groups = get_static_room_data(room)
+        return None
 
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if playernumber not in groups}
-                 for teamnumber, team in enumerate(names)}
+    locations, names, use_door_tracker, checks_in_area, player_location_to_area, \
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
 
     checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                    for teamnumber, team in enumerate(names)}
+
+    percent_total_checks_done = {teamnumber: {playernumber: 0
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                    for teamnumber, team in enumerate(names)}
 
     hints = {team: set() for team in range(len(names))}
     if room.multisave:
@@ -967,20 +1379,147 @@ def getTracker(tracker: UUID):
         if player in groups:
             continue
         player_locations = locations[player]
+        checks_done[team][player]["Total"] = len(locations_checked)
+        percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
+                                                      len(player_locations) * 100) \
+            if player_locations else 100
+
+    activity_timers = {}
+    now = datetime.datetime.utcnow()
+    for (team, player), timestamp in multisave.get("client_activity_timers", []):
+        activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+
+    player_names = {}
+    states: typing.Dict[typing.Tuple[int, int], int] = {}
+    for team, names in enumerate(names):
+        for player, name in enumerate(names, 1):
+            player_names[team, player] = name
+            states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
+    long_player_names = player_names.copy()
+    for (team, player), alias in multisave.get("name_aliases", {}).items():
+        player_names[team, player] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[team, player]})"
+
+    video = {}
+    for (team, player), data in multisave.get("video", []):
+        video[team, player] = data
+
+    return dict(
+        player_names=player_names, room=room, checks_done=checks_done,
+        percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+        activity_timers=activity_timers, video=video, hints=hints,
+        long_player_names=long_player_names,
+        multisave=multisave, precollected_items=precollected_items, groups=groups,
+        locations=locations, games=games, states=states,
+        custom_locations=custom_locations, custom_items=custom_items,
+    )
+
+
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+                 for teamnumber, team_data in data["checks_done"].items()}
+
+    groups = data["groups"]
+
+    for (team, player), locations_checked in data["multisave"].get("location_checks", {}).items():
+        if player in data["groups"]:
+            continue
+        player_locations = data["locations"][player]
+        precollected = data["precollected_items"][player]
+        for item_id in precollected:
+            inventory[team][player][item_id] += 1
+        for location in locations_checked:
+            item_id, recipient, flags = player_locations[location]
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                inventory[team][recipient][item_id] += 1
+    return inventory
+
+
+@app.route('/tracker/<suuid:tracker>')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Generic")
+
+    return render_template("multiTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/Factorio')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_Factorio_multiworld_tracker(tracker: UUID):
+    data = _get_multiworld_tracker_data(tracker)
+    if not data:
+        abort(404)
+
+    data["inventory"] = _get_inventory_data(data)
+    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
+
+    return render_template("multiFactorioTracker.html", **data)
+
+
+@app.route('/tracker/<suuid:tracker>/A Link to the Past')
+@cache.memoize(timeout=60)  # multisave is currently created at most every minute
+def get_LttP_multiworld_tracker(tracker: UUID):
+    room: Room = Room.get(tracker=tracker)
+    if not room:
+        abort(404)
+    locations, names, use_door_tracker, seed_checks_in_area, player_location_to_area, \
+        precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
+        get_static_room_data(room)
+
+    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in range(1, len(team) + 1) if
+                              playernumber not in groups}
+                 for teamnumber, team in enumerate(names)}
+
+    checks_done = {teamnumber: {playernumber: {loc_name: 0 for loc_name in default_locations}
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                   for teamnumber, team in enumerate(names)}
+
+    percent_total_checks_done = {teamnumber: {playernumber: 0
+                                              for playernumber in range(1, len(team) + 1) if playernumber not in groups}
+                                 for teamnumber, team in enumerate(names)}
+
+    hints = {team: set() for team in range(len(names))}
+    if room.multisave:
+        multisave = restricted_loads(room.multisave)
+    else:
+        multisave = {}
+    if "hints" in multisave:
+        for (team, slot), slot_hints in multisave["hints"].items():
+            hints[team] |= set(slot_hints)
+
+    def attribute_item(team: int, recipient: int, item: int):
+        nonlocal inventory
+        target_item = links.get(item, item)
+        if item in levels:  # non-progressive
+            inventory[team][recipient][target_item] = max(inventory[team][recipient][target_item], levels[item])
+        else:
+            inventory[team][recipient][target_item] += 1
+
+    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
+        if player in groups:
+            continue
+        player_locations = locations[player]
         if precollected_items:
             precollected = precollected_items[player]
             for item_id in precollected:
-                attribute_item(inventory, team, player, item_id)
+                attribute_item(team, player, item_id)
         for location in locations_checked:
             if location not in player_locations or location not in player_location_to_area[player]:
                 continue
-
             item, recipient, flags = player_locations[location]
-
-            if recipient in names:
-                attribute_item(inventory, team, recipient, item)
-            checks_done[team][player][player_location_to_area[player][location]] += 1
-            checks_done[team][player]["Total"] += 1
+            recipients = groups.get(recipient, [recipient])
+            for recipient in recipients:
+                attribute_item(team, recipient, item)
+                checks_done[team][player][player_location_to_area[player][location]] += 1
+                checks_done[team][player]["Total"] += 1
+        percent_total_checks_done[team][player] = int(
+            checks_done[team][player]["Total"] / len(player_locations) * 100) if \
+        player_locations else 100
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
@@ -1022,14 +1561,19 @@ def getTracker(tracker: UUID):
     for (team, player), data in multisave.get("video", []):
         video[(team, player)] = data
 
-    return render_template("tracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
+    enabled_multiworld_trackers = get_enabled_multiworld_trackers(room, "A Link to the Past")
+
+    return render_template("lttpMultiTracker.html", inventory=inventory, get_item_name_from_id=lookup_any_item_id_to_name,
                            lookup_id_to_name=Items.lookup_id_to_name, player_names=player_names,
                            tracking_names=tracking_names, tracking_ids=tracking_ids, room=room, icons=alttp_icons,
-                           multi_items=multi_items, checks_done=checks_done, ordered_areas=ordered_areas,
-                           checks_in_area=seed_checks_in_area, activity_timers=activity_timers,
+                           multi_items=multi_items, checks_done=checks_done,
+                           percent_total_checks_done=percent_total_checks_done,
+                           ordered_areas=ordered_areas, checks_in_area=seed_checks_in_area,
+                           activity_timers=activity_timers,
                            key_locations=group_key_locations, small_key_ids=small_key_ids, big_key_ids=big_key_ids,
                            video=video, big_key_locations=group_big_key_locations,
-                           hints=hints, long_player_names=long_player_names)
+                           hints=hints, long_player_names=long_player_names,
+                           enabled_multiworld_trackers=enabled_multiworld_trackers)
 
 
 game_specific_trackers: typing.Dict[str, typing.Callable] = {
@@ -1037,5 +1581,12 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
     "Ocarina of Time": __renderOoTTracker,
     "Timespinner": __renderTimespinnerTracker,
     "A Link to the Past": __renderAlttpTracker,
-    "Super Metroid": __renderSuperMetroidTracker
+    "ChecksFinder": __renderChecksfinder,
+    "Super Metroid": __renderSuperMetroidTracker,
+    "Starcraft 2 Wings of Liberty": __renderSC2WoLTracker
+}
+
+multi_trackers: typing.Dict[str, typing.Callable] = {
+    "A Link to the Past": get_LttP_multiworld_tracker,
+    "Factorio": get_Factorio_multiworld_tracker,
 }

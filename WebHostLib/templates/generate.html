@@ -1,7 +1,6 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    {{ super() }}
     <title>Generate Game</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/generate.css") }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/generate.js") }}"></script>
@@ -41,20 +40,20 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <label for="forfeit_mode">Forfeit Permission:
-                                            <span class="interactive" data-tooltip="A forfeit releases all remaining items from the locations in your world.">
+                                        <label for="release_mode">Release Permission:
+                                            <span class="interactive" data-tooltip="Permissions on when players are able to release all remaining items from their world.">
                                                 (?)
                                             </span>
                                         </label>
                                     </td>
                                     <td>
-                                        <select name="forfeit_mode" id="forfeit_mode">
+                                        <select name="release_mode" id="release_mode">
                                             <option value="auto">Automatic on goal completion</option>
-                                            <option value="goal">Allow !forfeit after goal completion</option>
+                                            <option value="goal">Allow !release after goal completion</option>
                                             <option value="auto-enabled">
-                                                Automatic on goal completion and manual !forfeit
+                                                Automatic on goal completion and manual !release
                                             </option>
-                                            <option value="enabled">Manual !forfeit</option>
+                                            <option value="enabled">Manual !release</option>
                                             <option value="disabled">Disabled</option>
                                         </select>
                                     </td>
@@ -63,7 +62,7 @@
                                 <tr>
                                     <td>
                                         <label for="collect_mode">Collect Permission:
-                                            <span class="interactive" data-tooltip="A collect releases all of your remaining items to you from across the multiworld.">
+                                            <span class="interactive" data-tooltip="Permissions on when players are able to collect all their remaining items from across the multiworld.">
                                                 (?)
                                             </span>
                                         </label>
@@ -114,6 +113,28 @@
                                             {% if race -%}
                                                 <option value="0">Disabled in Race mode</option>
                                             {%- else -%}
+                                                <option value="1">Enabled</option>
+                                                <option value="0">Disabled</option>
+                                            {%- endif -%}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="spoiler">Spoiler Log:
+                                            <span class="interactive" data-tooltip="Generates a text listing all randomized elements.
+Warning: playthrough can take a significant amount of time for larger multiworlds.">
+                                                (?)
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select name="spoiler" id="spoiler">
+                                            {% if race -%}
+                                                <option value="0">Disabled in Race mode</option>
+                                            {%- else -%}
+                                                <option value="3">Enabled with playthrough and traversal</option>
+                                                <option value="2">Enabled with playthrough</option>
                                                 <option value="1">Enabled</option>
                                                 <option value="0">Disabled</option>
                                             {%- endif -%}

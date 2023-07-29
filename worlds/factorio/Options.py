@@ -1,7 +1,9 @@
 from __future__ import annotations
 import typing
+import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle
+from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+    StartInventoryPool
 from schema import Schema, Optional, And, Or
 
 # schema helpers
@@ -10,7 +12,9 @@ LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 
 class MaxSciencePack(Choice):
-    """Maximum level of science pack required to complete the game."""
+    """Maximum level of science pack required to complete the game.
+    This also affects the relative cost of silo and satellite recipes if they are randomized.
+    That is the only thing in which the Utility Science Pack and Space Science Pack settings differ."""
     display_name = "Maximum Required Science Pack"
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
@@ -41,17 +45,51 @@ class Goal(Choice):
     default = 0
 
 
-class TechCost(Choice):
-    """How expensive are the technologies."""
-    display_name = "Technology Cost Scale"
-    option_very_easy = 0
-    option_easy = 1
-    option_kind = 2
-    option_normal = 3
-    option_hard = 4
-    option_very_hard = 5
-    option_insane = 6
-    default = 3
+class TechCost(Range):
+    range_start = 1
+    range_end = 10000
+    default = 5
+
+
+class MinTechCost(TechCost):
+    """The cheapest a Technology can be in Science Packs."""
+    display_name = "Minimum Science Pack Cost"
+    default = 5
+
+
+class MaxTechCost(TechCost):
+    """The most expensive a Technology can be in Science Packs."""
+    display_name = "Maximum Science Pack Cost"
+    default = 500
+
+
+class TechCostDistribution(Choice):
+    """Random distribution of costs of the Science Packs.
+    Even: any number between min and max is equally likely.
+    Low: low costs, near the minimum, are more likely.
+    Middle: medium costs, near the average, are more likely.
+    High: high costs, near the maximum, are more likely."""
+    display_name = "Tech Cost Distribution"
+    option_even = 0
+    option_low = 1
+    option_middle = 2
+    option_high = 3
+
+
+class TechCostMix(Range):
+    """Percent chance that a preceding Science Pack is also required.
+    Chance is rolled per preceding pack."""
+    display_name = "Science Pack Cost Mix"
+    range_end = 100
+    default = 70
+
+
+class RampingTechCosts(Toggle):
+    """Forces the amount of Science Packs required to ramp up with the highest involved Pack. Average is preserved.
+    For example:
+    off: Automation (red)/Logistics (green) sciences can range from 1 to 1000 Science Packs,
+    on: Automation (red) ranges to ~500 packs and Logistics (green) from ~500 to 1000 Science Packs"""
+    display_name = "Ramping Tech Costs"
 
 
 class Silo(Choice):
@@ -82,7 +120,14 @@ class FreeSamples(Choice):
 
 
 class TechTreeLayout(Choice):
-    """Selects how the tech tree nodes are interwoven."""
+    """Selects how the tech tree nodes are interwoven.
+    Single: No dependencies
+    Diamonds: Several grid graphs (4/9/16 nodes each)
+    Pyramids: Several top halves of diamonds (6/10/15 nodes each)
+    Funnels: Several bottom halves of diamonds (6/10/15 nodes each)
+    Trees: Several trees
+    Choices: A single balanced binary tree
+    """
     display_name = "Technology Tree Layout"
     option_single = 0
     option_small_diamonds = 1
@@ -100,7 +145,11 @@ class TechTreeLayout(Choice):
 
 
 class TechTreeInformation(Choice):
-    """How much information should be displayed in the tech tree."""
+    """How much information should be displayed in the tech tree.
+    None: No indication what a research unlocks
+    Advancement: Indicators which researches unlock items that are considered logical advancements
+    Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
+    """
     display_name = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
@@ -150,6 +199,14 @@ class RecipeIngredients(Choice):
     option_science_pack = 1
 
 
+class RecipeIngredientsOffset(Range):
+    """When randomizing ingredients, remove or add this many "slots" of items.
+    For example, at -1 a randomized Automation Science Pack will only require 1 ingredient, instead of 2."""
+    display_name = "Randomized Recipe Ingredients Offset"
+    range_start = -1
+    range_end = 5
+
+
 class FactorioStartItems(ItemDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
@@ -168,7 +225,7 @@ class FactorioFreeSampleWhitelist(OptionSet):
 
 
 class TrapCount(Range):
-    range_end = 4
+    range_end = 25
 
 
 class AttackTrapCount(TrapCount):
@@ -176,9 +233,36 @@ class AttackTrapCount(TrapCount):
     display_name = "Attack Traps"
 
 
+class TeleportTrapCount(TrapCount):
+    """Trap items that when received trigger a random teleport."""
+    display_name = "Teleport Traps"
+
+
+class GrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a grenade explosion on each player."""
+    display_name = "Grenade Traps"
+
+
+class ClusterGrenadeTrapCount(TrapCount):
+    """Trap items that when received trigger a cluster grenade explosion on each player."""
+    display_name = "Cluster Grenade Traps"
+
+
+class ArtilleryTrapCount(TrapCount):
+    """Trap items that when received trigger an artillery shell on each player."""
+    display_name = "Artillery Traps"
+
+
+class AtomicRocketTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on each player.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Rocket Traps"
+
+
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
     display_name = "Evolution Traps"
+    range_end = 10
 
 
 class EvolutionTrapIncrease(Range):
@@ -343,7 +427,11 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "max_science_pack": MaxSciencePack,
     "goal": Goal,
     "tech_tree_layout": TechTreeLayout,
-    "tech_cost": TechCost,
+    "min_tech_cost": MinTechCost,
+    "max_tech_cost": MaxTechCost,
+    "tech_cost_distribution": TechCostDistribution,
+    "tech_cost_mix": TechCostMix,
+    "ramping_tech_costs": RampingTechCosts,
     "silo": Silo,
     "satellite": Satellite,
     "free_samples": FreeSamples,
@@ -353,12 +441,32 @@ factorio_options: typing.Dict[str, type(Option)] = {
     "free_sample_whitelist": FactorioFreeSampleWhitelist,
     "recipe_time": RecipeTime,
     "recipe_ingredients": RecipeIngredients,
+    "recipe_ingredients_offset": RecipeIngredientsOffset,
     "imported_blueprints": ImportedBlueprint,
     "world_gen": FactorioWorldGen,
     "progressive": Progressive,
-    "evolution_traps": EvolutionTrapCount,
+    "teleport_traps": TeleportTrapCount,
+    "grenade_traps": GrenadeTrapCount,
+    "cluster_grenade_traps": ClusterGrenadeTrapCount,
+    "artillery_traps": ArtilleryTrapCount,
+    "atomic_rocket_traps": AtomicRocketTrapCount,
     "attack_traps": AttackTrapCount,
+    "evolution_traps": EvolutionTrapCount,
     "evolution_trap_increase": EvolutionTrapIncrease,
     "death_link": DeathLink,
-    "energy_link": EnergyLink
+    "energy_link": EnergyLink,
+    "start_inventory_from_pool": StartInventoryPool,
 }
+
+# spoilers below. If you spoil it for yourself, please at least don't spoil it for anyone else.
+if datetime.datetime.today().month == 4:
+
+    class ChunkShuffle(Toggle):
+        """Entrance Randomizer."""
+        display_name = "Chunk Shuffle"
+
+
+    if datetime.datetime.today().day > 1:
+        ChunkShuffle.__doc__ += """
+        2023 April Fool's option. Shuffles chunk border transitions."""
+    factorio_options["chunk_shuffle"] = ChunkShuffle

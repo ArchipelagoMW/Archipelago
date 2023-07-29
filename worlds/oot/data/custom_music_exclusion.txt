@@ -1,0 +1,3 @@
+# To omit a track from shuffled music, list the filename of its
+# .meta file below. One per line
+# Lines that begin with # are comments and not parsed

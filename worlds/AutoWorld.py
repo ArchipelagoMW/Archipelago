@@ -1,19 +1,36 @@
 from __future__ import annotations
 
+import hashlib
 import logging
-import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING
+import sys
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+    Union
 
-from Options import AssembleOptions
 from BaseClasses import CollectionState
+from Options import AssembleOptions
 
 if TYPE_CHECKING:
+    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from . import GamesPackage
+    from settings import Group
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    __file__: str
+    zip_path: Optional[str]
+    settings_key: str
+    __settings: Any
+
+    @property
+    def settings(cls) -> Any:  # actual type is defined in World
+        # lazy loading + caching to minimize runtime cost
+        if cls.__settings is None:
+            from settings import get_settings
+            cls.__settings = get_settings()[cls.settings_key]
+        return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -31,6 +48,9 @@ class AutoWorldRegister(type):
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
+        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                       in dct.get("location_name_groups", {}).items()}
+        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # move away from get_required_client_version function
@@ -52,6 +72,11 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        if "settings_key" not in dct:
+            mod_name = new_class.__module__
+            world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
+            new_class.settings_key = world_folder_name + "_options"
+        new_class.__settings = None
         return new_class
 
 
@@ -71,37 +96,55 @@ class AutoLogicRegister(type):
         return new_class
 
 
-def call_single(world: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(world.worlds[player], method_name)
-    return method(*args)
+def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
+    method = getattr(multiworld.worlds[player], method_name)
+    try:
+        ret = method(*args)
+    except Exception as e:
+        message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
+        if sys.version_info >= (3, 11, 0):
+            e.add_note(message)  # PEP 678
+        else:
+            logging.error(message)
+        raise e
+    else:
+        return ret
 
 
-def call_all(world: "MultiWorld", method_name: str, *args: Any) -> None:
+def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types: Set[AutoWorldRegister] = set()
-    for player in world.player_ids:
-        world_types.add(world.worlds[player].__class__)
-        call_single(world, method_name, player, *args)
+    for player in multiworld.player_ids:
+        prev_item_count = len(multiworld.itempool)
+        world_types.add(multiworld.worlds[player].__class__)
+        call_single(multiworld, method_name, player, *args)
+        if __debug__:
+            new_items = multiworld.itempool[prev_item_count:]
+            for i, item in enumerate(new_items):
+                for other in new_items[i+1:]:
+                    assert item is not other, (
+                        f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
+                        f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
+        stage_callable = getattr(world_type, f"stage_{method_name}", None)
+        if stage_callable:
+            stage_callable(multiworld, *args)
+
+
+def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
+    world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
     for world_type in world_types:
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(world, *args)
-
-
-def call_stage(world: "MultiWorld", method_name: str, *args: Any) -> None:
-    world_types = {world.worlds[player].__class__ for player in world.player_ids}
-    for world_type in world_types:
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            stage_callable(world, *args)
+            stage_callable(multiworld, *args)
 
 
 class WebWorld:
     """Webhost integration"""
-    
+
     settings_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
-    
+
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
@@ -120,112 +163,145 @@ class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: Dict[str, AssembleOptions] = {}  # link your Options mapping
-    game: str  # name the game
-    topology_present: bool = False  # indicate if world type has any meaningful layout/pathing
+    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}
+    """link your Options mapping"""
+    game: ClassVar[str]
+    """name the game"""
+    topology_present: ClassVar[bool] = False
+    """indicate if world type has any meaningful layout/pathing"""
 
-    # gets automatically populated with all item and item group names
-    all_item_and_group_names: FrozenSet[str] = frozenset()
+    all_item_and_group_names: ClassVar[FrozenSet[str]] = frozenset()
+    """gets automatically populated with all item and item group names"""
 
-    # map names to their IDs
-    item_name_to_id: Dict[str, int] = {}
-    location_name_to_id: Dict[str, int] = {}
+    item_name_to_id: ClassVar[Dict[str, int]] = {}
+    """map item names to their IDs"""
+    location_name_to_id: ClassVar[Dict[str, int]] = {}
+    """map location names to their IDs"""
 
-    # maps item group names to sets of items. Example: "Weapons" -> {"Sword", "Bow"}
-    item_name_groups: Dict[str, Set[str]] = {}
+    item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
+    """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
-    # increment this every time something in your world's names/id mappings changes.
-    # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
-    # retrieved by clients on every connection.
-    data_version: int = 1
+    location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
+    """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    # override this if changes to a world break forward-compatibility of the client
-    # The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
-    # future. Protocol level compatibility check moved to MultiServer.min_client_version.
+    data_version: ClassVar[int] = 0
+    """
+    Increment this every time something in your world's names/id mappings changes.
+
+    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
+    that it should not be cached, and clients should request that world's DataPackage every connection. Not
+    recommended for production-ready worlds.
+
+    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
+    request a new DataPackage, if necessary.
+    """
+
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
+    """
+    override this if changes to a world break forward-compatibility of the client
+    The base version of (0, 1, 6) is provided for backwards compatibility and does *not* need to be updated in the
+    future. Protocol level compatibility check moved to MultiServer.min_client_version.
+    """
 
-    # update this if the resulting multidata breaks forward-compatibility of the server
     required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    """update this if the resulting multidata breaks forward-compatibility of the server"""
 
-    hint_blacklist: FrozenSet[str] = frozenset()  # any names that should not be hintable
+    hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
+    """any names that should not be hintable"""
 
-    # NOTE: remote_items and remote_start_inventory are now available in the network protocol for the client to set.
-    # These values will be removed.
-    # if a world is set to remote_items, then it just needs to send location checks to the server and the server
-    # sends back the items
-    # if a world is set to remote_items = False, then the server never sends an item where receiver == finder,
-    # the client finds its own items in its own world.
-    remote_items: bool = True
+    hidden: ClassVar[bool] = False
+    """Hide World Type from various views. Does not remove functionality."""
 
-    # If remote_start_inventory is true, the start_inventory/world.precollected_items is sent on connection,
-    # otherwise the world implementation is in charge of writing the items to their output data.
-    remote_start_inventory: bool = True
+    web: ClassVar[WebWorld] = WebWorld()
+    """see WebWorld for options"""
 
-    # For games where after a victory it is impossible to go back in and get additional/remaining Locations checked.
-    # this forces forfeit:  auto for those games.
-    forced_auto_forfeit: bool = False
-
-    # Hide World Type from various views. Does not remove functionality.
-    hidden: bool = False
-
-    # see WebWorld for options
-    web: WebWorld = WebWorld()
-
-    # autoset on creation:
-    world: "MultiWorld"
+    multiworld: "MultiWorld"
+    """autoset on creation. The MultiWorld object for the currently generating multiworld."""
     player: int
+    """autoset on creation. The player number for this World"""
 
-    # automatically generated
-    item_id_to_name: Dict[int, str]
-    location_id_to_name: Dict[int, str]
+    item_id_to_name: ClassVar[Dict[int, str]]
+    """automatically generated reverse lookup of item id to name"""
+    location_id_to_name: ClassVar[Dict[int, str]]
+    """automatically generated reverse lookup of location id to name"""
 
-    item_names: Set[str]  # set of all potential item names
-    location_names: Set[str]  # set of all potential location names
+    item_names: ClassVar[Set[str]]
+    """set of all potential item names"""
+    location_names: ClassVar[Set[str]]
+    """set of all potential location names"""
 
-    zip_path: Optional[pathlib.Path] = None  # If loaded from a .apworld, this is the Path to it.
-    __file__: str  # path it was loaded from
+    random: random.Random
+    """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
-    def __init__(self, world: "MultiWorld", player: int):
-        self.world = world
+    settings_key: ClassVar[str]
+    """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
+    settings: ClassVar[Optional["Group"]]
+    """loaded settings from host.yaml"""
+
+    zip_path: ClassVar[Optional[pathlib.Path]] = None
+    """If loaded from a .apworld, this is the Path to it."""
+    __file__: ClassVar[str]
+    """path it was loaded from"""
+
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        self.multiworld = multiworld
         self.player = player
+
+    def __getattr__(self, item: str) -> Any:
+        if item == "settings":
+            return self.__class__.settings
+        raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
     # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
+
     @classmethod
-    def assert_generate(cls) -> None:
+    def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
         """Checks that a game is capable of generating, usually checks for some base file like a ROM.
-        Not run for unittests since they don't produce output"""
+        This gets called once per present world type. Not run for unittests since they don't produce output"""
         pass
 
     def generate_early(self) -> None:
+        """
+        Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
+        results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
+        """
         pass
 
     def create_regions(self) -> None:
+        """Method for creating and connecting regions for the World."""
         pass
 
     def create_items(self) -> None:
+        """
+        Method for creating and submitting items to the itempool. Items and Regions should *not* be created and submitted
+        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        """
         pass
 
     def set_rules(self) -> None:
+        """Method for setting the rules on the World's regions and locations."""
         pass
 
     def generate_basic(self) -> None:
+        """
+        Useful for randomizing things that don't affect logic but are better to be determined before the output stage.
+        i.e. checking what the player has marked as priority or randomizing enemies
+        """
         pass
 
     def pre_fill(self) -> None:
         """Optional method that is supposed to be used for special fill stages. This is run *after* plando."""
         pass
 
-    @classmethod
-    def fill_hook(cls,
+    def fill_hook(self,
                   progitempool: List["Item"],
                   usefulitempool: List["Item"],
                   filleritempool: List["Item"],
                   fill_locations: List["Location"]) -> None:
-        """Special method that gets called as part of distribute_items_restrictive (main fill).
-        This gets called once per present world type."""
+        """Special method that gets called as part of distribute_items_restrictive (main fill)."""
         pass
 
     def post_fill(self) -> None:
@@ -234,13 +310,16 @@ class World(metaclass=AutoWorldRegister):
 
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.slot_seeds[slot] instead."""
+        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
-        The client will receive this as JSON in the `Connected` response."""
+        The client will receive this as JSON in the `Connected` response.
+
+        The generation does not wait for `generate_output` to complete before calling this.
+        `threading.Event` can be used if you need to wait for something from `generate_output`."""
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
@@ -277,7 +356,7 @@ class World(metaclass=AutoWorldRegister):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.world.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
@@ -314,8 +393,35 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
+    @classmethod
+    def get_data_package_data(cls) -> "GamesPackage":
+        sorted_item_name_groups = {
+            name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
+        }
+        sorted_location_name_groups = {
+            name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
+        }
+        res: "GamesPackage" = {
+            # sorted alphabetically
+            "item_name_groups": sorted_item_name_groups,
+            "item_name_to_id": cls.item_name_to_id,
+            "location_name_groups": sorted_location_name_groups,
+            "location_name_to_id": cls.location_name_to_id,
+            "version": cls.data_version,
+        }
+        res["checksum"] = data_package_checksum(res)
+        return res
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
+
+def data_package_checksum(data: "GamesPackage") -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()

@@ -13,7 +13,8 @@ class StrictCapRequirements(DefaultOnToggle):
 
 
 class StrictCannonRequirements(DefaultOnToggle):
-    """If disabled, Stars that expect cannons may have to be acquired without them. Only makes a difference if Buddy Checks are enabled"""
+    """If disabled, Stars that expect cannons may have to be acquired without them. Only makes a difference if Buddy
+    Checks are enabled"""
     display_name = "Strict Cannon Requirements"
 
 
@@ -46,7 +47,7 @@ class MIPS1Cost(Range):
 
 
 class MIPS2Cost(Range):
-    """How many stars are required to spawn MIPS the secound time. Must be bigger or equal MIPS1Cost"""
+    """How many stars are required to spawn MIPS the second time."""
     range_start = 0
     range_end = 80
     default = 50
@@ -72,7 +73,8 @@ class AreaRandomizer(Choice):
     display_name = "Entrance Randomizer"
     option_Off = 0
     option_Courses_Only = 1
-    option_Courses_and_Secrets = 2
+    option_Courses_and_Secrets_Separate = 2
+    option_Courses_and_Secrets = 3
 
 
 class BuddyChecks(Toggle):

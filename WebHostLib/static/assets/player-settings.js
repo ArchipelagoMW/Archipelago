@@ -118,6 +118,8 @@ const buildOptionsTable = (settings, romOpts = false) => {
     const tdr = document.createElement('td');
     let element = null;
 
+    const randomButton = document.createElement('button');
+
     switch(settings[setting].type){
       case 'select':
         element = document.createElement('div');
@@ -138,8 +140,21 @@ const buildOptionsTable = (settings, romOpts = false) => {
           }
           select.appendChild(option);
         });
-        select.addEventListener('change', (event) => updateGameSetting(event));
+        select.addEventListener('change', (event) => updateGameSetting(event.target));
         element.appendChild(select);
+
+        // Randomize button
+        randomButton.innerText = '🎲';
+        randomButton.classList.add('randomize-button');
+        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
+        randomButton.addEventListener('click', (event) => toggleRandomize(event, select));
+        if (currentSettings[gameName][setting] === 'random') {
+          randomButton.classList.add('active');
+          select.disabled = true;
+        }
+
+        element.appendChild(randomButton);
         break;
 
       case 'range':
@@ -154,15 +169,29 @@ const buildOptionsTable = (settings, romOpts = false) => {
         range.value = currentSettings[gameName][setting];
         range.addEventListener('change', (event) => {
           document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event);
+          updateGameSetting(event.target);
         });
         element.appendChild(range);
 
         let rangeVal = document.createElement('span');
         rangeVal.classList.add('range-value');
         rangeVal.setAttribute('id', `${setting}-value`);
-        rangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+        rangeVal.innerText = currentSettings[gameName][setting] !== 'random' ?
+          currentSettings[gameName][setting] : settings[setting].defaultValue;
         element.appendChild(rangeVal);
+
+        // Randomize button
+        randomButton.innerText = '🎲';
+        randomButton.classList.add('randomize-button');
+        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
+        randomButton.addEventListener('click', (event) => toggleRandomize(event, range));
+        if (currentSettings[gameName][setting] === 'random') {
+          randomButton.classList.add('active');
+          range.disabled = true;
+        }
+
+        element.appendChild(randomButton);
         break;
 
       case 'special_range':
@@ -176,6 +205,11 @@ const buildOptionsTable = (settings, romOpts = false) => {
           let presetOption = document.createElement('option');
           presetOption.innerText = presetName;
           presetOption.value = settings[setting].value_names[presetName];
+          const words = presetOption.innerText.split("_");
+          for (let i = 0; i < words.length; i++) {
+            words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+          }
+          presetOption.innerText = words.join(" ");
           specialRangeSelect.appendChild(presetOption);
         });
         let customOption = document.createElement('option');
@@ -201,7 +235,8 @@ const buildOptionsTable = (settings, romOpts = false) => {
         let specialRangeVal = document.createElement('span');
         specialRangeVal.classList.add('range-value');
         specialRangeVal.setAttribute('id', `${setting}-value`);
-        specialRangeVal.innerText = currentSettings[gameName][setting] ?? settings[setting].defaultValue;
+        specialRangeVal.innerText = currentSettings[gameName][setting] !== 'random' ?
+          currentSettings[gameName][setting] : settings[setting].defaultValue;
 
         // Configure select event listener
         specialRangeSelect.addEventListener('change', (event) => {
@@ -210,7 +245,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
           // Update range slider
           specialRange.value = event.target.value;
           document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event);
+          updateGameSetting(event.target);
         });
 
         // Configure range event handler
@@ -220,13 +255,29 @@ const buildOptionsTable = (settings, romOpts = false) => {
             (Object.values(settings[setting].value_names).includes(parseInt(event.target.value))) ?
             parseInt(event.target.value) : 'custom';
           document.getElementById(`${setting}-value`).innerText = event.target.value;
-          updateGameSetting(event);
+          updateGameSetting(event.target);
         });
 
         element.appendChild(specialRangeSelect);
         specialRangeWrapper.appendChild(specialRange);
         specialRangeWrapper.appendChild(specialRangeVal);
         element.appendChild(specialRangeWrapper);
+
+        // Randomize button
+        randomButton.innerText = '🎲';
+        randomButton.classList.add('randomize-button');
+        randomButton.setAttribute('data-key', setting);
+        randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
+        randomButton.addEventListener('click', (event) => toggleRandomize(
+            event, specialRange, specialRangeSelect)
+        );
+        if (currentSettings[gameName][setting] === 'random') {
+          randomButton.classList.add('active');
+          specialRange.disabled = true;
+          specialRangeSelect.disabled = true;
+        }
+
+        specialRangeWrapper.appendChild(randomButton);
         break;
 
       default:
@@ -243,6 +294,27 @@ const buildOptionsTable = (settings, romOpts = false) => {
   return table;
 };
 
+const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
+  const active = event.target.classList.contains('active');
+  const randomButton = event.target;
+
+  if (active) {
+    randomButton.classList.remove('active');
+    inputElement.disabled = undefined;
+    if (optionalSelectElement) {
+      optionalSelectElement.disabled = undefined;
+    }
+  } else {
+    randomButton.classList.add('active');
+    inputElement.disabled = true;
+    if (optionalSelectElement) {
+      optionalSelectElement.disabled = true;
+    }
+  }
+
+  updateGameSetting(randomButton);
+};
+
 const updateBaseSetting = (event) => {
   const options = JSON.parse(localStorage.getItem(gameName));
   options[event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
@@ -250,10 +322,17 @@ const updateBaseSetting = (event) => {
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
-const updateGameSetting = (event) => {
+const updateGameSetting = (settingElement) => {
   const options = JSON.parse(localStorage.getItem(gameName));
-  options[gameName][event.target.getAttribute('data-key')] = isNaN(event.target.value) ?
-      event.target.value : parseInt(event.target.value, 10);
+
+  if (settingElement.classList.contains('randomize-button')) {
+    // If the event passed in is the randomize button, then we know what we must do.
+    options[gameName][settingElement.getAttribute('data-key')] = 'random';
+  } else {
+    options[gameName][settingElement.getAttribute('data-key')] = isNaN(settingElement.value) ?
+      settingElement.value : parseInt(settingElement.value, 10);
+  }
+
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
@@ -287,6 +366,7 @@ const generateGame = (raceMode = false) => {
     weights: { player: settings },
     presetData: { player: settings },
     playerCount: 1,
+    spoiler: 3,
     race: raceMode ? '1' : '0',
   }).then((response) => {
     window.location.href = response.data.url;

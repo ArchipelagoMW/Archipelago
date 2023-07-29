@@ -10,8 +10,8 @@ from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule
 
 
 class WitnessLogic(LogicMixin):
@@ -20,35 +20,24 @@ class WitnessLogic(LogicMixin):
     """
 
     def _witness_has_lasers(self, world, player: int, amount: int) -> bool:
+        regular_lasers = not is_option_enabled(world, player, "shuffle_lasers")
+
         lasers = 0
 
-        if is_option_enabled(world, player, "shuffle_lasers"):
-            lasers += int(self.has("Symmetry Laser", player))
-            lasers += int(self.has("Desert Laser", player)
-                          and self.has("Desert Laser Redirection", player))
-            lasers += int(self.has("Town Laser", player))
-            lasers += int(self.has("Monastery Laser", player))
-            lasers += int(self.has("Keep Laser", player))
-            lasers += int(self.has("Quarry Laser", player))
-            lasers += int(self.has("Treehouse Laser", player))
-            lasers += int(self.has("Jungle Laser", player))
-            lasers += int(self.has("Bunker Laser", player))
-            lasers += int(self.has("Swamp Laser", player))
-            lasers += int(self.has("Shadows Laser", player))
-            return lasers >= amount
+        place_names = [
+            "Symmetry", "Desert", "Town", "Monastery", "Keep",
+            "Quarry", "Treehouse", "Jungle", "Bunker", "Swamp", "Shadows"
+        ]
 
-        lasers += int(self.has("Symmetry Laser Activation", player))
-        lasers += int(self.has("Desert Laser Activation", player)
-                      and self.has("Desert Laser Redirection", player))
-        lasers += int(self.has("Town Laser Activation", player))
-        lasers += int(self.has("Monastery Laser Activation", player))
-        lasers += int(self.has("Keep Laser Activation", player))
-        lasers += int(self.has("Quarry Laser Activation", player))
-        lasers += int(self.has("Treehouse Laser Activation", player))
-        lasers += int(self.has("Jungle Laser Activation", player))
-        lasers += int(self.has("Bunker Laser Activation", player))
-        lasers += int(self.has("Swamp Laser Activation", player))
-        lasers += int(self.has("Shadows Laser Activation", player))
+        for place in place_names:
+            has_laser = self.has(place + " Laser", player)
+
+            has_laser = has_laser or (regular_lasers and self.has(place + " Laser Activation", player))
+
+            if place == "Desert":
+                has_laser = has_laser and self.has("Desert Laser Redirection", player)
+
+            lasers += int(has_laser)
 
         return lasers >= amount
 
@@ -84,11 +73,87 @@ class WitnessLogic(LogicMixin):
 
             for item in option:
                 if item == "7 Lasers":
-                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "mountain_lasers")):
+                    laser_req = get_option_value(world, player, "mountain_lasers")
+
+                    if not self._witness_has_lasers(world, player, laser_req):
                         valid_option = False
                         break
                 elif item == "11 Lasers":
-                    if not self._witness_has_lasers(world, player, get_option_value(world, player, "challenge_lasers")):
+                    laser_req = get_option_value(world, player, "challenge_lasers")
+
+                    if not self._witness_has_lasers(world, player, laser_req):
+                        valid_option = False
+                        break
+                elif item == "PP2 Weirdness":
+                    hedge_2_access = (
+                        self.can_reach("Keep 2nd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep to Keep 2nd Maze", "Entrance", player)
+                    )
+
+                    hedge_3_access = (
+                        self.can_reach("Keep 3rd Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 2nd Maze to Keep 3rd Maze", "Entrance", player)
+                        and hedge_2_access
+                    )
+
+                    hedge_4_access = (
+                        self.can_reach("Keep 4th Maze to Keep", "Entrance", player)
+                        or self.can_reach("Keep 3rd Maze to Keep 4th Maze", "Entrance", player)
+                        and hedge_3_access
+                    )
+
+                    hedge_access = (
+                        self.can_reach("Keep 4th Maze to Keep Tower", "Entrance", player)
+                        and self.can_reach("Keep", "Region", player)
+                        and hedge_4_access
+                    )
+
+                    backwards_to_fourth = (
+                        self.can_reach("Keep", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Keep Tower", "Entrance", player)
+                        and (
+                            self.can_reach("Keep Tower to Keep", "Entrance", player)
+                            or hedge_access
+                        )
+                    )
+                    
+                    shadows_shortcut = (
+                        self.can_reach("Main Island", "Region", player)
+                        and self.can_reach("Keep 4th Pressure Plate to Shadows", "Entrance", player)
+                    )
+
+                    backwards_access = (
+                        self.can_reach("Keep 3rd Pressure Plate to Keep 4th Pressure Plate", "Entrance", player)
+                        and (backwards_to_fourth or shadows_shortcut)
+                    )
+
+                    front_access = (
+                        self.can_reach("Keep to Keep 2nd Pressure Plate", 'Entrance', player)
+                        and self.can_reach("Keep", "Region", player)
+                    )
+
+                    if not (front_access and backwards_access):
+                        valid_option = False
+                        break
+                elif item == "Theater to Tunnels":
+                    direct_access = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                    )
+
+                    theater_from_town = (
+                        self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                        or self.can_reach("Theater to Town", "Entrance", player)
+                    )
+
+                    tunnels_from_town = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        or self.can_reach("Tunnels to Town", "Entrance", player)
+                    )
+
+                    if not (direct_access or theater_from_town and tunnels_from_town):
                         valid_option = False
                         break
                 elif item in player_logic.EVENT_PANELS:
@@ -96,8 +161,12 @@ class WitnessLogic(LogicMixin):
                         valid_option = False
                         break
                 elif not self.has(item, player):
-                    valid_option = False
-                    break
+                    # The player doesn't have the item. Check to see if it's part of a progressive item and, if so, the
+                    #   player has enough of that.
+                    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+                    if prog_item is item or not self.has(prog_item, player, player_logic.MULTI_AMOUNTS[item]):
+                        valid_option = False
+                        break
 
             if valid_option:
                 return True

@@ -1,12 +1,14 @@
 import datetime
 import os
+from typing import List, Dict, Union
 
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
+from pony.orm import count, commit, db_session
 
-from .models import count, Seed, commit, Room, db_session, Command, UUID, uuid4
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
+from .models import Seed, Room, Command, UUID, uuid4
 
 
 def get_world_theme(game_name: str):
@@ -68,10 +70,6 @@ def tutorial(game, file, lang):
 
 @app.route('/tutorial/')
 def tutorial_landing():
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if not world.hidden:
-            worlds[game] = world
     return render_template("tutorialLanding.html")
 
 
@@ -118,7 +116,11 @@ def display_log(room: UUID):
     if room is None:
         return abort(404)
     if room.owner == session["_id"]:
-        return Response(_read_log(os.path.join("logs", str(room.id) + ".txt")), mimetype="text/plain;charset=UTF-8")
+        file_path = os.path.join("logs", str(room.id) + ".txt")
+        if os.path.exists(file_path):
+            return Response(_read_log(file_path), mimetype="text/plain;charset=UTF-8")
+        return "Log File does not exist."
+
     return "Access Denied", 403
 
 
@@ -166,8 +168,9 @@ def get_datapackage():
 @app.route('/index')
 @app.route('/sitemap')
 def get_sitemap():
-    available_games = []
+    available_games: List[Dict[str, Union[str, bool]]] = []
     for game, world in AutoWorldRegister.world_types.items():
         if not world.hidden:
-            available_games.append(game)
+            has_settings: bool = isinstance(world.web.settings_page, bool) and world.web.settings_page
+            available_games.append({ 'title': game, 'has_settings': has_settings })
     return render_template("siteMap.html", games=available_games)

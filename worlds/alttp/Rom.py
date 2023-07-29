@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import Utils
-import worlds.AutoWorld
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
@@ -17,35 +16,38 @@ import random
 import struct
 import subprocess
 import threading
-import xxtea
 import concurrent.futures
 import bsdiff4
 from typing import Optional, List
 
-from BaseClasses import CollectionState, Region, Location
-from worlds.alttp.Shops import ShopType, ShopPriceType
-from worlds.alttp.Dungeons import dungeon_music_addresses
-from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
-from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
-from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
+from BaseClasses import CollectionState, Region, Location, MultiWorld
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
+
+from .Shops import ShopType, ShopPriceType
+from .Dungeons import dungeon_music_addresses
+from .Regions import old_location_address_to_new_location_address
+from .Text import MultiByteTextMapper, text_addresses, Credits, TextTable
+from .Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
     BombShop2_texts, junk_texts
-
-from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, \
+from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, \
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
-from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
-from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Options import smallkey_shuffle
-import Patch
+from .Items import ItemFactory, item_table, item_name_groups, progression_items
+from .EntranceShuffle import door_addresses
+from .Options import smallkey_shuffle
 
 try:
     from maseya import z3pr
     from maseya.z3pr.palette_randomizer import build_offset_collections
 except:
     z3pr = None
+
+try:
+    import xxtea
+except:
+    xxtea = None
 
 enemizer_logger = logging.getLogger("Enemizer")
 
@@ -85,7 +87,12 @@ class LocalRom(object):
             self.write_bytes(startaddress + i, bytearray(data))
 
     def encrypt(self, world, player):
-        local_random = world.slot_seeds[player]
+        global xxtea
+        if xxtea is None:
+            # cause crash to provide traceback
+            import xxtea
+
+        local_random = world.per_slot_randoms[player]
         key = bytes(local_random.getrandbits(8 * 16).to_bytes(16, 'big'))
         self.write_bytes(0x1800B0, bytearray(key))
         self.write_int16(0x180087, 1)
@@ -182,7 +189,7 @@ def check_enemizer(enemizercli):
         # some time may have passed since the lock was acquired, as such a quick re-check doesn't hurt
         if getattr(check_enemizer, "done", None):
             return
-        wanted_version = (7, 0, 1)
+        wanted_version = (7, 1, 0)
         # version info is saved on the lib, for some reason
         library_info = os.path.join(os.path.dirname(enemizercli), "EnemizerCLI.Core.deps.json")
         with open(library_info) as f:
@@ -272,7 +279,9 @@ def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_rand
                 rom.write_bytes(0x307078 + (i * 0x8000), sprite.glove_palette)
 
 
-def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_directory):
+def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
+    player = world.player
+    multiworld = world.multiworld
     check_enemizer(enemizercli)
     randopatch_path = os.path.abspath(os.path.join(output_directory, f'enemizer_randopatch_{player}.sfc'))
     options_path = os.path.abspath(os.path.join(output_directory, f'enemizer_options_{player}.json'))
@@ -280,18 +289,18 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     # write options file for enemizer
     options = {
-        'RandomizeEnemies': world.enemy_shuffle[player].value,
+        'RandomizeEnemies': multiworld.enemy_shuffle[player].value,
         'RandomizeEnemiesType': 3,
-        'RandomizeBushEnemyChance': world.bush_shuffle[player].value,
-        'RandomizeEnemyHealthRange': world.enemy_health[player] != 'default',
+        'RandomizeBushEnemyChance': multiworld.bush_shuffle[player].value,
+        'RandomizeEnemyHealthRange': multiworld.enemy_health[player] != 'default',
         'RandomizeEnemyHealthType': {'default': 0, 'easy': 0, 'normal': 1, 'hard': 2, 'expert': 3}[
-            world.enemy_health[player]],
+            multiworld.enemy_health[player]],
         'OHKO': False,
-        'RandomizeEnemyDamage': world.enemy_damage[player] != 'default',
+        'RandomizeEnemyDamage': multiworld.enemy_damage[player] != 'default',
         'AllowEnemyZeroDamage': True,
-        'ShuffleEnemyDamageGroups': world.enemy_damage[player] != 'default',
-        'EnemyDamageChaosMode': world.enemy_damage[player] == 'chaos',
-        'EasyModeEscape': world.mode[player] == "standard",
+        'ShuffleEnemyDamageGroups': multiworld.enemy_damage[player] != 'default',
+        'EnemyDamageChaosMode': multiworld.enemy_damage[player] == 'chaos',
+        'EasyModeEscape': multiworld.mode[player] == "standard",
         'EnemiesAbsorbable': False,
         'AbsorbableSpawnRate': 10,
         'AbsorbableTypes': {
@@ -320,7 +329,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'GrayscaleMode': False,
         'GenerateSpoilers': False,
         'RandomizeLinkSpritePalette': False,
-        'RandomizePots': world.pot_shuffle[player].value,
+        'RandomizePots': multiworld.pot_shuffle[player].value,
         'ShuffleMusic': False,
         'BootlegMagic': True,
         'CustomBosses': False,
@@ -333,7 +342,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'BeesLevel': 0,
         'RandomizeTileTrapPattern': False,
         'RandomizeTileTrapFloorTile': False,
-        'AllowKillableThief': world.killable_thieves[player].value,
+        'AllowKillableThief': multiworld.killable_thieves[player].value,
         'RandomizeSpriteOnHit': False,
         'DebugMode': False,
         'DebugForceEnemy': False,
@@ -345,26 +354,26 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
         'DebugShowRoomIdInRupeeCounter': False,
         'UseManualBosses': True,
         'ManualBosses': {
-            'EasternPalace': world.get_dungeon("Eastern Palace", player).boss.enemizer_name,
-            'DesertPalace': world.get_dungeon("Desert Palace", player).boss.enemizer_name,
-            'TowerOfHera': world.get_dungeon("Tower of Hera", player).boss.enemizer_name,
+            'EasternPalace': world.dungeons["Eastern Palace"].boss.enemizer_name,
+            'DesertPalace': world.dungeons["Desert Palace"].boss.enemizer_name,
+            'TowerOfHera': world.dungeons["Tower of Hera"].boss.enemizer_name,
             'AgahnimsTower': 'Agahnim',
-            'PalaceOfDarkness': world.get_dungeon("Palace of Darkness", player).boss.enemizer_name,
-            'SwampPalace': world.get_dungeon("Swamp Palace", player).boss.enemizer_name,
-            'SkullWoods': world.get_dungeon("Skull Woods", player).boss.enemizer_name,
-            'ThievesTown': world.get_dungeon("Thieves Town", player).boss.enemizer_name,
-            'IcePalace': world.get_dungeon("Ice Palace", player).boss.enemizer_name,
-            'MiseryMire': world.get_dungeon("Misery Mire", player).boss.enemizer_name,
-            'TurtleRock': world.get_dungeon("Turtle Rock", player).boss.enemizer_name,
+            'PalaceOfDarkness': world.dungeons["Palace of Darkness"].boss.enemizer_name,
+            'SwampPalace': world.dungeons["Swamp Palace"].boss.enemizer_name,
+            'SkullWoods': world.dungeons["Skull Woods"].boss.enemizer_name,
+            'ThievesTown': world.dungeons["Thieves Town"].boss.enemizer_name,
+            'IcePalace': world.dungeons["Ice Palace"].boss.enemizer_name,
+            'MiseryMire': world.dungeons["Misery Mire"].boss.enemizer_name,
+            'TurtleRock': world.dungeons["Turtle Rock"].boss.enemizer_name,
             'GanonsTower1':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['bottom'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['bottom'].enemizer_name,
             'GanonsTower2':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['middle'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['middle'].enemizer_name,
             'GanonsTower3':
-                world.get_dungeon('Ganons Tower' if world.mode[player] != 'inverted' else 'Inverted Ganons Tower',
-                                  player).bosses['top'].enemizer_name,
+                world.dungeons["Ganons Tower" if multiworld.mode[player] != 'inverted' else
+                               "Inverted Ganons Tower"].bosses['top'].enemizer_name,
             'GanonsTower4': 'Agahnim2',
             'Ganon': 'Ganon',
         }
@@ -377,7 +386,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
 
     max_enemizer_tries = 5
     for i in range(max_enemizer_tries):
-        enemizer_seed = str(world.slot_seeds[player].randint(0, 999999999))
+        enemizer_seed = str(multiworld.per_slot_randoms[player].randint(0, 999999999))
         enemizer_command = [os.path.abspath(enemizercli),
                             '--rom', randopatch_path,
                             '--seed', enemizer_seed,
@@ -407,7 +416,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
             continue
 
         for j in range(i + 1, max_enemizer_tries):
-            world.slot_seeds[player].randint(0, 999999999)
+            multiworld.per_slot_randoms[player].randint(0, 999999999)
             # Sacrifice all remaining random numbers that would have been used for unused enemizer tries.
             # This allows for future enemizer bug fixes to NOT affect the rest of the seed's randomness
         break
@@ -415,7 +424,7 @@ def patch_enemizer(world, player: int, rom: LocalRom, enemizercli, output_direct
     rom.read_from_file(enemizer_output_path)
     os.remove(enemizer_output_path)
 
-    if world.get_dungeon("Thieves Town", player).boss.enemizer_name == "Blind":
+    if world.dungeons["Thieves Town"].boss.enemizer_name == "Blind":
         rom.write_byte(0x04DE81, 6)
         rom.write_byte(0x1B0101, 0)  # Do not close boss room door on entry.
 
@@ -753,13 +762,15 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
                   0x4D504, 0x4D507, 0x4D55E, 0x4D56A]
 
 
-def get_nonnative_item_sprite(item: str) -> int:
+def get_nonnative_item_sprite(code: int) -> int:
+    if 84173 >= code >= 84007:  # LttP item in SMZ3
+        return code - 84000
     return 0x6B  # set all non-native sprites to Power Star as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
 
 
-def patch_rom(world, rom, player, enemized):
-    local_random = world.slot_seeds[player]
+def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
+    local_random = world.per_slot_randoms[player]
 
     # patch items
 
@@ -776,7 +787,7 @@ def patch_rom(world, rom, player, enemized):
                     if location.item.trap:
                         itemid = 0x5A  # Nothing, which disguises
                     else:
-                        itemid = get_nonnative_item_sprite(location.item.name)
+                        itemid = get_nonnative_item_sprite(location.item.code)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -788,11 +799,11 @@ def patch_rom(world, rom, player, enemized):
                             itemid = 0x33
                         elif location.item.compass:
                             itemid = 0x25
-                if world.worlds[player].remote_items:  # remote items does not currently work
-                    itemid = list(location_table.keys()).index(location.name) + 1
-                    assert itemid < 0x100
-                    rom.write_byte(location.player_address, 0xFF)
-                elif location.item.player != player:
+                # if world.worlds[player].remote_items:  # remote items does not currently work
+                #     itemid = list(location_table.keys()).index(location.name) + 1
+                #     assert itemid < 0x100
+                #     rom.write_byte(location.player_address, 0xFF)
+                if location.item.player != player:
                     if location.player_address is not None:
                         rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
                     else:
@@ -1240,8 +1251,8 @@ def patch_rom(world, rom, player, enemized):
     # assorted fixes
     rom.write_byte(0x1800A2, 0x01 if world.fix_fake_world[
         player] else 0x00)  # Toggle whether to be in real/fake dark world when dying in a DW dungeon before killing aga1
-    rom.write_byte(0x180169,
-                   0x01 if world.lock_aga_door_in_escape else 0x00)  # Lock or unlock aga tower door during escape sequence.
+    # Lock or unlock aga tower door during escape sequence.
+    rom.write_byte(0x180169, 0x00)
     if world.mode[player] == 'inverted':
         rom.write_byte(0x180169, 0x02)  # lock aga/ganon tower door with crystals in inverted
     rom.write_byte(0x180171,
@@ -1639,7 +1650,7 @@ def patch_rom(world, rom, player, enemized):
         rom.write_byte(0xFEE41, 0x2A)  # preopen bombable exit
 
     if world.tile_shuffle[player]:
-        tile_set = TileSet.get_random_tile_set(world.slot_seeds[player])
+        tile_set = TileSet.get_random_tile_set(world.per_slot_randoms[player])
         rom.write_byte(0x4BA21, tile_set.get_speed())
         rom.write_byte(0x4BA1D, tile_set.get_len())
         rom.write_bytes(0x4BA2A, tile_set.get_bytes())
@@ -1647,11 +1658,11 @@ def patch_rom(world, rom, player, enemized):
     write_strings(rom, world, player)
 
     # remote items flag, does not currently work
-    rom.write_byte(0x18637C, int(world.worlds[player].remote_items))
+    rom.write_byte(0x18637C, 0)
 
     # set rom name
     # 21 bytes
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
@@ -1730,7 +1741,7 @@ def write_custom_shops(rom, world, player):
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
-                item_code = get_nonnative_item_sprite(item['item'])
+                item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
@@ -1768,11 +1779,60 @@ def hud_format_text(text):
         output += b'\x7f\x00'
     return output[:32]
 
+def apply_oof_sfx(rom, oof: str):
+    with open(oof, 'rb') as stream:
+        oof_bytes = bytearray(stream.read())
 
-def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, palettes_options,
+    oof_len_bytes = len(oof_bytes).to_bytes(2, byteorder='little')
+
+    # Credit to kan for this method, and Nyx for initial C# implementation
+    # this is ported from, with both of their permission for use by AP
+    # Original C# implementation:
+    # https://github.com/Nyx-Edelstein/The-Unachievable-Ideal-of-Chibi-Elf-Grunting-Noises-When-They-Get-Punched-A-Z3-Rom-Patcher
+
+    # Jump execution from the SPC load routine to new code
+    rom.write_bytes(0x8CF, [0x5C, 0x00, 0x80, 0x25])
+
+    # Change the pointer for instrument 9 in SPC memory to point to the new data we'll be inserting:
+    rom.write_bytes(0x1A006C, [0x88, 0x31, 0x00, 0x00])
+
+    # Insert a sigil so we can branch on it later
+    # We will recover the value it overwrites after we're done with insertion
+    rom.write_bytes(0x1AD38C, [0xBE, 0xBE])
+
+    # Change the "oof" sound effect to use instrument 9:
+    rom.write_byte(0x1A9C4E, 0x09)
+
+    # Correct the pitch shift value:
+    rom.write_byte(0x1A9C51, 0xB6)
+
+    # Modify parameters of instrument 9
+    # (I don't actually understand this part, they're just magic values to me)
+    rom.write_bytes(0x1A9CAE, [0x7F, 0x7F, 0x00, 0x10, 0x1A, 0x00, 0x00, 0x7F, 0x01])
+
+    # Hook from SPC load routine:
+    #  * Check for the read of the sigil
+    #  * Once we find it, change the SPC load routine's data pointer to read from the location containing the new sample
+    #  * Note: XXXX in the string below is a placeholder for the number of bytes in the .brr sample (little endian)
+    #  * Another sigil "$EBEB" is inserted at the end of the data
+    #  * When the second sigil is read, we know we're done inserting our data so we can change the data pointer back
+    #  * Effect: The new data gets loaded into SPC memory without having to relocate the SPC load routine
+    # Slight variation from VT-compatible algorithm: We need to change the data pointer to $00 00 35 and load 538E into Y to pick back up where we left off
+    rom.write_bytes(0x128000, [0xB7, 0x00, 0xC8, 0xC8, 0xC9, 0xBE, 0xBE, 0xF0, 0x09, 0xC9, 0xEB, 0xEB, 0xF0, 0x1B, 0x5C, 0xD3, 0x88, 0x00, 0xA2, oof_len_bytes[0], oof_len_bytes[1], 0xA9, 0x80, 0x25, 0x85, 0x01, 0xA9, 0x3A, 0x80, 0x85, 0x00, 0xA0, 0x00, 0x00, 0xA9, 0x88, 0x31, 0x5C, 0xD8, 0x88, 0x00, 0xA9, 0x80, 0x35, 0x64, 0x00, 0x85, 0x01, 0xA2, 0x00, 0x00, 0xA0, 0x8E, 0x53, 0x5C, 0xD4, 0x88, 0x00])
+
+    # The new sample data
+    # (We need to insert the second sigil at the end)
+    rom.write_bytes(0x12803A, oof_bytes)
+    rom.write_bytes(0x12803A + len(oof_bytes), [0xEB, 0xEB])
+	
+	#Enemizer patch: prevent Enemizer from overwriting $3188 in SPC memory with an unused sound effect ("WHAT")
+    rom.write_bytes(0x13000D, [0x00, 0x00, 0x00, 0x08])
+	
+
+def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not world else world.slot_seeds[player]
+    local_random = random if not world else world.per_slot_randoms[player]
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -1911,6 +1971,10 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
+
+    if oof is not None:
+        apply_oof_sfx(rom, oof)
+
     if isinstance(rom, LocalRom):
         rom.write_crc()
 
@@ -2098,7 +2162,7 @@ def write_string_to_rom(rom, target, string):
 
 def write_strings(rom, world, player):
     from . import ALTTPWorld
-    local_random = world.slot_seeds[player]
+    local_random = world.per_slot_randoms[player]
     w: ALTTPWorld = world.worlds[player]
 
     tt = TextTable()
@@ -2297,7 +2361,7 @@ def write_strings(rom, world, player):
                                                                 'dungeonscrossed'] else 8
             hint_count = min(hint_count, len(items_to_hint), len(hint_locations))
             if hint_count:
-                locations = world.find_items_in_locations(items_to_hint, player)
+                locations = world.find_items_in_locations(items_to_hint, player, True)
                 local_random.shuffle(locations)
                 for x in range(min(hint_count, len(locations))):
                     this_location = locations.pop()
@@ -2314,7 +2378,7 @@ def write_strings(rom, world, player):
 
     # We still need the older hints of course. Those are done here.
 
-    silverarrows = world.find_item_locations('Silver Bow', player)
+    silverarrows = world.find_item_locations('Silver Bow', player, True)
     local_random.shuffle(silverarrows)
     silverarrow_hint = (
             ' %s?' % hint_text(silverarrows[0]).replace('Ganon\'s', 'my')) if silverarrows else '?\nI think not!'
@@ -2322,13 +2386,13 @@ def write_strings(rom, world, player):
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
     if world.worlds[player].has_progressive_bows and (world.difficulty_requirements[player].progressive_bow_limit >= 2 or (
             world.swordless[player] or world.logic[player] == 'noglitches')):
-        prog_bow_locs = world.find_item_locations('Progressive Bow', player)
-        world.slot_seeds[player].shuffle(prog_bow_locs)
+        prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
+        world.per_slot_randoms[player].shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):
             bow_loc = prog_bow_locs.pop()
-            if bow_loc.item.code == 0x65:
+            if bow_loc.item.code == 0x65 or (found_bow and not prog_bow_locs):
                 found_bow_alt = True
                 target = 'ganon_phase_3_no_silvers'
             else:

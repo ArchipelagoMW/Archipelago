@@ -1,6 +1,6 @@
-import typing
+from typing import Dict
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, OptionSet
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
 
 
 class StartingGender(Choice):
@@ -63,9 +63,9 @@ class FairyChestsPerZone(Range):
     bonuses can be found in Fairy Chests.
     """
     display_name = "Fairy Chests Per Zone"
-    range_start = 5
+    range_start = 0
     range_end = 15
-    default = 5
+    default = 1
 
 
 class ChestsPerZone(Range):
@@ -74,9 +74,9 @@ class ChestsPerZone(Range):
     gold or stat bonuses can be found in Chests.
     """
     display_name = "Chests Per Zone"
-    range_start = 15
-    range_end = 30
-    default = 15
+    range_start = 20
+    range_end = 50
+    default = 20
 
 
 class UniversalFairyChests(Toggle):
@@ -111,8 +111,10 @@ class Architect(Choice):
     """
     display_name = "Architect"
     option_start_unlocked = 0
-    option_normal = 2
+    option_early = 1
+    option_anywhere = 2
     option_disabled = 3
+    alias_normal = 2
     default = 2
 
 
@@ -173,7 +175,7 @@ class NumberOfChildren(Range):
     default = 3
 
 
-class AdditionalNames(OptionList):
+class AdditionalNames(OptionSet):
     """
     Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
     of names your children can have. The first value will also be your initial character's name depending on Starting
@@ -337,7 +339,8 @@ class AvailableClasses(OptionSet):
     default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
-legacy_options: typing.Dict[str, type(Option)] = {
+
+rl_options: Dict[str, type(Option)] = {
     "starting_gender": StartingGender,
     "starting_class": StartingClass,
     "available_classes": AvailableClasses,

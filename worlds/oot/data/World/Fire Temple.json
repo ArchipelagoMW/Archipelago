@@ -1,33 +1,39 @@
-[    
+[
     {
         "region_name": "Fire Temple Lower",
         "dungeon": "Fire Temple",
         "locations": {
-            "Fire Temple Near Boss Chest" : "
+            "Fire Temple Near Boss Chest": "
                 logic_fewer_tunic_requirements or can_use(Goron_Tunic)",
-            "Fire Temple Flare Dancer Chest": "
-                ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Megaton_Hammer)",
-            "Fire Temple Boss Key Chest": "
-                ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Megaton_Hammer)",
-            "Fire Temple Volvagia Heart": "
-                can_use(Goron_Tunic) and can_use(Megaton_Hammer) and Boss_Key_Fire_Temple and 
-                (logic_fire_boss_door_jump or Hover_Boots or
-                    at('Fire Temple Upper', can_play(Song_of_Time) or has_explosives))",
-            "Volvagia": "
-                can_use(Goron_Tunic) and can_use(Megaton_Hammer) and Boss_Key_Fire_Temple and 
-                (logic_fire_boss_door_jump or Hover_Boots or
-                    at('Fire Temple Upper', can_play(Song_of_Time) or has_explosives))",
-            "Fire Temple GS Boss Key Loop": "
-                ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Megaton_Hammer)",
+            "Fire Temple Near Boss Pot 1": "
+                is_adult and (Hover_Boots or Hookshot) and
+                (logic_fewer_tunic_requirements or Goron_Tunic)",
+            "Fire Temple Near Boss Pot 2": "
+                is_adult and (Hover_Boots or Hookshot) and
+                (logic_fewer_tunic_requirements or Goron_Tunic)",
             "Fairy Pot": "
-                has_bottle and (can_use(Hover_Boots) or can_use(Hookshot)) and
-                (logic_fewer_tunic_requirements or can_use(Goron_Tunic))"
+                is_adult and has_bottle and (Hover_Boots or Hookshot) and
+                (logic_fewer_tunic_requirements or Goron_Tunic)"
         },
         "exits": {
             "DMC Fire Temple Entrance": "True",
-            "Fire Temple Big Lava Room":"
+            "Fire Temple Big Lava Room": "
                 (Small_Key_Fire_Temple, 2) and
-                (logic_fewer_tunic_requirements or can_use(Goron_Tunic))"
+                (logic_fewer_tunic_requirements or can_use(Goron_Tunic))",
+            "Fire Temple Lower Locked Door": "
+                ((Small_Key_Fire_Temple, 8) or not keysanity) and can_use(Megaton_Hammer)",
+            "Fire Temple Boss Door": "
+                is_adult and (logic_fewer_tunic_requirements or Goron_Tunic) and
+                (fire_temple_shortcuts or logic_fire_boss_door_jump or Hover_Boots)"
+        }
+    },
+    {
+        "region_name": "Fire Temple Lower Locked Door",
+        "dungeon": "Fire Temple",
+        "locations": {
+            "Fire Temple Flare Dancer Chest": "True",
+            "Fire Temple Boss Key Chest": "True",
+            "Fire Temple GS Boss Key Loop": "True"
         }
     },
     {
@@ -36,45 +42,91 @@
         "locations": {
             "Fire Temple Big Lava Room Lower Open Door Chest": "True",
             "Fire Temple Big Lava Room Blocked Door Chest": "is_adult and has_explosives",
+            "Fire Temple Big Lava Room Pot 1": "True",
+            "Fire Temple Big Lava Room Pot 2": "True",
+            "Fire Temple Big Lava Room Pot 3": "True",
             "Fire Temple GS Song of Time Room": "
                 is_adult and (can_play(Song_of_Time) or logic_fire_song_of_time)"
         },
         "exits": {
-            "Fire Temple Lower":  "True",
-            "Fire Temple Middle": "
-                can_use(Goron_Tunic) and (Small_Key_Fire_Temple, 4) and
-                (Progressive_Strength_Upgrade or logic_fire_strength) and 
-                (has_explosives or Bow or Progressive_Hookshot)"
+            "Fire Temple Elevator Room": "
+                is_adult and Goron_Tunic and (Small_Key_Fire_Temple, 3)"
         }
     },
     {
-        "region_name": "Fire Temple Middle",
+        "region_name": "Fire Temple Elevator Room",
+        "dungeon": "Fire Temple",
+        "locations": {
+            "Fire Temple Elevator Room Recovery Heart 1": "True",
+            "Fire Temple Elevator Room Recovery Heart 2": "True",
+            "Fire Temple Elevator Room Recovery Heart 3": "True"
+        },
+        "exits": {
+            "Fire Temple Boulder Maze Lower": "
+                (Small_Key_Fire_Temple, 4) and
+                (Progressive_Strength_Upgrade or logic_fire_strength) and
+                (has_explosives or Bow or Hookshot)"
+        }
+    },
+    {
+        "region_name": "Fire Temple Boulder Maze Lower",
         "dungeon": "Fire Temple",
         "locations": {
             "Fire Temple Boulder Maze Lower Chest": "True",
-            "Fire Temple Boulder Maze Upper Chest": "(Small_Key_Fire_Temple, 6)",
             "Fire Temple Boulder Maze Side Room Chest": "True",
-            "Fire Temple Boulder Maze Shortcut Chest": "
-                (Small_Key_Fire_Temple, 6) and has_explosives",
+            "Fire Temple GS Boulder Maze": "has_explosives"
+        },
+        "exits": {
+            "Fire Temple Narrow Path Room": "(Small_Key_Fire_Temple, 5)"
+        }
+    },
+    {
+        "region_name": "Fire Temple Narrow Path Room",
+        "dungeon": "Fire Temple",
+        "locations": {
+            "Fire Temple Map Chest": "Bow or (Small_Key_Fire_Temple, 6)",
+            "Fire Temple Narrow Path Room Recovery Heart 1": "True",
+            "Fire Temple Narrow Path Room Recovery Heart 2": "True",
+            "Fire Temple Narrow Path Room Recovery Heart 3": "True"
+        },
+        "exits": {
+            "Fire Temple Boulder Maze Upper": "(Small_Key_Fire_Temple, 6)"
+        }
+    },
+    {
+        "region_name": "Fire Temple Boulder Maze Upper",
+        "dungeon": "Fire Temple",
+        "locations": {
+            "Fire Temple Boulder Maze Upper Chest": "True",
+            "Fire Temple Boulder Maze Shortcut Chest": "has_explosives",
             "Fire Temple Scarecrow Chest": "
-                (Small_Key_Fire_Temple, 6) and
-                (can_use(Scarecrow) or (logic_fire_scarecrow and can_use(Longshot)))",
-            "Fire Temple Map Chest": "
-                (Small_Key_Fire_Temple, 6) or ((Small_Key_Fire_Temple, 5) and can_use(Bow))",
-            "Fire Temple Compass Chest": "(Small_Key_Fire_Temple, 7)",
-            "Fire Temple GS Boulder Maze": "(Small_Key_Fire_Temple, 4) and has_explosives",
+                can_use(Scarecrow) or (logic_fire_scarecrow and Longshot)",
+            "Fire Temple Moving Fire Room Recovery Heart 1": "True",
+            "Fire Temple Moving Fire Room Recovery Heart 2": "True",
+            "Fire Temple Moving Fire Room Recovery Heart 3": "True",
             "Fire Temple GS Scarecrow Climb": "
-                (Small_Key_Fire_Temple, 6) and
-                (can_use(Scarecrow) or (logic_fire_scarecrow and can_use(Longshot)))",
+                can_use(Scarecrow) or (logic_fire_scarecrow and Longshot)",
             "Fire Temple GS Scarecrow Top": "
-                (Small_Key_Fire_Temple, 6) and
-                (can_use(Scarecrow) or (logic_fire_scarecrow and can_use(Longshot)))"
+                can_use(Scarecrow) or (logic_fire_scarecrow and Longshot)"
+        },
+        "exits": {
+            "Fire Temple Flame Maze": "(Small_Key_Fire_Temple, 7)"
+        }
+    },
+    {
+        "region_name": "Fire Temple Flame Maze",
+        "dungeon": "Fire Temple",
+        "locations": {
+            "Fire Temple Compass Chest": "True",
+            "Fire Temple Flame Maze Left Side Pot 1": "True",
+            "Fire Temple Flame Maze Left Side Pot 2": "True",
+            "Fire Temple Flame Maze Left Side Pot 3": "True",
+            "Fire Temple Flame Maze Left Side Pot 4": "True"
         },
         "exits": {
             "Fire Temple Upper": "
-                (Small_Key_Fire_Temple, 8) or 
-                ((Small_Key_Fire_Temple, 7) and
-                    ((can_use(Hover_Boots) and can_use(Megaton_Hammer)) or logic_fire_flame_maze))"
+                (Small_Key_Fire_Temple, 8) or
+                (Hover_Boots and Megaton_Hammer) or logic_fire_flame_maze"
         }
     },
     {
@@ -82,10 +134,18 @@
         "dungeon": "Fire Temple",
         "locations": {
             "Fire Temple Highest Goron Chest": "
-                can_use(Megaton_Hammer) and 
-                (can_play(Song_of_Time) or (logic_rusted_switches and 
-                    (can_use(Hover_Boots) or has_explosives)))",
-            "Fire Temple Megaton Hammer Chest": "has_explosives"
+                Megaton_Hammer and
+                (can_play(Song_of_Time) or
+                    (logic_rusted_switches and (Hover_Boots or has_explosives)))",
+            "Fire Temple Megaton Hammer Chest": "has_explosives",
+            "Fire Temple Flame Maze Right Side Pot 1": "True",
+            "Fire Temple Flame Maze Right Side Pot 2": "True",
+            "Fire Temple Flame Maze Right Side Pot 3": "True",
+            "Fire Temple Flame Maze Right Side Pot 4": "True"
+        },
+        "exits": {
+            "Fire Temple Boss Door": "
+                Megaton_Hammer and (can_play(Song_of_Time) or has_explosives)"
         }
     }
 ]

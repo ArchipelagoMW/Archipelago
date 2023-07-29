@@ -16,7 +16,7 @@
         "exits": {
             "Shadow Temple Entryway": "True",
             "Shadow Temple First Beamos": "can_use(Hover_Boots) or can_mega",
-            "Shadow Boss": "can_hover and has_explosives and can_use(Hover_Boots) and 
+            "Shadow Temple Boss Door": "can_hover and has_explosives and can_use(Hover_Boots) and
                 can_live_dmg(2.0)"
         }
     },
@@ -43,9 +43,9 @@
             "Shadow Temple Falling Spikes Switch Chest": "is_adult or can_hover",
             "Shadow Temple Invisible Spikes Chest": "(Small_Key_Shadow_Temple, 5) and (can_jumpslash or can_use(Dins_Fire))",
             "Shadow Temple Freestanding Key": "
-                (Small_Key_Shadow_Temple, 5) and (can_use(Hookshot) or can_hover) 
+                (Small_Key_Shadow_Temple, 5) and (can_use(Hookshot) or can_hover)
                 and (Progressive_Strength_Upgrade or has_explosives)",
-            "Shadow Temple GS Like Like Room": "is_adult or can_use(Boomerang) or can_hover",
+            "Shadow Temple GS Invisible Blades Room": "is_adult or can_use(Boomerang) or can_hover",
             "Shadow Temple GS Falling Spikes Room": "can_use(Hookshot) or (is_adult and can_mega) or (is_child and can_hover)",
             "Shadow Temple GS Single Giant Pot": "(Small_Key_Shadow_Temple, 5) and (can_use(Hookshot) or can_hover)"
         },
@@ -91,14 +91,22 @@
             "Shadow Temple GS Triple Giant Pot": "True"
         },
         "exits": {
-            "Shadow Boss": "(has_bombchus or can_use(Distant_Scarecrow) or Bow or 
+            "Shadow Temple Boss Door": "(has_bombchus or can_use(Distant_Scarecrow) or Bow or
                 (can_mega and can_use(Hover_Boots)) or can_hover) and 
                 (Boss_Key_Shadow_Temple or (has_explosives and is_adult)) and
                 (can_mega or can_use(Hover_Boots)) and (Small_Key_Shadow_Temple, 5)"
         }
     },
     {
-        "region_name": "Shadow Boss",
+        "region_name": "Shadow Temple Boss Door",
+        "scene": "Shadow Temple",
+        "dungeon": "Shadow Temple",
+        "exits": {
+            "Bongo Bongo Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Bongo Bongo Boss Room",
         "dungeon": "Shadow Temple",
         "locations": {
             "Shadow Temple Bongo Bongo Heart": "True",

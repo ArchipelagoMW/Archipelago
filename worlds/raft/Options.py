@@ -15,7 +15,9 @@ class MaximumResourcePackAmount(Range):
     default = 5
 
 class DuplicateItems(Choice):
-    """Adds duplicates of items to the item pool (if configured in Filler items). These will be selected alongside Resource Packs (if configured). Note that there are not many progression items, and selecting Progression may produce many of the same duplicate item."""
+    """Adds duplicates of items to the item pool (if configured in Filler items). These will be selected alongside
+    Resource Packs (if configured). Note that there are not many progression items, and selecting Progression may
+    produce many of the same duplicate item."""
     display_name = "Duplicate items"
     option_progression = 0
     option_non_progression = 1
@@ -59,11 +61,13 @@ class ProgressiveItems(DefaultOnToggle):
     display_name = "Progressive items"
 
 class BigIslandEarlyCrafting(Toggle):
-    """Allows recipes that require items from big islands (eg leather) to lock earlygame items like the Receiver, Bolt, or Smelter. Big islands are available from the start of the game, however it can take a long time to find them."""
+    """Allows recipes that require items from big islands (eg leather) to lock earlygame items like the Receiver, Bolt,
+    or Smelter. Big islands are available from the start of the game, however it can take a long time to find them."""
     display_name = "Early recipes behind big islands"
 
 class PaddleboardMode(Toggle):
-    """Sets later story islands to in logic without an Engine or Steering Wheel. May require lots of paddling. Not recommended."""
+    """Sets later story islands to in logic without an Engine or Steering Wheel. May require lots of paddling. Not
+    recommended."""
     display_name = "Paddleboard Mode"
 
 raft_options = {

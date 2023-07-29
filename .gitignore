@@ -4,15 +4,21 @@
 *_Spoiler.txt
 *.bmbp
 *.apbp
+*.apl2ac
 *.apm3
 *.apmc
 *.apz5
+*.aptloz
 *.pyc
 *.pyd
 *.sfc
 *.z64
 *.n64
 *.nes
+*.sms
+*.gb
+*.gbc
+*.gba
 *.wixobj
 *.lck
 *.db3
@@ -20,7 +26,9 @@
 *multisave
 *.archipelago
 *.apsave
+*.BIN
 
+setups
 build
 bundle/components.wxs
 dist
@@ -29,6 +37,7 @@ README.html
 EnemizerCLI/
 /Players/
 /SNI/
+/host.yaml
 /options.yaml
 /config.yaml
 /logs/
@@ -44,7 +53,9 @@ Output Logs/
 /freeze_requirements.txt
 /Archipelago.zip
 /setup.ini
-
+/installdelete.iss
+/data/user.kv
+/datapackage
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -125,12 +136,14 @@ ipython_config.py
 
 # Environments
 .env
-.venv
+.venv*
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+.code-workspace
+shell.nix
 
 # Spyder project settings
 .spyderproject
@@ -156,13 +169,21 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Cython intermediates
+_speedups.cpp
+_speedups.html
+
 # minecraft server stuff
 jdk*/
 minecraft*/
 minecraft_versions.json
+!worlds/minecraft/
 
 # pyenv
 .python-version
+
+#undertale stuff
+/Undertale/
 
 # OS General Files
 .DS_Store

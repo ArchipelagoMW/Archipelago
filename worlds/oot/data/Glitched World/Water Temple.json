@@ -5,7 +5,7 @@
         "locations": {},
         "exits": {
             "High Alcove": "is_adult or can_hover",
-            "Boss Area": "can_use(Longshot) or can_hover or (can_use(Hover_Boots) and (can_mega or Megaton_Hammer))",
+            "Water Temple Boss Door": "can_use(Longshot) or can_hover or (can_use(Hover_Boots) and (can_mega or Megaton_Hammer))",
             "Dark Link Area": "(at('High Alcove', can_play(Zeldas_Lullaby)) or 
                     (can_use(Hover_Boots) and (can_mega or Megaton_Hammer)))
                 and (Small_Key_Water_Temple, 4)",
@@ -29,7 +29,7 @@
             "Boss Key Area": "is_adult and 
                 (Small_Key_Water_Temple, 4)
                 and (can_use(Longshot) or can_hover or Hover_Boots)",
-            "Boss Area": "can_play(Zeldas_Lullaby) and can_use(Longshot)",
+            "Water Temple Boss Door": "can_play(Zeldas_Lullaby) and can_use(Longshot)",
             "Water Temple Lobby": "can_play(Zeldas_Lullaby)"
 
         }
@@ -161,7 +161,15 @@
         }
     },
     {
-        "region_name": "Boss Area",
+        "region_name": "Water Temple Boss Door",
+        "scene": "Water Temple",
+        "dungeon": "Water Temple",
+        "exits": {
+            "Morpha Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Morpha Boss Room",
         "dungeon": "Water Temple",
         "events": {
             "Water Temple Clear": "can_jumpslash and (can_hover or Boss_Key_Water_Temple)"

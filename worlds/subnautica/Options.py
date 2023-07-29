@@ -1,15 +1,44 @@
 import typing
 
-from Options import Choice, Range, DeathLink
+from Options import Choice, Range, DeathLink, Toggle, DefaultOnToggle, StartInventoryPool
 from .Creatures import all_creatures, Definitions
 
 
-class ItemPool(Choice):
-    """Valuable item pool leaves all filler items in their vanilla locations and
-    creates random duplicates of important items into freed spots."""
-    display_name = "Item Pool"
-    option_standard = 0
-    option_valuable = 1
+class SwimRule(Choice):
+    """What logic considers ok swimming distances.
+    Easy: +200 depth from any max vehicle depth.
+    Normal: +400 depth from any max vehicle depth.
+    Warning: Normal can expect you to death run to a location (No viable return trip).
+    Hard: +600 depth from any max vehicle depth.
+    Warning: Hard may require bases, deaths, glitches, multi-tank inventory or other depth extending means.
+    Items: Expected depth is extended by items like seaglide, ultra glide fins and capacity tanks.
+    """
+    display_name = "Swim Rule"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_items_easy = 3
+    option_items_normal = 4
+    option_items_hard = 5
+
+    @property
+    def base_depth(self) -> int:
+        return [200, 400, 600][self.value % 3]
+
+    @property
+    def consider_items(self) -> bool:
+        return self.value > 2
+
+
+class EarlySeaglide(DefaultOnToggle):
+    """Make sure 2 of the Seaglide Fragments are available in or near the Safe Shallows (Sphere 1 Locations)."""
+    display_name = "Early Seaglide"
+
+
+class FreeSamples(Toggle):
+    """Get free items with your blueprints.
+    Items that can go into your inventory are awarded when you unlock their blueprint through Archipelago."""
+    display_name = "Free Samples"
 
 
 class Goal(Choice):
@@ -60,7 +89,7 @@ class AggressiveScanLogic(Choice):
 
     def get_pool(self) -> typing.List[str]:
         if self == self.option_removed:
-            return Definitions.all_creatures_presorted_without_aggressive
+            return Definitions.all_creatures_presorted_without_aggressive_and_containment
         elif self == self.option_stasis:
             return Definitions.all_creatures_presorted_without_containment
         elif self == self.option_containment:
@@ -75,9 +104,12 @@ class SubnauticaDeathLink(DeathLink):
 
 
 options = {
-    "item_pool": ItemPool,
+    "swim_rule": SwimRule,
+    "early_seaglide": EarlySeaglide,
+    "free_samples": FreeSamples,
     "goal": Goal,
     "creature_scans": CreatureScans,
     "creature_scan_logic": AggressiveScanLogic,
     "death_link": SubnauticaDeathLink,
+    "start_inventory_from_pool": StartInventoryPool,
 }

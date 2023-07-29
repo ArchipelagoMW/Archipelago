@@ -1,16 +1,16 @@
 import json
 import pickle
-
 from uuid import UUID
 
-from . import api_endpoints
 from flask import request, session, url_for
+from markupsafe import Markup
 from pony.orm import commit
 
 from WebHostLib import app
-from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
 from WebHostLib.check import get_yaml_data, roll_options
 from WebHostLib.generate import get_meta
+from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
+from . import api_endpoints
 
 
 @api_endpoints.route('/generate', methods=['POST'])
@@ -22,13 +22,18 @@ def generate_api():
         if 'file' in request.files:
             file = request.files['file']
             options = get_yaml_data(file)
-            if type(options) == str:
+            if isinstance(options, Markup):
+                return {"text": options.striptags()}, 400
+            if isinstance(options, str):
                 return {"text": options}, 400
             if "race" in request.form:
                 race = bool(0 if request.form["race"] in {"false"} else int(request.form["race"]))
             meta_options_source = request.form
 
-        json_data = request.get_json()
+        # json_data is optional, we can have it silently fall to None as it used to do.
+        # See https://flask.palletsprojects.com/en/2.2.x/api/#flask.Request.get_json -> Changelog -> 2.1
+        json_data = request.get_json(silent=True)
+
         if json_data:
             meta_options_source = json_data
             if 'weights' in json_data:
@@ -44,9 +49,8 @@ def generate_api():
         if len(options) > app.config["MAX_ROLL"]:
             return {"text": "Max size of multiworld exceeded",
                     "detail": app.config["MAX_ROLL"]}, 409
-        meta = get_meta(meta_options_source)
-        meta["race"] = race
-        results, gen_options = roll_options(options, meta["plando_options"])
+        meta = get_meta(meta_options_source, race)
+        results, gen_options = roll_options(options, set(meta["plando_options"]))
         if any(type(result) == str for result in results.values()):
             return {"text": str(results),
                     "detail": results}, 400

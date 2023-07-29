@@ -5,10 +5,11 @@ import json
 import Utils
 from Utils import read_snes_rom
 from worlds.Files import APDeltaPatch
+from .variaRandomizer.utils.utils import openFile
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'
-ROM_PLAYER_LIMIT = 65535 # max archipelago player ID. note, SM ROM itself will only store 201 names+ids max
-
+SM_ROM_MAX_PLAYERID = 65535
+SM_ROM_PLAYERDATA_COUNT = 202
 
 class SMDeltaPatch(APDeltaPatch):
     hash = SMJUHASH
@@ -43,7 +44,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 def get_sm_symbols(sym_json_path) -> dict:
-    with open(sym_json_path, "r") as stream:
+    with openFile(sym_json_path, "r") as stream:
         symbols = json.load(stream)
         symboltable = {}
         for name, sixdigitaddr in symbols.items():

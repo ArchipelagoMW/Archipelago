@@ -11,7 +11,7 @@ TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
-ENERGY_INCREMENT = {{ energy_link * 1000000 }}
+ENERGY_INCREMENT = {{ energy_link * 10000000 }}
 ENERGY_LINK_EFFICIENCY = 0.75
 
 if settings.global[ARCHIPELAGO_DEATH_LINK_SETTING].value then
@@ -21,6 +21,119 @@ else
 end
 
 CURRENTLY_DEATH_LOCK = 0
+
+{% if chunk_shuffle %}
+LAST_POSITIONS = {}
+GENERATOR = nil
+NORTH = 1
+EAST = 2
+SOUTH = 3
+WEST = 4
+ER_COLOR = {1, 1, 1, 0.2}
+ER_SEED = {{ random.randint(4294967295, 2*4294967295)}}
+CURRENTLY_MOVING = false
+ER_FRAMES = {}
+CHUNK_OFFSET = {
+[NORTH] = {0, 1},
+[EAST] = {1, 0},
+[SOUTH] = {0, -1},
+[WEST] = {-1, 0}
+}
+
+
+function on_player_changed_position(event)
+    if CURRENTLY_MOVING == true then
+        return
+    end
+    local player_id = event.player_index
+    local player = game.get_player(player_id)
+    local character = player.character -- can be nil, such as spectators
+
+    if character == nil then
+        return
+    end
+    local last_position = LAST_POSITIONS[player_id]
+    if last_position == nil then
+        LAST_POSITIONS[player_id] = character.position
+        return
+    end
+
+    last_x_chunk = math.floor(last_position.x / 32)
+    current_x_chunk = math.floor(character.position.x / 32)
+    last_y_chunk = math.floor(last_position.y / 32)
+    current_y_chunk = math.floor(character.position.y / 32)
+    if (ER_FRAMES[player_id] ~= nil and rendering.is_valid(ER_FRAMES[player_id])) then
+        rendering.destroy(ER_FRAMES[player_id])
+    end
+    ER_FRAMES[player_id] = rendering.draw_rectangle{
+        color=ER_COLOR, width=1, filled=false, left_top = {current_x_chunk*32, current_y_chunk*32},
+        right_bottom={current_x_chunk*32+32, current_y_chunk*32+32}, players={player}, time_to_live=60,
+        draw_on_ground= true, only_in_alt_mode = true, surface=character.surface}
+    if current_x_chunk == last_x_chunk and current_y_chunk == last_y_chunk then -- nothing needs doing
+        return
+    end
+    if ((last_position.x - character.position.x) ^ 2 + (last_position.y - character.position.y) ^ 2) > 4000 then
+        -- distance too high, death or other teleport took place
+        LAST_POSITIONS[player_id] = character.position
+        return
+    end
+    -- we'll need a deterministic random state
+    if GENERATOR == nil or not GENERATOR.valid then
+        GENERATOR = game.create_random_generator()
+    end
+
+    -- sufficiently random pattern
+    GENERATOR.re_seed((ER_SEED + (last_x_chunk * 1730000000) + (last_y_chunk * 97000)) % 4294967295)
+    -- we now need all 4 exit directions deterministically shuffled to the 4 outgoing directions.
+    local exit_table = {
+    [1] = 1,
+    [2] = 2,
+    [3] = 3,
+    [4] = 4
+    }
+    exit_table = fisher_yates_shuffle(exit_table)
+    if current_x_chunk > last_x_chunk then -- going right/east
+        outbound_direction = EAST
+    elseif current_x_chunk < last_x_chunk then -- going left/west
+        outbound_direction = WEST
+    end
+
+    if current_y_chunk > last_y_chunk then -- going down/south
+        outbound_direction = SOUTH
+    elseif current_y_chunk < last_y_chunk then -- going up/north
+        outbound_direction = NORTH
+    end
+    local target_direction = exit_table[outbound_direction]
+
+	local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
+							 (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
+    target_position = character.surface.find_non_colliding_position(character.prototype.name,
+                                                                    target_position, 32, 0.5)
+    if target_position ~= nil then
+        rendering.draw_circle{color = ER_COLOR, radius = 1, filled = true,
+                              target = {character.position.x, character.position.y}, surface = character.surface,
+                              time_to_live = 300, draw_on_ground = true}
+        rendering.draw_line{color = ER_COLOR, width = 3, gap_length = 0.5, dash_length = 0.5,
+                            from = {character.position.x, character.position.y}, to = target_position,
+                            surface = character.surface,
+                            time_to_live = 300, draw_on_ground = true}
+        CURRENTLY_MOVING = true -- prevent recursive event
+        character.teleport(target_position)
+        CURRENTLY_MOVING = false
+    end
+    LAST_POSITIONS[player_id] = character.position
+end
+
+function fisher_yates_shuffle(tbl)
+    for i = #tbl, 2, -1 do
+        local j = GENERATOR(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+    return tbl
+end
+
+script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
+{% endif %}
 
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
@@ -112,6 +225,9 @@ function on_force_created(event)
 {%- if silo == 2 %}
     check_spawn_silo(force)
 {%- endif %}
+{%- for tech_name in useless_technologies %}
+    force.technologies.{{ tech_name }}.researched = true
+{%- endfor %}
 end
 script.on_event(defines.events.on_force_created, on_force_created)
 
@@ -157,6 +273,7 @@ function on_player_created(event)
 {%- if silo == 2 %}
     check_spawn_silo(game.players[event.player_index].force)
 {%- endif %}
+    dumpInfo(player.force)
 end
 script.on_event(defines.events.on_player_created, on_player_created)
 
@@ -176,8 +293,8 @@ script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
     if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
-		if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
-			global.forcedata[event.rocket.force.name]['victory'] = 1
+        if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
+            global.forcedata[event.rocket.force.name]['victory'] = 1
             dumpInfo(event.rocket.force)
             game.set_game_state
             {
@@ -186,8 +303,8 @@ function on_rocket_launched(event)
                 can_continue = true,
                 victorious_force = event.rocket.force
             }
-		end
-	end
+        end
+    end
 end
 script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 
@@ -232,7 +349,7 @@ function update_player(index)
             end
         else
             player.print("Unable to receive " .. count .. "x [item=" .. name .. "] as this item does not exist.")
-			samples[name] = nil
+            samples[name] = nil
         end
     end
 
@@ -250,9 +367,9 @@ script.on_event(defines.events.on_player_main_inventory_changed, update_player_e
 function add_samples(force, name, count)
     local function add_to_table(t)
         if count <= 0 then
-			-- Fixes a bug with single craft, if a recipe gives 0 of a given item.
-			return
-		end
+            -- Fixes a bug with single craft, if a recipe gives 0 of a given item.
+            return
+        end
         t[name] = (t[name] or 0) + count
     end
     -- Add to global table of earned samples for future new players
@@ -294,8 +411,8 @@ script.on_event(defines.events.on_research_finished, function(event)
         --Don't acknowledge AP research as an Editor Extensions test force
         --Also no need for free samples in the Editor extensions testing surfaces, as these testing surfaces
         --are worked on exclusively in editor mode.
-		return
-	end
+        return
+    end
     if technology.researched and string.find(technology.name, "ap%-") == 1 then
         -- check if it came from the server anyway, then we don't need to double send.
         dumpInfo(technology.force) --is sendable
@@ -491,6 +608,7 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         ["death_link"] = DEATH_LINK,
         ["energy"] = chain_lookup(forcedata, "energy"),
         ["energy_bridges"] = chain_lookup(forcedata, "energy_bridges"),
+        ["multiplayer"] = #game.players > 1,
     }
 
     for tech_name, tech in pairs(force.technologies) do
@@ -504,6 +622,37 @@ end)
 commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
     game.print(call.parameter)
 end)
+
+TRAP_TABLE = {
+["Attack Trap"] = function ()
+    game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
+end,
+["Evolution Trap"] = function ()
+    game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
+    game.print({"", "New evolution factor:", game.forces["enemy"].evolution_factor})
+end,
+["Teleport Trap"] = function ()
+    for _, player in ipairs(game.forces["player"].players) do
+        current_character = player.character
+        if current_character ~= nil then
+            current_character.teleport(current_character.surface.find_non_colliding_position(
+                current_character.prototype.name, random_offset_position(current_character.position, 1024), 0, 1))
+        end
+    end
+end,
+["Grenade Trap"] = function ()
+    fire_entity_at_players("grenade", 0.1)
+end,
+["Cluster Grenade Trap"] = function ()
+    fire_entity_at_players("cluster-grenade", 0.1)
+end,
+["Artillery Trap"] = function ()
+    fire_entity_at_players("artillery-projectile", 1)
+end,
+["Atomic Rocket Trap"] = function ()
+    fire_entity_at_players("atomic-rocket", 0.1)
+end,
+}
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
     if global.index_sync == nil then
@@ -524,7 +673,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         end
         return
     elseif progressive_technologies[item_name] ~= nil then
-        if global.index_sync[index] == nil then -- not yet received prog item
+        if global.index_sync[index] ~= item_name then -- not yet received prog item
             global.index_sync[index] = item_name
             local tech_stack = progressive_technologies[item_name]
             for _, item_name in ipairs(tech_stack) do
@@ -547,18 +696,11 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
                 tech.researched = true
             end
         end
-    elseif item_name == "Attack Trap" then
-        if global.index_sync[index] == nil then -- not yet received trap
-            game.print({"", "Received Attack Trap from ", source})
+    elseif TRAP_TABLE[item_name] ~= nil then
+        if global.index_sync[index] ~= item_name then -- not yet received trap
             global.index_sync[index] = item_name
-            local spawn_position = force.get_spawn_position(game.get_surface(1))
-            game.surfaces["nauvis"].build_enemy_base(spawn_position, 25)
-        end
-    elseif item_name == "Evolution Trap" then
-        if global.index_sync[index] == nil then -- not yet received trap
-            global.index_sync[index] = item_name
-            game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
-            game.print({"", "Received Evolution Trap from ", source, ". New factor:", game.forces["enemy"].evolution_factor})
+            game.print({"", "Received ", item_name, " from ", source})
+            TRAP_TABLE[item_name]()
         end
     else
         game.print("Unknown Item " .. item_name)
@@ -594,6 +736,18 @@ commands.add_command("ap-energylink", "Used by the Archipelago client to manage 
     local change = tonumber(call.parameter or "0")
     local force = "player"
     global.forcedata[force].energy = global.forcedata[force].energy + change
+end)
+
+commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)
+    log("Player command energy-link") -- notifies client
+end)
+
+commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends that get displayed in-game to only those that involve you.", function(call)
+    log("Player command toggle-ap-send-filter") -- notifies client
+end)
+
+commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
+    log("Player command toggle-ap-chat") -- notifies client
 end)
 
 -- data

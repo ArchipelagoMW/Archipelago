@@ -26,6 +26,7 @@ blue_switch_palace   = "Blue Switch Palace"
 ice_trap        = "Ice Trap"
 stun_trap       = "Stun Trap"
 literature_trap = "Literature Trap"
+timer_trap      = "Timer Trap"
 
 # Other Definitions
 victory   = "The Princess"

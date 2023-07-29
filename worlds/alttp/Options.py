@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
 
 
 class Logic(Choice):
@@ -39,8 +39,8 @@ class OpenPyramid(Choice):
     option_auto = 3
     default = option_goal
 
-    alias_yes = option_open
-    alias_no = option_closed
+    alias_true = option_open
+    alias_false = option_closed
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
@@ -107,10 +107,14 @@ class Crystals(Range):
 
 
 class CrystalsTower(Crystals):
+    """Number of crystals needed to open Ganon's Tower"""
+    display_name = "Crystals for GT"
     default = 7
 
 
 class CrystalsGanon(Crystals):
+    """Number of crystals needed to damage Ganon"""
+    display_name = "Crystals for Ganon"
     default = 7
 
 
@@ -121,12 +125,15 @@ class TriforcePieces(Range):
 
 
 class ShopItemSlots(Range):
+    """Number of slots in all shops available to have items from the multiworld"""
+    display_name = "Available Shop Slots"
     range_start = 0
     range_end = 30
 
 
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
+    display_name = "Shop Price Cost Percent"
     range_start = 0
     default = 100
     range_end = 400
@@ -138,13 +145,13 @@ class WorldState(Choice):
     option_inverted = 2
 
 
-class Bosses(TextChoice):
+class LTTPBosses(PlandoBosses):
     """Shuffles bosses around to different locations.
     Basic will shuffle all bosses except Ganon and Agahnim anywhere they can be placed.
     Full chooses 3 bosses at random to be placed twice instead of Lanmolas, Moldorm, and Helmasaur.
     Chaos allows any boss to appear any number of times.
     Singularity places a single boss in as many places as possible, and a second boss in any remaining locations.
-    Supports plando placement. Formatting here: https://archipelago.gg/tutorial/A%20Link%20to%20the%20Past/plando/en"""
+    Supports plando placement."""
     display_name = "Boss Shuffle"
     option_none = 0
     option_basic = 1
@@ -152,7 +159,9 @@ class Bosses(TextChoice):
     option_chaos = 3
     option_singularity = 4
 
-    bosses: set = {
+    duplicate_bosses = True
+
+    bosses = {
         "Armos Knights",
         "Lanmolas",
         "Moldorm",
@@ -165,7 +174,7 @@ class Bosses(TextChoice):
         "Trinexx",
     }
 
-    locations: set = {
+    locations = {
         "Ganons Tower Top",
         "Tower of Hera",
         "Skull Woods",
@@ -181,99 +190,16 @@ class Bosses(TextChoice):
         "Ganons Tower Bottom"
     }
 
-    def __init__(self, value: typing.Union[str, int]):
-        assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__class__.__name__}"
-        self.value = value
-
     @classmethod
-    def from_text(cls, text: str):
-        import random
-        # set all of our text to lower case for name checking
-        text = text.lower()
-        cls.bosses = {boss_name.lower() for boss_name in cls.bosses}
-        cls.locations = {boss_location.lower() for boss_location in cls.locations}
-        if text == "random":
-            return cls(random.choice(list(cls.options.values())))
-        for option_name, value in cls.options.items():
-            if option_name == text:
-                return cls(value)
-        options = text.split(";")
-
-        # since plando exists in the option verify the plando values given are valid
-        cls.validate_plando_bosses(options)
-
-        # find out what type of boss shuffle we should use for placing bosses after plando
-        # and add as a string to look nice in the spoiler
-        if "random" in options:
-            shuffle = random.choice(list(cls.options))
-            options.remove("random")
-            options = ";".join(options) + ";" + shuffle
-            boss_class = cls(options)
-        else:
-            for option in options:
-                if option in cls.options:
-                    boss_class = cls(";".join(options))
-                    break
-            else:
-                if len(options) == 1:
-                    if cls.valid_boss_name(options[0]):
-                        options = options[0] + ";singularity"
-                        boss_class = cls(options)
-                    else:
-                        options = options[0] + ";none"
-                        boss_class = cls(options)
-                else:
-                    options = ";".join(options) + ";none"
-                    boss_class = cls(options)
-        return boss_class
-
-    @classmethod
-    def validate_plando_bosses(cls, options: typing.List[str]) -> None:
-        from .Bosses import can_place_boss, format_boss_location
-        for option in options:
-            if option == "random" or option in cls.options:
-                if option != options[-1]:
-                    raise ValueError(f"{option} option must be at the end of the boss_shuffle options!")
-                continue
-            if "-" in option:
-                location, boss = option.split("-")
-                level = ''
-                if not cls.valid_boss_name(boss):
-                    raise ValueError(f"{boss} is not a valid boss name for location {location}.")
-                if not cls.valid_location_name(location):
-                    raise ValueError(f"{location} is not a valid boss location name.")
-                if location.split(" ")[-1] in ("top", "middle", "bottom"):
-                    location = location.split(" ")
-                    level = location[-1]
-                    location = " ".join(location[:-1])
-                location = location.title().replace("Of", "of")
-                if not can_place_boss(boss.title(), location, level):
-                    raise ValueError(f"{format_boss_location(location, level)} "
-                                     f"is not a valid location for {boss.title()}.")
-            else:
-                if not cls.valid_boss_name(option):
-                    raise ValueError(f"{option} is not a valid boss name.")
-
-    @classmethod
-    def valid_boss_name(cls, value: str) -> bool:
-        return value.lower() in cls.bosses
-
-    @classmethod
-    def valid_location_name(cls, value: str) -> bool:
-        return value in cls.locations
-
-    def verify(self, world, player_name: str, plando_options) -> None:
-        if isinstance(self.value, int):
-            return
-        from Generate import PlandoSettings
-        if not(PlandoSettings.bosses & plando_options):
-            import logging
-            # plando is disabled but plando options were given so pull the option and change it to an int
-            option = self.value.split(";")[-1]
-            self.value = self.options[option]
-            logging.warning(f"The plando bosses module is turned off, so {self.name_lookup[self.value].title()} "
-                    f"boss shuffle will be used for player {player_name}.")
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        from worlds.alttp.Bosses import can_place_boss
+        level = ''
+        words = location.split(" ")
+        if words[-1] in ("top", "middle", "bottom"):
+            level = words[-1]
+            location = " ".join(words[:-1])
+        location = location.title().replace("Of", "of")
+        return can_place_boss(boss.title(), location, level)
 
 
 class Enemies(Choice):
@@ -283,6 +209,7 @@ class Enemies(Choice):
 
 
 class Progressive(Choice):
+    """How item types that have multiple tiers (armor, bows, gloves, shields, and swords) should be rewarded"""
     display_name = "Progressive Items"
     option_off = 0
     option_grouped_random = 1
@@ -386,22 +313,27 @@ class Palette(Choice):
 
 
 class OWPalette(Palette):
+    """The type of palette shuffle to use for the overworld"""
     display_name = "Overworld Palette"
 
 
 class UWPalette(Palette):
+    """The type of palette shuffle to use for the underworld (caves, dungeons, etc.)"""
     display_name = "Underworld Palette"
 
 
 class HUDPalette(Palette):
+    """The type of palette shuffle to use for the HUD"""
     display_name = "Menu Palette"
 
 
 class SwordPalette(Palette):
+    """The type of palette shuffle to use for the sword"""
     display_name = "Sword Palette"
 
 
 class ShieldPalette(Palette):
+    """The type of palette shuffle to use for the shield"""
     display_name = "Shield Palette"
 
 
@@ -410,6 +342,7 @@ class ShieldPalette(Palette):
 
 
 class HeartBeep(Choice):
+    """How quickly the heart beep sound effect will play"""
     display_name = "Heart Beep Rate"
     option_normal = 0
     option_double = 1
@@ -419,6 +352,7 @@ class HeartBeep(Choice):
 
 
 class HeartColor(Choice):
+    """The color of hearts in the HUD"""
     display_name = "Heart Color"
     option_red = 0
     option_blue = 1
@@ -427,10 +361,12 @@ class HeartColor(Choice):
 
 
 class QuickSwap(DefaultOnToggle):
+    """Allows you to quickly swap items while playing with L/R"""
     display_name = "L/R Quickswapping"
 
 
 class MenuSpeed(Choice):
+    """How quickly the menu appears/disappears"""
     display_name = "Menu Speed"
     option_normal = 0
     option_instant = 1,
@@ -441,19 +377,27 @@ class MenuSpeed(Choice):
 
 
 class Music(DefaultOnToggle):
+    """Whether background music will play in game"""
     display_name = "Play music"
 
 
 class ReduceFlashing(DefaultOnToggle):
+    """Reduces flashing for certain scenes such as the Misery Mire and Ganon's Tower opening cutscenes"""
     display_name = "Reduce Screen Flashes"
 
 
 class TriforceHud(Choice):
+    """When and how the triforce hunt HUD should display"""
     display_name = "Display Method for Triforce Hunt"
     option_normal = 0
     option_hide_goal = 1
     option_hide_required = 2
     option_hide_both = 3
+
+
+class GlitchBoots(DefaultOnToggle):
+    """If this is enabled, the player will start with Pegasus Boots when playing with overworld glitches or harder logic."""
+    display_name = "Glitched Starting Boots"
 
 
 class BeemizerRange(Range):
@@ -497,7 +441,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "hints": Hints,
     "scams": Scams,
     "restrict_dungeon_item_on_boss": RestrictBossItem,
-    "boss_shuffle": Bosses,
+    "boss_shuffle": LTTPBosses,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
@@ -518,9 +462,10 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
-    "glitch_boots": DefaultOnToggle,
+    "glitch_boots": GlitchBoots,
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,
-    "allow_collect": AllowCollect
+    "allow_collect": AllowCollect,
+    "start_inventory_from_pool": StartInventoryPool,
 }

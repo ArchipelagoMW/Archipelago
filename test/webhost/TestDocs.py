@@ -7,8 +7,9 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestDocs(unittest.TestCase):
-    def setUp(self) -> None:
-        self.tutorials_data = WebHost.create_ordered_tutorials_file()
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.tutorials_data = WebHost.create_ordered_tutorials_file()
 
     def testHasTutorial(self):
         games_with_tutorial = set(entry["gameTitle"] for entry in self.tutorials_data)

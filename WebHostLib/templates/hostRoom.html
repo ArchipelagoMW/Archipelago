@@ -14,27 +14,36 @@
             <br />
         {% endif %}
         {% if room.tracker %}
-            This room has a <a href="{{ url_for("getTracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
+            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a> enabled.
             <br />
         {% endif %}
         The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
         Should you wish to continue later,
         anyone can simply refresh this page and the server will resume.<br>
-        {% if room.last_port %}
+        {% if room.last_port == -1 %}
+            There was an error hosting this Room. Another attempt will be made on refreshing this page.
+            The most likely failure reason is that the multiworld is too old to be loaded now.
+        {% elif room.last_port %}
             You can connect to this room by using <span class="interactive"
-            data-tooltip="This means address/ip is {{ config['PATCH_TARGET'] }} and port is {{ room.last_port }}.">
-            '/connect {{ config['PATCH_TARGET'] }}:{{ room.last_port }}'
+            data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
+            '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
             </span>
-            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>{% endif %}
+            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
+        {% endif %}
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
-            <form method=post>
-                <div class="form-group">
-                    <label for="cmd"></label>
-                    <input class="form-control" type="text" id="cmd" name="cmd"
-                           placeholder="Server Command. /help to list them, list gets appended to log.">
-                </div>
-            </form>
+            <div style="display: flex; align-items: center;">
+                <form method=post style="flex-grow: 1; margin-right: 1em;">
+                    <div class="form-group">
+                        <label for="cmd"></label>
+                        <input class="form-control" type="text" id="cmd" name="cmd"
+                               placeholder="Server Command. /help to list them, list gets appended to log.">
+                    </div>
+                </form>
+                <a href="{{ url_for("display_log", room=room.id) }}">
+                    Open Log File...
+                </a>
+            </div>
         <div id="logger"></div>
         <script type="application/ecmascript">
             let xmlhttp = new XMLHttpRequest();

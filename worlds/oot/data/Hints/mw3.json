@@ -1,0 +1,62 @@
+{
+    "name":                  "mw3",
+    "gui_name":              "MW Season 3",
+    "description":           "Hints used for the Multiworld Tournament Season 3.",
+    "add_locations":         [
+        {"location": "Sheik in Kakariko", "types": ["always"]},
+        {"location": "Song from Ocarina of Time", "types": ["always"]},
+        {"location": "Deku Theater Skull Mask", "types": ["always"]},
+        {"location": "DMC Deku Scrub", "types": ["always"]},
+        {"location": "Deku Tree GS Basement Back Room", "types": ["sometimes"]},
+        {"location": "Water Temple GS River", "types": ["sometimes"]},
+        {"location": "Spirit Temple GS Hall After Sun Block Room", "types": ["sometimes"]}
+    ],
+    "remove_locations":      [
+        {"location": "Sheik in Crater", "types": ["sometimes"]},
+        {"location": "Song from Royal Familys Tomb", "types": ["sometimes"]},
+        {"location": "Sheik in Forest", "types": ["sometimes"]},
+        {"location": "Sheik at Temple", "types": ["sometimes"]},
+        {"location": "Sheik at Colossus", "types": ["sometimes"]},
+        {"location": "LH Sun", "types": ["sometimes"]},
+        {"location": "GC Maze Left Chest", "types": ["sometimes"]},
+        {"location": "GV Chest", "types": ["sometimes"]},
+        {"location": "Graveyard Royal Familys Tomb Chest", "types": ["sometimes"]},
+        {"location": "GC Pot Freestanding PoH", "types": ["sometimes"]},
+        {"location": "LH Lab Dive", "types": ["sometimes"]},
+        {"location": "Fire Temple Megaton Hammer Chest", "types": ["sometimes"]},
+        {"location": "Fire Temple Scarecrow Chest", "types": ["sometimes"]},
+        {"location": "Water Temple Boss Key Chest", "types": ["sometimes"]},
+        {"location": "Water Temple GS Behind Gate", "types": ["sometimes"]},
+        {"location": "Gerudo Training Ground Maze Path Final Chest", "types": ["sometimes"]},
+        {"location": "Spirit Temple Silver Gauntlets Chest", "types": ["sometimes"]},
+        {"location": "Spirit Temple Mirror Shield Chest", "types": ["sometimes"]},
+        {"location": "Shadow Temple Freestanding Key", "types": ["sometimes"]},
+        {"location": "Ganons Castle Shadow Trial Golden Gauntlets Chest", "types": ["sometimes"]}
+    ],
+    "add_items":             [],
+    "remove_items":          [
+        {"item": "Zeldas Lullaby", "types": ["woth","goal"]}
+    ],
+    "dungeons_woth_limit":   40,
+    "dungeons_barren_limit": 40,
+    "named_items_required":  true,
+    "vague_named_items":     false,
+    "use_default_goals":     true,
+    "upgrade_hints":         "on",
+    "distribution":          {
+        "trial":      {"order":  1, "weight": 0.0, "fixed":   0, "copies": 2},
+        "always":     {"order":  2, "weight": 0.0, "fixed":   0, "copies": 2},
+        "goal":       {"order":  3, "weight": 0.0, "fixed":   7, "copies": 2},
+        "sometimes":  {"order":  4, "weight": 0.0, "fixed": 100, "copies": 2},
+        "barren":     {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "entrance":   {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "random":     {"order":  0, "weight": 9.0, "fixed":   0, "copies": 2},
+        "woth":       {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "item":       {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "song":       {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "overworld":  {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "dungeon":    {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "junk":       {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "named-item": {"order":  0, "weight": 0.0, "fixed":   0, "copies": 2}
+    }
+  }

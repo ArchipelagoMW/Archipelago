@@ -2,7 +2,8 @@
 Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS. This guide expects you to have some experience with running software from the terminal.
 ## Prerequisite Software
 Here is a list of software to install and source code to download.
-1. Python 3.8 or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
+1. Python 3.9 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
+   **Python 3.11 is not supported yet.**
 2. Xcode from the [macOS App Store](https://apps.apple.com/us/app/xcode/id497799835).
 3. The source code from the [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
 4. The asset with darwin in the name from the [SNI Github releases page](https://github.com/alttpo/sni/releases).
@@ -14,7 +15,7 @@ Here is a list of software to install and source code to download.
 3. Open terminal and navigate to your Archipelago directory.
 ## Setting up a Virtual Environment
 It is generally recommended that you use a virtual environment to run python based software to avoid contamination that can break some software. If Archipelago is the only piece of software you use that runs from python source code however, it is not necessary to use a virtual environment. 
-1. Open terminal and navigate to the Archipelago directory.
+1. Open terminal and navigate to the Archipelago directory. Alternatively, right click on the Archipelago folder in Finder and select 'New Terminal at Folder'.
 2. Run the command `python3 -m venv venv` to create a virtual environment. Running this command will create a new directory at the specified path, so make sure that path is clear for a new directory to be created.
 3. Run the command `source venv/bin/activate` to activate the virtual environment.
 4. If you want to exit the virtual environment, run the command `deactivate`.

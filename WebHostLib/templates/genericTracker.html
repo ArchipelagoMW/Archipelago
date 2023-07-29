@@ -4,18 +4,18 @@
     <title>{{ player_name }}&apos;s Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/tracker.css") }}"/>
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/jquery.scrollsync.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/tracker.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/trackerCommon.js") }}"></script>
 {% endblock %}
 
 {% block body %}
     {% include 'header/dirtHeader.html' %}
-    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}">
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker|suuid }}/{{ team }}/{{ player }}" data-second="{{ saving_second }}">
         <div id="tracker-header-bar">
             <input placeholder="Search" id="search"/>
             <span class="info">This tracker will automatically update itself periodically.</span>
         </div>
             <div class="table-wrapper">
-                <table class="table non-unique-item-table">
+                <table id="received-table" class="table non-unique-item-table">
                     <thead>
                         <tr>
                             <th>Item</th>
@@ -37,7 +37,7 @@
                 </table>
             </div>
             <div class="table-wrapper">
-                <table class="table non-unique-item-table">
+                <table id="locations-table" class="table non-unique-item-table">
                     <thead>
                     <tr>
                         <th>Location</th>

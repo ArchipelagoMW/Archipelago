@@ -7,9 +7,9 @@
 meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
 null:
   progression_balancing: # Progression balancing tries to make sure that the player has *something* towards any players goal in each "sphere"
-    on: 0 # Force every player into progression balancing
-    off: 0 # Force every player out of progression balancing, then prepare for a lot of logical BK
-    null: 1 # Let players decide via their own progression_balancing flag in their yaml, defaulting to on
+    normal: 0 # Force every player into default progression balancing
+    disabled: 0 # Force every player out of progression balancing, then prepare for a lot of logical BK
+    null: 1 # Let players decide via their own progression_balancing setting in their yaml, defaulting to 50
 A Link to the Past:
   goals:
     ganon: 100 # Climb GT, defeat Agahnim 2, and then kill Ganon

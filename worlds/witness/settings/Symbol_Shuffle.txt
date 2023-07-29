@@ -1,5 +1,6 @@
 Items:
-Dots
+Arrows
+Progressive Dots
 Colored Dots
 Sound Dots
 Symmetry
@@ -8,7 +9,6 @@ Eraser
 Shapers
 Rotated Shapers
 Negative Shapers
-Stars
-Stars + Same Colored Symbol
+Progressive Stars
 Black/White Squares
 Colored Squares

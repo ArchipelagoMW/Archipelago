@@ -4,8 +4,9 @@ and connects them with the proper requirements
 """
 
 from BaseClasses import MultiWorld, Entrance
-from . import StaticWitnessLogic
-from .locations import WitnessPlayerLocations
+from .static_logic import StaticWitnessLogic
+from .Options import get_option_value
+from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
 
 
@@ -26,20 +27,18 @@ class WitnessRegions:
         )
 
     def connect(self, world: MultiWorld, player: int, source: str, target: str, player_logic: WitnessPlayerLogic,
-                panel_hex_to_solve_set=None):
+                panel_hex_to_solve_set=frozenset({frozenset()}), backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
         source_region = world.get_region(source, player)
         target_region = world.get_region(target, player)
 
-        #print(source_region)
-        #print(target_region)
-        #print("---")
+        backwards = " Backwards" if backwards else ""
 
         connection = Entrance(
             player,
-            source + " to " + target + " via " + str(panel_hex_to_solve_set),
+            source + " to " + target + backwards,
             source_region
         )
 
@@ -58,16 +57,25 @@ class WitnessRegions:
             create_region(world, player, 'Menu', self.locat, None, ["The Splashscreen?"]),
         ]
 
+        difficulty = get_option_value(world, player, "puzzle_randomization")
+
+        if difficulty == 1:
+            reference_logic = StaticWitnessLogic.sigma_expert
+        elif difficulty == 0:
+            reference_logic = StaticWitnessLogic.sigma_normal
+        else:
+            reference_logic = StaticWitnessLogic.vanilla
+
         all_locations = set()
 
-        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                reference_logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
+                if StaticWitnessLocations.get_event_name(panel) in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
@@ -76,19 +84,24 @@ class WitnessRegions:
                 create_region(world, player, region_name, self.locat, locations_for_this_region)
             ]
 
-        for region_name, region in StaticWitnessLogic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[0] == "Entry":
-                    continue
-
                 if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
                     self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
                     continue
 
+                backwards_connections = set()
+
                 for subset in connection[1]:
                     if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
-                        if all({StaticWitnessLogic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
-                            self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
+                        if all({reference_logic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
+                            backwards_connections.add(subset)
+
+                if backwards_connections:
+                    self.connect(
+                        world, player, connection[0], region_name, player_logic,
+                        frozenset(backwards_connections), True
+                    )
 
                 self.connect(world, player, region_name, connection[0], player_logic, connection[1])
 

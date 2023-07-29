@@ -31,11 +31,19 @@
         },
         "exits": {
             "Jabu Jabus Belly Main": "True",
-            "Jabu Jabus Belly Boss Area": "can_use(Boomerang) or can_use(Hover_Boots) or can_mega"
+            "Jabu Jabus Belly Boss Door": "can_use(Boomerang) or can_use(Hover_Boots) or can_mega"
         }
     },
     {
-        "region_name": "Jabu Jabus Belly Boss Area",
+        "region_name": "Jabu Jabus Belly Boss Door",
+        "scene": "Jabu Jabus Belly",
+        "dungeon": "Jabu Jabus Belly",
+        "exits": {
+            "Barinade Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Barinade Boss Room",
         "dungeon": "Jabu Jabus Belly",
         "locations": {
             "Jabu Jabus Belly Barinade Heart": "can_use(Boomerang) and (Sticks or Kokiri_Sword)",

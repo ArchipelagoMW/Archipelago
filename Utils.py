@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+import json
 import typing
 import builtins
 import os
@@ -11,8 +13,9 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO
 
+from settings import Settings, get_settings
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -36,8 +39,11 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
+    def as_simple_string(self) -> str:
+        return ".".join(str(item) for item in self)
 
-__version__ = "0.3.5"
+
+__version__ = "0.4.2"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -86,7 +92,10 @@ def is_frozen() -> bool:
 
 
 def local_path(*path: str) -> str:
-    """Returns path to a file in the local Archipelago installation or source."""
+    """
+    Returns path to a file in the local Archipelago installation or source.
+    This might be read-only and user_path should be used instead for ROMs, configuration, etc.
+    """
     if hasattr(local_path, 'cached_path'):
         pass
     elif is_frozen():
@@ -98,7 +107,7 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__"):
+        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
             # we are running in a normal Python environment
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
@@ -130,18 +139,32 @@ def user_path(*path: str) -> str:
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
-        # populate home from local - TODO: upgrade feature
-        if user_path.cached_path != local_path() and not os.path.exists(user_path("host.yaml")):
-            import shutil
-            for dn in ("Players", "data/sprites"):
-                shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-            for fn in ("manifest.json", "host.yaml"):
-                shutil.copy2(local_path(fn), user_path(fn))
+        # populate home from local
+        if user_path.cached_path != local_path():
+            import filecmp
+            if not os.path.exists(user_path("manifest.json")) or \
+                    not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
+                import shutil
+                for dn in ("Players", "data/sprites"):
+                    shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
+                for fn in ("manifest.json",):
+                    shutil.copy2(local_path(fn), user_path(fn))
 
     return os.path.join(user_path.cached_path, *path)
 
 
-def output_path(*path: str):
+def cache_path(*path: str) -> str:
+    """Returns path to a file in the user's Archipelago cache directory."""
+    if hasattr(cache_path, "cached_path"):
+        pass
+    else:
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
+
+    return os.path.join(cache_path.cached_path, *path)
+
+
+def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
     output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
@@ -194,11 +217,11 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
         except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -212,128 +235,22 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
     return ip
 
 
-OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
+OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
 
 
 @cache_argsless
-def get_default_options() -> OptionsType:
-    # Refer to host.yaml for comments as to what all these options mean.
-    options = {
-        "general_options": {
-            "output_path": "output",
-        },
-        "factorio_options": {
-            "executable": os.path.join("factorio", "bin", "x64", "factorio"),
-        },
-        "sm_options": {
-            "rom_file": "Super Metroid (JU).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-        },
-        "soe_options": {
-            "rom_file": "Secret of Evermore (USA).sfc",
-        },
-        "lttp_options": {
-            "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-
-        },
-        "server_options": {
-            "host": None,
-            "port": 38281,
-            "password": None,
-            "multidata": None,
-            "savefile": None,
-            "disable_save": False,
-            "loglevel": "info",
-            "server_password": None,
-            "disable_item_cheat": False,
-            "location_check_points": 1,
-            "hint_cost": 10,
-            "forfeit_mode": "goal",
-            "collect_mode": "disabled",
-            "remaining_mode": "goal",
-            "auto_shutdown": 0,
-            "compatibility": 2,
-            "log_network": 0
-        },
-        "generator": {
-            "teams": 1,
-            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
-            "player_files_path": "Players",
-            "players": 0,
-            "weights_file_path": "weights.yaml",
-            "meta_file_path": "meta.yaml",
-            "spoiler": 2,
-            "glitch_triforce_room": 1,
-            "race": 0,
-            "plando_options": "bosses",
-        },
-        "minecraft_options": {
-            "forge_directory": "Minecraft Forge server",
-            "max_heap_size": "2G",
-            "release_channel": "release"
-        },
-        "oot_options": {
-            "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-        },
-        "dkc3_options": {
-            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-        },
-        "smw_options": {
-            "rom_file": "Super Mario World (USA).sfc",
-            "sni": "SNI",
-            "rom_start": True,
-        },
-    }
-
-    return options
+def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
+    return Settings(None)
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
-    for key, value in src.items():
-        new_keys = keys.copy()
-        new_keys.append(key)
-        option_name = '.'.join(new_keys)
-        if key not in dest:
-            dest[key] = value
-            if filename.endswith("options.yaml"):
-                logging.info(f"Warning: {filename} is missing {option_name}")
-        elif isinstance(value, dict):
-            if not isinstance(dest.get(key, None), dict):
-                if filename.endswith("options.yaml"):
-                    logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
-                dest[key] = value
-            else:
-                dest[key] = update_options(value, dest[key], filename, new_keys)
-    return dest
-
-
-@cache_argsless
-def get_options() -> OptionsType:
-    filenames = ("options.yaml", "host.yaml")
-    locations: typing.List[str] = []
-    if os.path.join(os.getcwd()) != local_path():
-        locations += filenames  # use files from cwd only if it's not the local_path
-    locations += [user_path(filename) for filename in filenames]
-
-    for location in locations:
-        if os.path.exists(location):
-            with open(location) as f:
-                options = parse_yaml(f.read())
-            return update_options(get_default_options(), options, location, list())
-
-    raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
+get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -361,6 +278,45 @@ def persistent_load() -> typing.Dict[str, dict]:
         storage = {}
     persistent_load.storage = storage
     return storage
+
+
+def get_file_safe_name(name: str) -> str:
+    return "".join(c for c in name if c not in '<>:"/\\|?*')
+
+
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.debug(f"Could not load data package: {e}")
+
+    # fall back to old cache
+    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
+    if cache.get("checksum") == checksum:
+        return cache
+
+    # cache does not match
+    return {}
+
+
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
+    checksum = data.get("checksum")
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = cache_path("datapackage", get_file_safe_name(game))
+        os.makedirs(game_folder, exist_ok=True)
+        try:
+            with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            logging.debug(f"Could not store data package: {e}")
 
 
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
@@ -420,6 +376,15 @@ def restricted_loads(s):
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
 
+class ByValue:
+    """
+    Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
+    See https://github.com/python/cpython/pull/26658 for why this exists.
+    """
+    def __reduce_ex__(self, prot):
+        return self.__class__, (self._value_, )
+
+
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
@@ -443,6 +408,7 @@ loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': log
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
                  log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
                  exception_logger: typing.Optional[str] = None):
+    import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
     os.makedirs(log_folder, exist_ok=True)
@@ -451,6 +417,9 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    logging.getLogger("websockets").setLevel(loglevel)  # make sure level is applied for websockets
+    if "a" not in write_mode:
+        name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
         os.path.join(log_folder, f"{name}.txt"),
         write_mode,
@@ -478,7 +447,25 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
 
         sys.excepthook = handle_exception
 
-    logging.info(f"Archipelago ({__version__}) logging initialized.")
+    def _cleanup():
+        for file in os.scandir(log_folder):
+            if file.name.endswith(".txt"):
+                last_change = datetime.datetime.fromtimestamp(file.stat().st_mtime)
+                if datetime.datetime.now() - last_change > datetime.timedelta(days=7):
+                    try:
+                        os.unlink(file.path)
+                    except Exception as e:
+                        logging.exception(e)
+                    else:
+                        logging.debug(f"Deleted old logfile {file.path}")
+    import threading
+    threading.Thread(target=_cleanup, name="LogCleaner").start()
+    import platform
+    logging.info(
+        f"Archipelago ({__version__}) logging initialized"
+        f" on {platform.platform()}"
+        f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
 
 
 def stream_input(stream, queue):
@@ -554,7 +541,7 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
     )
 
 
-def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
+def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
@@ -565,11 +552,12 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", ".", k_filters)
+            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters)
+            selection = (f'--filename="{suggest}',) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -582,7 +570,38 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
     else:
         root = tkinter.Tk()
         root.withdraw()
-        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes))
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                                                  initialfile=suggest or None)
+
+
+def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        from shutil import which
+        kdialog = None#which("kdialog")
+        if kdialog:
+            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
+        zenity = None#which("zenity")
+        if zenity:
+            z_filters = ("--directory",)
+            selection = (f'--filename="{suggest}',) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because open_filename was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
@@ -627,7 +646,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()
@@ -642,3 +664,78 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     if strip_header and len(buffer) % 0x400 == 0x200:
         return buffer[0x200:]
     return buffer
+
+
+_faf_tasks: "Set[asyncio.Task[typing.Any]]" = set()
+
+
+def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = None) -> None:
+    """
+    Use this to start a task when you don't keep a reference to it or immediately await it,
+    to prevent early garbage collection. "fire-and-forget"
+    """
+    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # Python docs:
+    # ```
+    # Important: Save a reference to the result of [asyncio.create_task],
+    # to avoid a task disappearing mid-execution.
+    # ```
+    # This implementation follows the pattern given in that documentation.
+
+    task: asyncio.Task[typing.Any] = asyncio.create_task(co, name=name)
+    _faf_tasks.add(task)
+    task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
+
+def _extend_freeze_support() -> None:
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
+    # upstream issue: https://github.com/python/cpython/issues/76327
+    # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
+    import multiprocessing
+    import multiprocessing.spawn
+
+    def _freeze_support() -> None:
+        """Minimal freeze_support. Only apply this if frozen."""
+        from subprocess import _args_from_interpreter_flags
+
+        # Prevent `spawn` from trying to read `__main__` in from the main script
+        multiprocessing.process.ORIGINAL_DIR = None
+
+        # Handle the first process that MP will create
+        if (
+            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
+                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
+                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.forkserver import main'
+            )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
+        ):
+            exec(sys.argv[-1])
+            sys.exit()
+
+        # Handle the second process that MP will create
+        if multiprocessing.spawn.is_forking(sys.argv):
+            kwargs = {}
+            for arg in sys.argv[2:]:
+                name, value = arg.split('=')
+                if value == 'None':
+                    kwargs[name] = None
+                else:
+                    kwargs[name] = int(value)
+            multiprocessing.spawn.spawn_main(**kwargs)
+            sys.exit()
+
+    if not is_windows and is_frozen():
+        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+
+
+def freeze_support() -> None:
+    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    import multiprocessing
+    _extend_freeze_support()
+    multiprocessing.freeze_support()

@@ -13,9 +13,11 @@ to obtain a config file for StarCraft 2.
 
 1. Install StarCraft 2 and Archipelago using the first two links above. (The StarCraft 2 client for Archipelago is
    included by default.)
-2. Click the third link above and follow the instructions there.
-3. Linux users should also follow the instructions found at the bottom of this page 
-   (["Running in Linux"](#running-in-linux)).
+   - Linux users should also follow the instructions found at the bottom of this page 
+     (["Running in Linux"](#running-in-linux)).
+2. Run ArchipelagoStarcraft2Client.exe.
+   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
+3. Type the command `/download_data`. This will automatically install the Maps and Data files from the third link above.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
@@ -33,6 +35,7 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 ## How do I join a MultiWorld game?
 
 1. Run ArchipelagoStarcraft2Client.exe.
+   - macOS users should instead follow the instructions found at ["Running in macOS"](#running-in-macos) for this step only.
 2. Type `/connect [server ip]`.
 3. Type your slot name and the server's password when prompted.
 4. Once connected, switch to the 'StarCraft 2 Launcher' tab in the client. There, you can see every mission. By default,
@@ -40,16 +43,13 @@ Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en
 
 ## The game isn't launching when I try to start a mission.
 
-First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If the below fix doesn't
-work for you, and you can't figure out the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2)
-tech-support channel for help. Please include a specific description of what's going wrong and attach your log file to
-your message.
+First, check the log file for issues (stored at `[Archipelago Directory]/logs/SC2Client.txt`). If you can't figure out
+the log file, visit our [Discord's](https://discord.com/invite/8Z65BR2) tech-support channel for help. Please include a
+specific description of what's going wrong and attach your log file to your message.
 
-### Check your installation
+## Running in macOS
 
-Make sure you've followed the installation instructions completely. Specifically, make sure that you've placed the Maps
-and Mods folders directly inside the StarCraft II installation folder. They should be in the same location as the
-SC2Data, Support, Support64, and Versions folders.
+To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`. This is done to make sure that `/download_data` works correctly.
 
 ## Running in Linux
 

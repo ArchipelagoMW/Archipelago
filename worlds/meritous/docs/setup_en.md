@@ -48,7 +48,7 @@ At minimum, every seed will require you to find the Cursed Seal and bring it bac
 - `any_ending`: You must defeat the final boss.
 - `true_ending`: You must first explore all 3000 rooms of the Atlas Dome and find the Agate Knife, then fight the final boss' true form.
 
-Once the goal has been completed, you may press F to send a forfeit, sending out all of your world's remaining items to their respective players, and C to send a collect, which gathers up all of your world's items from their shuffled locations in other player's worlds. You may also press S to view your statistics, if you're a fan of numbers.
+Once the goal has been completed, you may press F to send a release, sending out all of your world's remaining items to their respective players, and C to send a collect, which gathers up all of your world's items from their shuffled locations in other player's worlds. You may also press S to view your statistics, if you're a fan of numbers.
 
 More in-depth information about the game can be found in the game's help file, accessed by pressing H while playing.
 

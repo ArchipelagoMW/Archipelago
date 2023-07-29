@@ -9,11 +9,12 @@ from .Regions import create_regions, getConnectionName
 from .Rules import set_rules
 from .Options import raft_options
 
-from BaseClasses import Region, RegionType, Entrance, Location, MultiWorld, Item, ItemClassification, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
 
 
 class RaftWeb(WebWorld):
+    theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Raft integration for Archipelago multiworld games.",
@@ -42,35 +43,54 @@ class RaftWorld(World):
     data_version = 2
     required_client_version = (0, 3, 4)
 
-    def generate_basic(self):
-        minRPSpecified = self.world.minimum_resource_pack_amount[self.player].value
-        maxRPSpecified = self.world.maximum_resource_pack_amount[self.player].value
+    def create_items(self):
+        minRPSpecified = self.multiworld.minimum_resource_pack_amount[self.player].value
+        maxRPSpecified = self.multiworld.maximum_resource_pack_amount[self.player].value
         minimumResourcePackAmount = min(minRPSpecified, maxRPSpecified)
         maximumResourcePackAmount = max(minRPSpecified, maxRPSpecified)
+        isFillingFrequencies = self.multiworld.island_frequency_locations[self.player].value <= 3
         # Generate item pool
         pool = []
+        frequencyItems = []
         for item in item_table:
             raft_item = self.create_item_replaceAsNecessary(item["name"])
-            pool.append(raft_item)
+            if isFillingFrequencies and "Frequency" in item["name"]:
+                frequencyItems.append(raft_item)
+            else:
+                pool.append(raft_item)
+        if isFillingFrequencies:
+            if not hasattr(self.multiworld, "raft_frequencyItemsPerPlayer"):
+                self.multiworld.raft_frequencyItemsPerPlayer = {}
+            self.multiworld.raft_frequencyItemsPerPlayer[self.player] = frequencyItems
 
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
         if extras > 0:
-            if (self.world.filler_item_types[self.player].value != 1): # Use resource packs
+            if (self.multiworld.filler_item_types[self.player].value != 1): # Use resource packs
                 for packItem in resourcePackItems:
                     for i in range(minimumResourcePackAmount, maximumResourcePackAmount + 1):
                         extraItemNamePool.append(createResourcePackName(i, packItem))
 
-            if self.world.filler_item_types[self.player].value != 0: # Use duplicate items
+            if self.multiworld.filler_item_types[self.player].value != 0: # Use duplicate items
                 dupeItemPool = item_table.copy()
                 # Remove frequencies if necessary
-                if self.world.island_frequency_locations[self.player].value != 5: # Not completely random locations
+                if self.multiworld.island_frequency_locations[self.player].value != 5: # Not completely random locations
+                    # If we let frequencies stay in with progressive-frequencies, the progressive-frequency item
+                    # will be included 7 times. This is a massive flood of progressive-frequency items, so we
+                    # instead add progressive-frequency as its own item a smaller amount of times to prevent
+                    # flooding the duplicate item pool with them.
+                    if self.multiworld.island_frequency_locations[self.player].value == 4:
+                        for _ in range(2):
+                            # Progressives are not in item_pool, need to create faux item for duplicate item pool
+                            # This can still be filtered out later by duplicate_items setting
+                            dupeItemPool.append({ "name": "progressive-frequency", "progression": True }) # Progressive frequencies need to be included
+                    # Always remove non-progressive Frequency items
                     dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
                 
                 # Remove progression or non-progression items if necessary
-                if (self.world.duplicate_items[self.player].value == 0): # Progression only
+                if (self.multiworld.duplicate_items[self.player].value == 0): # Progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == True)
-                elif (self.world.duplicate_items[self.player].value == 1): # Non-progression only
+                elif (self.multiworld.duplicate_items[self.player].value == 1): # Non-progression only
                     dupeItemPool = (itm for itm in dupeItemPool if itm["progression"] == False)
                 
                 dupeItemPool = list(dupeItemPool)
@@ -84,23 +104,27 @@ class RaftWorld(World):
                     raft_item = self.create_item_replaceAsNecessary(randomItem)
                     pool.append(raft_item)
 
-        self.world.itempool += pool
+        self.multiworld.itempool += pool
+
+        # Victory item
+        self.multiworld.get_location("Utopia Complete", self.player).place_locked_item(
+            RaftItem("Victory", ItemClassification.progression, None, player=self.player))
 
     def set_rules(self):
-        set_rules(self.world, self.player)
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        create_regions(self.world, self.player)
+        create_regions(self.multiworld, self.player)
     
     def get_pre_fill_items(self):
-        if self.world.island_frequency_locations[self.player] in [0, 1, 2, 3]:
-            return [loc.item for loc in self.world.get_filled_locations()]
+        if self.multiworld.island_frequency_locations[self.player] in [0, 1, 2, 3]:
+            return [loc.item for loc in self.multiworld.get_filled_locations()]
         return []
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
-        shouldUseProgressive = ((isFrequency and self.world.island_frequency_locations[self.player].value == 4)
-            or (not isFrequency and self.world.progressive_items[self.player].value))
+        shouldUseProgressive = ((isFrequency and self.multiworld.island_frequency_locations[self.player].value == 4)
+            or (not isFrequency and self.multiworld.progressive_items[self.player].value))
         if shouldUseProgressive and name in progressive_table:
             name = progressive_table[name]
         return self.create_item(name)
@@ -128,7 +152,7 @@ class RaftWorld(World):
         return super(RaftWorld, self).collect_item(state, item, remove)
 
     def pre_fill(self):
-        if self.world.island_frequency_locations[self.player] == 0:
+        if self.multiworld.island_frequency_locations[self.player] == 0: # Vanilla
             self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
             self.setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
             self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
@@ -136,7 +160,7 @@ class RaftWorld(World):
             self.setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
             self.setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
             self.setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
-        elif self.world.island_frequency_locations[self.player] == 1:
+        elif self.multiworld.island_frequency_locations[self.player] == 1: # Random on island
             self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
             self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
             self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
@@ -144,7 +168,7 @@ class RaftWorld(World):
             self.setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
             self.setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
             self.setLocationItemFromRegion("Temperance", "Utopia Frequency")
-        elif self.world.island_frequency_locations[self.player] in [2, 3]:
+        elif self.multiworld.island_frequency_locations[self.player] in [2, 3]:
             locationToFrequencyItemMap = {
                 "Vasagatan": "Vasagatan Frequency",
                 "BalboaIsland": "Balboa Island Frequency",
@@ -172,37 +196,32 @@ class RaftWorld(World):
                 else:
                     currentLocation = availableLocationList[0] # Utopia (only one left in list)
                 availableLocationList.remove(currentLocation)
-                if self.world.island_frequency_locations[self.player] == 2:
+                if self.multiworld.island_frequency_locations[self.player] == 2: # Random island order
                     self.setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
-                elif self.world.island_frequency_locations[self.player] == 3:
+                elif self.multiworld.island_frequency_locations[self.player] == 3: # Random on island random order
                     self.setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
                 previousLocation = currentLocation
-
-        # Victory item
-        self.world.get_location("Utopia Complete", self.player).place_locked_item(
-            RaftItem("Victory", ItemClassification.progression, None, player=self.player))
     
     def setLocationItem(self, location: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.world.itempool))
-        self.world.itempool.remove(itemToUse)
-        self.world.get_location(location, self.player).place_locked_item(itemToUse)
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
+        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
+        self.multiworld.get_location(location, self.player).place_locked_item(itemToUse)
     
     def setLocationItemFromRegion(self, region: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.world.itempool))
-        self.world.itempool.remove(itemToUse)
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
+        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
         location = random.choice(list(loc for loc in location_table if loc["region"] == region))
-        self.world.get_location(location["name"], self.player).place_locked_item(itemToUse)
+        self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
     
     def fill_slot_data(self):
         return {
-            "IslandGenerationDistance": self.world.island_generation_distance[self.player].value,
-            "ExpensiveResearch": bool(self.world.expensive_research[self.player].value),
-            "DeathLink": bool(self.world.death_link[self.player].value)
+            "IslandGenerationDistance": self.multiworld.island_generation_distance[self.player].value,
+            "ExpensiveResearch": bool(self.multiworld.expensive_research[self.player].value),
+            "DeathLink": bool(self.multiworld.death_link[self.player].value)
         }
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    ret = Region(name, RegionType.Generic, name, player)
-    ret.world = world
+    ret = Region(name, player, world)
     if locations:
         for location in locations:
             loc_id = locations_lookup_name_to_id.get(location, 0)
@@ -211,7 +230,6 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if exits:
         for exit in exits:
             ret.exits.append(Entrance(player, getConnectionName(name, exit), ret))
-
     return ret
 
 class RaftLocation(Location):
