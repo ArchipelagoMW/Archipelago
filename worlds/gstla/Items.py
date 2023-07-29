@@ -1,8 +1,13 @@
-import typing
-
-from enum import Enum
+from typing import List, NamedTuple, Dict
+from enum import Enum, IntEnum
 from BaseClasses import Item, ItemClassification
 from .Names.ItemName import ItemName
+
+class ElementType(IntEnum):
+   Earth = 0
+   Water = 1
+   Fire = 2
+   Air = 3
 
 class ItemType(str, Enum):
    KeyItem = "key"
@@ -23,7 +28,7 @@ class ItemType(str, Enum):
 
 
 
-class ItemData(typing.NamedTuple):
+class ItemData(NamedTuple):
    ap_id: int
    itemName: str
    progression: ItemClassification
@@ -33,17 +38,21 @@ class ItemData(typing.NamedTuple):
    quantity: int = 1
 
 class DjinItemData(ItemData):
-   element: int
+    element: int
+    stats_addr: int
+    stats: List[int]
 
-   def __new__(cls, ap_id, itemName, progression, addr, gstla_id, element):
-      self = super(ItemData, cls).__new__(cls, (ap_id, itemName, progression, addr, ItemType.Djinn, gstla_id, 1))
-      self.element = element
-      return self
+    def __new__(cls, ap_id, itemName, progression, addr, gstla_id, element, stats_addr, stats):
+        self = super(ItemData, cls).__new__(cls, (ap_id, itemName, progression, addr, ItemType.Djinn, gstla_id, 1))
+        self.element = element
+        self.stats_addr = stats_addr
+        self.stats = stats
+        return self
 
 class GSTLAItem(Item):
-   game: str = "Golden Sun The Lost Age"
+    game: str = "Golden Sun The Lost Age"
 
-key_item_list: typing.List[ItemData] = [
+key_item_list: List[ItemData] = [
    # Golden Sun 1 Items
    # ItemData(6, ItemName.Hermes_Water, ItemClassification.filler, 738052, 0),
    # ItemData(7, ItemName.Empty_Bottle, ItemClassification.filler, 738096, 0),
@@ -76,7 +85,7 @@ key_item_list: typing.List[ItemData] = [
    ItemData(63, ItemName.Magma_Ball, ItemClassification.filler, 750196, ItemType.KeyItem, 1)
 ]
 
-consumables_list: typing.List[ItemData] = [
+consumables_list: List[ItemData] = [
    ItemData(1, ItemName.Empty, ItemClassification.filler, 729956, ItemType.Consumable, 17),
    ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 3),
    ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, ItemType.Consumable, 8),
@@ -104,14 +113,14 @@ consumables_list: typing.List[ItemData] = [
    ItemData(35, ItemName.Crystal_Powder, ItemClassification.filler, 740560, ItemType.Consumable, 4)
 ]
 
-trading_items: typing.List[ItemData] = [
+trading_items: List[ItemData] = [
    ItemData(55, ItemName.Pretty_Stone, ItemClassification.filler, 749844, ItemType.Trade, 1),
    ItemData(56, ItemName.Red_Cloth, ItemClassification.filler, 749888, ItemType.Trade, 1),
    ItemData(57, ItemName.Milk, ItemClassification.filler, 749932, ItemType.Trade, 1),
    ItemData(58, ItemName.Lil_Turtle, ItemClassification.filler, 749976, ItemType.Trade, 1)
 ]
 
-forgeables: typing.List[ItemData] = [
+forgeables: List[ItemData] = [
    ItemData(39, ItemName.Tear_Stone, ItemClassification.filler, 748832, ItemType.Forgeable, 4),
    ItemData(40, ItemName.Star_Dust, ItemClassification.filler, 748876, ItemType.Forgeable, 4),
    ItemData(41, ItemName.Sylph_Feather, ItemClassification.filler, 748920, ItemType.Forgeable, 3),
@@ -134,7 +143,7 @@ forgeables: typing.List[ItemData] = [
    ItemData(174, ItemName.Rusty_Staff, ItemClassification.filler, 748744, ItemType.Forgeable, 1)
 ]
 
-weapon_list: typing.List[ItemData] = [
+weapon_list: List[ItemData] = [
    ItemData(64, ItemName.Long_Sword, ItemClassification.filler, 730000, ItemType.Weapon, 1),
    ItemData(65, ItemName.Broad_Sword, ItemClassification.filler, 730044, ItemType.Weapon, 1),
    ItemData(66, ItemName.Claymore, ItemClassification.filler, 730088, ItemType.Weapon, 1),
@@ -237,7 +246,7 @@ weapon_list: typing.List[ItemData] = [
    ItemData(163, ItemName.Staff_of_Anubis, ItemClassification.filler, 744212, ItemType.Weapon, 0)
 ]
 
-armor_list: typing.List[ItemData] = [
+armor_list: List[ItemData] = [
    ItemData(175, ItemName.Leather_Armor, ItemClassification.filler, 733256, ItemType.Armor, 0),
    ItemData(176, ItemName.Psynergy_Armor, ItemClassification.filler, 733300, ItemType.Armor, 0),
    ItemData(177, ItemName.Chain_Mail, ItemClassification.filler, 733344, ItemType.Armor, 0),
@@ -294,7 +303,7 @@ armor_list: typing.List[ItemData] = [
    ItemData(228, ItemName.Iris_Robe, ItemClassification.filler, 745400, ItemType.Armor, 1)
 ]
 
-shield_list: typing.List[ItemData] = [
+shield_list: List[ItemData] = [
    ItemData(229, ItemName.Wooden_Shield, ItemClassification.filler, 735148, ItemType.Shield, 0),
    ItemData(230, ItemName.Bronze_Shield, ItemClassification.filler, 735192, ItemType.Shield, 0),
    ItemData(231, ItemName.Iron_Shield, ItemClassification.filler, 735236, ItemType.Shield, 0),
@@ -337,7 +346,7 @@ shield_list: typing.List[ItemData] = [
    ItemData(268, ItemName.Ledas_Bracelet, ItemClassification.filler, 746324, ItemType.Shield, 0)
 ]
 
-helm_list: typing.List[ItemData] = [
+helm_list: List[ItemData] = [
    ItemData(269, ItemName.Open_Helm, ItemClassification.filler, 736336, ItemType.Helm, 0),
    ItemData(270, ItemName.Bronze_Helm, ItemClassification.filler, 736380, ItemType.Helm, 0),
    ItemData(271, ItemName.Iron_Helm, ItemClassification.filler, 736424, ItemType.Helm, 0),
@@ -384,7 +393,7 @@ helm_list: typing.List[ItemData] = [
    ItemData(312, ItemName.Berserker_Band, ItemClassification.filler, 747380, ItemType.Helm, 0)
 ]
 
-psynergy_list: typing.List[ItemData] = [
+psynergy_list: List[ItemData] = [
    ItemData(374, ItemName.Growth, ItemClassification.progression, 752804, ItemType.Psyenergy, 1),
    ItemData(375, ItemName.Whirlwind, ItemClassification.progression, 753596, ItemType.Psyenergy, 1),
    ItemData(376, ItemName.Parch, ItemClassification.progression, 754316, ItemType.Psyenergy, 1),
@@ -395,7 +404,7 @@ psynergy_list: typing.List[ItemData] = [
 ]
 
 
-psyenergy_as_item_list: typing.List[ItemData] = [
+psyenergy_as_item_list: List[ItemData] = [
    ItemData(313, ItemName.Lash_Pebble, ItemClassification.filler, 738668, ItemType.PsyenergyItem, 0),
    ItemData(314, ItemName.Pound_Cube, ItemClassification.filler, 738712, ItemType.PsyenergyItem, 0),
    ItemData(315, ItemName.Orb_of_Force, ItemClassification.filler, 738756, ItemType.PsyenergyItem, 0),
@@ -415,7 +424,7 @@ psyenergy_as_item_list: typing.List[ItemData] = [
    ItemData(329, ItemName.Teleport_Lapis, ItemClassification.filler, 739504, ItemType.PsyenergyItem, 0)
 ]
 
-elemental_star_list: typing.List[ItemData] = [
+elemental_star_list: List[ItemData] = [
    #ItemData(330, ItemName.Venus_Star, ItemClassification.filler, 739636, ItemType.KeyItem, 0),
    #ItemData(331, ItemName.Mercury_Star, ItemClassification.filler, 739680, ItemType.KeyItem, 0),
    #ItemData(332, ItemName.Mythril_Bag, ItemClassification.filler, 739724, ItemType.KeyItem, 1),
@@ -426,7 +435,7 @@ elemental_star_list: typing.List[ItemData] = [
    ItemData(337, ItemName.Mars_Star, ItemClassification.filler, 740824, ItemType.KeyItem, 0)
 ]
 
-shirt_list: typing.List[ItemData] = [
+shirt_list: List[ItemData] = [
    ItemData(338, ItemName.Mythril_Shirt, ItemClassification.filler, 740956, ItemType.Shirt, 0),
    ItemData(339, ItemName.Silk_Shirt, ItemClassification.filler, 741000, ItemType.Shirt, 0),
    ItemData(340, ItemName.Running_Shirt, ItemClassification.filler, 741044, ItemType.Shirt, 0),
@@ -436,7 +445,7 @@ shirt_list: typing.List[ItemData] = [
    ItemData(344, ItemName.Casual_Shirt, ItemClassification.filler, 747600, ItemType.Shirt, 0)
 ]
 
-boots_list: typing.List[ItemData] = [
+boots_list: List[ItemData] = [
    ItemData(345, ItemName.Hyper_Boots, ItemClassification.filler, 741220, ItemType.Boots, 0),
    ItemData(346, ItemName.Quick_Boots, ItemClassification.filler, 741264, ItemType.Boots, 0),
    ItemData(347, ItemName.Fur_Boots, ItemClassification.filler, 741308, ItemType.Boots, 0),
@@ -450,7 +459,7 @@ boots_list: typing.List[ItemData] = [
    ItemData(355, ItemName.Golden_Boots, ItemClassification.filler, 747908, ItemType.Boots, 0)
 ]
 
-ring_list: typing.List[ItemData] = [
+ring_list: List[ItemData] = [
    ItemData(356, ItemName.Adept_Ring, ItemClassification.filler, 741484, ItemType.Ring, 0),
    ItemData(357, ItemName.War_Ring, ItemClassification.filler, 741528, ItemType.Ring, 0),
    ItemData(358, ItemName.Sleep_Ring, ItemClassification.filler, 741572, ItemType.Ring, 0),
@@ -467,14 +476,15 @@ ring_list: typing.List[ItemData] = [
    ItemData(369, ItemName.Golden_Ring, ItemClassification.filler, 748216, ItemType.Ring, 0)
 ]
 
-class_item_list: typing.List[ItemData] = [
+class_item_list: List[ItemData] = [
    ItemData(371, ItemName.Mysterious_Card, ItemClassification.filler, 749448, ItemType.Class, 1),
    ItemData(372, ItemName.Trainers_Whip, ItemClassification.filler, 749492, ItemType.Class, 1),
    ItemData(373, ItemName.Tomegathericon, ItemClassification.filler, 749536, ItemType.Class, 1)
 ]
 
+base_djinn_index = 400
 
-testitems: typing.List[ItemData] = [
+testitems: List[ItemData] = [
    ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 180, 8),
    ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 226, 1),
    ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 227, 1),
@@ -498,16 +508,87 @@ testitems: typing.List[ItemData] = [
    ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 229, 1),
    ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 190, 1),
 
-   DjinItemData(400, ItemName.Echo, ItemClassification.progression, 16384014, 7, 0),
-   DjinItemData(401, ItemName.Fog, ItemClassification.progression, 16384050, 7, 1),
-   DjinItemData(402, ItemName.Breath, ItemClassification.progression, 16384122, 7, 3),
-   DjinItemData(403, ItemName.Iron, ItemClassification.progression, 16384016, 8, 0),
-   DjinItemData(404, ItemName.Cannon, ItemClassification.progression, 16384086, 7, 2),
+
+   DjinItemData(base_djinn_index, ItemName.Flint, ItemClassification.progression, 16384000, 0, ElementType.Earth, 814004, [8, 4, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 1, ItemName.Granite, ItemClassification.progression, 16384002, 1, ElementType.Earth, 814016, [9, 0, 0, 2, 2, 1]),
+   DjinItemData(base_djinn_index + 2, ItemName.Quartz, ItemClassification.progression, 16384004, 2, ElementType.Earth, 814028, [10, 3, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 3, ItemName.Vine, ItemClassification.progression, 16384006, 3, ElementType.Earth, 814040, [12, 4, 0, 3, 0, 1]),
+   DjinItemData(base_djinn_index + 4, ItemName.Sap, ItemClassification.progression, 16384008, 4, ElementType.Earth, 814052, [10, 0, 3, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 5, ItemName.Ground, ItemClassification.progression, 16384010, 5, ElementType.Earth, 814064, [9, 3, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 6, ItemName.Bane, ItemClassification.progression, 16384012, 6, ElementType.Earth, 814076, [12, 0, 4, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 7, ItemName.Echo, ItemClassification.progression, 16384014, 7, ElementType.Earth, 814088, [9, 4, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 8, ItemName.Iron, ItemClassification.progression, 16384016, 8, ElementType.Earth, 814100, [11, 0, 0, 2, 3, 0]),
+   DjinItemData(base_djinn_index + 9, ItemName.Steel, ItemClassification.progression, 16384018, 9, ElementType.Earth, 814112, [9, 0, 4, 2, 0, 1]),
+   DjinItemData(base_djinn_index + 10, ItemName.Mud, ItemClassification.progression, 16384020, 10, ElementType.Earth, 814124, [10, 4, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 11, ItemName.Flower, ItemClassification.progression, 16384022, 11, ElementType.Earth, 814136, [12, 4, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 12, ItemName.Meld, ItemClassification.progression, 16384024, 12, ElementType.Earth, 814148, [9, 0, 0, 0, 4, 1]),
+   DjinItemData(base_djinn_index + 13, ItemName.Petra, ItemClassification.progression, 16384026, 13, ElementType.Earth, 814160, [11, 0, 0, 3, 0, 0]),
+   DjinItemData(base_djinn_index + 14, ItemName.Salt, ItemClassification.progression, 16384028, 14, ElementType.Earth, 814172, [9, 5, 0, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 15, ItemName.Geode, ItemClassification.progression, 16384030, 15, ElementType.Earth, 814184, [12, 0, 6, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 16, ItemName.Mold, ItemClassification.progression, 16384032, 16, ElementType.Earth, 814196, [8, 0, 4, 0, 2, 1]),
+   DjinItemData(base_djinn_index + 17, ItemName.Crystal, ItemClassification.progression, 16384034, 16, ElementType.Earth, 814208, [10, 5, 0, 2, 0, 0]),
+
+   DjinItemData(base_djinn_index + 18, ItemName.Fizz, ItemClassification.progression, 16384036, 0, ElementType.Water, 814328, [9, 4, 0, 3, 0, 0]),
+   DjinItemData(base_djinn_index + 19, ItemName.Sleet, ItemClassification.progression, 16384038, 1, ElementType.Water, 814256, [12, 0, 3, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 20, ItemName.Mist, ItemClassification.progression, 16384040, 2, ElementType.Water, 814268, [11, 0, 4, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 21, ItemName.Spritz, ItemClassification.progression, 16384042, 3, ElementType.Water, 814280, [8, 4, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 22, ItemName.Hail, ItemClassification.progression, 16384044, 4, ElementType.Water, 814292, [9, 0, 4, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 23, ItemName.Tonic, ItemClassification.progression, 16384046, 5, ElementType.Water, 814304, [8, 3, 0, 2, 0, 2]),
+   DjinItemData(base_djinn_index + 24, ItemName.Dew, ItemClassification.progression, 16384048, 6, ElementType.Water, 814316, [13, 4, 0, 0, 4, 0]),
+   DjinItemData(base_djinn_index + 25, ItemName.Fog, ItemClassification.progression, 16384050, 7, ElementType.Water, 814328, [9, 0, 0, 2, 2, 1]),
+   DjinItemData(base_djinn_index + 26, ItemName.Sour, ItemClassification.progression, 16384052, 8, ElementType.Water, 814340, [8, 4, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 27, ItemName.Spring, ItemClassification.progression, 16384054, 9, ElementType.Water, 814352, [11, 5, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 28, ItemName.Shade, ItemClassification.progression, 16384056, 10, ElementType.Water, 814364, [9, 0, 0, 3, 0, 2]),
+   DjinItemData(base_djinn_index + 29, ItemName.Chill, ItemClassification.progression, 16384058, 11, ElementType.Water, 814376, [10, 3, 0, 2, 0, 0]),
+   DjinItemData(base_djinn_index + 30, ItemName.Steam, ItemClassification.progression, 16384060, 12, ElementType.Water, 814388, [10, 0, 5, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 31, ItemName.Rime, ItemClassification.progression, 16384062, 13, ElementType.Water, 814400, [10, 6, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 32, ItemName.Gel, ItemClassification.progression, 16384064, 14, ElementType.Water, 814412, [9, 0, 5, 0, 2, 0]),
+   DjinItemData(base_djinn_index + 33, ItemName.Eddy, ItemClassification.progression, 16384066, 15, ElementType.Water, 814424, [9, 0, 0, 0, 3, 2]),
+   DjinItemData(base_djinn_index + 34, ItemName.Balm, ItemClassification.progression, 16384068, 16, ElementType.Water, 814436, [13, 4, 0, 0, 0, 2]),
+   DjinItemData(base_djinn_index + 35, ItemName.Serac, ItemClassification.progression, 16384070, 17, ElementType.Water, 814448, [12, 0, 3, 0, 0, 0]),
+
+   DjinItemData(base_djinn_index + 36, ItemName.Forge, ItemClassification.progression, 16384072, 0, ElementType.Fire, 814484, [10, 0, 2, 0, 2, 2]),
+   DjinItemData(base_djinn_index + 37, ItemName.Fever, ItemClassification.progression, 16384074, 1, ElementType.Fire, 814496, [8, 0, 3, 0, 2, 0]),
+   DjinItemData(base_djinn_index + 38, ItemName.Corona, ItemClassification.progression, 16384076, 2, ElementType.Fire, 814508, [12, 3, 0, 3, 0, 1]),
+   DjinItemData(base_djinn_index + 39, ItemName.Scorch, ItemClassification.progression, 16384078, 3, ElementType.Fire, 814520, [8, 0, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 40, ItemName.Ember, ItemClassification.progression, 16384080, 4, ElementType.Fire, 814532, [9, 4, 0, 2, 2, 0]),
+   DjinItemData(base_djinn_index + 41, ItemName.Flash, ItemClassification.progression, 16384082, 5, ElementType.Fire, 814544, [14, 3, 0, 2, 0, 0]),
+   DjinItemData(base_djinn_index + 42, ItemName.Torch, ItemClassification.progression, 16384084, 6, ElementType.Fire, 814556, [9, 0, 3, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 43, ItemName.Cannon, ItemClassification.progression, 16384086, 7, ElementType.Fire, 814568, [10, 0, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 44, ItemName.Spark, ItemClassification.progression, 16384088, 8, ElementType.Fire, 814580, [11, 6, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 45, ItemName.Kindle, ItemClassification.progression, 16384090, 9, ElementType.Fire, 814592, [8, 0, 5, 0, 0, 1]),
+   DjinItemData(base_djinn_index + 46, ItemName.Char, ItemClassification.progression, 16384092, 10, ElementType.Fire, 814604, [9, 0, 2, 0, 2, 1]),
+   DjinItemData(base_djinn_index + 47, ItemName.Coal, ItemClassification.progression, 16384094, 11, ElementType.Fire, 814616, [11, 3, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 48, ItemName.Reflux, ItemClassification.progression, 16384096, 12, ElementType.Fire, 814628, [9, 0, 0, 3, 0, 2]),
+   DjinItemData(base_djinn_index + 49, ItemName.Core, ItemClassification.progression, 16384098, 13, ElementType.Fire, 814640, [8, 0, 4, 2, 0, 0]),
+   DjinItemData(base_djinn_index + 50, ItemName.Tinder, ItemClassification.progression, 16384100, 14, ElementType.Fire, 814652, [12, 5, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 51, ItemName.Shine, ItemClassification.progression, 16384102, 15, ElementType.Fire, 814664, [9, 0, 3, 3, 2, 0]),
+   DjinItemData(base_djinn_index + 52, ItemName.Fury, ItemClassification.progression, 16384104, 16, ElementType.Fire, 814676, [12, 4, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 53, ItemName.Fugue, ItemClassification.progression, 16384106, 17, ElementType.Fire, 814688, [11, 4, 0, 2, 0, 0]),
+
+   DjinItemData(base_djinn_index + 54, ItemName.Gust, ItemClassification.progression, 16384108, 0, ElementType.Air, 814724, [9, 0, 2, 0, 2, 0]),
+   DjinItemData(base_djinn_index + 55, ItemName.Breeze, ItemClassification.progression, 16384110, 1, ElementType.Air, 814736, [12, 5, 0, 2, 0, 1]),
+   DjinItemData(base_djinn_index + 56, ItemName.Zephyr, ItemClassification.progression, 16384112, 2, ElementType.Air, 814748, [11, 3, 0, 0, 2, 1]),
+   DjinItemData(base_djinn_index + 57, ItemName.Smog, ItemClassification.progression, 16384114, 3, ElementType.Air, 814760, [9, 0, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 58, ItemName.Kite, ItemClassification.progression, 16384116, 4, ElementType.Air, 814772, [8, 4, 0, 0, 3, 0]),
+   DjinItemData(base_djinn_index + 59, ItemName.Squall, ItemClassification.progression, 16384118, 5, ElementType.Air, 814784, [10, 0, 5, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 60, ItemName.Luff, ItemClassification.progression, 16384120, 6, ElementType.Air, 814796, [11, 5, 0, 2, 0, 1]),
+   DjinItemData(base_djinn_index + 61, ItemName.Breath, ItemClassification.progression, 16384122, 7, ElementType.Air, 814808, [9, 0, 0, 3, 4, 0]),
+   DjinItemData(base_djinn_index + 62, ItemName.Blitz, ItemClassification.progression, 16384124, 8, ElementType.Air, 814820, [10, 4, 3, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 63, ItemName.Ether, ItemClassification.progression, 16384126, 9, ElementType.Air, 814832, [8, 4, 0, 0, 3, 2]),
+   DjinItemData(base_djinn_index + 64, ItemName.Waft, ItemClassification.progression, 16384128, 10, ElementType.Air, 814844, [11, 0, 4, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 65, ItemName.Haze, ItemClassification.progression, 16384130, 11, ElementType.Air, 814856, [10, 0, 0, 2, 3, 2]),
+   DjinItemData(base_djinn_index + 66, ItemName.Wheeze, ItemClassification.progression, 16384132, 12, ElementType.Air, 814868, [9, 3, 5, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 67, ItemName.Aroma, ItemClassification.progression, 16384134, 13, ElementType.Air, 814880, [11, 0, 0, 0, 3, 2]),
+   DjinItemData(base_djinn_index + 68, ItemName.Whorl, ItemClassification.progression, 16384136, 14, ElementType.Air, 814892, [9, 0, 4, 2, 0, 0]),
+   DjinItemData(base_djinn_index + 69, ItemName.Gasp, ItemClassification.progression, 16384138, 15, ElementType.Air, 814904, [12, 5, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 70, ItemName.Lull, ItemClassification.progression, 16384140, 16, ElementType.Air, 814916, [11, 6, 0, 0, 0, 0]),
+   DjinItemData(base_djinn_index + 71, ItemName.Gale, ItemClassification.progression, 16384142, 17, ElementType.Air, 814928, [10, 0, 0, 0, 5, 3])
 ]
 
 
-all_items: typing.List[ItemData] = testitems
+all_items: List[ItemData] = testitems
 
 
-all_all_items: typing.List[ItemData] = key_item_list + consumables_list + trading_items + forgeables + weapon_list + armor_list + shield_list + helm_list + psynergy_list + psyenergy_as_item_list + elemental_star_list + shirt_list + boots_list + ring_list + class_item_list
-item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
+all_all_items: List[ItemData] = key_item_list + consumables_list + trading_items + forgeables + weapon_list + armor_list + shield_list + helm_list + psynergy_list + psyenergy_as_item_list + elemental_star_list + shirt_list + boots_list + ring_list + class_item_list
+item_table: Dict[str, ItemData] = {item.itemName: item for item in all_items}

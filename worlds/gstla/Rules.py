@@ -3,6 +3,7 @@ from typing import Set
 from .Items import ItemType, all_items
 from .Names.LocationName import LocationName
 from .Names.ItemName import ItemName
+from .Locations import location_type_to_data, LocationType
 
 
 def set_access_rules(multiworld, player):
@@ -23,16 +24,8 @@ def set_access_rules(multiworld, player):
 def set_item_rules(multiworld, player):
     djinn: Set[str] = {item.itemName for item in all_items if item.type == ItemType.Djinn}
 
-    add_item_rule(multiworld.get_location("Echo", player),
-                  lambda item: item.player == player and item.name in djinn)
-    add_item_rule(multiworld.get_location("Fog", player),
-                  lambda item: item.player == player and item.name in djinn)
-    add_item_rule(multiworld.get_location("Breath", player),
-                  lambda item: item.player == player and item.name in djinn)
-    add_item_rule(multiworld.get_location("Iron", player),
-                  lambda item: item.player == player and item.name in djinn)
-    add_item_rule(multiworld.get_location("Cannon", player),
-                  lambda item: item.player == player and item.name in djinn)
+    for loc in location_type_to_data[LocationType.Djinn]:
+        add_item_rule(multiworld.get_location(loc.name, player), lambda item: item.player == player and item.name in djinn)
 
     add_item_rule(multiworld.get_location(LocationName.Kandorean_Temple_Lash_Pebble, player),
                   lambda item: item.player == player and item.name == ItemName.Cyclone_Chip)

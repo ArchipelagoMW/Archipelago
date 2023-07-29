@@ -1,4 +1,4 @@
-from typing import Callable, List, Dict
+from typing import Callable, List, Dict, NamedTuple
 from enum import Enum
 from BaseClasses import Location, CollectionState
 from .Names.LocationName import LocationName
@@ -6,21 +6,15 @@ from .Names.LocationName import LocationName
 class LocationType(str, Enum):
    Item = "Item"
    Event = "Event"
+   Djinn = "Djinn"
 
 
-class LocationData:
+class LocationData(NamedTuple):
     id: int
     name: str
-    addresses: List[int] = [0]
+    addresses: List[int]
     event_type: int
-    loc_type: LocationType
-
-    def __init__(self, id, name, addresses, event_type, loc_type = LocationType.Item):
-        self.name = name
-        self.id = id
-        self.addresses = addresses
-        self.event_type = event_type
-        self.loc_type = loc_type
+    loc_type: LocationType = LocationType.Item
 
 class GSTLALocation(Location):
     game: str = "Golden Sun The Lost Age"
@@ -353,12 +347,84 @@ filler = [
 
 ]
 
+base_djinn_index = 400
+
 djinn = [
-    LocationData(400, LocationName.Echo, [994832], 128),
-    LocationData(401, LocationName.Fog, [994832], 128),
-    LocationData(402, LocationName.Breath, [994832], 128),
-    LocationData(403, LocationName.Iron, [994832], 128),
-    LocationData(404, LocationName.Cannon, [994832], 128)
+    LocationData(base_djinn_index, LocationName.Flint, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 1, LocationName.Granite, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 2, LocationName.Quartz, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 3, LocationName.Vine, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 4, LocationName.Sap, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 5, LocationName.Ground, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 6, LocationName.Bane, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 7, LocationName.Echo, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 8, LocationName.Iron, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 9, LocationName.Steel, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 10, LocationName.Mud, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 11, LocationName.Flower, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 12, LocationName.Meld, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 13, LocationName.Petra, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 14, LocationName.Salt, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 15, LocationName.Geode, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 16, LocationName.Mold, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 17, LocationName.Crystal, [994832], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 18, LocationName.Fizz, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 19, LocationName.Sleet, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 20, LocationName.Mist, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 21, LocationName.Spritz, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 22, LocationName.Hail, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 23, LocationName.Tonic, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 24, LocationName.Dew, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 25, LocationName.Fog, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 26, LocationName.Sour, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 27, LocationName.Spring, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 28, LocationName.Shade, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 29, LocationName.Chill, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 30, LocationName.Steam, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 31, LocationName.Rime, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 32, LocationName.Gel, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 33, LocationName.Eddy, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 34, LocationName.Balm, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 35, LocationName.Serac, [994832], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 36, LocationName.Forge, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 37, LocationName.Fever, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 38, LocationName.Corona, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 39, LocationName.Scorch, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 40, LocationName.Ember, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 41, LocationName.Flash, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 42, LocationName.Torch, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 43, LocationName.Cannon, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 44, LocationName.Spark, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 45, LocationName.Kindle, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 46, LocationName.Char, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 47, LocationName.Coal, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 48, LocationName.Reflux, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 49, LocationName.Core, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 50, LocationName.Tinder, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 51, LocationName.Shine, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 52, LocationName.Fury, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 53, LocationName.Fugue, [994832], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 54, LocationName.Gust, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 55, LocationName.Breeze, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 56, LocationName.Zephyr, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 57, LocationName.Smog, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 58, LocationName.Kite, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 59, LocationName.Squall, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 60, LocationName.Luff, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 61, LocationName.Breath, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 62, LocationName.Blitz, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 63, LocationName.Ether, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 64, LocationName.Waft, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 65, LocationName.Haze, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 66, LocationName.Wheeze, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 67, LocationName.Aroma, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 68, LocationName.Whorl, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 69, LocationName.Gasp, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 70, LocationName.Lull, [994832], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 71, LocationName.Gale, [994832], 128, LocationType.Djinn)
 ]
 
 test_locations = [
@@ -392,12 +458,91 @@ test_locations = [
     LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128),
     LocationData(172, LocationName.Madra_Catacombs_Tremor_Bit, [992060], 128),
 
-    LocationData(400, LocationName.Echo, [16384014], 128),
-    LocationData(401, LocationName.Fog, [16384050], 128),
-    LocationData(402, LocationName.Breath, [16384122], 128),
-    LocationData(403, LocationName.Iron, [16384016], 128),
-    LocationData(404, LocationName.Cannon, [16384086], 128)
+    LocationData(base_djinn_index, LocationName.Flint, [16384000], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 1, LocationName.Granite, [16384002], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 2, LocationName.Quartz, [16384004], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 3, LocationName.Vine, [16384006], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 4, LocationName.Sap, [16384008], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 5, LocationName.Ground, [16384010], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 6, LocationName.Bane, [16384012], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 7, LocationName.Echo, [16384014], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 8, LocationName.Iron, [16384016], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 9, LocationName.Steel, [16384018], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 10, LocationName.Mud, [16384020], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 11, LocationName.Flower, [16384022], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 12, LocationName.Meld, [16384024], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 13, LocationName.Petra, [16384026], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 14, LocationName.Salt, [16384028], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 15, LocationName.Geode, [16384030], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 16, LocationName.Mold, [16384032], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 17, LocationName.Crystal, [16384034], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 18, LocationName.Fizz, [16384036], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 19, LocationName.Sleet, [16384038], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 20, LocationName.Mist, [16384040], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 21, LocationName.Spritz, [16384042], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 22, LocationName.Hail, [16384044], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 23, LocationName.Tonic, [16384046], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 24, LocationName.Dew, [16384048], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 25, LocationName.Fog, [16384050], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 26, LocationName.Sour, [16384052], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 27, LocationName.Spring, [16384054], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 28, LocationName.Shade, [16384056], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 29, LocationName.Chill, [16384058], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 30, LocationName.Steam, [16384060], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 31, LocationName.Rime, [16384062,], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 32, LocationName.Gel, [16384064], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 33, LocationName.Eddy, [16384066], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 34, LocationName.Balm, [16384068], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 35, LocationName.Serac, [16384070], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 36, LocationName.Forge, [16384072], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 37, LocationName.Fever, [16384074], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 38, LocationName.Corona, [16384076], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 39, LocationName.Scorch, [16384078], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 40, LocationName.Ember, [16384080], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 41, LocationName.Flash, [16384082], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 42, LocationName.Torch, [16384084], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 43, LocationName.Cannon, [16384086], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 44, LocationName.Spark, [16384088], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 45, LocationName.Kindle, [16384090], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 46, LocationName.Char, [16384092], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 47, LocationName.Coal, [16384094], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 48, LocationName.Reflux, [16384096], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 49, LocationName.Core, [16384098], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 50, LocationName.Tinder, [16384100], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 51, LocationName.Shine, [16384102], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 52, LocationName.Fury, [16384104], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 53, LocationName.Fugue, [16384106], 128, LocationType.Djinn),
+
+    LocationData(base_djinn_index + 54, LocationName.Gust, [16384108], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 55, LocationName.Breeze, [16384110], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 56, LocationName.Zephyr, [16384112], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 57, LocationName.Smog, [16384114], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 58, LocationName.Kite, [16384116], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 59, LocationName.Squall, [16384118], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 60, LocationName.Luff, [16384120], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 61, LocationName.Breath, [16384122], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 62, LocationName.Blitz, [16384124], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 63, LocationName.Ether, [16384126], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 64, LocationName.Waft, [16384128], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 65, LocationName.Haze, [16384130], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 66, LocationName.Wheeze, [16384132], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 67, LocationName.Aroma, [16384134], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 68, LocationName.Whorl, [16384136], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 69, LocationName.Gasp, [16384138], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 70, LocationName.Lull, [16384140], 128, LocationType.Djinn),
+    LocationData(base_djinn_index + 71, LocationName.Gale, [16384142], 128, LocationType.Djinn)
 ]
+
+def create_loctype_to_datamapping():
+    types: Dict[str, List[LocationData]] = {}
+    for idx, data in enumerate(all_locations):
+        if data.loc_type not in types:
+            types[data.loc_type] = []
+        types[data.loc_type].append(data)
+    return types
 
 all_locations: List[LocationData] = test_locations
 location_name_to_id: Dict[str, LocationData] =  {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
+location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

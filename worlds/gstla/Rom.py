@@ -49,6 +49,9 @@ class LocalRom:
         self.rom_data[loc_address] = djinn.gstla_id
         self.rom_data[loc_address + 1] = djinn.element
 
+        for idx, value in enumerate(djinn.stats):
+            self.rom_data[djinn.stats_addr + idx] = value
+
 class GSTLADeltaPatch(APDeltaPatch):
     hash = CHECKSUM_BLUE
     game = "Golden Sun: The Lost Age"

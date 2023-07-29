@@ -7,7 +7,7 @@ from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
 from .Items import GSTLAItem, item_table, all_items, ItemType
-from .Locations import GSTLALocation, all_locations, location_name_to_id, LocationType
+from .Locations import GSTLALocation, all_locations, location_name_to_id, LocationType, location_type_to_data
 from .Rules import set_access_rules, set_item_rules
 from .Regions import create_regions
 from .Names.ItemName import ItemName
@@ -84,12 +84,10 @@ class GSTLAWorld(World):
         from Fill import fill_restrictive, FillError
         all_state = self.multiworld.get_all_state(use_cache=False)
         locs = []
+
         #Todo: replace this with a list of djinn locations and fill them up with djinn items
-        locs.append( self.multiworld.get_location("Echo", self.player))
-        locs.append( self.multiworld.get_location("Fog", self.player))
-        locs.append( self.multiworld.get_location("Breath", self.player))
-        locs.append( self.multiworld.get_location("Iron", self.player))
-        locs.append( self.multiworld.get_location("Cannon", self.player))
+        for loc in location_type_to_data[LocationType.Djinn]:
+            locs.append(self.multiworld.get_location(loc.name, self.player))
 
         self.multiworld.random.shuffle(locs)
         self.multiworld.random.shuffle(self.djinnlist)
