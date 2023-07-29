@@ -97,19 +97,19 @@ class Base:
             self.assertEqual(self.store.get_for_player(3), {4: {9}})
             self.assertEqual(self.store.get_for_player(1), {1: {13}, 2: {22, 23}})
 
-        def get_checked(self) -> None:
+        def test_get_checked(self) -> None:
             self.assertEqual(self.store.get_checked(full_state, 0, 1), [11, 12, 13])
             self.assertEqual(self.store.get_checked(one_state, 0, 1), [12])
             self.assertEqual(self.store.get_checked(empty_state, 0, 1), [])
             self.assertEqual(self.store.get_checked(full_state, 0, 3), [9])
 
-        def get_missing(self) -> None:
+        def test_get_missing(self) -> None:
             self.assertEqual(self.store.get_missing(full_state, 0, 1), [])
             self.assertEqual(self.store.get_missing(one_state, 0, 1), [11, 13])
             self.assertEqual(self.store.get_missing(empty_state, 0, 1), [11, 12, 13])
             self.assertEqual(self.store.get_missing(empty_state, 0, 3), [9])
 
-        def get_remaining(self) -> None:
+        def test_get_remaining(self) -> None:
             self.assertEqual(self.store.get_remaining(full_state, 0, 1), [])
             self.assertEqual(self.store.get_remaining(one_state, 0, 1), [13, 21])
             self.assertEqual(self.store.get_remaining(empty_state, 0, 1), [13, 21, 22])
