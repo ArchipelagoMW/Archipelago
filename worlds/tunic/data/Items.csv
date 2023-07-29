@@ -1,0 +1,129 @@
+Name,Classification,Tunic Item Name,Tunic Item Quantity,Quantity in Item Pool
+Firecracker x2,filler,Firecracker,2,3
+Firecracker x3,filler,Firecracker,3,3
+Firecracker x4,filler,Firecracker,4,3
+Firecracker x5,filler,Firecracker,5,1
+Firecracker x6,filler,Firecracker,6,2
+Fire Bomb x2,filler,Firebomb,2,2
+Fire Bomb x3,filler,Firebomb,3,1
+Ice Bomb x2,filler,Ice Bomb,2,2
+Ice Bomb x3,filler,Ice Bomb,3,2
+Ice Bomb x5,filler,Ice Bomb,5,1
+Lure,filler,Bait,1,4
+Lure x2,filler,Bait,2,1
+Pepper x2,filler,Pepper,2,4
+Ivy x3,filler,Ivy,3,2
+Effigy,useful,Piggybank L1,1,12
+HP Berry,filler,Berry_HP,1,2
+HP Berry x2,filler,Berry_HP,2,4
+HP Berry x3,filler,Berry_HP,3,2
+MP Berry,filler,Berry_MP,1,4
+MP Berry x2,filler,Berry_MP,2,2
+MP Berry x3,filler,Berry_MP,3,7
+Fairy,progression,Fairy,1,20
+Stick,progression,Stick,1,1
+Sword,progression,Sword,1,3
+Magic Wand,progression,Techbow,1,1
+Magic Dagger,progression,Stundagger,1,1
+Magic Orb,progression,Wand,1,1
+Hero's Laurels,progression,Hyperdash,1,1
+Lantern,progression,Lantern,1,1
+Shotgun,useful,Shotgun,1,1
+Shield,useful,Shield,1,1
+Dath Stone,useful,Dath Stone,1,1
+Hourglass,useful,SlowmoItem,1,1
+Old House Key,progression,Key (House),1,1
+Key,progression,Key,1,2
+Fortress Vault Key,progression,Vault Key (Red),1,1
+Flask Shard,useful,Flask Shard,1,12
+Potion Flask,useful,Flask Container,1,5
+Golden Coin,progression,Trinket Coin,1,17
+Card Slot,useful,Trinket Slot,1,4
+Red Hexagon,progression,Hexagon Red,1,1
+Green Hexagon,progression,Hexagon Green,1,1
+Blue Hexagon,progression,Hexagon Blue,1,1
+Gold Hexagon,progression,Hexagon Gold,1,30
+ATT Offering,useful,Upgrade Offering - Attack - Tooth,1,4
+DEF Offering,useful,Upgrade Offering - DamageResist - Effigy,1,4
+Potion Offering,useful,Upgrade Offering - PotionEfficiency Swig - Ash,1,3
+HP Offering,useful,Upgrade Offering - Health HP - Flower,1,6
+MP Offering,useful,Upgrade Offering - Magic MP - Mushroom,1,3
+SP Offering,useful,Upgrade Offering - Stamina SP - Feather,1,2
+Hero Relic - ATT,useful,Relic - Hero Sword,1,1
+Hero Relic - DEF,useful,Relic - Hero Crown,1,1
+Hero Relic - HP,useful,Relic - Hero Pendant HP,1,1
+Hero Relic - MP,useful,Relic - Hero Pendant MP,1,1
+Hero Relic - POTION,useful,Relic - Hero Water,1,1
+Hero Relic - SP,useful,Relic - Hero Pendant SP,1,1
+Orange Peril Ring,useful,Trinket - RTSR,1,1
+Tincture,useful,Trinket - Attack Up Defense Down,1,1
+Scavenger Mask,progression,Mask,1,1
+Cyan Peril Ring,useful,Trinket - BTSR,1,1
+Bracer,useful,Trinket - Block Plus,1,1
+Dagger Strap,useful,Trinket - Fast Icedagger,1,1
+Inverted Ash,useful,Trinket - MP Flasks,1,1
+Lucky Cup,useful,Trinket - Heartdrops,1,1
+Magic Echo,useful,Trinket - Bloodstain MP,1,1
+Anklet,useful,Trinket - Walk Speed Plus,1,1
+Muffling Bell,useful,Trinket - Sneaky,1,1
+Glass Cannon,useful,Trinket - Glass Cannon,1,1
+Perfume,useful,Trinket - Stamina Recharge Plus,1,1
+Louder Echo,useful,Trinket - Bloodstain Plus,1,1
+Aura's Gem,useful,Trinket - Parry Window,1,1
+Bone Card,useful,Trinket - IFrames,1,1
+Mr Mayor,useful,GoldenTrophy_1,1,1
+Secret Legend,useful,GoldenTrophy_2,1,1
+Sacred Geometry,useful,GoldenTrophy_3,1,1
+Vintage,useful,GoldenTrophy_4,1,1
+Just Some Pals,useful,GoldenTrophy_5,1,1
+Regal Weasel,useful,GoldenTrophy_6,1,1
+Spring Falls,useful,GoldenTrophy_7,1,1
+Power Up,useful,GoldenTrophy_8,1,1
+Back To Work,useful,GoldenTrophy_9,1,1
+Phonomath,useful,GoldenTrophy_10,1,1
+Dusty,useful,GoldenTrophy_11,1,1
+Forever Friend,useful,GoldenTrophy_12,1,1
+Money x1,filler,money,1,3
+Money x10,filler,money,10,1
+Money x15,filler,money,15,10
+Money x16,filler,money,16,1
+Money x20,filler,money,20,17
+Money x25,filler,money,25,14
+Money x30,filler,money,30,4
+Money x32,filler,money,32,4
+Money x40,filler,money,40,3
+Money x48,filler,money,48,1
+Money x50,filler,money,50,7
+Money x64,filler,money,64,1
+Money x100,filler,money,100,5
+Money x128,filler,money,128,3
+Money x200,filler,money,200,1
+Money x255,filler,money,255,1
+Pages 0-1,useful,0,1,1
+Pages 2-3,useful,1,1,1
+Pages 4-5,useful,2,1,1
+Pages 6-7,useful,3,1,1
+Pages 8-9,useful,4,1,1
+Pages 10-11,useful,5,1,1
+Pages 12-13,useful,6,1,1
+Pages 14-15,useful,7,1,1
+Pages 16-17,useful,8,1,1
+Pages 18-19,useful,9,1,1
+Pages 20-21,useful,10,1,1
+Pages 22-23,useful,11,1,1
+Pages 24-25 (Prayer),progression,12,1,1
+Pages 26-27,useful,13,1,1
+Pages 28-29,useful,14,1,1
+Pages 30-31,useful,15,1,1
+Pages 32-33,useful,16,1,1
+Pages 34-35,useful,17,1,1
+Pages 36-37,useful,18,1,1
+Pages 38-39,useful,19,1,1
+Pages 40-41,useful,20,1,1
+Pages 42-43 (Holy Cross),progression,21,1,1
+Pages 44-45,useful,22,1,1
+Pages 46-47,useful,23,1,1
+Pages 48-49,useful,24,1,1
+Pages 50-51,useful,25,1,1
+Pages 52-53 (Ice Rod),progression,26,1,1
+Pages 54-55,useful,27,1,1
