@@ -115,6 +115,11 @@ class Base:
             self.assertEqual(self.store.get_remaining(empty_state, 0, 1), [13, 21, 22])
             self.assertEqual(self.store.get_remaining(empty_state, 0, 3), [99])
 
+        def test_location_set_intersection(self) -> None:
+            locations = {10, 11, 12}
+            locations.intersection_update(self.store[1])
+            self.assertEqual(locations, {11, 12})
+
     class TestLocationStoreConstructor(unittest.TestCase):
         """Test constructors for a given store type."""
         type: type
