@@ -1,9 +1,8 @@
 from ..generic.Rules import set_rule, forbid_item
+from BaseClasses import MultiWorld
 
-def set_rules(tunic_world):
-    player = tunic_world.player
-    multiworld = tunic_world.multiworld
 
+def set_rules(multiworld: MultiWorld, player: int):
     laurels = lambda state: state.has("Hero's Laurels", player)
     grapple = lambda state: state.has("Magic Orb", player)
     ice_dagger = lambda state: state.has("Magic Dagger", player)
@@ -25,7 +24,7 @@ def set_rules(tunic_world):
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), "Fairy", player)
 
     if multiworld.ability_shuffling[player].value:
-        set_ability_shuffle_rules(tunic_world)
+        set_ability_shuffle_rules(multiworld, player)
     else:
         set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player), (laurels))
         set_rule(multiworld.get_location("East Forest - Lower Grapple Chest", player), (grapple))
@@ -192,10 +191,7 @@ def set_rules(tunic_world):
         set_rule(multiworld.get_location("Hero's Grave - Feathers Relic", player), (laurels))
 
 
-def set_ability_shuffle_rules(tunic_world):
-    player = tunic_world.player
-    multiworld = tunic_world.multiworld
-
+def set_ability_shuffle_rules(multiworld: MultiWorld, player: int):
     laurels = lambda state: state.has("Hero's Laurels", player)
     grapple = lambda state: state.has("Magic Orb", player)
     ice_dagger = lambda state: state.has("Magic Dagger", player)
@@ -425,4 +421,3 @@ def set_ability_shuffle_rules(tunic_world):
     set_rule(multiworld.get_location("Hero's Grave - Flowers Relic", player), (laurels and prayer))
     set_rule(multiworld.get_location("Hero's Grave - Effigy Relic", player), (laurels and prayer))
     set_rule(multiworld.get_location("Hero's Grave - Feathers Relic", player), (laurels and prayer))
-

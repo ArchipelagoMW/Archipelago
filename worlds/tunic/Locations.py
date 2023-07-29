@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 from BaseClasses import Location
 import csv
+
+
 class TunicLocationData:
     id: str
     region_name: str
@@ -9,7 +11,8 @@ class TunicLocationData:
     position: int
     name: str
     code: int
-    
+
+
 class TunicLocations:
     locations: List[TunicLocationData] = []
     locations_lookup: Dict[str, TunicLocationData] = {}

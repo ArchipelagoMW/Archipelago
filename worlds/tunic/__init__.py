@@ -1,6 +1,6 @@
 from typing import Dict
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial
+from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial, ItemClassification
 from .Items import TunicItems
 from .Locations import TunicLocations
 from .Rules import set_rules
@@ -9,7 +9,7 @@ from .Options import tunic_options
 from ..AutoWorld import WebWorld, World
 
 
-class TunicLocation(Location):
+class TunicWeb(WebWorld):
     tutorials = [
         Tutorial(
             tutorial_name="Tunic Randomizer Multiworld Guide",
@@ -27,8 +27,8 @@ class TunicItem(Item):
     game = "Tunic"
 
 
-class TunicWeb(WebWorld):
-    settings_page = True
+class TunicLocation(Location):
+    game: str = "Tunic"
 
 
 class TunicWorld(World):
@@ -59,11 +59,6 @@ class TunicWorld(World):
         location_name_to_id[location.name] = location_base_id
         location_base_id += 1
 
-    def generate_basic(self) -> None:
-        # Create Victory
-        return
-
-
     def create_item(self, name: str) -> TunicItem:
         return TunicItem(name, self.tunic_items.items_lookup[name].classification, self.item_name_to_id[name],
                          self.player)
@@ -82,29 +77,29 @@ class TunicWorld(World):
         self.multiworld.itempool += items
 
     def create_regions(self):
-
         for region_name in tunic_regions.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
         for region_name in tunic_regions.keys():
             region = self.multiworld.get_region(region_name, self.player)
-            for connection in tunic_regions[region_name]:
-                region.exits.append(Entrance(self.player, connection, region))
-                region.exits[len(region.exits) - 1].connect(region)
+            region.add_exits(tunic_regions[region_name])
 
         for location_name in self.location_name_to_id:
-            location = TunicLocation(self.player, location_name, self.location_name_to_id[location_name])
-            self.multiworld.get_region(self.tunic_locations.locations_lookup[location_name].region_name, self.player) \
-                .locations.append(location)
-            print(self.tunic_locations.locations_lookup[location_name].region_name + " " + location.name)
-        x = 0
-        for region_name in tunic_regions.keys():
-            x += len(self.multiworld.get_region(region_name, self.player).locations)
-        print("Locations with Regions: " + str(x))
+            region = self.multiworld.get_region(self.tunic_locations.locations_lookup[location_name].region_name, self.player)
+            location = TunicLocation(self.player, location_name, self.location_name_to_id[location_name], region)
+            region.locations.append(location)
 
-    # set_rules = set_rules
-    set_rules = set_region_rules
+    def generate_basic(self) -> None:
+        victory_region = self.multiworld.get_region("Boss Arena", self.player)
+        victory_location = TunicLocation(self.player, "Final Boss", None, victory_region)
+        victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        victory_region.locations.append(victory_location)
+        return
+
+    def set_rules(self) -> None:
+        set_region_rules(self.multiworld, self.player)
 
     def pre_fill(self) -> None:
         if self.multiworld.keys_behind_bosses[self.player].value:

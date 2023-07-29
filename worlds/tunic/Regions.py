@@ -1,6 +1,6 @@
 from typing import Dict, Set
-
 from BaseClasses import MultiWorld
+
 
 class TunicEntrance:
     name: str
@@ -14,7 +14,7 @@ class TunicEntrance:
 tunic_regions: Dict[str, Set[str]] = {
     "Menu": {"Overworld"},
     "Overworld": {"Menu", "Overworld Holy Cross", "East Forest", "Dark Tomb", "Bottom of the Well", "West Garden",
-                  "Ruined Atoll", "Eastern Vault Fortress", "Beneath the Vault", "Quarry", "Swamp"},
+                  "Ruined Atoll", "Eastern Vault Fortress", "Beneath the Vault", "Quarry", "Swamp", "Boss Arena"},
     "Overworld Holy Cross": {"Overworld"},
     "East Forest": {"Overworld", "Eastern Vault Fortress"},
     "Dark Tomb": {"Overworld", "West Garden"},
@@ -29,12 +29,12 @@ tunic_regions: Dict[str, Set[str]] = {
     "Lower Quarry": {"Quarry", "Rooted Ziggurat"},
     "Rooted Ziggurat": {"Lower Quarry"},
     "Swamp": {"Overworld", "Cathedral"},
-    "Cathedral": {"Swamp"}
+    "Cathedral": {"Swamp"},
+    "Boss Arena": {"Overworld"}
 }
 
-def set_region_rules(tunic_world):
-    player = tunic_world.player
-    multiworld: MultiWorld = tunic_world.multiworld
+
+def set_region_rules(multiworld: MultiWorld, player: int):
 
     laurels = lambda state: state.has("Hero's Laurels", player)
     grapple = lambda state: state.has("Magic Orb", player)
@@ -42,6 +42,9 @@ def set_region_rules(tunic_world):
     mask = lambda state: state.has("Scavenger Mask", player)
     prayer = lambda state: state.has("Pages 24-25 (Prayer)", player)
     holy_cross = lambda state: state.has("Pages 42-43 (Holy Cross)", player)
+    red_hexagon = lambda state: state.has("Red Hexagon", player)
+    blue_hexagon = lambda state: state.has("Blue Hexagon", player)
+    green_hexagon = lambda state: state.has("Green Hexagon", player)
 
     for entrance in multiworld.get_region("Overworld", player).entrances:
         if entrance.name == "Overworld Holy Cross" and multiworld.ability_shuffling[player].value:
@@ -92,5 +95,8 @@ def set_region_rules(tunic_world):
         if entrance.name == "Cathedral":
             entrance.access_rule = (laurels and prayer) if multiworld.ability_shuffling[player].value else laurels
 
-
+    for entrance in multiworld.get_region("Boss Arena", player).entrances:
+        entrance.access_rule = (prayer and red_hexagon and blue_hexagon and green_hexagon) if \
+            multiworld.ability_shuffling[player].value \
+            else (red_hexagon and blue_hexagon and green_hexagon)
 
