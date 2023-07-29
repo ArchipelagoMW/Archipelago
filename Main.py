@@ -13,7 +13,8 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, get_options, output_path, version_tuple
+from settings import get_settings
+from Utils import __version__, output_path, version_tuple
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
@@ -22,7 +23,8 @@ __all__ = ["main"]
 
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
     if not baked_server_options:
-        baked_server_options = get_options()["server_options"]
+        baked_server_options = get_settings().server_options.as_dict()
+    assert isinstance(baked_server_options, dict)
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
@@ -131,12 +133,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world.non_local_items[player].value -= world.local_items[player].value
         world.non_local_items[player].value -= set(world.local_early_items[player])
 
-    if world.players > 1:
-        locality_rules(world)
-    else:
-        world.non_local_items[1].value = set()
-        world.local_items[1].value = set()
-
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
@@ -145,6 +141,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for location_name in world.priority_locations[player].value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
+    # Set local and non-local item rules.
+    if world.players > 1:
+        locality_rules(world)
+    else:
+        world.non_local_items[1].value = set()
+        world.local_items[1].value = set()
+    
     AutoWorld.call_all(world, "generate_basic")
 
     # remove starting inventory from pool items.
@@ -368,7 +371,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multidata = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
-                    "names": names,  # TODO: remove after 0.3.9
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,

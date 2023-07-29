@@ -50,6 +50,7 @@ Currently, the following games are supported:
 * Mega Man Battle Network 3: Blue Version
 * Muse Dash
 * DOOM 1993
+* Terraria
 * Inscryption
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
