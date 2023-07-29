@@ -314,7 +314,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    if ap_settings["ap_title_screen"]:
+    if ap_settings["text_shuffle"]:
         buckets = defaultdict(list)
         for n, data in enumerate(rom.texts._PointerTable__data):
             if type(data) != int and data and data != b'\xFF':
