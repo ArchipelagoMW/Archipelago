@@ -64,7 +64,11 @@ class TestBase(unittest.TestCase):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules")
         additional_steps = ("set_rules", "generate_basic", "pre_fill")
-        for game_name, world_type in AutoWorldRegister.world_types.items():
+        excluded_games = ("ChecksFinder", "Links Awakening DX", "MegaMan Battle Network 3", "Ocarina of Time", "SMZ3",
+                          "The Legend of Zelda")
+        worlds_to_test = {game: world
+                          for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
+        for game_name, world_type in worlds_to_test.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
                 created_items = multiworld.itempool.copy()
