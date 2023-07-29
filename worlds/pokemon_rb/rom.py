@@ -3,7 +3,7 @@ import hashlib
 import Utils
 import bsdiff4
 from copy import deepcopy
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 from .text import encode_text
 from .rom_addresses import rom_addresses
 from .locations import location_data
@@ -747,6 +747,7 @@ def generate_output(self, output_directory: str):
     if self.multiworld.require_pokedex[self.player]:
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
+        data[rom_addresses["Require_Pokedex_C"]] = 1
     if self.multiworld.dexsanity[self.player]:
         data[rom_addresses["Option_Dexsanity_A"]] = 1
         data[rom_addresses["Option_Dexsanity_B"]] = 1

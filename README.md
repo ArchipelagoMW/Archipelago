@@ -43,6 +43,14 @@ Currently, the following games are supported:
 * The Legend of Zelda: Link's Awakening DX
 * Clique
 * Adventure
+* DLC Quest
+* Noita
+* Undertale
+* Bumper Stickers
+* Mega Man Battle Network 3: Blue Version
+* Muse Dash
+* DOOM 1993
+* Terraria
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

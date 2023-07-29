@@ -17,9 +17,9 @@ from worlds.oot.N64Patch import apply_patch_file
 from worlds.oot.Utils import data_path
 
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart oot_connector.lua"
-CONNECTION_REFUSED_STATUS = "Connection refused. Please start your emulator and make sure oot_connector.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart oot_connector.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_oot.lua"
+CONNECTION_REFUSED_STATUS = "Connection refused. Please start your emulator and make sure connector_oot.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_oot.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -100,7 +100,7 @@ class OoTContext(CommonContext):
             await super(OoTContext, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to Bizhawk to get player information')
+            logger.info('Awaiting connection to EmuHawk to get player information')
             return
 
         await self.send_connect()
@@ -178,6 +178,12 @@ async def parse_payload(payload: dict, ctx: OoTContext, force: bool):
     # Locations handling
     locations = payload['locations']
     collectibles = payload['collectibles']
+
+    # The Lua JSON library serializes an empty table into a list instead of a dict. Verify types for safety:
+    if isinstance(locations, list):
+        locations = {}
+    if isinstance(collectibles, list):
+        collectibles = {}
 
     if ctx.location_table != locations or ctx.collectible_table != collectibles:
         ctx.location_table = locations
@@ -290,13 +296,16 @@ async def patch_and_run_game(apz5_file):
     comp_path = base_name + '.z64'
     # Load vanilla ROM, patch file, compress ROM
     rom_file_name = Utils.get_options()["oot_options"]["rom_file"]
-    if not os.path.exists(rom_file_name):
-        rom_file_name = Utils.user_path(rom_file_name)
     rom = Rom(rom_file_name)
-    apply_patch_file(rom, apz5_file,
-        sub_file=(os.path.basename(base_name) + '.zpf'
-            if zipfile.is_zipfile(apz5_file)
-            else None))
+
+    sub_file = None
+    if zipfile.is_zipfile(apz5_file):
+        for name in zipfile.ZipFile(apz5_file).namelist():
+            if name.endswith('.zpf'):
+                sub_file = name
+                break
+
+    apply_patch_file(rom, apz5_file, sub_file=sub_file)
     rom.write_to_file(decomp_path)
     os.chdir(data_path("Compress"))
     compress_rom_file(decomp_path, comp_path)

@@ -8,8 +8,7 @@ class ItemData(typing.NamedTuple):
     item_name: str
     ladxr_id: str
     classification: ItemClassification
-    mark_only_first_progression: bool = False
-    created_for_players = set()
+
     @property
     def item_id(self):
         return CHEST_ITEMS[self.ladxr_id]
@@ -33,6 +32,16 @@ class DungeonItemData(ItemData):
         s = self.ladxr_id[:-1]
         return DungeonItemType.__dict__[s]
 
+
+class TradeItemData(ItemData):
+    vanilla_location = None
+
+    def __new__(cls, item_name, ladxr_id, classification, vanilla_location):
+        self = super(ItemData, cls).__new__(cls, (item_name, ladxr_id, classification))
+        self.vanilla_location = vanilla_location
+        return self
+
+
 class LinksAwakeningItem(Item):
     game: str = Common.LINKS_AWAKENING
 
@@ -40,16 +49,10 @@ class LinksAwakeningItem(Item):
         classification = item_data.classification
         if callable(classification):
             classification = classification(world, player)
-        # this doesn't work lol
-        MARK_FIRST_ITEM = False
-        if MARK_FIRST_ITEM:
-            if item_data.mark_only_first_progression:
-                if player in item_data.created_for_players:
-                    classification = ItemClassification.filler
-                else:
-                    item_data.created_for_players.add(player)
+
         super().__init__(item_data.item_name, classification, Common.BASE_ID + item_data.item_id, player)
         self.item_data = item_data
+
 
 # TODO: use _NAMES instead?
 class ItemName:
@@ -184,8 +187,8 @@ links_awakening_items = [
     ItemData(ItemName.OCARINA, "OCARINA", ItemClassification.progression),
     ItemData(ItemName.FEATHER, "FEATHER", ItemClassification.progression),
     ItemData(ItemName.SHOVEL, "SHOVEL", ItemClassification.progression),
-    ItemData(ItemName.MAGIC_POWDER, "MAGIC_POWDER", ItemClassification.progression, True),
-    ItemData(ItemName.BOMB, "BOMB", ItemClassification.progression, True),
+    ItemData(ItemName.MAGIC_POWDER, "MAGIC_POWDER", ItemClassification.progression),
+    ItemData(ItemName.BOMB, "BOMB", ItemClassification.progression),
     ItemData(ItemName.SWORD, "SWORD", ItemClassification.progression),
     ItemData(ItemName.FLIPPERS, "FLIPPERS", ItemClassification.progression),
     ItemData(ItemName.MAGNIFYING_LENS, "MAGNIFYING_LENS", ItemClassification.progression),
@@ -196,13 +199,13 @@ links_awakening_items = [
     ItemData(ItemName.BIRD_KEY, "BIRD_KEY", ItemClassification.progression),
     ItemData(ItemName.SLIME_KEY, "SLIME_KEY", ItemClassification.progression),
     ItemData(ItemName.GOLD_LEAF, "GOLD_LEAF", ItemClassification.progression),
-    ItemData(ItemName.RUPEES_20, "RUPEES_20", ItemClassification.filler),
-    ItemData(ItemName.RUPEES_50, "RUPEES_50", ItemClassification.useful),
+    ItemData(ItemName.RUPEES_20, "RUPEES_20", ItemClassification.progression_skip_balancing),
+    ItemData(ItemName.RUPEES_50, "RUPEES_50", ItemClassification.progression_skip_balancing),
     ItemData(ItemName.RUPEES_100, "RUPEES_100", ItemClassification.progression_skip_balancing),
-    ItemData(ItemName.RUPEES_200, "RUPEES_200", ItemClassification.progression_skip_balancing),
-    ItemData(ItemName.RUPEES_500, "RUPEES_500", ItemClassification.progression_skip_balancing),
+    ItemData(ItemName.RUPEES_200, "RUPEES_200", ItemClassification.progression),
+    ItemData(ItemName.RUPEES_500, "RUPEES_500", ItemClassification.progression),
     ItemData(ItemName.SEASHELL, "SEASHELL", ItemClassification.progression_skip_balancing),
-    ItemData(ItemName.MESSAGE, "MESSAGE", ItemClassification.progression),
+    ItemData(ItemName.MESSAGE, "MESSAGE", ItemClassification.filler),
     ItemData(ItemName.GEL, "GEL", ItemClassification.trap),
     ItemData(ItemName.BOOMERANG, "BOOMERANG", ItemClassification.progression),
     ItemData(ItemName.HEART_PIECE, "HEART_PIECE", ItemClassification.filler),
@@ -279,20 +282,20 @@ links_awakening_items = [
     DungeonItemData(ItemName.INSTRUMENT6, "INSTRUMENT6", ItemClassification.progression),
     DungeonItemData(ItemName.INSTRUMENT7, "INSTRUMENT7", ItemClassification.progression),
     DungeonItemData(ItemName.INSTRUMENT8, "INSTRUMENT8", ItemClassification.progression),
-    ItemData(ItemName.TRADING_ITEM_YOSHI_DOLL, "TRADING_ITEM_YOSHI_DOLL", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_RIBBON, "TRADING_ITEM_RIBBON", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_DOG_FOOD, "TRADING_ITEM_DOG_FOOD", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_BANANAS, "TRADING_ITEM_BANANAS", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_STICK, "TRADING_ITEM_STICK", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_HONEYCOMB, "TRADING_ITEM_HONEYCOMB", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_PINEAPPLE, "TRADING_ITEM_PINEAPPLE", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_HIBISCUS, "TRADING_ITEM_HIBISCUS", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_LETTER, "TRADING_ITEM_LETTER", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_BROOM, "TRADING_ITEM_BROOM", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_FISHING_HOOK, "TRADING_ITEM_FISHING_HOOK", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_NECKLACE, "TRADING_ITEM_NECKLACE", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_SCALE, "TRADING_ITEM_SCALE", trade_item_prog),
-    ItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", trade_item_prog)
+    TradeItemData(ItemName.TRADING_ITEM_YOSHI_DOLL, "TRADING_ITEM_YOSHI_DOLL", trade_item_prog, "Trendy Game (Mabe Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_RIBBON, "TRADING_ITEM_RIBBON", trade_item_prog, "Papahl's Wife (Mabe Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_DOG_FOOD, "TRADING_ITEM_DOG_FOOD", trade_item_prog, "YipYip (Mabe Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_BANANAS, "TRADING_ITEM_BANANAS", trade_item_prog, "Banana Sale (Toronbo Shores)"),
+    TradeItemData(ItemName.TRADING_ITEM_STICK, "TRADING_ITEM_STICK", trade_item_prog, "Kiki (Ukuku Prairie)"),
+    TradeItemData(ItemName.TRADING_ITEM_HONEYCOMB, "TRADING_ITEM_HONEYCOMB", trade_item_prog, "Honeycomb (Ukuku Prairie)"),
+    TradeItemData(ItemName.TRADING_ITEM_PINEAPPLE, "TRADING_ITEM_PINEAPPLE", trade_item_prog, "Bear Cook (Animal Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_HIBISCUS, "TRADING_ITEM_HIBISCUS", trade_item_prog, "Papahl (Tal Tal Heights)"),
+    TradeItemData(ItemName.TRADING_ITEM_LETTER, "TRADING_ITEM_LETTER", trade_item_prog, "Goat (Animal Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_BROOM, "TRADING_ITEM_BROOM", trade_item_prog, "MrWrite (Goponga Swamp)"),
+    TradeItemData(ItemName.TRADING_ITEM_FISHING_HOOK, "TRADING_ITEM_FISHING_HOOK", trade_item_prog, "Grandma (Animal Village)"),
+    TradeItemData(ItemName.TRADING_ITEM_NECKLACE, "TRADING_ITEM_NECKLACE", trade_item_prog, "Fisher (Martha's Bay)"),
+    TradeItemData(ItemName.TRADING_ITEM_SCALE, "TRADING_ITEM_SCALE", trade_item_prog, "Mermaid (Martha's Bay)"),
+    TradeItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", trade_item_prog, "Mermaid Statue (Martha's Bay)")
 ]
 
 ladxr_item_to_la_item_name = {

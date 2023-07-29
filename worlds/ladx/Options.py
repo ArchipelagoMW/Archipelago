@@ -127,6 +127,11 @@ class DungeonEntranceShuffle(EntranceShuffle):
     """
     entrance_type=["dungeon"]
 
+class APTitleScreen(DefaultOnToggle):
+    """
+    Enables AP specific title screen and disables the intro cutscene
+    """
+
 
 class DungeonItemShuffle(Choice):
     option_original_dungeon = 0
@@ -443,5 +448,6 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
     'music_change_condition': MusicChangeCondition,
-    'nag_messages': NagMessages
+    'nag_messages': NagMessages,
+    'ap_title_screen': APTitleScreen,
 }

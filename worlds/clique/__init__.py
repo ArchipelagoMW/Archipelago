@@ -1,17 +1,12 @@
-from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from typing import List
+
+from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import set_rule
+from .Items import CliqueItem, item_data_table, item_table
+from .Locations import CliqueLocation, location_data_table, location_table, locked_locations
 from .Options import clique_options
-
-item_table = {
-    "The feeling of satisfaction.": 69696969,
-    "Button Key": 69696968,
-}
-
-location_table = {
-    "The Button": 69696969,
-    "The Desk": 69696968,
-}
+from .Regions import region_data_table
+from .Rules import get_button_rule
 
 
 class CliqueWebWorld(WebWorld):
@@ -29,81 +24,69 @@ class CliqueWebWorld(WebWorld):
 
 
 class CliqueWorld(World):
-    """The greatest game ever designed. Full of exciting gameplay!"""
+    """The greatest game of all time."""
 
     game = "Clique"
-    topology_present = False
-    data_version = 1
+    data_version = 3
     web = CliqueWebWorld()
     option_definitions = clique_options
-
     location_name_to_id = location_table
     item_name_to_id = item_table
 
-    def create_item(self, name: str) -> "Item":
-        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+    def create_item(self, name: str) -> CliqueItem:
+        return CliqueItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
 
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
+    def create_items(self) -> None:
+        item_pool: List[CliqueItem] = []
+        for name, item in item_data_table.items():
+            if item.code and item.can_create(self.multiworld, self.player):
+                item_pool.append(self.create_item(name))
 
-    def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in self.option_definitions}
-
-    def generate_basic(self) -> None:
-        self.multiworld.itempool.append(self.create_item("The feeling of satisfaction."))
-
-        if self.multiworld.hard_mode[self.player]:
-            self.multiworld.itempool.append(self.create_item("Button Key"))
+        self.multiworld.itempool += item_pool
 
     def create_regions(self) -> None:
-        if self.multiworld.hard_mode[self.player]:
-            self.multiworld.regions += [
-                create_region(self.multiworld, self.player, "Menu", None, ["Entrance to THE BUTTON"]),
-                create_region(self.multiworld, self.player, "THE BUTTON", self.location_name_to_id)
-            ]
-        else:
-            self.multiworld.regions += [
-                create_region(self.multiworld, self.player, "Menu", None, ["Entrance to THE BUTTON"]),
-                create_region(self.multiworld, self.player, "THE BUTTON", {"The Button": 69696969})
-            ]
+        # Create regions.
+        for region_name in region_data_table.keys():
+            region = Region(region_name, self.player, self.multiworld)
+            self.multiworld.regions.append(region)
 
-        self.multiworld.get_entrance("Entrance to THE BUTTON", self.player)\
-            .connect(self.multiworld.get_region("THE BUTTON", self.player))
+        # Create locations.
+        for region_name, region_data in region_data_table.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in location_data_table.items()
+                if location_data.region == region_name and location_data.can_create(self.multiworld, self.player)
+            }, CliqueLocation)
+            region.add_exits(region_data_table[region_name].connecting_regions)
+
+        # Place locked locations.
+        for location_name, location_data in locked_locations.items():
+            # Ignore locations we never created.
+            if not location_data.can_create(self.multiworld, self.player):
+                continue
+
+            locked_item = self.create_item(location_data_table[location_name].locked_item)
+            self.multiworld.get_location(location_name, self.player).place_locked_item(locked_item)
+
+        # Set priority location for the Big Red Button!
+        self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(item_table)
+        return "A Cool Filler Item (No Satisfaction Guaranteed)"
 
     def set_rules(self) -> None:
-        if self.multiworld.hard_mode[self.player]:
-            set_rule(
-                self.multiworld.get_location("The Button", self.player),
-                lambda state: state.has("Button Key", self.player)
-            )
+        button_rule = get_button_rule(self.multiworld, self.player)
+        self.multiworld.get_location("The Big Red Button", self.player).access_rule = button_rule
+        self.multiworld.get_location("In the Player's Mind", self.player).access_rule = button_rule
 
-            self.multiworld.completion_condition[self.player] = lambda state: \
-                state.has("Button Key", self.player)
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: \
-                state.has("The feeling of satisfaction.", self.player)
+        # Do not allow button activations on buttons.
+        self.multiworld.get_location("The Big Red Button", self.player).item_rule =\
+            lambda item: item.name != "Button Activation"
 
+        # Completion condition.
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("The Urge to Push", self.player)
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    region = Region(name, player, world)
-    if locations:
-        for location_name in locations.keys():
-            location = CliqueLocation(player, location_name, locations[location_name], region)
-            region.locations.append(location)
-
-    if exits:
-        for _exit in exits:
-            region.exits.append(Entrance(player, _exit, region))
-
-    return region
-
-
-class CliqueItem(Item):
-    game = "Clique"
-
-
-class CliqueLocation(Location):
-    game: str = "Clique"
+    def fill_slot_data(self):
+        return {
+            "color": getattr(self.multiworld, "color")[self.player].current_key
+        }

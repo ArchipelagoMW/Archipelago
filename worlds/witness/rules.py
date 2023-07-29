@@ -10,8 +10,8 @@ from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule
 
 
 class WitnessLogic(LogicMixin):
@@ -141,25 +141,30 @@ class WitnessLogic(LogicMixin):
                         and self.can_reach("Windmill Interior to Theater", "Entrance", player)
                     )
 
-                    exit_to_town = self.can_reach("Theater to Town", "Entrance", player)
-                    entrance_to_town = (
-                            self.can_reach("Town to Windmill Interior", "Entrance", player)
-                            and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                    theater_from_town = (
+                        self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                        or self.can_reach("Theater to Town", "Entrance", player)
                     )
-                    tunnels_to_town = self.can_reach("Tunnels to Town", "Entrance", player)
 
-                    if not (direct_access or (exit_to_town or entrance_to_town) and tunnels_to_town):
+                    tunnels_from_town = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        or self.can_reach("Tunnels to Town", "Entrance", player)
+                    )
+
+                    if not (direct_access or theater_from_town and tunnels_from_town):
                         valid_option = False
                         break
-
-
                 elif item in player_logic.EVENT_PANELS:
                     if not self._witness_can_solve_panel(item, world, player, player_logic, locat):
                         valid_option = False
                         break
                 elif not self.has(item, player):
-                    prog_dict = StaticWitnessLogic.ITEMS_TO_PROGRESSIVE
-                    if not (item in prog_dict and self.has(prog_dict[item], player, player_logic.MULTI_AMOUNTS[item])):
+                    # The player doesn't have the item. Check to see if it's part of a progressive item and, if so, the
+                    #   player has enough of that.
+                    prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
+                    if prog_item is item or not self.has(prog_item, player, player_logic.MULTI_AMOUNTS[item]):
                         valid_option = False
                         break
 

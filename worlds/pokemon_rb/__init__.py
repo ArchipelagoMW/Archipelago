@@ -1,7 +1,9 @@
-from typing import TextIO
 import os
-import logging
+import settings
+import typing
+
 from copy import deepcopy
+from typing import TextIO
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError, sweep_from_pool
@@ -15,10 +17,34 @@ from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process_pokemon_data, process_wild_pokemon,\
-    process_static_pokemon, process_move_data
+    process_static_pokemon, process_move_data, RedDeltaPatch, BlueDeltaPatch
 from .rules import set_rules
 
 import worlds.pokemon_rb.poke_data as poke_data
+
+
+class PokemonSettings(settings.Group):
+    class RedRomFile(settings.UserFilePath):
+        """File names of the Pokemon Red and Blue roms"""
+        description = "Pokemon Red (UE) ROM File"
+        copy_to = "Pokemon Red (UE) [S][!].gb"
+        md5s = [RedDeltaPatch.hash]
+
+    class BlueRomFile(settings.UserFilePath):
+        description = "Pokemon Blue (UE) ROM File"
+        copy_to = "Pokemon Blue (UE) [S][!].gb"
+        md5s = [BlueDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+        True for operating system default program
+        Alternatively, a path to a program to open the .gb file with
+        """
+
+    red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
+    blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
 
 
 class PokemonWebWorld(WebWorld):
@@ -39,8 +65,9 @@ class PokemonRedBlueWorld(World):
     # -MuffinJets#4559
     game = "Pokemon Red and Blue"
     option_definitions = pokemon_rb_options
+    settings: typing.ClassVar[PokemonSettings]
 
-    data_version = 7
+    data_version = 8
     required_client_version = (0, 3, 9)
 
     topology_present = False
@@ -197,6 +224,7 @@ class PokemonRedBlueWorld(World):
                           + self.multiworld.paralyze_trap_weight[self.player].value
                           + self.multiworld.ice_trap_weight[self.player].value)
         for location in locations:
+            event = location.event
             if not location.inclusion(self.multiworld, self.player):
                 continue
             if location.original_item in self.multiworld.start_inventory[self.player].value and \
@@ -208,7 +236,7 @@ class PokemonRedBlueWorld(World):
             elif location.original_item == "Pokedex":
                 if self.multiworld.randomize_pokedex[self.player] == "vanilla":
                     self.multiworld.get_location(location.name, self.player).event = True
-                    location.event = True
+                    event = True
                 item = self.create_item("Pokedex")
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
@@ -220,7 +248,7 @@ class PokemonRedBlueWorld(World):
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
-            if location.event:
+            if event:
                 self.multiworld.get_location(location.name, self.player).place_locked_item(item)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)

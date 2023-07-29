@@ -91,7 +91,7 @@ const createDefaultSettings = (settingData) => {
           case 'items-list':
           case 'locations-list':
           case 'custom-list':
-            newSettings[game][gameSetting] = [];
+            newSettings[game][gameSetting] = setting.defaultValue;
             break;
 
           default:
@@ -1199,6 +1199,7 @@ const generateGame = (raceMode = false) => {
     weights: { player: JSON.stringify(settings) },
     presetData: { player: JSON.stringify(settings) },
     playerCount: 1,
+    spoiler: 3,
     race: raceMode ? '1' : '0',
   }).then((response) => {
     window.location.href = response.data.url;

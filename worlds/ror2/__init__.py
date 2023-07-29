@@ -35,8 +35,8 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    data_version = 6
-    required_client_version = (0, 3, 7)
+    data_version = 7
+    required_client_version = (0, 4, 2)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -113,22 +113,22 @@ class RiskOfRainWorld(World):
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic:
+        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void:
+        if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
 
         # Generate item pool
         itempool: List = []
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
+        itempool += ["Beads of Fealty"]
 
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
 
-        # precollected environments are popped from the pool so counting like this is valid
-        nonjunk_item_count = self.total_revivals + len(environments_pool)
+        nonjunk_item_count = len(itempool)
         if self.multiworld.goal[self.player] == "classic":
             # classic mode
             total_locations = self.multiworld.total_locations[self.player].value
@@ -205,7 +205,7 @@ class RiskOfRainWorld(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         classification = ItemClassification.filler
-        if name == "Dio's Best Friend":
+        if name in {"Dio's Best Friend", "Beads of Fealty"}:
             classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful
