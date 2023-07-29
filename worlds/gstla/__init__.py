@@ -26,7 +26,7 @@ class GSTLAWorld(World):
     data_version = 1
     djinnlist = []
 
-    item_name_to_id = {item.itemName: item.id for item in all_items }
+    item_name_to_id = {item.itemName: item.ap_id for item in all_items}
     location_name_to_id = {location: location_name_to_id[location].id for location in location_name_to_id}
     web = GSTLAWeb()
 
@@ -134,9 +134,13 @@ class GSTLAWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
+        #for testing in case delta patch fails
+        rom.write_to_file('C:/Users/Gebruiker/Desktop/GameDev/GsTlaAp/GsArchipelago/output/gstla_patched.gba')
+
+
     def create_item(self, name: str) -> "Item":
         item = item_table[name]
-        return GSTLAItem(item.itemName, item.progression, item.id, self.player)
+        return GSTLAItem(item.itemName, item.progression, item.ap_id, self.player)
 
 
     def create_event(self, event: str):

@@ -24,12 +24,21 @@ class ItemType(str, Enum):
 
 
 class ItemData(typing.NamedTuple):
-   id: int
+   ap_id: int
    itemName: str
    progression: ItemClassification
    addr: int
    type: ItemType
-   quantity: int
+   gstla_id: int
+   quantity: int = 1
+
+class DjinItemData(ItemData):
+   element: int
+
+   def __new__(cls, ap_id, itemName, progression, addr, gstla_id, element):
+      self = super(ItemData, cls).__new__(cls, (ap_id, itemName, progression, addr, ItemType.Djinn, gstla_id, 1))
+      self.element = element
+      return self
 
 class GSTLAItem(Item):
    game: str = "Golden Sun The Lost Age"
@@ -466,34 +475,34 @@ class_item_list: typing.List[ItemData] = [
 
 
 testitems: typing.List[ItemData] = [
-   ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 8),
-   ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 1),
-   ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 1),
-   ItemData(8, ItemName.Psy_Crystal, ItemClassification.filler, 738140, ItemType.Consumable, 1),
-   ItemData(61, ItemName.Sea_Gods_Tear, ItemClassification.progression, 750108, ItemType.KeyItem, 1),
-   ItemData(371, ItemName.Mysterious_Card, ItemClassification.filler, 749448, ItemType.Class, 1),
-   ItemData(313, ItemName.Lash_Pebble, ItemClassification.progression, 738668, ItemType.PsyenergyItem, 1),
-   ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, ItemType.Consumable, 1),
-   ItemData(10, ItemName.Elixir, ItemClassification.filler, 738228, ItemType.Consumable, 2),
-   ItemData(17, ItemName.Mint, ItemClassification.filler, 738536, ItemType.Consumable, 1),
-   ItemData(142, ItemName.Themis_Axe, ItemClassification.filler, 743200, ItemType.Weapon, 1),
-   ItemData(218, ItemName.Full_Metal_Vest, ItemClassification.filler, 744916, ItemType.Armor, 1),
-   ItemData(314, ItemName.Pound_Cube, ItemClassification.filler, 738712, ItemType.PsyenergyItem, 1),
-   ItemData(9, ItemName.Antidote, ItemClassification.filler, 738184, ItemType.Consumable, 1),
-   ItemData(325, ItemName.Cyclone_Chip, ItemClassification.progression, 739196, ItemType.PsyenergyItem, 1),
-   ItemData(300, ItemName.Nurses_Cap, ItemClassification.filler, 746808, ItemType.Helm, 1),
+   ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 180, 8),
+   ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 226, 1),
+   ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 227, 1),
+   ItemData(8, ItemName.Psy_Crystal, ItemClassification.filler, 738140, ItemType.Consumable, 186, 1),
+   ItemData(61, ItemName.Sea_Gods_Tear, ItemClassification.progression, 750108, ItemType.KeyItem, 458, 1),
+   ItemData(371, ItemName.Mysterious_Card, ItemClassification.filler, 749448, ItemType.Class, 443, 1),
+   ItemData(313, ItemName.Lash_Pebble, ItemClassification.progression, 738668, ItemType.PsyenergyItem, 198, 1),
+   ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, ItemType.Consumable, 181, 1),
+   ItemData(10, ItemName.Elixir, ItemClassification.filler, 738228, ItemType.Consumable, 188, 2),
+   ItemData(17, ItemName.Mint, ItemClassification.filler, 738536, ItemType.Consumable, 195, 1),
+   ItemData(142, ItemName.Themis_Axe, ItemClassification.filler, 743200, ItemType.Weapon, 301, 1),
+   ItemData(218, ItemName.Full_Metal_Vest, ItemClassification.filler, 744916, ItemType.Armor, 340, 1),
+   ItemData(314, ItemName.Pound_Cube, ItemClassification.filler, 738712, ItemType.PsyenergyItem, 199, 1),
+   ItemData(9, ItemName.Antidote, ItemClassification.filler, 738184, ItemType.Consumable, 187, 1),
+   ItemData(325, ItemName.Cyclone_Chip, ItemClassification.progression, 739196, ItemType.PsyenergyItem, 210, 1),
+   ItemData(300, ItemName.Nurses_Cap, ItemClassification.filler, 746808, ItemType.Helm, 383, 1),
 
-   ItemData(62, ItemName.Ruin_Key, ItemClassification.filler, 750152, ItemType.KeyItem, 1),
-   ItemData(323, ItemName.Tremor_Bit, ItemClassification.filler, 739108, ItemType.PsyenergyItem, 1),
-   ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, ItemType.Consumable, 1),
-   ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 1),
-   ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 1),
+   ItemData(62, ItemName.Ruin_Key, ItemClassification.filler, 750152, ItemType.KeyItem, 459, 1),
+   ItemData(323, ItemName.Tremor_Bit, ItemClassification.filler, 739108, ItemType.PsyenergyItem, 208, 1),
+   ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, ItemType.Consumable, 193, 1),
+   ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 229, 1),
+   ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 190, 1),
 
-   ItemData(400, ItemName.Echo, ItemClassification.progression, 16384014, ItemType.Djinn, 1),
-   ItemData(401, ItemName.Fog, ItemClassification.progression, 16384050, ItemType.Djinn, 1),
-   ItemData(402, ItemName.Breath, ItemClassification.progression, 16384122, ItemType.Djinn, 1),
-   ItemData(403, ItemName.Iron, ItemClassification.progression, 16384016, ItemType.Djinn, 1),
-   ItemData(404, ItemName.Cannon, ItemClassification.progression, 16384086, ItemType.Djinn, 1),
+   DjinItemData(400, ItemName.Echo, ItemClassification.progression, 16384014, 7, 0),
+   DjinItemData(401, ItemName.Fog, ItemClassification.progression, 16384050, 7, 1),
+   DjinItemData(402, ItemName.Breath, ItemClassification.progression, 16384122, 7, 3),
+   DjinItemData(403, ItemName.Iron, ItemClassification.progression, 16384016, 8, 0),
+   DjinItemData(404, ItemName.Cannon, ItemClassification.progression, 16384086, 7, 2),
 ]
 
 

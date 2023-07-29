@@ -32,51 +32,7 @@ class LocalRom:
         loc_address = location.addresses[0]
 
         addr = loc_address
-        contents = 0
-
-        match item.itemName:
-            case ItemName.Herb:
-                contents = 180
-            case ItemName.Smoke_Bomb:
-                contents = 226
-            case ItemName.Sleep_Bomb:
-                contents = 227
-            case ItemName.Psy_Crystal:
-                contents = 186
-            case ItemName.Sea_Gods_Tear:
-                contents = 458
-            case ItemName.Mysterious_Card:
-                contents = 443
-            case ItemName.Lash_Pebble:
-                contents = 198
-            case ItemName.Nut:
-                contents = 181
-            case ItemName.Elixir:
-                contents = 188
-            case ItemName.Mint:
-                contents = 195
-            case ItemName.Themis_Axe:
-                contents = 301
-            case ItemName.Full_Metal_Vest:
-                contents = 340
-            case ItemName.Pound_Cube:
-                contents = 199
-            case ItemName.Antidote:
-                contents = 187
-            case ItemName.Cyclone_Chip:
-                contents = 210
-            case ItemName.Nurses_Cap:
-                contents = 383
-            case ItemName.Ruin_Key:
-                contents = 459
-            case ItemName.Tremor_Bit:
-                contents = 208
-            case ItemName.Apple:
-                contents = 193
-            case ItemName.Lucky_Medal:
-                contents = 229
-            case ItemName.Mist_Potion:
-                contents = 190
+        contents = item.gstla_id
 
         if addr >= 0xFA0000:
             self.rom_data[addr] = contents & 0xFF
@@ -90,30 +46,8 @@ class LocalRom:
     def write_djinn(self, location, djinn):
         loc_address = location.addresses[0]
 
-        match djinn.itemName:
-            case ItemName.Echo:
-                self.rom_data[loc_address] = 7
-                self.rom_data[loc_address + 1] = 0
-                pass
-            case ItemName.Fog:
-                self.rom_data[loc_address] = 7
-                self.rom_data[loc_address + 1] = 1
-
-                pass
-            case ItemName.Iron:
-                self.rom_data[loc_address] = 8
-                self.rom_data[loc_address + 1] = 0
-
-                pass
-            case ItemName.Cannon:
-                self.rom_data[loc_address] = 7
-                self.rom_data[loc_address + 1] = 2
-
-                pass
-            case ItemName.Breath:
-                self.rom_data[loc_address] = 7
-                self.rom_data[loc_address + 1] = 3
-
+        self.rom_data[loc_address] = djinn.gstla_id
+        self.rom_data[loc_address + 1] = djinn.element
 
 class GSTLADeltaPatch(APDeltaPatch):
     hash = CHECKSUM_BLUE
