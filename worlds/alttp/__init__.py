@@ -727,17 +727,22 @@ class ALTTPWorld(World):
     def fill_slot_data(self):
         slot_data = {}
         if not self.multiworld.is_race:
-            for option_name in alttp_options:
-                option = getattr(self.multiworld, option_name)[self.player]
-                slot_data[option_name] = option.value
-    
+            slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
+                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "progressive", "swordless", "retro_bow", "retro_caves",
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle"]
+
+            slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
+
             slot_data.update({
                 'mode': self.multiworld.mode[self.player],
                 'goal': self.multiworld.goal[self.player],
                 'dark_room_logic': self.multiworld.dark_room_logic[self.player],
                 'mm_medalion': self.multiworld.required_medallions[self.player][0],
                 'tr_medalion': self.multiworld.required_medallions[self.player][1],
-                'shop_shuffle': self.multiworld.shop_shuffle[self.player]}
+                'shop_shuffle': self.multiworld.shop_shuffle[self.player],
+                'entrance_shuffle': self.multiworld.shuffle[self.player]
+                }
             )
         return slot_data
         
