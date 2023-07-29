@@ -119,19 +119,19 @@ class InscryptionRules:
         return state.has("Holo Pelt", self.player, count)
 
     def has_one_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 1)
+        return self.has_pelts(state, 1) and self.has_drone_and_battery(state)
 
     def has_two_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 2)
+        return self.has_pelts(state, 2) and self.has_drone_and_battery(state)
 
     def has_three_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 3)
+        return self.has_pelts(state, 3) and self.has_drone_and_battery(state)
 
     def has_four_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 4)
+        return self.has_pelts(state, 4) and self.has_drone_and_battery(state)
 
     def has_five_pelt(self, state: CollectionState) -> bool:
-        return self.has_pelts(state, 5)
+        return self.has_pelts(state, 5) and self.has_drone_and_battery(state)
 
     def has_act2_requirements(self, state: CollectionState) -> bool:
         return state.has("Film Roll", self.player)
