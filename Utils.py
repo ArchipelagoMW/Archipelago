@@ -13,8 +13,9 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
+from settings import Settings, get_settings
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -42,7 +43,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -138,13 +139,16 @@ def user_path(*path: str) -> str:
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
-        # populate home from local - TODO: upgrade feature
-        if user_path.cached_path != local_path() and not os.path.exists(user_path("host.yaml")):
-            import shutil
-            for dn in ("Players", "data/sprites"):
-                shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-            for fn in ("manifest.json", "host.yaml"):
-                shutil.copy2(local_path(fn), user_path(fn))
+        # populate home from local
+        if user_path.cached_path != local_path():
+            import filecmp
+            if not os.path.exists(user_path("manifest.json")) or \
+                    not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
+                import shutil
+                for dn in ("Players", "data/sprites"):
+                    shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
+                for fn in ("manifest.json",):
+                    shutil.copy2(local_path(fn), user_path(fn))
 
     return os.path.join(user_path.cached_path, *path)
 
@@ -238,151 +242,15 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = typing.Dict[str, typing.Dict[str, typing.Any]]
+OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
 
 
 @cache_argsless
-def get_default_options() -> OptionsType:
-    # Refer to host.yaml for comments as to what all these options mean.
-    options = {
-        "general_options": {
-            "output_path": "output",
-        },
-        "factorio_options": {
-            "executable": os.path.join("factorio", "bin", "x64", "factorio"),
-            "filter_item_sends": False,
-            "bridge_chat_out": True,
-        },
-        "sni_options": {
-            "sni_path": "SNI",
-            "snes_rom_start": True,
-        },
-        "sm_options": {
-            "rom_file": "Super Metroid (JU).sfc",
-        },
-        "soe_options": {
-            "rom_file": "Secret of Evermore (USA).sfc",
-        },
-        "lttp_options": {
-            "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
-        },
-        "ladx_options": {
-            "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
-        },
-        "server_options": {
-            "host": None,
-            "port": 38281,
-            "password": None,
-            "multidata": None,
-            "savefile": None,
-            "disable_save": False,
-            "loglevel": "info",
-            "server_password": None,
-            "disable_item_cheat": False,
-            "location_check_points": 1,
-            "hint_cost": 10,
-            "release_mode": "goal",
-            "collect_mode": "disabled",
-            "remaining_mode": "goal",
-            "auto_shutdown": 0,
-            "compatibility": 2,
-            "log_network": 0
-        },
-        "generator": {
-            "enemizer_path": os.path.join("EnemizerCLI", "EnemizerCLI.Core"),
-            "player_files_path": "Players",
-            "players": 0,
-            "weights_file_path": "weights.yaml",
-            "meta_file_path": "meta.yaml",
-            "spoiler": 3,
-            "glitch_triforce_room": 1,
-            "race": 0,
-            "plando_options": "bosses",
-        },
-        "minecraft_options": {
-            "forge_directory": "Minecraft Forge server",
-            "max_heap_size": "2G",
-            "release_channel": "release"
-        },
-        "oot_options": {
-            "rom_file": "The Legend of Zelda - Ocarina of Time.z64",
-            "rom_start": True
-        },
-        "dkc3_options": {
-            "rom_file": "Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc",
-        },
-        "smw_options": {
-            "rom_file": "Super Mario World (USA).sfc",
-        },
-        "zillion_options": {
-            "rom_file": "Zillion (UE) [!].sms",
-            # RetroArch doesn't make it easy to launch a game from the command line.
-            # You have to know the path to the emulator core library on the user's computer.
-            "rom_start": "retroarch",
-        },
-        "pokemon_rb_options": {
-            "red_rom_file": "Pokemon Red (UE) [S][!].gb",
-            "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
-            "rom_start": True
-        },
-        "ffr_options": {
-            "display_msgs": True,
-        },
-        "lufia2ac_options": {
-            "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
-        },
-        "tloz_options": {
-            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
-            "rom_start": True,
-            "display_msgs": True,
-        },
-        "wargroove_options": {
-            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
-        },
-        "adventure_options": {
-            "rom_file": "ADVNTURE.BIN",
-            "display_msgs": True,
-            "rom_start": True,
-            "rom_args": ""
-        },
-    }
-    return options
+def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
+    return Settings(None)
 
 
-def update_options(src: dict, dest: dict, filename: str, keys: list) -> OptionsType:
-    for key, value in src.items():
-        new_keys = keys.copy()
-        new_keys.append(key)
-        option_name = '.'.join(new_keys)
-        if key not in dest:
-            dest[key] = value
-            if filename.endswith("options.yaml"):
-                logging.info(f"Warning: {filename} is missing {option_name}")
-        elif isinstance(value, dict):
-            if not isinstance(dest.get(key, None), dict):
-                if filename.endswith("options.yaml"):
-                    logging.info(f"Warning: {filename} has {option_name}, but it is not a dictionary. overwriting.")
-                dest[key] = value
-            else:
-                dest[key] = update_options(value, dest[key], filename, new_keys)
-    return dest
-
-
-@cache_argsless
-def get_options() -> OptionsType:
-    filenames = ("options.yaml", "host.yaml")
-    locations: typing.List[str] = []
-    if os.path.join(os.getcwd()) != local_path():
-        locations += filenames  # use files from cwd only if it's not the local_path
-    locations += [user_path(filename) for filename in filenames]
-
-    for location in locations:
-        if os.path.exists(location):
-            with open(location) as f:
-                options = parse_yaml(f.read())
-            return update_options(get_default_options(), options, location, list())
-
-    raise FileNotFoundError(f"Could not find {filenames[1]} to load options.")
+get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -673,7 +541,7 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
     )
 
 
-def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]) \
+def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
@@ -684,11 +552,12 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", ".", k_filters)
+            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters)
+            selection = (f'--filename="{suggest}',) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -701,7 +570,38 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
     else:
         root = tkinter.Tk()
         root.withdraw()
-        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes))
+        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                                                  initialfile=suggest or None)
+
+
+def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        from shutil import which
+        kdialog = None#which("kdialog")
+        if kdialog:
+            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
+        zenity = None#which("zenity")
+        if zenity:
+            z_filters = ("--directory",)
+            selection = (f'--filename="{suggest}',) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because open_filename was used for "{title}".')
+        raise e
+    else:
+        root = tkinter.Tk()
+        root.withdraw()
+        return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
@@ -766,10 +666,10 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     return buffer
 
 
-_faf_tasks: "Set[asyncio.Task[None]]" = set()
+_faf_tasks: "Set[asyncio.Task[typing.Any]]" = set()
 
 
-def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
@@ -782,7 +682,7 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     # ```
     # This implementation follows the pattern given in that documentation.
 
-    task = asyncio.create_task(co, name=name)
+    task: asyncio.Task[typing.Any] = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
 
@@ -792,3 +692,50 @@ def deprecate(message: str):
         raise Exception(message)
     import warnings
     warnings.warn(message)
+
+def _extend_freeze_support() -> None:
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
+    # upstream issue: https://github.com/python/cpython/issues/76327
+    # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
+    import multiprocessing
+    import multiprocessing.spawn
+
+    def _freeze_support() -> None:
+        """Minimal freeze_support. Only apply this if frozen."""
+        from subprocess import _args_from_interpreter_flags
+
+        # Prevent `spawn` from trying to read `__main__` in from the main script
+        multiprocessing.process.ORIGINAL_DIR = None
+
+        # Handle the first process that MP will create
+        if (
+            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
+                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
+                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.forkserver import main'
+            )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
+        ):
+            exec(sys.argv[-1])
+            sys.exit()
+
+        # Handle the second process that MP will create
+        if multiprocessing.spawn.is_forking(sys.argv):
+            kwargs = {}
+            for arg in sys.argv[2:]:
+                name, value = arg.split('=')
+                if value == 'None':
+                    kwargs[name] = None
+                else:
+                    kwargs[name] = int(value)
+            multiprocessing.spawn.spawn_main(**kwargs)
+            sys.exit()
+
+    if not is_windows and is_frozen():
+        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+
+
+def freeze_support() -> None:
+    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    import multiprocessing
+    _extend_freeze_support()
+    multiprocessing.freeze_support()
