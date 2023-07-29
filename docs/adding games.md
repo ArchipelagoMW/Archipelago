@@ -266,4 +266,4 @@ A world implementation requires a few key things from its implementation
           its submitted locations count.
         - You must always have a "Menu" Region from which the generation algorithm
           uses to enter the game and access locations.
-- Make sure to check out [world maintainer.md](./world%20maintainer.md) before publishing.
+- Make sure to check out [world maintainer.md](/docs/world%20maintainer.md) before publishing.
