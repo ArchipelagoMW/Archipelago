@@ -82,6 +82,7 @@ trap_table = {
     ItemName.ice_trap:        ItemData(0xFF0037, False, True),
     ItemName.slow_trap:       ItemData(0xFF0038, False, True),
     ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
+    ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
 
     ItemName.pong_trap:       ItemData(0xFF0050, False, True),
 }

@@ -193,11 +193,12 @@ class SA2BWorld(World):
             self.multiworld.cutscene_trap_weight[self.player].value = 0
 
             valid_trap_weights = self.multiworld.exposition_trap_weight[self.player].value + \
+                                 self.multiworld.reverse_trap_weight[self.player].value + \
                                  self.multiworld.pong_trap_weight[self.player].value
 
             if valid_trap_weights == 0:
                 self.multiworld.exposition_trap_weight[self.player].value = 4
-                self.multiworld.cutscene_trap_weight[self.player].value = 4
+                self.multiworld.reverse_trap_weight[self.player].value = 4
                 self.multiworld.pong_trap_weight[self.player].value = 4
 
             if self.multiworld.kart_race_checks[self.player].value == 0:
@@ -318,6 +319,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
         trap_weights += ([ItemName.slow_trap] * self.multiworld.slow_trap_weight[self.player].value)
         trap_weights += ([ItemName.cutscene_trap] * self.multiworld.cutscene_trap_weight[self.player].value)
+        trap_weights += ([ItemName.reverse_trap] * self.multiworld.reverse_trap_weight[self.player].value)
         trap_weights += ([ItemName.pong_trap] * self.multiworld.pong_trap_weight[self.player].value)
 
         junk_count += extra_junk_count

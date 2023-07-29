@@ -58,6 +58,7 @@ darkness_trap   = "Darkness Trap"
 ice_trap        = "Ice Trap"
 slow_trap       = "Slow Trap"
 cutscene_trap   = "Cutscene Trap"
+reverse_trap    = "Reverse Trap"
 
 pong_trap       = "Pong Trap"
 
