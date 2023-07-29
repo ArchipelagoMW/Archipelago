@@ -132,9 +132,6 @@ class GSTLAWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
-        #for testing in case delta patch fails
-        rom.write_to_file('C:/Users/Gebruiker/Desktop/GameDev/GsTlaAp/GsArchipelago/output/gstla_patched.gba')
-
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]
