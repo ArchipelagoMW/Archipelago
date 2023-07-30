@@ -34,69 +34,42 @@ tunic_regions: Dict[str, Set[str]] = {
 }
 
 
+
 def set_region_rules(multiworld: MultiWorld, player: int):
+    laurels = "Hero's Laurels"
+    grapple = "Magic Orb"
+    lantern = "Lantern"
+    mask = "Scavenger Mask"
+    prayer = "Pages 24-25 (Prayer)"
+    holy_cross = "Pages 42-43 (Holy Cross)"
+    red_hexagon = "Red Hexagon"
+    green_hexagon = "Green Hexagon"
+    blue_hexagon = "Blue Hexagon"
 
-    laurels = lambda state: state.has("Hero's Laurels", player)
-    grapple = lambda state: state.has("Magic Orb", player)
-    lantern = lambda state: state.has("Lantern", player)
-    mask = lambda state: state.has("Scavenger Mask", player)
-    prayer = lambda state: state.has("Pages 24-25 (Prayer)", player)
-    holy_cross = lambda state: state.has("Pages 42-43 (Holy Cross)", player)
-    red_hexagon = lambda state: state.has("Red Hexagon", player)
-    blue_hexagon = lambda state: state.has("Blue Hexagon", player)
-    green_hexagon = lambda state: state.has("Green Hexagon", player)
+    ability_shuffle = multiworld.ability_shuffling[player].value
 
-    for entrance in multiworld.get_region("Overworld", player).entrances:
-        if entrance.name == "Overworld Holy Cross" and multiworld.ability_shuffling[player].value:
-            entrance.access_rule = holy_cross
-        if entrance.name == "Dark Tomb":
-            entrance.access_rule = lantern
-        if entrance.name == "West Garden":
-            entrance.access_rule = laurels
-        if entrance.name == "Beneath the Vault":
-            entrance.access_rule = lantern and prayer if multiworld.ability_shuffling[player].value else lantern
+    if ability_shuffle:
+        multiworld.get_entrance("Overworld -> Overworld Holy Cross", player).access_rule = lambda state: state.has(holy_cross, player)
+        multiworld.get_entrance("Library -> Ruined Atoll", player).access_rule = lambda state: state.has(prayer, player)
+        multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player) and state.has(prayer, player)
+        multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = lambda state: state.has(grapple, player) and state.has(prayer, player)
+        multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player) and state.has(prayer, player)
+        multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: (state.has(grapple, player) or state.has(laurels, player)) and state.has(prayer, player)
+        multiworld.get_entrance("Overworld -> Boss Arena", player).access_rule = lambda state: state.has(prayer, player) and state.has(red_hexagon, player) and state.has(green_hexagon, player) and state.has(blue_hexagon, player)
+    else:
+        multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
+        multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = lambda state: state.has(grapple, player)
+        multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player)
+        multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: state.has(grapple, player) or state.has(laurels, player)
+        multiworld.get_entrance("Overworld -> Boss Arena", player).access_rule = lambda state: state.has(red_hexagon, player) and state.has(green_hexagon, player) and state.has(blue_hexagon, player)
 
-    for entrance in multiworld.get_region("East Forest", player).entrances:
-        if entrance.name == "Eastern Vault Fortress":
-            entrance.access_rule = laurels
+    multiworld.get_entrance("Overworld -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Overworld -> West Garden", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("Overworld -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("East Forest -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("Bottom of the Well -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("West Garden -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Eastern Vault Fortress -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = lambda state: state.has(mask, player)
 
-    for entrance in multiworld.get_region("Bottom of the Well", player).entrances:
-        if entrance.name == "Dark Tomb":
-            entrance.access_rule = lantern
-
-    for entrance in multiworld.get_region("West Garden", player).entrances:
-        if entrance.name == "Dark Tomb":
-            entrance.access_rule = lantern
-        if entrance.name == "Overworld":
-            entrance.access_rule = laurels
-
-    for entrance in multiworld.get_region("Ruined Atoll", player).entrances:
-        if entrance.name == "Library":
-            entrance.access_rule = (grapple or laurels) and prayer if multiworld.ability_shuffling[player].value \
-                else (grapple or laurels)
-
-    for entrance in multiworld.get_region("Library", player).entrances:
-        if multiworld.ability_shuffling[player].value:
-            entrance.access_rule = prayer
-
-    for entrance in multiworld.get_region("Eastern Vault Fortress", player).entrances:
-        if entrance.name == "Beneath the Vault":
-            entrance.access_rule = lantern
-
-    for entrance in multiworld.get_region("Quarry", player).entrances:
-        if entrance.name == "Lower Quarry":
-            entrance.access_rule = mask
-
-    for entrance in multiworld.get_region("Lower Quarry", player).entrances:
-        if entrance.name == "Rooted Ziggurat":
-            entrance.access_rule = (grapple and prayer) if multiworld.ability_shuffling[player].value else grapple
-
-    for entrance in multiworld.get_region("Swamp", player).entrances:
-        if entrance.name == "Cathedral":
-            entrance.access_rule = (laurels and prayer) if multiworld.ability_shuffling[player].value else laurels
-
-    for entrance in multiworld.get_region("Boss Arena", player).entrances:
-        entrance.access_rule = (prayer and red_hexagon and blue_hexagon and green_hexagon) if \
-            multiworld.ability_shuffling[player].value \
-            else (red_hexagon and blue_hexagon and green_hexagon)
 
