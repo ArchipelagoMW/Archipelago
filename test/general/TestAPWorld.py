@@ -21,6 +21,7 @@ class TestAPWorld(unittest.TestCase):
                             for game, world in AutoWorldRegister.world_types.items() if game in non_apworlds]
         test_worlds = {game: world for game, world in AutoWorldRegister.world_types.items() if game not in non_apworlds}
         # clear world_types so the apworlds are registerable
+        world_types = AutoWorldRegister.world_types.copy()
         AutoWorldRegister.world_types = {}
         for game_name, world_type in test_worlds.items():
             directory = Path(os.path.dirname(world_type.__file__))
@@ -56,3 +57,4 @@ class TestAPWorld(unittest.TestCase):
             shutil.copytree(copy_path, directory)
             shutil.rmtree(copy_path)
             os.remove(apworld_path)
+        AutoWorldRegister.world_types = world_types
