@@ -23120,6 +23120,9 @@
         <Host Subject="_Target"/>
         <Sound value="AP_ShadowFuryStrikLaunch"/>
     </CActorSound>
+    <CActorSplat id="AP_DarkTemplarShadowFuryCursorSplat" parent="ProtossCursorSplat" abil="AP_DarkTemplarShadowFury">
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
     <CActorSound id="AP_VoidHighTemplarMindBlastImpactSound" parent="SoundOneShot">
         <On Terms="Effect.AP_VoidHighTemplarMindBlastDamage.Start; At Target" Send="Create"/>
         <Sound value="AP_HighTemplar_MindBlast_Impact"/>
