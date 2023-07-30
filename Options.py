@@ -789,7 +789,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
-    def __getitem__(self, item: str):
+    def __getitem__(self, item: str) -> typing.Any:
         return self.value.__getitem__(item)
 
     def __iter__(self) -> typing.Iterator[str]:
