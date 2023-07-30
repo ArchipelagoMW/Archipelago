@@ -158,7 +158,7 @@ remote_item_giver = [
     0x00000000,  # NOP
     0x10000003,  # B     [forward 0x03]
     0x2409000F,  # ADDIU T1, R0, 0x000F
-    0x080FF4D1,  # J	 0x803FD344
+    0x080FF864,  # J	 0x803FE190
     0xA169FFFF,  # SB	 T1, 0xFFFF (T3)
     # DeathLink-specific checks
     0x3C0B8039,  # LUI   T3, 0x8039
@@ -313,9 +313,10 @@ overlay_modifiers = [
     0x03200008,  # JR    T9
     0xAF2A0194,  # SW    T2, 0x0194 (T9)
     # Fix to allow placing both bomb components at a cracked wall at once while having multiple copies of each, and
-    # prevent placing them at the downstairs crack altogether until the seal is removed
+    # prevent placing them at the downstairs crack altogether until the seal is removed. Also enables placing both in
+    # one interaction.
     0x24090024,  # ADDIU T1, R0, 0x0024
-    0x1509000F,  # BNE   T0, T1, [forward 0x0F]
+    0x15090012,  # BNE   T0, T1, [forward 0x12]
     0x240A0040,  # ADDIU T2, R0, 0x0040
     0x240BC338,  # ADDIU T3, R0, 0xC338
     0x240CC3D4,  # ADDIU T4, R0, 0xC3D4
@@ -330,6 +331,9 @@ overlay_modifiers = [
     0xA72D03A2,  # SH    T5, 0x03A2 (T9)
     0xA32A03CB,  # SB    T2, 0x03CB (T9)
     0xA72D03CE,  # SH    T5, 0x03CE (T9)
+    0xA32A05CF,  # SB    T2, 0x05CF (T9)
+    0x240EE074,  # ADDIU T6, R0, 0xE074
+    0xA72E05D2,  # SH    T6, 0x05D2 (T9)
     0x03200008,  # JR    T9
     # Disable the costume and Hard Mode flag checks so that pressing Up on the Player Select screen will always allow
     # the characters' alternate costumes to be used as well as Hard Mode being selectable without creating save data.
@@ -521,13 +525,15 @@ map_data_modifiers = [
     0x00000000,  # NOP
     # Tunnel (replaces 1 invisible Cure Ampoule)
     0x24090007,  # ADDIU T1, R0, 0x0007
-    0x15090008,  # BNE   T0, T1, [forward 0x08]
+    0x1509000A,  # BNE   T0, T1, [forward 0x0A]
     0x340A0001,  # ORI   T2, R0, 0x0001         <- Twin arrow signs
     0xA44A0268,  # SH    T2, 0x0268 (V0)
     0x340A0001,  # ORI   T2, R0, 0x0001         <- Bucket
     0xA44A0258,  # SH    T2, 0x0258 (V0)
+    0x240B0005,  # ADDIU T3, R0, 0x0005
+    0xA04B0150,  # SB    T3, 0x0150 (V0)
     0x24090011,  # ADDIU T1, R0, 0x0011
-    0x1139FFB4,  # BEQ   T1, T9, [backward 0x4C]
+    0x1139FFB2,  # BEQ   T1, T9, [backward 0x4E]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center factory floor (replaces 1 moneybag, 1 jewel, and gives every lizard man coffin item a unique flag)
@@ -570,7 +576,7 @@ map_data_modifiers = [
     0xAC4C0A88,  # SW    T4, 0x0AE8 (V0)
     0xAC4D0A8C,  # SW    T5, 0x0AEC (V0)
     0x24090001,  # ADDIU T1, R0, 0x0001
-    0x1139FF8B,  # BEQ   T1, T9, [backward 0x73]
+    0x1139FF89,  # BEQ   T1, T9, [backward 0x75]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Keep outside (replaces 1 invisible Healing Kit and gives both invisible Healing Kits pickup flags)
@@ -583,7 +589,7 @@ map_data_modifiers = [
     0xA44A004A,  # SH    T2, 0x004A (V0)
     0xA44B005A,  # SH    T3, 0x005A (V0)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x1139FF7F,  # BEQ   T0, T1, [backward 0x70]
+    0x1139FF7D,  # BEQ   T0, T1, [backward 0x72]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Wall main area (sets a flag for the freestanding Holy Water if applicable and the "beginning of stage"
@@ -593,7 +599,7 @@ map_data_modifiers = [
     0x24090004,  # ADDIU T1, R0, 0x0004
     0xA049009B,  # SB    T1, 0x009B (V0)
     0x24090010,  # ADDIU T1, R0, 0x0010
-    0x1139FF77,  # BEQ   T1, T9, [backward 0x89]
+    0x1139FF75,  # BEQ   T1, T9, [backward 0x8B]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Villa vampire crypt (sets the "beginning of stage" state if entered from the rear, as well as the "can warp here"
@@ -605,14 +611,14 @@ map_data_modifiers = [
     0x356B0001,  # ORI   T3, T3, 0x0001
     0xA14B9C1C,  # SB    T3, 0x9C1C (T2)
     0x24090003,  # ADDIU T1, R0, 0x0003
-    0x1139FF6D,  # BEQ   T1, T9, [backward 0x94]
+    0x1139FF6B,  # BEQ   T1, T9, [backward 0x96]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Underground Waterway (sets the "beginning of stage" state if entered from the rear)
     0x24090008,  # ADDIU T1, R0, 0x0008
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090001,  # ADDIU T1, R0, 0x0001
-    0x1139FF67,  # BEQ   T1, T9, [backward 0x9B]
+    0x1139FF65,  # BEQ   T1, T9, [backward 0x9D]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center elevator top (sets the "beginning of stage" state if entered from either rear, as well as the "can
@@ -624,30 +630,30 @@ map_data_modifiers = [
     0x356B0002,  # ORI   T3, T3, 0x0002
     0xA14B9C1C,  # SB    T3, 0x9C1C (T2)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x1139FF5D,  # BEQ   T1, T9, [backward 0xA6]
-    0x24090003,  # ADDIU T1, R0, 0x0003
     0x1139FF5B,  # BEQ   T1, T9, [backward 0xA8]
+    0x24090003,  # ADDIU T1, R0, 0x0003
+    0x1139FF59,  # BEQ   T1, T9, [backward 0xAA]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Execution (sets the "beginning of stage" state if entered from the rear)
     0x24090010,  # ADDIU T1, R0, 0x0010
     0x15090004,  # BNE   T0, T1, [forward 0x10]
     0x24090012,  # ADDIU T1, R0, 0x0012
-    0x1139FF55,  # BEQ   T1, T9, [backward 0xAB]
+    0x1139FF53,  # BEQ   T1, T9, [backward 0xAD]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Sorcery (sets the "beginning of stage" state if entered from the rear)
     0x24090011,  # ADDIU T1, R0, 0x0011
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090013,  # ADDIU T1, R0, 0x0013
-    0x1139FF4F,  # BEQ   T1, T9, [backward 0xB6]
+    0x1139FF4D,  # BEQ   T1, T9, [backward 0xB8]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Tower of Science (sets the "beginning of stage" state if entered from the rear)
     0x24090012,  # ADDIU T1, R0, 0x0012
     0x15090004,  # BNE   T0, T1, [forward 0x04]
     0x24090004,  # ADDIU T1, R0, 0x0004
-    0x1139FF49,  # BEQ   T1, T9, [backward 0xBD]
+    0x1139FF47,  # BEQ   T1, T9, [backward 0xBF]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Room of Clocks (changes 2 candle settings if applicable and sets the "begging of stage" state if spawning at end)
@@ -658,7 +664,7 @@ map_data_modifiers = [
     0xA0490059,  # SB    T1, 0x0059 (V0)
     0xA04A0069,  # SB    T2, 0x0069 (V0)
     0x24090014,  # ADDIU T1, R0, 0x0014
-    0x1139FF3F,  # BEQ   T1, T9, [backward 0xC8]
+    0x1139FF3D,  # BEQ   T1, T9, [backward 0xCA]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Center basement (changes 2 non-pickup-able Mandragoras into 2 real items and moves the torture shelf item
@@ -684,7 +690,7 @@ map_data_modifiers = [
     0x03E00008,  # JR    RA
     # Castle Center nitro area (changes 2 non-pickup-able Nitros into 2 real items)
     0x2409000E,  # ADDIU T1, R0, 0x000E
-    0x15090013,  # BNE   T0, T1, [forward 0x13]
+    0x15090015,  # BNE   T0, T1, [forward 0x15]
     0x240900C0,  # ADDIU T1, R0, 0x00C0
     0x240A00CE,  # ADDIU T2, R0, 0x00CE
     0xA0490471,  # SB    T1, 0x0471 (V0)
@@ -708,7 +714,7 @@ map_data_modifiers = [
     0x03E00008,  # JR    RA
     # Fan meeting room (sets "beginning of stage" flag)
     0x24090019,  # ADDIU T1, R0, 0x0019
-    0x1109FF11,  # BEQ   T1, T9, [backward 0xF7]
+    0x1109FF0F,  # BEQ   T1, T9, [backward 0xF9]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
 ]
@@ -802,7 +808,7 @@ dracula_door_text_redirector = [
     0x151F0003,  # BNE   T0, RA, [forward 0x03]
     0x00000000,  # NOP
     0x3C028040,  # LUI   V0, 0x8040
-    0x2442CC40,  # ADDIU V0, V0, 0xCC40
+    0x2442CC48,  # ADDIU V0, V0, 0xCC48
     0x03E00008   # JR    RA
 ]
 
@@ -1389,7 +1395,7 @@ prev_subweapon_fall_checker = [
 prev_subweapon_dropper = [
     # Spawns a pickup actor of the sub-weapon the player had before picking up a new one behind them at their current
     # position like in other CVs. This will enable them to pick it back up again if they still want it.
-    # Courtesy of B_squo; see derp.c in the src folder for the C source code.
+    # Courtesy of Moisés; see derp.c in the src folder for the C source code.
     0x27BDFFC8,
     0xAFBF001C,
     0xAFA40038,
@@ -1408,7 +1414,7 @@ prev_subweapon_dropper = [
     0x3084FFFF,
     0x44822000,
     0x3C018040,
-    0xC428D330,
+    0xC428D370,
     0x468021A0,
     0x3C048035,
     0x848409DE,
@@ -1419,7 +1425,7 @@ prev_subweapon_dropper = [
     0xE7AA0024,
     0x44828000,
     0x3C018040,
-    0xC424D334,
+    0xC424D374,
     0x468084A0,
     0x27A40024,
     0x00802825,
@@ -1448,26 +1454,36 @@ prev_subweapon_dropper = [
     0x27BD0038,
     0x03E00008,
     0x00000000,
+    0x3C068040,
+    0x24C6D368,
+    0x90CE0000,
+    0x27BDFFE8,
+    0xAFBF0014,
+    0x15C00027,
+    0x00802825,
+    0x240400DB,
+    0x0C0006B4,
+    0xAFA50018,
+    0x44802000,
     0x3C038040,
-    0x2463D328,
-    0x906E0000,
-    0x3C058040,
-    0x3C018035,
-    0x15C0001D,
-    0x24A5D324,
-    0xC42409D4,
-    0x3C01800D,
-    0xC4267B98,
+    0x2463D364,
+    0x3C068040,
+    0x24C6D368,
+    0x8FA50018,
+    0x1040000A,
+    0xE4640000,
+    0x8C4F0024,
     0x3C013F80,
-    0x44815000,
-    0x46062200,
-    0x3C058040,
-    0x24A5D324,
+    0x44814000,
+    0xC5E60044,
+    0xC4700000,
+    0x3C018040,
+    0x46083280,
+    0x460A8480,
+    0xE432D364,
+    0x94A20038,
     0x2401000F,
-    0x460A4400,
-    0x240F0001,
-    0xE4B00000,
-    0x94820038,
+    0x24180001,
     0x10410006,
     0x24010010,
     0x10410004,
@@ -1476,45 +1492,51 @@ prev_subweapon_dropper = [
     0x24010030,
     0x14410005,
     0x3C014040,
-    0x44812000,
-    0xC4B20000,
-    0x46049180,
-    0xE4A60000,
-    0xA06F0000,
-    0x03E00008,
+    0x44813000,
+    0xC4640000,
+    0x46062200,
+    0xE4680000,
+    0xA0D80000,
+    0x10000023,
     0x24020001,
-    0xC4800068,
-    0xC4A80000,
-    0x3C058039,
-    0x24A59BD0,
-    0x4608003E,
+    0x3C038040,
+    0x2463D364,
+    0xC4600000,
+    0xC4A20068,
+    0x3C038039,
+    0x24639BD0,
+    0x4600103E,
     0x00001025,
-    0x45000005,
+    0x45000006,
     0x00000000,
-    0x44805000,
-    0xA0600000,
-    0x03E00008,
-    0xE4AA0000,
-    0x3C058039,
-    0x24A59BD0,
+    0x44808000,
+    0xE4A00068,
+    0xA0C00000,
+    0x10000014,
+    0xE4700000,
+    0x3C038039,
+    0x24639BD0,
     0x3C018019,
-    0xC430C870,
-    0xC4A20000,
-    0x4610103C,
+    0xC42AC870,
+    0xC4600000,
+    0x460A003C,
     0x00000000,
     0x45000006,
     0x3C018019,
     0xC432C878,
-    0x46121100,
-    0xE4A40000,
-    0xC4A20000,
-    0xC4800068,
-    0x46020181,
+    0x46120100,
+    0xE4640000,
+    0xC4600000,
+    0xC4A20068,
+    0x46001181,
     0x24020001,
-    0xE4860068,
-    0xC4880068,
-    0xE4880034,
+    0xE4A60068,
+    0xC4A80068,
+    0xE4A80034,
+    0x8FBF0014,
+    0x27BD0018,
     0x03E00008,
+    0x00000000,
     0x00000000,
     0x00000000,
     0x00000000,
@@ -1610,7 +1632,7 @@ countdown_number_displayer = [
     # Displays a number below the HUD clock of however many items are left to find in whichever stage the player is in.
     # Which number in the save file to display depends on which map the player is currently on. It can track either
     # items marked progression only or all locations in the stage.
-    # Courtesy of B_squo; see print_text_ovl.c in the src folder for the C source code.
+    # Courtesy of Moisés; see print_text_ovl.c in the src folder for the C source code.
     0x27BDFFD8,
     0xAFBF0024,
     0x00002025,
@@ -2049,17 +2071,26 @@ map_text_redirector = [
     0x0002FFFF,  # Dummy text string
     0x3C0B8039,  # LUI   T3, 0x8039
     0x91689EE1,  # LBU   T0, 0x9EE1 (T3)
-    0x11000006,  # BEQZ  T0,     [forward 0x06]
+    0x1100000F,  # BEQZ  T0,     [forward 0x0F]
     0x24090006,  # ADDIU T1, R0, 0x0006
     0x240A0002,  # ADDIU T2, R0, 0x0002
-    0x110A0003,  # BEQ   T0, T2, [forward 0x03]
+    0x110A000C,  # BEQ   T0, T2, [forward 0x0C]
     0x24090008,  # ADDIU T1, R0, 0x0008
+    0x240A0009,  # ADDIU T2, R0, 0x0009
+    0x110A0009,  # BEQ   T0, T2, [forward 0x09]
+    0x24090004,  # ADDIU T1, R0, 0x0004
+    0x240A000A,  # ADDIU T2, R0, 0x000A
+    0x110A0006,  # BEQ   T0, T2, [forward 0x06]
+    0x24090001,  # ADDIU T1, R0, 0x0001
+    0x240A000C,  # ADDIU T2, R0, 0x000C
+    0x110A0003,  # BEQ   T0, T2, [forward 0x03]
+    0x2409000C,  # ADDIU T1, R0, 0x000C
     0x10000008,  # B     0x803FDB34
     0x00000000,  # NOP
-    0x15250004,  # BNE   T1, A1, [forward 0x04]
+    0x15250006,  # BNE   T1, A1, [forward 0x06]
     0x00000000,  # NOP
     0x3C04803F,  # LUI   A0, 0x803F
-    0x3484DAF0,  # ORI   A0, A0, 0xDAF0
+    0x3484DACC,  # ORI   A0, A0, 0xDACC
     0x24050000,  # ADDIU A1, R0, 0x0000
     0x0804B39F,  # J     0x8012CE7C
     0x00000000,  # NOP
@@ -2093,7 +2124,7 @@ map_text_redirector = [
     0x15250004,  # BNE   T1, A1, [forward 0x04]
     0x00000000,  # NOP
     0x3C04803F,  # LUI   A0, 0x803F
-    0x3484DAF0,  # ORI   A0, A0, 0xDAF0
+    0x3484DACC,  # ORI   A0, A0, 0xDACC
     0x24050000,  # ADDIU A1, R0, 0x0000
     0x0804B39F   # J     0x8012CE7C
 ]
@@ -2114,38 +2145,45 @@ special_descriptions_redirector = [
     0x0804B39F   # J     0x8012CE7C
 ]
 
-cw_villa_intro_cs_player = [
-    # Plays the Castle Wall or Villa intro cutscene after transitioning to a different map if the map being transitioned
-    # to is the start of their levels respectively. Gets around the fact that they have to be set on the previous
-    # loading zone for them to play normally.
+forest_cw_villa_intro_cs_player = [
+    # Plays the Forest, Castle Wall, or Villa intro cutscene after transitioning to a different map if the map being
+    # transitioned to is the start of their levels respectively. Gets around the fact that they have to be set on the
+    # previous loading zone for them to play normally.
     0x3C088039,  # LUI   T0, 0x8039
-    0x8D099EE0,  # LW    T0, 0x9EE0 (T0)
+    0x8D099EE0,  # LW    T1, 0x9EE0 (T0)
+    0x1120000B,  # BEQZ  T1  T1, [forward 0x0B]
+    0x240B0000,  # ADDIU T3, R0, 0x0000
     0x3C0A0002,  # LUI   T2, 0x0002
     0x112A0008,  # BEQ   T1, T2, [forward 0x08]
-    0x240B0004,  # ADDIU T3, R0, 0x0004
+    0x240B0007,  # ADDIU T3, R0, 0x0007
     0x254A0007,  # ADDIU T2, T2, 0x0007
     0x112A0005,  # BEQ   T1, T2, [forward 0x05]
     0x3C0A0003,  # LUI   T2, 0x0003
     0x112A0003,  # BEQ   T1, T2, [forward 0x03]
-    0x240B0000,  # ADDIU T3, R0, 0x0000
+    0x240B0003,  # ADDIU T3, R0, 0x0003
     0x08005FAA,  # J     0x80017EA8
     0x00000000,  # NOP
     0x010B6021,  # ADDU  T4, T0, T3
-    0x918D9C0B,  # LBU   T5, 0x9C0B (T4)
+    0x918D9C08,  # LBU   T5, 0x9C08 (T4)
     0x31AF0001,  # ANDI  T7, T5, 0x0001
-    0x15E00004,  # BNEZ  T7,     [forward 0x04]
+    0x15E00009,  # BNEZ  T7,     [forward 0x09]
     0x240E0009,  # ADDIU T6, R0, 0x0009
-    0x55600001,  # BNEZL T3,     [forward 0x01]
+    0x3C180003,  # LUI   T8, 0x0003
+    0x57090001,  # BNEL  T8, T1, [forward 0x01]
     0x240E0004,  # ADDIU T6, R0, 0x0004
+    0x15200003,  # BNEZ  T1,     [forward 0x03]
+    0x240F0001,  # ADDIU T7, R0, 0x0001
+    0xA18F9C08,  # SB    T7, 0x9C08 (T4)
+    0x240E003C,  # ADDIU T6, R0, 0x003C
     0xA10E9EFF,  # SB    T6, 0x9EFF (T0)
     0x08005FAA   # J     0x80017EA8
 ]
 
-map_id_resetter = [
+map_id_refresher = [
     # After transitioning to a different map, if this detects the map ID being transitioned to as FF, it will write back
-    # the past map ID so that the map will reset. Useful for getting around a bug wherein the camera fixes in place if
-    # you enter a loading zone that doesn't actually change the map, which can happen in a seed that gives you any
-    # character tower stage at the very start.
+    # the past map ID so that the map will reset. Useful for thngs like getting around a bug wherein the camera fixes in
+    # place if you enter a loading zone that doesn't actually change the map, which can happen in a seed that gives you
+    # any character tower stage at the very start.
     0x240800FF,  # ADDIU T0, R0, 0x00FF
     0x110E0003,  # BEQ   T0, T6, [forward 0x03]
     0x00000000,  # NOP
@@ -2154,4 +2192,240 @@ map_id_resetter = [
     0x904961D9,  # LBU   T1, 0x61D9
     0xA0496429,  # SB    T1, 0x6429
     0x03E00008   # JR    RA
+]
+
+character_changer = [
+    # Changes the character being controlled if the player is holding L while loading into a map by swapping the
+    # character ID.
+    0x3C08800D,  # LUI   T0, 0x800D
+    0x910B5E21,  # LBU   T3, 0x5E21 (T0)
+    0x31680020,  # ANDI  T0, T3, 0x0020
+    0x3C0A8039,  # LUI   T2, 0x8039
+    0x1100000B,  # BEQZ  T0,     [forward 0x0B]
+    0x91499C3D,  # LBU   T1, 0x9C3D (T2)
+    0x11200005,  # BEQZ  T1,     [forward 0x05]
+    0x24080000,  # ADDIU T0, R0, 0x0000
+    0xA1489C3D,  # SB    T0, 0x9C3D (T2)
+    0x25080001,  # ADDIU T0, T0, 0x0001
+    0xA1489BC2,  # SB    T0, 0x9BC2 (T2)
+    0x10000004,  # B             [forward 0x04]
+    0x24080001,  # ADDIU T0, R0, 0x0001
+    0xA1489C3D,  # SB    T0, 0x9C3D (T2)
+    0x25080001,  # ADDIU T0, T0, 0x0001
+    0xA1489BC2,  # SB    T0, 0x9BC2 (T2)
+    # Changes the alternate costume variables if the player is holding C-up.
+    0x31680008,  # ANDI  T0, T3, 0x0008
+    0x11000009,  # BEQZ  T0,     [forward 0x09]
+    0x91499C24,  # LBU   T1, 0x9C24 (T2)
+    0x312B0040,  # ANDI  T3, T1, 0x0040
+    0x2528FFC0,  # ADDIU T0, T1, 0xFFC0
+    0x15600003,  # BNEZ  T3,     [forward 0x03]
+    0x240C0000,  # ADDIU T4, R0, 0x0000
+    0x25280040,  # ADDIU T0, T1, 0x0040
+    0x240C0001,  # ADDIU T4, R0, 0x0001
+    0xA1489C24,  # SB    T0, 0x9C24 (T2)
+    0xA14C9CEE,  # SB    T4, 0x9CEE (T2)
+    0x080062AA,  # J     0x80018AA8
+    0x00000000,  # NOP
+    # Plays the attack sound of the character being changed into to indicate the change was successful.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91099BC2,  # LBU   T1, 0x9BC2 (T0)
+    0xA1009BC2,  # SB    R0, 0x9BC2 (T0)
+    0xA1009BC1,  # SB    R0, 0x9BC1 (T0)
+    0x11200006,  # BEQZ  T1,     [forward 0x06]
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0x240402F6,  # ADDIU A0, R0, 0x02F6
+    0x55200001,  # BNEZL T1,     [forward 0x01]
+    0x240402F8,  # ADDIU A0, R0, 0x02F8
+    0x08004FAB,  # J     0x80013EAC
+    0x00000000,  # NOP
+    0x03E00008   # JR    RA
+]
+
+panther_dash = [
+    # Changes various movement parameters when holding C-right so the player will move way faster.
+    # Increases movement speed and speeds up the running animation.
+    0x3C08800D,  # LUI   T0, 0x800D
+    0x91085E21,  # LBU   T0, 0x5E21 (T0)
+    0x31080001,  # ANDI  T0, T0, 0x0001
+    0x24093FEA,  # ADDIU T1, R0, 0x3FEA
+    0x11000004,  # BEQZ  T0,     [forward 0x04]
+    0x240B0010,  # ADDIU T3, R0, 0x0010
+    0x3C073F20,  # LUI   A3, 0x3F20
+    0x240940AA,  # ADDIU T1, R0, 0x40AA
+    0x240B000A,  # ADDIU T3, R0, 0x000A
+    0x3C0C8035,  # LUI   T4, 0x8035
+    0xA18B07AE,  # SB    T3, 0x07AE (T4)
+    0xA18B07C2,  # SB    T3, 0x07C2 (T4)
+    0x3C0A8034,  # LUI   T2, 0x8034
+    0x03200008,  # JR    T9
+    0xA5492BD8,  # SH    T1, 0x2BD8 (T2)
+    0x00000000,  # NOP
+    # Increases the turning speed so that handling is better.
+    0x3C08800D,  # LUI   T0, 0x800D
+    0x91085E21,  # LBU   T0, 0x5E21 (T0)
+    0x31080001,  # ANDI  T0, T0, 0x0001
+    0x11000002,  # BEQZ  T0,     [forward 0x02]
+    0x240A00D9,  # ADDIU T2, R0, 0x00D9
+    0x240A00F0,  # ADDIU T2, R0, 0x00F0
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916B9C3D,  # LBU   T3, 0x9C3D (T3)
+    0x11600003,  # BEQZ  T3,     [forward 0x03]
+    0xD428DD58,  # LDC1  F8, 0xDD58 (AT)
+    0x03E00008,  # JR    RA
+    0xA02ADD59,  # SB    T2, 0xDD59 (AT)
+    0xD428D798,  # LDC1  F8, 0xD798 (AT)
+    0x03E00008,  # JR    RA
+    0xA02AD799,  # SB    T2, 0xD799 (AT)
+    0x00000000,  # NOP
+    # Increases crouch-walking x and z speed.
+    0x3C08800D,  # LUI   T0, 0x800D
+    0x91085E21,  # LBU   T0, 0x5E21 (T0)
+    0x31080001,  # ANDI  T0, T0, 0x0001
+    0x11000002,  # BEQZ  T0,     [forward 0x02]
+    0x240A00C5,  # ADDIU T2, R0, 0x00C5
+    0x240A00F8,  # ADDIU T2, R0, 0x00F8
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x916B9C3D,  # LBU   T3, 0x9C3D (T3)
+    0x15600005,  # BNEZ  T3,     [forward 0x05]
+    0x00000000,  # NOP
+    0xA02AD801,  # SB    T2, 0xD801 (AT)
+    0xA02AD809,  # SB    T2, 0xD809 (AT)
+    0x03E00008,  # JR    RA
+    0xD430D800,  # LDC1  F16, 0xD800 (AT)
+    0xA02ADDC1,  # SB    T2, 0xDDC1 (AT)
+    0xA02ADDC9,  # SB    T2, 0xDDC9 (AT)
+    0x03E00008,  # JR    RA
+    0xD430DDC0   # LDC1  F16, 0xDDC0 (AT)
+]
+
+panther_jump_preventer = [
+    # Optional hack to prevent jumping while moving at the increased panther dash speed as a way to prevent logic
+    # sequence breaks that would otherwise be impossible without it. Such sequence breaks are never considered in logic
+    # either way.
+
+    # Decreases a "can running jump" value by 1 per frame unless it's at 0. When the player lets go of C-right, their
+    # running speed should have returned to a normal amount by the time it hits 0.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91099BC1,  # LBU   T1, 0x9BC1 (T0)
+    0x11200002,  # BEQZ  T1,     [forward 0x02]
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0xA1099BC1,  # SB    T1, 0x9BC1 (T0)
+    0x080FF413,  # J     0x803FD04C
+    0x00000000,  # NOP
+    # Increases the "can running jump" value by 2 per frame while panther dashing unless it's at 8 or higher, at which
+    # point the player should be at the max panther dash speed.
+    0x00074402,  # SRL   T0, A3, 16
+    0x29083F7F,  # SLTI  T0, T0, 0x3F7F
+    0x11000006,  # BEQZ  T0,     [forward 0x06]
+    0x3C098039,  # LUI   T1, 0x8039
+    0x912A9BC1,  # LBU   T2, 0x9BC1 (T1)
+    0x254A0002,  # ADDIU T2, T2, 0x0002
+    0x294B0008,  # SLTI  T3, T2, 0x0008
+    0x55600001,  # BNEZL T3,     [forward 0x01]
+    0xA12A9BC1,  # SB    T2, 0x9BC1 (T1)
+    0x03200008,  # JR    T9
+    0x00000000,  # NOP
+    # Makes running jumps only work while the "can running jump" value is at 0. Otherwise, their state won't change.
+    0x3C010001,  # LUI   AT, 0x0001
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089BC1,  # LBU   T0, 0x9BC1 (T0)
+    0x55000001,  # BNEZL T0,     [forward 0x01]
+    0x3C010000,  # LUI   AT, 0x0000
+    0x03E00008   # JR    RA
+]
+
+gondola_skipper = [
+    # Upon stepping on one of the gondolas in Tunnel to activate it, this will instantly teleport you to the other end
+    # of the gondola course depending on which one activated, skipping the entire 3-minute wait to get there.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x240900FF,  # ADDIU T1, R0, 0x00FF
+    0xA1099EE1,  # SB    T1, 0x9EE1 (T0)
+    0x31EA0020,  # ANDI  T2, T7, 0x0020
+    0x3C0C3080,  # LUI   T4, 0x3080
+    0x358C9700,  # ORI   T4, T4, 0x9700
+    0x154B0003,  # BNE   T2, T3, [forward 0x03]
+    0x24090002,  # ADDIU T1, R0, 0x0002
+    0x24090003,  # ADDIU T1, R0, 0x0003
+    0x3C0C7A00,  # LUI   T4, 0x7A00
+    0xA1099EE3,  # SB    T1, 0x9EE3 (T0)
+    0xAD0C9EE4,  # SW    T4, 0x9EE4 (T0)
+    0x3C0D0010,  # LUI   T5, 0x0010
+    0x25AD0010,  # ADDIU T5, T5, 0x0010
+    0xAD0D9EE8,  # SW    T5, 0x9EE8 (T0)
+    0x08063E68   # J     0x8018F9A0
+]
+
+mandragora_with_nitro_setter = [
+    # When setting a Nitro, if Mandragora is in the inventory too and the wall's "Mandragora set" flag is not set, this
+    # will automatically subtract a Mandragora from the inventory and set its flag so the wall can be blown up in just
+    # one interaction instead of two.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x81099EE1,  # LB    T1, 0x9EE1 (T0)
+    0x240A000C,  # ADDIU T2, R0, 0x000C
+    0x112A000E,  # BEQ   T1, T2, [forward 0x0E]
+    0x81099C18,  # LB    T1, 0x9C18 (T0)
+    0x31290002,  # ANDI  T1, T1, 0x0002
+    0x11200009,  # BEQZ  T1,     [forward 0x09]
+    0x91099C5D,  # LBU   T1, 0x9C5D (T0)
+    0x11200007,  # BEQZ  T1,     [forward 0x07]
+    0x910B9C1A,  # LBU   T3, 0x9C1A (T0)
+    0x316A0001,  # ANDI  T2, T3, 0x0001
+    0x15400004,  # BNEZ  T2,     [forward 0x04]
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0xA1099C5D,  # SB    T1, 0x9C5D (T0)
+    0x356B0001,  # ORI   T3, T3, 0x0001
+    0xA10B9C1A,  # SB    T3, 0x9C1A (T0)
+    0x08000512,  # J     0x80001448
+    0x00000000,  # NOP
+    0x810B9BF2,  # LB    T3, 0x9BF2 (T0)
+    0x31690040,  # ANDI  T1, T3, 0x0040
+    0x11200008,  # BEQZ  T1,     [forward 0x08]
+    0x91099C5D,  # LBU   T1, 0x9C5D (T0)
+    0x11200006,  # BEQZ  T1,     [forward 0x06]
+    0x316A0080,  # ANDI  T2, T3, 0x0080
+    0x15400004,  # BNEZ  T2, 0x803FE0E8
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0xA1099C5D,  # SB    T1, 0x9C5D (T0)
+    0x356B0080,  # ORI   T3, T3, 0x0080
+    0xA10B9BF2,  # SB    T3, 0x9BF2 (T0)
+    0x08000512   # J     0x80001448
+]
+
+ambience_silencer = [
+    # Silences all map-specific ambience when loading into a different map, so we don't have to live with, say, Tower of
+    # Science/Clock Tower machinery noises everywhere until either resetting, dying, or going into a map that is
+    # normally set up to disable said noises.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
+    0x24090012,  # ADDIU T1, R0, 0x0012
+    0x11090003,  # BEQ   T0, T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x3404818C,  # ORI   A0, R0, 0x818C
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x34048134,  # ORI   A0, R0, 0x8134
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x34048135,  # ORI   A0, R0, 0x8135
+    0x0C004FAB,  # JAL   0x80013EAC
+    0x34048136,  # ORI   A0, R0, 0x8136
+    0x08054987,  # J     0x8015261C
+    0x00000000,  # NOP
+    # Plays the fan ambience when loading into the fan meeting room if this detects the active character's cutscene flag
+    # here already being set.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91099EE1,  # LBU   T1, 0x9EE1 (T0)
+    0x240A0019,  # ADDIU T2, R0, 0x0019
+    0x152A000A,  # BNE   T1, T2, [forward 0x0A]
+    0x910B9BFE,  # LBU   T3, 0x9BFE (T0)
+    0x910C9C3D,  # LBU   T4, 0x9C3D (T0)
+    0x240D0001,  # ADDIU T5, R0, 0x0001
+    0x55800001,  # BNEZL T4,     [forward 0x01]
+    0x240D0002,  # ADDIU T5, R0, 0x0002
+    0x016D7024,  # AND   T6, T3, T5
+    0x11C00003,  # BEQZ  T6,     [forward 0x03]
+    0x00000000,  # NOP
+    0x0C0052B4,  # JAL   0x80014AD0
+    0x34040169,  # ORI   A0, R0, 0x0169
+    0x0805581C   # J     0x80156070
 ]

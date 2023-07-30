@@ -188,7 +188,7 @@ main_location_table = {
     LName.ccll_cwhall_cwflames:          LocationData(0xC64099, 0x10CCAF, RName.cc_upper),
     LName.ccll_heinrich:                 LocationData(0xC6409A, 0xBFC1C7, RName.cc_upper, "npc"),
     LName.ccia_nitro_crates:             LocationData(0xC6409B, 0x90FCE9, RName.cc_upper, "inv"),
-    LName.ccia_nitro_shelf_h:            LocationData(0xC6409C, 0xBFCBFB, RName.cc_upper),
+    LName.ccia_nitro_shelf_h:            LocationData(0xC6409C, 0xBFCC03, RName.cc_upper),
     LName.ccia_stairs_knight:            LocationData(0xC6409D, 0x90FE5C, RName.cc_upper, "inv"),
     LName.ccia_maids_vase:               LocationData(0xC6409E, 0x90FF1D, RName.cc_upper, "inv"),
     LName.ccia_maids_outer:              LocationData(0xC6409F, 0x10CCFF, RName.cc_upper),
@@ -200,9 +200,9 @@ main_location_table = {
     LName.ccia_inventions_round:         LocationData(0xC640A5, 0x90FBA7, RName.cc_upper, "inv"),
     LName.ccia_nitrohall_flamethrower:   LocationData(0xC640A6, 0x90FCDA, RName.cc_upper, "inv"),
     LName.ccia_nitrohall_torch:          LocationData(0xC640A7, 0x10CCD7, RName.cc_upper),
-    LName.ccia_nitro_shelf_i:            LocationData(0xC640A8, 0xBFCBF7, RName.cc_upper),
-    LName.ccb_mandrag_shelf_l:           LocationData(0xC640A9, 0xBFCBAB, RName.cc_torture_chamber),
-    LName.ccb_mandrag_shelf_r:           LocationData(0xC640AA, 0xBFCBA7, RName.cc_torture_chamber),
+    LName.ccia_nitro_shelf_i:            LocationData(0xC640A8, 0xBFCBFF, RName.cc_upper),
+    LName.ccb_mandrag_shelf_l:           LocationData(0xC640A9, 0xBFCBB3, RName.cc_torture_chamber),
+    LName.ccb_mandrag_shelf_r:           LocationData(0xC640AA, 0xBFCBAF, RName.cc_torture_chamber),
     LName.ccb_torture_rack:              LocationData(0xC640AB, 0x8985E5, RName.cc_torture_chamber, "inv"),
     LName.ccb_torture_rafters:           LocationData(0xC640AC, 0x8985D6, RName.cc_torture_chamber),
     LName.ccll_cwhall_wall:              LocationData(0xC640AD, 0x10CCB7, RName.cc_library),
@@ -250,7 +250,7 @@ main_location_table = {
     LName.ct_finalroom_platform: LocationData(0xC640D1, 0x10CEBB, RName.ct_end),
     # Castle Keep locations
     LName.ck_flame_l:     LocationData(0xC640D2, 0x9778C8, RName.ck_main, "inv"),
-    LName.ck_flame_r:     LocationData(0xC640D3, 0xBFCA5F, RName.ck_main, "inv"),
+    LName.ck_flame_r:     LocationData(0xC640D3, 0xBFCA67, RName.ck_main, "inv"),
     LName.ck_behind_drac: LocationData(0xC640D4, 0x10CE9B, RName.ck_main),
     LName.ck_cube:        LocationData(0xC640D5, 0x10CEA3, RName.ck_main)
 }
@@ -262,10 +262,10 @@ carrie_only_location_table = {
 
 cc_lizard_generator_table = {
     LName.ccff_lizard_coffin_nfr: LocationData(0xC640D8, 0x8C450A, RName.cc_lower),
-    LName.ccff_lizard_coffin_nmr: LocationData(0xC640D9, 0xBFC9BB, RName.cc_lower),
-    LName.ccff_lizard_coffin_nml: LocationData(0xC640DA, 0xBFC9BF, RName.cc_lower),
-    LName.ccff_lizard_coffin_nfl: LocationData(0xC640DB, 0xBFC9FF, RName.cc_lower),
-    LName.ccff_lizard_coffin_fl:  LocationData(0xC640DC, 0xBFC9FB, RName.cc_lower),
+    LName.ccff_lizard_coffin_nmr: LocationData(0xC640D9, 0xBFC9C3, RName.cc_lower),
+    LName.ccff_lizard_coffin_nml: LocationData(0xC640DA, 0xBFC9C7, RName.cc_lower),
+    LName.ccff_lizard_coffin_nfl: LocationData(0xC640DB, 0xBFCA07, RName.cc_lower),
+    LName.ccff_lizard_coffin_fl:  LocationData(0xC640DC, 0xBFCA03, RName.cc_lower),
     LName.ccff_lizard_coffin_fr:  LocationData(0xC640DD, 0x8C44F5, RName.cc_lower)
 }
 

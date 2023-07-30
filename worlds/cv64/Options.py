@@ -258,10 +258,17 @@ class DisableTimeRestrictions(Toggle):
     display_name = "Disable Time Requirements"
 
 
-class SkipWaterwayPlatforms(Toggle):
+class SkipGondolas(Toggle):
+    """Makes jumping on and activating a gondola in Tunnel instantly teleport you to the other station, thereby skipping
+    the entire three-minute wait to ride the gondolas. The item normally at the gondola transfer point will be moved to
+    instead be near the red gondola at its station."""
+    display_name = "Skip Gondolas"
+
+
+class SkipBrickPlatforms(Toggle):
     """Opens the door to the third switch in Underground Waterway from the start so that the jumping across floating
     brick platforms won't have to be done."""
-    display_name = "Skip Waterway Platforms"
+    display_name = "Skip Brick Platforms"
 
 
 class Countdown(Choice):
@@ -271,6 +278,18 @@ class Countdown(Choice):
     option_none = 0
     option_majors = 1
     option_all_locations = 2
+    default = 0
+
+
+class PantherDash(Choice):
+    """Hold C-right at any time to sprint way faster. Any sequence breaks that might be possible with it are NOT
+    considered in logic on any setting and any boss fights with boss health meters, if started, are expected to be
+    finished before leaving their arenas if Dracula's Condition is bosses. Jumpless will prevent jumping while moving at
+    the increased speed to make it impossible to cheat logic with it."""
+    display_name = "Panther Dash"
+    option_off = 0
+    option_on = 1
+    option_jumpless = 2
     default = 0
 
 
@@ -325,8 +344,10 @@ cv64_options: Dict[str, Option] = {
     "invisible_items": InvisibleItems,
     "drop_previous_sub_weapon": DropPreviousSubWeapon,
     "disable_time_restrictions": DisableTimeRestrictions,
-    "skip_waterway_platforms": SkipWaterwayPlatforms,
+    "skip_gondolas": SkipGondolas,
+    "skip_brick_platforms": SkipBrickPlatforms,
     "countdown": Countdown,
+    "panther_dash": PantherDash,
     "background_music": BackgroundMusic,
     "map_lighting": MapLighting,
     "death_link": DeathLink,

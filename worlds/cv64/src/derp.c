@@ -1,4 +1,4 @@
-// Written by B_squo
+// Written by Moisés
 #include "include/game/module.h"
 #include "include/game/math.h"
 #include "cv64.h"

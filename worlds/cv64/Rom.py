@@ -78,7 +78,7 @@ rom_sub_weapon_flags = {
     0x10C989: 0x10,
     0x10C991: 0x20,
     0x10C999: 0x40,
-    0x10CF74: 0x01,
+    0x10CF77: 0x80,
 
     0x10CA59: 0x40FF0E,  # Tunnel
     0x10CA6B: 0x80,
@@ -106,7 +106,7 @@ rom_sub_weapon_flags = {
 
 rom_empty_breakables_flags = {
     0x10C74D: 0x40FF05,  # Forest of Silence
-    0x10C765: 0x80FF0D,
+    0x10C765: 0x20FF0E,
     0x10C774: 0x0800FF0E,
     0x10C755: 0x80FF05,
     0x10C784: 0x0100FF0E,
@@ -116,8 +116,8 @@ rom_empty_breakables_flags = {
 
     0x10CF9F: 0x08,  # Room of Clocks flags
     0x10CFA7: 0x01,
-    0xBFCB37: 0x04,  # Room of Clocks candle property IDs
-    0xBFCB3B: 0x05,
+    0xBFCB6F: 0x04,  # Room of Clocks candle property IDs
+    0xBFCB73: 0x05,
 }
 
 rom_axe_cross_lower_values = {
@@ -135,7 +135,7 @@ rom_axe_cross_lower_values = {
 
     0xC64091: [0x8DF77C, 0x07],  # CC invention area
     0xC640A8: [0x90FD37, 0x43],
-    0xC6409C: [0xBFCC23, 0x43],
+    0xC6409C: [0xBFCC2B, 0x43],
     0xC640A5: [0x90FBA1, 0x51],
     0xC640A3: [0x90FBAD, 0x50],
     0xC6409D: [0x90FE56, 0x43]
@@ -360,13 +360,18 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Hack to make the CW and Villa intro cutscenes play at the start of their levels no matter what map came before
     rom.write_int32(0x97244, 0x803FDD60)
-    rom.write_int32s(0xBFDD60, Patches.cw_villa_intro_cs_player)
+    rom.write_int32s(0xBFDD60, Patches.forest_cw_villa_intro_cs_player)
 
     # Make changing the map ID to 0xFF reset the map. Helpful to work around a bug wherein the camera gets stuck when
     # entering a loading zone that doesn't change the map.
-    rom.write_int32s(0x197B0, [0x0C0FF76F,   # JAL   0x803FDDBC
+    rom.write_int32s(0x197B0, [0x0C0FF7E6,   # JAL   0x803FDF98
                                0x24840008])  # ADDIU A0, A0, 0x0008
-    rom.write_int32s(0xBFDDBC, Patches.map_id_resetter)
+    rom.write_int32s(0xBFDF98, Patches.map_id_refresher)
+
+    # Enable swapping characters when loading into a map by holding L.
+    rom.write_int32(0x97294, 0x803FDFC4)
+    rom.write_int32(0x19710, 0x080FF80E)  # J 0x803FE038
+    rom.write_int32s(0xBFDFC4, Patches.character_changer)
 
     # Villa coffin time-of-day hack
     rom.write_byte(0xD9D83, 0x74)
@@ -423,14 +428,18 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Skip the "There is a white jewel" text so checking one saves the game instantly.
     rom.write_int32s(0xEFC72, [0x00020002 for i in range(37)])
     rom.write_int32(0xA8FC0, 0x24020001)  # ADDIU V0, R0, 0x0001
-    # Skip the yes/no prompts when pulling levers.
-    rom.write_int32s(0xBFDAF0, Patches.map_text_redirector)
+    # Skip the yes/no prompts when activating things.
+    rom.write_int32s(0xBFDACC, Patches.map_text_redirector)
     rom.write_int32(0xA9084, 0x24020001)  # ADDIU V0, R0, 0x0001
-    rom.write_int32(0xBEBE8, 0x0C0FF6BD)  # JAL   0x803FDAF4
+    rom.write_int32(0xBEBE8, 0x0C0FF6B4)  # JAL   0x803FDAD0
     # Skip Vincent and Heinrich's mandatory-for-a-check dialogue
     rom.write_int32(0xBED9C, 0x0C0FF6DA)  # JAL   0x803FDB68
     # Skip the long yes/no prompt in the CC planetarium to set the pieces.
-    rom.write_int32(0xB5C5DF, 0x24030001)  # ADDIU	V1, R0, 0x0001
+    rom.write_int32(0xB5C5DF, 0x24030001)  # ADDIU  V1, R0, 0x0001
+    # Skip the yes/no prompt to activate the CC elevator.
+    rom.write_int32(0xB5E3FB, 0x24020001)  # ADDIU  V0, R0, 0x0001
+    # Skip the yes/no prompts to set Nitro/Mandragora at both walls.
+    rom.write_int32(0xB5DF3E, 0x24030001)  # ADDIU  V1, R0, 0x0001
 
     # Custom message if you try checking the downstairs CC crack before removing the seal.
     rom.write_bytes(0xBFDBAC, cv64_text_converter("The Furious Nerd Curse\n"
@@ -563,9 +572,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_byte(0xB585C8, 0xFF)
 
     # Make the Special1 and 2 play sounds when you reach milestones with them.
-    rom.write_int32s(0xBFDA80, Patches.special_sound_notifs)
-    rom.write_int32(0xBF240, 0x080FF6A0)  # J 0x803FDA80
-    rom.write_int32(0xBF220, 0x080FF6AA)  # J 0x803FDAA0
+    rom.write_int32s(0xBFDA50, Patches.special_sound_notifs)
+    rom.write_int32(0xBF240, 0x080FF694)  # J 0x803FDA50
+    rom.write_int32(0xBF220, 0x080FF69E)  # J 0x803FDA78
 
     # Add data for White Jewel #22 (the new Duel Tower savepoint) at the end of the White Jewel ID data list
     rom.write_int16s(0x104AC8, [0x0000, 0x0006,
@@ -595,13 +604,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         for offset in stage_info[stage].stage_number_offset_list:
             rom.write_byte(offset, active_stage_exits[stage][3])
 
-    # Top elevator switch check
+    # CC top elevator switch check
     rom.write_int32(0x6CF0A0, 0x0C0FF0B0)  # JAL 0x803FC2C0
     rom.write_int32s(0xBFC2C0, Patches.elevator_flag_checker)
-
-    # Waterway brick platforms skip
-    if multiworld.skip_waterway_platforms[player]:
-        rom.write_int32(0x6C7E2C, 0x00000000)  # NOP
 
     # Disable time restrictions
     if multiworld.disable_time_restrictions[player]:
@@ -625,7 +630,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Custom remote item rewarding and DeathLink receiving code
     rom.write_int32(0x19B98, 0x080FF000)  # J 0x803FC000
     rom.write_int32s(0xBFC000, Patches.remote_item_giver)
-    rom.write_int32s(0xBFD344, Patches.subweapon_surface_checker)
+    rom.write_int32s(0xBFE190, Patches.subweapon_surface_checker)
 
     # DeathLink counter decrementer code
     rom.write_int32(0x1C340, 0x080FF052)  # J 0x803FC148
@@ -661,14 +666,14 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Dracula's chamber condition
     rom.write_int32(0xE2FDC, 0x0804AB25)  # J 0x8012AC78
     rom.write_int32s(0xADE84, Patches.special_goal_checker)
-    rom.write_bytes(0xBFCC40, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
+    rom.write_bytes(0xBFCC48, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
     if multiworld.draculas_condition[player] == 1:
         rom.write_int32(0x6C8A54, 0x0C0FF089)  # JAL 0x803FC224
         rom.write_int32s(0xBFC224, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
-        rom.write_bytes(0xBFCC66, cv64_text_converter(f"It won't budge!\n"
+        rom.write_bytes(0xBFCC6E, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need the power\n"
                                                       f"of the basement crystal\n"
                                                       f"to undo the seal.", True))
@@ -677,13 +682,13 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32s(0xBFC630, Patches.boss_special2_giver)
         rom.write_int32s(0xBFC55C, Patches.werebull_flag_unsetter_special2_electric_boogaloo)
         rom.write_byte(0xADE8F, multiworld.bosses_required[player].value)
-        rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
+        rom.write_bytes(0xBFCC6E, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to defeat\n"
                                                       f"{required_s2s} powerful monsters\n"
                                                       f"to undo the seal.", True))
     elif multiworld.draculas_condition[player] == 3:
         rom.write_byte(0xADE8F, multiworld.special2s_required[player].value)
-        rom.write_bytes(0xBFCC62, cv64_text_converter(f"It won't budge!\n"
+        rom.write_bytes(0xBFCC6E, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need to find\n"
                                                       f"{required_s2s} Special2 jewels\n"
                                                       f"to undo the seal.", True))
@@ -693,11 +698,15 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # On-the-fly TLB script modifier
     rom.write_int32s(0xBFC338, Patches.double_component_checker)
     rom.write_int32s(0xBFC3D4, Patches.downstairs_seal_checker)
+    rom.write_int32s(0xBFE074, Patches.mandragora_with_nitro_setter)
     rom.write_int32s(0xBFC700, Patches.overlay_modifiers)
 
-    # On-the-fly map object data modifier hook
+    # On-the-fly actor data modifier hook
     rom.write_int32(0xEAB04, 0x080FF220)  # J 0x803FC880
     rom.write_int32s(0xBFC878, Patches.map_data_modifiers)
+
+    # Fix to make flags apply to freestanding invisible items properly
+    rom.write_int32(0xA84F8, 0x90CC0039)  # LBU T4, 0x0039 (A2)
 
     # Fix locked doors to check the key counters instead of their vanilla key locations' bitflags
     # Pickup flag check modifications:
@@ -791,6 +800,30 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_byte(0x109FBF, 0x44)
         rom.write_int32(0xD9D44, 0x00000000)
         rom.write_byte(0xD9D4D, 0x00)
+
+    # Tunnel gondola skip
+    if multiworld.skip_gondolas[player]:
+        rom.write_int32(0x6C5F58, 0x080FF7D0)  # J 0x803FDF40
+        rom.write_int32s(0xBFDF40, Patches.gondola_skipper)
+        # New gondola transfer point candle coordinates
+        rom.write_byte(0xBFC9A3, 0x04)
+        rom.write_bytes(0x86D824, [0x27, 0x01, 0x10, 0xF7, 0xA0])
+
+    # Waterway brick platforms skip
+    if multiworld.skip_brick_platforms[player]:
+        rom.write_int32(0x6C7E2C, 0x00000000)  # NOP
+
+    # Ambience silencing fix
+    rom.write_int32(0xD9270, 0x080FF840)  # J 0x803FE100
+    rom.write_int32s(0xBFE100, Patches.ambience_silencer)
+    # Fix for the door sliding sound playing infinitely if leaving the fan meeting room before the door closes entirely.
+    # Hooking this in the ambience silencer code does nothing for some reason.
+    rom.write_int32s(0xAE01C, [0x08004FAB,   # J   0x80013EAC
+                               0x3404829B])  # ORI A0, R0, 0x829B
+    rom.write_int32s(0xD9E8C, [0x08004FAB,   # J   0x80013EAC
+                               0x3404829B])  # ORI A0, R0, 0x829B
+    # Fan meeting room ambience fix
+    rom.write_int32(0x109964, 0x803FE13C)
 
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
@@ -922,6 +955,32 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
             for i in range(len(shop_price_list)):
                 price_offset = 0x103D6E + (i*12)
                 rom.write_int16(price_offset, shop_price_list[i])
+
+    # Panther Dash running
+    if multiworld.panther_dash[player]:
+        rom.write_int32(0x69C8C4, 0x0C0FF77E)     # JAL   0x803FDDF8
+        rom.write_int32(0x6AA228, 0x0C0FF77E)     # JAL   0x803FDDF8
+        rom.write_int32s(0x69C86C, [0x0C0FF78E,   # JAL   0x803FDE38
+                                    0x3C01803E])  # LUI   AT, 0x803E
+        rom.write_int32s(0x6AA1D0, [0x0C0FF78E,   # JAL   0x803FDE38
+                                    0x3C01803E])  # LUI   AT, 0x803E
+        rom.write_int32(0x69D37C, 0x0C0FF79E)     # JAL   0x803FDE78
+        rom.write_int32(0x6AACE0, 0x0C0FF79E)     # JAL   0x803FDE78
+        rom.write_int32s(0xBFDDF8, Patches.panther_dash)
+        # Jump prevention
+        if multiworld.panther_dash[player].value == 2:
+            rom.write_int32(0xBFDE2C, 0x080FF7BB)     # J     0x803FDEEC
+            rom.write_int32(0xBFD044, 0x080FF7B4)     # J     0x803FDED0
+            rom.write_int32s(0x69B630, [0x0C0FF7C6,   # JAL   0x803FDF18
+                                        0x8CCD0000])  # LW    T5, 0x0000 (A2)
+            rom.write_int32s(0x6A8EC0, [0x0C0FF7C6,   # JAL   0x803FDF18
+                                        0x8CCC0000])  # LW    T4, 0x0000 (A2)
+            # Fun fact: KCEK put separate code to handle coyote time jumping
+            rom.write_int32s(0x69910C, [0x0C0FF7C6,   # JAL   0x803FDF18
+                                        0x8C4E0000])  # LW    T6, 0x0000 (V0)
+            rom.write_int32s(0x6A6718, [0x0C0FF7C6,   # JAL   0x803FDF18
+                                        0x8C4E0000])  # LW    T6, 0x0000 (V0)
+            rom.write_int32s(0xBFDED0, Patches.panther_jump_preventer)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
