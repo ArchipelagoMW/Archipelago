@@ -32,7 +32,7 @@ def get_architect_quantity(multiworld: MultiWorld, player: int) -> int:
 def get_class_quantity(multiworld: MultiWorld, player: int, class_name: str, maximum: int = 1) -> int:
     """Returns the number of classes to create."""
     starting_class: StartingClass = getattr(multiworld, "starting_class")[player]
-    class_excluded = class_name in getattr(multiworld, "available_classes")[player].value
+    class_included = class_name in getattr(multiworld, "available_classes")[player].value
 
     # Starting Knights
     if class_name == "Knights" and starting_class == "knight":
@@ -65,7 +65,7 @@ def get_class_quantity(multiworld: MultiWorld, player: int, class_name: str, max
     if class_name == "Traitors" and starting_class == "traitor":
         return maximum - 1
 
-    return 0 if class_excluded else maximum
+    return maximum if class_included else 0
 
 
 def get_knights_quantity(multiworld: MultiWorld, player: int) -> int:
