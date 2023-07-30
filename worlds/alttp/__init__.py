@@ -727,6 +727,10 @@ class ALTTPWorld(World):
     def fill_slot_data(self):
         slot_data = {}
         if not self.multiworld.is_race:
+            # all of these option are NOT used by the SNI- or Text-Client.
+            # they are used by the alttp-poptracker pack (https://github.com/StripesOO7/alttp-ap-poptracker-pack)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
                             "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
