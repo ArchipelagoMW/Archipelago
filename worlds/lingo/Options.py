@@ -70,7 +70,7 @@ class MasteryAchievements(Range):
 class Level2Requirement(Range):
     """The number of panel solves required to unlock LEVEL 2.
     In the base game, 223 are needed.
-    Note that this count includes AN OTHER TRY.
+    Note that this count includes ANOTHER TRY.
     """
     display_name = "Level 2 Requirement"
     range_start = 2
