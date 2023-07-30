@@ -4,13 +4,35 @@ from . import setup_solo_multiworld
 
 
 class TestBase(unittest.TestCase):
-    def testCreateItem(self):
+    def testItem(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            proxy_world = world_type(None, 0)  # this is identical to MultiServer.py creating worlds
+            multiworld = setup_solo_multiworld(world_type)
+            proxy_world = multiworld.worlds[1]
+            empty_prog_items = multiworld.state.prog_items.copy()
             for item_name in world_type.item_name_to_id:
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
+
+                with self.subTest("Item Name", item_name=item_name, game_name=game_name):
                     self.assertEqual(item.name, item_name)
+
+                if item.advancement:
+                    with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
+                        multiworld.state.collect(item, True)
+
+                    with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
+                        multiworld.state.remove(item)
+
+                        self.assertEqual(multiworld.state.prog_items, empty_prog_items,
+                                         "Item Collect -> Remove should restore empty state.")
+                else:
+                    with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
+                        # Non-Advancement should not modify state.
+                        base_state = multiworld.state.prog_items.copy()
+                        multiworld.state.collect(item)
+                        self.assertEqual(base_state, multiworld.state.prog_items)
+
+                multiworld.state.prog_items = empty_prog_items
 
     def testItemNameGroupHasValidItem(self):
         """Test that all item name groups contain valid items. """
