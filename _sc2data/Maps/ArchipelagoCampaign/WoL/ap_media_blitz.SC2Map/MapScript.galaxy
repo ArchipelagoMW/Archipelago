@@ -5693,7 +5693,7 @@ bool gt_ObjectiveFindComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveFindCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveFindCreateQ, true, true);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveFindHiddenLab);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
@@ -7379,7 +7379,7 @@ bool gt_ObjectiveBarracksComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveBarracksCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveBarracksCreateQ, true, true);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(5);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllBarracks);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
@@ -7440,7 +7440,7 @@ bool gt_ObjectiveFactoriesComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveFactoriesCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveFactoriesCreateQ, true, true);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(6);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllFactories);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
@@ -7501,7 +7501,7 @@ bool gt_ObjectiveStarportsComplete_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    TriggerExecute(gt_ObjectiveStarportsCreateQ, true, false);
+    TriggerExecute(gt_ObjectiveStarportsCreateQ, true, true);
     lib5BD4895D_gf_AP_Core_sendLocationLocal(7);
     lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveTrashAllStarports);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
