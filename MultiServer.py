@@ -425,7 +425,7 @@ class Context:
 
         # load start inventory:
         for slot, items in decoded_obj["precollected_items"].items():
-            self.start_inventory[slot] = [NetworkItem(item['code'], -2, 0, item['flags']) for item in items]
+            self.start_inventory[slot] = [NetworkItem(item[0], -2, 0, item[1]) for item in items]
 
         for slot, hints in decoded_obj["precollected_hints"].items():
             self.hints[0, slot].update(hints)
