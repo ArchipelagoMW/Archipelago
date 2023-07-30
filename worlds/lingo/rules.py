@@ -74,6 +74,10 @@ class LingoLogic(LogicMixin):
             if not self._lingo_can_open_door(start_room, room if req_door.room is None else req_door.room,
                                              req_door.door, player, player_logic):
                 return False
+        for req_panel in panel_object.required_panels:
+            if not self._lingo_can_solve_panel(start_room, room if req_panel.room is None else req_panel.room,
+                                               req_panel.panel, multiworld, player, player_logic):
+                return False
         if len(panel_object.colors) > 0 and get_option_value(multiworld, player, "shuffle_colors") is True:
             for color in panel_object.colors:
                 if not self.has(color.capitalize(), player):

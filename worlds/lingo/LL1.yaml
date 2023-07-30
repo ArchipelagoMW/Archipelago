@@ -18,14 +18,30 @@
   # - id:            The internal ID of the panel in the LINGO map
   # - required_room: In addition to having access to this room, the player must
   #                  also have access to this other room in order to solve this
-  #                  panel
+  #                  panel.
   # - required_door: In addition to having access to this room, the player must
-  #                  also have this door opened in order to solve this panel
+  #                  also have this door opened in order to solve this panel.
+  # - required_panel: In addition to having access to this room, the player must
+  #                   also be able to access this other panel in order to solve
+  #                   this panel.
   # - colors:        A list of colors that are required to be unlocked in order
   #                  to solve this panel
   # - check:         A location check will be created for this individual panel.
   # - exclude_reduce: Panel checks are assumed to be INCLUDED when reduce checks
   #                   is on. This option excludes the check anyway.
+  # - tag:           Label that describes how panel randomization should be
+  #                  done. In reorder mode, panels with the same tag can be
+  #                  shuffled amongst themselves. "forbid" is a special value
+  #                  meaning that no randomization should be done. This field is
+  #                  mandatory.
+  # - link:          Panels with the same link label are randomized as a group.
+  # - subtag:        Used to identify the separate parts of a linked group.
+  # - copy_to_sign:  When randomizing this panel, the hint should be copied to
+  #                  the specified sign(s).
+  # - achievement:   The name of the achievement that is received upon solving
+  #                  this panel.
+  # - non_counting:  If True, this panel does not contribute to the total needed
+  #                  to unlock Level 2.
   #
   # doors is an array of doors associated with this room. When door
   # randomization is enabled, each of these is an item. The key is a name that
@@ -34,6 +50,8 @@
   # - id:             A string or list of internal door IDs from the LINGO map.
   #                   In door shuffle mode, collecting the item generated for
   #                   this door will open the doors listed here.
+  # - painting_id:    An internal ID of a painting that should be moved upon
+  #                   receiving this door.
   # - panels:         These are the panels that canonically open this door. If
   #                   there is only one panel for the door, then that panel is a
   #                   check. If there is more than one panel, then that entire
@@ -56,6 +74,8 @@
   #                   item instead of a progression item. Only use this for
   #                   doors that could never gate progression regardless of
   #                   options and state.
+  # - event:          Denotes that the door is event only. This is similar to
+  #                   setting both skip_location and skip_item.
   #
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
@@ -77,14 +97,29 @@
   #                   Use "required_when_no_doors" instead if it would be
   #                   possible to enter the room without the painting in door
   #                   shuffle mode.
+  # - move:           Denotes that the painting is able to move.
   Starting Room:
     entrances:
       Menu: True
     panels:
       HI:
         id: Entry Room/Panel_hi_hi
+        tag: midwhite
       HIDDEN:
         id: Entry Room/Panel_hidden_hidden
+        tag: midwhite
+      TYPE:
+        id: Entry Room/Panel_type_type
+        tag: midwhite
+      THIS:
+        id: Entry Room/Panel_this_this
+        tag: midwhite
+      WRITE:
+        id: Entry Room/Panel_write_write
+        tag: midwhite
+      SAME:
+        id: Entry Room/Panel_same_same
+        tag: midwhite
     doors:
       Main Door:
         id: Entry Room Area Doors/Door_hi_hi
@@ -172,15 +207,20 @@
         door: Seeker Entrance
       Dead End Area:
         door: Dead End Door
-      Knight Night Entrance:
+      Knight Night (Outer Ring):
         door: Knight Night Entrance
     panels:
       DEAD END:
         id: Appendix Room/Panel_deadend_deadened
         check: True
         exclude_reduce: True
+        tag: topwhite
       OPEN:
         id: Heteronym Room/Panel_entrance_entrance
+        tag: midwhite
+      LIES:
+        id: Appendix Room/Panel_lies_lies
+        tag: midwhite
     doors:
       Dead End Door:
         id: Appendix Room Area Doors/Door_rat_tar_2
@@ -230,8 +270,87 @@
       Achievement:
         id: Countdown Panels/Panel_seeker_seeker
         required_room: Hidden Room
+        tag: forbid
         check: True
         achievement: The Seeker
+      BEAR:
+        id: Heteronym Room/Panel_bear_bear
+        tag: midwhite
+      MINE:
+        id: Heteronym Room/Panel_mine_mine
+        tag: double midwhite
+        subtag: left
+        link: exact MINE
+      MINE (2):
+        id: Heteronym Room/Panel_mine_mine_2
+        tag: double midwhite
+        subtag: right
+        link: exact MINE
+      BOW:
+        id: Heteronym Room/Panel_bow_bow
+        tag: midwhite
+      DOES:
+        id: Heteronym Room/Panel_does_does
+        tag: midwhite
+      MOBILE:
+        id: Heteronym Room/Panel_mobile_mobile
+        tag: double midwhite
+        subtag: left
+        link: exact MOBILE
+      MOBILE (2):
+        id: Heteronym Room/Panel_mobile_mobile_2
+        tag: double midwhite
+        subtag: right
+        link: exact MOBILE
+      DESERT:
+        id: Heteronym Room/Panel_desert_desert
+        tag: topmid white stack
+        subtag: mid
+        link: topmid DESERT
+      DESSERT:
+        id: Heteronym Room/Panel_desert_dessert
+        tag: topmid white stack
+        subtag: top
+        link: topmid DESERT
+      SOW:
+        id: Heteronym Room/Panel_sow_sow
+        tag: topmid white stack
+        subtag: mid
+        link: topmid SOW
+      SEW:
+        id: Heteronym Room/Panel_sow_so
+        tag: topmid white stack
+        subtag: top
+        link: topmid SOW
+      TO:
+        id: Heteronym Room/Panel_two_to
+        tag: double topwhite
+        subtag: left
+        link: hp TWO
+      TOO:
+        id: Heteronym Room/Panel_two_too
+        tag: double topwhite
+        subtag: right
+        link: hp TWO
+      WRITE:
+        id: Heteronym Room/Panel_write_right
+        tag: topwhite
+      EWE:
+        id: Heteronym Room/Panel_you_ewe
+        tag: topwhite
+      KNOT:
+        id: Heteronym Room/Panel_not_knot
+        tag: double topwhite
+        subtag: left
+        link: hp NOT
+      NAUGHT:
+        id: Heteronym Room/Panel_not_naught
+        tag: double topwhite
+        subtag: right
+        link: hp NOT
+      BEAR (2):
+        id: Heteronym Room/Panel_bear_bare
+        tag: topwhite
   Second Room:
     entrances:
       Starting Room:
@@ -242,8 +361,19 @@
     panels:
       HI:
         id: Entry Room/Panel_hi_high
+        tag: topwhite
       LOW:
         id: Entry Room/Panel_low_low
+        tag: forbid # This is a midwhite pretending to be a botwhite
+      ANOTHER TRY:
+        id: Entry Room/Panel_advance
+        tag: topwhite
+      LEVEL 2:
+        # We will set up special rules for this in code.
+        id: EndPanel/Panel_level_2
+        tag: forbid
+        non_counting: True
+        #check: True
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
@@ -287,32 +417,50 @@
       ORDER:
         id: Shuffle Room/Panel_order_chaos
         colors: black
+        tag: botblack
       SLAUGHTER:
         id: Palindrome Room/Panel_slaughter_laughter
         colors: red
+        tag: midred
       NEAR:
         id: Symmetry Room/Panel_near_far
         colors: black
+        tag: botblack
       FAR:
         id: Symmetry Room/Panel_far_near
         colors: black
+        tag: botblack
       TRACE:
         id: Maze Room/Panel_trace_trace
+        tag: midwhite
       RAT:
         id: Appendix Room/Panel_rat_tar
         colors: black
         check: True
         exclude_reduce: True
+        tag: midblack
       OPEN:
         id: Synonym Room/Panel_open_open
+        tag: midwhite
       FOUR:
         id: Backside Room/Panel_four_four_3
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fours
       LOST:
         id: Shuffle Room/Panel_lost_found
         colors: black
+        tag: botblack
+      FORWARD:
+        id: Entry Room/Panel_forward_forward
+        tag: midwhite
+      BETWEEN:
+        id: Entry Room/Panel_between_between
+        tag: midwhite
+      BACKWARD:
+        id: Entry Room/Panel_backward_backward
+        tag: midwhite
     doors:
       Crossroads Entrance:
         id: Shuffle Room Area Doors/Door_chaos
@@ -368,11 +516,13 @@
     panels:
       FOUR:
         id: Backside Room/Panel_four_four_2
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fours
       EIGHT:
         id: Backside Room/Panel_eight_eight_8
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
@@ -389,11 +539,14 @@
       HOT CRUST:
         id: Lingo Room/Panel_shortcut
         colors: yellow
+        tag: midyellow
       PILGRIMAGE:
         id: Lingo Room/Panel_pilgrim
         colors: blue
+        tag: midblue
       MASTERY:
         id: Master Room/Panel_mastery_mastery14
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
@@ -419,6 +572,65 @@
       THIS:
         id: Lingo Room/Panel_lingo_9
         colors: gray
+        tag: forbid
+      TIME ROOM:
+        id: Lingo Room/Panel_lingo_1
+        colors: purple
+        tag: toppurp
+      SCIENCE ROOM:
+        id: Lingo Room/Panel_lingo_2
+        tag: botwhite
+      SHINY ROCK ROOM:
+        id: Lingo Room/Panel_lingo_3
+        tag: botwhite
+      ANGRY POWER:
+        id: Lingo Room/Panel_lingo_4
+        colors:
+          - white
+          - purple
+        tag: forbid
+      MICRO LEGION:
+        id: Lingo Room/Panel_lingo_5
+        colors: yellow
+        tag: midyellow
+      LOSERS RELAX:
+        id: Lingo Room/Panel_lingo_6
+        colors:
+          - black
+          - white
+        tag: forbid
+      "906234":
+        id: Lingo Room/Panel_lingo_7
+        colors:
+          - orange
+          - blue
+        tag: forbid
+      MOOR EMORDNILAP:
+        id: Lingo Room/Panel_lingo_8
+        colors: black
+        tag: midblack
+      HALL ROOMMATE:
+        id: Lingo Room/Panel_lingo_10
+        colors:
+          - red
+          - blue
+        tag: forbid
+      ALL GREY:
+        id: Lingo Room/Panel_lingo_11
+        colors: yellow
+        tag: midyellow
+      PLUNDER ISLAND:
+        id: Lingo Room/Panel_lingo_12
+        colors:
+          - purple
+          - red
+        tag: forbid
+      FLOSS PATHS:
+        id: Lingo Room/Panel_lingo_13
+        colors:
+          - purple
+          - brown
+        tag: forbid
     doors:
       Shortcut to The Seeker:
         id: Master Room Doors/Door_pilgrim_shortcut
@@ -440,29 +652,37 @@
       DECAY:
         id: Palindrome Room/Panel_decay_day
         colors: red
+        tag: midred
       NOPE:
         id: Sun Room/Panel_nope_open
         colors: yellow
+        tag: midyellow
       EIGHT:
         id: Backside Room/Panel_eight_eight_5
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
       WE ROT:
         id: Shuffle Room/Panel_tower
         colors: yellow
+        tag: midyellow
       WORDS:
         id: Shuffle Room/Panel_words_sword
         colors: yellow
+        tag: midyellow
       SWORD:
         id: Shuffle Room/Panel_sword_words
         colors: yellow
+        tag: midyellow
       TURN:
         id: Shuffle Room/Panel_turn_runt
         colors: yellow
+        tag: midyellow
       BEND HI:
         id: Shuffle Room/Panel_behind
         colors: yellow
+        tag: midyellow
       THE EYES:
         id: Shuffle Room/Panel_eyes_see_shuffle
         colors: yellow
@@ -470,6 +690,36 @@
         exclude_reduce: True
         required_door:
           door: Hollow Hallway
+        tag: midyellow
+      CORNER:
+        id: Shuffle Room/Panel_corner_corner
+        required_door:
+          door: Hollow Hallway
+        tag: midwhite
+      HOLLOW:
+        id: Shuffle Room/Panel_hollow_hollow
+        required_door:
+          door: Hollow Hallway
+        tag: midwhite
+      SWAP:
+        id: Shuffle Room/Panel_swap_wasp
+        colors: yellow
+        tag: midyellow
+      GEL:
+        id: Shuffle Room/Panel_gel
+        colors: yellow
+        tag: topyellow
+        required_door:
+          door: Tower Entrance
+      THOUGH:
+        id: Shuffle Room/Panel_though
+        colors: yellow
+        tag: topyellow
+        required_door:
+          door: Tower Entrance
+      CROSSROADS:
+        id: Shuffle Room/Panel_crossroads_crossroads
+        tag: midwhite
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_decay_day
@@ -554,9 +804,11 @@
       LOST (1):
         id: Shuffle Room/Panel_lost_lots
         colors: yellow
+        tag: midyellow
       LOST (2):
         id: Shuffle Room/Panel_lost_slot
         colors: yellow
+        tag: midyellow
     doors:
       Exit:
         id:
@@ -577,11 +829,18 @@
       AMEN:
         id: Shuffle Room/Panel_amen_mean
         colors: yellow
+        tag: double midyellow
+        subtag: left
+        link: ana MEAN
       NAME:
         id: Shuffle Room/Panel_name_mean
         colors: yellow
+        tag: double midyellow
+        subtag: right
+        link: ana MEAN
       NINE:
         id: Backside Room/Panel_nine_nine_3
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
@@ -597,6 +856,16 @@
         room: Amen Name Area
         door: Exit
       Roof: True
+    panels:
+      SPADES:
+        id: Cross Room/Panel_spades_spades
+        tag: midwhite
+      CLUBS:
+        id: Cross Room/Panel_clubs_clubs
+        tag: midwhite
+      HEARTS:
+        id: Cross Room/Panel_hearts_hearts
+        tag: midwhite
     paintings:
       - id: west_afar
         orientation: south
@@ -619,23 +888,51 @@
       LEVEL (Black):
         id: Palindrome Room/Panel_level_level
         colors: black
+        tag: midblack
       RACECAR (Black):
         id: Palindrome Room/Panel_racecar_racecar
         colors: black
+        tag: palindrome
+        copy_to_sign: sign4
       SOLOS (Black):
         id: Palindrome Room/Panel_solos_solos
         colors: black
+        tag: palindrome
+        copy_to_sign:
+          - sign5
+          - sign6
       LEVEL (White):
         id: Palindrome Room/Panel_level_level_2
+        tag: midwhite
       RACECAR (White):
         id: Palindrome Room/Panel_racecar_racecar_2
+        tag: midwhite
+        copy_to_sign: sign3
       SOLOS (White):
         id: Palindrome Room/Panel_solos_solos_2
+        tag: midwhite
+        copy_to_sign:
+          - sign1
+          - sign2
       Achievement:
         id: Countdown Panels/Panel_tenacious_tenacious
         check: True
-        required_door:
-          door: Required Panels
+        tag: forbid
+        required_panel:
+          - panel: LEVEL (Black)
+          - panel: RACECAR (Black)
+          - panel: SOLOS (Black)
+          - panel: LEVEL (White)
+          - panel: RACECAR (White)
+          - panel: SOLOS (White)
+          - room: Hub Room
+            panel: SLAUGHTER
+          - room: Crossroads
+            panel: DECAY
+          - room: Outside The Agreeable
+            panel: MASSACRED
+          - room: Dread Hallway
+            panel: DREAD
         achievement: The Tenacious
     doors:
       Shortcut to Hub Room:
@@ -656,23 +953,6 @@
           - LEVEL (White)
           - RACECAR (White)
           - SOLOS (White)
-      Required Panels:
-        event: True
-        panels:
-          - LEVEL (Black)
-          - RACECAR (Black)
-          - SOLOS (Black)
-          - LEVEL (White)
-          - RACECAR (White)
-          - SOLOS (White)
-          - room: Hub Room
-            panel: SLAUGHTER
-          - room: Crossroads
-            panel: DECAY
-          - room: Outside The Agreeable
-            panel: MASSACRED
-          - room: Dread Hallway
-            panel: DREAD
   Warts Straw Area:
     entrances:
       Hub Room:
@@ -684,9 +964,11 @@
       WARTS:
         id: Symmetry Room/Panel_warts_straw
         colors: black
+        tag: midblack
       STRAW:
         id: Symmetry Room/Panel_straw_warts
         colors: black
+        tag: midblack
     doors:
       Door:
         id:
@@ -707,9 +989,11 @@
       LEAF:
         id: Symmetry Room/Panel_leaf_feel
         colors: black
+        tag: topblack
       FEEL:
         id: Symmetry Room/Panel_feel_leaf
         colors: black
+        tag: topblack
     doors:
       Door:
         id:
@@ -745,26 +1029,41 @@
       MASSACRED:
         id: Palindrome Room/Panel_massacred_sacred
         colors: red
+        tag: midred
       BLACK:
         id: Symmetry Room/Panel_black_white
         colors: black
+        tag: botblack
       CLOSE:
         id: Antonym Room/Panel_close_open
         colors: black
+        tag: botblack
+      LEFT:
+        id: Symmetry Room/Panel_left_right
+        colors: black
+        tag: botblack
+      LEFT (2):
+        id: Symmetry Room/Panel_left_wrong
+        colors: black
+        tag: bot black black
       RIGHT:
         id: Symmetry Room/Panel_right_left
         colors: black
+        tag: botblack
       PURPLE:
         id: Color Arrow Room/Panel_purple_afar
+        tag: midwhite
         required_door:
           door: Purple Barrier
       FIVE (1):
         id: Backside Room/Panel_five_five_5
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fives
       FIVE (2):
         id: Backside Room/Panel_five_five_4
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fives
@@ -772,21 +1071,51 @@
         id: Hallway Room/Panel_out_out
         check: True
         exclude_reduce: True
+        tag: midwhite
       HIDE:
         id: Maze Room/Panel_hide_seek_4
         colors: black
+        tag: botblack
+      DAZE:
+        id: Maze Room/Panel_daze_maze
+        colors: purple
+        tag: midpurp
       WALL:
         id: Hallway Room/Panel_castle_1
         colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
       KEEP:
         id: Hallway Room/Panel_castle_2
         colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
       BAILEY:
         id: Hallway Room/Panel_castle_3
         colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
       TOWER:
         id: Hallway Room/Panel_castle_4
         colors: blue
+        tag: quad bot blue
+        link: qbb CASTLE
+      NORTH:
+        id: Cross Room/Panel_north_missing
+        colors: green
+        tag: forbid
+      DIAMONDS:
+        id: Cross Room/Panel_diamonds_missing
+        colors: green
+        tag: forbid
+      FIRE:
+        id: Cross Room/Panel_fire_missing
+        colors: green
+        tag: forbid
+      WINTER:
+        id: Cross Room/Panel_winter_missing
+        colors: green
+        tag: forbid
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
@@ -849,6 +1178,7 @@
       DREAD:
         id: Palindrome Room/Panel_dread_dead
         colors: red
+        tag: midred
     doors:
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_dread_dead
@@ -866,12 +1196,58 @@
       Achievement:
         id: Countdown Panels/Panel_disagreeable_agreeable
         colors: black
+        tag: forbid
         required_room: Outside The Agreeable
         check: True
         achievement: The Agreeable
       BYE:
         id: Antonym Room/Panel_bye_hi
         colors: black
+        tag: botblack
+      RETOOL:
+        id: Antonym Room/Panel_retool_looter
+        colors: black
+        tag: midblack
+      DRAWER:
+        id: Antonym Room/Panel_drawer_reward
+        colors: black
+        tag: midblack
+      READ:
+        id: Antonym Room/Panel_read_write
+        colors: black
+        tag: botblack
+      DIFFERENT:
+        id: Antonym Room/Panel_different_same
+        colors: black
+        tag: botblack
+      LOW:
+        id: Antonym Room/Panel_low_high
+        colors: black
+        tag: botblack
+      ALIVE:
+        id: Antonym Room/Panel_alive_dead
+        colors: black
+        tag: botblack
+      THAT:
+        id: Antonym Room/Panel_that_this
+        colors: black
+        tag: botblack
+      STRESSED:
+        id: Antonym Room/Panel_stressed_desserts
+        colors: black
+        tag: midblack
+      STAR:
+        id: Antonym Room/Panel_star_rats
+        colors: black
+        tag: midblack
+      TAME:
+        id: Antonym Room/Panel_tame_mate
+        colors: black
+        tag: topblack
+      CAT:
+        id: Antonym Room/Panel_cat_tack
+        colors: black
+        tag: topblack
     doors:
       Shortcut to Hedge Maze:
         id: Symmetry Room Area Doors/Door_bye_hi
@@ -898,25 +1274,70 @@
       DOWN:
         id: Maze Room/Panel_down_up
         colors: black
+        tag: botblack
       HIDE (1):
         id: Maze Room/Panel_hide_seek
         colors: black
+        tag: botblack
       HIDE (2):
         id: Maze Room/Panel_hide_seek_2
         colors: black
+        tag: botblack
       HIDE (3):
         id: Maze Room/Panel_hide_seek_3
         colors: black
+        tag: botblack
       MASTERY (1):
         id: Master Room/Panel_mastery_mastery5
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (2):
         id: Master Room/Panel_mastery_mastery9
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+      PATH (1):
+        id: Maze Room/Panel_path_lock
+        colors: green
+        tag: forbid
+      PATH (2):
+        id: Maze Room/Panel_path_knot
+        colors: green
+        tag: forbid
+      PATH (3):
+        id: Maze Room/Panel_path_lost
+        colors: green
+        tag: forbid
+      PATH (4):
+        id: Maze Room/Panel_path_open
+        colors: green
+        tag: forbid
+      PATH (5):
+        id: Maze Room/Panel_path_help
+        colors: green
+        tag: forbid
+      PATH (6):
+        id: Maze Room/Panel_path_hunt
+        colors: green
+        tag: forbid
+      PATH (7):
+        id: Maze Room/Panel_path_nest
+        colors: green
+        tag: forbid
+      PATH (8):
+        id: Maze Room/Panel_path_look
+        colors: green
+        tag: forbid
+      REFLOW:
+        id: Maze Room/Panel_reflow_flower
+        colors: yellow
+        tag: midyellow
+      LEAP:
+        id: Maze Room/Panel_leap_jump
+        tag: botwhite
     doors:
       Perceptive Entrance:
         id: Maze Area Doors/Door_maze_maze
@@ -964,12 +1385,14 @@
       Achievement:
         id: Countdown Panels/Panel_perceptive_perceptive
         colors: green
+        tag: forbid
         check: True
         achievement: The Perceptive
       GAZE:
         id: Maze Room/Panel_look_look
         check: True
         exclude_reduce: True
+        tag: botwhite
     paintings:
       - id: garden_painting_tower
         orientation: north
@@ -980,18 +1403,23 @@
       NAPS:
         id: Naps Room/Panel_naps_span
         colors: black
+        tag: midblack
       TEAM:
         id: Naps Room/Panel_team_meet
         colors: black
+        tag: topblack
       TEEM:
         id: Naps Room/Panel_teem_meat
         colors: black
+        tag: topblack
       IMPATIENT:
         id: Naps Room/Panel_impatient_doctor
         colors: black
+        tag: bot black black
       EAT:
         id: Naps Room/Panel_eat_tea
         colors: black
+        tag: topblack
     doors:
       Second Floor:
         id: Naps Room Doors/Door_hider_5
@@ -1017,24 +1445,31 @@
       NONE:
         id: Naps Room/Panel_one_many
         colors: black
+        tag: bot black top white
       SUM:
         id: Naps Room/Panel_one_none
         colors: black
+        tag: top white bot black
       FUNNY:
         id: Naps Room/Panel_funny_enough
         colors: black
+        tag: topblack
       MIGHT:
         id: Naps Room/Panel_might_time
         colors: black
+        tag: topblack
       SAFE:
         id: Naps Room/Panel_safe_face
         colors: black
+        tag: topblack
       SAME:
         id: Naps Room/Panel_same_mace
         colors: black
+        tag: topblack
       CAME:
         id: Naps Room/Panel_came_make
         colors: black
+        tag: topblack
     doors:
       Third Floor:
         id:
@@ -1059,8 +1494,25 @@
       Achievement:
         id: Countdown Panels/Panel_fearless_fearless
         colors: black
+        tag: forbid
         check: True
         achievement: The Fearless
+      EASY:
+        id: Naps Room/Panel_easy_soft
+        colors: black
+        tag: bot black black
+      SOMETIMES:
+        id: Naps Room/Panel_sometimes_always
+        colors: black
+        tag: bot black black
+      DARK:
+        id: Naps Room/Panel_dark_extinguish
+        colors: black
+        tag: bot black black
+      EVEN:
+        id: Naps Room/Panel_even_ordinary
+        colors: black
+        tag: bot black black
   The Observant:
     entrances:
       Hedge Maze:
@@ -1072,22 +1524,109 @@
         id: Countdown Panels/Panel_observant_observant
         colors: green
         check: True
+        tag: forbid
         required_door:
           door: Stairs
         achievement: The Observant
       BACK:
         id: Look Room/Panel_four_back
         colors: green
+        tag: forbid
       SIDE:
         id: Look Room/Panel_four_side
         colors: green
+        tag: forbid
       BACKSIDE:
         id: Backside Room/Panel_backside_2
+        tag: midwhite
         required_door:
           door: Backside Door
       STAIRS:
         id: Look Room/Panel_six_stairs
         colors: green
+        tag: forbid
+      WAYS:
+        id: Look Room/Panel_four_ways
+        colors: green
+        tag: forbid
+      "ON":
+        id: Look Room/Panel_two_on
+        colors: green
+        tag: forbid
+      UP:
+        id: Look Room/Panel_two_up
+        colors: green
+        tag: forbid
+      SWIMS:
+        id: Look Room/Panel_five_swims
+        colors: green
+        tag: forbid
+      UPSTAIRS:
+        id: Look Room/Panel_eight_upstairs
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      TOIL:
+        id: Look Room/Panel_blue_toil
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      STOP:
+        id: Look Room/Panel_four_stop
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      TOP:
+        id: Look Room/Panel_aqua_top
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      HI:
+        id: Look Room/Panel_blue_hi
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      HI (2):
+        id: Look Room/Panel_blue_hi2
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      "31":
+        id: Look Room/Panel_numbers_31
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      "52":
+        id: Look Room/Panel_numbers_52
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      OIL:
+        id: Look Room/Panel_aqua_oil
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      BACKSIDE (GREEN):
+        id: Look Room/Panel_eight_backside
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
+      SIDEWAYS:
+        id: Look Room/Panel_eight_sideways
+        colors: green
+        tag: forbid
+        required_door:
+          door: Stairs
     doors:
       Backside Door:
         id: Maze Area Doors/Door_backside
@@ -1111,14 +1650,64 @@
         id: Countdown Panels/Panel_incomparable_incomparable
         colors: blue
         check: True
+        tag: forbid
         required_room:
           - Elements Area
           - Courtyard
           - Eight Room
         achievement: The Incomparable
+      A (One):
+        id: Strand Room/Panel_blank_a
+        colors: blue
+        tag: forbid
+      A (Two):
+        id: Strand Room/Panel_a_an
+        colors: blue
+        tag: forbid
+      A (Three):
+        id: Strand Room/Panel_a_and
+        colors: blue
+        tag: forbid
+      A (Four):
+        id: Strand Room/Panel_a_sand
+        colors: blue
+        tag: forbid
+      A (Five):
+        id: Strand Room/Panel_a_stand
+        colors: blue
+        tag: forbid
+      A (Six):
+        id: Strand Room/Panel_a_strand
+        colors: blue
+        tag: forbid
+      I (One):
+        id: Strand Room/Panel_blank_i
+        colors: blue
+        tag: forbid
+      I (Two):
+        id: Strand Room/Panel_i_in
+        colors: blue
+        tag: forbid
+      I (Three):
+        id: Strand Room/Panel_i_sin
+        colors: blue
+        tag: forbid
+      I (Four):
+        id: Strand Room/Panel_i_sing
+        colors: blue
+        tag: forbid
+      I (Five):
+        id: Strand Room/Panel_i_sting
+        colors: blue
+        tag: forbid
+      I (Six):
+        id: Strand Room/Panel_i_string
+        colors: blue
+        tag: forbid
       I (Seven):
         id: Strand Room/Panel_i_strings
         colors: blue
+        tag: forbid
     doors:
       Eight Painting:
         id: Red Blue Purple Room Area Doors/Door_a_strands
@@ -1142,6 +1731,19 @@
     entrances:
       Eight Alcove:
         painting: True
+    panels:
+      Eight Back:
+        id: Strand Room/Panel_i_starling
+        colors: blue
+        tag: forbid
+      Eight Front:
+        id: Strand Room/Panel_i_starting
+        colors: blue
+        tag: forbid
+      Nine:
+        id: Strand Room/Panel_i_startling
+        colors: blue
+        tag: forbid
     paintings:
       - id: eight_painting
         orientation: south
@@ -1242,13 +1844,16 @@
     panels:
       SECRET:
         id: Shuffle Room/Panel_secret_secret
+        tag: midwhite
       DADS + ALE:
         id: Tower Room/Panel_dads_ale_dead_1
         colors: orange
         check: True
+        tag: midorange
       SALT:
         id: Backside Room/Panel_salt_pepper
         colors: black
+        tag: botblack
     doors:
       Shortcut to Hub Room:
         id: Shuffle Room Area Doors/Door_secret_secret
@@ -1274,8 +1879,8 @@
       Outside The Undeterred: True
   Orange Tower Third Floor:
     entrances:
-      Knight Night Room:
-        room: Knight Night Room
+      Knight Night Exit:
+        room: Knight Night (Final)
         door: Exit
       Orange Tower Second Floor:
         room: Orange Tower
@@ -1292,12 +1897,14 @@
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
+        tag: midwhite
         required_door:
           door: Red Barrier
       DEER + WREN:
         id: Tower Room/Panel_deer_wren_rats_3
         colors: orange
         check: True
+        tag: midorange
     doors:
       Red Barrier:
         id: Color Arrow Room Doors/Door_red_6
@@ -1355,18 +1962,28 @@
       RUNT:
         id: Shuffle Room/Panel_turn_runt2
         colors: yellow
+        tag: midyellow
+      RUNT (2):
+        id: Shuffle Room/Panel_runt3
+        colors:
+          - yellow
+          - blue
+        tag: mid yellow blue
       LEARNS + UNSEW:
         id: Tower Room/Panel_learns_unsew_unrest_4
         colors: orange
         check: True
+        tag: midorange
       HOT CRUSTS:
         id: Shuffle Room/Panel_shortcuts
         colors: yellow
+        tag: midyellow
       IRK HORN:
         id: Shuffle Room/Panel_corner
         colors: yellow
         check: True
         exclude_reduce: True
+        tag: topyellow
     doors:
       Hot Crusts Door:
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
@@ -1381,6 +1998,7 @@
     panels:
       EIGHT:
         id: Backside Room/Panel_eight_eight_3
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
@@ -1413,18 +2031,31 @@
       SIZE (Small):
         id: Entry Room/Panel_size_small
         colors: gray
+        tag: forbid
       SIZE (Big):
         id: Entry Room/Panel_size_big
         colors: gray
+        tag: forbid
       DRAWL + RUNS:
         id: Tower Room/Panel_drawl_runs_enter_5
         colors: orange
         check: True
+        tag: midorange
       NINE:
         id: Backside Room/Panel_nine_nine_2
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
+      SUMMER:
+        id: Entry Room/Panel_summer_summer
+        tag: midwhite
+      AUTUMN:
+        id: Entry Room/Panel_autumn_autumn
+        tag: midwhite
+      SPRING:
+        id: Entry Room/Panel_spring_spring
+        tag: midwhite
     doors:
       Welcome Back:
         id: Entry Room Area Doors/Door_sizes
@@ -1476,14 +2107,18 @@
       THE END:
         id: EndPanel/Panel_end_end
         check: True
+        tag: forbid
+        non_counting: True
       THE MASTER:
         # We will set up special rules for this in code.
         id: Countdown Panels/Panel_master_master
         check: True
+        tag: forbid
       MASTERY:
         # This is the MASTERY on the other side of THE FEARLESS. It can only be
         # accessed by jumping from the top of the tower.
         id: Master Room/Panel_mastery_mastery8
+        tag: midwhite
         required_door:
           door: Mastery
     doors:
@@ -1513,7 +2148,7 @@
         panels:
           - room: Room Room
             panel: MASTERY
-          - room: The Steady
+          - room: The Steady (Topaz)
             panel: MASTERY
           - room: Orange Tower Basement
             panel: MASTERY
@@ -1553,34 +2188,43 @@
     panels:
       MASTERY (1):
         id: Master Room/Panel_mastery_mastery6
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (2):
         id: Master Room/Panel_mastery_mastery7
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (3):
         id: Master Room/Panel_mastery_mastery10
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (4):
         id: Master Room/Panel_mastery_mastery11
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (5):
         id: Master Room/Panel_mastery_mastery12
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       MASTERY (6):
         id: Master Room/Panel_mastery_mastery15
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+      STAIRCASE:
+        id: Open Areas/Panel_staircase
+        tag: midwhite
   Orange Tower Basement:
     entrances:
       Orange Tower Sixth Floor:
@@ -1589,12 +2233,15 @@
     panels:
       MASTERY:
         id: Master Room/Panel_mastery_mastery3
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
       THE LIBRARY:
         id: EndPanel/Panel_library
         check: True
+        tag: forbid
+        non_counting: True
     paintings:
       - id: arrows_painting_11
         orientation: east
@@ -1615,10 +2262,20 @@
       I:
         id: Strand Room/Panel_i_staring
         colors: blue
+        tag: forbid
       GREEN:
         id: Color Arrow Room/Panel_green_afar
+        tag: midwhite
         required_door:
           door: Green Barrier
+      PINECONE:
+        id: Shuffle Room/Panel_pinecone_pine
+        colors: brown
+        tag: botbrown
+      ACORN:
+        id: Shuffle Room/Panel_acorn_oak
+        colors: brown
+        tag: botbrown
     doors:
       Painting Shortcut:
         painting_id: flower_painting_8
@@ -1652,8 +2309,10 @@
     panels:
       BACKSIDE:
         id: Backside Room/Panel_backside_3
+        tag: midwhite
       NINE:
         id: Backside Room/Panel_nine_nine_8
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
@@ -1672,12 +2331,16 @@
     panels:
       FIRST:
         id: Backside Room/Panel_first_first
+        tag: midwhite
       SECOND:
         id: Backside Room/Panel_second_second
+        tag: midwhite
       THIRD:
         id: Backside Room/Panel_third_third
+        tag: midwhite
       FOURTH:
         id: Backside Room/Panel_fourth_fourth
+        tag: midwhite
     doors:
       Backside Door:
         id: Count Up Room Area Doors/Door_yellow_backside
@@ -1697,6 +2360,7 @@
     panels:
       BEGIN:
         id: Doorways Room/Panel_begin_start
+        tag: botwhite
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_white
@@ -1716,6 +2380,7 @@
       FOUND:
         id: Doorways Room/Panel_found_lost
         colors: black
+        tag: botblack
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_black
@@ -1735,6 +2400,7 @@
       LOAF:
         id: Doorways Room/Panel_loaf_crust
         colors: red
+        tag: botred
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_red
@@ -1754,6 +2420,7 @@
       CREAM:
         id: Doorways Room/Panel_eggs_breakfast
         colors: yellow
+        tag: botyellow
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_yellow
@@ -1773,6 +2440,7 @@
       SUN:
         id: Doorways Room/Panel_sun_sky
         colors: blue
+        tag: botblue
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_blue
@@ -1792,6 +2460,7 @@
       SPOON:
         id: Doorways Room/Panel_teacher_substitute
         colors: purple
+        tag: botpurple
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_purple
@@ -1811,6 +2480,7 @@
       LETTERS:
         id: Doorways Room/Panel_walnuts_orange
         colors: orange
+        tag: botorange
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_orange
@@ -1830,6 +2500,7 @@
       WALLS:
         id: Doorways Room/Panel_path_i
         colors: green
+        tag: forbid
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_green
@@ -1849,6 +2520,7 @@
       IRON:
         id: Doorways Room/Panel_iron_rust
         colors: brown
+        tag: botbrown
     doors:
       Progress Door:
         id: Doorway Room Doors/Door_brown
@@ -1868,6 +2540,7 @@
       OBSTACLE:
         id: Doorways Room/Panel_obstacle_door
         colors: gray
+        tag: forbid
     doors:
       Progress Door:
         id:
@@ -1894,6 +2567,7 @@
       Achievement:
         id: Countdown Panels/Panel_colorful_colorful
         check: True
+        tag: forbid
         required_door:
           - room: The Colorful (White)
             door: Progress Door
@@ -1939,11 +2613,16 @@
     panels:
       WELCOME BACK:
         id: Entry Room/Panel_return_return
+        tag: midwhite
+      SECRET:
+        id: Entry Room/Panel_secret_secret
+        tag: midwhite
       CLOCKWISE:
         id: Shuffle Room/Panel_clockwise_counterclockwise
         colors: black
         check: True
         exclude_reduce: True
+        tag: botblack
     doors:
       Shortcut to Starting Room:
         id: Entry Room Area Doors/Door_return_return
@@ -1963,10 +2642,12 @@
       STRAYS:
         id: Maze Room/Panel_strays_maze
         colors: purple
+        tag: toppurp
       READS + RUST:
         id: Tower Room/Panel_reads_rust_lawns_6
         colors: orange
         check: True
+        tag: midorange
     doors:
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_strays_maze
@@ -1987,8 +2668,8 @@
     entrances:
       Hub Room:
         door: Shortcut to Hub Room
-      Knight Night Room:
-        room: Knight Night Room
+      Knight Night Exit:
+        room: Knight Night (Final)
         door: Exit
       Orange Tower Third Floor: True # sunwarp
       Orange Tower Fifth Floor:
@@ -1997,44 +2678,97 @@
     panels:
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sevens
       SEVEN (2):
         id: Backside Room/Panel_seven_seven_6
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sevens
       EIGHT:
         id: Backside Room/Panel_eight_eight_7
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
       NINE:
         id: Backside Room/Panel_nine_nine_4
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
       BLUE:
         id: Color Arrow Room/Panel_blue_afar
+        tag: midwhite
         required_door:
           door: Blue Barrier
       ORANGE:
         id: Color Arrow Room/Panel_orange_afar
+        tag: midwhite
         required_door:
           door: Orange Barrier
       UNCOVER:
         id: Appendix Room/Panel_discover_recover
         colors: purple
+        tag: midpurp
       OXEN:
         id: Rhyme Room/Panel_locked_knocked
         colors: purple
+        tag: midpurp
+      BACKSIDE:
+        id: Backside Room/Panel_backside_1
+        tag: midwhite
       The Optimistic:
         id: Countdown Panels/Panel_optimistic_optimistic
         check: True
+        tag: forbid
         required_door:
           door: Backsides
         achievement: The Optimistic
+      PAST:
+        id: Shuffle Room/Panel_past_present
+        colors: brown
+        tag: botbrown
+      FUTURE:
+        id: Shuffle Room/Panel_future_present
+        colors:
+          - brown
+          - black
+        tag: bot brown black
+      FUTURE (2):
+        id: Shuffle Room/Panel_future_past
+        colors: black
+        tag: botblack
+      PAST (2):
+        id: Shuffle Room/Panel_past_future
+        colors: black
+        tag: botblack
+      PRESENT:
+        id: Shuffle Room/Panel_past_past
+        colors:
+          - brown
+          - black
+        tag: bot brown black
+      SMILE:
+        id: Open Areas/Panel_smile_smile
+        tag: midwhite
+      ANGERED:
+        id: Open Areas/Panel_angered_enraged
+        colors:
+          - yellow
+          - white
+        tag: syn anagram
+        copy_to_sign: sign18
+      VOTE:
+        id: Open Areas/Panel_vote_veto
+        colors:
+          - yellow
+          - black
+        tag: ant anagram
+        copy_to_sign: sign17
     doors:
       Shortcut to Hub Room:
         id: Appendix Room Area Doors/Door_recover_discover
@@ -2121,8 +2855,92 @@
       Achievement:
         id: Countdown Panels/Panel_illuminated_initiated
         colors: purple
+        tag: forbid
         check: True
         achievement: The Initiated
+      DAUGHTER:
+        id: Rhyme Room/Panel_daughter_laughter
+        colors: purple
+        tag: midpurp
+      START:
+        id: Rhyme Room/Panel_move_love
+        colors: purple
+        tag: double midpurp
+        subtag: left
+        link: change STARS
+      STARE:
+        id: Rhyme Room/Panel_stove_love
+        colors: purple
+        tag: double midpurp
+        subtag: right
+        link: change STARS
+      HYPE:
+        id: Rhyme Room/Panel_scope_type
+        colors: purple
+        tag: midpurp and rhyme
+        copy_to_sign: sign16
+      ABYSS:
+        id: Rhyme Room/Panel_abyss_this
+        colors: purple
+        tag: toppurp
+      SWEAT:
+        id: Rhyme Room/Panel_sweat_great
+        colors: purple
+        tag: double midpurp
+        subtag: left
+        link: change GREAT
+      BEAT:
+        id: Rhyme Room/Panel_beat_great
+        colors: purple
+        tag: double midpurp
+        subtag: right
+        link: change GREAT
+      ALUMNI:
+        id: Rhyme Room/Panel_alumni_hi
+        colors: purple
+        tag: midpurp and rhyme
+        copy_to_sign: sign14
+      PATS:
+        id: Rhyme Room/Panel_wrath_path
+        colors: purple
+        tag: midpurp and rhyme
+        copy_to_sign: sign15
+      KNIGHT:
+        id: Rhyme Room/Panel_knight_write
+        colors: purple
+        tag: double toppurp
+        subtag: left
+        link: change WRITE
+      BYTE:
+        id: Rhyme Room/Panel_byte_write
+        colors: purple
+        tag: double toppurp
+        subtag: right
+        link: change WRITE
+      MAIM:
+        id: Rhyme Room/Panel_maim_same
+        colors: purple
+        tag: toppurp
+      MORGUE:
+        id: Rhyme Room/Panel_chair_bear
+        colors: purple
+        tag: purple rhyme change stack
+        subtag: top
+        link: prcs CYBORG
+      CHAIR:
+        id: Rhyme Room/Panel_bare_bear
+        colors: purple
+        tag: toppurp
+      HUMAN:
+        id: Rhyme Room/Panel_cost_most
+        colors: purple
+        tag: purple rhyme change stack
+        subtag: bot
+        link: prcs CYBORG
+      BED:
+        id: Rhyme Room/Panel_bed_dead
+        colors: purple
+        tag: toppurp
   The Traveled:
     entrances:
       Hub Room:
@@ -2134,12 +2952,76 @@
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled
         required_room: Hub Room
+        tag: forbid
         check: True
         achievement: The Traveled
+      CLOSE:
+        id: Synonym Room/Panel_close_near
+        tag: botwhite
+      COMPOSE:
+        id: Synonym Room/Panel_compose_write
+        tag: double botwhite
+        subtag: left
+        link: syn WRITE
+      RECORD:
+        id: Synonym Room/Panel_record_write
+        tag: double botwhite
+        subtag: right
+        link: syn WRITE
+      CATEGORY:
+        id: Synonym Room/Panel_category_type
+        tag: botwhite
       HELLO:
         id: Synonym Room/Panel_hello_hi
+        tag: botwhite
+      DUPLICATE:
+        id: Synonym Room/Panel_duplicate_same
+        tag: double botwhite
+        subtag: left
+        link: syn SAME
+      IDENTICAL:
+        id: Synonym Room/Panel_identical_same
+        tag: double botwhite
+        subtag: right
+        link: syn SAME
+      DISTANT:
+        id: Synonym Room/Panel_distant_far
+        tag: botwhite
+      HAY:
+        id: Synonym Room/Panel_hay_straw
+        tag: botwhite
+      GIGGLE:
+        id: Synonym Room/Panel_giggle_laugh
+        tag: double botwhite
+        subtag: left
+        link: syn LAUGH
+      CHUCKLE:
+        id: Synonym Room/Panel_chuckle_laugh
+        tag: double botwhite
+        subtag: right
+        link: syn LAUGH
+      SNITCH:
+        id: Synonym Room/Panel_snitch_rat
+        tag: botwhite
+      CONCEALED:
+        id: Synonym Room/Panel_concealed_hidden
+        tag: botwhite
+      PLUNGE:
+        id: Synonym Room/Panel_plunge_fall
+        tag: double botwhite
+        subtag: left
+        link: syn FALL
+      AUTUMN:
+        id: Synonym Room/Panel_autumn_fall
+        tag: double botwhite
+        subtag: right
+        link: syn FALL
+      ROAD:
+        id: Synonym Room/Panel_growths_warts
+        tag: botwhite
       FOUR:
         id: Backside Room/Panel_four_four_4
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fours
@@ -2191,18 +3073,69 @@
       UNOPEN:
         id: Truncate Room/Panel_unopened_open
         colors: red
+        tag: midred
       BEGIN:
         id: Rock Room/Panel_begin_begin
+        tag: midwhite
       SIX:
         id: Backside Room/Panel_six_six_4
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sixes
       NINE:
         id: Backside Room/Panel_nine_nine_5
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
+      LEFT:
+        id: Shuffle Room/Panel_left_left_2
+        tag: midwhite
+      RIGHT:
+        id: Shuffle Room/Panel_right_right_2
+        tag: midwhite
+      RISE (Horizon):
+        id: Open Areas/Panel_rise_horizon
+        colors: blue
+        tag: double topblue
+        subtag: left
+        link: expand HORIZON
+      RISE (Sunrise):
+        id: Open Areas/Panel_rise_sunrise
+        colors: blue
+        tag: double topblue
+        subtag: left
+        link: expand SUNRISE
+      ZEN:
+        id: Open Areas/Panel_son_horizon
+        colors: blue
+        tag: double topblue
+        subtag: right
+        link: expand HORIZON
+      SON:
+        id: Open Areas/Panel_son_sunrise
+        colors: blue
+        tag: double topblue
+        subtag: right
+        link: expand SUNRISE
+      STARGAZER:
+        id: Open Areas/Panel_stargazer_stargazer
+        tag: midwhite
+        required_door:
+          door: Stargazer Door
+      MOUTH:
+        id: Cross Room/Panel_mouth_south
+        colors: purple
+        tag: midpurp
+      YEAST:
+        id: Cross Room/Panel_yeast_east
+        colors: red
+        tag: midred
+      WET:
+        id: Cross Room/Panel_wet_west
+        colors: blue
+        tag: midblue
     doors:
       Bold Entrance:
         id: Red Blue Purple Room Area Doors/Door_unopened_open
@@ -2220,6 +3153,18 @@
         item_name: The Steady - Entrance
         panels:
           - BEGIN
+      Lilac Entrance:
+        event: True
+        panels:
+          - room: The Steady (Rose)
+            panel: SOAR
+      Stargazer Door:
+        event: True
+        panels:
+          - RISE (Horizon)
+          - RISE (Sunrise)
+          - ZEN
+          - SON
     paintings:
       - id: pencil_painting2
         orientation: west
@@ -2234,8 +3179,89 @@
       Achievement:
         id: Countdown Panels/Panel_emboldened_bold
         colors: red
+        tag: forbid
         check: True
         achievement: The Bold
+      FOOT:
+        id: Truncate Room/Panel_foot_toe
+        colors: red
+        tag: botred
+      NEEDLE:
+        id: Truncate Room/Panel_needle_eye
+        colors: red
+        tag: double botred
+        subtag: left
+        link: mero EYE
+      FACE:
+        id: Truncate Room/Panel_face_eye
+        colors: red
+        tag: double botred
+        subtag: right
+        link: mero EYE
+      SIGN:
+        id: Truncate Room/Panel_sign_sigh
+        colors: red
+        tag: topred
+      HEARTBREAK:
+        id: Truncate Room/Panel_heartbreak_brake
+        colors: red
+        tag: topred
+      UNDEAD:
+        id: Truncate Room/Panel_undead_dead
+        colors: red
+        tag: double midred
+        subtag: left
+        link: trunc DEAD
+      DEADLINE:
+        id: Truncate Room/Panel_deadline_dead
+        colors: red
+        tag: double midred
+        subtag: right
+        link: trunc DEAD
+      SUSHI:
+        id: Truncate Room/Panel_sushi_hi
+        colors: red
+        tag: midred
+      THISTLE:
+        id: Truncate Room/Panel_thistle_this
+        colors: red
+        tag: midred
+      LANDMASS:
+        id: Truncate Room/Panel_landmass_mass
+        colors: red
+        tag: double midred
+        subtag: left
+        link: trunc MASS
+      MASSACRED:
+        id: Truncate Room/Panel_massacred_mass
+        colors: red
+        tag: double midred
+        subtag: right
+        link: trunc MASS
+      AIRPLANE:
+        id: Truncate Room/Panel_airplane_plain
+        colors: red
+        tag: topred
+      NIGHTMARE:
+        id: Truncate Room/Panel_nightmare_knight
+        colors: red
+        tag: topred
+      MOUTH:
+        id: Truncate Room/Panel_mouth_teeth
+        colors: red
+        tag: double botred
+        subtag: left
+        link: mero TEETH
+      SAW:
+        id: Truncate Room/Panel_saw_teeth
+        colors: red
+        tag: double botred
+        subtag: right
+        link: mero TEETH
+      HAND:
+        id: Truncate Room/Panel_hand_finger
+        colors: red
+        tag: botred
   Outside The Undeterred:
     entrances:
       Color Hallways: True
@@ -2256,51 +3282,89 @@
         door: Painting Shortcut
         painting: True
     panels:
+      HOLLOW:
+        id: Hallway Room/Panel_hollow_hollow
+        tag: midwhite
       ART + ART:
         id: Tower Room/Panel_art_art_eat_2
         colors: orange
         check: True
+        tag: midorange
       PEN:
         id: Blue Room/Panel_pen_open
         colors: blue
+        tag: midblue
+      HUSTLING:
+        id: Open Areas/Panel_hustling_sunlight
+        colors: yellow
+        tag: midyellow
+      SUNLIGHT:
+        id: Open Areas/Panel_sunlight_light
+        colors: red
+        tag: midred
+        required_panel:
+          panel: HUSTLING
+      LIGHT:
+        id: Open Areas/Panel_light_bright
+        colors: purple
+        tag: midpurp
+        required_panel:
+          panel: SUNLIGHT
+      BRIGHT:
+        id: Open Areas/Panel_bright_sunny
+        tag: botwhite
+        required_panel:
+          panel: LIGHT
+      SUNNY:
+        id: Open Areas/Panel_sunny_rainy
+        colors: black
+        tag: botblack
+        required_panel:
+          panel: BRIGHT
       RAINY:
         id: Open Areas/Panel_rainy_rainbow
-        colors:
-          - brown
-          - black
-          - yellow
-          - purple
-          - red
+        colors: brown
+        tag: botbrown
+        required_panel:
+          panel: SUNNY
         check: True
       ZERO:
         id: Backside Room/Panel_zero_zero
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Zero Door
       ONE:
         id: Backside Room/Panel_one_one
+        tag: midwhite
       TWO (1):
         id: Backside Room/Panel_two_two
+        tag: midwhite
         required_door:
           door: Twos
       TWO (2):
         id: Backside Room/Panel_two_two_2
+        tag: midwhite
         required_door:
           door: Twos
       THREE (1):
         id: Backside Room/Panel_three_three
+        tag: midwhite
         required_door:
           door: Threes
       THREE (2):
         id: Backside Room/Panel_three_three_2
+        tag: midwhite
         required_door:
           door: Threes
       THREE (3):
         id: Backside Room/Panel_three_three_3
+        tag: midwhite
         required_door:
           door: Threes
       FOUR:
         id: Backside Room/Panel_four_four
+        tag: midwhite
         required_door:
           door: Fours
     doors:
@@ -2397,8 +3461,89 @@
       Achievement:
         id: Countdown Panels/Panel_deterred_undeterred
         colors: blue
+        tag: forbid
         check: True
         achievement: The Undeterred
+      BONE:
+        id: Blue Room/Panel_bone_skeleton
+        colors: blue
+        tag: botblue
+      EYE:
+        id: Blue Room/Panel_mouth_face
+        colors: blue
+        tag: double botblue
+        subtag: left
+        link: holo FACE
+      MOUTH:
+        id: Blue Room/Panel_eye_face
+        colors: blue
+        tag: double botblue
+        subtag: right
+        link: holo FACE
+      IRIS:
+        id: Blue Room/Panel_toucan_bird
+        colors: blue
+        tag: botblue
+      EYE (2):
+        id: Blue Room/Panel_two_toucan
+        colors: blue
+        tag: topblue
+      ICE:
+        id: Blue Room/Panel_ice_eyesight
+        colors: blue
+        tag: double topblue
+        subtag: left
+        link: hex EYESIGHT
+      HEIGHT:
+        id: Blue Room/Panel_height_eyesight
+        colors: blue
+        tag: double topblue
+        subtag: right
+        link: hex EYESIGHT
+      EYE (3):
+        id: Blue Room/Panel_eye_hi
+        colors: blue
+        tag: topblue
+      NOT:
+        id: Blue Room/Panel_not_notice
+        colors: blue
+        tag: midblue
+      JUST:
+        id: Blue Room/Panel_just_readjust
+        colors: blue
+        tag: double midblue
+        subtag: left
+        link: exp READJUST
+      READ:
+        id: Blue Room/Panel_read_readjust
+        colors: blue
+        tag: double midblue
+        subtag: right
+        link: exp READJUST
+      FATHER:
+        id: Blue Room/Panel_ate_primate
+        colors: blue
+        tag: midblue
+      FEATHER:
+        id: Blue Room/Panel_primate_mammal
+        colors: blue
+        tag: botblue
+      CONTINENT:
+        id: Blue Room/Panel_continent_planet
+        colors: blue
+        tag: double botblue
+        subtag: left
+        link: holo PLANET
+      OCEAN:
+        id: Blue Room/Panel_ocean_planet
+        colors: blue
+        tag: double botblue
+        subtag: right
+        link: holo PLANET
+      WALL:
+        id: Blue Room/Panel_wall_room
+        colors: blue
+        tag: botblue
   Number Hunt:
     # This works a little differently than in the base game. The door to the
     # initial number in each set opens at the same time as the rest of the doors
@@ -2415,23 +3560,28 @@
     panels:
       FIVE:
         id: Backside Room/Panel_five_five
+        tag: midwhite
         required_door:
           room: Outside The Undeterred
           door: Fives
       SIX:
         id: Backside Room/Panel_six_six
+        tag: midwhite
         required_door:
           door: Sixes
       SEVEN:
         id: Backside Room/Panel_seven_seven
+        tag: midwhite
         required_door:
           door: Sevens
       EIGHT:
         id: Backside Room/Panel_eight_eight
+        tag: midwhite
         required_door:
           door: Eights
       NINE:
         id: Backside Room/Panel_nine_nine
+        tag: midwhite
         required_door:
           door: Nines
     doors:
@@ -2482,10 +3632,10 @@
             panel: SIX (1)
           - room: Directional Gallery
             panel: SIX (2)
-          - room: The Bearer
-            panel: SIX (1)
-          - room: The Bearer
-            panel: SIX (2)
+          - room: The Bearer (East)
+            panel: SIX
+          - room: The Bearer (South)
+            panel: SIX
       Eights:
         id:
           - Count Up Room Area Doors/Door_eight_hider
@@ -2503,11 +3653,11 @@
           - SEVEN
           - room: Directional Gallery
             panel: SEVEN
-          - room: Knight Night Room
+          - room: Knight Night Exit
             panel: SEVEN (1)
-          - room: Knight Night Room
+          - room: Knight Night Exit
             panel: SEVEN (2)
-          - room: Knight Night Room
+          - room: Knight Night Exit
             panel: SEVEN (3)
           - room: Outside The Initiated
             panel: SEVEN (1)
@@ -2587,61 +3737,70 @@
       PEPPER:
         id: Backside Room/Panel_pepper_salt
         colors: black
+        tag: botblack
       TURN:
         id: Backside Room/Panel_turn_return
         colors: blue
+        tag: midblue
       LEARN:
         id: Backside Room/Panel_learn_return
         colors: purple
+        tag: midpurp
       FIVE (1):
         id: Backside Room/Panel_five_five_3
-        colors: purple # transitively
-        required_door:
-          room: Outside The Undeterred
-          door: Fives
+        tag: midwhite
+        required_panel:
+          panel: LIGHT
       FIVE (2):
         id: Backside Room/Panel_five_five_2
-        colors: blue # transitively
-        required_door:
-          room: Outside The Undeterred
-          door: Fives
+        tag: midwhite
+        required_panel:
+          panel: WARD
       SIX (1):
         id: Backside Room/Panel_six_six_3
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sixes
       SIX (2):
         id: Backside Room/Panel_six_six_2
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sixes
       SEVEN:
         id: Backside Room/Panel_seven_seven_2
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Sevens
       EIGHT:
         id: Backside Room/Panel_eight_eight_2
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
       NINE:
         id: Backside Room/Panel_nine_nine_6
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
       BACKSIDE:
         id: Backside Room/Panel_backside_4
+        tag: midwhite
       "834283054":
         id: Tower Room/Panel_834283054_undaunted
         colors: orange
         check: True
         exclude_reduce: True
+        tag: midorange
         required_door:
           room: Number Hunt
           door: Sixes
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
+        tag: midwhite
         check: True
         exclude_reduce: True
         required_door:
@@ -2649,6 +3808,7 @@
           door: Sixes
       YELLOW:
         id: Color Arrow Room/Panel_yellow_afar
+        tag: midwhite
         required_door:
           door: Yellow Barrier
       WADED + WEE:
@@ -2656,6 +3816,43 @@
         colors: orange
         check: True
         exclude_reduce: True
+        tag: midorange
+      THE EYES:
+        id: Shuffle Room/Panel_theeyes_theeyes
+        tag: midwhite
+      LEFT:
+        id: Shuffle Room/Panel_left_left
+        tag: midwhite
+      RIGHT:
+        id: Shuffle Room/Panel_right_right
+        tag: midwhite
+      MIDDLE:
+        id: Shuffle Room/Panel_middle_middle
+        tag: midwhite
+      WARD:
+        id: Backside Room/Panel_ward_forward
+        colors: blue
+        tag: midblue
+      HIND:
+        id: Backside Room/Panel_hind_behind
+        colors: blue
+        tag: midblue
+      RIG:
+        id: Backside Room/Panel_rig_right
+        colors: blue
+        tag: midblue
+      WINDWARD:
+        id: Backside Room/Panel_windward_forward
+        colors: purple
+        tag: midpurp
+      LIGHT:
+        id: Backside Room/Panel_light_right
+        colors: purple
+        tag: midpurp
+      REWIND:
+        id: Backside Room/Panel_rewind_behind
+        colors: purple
+        tag: midpurp
     doors:
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
@@ -2695,30 +3892,40 @@
     panels:
       EXIT:
         id: Rock Room/Panel_red_red
+        tag: midwhite
+      HUES:
+        id: Color Arrow Room/Panel_hues_colors
+        tag: botwhite
       RED:
         id: Color Arrow Room/Panel_red_near
         check: True
+        tag: midwhite
       BLUE:
         id: Color Arrow Room/Panel_blue_near
         check: True
+        tag: midwhite
       YELLOW:
         id: Color Arrow Room/Panel_yellow_near
         check: True
+        tag: midwhite
       GREEN:
         id: Color Arrow Room/Panel_green_near
         check: True
+        tag: midwhite
         required_door:
           room: Outside The Initiated
           door: Green Barrier
       PURPLE:
         id: Color Arrow Room/Panel_purple_near
         check: True
+        tag: midwhite
         required_door:
           room: Outside The Initiated
           door: Purple Barrier
       ORANGE:
         id: Color Arrow Room/Panel_orange_near
         check: True
+        tag: midwhite
         required_door:
           room: Orange Tower Third Floor
           door: Orange Barrier
@@ -2729,6 +3936,22 @@
           door: Entrance
         check: True
         colors: gray
+        tag: forbid
+      ME:
+        id: Color Arrow Room/Panel_me
+        colors: gray
+        tag: forbid
+      SECRET BLUE:
+        # Pretend this and the other two are white, because they are snipes.
+        # TODO: Extract them and randomize them?
+        id: Color Arrow Room/Panel_secret_blue
+        tag: forbid
+      SECRET YELLOW:
+        id: Color Arrow Room/Panel_secret_yellow
+        tag: forbid
+      SECRET RED:
+        id: Color Arrow Room/Panel_secret_red
+        tag: forbid
     doors:
       Shortcut to The Steady:
         id: Rock Room Doors/Door_hint
@@ -2751,53 +3974,82 @@
           door: Entrance
   The Bearer:
     entrances:
-      # Let's treat the shortcut to the tower third floor as one-way for now,
-      # because The Bearer is complicated.
       Outside The Bold:
         door: Shortcut to The Bold
       Orange Tower Fifth Floor:
         room: Art Gallery
         door: Exit
+      The Bearer (East): True
+      The Bearer (North): True
+      The Bearer (South): True
+      The Bearer (West): True
       Roof: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_bearer_bearer
         check: True
-        colors:
-          - red
-          - yellow
-          - blue
+        tag: forbid
+        required_panel:
+          - panel: PART
+          - panel: HEART
+          - room: The Bearer (East)
+            panel: WINTER
+          - room: The Bearer (East)
+            panel: PEACE
+          - room: The Bearer (North)
+            panel: NORTH
+          - room: The Bearer (North)
+            panel: SILENT (1)
+          - room: The Bearer (North)
+            panel: SILENT (2)
+          - room: The Bearer (North)
+            panel: SPACE
+          - room: The Bearer (North)
+            panel: WARTS
+          - room: The Bearer (South)
+            panel: FIRE
+          - room: The Bearer (South)
+            panel: TENT
+          - room: The Bearer (South)
+            panel: BOWL
+          - room: The Bearer (West)
+            panel: DIAMONDS
+          - room: The Bearer (West)
+            panel: SNOW
+          - room: The Bearer (West)
+            panel: SMILE
+          - room: Bearer Side Area
+            panel: SHORTCUT
+          - room: Bearer Side Area
+            panel: POTS
         achievement: The Bearer
       MIDDLE:
         id: Shuffle Room/Panel_middle_middle_2
-      SIX (1):
-        id: Backside Room/Panel_six_six_6
-        colors:
-          - red
-          - yellow
-        required_door:
-          room: Number Hunt
-          door: Sixes
-      SIX (2):
-        id: Backside Room/Panel_six_six_5
-        colors:
-          - red
-          - yellow
-        required_door:
-          room: Number Hunt
-          door: Sixes
+        tag: midwhite
       FARTHER:
         id: Backside Room/Panel_farther_far
         colors: red
+        tag: midred
       BACKSIDE:
         id: Backside Room/Panel_backside_5
+        tag: midwhite
         required_door:
           door: Backside Door
-      SPACE:
-        id: Cross Room/Panel_space_cape
+      PART:
+        id: Cross Room/Panel_part_rap
         colors:
           - red
           - yellow
+        tag: mid red yellow
+        required_panel:
+          room: The Bearer (East)
+          panel: PEACE
+      HEART:
+        id: Cross Room/Panel_heart_tar
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
     doors:
       Shortcut to The Bold:
         id: Red Blue Purple Room Area Doors/Door_middle_middle
@@ -2808,21 +4060,204 @@
         group: Backside Doors
         panels:
           - FARTHER
-      Red Yellow Access:
+      East Entrance:
         event: True
         panels:
-          - SPACE
-  Bearer Side Area:
+          - HEART
+  The Bearer (East):
     entrances:
       The Bearer:
         room: The Bearer
-        door: Red Yellow Access
+        door: East Entrance
+      Bearer Side Area:
+        door: Side Area Access
+      Roof: True
+    panels:
+      WINTER:
+        id: Cross Room/Panel_winter_winter
+        colors: blue
+        tag: forbid
+      SIX:
+        id: Backside Room/Panel_six_six_5
+        tag: midwhite
+        colors:
+          - red
+          - yellow
+        required_door:
+          room: Number Hunt
+          door: Sixes
+      PEACE:
+        id: Cross Room/Panel_peace_ape
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+    doors:
+      North Entrance:
+        event: True
+        panels:
+          - room: The Bearer
+            panel: PART
+      Side Area Access:
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: SPACE
+  The Bearer (North):
+    entrances:
+      The Bearer (East):
+        room: The Bearer (East)
+        door: North Entrance
+      Roof: True
+    panels:
+      NORTH:
+        id: Cross Room/Panel_north_north
+        colors: blue
+        tag: forbid
+      SILENT (1):
+        id: Cross Room/Panel_silent_list
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+        required_panel:
+          room: The Bearer (West)
+          panel: SMILE
+      SILENT (2):
+        id: Cross Room/Panel_silent_list_2
+        colors:
+          - red
+          - yellow
+        tag: mid yellow red
+        required_panel:
+          room: The Bearer (West)
+          panel: SMILE
+      SPACE:
+        id: Cross Room/Panel_space_cape
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+      WARTS:
+        id: Cross Room/Panel_warts_star
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+        required_panel:
+          room: The Bearer (West)
+          panel: SNOW
+    doors:
+      South Entrance:
+        event: True
+        panels:
+          - room: Bearer Side Area
+            panel: POTS
+  The Bearer (South):
+    entrances:
+      The Bearer (North):
+        room: The Bearer (North)
+        door: South Entrance
+      Bearer Side Area:
+        door: Side Area Shortcut
+      Roof: True
+    panels:
+      FIRE:
+        id: Cross Room/Panel_fire_fire
+        colors: blue
+        tag: forbid
+      SIX:
+        id: Backside Room/Panel_six_six_6
+        tag: midwhite
+        colors:
+          - red
+          - yellow
+        required_door:
+          room: Number Hunt
+          door: Sixes
+      TENT:
+        id: Cross Room/Panel_tent_net
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+      BOWL:
+        id: Cross Room/Panel_bowl_low
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+        required_panel:
+          panel: TENT
+    doors:
+      Side Area Shortcut:
+        event: True
+        panels:
+          - room: The Bearer (North)
+            panel: SILENT (1)
+  The Bearer (West):
+    entrances:
+      Bearer Side Area:
+        - room: Bearer Side Area
+          door: West Entrance
+        - door: Side Area Shortcut
+      Roof: True
+    panels:
+      DIAMONDS:
+        id: Cross Room/Panel_diamonds_diamonds
+        colors: blue
+        tag: forbid
+      SNOW:
+        id: Cross Room/Panel_smile_lime
+        colors:
+          - red
+          - yellow
+        tag: mid yellow red
+      SMILE:
+        id: Cross Room/Panel_snow_won
+        colors:
+          - red
+          - yellow
+        tag: mid red yellow
+        required_panel:
+          room: The Bearer (North)
+          panel: WARTS
+    doors:
+      Side Area Shortcut:
+        event: True
+        panels:
+          - room: The Bearer (East)
+            panel: WINTER
+          - room: The Bearer (North)
+            panel: NORTH
+          - room: The Bearer (South)
+            panel: FIRE
+          - room: The Bearer (West)
+            panel: DIAMONDS
+  Bearer Side Area:
+    entrances:
+      The Bearer (East):
+        room: The Bearer (East)
+        door: Side Area Access
+      The Bearer (South):
+        room: The Bearer (South)
+        door: Side Area Shortcut
+      The Bearer (West):
+        room: The Bearer (West)
+        door: Side Area Shortcut
       Orange Tower Third Floor:
         door: Shortcut to Tower
       Roof: True
     panels:
       SHORTCUT:
         id: Cross Room/Panel_shortcut_shortcut
+        tag: midwhite
+      POTS:
+        id: Cross Room/Panel_pots_top
+        colors:
+          - red
+          - yellow
+        tag: mid yellow red
     doors:
       Shortcut to Tower:
         id: Cross Room Doors/Door_shortcut
@@ -2830,97 +4265,590 @@
         location_name: The Bearer - SHORTCUT
         panels:
           - SHORTCUT
-  The Steady:
-    # For now, let's just let the doors in here be vanilla.
+      West Entrance:
+        event: True
+        panels:
+          - room: The Bearer (South)
+            panel: BOWL
+  The Steady (Rose):
     entrances:
       Outside The Bold:
         room: Outside The Bold
         door: Steady Entrance
+      The Steady (Lilac):
+        room: The Steady
+        door: Reveal
+      The Steady (Ruby):
+        door: Forward Exit
+      The Steady (Carnation):
+        door: Right Exit
     panels:
-      Achievement:
-        id: Countdown Panels/Panel_steady_steady
-        colors:
-          - black
-          - yellow
-          - purple
-          - red
-          - blue
-        check: True
-        achievement: The Steady
+      SOAR:
+        id: Rock Room/Panel_soar_rose
+        colors: black
+        tag: topblack
+    doors:
+      Forward Exit:
+        event: True
+        panels:
+          - SOAR
+      Right Exit:
+        event: True
+        panels:
+          - room: The Steady (Lilac)
+            panel: LIE LACK
+  The Steady (Ruby):
+    entrances:
+      The Steady (Rose):
+        room: The Steady (Rose)
+        door: Forward Exit
+      The Steady (Amethyst):
+        room: The Steady
+        door: Reveal
+      The Steady (Cherry):
+        door: Forward Exit
+      The Steady (Amber):
+        door: Right Exit
+    panels:
+      BURY:
+        id: Rock Room/Panel_bury_ruby
+        colors: yellow
+        tag: midyellow
+    doors:
+      Forward Exit:
+        event: True
+        panels:
+          - room: The Steady (Lime)
+            panel: LIMELIGHT
+      Right Exit:
+        event: True
+        panels:
+          - room: The Steady (Carnation)
+            panel: INCARNATION
+  The Steady (Carnation):
+    entrances:
+      The Steady (Rose):
+        room: The Steady (Rose)
+        door: Right Exit
+      Outside The Bold:
+        room: The Steady
+        door: Reveal
+      The Steady (Amber):
+        room: The Steady
+        door: Reveal
+      The Steady (Sunflower):
+        door: Right Exit
+    panels:
+      INCARNATION:
+        id: Rock Room/Panel_incarnation_carnation
+        colors: red
+        tag: midred
+    doors:
+      Right Exit:
+        event: True
+        panels:
+          - room: The Steady (Amethyst)
+            panel: PACIFIST
+  The Steady (Sunflower):
+    entrances:
+      The Steady (Carnation):
+        room: The Steady (Carnation)
+        door: Right Exit
+      The Steady (Topaz):
+        room: The Steady (Topaz)
+        door: Back Exit
+    panels:
+      SUN:
+        id: Rock Room/Panel_sun_sunflower
+        colors: blue
+        tag: midblue
+    doors:
+      Back Exit:
+        event: True
+        panels:
+          - SUN
+  The Steady (Plum):
+    entrances:
+      The Steady (Amethyst):
+        room: The Steady
+        door: Reveal
+      The Steady (Blueberry):
+        room: The Steady
+        door: Reveal
+      The Steady (Cherry):
+        room: The Steady (Cherry)
+        door: Left Exit
+    panels:
+      LUMP:
+        id: Rock Room/Panel_lump_plum
+        colors: yellow
+        tag: midyellow
+  The Steady (Lime):
+    entrances:
+      The Steady (Sunflower): True
+      The Steady (Emerald):
+        room: The Steady
+        door: Reveal
+      The Steady (Blueberry):
+        door: Right Exit
+    panels:
+      LIMELIGHT:
+        id: Rock Room/Panel_limelight_lime
+        colors: red
+        tag: midred
+    doors:
+      Right Exit:
+        event: True
+        panels:
+          - room: The Steady (Amber)
+            panel: ANTECHAMBER
+    paintings:
+      - id: pencil_painting5
+        orientation: south
+  The Steady (Lemon):
+    entrances:
+      The Steady (Emerald): True
+      The Steady (Orange):
+        room: The Steady
+        door: Reveal
+      The Steady (Topaz):
+        door: Back Exit
+    panels:
+      MELON:
+        id: Rock Room/Panel_melon_lemon
+        colors: yellow
+        tag: midyellow
+    doors:
+      Back Exit:
+        event: True
+        panels:
+          - MELON
+    paintings:
+      - id: pencil_painting4
+        orientation: south
+  The Steady (Topaz):
+    entrances:
+      The Steady (Lemon):
+        room: The Steady (Lemon)
+        door: Back Exit
+      The Steady (Amber):
+        room: The Steady
+        door: Reveal
+      The Steady (Sunflower):
+        door: Back Exit
+    panels:
+      TOP:
+        id: Rock Room/Panel_top_topaz
+        colors: blue
+        tag: midblue
       MASTERY:
         id: Master Room/Panel_mastery_mastery2
-        colors:
-          - black
-          - yellow
-          - purple
-          - red
-          - blue
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
-    paintings:
-      - id: pencil_painting4
-        disable: True
-        orientation: south
-      - id: pencil_painting5
-        disable: True
-        orientation: south
-  Knight Night Entrance:
-    # For now, let's just let the doors in here be vanilla.
-    # We will allow reverse progression because it works if the exit is open.
+    doors:
+      Back Exit:
+        event: True
+        panels:
+          - TOP
+  The Steady (Orange):
+    entrances:
+      The Steady (Cherry):
+        room: The Steady
+        door: Reveal
+      The Steady (Lemon):
+        room: The Steady
+        door: Reveal
+      The Steady (Amber):
+        room: The Steady (Amber)
+        door: Forward Exit
+    panels:
+      BLUE:
+        id: Rock Room/Panel_blue_orange
+        colors: black
+        tag: botblack
+  The Steady (Sapphire):
+    entrances:
+      The Steady (Emerald):
+        door: Left Exit
+      The Steady (Blueberry):
+        room: The Steady
+        door: Reveal
+      The Steady (Amethyst):
+        room: The Steady (Amethyst)
+        door: Left Exit
+    panels:
+      SAP:
+        id: Rock Room/Panel_sap_sapphire
+        colors: blue
+        tag: midblue
+    doors:
+      Left Exit:
+        event: True
+        panels:
+          - room: The Steady (Plum)
+            panel: LUMP
+          - room: The Steady (Orange)
+            panel: BLUE
+  The Steady (Blueberry):
+    entrances:
+      The Steady (Lime):
+        room: The Steady (Lime)
+        door: Right Exit
+      The Steady (Sapphire):
+        room: The Steady
+        door: Reveal
+      The Steady (Plum):
+        room: The Steady
+        door: Reveal
+    panels:
+      BLUE:
+        id: Rock Room/Panel_blue_blueberry
+        colors: blue
+        tag: midblue
+  The Steady (Amber):
+    entrances:
+      The Steady (Ruby):
+        room: The Steady (Ruby)
+        door: Right Exit
+      The Steady (Carnation):
+        room: The Steady
+        door: Reveal
+      The Steady (Orange):
+        door: Forward Exit
+      The Steady (Topaz):
+        room: The Steady
+        door: Reveal
+    panels:
+      ANTECHAMBER:
+        id: Rock Room/Panel_antechamber_amber
+        colors: red
+        tag: midred
+    doors:
+      Forward Exit:
+        event: True
+        panels:
+          - room: The Steady (Blueberry)
+            panel: BLUE
+  The Steady (Emerald):
+    entrances:
+      The Steady (Sapphire):
+        room: The Steady (Sapphire)
+        door: Left Exit
+      The Steady (Lime):
+        room: The Steady
+        door: Reveal
+    panels:
+      HERALD:
+        id: Rock Room/Panel_herald_emerald
+        colors: purple
+        tag: midpurp
+  The Steady (Amethyst):
+    entrances:
+      The Steady (Lilac):
+        room: The Steady (Lilac)
+        door: Forward Exit
+      The Steady (Sapphire):
+        door: Left Exit
+      The Steady (Plum):
+        room: The Steady
+        door: Reveal
+      The Steady (Ruby):
+        room: The Steady
+        door: Reveal
+    panels:
+      PACIFIST:
+        id: Rock Room/Panel_thistle_amethyst
+        colors: purple
+        tag: toppurp
+    doors:
+      Left Exit:
+        event: True
+        panels:
+          - room: The Steady (Sunflower)
+            panel: SUN
+  The Steady (Lilac):
+    entrances:
+      Outside The Bold:
+        room: Outside The Bold
+        door: Lilac Entrance
+      The Steady (Amethyst):
+        door: Forward Exit
+      The Steady (Rose):
+        room: The Steady
+        door: Reveal
+    panels:
+      LIE LACK:
+        id: Rock Room/Panel_lielack_lilac
+        tag: topwhite
+    doors:
+      Forward Exit:
+        event: True
+        panels:
+          - room: The Steady (Ruby)
+            panel: BURY
+  The Steady (Cherry):
+    entrances:
+      The Steady (Plum):
+        door: Left Exit
+      The Steady (Orange):
+        room: The Steady
+        door: Reveal
+      The Steady (Ruby):
+        room: The Steady (Ruby)
+        door: Forward Exit
+    panels:
+      HAIRY:
+        id: Rock Room/Panel_hairy_cherry
+        colors: blue
+        tag: topblue
+    doors:
+      Left Exit:
+        event: True
+        panels:
+          - room: The Steady (Sapphire)
+            panel: SAP
+  The Steady:
+    entrances:
+      The Steady (Sunflower):
+        room: The Steady (Sunflower)
+        door: Back Exit
+    panels:
+      Achievement:
+        id: Countdown Panels/Panel_steady_steady
+        required_panel:
+          - room: The Steady (Rose)
+            panel: SOAR
+          - room: The Steady (Carnation)
+            panel: INCARNATION
+          - room: The Steady (Sunflower)
+            panel: SUN
+          - room: The Steady (Ruby)
+            panel: BURY
+          - room: The Steady (Plum)
+            panel: LUMP
+          - room: The Steady (Lime)
+            panel: LIMELIGHT
+          - room: The Steady (Lemon)
+            panel: MELON
+          - room: The Steady (Topaz)
+            panel: TOP
+          - room: The Steady (Orange)
+            panel: BLUE
+          - room: The Steady (Sapphire)
+            panel: SAP
+          - room: The Steady (Blueberry)
+            panel: BLUE
+          - room: The Steady (Amber)
+            panel: ANTECHAMBER
+          - room: The Steady (Emerald)
+            panel: HERALD
+          - room: The Steady (Amethyst)
+            panel: PACIFIST
+          - room: The Steady (Lilac)
+            panel: LIE LACK
+          - room: The Steady (Cherry)
+            panel: HAIRY
+        tag: forbid
+        check: True
+        achievement: The Steady
+    doors:
+      Reveal:
+        event: True
+        panels:
+          - Achievement
+  Knight Night (Outer Ring):
     entrances:
       Hidden Room:
         room: Hidden Room
         door: Knight Night Entrance
-      Knight Night Room: True
+      Knight Night Exit: True
     panels:
-      TRUST (1):
+      NIGHT:
+        id: Appendix Room/Panel_night_knight
+        colors: blue
+        tag: homophone midblue
+        copy_to_sign: sign7
+      KNIGHT:
+        id: Appendix Room/Panel_knight_night
+        colors: red
+        tag: homophone midred
+        copy_to_sign: sign8
+      BEE:
+        id: Appendix Room/Panel_bee_be
+        colors: red
+        tag: homophone midred
+        copy_to_sign: sign9
+      NEW:
+        id: Appendix Room/Panel_new_knew
+        colors: blue
+        tag: homophone midblue
+        copy_to_sign: sign11
+      FORE:
+        id: Appendix Room/Panel_fore_for
+        colors: red
+        tag: homophone midred
+        copy_to_sign: sign10
+      TRUSTED (1):
+        id: Appendix Room/Panel_trusted_trust
+        colors: red
+        tag: midred
+        required_panel:
+          room: Knight Night (Right Lower Segment)
+          panel: BEFORE
+      TRUSTED (2):
+        id: Appendix Room/Panel_trusted_rusted
+        colors: red
+        tag: midred
+        required_panel:
+          room: Knight Night (Right Lower Segment)
+          panel: BEFORE
+      ENCRUSTED:
+        id: Appendix Room/Panel_encrusted_rust
+        colors: red
+        tag: midred
+        required_panel:
+          - panel: TRUSTED (1)
+          - panel: TRUSTED (2)
+      ADJUST (1):
+        id: Appendix Room/Panel_adjust_readjust
+        colors: blue
+        tag: midblue and phone
+        required_panel:
+          room: Knight Night (Right Lower Segment)
+          panel: BE
+      ADJUST (2):
+        id: Appendix Room/Panel_adjust_adjusted
+        colors: blue
+        tag: midblue and phone
+        required_panel:
+          room: Knight Night (Right Lower Segment)
+          panel: BE
+      RIGHT:
+        id: Appendix Room/Panel_right_right
+        tag: midwhite
+        required_panel:
+          room: Knight Night (Right Lower Segment)
+          panel: ADJUST
+      TRUST:
         id: Appendix Room/Panel_trust_crust
         colors:
           - red
           - blue
-      TRUST (2):
-        id: Appendix Room/Panel_trust_crust_2
-        colors: purple
+        tag: mid red blue
+        required_panel:
+          - room: Knight Night (Right Lower Segment)
+            panel: ADJUST
+          - room: Knight Night (Right Lower Segment)
+            panel: LEFT
     doors:
-      Progression:
+      Fore Door:
         event: True
         panels:
-          - TRUST (1)
-          - TRUST (2)
-  Knight Night Room:
+          - FORE
+      New Door:
+        event: True
+        panels:
+          - NEW
+      To End:
+        event: True
+        panels:
+          - RIGHT
+          - room: Knight Night (Right Lower Segment)
+            panel: LEFT
+  Knight Night (Right Upper Segment):
     entrances:
-      Knight Night Entrance:
-        - door: Exit
-        - room: Knight Night Entrance
-          door: Progression
-      Orange Tower Third Floor:
-        door: Exit
-      Outside The Initiated:
-        door: Exit
+      Knight Night Exit: True
+      Knight Night (Outer Ring):
+        room: Knight Night (Outer Ring)
+        door: Fore Door
+      Knight Night (Right Lower Segment):
+        door: Segment Door
+    panels:
+      RUST (1):
+        id: Appendix Room/Panel_rust_trust
+        colors: blue
+        tag: midblue
+        required_panel:
+          room: Knight Night (Outer Ring)
+          panel: BEE
+      RUST (2):
+        id: Appendix Room/Panel_rust_crust
+        colors: blue
+        tag: midblue
+        required_panel:
+          room: Knight Night (Outer Ring)
+          panel: BEE
+    doors:
+      Segment Door:
+        event: True
+        panels:
+          - RUST (2)
+          - room: Knight Night (Right Lower Segment)
+            panel: BEFORE
+  Knight Night (Right Lower Segment):
+    entrances:
+      Knight Night Exit: True
+      Knight Night (Right Upper Segment):
+        room: Knight Night (Right Upper Segment)
+        door: Segment Door
+      Knight Night (Outer Ring):
+        room: Knight Night (Outer Ring)
+        door: New Door
+    panels:
+      ADJUST:
+        id: Appendix Room/Panel_adjust_readjusted
+        colors: blue
+        tag: midblue
+        required_panel:
+          - room: Knight Night (Outer Ring)
+            panel: ADJUST (1)
+          - room: Knight Night (Outer Ring)
+            panel: ADJUST (2)
+      BEFORE:
+        id: Appendix Room/Panel_before_fore
+        colors: red
+        tag: midred and phone
+        required_panel:
+          room: Knight Night (Right Upper Segment)
+          panel: RUST (1)
+      BE:
+        id: Appendix Room/Panel_be_before
+        colors: blue
+        tag: midblue and phone
+        required_panel:
+          room: Knight Night (Right Upper Segment)
+          panel: RUST (1)
+      LEFT:
+        id: Appendix Room/Panel_left_left
+        tag: midwhite
+        required_panel:
+          room: Knight Night (Outer Ring)
+          panel: ENCRUSTED
+      TRUST:
+        id: Appendix Room/Panel_trust_crust_2
+        colors: purple
+        tag: midpurp
+        required_panel:
+          - room: Knight Night (Outer Ring)
+            panel: ENCRUSTED
+          - room: Knight Night (Outer Ring)
+            panel: RIGHT
+  Knight Night (Final):
+    entrances:
+      Knight Night Exit: True
+      Knight Night (Outer Ring):
+        room: Knight Night (Outer Ring)
+        door: To End
+      Knight Night (Right Upper Segment):
+        room: Knight Night (Outer Ring)
+        door: To End
     panels:
       TRUSTED:
         id: Appendix Room/Panel_trusted_readjusted
-        colors:
-          - purple
-      SEVEN (1):
-        id: Backside Room/Panel_seven_seven_7
-        required_door:
-          - room: Number Hunt
-            door: Sevens
-          - door: Exit
-      SEVEN (2):
-        id: Backside Room/Panel_seven_seven_3
-        required_door:
-          - room: Number Hunt
-            door: Sevens
-          - door: Exit
-      SEVEN (3):
-        id: Backside Room/Panel_seven_seven_4
-        required_door:
-          - room: Number Hunt
-            door: Sevens
-          - door: Exit
+        colors: purple
+        tag: midpurp
     doors:
       Exit:
         id:
@@ -2940,6 +4868,43 @@
         include_reduce: True
         panels:
           - TRUSTED
+  Knight Night Exit:
+    entrances:
+      Knight Night (Outer Ring):
+        room: Knight Night (Final)
+        door: Exit
+      Orange Tower Third Floor:
+        room: Knight Night (Final)
+        door: Exit
+      Outside The Initiated:
+        room: Knight Night (Final)
+        door: Exit
+    panels:
+      SEVEN (1):
+        id: Backside Room/Panel_seven_seven_7
+        tag: midwhite
+        required_door:
+          - room: Number Hunt
+            door: Sevens
+      SEVEN (2):
+        id: Backside Room/Panel_seven_seven_3
+        tag: midwhite
+        required_door:
+          - room: Number Hunt
+            door: Sevens
+      SEVEN (3):
+        id: Backside Room/Panel_seven_seven_4
+        tag: midwhite
+        required_door:
+          - room: Number Hunt
+            door: Sevens
+      DEAD END:
+        id: Appendix Room/Panel_deadend_deadend
+        tag: midwhite
+      WARNER:
+        id: Appendix Room/Panel_warner_corner
+        colors: purple
+        tag: toppurp
   The Artistic (Smiley):
     entrances:
       Dead End Area:
@@ -2976,6 +4941,7 @@
           - black
           - yellow
           - blue
+        tag: forbid
         required_room:
           - The Artistic (Panda)
           - The Artistic (Apple)
@@ -2985,21 +4951,39 @@
       FINE:
         id: Ceiling Room/Panel_yellow_top_5
         colors: yellow
+        tag: yellow top blue bot
+        subtag: top
+        link: yxu KNIFE
       BLADE:
         id: Ceiling Room/Panel_blue_bot_5
         colors: blue
+        tag: yellow top blue bot
+        subtag: bot
+        link: yxu KNIFE
       RED:
         id: Ceiling Room/Panel_blue_top_6
         colors: blue
+        tag: blue top yellow mid
+        subtag: top
+        link: uyx BREAD
       BEARD:
         id: Ceiling Room/Panel_yellow_mid_6
         colors: yellow
+        tag: blue top yellow mid
+        subtag: mid
+        link: uyx BREAD
       ICE:
         id: Ceiling Room/Panel_blue_mid_7
         colors: blue
+        tag: blue mid yellow bot
+        subtag: mid
+        link: xuy SPICE
       ROOT:
         id: Ceiling Room/Panel_yellow_bot_7
         colors: yellow
+        tag: blue mid yellow bot
+        subtag: bot
+        link: xuy SPICE
     doors:
       Door to Panda:
         id:
@@ -3049,27 +5033,51 @@
       EYE (Top):
         id: Ceiling Room/Panel_blue_top_1
         colors: blue
+        tag: blue top red bot
+        subtag: top
+        link: uxr IRIS
       EYE (Bottom):
         id: Ceiling Room/Panel_red_bot_1
         colors: red
+        tag: blue top red bot
+        subtag: bot
+        link: uxr IRIS
       LADYLIKE:
         id: Ceiling Room/Panel_red_mid_2
         colors: red
+        tag: red mid blue bot
+        subtag: mid
+        link: xru LAKE
       WATER:
         id: Ceiling Room/Panel_blue_bot_2
         colors: blue
+        tag: red mid blue bot
+        subtag: bot
+        link: xru LAKE
       OURS:
         id: Ceiling Room/Panel_blue_mid_3
         colors: blue
+        tag: blue mid red bot
+        subtag: mid
+        link: xur HOURS
       DAYS:
         id: Ceiling Room/Panel_red_bot_3
         colors: red
+        tag: blue mid red bot
+        subtag: bot
+        link: xur HOURS
       NIGHTTIME:
         id: Ceiling Room/Panel_red_top_4
         colors: red
+        tag: red top mid blue
+        subtag: top
+        link: rux KNIGHT
       NIGHT:
         id: Ceiling Room/Panel_blue_mid_4
         colors: blue
+        tag: red top mid blue
+        subtag: mid
+        link: rux KNIGHT
     doors:
       Door to Lattice:
         id:
@@ -3120,27 +5128,51 @@
       POSH:
         id: Ceiling Room/Panel_black_top_12
         colors: black
+        tag: black top red bot
+        subtag: top
+        link: bxr SHOP
       MALL:
         id: Ceiling Room/Panel_red_bot_12
         colors: red
+        tag: black top red bot
+        subtag: bot
+        link: bxr SHOP
       DEICIDE:
         id: Ceiling Room/Panel_red_top_13
         colors: red
+        tag: red top black bot
+        subtag: top
+        link: rxb DECIDE
       WAVER:
         id: Ceiling Room/Panel_black_bot_13
         colors: black
+        tag: red top black bot
+        subtag: bot
+        link: rxb DECIDE
       REPAID:
         id: Ceiling Room/Panel_black_mid_14
         colors: black
+        tag: black mid red bot
+        subtag: mid
+        link: xbr DIAPER
       BABY:
         id: Ceiling Room/Panel_red_bot_14
         colors: red
+        tag: black mid red bot
+        subtag: bot
+        link: xbr DIAPER
       LOBE:
         id: Ceiling Room/Panel_black_top_15
         colors: black
+        tag: black top red mid
+        subtag: top
+        link: brx BOWL
       BOWELS:
         id: Ceiling Room/Panel_red_mid_15
         colors: red
+        tag: black top red mid
+        subtag: mid
+        link: brx BOWL
     doors:
       Door to Apple:
         id:
@@ -3193,27 +5225,51 @@
       SPRIG:
         id: Ceiling Room/Panel_yellow_mid_8
         colors: yellow
+        tag: yellow mid black bot
+        subtag: mid
+        link: xyb GRIPS
       RELEASES:
         id: Ceiling Room/Panel_black_bot_8
         colors: black
+        tag: yellow mid black bot
+        subtag: bot
+        link: xyb GRIPS
       MUCH:
         id: Ceiling Room/Panel_black_top_9
         colors: black
+        tag: black top yellow bot
+        subtag: top
+        link: bxy CHUM
       FISH:
         id: Ceiling Room/Panel_yellow_bot_9
         colors: yellow
+        tag: black top yellow bot
+        subtag: bot
+        link: bxy CHUM
       MASK:
         id: Ceiling Room/Panel_yellow_top_10
         colors: yellow
+        tag: yellow top black bot
+        subtag: top
+        link: yxb CHASM
       HILL:
         id: Ceiling Room/Panel_black_bot_10
         colors: black
+        tag: yellow top black bot
+        subtag: bot
+        link: yxb CHASM
       TINE:
         id: Ceiling Room/Panel_black_top_11
         colors: black
+        tag: black top yellow mid
+        subtag: top
+        link: byx NIGHT
       THING:
         id: Ceiling Room/Panel_yellow_mid_11
         colors: yellow
+        tag: black top yellow mid
+        subtag: mid
+        link: byx NIGHT
     doors:
       Door to Smiley:
         id:
@@ -3247,6 +5303,28 @@
         orientation: south
         exit_only: True
         required_when_no_doors: True
+  The Artistic (Hint Room):
+    entrances:
+      The Artistic (Lattice):
+        room: The Artistic (Lattice)
+        door: Door to Apple
+    panels:
+      ARTICLE:
+        id: Ceiling Room/Panel_answer_1
+        colors: red
+        tag: botred
+      TAR:
+        id: Ceiling Room/Panel_answer_2
+        colors: black
+        tag: topblack
+      I:
+        id: Ceiling Room/Panel_answer_3
+        colors: blue
+        tag: midblue
+      KIT:
+        id: Ceiling Room/Panel_answer_4
+        colors: yellow
+        tag: topyellow
   The Discerning:
     entrances:
       Crossroads:
@@ -3256,8 +5334,89 @@
       Achievement:
         id: Countdown Panels/Panel_discerning_scramble
         colors: yellow
+        tag: forbid
         check: True
         achievement: The Discerning
+      HITS:
+        id: Sun Room/Panel_hits_this
+        colors: yellow
+        tag: midyellow
+      WARRED:
+        id: Sun Room/Panel_warred_drawer
+        colors: yellow
+        tag: double midyellow
+        subtag: left
+        link: ana DRAWER
+      REDRAW:
+        id: Sun Room/Panel_redraw_drawer
+        colors: yellow
+        tag: double midyellow
+        subtag: right
+        link: ana DRAWER
+      ADDER:
+        id: Sun Room/Panel_adder_dread
+        colors: yellow
+        tag: midyellow
+      LAUGHTERS:
+        id: Sun Room/Panel_laughters_slaughter
+        colors: yellow
+        tag: midyellow
+      STONE:
+        id: Sun Room/Panel_stone_notes
+        colors: yellow
+        tag: double midyellow
+        subtag: left
+        link: ana NOTES
+      ONSET:
+        id: Sun Room/Panel_onset_notes
+        colors: yellow
+        tag: double midyellow
+        subtag: right
+        link: ana NOTES
+      RAT:
+        id: Sun Room/Panel_rat_art
+        colors: yellow
+        tag: midyellow
+      DUSTY:
+        id: Sun Room/Panel_dusty_study
+        colors: yellow
+        tag: midyellow
+      ARTS:
+        id: Sun Room/Panel_arts_star
+        colors: yellow
+        tag: double midyellow
+        subtag: left
+        link: ana STAR
+      TSAR:
+        id: Sun Room/Panel_tsar_star
+        colors: yellow
+        tag: double midyellow
+        subtag: right
+        link: ana STAR
+      STATE:
+        id: Sun Room/Panel_state_taste
+        colors: yellow
+        tag: midyellow
+      REACT:
+        id: Sun Room/Panel_react_trace
+        colors: yellow
+        tag: midyellow
+      DEAR:
+        id: Sun Room/Panel_dear_read
+        colors: yellow
+        tag: double midyellow
+        subtag: left
+        link: ana READ
+      DARE:
+        id: Sun Room/Panel_dare_read
+        colors: yellow
+        tag: double midyellow
+        subtag: right
+        link: ana READ
+      SEAM:
+        id: Sun Room/Panel_seam_same
+        colors: yellow
+        tag: midyellow
   The Eyes They See:
     entrances:
       Crossroads:
@@ -3270,8 +5429,10 @@
     panels:
       NEAR:
         id: Shuffle Room/Panel_near_near
+        tag: midwhite
       EIGHT:
         id: Backside Room/Panel_eight_eight_4
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
@@ -3286,6 +5447,16 @@
         orientation: west
       - id: smile_painting_2
         orientation: north
+  Far Window:
+    entrances:
+      Crossroads:
+        room: Crossroads
+        door: Eye Wall
+      The Eyes They See: True
+    panels:
+      FAR:
+        id: Shuffle Room/Panel_far_far
+        tag: midwhite
   Wondrous Lobby:
     entrances:
       Directional Gallery: True
@@ -3304,6 +5475,7 @@
     panels:
       SHRINK:
         id: Wonderland Room/Panel_shrink_shrink
+        tag: midwhite
     doors:
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
@@ -3344,6 +5516,7 @@
       CASE:
         id: Wonderland Room/Panel_case_bookcase
         colors: blue
+        tag: midblue
     paintings:
       - id: symmetry_painting_a_3
         orientation: west
@@ -3357,6 +5530,7 @@
       CANDLE HEIR:
         id: Wonderland Room/Panel_candleheir_chandelier
         colors: yellow
+        tag: midyellow
     paintings:
       - id: symmetry_painting_a_5
         orientation: east
@@ -3369,6 +5543,7 @@
       GLASS:
         id: Wonderland Room/Panel_glass_window
         colors: brown
+        tag: botbrown
     paintings:
       - id: symmetry_painting_b_4
         orientation: north
@@ -3384,12 +5559,14 @@
       WOOD:
         id: Wonderland Room/Panel_wood_table
         colors: brown
+        tag: botbrown
       BROOK NOD:
         # This panel, while physically being in the first room, is facing upward
         # and is only really solvable while standing on the windowsill, which is
         # a location you can only get to from Table.
         id: Wonderland Room/Panel_brooknod_doorknob
         colors: yellow
+        tag: midyellow
     paintings:
       - id: symmetry_painting_a_2
         orientation: west
@@ -3406,16 +5583,11 @@
       FIREPLACE:
         id: Wonderland Room/Panel_fireplace_fire
         colors: red
+        tag: midred
       Achievement:
         id: Countdown Panels/Panel_wondrous_wondrous
-        required_door:
-          door: Required Panels
-        achievement: The Wondrous
-    doors:
-      Required Panels:
-        event: True
-        panels:
-          - FIREPLACE
+        required_panel:
+          - panel: FIREPLACE
           - room: The Wondrous (Table)
             panel: BROOK NOD
           - room: The Wondrous (Bookcase)
@@ -3426,6 +5598,9 @@
             panel: GLASS
           - room: The Wondrous (Table)
             panel: WOOD
+        tag: forbid
+        achievement: The Wondrous
+    doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_wonderland_exit
         painting_id: arrows_painting_9
@@ -3453,9 +5628,13 @@
     panels:
       MASTERY:
         id: Master Room/Panel_mastery_mastery4
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+      SHARP:
+        id: Open Areas/Panel_rainy_rainbow2
+        tag: midwhite
     paintings:
       - id: flower_painting_6
         orientation: south
@@ -3469,15 +5648,23 @@
       WISE:
         id: Hallway Room/Panel_counterclockwise_1
         colors: blue
+        tag: quad mid blue
+        link: qmb COUNTERCLOCKWISE
       CLOCK:
         id: Hallway Room/Panel_counterclockwise_2
         colors: blue
+        tag: quad mid blue
+        link: qmb COUNTERCLOCKWISE
       ER:
         id: Hallway Room/Panel_counterclockwise_3
         colors: blue
+        tag: quad mid blue
+        link: qmb COUNTERCLOCKWISE
       COUNT:
         id: Hallway Room/Panel_counterclockwise_4
         colors: blue
+        tag: quad mid blue
+        link: qmb COUNTERCLOCKWISE
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_3
@@ -3498,15 +5685,23 @@
       TRANCE:
         id: Hallway Room/Panel_transformation_1
         colors: blue
+        tag: quad top blue
+        link: qtb TRANSFORMATION
       FORM:
         id: Hallway Room/Panel_transformation_2
         colors: blue
+        tag: quad top blue
+        link: qtb TRANSFORMATION
       A:
         id: Hallway Room/Panel_transformation_3
         colors: blue
+        tag: quad top blue
+        link: qtb TRANSFORMATION
       SHUN:
         id: Hallway Room/Panel_transformation_4
         colors: blue
+        tag: quad top blue
+        link: qtb TRANSFORMATION
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_room_4
@@ -3527,6 +5722,7 @@
       WHEEL:
         id: Hallway Room/Panel_room_5
         colors: blue
+        tag: full stack blue
     doors:
       Exit:
         id:
@@ -3550,8 +5746,10 @@
       A:
         id: Strand Room/Panel_a_strands
         colors: blue
+        tag: forbid
       NINE:
         id: Backside Room/Panel_nine_nine_7
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
@@ -3559,11 +5757,22 @@
         id: Open Areas/Panel_undistracted
         check: True
         exclude_reduce: True
+        tag: midwhite
       MASTERY:
         id: Master Room/Panel_mastery_mastery13
+        tag: midwhite
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+      EARTH:
+        id: Cross Room/Panel_earth_earth
+        tag: midwhite
+      WATER:
+        id: Cross Room/Panel_water_water
+        tag: midwhite
+      AIR:
+        id: Cross Room/Panel_air_air
+        tag: midwhite
     paintings:
       - id: south_afar
         orientation: south
@@ -3579,6 +5788,7 @@
       WANDERLUST:
         id: Tower Room/Panel_wanderlust_1234567890
         colors: orange
+        tag: midorange
     doors:
       Wanderer Entrance:
         id: Tower Room Area Doors/Door_wanderer_entrance
@@ -3601,7 +5811,40 @@
         id: Countdown Panels/Panel_1234567890_wanderlust
         colors: orange
         check: True
+        tag: forbid
         achievement: The Wanderer
+      "7890":
+        id: Orange Room/Panel_lust
+        colors: orange
+        tag: midorange
+      "6524":
+        id: Orange Room/Panel_read
+        colors: orange
+        tag: midorange
+      "951":
+        id: Orange Room/Panel_sew
+        colors: orange
+        tag: midorange
+      "4524":
+        id: Orange Room/Panel_dead
+        colors: orange
+        tag: midorange
+      LEARN:
+        id: Orange Room/Panel_learn
+        colors: orange
+        tag: midorange
+      DUST:
+        id: Orange Room/Panel_dust
+        colors: orange
+        tag: midorange
+      STAR:
+        id: Orange Room/Panel_star
+        colors: orange
+        tag: midorange
+      WANDER:
+        id: Orange Room/Panel_wander
+        colors: orange
+        tag: midorange
   Art Gallery:
     entrances:
       Orange Tower Third Floor: True
@@ -3613,23 +5856,29 @@
     panels:
       EIGHT:
         id: Backside Room/Panel_eight_eight_6
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Eights
       EON:
         id: Painting Room/Panel_eon_one
         colors: yellow
+        tag: midyellow
       TRUSTWORTHY:
         id: Painting Room/Panel_to_two
         colors: red
+        tag: midred
       FREE:
         id: Painting Room/Panel_free_three
         colors: purple
+        tag: midpurp
       OUR:
         id: Painting Room/Panel_our_four
         colors: blue
+        tag: midblue
       ONE ROAD MANY TURNS:
         id: Painting Room/Panel_order_onepathmanyturns
+        tag: forbid
         colors:
           - yellow
           - blue
@@ -3711,15 +5960,19 @@
       HOUSE:
         id: Painting Room/Panel_house_neighborhood
         colors: blue
+        tag: botblue
       PATH:
         id: Painting Room/Panel_path_road
         colors: brown
+        tag: botbrown
       PARK:
         id: Painting Room/Panel_park_drive
         colors: black
+        tag: botblack
       CARRIAGE:
         id: Painting Room/Panel_carriage_horse
         colors: red
+        tag: botred
     doors:
       Puzzles:
         skip_item: True
@@ -3738,15 +5991,19 @@
       AN:
         id: Painting Room/Panel_an_many
         colors: blue
+        tag: midblue
       MAY:
         id: Painting Room/Panel_may_many
         colors: blue
+        tag: midblue
       ANY:
         id: Painting Room/Panel_any_many
         colors: blue
+        tag: midblue
       MAN:
         id: Painting Room/Panel_man_many
         colors: blue
+        tag: midblue
     doors:
       Puzzles:
         skip_item: True
@@ -3765,21 +6022,27 @@
       URNS:
         id: Painting Room/Panel_urns_turns
         colors: blue
+        tag: midblue
       LEARNS:
         id: Painting Room/Panel_learns_turns
         colors: purple
+        tag: midpurp
       RUNTS:
         id: Painting Room/Panel_runts_turns
         colors: yellow
+        tag: midyellow
       SEND - USE:
         id: Painting Room/Panel_send_use_turns
         colors: orange
+        tag: midorange
       TRUST:
         id: Painting Room/Panel_trust_06890
         colors: orange
+        tag: midorange
       "062459":
         id: Painting Room/Panel_06890_trust
         colors: orange
+        tag: midorange
     doors:
       Puzzles:
         skip_item: True
@@ -3804,24 +6067,48 @@
       LOANS:
         id: Double Room/Panel_bones_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme BONES
       SKELETON:
         id: Double Room/Panel_bones_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme BONES
       REPENTANCE:
         id: Double Room/Panel_sentence_rhyme
         colors: purple
+        tag: whole rhyme
+        subtag: top
+        link: rhyme SENTENCE
       WORD:
         id: Double Room/Panel_sentence_whole
         colors: blue
+        tag: whole rhyme
+        subtag: bot
+        link: rhyme SENTENCE
       SCHEME:
         id: Double Room/Panel_dream_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme DREAM
       FANTASY:
         id: Double Room/Panel_dream_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme DREAM
       HISTORY:
         id: Double Room/Panel_mystery_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme MYSTERY
       SECRET:
         id: Double Room/Panel_mystery_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme MYSTERY
     doors:
       # This is complicated. I want the location in here to just be the four
       # panels against the wall toward Target. But in vanilla, you also need to
@@ -3866,31 +6153,59 @@
     panels:
       NINE:
         id: Backside Room/Panel_nine_nine_9
+        tag: midwhite
         required_door:
           room: Number Hunt
           door: Nines
       FERN:
         id: Double Room/Panel_return_rhyme
         colors: purple
+        tag: ant rhyme
+        subtag: top
+        link: rhyme RETURN
       STAY:
         id: Double Room/Panel_return_ant
         colors: black
+        tag: ant rhyme
+        subtag: bot
+        link: rhyme RETURN
       FRIEND:
         id: Double Room/Panel_descend_rhyme
         colors: purple
+        tag: ant rhyme
+        subtag: top
+        link: rhyme DESCEND
       RISE:
         id: Double Room/Panel_descend_ant
         colors: black
+        tag: ant rhyme
+        subtag: bot
+        link: rhyme DESCEND
       PLUMP:
         id: Double Room/Panel_jump_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme JUMP
       BOUNCE:
         id: Double Room/Panel_jump_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme JUMP
       SCRAWL:
         id: Double Room/Panel_fall_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme FALL
       PLUNGE:
         id: Double Room/Panel_fall_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme FALL
+      LEAP:
+        id: Double Room/Panel_leap_leap
+        tag: midwhite
     doors:
       Exit:
         id: Double Room Area Doors/Door_room_exit
@@ -3915,19 +6230,37 @@
       BIRD:
         id: Double Room/Panel_word_rhyme
         colors: purple
+        tag: whole rhyme
+        subtag: top
+        link: rhyme WORD
       LETTER:
         id: Double Room/Panel_word_whole
         colors: blue
+        tag: whole rhyme
+        subtag: bot
+        link: rhyme WORD
       FORBIDDEN:
         id: Double Room/Panel_hidden_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme HIDDEN
       CONCEALED:
         id: Double Room/Panel_hidden_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme HIDDEN
       VIOLENT:
         id: Double Room/Panel_silent_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme SILENT
       MUTE:
         id: Double Room/Panel_silent_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme SILENT
     doors:
       Door to Smiley:
         id:
@@ -3966,23 +6299,47 @@
       WALKED:
         id: Double Room/Panel_blocked_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme BLOCKED
       OBSTRUCTED:
         id: Double Room/Panel_blocked_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme BLOCKED
       SKIES:
         id: Double Room/Panel_rise_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme RISE
       SWELL:
         id: Double Room/Panel_rise_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme RISE
       PENNED:
         id: Double Room/Panel_ascend_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme ASCEND
       CLIMB:
         id: Double Room/Panel_ascend_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme ASCEND
       TROUBLE:
         id: Double Room/Panel_double_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme DOUBLE
       DUPLICATE:
         id: Double Room/Panel_double_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme DOUBLE
     doors:
       Door to Circle:
         id:
@@ -4053,18 +6410,36 @@
       WILD:
         id: Double Room/Panel_child_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme CHILD
       KID:
         id: Double Room/Panel_child_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme CHILD
       PISTOL:
         id: Double Room/Panel_crystal_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme CRYSTAL
       QUARTZ:
         id: Double Room/Panel_crystal_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme CRYSTAL
       INNOVATIVE (Top):
         id: Double Room/Panel_creative_rhyme
         colors: purple
+        tag: syn rhyme
+        subtag: top
+        link: rhyme CREATIVE
       INNOVATIVE (Bottom):
         id: Double Room/Panel_creative_syn
+        tag: syn rhyme
+        subtag: bot
+        link: rhyme CREATIVE
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
@@ -4090,29 +6465,187 @@
     entrances:
       Orange Tower Fourth Floor: True
     panels:
+      DOOR (1):
+        id: Panel Room/Panel_room_door_1
+        colors: gray
+        tag: forbid
+      DOOR (2):
+        id: Panel Room/Panel_room_door_2
+        colors: gray
+        tag: forbid
+      WINDOW:
+        id: Panel Room/Panel_room_window_1
+        colors: gray
+        tag: forbid
+      STAIRS:
+        id: Panel Room/Panel_room_stairs_1
+        colors: gray
+        tag: forbid
+      PAINTING:
+        id: Panel Room/Panel_room_painting_1
+        colors: gray
+        tag: forbid
+      FLOOR (1):
+        id: Panel Room/Panel_room_floor_1
+        colors: gray
+        tag: forbid
+      FLOOR (2):
+        id: Panel Room/Panel_room_floor_2
+        colors: gray
+        tag: forbid
+      FLOOR (3):
+        id: Panel Room/Panel_room_floor_3
+        colors: gray
+        tag: forbid
+      FLOOR (4):
+        id: Panel Room/Panel_room_floor_4
+        colors: gray
+        tag: forbid
+      FLOOR (5):
+        id: Panel Room/Panel_room_floor_5
+        colors: gray
+        tag: forbid
+      FLOOR (7):
+        id: Panel Room/Panel_room_floor_7
+        colors: gray
+        tag: forbid
+      FLOOR (8):
+        id: Panel Room/Panel_room_floor_8
+        colors: gray
+        tag: forbid
+      FLOOR (9):
+        id: Panel Room/Panel_room_floor_9
+        colors: gray
+        tag: forbid
+      FLOOR (10):
+        id: Panel Room/Panel_room_floor_10
+        colors: gray
+        tag: forbid
+      CEILING (1):
+        id: Panel Room/Panel_room_ceiling_1
+        colors: gray
+        tag: forbid
+      CEILING (2):
+        id: Panel Room/Panel_room_ceiling_2
+        colors: gray
+        tag: forbid
+      CEILING (3):
+        id: Panel Room/Panel_room_ceiling_3
+        colors: gray
+        tag: forbid
+      CEILING (4):
+        id: Panel Room/Panel_room_ceiling_4
+        colors: gray
+        tag: forbid
+      CEILING (5):
+        id: Panel Room/Panel_room_ceiling_5
+        colors: gray
+        tag: forbid
       WALL (1):
         id: Panel Room/Panel_room_wall_1
         colors: gray
+        tag: forbid
+      WALL (2):
+        id: Panel Room/Panel_room_wall_2
+        colors: gray
+        tag: forbid
+      WALL (3):
+        id: Panel Room/Panel_room_wall_3
+        colors: gray
+        tag: forbid
+      WALL (4):
+        id: Panel Room/Panel_room_wall_4
+        colors: gray
+        tag: forbid
+      WALL (5):
+        id: Panel Room/Panel_room_wall_5
+        colors: gray
+        tag: forbid
+      WALL (6):
+        id: Panel Room/Panel_room_wall_6
+        colors: gray
+        tag: forbid
+      WALL (7):
+        id: Panel Room/Panel_room_wall_7
+        colors: gray
+        tag: forbid
+      WALL (8):
+        id: Panel Room/Panel_room_wall_8
+        colors: gray
+        tag: forbid
+      WALL (9):
+        id: Panel Room/Panel_room_wall_9
+        colors: gray
+        tag: forbid
+      WALL (10):
+        id: Panel Room/Panel_room_wall_10
+        colors: gray
+        tag: forbid
+      WALL (11):
+        id: Panel Room/Panel_room_wall_11
+        colors: gray
+        tag: forbid
+      WALL (12):
+        id: Panel Room/Panel_room_wall_12
+        colors: gray
+        tag: forbid
+      WALL (13):
+        id: Panel Room/Panel_room_wall_13
+        colors: gray
+        tag: forbid
+      WALL (14):
+        id: Panel Room/Panel_room_wall_14
+        colors: gray
+        tag: forbid
+      WALL (15):
+        id: Panel Room/Panel_room_wall_15
+        colors: gray
+        tag: forbid
+      WALL (16):
+        id: Panel Room/Panel_room_wall_16
+        colors: gray
+        tag: forbid
+      WALL (17):
+        id: Panel Room/Panel_room_wall_17
+        colors: gray
+        tag: forbid
+      WALL (18):
+        id: Panel Room/Panel_room_wall_18
+        colors: gray
+        tag: forbid
+      WALL (19):
+        id: Panel Room/Panel_room_wall_19
+        colors: gray
+        tag: forbid
+      WALL (20):
+        id: Panel Room/Panel_room_wall_20
+        colors: gray
+        tag: forbid
+      WALL (21):
+        id: Panel Room/Panel_room_wall_21
+        colors: gray
+        tag: forbid
       BROOMED:
         id: Panel Room/Panel_broomed_bedroom
-        colors:
-          - yellow
-          - gray
+        colors: yellow
+        tag: midyellow
+        required_door:
+          door: Excavation
       LAYS:
         id: Panel Room/Panel_lays_maze
-        colors:
-          - yellow
-          - purple
-          - gray
+        colors: purple
+        tag: toppurp
+        required_panel:
+          panel: BROOMED
       BASE:
         id: Panel Room/Panel_base_basement
-        colors:
-          - yellow
-          - purple
-          - blue
-          - gray
+        colors: blue
+        tag: midblue
+        required_panel:
+          panel: LAYS
       MASTERY:
         id: Master Room/Panel_mastery_mastery
+        tag: midwhite
         colors: gray
         required_door:
           room: Orange Tower Seventh Floor
@@ -4127,8 +6660,6 @@
           - Tower Room Area Doors/Door_panel_basement
           - Tower Room Area Doors/Door_panel_basement2
         panels:
-          - BROOMED
-          - LAYS
           - BASE
   Cellar:
     entrances:
@@ -4138,6 +6669,31 @@
       Orange Tower Fifth Floor:
         room: Room Room
         door: Shortcut to Fifth Floor
+    panels:
+      FLOWER:
+        id: Panel Room/Panel_painting_flower
+        colors: green
+        tag: forbid
+      EYE:
+        id: Panel Room/Panel_painting_eye
+        colors: green
+        tag: forbid
+      SNOWMAN:
+        id: Panel Room/Panel_painting_snowman
+        colors: green
+        tag: forbid
+      OWL:
+        id: Panel Room/Panel_painting_owl
+        colors: green
+        tag: forbid
+      PANDA:
+        id: Panel Room/Panel_painting_panda
+        colors: green
+        tag: forbid
+      STAIRS:
+        id: Panel Room/Panel_room_stairs
+        colors: gray
+        tag: forbid
   Outside The Wise:
     entrances:
       Orange Tower Sixth Floor:
@@ -4148,8 +6704,10 @@
       KITTEN:
         id: Clock Room/Panel_kitten_cat
         colors: brown
+        tag: botbrown
       CAT:
         id: Clock Room/Panel_cat_kitten
+        tag: bot brown black
         colors:
           - brown
           - black
@@ -4178,8 +6736,65 @@
         colors:
           - brown
           - black
+        tag: forbid
         check: True
         achievement: The Wise
+      PUPPY:
+        id: Clock Room/Panel_puppy_dog
+        colors: brown
+        tag: botbrown
+      ADULT:
+        id: Clock Room/Panel_adult_child
+        colors:
+          - brown
+          - black
+        tag: bot brown black
+      BREAD:
+        id: Clock Room/Panel_bread_mold
+        colors: brown
+        tag: botbrown
+      DINOSAUR:
+        id: Clock Room/Panel_dinosaur_fossil
+        colors: brown
+        tag: botbrown
+      OAK:
+        id: Clock Room/Panel_oak_acorn
+        colors:
+          - brown
+          - black
+        tag: bot brown black
+      CORPSE:
+        id: Clock Room/Panel_corpse_skeleton
+        colors: brown
+        tag: botbrown
+      BEFORE:
+        id: Clock Room/Panel_before_ere
+        colors:
+          - brown
+          - black
+        tag: mid brown black
+      YOUR:
+        id: Clock Room/Panel_your_thy
+        colors:
+          - brown
+          - black
+        tag: mid brown black
+      BETWIXT:
+        id: Clock Room/Panel_betwixt_between
+        colors: brown
+        tag: midbrown
+      NIGH:
+        id: Clock Room/Panel_nigh_near
+        colors: brown
+        tag: midbrown
+      CONNEXION:
+        id: Clock Room/Panel_connexion_connection
+        colors: brown
+        tag: midbrown
+      THOU:
+        id: Clock Room/Panel_thou_you
+        colors: brown
+        tag: midbrown
     paintings:
       - id: clock_painting_3
         orientation: east
@@ -4189,11 +6804,78 @@
     panels:
       Achievement:
         id: Countdown Panels/Panel_grandfathered_red
-        colors:
-          - red
-          - black
+        colors: red
+        tag: forbid
         check: True
         achievement: The Red
+      PANDEMIC (1):
+        id: Hangry Room/Panel_red_top_1
+        colors: red
+        tag: topred
+      TRINITY:
+        id: Hangry Room/Panel_red_top_2
+        colors: red
+        tag: topred
+      CHEMISTRY:
+        id: Hangry Room/Panel_red_top_3
+        colors: red
+        tag: topred
+      FLUMMOXED:
+        id: Hangry Room/Panel_red_top_4
+        colors: red
+        tag: topred
+      PANDEMIC (2):
+        id: Hangry Room/Panel_red_mid_1
+        colors: red
+        tag: midred
+      COUNTERCLOCKWISE:
+        id: Hangry Room/Panel_red_mid_2
+        colors: red
+        tag: red top red mid black bot
+      FEARLESS:
+        id: Hangry Room/Panel_red_mid_3
+        colors: red
+        tag: midred
+      DEFORESTATION:
+        id: Hangry Room/Panel_red_mid_4
+        colors: red
+        tag: red mid bot
+        subtag: mid
+        link: rmb FORE
+      CRAFTSMANSHIP:
+        id: Hangry Room/Panel_red_mid_5
+        colors: red
+        tag: red mid bot
+        subtag: mid
+        link: rmb AFT
+      CAMEL:
+        id: Hangry Room/Panel_red_bot_1
+        colors: red
+        tag: botred
+      LION:
+        id: Hangry Room/Panel_red_bot_2
+        colors: red
+        tag: botred
+      TIGER:
+        id: Hangry Room/Panel_red_bot_3
+        colors: red
+        tag: botred
+      SHIP (1):
+        id: Hangry Room/Panel_red_bot_4
+        colors: red
+        tag: red mid bot
+        subtag: bot
+        link: rmb FORE
+      SHIP (2):
+        id: Hangry Room/Panel_red_bot_5
+        colors: red
+        tag: red mid bot
+        subtag: bot
+        link: rmb AFT
+      GIRAFFE:
+        id: Hangry Room/Panel_red_bot_6
+        colors: red
+        tag: botred
   The Ecstatic:
     entrances:
       Roof: True
@@ -4201,8 +6883,65 @@
       Achievement:
         id: Countdown Panels/Panel_ecstatic_ecstatic
         colors: yellow
+        tag: forbid
         check: True
         achievement: The Ecstatic
+      VINES:
+        id: Smiley Room/Panel_soundgram_1
+        colors: yellow
+        tag: topyellow
+      LEAVES:
+        id: Smiley Room/Panel_soundgram_2
+        colors: yellow
+        tag: topyellow
+      EGGS:
+        id: Smiley Room/Panel_scrambled_1
+        colors: yellow
+        tag: botyellow
+      VEGETABLES:
+        id: Smiley Room/Panel_scrambled_2
+        colors: yellow
+        tag: botyellow
+      ARGENT:
+        id: Smiley Room/Panel_anagram_6_1
+        colors: yellow
+        tag: midyellow
+      CHASER:
+        id: Smiley Room/Panel_anagram_6_2
+        colors: yellow
+        tag: midyellow
+      REGALLY:
+        id: Smiley Room/Panel_anagram_7_1
+        colors: yellow
+        tag: midyellow
+      REPENTS:
+        id: Smiley Room/Panel_anagram_7_2
+        colors: yellow
+        tag: midyellow
+      PRAISED:
+        id: Smiley Room/Panel_anagram_7_3
+        colors: yellow
+        tag: midyellow
+      ADMIRER:
+        id: Smiley Room/Panel_anagram_7_4
+        colors: yellow
+        tag: midyellow
+      DISOWNED:
+        id: Smiley Room/Panel_anagram_8_1
+        colors: yellow
+        tag: midyellow
+      GENERALS:
+        id: Smiley Room/Panel_anagram_8_2
+        colors: yellow
+        tag: midyellow
+      RESIGNED:
+        id: Smiley Room/Panel_anagram_8_3
+        colors: yellow
+        tag: midyellow
+      EMIGRANTS:
+        id: Smiley Room/Panel_anagram_9_1
+        colors: yellow
+        tag: midyellow
   Outside The Scientific:
     entrances:
       Roof: True
@@ -4211,6 +6950,15 @@
     panels:
       OPEN:
         id: Chemistry Room/Panel_open
+        tag: midwhite
+      CLOSE:
+        id: Chemistry Room/Panel_close
+        colors: black
+        tag: botblack
+      AHEAD:
+        id: Chemistry Room/Panel_ahead
+        colors: black
+        tag: botblack
     doors:
       Scientific Entrance:
         id: Red Blue Purple Room Area Doors/Door_chemistry_lab
@@ -4232,120 +6980,216 @@
           - brown
           - black
           - purple
+        tag: forbid
         check: True
         achievement: The Scientific
       HYDROGEN (1):
         id: Chemistry Room/Panel_blue_bot_3
         colors: blue
+        tag: tri botblue
+        link: tbb WATER
       OXYGEN:
         id: Chemistry Room/Panel_blue_bot_2
         colors: blue
+        tag: tri botblue
+        link: tbb WATER
       HYDROGEN (2):
         id: Chemistry Room/Panel_blue_bot_4
         colors: blue
+        tag: tri botblue
+        link: tbb WATER
       SUGAR (1):
         id: Chemistry Room/Panel_sugar_1
         colors: red
+        tag: botred
       SUGAR (2):
         id: Chemistry Room/Panel_sugar_2
         colors: red
+        tag: botred
       SUGAR (3):
         id: Chemistry Room/Panel_sugar_3
         colors: red
+        tag: botred
       CHLORINE:
         id: Chemistry Room/Panel_blue_bot_5
         colors: blue
+        tag: double botblue
+        subtag: left
+        link: holo SALT
       SODIUM:
         id: Chemistry Room/Panel_blue_bot_6
         colors: blue
+        tag: double botblue
+        subtag: right
+        link: holo SALT
       FOREST:
         id: Chemistry Room/Panel_long_bot_1
         colors:
           - red
           - blue
+        tag: chain red bot blue top
       POUND:
         id: Chemistry Room/Panel_long_top_1
         colors:
           - red
           - blue
+        tag: chain blue mid red bot
       ICE:
         id: Chemistry Room/Panel_brown_bot_1
         colors: brown
+        tag: botbrown
       FISSION:
         id: Chemistry Room/Panel_black_bot_1
         colors: black
+        tag: botblack
       FUSION:
         id: Chemistry Room/Panel_black_bot_2
         colors: black
+        tag: botblack
       MISS:
         id: Chemistry Room/Panel_blue_top_1
         colors: blue
+        tag: double topblue
+        subtag: left
+        link: exp CHEMISTRY
       TREE (1):
         id: Chemistry Room/Panel_blue_top_2
         colors: blue
+        tag: double topblue
+        subtag: right
+        link: exp CHEMISTRY
       BIOGRAPHY:
         id: Chemistry Room/Panel_biology_9
         colors: purple
+        tag: midpurp
       CACTUS:
         id: Chemistry Room/Panel_biology_4
         colors: red
+        tag: double botred
+        subtag: right
+        link: mero SPINE
       VERTEBRATE:
         id: Chemistry Room/Panel_biology_8
         colors: red
+        tag: double botred
+        subtag: left
+        link: mero SPINE
       ROSE:
         id: Chemistry Room/Panel_biology_2
         colors: red
+        tag: botred
       TREE (2):
         id: Chemistry Room/Panel_biology_3
         colors: red
+        tag: botred
       FRUIT:
         id: Chemistry Room/Panel_biology_1
         colors: red
+        tag: botred
       MAMMAL:
         id: Chemistry Room/Panel_biology_5
         colors: red
+        tag: botred
       BIRD:
         id: Chemistry Room/Panel_biology_6
         colors: red
+        tag: botred
       FISH:
         id: Chemistry Room/Panel_biology_7
         colors: red
+        tag: botred
       GRAVELY:
         id: Chemistry Room/Panel_physics_9
         colors: purple
+        tag: double midpurp
+        subtag: left
+        link: change GRAVITY
       BREVITY:
         id: Chemistry Room/Panel_biology_10
         colors: purple
+        tag: double midpurp
+        subtag: right
+        link: change GRAVITY
       PART:
         id: Chemistry Room/Panel_physics_2
         colors: blue
+        tag: blue mid red bot
+        subtag: mid
+        link: xur PARTICLE
       MATTER:
         id: Chemistry Room/Panel_physics_1
         colors: red
+        tag: blue mid red bot
+        subtag: bot
+        link: xur PARTICLE
       ELECTRIC:
         id: Chemistry Room/Panel_physics_6
         colors: purple
+        tag: purple mid red bot
+        subtag: mid
+        link: xpr ELECTRON
       ATOM (1):
         id: Chemistry Room/Panel_physics_3
         colors: red
+        tag: purple mid red bot
+        subtag: bot
+        link: xpr ELECTRON
       NEUTRAL:
         id: Chemistry Room/Panel_physics_7
         colors: purple
+        tag: purple mid red bot
+        subtag: mid
+        link: xpr NEUTRON
       ATOM (2):
         id: Chemistry Room/Panel_physics_4
         colors: red
+        tag: purple mid red bot
+        subtag: bot
+        link: xpr NEUTRON
       PROPEL:
         id: Chemistry Room/Panel_physics_8
         colors: purple
+        tag: purple mid red bot
+        subtag: mid
+        link: xpr PROTON
       ATOM (3):
         id: Chemistry Room/Panel_physics_5
         colors: red
+        tag: purple mid red bot
+        subtag: bot
+        link: xpr PROTON
       ORDER:
         id: Chemistry Room/Panel_physics_11
         colors: brown
+        tag: botbrown
       OPTICS:
         id: Chemistry Room/Panel_physics_10
         colors: yellow
+        tag: midyellow
+      GRAPHITE:
+        id: Chemistry Room/Panel_yellow_bot_1
+        colors: yellow
+        tag: botyellow
+      HOT RYE:
+        id: Chemistry Room/Panel_anagram_1
+        colors: yellow
+        tag: midyellow
+      SIT SHY HOPE:
+        id: Chemistry Room/Panel_anagram_2
+        colors: yellow
+        tag: midyellow
+      ME NEXT PIER:
+        id: Chemistry Room/Panel_anagram_3
+        colors: yellow
+        tag: midyellow
+      RUT LESS:
+        id: Chemistry Room/Panel_anagram_4
+        colors: yellow
+        tag: midyellow
+      SON COUNCIL:
+        id: Chemistry Room/Panel_anagram_5
+        colors: yellow
+        tag: midyellow
     doors:
       Chemistry Puzzles:
         skip_item: True
@@ -4408,6 +7252,10 @@
     panels:
       WELCOME:
         id: Challenge Room/Panel_welcome_welcome
+        tag: midwhite
+      CHALLENGE:
+        id: Challenge Room/Panel_challenge_challenge
+        tag: midwhite
       Achievement:
         id: Countdown Panels/Panel_challenged_unchallenged
         check: True
@@ -4420,7 +7268,117 @@
           - purple
           - brown
           - orange
+        tag: forbid
         achievement: The Unchallenged
+      OPEN:
+        id: Challenge Room/Panel_open_nepotism
+        colors:
+          - black
+          - blue
+        tag: chain mid black !!! blue
+      SINGED:
+        id: Challenge Room/Panel_singed_singsong
+        colors:
+          - red
+          - blue
+        tag: chain mid red blue
+      NEVER TRUSTED:
+        id: Challenge Room/Panel_nevertrusted_maladjusted
+        colors: purple
+        tag: midpurp
+      CORNER:
+        id: Challenge Room/Panel_corner_corn
+        colors: red
+        tag: midred
+      STRAWBERRIES:
+        id: Challenge Room/Panel_strawberries_mold
+        colors: brown
+        tag: double botbrown
+        subtag: left
+        link: time MOLD
+      GRUB:
+        id: Challenge Room/Panel_grub_burger
+        colors:
+          - black
+          - blue
+        tag: chain mid black blue
+      BREAD:
+        id: Challenge Room/Panel_bread_mold
+        colors: brown
+        tag: double botbrown
+        subtag: right
+        link: time MOLD
+      COLOR:
+        id: Challenge Room/Panel_color_gray
+        colors: gray
+        tag: forbid
+      WRITER:
+        id: Challenge Room/Panel_writer_songwriter
+        colors: blue
+        tag: midblue
+      "02759":
+        id: Challenge Room/Panel_tales_stale
+        colors:
+          - orange
+          - yellow
+        tag: chain mid orange yellow
+      REAL EYES:
+        id: Challenge Room/Panel_realeyes_realize
+        tag: topwhite
+      LOBS:
+        id: Challenge Room/Panel_lobs_lobster
+        colors: blue
+        tag: midblue
+      PEST ALLY:
+        id: Challenge Room/Panel_double_anagram_1
+        colors: yellow
+        tag: midyellow
+      GENIAL HALO:
+        id: Challenge Room/Panel_double_anagram_2
+        colors: yellow
+        tag: midyellow
+      DUCK LOGO:
+        id: Challenge Room/Panel_double_anagram_3
+        colors: yellow
+        tag: midyellow
+      AVIAN GREEN:
+        id: Challenge Room/Panel_double_anagram_4
+        colors: yellow
+        tag: midyellow
+      FEVER TEAR:
+        id: Challenge Room/Panel_double_anagram_5
+        colors: yellow
+        tag: midyellow
+      FACTS:
+        id: Challenge Room/Panel_facts
+        colors:
+          - white
+          - red
+          - blue
+        tag: forbid
+      FACTS (1):
+        id: Challenge Room/Panel_facts2
+        colors: red
+        tag: forbid
+      FACTS (3):
+        id: Challenge Room/Panel_facts3
+        tag: forbid
+      FACTS (4):
+        id: Challenge Room/Panel_facts4
+        colors: blue
+        tag: forbid
+      FACTS (5):
+        id: Challenge Room/Panel_facts5
+        colors: blue
+        tag: forbid
+      FACTS (6):
+        id: Challenge Room/Panel_facts6
+        colors: blue
+        tag: forbid
+      LAPEL SHEEP:
+        id: Challenge Room/Panel_double_anagram_6
+        colors: yellow
+        tag: midyellow
     doors:
       Welcome Door:
         id: Entry Room Area Doors/Door_challenge_challenge

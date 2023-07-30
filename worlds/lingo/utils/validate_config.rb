@@ -10,8 +10,8 @@ require 'yaml'
 configpath = ARGV[0]
 mappath = ARGV[1]
 
-panels = Set[]
-doors = Set[]
+panels = Set["Countdown Panels/Panel_1234567890_wanderlust"]
+doors = Set["Naps Room Doors/Door_hider_new1", "Tower Room Area Doors/Door_wanderer_entrance"]
 paintings = Set[]
 
 File.readlines(mappath).each do |line|
@@ -40,6 +40,11 @@ mentioned_panels = Set[]
 door_groups = {}
 
 directives = Set["entrances", "panels", "doors", "paintings", "progression"]
+panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting"]
+door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event"]
+painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move"]
+
+non_counting = 0
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
@@ -74,6 +79,10 @@ config.each do |room_name, room|
   end
 
   (room["panels"] || {}).each do |panel_name, panel|
+    unless panel_name.kind_of? String then
+      puts "#{room_name} has an invalid panel name"
+    end
+
     configured_panels.add(room_name + " - " + panel_name)
 
     if panel.include?("id")
@@ -116,8 +125,42 @@ config.each do |room_name, room|
 
       required_doors.each do |required_door|
         other_room = required_door.include?("room") ? required_door["room"] : room_name
+        mentioned_rooms.add(other_room)
         mentioned_doors.add("#{other_room} - #{required_door["door"]}")
       end
+    end
+
+    if panel.include?("required_panel")
+      required_panels = []
+      if panel["required_panel"].kind_of? Array
+        required_panels = panel["required_panel"]
+      else
+        required_panels = [panel["required_panel"]]
+      end
+
+      required_panels.each do |required_panel|
+        other_room = required_panel.include?("room") ? required_panel["room"] : room_name
+        mentioned_rooms.add(other_room)
+        mentioned_panels.add("#{other_room} - #{required_panel["panel"]}")
+      end
+    end
+
+    unless panel.include?("tag") then
+      puts "#{room_name} - #{panel_name} :::: Panel is missing a tag"
+    end
+
+    if panel.include?("non_counting") then
+      non_counting += 1
+    end
+
+    bad_subdirectives = []
+    panel.keys.each do |key|
+      unless panel_directives.include?(key) then
+        bad_subdirectives << key
+      end
+    end
+    unless bad_subdirectives.empty? then
+      puts "#{room_name} - #{panel_name} :::: Panel has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
   end
 
@@ -176,6 +219,16 @@ config.each do |room_name, room|
       door_groups[door["group"]] ||= 0
       door_groups[door["group"]] += 1
     end
+
+    bad_subdirectives = []
+    door.keys.each do |key|
+      unless door_directives.include?(key) then
+        bad_subdirectives << key
+      end
+    end
+    unless bad_subdirectives.empty? then
+      puts "#{room_name} - #{door_name} :::: Door has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
+    end
   end
 
   (room["paintings"] || []).each do |painting|
@@ -207,6 +260,16 @@ config.each do |room_name, room|
       unless painting["enter_only"] then
         puts "#{room_name} - #{painting["id"] || "painting"} :::: Should be marked enter_only if there is a required_door"
       end
+    end
+
+    bad_subdirectives = []
+    painting.keys.each do |key|
+      unless painting_directives.include?(key) then
+        bad_subdirectives << key
+      end
+    end
+    unless bad_subdirectives.empty? then
+      puts "#{room_name} - #{painting["id"] || "painting"} :::: Painting has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
   end
 
@@ -262,3 +325,5 @@ end
 unless slashed_doors.empty? then
   puts "The following doors have slashes in their names: " + slashed_doors.to_s
 end
+
+puts "#{configured_panels.size} panels (#{non_counting} non counting)"

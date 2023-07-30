@@ -247,17 +247,6 @@ class LingoPlayerLogic:
             warp_exit = multiworld.per_slot_randoms[player].choice(chosen_exits)
             self.PAINTING_MAPPING[warp_enter] = warp_exit
 
-        # Hard-code the relation with the two pencil paintings in The Steady. If the pencil painting outside The
-        # Bold is an entrance, then these should also be the same entrance (so we don't have to worry about logic
-        # trying to figure out if the player has access to those paintings, since the one outside The Bold is right
-        # there). Otherwise, make these paintings warps to the main one.
-        if "pencil_painting2" in self.PAINTING_MAPPING.keys():
-            self.PAINTING_MAPPING["pencil_painting4"] = self.PAINTING_MAPPING["pencil_painting2"]
-            self.PAINTING_MAPPING["pencil_painting5"] = self.PAINTING_MAPPING["pencil_painting2"]
-        else:
-            self.PAINTING_MAPPING["pencil_painting4"] = "pencil_painting2"
-            self.PAINTING_MAPPING["pencil_painting5"] = "pencil_painting2"
-
         # The Eye Wall painting is unique in that it is both double-sided and also enter only (because it moves).
         # There is only one eligible double-sided exit painting, which is the vanilla exit for this warp. If the
         # exit painting is an entrance in the shuffle, we will disable the Eye Wall painting. Otherwise, Eye Wall

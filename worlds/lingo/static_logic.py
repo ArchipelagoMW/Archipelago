@@ -43,6 +43,7 @@ class Door(NamedTuple):
 class Panel(NamedTuple):
     required_rooms: List[str]
     required_doors: List[RoomAndDoor]
+    required_panels: List[RoomAndPanel]
     colors: List[str]
     check: bool
     event: bool
@@ -144,6 +145,21 @@ class StaticLingoLogic:
                         door["door"]
                     ))
 
+        required_panels = list()
+        if "required_panel" in panel_data:
+            if isinstance(panel_data["required_panel"], Dict):
+                other_panel = panel_data["required_panel"]
+                required_panels.append(RoomAndPanel(
+                    other_panel["room"] if "room" in other_panel else None,
+                    other_panel["panel"]
+                ))
+            else:
+                for other_panel in panel_data["required_panel"]:
+                    required_panels.append(RoomAndPanel(
+                        other_panel["room"] if "room" in other_panel else None,
+                        other_panel["panel"]
+                    ))
+
         if "colors" in panel_data:
             if isinstance(panel_data["colors"], List):
                 colors = panel_data["colors"]
@@ -180,7 +196,7 @@ class StaticLingoLogic:
         else:
             internal_ids = []
 
-        panel_obj = Panel(required_rooms, required_doors, colors, check, event, internal_ids,
+        panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, internal_ids,
                           exclude_reduce, achievement)
         self.PANELS[full_name] = panel_obj
         self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
