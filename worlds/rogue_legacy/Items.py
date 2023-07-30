@@ -261,7 +261,7 @@ item_table: Dict[str, RLItemData] = {
     "Progressive Shinobis":     RLItemData(ItemClassification.useful,         7, get_shinobis_quantity),
     "Progressive Miners":       RLItemData(ItemClassification.useful,         8, get_miners_quantity),
     "Progressive Liches":       RLItemData(ItemClassification.useful,         9, get_liches_quantity),
-    "Progressive Spellthieves": RLItemData(ItemClassification.useful,        10, get_liches_quantity),
+    "Progressive Spellthieves": RLItemData(ItemClassification.useful,        10, get_spellthieves_quantity),
     "Dragons":                  RLItemData(ItemClassification.progression,   96, get_dragons_quantity),
     "Traitors":                 RLItemData(ItemClassification.useful,        97, get_traitors_quantity),
 
