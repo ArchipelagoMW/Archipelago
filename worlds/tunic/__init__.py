@@ -1,6 +1,6 @@
 from typing import Dict
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .Items import TunicItems
 from .Locations import TunicLocations
 from .Rules import set_location_rules
@@ -64,14 +64,24 @@ class TunicWorld(World):
                          self.player)
 
     def create_items(self):
+
+        hexagon_locations: Dict[str, str] = {
+            "Red Hexagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
+            "Green Hexagon": "Librarian - Hexagon Green",
+            "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue"
+        }
+
         items = []
         for item_name in TunicItems.items_lookup:
             item = self.tunic_items.items_lookup[item_name]
             if item.name == "Gold Hexagon" and not self.multiworld.hexagon_quest[self.player].value:
                 continue
-
-            for i in range(0, item.quantity_in_item_pool):
-                items.append(self.create_item(item.name))
+            elif self.multiworld.keys_behind_bosses[self.player].value and item.name in hexagon_locations.keys():
+                self.multiworld.get_location(hexagon_locations[item.name], self.player)\
+                    .place_locked_item(self.create_item(item.name))
+            else:
+                for i in range(0, item.quantity_in_item_pool):
+                    items.append(self.create_item(item.name))
 
         self.multiworld.random.shuffle(items)
         self.multiworld.itempool += items
@@ -102,18 +112,6 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
-
-    def pre_fill(self) -> None:
-        if self.multiworld.keys_behind_bosses[self.player].value:
-            hexagon_quest = self.multiworld.hexagon_quest[self.player].value
-            # Place hexagons behind bosses
-            self.multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup",
-                                         self.player).item_rule = lambda \
-                item: item.name == "Gold Hexagon" if hexagon_quest else "Red Hexagon"
-            self.multiworld.get_location("Librarian - Hexagon Green", self.player).item_rule = lambda \
-                item: item.name == "Gold Hexagon" if hexagon_quest else "Green Hexagon"
-            self.multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", self.player).item_rule = lambda \
-                item: item.name == "Gold Hexagon" if hexagon_quest else "Blue Hexagon"
 
     def fill_slot_data(self) -> Dict[str, any]:
         # Find items for generating hints in-game

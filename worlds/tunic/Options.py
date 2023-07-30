@@ -1,6 +1,6 @@
 import typing
 
-from Options import Option, DefaultOnToggle, Choice, Toggle
+from Options import Option, DefaultOnToggle, Toggle
 
 class SwordProgression(DefaultOnToggle):
     """Option to play with sword progression. Sword Progression adds four possible upgrades to find that will
@@ -12,7 +12,7 @@ class StartWithSword(Toggle):
 
 class KeysBehindBosses(Toggle):
     """Option to choose if the three hexagon keys are placed randomly or behind their respective boss fight"""
-    display_name = "Hexagons Behind Bosses"
+    display_name = "Keys Behind Bosses"
 
 class AbilityShuffling(Toggle):
     """Choose whether to lock the usage of Prayer, Holy Cross*, and Ice Rod until the relevant poge of the manual is found.

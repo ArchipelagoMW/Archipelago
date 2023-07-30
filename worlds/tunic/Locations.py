@@ -1,6 +1,5 @@
 from pathlib import Path
-from typing import Dict, Set, NamedTuple, List
-from BaseClasses import Location
+from typing import Dict, List
 import csv
 
 
