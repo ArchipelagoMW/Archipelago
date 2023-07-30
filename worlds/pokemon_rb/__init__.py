@@ -7,8 +7,8 @@ from typing import TextIO
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
 from Fill import fill_restrictive, FillError, sweep_from_pool
-from ..AutoWorld import World, WebWorld
-from ..generic.Rules import add_item_rule
+from worlds.AutoWorld import World, WebWorld
+from worlds.generic.Rules import add_item_rule
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from .regions import create_regions

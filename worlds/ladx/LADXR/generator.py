@@ -247,7 +247,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     # USEFUL_HINT = 1.0
     # TODO: filter events, filter unshuffled keys
     all_items = multiworld.get_items()
-    our_items = [item for item in all_items if item.player == player_id and item.code is not None and item.location.show_in_spoiler]
+    our_items = [item for item in all_items if item.player == player_id and item.location and item.code is not None and item.location.show_in_spoiler]
     our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
     def gen_hint():
         chance = rnd.uniform(0, 1)

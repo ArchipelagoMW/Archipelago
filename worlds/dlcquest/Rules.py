@@ -105,6 +105,8 @@ def set_basic_shuffled_items_rules(World_Options, player, world):
              lambda state: state.has("Sword", player) or state.has("Gun", player))
     set_rule(world.get_location("West Cave Sheep", player),
              lambda state: state.has("Sword", player) or state.has("Gun", player))
+    set_rule(world.get_location("Gun", player),
+             lambda state: state.has("Gun Pack", player))
 
     if World_Options[Options.TimeIsMoney] == Options.TimeIsMoney.option_required:
         set_rule(world.get_location("Sword", player),
