@@ -48,6 +48,12 @@ before connecting.
 When the console tells you that you have joined the room, you're all set. Congratulations on successfully joining a
 multiworld game!
 
+### PLEASE READ!
+
+Please read this page in its entirety before asking questions! Most importantly, there is a list of 
+gameplay differences at the bottom.
+[Undertale Game Info Page](/games/Undertale/info/en)
+
 ### Where do I get a YAML file?
 
 You can customize your settings by visiting the [Undertale Player Settings Page](/games/Undertale/player-settings)

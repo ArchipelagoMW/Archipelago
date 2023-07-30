@@ -276,6 +276,8 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], world_o
 
 
 def extend_backpack_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.BackpackProgression] == options.BackpackProgression.option_vanilla:
+        return
     backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
     filtered_backpack_locations = filter_modded_locations(world_options, backpack_locations)
     randomized_locations.extend(filtered_backpack_locations)

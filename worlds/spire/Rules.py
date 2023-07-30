@@ -69,8 +69,6 @@ def set_rules(world: MultiWorld, player: int):
     # Act 3 Boss Event
     set_rule(world.get_location("Act 3 Boss", player), lambda state: state.has("Beat Act 2 Boss", player) and state._spire_has_relics(player, 7) and state.has("Boss Relic", player, 2))
 
-    # Act 3 Boss Rewards
-    set_rule(world.get_location("Rare Card Draw 3", player), lambda state: state.has("Beat Act 3 Boss", player))
-    set_rule(world.get_location("Boss Relic 3", player), lambda state: state.has("Beat Act 3 Boss", player))
-
     set_rule(world.get_location("Heart Room", player), lambda state: state.has("Beat Act 3 Boss", player))
+
+    world.completion_condition[player] = lambda state: state.has("Victory", player)
