@@ -134,7 +134,7 @@ class ValidInventory:
 
         # Locking associated items for items that have already been placed when units_always_have_upgrades is on
         if units_always_have_upgrades:
-            existing_items = self.existing_items[:]
+            existing_items = set(self.existing_items[:] + locked_items)
             while existing_items:
                 existing_item = existing_items.pop()
                 items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
@@ -142,8 +142,10 @@ class ValidInventory:
                     if item in inventory:
                         for _ in range(inventory.count(item)):
                             inventory.remove(item)
-                        for _ in range(get_item_quantity(item)):
-                            locked_items.append(copy_item(item))
+                        if item not in locked_items:
+                            # Lock all the associated items if not already locked
+                            for _ in range(get_item_quantity(item)):
+                                locked_items.append(copy_item(item))
                     if item in existing_items:
                         existing_items.remove(item)
 

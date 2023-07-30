@@ -198,7 +198,7 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[s
                 pool.append(item)
 
     # Check the parent item integrity, exclude items
-    pool[:] = [item for item in pool if pool_contains_parent(item, pool)]
+    pool[:] = [item for item in pool if pool_contains_parent(item, pool + locked_items)]
 
     existing_items = starter_items + [item for item in multiworld.precollected_items[player]]
     existing_names = [item.name for item in existing_items]
