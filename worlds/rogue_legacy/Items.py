@@ -346,10 +346,10 @@ item_table: Dict[str, RLItemData] = {
     "1,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        31, get_none, 3),
     "3,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        32, get_none, 2),
     "5,000 Gold Stimulus":      RLItemData(ItemClassification.filler,        33, get_none, 1),
-    "Random Teleport":          RLItemData(ItemClassification.trap,         150, get_none, 2),
+    "Random Teleport":          RLItemData(ItemClassification.trap,         150, get_none, 0),
     "Hedgehog's Curse":         RLItemData(ItemClassification.trap,         151, get_none, 2),
     "Vertigo":                  RLItemData(ItemClassification.trap,         152, get_none, 2),
-    "Genetic Lottery":          RLItemData(ItemClassification.trap,         153, get_none, 1),
+    "Genetic Lottery":          RLItemData(ItemClassification.trap,         153, get_none, 2),
 
     # Events - These are automatically created and placed when their respective event location is made.
     "Defeat Khidr":             RLItemData(ItemClassification.progression, None, get_none),
