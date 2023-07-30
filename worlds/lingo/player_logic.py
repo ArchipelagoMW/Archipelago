@@ -28,6 +28,7 @@ class LingoPlayerLogic:
 
     VICTORY_CONDITION: str
     MASTERY_LOCATION: str
+    LEVEL_2_LOCATION: str
 
     PAINTING_MAPPING: Dict[str, str]
 
@@ -61,6 +62,7 @@ class LingoPlayerLogic:
         self.REAL_ITEMS = []
         self.VICTORY_CONDITION = ""
         self.MASTERY_LOCATION = ""
+        self.LEVEL_2_LOCATION = ""
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
@@ -93,7 +95,8 @@ class LingoPlayerLogic:
                     self.EVENT_LOC_TO_ITEM[door_data.item_name] = door_data.item_name + " (Opened)"
                     self.set_door_item(room_name, door_name, door_data.item_name + " (Opened)")
 
-        # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
+        # Create events for each achievement panel, so that we can determine when THE MASTER is accessible. We also
+        # create events for each counting panel, so that we can determine when LEVEL 2 is accessible.
         for room_name, room_data in StaticLingoLogic.PANELS_BY_ROOM.items():
             for panel_name, panel_data in room_data.items():
                 if panel_data.achievement:
@@ -102,9 +105,16 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
+                if not panel_data.non_counting:
+                    event_name = room_name + " - " + panel_name + " (Counted)"
+                    self.add_location(room_name, PlayerLocation(event_name, None,
+                                                                [RoomAndPanel(room_name, panel_name)]))
+                    self.EVENT_LOC_TO_ITEM[event_name] = "Counting Panel Solved"
+
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
         self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
+        self.LEVEL_2_LOCATION = "Second Room - LEVEL 2"
 
         if get_option_value(multiworld, player, "victory_condition") == 0:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
@@ -116,6 +126,12 @@ class LingoPlayerLogic:
 
             self.add_location("Orange Tower Seventh Floor", PlayerLocation(self.MASTERY_LOCATION, None, []))
             self.EVENT_LOC_TO_ITEM[self.MASTERY_LOCATION] = "Victory"
+        elif get_option_value(multiworld, player, "victory_condition") == 2:
+            self.VICTORY_CONDITION = "Second Room - LEVEL 2"
+            self.LEVEL_2_LOCATION = "Second Room - Unlock Level 2"
+
+            self.add_location("Second Room", PlayerLocation(self.LEVEL_2_LOCATION, None, []))
+            self.EVENT_LOC_TO_ITEM[self.LEVEL_2_LOCATION] = "Victory"
 
         # Instantiate all real locations.
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():

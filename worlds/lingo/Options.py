@@ -52,6 +52,7 @@ class VictoryCondition(Choice):
     display_name = "Victory Condition"
     option_the_end = 0
     option_the_master = 1
+    option_level_2 = 2
 
 
 class MasteryAchievements(Range):
@@ -64,6 +65,17 @@ class MasteryAchievements(Range):
     range_start = 1
     range_end = 24
     default = 21
+
+
+class Level2Requirement(Range):
+    """The number of panel solves required to unlock LEVEL 2.
+    In the base game, 223 are needed.
+    Note that this count includes AN OTHER TRY.
+    """
+    display_name = "Level 2 Requirement"
+    range_start = 2
+    range_end = 800
+    default = 223
 
 
 class TrapPercentage(Range):
@@ -88,6 +100,7 @@ lingo_options: Dict[str, type] = {
     "shuffle_paintings": ShufflePaintings,
     "victory_condition": VictoryCondition,
     "mastery_achievements": MasteryAchievements,
+    "level_2_requirement": Level2Requirement,
     "trap_percentage": TrapPercentage,
     "death_link": DeathLink
 }

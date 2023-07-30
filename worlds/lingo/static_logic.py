@@ -50,6 +50,7 @@ class Panel(NamedTuple):
     internal_ids: List[str]
     exclude_reduce: bool
     achievement: bool
+    non_counting: bool
 
 
 class Painting(NamedTuple):
@@ -188,6 +189,11 @@ class StaticLingoLogic:
         else:
             exclude_reduce = False
 
+        if "non_counting" in panel_data:
+            non_counting = panel_data["non_counting"]
+        else:
+            non_counting = False
+
         if "id" in panel_data:
             if isinstance(panel_data["id"], List):
                 internal_ids = panel_data["id"]
@@ -197,7 +203,7 @@ class StaticLingoLogic:
             internal_ids = []
 
         panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, internal_ids,
-                          exclude_reduce, achievement)
+                          exclude_reduce, achievement, non_counting)
         self.PANELS[full_name] = panel_obj
         self.PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 

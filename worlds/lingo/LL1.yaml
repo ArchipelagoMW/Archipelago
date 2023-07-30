@@ -373,7 +373,7 @@
         id: EndPanel/Panel_level_2
         tag: forbid
         non_counting: True
-        #check: True
+        check: True
     doors:
       Exit Door:
         id: Entry Room Area Doors/Door_hi_high
@@ -586,7 +586,6 @@
       ANGRY POWER:
         id: Lingo Room/Panel_lingo_4
         colors:
-          - white
           - purple
         tag: forbid
       MICRO LEGION:
@@ -597,7 +596,6 @@
         id: Lingo Room/Panel_lingo_6
         colors:
           - black
-          - white
         tag: forbid
       "906234":
         id: Lingo Room/Panel_lingo_7
@@ -2759,7 +2757,6 @@
         id: Open Areas/Panel_angered_enraged
         colors:
           - yellow
-          - white
         tag: syn anagram
         copy_to_sign: sign18
       VOTE:
@@ -7352,7 +7349,6 @@
       FACTS:
         id: Challenge Room/Panel_facts
         colors:
-          - white
           - red
           - blue
         tag: forbid
