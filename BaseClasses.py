@@ -935,17 +935,6 @@ class LocationProgressType(IntEnum):
     EXCLUDED = 3
 
 
-class LocationSpoilerType(IntEnum):
-    HIDE = 10
-    SHOW_IN_LOCATIONS = 20
-    SHOW_IN_PLAYTHROUGH = 30
-    SHOW = 40
-
-
-class LocationFlags(IntFlag):
-    pass
-
-
 class Location:
     game: str = "Generic"
     player: int
@@ -954,7 +943,8 @@ class Location:
     parent_region: Optional[Region]
     event: bool = False
     locked: bool = False
-    flags: LocationFlags = LocationSpoilerType.SHOW + LocationProgressType.DEFAULT
+    show_in_spoiler: bool = True
+    progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow = staticmethod(lambda item, state: False)
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
@@ -1009,30 +999,6 @@ class Location:
         if hint_text:
             return hint_text
         return "at " + self.name.replace("_", " ").replace("-", " ")
-    
-    @property
-    def progress_type(self) -> LocationProgressType:
-        return LocationProgressType(self.flags % 10)
-    
-    @progress_type.setter
-    def progress_type(self, type_: LocationProgressType) -> None:
-        self.flags = LocationFlags(self.spoiler_type + type_)
-    
-    @property
-    def spoiler_type(self) -> LocationSpoilerType:
-        return LocationSpoilerType(self.flags // 10 * 10)
-    
-    @spoiler_type.setter
-    def spoiler_type(self, type_: LocationSpoilerType) -> None:
-        self.flags = LocationFlags(type_ + self.progress_type)
-    
-    @property
-    def show_in_spoiler(self) -> bool:
-        return bool(self.spoiler_type)
-    
-    @show_in_spoiler.setter
-    def show_in_spoiler(self, should_show: bool) -> None:
-        self.spoiler_type = LocationSpoilerType.SHOW if should_show else LocationSpoilerType.SHOW_IN_PLAYTHROUGH
 
 
 class ItemClassification(IntFlag):
@@ -1252,15 +1218,9 @@ class Spoiler:
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 
-        sphere_index = 1
-        for sphere in collection_spheres:
-            sphere_data = {str(location): str(location.item) for location in sorted(sphere) if location.show_in_spoiler}
-            if not sphere_data:  # No 'visible' locations in sphere to show.
-                continue
-
-            self.playthrough[str(sphere_index)] = sphere_data
-            sphere_index += 1
-
+        for i, sphere in enumerate(collection_spheres):
+            self.playthrough[str(i + 1)] = {
+                str(location): str(location.item) for location in sorted(sphere)}
         if create_paths:
             self.create_paths(state, collection_spheres)
 
