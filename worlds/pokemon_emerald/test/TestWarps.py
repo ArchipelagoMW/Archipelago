@@ -1,8 +1,8 @@
-from worlds.pokemon_emerald.data import Warp
 from test.TestBase import TestBase
+from worlds.pokemon_emerald.data import Warp
 
 class TestWarps(TestBase):
-    def test_warps_connect_ltr(self):
+    def test_warps_connect_ltr(self) -> None:
         # 2-way
         self.assertTrue(Warp("FAKE_MAP_A:0/FAKE_MAP_B:0").connects_to(Warp("FAKE_MAP_B:0/FAKE_MAP_A:0")))
         self.assertTrue(Warp("FAKE_MAP_A:0/FAKE_MAP_B:2").connects_to(Warp("FAKE_MAP_B:2/FAKE_MAP_A:0")))

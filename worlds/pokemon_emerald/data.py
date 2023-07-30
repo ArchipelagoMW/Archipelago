@@ -7,7 +7,7 @@ and sorting, and Warp methods.
 from dataclasses import dataclass
 from enum import IntEnum
 import json
-from typing import Dict, List, NamedTuple, Optional, Set, Tuple, Any, Union
+from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
 import pkgutil
 import pkg_resources
 
@@ -22,7 +22,7 @@ class Warp:
     source_map: str
     source_ids: List[int]
     dest_map: str
-    dest_ids: int
+    dest_ids: List[int]
     parent_region: Optional[str]
 
     def __init__(self, encoded_string: Optional[str] = None, parent_region: Optional[str] = None) -> None:
@@ -44,7 +44,12 @@ class Warp:
             source_ids_string += str(source_id) + ","
         source_ids_string = source_ids_string[:-1]  # Remove last ","
 
-        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_ids}{'!' if self.is_one_way else ''}"
+        dest_ids_string = ""
+        for dest_id in self.dest_ids:
+            dest_ids_string += str(dest_id) + ","
+        dest_ids_string = dest_ids_string[:-1]  # Remove last ","
+
+        return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{dest_ids_string}{'!' if self.is_one_way else ''}"
 
     def connects_to(self, other: 'Warp') -> bool:
         """
@@ -79,7 +84,7 @@ class ItemData(NamedTuple):
     label: str
     item_id: int
     classification: ItemClassification
-    tags: Set[str]
+    tags: FrozenSet[str]
 
 
 class LocationData(NamedTuple):
@@ -89,7 +94,7 @@ class LocationData(NamedTuple):
     default_item: int
     rom_address: int
     flag: int
-    tags: Set[str]
+    tags: FrozenSet[str]
 
 
 class EventData(NamedTuple):
@@ -269,7 +274,7 @@ class PokemonEmeraldData:
     warp_map: Dict[str, Optional[str]]
     trainers: List[TrainerData]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.starters = (277, 280, 283)
         self.constants = {}
         self.rom_addresses = {}
@@ -286,7 +291,7 @@ class PokemonEmeraldData:
         self.trainers = []
 
 
-def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
+def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
     return json.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
 
 
@@ -294,8 +299,8 @@ config: Dict[str, Any] = load_json_data("config.json")
 data = PokemonEmeraldData()
 
 
-def _init():
-    extracted_data: Dict[str, any] = load_json_data("extracted_data.json")
+def _init() -> None:
+    extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
     data.rom_addresses = extracted_data["misc_rom_addresses"]
 
@@ -335,7 +340,7 @@ def _init():
                 location_json["default_item"],
                 location_json["rom_address"],
                 location_json["flag"],
-                set(location_attributes_json[location_name]["tags"])
+                frozenset(location_attributes_json[location_name]["tags"])
             )
             new_region.locations.append(location_name)
             data.locations[location_name] = new_location
@@ -384,7 +389,7 @@ def _init():
             attributes["label"],
             data.constants[item_constant_name],
             item_classification,
-            set(attributes["tags"])
+            frozenset(attributes["tags"])
         )
 
     # Create species data
@@ -428,8 +433,8 @@ def _init():
 
     data.species = [None for i in range(max_species_id + 1)]
 
-    for species in species_list:
-        data.species[species.species_id] = species
+    for species_data in species_list:
+        data.species[species_data.species_id] = species_data
 
     for species in data.species:
         if species is not None:

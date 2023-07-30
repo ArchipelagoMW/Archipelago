@@ -9,7 +9,7 @@ import bsdiff4
 from BaseClasses import MultiWorld
 from Options import Toggle
 from worlds.Files import APDeltaPatch
-import Utils
+from settings import get_settings
 
 from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
@@ -252,13 +252,13 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(Utils.get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
+    with open(get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes
 
 
-def _set_bytes_little_endian(byte_array, address, size, value) -> None:
+def _set_bytes_little_endian(byte_array: bytearray, address: int, size: int, value: int) -> None:
     offset = 0
     while size > 0:
         byte_array[address + offset] = value & 0xFF

@@ -1,19 +1,21 @@
 """
 Functions related to AP regions for Pokemon Emerald (see ./data/regions for region definitions)
 """
-from BaseClasses import Entrance, ItemClassification, Region
+from typing import Dict
+
+from BaseClasses import Entrance, ItemClassification, Region, MultiWorld
 
 from .data import data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
 
 
-def create_regions(multiworld, player) -> None:
+def create_regions(multiworld: MultiWorld, player: int) -> None:
     """
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
     """
-    regions = {}
+    regions: Dict[str, Region] = {}
 
     connections = []
     for region_name, region_data in data.regions.items():

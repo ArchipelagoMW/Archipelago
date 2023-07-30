@@ -10,43 +10,43 @@ from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders
 from .util import location_name_to_label
 
 
-def _can_cut(state: CollectionState, player: int):
+def _can_cut(state: CollectionState, player: int) -> bool:
     return state.has("HM01 Cut", player) and state.has("Stone Badge", player)
 
 
-def _can_surf(state: CollectionState, player: int):
+def _can_surf(state: CollectionState, player: int) -> bool:
     return state.has("HM03 Surf", player) and state.has("Balance Badge", player)
 
 
-def _can_strength(state: CollectionState, player: int):
+def _can_strength(state: CollectionState, player: int) -> bool:
     return state.has("HM04 Strength", player) and state.has("Heat Badge", player)
 
 
-def _can_flash(state: CollectionState, player: int):
+def _can_flash(state: CollectionState, player: int) -> bool:
     return state.has("HM05 Flash", player) and state.has("Knuckle Badge", player)
 
 
-def _can_rock_smash(state: CollectionState, player: int):
+def _can_rock_smash(state: CollectionState, player: int) -> bool:
     return state.has("HM06 Rock Smash", player) and state.has("Dynamo Badge", player)
 
 
-def _can_waterfall(state: CollectionState, player: int):
+def _can_waterfall(state: CollectionState, player: int) -> bool:
     return state.has("HM07 Waterfall", player) and state.has("Rain Badge", player)
 
 
-def _can_dive(state: CollectionState, player: int):
+def _can_dive(state: CollectionState, player: int) -> bool:
     return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
 
 
-def _can_use_mach_bike(state: CollectionState, player: int):
+def _can_use_mach_bike(state: CollectionState, player: int) -> bool:
     return state.has("Mach Bike", player)
 
 
-def _can_use_acro_bike(state: CollectionState, player: int):
+def _can_use_acro_bike(state: CollectionState, player: int) -> bool:
     return state.has("Acro Bike", player)
 
 
-def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
+def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int) -> bool:
     num_gym_leaders_defeated = 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", player) else 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", player) else 0
@@ -61,7 +61,7 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
 
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
-def set_default_rules(multiworld: MultiWorld, player: int):
+def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
@@ -1139,7 +1139,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     # )
 
 
-def set_overworld_item_rules(multiworld: MultiWorld, player: int):
+def set_overworld_item_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
@@ -1198,7 +1198,7 @@ def set_overworld_item_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_hidden_item_rules(multiworld: MultiWorld, player: int):
+def set_hidden_item_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
 
     # Route 120
@@ -1214,7 +1214,7 @@ def set_hidden_item_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_npc_gift_rules(multiworld: MultiWorld, player: int):
+def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
     # Littleroot Town
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
@@ -1282,7 +1282,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
+def set_enable_ferry_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
@@ -1297,7 +1297,7 @@ def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
+def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int) -> None:
     for location in multiworld.get_locations(player):
         if location.tags is not None and "HiddenItem" in location.tags:
             add_rule(
@@ -1306,7 +1306,7 @@ def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
             )
 
 
-def add_flash_rules(multiworld: MultiWorld, player: int):
+def add_flash_rules(multiworld: MultiWorld, player: int) -> None:
     can_flash = lambda state: _can_flash(state, player)
 
     # Granite Cave

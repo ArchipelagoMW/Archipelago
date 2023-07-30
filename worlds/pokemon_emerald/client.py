@@ -1,13 +1,15 @@
 import asyncio
+from argparse import Namespace
 import json
 import os
 import subprocess
-from typing import Optional, Dict, Set, Tuple
+from typing import Optional, Dict, Set, Tuple, Any
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, gui_enabled, logger
 from NetUtils import ClientStatus
 import Patch
-from Utils import async_start, get_settings
+from settings import get_settings
+from Utils import async_start
 
 from .data import data, config
 from .options import Goal
@@ -54,7 +56,7 @@ TRACKER_EVENT_FLAGS = [
 
 
 class GBACommandProcessor(ClientCommandProcessor):
-    def _cmd_gba(self):
+    def _cmd_gba(self) -> None:
         """Check GBA Connection State"""
         if isinstance(self.ctx, GBAContext):
             logger.info(f"GBA Status: {self.ctx.gba_status}")
@@ -80,7 +82,7 @@ class GBAContext(CommonContext):
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
 
-    async def server_auth(self, password_requested: bool = False):
+    async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
             await super(GBAContext, self).server_auth(password_requested)
         if self.auth is None:
@@ -89,7 +91,7 @@ class GBAContext(CommonContext):
             return
         await self.send_connect()
 
-    def run_gui(self):
+    def run_gui(self) -> None:
         from kvui import GameManager
 
         class GBAManager(GameManager):
@@ -98,7 +100,7 @@ class GBAContext(CommonContext):
         self.ui = GBAManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    def on_package(self, cmd, args):
+    def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
             slot_data = args.get("slot_data", None)
             if slot_data is not None:
@@ -110,7 +112,7 @@ class GBAContext(CommonContext):
                     self.goal_flag = DEFEATED_NORMAN_FLAG
 
 
-def create_payload(ctx: GBAContext):
+def create_payload(ctx: GBAContext) -> str:
     payload = json.dumps({
         "items": [[item.item - config["ap_offset"], item.flags & 1] for item in ctx.items_received]
     })
@@ -118,7 +120,7 @@ def create_payload(ctx: GBAContext):
     return payload
 
 
-async def handle_read_data(gba_data, ctx: GBAContext):
+async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
     local_checked_locations = set()
     game_clear = False
 
@@ -179,7 +181,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
             ctx.local_set_events = local_set_events
 
 
-async def gba_send_receive_task(ctx: GBAContext):
+async def gba_send_receive_task(ctx: GBAContext) -> None:
     logger.info("Waiting to connect to GBA. Use /gba for status information")
     while not ctx.exit_event.is_set():
         error_status: Optional[str] = None
@@ -248,7 +250,7 @@ async def gba_send_receive_task(ctx: GBAContext):
                 ctx.gba_status = CONNECTION_STATUS_CONNECTED
 
 
-async def run_game(rom_file_path):
+async def run_game(rom_file_path: str) -> None:
     auto_start = get_settings()["pokemon_emerald_settings"].get("rom_start", True)
     if auto_start is True:
         import webbrowser
@@ -258,7 +260,7 @@ async def run_game(rom_file_path):
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-async def patch_and_run_game(patch_file_path):
+async def patch_and_run_game(patch_file_path: str) -> None:
     meta_data, output_file_path = Patch.create_rom_file(patch_file_path)
     async_start(run_game(output_file_path))
 
@@ -268,8 +270,8 @@ parser.add_argument("apemerald_file", default="", type=str, nargs="?", help="Pat
 args = parser.parse_args()
 
 
-def launch():
-    async def main(args):
+def launch() -> None:
+    async def main(args: Namespace) -> None:
         ctx = GBAContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 

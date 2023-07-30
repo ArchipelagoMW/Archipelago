@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP items for Pokemon Emerald
 """
-from typing import Dict, FrozenSet, Set, Optional, Union
+from typing import Dict, FrozenSet, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 
@@ -21,21 +21,17 @@ class PokemonEmeraldItem(Item):
             self.tags = data.items[reverse_offset_item_value(code)].tags
 
 
-def offset_item_value(item_value: Union[int, None]) -> Union[int, None]:
+def offset_item_value(item_value: int) -> int:
     """
     Returns the AP item id (code) for a given item value
     """
-    if item_value is None:
-        return None
     return item_value + config["ap_offset"]
 
 
-def reverse_offset_item_value(item_id: Union[int, None]) -> Union[int, None]:
+def reverse_offset_item_value(item_id: int) -> int:
     """
     Returns the item value for a given AP item id (code)
     """
-    if item_id is None:
-        return None
     return item_id - config["ap_offset"]
 
 

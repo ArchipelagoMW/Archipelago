@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP locations for Pokemon Emerald
 """
-from typing import Dict, Optional, FrozenSet
+from typing import Dict, Optional, FrozenSet, Iterable
 
 from BaseClasses import Location, MultiWorld, Region
 
@@ -15,7 +15,7 @@ class PokemonEmeraldLocation(Location):
     rom_address: Optional[int]
     default_item_code: Optional[int]
     is_event: bool
-    tags: Optional[FrozenSet[str]]
+    tags: FrozenSet[str]
 
     def __init__(
             self,
@@ -25,16 +25,16 @@ class PokemonEmeraldLocation(Location):
             parent: Optional[Region] = None,
             rom_address: Optional[int] = None,
             default_item_value: Optional[int] = None,
-            tags: Optional[FrozenSet[str]] = None) -> None:
-        super().__init__(player, name, offset_flag(flag), parent)
+            tags: FrozenSet[str] = frozenset()) -> None:
+        super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
         self.flag = flag
-        self.default_item_code = offset_item_value(default_item_value)
+        self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
         self.rom_address = rom_address
         self.is_event = flag is None
         self.tags = tags
 
 
-def offset_flag(flag: Optional[int]) -> Optional[int]:
+def offset_flag(flag: int) -> int:
     """
     Returns the AP location id (address) for a given flag
     """
@@ -43,7 +43,7 @@ def offset_flag(flag: Optional[int]) -> Optional[int]:
     return flag + config["ap_offset"]
 
 
-def reverse_offset_flag(location_id: Optional[int]) -> Optional[int]:
+def reverse_offset_flag(location_id: int) -> int:
     """
     Returns the flag id for a given AP location id (address)
     """
@@ -52,7 +52,7 @@ def reverse_offset_flag(location_id: Optional[int]) -> Optional[int]:
     return location_id - config["ap_offset"]
 
 
-def create_locations_with_tags(multiworld: MultiWorld, player: int, tags) -> None:
+def create_locations_with_tags(multiworld: MultiWorld, player: int, tags: Iterable[str]) -> None:
     """
     Iterates through region data and adds locations to the multiworld if
     those locations include any of the provided tags.
