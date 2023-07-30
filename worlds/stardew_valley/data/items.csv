@@ -271,6 +271,7 @@ id,name,classification,groups,mod_name
 284,Cute Baby,progression,"BABY",
 285,Ugly Baby,progression,"BABY",
 286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
+287,Treehouse,progression,"GINGER_ISLAND",
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,
@@ -594,5 +595,5 @@ id,name,classification,groups,mod_name
 10109,Delores <3,progression,FRIENDSANITY,Delores - Custom NPC
 10110,Ayeisha <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
 10111,Riley <3,progression,FRIENDSANITY,Custom NPC - Riley
-10301,Progressive Wood Obelisk Sigils,progression,,DeepWoods
+10301,Progressive Woods Obelisk Sigils,progression,,DeepWoods
 10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator
