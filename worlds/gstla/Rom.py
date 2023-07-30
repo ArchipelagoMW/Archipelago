@@ -33,13 +33,18 @@ class LocalRom:
 
         addr = loc_address
         contents = item.gstla_id
+        event_type = self.fix_event_type(location, item)
+        event_type = self.show_item_settings(item, event_type, True)
 
         if addr >= 0xFA0000:
             self.rom_data[addr] = contents & 0xFF
             self.rom_data[addr + 1] = contents >> 8
         else:
-            #self.rom_data[addr] = event_type & 0xFF
-            #self.rom_data[addr + 1] = event_type >> 8
+            print(f'item {item.itemName} with contents {contents} on location {location.name} '
+                  f'with event {event_type}, original event on location {location.event_type}')
+
+            self.rom_data[addr] = event_type & 0xFF
+            self.rom_data[addr + 1] = event_type >> 8
             self.rom_data[addr + 6] = contents & 0xFF
             self.rom_data[addr + 7] = contents >> 8
 
@@ -51,6 +56,46 @@ class LocalRom:
 
         for idx, value in enumerate(djinn.stats):
             self.rom_data[djinn.stats_addr + idx] = value
+
+    def fix_event_type(self, location, item):
+        event_type = item.event_type
+        contents = item.gstla_id
+        vanilla_event_type = location.event_type
+
+        if vanilla_event_type < 0x80 and event_type != 0x81:
+            event_type = vanilla_event_type
+
+        if event_type != 0x81 and (vanilla_event_type <= 0x80 or vanilla_event_type == 0x83 or vanilla_event_type == 0x84 or vanilla_event_type == 0x85):
+            return vanilla_event_type
+
+        if 0xE00 <= contents <= 0xFFF:
+            if vanilla_event_type != 0x83:
+                return 0x84
+            else:
+                return 0x83
+
+        if vanilla_event_type == 0x81:
+            if 0xE00 <= contents <= 0xFFF:
+                return 0x84
+            elif event_type != 0x81:
+                return 0x80
+
+        return event_type
+
+
+    def show_item_settings(self, item, event_type, stand_alone_items):
+        if stand_alone_items:
+            if event_type == 0x80 or event_type == 0x81 or event_type == 0x84:
+                return 0x83
+        else:
+            if event_type == 0x80 or event_type == 0x84:
+                if 0xE00 <= item.gstla_id <= 0xFFF:
+                    return 0x84
+                else:
+                    return 0x80
+
+        return event_type
+
 
 class GSTLADeltaPatch(APDeltaPatch):
     hash = CHECKSUM_BLUE

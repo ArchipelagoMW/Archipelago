@@ -172,7 +172,41 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Whorl,
         LocationName.Gasp,
         LocationName.Lull,
-        LocationName.Gale
+        LocationName.Gale,
+
+
+        LocationName.Tundaria_Tower_Burst_Brooch,
+        LocationName.Lemuria_Grindstone,
+        LocationName.Mars_Lighthouse_Teleport_Lapis,
+        LocationName.Yampi_Desert_Scoop_Gem,
+        LocationName.Shaman_Village_Hover_Jade,
+        LocationName.Airs_Rock_Reveal,
+        LocationName.Aqua_Rock_Parch,
+        LocationName.Gaia_Rock_Sand,
+        LocationName.Magma_Rock_Blaze,
+        LocationName.Idejima_Mind_Read,
+        LocationName.Idejima_Whirlwind,
+        LocationName.Idejima_Growth,
+        LocationName.Contigo_Carry_Stone,
+        LocationName.Contigo_Lifting_Gem,
+        LocationName.Contigo_Orb_of_Force,
+        LocationName.Contigo_Catch_Beads,
+        LocationName.Kibombo_Douse_Drop,
+        LocationName.Kibombo_Frost_Jewel,
+
+        LocationName.Madra_Catacombs_Moloch,
+        LocationName.Yampi_Desert_Cave_Daedalus,
+        LocationName.Airs_Rock_Flora,
+        LocationName.Izumo_Ulysses,
+        LocationName.Treasure_Isle_Azul,
+        LocationName.Indra_Cavern_Zagan,
+        LocationName.Osenia_Cavern_Megaera,
+        LocationName.Angara_Cavern_Haures,
+        LocationName.Atteka_Cavern_Coatlicue,
+        LocationName.Islet_Cave_Catastrophe,
+        LocationName.Anemos_Inner_Sanctum_Charon,
+        LocationName.Anemos_Inner_Sanctum_Iris,
+        LocationName.Lemuria_Eclipse,
     ])
 
     create_connect(multiworld, player, RegionName.Menu, RegionName.Idejima)

@@ -7,6 +7,7 @@ class LocationType(str, Enum):
    Item = "Item"
    Event = "Event"
    Djinn = "Djinn"
+   Psyenergy = "Psyenergy"
 
 
 class LocationData(NamedTuple):
@@ -103,21 +104,6 @@ hidden_items = [
     LocationData(81, LocationName.Prox_Cookie, [994592], 2),
     LocationData(82, LocationName.Prox_Potion, [994604], 2),
     LocationData(83, LocationName.Prox_Sacred_Feather, [994612], 13)
-]
-summon_tablets = [
-    LocationData(84, LocationName.Madra_Catacombs_Moloch, [992068], 132),
-    LocationData(85, LocationName.Yampi_Desert_Cave_Daedalus, [992212], 132),
-    LocationData(86, LocationName.Airs_Rock_Flora, [992632], 132),
-    LocationData(87, LocationName.Izumo_Ulysses, [993424], 132),
-    LocationData(88, LocationName.Treasure_Isle_Azul, [994300], 132),
-    LocationData(89, LocationName.Indra_Cavern_Zagan, [994844], 132),
-    LocationData(90, LocationName.Osenia_Cavern_Megaera, [994856], 132),
-    LocationData(91, LocationName.Angara_Cavern_Haures, [994868], 132),
-    LocationData(92, LocationName.Atteka_Cavern_Coatlicue, [994880], 132),
-    LocationData(93, LocationName.Islet_Cave_Catastrophe, [994892], 132),
-    LocationData(94, LocationName.Anemos_Inner_Sanctum_Charon, [994904], 132),
-    LocationData(95, LocationName.Anemos_Inner_Sanctum_Iris, [994916], 132),
-    LocationData(96, LocationName.Lemuria_Eclipse, [16384198], 132)
 ]
 major_items = [
     LocationData(97, LocationName.Dehkan_Plateau_Full_Metal_Vest, [991884], 128),
@@ -349,115 +335,7 @@ filler = [
 
 base_djinn_index = 400
 
-djinn = [
-    LocationData(base_djinn_index, LocationName.Flint, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 1, LocationName.Granite, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 2, LocationName.Quartz, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 3, LocationName.Vine, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 4, LocationName.Sap, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 5, LocationName.Ground, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 6, LocationName.Bane, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 7, LocationName.Echo, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 8, LocationName.Iron, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 9, LocationName.Steel, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 10, LocationName.Mud, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 11, LocationName.Flower, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 12, LocationName.Meld, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 13, LocationName.Petra, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 14, LocationName.Salt, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 15, LocationName.Geode, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 16, LocationName.Mold, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 17, LocationName.Crystal, [994832], 128, LocationType.Djinn),
-
-    LocationData(base_djinn_index + 18, LocationName.Fizz, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 19, LocationName.Sleet, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 20, LocationName.Mist, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 21, LocationName.Spritz, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 22, LocationName.Hail, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 23, LocationName.Tonic, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 24, LocationName.Dew, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 25, LocationName.Fog, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 26, LocationName.Sour, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 27, LocationName.Spring, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 28, LocationName.Shade, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 29, LocationName.Chill, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 30, LocationName.Steam, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 31, LocationName.Rime, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 32, LocationName.Gel, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 33, LocationName.Eddy, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 34, LocationName.Balm, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 35, LocationName.Serac, [994832], 128, LocationType.Djinn),
-
-    LocationData(base_djinn_index + 36, LocationName.Forge, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 37, LocationName.Fever, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 38, LocationName.Corona, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 39, LocationName.Scorch, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 40, LocationName.Ember, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 41, LocationName.Flash, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 42, LocationName.Torch, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 43, LocationName.Cannon, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 44, LocationName.Spark, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 45, LocationName.Kindle, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 46, LocationName.Char, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 47, LocationName.Coal, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 48, LocationName.Reflux, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 49, LocationName.Core, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 50, LocationName.Tinder, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 51, LocationName.Shine, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 52, LocationName.Fury, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 53, LocationName.Fugue, [994832], 128, LocationType.Djinn),
-
-    LocationData(base_djinn_index + 54, LocationName.Gust, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 55, LocationName.Breeze, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 56, LocationName.Zephyr, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 57, LocationName.Smog, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 58, LocationName.Kite, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 59, LocationName.Squall, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 60, LocationName.Luff, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 61, LocationName.Breath, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 62, LocationName.Blitz, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 63, LocationName.Ether, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 64, LocationName.Waft, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 65, LocationName.Haze, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 66, LocationName.Wheeze, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 67, LocationName.Aroma, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 68, LocationName.Whorl, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 69, LocationName.Gasp, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 70, LocationName.Lull, [994832], 128, LocationType.Djinn),
-    LocationData(base_djinn_index + 71, LocationName.Gale, [994832], 128, LocationType.Djinn)
-]
-
-test_locations = [
-    LocationData(1, LocationName.Daila_Herb, [991776, 991796], 2),
-    LocationData(2, LocationName.Daila_Smoke_Bomb, [991784, 991804], 3),
-    LocationData(3, LocationName.Daila_Psy_Crystal, [991812], 131),
-    LocationData(5, LocationName.Daila_Sleep_Bomb, [991832], 3),
-    LocationData(6, LocationName.Daila_3_coins, [991840], 2),
-    LocationData(7, LocationName.Daila_12_coins, [991848], 2),
-    LocationData(198, LocationName.Daila_Sea_Gods_Tear, [16384186], 128),
-
-    LocationData(97, LocationName.Dehkan_Plateau_Full_Metal_Vest, [991884], 128),
-    LocationData(98, LocationName.Dehkan_Plateau_Themis_Axe, [991916], 128),
-    LocationData(188, LocationName.Dehkan_Plateau_Pound_Cube, [16384162], 128),
-    LocationData(216, LocationName.Dehkan_Plateau_Mint, [991904], 128),
-    LocationData(217, LocationName.Dehkan_Plateau_Nut, [991928], 128),
-
-    LocationData(8, LocationName.Madra_Antidote, [991948], 13),
-    LocationData(9, LocationName.Madra_Cyclone_Chip, [16384166, 991956], 128),
-    LocationData(10, LocationName.Madra_Smoke_Bomb, [991968], 3),
-    LocationData(11, LocationName.Madra_15_coins, [991976], 13),
-    LocationData(12, LocationName.Madra_Sleep_Bomb, [991984], 2),
-    LocationData(13, LocationName.Madra_Elixir, [991996], 2),
-    LocationData(99, LocationName.Madra_Nurses_Cap, [991940], 128),
-
-    LocationData(84, LocationName.Madra_Catacombs_Moloch, [992068], 132),
-    LocationData(218, LocationName.Madra_Catacombs_Apple, [992008], 128),
-    LocationData(219, LocationName.Madra_Catacombs_Mist_Potion, [992016], 128),
-    LocationData(220, LocationName.Madra_Catacombs_Lucky_Medal, [992028], 128),
-    LocationData(170, LocationName.Madra_Cyclone_Chip, [16384166, 991956], 128),
-    LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128),
-    LocationData(172, LocationName.Madra_Catacombs_Tremor_Bit, [992060], 128),
-
+djinn_locations = [
     LocationData(base_djinn_index, LocationName.Flint, [16384000], 128, LocationType.Djinn),
     LocationData(base_djinn_index + 1, LocationName.Granite, [16384002], 128, LocationType.Djinn),
     LocationData(base_djinn_index + 2, LocationName.Quartz, [16384004], 128, LocationType.Djinn),
@@ -535,6 +413,80 @@ test_locations = [
     LocationData(base_djinn_index + 71, LocationName.Gale, [16384142], 128, LocationType.Djinn)
 ]
 
+summon_index = 500
+
+summon_tablets = [
+    LocationData(summon_index + 1, LocationName.Madra_Catacombs_Moloch, [992068], 132),
+    LocationData(summon_index + 2, LocationName.Yampi_Desert_Cave_Daedalus, [992212], 132),
+    LocationData(summon_index + 3, LocationName.Airs_Rock_Flora, [992632], 132),
+    LocationData(summon_index + 4, LocationName.Izumo_Ulysses, [993424], 132),
+    LocationData(summon_index + 5, LocationName.Treasure_Isle_Azul, [994300], 132),
+    LocationData(summon_index + 6, LocationName.Indra_Cavern_Zagan, [994844], 132),
+    LocationData(summon_index + 7, LocationName.Osenia_Cavern_Megaera, [994856], 132),
+    LocationData(summon_index + 8, LocationName.Angara_Cavern_Haures, [994868], 132),
+    LocationData(summon_index + 9, LocationName.Atteka_Cavern_Coatlicue, [994880], 132),
+    LocationData(summon_index + 10, LocationName.Islet_Cave_Catastrophe, [994892], 132),
+    LocationData(summon_index + 11, LocationName.Anemos_Inner_Sanctum_Charon, [994904], 132),
+    LocationData(summon_index + 12, LocationName.Anemos_Inner_Sanctum_Iris, [994916], 132),
+    LocationData(summon_index + 13, LocationName.Lemuria_Eclipse, [16384198], 132)
+]
+
+psyenergy_index = 300
+
+psyenergy_locations = [
+    LocationData(psyenergy_index + 1, LocationName.Madra_Cyclone_Chip, [16384166, 991956], 128),
+    LocationData(psyenergy_index + 2, LocationName.Madra_Catacombs_Tremor_Bit, [992060], 128),
+    LocationData(psyenergy_index + 3, LocationName.Tundaria_Tower_Burst_Brooch, [993828], 131),
+    LocationData(psyenergy_index + 4, LocationName.Lemuria_Grindstone, [993916], 128),
+    LocationData(psyenergy_index + 5, LocationName.Mars_Lighthouse_Teleport_Lapis, [994636], 128),
+    LocationData(psyenergy_index + 6, LocationName.Kandorean_Temple_Lash_Pebble, [16384160], 128),
+    LocationData(psyenergy_index + 7, LocationName.Dehkan_Plateau_Pound_Cube, [16384162], 128),
+    LocationData(psyenergy_index + 8, LocationName.Yampi_Desert_Scoop_Gem, [16384164], 128),
+    LocationData(psyenergy_index + 9, LocationName.Shaman_Village_Hover_Jade, [16384168], 128),
+    LocationData(psyenergy_index + 10, LocationName.Airs_Rock_Reveal, [16384190], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 11, LocationName.Aqua_Rock_Parch, [16384192], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 12, LocationName.Gaia_Rock_Sand, [16384194], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 13, LocationName.Magma_Rock_Blaze, [16384196], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 14, LocationName.Idejima_Mind_Read, [16384204], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 15, LocationName.Idejima_Whirlwind, [16384206], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 16, LocationName.Idejima_Growth, [16384208], 132, LocationType.Psyenergy),
+    LocationData(psyenergy_index + 17, LocationName.Contigo_Carry_Stone, [16384210], 128),
+    LocationData(psyenergy_index + 18, LocationName.Contigo_Lifting_Gem, [16384212], 128),
+    LocationData(psyenergy_index + 19, LocationName.Contigo_Orb_of_Force, [16384214], 128),
+    LocationData(psyenergy_index + 20, LocationName.Contigo_Catch_Beads, [16384216], 128),
+    LocationData(psyenergy_index + 21, LocationName.Kibombo_Douse_Drop, [16384218], 128),
+    LocationData(psyenergy_index + 22, LocationName.Kibombo_Frost_Jewel, [16384220], 128)
+]
+
+test_locations = [
+    LocationData(1, LocationName.Daila_Herb, [991776, 991796], 2),
+    LocationData(2, LocationName.Daila_Smoke_Bomb, [991784, 991804], 3),
+    LocationData(3, LocationName.Daila_Psy_Crystal, [991812], 131),
+    LocationData(5, LocationName.Daila_Sleep_Bomb, [991832], 3),
+    LocationData(6, LocationName.Daila_3_coins, [991840], 2),
+    LocationData(7, LocationName.Daila_12_coins, [991848], 2),
+    LocationData(198, LocationName.Daila_Sea_Gods_Tear, [16384186], 128),
+
+    LocationData(96, LocationName.Dehkan_Plateau_Elixir, [991892], 128),
+    LocationData(97, LocationName.Dehkan_Plateau_Full_Metal_Vest, [991884], 128),
+    LocationData(98, LocationName.Dehkan_Plateau_Themis_Axe, [991916], 128),
+    LocationData(216, LocationName.Dehkan_Plateau_Mint, [991904], 128),
+    LocationData(217, LocationName.Dehkan_Plateau_Nut, [991928], 128),
+
+    LocationData(8, LocationName.Madra_Antidote, [991948], 13),
+    LocationData(10, LocationName.Madra_Smoke_Bomb, [991968], 3),
+    LocationData(11, LocationName.Madra_15_coins, [991976], 13),
+    LocationData(12, LocationName.Madra_Sleep_Bomb, [991984], 2),
+    LocationData(13, LocationName.Madra_Elixir, [991996], 2),
+    LocationData(99, LocationName.Madra_Nurses_Cap, [991940], 128),
+
+    LocationData(84, LocationName.Madra_Catacombs_Moloch, [992068], 132),
+    LocationData(218, LocationName.Madra_Catacombs_Apple, [992008], 128),
+    LocationData(219, LocationName.Madra_Catacombs_Mist_Potion, [992016], 128),
+    LocationData(220, LocationName.Madra_Catacombs_Lucky_Medal, [992028], 128),
+    LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128),
+]
+
 def create_loctype_to_datamapping():
     types: Dict[str, List[LocationData]] = {}
     for idx, data in enumerate(all_locations):
@@ -543,6 +495,7 @@ def create_loctype_to_datamapping():
         types[data.loc_type].append(data)
     return types
 
-all_locations: List[LocationData] = test_locations
+
+all_locations: List[LocationData] = test_locations + djinn_locations + psyenergy_locations + summon_tablets
 location_name_to_id: Dict[str, LocationData] =  {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()
