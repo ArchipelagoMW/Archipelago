@@ -13,7 +13,7 @@ You can use other sm64-port based builds with it, but you can't use a different 
 
 ## Installation and Game Start Procedures
 
-# Installation via sm64pclauncher (For Windows)
+### Installation via sm64pclauncher (For Windows)
 
 First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
 Do all steps up to including step 6.
@@ -37,19 +37,31 @@ After it's done, the Build list should have another entry titled with what you n
 NOTE: For some reason first start of the game always crashes the launcher. Just restart it.
 If it still crashes, recheck if you typed the launch options correctly (Described in "Joining a MultiWorld Game")
 
-# Manual Compilation (Linux/Windows)
+### Manual Compilation (Linux/Windows)
 
-Dependencies for Linux: `sdl2 glew cmake python make`.
-Dependencies for Windows: `mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`
-SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
+*Windows Instructions*
 
-1. Clone `https://github.com/N00byKing/sm64ex` recursively
-2. Enter `sm64ex` and copy your Rom to `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
-3. Compile with `make`. For faster compilation set the parameter `-jn` where `n` is the Number of CPU Cores.
+First, install [MSYS](https://www.msys2.org/) as described on the page. DO NOT INSTALL INTO A FOLDER PATH WITH SPACES.
 
-The Compiled binary will be in `build/REGION_pc/`.
+After launching msys2, and update by entering `pacman -Syuu` in the command prompt. Next, install the relevant dependencies by entering `pacman -S unzip mingw-w64-x86_64-gcc mingw-w64-x86_64-glew mingw-w64-x86_64-SDL2 git make python3 mingw-w64-x86_64-cmake`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
 
-# Joining a MultiWorld Game
+After this, obtain the code base by cloning the relevant repository manually via `git clone --recursive https://github.com/N00byKing/sm64ex`. Ready your ROM by copying your legally dumped rom into your sm64ex folder (if you are not sure where your folder is located, do a quick Windows search for sm64ex). The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
+
+After all these preparatory steps have succeeded, type `make` in your command prompt and get ready to wait for a bit. If you want to speed up compilation, tell the compiler how many CPU cores to use by using `make -jn` where n is the number of cores you want.
+
+After the compliation was successful, there will be a binary in your `sm64ex/build/REGION_pc/` folder.
+
+*Linux Instructions*
+
+Install the relevant dependencies `sdl2 glew cmake python make`. SM64EX will link `jsoncpp` dynamic if installed. If not, it will compile and link statically.
+
+After this, obtain the code base by cloning the relevant repository manually via `git clone --recursive https://github.com/N00byKing/sm64ex`. Ready your ROM by copying your legally dumped rom into your sm64ex folder. The name of the ROM needs to be `baserom.REGION.z64` where `REGION` is either `us` or `jp` respectively.
+
+After all these preparatory steps have succeeded, type `make` in your command prompt and get ready to wait for a bit. If you want to speed up compilation, tell the compiler how many CPU cores to use by using `make -jn` where n is the number of cores you want.
+
+After the compliation was successful, there will be a binary in your `sm64ex/build/REGION_pc/` folder.
+
+### Joining a MultiWorld Game
 
 To join, set the following launch options: `--sm64ap_name YourName --sm64ap_ip ServerIP:Port`.
 Optionally, add `--sm64ap_passwd "YourPassword"` if the room you are using requires a password.
@@ -62,12 +74,12 @@ Additionally, any time the game is not connected (for example when the connectio
 **Important:** You must start a new file for every new seed you play. Using `⭐x0` files is **not** sufficient.
 Failing to use a new file may make some locations unavailable. However, this can be fixed without losing any progress by exiting and starting a new file.
 
-# Playing offline
+### Playing offline
 
 To play offline, first generate a seed on the game's settings page.
 Create a room and download the `.apsm64ex` file, and start the game with the `--sm64ap_file "path/to/FileName"` launch argument.
 
-# Optional: Using Batch Files to play offline and MultiWorld games
+### Optional: Using Batch Files to play offline and MultiWorld games
 
 As an alternative to launching the game with sm64pclauncher, it is also possible to launch the completed build with the use of Windows batch files. This has the added benefit of streamlining the join process so that manual editing of connection info is not needed for each new game. However, you'll need to be somewhat comfortable with creating and using batch files.
 
