@@ -23,7 +23,7 @@ window.addEventListener('load', () => {
     adjustHeaderWidth();
 
     // Event listeners
-    document.getElementById('export-settings').addEventListener('click', () => exportSettings());
+    document.getElementById('export-options').addEventListener('click', () => exportSettings());
     document.getElementById('generate-race').addEventListener('click', () => generateGame(true));
     document.getElementById('generate-game').addEventListener('click', () => generateGame());
 
