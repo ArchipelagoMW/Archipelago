@@ -8,6 +8,8 @@
 ## Optional Software
 
 - [ArchipelagoTextClient](https://github.com/ArchipelagoMW/Archipelago/releases)
+- [PopTracker](https://github.com/black-sliver/PopTracker/)
+  - [OZone's APDoom tracker pack](https://github.com/Ozone31/doom-ap-tracker/releases)
 
 ## Installing AP Doom
 1. Download [APDOOM.zip](https://github.com/Daivuk/apdoom/releases) and extract it.
@@ -36,3 +38,6 @@ but they disappear quickly and there's no reasonable way to check your message h
 APDOOM has a functional map tracker integrated into the level select screen.
 It tells you which levels you have unlocked, which keys you have for each level, which levels have been completed,
 and how many of the checks you have completed in each level.
+
+For better tracking, try OZone's poptracker package: https://github.com/Ozone31/doom-ap-tracker/releases .
+Requires [PopTracker](https://github.com/black-sliver/PopTracker/).
