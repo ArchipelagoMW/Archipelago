@@ -402,7 +402,7 @@ class IncludeTraps(Toggle):
     display_name = "Include Traps"
 
 
-class FreeDiaryOnGeneration(Toggle):
+class FreeDiaryOnGeneration(DefaultOnToggle):
     """
     Gives a free diary location check (up to 24) each generation. If disabled, you'll have to find the other 23
     organically!
