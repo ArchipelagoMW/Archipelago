@@ -130,7 +130,6 @@ non_dead_end_crest_warps = [
 def set_rules(self) -> None:
     self.multiworld.completion_condition[self.player] = lambda state: state.has("Dark King", self.player)
 
-    # need to add this to aquaria and fireburg bosses if they're in foresta region when entrance shuffle added
     def hard_boss_logic(state):
         return state.has_all(["River Coin", "Sand Coin"], self.player)
 
