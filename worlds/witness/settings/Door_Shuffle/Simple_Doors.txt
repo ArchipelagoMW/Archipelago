@@ -20,19 +20,13 @@ Windmill & Theater Doors
 Jungle Doors
 Bunker Doors
 Swamp Doors
-Swamp Laser Shortcut (Door)
+Swamp Shortcuts
 Swamp Water Pumps
 Treehouse Entry Doors
-Treehouse Drawbridge (Door)
-Treehouse Laser House Entry (Door)
-Mountain Floor 1 Exit (Door)
-Mountain Floor 2 Stairs & Doors
-Mountain Bottom Floor Giant Puzzle Exit (Door)
-Mountain Bottom Floor Final Room Entry (Door)
-Mountain Bottom Floor Doors to Caves
-Caves Doors to Challenge
-Caves Exits to Main Island
-Challenge Tunnels Entry (Door)
+Treehouse Upper Doors
+Mountain Layer 1&2 Doors
+Mountain Bottom Layer Doors
+Caves Doors
 Tunnels Doors
 
 Added Locations:
