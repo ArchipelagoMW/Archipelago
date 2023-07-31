@@ -1,6 +1,6 @@
 import typing
 
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle
+from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
 
 
 class Difficulty(Choice):
@@ -56,6 +56,12 @@ class AllowDeathLogic(Toggle):
     Get killed in the current map. The map will reset, you can now attempt the puzzle again."""
     display_name = "Allow Death Logic"
 
+    
+class Pro(Toggle):
+    """Include difficult tricks into rules. Mostly employed by speed runners.
+    i.e.: Leaps across to a locked area, trigger a switch behind a window at the right angle, etc."""
+    display_name = "Pro Doom"
+
 
 class StartWithComputerAreaMaps(Toggle):
     """Give the player all Computer Area Map items from the start."""
@@ -87,10 +93,12 @@ class Episode4(Toggle):
 
 
 options: typing.Dict[str, AssembleOptions] = {
+    "start_inventory_from_pool": StartInventoryPool,
     "difficulty": Difficulty,
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
     "allow_death_logic": AllowDeathLogic,
+    "pro": Pro,
     "start_with_computer_area_maps": StartWithComputerAreaMaps,
     "death_link": DeathLink,
     "episode1": Episode1,

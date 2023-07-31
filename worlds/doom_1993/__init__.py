@@ -90,6 +90,8 @@ class DOOM1993World(World):
             self.included_episodes[0] = 1
 
     def create_regions(self):
+        pro = getattr(self.multiworld, "pro")[self.player].value
+
         # Main regions
         menu_region = Region("Menu", self.player, self.multiworld)
         hub_region = Region("Hub", self.player, self.multiworld)
@@ -116,8 +118,11 @@ class DOOM1993World(World):
 
             self.multiworld.regions.append(region)
 
-            for connection in region_dict["connections"]:
-                connections.append((region, connection))
+            for connection_dict in region_dict["connections"]:
+                # Check if it's a pro-only connection
+                if connection_dict["pro"] and not pro:
+                    continue
+                connections.append((region, connection_dict["target"]))
         
         # Connect main regions to Hub
         hub_region.add_exits(main_regions)
@@ -151,12 +156,15 @@ class DOOM1993World(World):
         return True
 
     def set_rules(self):
-        Rules.set_rules(self, self.included_episodes)
+        pro = getattr(self.multiworld, "pro")[self.player].value
+        allow_death_logic = getattr(self.multiworld, "allow_death_logic")[self.player].value
+
+        Rules.set_rules(self, self.included_episodes, pro)
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
 
         # Forbid progression items to locations that can be missed and can't be picked up. (e.g. One-time timed
         # platform) Unless the user allows for it.
-        if not getattr(self.multiworld, "allow_death_logic")[self.player].value:
+        if not allow_death_logic:
             for death_logic_location in Locations.death_logic_locations:
                 self.multiworld.exclude_locations[self.player].value.add(death_logic_location)
     
