@@ -24,8 +24,8 @@ Swamp Shortcuts
 Swamp Water Pumps
 Treehouse Entry Doors
 Treehouse Upper Doors
-Mountain Layer 1&2 Doors
-Mountain Bottom Layer Doors
+Mountain Floor 1&2 Doors
+Mountain Bottom Floor Doors
 Caves Doors
 Tunnels Doors
 

@@ -134,7 +134,6 @@ Disabled Locations:
 
 0x17CAA (River Garden Entry Panel)
 
-Precompleted Locations:
 0x034A7
 0x034AD
 0x034AF

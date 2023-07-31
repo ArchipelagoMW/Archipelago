@@ -37,7 +37,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_CHECKS or panel_hex in self.PRECOMPLETED_LOCATIONS:
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
             return frozenset()
 
         check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
@@ -72,7 +72,11 @@ class WitnessPlayerLogic:
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
-        these_panels = frozenset({panels - self.PRECOMPLETED_LOCATIONS for panels in these_panels})
+        disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_CHECKS
+                        if StaticWitnessLogic.CHECKS_BY_HEX[eHex]["panelType"] == "EP"}
+
+        these_panels = frozenset({panels - disabled_eps
+                                  for panels in these_panels})
 
         if these_panels == frozenset({frozenset()}):
             return these_items
@@ -226,9 +230,6 @@ class WitnessPlayerLogic:
                 line = StaticWitnessLogic.CHECKS_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-        if adj_type == "Precompleted Locations":
-            self.PRECOMPLETED_LOCATIONS.add(line)
-
     def make_options_adjustments(self, world, player):
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -358,7 +359,7 @@ class WitnessPlayerLogic:
             if loc_obj["panelType"] in {"EP", "General"}:
                 self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
 
-        adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
+        adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None

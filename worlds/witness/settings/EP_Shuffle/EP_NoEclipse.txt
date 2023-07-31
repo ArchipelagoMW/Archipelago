@@ -1,2 +1,2 @@
-Precompleted Locations:
+Disabled Locations:
 0x339B6

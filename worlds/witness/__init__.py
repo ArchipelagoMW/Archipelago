@@ -76,8 +76,7 @@ class WitnessWorld(World):
             'log_ids_to_hints': self.log_ids_to_hints,
             'progressive_item_lists': self.items.get_progressive_item_ids_in_pool(),
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': [int(h, 16) for h in
-                                     self.player_logic.EXCLUDED_LOCATIONS | self.player_logic.PRECOMPLETED_LOCATIONS],
+            'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
             'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
 

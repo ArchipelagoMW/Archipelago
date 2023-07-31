@@ -1,4 +1,4 @@
-Precompleted Locations:
+Disabled Locations:
 0x339B6
 0x335AE
 0x3388F
