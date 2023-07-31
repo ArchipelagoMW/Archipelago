@@ -218,7 +218,7 @@ class PokemonEmeraldWorld(World):
 
             # Create items
             for item in default_itempool:
-                if item.classification != ItemClassification.progression:
+                if item.classification != ItemClassification.progression and "Unique" not in item.tags:
                     category = self.random.choices(item_categories, item_category_weights)[0]
                     if category == "TM":
                         if len(fill_item_candidates_by_category["TM"]) == 0:
