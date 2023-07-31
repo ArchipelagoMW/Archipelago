@@ -15,6 +15,8 @@ class TestItemLinksEverythingIncluded(SVTestBase):
             if filler in filler_generated:
                 continue
             filler_generated.append(filler)
+            self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
+            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
             if Group.TRAP in item_table[filler].groups:
                 at_least_one_trap = True
             if Group.GINGER_ISLAND in item_table[filler].groups:
@@ -38,6 +40,8 @@ class TestItemLinksNoIsland(SVTestBase):
                 continue
             filler_generated.append(filler)
             self.assertNotIn(Group.GINGER_ISLAND, item_table[filler].groups)
+            self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
+            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
             if Group.TRAP in item_table[filler].groups:
                 at_least_one_trap = True
         self.assertTrue(at_least_one_trap)
@@ -57,6 +61,8 @@ class TestItemLinksNoTraps(SVTestBase):
                 continue
             filler_generated.append(filler)
             self.assertNotIn(Group.TRAP, item_table[filler].groups)
+            self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
+            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
             if Group.GINGER_ISLAND in item_table[filler].groups:
                 at_least_one_island = True
         self.assertTrue(at_least_one_island)
@@ -76,4 +82,6 @@ class TestItemLinksNoTrapsAndIsland(SVTestBase):
             filler_generated.append(filler)
             self.assertNotIn(Group.GINGER_ISLAND, item_table[filler].groups)
             self.assertNotIn(Group.TRAP, item_table[filler].groups)
+            self.assertNotIn(Group.MAXIMUM_ONE, item_table[filler].groups)
+            self.assertNotIn(Group.EXACTLY_TWO, item_table[filler].groups)
         self.assertGreaterEqual(len(filler_generated), 50)
