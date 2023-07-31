@@ -6,7 +6,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles import get_all_bundles, Bundle
-from .items import item_table, create_items, ItemData, Group, items_by_group
+from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
 from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
@@ -270,7 +270,12 @@ class StardewValleyWorld(World):
         pass
 
     def get_filler_item_name(self) -> str:
-        return "Joja Cola"
+        include_traps = self.options[options.TrapItems] != options.TrapItems.option_no_traps
+        exclude_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+        available_filler = get_all_filler_items(include_traps, exclude_island)
+        available_filler = remove_limited_amount_packs(available_filler)
+        filler_names = [item.name for item in available_filler]
+        return self.random.choice(filler_names)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
