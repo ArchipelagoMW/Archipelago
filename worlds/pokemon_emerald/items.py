@@ -5,7 +5,7 @@ from typing import Dict, FrozenSet, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 
-from .data import config, data
+from .data import BASE_OFFSET, data
 
 
 class PokemonEmeraldItem(Item):
@@ -25,14 +25,14 @@ def offset_item_value(item_value: int) -> int:
     """
     Returns the AP item id (code) for a given item value
     """
-    return item_value + config["ap_offset"]
+    return item_value + BASE_OFFSET
 
 
 def reverse_offset_item_value(item_id: int) -> int:
     """
     Returns the item value for a given AP item id (code)
     """
-    return item_id - config["ap_offset"]
+    return item_id - BASE_OFFSET
 
 
 def create_item_label_to_code_map() -> Dict[str, int]:

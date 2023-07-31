@@ -5,7 +5,7 @@ from typing import Dict, Optional, FrozenSet, Iterable
 
 from BaseClasses import Location, MultiWorld, Region
 
-from .data import config, data
+from .data import BASE_OFFSET, data
 from .items import offset_item_value
 
 
@@ -40,7 +40,7 @@ def offset_flag(flag: int) -> int:
     """
     if flag is None:
         return None
-    return flag + config["ap_offset"]
+    return flag + BASE_OFFSET
 
 
 def reverse_offset_flag(location_id: int) -> int:
@@ -49,7 +49,7 @@ def reverse_offset_flag(location_id: int) -> int:
     """
     if location_id is None:
         return None
-    return location_id - config["ap_offset"]
+    return location_id - BASE_OFFSET
 
 
 def create_locations_with_tags(multiworld: MultiWorld, player: int, tags: Iterable[str]) -> None:

@@ -14,6 +14,9 @@ import pkg_resources
 from BaseClasses import ItemClassification
 
 
+BASE_OFFSET = 3860000
+
+
 class Warp:
     """
     Represents warp events in the game like doorways or warp pads
@@ -295,7 +298,6 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
     return json.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
 
 
-config: Dict[str, Any] = load_json_data("config.json")
 data = PokemonEmeraldData()
 
 

@@ -11,7 +11,7 @@ import Patch
 from settings import get_settings
 from Utils import async_start
 
-from .data import data, config
+from .data import BASE_OFFSET, data
 from .options import Goal
 
 
@@ -114,7 +114,7 @@ class GBAContext(CommonContext):
 
 def create_payload(ctx: GBAContext) -> str:
     payload = json.dumps({
-        "items": [[item.item - config["ap_offset"], item.flags & 1] for item in ctx.items_received]
+        "items": [[item.item - BASE_OFFSET, item.flags & 1] for item in ctx.items_received]
     })
 
     return payload
@@ -140,7 +140,7 @@ async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
                 if byte & (1 << i) != 0:
                     flag_id = byte_i * 8 + i
 
-                    location_id = flag_id + config["ap_offset"]
+                    location_id = flag_id + BASE_OFFSET
                     if location_id in ctx.server_locations:
                         local_checked_locations.add(location_id)
 
