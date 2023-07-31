@@ -20,7 +20,7 @@ from .items import (PokemonEmeraldItem, create_item_label_to_code_map, get_item_
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
-                      HmCompatibility, RandomizeStaticEncounters, option_definitions)
+                      HmCompatibility, RandomizeStaticEncounters, NormanRequirement, option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -98,6 +98,30 @@ class PokemonEmeraldWorld(World):
             raise FileNotFoundError(cls.settings.rom_file)
 
         assert validate_regions()
+
+    def generate_early(self) -> None:
+        # If badges or HMs are vanilla, Norman locks you from using Surf, which means you're not guaranteed to be
+        # able to reach Fortree Gym, Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those gyms to
+        # challenge Norman or it creates a circular dependency.
+        # This is never a problem for completely random badges/hms because the algo will not place Surf/Balance Badge
+        # on Norman on its own. It's never a problem for shuffled badges/hms because there is no scenario where Cut or
+        # the Stone Badge can be a lynchpin for access to any gyms, so they can always be put on Norman in a worst case
+        # scenario.
+        # This will also be a problem in warp rando if direct access to Norman's room requires Surf or if access
+        # any gym leader in general requires Surf. We will probably have to force this to 0 in that case.
+        max_norman_count = 7
+
+        if self.multiworld.badges[self.player].value == RandomizeBadges.option_vanilla:
+            max_norman_count = 4
+
+        if self.multiworld.hms[self.player].value == RandomizeHms.option_vanilla:
+            if self.multiworld.norman_requirement[self.player].value == NormanRequirement.option_badges:
+                if self.multiworld.badges[self.player].value != RandomizeBadges.option_completely_random:
+                    max_norman_count = 4
+            if self.multiworld.norman_requirement[self.player].value == NormanRequirement.option_gyms:
+                max_norman_count = 4
+
+        self.multiworld.norman_count[self.player].value = min(self.multiworld.norman_count[self.player].value, max_norman_count)
 
     def create_regions(self) -> None:
         tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
