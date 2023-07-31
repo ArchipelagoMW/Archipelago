@@ -116,7 +116,7 @@ joke_hints = [
 def get_always_hint_items(multiworld: MultiWorld, player: int):
     always = [
         "Boat",
-        "Caves Exits to Main Island",
+        "Caves Shortcuts",
         "Progressive Dots",
     ]
 

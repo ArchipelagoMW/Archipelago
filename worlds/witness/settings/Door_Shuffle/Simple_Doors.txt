@@ -27,6 +27,7 @@ Treehouse Upper Doors
 Mountain Floor 1&2 Doors
 Mountain Bottom Floor Doors
 Caves Doors
+Caves Shortcuts
 Tunnels Doors
 
 Added Locations:
