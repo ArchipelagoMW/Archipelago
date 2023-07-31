@@ -59,7 +59,7 @@ class StaticWitnessItems:
                 classification = ItemClassification.progression
                 StaticWitnessItems.item_groups.setdefault("Doors", []).append(item_name)
             elif definition.category is ItemCategory.LASER:
-                classification = ItemClassification.progression
+                classification = ItemClassification.progression_skip_balancing
                 StaticWitnessItems.item_groups.setdefault("Lasers", []).append(item_name)
             elif definition.category is ItemCategory.USEFUL:
                 classification = ItemClassification.useful
@@ -102,9 +102,12 @@ class WitnessPlayerItems:
         self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
 
         # Remove all progression items that aren't actually in the game.
-        self.item_data = {name: data for (name, data) in self.item_data.items()
-                          if data.classification is not ItemClassification.progression or
-                          name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
+        self.item_data = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification not in
+            {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+        }
 
         # Adjust item classifications based on game settings.
         eps_shuffled = get_option_value(self._world, self._player_id, "shuffle_EPs") != 0
@@ -124,8 +127,11 @@ class WitnessPlayerItems:
         self._mandatory_items: Dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
-        for item_name, item_data in {name: data for (name, data) in self.item_data.items()
-                                     if data.classification == ItemClassification.progression}.items():
+        progression_dict = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+        }
+        for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
                 num_progression = len(self._logic.MULTI_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
