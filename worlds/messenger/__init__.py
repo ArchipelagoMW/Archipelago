@@ -173,7 +173,7 @@ class MessengerWorld(World):
         if not getattr(self, "_filler_items", None):
             self._filler_items = [name for name in self.random.choices(list(FILLER),
                                                                        weights=list(FILLER.values()),
-                                                                       k=50)]
+                                                                       k=100)]
         return self._filler_items.pop(0)
 
     def create_item(self, name: str) -> MessengerItem:
