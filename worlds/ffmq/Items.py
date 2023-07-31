@@ -232,6 +232,8 @@ def create_items(self) -> None:
     if self.multiworld.sky_coin_mode[self.player] == "start_with":
         self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
+    precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
+
     def add_item(item_name):
         if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
             return
@@ -250,10 +252,10 @@ def create_items(self) -> None:
             elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
                 items.append(self.create_filler())
                 return
-        i = self.create_item(item_name)
-        if i in self.multiworld.precollected_items:
+        if item_name in precollected_item_names:
             items.append(self.create_filler())
             return
+        i = self.create_item(item_name)
         if self.multiworld.logic[self.player] != "friendly" and item_name in ("Magic Mirror", "Mask"):
             i.classification = ItemClassification.useful
         if (self.multiworld.logic[self.player] == "expert" and self.multiworld.map_shuffle[self.player] == "none" and
