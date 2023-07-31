@@ -425,8 +425,11 @@ class Context:
 
         # load start inventory:
         for slot, items in decoded_obj["precollected_items"].items():
-            self.start_inventory[slot] = [NetworkItem(item[0] if type(item) == tuple else item, -2, 0,
-                                                      item[1] if type(item) == tuple else 0) for item in items]
+            # TODO: remove conditionals in version 0.4.4
+            if items and isinstance(items[0], tuple):
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0, flags) for item_code, flags in items]
+            else:
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in items]
         for slot, hints in decoded_obj["precollected_hints"].items():
             self.hints[0, slot].update(hints)
 
