@@ -128,6 +128,7 @@ class WitnessWorld(World):
                     item_pool.pop(inventory_item_name)
                 else:
                     item_pool[inventory_item_name] -= 1
+            self.multiworld.push_precollected(self.create_item(inventory_item_name))
 
         if len(item_pool) > pool_size:
             error_string = "The Witness world has too few locations ({num_loc}) to place its necessary items " \
@@ -192,7 +193,7 @@ class WitnessWorld(World):
         credits_hint = (
             "This Randomizer is brought to you by",
             "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
+            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1
         )
 
         audio_logs = get_audio_logs().copy()
