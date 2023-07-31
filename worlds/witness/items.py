@@ -112,7 +112,7 @@ class WitnessPlayerItems:
             if not eps_shuffled and item_name in ["Monastery Garden Entry (Door)", "Monastery Shortcuts"]:
                 # Downgrade doors that only gate progress in EP shuffle.
                 item_data.classification = ItemClassification.useful
-            elif item_name in ["River Monastery Shortcut (Door)", "Jungle & River Shortcuts",
+            elif item_name in ["River Monastery Shortcut (Door)",
                                "Monastery Shortcut (Door)",
                                "Orchard Second Gate (Door)"]:
                 # Downgrade doors that don't gate progress.

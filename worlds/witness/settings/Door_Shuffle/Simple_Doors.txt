@@ -1,29 +1,23 @@
 Items:
-Glass Factory Back Wall (Door)
-Quarry Boathouse Dock (Door)
 Outside Tutorial Outpost Doors
-Glass Factory Entry (Door)
+Glass Factory Doors
 Symmetry Island Doors
 Orchard Gates
 Desert Doors
-Quarry Main Entry
-Quarry Stoneworks Entry (Door)
-Quarry Stoneworks Shortcuts
-Quarry Boathouse Barriers
-Shadows Timed Door
-Shadows Laser Room Door
-Shadows Barriers
+Quarry Entry Doors
+Quarry Stoneworks Doors
+Quarry Boathouse Doors
+Shadows Laser Room Doors
+Shadows Lower Doors
 Keep Hedge Maze Doors
 Keep Pressure Plates Doors
 Keep Shortcuts
-Monastery Entry
+Monastery Entry Doors
 Monastery Shortcuts
 Town Doors
 Town Tower Doors
-Theater Entry (Door)
-Theater Exit
-Jungle & River Shortcuts
-Jungle Popup Wall (Door)
+Windmill & Theater Doors
+Jungle Doors
 Bunker Doors
 Swamp Doors
 Swamp Laser Shortcut (Door)
