@@ -127,7 +127,7 @@ def create_region_and_locations(region_name: str, locations: List[str], exits: L
     if number_coins_basic > 0:
         add_coin_dlcquest(region, number_coins_basic, player)
     if number_coins_lfod > 0:
-        add_coin_dlcquest(region, number_coins_lfod, player)
+        add_coin_lfod(region, number_coins_lfod, player)
     multiworld.regions.append(region)
     return region
 
