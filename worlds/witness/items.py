@@ -114,7 +114,9 @@ class WitnessPlayerItems:
                 item_data.classification = ItemClassification.useful
             elif item_name in ["River Monastery Shortcut (Door)",
                                "Monastery Shortcut (Door)",
-                               "Orchard Second Gate (Door)"]:
+                               "Orchard Second Gate (Door)",
+                               "Jungle Bamboo Laser Shortcut (Door)",
+                               "Keep Pressure Plates 2 Exit (Door)"]:
                 # Downgrade doors that don't gate progress.
                 item_data.classification = ItemClassification.useful
 
