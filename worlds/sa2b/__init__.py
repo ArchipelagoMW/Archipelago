@@ -527,7 +527,13 @@ class SA2BWorld(World):
         return created_item
 
     def get_filler_item_name(self) -> str:
-        self.multiworld.random.choice(junk_table.keys())
+        junk_keys = list(junk_table.keys())
+
+        # Chao Junk
+        if self.any_chao_locations_active():
+            junk_keys += list(chaos_drives_table.keys())
+
+        return self.multiworld.random.choice(junk_keys)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map)
