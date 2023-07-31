@@ -16,9 +16,9 @@ def can_reach_level(state: "CollectionState", player: int, level: int, open_worl
         return True
     else:
         if open_world:
-            return state.has(f"{LocationName.level_names_inverse[level-1]} - Stage Completion", player, ow_boss_req)
+            return state.has(f"{LocationName.level_names_inverse[level - 1]} - Stage Completion", player, ow_boss_req)
         else:
-            return state.has(f"{LocationName.level_names_inverse[level-1]} 6 - Stage Completion", player)
+            return state.has(f"{LocationName.level_names_inverse[level - 1]} 6 - Stage Completion", player)
 
 
 def can_reach_rick(state: "CollectionState", player: int) -> bool:
@@ -45,13 +45,44 @@ def can_reach_pitch(state: "CollectionState", player: int) -> bool:
     return state.has("Pitch", player) and state.has("Pitch Spawn", player)
 
 
-def set_rules(world: "KDL3World") -> None:
+def can_reach_burning(state: "CollectionState", player: int) -> bool:
+    return state.has("Burning", player) and state.has("Burning Ability", player)
 
+
+def can_reach_stone(state: "CollectionState", player: int) -> bool:
+    return state.has("Stone", player) and state.has("Stone Ability", player)
+
+
+def can_reach_ice(state: "CollectionState", player: int) -> bool:
+    return state.has("Ice", player) and state.has("Ice Ability", player)
+
+
+def can_reach_needle(state: "CollectionState", player: int) -> bool:
+    return state.has("Needle", player) and state.has("Needle Ability", player)
+
+
+def can_reach_clean(state: "CollectionState", player: int) -> bool:
+    return state.has("Clean", player) and state.has("Clean Ability", player)
+
+
+def can_reach_parasol(state: "CollectionState", player: int) -> bool:
+    return state.has("Parasol", player) and state.has("Parasol Ability", player)
+
+
+def can_reach_spark(state: "CollectionState", player: int) -> bool:
+    return state.has("Spark", player) and state.has("Spark Ability", player)
+
+
+def can_reach_cutter(state: "CollectionState", player: int) -> bool:
+    return state.has("Cutter", player) and state.has("Cutter Ability", player)
+
+
+def set_rules(world: "KDL3World") -> None:
     # Level 1
     add_rule(world.multiworld.get_location(LocationName.grass_land_muchi, world.player),
              lambda state: can_reach_chuchu(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.grass_land_chao, world.player),
-             lambda state: state.has("Stone", world.player))
+             lambda state: can_reach_stone(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.grass_land_mine, world.player),
              lambda state: can_reach_kine(state, world.player))
 
@@ -66,7 +97,7 @@ def set_rules(world: "KDL3World") -> None:
              lambda state: state.has("Needle", world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
              lambda state: can_reach_pitch(state, world.player) and can_reach_kine(state, world.player)
-                           and state.has("Burning", world.player) and state.has("Stone", world.player))
+                           and state.has("Burning", world.player) and can_reach_stone(state, world.player))
 
     # Level 3
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_5, world.player),
@@ -74,24 +105,24 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_auntie, world.player),
              lambda state: state.has("Clean", world.player))
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_nyupun, world.player),
-             lambda state: state.has("ChuChu", world.player) and state.has("Cutter", world.player))
+             lambda state: can_reach_chuchu(state, world.player) and state.has("Cutter", world.player))
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_rob, world.player),
-             lambda state: (state.has("Kine", world.player) and state.has("Coo", world.player))
+             lambda state: (can_reach_kine(state, world.player) and can_reach_coo(state, world.player))
                            and state.has("Parasol", world.player)
-                           and state.has("Stone", world.player)
+                           and can_reach_stone(state, world.player)
                            and (state.has("Clean", world.player) or state.has("Spark", world.player))
                            and (state.has("Ice", world.player) or state.has("Needle", world.player))
              )
 
     # Level 4
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_hibanamodoki, world.player),
-             lambda state: state.has("Coo", world.player) and state.has("Clean", world.player))
+             lambda state: can_reach_coo(state, world.player) and state.has("Clean", world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_piyokeko, world.player),
              lambda state: state.has("Needle", world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_mikarin, world.player),
-             lambda state: state.has("Coo", world.player))
+             lambda state: can_reach_coo(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_pick, world.player),
-             lambda state: state.has("Rick", world.player))
+             lambda state: can_reach_rick(state, world.player))
 
     # Level 5
     add_rule(world.multiworld.get_location(LocationName.iceberg_4, world.player),
@@ -101,14 +132,13 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.iceberg_samus, world.player),
              lambda state: state.has("Ice", world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_name, world.player),
-             lambda state: state.has("Coo", world.player) and state.has("Burning", world.player)
-                           and state.has("ChuChu", world.player) and can_reach_coo(state, world.player))
+             lambda state: can_reach_coo(state, world.player) and state.has("Burning", world.player)
+                           and state.has("ChuChu", world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: can_reach_nago(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
              lambda state: state.has_all([ability for ability in copy_ability_table.keys()], world.player))
     # cleaner than writing out 8 ands
-
 
     # Consumables
     if world.multiworld.consumables[world.player]:
@@ -125,17 +155,17 @@ def set_rules(world: "KDL3World") -> None:
         add_rule(world.multiworld.get_location(LocationName.ripple_field_3_u1, world.player),
                  lambda state: state.has("Cutter", world.player) or state.has("Spark", world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_4_u1, world.player),
-                 lambda state: state.has("Stone", world.player))
+                 lambda state: can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_4_m2, world.player),
-                 lambda state: state.has("Stone", world.player))
+                 lambda state: can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m1, world.player),
                  lambda state: state.has("Kine", world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_u1, world.player),
                  lambda state: state.has("Kine", world.player)
-                               and state.has("Burning", world.player) and state.has("Stone", world.player))
+                               and state.has("Burning", world.player) and can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m2, world.player),
                  lambda state: state.has("Kine", world.player)
-                               and state.has("Burning", world.player) and state.has("Stone", world.player))
+                               and state.has("Burning", world.player) and can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_u1, world.player),
                  lambda state: state.has("Clean", world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
@@ -157,12 +187,12 @@ def set_rules(world: "KDL3World") -> None:
                                           range(1, 6)):
         set_rule(world.multiworld.get_location(boss_flag, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and can_reach_level(state, world.player, i+1,
+                                    and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
                                                         world.multiworld.ow_boss_requirement[world.player]))
         set_rule(world.multiworld.get_location(purification, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and can_reach_level(state, world.player, i+1,
+                                    and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
                                                         world.multiworld.ow_boss_requirement[world.player]))
 

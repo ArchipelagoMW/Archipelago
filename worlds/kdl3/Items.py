@@ -42,6 +42,18 @@ animal_friend_spawn_table = {
     "Pitch Spawn": ItemData(None, True)
 }
 
+copy_ability_access_table = {
+    "No Ability": ItemData(None, False),
+    "Burning Ability": ItemData(None, True),
+    "Stone Ability": ItemData(None, True),
+    "Ice Ability": ItemData(None, True),
+    "Needle Ability": ItemData(None, True),
+    "Clean Ability": ItemData(None, True),
+    "Parasol Ability": ItemData(None, True),
+    "Spark Ability": ItemData(None, True),
+    "Cutter Ability": ItemData(None, True),
+}
+
 misc_item_table = {
     "Heart Star": ItemData(0x770020, True, True),
     "1-Up": ItemData(0x770021, False),
@@ -64,6 +76,7 @@ filler_item_weights = {
 
 item_table = {
     **copy_ability_table,
+    **copy_ability_access_table,
     **animal_friend_table,
     **animal_friend_spawn_table,
     **misc_item_table,
