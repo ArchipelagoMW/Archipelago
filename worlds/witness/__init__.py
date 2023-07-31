@@ -267,9 +267,9 @@ def create_region(world: MultiWorld, player: int, name: str,
             loc_id = locat.CHECK_LOCATION_TABLE[location]
 
             check_hex = -1
-            if location in StaticWitnessLogic.CHECKS_BY_NAME:
+            if location in StaticWitnessLogic.ENTITIES_BY_NAME:
                 check_hex = int(
-                    StaticWitnessLogic.CHECKS_BY_NAME[location]["checkHex"], 0
+                    StaticWitnessLogic.ENTITIES_BY_NAME[location]["checkHex"], 0
                 )
             location = WitnessLocation(
                 player, location, loc_id, ret, check_hex

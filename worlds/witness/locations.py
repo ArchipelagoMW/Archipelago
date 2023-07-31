@@ -462,7 +462,7 @@ class StaticWitnessLocations:
         Calculates the location ID for any given location
         """
 
-        return StaticWitnessLogic.CHECKS_BY_HEX[chex]["id"]
+        return StaticWitnessLogic.ENTITIES_BY_HEX[chex]["id"]
 
     @staticmethod
     def get_event_name(panel_hex):
@@ -470,14 +470,14 @@ class StaticWitnessLocations:
         Returns the event name of any given panel.
         """
 
-        action = " Opened" if StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["panelType"] == "Door" else " Solved"
+        action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] == "Door" else " Solved"
 
-        return StaticWitnessLogic.CHECKS_BY_HEX[panel_hex]["checkName"] + action
+        return StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["checkName"] + action
 
     def __init__(self):
         all_loc_to_id = {
             panel_obj["checkName"]: self.get_id(chex)
-            for chex, panel_obj in StaticWitnessLogic.CHECKS_BY_HEX.items()
+            for chex, panel_obj in StaticWitnessLogic.ENTITIES_BY_HEX.items()
             if panel_obj["id"]
         }
 
@@ -512,26 +512,26 @@ class WitnessPlayerLocations:
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
             for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:
-                obelisk_loc_hex = StaticWitnessLogic.CHECKS_BY_NAME[obelisk_loc]["checkHex"]
+                obelisk_loc_hex = StaticWitnessLogic.ENTITIES_BY_NAME[obelisk_loc]["checkHex"]
                 if player_logic.REQUIREMENTS_BY_HEX[obelisk_loc_hex] == frozenset({frozenset()}):
                     self.CHECK_LOCATIONS.discard(obelisk_loc)
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
 
-        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.CHECKS_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
+        self.CHECK_LOCATIONS.discard(StaticWitnessLogic.ENTITIES_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
-            StaticWitnessLogic.CHECKS_BY_HEX[check_hex]["checkName"]
+            StaticWitnessLogic.ENTITIES_BY_HEX[check_hex]["checkName"]
             for check_hex in player_logic.COMPLETELY_DISABLED_CHECKS | player_logic.PRECOMPLETED_LOCATIONS
         }
 
         self.CHECK_PANELHEX_TO_ID = {
-            StaticWitnessLogic.CHECKS_BY_NAME[ch]["checkHex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
+            StaticWitnessLogic.ENTITIES_BY_NAME[ch]["checkHex"]: StaticWitnessLocations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
-            if StaticWitnessLogic.CHECKS_BY_NAME[ch]["panelType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if StaticWitnessLogic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
 
-        dog_hex = StaticWitnessLogic.CHECKS_BY_NAME["Town Pet the Dog"]["checkHex"]
+        dog_hex = StaticWitnessLogic.ENTITIES_BY_NAME["Town Pet the Dog"]["checkHex"]
         dog_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
         self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
 
@@ -549,8 +549,8 @@ class WitnessPlayerLocations:
         }
 
         check_dict = {
-            StaticWitnessLogic.CHECKS_BY_HEX[location]["checkName"]:
-            StaticWitnessLocations.get_id(StaticWitnessLogic.CHECKS_BY_HEX[location]["checkHex"])
+            StaticWitnessLogic.ENTITIES_BY_HEX[location]["checkName"]:
+            StaticWitnessLocations.get_id(StaticWitnessLogic.ENTITIES_BY_HEX[location]["checkHex"])
             for location in self.CHECK_PANELHEX_TO_ID
         }
 

@@ -70,8 +70,8 @@ class WitnessRegions:
 
         for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                reference_logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
                 StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
@@ -94,7 +94,7 @@ class WitnessRegions:
 
                 for subset in connection[1]:
                     if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
-                        if all({reference_logic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
+                        if all({reference_logic.ENTITIES_BY_HEX[panel]["id"] is None for panel in subset}):
                             backwards_connections.add(subset)
 
                 if backwards_connections:

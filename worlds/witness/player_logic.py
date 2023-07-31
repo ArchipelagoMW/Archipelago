@@ -40,7 +40,7 @@ class WitnessPlayerLogic:
         if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
             return frozenset()
 
-        check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
+        check_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
 
         these_items = frozenset({frozenset()})
 
@@ -73,7 +73,7 @@ class WitnessPlayerLogic:
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_CHECKS
-                        if StaticWitnessLogic.CHECKS_BY_HEX[eHex]["panelType"] == "EP"}
+                        if StaticWitnessLogic.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
 
         these_panels = frozenset({panels - disabled_eps
                                   for panels in these_panels})
@@ -87,7 +87,7 @@ class WitnessPlayerLogic:
             dependent_items_for_option = frozenset({frozenset()})
 
             for option_panel in option:
-                dep_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX.get(option_panel)
+                dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_panel)
 
                 if option_panel in self.COMPLETELY_DISABLED_CHECKS:
                     new_items = frozenset()
@@ -227,7 +227,7 @@ class WitnessPlayerLogic:
 
         if adj_type == "Added Locations":
             if "0x" in line:
-                line = StaticWitnessLogic.CHECKS_BY_HEX[line]["checkName"]
+                line = StaticWitnessLogic.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
     def make_options_adjustments(self, world, player):
@@ -348,15 +348,15 @@ class WitnessPlayerLogic:
         yaml_disabled_eps = []
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
-            if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
+            if yaml_disabled_location not in StaticWitnessLogic.ENTITIES_BY_NAME:
                 continue
 
-            loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
+            loc_obj = StaticWitnessLogic.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["panelType"] == "EP" and get_option_value(world, player, "shuffle_EPs") != 0:
+            if loc_obj["entityType"] == "EP" and get_option_value(world, player, "shuffle_EPs") != 0:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
-            if loc_obj["panelType"] in {"EP", "General"}:
+            if loc_obj["entityType"] in {"EP", "General"}:
                 self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
 
         adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
@@ -405,14 +405,14 @@ class WitnessPlayerLogic:
         """
         Makes a pair of an event panel and its event item
         """
-        action = " Opened" if StaticWitnessLogic.CHECKS_BY_HEX[panel]["panelType"] == "Door" else " Solved"
+        action = " Opened" if StaticWitnessLogic.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
 
-        name = StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"] + action
+        name = StaticWitnessLogic.ENTITIES_BY_HEX[panel]["checkName"] + action
         if panel not in self.EVENT_ITEM_NAMES:
-            if StaticWitnessLogic.CHECKS_BY_HEX[panel]["panelType"] == "EP":
-                obelisk = StaticWitnessLogic.CHECKS_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[panel]]["checkName"]
+            if StaticWitnessLogic.ENTITIES_BY_HEX[panel]["entityType"] == "EP":
+                obelisk = StaticWitnessLogic.ENTITIES_BY_HEX[StaticWitnessLogic.EP_TO_OBELISK_SIDE[panel]]["checkName"]
 
-                self.EVENT_ITEM_NAMES[panel] = obelisk + " - " + StaticWitnessLogic.CHECKS_BY_HEX[panel]["checkName"]
+                self.EVENT_ITEM_NAMES[panel] = obelisk + " - " + StaticWitnessLogic.ENTITIES_BY_HEX[panel]["checkName"]
 
             else:
                 warning("Panel \"" + name + "\" does not have an associated event name.")
@@ -434,7 +434,7 @@ class WitnessPlayerLogic:
                         if panel == "TrueOneWay":
                             continue
 
-                        if self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel]["region"]["name"] != region_name:
+                        if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["region"]["name"] != region_name:
                             if not panel in self.COMPLETELY_DISABLED_CHECKS:
                                 self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
