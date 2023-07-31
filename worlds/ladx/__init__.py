@@ -517,7 +517,7 @@ class LinksAwakeningWorld(World):
     def collect_item(self, state, item, remove=False):
         if item.name in self.rupees:
             assert item.advancement
-            value =  (1 - 2 * remove) * self.rupees[item.name]
+            value = (1 - 2 * remove) * self.rupees[item.name]
             state.prog_items["RUPEES", self.player] += value
 
         return super(LinksAwakeningWorld, self).collect_item(state, item, remove)
