@@ -489,7 +489,7 @@ class MultiWorld():
             if not location_names:
                 valid_locations = [location.name for location in self.get_unfilled_locations(player)]
             else:
-                valid_locations = location_names.copy()
+                valid_locations = location_names
             for location_name in valid_locations:
                 location = self._location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
