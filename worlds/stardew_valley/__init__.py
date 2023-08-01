@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any, Iterable, Optional, Union, Set, List
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld, Group as ItemLinkGroup
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
@@ -272,12 +272,29 @@ class StardewValleyWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
-            include_traps = self.options[options.TrapItems] != options.TrapItems.option_no_traps
-            exclude_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
-            available_filler = get_all_filler_items(include_traps, exclude_island)
-            available_filler = remove_limited_amount_packs(available_filler)
-            self.filler_item_pool_names = [item.name for item in available_filler]
-        return self.random.choice(self.filler_item_pool_names)
+            self.generate_filler_item_pool_names()
+        return self.multiworld.random.choice(self.filler_item_pool_names)
+
+    def generate_filler_item_pool_names(self):
+        include_traps, exclude_island = self.get_filler_item_rules()
+        available_filler = get_all_filler_items(include_traps, exclude_island)
+        available_filler = remove_limited_amount_packs(available_filler)
+        self.filler_item_pool_names = [item.name for item in available_filler]
+
+    def get_filler_item_rules(self):
+        if self.player in self.multiworld.groups:
+            link_group: ItemLinkGroup = self.multiworld.groups[self.player]
+            include_traps = True
+            exclude_island = False
+            for player in link_group["players"]:
+                player_options = fetch_options(self.multiworld, player)
+                if player_options[options.TrapItems] == options.TrapItems.option_no_traps:
+                    include_traps = False
+                if player_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+                    include_traps = exclude_island = True
+            return include_traps, exclude_island
+        else:
+            return self.options[options.TrapItems] != options.TrapItems.option_no_traps, self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
