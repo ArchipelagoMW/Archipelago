@@ -133,13 +133,11 @@ class MessengerWorld(World):
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         if remaining_fill < 10:
             filler_pool = dict(list(FILLER.items())[2:])
-            self._filler_items = [name
-                                  for name in
-                                  self.random.choices(
+            self._filler_items = self.random.choices(
                                       list(filler_pool),
                                       weights=list(filler_pool.values()),
                                       k=remaining_fill
-                                  )]
+            )
         itempool += [self.create_filler() for _ in range(remaining_fill)]
 
         self.multiworld.itempool += itempool
@@ -171,9 +169,11 @@ class MessengerWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not getattr(self, "_filler_items", None):
-            self._filler_items = [name for name in self.random.choices(list(FILLER),
-                                                                       weights=list(FILLER.values()),
-                                                                       k=100)]
+            self._filler_items = [name for name in self.random.choices(
+                list(FILLER),
+                weights=list(FILLER.values()),
+                k=20
+            )]
         return self._filler_items.pop(0)
 
     def create_item(self, name: str) -> MessengerItem:
