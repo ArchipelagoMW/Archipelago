@@ -99,6 +99,9 @@ class PokemonEmeraldWorld(World):
 
         assert validate_regions()
 
+    def get_filler_item_name(self) -> str:
+        return "Great Ball"
+
     def generate_early(self) -> None:
         # If badges or HMs are vanilla, Norman locks you from using Surf, which means you're not guaranteed to be
         # able to reach Fortree Gym, Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those gyms to
@@ -819,13 +822,7 @@ class PokemonEmeraldWorld(World):
         return slot_data
 
     def create_item(self, name: str) -> PokemonEmeraldItem:
-        item_code = self.item_name_to_id[name]
-        return PokemonEmeraldItem(
-            name,
-            get_item_classification(item_code),
-            item_code,
-            self.player
-        )
+        return self.create_item_by_code(self.item_name_to_id[name])
 
     def create_item_by_code(self, item_code: int) -> PokemonEmeraldItem:
         return PokemonEmeraldItem(
