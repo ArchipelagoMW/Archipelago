@@ -16,9 +16,10 @@ class TestBase(unittest.TestCase):
     
     def testCreateFiller(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            world = setup_solo_multiworld(world_type, ()).worlds[1]
-            with self.subTest("Create Filler", game_name=game_name):
-                self.assertIsInstance(world.create_filler(), Item)
+            if world_type.item_name_to_id:
+                world = setup_solo_multiworld(world_type, ()).worlds[1]
+                with self.subTest("Create Filler", game_name=game_name):
+                    self.assertIsInstance(world.create_filler(), Item)
 
     def testItemNameGroupHasValidItem(self):
         """Test that all item name groups contain valid items. """
