@@ -69,7 +69,7 @@ class FFMQWorld(World):
 
     def generate_early(self):
         if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
-            self.multiworld.brown_boxes[self.player] = self.multiworld.brown_boxes[self.player].from_text("include")
+            self.multiworld.brown_boxes[self.player].value = 1
         if self.multiworld.enemies_scaling_lower[self.player].value > \
                 self.multiworld.enemies_scaling_upper[self.player].value:
             (self.multiworld.enemies_scaling_lower[self.player].value,
