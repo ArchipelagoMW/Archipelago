@@ -767,7 +767,7 @@ class ALTTPWorld(World):
                 item)))
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.goal[self.player] == "icerodhunt":
+        if self.multiworld.player_types[self.player] == 1 and self.multiworld.goal[self.player] == "icerodhunt":
             item = "Nothing"
         else:
             item = self.multiworld.random.choice(extras_list)
