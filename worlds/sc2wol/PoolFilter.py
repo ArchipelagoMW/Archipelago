@@ -156,7 +156,8 @@ class ValidInventory:
         if True:
             maxUpgrad = 3
             unitAvailUpgrad = {}
-            for item in inventory + locked_items + self.existing_items:
+            unitNbUpgrades = {}
+            for item in inventory:
                 tmp = get_full_item_list()[item.name]
                 # print(item.name)
                 # print(tmp.type)
@@ -164,42 +165,70 @@ class ValidInventory:
                 # print()
                 if tmp.type == "Unit" and item.name not in unitAvailUpgrad:
                     unitAvailUpgrad[item.name] = []
+                    unitNbUpgrades[item.name] = 0
                 elif tmp.parent_item is not None:
                     # print(item.name)
                     # do seomthing about exlucded unit?
                     # print(unitAvailUpgrad)
                     if tmp.parent_item not in unitAvailUpgrad:
                         unitAvailUpgrad[tmp.parent_item] = [item]
+                        unitNbUpgrades[tmp.parent_item] = tmp.quantity
                     else:
                         unitAvailUpgrad[tmp.parent_item].append(item)
+                        unitNbUpgrades[tmp.parent_item] += tmp.quantity
+            # For those two categories, we cound them but dont include them in removal
+            for item in locked_items + self.existing_items:
+                if tmp.type == "Unit" and item.name not in unitAvailUpgrad:
+                    unitAvailUpgrad[item.name] = []
+                elif tmp.parent_item is not None:
+                    # print(item.name)
+                    # do seomthing about exlucded unit?
+                    # print(unitAvailUpgrad)
+                    if tmp.parent_item not in unitAvailUpgrad:
+                        unitNbUpgrades[tmp.parent_item] = tmp.quantity
+                    else:
+                        unitNbUpgrades[tmp.parent_item] += tmp.quantity
             # print(unitAvailUpgrad)
             for unit in unitAvailUpgrad:
-                if len(unitAvailUpgrad[unit]) > maxUpgrad:
-                    cNbUpgrad = 0 
-                    for cUpgrad in unitAvailUpgrad[unit]:
-                        cNbUpgrad += get_full_item_list()[cUpgrad.name].quantity
-                    toto = cNbUpgrad
-                    # dsa does not take into acount cases with lock and those kind of things
-                    while toto > maxUpgrad:
-                        print(f"Nb upgrades: {toto}")
-                        print()
-                        # print(unit)
-                        # print(cNbUpgrad)
-                        itemCandidate = self.multiworld.random.choice(unitAvailUpgrad[unit])
-                        # print("Derp!")
+                print(unit)
+                print(len(inventory))
+                # if (unitNbUpgrades[unit] > maxUpgrad) and (len(unitAvailUpgrad[unit]) > 0):
+                #     cNbUpgrad = 0 
+                #     for cUpgrad in unitAvailUpgrad[unit]:
+                #         cNbUpgrad += get_full_item_list()[cUpgrad.name].quantity
+                #     toto = cNbUpgrad
+                #     # dsa does not take into acount cases with lock and those kind of things
+                    # while toto > maxUpgrad:
+                while (unitNbUpgrades[unit] > maxUpgrad) and (len(unitAvailUpgrad[unit]) > 0):
+                    print(f"Nb upgrades: {unitNbUpgrades[unit]}")
+                    # print()
+                    # print(unit)
+                    # print(cNbUpgrad)
+                    itemCandidate = self.multiworld.random.choice(unitAvailUpgrad[unit])
+                    # print("Derp!")
+                    # print(itemCandidate)
+                    # print(f"Inventory: {len(inventory)}")
+                    # print(itemCandidate)
+                    # dsa Currently, any upgrades with quantity is removed completly
+                    success = attempt_removal(itemCandidate)
+                    # print(f"Inventory: {len(inventory)}")
+                    # print(success)
+                    if success:
+                        # print(f"Removed {itemCandidate}")
+                        unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
+                        # print(unitAvailUpgrad[unit])
                         # print(itemCandidate)
-                        success = attempt_removal(itemCandidate)
-                        # print(success)
-                        if success:
-                            # print(f"Removed {itemCandidate}")
-                            toto -= get_full_item_list()[itemCandidate.name].quantity
-                            # print(unitAvailUpgrad[unit])
-                            # print(itemCandidate)
-                            unitAvailUpgrad[unit].remove(itemCandidate)
-                        else:
-                            # dsa no fail safe
-                            print("Derp!")
-                    print("Done!")
+                        unitAvailUpgrad[unit].remove(itemCandidate)
+                    else:
+                        print("Derp!")
+                        # dsa Well... since it is locked after attempt, just removing it from counter?
+                        unitAvailUpgrad[unit].remove(itemCandidate)
+                        unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
+                # print(unitAvailUpgrad[unit])
+                print(f"Finish! {unitNbUpgrades[unit]}")
+                print(len(inventory))
+                print()
+                # print()
             # dsa get unit with more upgrade
 
         # Locking associated items for items that have already been placed when units_always_have_upgrades is on
