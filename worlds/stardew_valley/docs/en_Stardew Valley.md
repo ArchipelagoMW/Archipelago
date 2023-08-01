@@ -93,8 +93,15 @@ Starting in version 4.x.x, some Stardew Valley mods unrelated to Archipelago are
 This means that, for these specific mods, if you decide to include them in your yaml settings, the multiworld will be generated with the assumption that you will install and play with these mods.
 The multiworld will contain related items and locations for these mods, the specifics will vary from mod to mod
 
+[Supported Mods Documentation](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)
+
 List of supported mods:
 
+- General
+  - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
+  - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
+  - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
+  - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
 - Skills
   - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
   - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
@@ -114,11 +121,6 @@ List of supported mods:
   - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
   - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
   - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
-- Other
-  - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
-  - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
-  - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
-  - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
 
 ## Multiplayer
 
