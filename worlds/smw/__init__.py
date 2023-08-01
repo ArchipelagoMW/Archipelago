@@ -270,5 +270,8 @@ class SMWWorld(World):
 
         return created_item
 
+    def get_filler_item_name(self) -> str:
+        return ItemName.one_up_mushroom
+
     def set_rules(self):
         set_rules(self.multiworld, self.player)
