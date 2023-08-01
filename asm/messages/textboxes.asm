@@ -1,6 +1,7 @@
 .gba
 
-.org 0x8080C5C
+org 0x8080CD8
+    mov r0, #15  ; Lets the player flip through all the items if they want
 
 ; Hook into GameSelectSeisan() case 7
 hook 0x8080C5C, 0x8080C6C, ResultsScreenShowItems

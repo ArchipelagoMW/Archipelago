@@ -11,8 +11,8 @@
 CreateTextOAM:
     push {r4-r6, lr}
     mov r6, r0
-    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(152)
-    ldr r1, =attr1_size(1) | attr1_x(0)
+    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(146)
+    ldr r1, =attr1_size(1) | attr1_x(8)
     ldr r2, =attr2_palette(3) | attr2_priority(0) | attr2_id(0x10C)
     ldr r3, =ucCntObj
     ldr r4, =OamBuf

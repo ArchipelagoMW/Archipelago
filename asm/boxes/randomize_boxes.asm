@@ -310,7 +310,7 @@ CollectRandomItem:
     mov r1, #3
     strb r1, [r0] 
     ldr r0, =TextTimer
-    mov r1, #90
+    mov r1, #120
     strb r1, [r0]
 
 @@JewelPiece:

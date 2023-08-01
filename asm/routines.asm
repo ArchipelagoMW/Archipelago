@@ -64,7 +64,7 @@ PyramidScreen:
     bl PyramidScreenShowReceivedItem
 
     ldr r0, =TextTimer
-    mov r1, #30
+    mov r1, #15
     strb r1, [r0]
 
 @@RunCase2:
@@ -128,7 +128,7 @@ LevelScreen:
     beq @@Return
     ; Set text timer
     ldr r1, =TextTimer
-    mov r2, #90
+    mov r2, #120
     strb r2, [r1]
 
     mov r4, r0
