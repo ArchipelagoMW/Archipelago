@@ -172,10 +172,10 @@ class ValidInventory:
                     # print(unitAvailUpgrad)
                     if tmp.parent_item not in unitAvailUpgrad:
                         unitAvailUpgrad[tmp.parent_item] = [item]
-                        unitNbUpgrades[tmp.parent_item] = tmp.quantity
+                        unitNbUpgrades[tmp.parent_item] = 1
                     else:
                         unitAvailUpgrad[tmp.parent_item].append(item)
-                        unitNbUpgrades[tmp.parent_item] += tmp.quantity
+                        unitNbUpgrades[tmp.parent_item] += 1
             # For those two categories, we cound them but dont include them in removal
             for item in locked_items + self.existing_items:
                 if tmp.type == "Unit" and item.name not in unitAvailUpgrad:
@@ -185,13 +185,13 @@ class ValidInventory:
                     # do seomthing about exlucded unit?
                     # print(unitAvailUpgrad)
                     if tmp.parent_item not in unitAvailUpgrad:
-                        unitNbUpgrades[tmp.parent_item] = tmp.quantity
+                        unitNbUpgrades[tmp.parent_item] = 1
                     else:
-                        unitNbUpgrades[tmp.parent_item] += tmp.quantity
+                        unitNbUpgrades[tmp.parent_item] += 1
             # print(unitAvailUpgrad)
             for unit in unitAvailUpgrad:
-                print(unit)
-                print(len(inventory))
+                # print(unit)
+                # print(len(inventory))
                 # if (unitNbUpgrades[unit] > maxUpgrad) and (len(unitAvailUpgrad[unit]) > 0):
                 #     cNbUpgrad = 0 
                 #     for cUpgrad in unitAvailUpgrad[unit]:
@@ -200,7 +200,7 @@ class ValidInventory:
                 #     # dsa does not take into acount cases with lock and those kind of things
                     # while toto > maxUpgrad:
                 while (unitNbUpgrades[unit] > maxUpgrad) and (len(unitAvailUpgrad[unit]) > 0):
-                    print(f"Nb upgrades: {unitNbUpgrades[unit]}")
+                    # print(f"Nb upgrades: {unitNbUpgrades[unit]}")
                     # print()
                     # print(unit)
                     # print(cNbUpgrad)
@@ -215,19 +215,21 @@ class ValidInventory:
                     # print(success)
                     if success:
                         # print(f"Removed {itemCandidate}")
-                        unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
+                        # unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
                         # print(unitAvailUpgrad[unit])
                         # print(itemCandidate)
                         unitAvailUpgrad[unit].remove(itemCandidate)
+                        unitNbUpgrades[unit] -= 1
                     else:
-                        print("Derp!")
+                        print(f"Derp! {itemCandidate}")
                         # dsa Well... since it is locked after attempt, just removing it from counter?
                         unitAvailUpgrad[unit].remove(itemCandidate)
-                        unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
+                        unitNbUpgrades[unit] -= 1
+                        # unitNbUpgrades[unit] -= get_full_item_list()[itemCandidate.name].quantity
                 # print(unitAvailUpgrad[unit])
-                print(f"Finish! {unitNbUpgrades[unit]}")
-                print(len(inventory))
-                print()
+                # print(f"Finish! {unitNbUpgrades[unit]}")
+                # print(len(inventory))
+                # print()
                 # print()
             # dsa get unit with more upgrade
 
