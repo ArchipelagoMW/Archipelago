@@ -16,7 +16,7 @@ When the world has parsed its options, a second function is called to finalize t
 """
 
 import copy
-from typing import Set, Dict, cast
+from typing import Set, Dict, cast, List
 from logging import warning
 
 from BaseClasses import MultiWorld
@@ -157,7 +157,7 @@ class WitnessPlayerLogic:
             if StaticWitnessLogic.all_items[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 panel_hexes = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name]).panel_id_hexes
                 for panel_hex in panel_hexes:
-                    if panel_hex in self.DOOR_ITEMS_BY_ID:
+                    if panel_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[panel_hex]:
                         self.DOOR_ITEMS_BY_ID[panel_hex].remove(item_name)
 
         if adj_type == "Starting Inventory":
@@ -421,7 +421,7 @@ class WitnessPlayerLogic:
         self.MULTI_LISTS = dict()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
         self.PROG_ITEMS_ACTUALLY_IN_THE_GAME = set()
-        self.DOOR_ITEMS_BY_ID: dict[str, list[int]] = {}
+        self.DOOR_ITEMS_BY_ID: Dict[str, List[int]] = {}
         self.STARTING_INVENTORY = set()
 
         self.DIFFICULTY = get_option_value(world, player, "puzzle_randomization")

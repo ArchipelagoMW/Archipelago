@@ -782,6 +782,32 @@ class ALTTPWorld(World):
                         res.append(item)
         return res
 
+    def fill_slot_data(self):
+        slot_data = {}
+        if not self.multiworld.is_race:
+            # all of these option are NOT used by the SNI- or Text-Client.
+            # they are used by the alttp-poptracker pack (https://github.com/StripesOO7/alttp-ap-poptracker-pack)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
+            slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
+                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle"]
+
+            slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
+
+            slot_data.update({
+                'mode': self.multiworld.mode[self.player],
+                'goal': self.multiworld.goal[self.player],
+                'dark_room_logic': self.multiworld.dark_room_logic[self.player],
+                'mm_medalion': self.multiworld.required_medallions[self.player][0],
+                'tr_medalion': self.multiworld.required_medallions[self.player][1],
+                'shop_shuffle': self.multiworld.shop_shuffle[self.player],
+                'entrance_shuffle': self.multiworld.shuffle[self.player]
+                }
+            )
+        return slot_data
+        
 
 def get_same_seed(world, seed_def: tuple) -> str:
     seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})

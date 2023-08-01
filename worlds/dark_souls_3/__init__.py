@@ -46,7 +46,7 @@ class DarkSouls3World(World):
     option_definitions = dark_souls_options
     topology_present: bool = True
     web = DarkSouls3Web()
-    data_version = 6
+    data_version = 7
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
@@ -100,7 +100,7 @@ class DarkSouls3World(World):
                 progressive_location_table += location_tables["Progressive Items DLC"]
 
         # Create Vanilla Regions
-        regions = {}
+        regions: Dict[str, Region] = {}
         regions["Menu"] = self.create_region("Menu", progressive_location_table)
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
             "Firelink Shrine",
@@ -123,6 +123,11 @@ class DarkSouls3World(World):
             "Archdragon Peak",
             "Kiln of the First Flame",
         ]})
+
+        # Adds Path of the Dragon as an event item for Archdragon Peak access
+        potd_location = DarkSouls3Location(self.player, "CKG: Path of the Dragon", DS3LocationCategory.EVENT, "Path of the Dragon", None, regions["Consumed King's Garden"])
+        potd_location.place_locked_item(Item("Path of the Dragon", ItemClassification.progression, None, self.player))
+        regions["Consumed King's Garden"].locations.append(potd_location)
 
         # Create DLC Regions
         if self.multiworld.enable_dlc[self.player]:
@@ -354,7 +359,7 @@ class DarkSouls3World(World):
         set_rule(self.multiworld.get_entrance("Go To Irithyll of the Boreal Valley", self.player),
                  lambda state: state.has("Small Doll", self.player))
         set_rule(self.multiworld.get_entrance("Go To Archdragon Peak", self.player),
-                 lambda state: state.can_reach("Go To Untended Graves", "Entrance", self.player))
+                 lambda state: state.has("Path of the Dragon", self.player))
         set_rule(self.multiworld.get_entrance("Go To Grand Archives", self.player),
                  lambda state: state.has("Grand Archives Key", self.player))
         set_rule(self.multiworld.get_entrance("Go To Kiln of the First Flame", self.player),
@@ -372,14 +377,14 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_entrance("Go To Ringed City", self.player),
                      lambda state: state.has("Small Envoy Banner", self.player))
 
-            # If key items are randomized, must have contraption key to enter DLC
+            # If key items are randomized, must have contraption key to enter second half of Ashes DLC
             # If key items are not randomized, Contraption Key is guaranteed to be accessible before it is needed
             if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
                 add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
                          lambda state: state.has("Contraption Key", self.player))
 
             if self.multiworld.late_dlc[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 1", self.player),
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations

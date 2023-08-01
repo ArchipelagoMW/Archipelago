@@ -1,11 +1,10 @@
 from functools import lru_cache
 from math import floor
-from typing import *
-from fractions import Fraction
+from typing import List, Collection
 from pkgutil import get_data
 
 
-def build_weighted_int_list(inputs: Collection[float], total: int) -> list[int]:
+def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     """
     Converts a list of floats to a list of ints of a given length, using the Largest Remainder Method.
     """
@@ -15,11 +14,11 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> list[int]:
     scaled_input = [x * scale_factor for x in inputs]
 
     # Generate whole number counts, always rounding down.
-    rounded_output: list[int] = [floor(x) for x in scaled_input]
+    rounded_output: List[int] = [floor(x) for x in scaled_input]
     rounded_sum = sum(rounded_output)
 
     # If the output's total is insufficient, increment the value that has the largest remainder until we meet our goal.
-    remainders: list[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output)]
+    remainders: List[float] = [real - rounded for real, rounded in zip(scaled_input, rounded_output)]
     while rounded_sum < total:
         max_remainder = max(remainders)
         if max_remainder == 0:
