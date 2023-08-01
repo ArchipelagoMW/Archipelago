@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 
 from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
 from worlds.AutoWorld import World, WebWorld
@@ -71,6 +71,7 @@ class MessengerWorld(World):
     total_shards: int
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
+    _filler_items: List[str]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -130,14 +131,13 @@ class MessengerWorld(World):
             itempool += seals
 
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
-        filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
-        itempool += [self.create_item(filler_item)
-                     for filler_item in
-                     self.random.choices(
-                         list(filler_pool),
-                         weights=list(filler_pool.values()),
-                         k=remaining_fill
-                     )]
+        if remaining_fill < 10:
+            self._filler_items = self.random.choices(
+                                      list(FILLER)[2:],
+                                      weights=list(FILLER.values())[2:],
+                                      k=remaining_fill
+            )
+        itempool += [self.create_filler() for _ in range(remaining_fill)]
 
         self.multiworld.itempool += itempool
 
@@ -167,7 +167,13 @@ class MessengerWorld(World):
         }
 
     def get_filler_item_name(self) -> str:
-        return "Time Shard"
+        if not getattr(self, "_filler_items", None):
+            self._filler_items = [name for name in self.random.choices(
+                list(FILLER),
+                weights=list(FILLER.values()),
+                k=20
+            )]
+        return self._filler_items.pop(0)
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
