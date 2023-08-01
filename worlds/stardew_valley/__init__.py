@@ -74,6 +74,7 @@ class StardewValleyWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.all_progression_items = set()
+        self.filler_item_pool_names = []
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
@@ -270,12 +271,13 @@ class StardewValleyWorld(World):
         pass
 
     def get_filler_item_name(self) -> str:
-        include_traps = self.options[options.TrapItems] != options.TrapItems.option_no_traps
-        exclude_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
-        available_filler = get_all_filler_items(include_traps, exclude_island)
-        available_filler = remove_limited_amount_packs(available_filler)
-        filler_names = [item.name for item in available_filler]
-        return self.random.choice(filler_names)
+        if not self.filler_item_pool_names:
+            include_traps = self.options[options.TrapItems] != options.TrapItems.option_no_traps
+            exclude_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+            available_filler = get_all_filler_items(include_traps, exclude_island)
+            available_filler = remove_limited_amount_packs(available_filler)
+            self.filler_item_pool_names = [item.name for item in available_filler]
+        return self.random.choice(self.filler_item_pool_names)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
