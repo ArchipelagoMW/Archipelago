@@ -57,23 +57,6 @@ class LingoWorld(World):
     # This is just used for unit testing. It should remain at the default values for actual play.
     test_options: LingoTestOptions = LingoTestOptions()
 
-    def _get_slot_data(self):
-        return {
-            'door_ids_by_item_id': {
-                data.code: data.door_ids for data in self.static_items.ALL_ITEM_TABLE.values()
-                if data.code is not None and len(data.door_ids) > 0
-            },
-            'painting_ids_by_item_id': {
-                data.code: data.painting_ids for data in self.static_items.ALL_ITEM_TABLE.values()
-                if data.code is not None and len(data.painting_ids) > 0
-            },
-            'panel_ids_by_location_id': {
-                data.code: data.panel_ids() for data in self.static_locat.ALL_LOCATION_TABLE.values()
-                if data.code is not None
-            },
-            'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
-        }
-
     def generate_early(self):
         self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic, self.test_options)
 
@@ -134,16 +117,13 @@ class LingoWorld(World):
             lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self):
-        slot_data = self._get_slot_data()
+        slot_data = {"seed": self.multiworld.per_slot_randoms[self.player].randint(0, 1000000)}
 
-        for option_name in lingo_options:
+        for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
+                            "shuffle_panels", "mastery_achievements", "level_2_requirement"]:
             slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
             slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
-            slot_data["paintings"] = {
-                painting.id: {"orientation": painting.orientation, "move": painting.move}
-                for painting in self.static_logic.PAINTINGS.values()
-            }
 
         return slot_data
