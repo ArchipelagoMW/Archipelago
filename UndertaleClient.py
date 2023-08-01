@@ -99,6 +99,7 @@ class UndertaleContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.pieces_needed = 0
+        self.finished_game = False
         self.game = "Undertale"
         self.got_deathlink = False
         self.syncing = False
