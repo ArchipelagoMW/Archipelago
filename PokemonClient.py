@@ -176,8 +176,10 @@ async def parse_locations(data: List, ctx: GBContext):
     elif (location_name_to_id["Fossil - Choice B"] in ctx.checked_locations and location_name_to_id["Fossil - Choice A"]
             not in ctx.checked_locations):
         hints.append("Fossil - Choice A")
-    hints = [location_name_to_id[loc] for loc in hints if loc not in ctx.auto_hints and location_name_to_id[loc] in
-             ctx.missing_locations and location_name_to_id[loc] not in ctx.locations_checked]
+    hints = [
+        location_name_to_id[loc] for loc in hints if location_name_to_id[loc] not in ctx.auto_hints and
+        location_name_to_id[loc] in ctx.missing_locations and location_name_to_id[loc] not in ctx.locations_checked
+    ]
     if hints:
         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}])
     ctx.auto_hints.update(hints)
