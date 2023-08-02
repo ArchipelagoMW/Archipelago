@@ -129,6 +129,8 @@ class RiskOfRainWorld(World):
         set_rules(self.multiworld, self.player)
 
     def get_filler_item_name(self) -> str:
+        if not self.junk_pool:
+            self.junk_pool = self.create_junk_pool()
         weights = [data for data in self.junk_pool.values()]
         filler = self.multiworld.random.choices([filler for filler in self.junk_pool.keys()], weights,
                                                 k=1)[0]
