@@ -26,7 +26,6 @@ class TestSurf(PokemonEmeraldTestBase):
 
     def testAccessibleWithSurfOnly(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_PETALBURG_CITY_ETHER")))
         self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_SOOTHE_BELL")))
         self.assertTrue(self.can_reach_location(location_name_to_label("ITEM_LILYCOVE_CITY_MAX_REPEL")))
@@ -155,7 +154,6 @@ class TestNormanRequirement4(PokemonEmeraldTestBase):
 
     def testAccessibleWithReachableGyms(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge"]) # Reaches Roxanne, Brawley, Wattson, and Flannery
-        self.multiworld.state.sweep_for_events()
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
@@ -169,17 +167,12 @@ class TestVictoryRoad(PokemonEmeraldTestBase):
     def testAccessibleWithSpecificHMs(self) -> None:
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM03 Surf", "Balance Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM07 Waterfall", "Rain Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM04 Strength", "Heat Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM06 Rock Smash", "Dynamo Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertFalse(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))
         self.collect_by_name(["HM05 Flash", "Knuckle Badge"])
-        self.multiworld.state.sweep_for_events()
         self.assertTrue(self.can_reach_location("EVENT_DEFEAT_CHAMPION"))

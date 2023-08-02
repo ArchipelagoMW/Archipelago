@@ -319,7 +319,6 @@ class PokemonEmeraldWorld(World):
             if self.hm_shuffle_info is not None:
                 for _, item in self.hm_shuffle_info:
                     collection_state.collect(item)
-                collection_state.sweep_for_events()
 
             self.random.shuffle(badge_locations)
             self.random.shuffle(badge_items)
