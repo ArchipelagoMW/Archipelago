@@ -190,7 +190,7 @@ class PokemonEmeraldWorld(World):
             # Count occurrences of types of vanilla items in pool
             item_category_counter = Counter()
             for item in default_itempool:
-                if item.classification != ItemClassification.progression:
+                if not item.advancement:
                     item_category_counter.update([tag for tag in item.tags if tag in item_categories])
 
             item_category_weights = [item_category_counter.get(category) for category in item_categories]
@@ -223,7 +223,7 @@ class PokemonEmeraldWorld(World):
 
             # Create items
             for item in default_itempool:
-                if item.classification != ItemClassification.progression and "Unique" not in item.tags:
+                if not item.advancement and "Unique" not in item.tags:
                     category = self.random.choices(item_categories, item_category_weights)[0]
                     if category == "TM":
                         if len(fill_item_candidates_by_category["TM"]) == 0:
