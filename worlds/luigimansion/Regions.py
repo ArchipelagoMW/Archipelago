@@ -175,16 +175,16 @@ def create_regions(multiworld: MultiWorld, player: int, locations: tuple[Locatio
             lambda state: state.has("Spade Key", player) and state.has("Boo", player, multiworld.FinalBooCount[player]))
 
 
-def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionNames: Set[str]):
+def throwIfAnyLocationIsNotAssignedToARegion(regions: List[Region], regionnames: Set[str]):
     existingRegions = set()
 
     for region in regions:
         existingRegions.add(region.name)
 
-    if (regionNames - existingRegions):
+    if (regionnames - existingRegions):
         raise Exception(
             "LuigiMansion: the following regions are used in locations: {}, but no such region exists".format(
-                regionNames - existingRegions))
+                regionnames - existingRegions))
 
 
 def create_location(player: int, location_data: LocationData, region: Region,  # check where event items are assigned

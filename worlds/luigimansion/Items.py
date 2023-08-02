@@ -6,6 +6,7 @@ from BaseClasses import ItemClassification, Item
 class LMItem(Item):
     game = "Luigi's Mansion"
 
+
 class ItemData(NamedTuple):
     group: str
     code: int
