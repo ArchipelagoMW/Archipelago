@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
 from .. import LingoWorld
-from ... import AutoWorld
+from worlds.Autoworld import AutoWorld, call_all
 from ...AutoWorld import call_all
 
 
