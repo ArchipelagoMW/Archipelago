@@ -30,3 +30,17 @@
         mov pc, register
     @@Return:
 .endmacro
+
+; Copy bits m-n inclusive from the source register into a destination register.
+; They'll be shifted into the least significant position, and the most
+; significant bits will all be cleared.
+.macro get_bits, dst, src, msb, lsb
+        lsl dst, src, #31-msb
+        lsr dst, dst, #31 - (msb - lsb)
+.endmacro
+
+; Copy bit n from the source register into the least significant bit in the
+; destination register. The most significant 31 bits will be cleared.
+.macro get_bit, dst, src, bit
+        get_bits dst, src, bit, bit
+.endmacro

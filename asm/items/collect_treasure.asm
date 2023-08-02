@@ -167,10 +167,8 @@ ReadJewelPieces:
         ldr r0, =LastCollectedItemID
         ldrb r7, [r0]
         lsr r3, r7, #7  ; r3 = 1 if collected this frame, 0 otherwise
-        lsl r0, r7, #31-4
-        lsr r0, r0, #31-2  ; r0 = passage ID
-        lsl r7, r7, #31-1
-        lsr r7, r7, #31-1  ; r7 = quadrant
+        get_bits r0, r7, 4, 2  ; r0 = passage ID
+        get_bits r7, r7, 1, 0  ; r7 = quadrant
 
     ; Piece 1
         cmp r3, #0
@@ -229,8 +227,7 @@ ReadJewelPieces:
     @@Return:
         ldr r0, =LastCollectedItemID
         ldrb r3, [r0]
-        lsl r3, 31-6
-        lsr r3, 31-6
+        get_bits r3, r3, 6, 0
         strb r3, [r0]
 
         pop {r7}
@@ -322,8 +319,7 @@ ReadCD:
     @@Return:
         ldr r0, =LastCollectedItemID
         ldrb r3, [r0]
-        lsl r3, 31-6
-        lsr r3, 31-6
+        get_bits r3, r3, 6, 0
         strb r3, [r0]
 
         ldr r3, =Scbuf_ucStatus

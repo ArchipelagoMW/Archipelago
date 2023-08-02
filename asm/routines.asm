@@ -137,15 +137,13 @@ LevelScreen:
         bl LoadReceivedText
 
     ; If we get treasure, tell the player
-        lsl r0, r4, #31-6
-        lsr r0, r0, #31
+        get_bit r0, r4, 6
         cmp r0, #0
         bne @@CollectJunk
 
         mov r0, r4
         bl ItemReceivedFeedbackSound
-        lsl r0, r4, #31-4
-        lsr r0, r0, #31-2
+        get_bits r0, r4, 4, 2
         bl SetTreasurePalette
         lsr r0, r4, #5
         bl SpawnCollectionIndicator

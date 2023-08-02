@@ -28,16 +28,14 @@ PyramidScreenCreateReceivedItemOAM:
 
         ldr r6, =IncomingItemID
         ldrb r6, [r6]
-        lsl r1, r6, #31-6
-        lsr r1, r1, #31
+        get_bit r1, r6, 6
         cmp r1, #0
         bne @@JunkItem
 
     ; Jewel Pieces or CD
         add r5, #1
 
-        lsl r1, r6, #31-5
-        lsr r1, r1, #31
+        get_bit r1, r6, 5
         cmp r1, #0
         bne @@CD
 

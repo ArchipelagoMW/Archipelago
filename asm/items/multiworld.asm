@@ -10,8 +10,7 @@
 ItemReceivedFeedbackSound:
         push {lr}
 
-        lsl r0, r4, #31-6
-        lsr r0, r0, #32-2
+        get_bits r0, r4, 6, 5
         cmp r0, #1
         bgt @@Return
         beq @@CDSound

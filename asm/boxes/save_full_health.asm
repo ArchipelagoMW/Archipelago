@@ -19,8 +19,7 @@ ItemGetFlagFullHealth:
     ; original branch when this returns.
     ; Some other code gets to one of those branches, which is why we can't replace
     ; it here.
-        lsl r2, r1, #25
-        lsr r2, r2, #31
+        get_bit r2, r1, 6
         cmp r2, #0
         beq @@NoFullHealth
 
@@ -40,8 +39,7 @@ ItemGetFlagFullHealth:
         add r1, r3, r1
         add r1, r12
         ldrb r1, [r1]
-        lsl r2, r1, #26
-        lsr r2, r2, #31
+        get_bit r2, r1, 5
 
     @@Return:
         cmp r2, #0  ; Next instruction is beq

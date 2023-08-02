@@ -107,17 +107,14 @@ PyramidScreenShowReceivedItem:
         ldr r0, =IncomingItemID
         ldrb r0, [r0]
 
-        lsl r1, r0, #31-6
-        lsr r1, r1, #31
+        get_bit r1, r0, 6
         cmp r1, #1
         beq @@JunkItem
 
         ; Major item
-        lsl r2, r0, #31-4
-        lsr r2, r2, #31-2  ; Passage
+        get_bits r2, r0, 4, 2  ; Passage
         lsl r2, r2, #5  ; r2: Passage * 32
-        lsl r1, r0, #31-5
-        lsr r1, r1, #31
+        get_bit r1, r0, 5
         cmp r1, #1
         beq @@CD
 

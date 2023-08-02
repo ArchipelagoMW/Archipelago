@@ -93,15 +93,13 @@ GiveItem:
         ldr r4, =LevelStatusTable
 
         ; Get passage ID * 24 into r1
-        lsl r1, r0, #31-4  ; we want the passage ID in bits 4:2
-        lsr r1, r1, #31-2  ; r1 = passage ID
+        get_bits r1, r0, 4, 2  ; r1 = passage ID
         lsl r3, r1, #1  ; passage*2
         add r3, r3, r1  ; passage*3
         lsl r1, r3, #3  ; passage*24
 
         ; Get bits 1:0 into r2
-        lsl r2, r0, #31-1
-        lsr r2, r2, #31-1
+        get_bits r2, r0, 1, 0
 
         ; Check bit 5 to determine CD/Jewel piece
         lsr r3, r0, #5
@@ -116,20 +114,20 @@ GiveItem:
         mov r3, #1
         lsl r3, r2
 
-        ; Loop through level statuses to find the first one with this piece's bit
-        ; unset. If all four are set, break out since this one's an extra.
-        @@CheckJewel:
-            ldr r2, [r1]
-            mov r0, r2
-            and r2, r3
-            cmp r2, #0
-            beq @@FoundJewel
+    ; Loop through level statuses to find the first one with this piece's bit
+    ; unset. If all four are set, break out since this one's an extra.
+    @@CheckJewel:
+        ldr r2, [r1]
+        mov r0, r2
+        and r2, r3
+        cmp r2, #0
+        beq @@FoundJewel
 
-        ; Next
-            add r1, r1, #4
-            add r5, r5, #-1
-            cmp r5, #0
-            beq @@Return
+    ; Next
+        add r1, r1, #4
+        add r5, r5, #-1
+        cmp r5, #0
+        beq @@Return
             b @@CheckJewel
 
     @@FoundJewel:
@@ -151,8 +149,7 @@ GiveItem:
 
     @@Junk:
     ; Queue your junk item by incrementing the appropriate variable
-        lsl r1, r0, #31-3
-        lsr r1, r1, #31-3
+        get_bits r1, r0, 3, 0
         ldr r2, =QueuedJunk
         add r1, r1, r2
         ldrb r2, [r1]

@@ -162,9 +162,7 @@ LoadRandomItemAnimation:
 
     ; Change the palette
         ; Get passage
-        lsl r0, r6, #31-4
-        lsr r0, r0, #31-2
-
+        get_bits r0, r6, 4, 2
         bl SetTreasurePalette
 
     ; Jewel/CD branch
@@ -173,8 +171,7 @@ LoadRandomItemAnimation:
         bne @@CD
 
     ; Jewel piece
-        lsl r6, r6, #31-1
-        lsr r6, r6, #31-1
+        get_bits r6, r6, 1, 0
         b @@SetAnimation
 
     @@CD:

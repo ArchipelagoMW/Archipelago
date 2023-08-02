@@ -23,8 +23,7 @@ CollectJunkItems:
     ; Only every 32 frames so as to not spam them too hard
         ldr r3, =GlobalTimer
         ldr r3, [r3]
-        lsl r2, r3, #32-5
-        lsr r2, r2, #32-5
+        get_bits r2, r3, 4, 0
         cmp r2, #0
         bne @@EndCheckHearts
 
