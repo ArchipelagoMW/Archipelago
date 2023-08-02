@@ -1,6 +1,6 @@
 from BaseClasses import Item
 from typing import NamedTuple, Dict
-
+from .Overcooked2Levels import Overcooked2Dlc
 
 class ItemData(NamedTuple):
     code: int
@@ -75,6 +75,18 @@ item_frequencies = {
     "Preparing Emote" : 0,
     "Washing Up Emote": 0,
     "Ok Emote": 0,
+}
+
+dlc_exclusives = {
+    "Wood"                          : {Overcooked2Dlc.CAMPFIRE_COOK_OFF},
+    "Coal Bucket"                   : {Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE},
+    "Bellows"                       : {Overcooked2Dlc.SURF_N_TURF},
+    "Control Stick Batteries"       : {Overcooked2Dlc.STORY, Overcooked2Dlc.SURF_N_TURF, Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE, Overcooked2Dlc.CARNIVAL_OF_CHAOS, Overcooked2Dlc.SEASONAL},
+    "Wok Wheels"                    : {Overcooked2Dlc.SEASONAL},
+    "Lightweight Backpack"          : {Overcooked2Dlc.CAMPFIRE_COOK_OFF},
+    "Faster Condiment/Drink Switch" : {Overcooked2Dlc.SEASONAL, Overcooked2Dlc.CARNIVAL_OF_CHAOS},
+    "Calmer Unbread"                : {Overcooked2Dlc.SEASONAL, Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE},
+    "Coin Purse"                    : {Overcooked2Dlc.SEASONAL, Overcooked2Dlc.NIGHT_OF_THE_HANGRY_HORDE},
 }
 
 item_name_to_config_name = {

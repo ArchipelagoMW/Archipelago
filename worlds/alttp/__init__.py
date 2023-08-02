@@ -1,13 +1,13 @@
 import logging
 import os
 import random
+import settings
 import threading
 import typing
-from collections import OrderedDict
 
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
-from .Dungeons import create_dungeons
+from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
     indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -20,13 +20,24 @@ from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
-from .Shops import create_shops, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
+from .Shops import create_shops, Shop, ShopSlotFill, ShopType, price_rate_display, price_type_display_name
 from .SubClasses import ALttPItem, LTTPRegionType
 from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .StateHelpers import can_buy_unlimited
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
 extras_list = sum(difficulties['normal'].extras[0:5], [])
+
+
+class ALTTPSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the v1.0 J rom"""
+        description = "ALTTP v1.0 J ROM File"
+        copy_to = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
+        md5s = [LttPDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class ALTTPWeb(WebWorld):
@@ -36,7 +47,7 @@ class ALTTPWeb(WebWorld):
         "English",
         "multiworld_en.md",
         "multiworld/en",
-        ["Farrak Kilhn"]
+        ["Farrak Kilhn", "Berserker"]
     )
 
     setup_de = Tutorial(
@@ -102,7 +113,16 @@ class ALTTPWeb(WebWorld):
         ["Berserker"]
     )
 
-    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando]
+    oof_sound = Tutorial(
+        "'OOF' Sound Replacement",
+        "A guide to customizing Link's 'oof' sound",
+        "English",
+        "oof_sound_en.md",
+        "oof_sound/en",
+        ["Nyx Edelstein"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando, oof_sound]
 
 
 class ALTTPWorld(World):
@@ -112,17 +132,89 @@ class ALTTPWorld(World):
     dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
     Ganon!
     """
-    game: str = "A Link to the Past"
+    game = "A Link to the Past"
     option_definitions = alttp_options
+    settings_key = "lttp_options"
+    settings: typing.ClassVar[ALTTPSettings]
     topology_present = True
     item_name_groups = item_name_groups
+    location_name_groups = {
+        "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
+                           "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
+        "Kakariko Well": {"Kakariko Well - Top", "Kakariko Well - Left", "Kakariko Well - Middle",
+                          "Kakariko Well - Right", "Kakariko Well - Bottom"},
+        "Mini Moldorm Cave": {"Mini Moldorm Cave - Far Left", "Mini Moldorm Cave - Left", "Mini Moldorm Cave - Right",
+                              "Mini Moldorm Cave - Far Right", "Mini Moldorm Cave - Generous Guy"},
+        "Paradox Cave": {"Paradox Cave Lower - Far Left", "Paradox Cave Lower - Left", "Paradox Cave Lower - Right",
+                         "Paradox Cave Lower - Far Right", "Paradox Cave Lower - Middle", "Paradox Cave Upper - Left",
+                         "Paradox Cave Upper - Right"},
+        "Hype Cave": {"Hype Cave - Top", "Hype Cave - Middle Right", "Hype Cave - Middle Left",
+                      "Hype Cave - Bottom", "Hype Cave - Generous Guy"},
+        "Hookshot Cave": {"Hookshot Cave - Top Right", "Hookshot Cave - Top Left", "Hookshot Cave - Bottom Right",
+                          "Hookshot Cave - Bottom Left"},
+        "Hyrule Castle": {"Hyrule Castle - Boomerang Chest", "Hyrule Castle - Map Chest",
+                          "Hyrule Castle - Zelda's Chest", "Sewers - Dark Cross", "Sewers - Secret Room - Left",
+                          "Sewers - Secret Room - Middle", "Sewers - Secret Room - Right"},
+        "Eastern Palace": {"Eastern Palace - Compass Chest", "Eastern Palace - Big Chest",
+                           "Eastern Palace - Cannonball Chest", "Eastern Palace - Big Key Chest",
+                           "Eastern Palace - Map Chest", "Eastern Palace - Boss"},
+        "Desert Palace": {"Desert Palace - Big Chest", "Desert Palace - Torch", "Desert Palace - Map Chest",
+                          "Desert Palace - Compass Chest", "Desert Palace - Big Key Chest", "Desert Palace - Boss"},
+        "Tower of Hera": {"Tower of Hera - Basement Cage", "Tower of Hera - Map Chest", "Tower of Hera - Big Key Chest",
+                          "Tower of Hera - Compass Chest", "Tower of Hera - Big Chest", "Tower of Hera - Boss"},
+        "Palace of Darkness": {"Palace of Darkness - Shooter Room", "Palace of Darkness - The Arena - Bridge",
+                               "Palace of Darkness - Stalfos Basement", "Palace of Darkness - Big Key Chest",
+                               "Palace of Darkness - The Arena - Ledge", "Palace of Darkness - Map Chest",
+                               "Palace of Darkness - Compass Chest", "Palace of Darkness - Dark Basement - Left",
+                               "Palace of Darkness - Dark Basement - Right", "Palace of Darkness - Dark Maze - Top",
+                               "Palace of Darkness - Dark Maze - Bottom", "Palace of Darkness - Big Chest",
+                               "Palace of Darkness - Harmless Hellway", "Palace of Darkness - Boss"},
+        "Swamp Palace": {"Swamp Palace - Entrance", "Swamp Palace - Map Chest", "Swamp Palace - Big Chest",
+                         "Swamp Palace - Compass Chest", "Swamp Palace - Big Key Chest", "Swamp Palace - West Chest",
+                         "Swamp Palace - Flooded Room - Left", "Swamp Palace - Flooded Room - Right",
+                         "Swamp Palace - Waterfall Room", "Swamp Palace - Boss"},
+        "Thieves' Town": {"Thieves' Town - Big Key Chest", "Thieves' Town - Map Chest", "Thieves' Town - Compass Chest",
+                          "Thieves' Town - Ambush Chest", "Thieves' Town - Attic", "Thieves' Town - Big Chest",
+                          "Thieves' Town - Blind's Cell", "Thieves' Town - Boss"},
+        "Skull Woods": {"Skull Woods - Map Chest", "Skull Woods - Pinball Room", "Skull Woods - Compass Chest",
+                        "Skull Woods - Pot Prison", "Skull Woods - Big Chest", "Skull Woods - Big Key Chest",
+                        "Skull Woods - Bridge Room", "Skull Woods - Boss"},
+        "Ice Palace": {"Ice Palace - Compass Chest", "Ice Palace - Freezor Chest", "Ice Palace - Big Chest",
+                       "Ice Palace - Freezor Chest", "Ice Palace - Big Chest", "Ice Palace - Iced T Room",
+                       "Ice Palace - Spike Room", "Ice Palace - Big Key Chest", "Ice Palace - Map Chest",
+                       "Ice Palace - Boss"},
+        "Misery Mire": {"Misery Mire - Big Chest", "Misery Mire - Map Chest", "Misery Mire - Main Lobby",
+                        "Misery Mire - Bridge Chest", "Misery Mire - Spike Chest", "Misery Mire - Compass Chest",
+                        "Misery Mire - Big Key Chest", "Misery Mire - Boss"},
+        "Turtle Rock": {"Turtle Rock - Compass Chest", "Turtle Rock - Roller Room - Left",
+                        "Turtle Rock - Roller Room - Right", "Turtle Rock - Chain Chomps", "Turtle Rock - Big Key Chest",
+                        "Turtle Rock - Big Chest", "Turtle Rock - Crystaroller Room",
+                        "Turtle Rock - Eye Bridge - Bottom Left", "Turtle Rock - Eye Bridge - Bottom Right",
+                        "Turtle Rock - Eye Bridge - Top Left", "Turtle Rock - Eye Bridge - Top Right",
+                        "Turtle Rock - Boss"},
+        "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganons Tower - Hope Room - Left",
+                         "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
+                         "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
+                         "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
+                         "Ganons Tower - DMs Room - Top Left", "Ganons Tower - DMs Room - Top Right",
+                         "Ganons Tower - DMs Room - Bottom Left", "Ganons Tower - DMs Room - Bottom Right",
+                         "Ganons Tower - Map Chest", "Ganons Tower - Firesnake Room",
+                         "Ganons Tower - Randomizer Room - Top Left", "Ganons Tower - Randomizer Room - Top Right",
+                         "Ganons Tower - Randomizer Room - Bottom Left", "Ganons Tower - Randomizer Room - Bottom Right",
+                         "Ganons Tower - Bob's Chest", "Ganons Tower - Big Chest", "Ganons Tower - Big Key Room - Left",
+                         "Ganons Tower - Big Key Room - Right", "Ganons Tower - Big Key Chest",
+                         "Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                         "Ganons Tower - Pre-Moldorm Chest", "Ganons Tower - Validation Chest"},
+        "Ganons Tower Climb": {"Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
+                               "Ganons Tower - Pre-Moldorm Chest", "Ganons Tower - Validation Chest"},
+    }
     hint_blacklist = {"Triforce"}
 
     item_name_to_id = {name: data.item_code for name, data in item_table.items() if type(data.item_code) == int}
     location_name_to_id = lookup_name_to_id
 
     data_version = 8
-    required_client_version = (0, 3, 2)
+    required_client_version = (0, 4, 1)
     web = ALTTPWeb()
 
     pedestal_credit_texts: typing.Dict[int, str] = \
@@ -140,15 +232,30 @@ class ALTTPWorld(World):
 
     create_items = generate_itempool
 
-    enemizer_path: str = Utils.get_options()["generator"]["enemizer_path"] \
-        if os.path.isabs(Utils.get_options()["generator"]["enemizer_path"]) \
-        else Utils.local_path(Utils.get_options()["generator"]["enemizer_path"])
+    _enemizer_path: typing.ClassVar[typing.Optional[str]] = None
+
+    @property
+    def enemizer_path(self) -> str:
+        # TODO: directly use settings
+        cls = self.__class__
+        if cls._enemizer_path is None:
+            cls._enemizer_path = settings.get_settings().generator.enemizer_path
+            assert isinstance(cls._enemizer_path, str)
+        return cls._enemizer_path
+
+    # custom instance vars
+    dungeon_local_item_names: typing.Set[str]
+    dungeon_specific_item_names: typing.Set[str]
+    rom_name_available_event: threading.Event
+    has_progressive_bows: bool
+    dungeons: typing.Dict[str, Dungeon]
 
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
+        self.dungeons = {}
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -167,6 +274,13 @@ class ALTTPWorld(World):
 
         player = self.player
         world = self.multiworld
+
+        if world.mode[player] == 'standard' \
+                and world.smallkey_shuffle[player] \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_start_with:
+            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
 
         # system for sharing ER layouts
         self.er_seed = str(world.random.randint(0, 2 ** 64))
@@ -204,6 +318,8 @@ class ALTTPWorld(World):
         world.non_local_items[player].value -= item_name_groups['Pendants']
         world.non_local_items[player].value -= item_name_groups['Crystals']
 
+    create_dungeons = create_dungeons
+
     def create_regions(self):
         player = self.player
         world = self.multiworld
@@ -216,7 +332,7 @@ class ALTTPWorld(World):
         else:
             create_inverted_regions(world, player)
         create_shops(world, player)
-        create_dungeons(world, player)
+        self.create_dungeons()
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
@@ -382,49 +498,50 @@ class ALTTPWorld(World):
                     or world.killable_thieves[player])
 
     def generate_output(self, output_directory: str):
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
         try:
             use_enemizer = self.use_enemizer
 
             rom = LocalRom(get_base_rom_path())
 
-            patch_rom(world, rom, player, use_enemizer)
+            patch_rom(multiworld, rom, player, use_enemizer)
 
             if use_enemizer:
-                patch_enemizer(world, player, rom, self.enemizer_path, output_directory)
+                patch_enemizer(self, rom, self.enemizer_path, output_directory)
 
-            if world.is_race:
-                patch_race_rom(rom, world, player)
+            if multiworld.is_race:
+                patch_race_rom(rom, multiworld, player)
 
-            world.spoiler.hashes[player] = get_hash_string(rom.hash)
+            multiworld.spoiler.hashes[player] = get_hash_string(rom.hash)
 
             palettes_options = {
-                'dungeon': world.uw_palettes[player],
-                'overworld': world.ow_palettes[player],
-                'hud': world.hud_palettes[player],
-                'sword': world.sword_palettes[player],
-                'shield': world.shield_palettes[player],
+                'dungeon': multiworld.uw_palettes[player],
+                'overworld': multiworld.ow_palettes[player],
+                'hud': multiworld.hud_palettes[player],
+                'sword': multiworld.sword_palettes[player],
+                'shield': multiworld.shield_palettes[player],
                 # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
-            apply_rom_settings(rom, world.heartbeep[player].current_key,
-                               world.heartcolor[player].current_key,
-                               world.quickswap[player],
-                               world.menuspeed[player].current_key,
-                               world.music[player],
-                               world.sprite[player],
-                               palettes_options, world, player, True,
-                               reduceflashing=world.reduceflashing[player] or world.is_race,
-                               triforcehud=world.triforcehud[player].current_key,
-                               deathlink=world.death_link[player],
-                               allowcollect=world.allow_collect[player])
+            apply_rom_settings(rom, multiworld.heartbeep[player].current_key,
+                               multiworld.heartcolor[player].current_key,
+                               multiworld.quickswap[player],
+                               multiworld.menuspeed[player].current_key,
+                               multiworld.music[player],
+                               multiworld.sprite[player],
+                               None,
+                               palettes_options, multiworld, player, True,
+                               reduceflashing=multiworld.reduceflashing[player] or multiworld.is_race,
+                               triforcehud=multiworld.triforcehud[player].current_key,
+                               deathlink=multiworld.death_link[player],
+                               allowcollect=multiworld.allow_collect[player])
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+                                   player_name=multiworld.player_name[player], patched_path=rompath)
             patch.write()
             os.unlink(rompath)
             self.rom_name = rom.name
@@ -447,6 +564,44 @@ class ALTTPWorld(World):
                             er_hint_data[region.player][location.address] = main_entrance.name
         hint_data.update(er_hint_data)
 
+    @classmethod
+    def stage_modify_multidata(cls, multiworld, multidata: dict):
+
+        ordered_areas = (
+            'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+            'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+            'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
+        )
+
+        checks_in_area = {player: {area: list() for area in ordered_areas}
+                          for player in multiworld.get_game_players(cls.game)}
+
+        for player in checks_in_area:
+            checks_in_area[player]["Total"] = 0
+
+        for location in multiworld.get_locations():
+            if location.game == cls.game and type(location.address) is int:
+                main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                if location.parent_region.dungeon:
+                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                   'Inverted Ganons Tower': 'Ganons Tower'} \
+                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                    checks_in_area[location.player][dungeonname].append(location.address)
+                elif location.parent_region.type == LTTPRegionType.LightWorld:
+                    checks_in_area[location.player]["Light World"].append(location.address)
+                elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                    checks_in_area[location.player]["Dark World"].append(location.address)
+                elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                    checks_in_area[location.player]["Light World"].append(location.address)
+                elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                    checks_in_area[location.player]["Dark World"].append(location.address)
+                else:
+                    assert False, "Unknown Location area."
+                # TODO: remove Total as it's duplicated data and breaks consistent typing
+                checks_in_area[location.player]["Total"] += 1
+
+        multidata["checks_in_area"].update(checks_in_area)
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.
@@ -463,12 +618,8 @@ class ALTTPWorld(World):
     @classmethod
     def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-        standard_keyshuffle_players = set()
+
         for player in world.get_game_players("A Link to the Past"):
-            if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                    and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
-                    world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
-                standard_keyshuffle_players.add(player)
             if not world.ganonstower_vanilla[player] or \
                     world.logic[player] in {'owglitches', 'hybridglitches', "nologic"}:
                 pass
@@ -477,27 +628,6 @@ class ALTTPWorld(World):
                                                             world.crystals_needed_for_gt[player] * 4)
             else:
                 trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
-
-        # Make sure the escape small key is placed first in standard with key shuffle to prevent running out of spots
-        # TODO: this might be worthwhile to introduce as generic option for various games and then optimize it
-        if standard_keyshuffle_players:
-            viable = {}
-            for location in world.get_locations():
-                if location.player in standard_keyshuffle_players \
-                        and location.item is None \
-                        and location.can_reach(world.state):
-                    viable.setdefault(location.player, []).append(location)
-
-            for player in standard_keyshuffle_players:
-                loc = world.random.choice(viable[player])
-                key = world.create_item("Small Key (Hyrule Castle)", player)
-                loc.place_locked_item(key)
-                fill_locations.remove(loc)
-            world.random.shuffle(fill_locations)
-            # TODO: investigate not creating the key in the first place
-            progitempool[:] = [item for item in progitempool if
-                               item.player not in standard_keyshuffle_players or
-                               item.name != "Small Key (Hyrule Castle)"]
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -567,35 +697,34 @@ class ALTTPWorld(World):
         if self.multiworld.boss_shuffle[self.player] != "none":
             def create_boss_map() -> typing.Dict:
                 boss_map = {
-                    "Eastern Palace": self.multiworld.get_dungeon("Eastern Palace", self.player).boss.name,
-                    "Desert Palace": self.multiworld.get_dungeon("Desert Palace", self.player).boss.name,
-                    "Tower Of Hera": self.multiworld.get_dungeon("Tower of Hera", self.player).boss.name,
+                    "Eastern Palace": self.dungeons["Eastern Palace"].boss.name,
+                    "Desert Palace": self.dungeons["Desert Palace"].boss.name,
+                    "Tower Of Hera": self.dungeons["Tower of Hera"].boss.name,
                     "Hyrule Castle": "Agahnim",
-                    "Palace Of Darkness": self.multiworld.get_dungeon("Palace of Darkness",
-                                                                              self.player).boss.name,
-                    "Swamp Palace": self.multiworld.get_dungeon("Swamp Palace", self.player).boss.name,
-                    "Skull Woods": self.multiworld.get_dungeon("Skull Woods", self.player).boss.name,
-                    "Thieves Town": self.multiworld.get_dungeon("Thieves Town", self.player).boss.name,
-                    "Ice Palace": self.multiworld.get_dungeon("Ice Palace", self.player).boss.name,
-                    "Misery Mire": self.multiworld.get_dungeon("Misery Mire", self.player).boss.name,
-                    "Turtle Rock": self.multiworld.get_dungeon("Turtle Rock", self.player).boss.name,
+                    "Palace Of Darkness": self.dungeons["Palace of Darkness"].boss.name,
+                    "Swamp Palace": self.dungeons["Swamp Palace"].boss.name,
+                    "Skull Woods": self.dungeons["Skull Woods"].boss.name,
+                    "Thieves Town": self.dungeons["Thieves Town"].boss.name,
+                    "Ice Palace": self.dungeons["Ice Palace"].boss.name,
+                    "Misery Mire": self.dungeons["Misery Mire"].boss.name,
+                    "Turtle Rock": self.dungeons["Turtle Rock"].boss.name,
                     "Ganons Tower": "Agahnim 2",
                     "Ganon": "Ganon"
                 }
                 if self.multiworld.mode[self.player] != 'inverted':
                     boss_map.update({
                         "Ganons Tower Basement":
-                            self.multiworld.get_dungeon("Ganons Tower", self.player).bosses["bottom"].name,
-                        "Ganons Tower Middle": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            self.dungeons["Ganons Tower"].bosses["bottom"].name,
+                        "Ganons Tower Middle": self.dungeons["Ganons Tower"].bosses[
                             "middle"].name,
-                        "Ganons Tower Top": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                        "Ganons Tower Top": self.dungeons["Ganons Tower"].bosses[
                             "top"].name
                     })
                 else:
                     boss_map.update({
-                        "Ganons Tower Basement": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["bottom"].name,
-                        "Ganons Tower Middle": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["middle"].name,
-                        "Ganons Tower Top": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["top"].name
+                        "Ganons Tower Basement": self.dungeons["Inverted Ganons Tower"].bosses["bottom"].name,
+                        "Ganons Tower Middle": self.dungeons["Inverted Ganons Tower"].bosses["middle"].name,
+                        "Ganons Tower Top": self.dungeons["Inverted Ganons Tower"].bosses["top"].name
                     })
                 return boss_map
 
@@ -604,11 +733,7 @@ class ALTTPWorld(World):
                 f'\n\nBosses{(f" ({self.multiworld.get_player_name(self.player)})" if self.multiworld.players > 1 else "")}:\n')
             spoiler_handle.write('    ' + '\n    '.join([f'{x}: {y}' for x, y in bossmap.items()]))
 
-        def build_shop_info() -> typing.Dict:
-            shop = self.multiworld.shops[self.player]
-            if not shop.custom:
-                return None
-
+        def build_shop_info(shop: Shop) -> typing.Dict[str, str]:
             shop_data = {
                 "location": str(shop.region),
                 "type": "Take Any" if shop.type == ShopType.TakeAny else "Shop"
@@ -634,12 +759,12 @@ class ALTTPWorld(World):
 
             return shop_data
 
-        shop_data = build_shop_info()
-        if shop_data is not None:
+        if shop_info := [build_shop_info(shop) for shop in self.multiworld.shops if shop.custom]:
             spoiler_handle.write('\n\nShops:\n\n')
-            spoiler_handle.write(''.join("{} [{}]\n    {}".format(shop_data['location'], shop_data['type'], "\n    ".join(
+        for shop_data in shop_info:
+            spoiler_handle.write("{} [{}]\n    {}\n".format(shop_data['location'], shop_data['type'], "\n    ".join(
                 item for item in [shop_data.get('item_0', None), shop_data.get('item_1', None), shop_data.get('item_2', None)] if
-                item))))
+                item)))
 
     def get_filler_item_name(self) -> str:
         if self.multiworld.goal[self.player] == "icerodhunt":
@@ -651,13 +776,38 @@ class ALTTPWorld(World):
     def get_pre_fill_items(self):
         res = []
         if self.dungeon_local_item_names:
-            for (name, player), dungeon in self.multiworld.dungeons.items():
-                if player == self.player:
-                    for item in dungeon.all_items:
-                        if item.name in self.dungeon_local_item_names:
-                            res.append(item)
+            for dungeon in self.dungeons.values():
+                for item in dungeon.all_items:
+                    if item.name in self.dungeon_local_item_names:
+                        res.append(item)
         return res
 
+    def fill_slot_data(self):
+        slot_data = {}
+        if not self.multiworld.is_race:
+            # all of these option are NOT used by the SNI- or Text-Client.
+            # they are used by the alttp-poptracker pack (https://github.com/StripesOO7/alttp-ap-poptracker-pack)
+            # for convenient auto-tracking of the generated settings and adjusting the tracker accordingly
+
+            slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
+                            "bigkey_shuffle", "smallkey_shuffle", "compass_shuffle", "map_shuffle",
+                            "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle"]
+
+            slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in slot_options}
+
+            slot_data.update({
+                'mode': self.multiworld.mode[self.player],
+                'goal': self.multiworld.goal[self.player],
+                'dark_room_logic': self.multiworld.dark_room_logic[self.player],
+                'mm_medalion': self.multiworld.required_medallions[self.player][0],
+                'tr_medalion': self.multiworld.required_medallions[self.player][1],
+                'shop_shuffle': self.multiworld.shop_shuffle[self.player],
+                'entrance_shuffle': self.multiworld.shuffle[self.player]
+                }
+            )
+        return slot_data
+        
 
 def get_same_seed(world, seed_def: tuple) -> str:
     seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})
@@ -673,5 +823,5 @@ class ALttPLogic(LogicMixin):
         if self.multiworld.logic[player] == 'nologic':
             return True
         if self.multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-            return self.can_buy_unlimited('Small Key (Universal)', player)
+            return can_buy_unlimited(self, 'Small Key (Universal)', player)
         return self.prog_items[item, player] >= count

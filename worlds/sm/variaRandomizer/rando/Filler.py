@@ -1,14 +1,14 @@
 
-import utils.log, copy, time, random
-
-from logic.cache import RequestCache
-from rando.RandoServices import RandoServices
-from rando.Choice import ItemThenLocChoice
-from rando.RandoServices import ComebackCheckType
-from rando.ItemLocContainer import ItemLocation, getItemLocationsStr
-from utils.parameters import infinity
-from logic.helpers import diffValue2txt
-from graph.graph_utils import GraphUtils
+import copy, time, random
+from ..utils import log
+from ..logic.cache import RequestCache
+from ..rando.RandoServices import RandoServices
+from ..rando.Choice import ItemThenLocChoice
+from ..rando.RandoServices import ComebackCheckType
+from ..rando.ItemLocContainer import ItemLocation, getItemLocationsStr
+from ..utils.parameters import infinity
+from ..logic.helpers import diffValue2txt
+from ..graph.graph_utils import GraphUtils
 
 # base class for fillers. a filler responsibility is to fill a given
 # ItemLocContainer while a certain condition is fulfilled (usually
@@ -25,7 +25,7 @@ class Filler(object):
         self.endDate = endDate
         self.baseContainer = emptyContainer
         self.maxDiff = self.settings.maxDiff
-        self.log = utils.log.get('Filler')
+        self.log = log.get('Filler')
 
     # reinit algo state
     def initFiller(self):

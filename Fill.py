@@ -1,11 +1,10 @@
-import logging
-import typing
 import collections
 import itertools
+import logging
+import typing
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Location, LocationProgressType, MultiWorld, Item, ItemClassification
-
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from worlds.AutoWorld import call_all
 from worlds.generic.Rules import add_item_rule
 
@@ -23,15 +22,28 @@ def sweep_from_pool(base_state: CollectionState, itempool: typing.Sequence[Item]
 
 
 def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
-                     itempool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
+                     item_pool: typing.List[Item], single_player_placement: bool = False, lock: bool = False,
                      swap: bool = True, on_place: typing.Optional[typing.Callable[[Location], None]] = None,
-                     allow_partial: bool = False) -> None:
+                     allow_partial: bool = False, allow_excluded: bool = False) -> None:
+    """
+    :param world: Multiworld to be filled.
+    :param base_state: State assumed before fill.
+    :param locations: Locations to be filled with item_pool
+    :param item_pool: Items to fill into the locations
+    :param single_player_placement: if true, can speed up placement if everything belongs to a single player
+    :param lock: locations are set to locked as they are filled
+    :param swap: if true, swaps of already place items are done in the event of a dead end
+    :param on_place: callback that is called when a placement happens
+    :param allow_partial: only place what is possible. Remaining items will be in the item_pool list.
+    :param allow_excluded: if true and placement fails, it is re-attempted while ignoring excluded on Locations
+    """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
+    cleanup_required = False
 
-    swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
+    swapped_items: typing.Counter[typing.Tuple[int, str, bool]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
-    for item in itempool:
+    for item in item_pool:
         reachable_items.setdefault(item.player, deque()).append(item)
 
     while any(reachable_items.values()) and locations:
@@ -39,9 +51,12 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         items_to_place = [items.pop()
                           for items in reachable_items.values() if items]
         for item in items_to_place:
-            itempool.remove(item)
+            for p, pool_item in enumerate(item_pool):
+                if pool_item is item:
+                    item_pool.pop(p)
+                    break
         maximum_exploration_state = sweep_from_pool(
-            base_state, itempool + unplaced_items)
+            base_state, item_pool + unplaced_items)
 
         has_beaten_game = world.has_beaten_game(maximum_exploration_state)
 
@@ -73,25 +88,28 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             else:
                 # we filled all reachable spots.
                 if swap:
-                    # try swapping this item with previously placed items
-                    for (i, location) in enumerate(placements):
+                    # try swapping this item with previously placed items in a safe way then in an unsafe way
+                    swap_attempts = ((i, location, unsafe)
+                                     for unsafe in (False, True)
+                                     for i, location in enumerate(placements))
+                    for (i, location, unsafe) in swap_attempts:
                         placed_item = location.item
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
                         # number of times we will swap an individual item to prevent this
-                        swap_count = swapped_items[placed_item.player,
-                                                   placed_item.name]
+                        swap_count = swapped_items[placed_item.player, placed_item.name, unsafe]
                         if swap_count > 1:
                             continue
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item])
-                        # swap_state assumes we can collect placed item before item_to_place
+                        swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [])
+                        # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
+                        # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
+                        # to clean that up later, so there is a chance generation fails.
                         if (not single_player_placement or location.player == item_to_place.player) \
                                 and location.can_fill(swap_state, item_to_place, perform_access_check):
 
-                            # Verify that placing this item won't reduce available locations, which could happen with rules
-                            # that want to not have both items. Left in until removal is proven useful.
+                            # Verify placing this item won't reduce available locations, which would be a useless swap.
                             prev_state = swap_state.copy()
                             prev_loc_count = len(
                                 world.get_reachable_locations(prev_state))
@@ -106,12 +124,14 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                                 spot_to_fill = placements.pop(i)
 
                                 swap_count += 1
-                                swapped_items[placed_item.player,
-                                              placed_item.name] = swap_count
+                                swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
 
                                 reachable_items[placed_item.player].appendleft(
                                     placed_item)
-                                itempool.append(placed_item)
+                                item_pool.append(placed_item)
+
+                                # cleanup at the end to hopefully get better errors
+                                cleanup_required = True
 
                                 break
 
@@ -133,6 +153,31 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             if on_place:
                 on_place(spot_to_fill)
 
+    if cleanup_required:
+        # validate all placements and remove invalid ones
+        state = sweep_from_pool(base_state, [])
+        for placement in placements:
+            if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
+                placement.item.location = None
+                unplaced_items.append(placement.item)
+                placement.item = None
+                locations.append(placement)
+
+    if allow_excluded:
+        # check if partial fill is the result of excluded locations, in which case retry
+        excluded_locations = [
+            location for location in locations
+            if location.progress_type == location.progress_type.EXCLUDED and not location.item
+        ]
+        if excluded_locations:
+            for location in excluded_locations:
+                location.progress_type = location.progress_type.DEFAULT
+            fill_restrictive(world, base_state, excluded_locations, unplaced_items, single_player_placement, lock,
+                             swap, on_place, allow_partial, False)
+            for location in excluded_locations:
+                if not location.item:
+                    location.progress_type = location.progress_type.EXCLUDED
+
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
         if world.can_beat_game():
@@ -142,7 +187,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             raise FillError(f'No more spots to place {unplaced_items}, locations {locations} are invalid. '
                             f'Already placed {len(placements)}: {", ".join(str(place) for place in placements)}')
 
-    itempool.extend(unplaced_items)
+    item_pool.extend(unplaced_items)
 
 
 def remaining_fill(world: MultiWorld,
@@ -499,16 +544,16 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
         checked_locations: typing.Set[Location] = set()
         unchecked_locations: typing.Set[Location] = set(world.get_locations())
 
-        reachable_locations_count: typing.Dict[int, int] = {
-            player: 0
-            for player in world.player_ids
-            if len(world.get_filled_locations(player)) != 0
-        }
         total_locations_count: typing.Counter[int] = Counter(
             location.player
             for location in world.get_locations()
             if not location.locked
         )
+        reachable_locations_count: typing.Dict[int, int] = {
+            player: 0
+            for player in world.player_ids
+            if total_locations_count[player] and len(world.get_filled_locations(player)) != 0
+        }
         balanceable_players = {
             player: balanceable_players[player]
             for player in balanceable_players
@@ -524,6 +569,10 @@ def balance_multiworld_progression(world: MultiWorld) -> None:
 
         def item_percentage(player: int, num: int) -> float:
             return num / total_locations_count[player]
+
+        # If there are no locations that aren't locked, there's no point in attempting to balance progression.
+        if len(total_locations_count) == 0:
+            return
 
         while True:
             # Gather non-locked locations.
@@ -798,7 +847,6 @@ def distribute_planned(world: MultiWorld) -> None:
                 for player in worlds:
                     locations += non_early_locations[player]
 
-
             block['locations'] = locations
 
             if not block['count']:
@@ -840,8 +888,7 @@ def distribute_planned(world: MultiWorld) -> None:
             maxcount = placement['count']['target']
             from_pool = placement['from_pool']
 
-            candidates = list(location for location in world.get_unfilled_locations_for_players(locations,
-                                                                                                worlds))
+            candidates = list(world.get_unfilled_locations_for_players(locations, sorted(worlds)))
             world.random.shuffle(candidates)
             world.random.shuffle(items)
             count = 0

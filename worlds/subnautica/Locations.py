@@ -571,35 +571,3 @@ location_table: Dict[int, LocationDict] = {
             'need_laser_cutter': False,
             'position': {'x': 83.2, 'y': -276.4, 'z': -345.5}},
 }
-
-if False:  # turn to True to export for Subnautica mod
-    import json
-    import math
-
-    payload = {location_id: location_data["position"] for location_id, location_data in location_table.items()}
-    with open("locations.json", "w") as f:
-        json.dump(payload, f)
-
-    def radiated(pos: Vector):
-        aurora_dist = math.sqrt((pos["x"] - 1038.0) ** 2 + (pos["y"] - -3.4) ** 2 + (pos["y"] - -163.1) ** 2)
-        return aurora_dist < 950
-
-    def far_away(pos: Vector):
-        return (pos["x"] ** 2 + pos["z"] ** 2) > (800 ** 2)
-
-    payload = {
-        # "LaserCutter" in Subnautica ID
-        "761": [location_id for location_id, location_data
-                in location_table.items() if location_data["need_laser_cutter"]],
-        # PropulsionCannon in Subnautica ID
-        "757": [location_id for location_id, location_data
-                in location_table.items() if location_data.get("need_propulsion_cannon", False)],
-        # Radiation Suit in Subnautica ID
-        "519": [location_id for location_id, location_data
-                in location_table.items() if radiated(location_data["position"])],
-        # SeaGlide in Subnautica ID
-        "751": [location_id for location_id, location_data
-                in location_table.items() if far_away(location_data["position"])],
-    }
-    with open("logic.json", "w") as f:
-        json.dump(payload, f)
