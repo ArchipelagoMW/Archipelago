@@ -6,7 +6,7 @@ from Options import Toggle
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders
+from .options import EliteFourRequirement, NormanRequirement
 from .util import location_name_to_label
 
 
@@ -164,7 +164,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
-    if multiworld.norman_requirement[player].value == NormanRequirement.option_badges:
+    if multiworld.norman_requirement[player] == NormanRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
             lambda state: state.has_group("Badge", player, multiworld.norman_count[player].value)
@@ -256,7 +256,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
-    if multiworld.extra_boulders[player].value == ExtraBoulders.option_true:
+    if multiworld.extra_boulders[player]:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
             can_strength
@@ -1099,7 +1099,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
 
     # Pokemon League
-    if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_badges:
+    if multiworld.elite_four_requirement[player] == EliteFourRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
             lambda state: state.has_group("Badge", player, multiworld.elite_four_count[player].value)

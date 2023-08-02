@@ -7,7 +7,6 @@ import pkgutil
 import bsdiff4
 
 from BaseClasses import MultiWorld
-from Options import Toggle
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 
@@ -59,7 +58,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     for location in multiworld.get_locations(player):
         # Set free fly location
         if location.is_event:
-            if multiworld.free_fly_location[player].value == Toggle.option_true and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
+            if multiworld.free_fly_location[player] and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
                 _set_bytes_little_endian(
                     patched_rom,
                     data.rom_addresses["gArchipelagoOptions"] + 0x16,
@@ -108,11 +107,11 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_species_info(modified_data, patched_rom)
 
     # Set encounter tables
-    if multiworld.wild_pokemon[player].value != RandomizeWildPokemon.option_vanilla:
+    if multiworld.wild_pokemon[player] != RandomizeWildPokemon.option_vanilla:
         _set_encounter_tables(modified_data, patched_rom)
 
     # Set opponent data
-    if multiworld.trainer_parties[player].value != RandomizeTrainerParties.option_vanilla:
+    if multiworld.trainer_parties[player] != RandomizeTrainerParties.option_vanilla:
         _set_opponents(modified_data, patched_rom)
 
     # Set static pokemon
@@ -158,19 +157,19 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set hold A to advance text
-    turbo_a = 1 if multiworld.turbo_a[player].value == Toggle.option_true else 0
+    turbo_a = 1 if multiworld.turbo_a[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
     # Set ferry enabled
-    enable_ferry = 1 if multiworld.enable_ferry[player].value == Toggle.option_true else 0
+    enable_ferry = 1 if multiworld.enable_ferry[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, enable_ferry)
 
     # Set blind trainers
-    blind_trainers = 1 if multiworld.blind_trainers[player].value == Toggle.option_true else 0
+    blind_trainers = 1 if multiworld.blind_trainers[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
 
     # Set fly without badge
-    fly_without_badge = 1 if multiworld.fly_without_badge[player].value == Toggle.option_true else 0
+    fly_without_badge = 1 if multiworld.fly_without_badge[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, fly_without_badge)
 
     # Set exp modifier
@@ -182,15 +181,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player], data.species).species_id)
 
     # Set guaranteed catch
-    guaranteed_catch = 1 if multiworld.guaranteed_catch[player].value == Toggle.option_true else 0
+    guaranteed_catch = 1 if multiworld.guaranteed_catch[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0A, 1, guaranteed_catch)
 
     # Set better shops
-    better_shops = 1 if multiworld.better_shops[player].value == Toggle.option_true else 0
+    better_shops = 1 if multiworld.better_shops[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0B, 1, better_shops)
 
     # Set elite four requirement
-    elite_four_requires_gyms = 1 if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_gyms else 0
+    elite_four_requires_gyms = 1 if multiworld.elite_four_requirement[player] == EliteFourRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0C, 1, elite_four_requires_gyms)
 
     # Set elite four count
@@ -198,7 +197,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
 
     # Set norman requirement
-    norman_requires_gyms = 1 if multiworld.norman_requirement[player].value == NormanRequirement.option_gyms else 0
+    norman_requires_gyms = 1 if multiworld.norman_requirement[player] == NormanRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
 
     # Set norman count
@@ -213,11 +212,11 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
 
     # Set reusable TMs
-    reusable_tms = 1 if multiworld.reusable_tms[player].value == Toggle.option_true else 0
+    reusable_tms = 1 if multiworld.reusable_tms[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
 
     # Set route 115 boulders
-    route_115_boulders = 1 if multiworld.extra_boulders[player].value == Toggle.option_true else 0
+    route_115_boulders = 1 if multiworld.extra_boulders[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, route_115_boulders)
 
     # Set removed blockers
