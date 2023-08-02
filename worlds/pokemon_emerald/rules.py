@@ -2,11 +2,10 @@
 Logic rule definitions for Pokemon Emerald
 """
 from BaseClasses import CollectionState, MultiWorld
-from Options import Toggle
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement
+from .options import EliteFourRequirement, NormanRequirement, Goal
 from .util import location_name_to_label
 
 
@@ -69,8 +68,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     can_waterfall = lambda state: _can_waterfall(state, player)
     can_dive = lambda state: _can_dive(state, player)
 
+    victory_event_name = "EVENT_DEFEAT_CHAMPION"
+    if multiworld.goal[player] == Goal.option_steven:
+        victory_event_name = "EVENT_DEFEAT_STEVEN"
+    elif multiworld.goal[player] == Goal.option_norman:
+        victory_event_name = "EVENT_DEFEAT_NORMAN"
+
+    multiworld.completion_condition[player] = lambda state: state.has(victory_event_name, player)
+
     # Sky
-    if multiworld.fly_without_badge[player] == Toggle.option_true:
+    if multiworld.fly_without_badge[player]:
         set_rule(
             multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
             lambda state: state.has("HM02 Fly", player)

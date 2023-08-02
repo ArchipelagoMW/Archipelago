@@ -257,14 +257,6 @@ class PokemonEmeraldWorld(World):
             add_flash_rules(self.multiworld, self.player)
 
     def generate_basic(self) -> None:
-        victory_event_name = "EVENT_DEFEAT_CHAMPION"
-        if self.multiworld.goal[self.player] == Goal.option_steven:
-            victory_event_name = "EVENT_DEFEAT_STEVEN"
-        if self.multiworld.goal[self.player] == Goal.option_norman:
-            victory_event_name = "EVENT_DEFEAT_NORMAN"
-
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(victory_event_name, self.player)
-
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
         # Set our free fly location
