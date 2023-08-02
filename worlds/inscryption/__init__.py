@@ -15,23 +15,23 @@ from ..AutoWorld import World, WebWorld
 class InscrypWeb(WebWorld):
     theme = "dirt"
 
-    guide_en = [Tutorial(
+    guide_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Inscryption Archipelago Multiworld",
         "English",
         "setup_en.md",
         "setup/en",
         ["DrBibop"]
-    )]
+    )
 
-    guide_fr = [Tutorial(
+    guide_fr = Tutorial(
         "Multiworld Setup Guide",
         "Un guide pour configurer Inscryption Archipelago Multiworld",
         "Français",
         "setup_fr.md",
         "setup/fr",
         ["Glowbuzz"]
-    )]
+    )
 
     tutorials = [guide_en, guide_fr]
 

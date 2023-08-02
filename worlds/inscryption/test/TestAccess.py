@@ -102,12 +102,30 @@ class AccessTest(InscryptionTestBase):
 
     def test_inspectometer_battery(self) -> None:
         self.assertAccessDependency(
-            ["Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly"],
+            ["Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly",
+             "Act 3 - Trader 1", "Act 3 - Trader 2", "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5",
+             "Act 3 - Shop Holo Pelt", "Act 3 - Forest Holo Pelt 3", "Act 3 - Crypt Holo Pelt",
+             "Act 3 - Tower Holo Pelt", "Act 3 - The Great Transcendence", "Act 3 - Boss Mycologists",
+             "Act 3 - Bone Lord Room"],
             [["Inspectometer Battery"]]
         )
 
-    def test_battery_and_gem_drone(self) -> None:
+    def test_gem_drone(self) -> None:
         self.assertAccessDependency(
-            ["Act 3 - Boss Photographer", "Act 3 - Boss Archivist", "Act 3 - Boss Unfinished", "Act 3 - Boss G0lly"],
-            [["Inspectometer Battery", "Gem Drone"]]
+            ["Act 3 - Boss Unfinished", "Act 3 - Boss G0lly", "Act 3 - Trader 1", "Act 3 - Trader 2",
+             "Act 3 - Trader 3", "Act 3 - Trader 4", "Act 3 - Trader 5", "Act 3 - Shop Holo Pelt",
+             "Act 3 - Tower Holo Pelt", "Act 3 - The Great Transcendence"],
+            [["Gem Drone"]]
+        )
+
+    def test_mycologists_holo_key(self) -> None:
+        self.assertAccessDependency(
+            ["Act 3 - Boss Mycologists"],
+            [["Mycologists Holo Key"]]
+        )
+
+    def test_bone_lord_holo_key(self) -> None:
+        self.assertAccessDependency(
+            ["Act 3 - Bone Lord Room"],
+            [["Bone Lord Holo Key"]]
         )
