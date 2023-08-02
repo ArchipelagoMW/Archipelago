@@ -3,6 +3,7 @@ Archipelago World definition for Pokemon Emerald Version
 """
 from collections import Counter
 import copy
+import logging
 import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
@@ -124,7 +125,10 @@ class PokemonEmeraldWorld(World):
             if self.multiworld.norman_requirement[self.player] == NormanRequirement.option_gyms:
                 max_norman_count = 4
 
-        self.multiworld.norman_count[self.player].value = min(self.multiworld.norman_count[self.player].value, max_norman_count)
+        if self.multiworld.norman_count[self.player].value > max_norman_count:
+            logging.warning("Pokemon Emerald: Norman requirements for Player %s (%s) are unsafe in combination with "
+                            "other settings. Reducing to 4.", self.player, self.multiworld.player_name[self.player])
+            self.multiworld.norman_count[self.player].value = max_norman_count
 
     def create_regions(self) -> None:
         tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
