@@ -131,8 +131,8 @@ PyramidScreenShowReceivedItem:
         ldr r1, [r3, #8]
 
         ; DMA in the tiles
-        lsl r1, r0, #31-1
-        lsr r1, r1, #31-1-1  ; Quadrant * 2
+        get_bits r1, r0, 1, 0
+        lsl r1, #1  ; Quadrant * 2
         ldr r0, =@@JewelPieceNEOffset  ; Table
         add r0, r0, r1  ; Entry
         ldrh r1, [r0]  ; Tile offset
@@ -169,8 +169,8 @@ PyramidScreenShowReceivedItem:
         b @@Return
 
     @@JunkItem:
-        lsl r1, r0, #31-3
-        lsr r1, r1, #31-3-2
+        get_bits r1, r0, 3, 0
+        lsl r1, #2
         ldr r2, =@@JunkJumpTable
         add r1, r2
         ldr r6, [r1]

@@ -55,8 +55,8 @@ PyramidScreenCreateReceivedItemOAM:
         b @@Return
 
     @@JunkItem:
-        lsl r1, r6, #31-3
-        lsr r1, r1, #31-3-2
+        get_bits r1, r6, 3, 0
+        lsl r1, #2
         ldr r7, =@@JunkJumpTable
         add r1, r7
         ldr r1, [r1]
