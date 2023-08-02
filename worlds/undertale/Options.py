@@ -57,13 +57,13 @@ class NoEquips(Toggle):
 
 
 class RandomizeLove(Toggle):
-    """Adds LOVE to the pool. GENOCIDE ONLY!"""
+    """Adds LOVE to the pool. Only matters if your goal includes Genocide route"""
     display_name = "Randomize LOVE"
     default = 0
 
 
 class RandomizeStats(Toggle):
-    """Makes each stat increase from LV a separate item. GENOCIDE ONLY!
+    """Makes each stat increase from LV a separate item. Only matters if your goal includes Genocide route
     Warning: This tends to spam chat with sending out checks."""
     display_name = "Randomize Stats"
     default = 0

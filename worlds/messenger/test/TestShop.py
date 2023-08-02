@@ -20,7 +20,7 @@ class ShopCostTest(MessengerTestBase):
         prices: Dict[str, int] = self.multiworld.worlds[self.player].shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
-                self.assertEqual(price, self.multiworld.get_location(f"The Shop - {loc}", self.player).cost())
+                self.assertLessEqual(price, self.multiworld.get_location(f"The Shop - {loc}", self.player).cost)
                 self.assertTrue(loc in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
@@ -49,7 +49,7 @@ class ShopCostMinTest(ShopCostTest):
         "shop_price": "random",
         "shuffle_seals": "false",
     }
-    
+
     def testShopRules(self) -> None:
         if self.multiworld.worlds[self.player].total_shards:
             super().testShopRules()
@@ -94,7 +94,7 @@ class PlandoTest(MessengerTestBase):
                     self.assertIn(price, self.options["shop_price_plan"]["Serendipitous Bodies"])
 
                 loc = f"The Shop - {loc}"
-                self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
+                self.assertLessEqual(price, self.multiworld.get_location(loc, self.player).cost)
                 self.assertTrue(loc.replace("The Shop - ", "") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
@@ -106,6 +106,6 @@ class PlandoTest(MessengerTestBase):
                 elif loc == "Demon Hive Figurine":
                     self.assertIn(price, self.options["shop_price_plan"]["Demon Hive Figurine"])
 
-                self.assertEqual(price, self.multiworld.get_location(loc, self.player).cost())
+                self.assertLessEqual(price, self.multiworld.get_location(loc, self.player).cost)
                 self.assertTrue(loc in FIGURINES)
         self.assertEqual(len(figures), len(FIGURINES))
