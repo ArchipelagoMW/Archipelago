@@ -1,8 +1,6 @@
 """
 Functions related to AP regions for Pokemon Emerald (see ./data/regions for region definitions)
 """
-from typing import Dict
-
 from BaseClasses import Entrance, ItemClassification, Region, MultiWorld
 
 from .data import data
@@ -15,8 +13,6 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
     """
-    regions: Dict[str, Region] = {}
-
     connections = []
     for region_name, region_data in data.regions.items():
         new_region = Region(region_name, player, multiworld)
@@ -35,17 +31,12 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                 continue
             connections.append((warp, region_name, dest_warp.parent_region))
 
-        regions[region_name] = new_region
+        multiworld.regions.append(new_region)
 
     for name, source, dest in connections:
-        connection = Entrance(player, name, regions[source])
-        regions[source].exits.append(connection)
-        connection.connect(regions[dest])
+        multiworld.get_region(source, player).connect(multiworld.get_region(dest, player), name)
 
     menu = Region("Menu", player, multiworld)
-    connection = Entrance(player, "Start Game", menu)
-    menu.exits.append(connection)
-    connection.connect(regions["REGION_LITTLEROOT_TOWN/MAIN"])
-    regions["Menu"] = menu
+    menu.connect(multiworld.get_region("REGION_LITTLEROOT_TOWN/MAIN", player), "Start Game")
 
-    multiworld.regions += regions.values()
+    multiworld.regions.append(menu)
