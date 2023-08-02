@@ -40,6 +40,10 @@ class RiskOfRainWorld(World):
     web = RiskOfWeb()
     total_revivals: int
 
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.junk_pool: Dict[str, int] = {}
+
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
         if self.multiworld.goal[self.player] == "classic":
@@ -111,6 +115,8 @@ class RiskOfRainWorld(World):
                     dlc_sotv=self.multiworld.dlc_sotv[self.player].value
                 )
             )
+        # Create junk items
+        self.junk_pool = self.create_junk_pool()
         # Fill remaining items with randomly generated junk
         while len(itempool) < total_locations:
             itempool.append(self.get_filler_item_name())
@@ -123,6 +129,12 @@ class RiskOfRainWorld(World):
         set_rules(self.multiworld, self.player)
 
     def get_filler_item_name(self) -> str:
+        weights = [data for data in self.junk_pool.values()]
+        filler = self.multiworld.random.choices([filler for filler in self.junk_pool.keys()], weights,
+                                                k=1)[0]
+        return filler
+
+    def create_junk_pool(self) -> Dict:
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.multiworld.item_weights[self.player].value
         junk_pool: Dict[str, int] = {}
@@ -154,10 +166,8 @@ class RiskOfRainWorld(World):
         # remove void items from the pool
         if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
-        weights = [data for data in junk_pool.values()]
-        filler = self.multiworld.random.choices([filler for filler in junk_pool.keys()], weights,
-                                       k=1)[0]
-        return filler
+
+        return junk_pool
 
     def create_regions(self) -> None:
 
@@ -216,7 +226,7 @@ class RiskOfRainWorld(World):
             classification = ItemClassification.trap
 
         # Only check for an item to be a environment unlock if those are known to be in the pool.
-        # This should shave down comparions.
+        # This should shave down comparisons.
 
         elif name in environment_ALL_table.keys():
             if name in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:
