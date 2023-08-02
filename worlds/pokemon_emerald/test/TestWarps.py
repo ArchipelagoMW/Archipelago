@@ -1,5 +1,5 @@
 from test.TestBase import TestBase
-from worlds.pokemon_emerald.data import Warp
+from ..data import Warp
 
 class TestWarps(TestBase):
     def test_warps_connect_ltr(self) -> None:
