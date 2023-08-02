@@ -145,13 +145,11 @@ class PokemonEmeraldWorld(World):
         create_locations_with_tags(self.multiworld, self.player, tags)
 
     def create_items(self) -> None:
-        item_locations: List[PokemonEmeraldLocation] = []
-        for region in self.multiworld.regions:
-            if region.player == self.player:
-                item_locations += region.locations
-
-        # Filter events
-        item_locations = [location for location in item_locations if not location.is_event]
+        item_locations: List[PokemonEmeraldLocation] = [
+            location
+            for location in self.multiworld.get_locations(self.player)
+            if not location.is_event
+        ]
 
         # Filter progression items which shouldn't be shuffled into the itempool. Their locations
         # still exist, but event items will be placed and locked at their vanilla locations instead.
@@ -172,12 +170,12 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.badges[self.player] == RandomizeBadges.option_shuffle:
             self.badge_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [location for location in item_locations if "Badge" in location.tags]
+                for location in [l for l in item_locations if "Badge" in l.tags]
             ]
         if self.multiworld.hms[self.player] == RandomizeHms.option_shuffle:
             self.hm_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
-                for location in [location for location in item_locations if "HM" in location.tags]
+                for location in [l for l in item_locations if "HM" in l.tags]
             ]
 
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
