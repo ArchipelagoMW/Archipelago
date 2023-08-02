@@ -175,6 +175,15 @@ class ExtendedItems(Toggle):
     display_name = "Extended Items"
 
 
+class MaxNbUpgrades(Range):
+    """If turned on, original items that did not appear in Campaign mode may appear in the world."""
+    display_name = "Maximum number of upgrades per unit/structure"
+    range_start = 0
+    # dsa Dont know the max...
+    range_end = 123
+    default = 123
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -212,7 +221,8 @@ sc2wol_options: Dict[str, Option] = {
     "excluded_missions": ExcludedMissions,
     "nco_items": NovaCovertOpsItems,
     "bw_items": BroodWarItems,
-    "ext_items": ExtendedItems
+    "ext_items": ExtendedItems,
+    "max_nb_upgrades": MaxNbUpgrades
 }
 
 
