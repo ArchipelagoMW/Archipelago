@@ -636,7 +636,8 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+        ],
         "music": 9
     },
     {
@@ -778,7 +779,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Grass Land 4 - Miniboss 1 (Boboo)"
+        ],
         "music": 4
     },
     {
@@ -2069,7 +2072,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Ripple Field 4 - Miniboss 1 (Captain Stitch)"
+        ],
         "music": 4
     },
     {
@@ -4374,7 +4379,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Sand Canyon 4 - Miniboss 1 (Haboki)"
+        ],
         "music": 4
     },
     {
@@ -7734,7 +7741,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Cloudy Park 4 - Miniboss 1 (Jumper Shoot)"
+        ],
         "music": 4
     },
     {
@@ -9731,7 +9740,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 4 - Miniboss 1 (Yuki)"
+        ],
         "music": 4
     },
     {
@@ -11422,7 +11433,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 1 (Blocky)"
+        ],
         "music": 12
     },
     {
@@ -11466,7 +11479,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 2 (Jumper Shoot)"
+        ],
         "music": 12
     },
     {
@@ -11510,7 +11525,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 3 (Yuki)"
+        ],
         "music": 12
     },
     {
@@ -11602,7 +11619,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 4 (Haboki)"
+        ],
         "music": 12
     },
     {
@@ -11646,7 +11665,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 5 (Boboo)"
+        ],
         "music": 12
     },
     {
@@ -11690,7 +11711,9 @@
                 "access_rule": []
             }
         ],
-        "locations": [],
+        "locations": [
+            "Iceberg 6 - Miniboss 6 (Captain Stitch)"
+        ],
         "music": 12
     },
     {

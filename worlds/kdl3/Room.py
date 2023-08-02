@@ -40,10 +40,10 @@ class Room(Region):
 
     def patch(self, rom: "RomData"):
         rom.write_byte(self.pointer + 2, self.music)
-        animals = [x.item for x in self.locations if "Animal" in x.name]
+        animals = [x.item.name for x in self.locations if "Animal" in x.name]
         if len(animals) > 0:
             for current_animal, address in zip(animals, self.animal_pointers):
-                rom.write_byte(address + 7, animal_map[animals[current_animal]])
+                rom.write_byte(self.pointer + address + 7, animal_map[current_animal])
 
 
 room_data = [

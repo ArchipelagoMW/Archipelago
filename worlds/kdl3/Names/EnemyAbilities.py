@@ -1,3 +1,5 @@
+from typing import List, Tuple, Set
+
 Grass_Land_1_E1 = "Grass Land 1 - Enemy 1 (Waddle Dee)"
 Grass_Land_1_E2 = "Grass Land 1 - Enemy 2 (Sir Kibble)"
 Grass_Land_1_E3 = "Grass Land 1 - Enemy 3 (Cappy)"
@@ -350,6 +352,18 @@ Iceberg_6_E1 = "Iceberg 6 - Enemy 1 (Nruff)"
 Iceberg_6_E2 = "Iceberg 6 - Enemy 2 (Nidoo)"
 Iceberg_6_E3 = "Iceberg 6 - Enemy 3 (Sparky)"
 Iceberg_6_E4 = "Iceberg 6 - Enemy 4 (Sir Kibble)"
+Grass_Land_4_M1 = "Grass Land 4 - Miniboss 1 (Boboo)"
+Ripple_Field_4_M1 = "Ripple Field 4 - Miniboss 1 (Captain Stitch)"
+Sand_Canyon_4_M1 = "Sand Canyon 4 - Miniboss 1 (Haboki)"
+Cloudy_Park_4_M1 = "Cloudy Park 4 - Miniboss 1 (Jumper Shoot)"
+Iceberg_4_M1 = "Iceberg 4 - Miniboss 1 (Yuki)"
+Iceberg_6_M1 = "Iceberg 6 - Miniboss 1 (Blocky)"
+Iceberg_6_M2 = "Iceberg 6 - Miniboss 2 (Jumper Shoot)"
+Iceberg_6_M3 = "Iceberg 6 - Miniboss 3 (Yuki)"
+Iceberg_6_M4 = "Iceberg 6 - Miniboss 4 (Haboki)"
+Iceberg_6_M5 = "Iceberg 6 - Miniboss 5 (Boboo)"
+Iceberg_6_M6 = "Iceberg 6 - Miniboss 6 (Captain Stitch)"
+
 
 enemy_mapping = {
     Grass_Land_1_E1: "Waddle Dee",
@@ -704,6 +718,18 @@ enemy_mapping = {
     Iceberg_6_E2: "Nidoo",
     Iceberg_6_E3: "Sparky",
     Iceberg_6_E4: "Sir Kibble",
+    Grass_Land_4_M1: "Boboo",
+    Ripple_Field_4_M1: "Captain Stitch",
+    Sand_Canyon_4_M1: "Haboki",
+    Cloudy_Park_4_M1: "Jumper Shoot",
+    Iceberg_4_M1: "Yuki",
+    Iceberg_6_M1: "Blocky",
+    Iceberg_6_M2: "Jumper Shoot",
+    Iceberg_6_M3: "Yuki",
+    Iceberg_6_M4: "Haboki",
+    Iceberg_6_M5: "Boboo",
+    Iceberg_6_M6: "Captain Stitch",
+
 }
 
 vanilla_enemies = {'Waddle Dee': 'No Ability',
@@ -772,5 +798,25 @@ vanilla_enemies = {'Waddle Dee': 'No Ability',
                    'Wapod': 'No Ability',
                    'Propeller': 'No Ability',
                    'Dogon': 'No Ability',
-                   'Joe': 'No Ability'
+                   'Joe': 'No Ability',
+                   'Captain Stitch': 'Needle Ability',
+                   'Yuki': 'Ice Ability',
+                   'Blocky': 'Stone Ability',
+                   'Jumper Shoot': 'Parasol Ability',
+                   'Boboo': 'Burning Ability',
+                   'Haboki': 'Clean Ability',
                    }
+
+enemy_restrictive: List[Tuple[Set, Set]] = [
+    # abilities, enemies, set_all (False to set any)
+    ({"Burning Ability", "Stone Ability"}, {"Rocky", "Sparky", "Babut", "Squishy", }),  # Ribbon Field 5 - 7
+    # Sand Canyon 6
+    ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+    ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
+    ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
+    ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
+    ({"Stone Ability"}, {'Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
+                         'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+    ({"Parasol Ability"}, {'Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
+                           'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+]

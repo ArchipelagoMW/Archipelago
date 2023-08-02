@@ -231,6 +231,26 @@ enemy_remap = {
     "Joe": 91
 }
 
+miniboss_remap = {
+    "Captain Stitch": 0,
+    "Yuki": 1,
+    "Blocky": 2,
+    "Jumper Shoot": 3,
+    "Boboo": 4,
+    "Haboki": 5
+}
+
+ability_remap = {
+    "No Ability": 0,
+    "Burning Ability": 1,
+    "Stone Ability": 2,
+    "Ice Ability": 3,
+    "Needle Ability": 4,
+    "Clean Ability": 5,
+    "Parasol Ability": 6,
+    "Spark Ability": 7,
+    "Cutter Ability": 8,
+}
 
 class RomData:
     def __init__(self, file: str, name: typing.Optional[str] = None):
@@ -344,7 +364,8 @@ class KDL3DeltaPatch(APDeltaPatch):
         rom.write_to_file(target)
 
 
-def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, shuffled_levels, bb_boss_enabled):
+def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
+              shuffled_levels, bb_boss_enabled, copy_abilities):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
@@ -1045,6 +1066,7 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
                                   0x6B,  # RTL
                                   ])
 
+    rooms = [region for region in multiworld.regions if region.player == player and isinstance(region, Room)]
     if multiworld.music_shuffle[player] > 0:
         if multiworld.music_shuffle[player] == 1:
             shuffled_music = music_choices.copy()
@@ -1054,9 +1076,8 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             music_map[5] = multiworld.per_slot_randoms[player].choice(music_choices)
             # Heart Star music doesn't work on regular stages
             music_map[8] = multiworld.per_slot_randoms[player].choice(music_choices)
-            for room in [region for region in multiworld.regions if
-                         region.player == player and isinstance(region, Room)]:
-                room.patch(rom)
+            for room in rooms:
+                room.music = music_map[room.music]
             for room in room_pointers:
                 old_music = rom.read_byte(room + 2)
                 rom.write_byte(room + 2, music_map[old_music])
@@ -1070,6 +1091,8 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             rom.write_byte(0x4A388, music_map[0x08])
             rom.write_byte(0x4A38D, music_map[0x1D])
         elif multiworld.music_shuffle[player] == 2:
+            for room in rooms:
+                room.music = multiworld.per_slot_randoms[player].choice(music_choices)
             for room in room_pointers:
                 rom.write_byte(room + 2, multiworld.per_slot_randoms[player].choice(music_choices))
             for i in range(5):
@@ -1080,6 +1103,9 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             # Heart Star success and fail
             rom.write_byte(0x4A388, multiworld.per_slot_randoms[player].choice(music_choices))
             rom.write_byte(0x4A38D, multiworld.per_slot_randoms[player].choice(music_choices))
+
+    for room in rooms:
+        room.patch(rom)
 
     if multiworld.virtual_console[player] in [1, 3]:
         # Flash Reduction
@@ -1121,7 +1147,32 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             rom.write_bytes(0x3F0000 + (level_pointers[0x770200 + i]), struct.pack("I", bb_bosses[0x770200 + i]))
 
     # copy ability shuffle
-    # copy ability array at 0xB3CAC
+    if multiworld.copy_ability_randomization[player] > 0:
+        for enemy in copy_abilities:
+            if enemy in miniboss_remap:
+                rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1), struct.pack("H", ability_remap[copy_abilities[enemy]]))
+            else:
+                rom.write_bytes(0xB3CAC + (enemy_remap[enemy] << 1), struct.pack("H", ability_remap[copy_abilities[enemy]]))
+        # following only needs done on non-door rando
+        # incredibly lucky this follows the same order (including 5E == star block)
+        rom.write_byte(0x2F77EA, 0x5E + (ability_remap[copy_abilities["Sparky"]] << 1))
+        rom.write_byte(0x2F7811, 0x5E + (ability_remap[copy_abilities["Sparky"]] << 1))
+        rom.write_byte(0x2F9BC4, 0x5E + (ability_remap[copy_abilities["Blocky"]] << 1))
+        rom.write_byte(0x2F9BEB, 0x5E + (ability_remap[copy_abilities["Blocky"]] << 1))
+        rom.write_byte(0x2FAC06, 0x5E + (ability_remap[copy_abilities["Jumper Shoot"]] << 1))
+        rom.write_byte(0x2FAC2D, 0x5E + (ability_remap[copy_abilities["Jumper Shoot"]] << 1))
+        rom.write_byte(0x2F9E7B, 0x5E + (ability_remap[copy_abilities["Yuki"]] << 1))
+        rom.write_byte(0x2F9EA2, 0x5E + (ability_remap[copy_abilities["Yuki"]] << 1))
+        rom.write_byte(0x2FA951, 0x5E + (ability_remap[copy_abilities["Sir Kibble"]] << 1))
+        rom.write_byte(0x2FA978, 0x5E + (ability_remap[copy_abilities["Sir Kibble"]] << 1))
+        rom.write_byte(0x2FA132, 0x5E + (ability_remap[copy_abilities["Haboki"]] << 1))
+        rom.write_byte(0x2FA159, 0x5E + (ability_remap[copy_abilities["Haboki"]] << 1))
+        rom.write_byte(0x2FA3E8, 0x5E + (ability_remap[copy_abilities["Boboo"]] << 1))
+        rom.write_byte(0x2FA40F, 0x5E + (ability_remap[copy_abilities["Boboo"]] << 1))
+        rom.write_byte(0x2F90E2, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
+        rom.write_byte(0x2F9109, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
+
+
 
     # write jumping goal
     rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))

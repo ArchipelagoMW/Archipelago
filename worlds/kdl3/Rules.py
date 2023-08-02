@@ -1,6 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, level_consumables
-from .Names import LocationName, AnimalFriendSpawns
+from .Names import LocationName, EnemyAbilities
 from .Items import copy_ability_table
 import typing
 from BaseClasses import MultiWorld
@@ -8,7 +8,6 @@ from BaseClasses import MultiWorld
 if typing.TYPE_CHECKING:
     from . import KDL3World
     from BaseClasses import CollectionState
-
 
 def can_reach_level(state: "CollectionState", player: int, level: int, open_world: bool,
                     ow_boss_req: int):
@@ -77,6 +76,44 @@ def can_reach_cutter(state: "CollectionState", player: int) -> bool:
     return state.has("Cutter", player) and state.has("Cutter Ability", player)
 
 
+ability_map = {
+    "Burning Ability": can_reach_burning,
+    "Stone Ability": can_reach_stone,
+    "Ice Ability": can_reach_ice,
+    "Needle Ability": can_reach_needle,
+    "Clean Ability": can_reach_clean,
+    "Parasol Ability": can_reach_parasol,
+    "Spark Ability": can_reach_spark,
+    "Cutter Ability": can_reach_cutter,
+}
+
+
+def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typing.Dict[str,str]):
+    # check animal requirements
+    if not can_reach_coo(state, player) and can_reach_kine(state, player):
+        return False
+    # now we need to get our bukisets
+    bukisets = {enemy: copy_abilities[enemy] for enemy in copy_abilities if "Bukiset" in enemy}
+    # probably some cleaner way to handle this
+    room1 = EnemyAbilities.enemy_restrictive[1]
+    room2 = EnemyAbilities.enemy_restrictive[2]
+    room3 = EnemyAbilities.enemy_restrictive[3]
+    room4 = EnemyAbilities.enemy_restrictive[4]
+    for abilities, bukisets in [room1, room2, room3, room4]:
+        iterator = iter(x for x in bukisets if copy_abilities[x] in abilities)
+        target_bukiset = next(iterator, None)
+        can_reach = False
+        while target_bukiset is not None:
+            can_reach = can_reach | ability_map[copy_abilities[target_bukiset]](state, player)
+            target_bukiset = next(iterator, None)
+        if not can_reach:
+            return False
+    # now the known needed abilities
+    return can_reach_parasol(state, player) and can_reach_stone(state, player)
+
+
+
+
 def set_rules(world: "KDL3World") -> None:
     # Level 1
     add_rule(world.multiworld.get_location(LocationName.grass_land_muchi, world.player),
@@ -90,35 +127,31 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.ripple_field_5, world.player),
              lambda state: can_reach_kine(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_kamuribana, world.player),
-             lambda state: can_reach_pitch(state, world.player) and state.has("Clean", world.player))
+             lambda state: can_reach_pitch(state, world.player) and can_reach_clean(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_bakasa, world.player),
-             lambda state: can_reach_kine(state, world.player) and state.has("Parasol", world.player))
+             lambda state: can_reach_kine(state, world.player) and can_reach_parasol(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_toad, world.player),
-             lambda state: state.has("Needle", world.player))
+             lambda state: can_reach_needle(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
              lambda state: can_reach_pitch(state, world.player) and can_reach_kine(state, world.player)
-                           and state.has("Burning", world.player) and can_reach_stone(state, world.player))
+                           and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
 
     # Level 3
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_5, world.player),
-             lambda state: state.has("Cutter", world.player))
+             lambda state: can_reach_cutter(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_auntie, world.player),
-             lambda state: state.has("Clean", world.player))
+             lambda state: can_reach_clean(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_nyupun, world.player),
-             lambda state: can_reach_chuchu(state, world.player) and state.has("Cutter", world.player))
+             lambda state: can_reach_chuchu(state, world.player) and can_reach_cutter(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_rob, world.player),
-             lambda state: (can_reach_kine(state, world.player) and can_reach_coo(state, world.player))
-                           and state.has("Parasol", world.player)
-                           and can_reach_stone(state, world.player)
-                           and (state.has("Clean", world.player) or state.has("Spark", world.player))
-                           and (state.has("Ice", world.player) or state.has("Needle", world.player))
+             lambda state: can_assemble_rob(state, world.player, world.copy_abilities)
              )
 
     # Level 4
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_hibanamodoki, world.player),
-             lambda state: can_reach_coo(state, world.player) and state.has("Clean", world.player))
+             lambda state: can_reach_coo(state, world.player) and can_reach_clean(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_piyokeko, world.player),
-             lambda state: state.has("Needle", world.player))
+             lambda state: can_reach_needle(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_mikarin, world.player),
              lambda state: can_reach_coo(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.cloudy_park_pick, world.player),
@@ -126,14 +159,15 @@ def set_rules(world: "KDL3World") -> None:
 
     # Level 5
     add_rule(world.multiworld.get_location(LocationName.iceberg_4, world.player),
-             lambda state: state.has("Burning", world.player))
+             lambda state: can_reach_burning(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_kogoesou, world.player),
-             lambda state: state.has("Burning", world.player))
+             lambda state: can_reach_burning(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_samus, world.player),
-             lambda state: state.has("Ice", world.player))
+             lambda state: can_reach_ice(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_name, world.player),
-             lambda state: can_reach_coo(state, world.player) and state.has("Burning", world.player)
-                           and state.has("ChuChu", world.player))
+             lambda state: can_reach_coo(state, world.player) and can_reach_burning(state, world.player)
+                           and can_reach_chuchu(state, world.player))
+    # ChuChu is guaranteed here, but we use this for consistency
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: can_reach_nago(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
@@ -143,41 +177,45 @@ def set_rules(world: "KDL3World") -> None:
     # Consumables
     if world.multiworld.consumables[world.player]:
         add_rule(world.multiworld.get_location(LocationName.grass_land_1_u1, world.player),
-                 lambda state: state.has("Parasol", world.player))
+                 lambda state: can_reach_parasol(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.grass_land_1_m1, world.player),
-                 lambda state: state.has("Spark", world.player))
+                 lambda state: can_reach_spark(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.grass_land_2_u1, world.player),
-                 lambda state: state.has("Needle", world.player))
+                 lambda state: can_reach_needle(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_2_u1, world.player),
-                 lambda state: state.has("Kine", world.player))
+                 lambda state: can_reach_kine(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_2_m1, world.player),
-                 lambda state: state.has("Kine", world.player))
+                 lambda state: can_reach_kine(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_3_u1, world.player),
-                 lambda state: state.has("Cutter", world.player) or state.has("Spark", world.player))
+                 lambda state: can_reach_cutter(state, world.player) or can_reach_spark(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_4_u1, world.player),
                  lambda state: can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_4_m2, world.player),
                  lambda state: can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m1, world.player),
-                 lambda state: state.has("Kine", world.player))
+                 lambda state: can_reach_kine(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_u1, world.player),
-                 lambda state: state.has("Kine", world.player)
-                               and state.has("Burning", world.player) and can_reach_stone(state, world.player))
+                 lambda state: can_reach_kine(state, world.player)
+                               and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m2, world.player),
-                 lambda state: state.has("Kine", world.player)
-                               and state.has("Burning", world.player) and can_reach_stone(state, world.player))
+                 lambda state: can_reach_kine(state, world.player)
+                               and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_u1, world.player),
-                 lambda state: state.has("Clean", world.player))
+                 lambda state: can_reach_clean(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
-                 lambda state: state.has("Needle", world.player))
+                 lambda state: can_reach_needle(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
-                 lambda state: state.has("Ice", world.player) and state.has("Rick", world.player))
+                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
-                 lambda state: state.has("Ice", world.player) and state.has("Rick", world.player))
+                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
-                 lambda state: state.has("Ice", world.player) and state.has("Rick", world.player))
+                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
-                 lambda state: state.has("Cutter", world.player))
+                 lambda state: can_reach_cutter(state, world.player))
+
+    # copy ability access edge cases
+    # water locked: all mony, joe, and some blipper/glunk/squishy
+    # sand canyon 4 all
 
     for boss_flag, purification, i in zip(["Level 1 Boss", "Level 2 Boss",
                                            "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],

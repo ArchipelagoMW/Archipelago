@@ -8,7 +8,7 @@ from .Items import item_table, item_names, copy_ability_table, animal_friend_tab
     trap_item_table, copy_ability_access_table
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
-from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping
+from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .Regions import create_levels
 from .Options import kdl3_options
 from .Names import LocationName
@@ -124,24 +124,30 @@ class KDL3World(World):
         # fill animals
         if self.multiworld.animal_randomization[self.player] != 0:
             spawns = [animal for animal in animal_friend_spawns.keys() if
-                      animal not in ["Ripple Field 5 - Animal 2", "Iceberg 4 - Animal 1"]]
+                      animal not in ["Ripple Field 5 - Animal 2", "Sand Canyon 6 - Animal 1", "Iceberg 4 - Animal 1"]]
             self.multiworld.get_location("Iceberg 4 - Animal 1", self.player) \
                 .place_locked_item(self.create_item("ChuChu Spawn"))
             # Not having ChuChu here makes the room impossible (since only she has vertical burning)
             self.multiworld.get_location("Ripple Field 5 - Animal 2", self.player) \
                 .place_locked_item(self.create_item("Pitch Spawn"))
+            guaranteed_animal = self.multiworld.per_slot_randoms[self.player].choice(["Kine Spawn", "Coo Spawn"])
+            self.multiworld.get_location("Sand Canyon 6 - Animal 1", self.player) \
+                .place_locked_item(self.create_item(guaranteed_animal))
             # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-door rando
             if self.multiworld.animal_randomization[self.player] == 1:
                 animal_pool = [animal_friend_spawns[spawn] for spawn in animal_friend_spawns
-                               if spawn not in ["Ripple Field 5 - Animal 2", "Iceberg 4 - Animal 1"]]
+                               if spawn not in ["Ripple Field 5 - Animal 2", "Sand Canyon 6 - Animal 1",
+                                                "Iceberg 4 - Animal 1"]]
             else:
                 animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
                 animal_pool = [self.multiworld.per_slot_randoms[self.player].choice(animal_base)
-                               for _ in range(len(animal_friend_spawns) - 8)]
+                               for _ in range(len(animal_friend_spawns) - 9)]
                 # have to guarantee one of each animal
                 animal_pool.extend(animal_base)
-            self.multiworld.per_slot_randoms[self.player].shuffle(
-                animal_pool)  # TODO: change to world.random once 0.4.1 support is deprecated
+            if guaranteed_animal == "Kine Spawn":
+                animal_pool.append("Coo Spawn")
+            else:
+                animal_pool.append("Kine Spawn")
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items = [self.create_item(animal) for animal in animal_pool]
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, items)
@@ -154,8 +160,24 @@ class KDL3World(World):
         if self.multiworld.copy_ability_randomization[self.player]:
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
-            for enemy in self.copy_abilities:
-                self.copy_abilities[enemy] = self.multiworld.per_slot_randoms[self.player]\
+            enemies_to_set = list(self.copy_abilities.keys())
+            # now for the edge cases
+            for abilities, enemies in enemy_restrictive:
+                available_enemies = list()
+                for enemy in enemies:
+                    if enemy not in enemies_to_set:
+                        if self.copy_abilities[enemy] in abilities:
+                            break
+                    else:
+                        available_enemies.append(enemy)
+                else:
+                    chosen_enemy = self.multiworld.per_slot_randoms[self.player].choice(available_enemies)
+                    chosen_ability = self.multiworld.per_slot_randoms[self.player].choice(tuple(abilities))
+                    self.copy_abilities[chosen_enemy] = chosen_ability
+                    enemies_to_set.remove(chosen_enemy)
+            # place remaining
+            for enemy in enemies_to_set:
+                self.copy_abilities[enemy] = self.multiworld.per_slot_randoms[self.player] \
                     .choice(valid_abilities)
 
         for enemy in enemy_mapping:
@@ -238,7 +260,8 @@ class KDL3World(World):
             patch_rom(self.multiworld, self.player, rom, self.required_heart_stars[self.player],
                       self.boss_requirements[self.player],
                       self.player_levels[self.player],
-                      self.boss_butch_bosses[self.player])
+                      self.boss_butch_bosses[self.player],
+                      self.copy_abilities)
 
             rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rom_path)
