@@ -105,7 +105,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting:
+                if not panel_data.non_counting and get_option_value(multiworld, player, "victory_condition") == 2:
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
@@ -114,7 +114,7 @@ class LingoPlayerLogic:
         # Handle the victory condition. Victory conditions other than the chosen one become regular checks, so we need
         # to prevent the actual victory condition from becoming a check.
         self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
-        self.LEVEL_2_LOCATION = "Second Room - LEVEL 2"
+        self.LEVEL_2_LOCATION = "N/A"
 
         if get_option_value(multiworld, player, "victory_condition") == 0:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
