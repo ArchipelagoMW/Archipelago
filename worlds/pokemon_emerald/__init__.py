@@ -279,7 +279,6 @@ class PokemonEmeraldWorld(World):
         self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
 
         free_fly_location_location = self.multiworld.get_location("FREE_FLY_LOCATION", self.player)
-        free_fly_location_location.locked = False
         free_fly_location_location.item = None
         free_fly_location_location.place_locked_item(self.create_event(fly_location_name))
 

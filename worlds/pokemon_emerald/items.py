@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP items for Pokemon Emerald
 """
-from typing import Dict, FrozenSet, Set, Optional
+from typing import Dict, FrozenSet, Optional
 
 from BaseClasses import Item, ItemClassification
 
