@@ -148,7 +148,7 @@ class PokemonEmeraldWorld(World):
         item_locations: List[PokemonEmeraldLocation] = [
             location
             for location in self.multiworld.get_locations(self.player)
-            if not location.is_event
+            if location.address is not None
         ]
 
         # Filter progression items which shouldn't be shuffled into the itempool. Their locations
@@ -290,7 +290,6 @@ class PokemonEmeraldWorld(World):
                 if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.address = None
-                    location.is_event = True
 
         if self.multiworld.badges[self.player] == RandomizeBadges.option_vanilla:
             convert_unrandomized_items_to_events("Badge")

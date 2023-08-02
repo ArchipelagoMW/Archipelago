@@ -57,7 +57,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Set item values
     for location in multiworld.get_locations(player):
         # Set free fly location
-        if location.is_event:
+        if location.address is None:
             if multiworld.free_fly_location[player] and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
                 _set_bytes_little_endian(
                     patched_rom,

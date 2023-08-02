@@ -11,10 +11,8 @@ from .items import offset_item_value
 
 class PokemonEmeraldLocation(Location):
     game: str = "Pokemon Emerald"
-    flag: Optional[int]
     rom_address: Optional[int]
     default_item_code: Optional[int]
-    is_event: bool
     tags: FrozenSet[str]
 
     def __init__(
@@ -27,10 +25,8 @@ class PokemonEmeraldLocation(Location):
             default_item_value: Optional[int] = None,
             tags: FrozenSet[str] = frozenset()) -> None:
         super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
-        self.flag = flag
         self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
         self.rom_address = rom_address
-        self.is_event = flag is None
         self.tags = tags
 
 
