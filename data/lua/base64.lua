@@ -5,8 +5,6 @@ local base64 = {}
 
 local extract = _G.bit32 and _G.bit32.extract -- Lua 5.2/Lua 5.3 in compatibility mode
 if not extract then
-    print(_G.bit)
-    print(_VERSION)
     if _G._VERSION == "Lua 5.4" then
         extract = load[[return function( v, from, width )
             return ( v >> from ) & ((1 << width) - 1)
