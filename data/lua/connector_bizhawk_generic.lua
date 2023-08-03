@@ -284,8 +284,8 @@ function queue_shift (self)
 end
 
 function new_queue ()
-    new_queue = {left = 1, right = 1}
-    return setmetatable(new_queue, {__index = {is_empty = queue_is_empty, push = queue_push, shift = queue_shift}})
+    local queue = {left = 1, right = 1}
+    return setmetatable(queue, {__index = {is_empty = queue_is_empty, push = queue_push, shift = queue_shift}})
 end
 
 local message_queue = new_queue()
@@ -435,35 +435,28 @@ function send_receive ()
     end
 end
 
-function main ()
-    if (bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7)) then
-        print("Must use BizHawk 2.7.0 or newer")
-        return
-    elseif (bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)) then
-        print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
-    end
+if (bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7)) then
+    print("Must use BizHawk 2.7.0 or newer")
+    return
+elseif (bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)) then
+    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
+end
 
+if (emu.getsystemid() == "NULL") then
+    print("No ROM is loaded. Please load a ROM.")
+    while (emu.getsystemid() == "NULL") do
+        emu.frameadvance()
+    end
+end
+
+rom_hash = gameinfo.getromhash()
+
+function main ()
     local server, err = socket.bind("localhost", SOCKET_PORT)
     if (err ~= nil) then
         print(err)
         return
     end
-
-    function onexit ()
-        server:close()
-    end
-
-    event.onexit(onexit)
-
-    local printed_no_rom_message = false
-    if (emu.getsystemid() == "NULL") then
-        print("No ROM is loaded. Please load a ROM.")
-        while (emu.getsystemid() == "NULL") do
-            emu.frameadvance()
-        end
-    end
-
-    rom_hash = gameinfo.getromhash()
 
     while true do
         current_time = socket.socket.gettime()
@@ -478,9 +471,6 @@ function main ()
 
         if (current_state == STATE_NOT_CONNECTED) then
             if (emu.framecount() % 60 == 0) then
-                print("Waiting for client to connect...")
-                emu.frameadvance() -- To flush print message
-
                 server:settimeout(2)
                 local client, timeout = server:accept()
                 if (timeout == nil) then
@@ -488,6 +478,8 @@ function main ()
                     current_state = STATE_CONNECTED
                     client_socket = client
                     client_socket:settimeout(0)
+                else
+                    print("No client found. Trying again...")
                 end
             end
         else
@@ -501,8 +493,46 @@ function main ()
             end
         end
 
-        emu.frameadvance()
+        coroutine.yield()
     end
 end
 
-main()
+event.onexit(function ()
+    if server ~= nil then
+        server:close()
+    end
+end)
+
+local co = coroutine.create(main)
+local did_crash = false
+function tick ()
+    if (not did_crash) then
+        status, err = coroutine.resume(co)
+
+        -- Even after detecting an error, trying to recover gracefully
+        -- seems to get the port clogged. At least we can be a little more
+        -- clear about the existence of a problem.
+        if (not status) then
+            print("ERROR: "..err)
+            print("Please restart this script and consider reporting the crash.")
+            did_crash = true
+        end
+    end
+end
+
+-- Gambatte has a setting which can cause script execution to become
+-- misaligned, so for GB and GBC we explicitly set the callback on
+-- vblank instead.
+-- https://github.com/TASEmulators/BizHawk/issues/3711
+if (emu.getsystemid() == "GB" or emu.getsystemid() == "GBC") then
+    event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
+else
+    event.onframeend(tick)
+end
+
+print("Running Archipelago BizHawkClient connector script")
+print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.")
+
+while true do
+    emu.frameadvance()
+end
