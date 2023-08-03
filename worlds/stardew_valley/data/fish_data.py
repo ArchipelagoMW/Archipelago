@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 
 from . import season_data as season
 from .game_item import GameItem
-from .region_data import SVRegion
+from ..strings.region_names import Region
 
 
 @dataclass(frozen=True)
@@ -11,41 +11,43 @@ class FishItem(GameItem):
     locations: Tuple[str]
     seasons: Tuple[str]
     difficulty: int
+    mod_name: Optional[str]
 
     def __repr__(self):
         return f"{self.name} [{self.item_id}] (Locations: {self.locations} |" \
                f" Seasons: {self.seasons} |" \
-               f" Difficulty: {self.difficulty}) "
+               f" Difficulty: {self.difficulty}) |" \
+               f"Mod: {self.mod_name}"
 
 
-fresh_water = (SVRegion.farm, SVRegion.forest, SVRegion.town, SVRegion.mountain)
-ocean = (SVRegion.beach,)
-town_river = (SVRegion.town,)
-mountain_lake = (SVRegion.mountain,)
-forest_pond = (SVRegion.forest,)
-forest_river = (SVRegion.forest,)
-secret_woods = (SVRegion.secret_woods,)
-mines_floor_20 = (SVRegion.mines_floor_20,)
-mines_floor_60 = (SVRegion.mines_floor_60,)
-mines_floor_100 = (SVRegion.mines_floor_100,)
-sewers = (SVRegion.sewers,)
-desert = (SVRegion.desert,)
-mutant_bug_lair = (SVRegion.mutant_bug_lair,)
-witch_swamp = (SVRegion.witch_swamp,)
-night_market = (SVRegion.beach,)
-ginger_island_ocean = (SVRegion.ginger_island,)
-ginger_island_river = (SVRegion.ginger_island,)
-pirate_cove = (SVRegion.pirate_cove,)
+fresh_water = (Region.farm, Region.forest, Region.town, Region.mountain)
+ocean = (Region.beach,)
+town_river = (Region.town,)
+mountain_lake = (Region.mountain,)
+forest_pond = (Region.forest,)
+forest_river = (Region.forest,)
+secret_woods = (Region.secret_woods,)
+mines_floor_20 = (Region.mines_floor_20,)
+mines_floor_60 = (Region.mines_floor_60,)
+mines_floor_100 = (Region.mines_floor_100,)
+sewers = (Region.sewer,)
+desert = (Region.desert,)
+mutant_bug_lair = (Region.mutant_bug_lair,)
+witch_swamp = (Region.witch_swamp,)
+night_market = (Region.beach,)
+ginger_island_ocean = (Region.island_south, Region.island_west)
+ginger_island_river = (Region.island_west,)
+pirate_cove = (Region.pirate_cove,)
 
 all_fish: List[FishItem] = []
 
 
 def create_fish(name: str, item_id: int, locations: Tuple[str, ...], seasons: Union[str, Tuple[str, ...]],
-                difficulty: int) -> FishItem:
+                difficulty: int, mod_name: Optional[str] = None) -> FishItem:
     if isinstance(seasons, str):
         seasons = (seasons,)
 
-    fish_item = FishItem(name, item_id, locations, seasons, difficulty)
+    fish_item = FishItem(name, item_id, locations, seasons, difficulty, mod_name)
     all_fish.append(fish_item)
     return fish_item
 
@@ -94,6 +96,7 @@ sunfish = create_fish("Sunfish", 145, town_river + forest_river, (season.spring,
 super_cucumber = create_fish("Super Cucumber", 155, ocean + ginger_island_ocean, (season.summer, season.fall), 80)
 tiger_trout = create_fish("Tiger Trout", 699, town_river + forest_river, (season.fall, season.winter), 60)
 tilapia = create_fish("Tilapia", 701, ocean + ginger_island_ocean, (season.summer, season.fall), 50)
+# Tuna has different seasons on ginger island. Should be changed when the whole fish thing is refactored
 tuna = create_fish("Tuna", 130, ocean + ginger_island_ocean, (season.summer, season.winter), 70)
 void_salmon = create_fish("Void Salmon", 795, witch_swamp, season.all_seasons, 80)
 walleye = create_fish("Walleye", 140, town_river + forest_river + forest_pond + mountain_lake, season.fall, 45)
@@ -122,3 +125,6 @@ snail = create_fish("Snail", 721, fresh_water, season.all_seasons, -1)
 
 legendary_fish = [crimsonfish, angler, legend, glacierfish, mutant_carp]
 special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado]
+island_fish = [lionfish, blue_discus, stingray]
+
+all_fish_by_name = {fish.name: fish for fish in all_fish}
