@@ -58,7 +58,7 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize how many World-Locking Items you need to progress in that world.
 - Customize the amount of World-Locking Items you start with.
 - Customize how many of Sora's Levels are locations.
-- Customize the EXP multiplier for Sora.
+- Customize the EXP multiplier for Sora, his Drive Forms, and his Summons.
 - Customize the available abilities on keyblades.
 - Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
