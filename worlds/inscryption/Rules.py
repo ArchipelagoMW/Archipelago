@@ -57,7 +57,7 @@ class InscryptionRules:
             "Act 2 - Mycologists Holo Key": self.has_epitaphs_and_forest_items,
             "Act 2 - Ancient Obol": self.has_tower_requirements,  # Need money for the pieces? Use the tower mannequin.
             "Act 3 - Boss Photographer": self.has_inspectometer_battery,
-            "Act 3 - Boss Archivist": self.has_inspectometer_battery,
+            "Act 3 - Boss Archivist": self.has_battery_and_quill,
             "Act 3 - Boss Unfinished": self.has_drone_and_battery,
             "Act 3 - Boss G0lly": self.has_drone_and_battery,
             "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so multiple battles are prob necessary.
@@ -69,13 +69,14 @@ class InscryptionRules:
             "Act 3 - Trader 3": self.has_three_pelt,
             "Act 3 - Trader 4": self.has_four_pelt,
             "Act 3 - Trader 5": self.has_five_pelt,
-            "Act 3 - The Great Transcendence": self.has_drone_and_battery,
+            "Act 3 - The Great Transcendence": self.has_transcendence_requirements,
             "Act 3 - Boss Mycologists": self.has_mycologists_boss_requirements,
             "Act 3 - Bone Lord Room": self.has_bone_lord_room_requirements,
-            "Act 3 - Luke's File Entry 1": self.has_inspectometer_battery,
-            "Act 3 - Luke's File Entry 2": self.has_inspectometer_battery,
-            "Act 3 - Luke's File Entry 3": self.has_inspectometer_battery,
-            "Act 3 - Luke's File Entry 4": self.has_drone_and_battery,
+            "Act 3 - Luke's File Entry 1": self.has_battery_and_quill,
+            "Act 3 - Luke's File Entry 2": self.has_battery_and_quill,
+            "Act 3 - Luke's File Entry 3": self.has_battery_and_quill,
+            "Act 3 - Luke's File Entry 4": self.has_transcendence_requirements,
+            "Act 3 - Well": self.has_inspectometer_battery,
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -149,6 +150,12 @@ class InscryptionRules:
 
     def has_bone_lord_room_requirements(self, state: CollectionState) -> bool:
         return state.has("Bone Lord Holo Key", self.player) and self.has_inspectometer_battery(state)
+
+    def has_battery_and_quill(self, state: CollectionState) -> bool:
+        return state.has("Quill", self.player) and self.has_inspectometer_battery(state)
+
+    def has_transcendence_requirements(self, state: CollectionState) -> bool:
+        return state.has("Quill", self.player) and self.has_drone_and_battery(state)
 
     def has_act2_requirements(self, state: CollectionState) -> bool:
         return state.has("Film Roll", self.player)

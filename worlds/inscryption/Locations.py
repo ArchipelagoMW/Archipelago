@@ -213,4 +213,6 @@ location_table: List[LocDict] = [
      'region': "Act 3"},
     {'name': "Act 3 - The Great Transcendence",
      'region': "Act 3"},
+    {'name': "Act 3 - Well",
+     'region': "Act 3"},
 ]

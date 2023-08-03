@@ -159,4 +159,7 @@ item_table: List[ItemDict] = [
     {'name': "Holo Pelt",
      'count': 5,
      'classification': ItemClassification.progression},
+    {'name': "Quill",
+     'count': 1,
+     'classification': ItemClassification.progression},
 ]
