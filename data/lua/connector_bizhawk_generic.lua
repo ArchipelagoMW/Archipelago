@@ -407,7 +407,8 @@ function send_receive ()
     end
 
     if (message == "VERSION") then
-        local result, err client_socket:send(tostring(SCRIPT_VERSION))
+        -- local result, err client_socket:send(tostring(SCRIPT_VERSION))
+        local result, err client_socket:send(tostring(SCRIPT_VERSION).."\n")
     else
         local res = {}
         local data = json.decode(message)
