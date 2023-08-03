@@ -7,7 +7,7 @@ from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
                                      chao_stat_power_table, chao_stat_stamina_table,\
                                      chao_stat_luck_table, chao_stat_intelligence_table, chao_animal_event_location_table,\
-                                     chao_kindergarten_location_table
+                                     chao_kindergarten_location_table, black_market_location_table
 from .Names import LocationName, ItemName
 from .GateBosses import get_boss_name, all_gate_bosses_table, king_boom_boo
 
@@ -1660,6 +1660,13 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                                  chao_kindergarten_region_locations)
         conditional_regions += [chao_kindergarten_region]
 
+    if multiworld.black_market_slots[player].value > 0:
+
+        black_market_region_locations = list(black_market_location_table.keys())
+        black_market_region = create_region(multiworld, player, active_locations, LocationName.black_market_region,
+                                            black_market_region_locations)
+        conditional_regions += [black_market_region]
+
     kart_race_beginner_region_locations = []
     if multiworld.kart_race_checks[player] == 2:
         kart_race_beginner_region_locations.extend([
@@ -2410,6 +2417,9 @@ def connect_regions(multiworld, player, gates: typing.List[LevelGate], cannon_co
                 connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.tails_booster, player) and
                                        state.has(ItemName.knuckles_hammer_gloves, player)))
+
+    if multiworld.black_market_slots[player].value > 0:
+        connect(multiworld, player, names, LocationName.gate_0_region, LocationName.black_market_region)
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

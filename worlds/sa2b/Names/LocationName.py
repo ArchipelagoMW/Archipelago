@@ -1179,6 +1179,8 @@ chao_stat_stamina_base      = "Chao Stat - Stamina - "
 chao_stat_luck_base         = "Chao Stat - Luck - "
 chao_stat_intelligence_base = "Chao Stat - Intelligence - "
 
+chao_black_market_base = "Black Market - "
+
 # Animal Event Locations
 animal_penguin      = "Penguin Behavior"
 animal_seal         = "Seal Behavior"
@@ -1443,6 +1445,8 @@ chao_karate_expert_region       = "Chao Karate - Expert"
 chao_karate_super_region        = "Chao Karate - Super"
 
 chao_kindergarten_region = "Chao Kindergarten"
+
+black_market_region = "Black Market"
 
 kart_race_beginner_region = "Kart Race - Beginner"
 kart_race_standard_region = "Kart Race - Intermediate"

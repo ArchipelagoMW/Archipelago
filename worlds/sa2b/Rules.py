@@ -2197,7 +2197,7 @@ def set_boss_gate_rules(multiworld: MultiWorld, player: int, gate_bosses: typing
                      lambda state: state.has(ItemName.knuckles_shovel_claws, player))
 
 
-def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int, int], boss_rush_map: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int]):
+def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int, int], boss_rush_map: typing.Dict[int, int], mission_map: typing.Dict[int, int], mission_count_map: typing.Dict[int, int], black_market_costs: typing.Dict[int, int]):
     # Mission Progression Rules (Mission 1 begets Mission 2, etc.)
     set_mission_progress_rules(multiworld, player, mission_map, mission_count_map)
 
@@ -2207,6 +2207,10 @@ def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int,
             set_mission_upgrade_rules_standard(multiworld, player)
         elif multiworld.logic_difficulty[player].value == 1:
             set_mission_upgrade_rules_hard(multiworld, player)
+
+        for i in range(multiworld.black_market_slots[player].value):
+            add_rule(multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), player),
+                     lambda state: (state.has(ItemName.market_token, player, black_market_costs[i])))
 
     if multiworld.goal[player] in [4, 5, 6]:
         for i in range(16):

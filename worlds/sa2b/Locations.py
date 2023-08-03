@@ -1499,6 +1499,8 @@ chao_kindergarten_location_table = {
     LocationName.chao_kindergarten_tambourine: 0xFF12EF,
 }
 
+black_market_location_table = { LocationName.chao_black_market_base + str(index): (0xFF1300 + index) for index in range(1,65) }
+
 kart_race_beginner_location_table = {
     LocationName.kart_race_beginner_sonic: 0xFF0A00,
     LocationName.kart_race_beginner_tails: 0xFF0A01,
@@ -1594,6 +1596,7 @@ all_locations = {
     **chao_stat_intelligence_table,
     **chao_animal_part_location_table,
     **chao_kindergarten_location_table,
+    **black_market_location_table,
 }
 
 boss_gate_set = [
@@ -1745,6 +1748,9 @@ def setup_locations(multiworld: MultiWorld, player: int, mission_map: typing.Dic
 
         if multiworld.chao_kindergarten[player]:
             location_table.update({**chao_kindergarten_location_table})
+
+        for index in range(1, multiworld.black_market_slots[player].value + 1):
+            location_table[LocationName.chao_black_market_base + str(index)] = black_market_location_table[LocationName.chao_black_market_base + str(index)]
 
         for x in range(len(boss_gate_set)):
             if x < multiworld.number_of_level_gates[player].value:

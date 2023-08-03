@@ -411,6 +411,39 @@ class ChaoKindergarten(Toggle):
     display_name = "Chao Kindergarten"
 
 
+class BlackMarketSlots(Range):
+    """
+    Determines how many multiworld items are available to purchase from the Black Market
+    """
+    display_name = "Black Market Slots"
+    range_start = 0
+    range_end = 64
+    default = 0
+
+
+class BlackMarketUnlockCosts(Choice):
+    """
+    Determines how many Chao Coins are required to unlock sets of Black Market items
+    """
+    display_name = "Black Market Unlock Costs"
+    option_low = 0
+    option_medium = 1
+    option_high = 2
+    default = 1
+
+
+class BlackMarketRingCosts(Choice):
+    """
+    Determines how many rings the Black Market items cost
+    """
+    display_name = "Black Market Ring Costs"
+    option_free = 0
+    option_low = 1
+    option_medium = 2
+    option_high = 3
+    default = 1
+
+
 class ShuffleStartingChaoEggs(DefaultOnToggle):
     """
     Determines whether the starting Chao eggs in the gardens are random
@@ -761,6 +794,9 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "chao_stats_hidden": ChaoStatsHidden,
     "chao_animal_parts": ChaoAnimalParts,
     "chao_kindergarten": ChaoKindergarten,
+    "black_market_slots": BlackMarketSlots,
+    "black_market_unlock_costs": BlackMarketUnlockCosts,
+    "black_market_ring_costs": BlackMarketRingCosts,
     "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
 
     "junk_fill_percentage": JunkFillPercentage,

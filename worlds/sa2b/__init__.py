@@ -4,7 +4,7 @@ import math
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
                    eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
-from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table
+from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
 from .Options import sa2b_options
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
@@ -73,6 +73,8 @@ class SA2BWorld(World):
     gate_costs: typing.Dict[int, int]
     gate_bosses: typing.Dict[int, int]
     boss_rush_map: typing.Dict[int, int]
+    black_market_costs: typing.Dict[int, int]
+
     web = SA2BWeb()
 
     def _get_slot_data(self):
@@ -107,6 +109,9 @@ class SA2BWorld(World):
             "ChaoStatsFrequency": self.multiworld.chao_stats_frequency[self.player].value,
             "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
             "ChaoKindergarten": self.multiworld.chao_kindergarten[self.player].value,
+            "BlackMarketSlots": self.multiworld.black_market_slots[self.player].value,
+            "BlackMarketData": self.generate_black_market_data(),
+            "BlackMarketUnlockCosts": self.black_market_costs,
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
@@ -119,10 +124,6 @@ class SA2BWorld(World):
             "BossRushMap": self.boss_rush_map,
             "PlayerNum": self.player,
         }
-
-    def _create_items(self, name: str):
-        data = item_table[name]
-        return [self.create_item(name) for _ in range(data.quantity)]
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
@@ -180,6 +181,7 @@ class SA2BWorld(World):
             self.multiworld.chao_stats[self.player].value = 0
             self.multiworld.chao_animal_parts[self.player].value = 0
             self.multiworld.chao_kindergarten[self.player].value = 0
+            self.multiworld.black_market_slots[self.player].value = 0
 
             self.multiworld.junk_fill_percentage[self.player].value = 100
             self.multiworld.trap_fill_percentage[self.player].value = 100
@@ -218,6 +220,8 @@ class SA2BWorld(World):
         create_regions(self.multiworld, self.player, self.location_table)
 
         # Not Generate Basic
+        self.black_market_costs = dict()
+
         if self.multiworld.goal[self.player].value in [0, 2, 4, 5, 6]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
@@ -248,7 +252,19 @@ class SA2BWorld(World):
             if self.multiworld.goal[self.player].value in [1, 2, 6]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
-                    itempool += self._create_items(item)
+                    itempool += self.create_item(item)
+
+            # Black Market
+            itempool += [self.create_item(ItemName.market_token) for _ in range(self.multiworld.black_market_slots[self.player].value)]
+
+            black_market_unlock_mult = 1.0
+            if self.multiworld.black_market_unlock_costs[self.player].value == 0:
+                black_market_unlock_mult = 0.5
+            elif self.multiworld.black_market_unlock_costs[self.player].value == 1:
+                black_market_unlock_mult = 0.75
+
+            for i in range(self.multiworld.black_market_slots[self.player].value):
+                self.black_market_costs[i] = math.floor(i * black_market_unlock_mult)
 
         # Cap at player-specified Emblem count
         raw_emblem_count = total_required_locations - len(itempool)
@@ -536,7 +552,7 @@ class SA2BWorld(World):
         return self.multiworld.random.choice(junk_keys)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map)
+        set_rules(self.multiworld, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map, self.black_market_costs)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
         if self.multiworld.number_of_level_gates[self.player].value > 0 or self.multiworld.goal[self.player].value in [4, 5, 6]:
@@ -577,6 +593,8 @@ class SA2BWorld(World):
             LocationName.chao_karate_intermediate_region,
             LocationName.chao_karate_expert_region,
             LocationName.chao_karate_super_region,
+            LocationName.chao_kindergarten_region,
+            LocationName.black_market_region,
         ]
         er_hint_data = {}
         for i in range(self.multiworld.number_of_level_gates[self.player].value + 1):
@@ -591,6 +609,11 @@ class SA2BWorld(World):
                 for location in level_region.locations:
                     er_hint_data[location.address] = gate_name
 
+        for i in range(self.multiworld.black_market_slots[self.player].value):
+            location = self.multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), self.player)
+            er_hint_data[location.address] = str(self.black_market_costs[i]) + " " + str(ItemName.market_token)
+
+
         hint_data[self.player] = er_hint_data
 
     @classmethod
@@ -604,7 +627,41 @@ class SA2BWorld(World):
            self.multiworld.chao_karate_difficulty[self.player].value > 0 or \
            self.multiworld.chao_stats[self.player].value > 0 or \
            self.multiworld.chao_animal_parts[self.player] or \
-           self.multiworld.chao_kindergarten[self.player]:
+           self.multiworld.chao_kindergarten[self.player] or \
+           self.multiworld.black_market_slots[self.player].value > 0:
             return True;
 
         return False
+
+    def generate_black_market_data(self) -> typing.Dict[int, int]:
+        if self.multiworld.black_market_slots[self.player].value == 0:
+            return {}
+
+        ring_costs = [[0, 0, 0], [50, 75, 100], [500, 750, 1000], [5000, 7500, 10000]]
+
+        market_data = {}
+        item_names = []
+        player_names = []
+        progression_flags = []
+        location_names = [(LocationName.chao_black_market_base + str(i)) for i in range(1, self.multiworld.black_market_slots[self.player].value + 1)]
+        locations = [self.multiworld.get_location(location_name, self.player) for location_name in location_names]
+        for location in locations:
+            item_names.append(location.item.name)
+            player_names.append(self.multiworld.player_name[location.item.player])
+            if location.item.classification & ItemClassification.progression:
+                progression_flags.append(2)
+            elif location.item.classification & ItemClassification.useful:
+                progression_flags.append(1)
+            else:
+                progression_flags.append(0)
+
+        for item_idx in range(self.multiworld.black_market_slots[self.player].value):
+            for chr_idx in range(len(item_names[item_idx][:20])):
+                market_data[(item_idx * 40) + chr_idx] = ord(item_names[item_idx][chr_idx])
+            for chr_idx in range(len(player_names[item_idx][:16])):
+                market_data[(item_idx * 40) + 20 + chr_idx] = ord(player_names[item_idx][chr_idx])
+
+            market_data[(item_idx * 40) + 36] = ring_costs[self.multiworld.black_market_ring_costs[self.player].value][progression_flags[item_idx]]
+            #market_data[(item_idx * 40) + 37] = unlock_cost[item_idx]
+
+        return market_data

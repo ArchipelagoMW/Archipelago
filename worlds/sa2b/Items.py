@@ -22,7 +22,8 @@ class SA2BItem(Item):
 
 # Separate tables for each type of item.
 emblems_table = {
-    ItemName.emblem:  ItemData(0xFF0000, True),
+    ItemName.emblem:       ItemData(0xFF0000, True),
+    ItemName.market_token: ItemData(0xFF001F, True),
 }
 
 upgrades_table = {

@@ -1,6 +1,9 @@
 # Emblem Definition
 emblem = "Emblem"
 
+# Market Token Definition
+market_token = "Chao Coin"
+
 # Upgrade Definitions
 sonic_gloves          = "Sonic - Magic Glove"
 sonic_light_shoes     = "Sonic - Light Shoes"
