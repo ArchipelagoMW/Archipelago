@@ -502,6 +502,9 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, player: int):
         add_rule(multiworld.get_location(LocationName.cosmic_wall_pipe_1, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
+        add_rule(multiworld.get_location(LocationName.cannon_core_pipe_1, player),
+                 lambda state: state.has(ItemName.tails_booster, player))
+
         add_rule(multiworld.get_location(LocationName.mission_street_pipe_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_pipe_2, player),
