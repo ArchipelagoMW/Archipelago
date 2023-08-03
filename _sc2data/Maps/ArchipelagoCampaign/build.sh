@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 rm -rf WoL_build
 mkdir -p WoL_build
 for map in WoL/*.SC2Map ; do

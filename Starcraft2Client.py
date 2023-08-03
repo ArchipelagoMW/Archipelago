@@ -45,6 +45,17 @@ nest_asyncio.apply(loop)
 max_bonus: int = 13
 victory_modulo: int = 100
 
+# GitHub repo where the Map/mod data is hosted for /download_data command
+DATA_REPO_OWNER = "Ziktofel"
+DATA_REPO_NAME = "ArchipelagoPlayerCompiledMaps"
+
+
+# Data version file path.
+# This file is used to tell if the downloaded data are outdated
+# Associated with /download_data command
+def get_data_version_file():
+    return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Version.txt"
+
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
@@ -199,20 +210,20 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
-        if os.path.exists(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt"):
-            with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "r") as f:
+        if os.path.exists(get_data_version_file()):
+            with open(get_data_version_file(), "r") as f:
                 current_ver = f.read()
         else:
             current_ver = None
 
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData',
+        tempzip, version = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME,
                                                        current_version=current_ver, force_download=True)
 
         if tempzip != '':
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
-                with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
+                with open(get_data_version_file(), "w") as f:
                     f.write(version)
             finally:
                 os.remove(tempzip)
@@ -298,10 +309,11 @@ class SC2Context(CommonContext):
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             maps_present = is_mod_installed_correctly()
-            if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
-                with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
+            if os.path.exists(get_data_version_file()):
+                with open(get_data_version_file(), "r") as f:
                     current_ver = f.read()
-                if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
+                    sc2_logger.debug(f"Current version: {current_ver}")
+                if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
             elif maps_present:
                 sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
@@ -1045,16 +1057,9 @@ def is_mod_installed_correctly() -> bool:
         check_game_install_path()
 
     mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
-    modfile = os.environ["SC2PATH"] / Path("Mods/ArchipelagoPlayer.SC2Mod")
-    wol_required_maps = [
-        "WoL/ap_thanson01.SC2Map", "WoL/ap_thanson02.SC2Map", "WoL/ap_thanson03a.SC2Map", "WoL/ap_thanson03b.SC2Map",
-        "WoL/ap_thorner01.SC2Map", "WoL/ap_thorner02.SC2Map", "WoL/ap_thorner03.SC2Map", "WoL/ap_thorner04.SC2Map", "WoL/ap_thorner05s.SC2Map",
-        "WoL/liberation_day.SC2Map", "WoL/the_outlaws.SC2Map", "WoL/ap_traynor03.SC2Map",
-        "WoL/ap_ttosh01.SC2Map", "WoL/ap_ttosh02.SC2Map", "WoL/ap_ttosh03a.SC2Map", "WoL/ap_ttosh03b.SC2Map",
-        "WoL/ap_ttychus01.SC2Map", "WoL/ap_ttychus02.SC2Map", "WoL/ap_ttychus03.SC2Map", "WoL/ap_ttychus04.SC2Map", "WoL/ap_ttychus05.SC2Map",
-        "WoL/ap_tvalerian01.SC2Map", "WoL/ap_tvalerian02a.SC2Map", "WoL/ap_tvalerian02b.SC2Map", "WoL/ap_tvalerian03.SC2Map",
-        "WoL/ap_tzeratul01.SC2Map", "WoL/ap_tzeratul02.SC2Map", "WoL/ap_tzeratul03.SC2Map", "WoL/ap_tzeratul04.SC2Map"
-    ]
+    mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerWoL", "ArchipelagoTriggers"]
+    modfiles = [os.environ["SC2PATH"] / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
+    wol_required_maps = ["WoL" + os.sep + map_name + ".SC2Map" for map_name in maps_table]
     needs_files = False
 
     # Check for maps.
@@ -1074,17 +1079,19 @@ def is_mod_installed_correctly() -> bool:
         sc2_logger.info(f"All maps found in {mapdir}.")
 
     # Check for mods.
-    if os.path.isfile(modfile):
-        sc2_logger.info(f"Archipelago mod found at {modfile}.")
-    else:
-        sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
-        needs_files = True
+    for modfile in modfiles:
+        if os.path.isfile(modfile) or os.path.isdir(modfile):
+            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+        else:
+            sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
+            needs_files = True
 
     # Final verdict.
     if needs_files:
         sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
         return False
     else:
+        sc2_logger.debug(f"All map/mod files are properly installed.")
         return True
 
 
