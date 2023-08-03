@@ -44,8 +44,15 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
         client class, so you do not need to check the system yourself.
 
         Once this function has determined that the ROM should be handled by this client, it should also modify `ctx`
-        as necessary (such as setting `ctx.game = self.game`, modifying `ctx.items_handling`, etc...)."""
+        as necessary (such as setting `ctx.game = self.game`, modifying `ctx.items_handling`, etc...). If you can read
+        the slot name from ROM, set `ctx.auth` here as well. Otherwise the user will be prompted after this."""
         ...
+
+    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+        """Should set ctx.auth in anticipation of sending a `Connected` packet. You may override this if you store slot
+        name in your patched ROM. If ctx.auth is not set after calling, the player will be prompted to enter their
+        username."""
+        pass
 
     @abc.abstractmethod
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:

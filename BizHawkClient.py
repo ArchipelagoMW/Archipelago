@@ -397,6 +397,16 @@ async def _game_watcher(ctx: BizHawkClientContext):
             if ctx.client_handler is None:
                 from worlds.AutoBizHawkClient import AutoBizHawkClientRegister
 
+                rom_hash = (await send_requests(ctx, [{"type": "HASH"}]))[0]["value"]
+                if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
+                    if ctx.server is not None:
+                        logger.info(f"ROM changed. Disconnecting from server.")
+                        await ctx.disconnect(True)
+
+                    ctx.auth = None
+                    ctx.username = None
+                ctx.rom_hash = rom_hash
+
                 system = (await send_requests(ctx, [{"type": "SYSTEM"}]))[0]["value"]
                 ctx.client_handler = await AutoBizHawkClientRegister.get_handler(ctx, system)
 
@@ -409,18 +419,17 @@ async def _game_watcher(ctx: BizHawkClientContext):
                     showed_no_handler_message = False
                     logger.info(f"Running handler for {ctx.client_handler.game}")
 
-                rom_hash = (await send_requests(ctx, [{"type": "HASH"}]))[0]["value"]
-                if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
-                    if ctx.server is not None:
-                        logger.info(f"ROM changed. Disconnecting from server.")
-                        await ctx.disconnect(True)
-
-                    ctx.auth = None
-                    ctx.username = None
-
-                ctx.rom_hash = rom_hash
         except RequestFailedError:
             continue
+
+        # Get slot name and send `Connect`
+        if ctx.server is not None and ctx.username is None:
+            await ctx.client_handler.set_auth(ctx)
+
+            if ctx.auth is None:
+                await ctx.get_username()
+
+            await ctx.send_connect()
 
         await ctx.client_handler.game_watcher(ctx)
 
