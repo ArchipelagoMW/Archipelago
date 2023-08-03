@@ -369,29 +369,30 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
         ctx.watcher_event.clear()
 
-        if ctx.bizhawk_streams is None:
-            if not showed_connecting_message:
-                logger.info("Waiting to connect to BizHawk...")
-                showed_connecting_message = True
-
-            if not await _try_connect(ctx):
-                continue
-
-            showed_no_handler_message = False
-
-            script_version = await _get_script_version(ctx)
-
-            if script_version != EXPECTED_SCRIPT_VERSION:
-                logger.info(f"Connector script is incompatible. Expected version {EXPECTED_SCRIPT_VERSION} but got {script_version}. Disconnecting.")
-
-                ctx.bizhawk_streams[1].close()
-                ctx.bizhawk_streams = None
-                ctx.bizhawk_connection_status = BizHawkConnectionStatus.NOT_CONNECTED
-
-                continue
-
-        showed_connecting_message = False
         try:
+            if ctx.bizhawk_streams is None:
+                if not showed_connecting_message:
+                    logger.info("Waiting to connect to BizHawk...")
+                    showed_connecting_message = True
+
+                if not await _try_connect(ctx):
+                    continue
+
+                showed_no_handler_message = False
+
+                script_version = await _get_script_version(ctx)
+
+                if script_version != EXPECTED_SCRIPT_VERSION:
+                    logger.info(f"Connector script is incompatible. Expected version {EXPECTED_SCRIPT_VERSION} but got {script_version}. Disconnecting.")
+
+                    ctx.bizhawk_streams[1].close()
+                    ctx.bizhawk_streams = None
+                    ctx.bizhawk_connection_status = BizHawkConnectionStatus.NOT_CONNECTED
+
+                    continue
+
+            showed_connecting_message = False
+
             await send_requests(ctx, [{"type": "PING"}])
 
             if ctx.client_handler is None:
