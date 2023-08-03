@@ -657,7 +657,9 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init02Players, true, false);
+    TriggerExecute(gt_Init03UnitsVariables, true, true);
     TriggerExecute(lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor, true, false);
     lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
     libABFE498B_gf_AP_Triggers_MapConfig_setMissionBuild(false);
@@ -681,8 +683,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerExecute(gt_Init01Technology, true, true);
-    TriggerExecute(gt_Init03UnitsVariables, true, true);
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
@@ -712,8 +712,6 @@ bool gt_Init01Technology_Func (bool testConds, bool runActions) {
     TechTreeUpgradeAddLevel(gv_p2_ALLIED, "BlinkTech", 1);
     TechTreeUpgradeAddLevel(gv_p2_ALLIED, "Charge", 1);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("PhaseMineBlast", 0), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ZeratulStun", 0), false);
-    TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("ZeratulBlink", 0), false);
     return true;
 }
 
