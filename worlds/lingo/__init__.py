@@ -120,7 +120,7 @@ class LingoWorld(World):
         slot_data = {"seed": self.multiworld.per_slot_randoms[self.player].randint(0, 1000000)}
 
         for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
-                            "shuffle_panels", "mastery_achievements", "level_2_requirement"]:
+                            "shuffle_panels", "mastery_achievements", "level_2_requirement", "reduce_checks"]:
             slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
 
         if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
