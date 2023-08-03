@@ -46,7 +46,7 @@ It is added to your inventory. If you obtain magic, you will need to pause your 
 When you die in vanilla Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, any chest you have opened will remain open, and you will keep your level, but lose the experience.
 
 
-For example, if you are fighting Roxas, receive Reflect Element, then die mid-fight, you will keep Reflect Element. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
+For example, if you are fighting Roxas, receive Reflect Element, then die mid-fight, you will keep that Reflect Element. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 
 <h2 style="text-transform:none";>Customization options:</h2>
 
