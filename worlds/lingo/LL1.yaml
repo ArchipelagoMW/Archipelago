@@ -4863,6 +4863,8 @@
           - Appendix Room Area Doors/Door_trusted_readjusted12
           - Appendix Room Area Doors/Door_trusted_readjusted13
         include_reduce: True
+        location_name: Knight Night Room - TRUSTED
+        item_name: Knight Night Room - Exit
         panels:
           - TRUSTED
   Knight Night Exit:
