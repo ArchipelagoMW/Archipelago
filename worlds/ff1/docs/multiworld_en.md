@@ -36,7 +36,7 @@ Generate a game by going to the site and performing the following steps:
 4. Press the `NEW` button beside `Seed` a few times
 5. Click `GENERATE ROM`
 
-It should download two files. One is the `*.nes` file, which your emulator will run, and the other is the yaml file
+It should download two files. One is the `*.nes` file which your emulator will run, and the other is the yaml file
 required by Archipelago.gg
 
 At this point, you are ready to join the multiworld. If you are uncertain on how to generate, host, or join a multiworld,
