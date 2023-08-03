@@ -92,8 +92,6 @@ def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typi
     # check animal requirements
     if not can_reach_coo(state, player) and can_reach_kine(state, player):
         return False
-    # now we need to get our bukisets
-    bukisets = {enemy: copy_abilities[enemy] for enemy in copy_abilities if "Bukiset" in enemy}
     # probably some cleaner way to handle this
     room1 = EnemyAbilities.enemy_restrictive[1]
     room2 = EnemyAbilities.enemy_restrictive[2]
@@ -112,6 +110,11 @@ def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typi
     return can_reach_parasol(state, player) and can_reach_stone(state, player)
 
 
+def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: typing.Dict[str,str]):
+    can_reach = False
+    for enemy in {"Sparky", "Blocky", "Jumper Shoot", "Yuki", "Sir Kibble", "Kaboki", "Boboo", "Captain Stitch"}:
+        can_reach = can_reach | ability_map[copy_abilities[enemy]](state, player)
+    return can_reach
 
 
 def set_rules(world: "KDL3World") -> None:
@@ -171,8 +174,7 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: can_reach_nago(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
-             lambda state: state.has_all([ability for ability in copy_ability_table.keys()], world.player))
-    # cleaner than writing out 8 ands
+             lambda state: can_fix_angel_wings(state, world.player, world.copy_abilities))
 
     # Consumables
     if world.multiworld.consumables[world.player]:
