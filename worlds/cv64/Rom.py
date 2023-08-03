@@ -801,6 +801,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32(0xD9D44, 0x00000000)
         rom.write_byte(0xD9D4D, 0x00)
 
+    # Put the character-specific post-Behemoth and RoC bosses on the same flags so that they can only count as 1 towards
+    # the Bosses goal, for now.
+    rom.write_byte(0xEED8B, 0x40)
+    rom.write_byte(0x109FB7, 0x90)
+    rom.write_byte(0x109FC3, 0x90)
+
     # Tunnel gondola skip
     if multiworld.skip_gondolas[player]:
         rom.write_int32(0x6C5F58, 0x080FF7D0)  # J 0x803FDF40
@@ -818,12 +824,20 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32s(0xBFE100, Patches.ambience_silencer)
     # Fix for the door sliding sound playing infinitely if leaving the fan meeting room before the door closes entirely.
     # Hooking this in the ambience silencer code does nothing for some reason.
-    rom.write_int32s(0xAE01C, [0x08004FAB,   # J   0x80013EAC
+    rom.write_int32s(0xAE10C, [0x08004FAB,   # J   0x80013EAC
                                0x3404829B])  # ORI A0, R0, 0x829B
     rom.write_int32s(0xD9E8C, [0x08004FAB,   # J   0x80013EAC
                                0x3404829B])  # ORI A0, R0, 0x829B
     # Fan meeting room ambience fix
     rom.write_int32(0x109964, 0x803FE13C)
+
+    # Make the Villa coffin cutscene skippable
+    rom.write_int32(0xAA530, 0x080FF880)  # J 0x803FE200
+    rom.write_int32s(0xBFE200, Patches.coffin_cutscene_skipper)
+
+    # Increase shimmy speed
+    if multiworld.increase_shimmy_speed[player]:
+        rom.write_byte(0xA4241, 0x62)
 
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:

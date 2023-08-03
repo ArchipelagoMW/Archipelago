@@ -293,6 +293,11 @@ class PantherDash(Choice):
     default = 0
 
 
+class IncreaseShimmySpeed(Toggle):
+    """Increases the speed at which characters shimmy left and right while hanging on ledges."""
+    display_name = "Increase Shimmy Speed"
+
+
 class BackgroundMusic(Choice):
     """Randomizes or disables the music heard throughout the game. Randomized music is split into two pools: songs that
     loop and songs that don't."""
@@ -348,6 +353,7 @@ cv64_options: Dict[str, Option] = {
     "skip_brick_platforms": SkipBrickPlatforms,
     "countdown": Countdown,
     "panther_dash": PantherDash,
+    "increase_shimmy_speed": IncreaseShimmySpeed,
     "background_music": BackgroundMusic,
     "map_lighting": MapLighting,
     "death_link": DeathLink,

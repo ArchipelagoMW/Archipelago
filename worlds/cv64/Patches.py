@@ -2429,3 +2429,22 @@ ambience_silencer = [
     0x34040169,  # ORI   A0, R0, 0x0169
     0x0805581C   # J     0x80156070
 ]
+
+coffin_cutscene_skipper = [
+    # Kills the normally-unskippable "Found a hidden path" cutscene at the end of Villa if this detects, in the current
+    # module in the modules array, the cutscene's module number of 0x205C and the "skip" value 0f 0x01 normally set by
+    # all cutscenes upon pressing Start.
+    0x10A0000B,  # BEQZ  A1,     [forward 0x0B]
+    0x00000000,  # NOP
+    0x94A80000,  # LHU   T0, 0x0000 (A1)
+    0x2409205C,  # ADDIU T1, R0, 0x205C
+    0x15090007,  # BNE   T0, T1, [forward 0x07]
+    0x90AA0070,  # LBU   T2, 0x0070 (A1)
+    0x11400005,  # BEQZ  T2,     [forward 0x05]
+    0x90AB0009,  # LBU   T3, 0x0009 (A1)
+    0x240C0003,  # ADDIU T4, R0, 0x0003
+    0x156C0002,  # BNE   T3, T4, [forward 0x02]
+    0x240B0004,  # ADDIU T3, R0, 0x0004
+    0xA0AB0009,  # SB    T3, 0x0009 (A1)
+    0x03E00008   # JR    RA
+]
