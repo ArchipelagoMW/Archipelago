@@ -149,51 +149,46 @@ class ValidInventory:
         # Limit the maximum number of upgrades 
         maxUpgrad = get_option_value(self.multiworld, self.player, 
                             "max_nb_upgrades")
-        # dsa dont know how to define max 
-        if maxUpgrad < 123:
-            unitAvailUpgrad = {}
-            # Need to take into account locked/existing items
-            unitNbUpgrades = {}
+        if maxUpgrad != -1:
+            unit_avail_upgrades = {}
+            # Needed to take into account locked/existing items
+            unit_nb_upgrades = {}
             for item in inventory:
-                tmp = get_full_item_list()[item.name]
-                if tmp.type == "Unit" and item.name not in unitAvailUpgrad:
-                    unitAvailUpgrad[item.name] = []
-                    unitNbUpgrades[item.name] = 0
-                elif tmp.parent_item is not None:
-                    if tmp.parent_item not in unitAvailUpgrad:
-                        unitAvailUpgrad[tmp.parent_item] = [item]
-                        unitNbUpgrades[tmp.parent_item] = 1
+                cItem = get_full_item_list()[item.name]
+                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_avail_upgrades[cItem.parent_item] = [item]
+                        unit_nb_upgrades[cItem.parent_item] = 1
                     else:
-                        unitAvailUpgrad[tmp.parent_item].append(item)
-                        unitNbUpgrades[tmp.parent_item] += 1
+                        unit_avail_upgrades[cItem.parent_item].append(item)
+                        unit_nb_upgrades[cItem.parent_item] += 1
             # For those two categories, we count them but dont include them in removal
             for item in locked_items + self.existing_items:
-                if tmp.type == "Unit" and item.name not in unitAvailUpgrad:
-                    unitAvailUpgrad[item.name] = []
-                elif tmp.parent_item is not None:
-                    if tmp.parent_item not in unitAvailUpgrad:
-                        unitNbUpgrades[tmp.parent_item] = 1
+                cItem = get_full_item_list()[item.name]
+                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_nb_upgrades[cItem.parent_item] = 1
                     else:
-                        unitNbUpgrades[tmp.parent_item] += 1
-            # dsa need to shuffle to make it random
-            for unit in unitAvailUpgrad:
-                print(unit)
-                print(len(inventory))
-                print(unitNbUpgrades[unit])
-                while (unitNbUpgrades[unit] > maxUpgrad) \
-                         and (len(unitAvailUpgrad[unit]) > 0):
-                    itemCandidate = self.multiworld.random.choice(unitAvailUpgrad[unit])
-                    success = attempt_removal(itemCandidate)
-                    # Whatever it succeed to remove the iventory or 
-                    # it fails and thus lock it, the upgrade is no longer 
-                    # available for removal
-                    unitAvailUpgrad[unit].remove(itemCandidate)
-                    unitNbUpgrades[unit] -= 1
-                    if not success:
-                        print(f"Locked {itemCandidate}")
-                print(len(inventory))
-                print(unitAvailUpgrad[unit])
-                print()
+                        unit_nb_upgrades[cItem.parent_item] += 1
+            # Making sure that the upgrades being removed is random 
+            # Currently, only for combat shield vs Stabilizer Medpacks...
+            suffled_unit_list = list(unit_avail_upgrades.keys())
+            self.multiworld.random.shuffle(suffled_unit_list)
+            for unit in suffled_unit_list:
+                while (unit_nb_upgrades[unit] > maxUpgrad) \
+                         and (len(unit_avail_upgrades[unit]) > 0):
+                    itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
+                    _ = attempt_removal(itemCandidate)
+                    # Whatever it succeed to remove the iventory or it fails and thus 
+                    # lock it, the upgrade is no longer available for removal
+                    unit_avail_upgrades[unit].remove(itemCandidate)
+                    unit_nb_upgrades[unit] -= 1
 
         # Locking associated items for items that have already been placed when units_always_have_upgrades is on
         if units_always_have_upgrades:
