@@ -66,7 +66,7 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Kandorean_Temple_Mimic,
         LocationName.Kandorean_Temple_Lash_Pebble,
         LocationName.Kandorean_Temple_Mysterious_Card,
-        LocationName.DefeatChestBeaters,
+        LocationName.Kandorean_Temple_Chestbeaters,
         LocationName.Fog
     ])
 
@@ -95,13 +95,12 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.MadraCatacombs,
     [
-        LocationName.Madra_Catacombs_Moloch,
         LocationName.Madra_Catacombs_Ruin_Key,
         LocationName.Madra_Catacombs_Tremor_Bit,
         LocationName.Madra_Catacombs_Apple,
         LocationName.Madra_Catacombs_Lucky_Medal,
         LocationName.Madra_Catacombs_Mist_Potion,
-        LocationName.DoomDragonDefeated,
+        LocationName.Mars_Lighthouse_Doom_Dragon,
 
         LocationName.Flint,
         LocationName.Granite,

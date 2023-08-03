@@ -396,7 +396,7 @@ class ItemName():
    Blaze = "Blaze"
 
    Victory = "Victory"
-   DefeatChestbeaters = "DefeatChestbeaters"
+   Chestbeaters_defeated = "Chestbeaters defeated"
 
    Flint = "Flint"
    Granite = "Granite"

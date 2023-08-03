@@ -335,8 +335,8 @@ class LocationName():
     Mars_Lighthouse_Mimic = "Mars_Lighthouse - Mimic"
     Mars_Lighthouse_Psy_Crystal = "Mars_Lighthouse - Psy_Crystal"
     Shaman_Village_Elixir = "Shaman_Village - Elixir"
-    DoomDragonDefeated = "Doom Dragon Defeated"
-    DefeatChestBeaters = "Defeated Chestbeaters"
+    Mars_Lighthouse_Doom_Dragon = "Mars Lighthouse - Doom Dragon Fight"
+    Kandorean_Temple_Chestbeaters = "Kandorean Temple - Chestbeaters Fight"
 
     Flint = "Flint"
     Granite = "Granite"

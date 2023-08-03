@@ -40,9 +40,6 @@ class LocalRom:
             self.rom_data[addr] = contents & 0xFF
             self.rom_data[addr + 1] = contents >> 8
         else:
-            print(f'item {item.itemName} with contents {contents} on location {location.name} '
-                  f'with event {event_type}, original event on location {location.event_type}')
-
             self.rom_data[addr] = event_type & 0xFF
             self.rom_data[addr + 1] = event_type >> 8
             self.rom_data[addr + 6] = contents & 0xFF
