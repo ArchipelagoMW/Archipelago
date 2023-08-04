@@ -1,5 +1,5 @@
 from typing import Dict, NamedTuple, Optional, List
-from BaseClasses import Item, MultiWorld
+from BaseClasses import Item, MultiWorld, ItemClassification
 from .Options import get_option_value
 from .static_logic import StaticLingoLogic
 
@@ -9,8 +9,7 @@ class ItemData(NamedTuple):
     ItemData for an item in Lingo
     """
     code: Optional[int]
-    progression: bool
-    trap: bool
+    classification: ItemClassification
     mode: Optional[str]
     event: bool
     door_ids: List[str]
@@ -51,10 +50,10 @@ class StaticLingoItems:
 
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 
-    def create_item(self, name: str, event: bool, progression: bool, trap: bool, mode: Optional[str] = None,
+    def create_item(self, name: str, event: bool, classification: ItemClassification, mode: Optional[str] = None,
                     door_ids: Optional[List[str]] = None, painting_ids: Optional[List[str]] = None):
         new_id = None if event is True else self.base_id + len(self.ALL_ITEM_TABLE)
-        new_item = ItemData(new_id, progression, trap, mode, event, [] if door_ids is None else door_ids,
+        new_item = ItemData(new_id, classification, mode, event, [] if door_ids is None else door_ids,
                             [] if painting_ids is None else painting_ids)
         self.ALL_ITEM_TABLE[name] = new_item
 
@@ -62,7 +61,7 @@ class StaticLingoItems:
         self.base_id = base_id
 
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
-            self.create_item(color, False, True, False, "colors")
+            self.create_item(color, False, ItemClassification.progression, "colors")
 
         door_groups: Dict[str, List[str]] = {}
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
@@ -83,16 +82,18 @@ class StaticLingoItems:
                     else:
                         door_mode = "special"
 
-                self.create_item(door.item_name, False, not door.junk_item, False, door_mode, door.door_ids,
-                                 door.painting_ids)
+                self.create_item(door.item_name, False,
+                                 ItemClassification.filler if door.junk_item else ItemClassification.progression,
+                                 door_mode, door.door_ids, door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
-            self.create_item(group, False, True, False, "door group", group_door_ids, [])
+            self.create_item(group, False, ItemClassification.progression, "door group", group_door_ids, [])
 
-        self.create_item("Nothing", False, False, False, "special")
-        self.create_item("Slowness Trap", False, False, True, "special")
-        self.create_item("Iceland Trap", False, False, True, "special")
-        self.create_item("Atbash Trap", False, False, True, "special")
+        self.create_item("Nothing", False, ItemClassification.filler, "special")
+        self.create_item("Slowness Trap", False, ItemClassification.trap, "special")
+        self.create_item("Iceland Trap", False, ItemClassification.trap, "special")
+        self.create_item("Atbash Trap", False, ItemClassification.trap, "special")
+        self.create_item("Puzzle Skip", False, ItemClassification.useful, "special")
 
         for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
-            self.create_item(item_name, False, True, False, "special")
+            self.create_item(item_name, False, ItemClassification.progression, "special")

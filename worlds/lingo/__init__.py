@@ -86,8 +86,16 @@ class LingoWorld(World):
             traps = floor(item_difference * trap_percentage / 100.0)
             non_traps = item_difference - traps
 
-            for i in range(0, non_traps):
-                pool.append(self.create_item("Nothing"))
+            if non_traps > 0:
+                skip_percentage = get_option_value(self.multiworld, self.player, "puzzle_skip_percentage")
+                skips = floor(non_traps * skip_percentage / 100.0)
+                non_skips = non_traps - skips
+
+                for i in range(0, non_skips):
+                    pool.append(self.create_item("Nothing"))
+
+                for i in range(0, skips):
+                    pool.append(self.create_item("Puzzle Skip"))
 
             if traps > 0:
                 traps_list = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
@@ -99,15 +107,7 @@ class LingoWorld(World):
 
     def create_item(self, name: str) -> Item:
         item = StaticLingoItems.ALL_ITEM_TABLE[name]
-
-        if item.progression:
-            classification = ItemClassification.progression
-        elif item.trap:
-            classification = ItemClassification.trap
-        else:
-            classification = ItemClassification.filler
-
-        new_item = LingoItem(name, classification, item.code, player=self.player)
+        new_item = LingoItem(name, item.classification, item.code, player=self.player)
         return new_item
 
     def set_rules(self):

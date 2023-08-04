@@ -86,6 +86,14 @@ class TrapPercentage(Range):
     default = 20
 
 
+class PuzzleSkipPercentage(Range):
+    """Replaces junk items with puzzle skips, at the specified rate."""
+    display_name = "Puzzle Skip Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class DeathLink(Toggle):
     """If on: Whenever another player on death link dies, you will be returned to the starting room."""
     display_name = "Death Link"
@@ -102,6 +110,7 @@ lingo_options: Dict[str, type] = {
     "mastery_achievements": MasteryAchievements,
     "level_2_requirement": Level2Requirement,
     "trap_percentage": TrapPercentage,
+    "puzzle_skip_percentage": PuzzleSkipPercentage,
     "death_link": DeathLink
 }
 
