@@ -54,10 +54,6 @@
 .org 0x8091DA8  ; ReadySet_SelectKey(): Don't play car engine sound
     .word 0x8091DD8
 
-; Autosave tutorial
-.org 0x8080C5C  ; GameSelectSeisan()
-    mov r0, #1
-
 ; Jewel cutscene and jewel door opening
 .org 0x8080FA8  ; DoraGetItemHantei()
     nop

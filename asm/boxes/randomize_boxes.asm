@@ -10,6 +10,8 @@ hook 0x8029D06, 0x8029D24, SpawnRandomizedItemFromBox  ; CD
 hook 0x8029F02, 0x8029F2A, SpawnRandomizedItemFromBox  ; Full health item
 
 .autoregion
+.align 2
+
 @oam_animation_pointer equ 0x04
 @y_pos equ 0x08
 @x_pos equ 0x0A
@@ -26,7 +28,7 @@ hook 0x8029F02, 0x8029F2A, SpawnRandomizedItemFromBox  ; Full health item
 ; redundant for now, this opens up the possibility to apply or send native traps
 ; as soon as the box opens rather than hide behind an item's appearance.
 SpawnRandomizedItemFromBox:
-    push r4-r6, lr
+    push r4-r7, lr
     sub sp, sp, #4
     ldr r4, =CurrentEnemyData
 
@@ -61,16 +63,16 @@ SpawnRandomizedItemFromBox:
 
 @@CheckLocation:
     ldr r6, =Jewel1BoxContents
-    lsl r1, r0, #1
-    add r6, r6, r1
+    ldr r7, =Jewel1BoxExtData
+    add r6, r6, r0
+    lsl r1, r0, #2
+    add r7, r7, r1
     bl GetItemAtLocation
     strb r0, [r6]
-    strb r1, [r6, #1]
+    str r1, [r7]
 
 ; If it's your own junk item, always release it
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@CheckCollectionStatus
     lsr r0, r0, #6
     cmp r0, #1
@@ -120,7 +122,7 @@ SpawnRandomizedItemFromBox:
 
 @@Return:
     add sp, sp, #4
-    pop r4-r6, pc
+    pop r4-r7, pc
 
 .pool
 .endautoregion
@@ -143,7 +145,6 @@ LoadRandomItemAnimation:
     ldrb r0, [r4, @global_id]
     sub r0, 0x86
     ldr r1, =Jewel1BoxContents
-    lsl r0, r0, #1
     add r0, r1, r0
     ldrb r0, [r0]
     mov r6, r0
@@ -228,6 +229,7 @@ hook 0x802A2CA, 0x802A31E, CollectRandomItem  ; CD
 hook 0x802A38A, 0x802A3C4, CollectRandomItem  ; Full health item
 
 .autoregion
+.align 2
 CollectRandomItem:
     push r4-r6, lr
 
@@ -262,15 +264,15 @@ CollectRandomItem:
 
 ; Get and decode
     ldr r1, =Jewel1BoxContents
-    lsl r0, r5, #1
-    add r1, r0, r1
+    ldr r2, =Jewel1BoxExtData
+    add r1, r5, r1
+    lsl r0, r5, #2
+    add r2, r0, r2
     ldrb r5, [r1]
-    ldrb r1, [r1, 1]
+    ldr r1, [r2]
 
 ; Multiplayer items
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@MultiplayerItem
 
 ; Junk items
@@ -290,9 +292,28 @@ CollectRandomItem:
     bne @@CD
     mov r0, #0  ; a1
     bl SpawnCollectionIndicator
+    b @@JewelPiece
 
-; Jewel piece or other world's item
 @@MultiplayerItem:
+    ldr r0, [r1, #4]
+    ldr r1, =TilesItemA12
+    mov r2, #12
+    bl LoadSpriteString
+    ldr r1, =TilesItemB8
+    mov r2, #8
+    bl LoadSpriteString
+    ldr r1, =TilesItemC8
+    mov r2, #8
+    bl LoadSpriteString
+
+    ldr r0, =MultiworldState
+    mov r1, #3
+    strb r1, [r0] 
+    ldr r0, =TextTimer
+    mov r1, #120
+    strb r1, [r0]
+
+@@JewelPiece:
     ldr r0, =0x13B  ; a1
     b @@PlayCollectionSound
 

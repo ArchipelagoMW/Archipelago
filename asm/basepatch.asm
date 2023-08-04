@@ -10,13 +10,14 @@ UnusedRomStart equ 0x0878F97C
 .include "asm/util/vanilla_labels.asm"
 .include "asm/util/randomizer_variables.asm"
 .include "asm/util/hook_macros.asm"
+.include "asm/util/bitfields.asm"
 
 
 ; Allocate space at ROM end
 .org UnusedRomStart
 .region 0x0E000000-.
 PlayerName: .fill 16, 0  ; Player's name, up to 16 characters
-PlayerID: .byte 0
+PlayerID: .halfword 0
 DeathLinkFlag: .byte 0
 .endregion
 
@@ -29,5 +30,7 @@ DeathLinkFlag: .byte 0
 .include "asm/routines.asm"
 .include "asm/patches.asm"
 .include "asm/graphics.asm"
+.include "asm/messages/textboxes.asm"
+.include "asm/messages/strings.asm"
 
 .close

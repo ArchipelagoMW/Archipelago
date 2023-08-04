@@ -20,18 +20,17 @@ hook 0x808134C, 0x808135C, CheckLocations
     cmp r0, #0
     beq @@DontGive
 
-; Get the item and player ID
+; Get the item and multiworld pointer
     ldr r0, =LocationTable
     add r1, r0, r4  ; get entry for this level
     ldrb r0, [r1]  ; a1
-    ldr r1, =ItemDestinationTable + (LocationTable - ItemLocationTable)
-    add r1, r1, r4
-    ldrb r1, [r1]  ; a2
+    ldr r1, =ItemExtDataTable + 4 * (LocationTable - ItemLocationTable)
+    lsl r2, r4, #2
+    add r1, r1, r2
+    ldr r1, [r1]  ; a2
 
 ; Skip your junk items
-    ldr r2, =PlayerID
-    ldrb r2, [r2]
-    cmp r1, r2
+    cmp r1, #0
     bne @@Give
     lsr r2, r0, #6
     cmp r2, #1
@@ -140,7 +139,7 @@ SpawnCollectionIndicator:
     str r0, [r1]
     ldr r0, =TileId
     str r0, [r1, #4]
-    ldr r0, =0x80000010
+    ldr r0, =dma_enable | dma_halfwords(0x10)
     str r0, [r1, #8]
     ldr r0, [r1, #8]
 .endmacro
@@ -266,7 +265,7 @@ UpdateJewelIcon:
     str r0, [r1]  
     ldr r0, [r3, #4]  ; Destination (tilemap position)
     str r0, [r1, #4]
-    ldr r0, =0x80000010
+    ldr r0, =dma_enable | dma_halfwords(0x10)
     str r0, [r1, #8]
     ldr r0, [r1, #8]
 
