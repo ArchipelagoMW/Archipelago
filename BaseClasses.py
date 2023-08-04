@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import collections
 import copy
 import functools
 import logging
@@ -209,6 +210,9 @@ class MultiWorld():
         for option_key, option in Options.per_game_common_options.items():
             getattr(self, option_key)[new_id] = option(option.default)
 
+        world_type.random = random.Random(self.random.getrandbits(64))
+        self.per_slot_randoms[new_id] = world_type.random
+
         self.worlds[new_id] = world_type(self, new_id)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
         self.player_name[new_id] = name
@@ -304,6 +308,83 @@ class MultiWorld():
             group["local_items"] = item_link["local_items"]
             group["non_local_items"] = item_link["non_local_items"]
             group["link_replacement"] = replacement_prio[item_link["link_replacement"]]
+
+    def link_items(self) -> None:
+        for group_id, group in self.groups.items():
+            def find_common_pool(players: Set[int], shared_pool: Set[str]) -> Tuple[
+                Optional[Dict[int, Dict[str, int]]], Optional[Dict[str, int]]
+            ]:
+                classifications: Dict[str, int] = collections.defaultdict(int)
+                counters = {player: {name: 0 for name in shared_pool} for player in players}
+                for item in self.itempool:
+                    if item.player in counters and item.name in shared_pool:
+                        counters[item.player][item.name] += 1
+                        classifications[item.name] |= item.classification
+
+                for player in players.copy():
+                    if all([counters[player][item] == 0 for item in shared_pool]):
+                        players.remove(player)
+                        del (counters[player])
+
+                if not players:
+                    return None, None
+
+                for item in shared_pool:
+                    count = min(counters[player][item] for player in players)
+                    if count:
+                        for player in players:
+                            counters[player][item] = count
+                    else:
+                        for player in players:
+                            del (counters[player][item])
+                return counters, classifications
+
+            common_item_count, classifications = find_common_pool(group["players"], group["item_pool"])
+            if not common_item_count:
+                continue
+
+            new_itempool: List[Item] = []
+            for item_name, item_count in next(iter(common_item_count.values())).items():
+                for _ in range(item_count):
+                    new_item = group["world"].create_item(item_name)
+                    # mangle together all original classification bits
+                    new_item.classification |= classifications[item_name]
+                    new_itempool.append(new_item)
+
+            region = Region("Menu", group_id, self, "ItemLink")
+            self.regions.append(region)
+            locations = region.locations = []
+            for item in self.itempool:
+                count = common_item_count.get(item.player, {}).get(item.name, 0)
+                if count:
+                    loc = Location(group_id, f"Item Link: {item.name} -> {self.player_name[item.player]} {count}",
+                                   None, region)
+                    loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
+                        state.has(item_name, group_id_, count_)
+
+                    locations.append(loc)
+                    loc.place_locked_item(item)
+                    common_item_count[item.player][item.name] -= 1
+                else:
+                    new_itempool.append(item)
+
+            itemcount = len(self.itempool)
+            self.itempool = new_itempool
+
+            while itemcount > len(self.itempool):
+                items_to_add = []
+                for player in group["players"]:
+                    if group["link_replacement"]:
+                        item_player = group_id
+                    else:
+                        item_player = player
+                    if group["replacement_items"][player]:
+                        items_to_add.append(AutoWorld.call_single(self, "create_item", item_player,
+                                                                  group["replacement_items"][player]))
+                    else:
+                        items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player))
+                self.random.shuffle(items_to_add)
+                self.itempool.extend(items_to_add[:itemcount - len(self.itempool)])
 
     # intended for unittests
     def set_default_common_options(self):
