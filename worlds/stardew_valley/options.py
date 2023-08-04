@@ -490,6 +490,60 @@ class FriendsanityHeartSize(Range):
     # step = 1
 
 
+class Monstersanity(Choice):
+    """Locations for slaying monsters?
+    None: There are no checks for slaying monsters
+    One per category: Every category visible at the adventure guild gives one check
+    One per Monster: Every unique monster gives one check
+    Monster Eradication Goals: The Monster Eradication Goals each contain one check
+    Short Monster Eradication Goals: The Monster Eradication Goals each contain one check, but are reduced by 60%
+    Very Short Monster Eradication Goals: The Monster Eradication Goals each contain one check, but are reduced by 90%
+    Progressive Eradication Goals: The Monster Eradication Goals each contain 5 checks, each 20% of the way
+    Split Eradication Goals: The Monster Eradication Goals are split by monsters, each monster has one check
+    """
+    internal_name = "monstersanity"
+    display_name = "Monstersanity"
+    default = 1
+    option_none = 0
+    option_one_per_category = 1
+    option_one_per_monster = 2
+    option_goals = 3
+    option_short_goals = 4
+    option_very_short_goals = 5
+    option_progressive_goals = 6
+    option_split_goals = 7
+
+
+class Shipsanity(Choice):
+    """Locations for shipping items?
+    None: There are no checks for shipping items
+    Crops: Every crop being shipped is a check
+    Quality Crops: Every crop being shipped is a check, but only granted if it is gold-quality
+    Fish: Every fish being shipped is a check except legendaries
+    Quality Fish: Every fish being shipped is a check except legendaries, but only granted if it is gold-quality
+    Full Shipment: Every item in the Collections page is a check
+    Quality Full Shipment: Every item in the Collections page is a check, but only granted if it is gold-quality when applicable
+    Full Shipment With Fish: Every item in the Collections page and every fish is a check
+    Quality Full Shipment With Fish: Every item in the Collections page and every fish is a check, but only granted if it is gold-quality when applicable
+    Everything: Every item in the game that can be shipped is a check
+    Quality Everything: Every item in the game that can be shipped is a check, but only granted if it is gold-quality when applicable
+    """
+    internal_name = "shipsanity"
+    display_name = "Shipsanity"
+    default = 0
+    option_none = 0
+    option_crops = 1
+    option_quality_crops = 2
+    option_fish = 3
+    option_quality_fish = 4
+    option_full_shipment = 5
+    option_quality_full_shipment = 6
+    option_full_shipment_with_fish = 7
+    option_quality_full_shipment_with_fish = 8
+    option_everything = 9
+    option_quality_everything = 10
+
+
 class NumberOfMovementBuffs(Range):
     """Number of movement speed buffs to the player that exist as items in the pool.
     Each movement speed buff is a +25% multiplier that stacks additively"""
