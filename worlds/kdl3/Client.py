@@ -146,15 +146,15 @@ class KDL3SNIClient(SNIClient):
         if len(self.item_queue) > 0:
             item = self.item_queue.pop()
             # special handling for the remaining three
-            item = item.item & 0x0000FF
-            if item == 0x21:
+            item_idx = item.item & 0x0000FF
+            if item_idx == 0x21:
                 # 1-Up
                 life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
                 life_bytes = pack("H", life_count[0] + 1)
                 snes_buffered_write(ctx, KDL3_LIFE_COUNT, life_bytes)
                 snes_buffered_write(ctx, KDL3_LIFE_VISUAL, life_bytes)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x33]))
-            elif item == 0x22:
+            elif item_idx == 0x22:
                 # Maxim Tomato
                 # Check for Gooey
                 gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
@@ -164,18 +164,18 @@ class KDL3SNIClient(SNIClient):
                     snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08]))
                 else:
                     snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A]))
-            elif item == 0x23:
+            elif item_idx == 0x23:
                 # Invincibility Candy
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
                 snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x84, 0x03]))
-            elif item == 0x40:
+            elif item_idx == 0x40:
                 check_gooey_r = await snes_read(ctx, KDL3_GOOEY_TRAP, 2)
                 check_gooey = struct.unpack("H", check_gooey_r)
                 if check_gooey[0] == 0:
                     snes_buffered_write(ctx, KDL3_GOOEY_TRAP, bytes([0x01, 0x00]))
                 else:
                     self.item_queue.append(item)  # We can't apply this yet
-            elif item == 0x41:
+            elif item_idx == 0x41:
                 check_slow_r = await snes_read(ctx, KDL3_SLOWNESS_TRAP, 2)
                 check_slow = struct.unpack("H", check_slow_r)
                 if check_slow[0] == 0:
@@ -183,7 +183,7 @@ class KDL3SNIClient(SNIClient):
                     snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0xA7]))
                 else:
                     self.item_queue.append(item)  # We can't apply this yet
-            elif item == 0x42:
+            elif item_idx == 0x42:
                 check_ability_r = await snes_read(ctx, KDL3_ABILITY_TRAP, 2)
                 check_ability = struct.unpack("H", check_ability_r)
                 if check_ability[0] == 0:
