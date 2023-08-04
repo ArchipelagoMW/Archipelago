@@ -77,6 +77,7 @@ def can_reach_cutter(state: "CollectionState", player: int) -> bool:
 
 
 ability_map = {
+    "No Ability": lambda state, player: True,
     "Burning Ability": can_reach_burning,
     "Stone Ability": can_reach_stone,
     "Ice Ability": can_reach_ice,
@@ -111,9 +112,9 @@ def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typi
 
 
 def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: typing.Dict[str,str]):
-    can_reach = False
-    for enemy in {"Sparky", "Blocky", "Jumper Shoot", "Yuki", "Sir Kibble", "Kaboki", "Boboo", "Captain Stitch"}:
-        can_reach = can_reach | ability_map[copy_abilities[enemy]](state, player)
+    can_reach = True
+    for enemy in {"Sparky", "Blocky", "Jumper Shoot", "Yuki", "Sir Kibble", "Haboki", "Boboo", "Captain Stitch"}:
+        can_reach = can_reach & ability_map[copy_abilities[enemy]](state, player)
     return can_reach
 
 

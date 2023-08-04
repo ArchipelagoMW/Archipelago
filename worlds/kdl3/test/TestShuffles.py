@@ -1,6 +1,7 @@
+from typing import List, Tuple
+
 from . import KDL3TestBase
 from .TestGoal import TestNormalGoal
-
 
 class TestCopyAbilityShuffle(KDL3TestBase):
     options = {
@@ -39,7 +40,41 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)
 
-    #def testValidAbilitiesForROB(self):
+    def testValidAbilitiesForROB(self):
+        # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
+        self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
+        # first we need to identify our bukiset requirements
+        groups = [
+            ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+            ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
+            ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
+            ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
+        ]
+        copy_abilities = self.multiworld.worlds[1].copy_abilities
+        required_abilities: List[Tuple[str]] = []
+        for abilities, bukisets in groups:
+            potential_abilities: List[str] = list()
+            for bukiset in bukisets:
+                if copy_abilities[bukiset] in abilities:
+                    potential_abilities.append(copy_abilities[bukiset])
+            required_abilities.append(tuple(potential_abilities))
+        collected_abilities = list()
+        for group in required_abilities:
+            self.assertFalse(len(group) == 0)
+            collected_abilities.append(group[0])
+        self.collect_by_name([ability.replace(" Ability", "") for ability in collected_abilities])
+        if "Parasol" not in collected_abilities or "Stone" not in collected_abilities:
+            # required for non-Bukiset related portions
+            self.collect_by_name(["Parasol", "Stone"])
+
+        if "Cutter" not in collected_abilities:
+            # we can't actually reach 3-6 without Cutter
+            assert not self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
+            self.collect_by_name(["Cutter"])
+
+        assert self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
+
+
 
 
 class TestAnimalShuffle(KDL3TestBase):
@@ -84,7 +119,8 @@ class TestAnimalShuffle(KDL3TestBase):
         self.assertTrue(self, self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
         self.assertTrue(self, self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
 
-class testAllShuffle(KDL3TestBase):
+
+class TestAllShuffle(KDL3TestBase):
     options = {
         "goal_speed": "normal",
         "total_heart_stars": 30,
