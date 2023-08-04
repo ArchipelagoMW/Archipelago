@@ -224,7 +224,6 @@ Door - 0x09D6F (Entry 1) - 0x09E57
 159421 - 0x289D1 (Rock Line Reflection EP) - True - True
 
 Quarry Elevator (Quarry):
-159802 - 0xFFD01 (Inside Reached Independently) - True - True
 158120 - 0x17CC4 (Elevator Control) - 0x0367C - Dots & Eraser
 159403 - 0x17CB9 (Railroad EP) - 0x17CC4 - True
 
@@ -232,7 +231,8 @@ Quarry Between Entrys (Quarry) - Quarry - 0x17C07:
 158119 - 0x17C09 (Entry 2 Panel) - True - Shapers & Triangles
 Door - 0x17C07 (Entry 2) - 0x17C09
 
-Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010 - Quarry Elevator - 0x17CC4:
+Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010:
+159802 - 0xFFD01 (Inside Reached Independently) - True - True
 158121 - 0x01E5A (Stoneworks Entry Left Panel) - True - Squares & Black/White Squares & Stars & Stars + Same Colored Symbol
 158122 - 0x01E59 (Stoneworks Entry Right Panel) - True - Triangles
 Door - 0x02010 (Stoneworks Entry) - 0x01E59 & 0x01E5A
