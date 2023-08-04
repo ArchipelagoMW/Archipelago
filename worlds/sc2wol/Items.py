@@ -245,9 +245,13 @@ item_table = {
     "Void Ray": ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 7, classification=ItemClassification.progression),
     "Carrier": ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Protoss", 8, classification=ItemClassification.progression),
 
+    # Filler items to fill remaining spots
     "+15 Starting Minerals": ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, quantity=0, classification=ItemClassification.filler),
     "+15 Starting Vespene": ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, quantity=0, classification=ItemClassification.filler),
+    # This Filler item isn't placed by the generator yet unless plando'd
     "+2 Starting Supply": ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.filler),
+    # This item is used to "remove" location from the game. Never placed unless plando'd
+    "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing", 2, quantity=0, classification=ItemClassification.filler),
 
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
@@ -376,5 +380,6 @@ type_flaggroups: typing.Dict[str, int] = {
     "Goal": 11,
     "Armory 3": 12,  # Unit upgrades
     "Armory 4": 13,  # Unit upgrades
-    "Progressive Upgrade": 14  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
+    "Progressive Upgrade": 14,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
+    "Nothing": 15
 }
