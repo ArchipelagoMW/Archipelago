@@ -10,6 +10,7 @@ from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, 
 
 def generate_multi_world(players: int = 1) -> MultiWorld:
     multi_world = MultiWorld(players)
+    multi_world.set_seed(0)
     multi_world.player_name = {}
     for i in range(players):
         player_id = i+1
@@ -20,7 +21,6 @@ def generate_multi_world(players: int = 1) -> MultiWorld:
         region = Region("Menu", player_id, multi_world, "Menu Region Hint")
         multi_world.regions.append(region)
 
-    multi_world.set_seed(0)
     multi_world.set_default_common_options()
 
     return multi_world

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import random
 import sys
 from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
     Union
@@ -11,7 +12,6 @@ from BaseClasses import CollectionState
 from Options import AssembleOptions
 
 if TYPE_CHECKING:
-    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
@@ -246,6 +246,9 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
+        if multiworld:  # this can be None for some unit tests
+            self.random = random.Random(multiworld.random.getrandbits(64))
+            multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":

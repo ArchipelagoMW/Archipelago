@@ -228,8 +228,6 @@ class MultiWorld():
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
-                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         for option_key in Options.common_options:
@@ -244,7 +242,6 @@ class MultiWorld():
                 setattr(self, option_key, getattr(args, option_key, {}))
 
             self.worlds[player] = world_type(self, player)
-            self.worlds[player].random = self.per_slot_randoms[player]
 
     def set_item_links(self):
         item_links = {}
