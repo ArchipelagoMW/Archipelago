@@ -201,6 +201,10 @@ def get_mountain_lower_exclusion_list():
     return get_adjustment_file("settings/Postgame/Mountain_Lower.txt")
 
 
+def get_elevators_come_to_you():
+    return get_adjustment_file("settings/Door_Shuffle/Elevators_Come_To_You.txt")
+
+
 def get_sigma_normal_logic():
     return get_adjustment_file("WitnessLogic.txt")
 

@@ -146,6 +146,12 @@ class ChallengeLasers(Range):
     default = 11
 
 
+class ElevatorsComeToYou(Toggle):
+    """If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    This does actually affect logic as it allows unintended backwards / early access into these areas."""
+    display_name = "All Bridges & Elevators come to you"
+
+
 class TrapPercentage(Range):
     """Replaces junk items with traps, at the specified rate."""
     display_name = "Trap Percentage"
@@ -195,6 +201,7 @@ the_witness_options: Dict[str, type] = {
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
     "early_secret_area": EarlySecretArea,
+    "elevators_come_to_you": ElevatorsComeToYou,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,
     "hint_amount": HintAmount,

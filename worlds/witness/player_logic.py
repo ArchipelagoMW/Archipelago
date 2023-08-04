@@ -225,6 +225,26 @@ class WitnessPlayerLogic:
 
             return
 
+        if adj_type == "New Connections":
+            line_split = line.split(" - ")
+            source_region = line_split[0]
+            target_region = line_split[1]
+            panel_set_string = line_split[2]
+
+            for connection in self.CONNECTIONS_BY_REGION_NAME[source_region]:
+                if connection[0] == target_region:
+                    self.CONNECTIONS_BY_REGION_NAME[source_region].remove(connection)
+
+                    if panel_set_string == "TrueOneWay":
+                        self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, frozenset({frozenset()})))
+                    else:
+                        new_lambda = connection[1] | parse_lambda(panel_set_string)
+                        self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, new_lambda))
+                    break
+            else:  # Execute if loop did not break. TIL this is a thing you can do!
+                new_conn = (target_region, parse_lambda(panel_set_string))
+                self.CONNECTIONS_BY_REGION_NAME[source_region].add(new_conn)
+
         if adj_type == "Added Locations":
             if "0x" in line:
                 line = StaticWitnessLogic.ENTITIES_BY_HEX[line]["checkName"]
@@ -331,6 +351,9 @@ class WitnessPlayerLogic:
 
         if is_option_enabled(world, player, "early_secret_area"):
             adjustment_linesets_in_order.append(get_early_utm_list())
+
+        if is_option_enabled(world, player, "elevators_come_to_you"):
+            adjustment_linesets_in_order.append(get_elevators_come_to_you())
 
         for item in self.YAML_ADDED_ITEMS:
             adjustment_linesets_in_order.append(["Items:", item])
@@ -491,6 +514,8 @@ class WitnessPlayerLogic:
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
+            "0xFFD00": "Main Island Reached Independently",
+            "0xFFD01": "Inside Quarry Reached Independently",
             "0x09D9B": "Monastery Shutters Open",
             "0x193A6": "Monastery Laser Panel Activates",
             "0x00037": "Monastery Branch Panels Activate",

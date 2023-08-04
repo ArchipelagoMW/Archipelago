@@ -54,6 +54,7 @@ Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
 Main Island (Main Island) - Outside Tutorial - True:
+159801 - 0xFFD00 (Reached Independently) - True - True
 159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
 
 Outside Glass Factory (Glass Factory) - Main Island - True - Inside Glass Factory - 0x01A29:
@@ -210,7 +211,7 @@ Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x012F
 
 Desert Lowest Level Inbetween Shortcuts (Desert):
 
-Outside Quarry (Quarry) - Main Island - True - Quarry Between Entrys - 0x09D6F - Quarry Elevator - TrueOneWay:
+Outside Quarry (Quarry) - Main Island - True - Quarry Between Entrys - 0x09D6F - Quarry Elevator - 0xFFD00 & 0xFFD01:
 158118 - 0x09E57 (Entry 1 Panel) - True - Black/White Squares
 158603 - 0x17CF0 (Discard) - True - Triangles
 158702 - 0x03612 (Laser Panel) - 0x0A3D0 & 0x0367C - Eraser & Shapers
@@ -230,7 +231,8 @@ Quarry Between Entrys (Quarry) - Quarry - 0x17C07:
 158119 - 0x17C09 (Entry 2 Panel) - True - Shapers
 Door - 0x17C07 (Entry 2) - 0x17C09
 
-Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010 - Quarry Elevator - 0x17CC4:
+Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010:
+159802 - 0xFFD01 (Inside Reached Independently) - True - True
 158121 - 0x01E5A (Stoneworks Entry Left Panel) - True - Black/White Squares
 158122 - 0x01E59 (Stoneworks Entry Right Panel) - True - Dots
 Door - 0x02010 (Stoneworks Entry) - 0x01E59 & 0x01E5A
@@ -715,16 +717,19 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159331 - 0x016B2 (Rotating Bridge CCW EP) - 0x181F5 - True
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
-Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482:
+Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02:
+158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Rotated Shapers
 158330 - 0x00A1E (Beyond Rotating Bridge 2) - 0x003B2 - Rotated Shapers
 158331 - 0x00C2E (Beyond Rotating Bridge 3) - 0x00A1E - Rotated Shapers & Shapers
 158332 - 0x00E3A (Beyond Rotating Bridge 4) - 0x00C2E - Rotated Shapers
-158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
 Door - 0x18482 (Blue Water Pump) - 0x00E3A
 159332 - 0x3365F (Boat EP) - 0x09DB8 - True
 159333 - 0x03731 (Long Bridge Side EP) - 0x17E2B - True
+
+Swamp Long Bridge (Swamp):
+158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
 
 Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x0A1D6:
 Door - 0x0A1D6 (Purple Water Pump) - 0x00E3A
