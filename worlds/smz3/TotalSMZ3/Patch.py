@@ -84,6 +84,7 @@ class DropPrize(Enum):
 class Patch:
     Major = 11
     Minor = 3
+    Patch = 1
     allWorlds: List[World]
     myWorld: World
     seedGuid: str
@@ -122,7 +123,7 @@ class Patch:
 
         self.WriteGanonInvicible(config.Goal)
         self.WritePreOpenPyramid(config.Goal)
-        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals)
+        self.WriteCrystalsNeeded(self.myWorld.TowerCrystals, self.myWorld.GanonCrystals, config.Goal)
         self.WriteBossesNeeded(self.myWorld.TourianBossTokens)
         self.WriteRngBlock()
 
@@ -615,7 +616,7 @@ class Patch:
                     "H" if self.myWorld.Config.SMLogic == Config.SMLogic.Hard else \
                     "X"
 
-        self.title = f"ZSM{Patch.Major}{Patch.Minor}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
+        self.title = f"ZSM{Patch.Major}{Patch.Minor}{Patch.Patch}{z3Glitch}{smGlitch}{self.myWorld.Id}{self.seed:08x}".ljust(21)[:21]
         self.patches.append((Snes(0x00FFC0), bytearray(self.title, 'utf8')))
         self.patches.append((Snes(0x80FFC0), bytearray(self.title, 'utf8')))
     
@@ -776,12 +777,15 @@ class Patch:
     def WriteBossesNeeded(self, tourianBossTokens):
         self.patches.append((Snes(0xF47200), getWordArray(tourianBossTokens)))
 
-    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals):
+    def WriteCrystalsNeeded(self, towerCrystals, ganonCrystals, goal: Goal):
         self.patches.append((Snes(0x30805E), [towerCrystals]))
         self.patches.append((Snes(0x30805F), [ganonCrystals]))
 
         self.stringTable.SetTowerRequirementText(f"You need {towerCrystals} crystals to enter Ganon's Tower.")
-        self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
+        if (goal == Goal.AllDungeonsDefeatMotherBrain):
+            self.stringTable.SetGanonRequirementText(f"You need to complete all the dungeons and bosses to defeat Ganon.")
+        else:
+            self.stringTable.SetGanonRequirementText(f"You need {ganonCrystals} crystals to defeat Ganon.")
 
     def WriteRngBlock(self):
         #/* Repoint RNG Block */
