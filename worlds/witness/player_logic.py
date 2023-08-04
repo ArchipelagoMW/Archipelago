@@ -338,11 +338,7 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if get_option_value(world, player, "shuffle_EPs") == 0:  # No EP Shuffle
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
-
-        elif get_option_value(world, player, "shuffle_EPs") == 1:  # Individual EPs
+        if get_option_value(world, player, "shuffle_EPs") != 2:  # No EP Shuffle
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         yaml_disabled_eps = []
