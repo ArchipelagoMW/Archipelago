@@ -10,3 +10,8 @@ Swamp Long Bridge - Outside Swamp - 0x17E2B
 Swamp Long Bridge - Swamp Near Boat - 0x17E2B
 Outside Swamp - Swamp Long Bridge - TrueOneWay
 Swamp Near Boat - Swamp Long Bridge - TrueOneWay
+
+
+
+Requirement Changes:
+0x035DE - 0x17E2B - True
