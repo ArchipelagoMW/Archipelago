@@ -37,7 +37,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
             return frozenset()
 
         check_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
@@ -338,8 +338,11 @@ class WitnessPlayerLogic:
         if is_option_enabled(world, player, "shuffle_lasers"):
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if get_option_value(world, player, "shuffle_EPs") != 2:  # No EP Shuffle
+        if get_option_value(world, player, "shuffle_EPs") != 2:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
+
+        if get_option_value(world, player, "shuffle_EPs") != 0:
+            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(get_ep_all_individual()[1:])
 
         yaml_disabled_eps = []
 
@@ -452,6 +455,8 @@ class WitnessPlayerLogic:
 
         self.EVENT_PANELS_FROM_PANELS = set()
         self.EVENT_PANELS_FROM_REGIONS = set()
+
+        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES = set()
 
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
