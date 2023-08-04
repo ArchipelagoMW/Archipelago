@@ -1,8 +1,11 @@
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .locations import LingoLocation
 from .player_logic import LingoPlayerLogic
 from .Options import get_option_value
+from .rules import make_location_lambda
+from worlds.generic.Rules import set_rule
+from .items import LingoItem
 
 
 def create_region(room: Room, multiworld: MultiWorld, player: int, player_logic: LingoPlayerLogic):
@@ -11,11 +14,16 @@ def create_region(room: Room, multiworld: MultiWorld, player: int, player_logic:
     if room.name in player_logic.LOCATIONS_BY_ROOM.keys():
         for location in player_logic.LOCATIONS_BY_ROOM[room.name]:
             new_loc = LingoLocation(player, location.name, location.code, new_region)
+            set_rule(new_loc, make_location_lambda(location, room.name, multiworld, player, player_logic))
+
+            if location.name in player_logic.EVENT_LOC_TO_ITEM:
+                event_item = LingoItem(player_logic.EVENT_LOC_TO_ITEM[location.name], ItemClassification.progression,
+                                       None, player=player)
+                new_loc.place_locked_item(event_item)
+
             new_region.locations.append(new_loc)
 
-    multiworld.regions += [
-        new_region
-    ]
+    multiworld.regions.append(new_region)
 
 
 def connect(target: Room, entrance: RoomEntrance, multiworld: MultiWorld, player: int, player_logic: LingoPlayerLogic):

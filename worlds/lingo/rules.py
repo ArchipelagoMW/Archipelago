@@ -3,7 +3,6 @@ from BaseClasses import MultiWorld
 from .Options import get_option_value
 from .static_logic import StaticLingoLogic, RoomAndDoor
 from worlds.AutoWorld import LogicMixin
-from worlds.generic.Rules import set_rule
 from .locations import StaticLingoLocations, LocationData
 from .player_logic import LingoPlayerLogic, PlayerLocation
 
@@ -96,11 +95,3 @@ def make_location_lambda(location: PlayerLocation, room_name: str, multiworld: M
         return lambda state: state.lingo_can_use_level_2_location(multiworld, player)
     else:
         return lambda state: state.lingo_can_use_location(location, room_name, multiworld, player, player_logic)
-
-
-def set_rules(multiworld: MultiWorld, player: int, player_logic: LingoPlayerLogic):
-    for room_name, locations in player_logic.LOCATIONS_BY_ROOM.items():
-        for location in locations:
-            set_rule(multiworld.get_location(location.name, player), make_location_lambda(location, room_name,
-                                                                                          multiworld, player,
-                                                                                          player_logic))

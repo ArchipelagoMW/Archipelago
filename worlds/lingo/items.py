@@ -52,7 +52,7 @@ class StaticLingoItems:
 
     def create_item(self, name: str, event: bool, classification: ItemClassification, mode: Optional[str] = None,
                     door_ids: Optional[List[str]] = None, painting_ids: Optional[List[str]] = None):
-        new_id = None if event is True else self.base_id + len(self.ALL_ITEM_TABLE)
+        new_id = None if event else self.base_id + len(self.ALL_ITEM_TABLE)
         new_item = ItemData(new_id, classification, mode, event, [] if door_ids is None else door_ids,
                             [] if painting_ids is None else painting_ids)
         self.ALL_ITEM_TABLE[name] = new_item
