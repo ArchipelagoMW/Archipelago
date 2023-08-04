@@ -62,6 +62,11 @@ class LocationTags(enum.Enum):
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
+    REQUIRES_MUSEUM = enum.auto()
+    MONSTERSANITY = enum.auto()
+    MONSTERSANITY_GOALS = enum.auto()
+    MONSTERSANITY_PROGRESSIVE_GOALS = enum.auto()
+    MONSTERSANITY_MONSTER = enum.auto()
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
@@ -293,6 +298,26 @@ def extend_elevator_locations(randomized_locations: List[LocationData], options:
     randomized_locations.extend(filtered_elevator_locations)
 
 
+def extend_monstersanity_locations(randomized_locations: List[LocationData], world_options):
+    monstersanity = world_options[options.Monstersanity]
+    if monstersanity == options.Monstersanity.option_none:
+        return
+    if monstersanity == options.Monstersanity.option_one_per_monster or monstersanity == options.Monstersanity.option_split_goals:
+        monster_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_MONSTER]]
+        filtered_monster_locations = filter_disabled_locations(world_options, monster_locations)
+        randomized_locations.extend(filtered_monster_locations)
+        return
+    goal_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_GOALS]]
+    filtered_goal_locations = filter_disabled_locations(world_options, goal_locations)
+    randomized_locations.extend(filtered_goal_locations)
+    if monstersanity != options.Monstersanity.option_progressive_goals:
+        return
+    progressive_goal_locations = [location for location in locations_by_tag[LocationTags.MONSTERSANITY_PROGRESSIVE_GOALS]]
+    filtered_progressive_goal_locations = filter_disabled_locations(world_options, progressive_goal_locations)
+    randomized_locations.extend(filtered_progressive_goal_locations)
+
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      random: Random):
@@ -332,8 +357,15 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_special_order_locations(randomized_locations, options)
     extend_walnut_purchase_locations(randomized_locations, options)
 
+    extend_monstersanity_locations(randomized_locations, world_options)
+
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
+
+
+def filter_museum_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    include_museum = world_options[options.Museumsanity] != options.Museumsanity.option_none
+    return [location for location in locations if include_museum or LocationTags.REQUIRES_MUSEUM not in location.tags]
 
 
 def filter_ginger_island(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
@@ -347,6 +379,7 @@ def filter_modded_locations(options: StardewValleyOptions, locations: List[Locat
 
 
 def filter_disabled_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
-    locations_first_pass = filter_ginger_island(options, locations)
-    locations_second_pass = filter_modded_locations(options, locations_first_pass)
-    return locations_second_pass
+    locations_museum_filter = filter_museum_locations(options, locations)
+    locations_island_filter = filter_ginger_island(options, locations_museum_filter)
+    locations_mod_filter = filter_modded_locations(options, locations_island_filter)
+    return locations_mod_filter
