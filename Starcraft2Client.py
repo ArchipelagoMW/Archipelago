@@ -288,7 +288,10 @@ class SC2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
-            self.game_speed = args["slot_data"]["game_speed"]
+            if "game_speed" in args["slot_data"]:
+                self.game_speed = args["slot_data"]["game_speed"]
+            else:
+                self.game_speed = 0
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             # Maintaining backwards compatibility with older slot data
