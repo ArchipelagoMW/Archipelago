@@ -342,7 +342,7 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         if get_option_value(world, player, "shuffle_EPs") == 0:
-            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(get_ep_all_individual()[1:])
+            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.update(get_ep_all_individual()[1:])
 
         yaml_disabled_eps = []
 
