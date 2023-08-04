@@ -192,22 +192,6 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
     return levels
 
 
-def generate_locations_from_stages(stages: typing.List[int],
-                                   consumables: bool) -> typing.Dict[str, typing.Optional[int]]:
-    locations = dict()
-    for stage in stages[:-1]:
-        locations[location_table[stage]] = stage
-        locations[location_table[stage + 0x100]] = stage + 0x100
-        if consumables:
-            stage_idx = stage & 0xFF
-            if stage_idx in level_consumables:
-                for consumable in level_consumables[stage_idx]:
-                    loc_id = consumable + 0x770300
-                    locations[location_table[loc_id]] = loc_id
-
-    return locations
-
-
 def create_levels(world: World) -> None:
     menu = Region("Menu", world.player, world.multiworld)
     start = Entrance(world.player, "Start Game", menu)
