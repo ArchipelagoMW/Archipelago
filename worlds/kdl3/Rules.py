@@ -217,13 +217,13 @@ def set_rules(world: "KDL3World") -> None:
                  lambda state: can_reach_cutter(state, world.player))
 
     # copy ability access edge cases
-    # water locked: most mony, joe, and some blipper/glunk/squishy
-    # sand canyon 4 all
+    # Kirby cannot eat enemies fully submerged in water. Vast majority of cases, the enemy can be brought to the surface
+    # and eaten by inhaling while falling on top of them
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_2_E3, world.player),
              lambda state: can_reach_kine(state, world.player))
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_3_E6, world.player),
              lambda state: can_reach_kine(state, world.player))
-    # Ripple Field 4 E5, E7, and E8 are strict, but doable
+    # Ripple Field 4 E5, E7, and E8 are doable, but too strict to leave in logic
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E5, world.player),
              lambda state: can_reach_kine(state, world.player))
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E7, world.player),
@@ -237,6 +237,14 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E3, world.player),
              lambda state: can_reach_kine(state, world.player))
     add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E4, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E7, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E8, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E9, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E10, world.player),
              lambda state: can_reach_kine(state, world.player))
 
     for boss_flag, purification, i in zip(["Level 1 Boss", "Level 2 Boss",
