@@ -6,7 +6,7 @@ import threading
 import copy
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, item_table, tier1_junk_table, tier2_junk_table, key_table, special_table, \
+from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, key_table, special_table, \
     sub_weapon_table, pickup_item_discrepancies
 from .Locations import CV64Location, all_locations, create_locations, boss_table
 from .Entrances import create_entrances
@@ -43,13 +43,17 @@ class CV64World(World):
     way to Dracula's chamber and stop his rule of terror.
     """
     game: str = "Castlevania 64"
+    item_name_groups = {
+        "Bomb": {IName.magical_nitro, IName.mandragora},
+        "Ingredient": {IName.magical_nitro, IName.mandragora},
+    }
     option_definitions = cv64_options
     topology_present = True
     data_version = 0
     remote_items = False
 
-    item_name_to_id = {name: code for name, code in item_table.items()}
-    location_name_to_id = {name: data.code for name, data in all_locations.items()}
+    item_name_to_id = {name: code + 0xC64000 for name, code in item_table.items()}
+    location_name_to_id = {name: data.code + 0xC64000 for name, data in all_locations.items()}
 
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
@@ -69,6 +73,20 @@ class CV64World(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
+        # If there are more S1s needed to unlock the whole warp menu than there are S1s in total, force the total S1
+        # count to be higher than the former by a random amount.
+        if self.multiworld.special1s_per_warp[self.player].value * 7 > \
+                self.multiworld.total_special1s[self.player].value:
+            self.multiworld.total_special1s[self.player].value = \
+                self.multiworld.random.randint(self.multiworld.special1s_per_warp[self.player].value * 7, 70)
+
+        # If there are more S2s needed to unlock Dracula's chamber than there are S2s in total, force the total S2
+        # count to be higher than the former by a random amount.
+        if self.multiworld.special2s_required[self.player].value > \
+                self.multiworld.total_special2s[self.player].value:
+            self.multiworld.total_special2s[self.player].value = \
+                self.multiworld.random.randint(self.multiworld.special2s_required[self.player].value, 70)
+
         self.active_stage_list = vanilla_stage_order.copy()
         self.active_stage_exits = copy.deepcopy(vanilla_stage_exits)
 
@@ -123,7 +141,7 @@ class CV64World(World):
         elif self.multiworld.warp_shuffle[self.player].value == 2:
             # Arrange the warps to be in the vanilla game's stage order
             new_list = vanilla_stage_order.copy()
-            for warp in self.active_stage_list:
+            for warp in vanilla_stage_order:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
@@ -163,7 +181,11 @@ class CV64World(World):
         else:
             classification = ItemClassification.filler
 
-        code = item_table[name]
+        if name in item_table:
+            code = item_table[name]
+        else:
+            code = None
+            classification = ItemClassification.progression
 
         created_item = CV64Item(name, classification, code, self.player)
         if self.multiworld.draculas_condition[self.player].value != 3 and created_item.name == IName.special_two:
@@ -173,19 +195,19 @@ class CV64World(World):
 
     def create_items(self) -> None:
         item_counts = {
-            "tier1_junk_counts": {name: 0 for name in tier1_junk_table.keys()},
-            "tier2_junk_counts": {name: 0 for name in tier2_junk_table.keys()},
+            "filler_junk_counts": {name: 0 for name in filler_junk_table.keys()},
+            "non_filler_junk_counts": {name: 0 for name in non_filler_junk_table.keys()},
             "key_counts": {name: 0 for name in key_table.keys()},
             "special_counts": {name: 0 for name in special_table.keys()},
         }
         extras_count = 0
 
-        def add_tier1_junk(number_to_add):
+        def add_filler_junk(number_to_add):
             for index in range(number_to_add):
-                item_to_add = self.multiworld.random.choice(list(tier1_junk_table.keys()))
-                if item_to_add not in item_counts["tier1_junk_counts"]:
-                    item_counts["tier1_junk_counts"][item_to_add] = 0
-                item_counts["tier1_junk_counts"][item_to_add] += 1
+                item_to_add = self.get_filler_item_name()
+                if item_to_add not in item_counts["filler_junk_counts"]:
+                    item_counts["filler_junk_counts"][item_to_add] = 0
+                item_counts["filler_junk_counts"][item_to_add] += 1
 
         def add_items(amounts_dict, counts_to_add_on_to):
             for item_name in amounts_dict:
@@ -196,76 +218,66 @@ class CV64World(World):
         # Add up all the item counts per stage
         for stage in self.active_stage_list:
             add_items(stage_info[stage].stage_key_counts, "key_counts")
-            add_items(stage_info[stage].stage_tier2_junk_counts, "tier2_junk_counts")
-            add_tier1_junk(stage_info[stage].stage_tier1_junk_count)
+            add_items(stage_info[stage].stage_non_filler_junk_counts, "non_filler_junk_counts")
+            add_filler_junk(stage_info[stage].stage_filler_junk_count)
 
             # If 3HBs are on, add those items too
             if self.multiworld.multi_hit_breakables[self.player]:
-                add_items(stage_info[stage].multihit_tier2_junk_counts, "tier2_junk_counts")
-                add_tier1_junk(stage_info[stage].multihit_tier1_junk_count)
+                add_items(stage_info[stage].multihit_non_filler_junk_counts, "non_filler_junk_counts")
+                add_filler_junk(stage_info[stage].multihit_filler_junk_count)
 
             # If sub-weapons are shuffled in the main pool, add those in too
             if self.multiworld.sub_weapon_shuffle[self.player].value > 1:
-                add_items(stage_info[stage].sub_weapon_counts, "tier2_junk_counts")
+                add_items(stage_info[stage].sub_weapon_counts, "non_filler_junk_counts")
 
             # If both 3HBs are on AND sub-weapons are shuffled in the main pool...yeah
             if self.multiworld.multi_hit_breakables[self.player] and \
                     self.multiworld.sub_weapon_shuffle[self.player].value > 1:
-                add_items(stage_info[stage].multihit_sub_weapon_counts, "tier2_junk_counts")
+                add_items(stage_info[stage].multihit_sub_weapon_counts, "non_filler_junk_counts")
 
         # Put in the Carrie-only items if applicable
         if self.multiworld.carrie_logic[self.player] and RName.underground_waterway in self.active_stage_list:
-            item_counts["tier2_junk_counts"][IName.roast_beef] += 1
-            item_counts["tier2_junk_counts"][IName.moon_card] += 1
+            item_counts["non_filler_junk_counts"][IName.roast_beef] += 1
+            item_counts["non_filler_junk_counts"][IName.moon_card] += 1
 
         # Put in empty breakable items if applicable
         if self.multiworld.empty_breakables[self.player]:
             if RName.forest_of_silence in self.active_stage_list:
-                add_tier1_junk(6)
+                add_filler_junk(6)
             if RName.villa in self.active_stage_list:
-                add_tier1_junk(1)
+                add_filler_junk(1)
             if RName.room_of_clocks in self.active_stage_list:
-                add_tier1_junk(2)
+                add_filler_junk(2)
 
         # Put in the lizard-man generator items if applicable
         if self.multiworld.lizard_generator_items[self.player] and RName.castle_center in self.active_stage_list:
-            item_counts["tier2_junk_counts"][IName.powerup] += 1
-            item_counts["tier2_junk_counts"][IName.sun_card] += 1
-            add_tier1_junk(4)
+            item_counts["non_filler_junk_counts"][IName.powerup] += 1
+            item_counts["non_filler_junk_counts"][IName.sun_card] += 1
+            add_filler_junk(4)
 
         # Put in Renon's shop items if applicable
         if self.multiworld.shopsanity[self.player]:
-            item_counts["tier2_junk_counts"][IName.roast_chicken] += 1
-            item_counts["tier2_junk_counts"][IName.roast_beef] += 1
-            item_counts["tier2_junk_counts"][IName.healing_kit] += 1
-            item_counts["tier2_junk_counts"][IName.purifying] += 1
-            item_counts["tier2_junk_counts"][IName.cure_ampoule] += 1
-            item_counts["tier2_junk_counts"][IName.sun_card] += 1
-            item_counts["tier2_junk_counts"][IName.moon_card] += 1
+            item_counts["non_filler_junk_counts"][IName.roast_chicken] += 1
+            item_counts["non_filler_junk_counts"][IName.roast_beef] += 1
+            item_counts["non_filler_junk_counts"][IName.healing_kit] += 1
+            item_counts["non_filler_junk_counts"][IName.purifying] += 1
+            item_counts["non_filler_junk_counts"][IName.cure_ampoule] += 1
+            item_counts["non_filler_junk_counts"][IName.sun_card] += 1
+            item_counts["non_filler_junk_counts"][IName.moon_card] += 1
 
         # Determine the S1 count
         item_counts["special_counts"][IName.special_one] = self.multiworld.total_special1s[self.player].value
         extras_count += item_counts["special_counts"][IName.special_one]
-        required_s1s = self.multiworld.special1s_per_warp[self.player].value * 7
-        if required_s1s > item_counts["special_counts"][IName.special_one]:
-            needed_s1s = required_s1s - item_counts["special_counts"][IName.special_one]
-            raise Exception(f"Not enough Special1 jewels for player {self.multiworld.get_player_name(self.player)} to "
-                            f"use the whole warp menu. Need {needed_s1s} more.")
 
         # Determine the S2 count if applicable
         if self.multiworld.draculas_condition[self.player].value == 3:
             item_counts["special_counts"][IName.special_two] = self.multiworld.total_special2s[self.player].value
             extras_count += item_counts["special_counts"][IName.special_two]
-            self.required_s2s = self.multiworld.special2s_required[self.player].value
-            if self.required_s2s > item_counts["special_counts"][IName.special_two]:
-                needed_s2s = self.required_s2s - item_counts["special_counts"][IName.special_two]
-                raise Exception(f"More Special2 jewels required than there are for player"
-                                f"{self.multiworld.get_player_name(self.player)}. Need {needed_s2s} more.")
 
         # Determine the extra key counts if applicable
         if self.multiworld.extra_keys[self.player].value == 1:
             for key in item_counts["key_counts"]:
-                extra_copies = item_counts["key_counts"][key] * 2
+                extra_copies = item_counts["key_counts"][key]
                 item_counts["key_counts"][key] += extra_copies
                 extras_count += extra_copies
         elif self.multiworld.extra_keys[self.player].value == 2:
@@ -278,26 +290,21 @@ class CV64World(World):
                 extras_count += extra_copies
 
         # Subtract from the junk tables the total number of "extra" items we're adding. Tier 1 will be subtracted from
-        # first until it runs out, at which point we'll start subtracting from Tier 2. If Tier 2 also runs out then
-        # there's simply not enough locations.
-        total_tier1_junk = 0
-        total_tier2_junk = 0
-        for junk in item_counts["tier1_junk_counts"]:
-            total_tier1_junk += item_counts["tier1_junk_counts"][junk]
-        for junk in item_counts["tier2_junk_counts"]:
-            total_tier2_junk += item_counts["tier2_junk_counts"][junk]
+        # first until it runs out, at which point we'll start subtracting from Tier 2.
+        total_filler_junk = 0
+        total_non_filler_junk = 0
+        for junk in item_counts["filler_junk_counts"]:
+            total_filler_junk += item_counts["filler_junk_counts"][junk]
+        for junk in item_counts["non_filler_junk_counts"]:
+            total_non_filler_junk += item_counts["non_filler_junk_counts"][junk]
 
         for i in range(extras_count):
-            if total_tier1_junk > 0:
-                table = "tier1_junk_counts"
-                total_tier1_junk -= 1
-            elif total_tier2_junk > 0:
-                table = "tier2_junk_counts"
-                total_tier2_junk -= 1
-            else:
-                raise Exception(f"Not enough replaceable junk for player "
-                                f"{self.multiworld.get_player_name(self.player)}. Need {extras_count - i} "
-                                f"more locations.")
+            table = "filler_junk_counts"
+            if total_filler_junk > 0:
+                total_filler_junk -= 1
+            elif total_non_filler_junk > 0:
+                table = "non_filler_junk_counts"
+                total_non_filler_junk -= 1
 
             item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
             while item_counts[table][item_to_subtract] == 0:
@@ -326,7 +333,8 @@ class CV64World(World):
                 except KeyError:
                     continue
 
-            # Verify enough bosses are available in the player's world. If there aren't, an exception will be raised.
+            # Verify enough bosses are active in the player's world. If there aren't, the number of required bosses will
+            # lower to a random number between 1 and the actual number available.
             for stage in self.active_stage_list:
                 self.total_available_bosses += stage_info[stage].boss_count
 
@@ -335,8 +343,9 @@ class CV64World(World):
             if self.multiworld.vincent_fight_condition[self.player].value == 0:
                 self.total_available_bosses -= 1
             if self.required_s2s > self.total_available_bosses:
-                raise Exception(f"{self.required_s2s - self.total_available_bosses} more boss(es) required than there are "
-                                f"for player {self.multiworld.get_player_name(self.player)}.")
+                self.multiworld.bosses_required[self.player].value = \
+                    self.multiworld.random.randint(1, self.total_available_bosses)
+                self.required_s2s = self.multiworld.bosses_required[self.player].value
         elif self.multiworld.draculas_condition[self.player].value == 0:
             self.required_s2s = 0
 
@@ -435,9 +444,9 @@ class CV64World(World):
                 min_price = self.multiworld.minimum_gold_price[self.player].value
                 max_price = self.multiworld.maximum_gold_price[self.player].value
                 if min_price > max_price:
-                    min_price = random.randrange(0, max_price)
+                    min_price = random.randint(0, max_price)
 
-                shop_price_list = [random.randrange(min_price * 100, max_price * 100) for i in range(7)]
+                shop_price_list = [random.randint(min_price * 100, max_price * 100) for i in range(7)]
 
             world = self.multiworld
             player = self.player
@@ -461,7 +470,7 @@ class CV64World(World):
                     if loc.cv64_loc_type not in ["npc", "shop"] and loc.item.name in pickup_item_discrepancies:
                         offsets_to_ids[loc.cv64_rom_offset] = pickup_item_discrepancies[loc.item.name]
                     else:
-                        offsets_to_ids[loc.cv64_rom_offset] = loc.item.code - 0xC64000
+                        offsets_to_ids[loc.cv64_rom_offset] = item_table[loc.item.name]
                 else:
                     if loc.item.advancement:
                         offsets_to_ids[loc.cv64_rom_offset] = 0x11  # Wooden stakes are majors
@@ -470,7 +479,7 @@ class CV64World(World):
 
                     # If it's another CV64 player's item, change the multiworld item's model to match what it is.
                     if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "npc":
-                        offsets_to_ids[loc.cv64_rom_offset - 1] = loc.item.code - 0xC64000
+                        offsets_to_ids[loc.cv64_rom_offset - 1] = item_table[loc.item.name]
 
                 # Apply the invisibility variable depending on the "invisible items" setting.
                 if (inv_setting == 1 and loc.cv64_loc_type == "inv") or \
@@ -496,9 +505,9 @@ class CV64World(World):
                     shop_name_list.append(shop_name)
 
                     if loc.item.player == self.player:
-                        shop_desc_list.append([loc.item.code - 0xC64000, None])
+                        shop_desc_list.append([item_table[loc.item.name], None])
                     elif loc.item.game == "Castlevania 64":
-                        shop_desc_list.append([loc.item.code - 0xC64000,
+                        shop_desc_list.append([item_table[loc.item.name],
                                                self.multiworld.get_player_name(loc.item.player)])
                     else:
                         if loc.item.advancement:
@@ -610,6 +619,9 @@ class CV64World(World):
 
         return slot_data
 
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice(list(filler_junk_table.keys()))
+    
     def modify_multidata(self, multidata: dict) -> None:
         import base64
         # wait for self.rom_name to be available.

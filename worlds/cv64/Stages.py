@@ -26,10 +26,10 @@ class CV64Stage:
     stage_number_offset_list: typing.List[int]
 
     stage_key_counts: typing.Dict[str, int]
-    stage_tier2_junk_counts: typing.Dict[str, int]
-    stage_tier1_junk_count: int
-    multihit_tier2_junk_counts: typing.Dict[str, int]
-    multihit_tier1_junk_count: int
+    stage_non_filler_junk_counts: typing.Dict[str, int]
+    stage_filler_junk_count: int
+    multihit_non_filler_junk_counts: typing.Dict[str, int]
+    multihit_filler_junk_count: int
     multihit_sub_weapon_counts: typing.Dict[str, int]
     sub_weapon_counts: typing.Dict[str, int]
 
@@ -39,9 +39,9 @@ class CV64Stage:
                  endzone_spawn_offset: typing.Optional[int], altzone_map_offset: typing.Optional[int],
                  altzone_spawn_offset: typing.Optional[int], end_map_id: typing.Optional[int],
                  end_spawn_id: typing.Optional[int], boss_count: int, stage_number_offset_list: list,
-                 stage_key_counts: dict, stage_tier2_item_counts: dict, stage_tier1_junk_count: int,
-                 multihit_tier2_item_counts: dict, multihit_tier1_junk_count: int, multihit_sub_weapon_counts: dict,
-                 sub_weapon_counts: dict):
+                 stage_key_counts: dict, stage_non_filler_item_counts: dict, stage_filler_junk_count: int,
+                 multihit_non_filler_item_counts: dict, multihit_filler_junk_count: int,
+                 multihit_sub_weapon_counts: dict, sub_weapon_counts: dict):
         self.start_region_name = start_region_name
         self.startzone_map_offset = startzone_map_offset
         self.startzone_spawn_offset = startzone_spawn_offset
@@ -64,10 +64,10 @@ class CV64Stage:
         self.stage_number_offset_list = stage_number_offset_list
 
         self.stage_key_counts = stage_key_counts
-        self.stage_tier2_junk_counts = stage_tier2_item_counts
-        self.stage_tier1_junk_count = stage_tier1_junk_count
-        self.multihit_tier2_junk_counts = multihit_tier2_item_counts
-        self.multihit_tier1_junk_count = multihit_tier1_junk_count
+        self.stage_non_filler_junk_counts = stage_non_filler_item_counts
+        self.stage_filler_junk_count = stage_filler_junk_count
+        self.multihit_non_filler_junk_counts = multihit_non_filler_item_counts
+        self.multihit_filler_junk_count = multihit_filler_junk_count
         self.multihit_sub_weapon_counts = multihit_sub_weapon_counts
         self.sub_weapon_counts = sub_weapon_counts
 
