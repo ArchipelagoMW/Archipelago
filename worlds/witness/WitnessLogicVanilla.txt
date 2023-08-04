@@ -633,7 +633,7 @@ Door - 0x0A08D (Elevator Room Entry) - 0x17E67
 Bunker Elevator Section (Bunker) - Bunker Elevator - TrueOneWay:
 159311 - 0x035F5 (Tinted Door EP) - 0x17C79 - True
 
-Bunker Elevator (Bunker) - Bunker Laser Platform - 0x0A079 - Bunker Green Room - 0x0A079 - Bunker Laser Platform - 0x0A079 - Outside Bunker - 0x0A079:
+Bunker Elevator (Bunker) - Bunker Elevator Section - 0x0A079 - Bunker Laser Platform - 0x0A079 - Bunker Green Room - 0x0A079 - Bunker Laser Platform - 0x0A079 - Outside Bunker - 0x0A079:
 158286 - 0x0A079 (Elevator Control) - True - Colored Squares & Black/White Squares
 
 Bunker Green Room (Bunker) - Bunker Elevator - TrueOneWay:
