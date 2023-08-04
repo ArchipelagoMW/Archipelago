@@ -5,8 +5,7 @@ from BaseClasses import MultiWorld
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
 from .. import LingoWorld
-from worlds.Autoworld import AutoWorld, call_all
-from ...AutoWorld import call_all
+from worlds.AutoWorld import AutoWorldRegister, call_all
 
 
 class LingoTestBase(WorldTestBase):
@@ -21,7 +20,7 @@ class LingoTestBase(WorldTestBase):
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(None)
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].option_definitions.items():
+        for name, option in AutoWorldRegister.world_types[self.game].option_definitions.items():
             setattr(args, name, {
                 1: option.from_any(self.options.get(name, getattr(option, "default")))
             })
