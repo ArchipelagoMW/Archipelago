@@ -217,8 +217,27 @@ def set_rules(world: "KDL3World") -> None:
                  lambda state: can_reach_cutter(state, world.player))
 
     # copy ability access edge cases
-    # water locked: all mony, joe, and some blipper/glunk/squishy
+    # water locked: most mony, joe, and some blipper/glunk/squishy
     # sand canyon 4 all
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_2_E3, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_3_E6, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    # Ripple Field 4 E5, E7, and E8 are strict, but doable
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E5, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E7, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E8, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E1, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E2, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E3, world.player),
+             lambda state: can_reach_kine(state, world.player))
+    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E4, world.player),
+             lambda state: can_reach_kine(state, world.player))
 
     for boss_flag, purification, i in zip(["Level 1 Boss", "Level 2 Boss",
                                            "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],

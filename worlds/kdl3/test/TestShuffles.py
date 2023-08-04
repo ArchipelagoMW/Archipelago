@@ -63,11 +63,11 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             self.assertFalse(len(group) == 0)
             collected_abilities.append(group[0])
         self.collect_by_name([ability.replace(" Ability", "") for ability in collected_abilities])
-        if "Parasol" not in collected_abilities or "Stone" not in collected_abilities:
+        if "Parasol Ability" not in collected_abilities or "Stone Ability" not in collected_abilities:
             # required for non-Bukiset related portions
             self.collect_by_name(["Parasol", "Stone"])
 
-        if "Cutter" not in collected_abilities:
+        if "Cutter Ability" not in collected_abilities:
             # we can't actually reach 3-6 without Cutter
             assert not self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
             self.collect_by_name(["Cutter"])
