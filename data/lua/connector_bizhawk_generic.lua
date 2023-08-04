@@ -235,6 +235,7 @@ local SOCKET_PORT = 43055
 local STATE_NOT_CONNECTED = 0
 local STATE_CONNECTED = 1
 
+local server = nil
 local client_socket = nil
 
 local current_state = STATE_NOT_CONNECTED
@@ -452,7 +453,7 @@ end
 rom_hash = gameinfo.getromhash()
 
 function main ()
-    local server, err = socket.bind("localhost", SOCKET_PORT)
+    server, err = socket.bind("localhost", SOCKET_PORT)
     if (err ~= nil) then
         print(err)
         return
@@ -504,19 +505,18 @@ event.onexit(function ()
 end)
 
 local co = coroutine.create(main)
-local did_crash = false
 function tick ()
-    if (not did_crash) then
-        status, err = coroutine.resume(co)
+    status, err = coroutine.resume(co)
 
-        -- Even after detecting an error, trying to recover gracefully
-        -- seems to get the port clogged. At least we can be a little more
-        -- clear about the existence of a problem.
-        if (not status) then
-            print("ERROR: "..err)
-            print("Please restart this script and consider reporting the crash.")
-            did_crash = true
+    if not status then
+        print("\nERROR: "..err)
+        print("Consider reporting this crash.\n")
+
+        if server ~= nil then
+            server:close()
         end
+
+        co = coroutine.create(main)
     end
 end
 
@@ -531,7 +531,7 @@ else
 end
 
 print("Running Archipelago BizHawkClient connector script")
-print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.")
+print("\nWaiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
 
 while true do
     emu.frameadvance()
