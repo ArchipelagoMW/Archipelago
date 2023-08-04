@@ -383,13 +383,13 @@ function send_receive ()
     local message, err = client_socket:receive()
 
     -- Handle errors
-    if (err == "closed") then
+    if err == "closed" then
         if (current_state == STATE_CONNECTED) then
             print("Connection to client closed")
         end
         current_state = STATE_NOT_CONNECTED
         return
-    elseif (err == "timeout") then
+    elseif err == "timeout" then
         unlock()
         return
     elseif err ~= nil then
@@ -407,7 +407,7 @@ function send_receive ()
         print("Received Message ["..emu.framecount().."]: "..'"'..message..'"')
     end
 
-    if (message == "VERSION") then
+    if message == "VERSION" then
         -- local result, err client_socket:send(tostring(SCRIPT_VERSION))
         local result, err client_socket:send(tostring(SCRIPT_VERSION).."\n")
     else
@@ -415,16 +415,16 @@ function send_receive ()
         local data = json.decode(message)
         local failed_guard_response = nil
         for i, req in ipairs(data) do
-            if (failed_guard_response ~= nil) then
+            if failed_guard_response ~= nil then
                 res[i] = failed_guard_response
             else
                 -- An error is more likely to cause an NLua exception than to return an error here
                 local status, response = pcall(process_request, req)
-                if (status) then
+                if status then
                     res[i] = response
 
                     -- If the GUARD validation failed, skip the remaining commands
-                    if (response["type"] == "GUARD_RESPONSE" and not response["value"]) then
+                    if response["type"] == "GUARD_RESPONSE" and not response["value"] then
                         failed_guard_response = response
                     end
                 else
@@ -435,22 +435,6 @@ function send_receive ()
         local result, err client_socket:send(json.encode(res).."\n")
     end
 end
-
-if (bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7)) then
-    print("Must use BizHawk 2.7.0 or newer")
-    return
-elseif (bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)) then
-    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
-end
-
-if (emu.getsystemid() == "NULL") then
-    print("No ROM is loaded. Please load a ROM.")
-    while (emu.getsystemid() == "NULL") do
-        emu.frameadvance()
-    end
-end
-
-rom_hash = gameinfo.getromhash()
 
 function main ()
     server, err = socket.bind("localhost", SOCKET_PORT)
@@ -499,40 +483,55 @@ function main ()
 end
 
 event.onexit(function ()
+    print("\n-- Restarting Script --\n")
     if server ~= nil then
         server:close()
     end
 end)
 
-local co = coroutine.create(main)
-function tick ()
-    status, err = coroutine.resume(co)
-
-    if not status then
-        print("\nERROR: "..err)
-        print("Consider reporting this crash.\n")
-
-        if server ~= nil then
-            server:close()
-        end
-
-        co = coroutine.create(main)
-    end
-end
-
--- Gambatte has a setting which can cause script execution to become
--- misaligned, so for GB and GBC we explicitly set the callback on
--- vblank instead.
--- https://github.com/TASEmulators/BizHawk/issues/3711
-if (emu.getsystemid() == "GB" or emu.getsystemid() == "GBC") then
-    event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
+if bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7) then
+    print("Must use BizHawk 2.7.0 or newer")
+elseif bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9) then
+    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
 else
-    event.onframeend(tick)
-end
+    if emu.getsystemid() == "NULL" then
+        print("No ROM is loaded. Please load a ROM.")
+        while emu.getsystemid() == "NULL" do
+            emu.frameadvance()
+        end
+    end
+    
+    rom_hash = gameinfo.getromhash()
 
-print("Running Archipelago BizHawkClient connector script")
-print("\nWaiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
+    print("Waiting for client to connect. Emulation will freeze intermittently until a client is found.\n")
 
-while true do
-    emu.frameadvance()
+    local co = coroutine.create(main)
+    function tick ()
+        local status, err = coroutine.resume(co)
+    
+        if not status then
+            print("\nERROR: "..err)
+            print("Consider reporting this crash.\n")
+    
+            if server ~= nil then
+                server:close()
+            end
+    
+            co = coroutine.create(main)
+        end
+    end
+    
+    -- Gambatte has a setting which can cause script execution to become
+    -- misaligned, so for GB and GBC we explicitly set the callback on
+    -- vblank instead.
+    -- https://github.com/TASEmulators/BizHawk/issues/3711
+    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" then
+        event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
+    else
+        event.onframeend(tick)
+    end
+    
+    while true do
+        emu.frameadvance()
+    end
 end
