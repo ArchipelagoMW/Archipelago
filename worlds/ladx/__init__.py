@@ -299,8 +299,6 @@ class LinksAwakeningWorld(World):
                 index = self.multiworld.random.choice(possible_start_items)
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
-                self.pre_fill_items.append(start_item)
-
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
