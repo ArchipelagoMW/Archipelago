@@ -593,6 +593,9 @@ class SA2BWorld(World):
             LocationName.chao_karate_intermediate_region,
             LocationName.chao_karate_expert_region,
             LocationName.chao_karate_super_region,
+            LocationName.kart_race_beginner_region,
+            LocationName.kart_race_standard_region,
+            LocationName.kart_race_expert_region,
             LocationName.chao_kindergarten_region,
             LocationName.black_market_region,
         ]
