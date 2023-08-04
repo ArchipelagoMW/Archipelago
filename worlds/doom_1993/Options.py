@@ -80,7 +80,7 @@ class Episode3(DefaultOnToggle):
     display_name = "Episode 3"
 
 
-class Episode4(DefaultOnToggle):
+class Episode4(Toggle):
     """Thy Flesh Consumed.
     If none of the episodes are chosen, Episode 1 will be chosen by default."""
     display_name = "Episode 4"
