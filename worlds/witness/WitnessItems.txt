@@ -223,19 +223,6 @@ Doors:
 1984 - Caves Shortcuts - 0x2D859,0x2D73F
 1987 - Tunnels Doors - 0x27739,0x27263,0x09E87,0x0348A
 
-Lasers:
-1500 - Symmetry Laser - 0x00509
-1501 - Desert Laser - 0x012FB,0x01317
-1502 - Quarry Laser - 0x01539
-1503 - Shadows Laser - 0x181B3
-1504 - Keep Laser - 0x014BB
-1505 - Monastery Laser - 0x17C65
-1506 - Town Laser - 0x032F9
-1507 - Jungle Laser - 0x00274
-1508 - Bunker Laser - 0x0C2B2
-1509 - Swamp Laser - 0x00BF6
-1510 - Treehouse Laser - 0x028A4
-
 2000 - Desert Control Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 2005 - Quarry Stoneworks Control Panels - 0x03678,0x03676,0x03679,0x03675
 2010 - Quarry Boathouse Control Panels - 0x03852,0x03858,0x275FA
@@ -260,3 +247,16 @@ Lasers:
 2160 - Mountain Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB
 2165 - Caves Panels - 0x3369D,0x00FF8,0x0A16E,0x335AB,0x335AC
 2170 - Tunnels Panels - 0x09E85,0x039B4
+
+Lasers:
+1500 - Symmetry Laser - 0x00509
+1501 - Desert Laser - 0x012FB,0x01317
+1502 - Quarry Laser - 0x01539
+1503 - Shadows Laser - 0x181B3
+1504 - Keep Laser - 0x014BB
+1505 - Monastery Laser - 0x17C65
+1506 - Town Laser - 0x032F9
+1507 - Jungle Laser - 0x00274
+1508 - Bunker Laser - 0x0C2B2
+1509 - Swamp Laser - 0x00BF6
+1510 - Treehouse Laser - 0x028A4
