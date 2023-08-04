@@ -1,10 +1,10 @@
 from typing import Dict
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import TunicItems
+from .Items import TunicItems, filler_items
 from .Locations import TunicLocations
-from .Rules import set_location_rules
-from .Regions import tunic_regions, set_region_rules
+from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
+from .Regions import tunic_regions
 from .Options import tunic_options
 from ..AutoWorld import WebWorld, World
 
@@ -12,14 +12,15 @@ from ..AutoWorld import WebWorld, World
 class TunicWeb(WebWorld):
     tutorials = [
         Tutorial(
-            tutorial_name="Tunic Randomizer Multiworld Guide",
-            description="A guide to connecting the Tunic Randomizer to Archipelago",
+            tutorial_name="Multiworld Setup Guide",
+            description="A guide to setting up the TUNIC Randomizer for Archipelago multiworld games.",
             language="English",
-            file_name="guide_en.md",
+            file_name="setup_en.md",
             link="guide/en",
-            authors=["silentdestroyer"]
+            authors=["SilentDestroyer"]
         )
     ]
+    theme = "grassFlowers"
     game = "Tunic"
 
 
@@ -33,14 +34,14 @@ class TunicLocation(Location):
 
 class TunicWorld(World):
     """
-    Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action
-    game about a small fox on a big adventure. This randomizer shuffles all the items in the game, adds new items,
-    and much more! Be brave, tiny fox.
+    Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action game
+    about a small fox on a big adventure. Stranded on a mysterious beach, armed with only your own curiosity, you will
+    confront colossal beasts, collect strange and powerful items, and unravel long-lost secrets. Be brave, tiny fox!
     """
     game = "Tunic"
     web = TunicWeb()
 
-    data_version = 0
+    data_version = 1
     tunic_items = TunicItems()
     tunic_locations = TunicLocations()
     tunic_items.populate_items()
@@ -50,7 +51,7 @@ class TunicWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
     item_base_id = 2000
-    location_base_id = 3000
+    location_base_id = 2000
     for item in tunic_items.items:
         item_name_to_id[item.name] = item_base_id
         item_base_id += 1
@@ -60,6 +61,7 @@ class TunicWorld(World):
         location_base_id += 1
 
     def create_item(self, name: str) -> TunicItem:
+        print(name)
         return TunicItem(name, self.tunic_items.items_lookup[name].classification, self.item_name_to_id[name],
                          self.player)
 
@@ -74,7 +76,24 @@ class TunicWorld(World):
         items = []
         for item_name in TunicItems.items_lookup:
             item = self.tunic_items.items_lookup[item_name]
-            if item.name == "Gold Hexagon" and not self.multiworld.hexagon_quest[self.player].value:
+            if self.multiworld.hexagon_quest[self.player].value:
+
+                pass
+            else:
+                pass
+
+            if self.multiworld.hexagon_quest[self.player].value and item.name == "Gold Hexagon":
+                if self.multiworld.keys_behind_bosses[self.player].value:
+                    for location in hexagon_locations.values():
+                        self.multiworld.get_location(location, self.player)\
+                            .place_locked_item(self.create_item("Gold Hexagon"))
+                    item.quantity_in_item_pool = 27
+
+                for i in range(0, item.quantity_in_item_pool):
+                    items.append(self.create_item(item.name))
+                items.append(self.create_item("Money x1"))
+            elif self.multiworld.hexagon_quest[self.player].value and \
+                    ("Pages" in item.name or item.name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
                 continue
             elif self.multiworld.keys_behind_bosses[self.player].value and item.name in hexagon_locations.keys():
                 self.multiworld.get_location(hexagon_locations[item.name], self.player)\
@@ -101,17 +120,20 @@ class TunicWorld(World):
             location = TunicLocation(self.player, location_name, self.location_name_to_id[location_name], region)
             region.locations.append(location)
 
-    def generate_basic(self) -> None:
-        victory_region = self.multiworld.get_region("Boss Arena", self.player)
-        victory_location = TunicLocation(self.player, "Final Boss", None, victory_region)
+        victory_region = self.multiworld.get_region("Spirit Arena", self.player)
+        victory_location = TunicLocation(self.player, "The Heir", None, victory_region)
         victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
         victory_region.locations.append(victory_location)
-        return
 
     def set_rules(self) -> None:
+        set_abilities(self.multiworld, self.player)
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
+        print(hexagon_quest_abilities["prayer"])
+
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, any]:
         # Find items for generating hints in-game
@@ -135,15 +157,9 @@ class TunicWorld(World):
         hp_relic = self.multiworld.find_item("Hero Relic - HP", self.player).item
         sp_relic = self.multiworld.find_item("Hero Relic - MP", self.player).item
         mp_relic = self.multiworld.find_item("Hero Relic - SP", self.player).item
-        hexagon_red = self.multiworld.find_item("Red Hexagon", self.player).item
-        hexagon_green = self.multiworld.find_item("Green Hexagon", self.player).item
-        hexagon_blue = self.multiworld.find_item("Blue Hexagon", self.player).item
-        prayer_page = self.multiworld.find_item("Pages 24-25 (Prayer)", self.player).item
-        holy_cross_page = self.multiworld.find_item("Pages 42-43 (Holy Cross)", self.player).item
-        ice_rod_page = self.multiworld.find_item("Pages 52-53 (Ice Rod)", self.player).item
 
         slot_data: Dict[str, any] = {
-            "seed": self.multiworld.seed_name,
+            "seed": self.multiworld.per_slot_randoms[self.player].randint(0, 2147483647),
             "start_with_sword": self.multiworld.start_with_sword[self.player].value,
             "keys_behind_bosses": self.multiworld.keys_behind_bosses[self.player].value,
             "sword_progression": self.multiworld.sword_progression[self.player].value,
@@ -169,11 +185,35 @@ class TunicWorld(World):
             "Hero Relic - HP": [hp_relic.location.name, hp_relic.location.player],
             "Hero Relic - MP": [sp_relic.location.name, sp_relic.location.player],
             "Hero Relic - SP": [mp_relic.location.name, mp_relic.location.player],
-            "Red Hexagon": [hexagon_red.location.name, hexagon_red.location.player],
-            "Green Hexagon": [hexagon_green.location.name, hexagon_green.location.player],
-            "Blue Hexagon": [hexagon_blue.location.name, hexagon_blue.location.player],
-            "Pages 24-25 (Prayer)": [prayer_page.location.name, prayer_page.location.player],
-            "Pages 42-43 (Holy Cross)": [holy_cross_page.location.name, holy_cross_page.location.player],
-            "Pages 52-53 (Ice Rod)": [ice_rod_page.location.name, ice_rod_page.location.player],
         }
+
+        if not self.multiworld.hexagon_quest[self.player].value:
+            hexagon_red = self.multiworld.find_item("Red Hexagon", self.player).item
+            hexagon_green = self.multiworld.find_item("Green Hexagon", self.player).item
+            hexagon_blue = self.multiworld.find_item("Blue Hexagon", self.player).item
+            prayer_page = self.multiworld.find_item("Pages 24-25 (Prayer)", self.player).item
+            holy_cross_page = self.multiworld.find_item("Pages 42-43 (Holy Cross)", self.player).item
+            ice_rod_page = self.multiworld.find_item("Pages 52-53 (Ice Rod)", self.player).item
+            slot_data["Red Hexagon"] = [hexagon_red.location.name, hexagon_red.location.player]
+            slot_data["Green Hexagon"] = [hexagon_green.location.name, hexagon_green.location.player]
+            slot_data["Blue Hexagon"] = [hexagon_blue.location.name, hexagon_blue.location.player]
+            slot_data["Pages 24-25 (Prayer)"] = [prayer_page.location.name, prayer_page.location.player]
+            slot_data["Pages 42-43 (Holy Cross)"] = [holy_cross_page.location.name, holy_cross_page.location.player]
+            slot_data["Pages 52-53 (Ice Rod)"] = [ice_rod_page.location.name, ice_rod_page.location.player]
+        else:
+            golden_hexagons = self.multiworld.find_item_locations("Gold Hexagon", self.player, False)
+            hexagon_gold = self.multiworld.per_slot_randoms[self.player].choice(golden_hexagons)
+            golden_hexagons.remove(hexagon_gold)
+            hexagon_gold2 = self.multiworld.find_item("Gold Hexagon", self.player).item
+            while not hexagon_gold2.location == hexagon_gold.location:
+                hexagon_gold2 = self.multiworld.find_item("Gold Hexagon", self.player).item
+            hexagon_gold3 = self.multiworld.find_item("Gold Hexagon", self.player).item
+            print(self.multiworld.find_item_locations("Gold Hexagon", self.player, False))
+            slot_data["Gold Hexagon"] = [hexagon_gold.location.name, hexagon_gold.location.player]
+            slot_data["Gold Hexagon"] = [hexagon_gold2.location.name, hexagon_gold2.location.player]
+            slot_data["Gold Hexagon"] = [hexagon_gold3.location.name, hexagon_gold3.location.player]
+            print(slot_data["Gold Hexagon 1"])
+            print(slot_data["Gold Hexagon 2"])
+            print(slot_data["Gold Hexagon 3"])
+
         return slot_data

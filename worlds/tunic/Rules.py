@@ -1,6 +1,63 @@
+from typing import Dict
+
 from ..generic.Rules import set_rule, forbid_item
 from BaseClasses import MultiWorld
 
+hexagon_quest_abilities: Dict[str, int] = {}
+def set_abilities(multiworld: MultiWorld, player: int):
+    abilities = [5, 10, 15]
+    hexagon_quest_abilities["prayer"] = multiworld.per_slot_randoms[player].choice(abilities)
+    abilities.remove(hexagon_quest_abilities["prayer"])
+    hexagon_quest_abilities["holy_cross"] = multiworld.per_slot_randoms[player].choice(abilities)
+    abilities.remove(hexagon_quest_abilities["holy_cross"])
+    hexagon_quest_abilities["ice_combo"] = multiworld.per_slot_randoms[player].choice(abilities)
+    abilities.remove(hexagon_quest_abilities["ice_combo"])
+
+def set_region_rules(multiworld: MultiWorld, player: int):
+    laurels = "Hero's Laurels"
+    grapple = "Magic Orb"
+    lantern = "Lantern"
+    mask = "Scavenger Mask"
+    prayer = "Pages 24-25 (Prayer)"
+    holy_cross = "Pages 42-43 (Holy Cross)"
+    red_hexagon = "Red Hexagon"
+    green_hexagon = "Green Hexagon"
+    blue_hexagon = "Blue Hexagon"
+    gold_hexagon = "Gold Hexagon"
+
+    prayer_amount = 1
+    holy_cross_amount = 1
+
+    ability_shuffle = multiworld.ability_shuffling[player].value
+
+    if multiworld.hexagon_quest[player].value:
+        prayer, holy_cross = ["Gold Hexagon", "Gold Hexagon"]
+        prayer_amount = hexagon_quest_abilities["prayer"]
+        holy_cross_amount = hexagon_quest_abilities["holy_cross"]
+
+    if ability_shuffle:
+        multiworld.get_entrance("Overworld -> Overworld Holy Cross", player).access_rule = lambda state: state.has(holy_cross, player, holy_cross_amount)
+        multiworld.get_entrance("Library -> Ruined Atoll", player).access_rule = lambda state: state.has(prayer, player, prayer_amount)
+        multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player) and state.has(prayer, player, prayer_amount)
+        multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = lambda state: state.has(grapple, player) and state.has(prayer, player, prayer_amount)
+        multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount)
+        multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: (state.has(grapple, player) or state.has(laurels, player)) and state.has(prayer, player, prayer_amount)
+        multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = lambda state: state.has(gold_hexagon, player, 20) if multiworld.hexagon_quest[player].value else state.has(prayer, player, prayer_amount) and state.has(red_hexagon, player) and state.has(green_hexagon, player) and state.has(blue_hexagon, player)
+    else:
+        multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
+        multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = lambda state: state.has(grapple, player)
+        multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player)
+        multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: state.has(grapple, player) or state.has(laurels, player)
+        multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = lambda state: state.has(gold_hexagon, player, 20) if multiworld.hexagon_quest[player].value else state.has(red_hexagon, player) and state.has(green_hexagon, player) and state.has(blue_hexagon, player)
+
+    multiworld.get_entrance("Overworld -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Overworld -> West Garden", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("Overworld -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("East Forest -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("Bottom of the Well -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("West Garden -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Eastern Vault Fortress -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
+    multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = lambda state: state.has(mask, player)
 
 def set_location_rules(multiworld: MultiWorld, player: int):
     laurels = "Hero's Laurels"
@@ -19,37 +76,47 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     house_key = "Old House Key"
     vault_key = "Fortress Vault Key"
 
+    prayer_amount = 1
+    holy_cross_amount = 1
+    ice_combo_amount = 1
+
     ability_shuffle = multiworld.ability_shuffling[player].value
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 
+    if multiworld.hexagon_quest[player].value:
+        prayer, holy_cross, ice_combo = ["Gold Hexagon", "Gold Hexagon", "Gold Hexagon"]
+        prayer_amount = hexagon_quest_abilities["prayer"]
+        holy_cross_amount = hexagon_quest_abilities["holy_cross"]
+        ice_combo_amount = hexagon_quest_abilities["ice_combo"]
+
     # Ability Shuffle Exclusive Rules
     if ability_shuffle:
-        set_rule(multiworld.get_location("Far Shore - Page Pickup", player), lambda state: state.has(prayer, player))
+        set_rule(multiworld.get_location("Far Shore - Page Pickup", player), lambda state: state.has(prayer, player, prayer_amount))
         set_rule(multiworld.get_location("Fortress Courtyard - Chest Near Cave", player),
-                 lambda state: state.has(prayer, player) or state.has(laurels, player))
+                 lambda state: state.has(prayer, player, prayer_amount) or state.has(laurels, player))
         set_rule(multiworld.get_location("Fortress Courtyard - Page Near Cave", player),
-                 lambda state: state.has(prayer, player) or state.has(laurels, player))
+                 lambda state: state.has(prayer, player, prayer_amount) or state.has(laurels, player))
         set_rule(multiworld.get_location("East Forest - Dancing Fox Spirit Holy Cross", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Forest Grave Path - Holy Cross Code by Grave", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Bottom of the Well - [Powered Secret Room] Chest", player),
-                 lambda state: state.has(prayer, player))
+                 lambda state: state.has(prayer, player, prayer_amount))
         set_rule(multiworld.get_location("West Garden - [North] Behind Holy Cross Door", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Library Hall - Holy Cross Chest", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Eastern Vault Fortress - [West Wing] Candles Holy Cross", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("West Garden - [Central Highlands] Holy Cross (Blue Lines)", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Quarry - [Back Entrance] Bushes Holy Cross", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
         set_rule(multiworld.get_location("Cathedral - Secret Legend Trophy Chest", player),
-                 lambda state: state.has(holy_cross, player))
+                 lambda state: state.has(holy_cross, player, holy_cross_amount))
 
     # Overworld
     set_rule(multiworld.get_location("Overworld - [Southwest] Fountain Page", player),
@@ -59,7 +126,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2", player),
              lambda state: state.has(grapple, player) or state.has(laurels, player))
     set_rule(multiworld.get_location("Far Shore - Secret Chest", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Overworld - [Southeast] Page on Pillar by Swamp", player),
              lambda state: state.has(laurels, player))
@@ -90,9 +157,9 @@ def set_location_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has(laurels, player) or (
                          state.has(lantern, player) and (state.has(sword, player) or state.has(stick, player))))
     set_rule(multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", player),
-             lambda state: state.has(fairies, 10, player))
+             lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
-             lambda state: state.has(fairies, 20, player))
+             lambda state: state.has(fairies, player, 20))
     set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player), lambda state: state.has(coins, 3, player))
     set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player), lambda state: state.has(coins, 6, player))
     set_rule(multiworld.get_location("Coins in the Well - 10 Coins", player),
@@ -108,7 +175,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand,
                                                                                            player) and state.has(
-            ice_combo, player)) if ability_shuffle else (
+            ice_combo, ice_combo_amount, player)) if ability_shuffle else (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand, player)))
 
     # West Garden
@@ -121,7 +188,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
                                                                     player) if ability_shuffle else state.has(laurels,
                                                                                                               player))
     set_rule(multiworld.get_location("West Garden - [East Lowlands] Page Behind Ice Dagger House", player),
-             lambda state: (state.has(laurels, player) and state.has(prayer, player)) if ability_shuffle else state.has(
+             lambda state: (state.has(laurels, player) and state.has(prayer, player, prayer_amount)) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("West Garden - [Central Lowlands] Below Left Walkway", player),
              lambda state: state.has(laurels, player))
@@ -148,10 +215,10 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Fortress Leaf Piles - Secret Chest", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
-             lambda state: (state.has(sword, player) and state.has(prayer, player)) if ability_shuffle else state.has(
+             lambda state: (state.has(sword, player) and state.has(prayer, player, prayer_amount)) if ability_shuffle else state.has(
                  sword, player))
     set_rule(multiworld.get_location("Fortress Arena - Hexagon Red", player), lambda state: (
-                state.has(vault_key, player) and state.has(prayer, player)) if ability_shuffle else state.has(vault_key,
+                state.has(vault_key, player) and state.has(prayer, player, prayer_amount)) if ability_shuffle else state.has(vault_key,
                                                                                                               player))
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
@@ -175,20 +242,20 @@ def set_location_rules(multiworld: MultiWorld, player: int):
 
     # Hero's Grave
     set_rule(multiworld.get_location("Hero's Grave - Tooth Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Hero's Grave - Mushroom Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Hero's Grave - Ash Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Hero's Grave - Flowers Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Hero's Grave - Effigy Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))
     set_rule(multiworld.get_location("Hero's Grave - Feathers Relic", player),
-             lambda state: state.has(laurels, player) and state.has(prayer, player) if ability_shuffle else state.has(
+             lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount) if ability_shuffle else state.has(
                  laurels, player))

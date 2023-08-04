@@ -39,10 +39,10 @@ Flask Shard,useful,Flask Shard,1,12
 Potion Flask,useful,Flask Container,1,5
 Golden Coin,progression,Trinket Coin,1,17
 Card Slot,useful,Trinket Slot,1,4
-Red Hexagon,progression,Hexagon Red,1,1
-Green Hexagon,progression,Hexagon Green,1,1
-Blue Hexagon,progression,Hexagon Blue,1,1
-Gold Hexagon,progression,Hexagon Gold,1,30
+Red Hexagon,progression_skip_balancing,Hexagon Red,1,1
+Green Hexagon,progression_skip_balancing,Hexagon Green,1,1
+Blue Hexagon,progression_skip_balancing,Hexagon Blue,1,1
+Gold Hexagon,progression_skip_balancing,Hexagon Gold,1,30
 ATT Offering,useful,Upgrade Offering - Attack - Tooth,1,4
 DEF Offering,useful,Upgrade Offering - DamageResist - Effigy,1,4
 Potion Offering,useful,Upgrade Offering - PotionEfficiency Swig - Ash,1,3
@@ -95,10 +95,10 @@ Money x40,filler,money,40,3
 Money x48,filler,money,48,1
 Money x50,filler,money,50,7
 Money x64,filler,money,64,1
-Money x100,filler,money,100,5
-Money x128,filler,money,128,3
-Money x200,filler,money,200,1
-Money x255,filler,money,255,1
+Money x100,useful,money,100,5
+Money x128,useful,money,128,3
+Money x200,useful,money,200,1
+Money x255,useful,money,255,1
 Pages 0-1,progression_skip_balancing,0,1,1
 Pages 2-3,progression_skip_balancing,1,1,1
 Pages 4-5,progression_skip_balancing,2,1,1

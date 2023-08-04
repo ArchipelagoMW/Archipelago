@@ -1,7 +1,8 @@
 from pathlib import Path
-from typing import Dict, Set, NamedTuple, List
-from BaseClasses import Item, ItemClassification
+from typing import Dict, List
+from BaseClasses import ItemClassification, MultiWorld
 import csv
+
 
 
 class TunicItemData:
@@ -12,6 +13,7 @@ class TunicItemData:
 
 
 class TunicItems:
+
     items: List[TunicItemData] = []
     items_lookup: Dict[str, TunicItemData] = {}
 
@@ -24,6 +26,10 @@ class TunicItems:
                 item = TunicItemData()
                 item.name = line[0]
                 item.classification = getattr(ItemClassification, line[1])
+                if item.classification == ItemClassification.filler:
+                    filler_items.append(item.name)
                 item.quantity_in_item_pool = int(line[4])
                 self.items.append(item)
                 self.items_lookup[item.name] = item
+
+filler_items = []
