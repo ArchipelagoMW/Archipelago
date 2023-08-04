@@ -331,11 +331,11 @@ function process_request (req)
 
     elseif req["type"] == "GUARD" then
         res["type"] = "GUARD_RESPONSE"
-        expected_data = base64.decode(req["expected_data"])
+        local expected_data = base64.decode(req["expected_data"])
 
-        actual_data = memory.read_bytes_as_array(req["address"], #expected_data, req["domain"])
+        local actual_data = memory.read_bytes_as_array(req["address"], #expected_data, req["domain"])
 
-        data_is_validated = true
+        local data_is_validated = true
         for i, byte in ipairs(actual_data) do
             if (byte ~= expected_data[i]) then
                 data_is_validated = false
@@ -408,7 +408,6 @@ function send_receive ()
     end
 
     if message == "VERSION" then
-        -- local result, err client_socket:send(tostring(SCRIPT_VERSION))
         local result, err client_socket:send(tostring(SCRIPT_VERSION).."\n")
     else
         local res = {}
@@ -432,7 +431,8 @@ function send_receive ()
                 end
             end
         end
-        local result, err client_socket:send(json.encode(res).."\n")
+
+        client_socket:send(json.encode(res).."\n")
     end
 end
 
