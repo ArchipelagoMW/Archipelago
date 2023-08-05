@@ -116,19 +116,19 @@ class WitnessPlayerItems:
             if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
                                                   "Monastery Shortcuts",
                                                   "Quarry Boathouse Hook Control (Panel)",
-                                                  "Windmill Turn Control (Panel)",
-                                                  "Caves Elevator Control (Panel)"}:
+                                                  "Windmill Turn Control (Panel)"}:
                 # Downgrade doors that only gate progress in EP shuffle.
                 item_data.classification = ItemClassification.useful
-            elif not come_to_you and item_name in {"Quarry Elevator Control (Panel)",
-                                                   "Swamp Long Bridge (Panel)"}:
+            elif not come_to_you and not eps_shuffled and item_name in {"Quarry Elevator Control (Panel)",
+                                                                        "Swamp Long Bridge (Panel)"}:
                 # These Bridges/Elevators are not logical access because they may leave you stuck.
                 item_data.classification = ItemClassification.useful
             elif item_name in {"River Monastery Shortcut (Door)",
                                "Monastery Shortcut (Door)",
                                "Orchard Second Gate (Door)",
                                "Jungle Bamboo Laser Shortcut (Door)",
-                               "Keep Pressure Plates 2 Exit (Door)"}:
+                               "Keep Pressure Plates 2 Exit (Door)",
+                               "Caves Elevator Control (Panel)"}:
                 # Downgrade doors that don't gate progress.
                 item_data.classification = ItemClassification.useful
 
