@@ -15,10 +15,16 @@ class DisableNonRandomizedPuzzles(Toggle):
     display_name = "Disable non randomized puzzles"
 
 
-class EarlySecretArea(Toggle):
-    """Opens the Mountainside shortcut to the Caves from the start.
-    (Otherwise known as "UTM", "Caves" or the "Challenge Area")"""
+class EarlyCaves(Choice):
+    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain,
+    allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
+    You can either add this item to the pool to be found on one of your randomized checks,
+    or you can outright start with it and have immediate access to the Caves.
+    If you choose "add_to_pool" and you are already playing a Remote Doors mode, this setting will do nothing."""
     display_name = "Early Caves"
+    option_off = 0
+    option_add_to_pool = 1
+    option_starting_inventory = 2
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -200,7 +206,7 @@ the_witness_options: Dict[str, type] = {
     "victory_condition": VictoryCondition,
     "mountain_lasers": MountainLasers,
     "challenge_lasers": ChallengeLasers,
-    "early_secret_area": EarlySecretArea,
+    "early_caves": EarlyCaves,
     "elevators_come_to_you": ElevatorsComeToYou,
     "trap_percentage": TrapPercentage,
     "puzzle_skip_amount": PuzzleSkipAmount,

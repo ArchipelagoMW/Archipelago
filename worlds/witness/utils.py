@@ -106,8 +106,12 @@ def get_disable_unrandomized_list():
     return get_adjustment_file("settings/Exclusions/Disable_Unrandomized.txt")
 
 
-def get_early_utm_list():
-    return get_adjustment_file("settings/Early_UTM.txt")
+def get_early_caves_list():
+    return get_adjustment_file("settings/Early_Caves.txt")
+
+
+def get_early_caves_start_list():
+    return get_adjustment_file("settings/Early_Caves_Start.txt")
 
 
 def get_symbol_shuffle_list():
