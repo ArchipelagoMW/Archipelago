@@ -177,8 +177,8 @@ class PuzzleSkipAmount(Range):
 
 
 class HintAmount(Range):
-    """Adds hints to Audio Logs. Hints will have the same number of duplicates, as many as will fit. Remaining Audio
-    Logs will have junk hints."""
+    """Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
+    Remaining Audio Logs will have junk hints."""
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
