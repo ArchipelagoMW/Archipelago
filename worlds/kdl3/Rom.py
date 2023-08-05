@@ -252,6 +252,7 @@ ability_remap = {
     "Cutter Ability": 8,
 }
 
+
 class RomData:
     def __init__(self, file: str, name: typing.Optional[str] = None):
         self.file = bytearray()
@@ -815,6 +816,11 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
                               0x0A,  # ASL
                               0xAA,  # TAX
                               0xBF, 0x00, 0x90, 0x40,  # LDA $409000, X
+                              0xC9, 0xFF, 0xFF,  # CMP #$FFFF
+                              0xD0, 0x04,  # BNE $07A3A3
+                              0xCA,  # DEX
+                              0xCA,  # DEX
+                              0x80, 0xF3,  # BRA $07A396
                               0xA2, 0x00, 0x00,  # LDX #$0000
                               0xC9, 0x0A, 0x00,  # CMP #$000A
                               0x90, 0x07,  # BCC $07A3A9
@@ -905,6 +911,36 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
     # Goal/Goal Speed letter offsets
     rom.write_bytes(0x3E000, [0x20, 0x03, 0x20, 0x00, 0x80, 0x01, 0x20, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                               0x00, 0xA0, 0x01, 0xA0, 0x00, ])
+
+    # Heart Star Visual redirect
+    rom.write_bytes(0x1427C, [0x22, 0x80, 0xA4, 0x07, 0xEA, 0xEA, ])
+    rom.write_bytes(0x3A480, [0xDA,  # PHX
+                              0x8A,  # TXA
+                              0x0A,  # ASL
+                              0xAA,  # TAX
+                              0xBD, 0x20, 0x90,  # LDA $9020, X
+                              0x3A,  # DEC
+                              0xAA,  # TAX
+                              0xC9, 0x07, 0x00,  # CMP #$0007
+                              0x30, 0x07,  # BMI $07A495
+                              0xE8,  # INX
+                              0x18,  # CLC
+                              0xE9, 0x06, 0x00,  # SBC #$0006
+                              0x80, 0xF4,  # BRA $07A489
+                              0xBD, 0xA7, 0x53,  # LDA $53A7, X
+                              0xFA,  # PLX
+                              0x29, 0xFF, 0x00,  # AND #$00FF
+                              0x6B,  # RTL
+                              ])
+
+    # Heart Star Cutscene redirect
+    rom.write_bytes(0x49F35, [0x22, 0x00, 0xA5, 0x07, ])
+    rom.write_bytes(0x3A500, [0xAA,  # TAX
+                              0xAD, 0xD3, 0x53,  # LDA $53D3
+                              0x3A,  # DEC
+                              0x8D, 0xC3, 0x5A,  # STA $5AC3
+                              0x6B,  # RTL
+                              ])
 
     # base patch done, write relevant slot info
 
@@ -1172,13 +1208,11 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
         rom.write_byte(0x2F90E2, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
         rom.write_byte(0x2F9109, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
 
-
-
     # write jumping goal
     rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))
     rom.write_bytes(0x944E, struct.pack("H", multiworld.jumping_target[player]))
 
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3C000, rom.name)
