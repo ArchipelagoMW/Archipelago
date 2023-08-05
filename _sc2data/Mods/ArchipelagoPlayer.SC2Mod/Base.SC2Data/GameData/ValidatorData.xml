@@ -3864,4 +3864,10 @@
         <Value value="7"/>
         <Behavior value="AP_ZerglingRangeCounter"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerCompareFoodAvailable id="AP_FoodAvailableOneHalf">
+        <ResultFailed value="NotEnoughFood"/>
+        <WhichPlayer Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="0.5"/>
+    </CValidatorPlayerCompareFoodAvailable>
 </Catalog>

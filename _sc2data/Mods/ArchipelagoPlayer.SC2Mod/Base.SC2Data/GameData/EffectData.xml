@@ -11513,7 +11513,7 @@
         <SpawnCount value="10"/>
     </CEffectCreateUnit>
     <CEffectCreatePersistent id="AP_ZerglingRespawnTrainCP">
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <ValidatorArray value="NotHidden"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="CasterUnit"/>
@@ -11596,7 +11596,7 @@
         <AmmoUnit value="AP_ZerglingRespawnWeapon"/>
     </CEffectLaunchMissile>
     <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrder">
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <Abil value="AP_ZerglingRespawnTrain"/>
@@ -11604,7 +11604,7 @@
     </CEffectIssueOrder>
     <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrderSwarmling">
         <ValidatorArray value="AP_HaveHotSHaveSwarmling"/>
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <Abil value="AP_ZerglingRespawnTrain"/>
