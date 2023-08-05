@@ -80,17 +80,23 @@ class TunicWorld(World):
             else:
                 pass
 
-            if self.multiworld.hexagon_quest[self.player].value and item_name == "Gold Hexagon":
-                if self.multiworld.keys_behind_bosses[self.player].value:
-                    for location in hexagon_locations.values():
-                        self.multiworld.get_location(location, self.player)\
-                            .place_locked_item(self.create_item("Gold Hexagon"))
-                    item_data.quantity_in_item_pool = 27
+            if item_name == "Gold Hexagon":
+                # if hexagon quest is on, add the gold hexagons in
+                if self.multiworld.hexagon_quest[self.player].value:
+                    # if keys are behind bosses, place 3 manually
+                    if self.multiworld.keys_behind_bosses[self.player].value:
+                        for location in hexagon_locations.values():
+                            self.multiworld.get_location(location, self.player)\
+                                .place_locked_item(self.create_item("Gold Hexagon"))
+                        item_data.quantity_in_item_pool = item_data.quantity_in_item_pool - 3
 
-                for i in range(0, item_data.quantity_in_item_pool):
-                    items.append(self.create_item(item_name))
-                # adding a money x1 to even out the pool with this option
-                items.append(self.create_item("Money x1"))
+                    for i in range(0, item_data.quantity_in_item_pool):
+                        items.append(self.create_item(item_name))
+                    # adding a money x1 to even out the pool with this option
+                    items.append(self.create_item("Money x1"))
+                else:
+                    # if not doing hexagon quest, just skip the gold hexagons
+                    continue
             elif self.multiworld.hexagon_quest[self.player].value and \
                     ("Pages" in item_name or item_name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
                 continue
