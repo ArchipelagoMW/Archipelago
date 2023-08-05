@@ -2,7 +2,7 @@ from typing import Dict
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .Items import filler_items, item_table
-from .Locations import TunicLocations
+from .Locations import location_table
 from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
 from .Regions import tunic_regions
 from .Options import tunic_options
@@ -43,8 +43,7 @@ class TunicWorld(World):
 
     data_version = 1
     tunic_items = item_table
-    tunic_locations = TunicLocations()
-    tunic_locations.populate_locations()
+    tunic_locations = location_table
     option_definitions = tunic_options
 
     item_name_to_id = {}
@@ -56,8 +55,8 @@ class TunicWorld(World):
         item_name_to_id[item_name] = item_base_id
         item_base_id += 1
 
-    for location in tunic_locations.locations:
-        location_name_to_id[location.name] = location_base_id
+    for location_name, location_data in location_table.items():
+        location_name_to_id[location_name] = location_base_id
         location_base_id += 1
 
     def create_item(self, name: str) -> TunicItem:
@@ -66,7 +65,6 @@ class TunicWorld(World):
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self):
-
         hexagon_locations: Dict[str, str] = {
             "Red Hexagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
             "Green Hexagon": "Librarian - Hexagon Green",
@@ -91,6 +89,7 @@ class TunicWorld(World):
 
                 for i in range(0, item_data.quantity_in_item_pool):
                     items.append(self.create_item(item_name))
+                # adding a money x1 to even out the pool with this option
                 items.append(self.create_item("Money x1"))
             elif self.multiworld.hexagon_quest[self.player].value and \
                     ("Pages" in item_name or item_name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
@@ -115,8 +114,7 @@ class TunicWorld(World):
             region.add_exits(tunic_regions[region_name])
 
         for location_name in self.location_name_to_id:
-            region = self.multiworld.get_region(self.tunic_locations.locations_lookup[location_name].region,
-                                                self.player)
+            region = self.multiworld.get_region(location_table[location_name].region, self.player)
             location = TunicLocation(self.player, location_name, self.location_name_to_id[location_name], region)
             region.locations.append(location)
 
