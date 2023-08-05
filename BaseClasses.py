@@ -210,9 +210,6 @@ class MultiWorld():
         for option_key, option in Options.per_game_common_options.items():
             getattr(self, option_key)[new_id] = option(option.default)
 
-        world_type.random = random.Random(self.random.getrandbits(64))
-        self.per_slot_randoms[new_id] = world_type.random
-
         self.worlds[new_id] = world_type(self, new_id)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
         self.player_name[new_id] = name
