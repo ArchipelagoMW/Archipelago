@@ -1973,8 +1973,6 @@
     </CEffectApplyBehavior>
     <CEffectEnumArea id="AP_LiberatorTargetMorphSearchArea">
         <EditorCategories value="Race:Terran"/>
-        <AINotifyFlags index="HurtEnemy" value="1"/>
-        <AINotifyFlags index="MinorDanger" value="1"/>
         <SearchFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="5" Effect="AP_LiberatorTargetMorphSearchAB"/>
     </CEffectEnumArea>
