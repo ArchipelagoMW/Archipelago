@@ -3021,13 +3021,13 @@
     <CActorModel id="AP_GhostNukeDrop">
         <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
         <On Terms="Effect.AP_NukeDetonate.Start" Send="$Birth"/>
-        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <On Terms="Effect.AP_NukeDamage.Start" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="GhostNukeDrop"/>
     </CActorModel>
     <CActorSound id="AP_GhostNukeDropSound" parent="SoundContinuous">
         <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
-        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <On Terms="Effect.AP_NukeDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
     <CActorSquib id="AP_GhostNukeExplode">

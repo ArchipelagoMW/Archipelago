@@ -890,10 +890,13 @@
         <UninterruptibleArray index="Channel" value="1"/>
         <ValidatedArray index="Channel" value="0"/>
         <AlertArray index="Cast" value="CalldownLaunch"/>
+        <AbilSetId value="AP_TacNukeStrike"/>
         <CursorEffect value="AP_NukeDamage"/>
         <CalldownEffect value="AP_Nuke"/>
         <AINotifyEffect value="Nuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NukeCalldown" Requirements="AP_HaveNuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NukeCalldown" Requirements="AP_HaveNuke">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilEffectInstant id="AP_GhostHoldFire">
@@ -967,9 +970,12 @@
         <UninterruptibleArray index="Channel" value="1"/>
         <ValidatedArray index="Channel" value="0"/>
         <AlertArray index="Cast" value="CalldownLaunch"/>
+        <AbilSetId value="AP_TacNukeStrike"/>
         <CursorEffect value="AP_SpectreNukeDamage"/>
         <CalldownEffect value="AP_SpectreNuke"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpectreNukeCalldown" Requirements="AP_HaveNuke"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpectreNukeCalldown" Requirements="AP_HaveNuke">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_UltrasonicPulse">
