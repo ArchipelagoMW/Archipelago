@@ -1,34 +1,146 @@
-from typing import Dict, List
+from typing import Dict, List, NamedTuple
 from BaseClasses import ItemClassification
-from . import data
-import csv
 
 
-class TunicItemData:
-    name: str
+class TunicItemData(NamedTuple):
     classification: ItemClassification
     quantity_in_item_pool: int
-    region: str
 
 
-class TunicItems:
-    items: List[TunicItemData] = []
-    items_lookup: Dict[str, TunicItemData] = {}
+item_table: Dict[str, TunicItemData] = {
+    "Firecracker x2": TunicItemData(ItemClassification.filler, 3),
+    "Firecracker x3": TunicItemData(ItemClassification.filler, 3),
+    "Firecracker x4": TunicItemData(ItemClassification.filler, 3),
+    "Firecracker x5": TunicItemData(ItemClassification.filler, 1),
+    "Firecracker x6": TunicItemData(ItemClassification.filler, 2),
+    "Fire Bomb x2": TunicItemData(ItemClassification.filler, 2),
+    "Fire Bomb x3": TunicItemData(ItemClassification.filler, 1),
+    "Ice Bomb x2": TunicItemData(ItemClassification.filler, 2),
+    "Ice Bomb x3": TunicItemData(ItemClassification.filler, 2),
+    "Ice Bomb x5": TunicItemData(ItemClassification.filler, 1),
+    "Lure": TunicItemData(ItemClassification.filler, 4),
+    "Lure x2": TunicItemData(ItemClassification.filler, 1),
+    "Pepper x2": TunicItemData(ItemClassification.filler, 4),
+    "Ivy x3": TunicItemData(ItemClassification.filler, 2),
+    "Effigy": TunicItemData(ItemClassification.useful, 12),
+    "HP Berry": TunicItemData(ItemClassification.filler, 2),
+    "HP Berry x2": TunicItemData(ItemClassification.filler, 4),
+    "HP Berry x3": TunicItemData(ItemClassification.filler, 2),
+    "MP Berry": TunicItemData(ItemClassification.filler, 4),
+    "MP Berry x2": TunicItemData(ItemClassification.filler, 2),
+    "MP Berry x3": TunicItemData(ItemClassification.filler, 7),
+    "Fairy": TunicItemData(ItemClassification.progression, 20),
+    "Stick": TunicItemData(ItemClassification.progression, 1),
+    "Sword": TunicItemData(ItemClassification.progression, 3),
+    "Magic Wand": TunicItemData(ItemClassification.progression, 1),
+    "Magic Dagger": TunicItemData(ItemClassification.progression, 1),
+    "Magic Orb": TunicItemData(ItemClassification.progression, 1),
+    "Hero's Laurels": TunicItemData(ItemClassification.progression, 1),
+    "Lantern": TunicItemData(ItemClassification.progression, 1),
+    "Shotgun": TunicItemData(ItemClassification.useful, 1),
+    "Shield": TunicItemData(ItemClassification.useful, 1),
+    "Dath Stone": TunicItemData(ItemClassification.useful, 1),
+    "Hourglass": TunicItemData(ItemClassification.useful, 1),
+    "Old House Key": TunicItemData(ItemClassification.progression, 1),
+    "Key": TunicItemData(ItemClassification.progression, 2),
+    "Fortress Vault Key": TunicItemData(ItemClassification.progression, 1),
+    "Flask Shard": TunicItemData(ItemClassification.useful, 12),
+    "Potion Flask": TunicItemData(ItemClassification.useful, 5),
+    "Golden Coin": TunicItemData(ItemClassification.progression, 17),
+    "Card Slot": TunicItemData(ItemClassification.useful, 4),
+    "Red Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Green Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Blue Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Gold Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 30),
+    "ATT Offering": TunicItemData(ItemClassification.useful, 4),
+    "DEF Offering": TunicItemData(ItemClassification.useful, 4),
+    "Potion Offering": TunicItemData(ItemClassification.useful, 3),
+    "HP Offering": TunicItemData(ItemClassification.useful, 6),
+    "MP Offering": TunicItemData(ItemClassification.useful, 3),
+    "SP Offering": TunicItemData(ItemClassification.useful, 2),
+    "Hero Relic - ATT": TunicItemData(ItemClassification.useful, 1),
+    "Hero Relic - DEF": TunicItemData(ItemClassification.useful, 1),
+    "Hero Relic - HP": TunicItemData(ItemClassification.useful, 1),
+    "Hero Relic - MP": TunicItemData(ItemClassification.useful, 1),
+    "Hero Relic - POTION": TunicItemData(ItemClassification.useful, 1),
+    "Hero Relic - SP": TunicItemData(ItemClassification.useful, 1),
+    "Orange Peril Ring": TunicItemData(ItemClassification.useful, 1),
+    "Tincture": TunicItemData(ItemClassification.useful, 1),
+    "Scavenger Mask": TunicItemData(ItemClassification.progression, 1),
+    "Cyan Peril Ring": TunicItemData(ItemClassification.useful, 1),
+    "Bracer": TunicItemData(ItemClassification.useful, 1),
+    "Dagger Strap": TunicItemData(ItemClassification.useful, 1),
+    "Inverted Ash": TunicItemData(ItemClassification.useful, 1),
+    "Lucky Cup": TunicItemData(ItemClassification.useful, 1),
+    "Magic Echo": TunicItemData(ItemClassification.useful, 1),
+    "Anklet": TunicItemData(ItemClassification.useful, 1),
+    "Muffling Bell": TunicItemData(ItemClassification.useful, 1),
+    "Glass Cannon": TunicItemData(ItemClassification.useful, 1),
+    "Perfume": TunicItemData(ItemClassification.useful, 1),
+    "Louder Echo": TunicItemData(ItemClassification.useful, 1),
+    "Aura's Gem": TunicItemData(ItemClassification.useful, 1),
+    "Bone Card": TunicItemData(ItemClassification.useful, 1),
+    "Mr Mayor": TunicItemData(ItemClassification.useful, 1),
+    "Secret Legend": TunicItemData(ItemClassification.useful, 1),
+    "Sacred Geometry": TunicItemData(ItemClassification.useful, 1),
+    "Vintage": TunicItemData(ItemClassification.useful, 1),
+    "Just Some Pals": TunicItemData(ItemClassification.useful, 1),
+    "Regal Weasel": TunicItemData(ItemClassification.useful, 1),
+    "Spring Falls": TunicItemData(ItemClassification.useful, 1),
+    "Power Up": TunicItemData(ItemClassification.useful, 1),
+    "Back To Work": TunicItemData(ItemClassification.useful, 1),
+    "Phonomath": TunicItemData(ItemClassification.useful, 1),
+    "Dusty": TunicItemData(ItemClassification.useful, 1),
+    "Forever Friend": TunicItemData(ItemClassification.useful, 1),
+    "Money x1": TunicItemData(ItemClassification.filler, 3),
+    "Money x10": TunicItemData(ItemClassification.filler, 1),
+    "Money x15": TunicItemData(ItemClassification.filler, 10),
+    "Money x16": TunicItemData(ItemClassification.filler, 1),
+    "Money x20": TunicItemData(ItemClassification.filler, 17),
+    "Money x25": TunicItemData(ItemClassification.filler, 14),
+    "Money x30": TunicItemData(ItemClassification.filler, 4),
+    "Money x32": TunicItemData(ItemClassification.filler, 4),
+    "Money x40": TunicItemData(ItemClassification.filler, 3),
+    "Money x48": TunicItemData(ItemClassification.filler, 1),
+    "Money x50": TunicItemData(ItemClassification.filler, 7),
+    "Money x64": TunicItemData(ItemClassification.filler, 1),
+    "Money x100": TunicItemData(ItemClassification.useful, 5),
+    "Money x128": TunicItemData(ItemClassification.useful, 3),
+    "Money x200": TunicItemData(ItemClassification.useful, 1),
+    "Money x255": TunicItemData(ItemClassification.useful, 1),
+    "Pages 0-1": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 2-3": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 4-5": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 6-7": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 8-9": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 10-11": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 12-13": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 14-15": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 16-17": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 18-19": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 20-21": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 22-23": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 24-25 (Prayer)": TunicItemData(ItemClassification.progression, 1),
+    "Pages 26-27": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 28-29": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 30-31": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 32-33": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 34-35": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 36-37": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 38-39": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 40-41": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 42-43 (Holy Cross)": TunicItemData(ItemClassification.progression, 1),
+    "Pages 44-45": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 46-47": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 48-49": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 50-51": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+    "Pages 52-53 (Ice Rod)": TunicItemData(ItemClassification.progression, 1),
+    "Pages 54-55": TunicItemData(ItemClassification.progression_skip_balancing, 1),
+}
 
-    def populate_items(self):
-        from importlib.resources import files
-        with files(data).joinpath("Items.csv").open() as item_file:
-            csv_file = csv.reader(item_file)
-            csv_file.__next__()
-            for line in csv_file:
-                item = TunicItemData()
-                item.name = line[0]
-                item.classification = getattr(ItemClassification, line[1])
-                if item.classification == ItemClassification.filler:
-                    filler_items.append(item.name)
-                item.quantity_in_item_pool = int(line[4])
-                self.items.append(item)
-                self.items_lookup[item.name] = item
+
+def item_is_filler(item_name: str) -> bool:
+    return item_table[item_name].classification == ItemClassification.filler
 
 
-filler_items = []
+filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))

@@ -1,7 +1,7 @@
 from typing import Dict
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import TunicItems, filler_items
+from .Items import filler_items, item_table
 from .Locations import TunicLocations
 from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
 from .Regions import tunic_regions
@@ -25,7 +25,7 @@ class TunicWeb(WebWorld):
 
 
 class TunicItem(Item):
-    game = "Tunic"
+    game: str = "Tunic"
 
 
 class TunicLocation(Location):
@@ -42,18 +42,18 @@ class TunicWorld(World):
     web = TunicWeb()
 
     data_version = 1
-    tunic_items = TunicItems()
+    tunic_items = item_table
     tunic_locations = TunicLocations()
-    tunic_items.populate_items()
     tunic_locations.populate_locations()
     option_definitions = tunic_options
 
     item_name_to_id = {}
     location_name_to_id = {}
-    item_base_id = 2000
-    location_base_id = 2000
-    for item in tunic_items.items:
-        item_name_to_id[item.name] = item_base_id
+    item_base_id = 509342400
+    location_base_id = 509342400
+
+    for item_name, item_data in item_table.items():
+        item_name_to_id[item_name] = item_base_id
         item_base_id += 1
 
     for location in tunic_locations.locations:
@@ -61,9 +61,9 @@ class TunicWorld(World):
         location_base_id += 1
 
     def create_item(self, name: str) -> TunicItem:
-        print(name)
-        return TunicItem(name, self.tunic_items.items_lookup[name].classification, self.item_name_to_id[name],
-                         self.player)
+        # print(name)
+        item_data = item_table[name]
+        return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self):
 
@@ -74,33 +74,33 @@ class TunicWorld(World):
         }
 
         items = []
-        for item_name in TunicItems.items_lookup:
-            item = self.tunic_items.items_lookup[item_name]
+        for item_name in item_table:
+            item_data = item_table[item_name]
             if self.multiworld.hexagon_quest[self.player].value:
 
                 pass
             else:
                 pass
 
-            if self.multiworld.hexagon_quest[self.player].value and item.name == "Gold Hexagon":
+            if self.multiworld.hexagon_quest[self.player].value and item_name == "Gold Hexagon":
                 if self.multiworld.keys_behind_bosses[self.player].value:
                     for location in hexagon_locations.values():
                         self.multiworld.get_location(location, self.player)\
                             .place_locked_item(self.create_item("Gold Hexagon"))
-                    item.quantity_in_item_pool = 27
+                    item_data.quantity_in_item_pool = 27
 
-                for i in range(0, item.quantity_in_item_pool):
-                    items.append(self.create_item(item.name))
+                for i in range(0, item_data.quantity_in_item_pool):
+                    items.append(self.create_item(item_name))
                 items.append(self.create_item("Money x1"))
             elif self.multiworld.hexagon_quest[self.player].value and \
-                    ("Pages" in item.name or item.name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
+                    ("Pages" in item_name or item_name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
                 continue
-            elif self.multiworld.keys_behind_bosses[self.player].value and item.name in hexagon_locations.keys():
-                self.multiworld.get_location(hexagon_locations[item.name], self.player)\
-                    .place_locked_item(self.create_item(item.name))
+            elif self.multiworld.keys_behind_bosses[self.player].value and item_name in hexagon_locations.keys():
+                self.multiworld.get_location(hexagon_locations[item_name], self.player)\
+                    .place_locked_item(self.create_item(item_name))
             else:
-                for i in range(0, item.quantity_in_item_pool):
-                    items.append(self.create_item(item.name))
+                for i in range(0, item_data.quantity_in_item_pool):
+                    items.append(self.create_item(item_name))
 
         self.multiworld.random.shuffle(items)
         self.multiworld.itempool += items
@@ -130,7 +130,7 @@ class TunicWorld(World):
         set_abilities(self.multiworld, self.player)
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
-        print(hexagon_quest_abilities["prayer"])
+        # print(hexagon_quest_abilities["prayer"])
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(filler_items)
@@ -202,18 +202,16 @@ class TunicWorld(World):
             slot_data["Pages 52-53 (Ice Rod)"] = [ice_rod_page.location.name, ice_rod_page.location.player]
         else:
             golden_hexagons = self.multiworld.find_item_locations("Gold Hexagon", self.player, False)
-            hexagon_gold = self.multiworld.per_slot_randoms[self.player].choice(golden_hexagons)
-            golden_hexagons.remove(hexagon_gold)
-            hexagon_gold2 = self.multiworld.find_item("Gold Hexagon", self.player).item
-            while not hexagon_gold2.location == hexagon_gold.location:
-                hexagon_gold2 = self.multiworld.find_item("Gold Hexagon", self.player).item
-            hexagon_gold3 = self.multiworld.find_item("Gold Hexagon", self.player).item
-            print(self.multiworld.find_item_locations("Gold Hexagon", self.player, False))
-            slot_data["Gold Hexagon"] = [hexagon_gold.location.name, hexagon_gold.location.player]
-            slot_data["Gold Hexagon"] = [hexagon_gold2.location.name, hexagon_gold2.location.player]
-            slot_data["Gold Hexagon"] = [hexagon_gold3.location.name, hexagon_gold3.location.player]
-            print(slot_data["Gold Hexagon 1"])
-            print(slot_data["Gold Hexagon 2"])
-            print(slot_data["Gold Hexagon 3"])
+            self.multiworld.per_slot_randoms[self.player].shuffle(golden_hexagons)
+            hexagon_gold = golden_hexagons.pop()
+            hexagon_gold2 = golden_hexagons.pop()
+            hexagon_gold3 = golden_hexagons.pop()
+            # print(self.multiworld.find_item_locations("Gold Hexagon", self.player, False))
+            slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player]
+            slot_data["Gold Hexagon"] = [hexagon_gold2.name, hexagon_gold2.player]
+            slot_data["Gold Hexagon"] = [hexagon_gold3.name, hexagon_gold3.player]
+            # print(slot_data["Gold Hexagon 1"])
+            # print(slot_data["Gold Hexagon 2"])
+            # print(slot_data["Gold Hexagon 3"])
 
         return slot_data
