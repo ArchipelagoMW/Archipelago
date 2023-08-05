@@ -4260,8 +4260,7 @@
         <AreaArray Radius="1.2" Fraction="0.5"/>
         <AreaArray Radius="2.4" Fraction="0.25"/>
         <ExcludeArray Value="Target"/>
-        <ExcludeArray Value="Target"/>
-        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="AP_NovaRavenSeekerMissileLaunchCP">
