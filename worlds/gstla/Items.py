@@ -682,12 +682,31 @@ test_items: List[ItemData] = [
    ItemData(62, ItemName.Ruin_Key, ItemClassification.filler, 750152, ItemType.KeyItem, 459, 128),
    ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, ItemType.Consumable, 193, 128),
    ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 229, 128),
-   ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 190, 128)
+   ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 190, 128),
+
+    ItemData(50, ItemName.Right_Prong, ItemClassification.progression, 749272, ItemType.KeyItem, 439, 131),
+    ItemData(51, ItemName.Rusty_Staff, ItemClassification.filler, 748700, ItemType.Forgeable, 426, 128),
+    ItemData(52, ItemName.Pirates_Sword, ItemClassification.filler, 742584, ItemType.Weapon, 287, 128),
+
+
+    ItemData(53, ItemName.Guardian_Ring, ItemClassification.useful, 748172, ItemType.Ring, 414, 128),
+    ItemData(54, ItemName.Trainers_Whip, ItemClassification.useful, 749492, ItemType.Weapon, 444, 128),
+    ItemData(55, ItemName.Blow_Mace, ItemClassification.useful, 743552, ItemType.Weapon, 309, 128),
+    ItemData(56, ItemName.Hard_Nut, ItemClassification.useful, 738492, ItemType.Consumable, 194, 128),
+
+
+    ItemData(57, ItemName.Apple, ItemClassification.useful, 738448, ItemType.Consumable, 193, 2),
+    ItemData(58, ItemName.Ixion_Mail, ItemClassification.useful, 744608, ItemType.Armor, 333, 128),
+    ItemData(58, ItemName.Power_Bread, ItemClassification.useful, 738360, ItemType.Consumable, 191, 128),
+    ItemData(58, ItemName.Potion, ItemClassification.filler, 742496, ItemType.Consumable, 183, 128)
 ]
 
 events = [
-   ItemData(None, ItemName.Victory, ItemClassification.progression, 0, ItemType.Event, 0 ),
-   ItemData(None, ItemName.Chestbeaters_defeated, ItemClassification.progression, 0, ItemType.Event, 0 )
+   ItemData(None, ItemName.Ship, ItemClassification.progression, 0, ItemType.Event, 0),
+   ItemData(None, ItemName.Victory, ItemClassification.progression, 0, ItemType.Event, 0),
+   ItemData(None, ItemName.Chestbeaters_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
+   ItemData(None, ItemName.King_Scorpion_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
+   ItemData(None, ItemName.Gabombo_Statue_Completed, ItemClassification.progression, 0, ItemType.Event, 0)
 ]
 
 all_items: List[ItemData] = test_items + djinn_items + psyenergy_as_item_list + psynergy_list + summon_list + events

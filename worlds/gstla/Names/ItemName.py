@@ -395,8 +395,13 @@ class ItemName():
    Reveal = "Reveal"
    Blaze = "Blaze"
 
+   Ship = "Ship"
    Victory = "Victory"
    Chestbeaters_defeated = "Chestbeaters defeated"
+   Gabombo_Statue_Completed = "Gabombo Statue Completed"
+   King_Scorpion_defeated = "King Scorpion defeated"
+   Briggs_defeated = "Briggs defeated"
+   Briggs_escaped = "Briggs escaped"
 
    Flint = "Flint"
    Granite = "Granite"

@@ -34,11 +34,11 @@ class GSTLAWorld(World):
         ItemType.Djinn: {item.itemName for item in all_items if item.type == ItemType.Djinn}
     }
 
-    cyclonechip = []
-
 
     def generate_early(self) -> None:
-        pass
+        self.multiworld.non_local_items[self.player].value -= self.item_name_groups[ItemType.Djinn]
+        self.multiworld.start_inventory[self.player].value[ "Ship" ] = 1
+
 
 
     def create_regions(self) -> None:
@@ -56,10 +56,11 @@ class GSTLAWorld(World):
             ap_item = self.create_item(location.vanilla_item)
             if location.loc_type == LocationType.Djinn:
                 self.djinnlist.append(ap_item)
-            elif location.vanilla_item == ItemName.Cyclone_Chip:
-                self.cyclonechip.append(ap_item)
             else:
                 self.multiworld.itempool.append(ap_item)
+
+        self.multiworld.push_precollected(self.create_event(ItemName.Ship))
+
 
 
     def set_rules(self) -> None:
@@ -89,11 +90,7 @@ class GSTLAWorld(World):
         for ap_item in self.djinnlist:
             all_state.remove(ap_item)
 
-        all_state.remove(self.cyclonechip[0])
-
         fill_restrictive(self.multiworld, all_state, locs, self.djinnlist, True, True)
-
-        fill_restrictive(self.multiworld, all_state, [self.multiworld.get_location(LocationName.Daila_Smoke_Bomb, self.player)], self.cyclonechip, True, True)
 
     def generate_output(self, output_directory: str):
         rom = LocalRom(get_base_rom_path())
@@ -128,6 +125,7 @@ class GSTLAWorld(World):
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
+
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]

@@ -337,6 +337,10 @@ class LocationName():
     Shaman_Village_Elixir = "Shaman_Village - Elixir"
     Mars_Lighthouse_Doom_Dragon = "Mars Lighthouse - Doom Dragon Fight"
     Kandorean_Temple_Chestbeaters = "Kandorean Temple - Chestbeaters Fight"
+    Yampi_Desert_King_Scorpion = "Yampi Desert - King Scorpion Fight"
+    Gabombo_Statue = "Gabombo Statue"
+    Alhafra_Briggs = "Alhafra Briggs"
+    Alhafra_Prison_Briggs = "Alhafra Prison Briggs"
 
     Flint = "Flint"
     Granite = "Granite"

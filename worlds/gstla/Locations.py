@@ -479,28 +479,62 @@ test_locations = [
     LocationData(169, LocationName.Kandorean_Temple_Mysterious_Card, [991860], 128, ItemName.Mysterious_Card),
     LocationData(214, LocationName.Kandorean_Temple_Mimic, [991872], 129, ItemName.Herb),
 
+    LocationData(10, LocationName.Shrine_of_the_Sea_God_Rusty_Staff, [992968], 128, ItemName.Rusty_Staff),
+    LocationData(11, LocationName.Shrine_of_the_Sea_God_Right_Prong, [992980], 131, ItemName.Right_Prong),
+
     LocationData(96, LocationName.Dehkan_Plateau_Elixir, [991892], 128, ItemName.Elixir),
     LocationData(97, LocationName.Dehkan_Plateau_Full_Metal_Vest, [991884], 128, ItemName.Full_Metal_Vest),
     LocationData(98, LocationName.Dehkan_Plateau_Themis_Axe, [991916], 128, ItemName.Themis_Axe),
     LocationData(216, LocationName.Dehkan_Plateau_Mint, [991904], 128, ItemName.Mint),
     LocationData(217, LocationName.Dehkan_Plateau_Nut, [991928], 128, ItemName.Nut),
 
-    LocationData(8, LocationName.Madra_Antidote, [991948], 13, ItemName.Antidote),
-    LocationData(10, LocationName.Madra_Smoke_Bomb, [991968], 3, ItemName.Smoke_Bomb),
-    LocationData(11, LocationName.Madra_15_coins, [991976], 13, ItemName.Herb),
-    LocationData(12, LocationName.Madra_Sleep_Bomb, [991984], 2, ItemName.Sleep_Bomb),
-    LocationData(13, LocationName.Madra_Elixir, [991996], 2, ItemName.Elixir),
+    LocationData(8, LocationName.Madra_Antidote, [991948], 13, ItemName.Antidote, LocationType.Hidden),
+    LocationData(10, LocationName.Madra_Smoke_Bomb, [991968], 3, ItemName.Smoke_Bomb, LocationType.Hidden),
+    LocationData(11, LocationName.Madra_15_coins, [991976], 13, ItemName.Herb, LocationType.Hidden),
+    LocationData(12, LocationName.Madra_Sleep_Bomb, [991984], 2, ItemName.Sleep_Bomb, LocationType.Hidden),
+    LocationData(13, LocationName.Madra_Elixir, [991996], 2, ItemName.Elixir, LocationType.Hidden),
     LocationData(99, LocationName.Madra_Nurses_Cap, [991940], 128, ItemName.Nurses_Cap),
 
     LocationData(218, LocationName.Madra_Catacombs_Apple, [992008], 128, ItemName.Apple),
     LocationData(219, LocationName.Madra_Catacombs_Mist_Potion, [992016], 128, ItemName.Mist_Potion),
     LocationData(220, LocationName.Madra_Catacombs_Lucky_Medal, [992028], 128, ItemName.Lucky_Medal),
-    LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128, ItemName.Ruin_Key)
+    LocationData(171, LocationName.Madra_Catacombs_Ruin_Key, [992036, 992048], 128, ItemName.Ruin_Key),
+
+    LocationData(171, LocationName.Osenia_Cliffs_Pirates_Sword, [992080], 128, ItemName.Pirates_Sword),
+
+    LocationData(100, LocationName.Yampi_Desert_Antidote, [992104], 128, ItemName.Antidote),
+    LocationData(101, LocationName.Yampi_Desert_Guardian_Ring, [992092], 128, ItemName.Guardian_Ring),
+    LocationData(102, LocationName.Yampi_Desert_Trainers_Whip, [992148], 128, ItemName.Trainers_Whip),
+    LocationData(103, LocationName.Yampi_Desert_Lucky_Medal, [992140], 128, ItemName.Lucky_Medal),
+    LocationData(104, LocationName.Yampi_Desert_315_coins, [992128], 131, ItemName.Herb, LocationType.Hidden),
+    LocationData(105, LocationName.Yampi_Desert_Blow_Mace, [992180], 128, ItemName.Blow_Mace),
+    LocationData(106, LocationName.Yampi_Desert_Hard_Nut, [992172], 128, ItemName.Hard_Nut),
+
+
+    LocationData(106, LocationName.Alhafra_Psy_Crystal, [992244], 128, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Alhafra_Sleep_Bomb, [992252], 2, ItemName.Sleep_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafra_Lucky_Medal, [992260], 2, ItemName.Lucky_Medal, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafra_32_coins, [992268], 13, ItemName.Herb, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafra_Smoke_Bomb, [992280], 2, ItemName.Smoke_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafra_Elixir, [992304], 3, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafra_Apple, [992312], 2, ItemName.Apple, LocationType.Hidden),
+
+    LocationData(106, LocationName.Alhafran_Cave_123_coins, [992324], 128, ItemName.Herb),
+    LocationData(106, LocationName.Alhafran_Cave_Ixion_Mail, [992332], 128, ItemName.Ixion_Mail),
+    LocationData(106, LocationName.Alhafran_Cave_Lucky_Medal, [992340], 128, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Alhafran_Cave_Power_Bread, [992348], 2, ItemName.Power_Bread, LocationType.Hidden),
+    LocationData(106, LocationName.Alhafran_Cave_777_coins, [992360], 128, ItemName.Herb),
+    LocationData(106, LocationName.Alhafran_Cave_Potion, [992368], 128, ItemName.Potion),
+    LocationData(106, LocationName.Alhafran_Cave_Psy_Crystal, [992376], 128, ItemName.Psy_Crystal)
 ]
 
 events = [
     LocationData(None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
-    LocationData(None, LocationName.Kandorean_Temple_Chestbeaters, [0], 0, ItemName.Chestbeaters_defeated, LocationType.Event, True)
+    LocationData(None, LocationName.Kandorean_Temple_Chestbeaters, [0], 0, ItemName.Chestbeaters_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Yampi_Desert_King_Scorpion, [0], 0, ItemName.King_Scorpion_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
+    LocationData(None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True)
 ]
 
 def create_loctype_to_datamapping():
