@@ -1,8 +1,8 @@
 from random import Random
 from typing import List, Dict, Union
 
+from .logic.logic import StardewLogic
 from .data.bundle_data import *
-from .logic import StardewLogic
 from .options import BundleRandomization, BundlePrice
 
 vanilla_bundles = {

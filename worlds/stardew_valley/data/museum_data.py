@@ -171,8 +171,7 @@ class Artifact:
 
 
 class Mineral:
-    quartz = create_mineral("Quartz", 80, Region.mines_floor_20,
-                            monsters=Monster.stone_golem)
+    quartz = create_mineral("Quartz", 80, Region.mines_floor_20)
     fire_quartz = create_mineral("Fire Quartz", 82, Region.mines_floor_100,
                                  geodes=(Geode.magma, Geode.omni, common.fishing_chest),
                                  difficulty=1.0 / 12.0)

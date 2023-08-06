@@ -67,6 +67,7 @@ class LocationTags(enum.Enum):
     MONSTERSANITY_GOALS = enum.auto()
     MONSTERSANITY_PROGRESSIVE_GOALS = enum.auto()
     MONSTERSANITY_MONSTER = enum.auto()
+    SHIPSANITY = enum.auto()
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()

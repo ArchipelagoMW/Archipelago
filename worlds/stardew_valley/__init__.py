@@ -8,13 +8,15 @@ from . import rules
 from .bundles import get_all_bundles, Bundle
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
-from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
+from .logic.logic import StardewLogic
+from .logic.time_logic import MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
     BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
+from .stardew_rule import True_, StardewRule
 from .strings.goal_names import Goal as GoalName
 
 client_version = 0
@@ -186,6 +188,7 @@ class StardewValleyWorld(World):
                                        "Victory")
         elif self.options.goal == Goal.option_bottom_of_the_mines:
             self.create_event_location(location_table[GoalName.bottom_of_the_mines],
+                                       self.logic.mine.can_mine_to_floor(120).simplify(),
                                        item="Victory")
         elif self.options.goal == Goal.option_cryptic_note:
             self.create_event_location(location_table[GoalName.cryptic_note],
@@ -197,11 +200,11 @@ class StardewValleyWorld(World):
                                        "Victory")
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(location_table[GoalName.complete_museum],
-                                       self.logic.can_complete_museum().simplify(),
+                                       self.logic.museum.can_complete_museum().simplify(),
                                        "Victory")
         elif self.options.goal == Goal.option_full_house:
             self.create_event_location(location_table[GoalName.full_house],
-                                       (self.logic.has_children(2) & self.logic.can_reproduce()).simplify(),
+                                       (self.logic.relationship.has_children(2) & self.logic.relationship.can_reproduce()).simplify(),
                                        "Victory")
         elif self.options.goal == Goal.option_greatest_walnut_hunter:
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],

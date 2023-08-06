@@ -1,6 +1,5 @@
 import unittest
-from .. import True_
-from ..logic import Received, Has, False_, And, Or
+from ..stardew_rule import Received, Has, False_, And, Or, True_
 
 
 class TestSimplification(unittest.TestCase):

@@ -64,34 +64,34 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=True)
         self.multiworld.state.collect(self.world.create_item("Summer"), event=True)
 
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         fall = self.world.create_item("Fall")
         self.multiworld.state.collect(fall, event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         tuesday = self.world.create_item("Traveling Merchant: Tuesday")
         self.multiworld.state.collect(tuesday, event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         rare_seed = self.world.create_item("Rare Seed")
         self.multiworld.state.collect(rare_seed, event=True)
-        self.assertTrue(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         self.remove(fall)
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
         self.remove(tuesday)
 
         green_house = self.world.create_item("Greenhouse")
         self.multiworld.state.collect(green_house, event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
 
         friday = self.world.create_item("Traveling Merchant: Friday")
         self.multiworld.state.collect(friday, event=True)
         self.assertTrue(self.multiworld.get_location("Old Master Cannoli", 1).access_rule(self.multiworld.state))
 
         self.remove(green_house)
-        self.assertFalse(self.world.logic.can_reach_location("Old Master Cannoli")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Old Master Cannoli")(self.multiworld.state))
         self.remove(friday)
 
 
@@ -100,7 +100,7 @@ class TestBundlesLogic(SVTestBase):
     }
 
     def test_vault_2500g_bundle(self):
-        self.assertTrue(self.world.logic.can_reach_location("2,500g Bundle")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach_location("2,500g Bundle")(self.multiworld.state))
 
 
 class TestBuildingLogic(SVTestBase):
@@ -109,27 +109,27 @@ class TestBuildingLogic(SVTestBase):
     }
 
     def test_coop_blueprint(self):
-        self.assertFalse(self.world.logic.can_reach_location("Coop Blueprint")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.assertTrue(self.world.logic.can_reach_location("Coop Blueprint")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach_location("Coop Blueprint")(self.multiworld.state))
 
     def test_big_coop_blueprint(self):
-        self.assertFalse(self.world.logic.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        self.assertFalse(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        self.assertFalse(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
         self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
-        self.assertTrue(self.world.logic.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
+        self.assertTrue(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
     def test_deluxe_coop_blueprint(self):
-        self.assertFalse(self.world.logic.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
@@ -138,16 +138,16 @@ class TestBuildingLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
-
-        self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
-        self.assertTrue(self.world.logic.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
+        self.assertTrue(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
     def test_big_shed_blueprint(self):
-        self.assertFalse(self.world.logic.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        self.assertFalse(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
@@ -156,11 +156,11 @@ class TestBuildingLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
-        self.assertFalse(self.world.logic.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        self.assertFalse(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
         self.multiworld.state.collect(self.world.create_item("Progressive Shed"), event=True)
-        self.assertTrue(self.world.logic.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
+        self.assertTrue(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
 
@@ -170,10 +170,10 @@ class TestArcadeMachinesLogic(SVTestBase):
     }
 
     def test_prairie_king(self):
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
 
         boots = self.world.create_item("JotPK: Progressive Boots")
         gun = self.world.create_item("JotPK: Progressive Gun")
@@ -183,19 +183,19 @@ class TestArcadeMachinesLogic(SVTestBase):
 
         self.multiworld.state.collect(boots, event=True)
         self.multiworld.state.collect(gun, event=True)
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
         self.remove(boots)
         self.remove(gun)
 
         self.multiworld.state.collect(boots, event=True)
         self.multiworld.state.collect(boots, event=True)
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
         self.remove(boots)
         self.remove(boots)
 
@@ -203,10 +203,10 @@ class TestArcadeMachinesLogic(SVTestBase):
         self.multiworld.state.collect(gun, event=True)
         self.multiworld.state.collect(ammo, event=True)
         self.multiworld.state.collect(life, event=True)
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
         self.remove(boots)
         self.remove(gun)
         self.remove(ammo)
@@ -219,10 +219,10 @@ class TestArcadeMachinesLogic(SVTestBase):
         self.multiworld.state.collect(ammo, event=True)
         self.multiworld.state.collect(life, event=True)
         self.multiworld.state.collect(drop, event=True)
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertFalse(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertFalse(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
         self.remove(boots)
         self.remove(gun)
         self.remove(gun)
@@ -242,10 +242,10 @@ class TestArcadeMachinesLogic(SVTestBase):
         self.multiworld.state.collect(ammo, event=True)
         self.multiworld.state.collect(life, event=True)
         self.multiworld.state.collect(drop, event=True)
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 1")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 2")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_region("JotPK World 3")(self.multiworld.state))
-        self.assertTrue(self.world.logic.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 1")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 2")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach("JotPK World 3")(self.multiworld.state))
+        self.assertTrue(self.world.logic.region.can_reach_location("Journey of the Prairie King Victory")(self.multiworld.state))
         self.remove(boots)
         self.remove(boots)
         self.remove(gun)
@@ -298,29 +298,29 @@ class TestWeaponsLogic(SVTestBase):
         item = self.multiworld.create_item(item_name, self.player)
         self.multiworld.state.collect(item, event=True)
         if reachable_level > 0:
-            self.assertTrue(self.world.logic.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
+            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
+            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_1_40()(self.multiworld.state))
 
         if reachable_level > 1:
-            self.assertTrue(self.world.logic.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
+            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
+            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_41_80()(self.multiworld.state))
 
         if reachable_level > 2:
-            self.assertTrue(self.world.logic.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
+            self.assertTrue(self.world.logic.mine.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
+            self.assertFalse(self.world.logic.mine.can_mine_in_the_mines_floor_81_120()(self.multiworld.state))
 
         if reachable_level > 3:
-            self.assertTrue(self.world.logic.can_mine_in_the_skull_cavern()(self.multiworld.state))
+            self.assertTrue(self.world.logic.mine.can_mine_in_the_skull_cavern()(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.can_mine_in_the_skull_cavern()(self.multiworld.state))
+            self.assertFalse(self.world.logic.mine.can_mine_in_the_skull_cavern()(self.multiworld.state))
 
         if reachable_level > 4:
-            self.assertTrue(self.world.logic.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
+            self.assertTrue(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
         else:
-            self.assertFalse(self.world.logic.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
+            self.assertFalse(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
 
         self.remove(item)
 
