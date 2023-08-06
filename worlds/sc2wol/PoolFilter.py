@@ -210,6 +210,12 @@ class ValidInventory:
 
         if not spider_mine_sources & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
+        if not BARRACKS_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Infantry")]
+        if not FACTORY_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
+        if not STARPORT_UNITS & self.logical_inventory:
+            inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
 
         return inventory + locked_items
 

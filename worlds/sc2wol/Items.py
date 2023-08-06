@@ -62,7 +62,7 @@ item_table = {
     "Progressive Armor Upgrade": ItemData(108 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 1, quantity=3),
     "Progressive Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     "Progressive Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
-    "Progressive Starship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
+    "Progressive Ship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
     "Progressive Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, parent_item="Bunker"),
