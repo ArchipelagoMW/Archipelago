@@ -61,7 +61,7 @@ from .locations.keyLocation import KeyLocation
 
 from BaseClasses import ItemClassification
 from ..Locations import LinksAwakeningLocation
-from ..Options import TrendyGame, Palette, MusicChangeCondition
+from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls
 
 
 # Function to generate a final rom, this patches the rom with all required patches
@@ -240,6 +240,8 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
     
+    patches.core.addBootsControls(rom, ap_settings['boots_controls'])
+
     world_setup = logic.world_setup
 
     JUNK_HINT = 0.33
@@ -313,61 +315,6 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    
-    from .assembler import ASM
-    consts = {
-          "INVENTORY_PEGASUS_BOOTS": 0x8,
-          "INVENTORY_POWER_BRACELET": 0x3,
-          "UsePegasusBoots": 0x1705,
-          "J_A": (1 << 4),
-          "J_B": (1 << 5),
-          "wAButtonSlot": 0xDB01,
-          "wBButtonSlot": 0xDB00,
-          "wPegasusBootsChargeMeter": 0xC14B,
-          "hPressedButtonsMask": 0xCB
-    }
-    for c,v in consts.items():
-        assembler.const(c, v)
-
-    BOOTS_START_ADDR = 0x11E8
-    boots_code = assembler.ASM("""
-CheckBoots:
-    ; check if own boots at all???
-    ld  a, [wCollectedTunics]
-    and  $04
-    jr z, .out
-    ld  hl, wBButtonSlot               
-    ld   d, J_B 
-    call  .maybeBoots
-    inc l          
-    ld   d, J_A
-    call  .maybeBoots
-    xor  a                                        
-    ld   [wPegasusBootsChargeMeter], a            
-    jr .out
-
-.maybeBoots:
-    ldh  a, [hPressedButtonsMask]  
-    and  d
-    ret  z
-    ld   a, [hl]
-    cp   INVENTORY_PEGASUS_BOOTS
-    jr   z, .yesBoots
-    cp   INVENTORY_POWER_BRACELET                  
-    ret  nz
-.yesBoots:
-    call UsePegasusBoots
-    pop af
-.out:
-        """, BOOTS_START_ADDR)
-
-    print(boots_code)
-    assert len(boots_code) // 2 <= (0x1214 - BOOTS_START_ADDR), (len(boots_code) // 2, 0x1214- BOOTS_START_ADDR)
-    for addr in range(BOOTS_START_ADDR, 0x1214):
-        rom.banks[0][addr] = 0
-        
-    rom.patch(0, BOOTS_START_ADDR, '00' * (0x1214 - BOOTS_START_ADDR), boots_code, fill_nop=True)
-    print(rom.banks[0][BOOTS_START_ADDR:0x1214])
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
