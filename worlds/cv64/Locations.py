@@ -3,6 +3,8 @@ import typing
 from BaseClasses import Location
 from .Names import LName, RName
 
+base_id = 0xC640000
+
 
 class CV64Location(Location):
     game: str = "Castlevania 64"
@@ -517,4 +519,6 @@ def create_locations(world, player: int, active_regions):
             stage = RName.regions_to_stages[data.region]
             created_location = CV64Location(player, loc, data.code, active_regions[data.region],
                                             data.cv64_rom_offset, data.cv64_loc_type, stage)
+            if created_location.address is not None:
+                created_location.address += base_id
             active_regions[data.region].locations.append(created_location)

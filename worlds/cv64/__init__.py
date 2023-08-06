@@ -8,7 +8,7 @@ import copy
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, key_table, special_table, \
     sub_weapon_table, pickup_item_discrepancies
-from .Locations import CV64Location, all_locations, create_locations, boss_table
+from .Locations import CV64Location, all_locations, create_locations, boss_table, base_id
 from .Entrances import create_entrances
 from .Options import cv64_options
 from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, vanilla_stage_exits
@@ -53,7 +53,7 @@ class CV64World(World):
     remote_items = False
 
     item_name_to_id = {name: code + 0xC64000 for name, code in item_table.items()}
-    location_name_to_id = {name: data.code + 0xC64000 for name, data in all_locations.items()}
+    location_name_to_id = {name: data.code + base_id for name, data in all_locations.items()}
 
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
