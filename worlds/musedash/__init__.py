@@ -154,8 +154,6 @@ class MuseDashWorld(World):
         if self.location_count < minimum_location_count:
             self.location_count = minimum_location_count
 
-        assert self.victory_song_name not in self.included_songs
-
     def create_item(self, name: str) -> Item:
         if name == self.md_collection.MUSIC_SHEET_NAME:
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
