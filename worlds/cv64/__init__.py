@@ -33,7 +33,7 @@ class CV64Web(WebWorld):
         ["Liquid Cat"]
     )
 
-    tutorials = "Insert setup webpage here"
+    tutorials = [setup_en]
 
 
 class CV64World(World):
@@ -170,11 +170,9 @@ class CV64World(World):
             self.multiworld.regions.append(active_regions[region])
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
-        s1_with_under_15 = name == IName.special_one and self.multiworld.total_special1s[self.player] < 15
-
         if force_non_progression:
             classification = ItemClassification.filler
-        elif name in key_table or s1_with_under_15:
+        elif name in key_table:
             classification = ItemClassification.progression
         elif name in special_table:
             classification = ItemClassification.progression_skip_balancing
@@ -318,18 +316,19 @@ class CV64World(World):
                     self.multiworld.itempool.append(self.create_item(item))
 
     def set_rules(self) -> None:
-        self.multiworld.get_location(LName.the_end, self.player).place_locked_item(self.create_item(IName.victory))
+        self.multiworld.get_location(LName.the_end, self.player).place_locked_item(
+            CV64Item(IName.victory, ItemClassification.progression, None, self.player))
 
         if self.multiworld.draculas_condition[self.player].value == 1:
             self.required_s2s = 1
             self.multiworld.get_location(LName.cc_behind_the_seal, self.player).place_locked_item(
-                self.create_item(IName.special_two))
+                CV64Item(IName.special_two, ItemClassification.progression, None, self.player))
         elif self.multiworld.draculas_condition[self.player].value == 2:
             self.required_s2s = self.multiworld.bosses_required[self.player].value
             for boss_loc in boss_table:
                 try:
                     self.multiworld.get_location(boss_loc, self.player).place_locked_item(
-                        self.create_item(IName.special_two))
+                        CV64Item(IName.special_two, ItemClassification.progression, None, self.player))
                 except KeyError:
                     continue
 
