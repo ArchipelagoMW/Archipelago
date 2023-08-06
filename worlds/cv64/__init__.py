@@ -186,8 +186,6 @@ class CV64World(World):
             classification = ItemClassification.progression
 
         created_item = CV64Item(name, classification, code, self.player)
-        if self.multiworld.draculas_condition[self.player].value != 3 and created_item.name == IName.special_two:
-            created_item.code = None
 
         return created_item
 
