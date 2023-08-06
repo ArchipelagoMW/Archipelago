@@ -2,7 +2,7 @@ from typing import Dict
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .Items import filler_items, item_table, item_name_groups
-from .Locations import location_table
+from .Locations import location_table, location_name_groups
 from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
 from .Regions import tunic_regions
 from .Options import tunic_options
@@ -46,6 +46,7 @@ class TunicWorld(World):
     tunic_locations = location_table
     option_definitions = tunic_options
     item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
 
     item_name_to_id = {}
     location_name_to_id = {}

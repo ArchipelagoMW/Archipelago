@@ -1,9 +1,10 @@
-from typing import Dict, List, NamedTuple
+from typing import Dict, NamedTuple, Set
+from itertools import groupby
 
 
-# this is here in case some more arguments need to be added later
 class TunicLocationData(NamedTuple):
     region: str
+    location_group: str = ""
 
 
 location_table: Dict[str, TunicLocationData] = {
@@ -42,8 +43,8 @@ location_table: Dict[str, TunicLocationData] = {
     "Guardhouse 2 - Bottom Floor Secret": TunicLocationData("East Forest"),
     "Guardhouse 1 - Upper Floor Obscured": TunicLocationData("East Forest"),
     "Guardhouse 1 - Upper Floor": TunicLocationData("East Forest"),
-    "East Forest - Dancing Fox Spirit Holy Cross": TunicLocationData("East Forest"),
-    "East Forest - Golden Obelisk Holy Cross": TunicLocationData("East Forest"),
+    "East Forest - Dancing Fox Spirit Holy Cross": TunicLocationData("East Forest", "holy cross"),
+    "East Forest - Golden Obelisk Holy Cross": TunicLocationData("East Forest", "holy cross"),
     "East Forest - Ice Rod Grapple Chest": TunicLocationData("East Forest"),
     "East Forest - Above Save Point": TunicLocationData("East Forest"),
     "East Forest - Above Save Point Obscured": TunicLocationData("East Forest"),
@@ -61,7 +62,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Forest Belltower - Obscured Near Bell Top Floor": TunicLocationData("East Forest"),
     "Forest Belltower - Obscured Beneath Bell Bottom Floor": TunicLocationData("East Forest"),
     "Forest Belltower - Page Pickup": TunicLocationData("East Forest"),
-    "Forest Grave Path - Holy Cross Code by Grave": TunicLocationData("East Forest"),
+    "Forest Grave Path - Holy Cross Code by Grave": TunicLocationData("East Forest", "holy cross"),
     "Forest Grave Path - Above Gate": TunicLocationData("East Forest"),
     "Forest Grave Path - Obscured Chest": TunicLocationData("East Forest"),
     "Forest Grave Path - Upper Walkway": TunicLocationData("East Forest"),
@@ -72,7 +73,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Fortress Arena - Hexagon Red": TunicLocationData("Eastern Vault Fortress"),
     "Fortress Arena - Siege Engine/Vault Key Pickup": TunicLocationData("Eastern Vault Fortress"),
     "Fortress East Shortcut - Chest Near Slimes": TunicLocationData("Eastern Vault Fortress"),
-    "Eastern Vault Fortress - [West Wing] Candles Holy Cross": TunicLocationData("Eastern Vault Fortress"),
+    "Eastern Vault Fortress - [West Wing] Candles Holy Cross": TunicLocationData("Eastern Vault Fortress", "holy cross"),
     "Eastern Vault Fortress - [West Wing] Dark Room Chest 1": TunicLocationData("Eastern Vault Fortress"),
     "Eastern Vault Fortress - [West Wing] Dark Room Chest 2": TunicLocationData("Eastern Vault Fortress"),
     "Eastern Vault Fortress - [East Wing] Bombable Wall": TunicLocationData("Eastern Vault Fortress"),
@@ -98,7 +99,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Frog's Domain - Side Room Grapple Secret": TunicLocationData("Frog's Domain"),
     "Frog's Domain - Magic Orb Pickup": TunicLocationData("Frog's Domain"),
     "Librarian - Hexagon Green": TunicLocationData("Library"),
-    "Library Hall - Holy Cross Chest": TunicLocationData("Library"),
+    "Library Hall - Holy Cross Chest": TunicLocationData("Library", "holy cross"),
     "Library Lab - Chest By Shrine 2": TunicLocationData("Library"),
     "Library Lab - Chest By Shrine 1": TunicLocationData("Library"),
     "Library Lab - Chest By Shrine 3": TunicLocationData("Library"),
@@ -177,33 +178,33 @@ location_table: Dict[str, TunicLocationData] = {
     "Coins in the Well - 6 Coins": TunicLocationData("Overworld"),
     "Secret Gathering Place - 20 Fairy Reward": TunicLocationData("Overworld"),
     "Secret Gathering Place - 10 Fairy Reward": TunicLocationData("Overworld"),
-    "Overworld - [West] Moss Wall Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [Southwest] Flowers Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [Southwest] Fountain Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [Northeast] Flowers Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [East] Weathervane Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [West] Windmill Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [Southwest] Haiku Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [West] Windchimes Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [South] Starting Platform Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Overworld - [Northwest] Golden Obelisk Page": TunicLocationData("Overworld Holy Cross"),
-    "Old House - Holy Cross Door Page": TunicLocationData("Overworld Holy Cross"),
-    "Cube Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Southeast Cross Door - Chest 3": TunicLocationData("Overworld Holy Cross"),
-    "Southeast Cross Door - Chest 2": TunicLocationData("Overworld Holy Cross"),
-    "Southeast Cross Door - Chest 1": TunicLocationData("Overworld Holy Cross"),
-    "Maze Cave - Maze Room Holy Cross": TunicLocationData("Overworld Holy Cross"),
-    "Caustic Light Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Old House - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Patrol Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Ruined Passage - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Hourglass Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Sealed Temple - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Fountain Cross Door - Page Pickup": TunicLocationData("Overworld Holy Cross"),
-    "Secret Gathering Place - Holy Cross Chest": TunicLocationData("Overworld Holy Cross"),
-    "Top of the Mountain - Page At The Peak": TunicLocationData("Overworld Holy Cross"),
+    "Overworld - [West] Moss Wall Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [Southwest] Flowers Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [Southwest] Fountain Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [Northeast] Flowers Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [East] Weathervane Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [West] Windmill Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [Southwest] Haiku Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [West] Windchimes Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [South] Starting Platform Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Overworld - [Northwest] Golden Obelisk Page": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Old House - Holy Cross Door Page": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Cube Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Southeast Cross Door - Chest 3": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Southeast Cross Door - Chest 2": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Southeast Cross Door - Chest 1": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Maze Cave - Maze Room Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Caustic Light Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Old House - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Patrol Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Ruined Passage - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Hourglass Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Sealed Temple - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Fountain Cross Door - Page Pickup": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Secret Gathering Place - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "holy cross"),
+    "Top of the Mountain - Page At The Peak": TunicLocationData("Overworld Holy Cross", "holy cross"),
     "Monastery - Monastery Chest": TunicLocationData("Quarry"),
-    "Quarry - [Back Entrance] Bushes Holy Cross": TunicLocationData("Quarry"),
+    "Quarry - [Back Entrance] Bushes Holy Cross": TunicLocationData("Quarry", "holy cross"),
     "Quarry - [Back Entrance] Chest": TunicLocationData("Quarry"),
     "Quarry - [Central] Near Shortcut Ladder": TunicLocationData("Quarry"),
     "Quarry - [East] Near Telescope": TunicLocationData("Quarry"),
@@ -287,11 +288,11 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Feathers Relic": TunicLocationData("Swamp"),
     "Overworld Belltower - Chest": TunicLocationData("West Garden"),
     "Overworld - [West] Near Gardens Entrance": TunicLocationData("West Garden"),
-    "West Garden - [Central Highlands] Holy Cross (Blue Lines)": TunicLocationData("West Garden"),
-    "West Garden - [West Lowlands] Tree Holy Cross Chest": TunicLocationData("West Garden"),
+    "West Garden - [Central Highlands] Holy Cross (Blue Lines)": TunicLocationData("West Garden", "holy cross"),
+    "West Garden - [West Lowlands] Tree Holy Cross Chest": TunicLocationData("West Garden", "holy cross"),
     "West Garden - [Southeast Lowlands] Outside Cave": TunicLocationData("West Garden"),
     "West Garden - [Central Lowlands] Chest Beneath Faeries": TunicLocationData("West Garden"),
-    "West Garden - [North] Behind Holy Cross Door": TunicLocationData("West Garden"),
+    "West Garden - [North] Behind Holy Cross Door": TunicLocationData("West Garden", "holy cross"),
     "West Garden - [Central Highlands] Top of Ladder Before Boss": TunicLocationData("West Garden"),
     "West Garden - [Central Lowlands] Passage Beneath Bridge": TunicLocationData("West Garden"),
     "West Garden - [North] Across From Page Pickup": TunicLocationData("West Garden"),
@@ -309,4 +310,13 @@ location_table: Dict[str, TunicLocationData] = {
     "West Garden - [North] Page Pickup": TunicLocationData("West Garden"),
     "West Garden House - [Southeast Lowlands] Ice Dagger Pickup": TunicLocationData("West Garden"),
     "Hero's Grave - Effigy Relic": TunicLocationData("West Garden"),
+}
+
+
+def get_loc_group(location_name: str) -> str:
+    return location_table[location_name].location_group
+
+
+location_name_groups: Dict[str, Set[str]] = {
+    group: set(item_names) for group, item_names in groupby(sorted(location_table, key=get_loc_group), get_loc_group)
 }
