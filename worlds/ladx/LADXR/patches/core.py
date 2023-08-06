@@ -580,7 +580,7 @@ def addBootsControls(rom, boots_controls: BootsControls):
         """
     }[boots_controls.value]
 
-    # In the case of using "bracelet" controls, the new code fits exactly within Nintendo's poorly space optimzied code
+    # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
     boots_code = assembler.ASM("""
 CheckBoots:
     ; check if we own boots
