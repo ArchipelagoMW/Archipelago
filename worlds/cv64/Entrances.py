@@ -111,7 +111,6 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.tosor_main, get_next_stage_start(RName.tower_of_sorcery)),
         # Room of Clocks
         EntranceData(RName.roc_main, get_next_stage_start(RName.room_of_clocks)),
-        EntranceData(RName.roc_main, RName.renon),
         # Clock Tower
         EntranceData(RName.ct_start, RName.ct_middle,
                      lambda state: state.has(IName.clocktower_key_one, player)),
@@ -128,15 +127,6 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.ck_main, RName.roc_main, hard_entrance=True),
         EntranceData(RName.ck_main, RName.ck_drac_chamber)
     ]
-
-    # Figure out the active farm regions for shopsanity logic
-    farmable_regions = [RName.forest_start, RName.forest_mid, RName.cw_start, RName.cw_ltower, RName.villa_main,
-                        RName.villa_maze, RName.tunnel_start, RName.tunnel_end, RName.uw_main, RName.cc_lower,
-                        RName.cc_upper, RName.cc_elev_top, RName.tosor_main, RName.ct_middle, RName.ct_end]
-    active_farm_regions = []
-    for region in farmable_regions:
-        if region in active_regions:
-            active_farm_regions.append(region)
 
     # Set up the starting stage and warp entrances
     for i in range(len(active_warp_list)):
@@ -165,9 +155,5 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
             created_entrance = Entrance(player, data.target_region, active_regions[data.parent_region])
             if data.rule and rule_not_too_easy:
                 created_entrance.access_rule = data.rule
-            # Make sure there are any farm-able regions accessible before expecting players to grind money for Renon.
-            if data.target_region == RName.renon and multiworld.maximum_gold_price[player] != 0:
-                created_entrance.access_rule = lambda state: \
-                    any((state.can_reach(farm_region, "Region", player) for farm_region in active_farm_regions))
             created_entrance.connect(active_regions[data.target_region])
             active_regions[data.parent_region].exits.append(created_entrance)
