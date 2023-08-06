@@ -7254,4 +7254,28 @@
         <Pitch value="-18.000000,-15.000000"/>
         <Volume value="-20.000000,0.000000"/>
     </CSound>
+    <CSound id="AP_HHViking_SpeedMorphToAssaultMode" parent="Spell">
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <Volume value="-8.000000,-8.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_MorphToAssault0.wav" Offset="60000,60000"/>
+        <EditorCategories value="Race:Terran"/>
+        <Pitch value="0.000000,1.000000"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+    </CSound>
+    <CSound id="AP_HHViking_SpeedMorphToFighterMode" parent="Spell">
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <Volume value="-8.000000,-8.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_MorphToFighter0.wav" Offset="70000,70000"/>
+        <EditorCategories value="Race:Terran"/>
+        <Pitch value="0.000000,1.000000"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+    </CSound>
 </Catalog>

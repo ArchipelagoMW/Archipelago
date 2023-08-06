@@ -18895,21 +18895,27 @@
     </CActorSound>
     <CActorSound id="AP_LiberatorAGSoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <On Terms="UnitDeath.AP_LiberatorAG" Send="Destroy"/>
-        <On Terms="UnitDeath.AP_VikingFighter" Send="Destroy"/>
-        <On Terms="UnitDeath.AP_HelsAngelFighter" Send="Destroy"/>
         <Sound value="AP_Liberator_AG_Morph_Servo"/>
     </CActorSound>
     <CActorSound id="AP_LiberatorAASoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_Liberator; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
+        <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
+        <Sound value="AP_Liberator_AA_Morph_Servo"/>
+    </CActorSound>
+    <CActorSound id="AP_VikingFighterSoundServo" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="UnitDeath.AP_VikingFighter" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_HelsAngelFighter" Send="Destroy"/>
+        <Sound value="AP_HHViking_SpeedMorphToFighterMode"/>
+    </CActorSound>
+    <CActorSound id="AP_VikingAssaultSoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
-        <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
         <On Terms="UnitDeath.AP_VikingAssault" Send="Destroy"/>
         <On Terms="UnitDeath.AP_HelsAngelAssault" Send="Destroy"/>
-        <Sound value="AP_Liberator_AA_Morph_Servo"/>
+        <Sound value="AP_HHViking_SpeedMorphToAssaultMode"/>
     </CActorSound>
     <CActorSiteOpBankerUnit id="AP_SOpBankerLiberator">
         <RollMax value="30.000000,10.000000"/>
