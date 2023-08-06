@@ -1,5 +1,7 @@
 from typing import Dict
-from Options import Option, Choice, DefaultOnToggle, Range, Toggle, DeathLink
+from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList, DeathLink
+from .Names import RName
+from .Stages import vanilla_stage_order
 
 
 class CharacterStages(Choice):
@@ -17,6 +19,21 @@ class StageShuffle(Toggle):
     stage slots if all character stages are included; they can only be somewhere on the main path.
     Castle Keep will always be at the end of the line."""
     display_name = "Stage Shuffle"
+
+
+# class CustomStageOrder(OptionList):
+#     """Make a custom order for Castlevania 64's stages to be in.
+#     Format as a comma-separated list of "nice" names: ["Tunnel", "Castle Wall", "Tower of Science", etc.].
+#     Must include all "main path" stages and Reinhardt and/or Carrie stages to be considered valid.
+#     Do not include Castle Keep; it will always be at the end.
+#     Branching paths will be considered on the following conditions:
+#    -All stages are included.
+#     -Two stages follow Villa and four stages follow Castle Center (not counting Castle Keep).
+#     -Character Stages is not set to both_no_branches.
+#     """
+#     display_name = "Custom Stage Order"
+#     valid_keys = frozenset({stage.casefold() for stage in vanilla_stage_order if stage != RName.castle_keep})
+#     valid_keys_casefold = True
 
 
 class WarpShuffle(Choice):
@@ -320,6 +337,7 @@ class MapLighting(Choice):
 cv64_options: Dict[str, Option] = {
     "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
+    # "custom_stage_order": CustomStageOrder,
     "warp_shuffle": WarpShuffle,
     "sub_weapon_shuffle": SubWeaponShuffle,
     "extra_keys": ExtraKeys,

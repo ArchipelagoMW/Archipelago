@@ -280,6 +280,13 @@ vanilla_stage_exits = {"Forest of Silence":    [None,               "Castle Wall
                        "Castle Keep":          [None,               None,                 None,                   10]}
 
 
+# def set_custom_stage_order(multiworld, player, active_stage_list, active_stage_exits):
+#     valid = True
+#     branching_valid = True
+#     if len(multiworld.custom_stage_order[player]) == 12:
+#         for stage in multiworld.custom_stage_order[player]:
+
+
 def shuffle_stages(multiworld, player, active_stage_list, active_stage_exits, stage_1_blacklist):
     new_stage_order = []
     villa_cc_ids = [2, 3]

@@ -166,9 +166,8 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
             if data.rule and rule_not_too_easy:
                 created_entrance.access_rule = data.rule
             # Make sure there are any farm-able regions accessible before expecting players to grind money for Renon.
-            if data.target_region == RName.renon and multiworld.minimum_gold_price[player] != 0 and \
-                    multiworld.maximum_gold_price[player] != 0:
+            if data.target_region == RName.renon and multiworld.maximum_gold_price[player] != 0:
                 created_entrance.access_rule = lambda state: \
-                    any([state.can_reach(farm_region, "Region", player) for farm_region in active_farm_regions])
+                    any(state.can_reach(farm_region, "Region", player) for farm_region in active_farm_regions)
             created_entrance.connect(active_regions[data.target_region])
             active_regions[data.parent_region].exits.append(created_entrance)

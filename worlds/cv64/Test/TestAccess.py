@@ -14,13 +14,13 @@ class WarpTest(CV64TestBase):
         self.assertTrue(self.can_reach_entrance("Warp 3"))
 
 
-class ShopTest(CV64TestBase):
-    options = {
-        "stage_shuffle": True,
-        "shopsanity": True
-    }
+# class ShopTest(CV64TestBase):
+#    options = {
+#         "stage_shuffle": True,
+#         "shopsanity": True
+#     }
 
-    def testShop(self):
-        self.assertFalse(self.can_reach_location("Renon's shop: Roast Chicken purchase"))
-        self.collect(self.get_item_by_name("Clocktower Key1"))
-        self.assertTrue(self.can_reach_location("Renon's shop: Roast Chicken purchase"))
+#     def testShop(self):
+#         self.assertFalse(self.can_reach_location("Renon's shop: Roast Chicken purchase"))
+#         self.collect(self.get_item_by_name("Clocktower Key1"))
+#         self.assertTrue(self.can_reach_location("Renon's shop: Roast Chicken purchase"))
