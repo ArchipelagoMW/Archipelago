@@ -325,6 +325,30 @@ class TestWeaponsLogic(SVTestBase):
         self.remove(item)
 
 
+class TestMonstersanityProgressiveRules(SVTestBase):
+    options = {
+        options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
+    }
+
+    def test_has_rules(self):
+        for location in self.multiworld.get_locations(self.player):
+            if "Monster Eradication: " not in location.name:
+                continue
+            self.assertFalse(self.world.logic.region.can_reach_location(location)(self.multiworld.state))
+
+
+class TestMonstersanitySplitRules(SVTestBase):
+    options = {
+        options.Monstersanity.internal_name: options.Monstersanity.option_split_goals,
+    }
+
+    def test_has_rules(self):
+        for location in self.multiworld.get_locations(self.player):
+            if "Monster Eradication: " not in location.name:
+                continue
+            self.assertFalse(self.world.logic.region.can_reach_location(location)(self.multiworld.state))
+
+
 class TestRecipeLogic(SVTestBase):
     options = {
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,

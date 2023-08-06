@@ -38,6 +38,8 @@ class Group(enum.Enum):
     WEAPON = enum.auto()
     PROGRESSIVE_TOOLS = enum.auto()
     SKILL_LEVEL_UP = enum.auto()
+    BUILDING = enum.auto()
+    WIZARD_BUILDING = enum.auto()
     ARCADE_MACHINE_BUFFS = enum.auto()
     GALAXY_WEAPONS = enum.auto()
     BASE_RESOURCE = enum.auto()

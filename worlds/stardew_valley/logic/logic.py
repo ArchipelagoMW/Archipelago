@@ -113,7 +113,7 @@ class StardewLogic:
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
         self.museum = MuseumLogic(self.player, self.options[options.Museumsanity], self.received, self.has, self.region, self.action)
         self.wallet = WalletLogic(self.player, self.received, self.museum)
-        self.combat = CombatLogic(self.player, self.received)
+        self.combat = CombatLogic(self.player, self.received, self.region)
         self.tool = ToolLogic(self.player, tool_option, self.received, self.has, self.region, self.season, self.money)
         self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.has, self.region, self.season, self.tool)

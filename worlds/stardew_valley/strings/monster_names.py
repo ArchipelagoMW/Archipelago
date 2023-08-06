@@ -52,7 +52,7 @@ class Monster:
 
 
 class MonsterCategory:
-    slime = "Slime"
+    slime = "Slimes"
     void_spirits = "Void Spirits"
     bats = "Bats"
     skeletons = "Skeletons"

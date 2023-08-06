@@ -2,6 +2,10 @@ def dig_to_mines_floor(floor: int) -> str:
     return f"Dig to The Mines - Floor {floor}"
 
 
+def dig_to_dangerous_mines_floor(floor: int) -> str:
+    return f"Dig to the Dangerous Mines - Floor {floor}"
+
+
 def dig_to_skull_floor(floor: int) -> str:
     return f"Mine to Skull Cavern Floor {floor}"
 
@@ -22,6 +26,10 @@ class Entrance:
     farm_to_forest = "Farm to Forest"
     farm_to_farmcave = "Farm to Farmcave"
     enter_greenhouse = "Farm to Greenhouse"
+    enter_coop = "Farm to Coop"
+    enter_barn = "Farm to Barn"
+    enter_shed = "Farm to Shed"
+    enter_slime_hutch = "Farm to Slime Hutch"
     use_desert_obelisk = "Use Desert Obelisk"
     use_island_obelisk = "Use Island Obelisk"
     use_farm_obelisk = "Use Farm Obelisk"
@@ -108,6 +116,7 @@ class Entrance:
     mine_to_skull_cavern_floor_150 = dig_to_skull_floor(150)
     mine_to_skull_cavern_floor_175 = dig_to_skull_floor(175)
     mine_to_skull_cavern_floor_200 = dig_to_skull_floor(200)
+    enter_dangerous_skull_cavern = "Enter the Dangerous Skull Cavern"
     talk_to_mines_dwarf = "Talk to Mines Dwarf"
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
@@ -133,6 +142,9 @@ class Entrance:
     dig_to_mines_floor_110 = dig_to_mines_floor(110)
     dig_to_mines_floor_115 = dig_to_mines_floor(115)
     dig_to_mines_floor_120 = dig_to_mines_floor(120)
+    dig_to_dangerous_mines_20 = dig_to_dangerous_mines_floor(20)
+    dig_to_dangerous_mines_60 = dig_to_dangerous_mines_floor(60)
+    dig_to_dangerous_mines_100 = dig_to_dangerous_mines_floor(100)
     island_south_to_west = "Island South to West"
     island_south_to_north = "Island South to North"
     island_south_to_east = "Island South to East"
