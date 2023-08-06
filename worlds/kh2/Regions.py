@@ -1111,12 +1111,9 @@ def connect_regions(world: MultiWorld, player: int):
         RegionName.AtlanticaSongThree: {RegionName.AtlanticaSongFour},
     }
 
-    names: typing.Dict[str, int] = {}
     for source, target in KH2RegionConnections.items():
         source_region = world.get_region(source, player)
         source_region.add_exits(target)
-        for region in target:
-            connect(world, player, names, source, region)
 
 
 # cave fight:fire/guard
@@ -1137,27 +1134,6 @@ def connect_regions(world: MultiWorld, player: int):
 # sp2: reflera, stitch, basse tools, reflera, thundara, fantasia/duck flare,once more.
 # tt3: stitch/chicken little, magnera,reflera,base tools,finishing leap,limit form
 # cor
-
-def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
-    rule: typing.Optional[typing.Callable] = None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
-
-    if target not in used_names:
-        used_names[target] = 1
-        name = target
-    else:
-        used_names[target] += 1
-        name = target + (' ' * used_names[target])
-
-    connection = Entrance(player, name, source_region)
-
-    if rule:
-        connection.access_rule = rule
-
-    source_region.exits.append(connection)
-    connection.connect(target_region)
-
 
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, world)
