@@ -59,6 +59,7 @@ def set_region_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Eastern Vault Fortress -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
     multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = lambda state: state.has(mask, player)
 
+
 def set_location_rules(multiworld: MultiWorld, player: int):
     laurels = "Hero's Laurels"
     grapple = "Magic Orb"
@@ -160,12 +161,12 @@ def set_location_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
              lambda state: state.has(fairies, player, 20))
-    set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player), lambda state: state.has(coins, 3, player))
-    set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player), lambda state: state.has(coins, 6, player))
+    set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player), lambda state: state.has(coins, player, 3))
+    set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player), lambda state: state.has(coins, player, 6))
     set_rule(multiworld.get_location("Coins in the Well - 10 Coins", player),
-             lambda state: state.has(coins, 10, player))
+             lambda state: state.has(coins, player, 10))
     set_rule(multiworld.get_location("Coins in the Well - 15 Coins", player),
-             lambda state: state.has(coins, 15, player))
+             lambda state: state.has(coins, player, 15))
 
     # East Forest
     set_rule(multiworld.get_location("East Forest - Lower Grapple Chest", player),
