@@ -835,7 +835,7 @@
         <Range value="10"/>
         <PrepTime value="0.01"/>
         <FinishTime value="2.5"/>
-        <CursorEffect value="EMPSearch"/>
+        <CursorEffect value="AP_EMPSearch"/>
         <AINotifyEffect value="EMPLaunchMissile"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="EMP" State="Restricted">
             <Flags index="ShowInGlossary" value="0"/>

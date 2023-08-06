@@ -11100,7 +11100,7 @@
         <LaunchLocation Value="TargetPoint"/>
         <ImpactLocation Value="TargetPoint"/>
         <SearchFilters value="-;Hidden,Invulnerable"/>
-        <AreaArray Radius="1.875" Effect="AP_ScienceVesselSCBWEMPShockwave@Set"/>
+        <AreaArray Radius="3" Effect="AP_ScienceVesselSCBWEMPShockwave@Set"/>
     </CEffectEnumArea>
     <CEffectSet id="AP_ScienceVesselSCBWEMPShockwave@Set">
         <EditorCategories value="Race:Terran"/>
