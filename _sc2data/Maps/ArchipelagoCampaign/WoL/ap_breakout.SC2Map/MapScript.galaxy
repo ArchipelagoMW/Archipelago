@@ -325,8 +325,8 @@ void gf_CellBlockMoveWorker (unit lp_worker, region lp_locale) {
         return ;
     }
 
-    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("Diamondback", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
-    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("SiegeTank", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("AP_Diamondback", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
+    libNtve_gf_AddUnitGroupToUnitGroup(UnitGroup("AP_SiegeTank", gv_p0_NEUTRAL, lp_locale, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), lv_vehicles);
     if ((UnitGroupCount(lv_vehicles, c_unitCountAlive) > 0)) {
         UnitIssueOrder(lp_worker, OrderTargetingPoint(AbilityCommand("move", 0), UnitGetPosition(UnitGroupRandomUnit(lv_vehicles, c_unitCountAlive))), c_orderQueueReplace);
     }
@@ -489,7 +489,7 @@ void gf_MedicAI (int lp_owner, unit lp_medic, unitgroup lp_candidates) {
     // Automatic Variable Declarations
     // Implementation
     if ((UnitGetPropertyFixed(gv_tosh, c_unitPropLifePercent, c_unitPropCurrent) < 100.0) && (DistanceBetweenPoints(UnitGetPosition(gv_tosh), UnitGetPosition(lp_medic)) <= 6.0)) {
-        libNtve_gf_AICast(lp_medic, OrderTargetingUnit(AbilityCommand("heal", 0), gv_tosh));
+        libNtve_gf_AICast(lp_medic, OrderTargetingUnit(AbilityCommand("AP_heal", 0), gv_tosh));
     }
 
 }
@@ -523,23 +523,39 @@ void gt_Initialization_Init () {
 // Trigger: Init 01 Technology
 //--------------------------------------------------------------------------------------------------
 bool gt_Init01Technology_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
     // Automatic Variable Declarations
+    playergroup autoC3152ADA_g;
+
+    // Variable Initialization
+
     // Actions
     if (!runActions) {
         return true;
     }
 
-    libCamp_gf_SetTechRestrictionsCallback(TriggerGetCurrent());
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("HeroNuclearStrike", 0), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("MindBlast", 0), false);
     TechTreeAbilityAllow(gv_p1_USER, AbilityCommand("Consumption", 0), false);
-    gf_UpgradeForAllies(1, "TerranInfantryArmorsLevel1");
+    gf_UpgradeForAllies(1, "AP_TerranInfantryArmorsPreplacedNoBuild");
     gf_UpgradeForAllies(1, "SiegeTech");
-    TechTreeUnitAllow(gv_p2_RAYNOR_LIGHTBLUE, "Marauder", true);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupInfantryMarauder, gv_p2_RAYNOR_LIGHTBLUE);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesDiamondback, gv_p11_ALLIED_CELLBLOCK_A);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupVehiclesSiegeTank, gv_p12_ALLIED_CELLBLOCK_B);
-    TechTreeAbilityAllow(gv_p2_RAYNOR_LIGHTBLUE, AbilityCommand("StimPack", 0), false);
+    autoC3152ADA_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(autoC3152ADA_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarine(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedic(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauder(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunker(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockMissileTurret(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTank(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondback(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderInternalTechModule(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities(lv_currentPlayer);
+    }
     gf_UpgradeForEnemies(1, "TerranInfantryArmorsLevel1");
     gf_UpgradeForEnemies(1, "SiegeTech");
     TechTreeUpgradeAddLevel(gv_p3_DOMINION_RED, "PunisherGrenades", 1);
@@ -735,7 +751,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     UnitSetState(UnitFromId(126), c_unitStateSelectable, false);
     UnitSetState(UnitFromId(126), c_unitStateTargetable, false);
     UnitSetState(UnitFromId(126), c_unitStateStatusBar, false);
-    autoAE243F6A_g = UnitGroup("Diamondback", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    autoAE243F6A_g = UnitGroup("AP_Diamondback", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoAE243F6A_u = UnitGroupCount(autoAE243F6A_g, c_unitCountAll);
     for (;; autoAE243F6A_u -= 1) {
         autoAE243F6A_var = UnitGroupUnitFromEnd(autoAE243F6A_g, autoAE243F6A_u);
@@ -745,7 +761,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
         UnitSetState(autoAE243F6A_var, c_unitStateStatusBar, false);
         UnitSetState(autoAE243F6A_var, c_unitStateInvulnerable, true);
     }
-    auto34E8DD9B_g = UnitGroup("SiegeTank", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto34E8DD9B_g = UnitGroup("AP_SiegeTank", 0, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto34E8DD9B_u = UnitGroupCount(auto34E8DD9B_g, c_unitCountAll);
     for (;; auto34E8DD9B_u -= 1) {
         auto34E8DD9B_var = UnitGroupUnitFromEnd(auto34E8DD9B_g, auto34E8DD9B_u);
@@ -766,7 +782,7 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_CellBlockAPrisonerWander, true, false);
     TriggerExecute(gt_CellBlockBPrisonerWander, true, false);
     UnitIssueOrder(UnitFromId(731), OrderTargetingPoint(AbilityCommand("move", 1), PointFromId(1151)), c_orderQueueReplace);
-    gv_nonActivatedDiamondbacks = UnitGroup("Diamondback", 0, RegionFromId(26), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    gv_nonActivatedDiamondbacks = UnitGroup("AP_Diamondback", 0, RegionFromId(26), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoA878FA45_g = UnitGroup(null, gv_p6_DOMINION_ORANGE, RegionFromId(10), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoA878FA45_u = UnitGroupCount(autoA878FA45_g, c_unitCountAll);
     for (;; autoA878FA45_u -= 1) {
@@ -795,8 +811,8 @@ bool gt_Init03Units_Func (bool testConds, bool runActions) {
     UnitIssueOrder(UnitFromId(1648), Order(AbilityCommand("move", 2)), c_orderQueueReplace);
     UnitBehaviorAdd(UnitFromId(24), "FastBuild", UnitFromId(24), 1);
     UnitBehaviorAdd(UnitFromId(25), "FastBuild", UnitFromId(25), 1);
-    UnitCargoCreate(UnitFromId(6), "Marine", 4);
-    UnitCargoCreate(UnitFromId(7), "Marine", 4);
+    UnitCargoCreate(UnitFromId(6), "AP_Marine", 4);
+    UnitCargoCreate(UnitFromId(7), "AP_Marine", 4);
     autoB69A8C3C_g = UnitGroup(null, gv_p3_DOMINION_RED, RegionFromId(58), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoB69A8C3C_u = UnitGroupCount(autoB69A8C3C_g, c_unitCountAll);
     for (;; autoB69A8C3C_u -= 1) {
@@ -913,7 +929,7 @@ bool gt_Init06Difficulties_Func (bool testConds, bool runActions) {
     while (true) {
         autoB6AD81FD_var = PlayerGroupNextPlayer(autoB6AD81FD_g, autoB6AD81FD_var);
         if (autoB6AD81FD_var < 0) { break; }
-        libNtve_gf_SetTacticalAIThink(autoB6AD81FD_var, "Medic", "MedicAI", false);
+        libNtve_gf_SetTacticalAIThink(autoB6AD81FD_var, "AP_Medic", "MedicAI", false);
     }
     if (((PlayerDifficulty(1) == 3 || PlayerDifficulty(1) == 4) == true)) {
         AISetDifficulty(gv_p3_DOMINION_RED, c_diffPressForward, true);
@@ -2110,7 +2126,7 @@ bool gt_CellBlockACompleted_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_p1_USER, RegionFromId(13), 0.0, false);
     TriggerExecute(gt_CellBlockACompletedQ, true, false);
     TriggerStop(gt_CellBlockAPrisonerWander);
-    gf_CellBlockAssignDrivers("Diamondback", "Diamondback", RegionFromId(22), RegionFromId(13));
+    gf_CellBlockAssignDrivers("AP_Diamondback", "AP_Diamondback", RegionFromId(22), RegionFromId(13));
     while (!((gv_firstDiamondbacksActivated >= 1))) {
         Wait(1.0, c_timeAI);
     }
@@ -2481,7 +2497,7 @@ bool gt_CellBlockBCompleted_Func (bool testConds, bool runActions) {
     VisRevealArea(gv_p1_USER, RegionFromId(15), 0.0, false);
     TriggerExecute(gt_CellBlockBCompletedQ, true, false);
     TriggerStop(gt_CellBlockBPrisonerWander);
-    gf_CellBlockAssignDrivers("SiegeTank", "SiegeTank", RegionFromId(31), RegionFromId(15));
+    gf_CellBlockAssignDrivers("AP_SiegeTank", "AP_SiegeTank", RegionFromId(31), RegionFromId(15));
     while (!((gv_firstSiegeTanksActivated >= 2))) {
         Wait(1.0, c_timeAI);
     }
@@ -2799,8 +2815,8 @@ bool gt_CellBlockSpawners_Func (bool testConds, bool runActions) {
     }
 
     if ((gv_bonusClear01 == true)) {
-        if ((UnitGroupCount(UnitGroup("Diamondback", gv_p0_NEUTRAL, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "Diamondback", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(18)), 43.0);
+        if ((UnitGroupCount(UnitGroup("AP_Diamondback", gv_p0_NEUTRAL, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "AP_Diamondback", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(18)), 43.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
@@ -2809,15 +2825,15 @@ bool gt_CellBlockSpawners_Func (bool testConds, bool runActions) {
     }
 
     if ((gv_bonusClear02 == true)) {
-        if ((UnitGroupCount(UnitGroup("SiegeTank", gv_p0_NEUTRAL, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(20)), 135.0);
+        if ((UnitGroupCount(UnitGroup("AP_SiegeTank", gv_p0_NEUTRAL, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "AP_SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(20)), 135.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
         }
 
-        if ((UnitGroupCount(UnitGroup("SiegeTank", gv_p0_NEUTRAL, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
-            UnitCreate(1, "SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(19)), 45.0);
+        if ((UnitGroupCount(UnitGroup("AP_SiegeTank", gv_p0_NEUTRAL, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) < 1)) {
+            UnitCreate(1, "AP_SiegeTank", 0, gv_p0_NEUTRAL, RegionGetCenter(RegionFromId(19)), 45.0);
             UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
             UnitSetState(UnitLastCreated(), c_unitStateStatusBar, false);
             UnitSetState(UnitLastCreated(), c_unitStateInvulnerable, true);
@@ -3022,6 +3038,9 @@ void gt_OutpostBuild01AutoSaveQ_Init () {
 // Trigger: Defense Outpost01 Create
 //--------------------------------------------------------------------------------------------------
 bool gt_DefenseOutpost01Create_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unitgroup lv_sCVs;
+
     // Automatic Variable Declarations
     unitgroup auto87C9B864_g;
     int auto87C9B864_u;
@@ -3030,14 +3049,20 @@ bool gt_DefenseOutpost01Create_Func (bool testConds, bool runActions) {
     int auto5B138040_u;
     unit auto5B138040_var;
 
+    // Variable Initialization
+    lv_sCVs = UnitGroupEmpty();
+
     // Actions
     if (!runActions) {
         return true;
     }
 
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(292), PointFromId(280), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(293), PointFromId(281), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(341), PointFromId(282), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
+    libABFE498B_gf_AP_Triggers_Terran_unlockMarine(gv_p8_ALLIED_PINK);
+    libABFE498B_gf_AP_Triggers_Terran_unlockMedic(gv_p8_ALLIED_PINK);
+    libABFE498B_gf_AP_Triggers_Terran_unlockBunker(gv_p8_ALLIED_PINK);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(292), PointFromId(280), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(293), PointFromId(281), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
+    gf_SpawnDropPod(gv_p8_ALLIED_PINK, PointFromId(341), PointFromId(282), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
     Wait(5.0, c_timeGame);
     AIToggleBulliesInRegion(gv_p8_ALLIED_PINK, RegionFromId(5), true);
     auto87C9B864_g = UnitGroup(null, gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -3048,12 +3073,13 @@ bool gt_DefenseOutpost01Create_Func (bool testConds, bool runActions) {
         AISetUnitScriptControlled(auto87C9B864_var, false);
     }
     Wait(5.0, c_timeGame);
-    auto5B138040_g = UnitGroup("SCV", gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    lv_sCVs = UnitGroup("AP_SCV", gv_p8_ALLIED_PINK, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto5B138040_g = lv_sCVs;
     auto5B138040_u = UnitGroupCount(auto5B138040_g, c_unitCountAll);
     for (;; auto5B138040_u -= 1) {
         auto5B138040_var = UnitGroupUnitFromEnd(auto5B138040_g, auto5B138040_u);
         if (auto5B138040_var == null) { break; }
-        UnitIssueOrder(auto5B138040_var, OrderSetAutoCast(AbilityCommand("Repair", 0), true), c_orderQueueReplace);
+        UnitIssueOrder(auto5B138040_var, OrderSetAutoCast(AbilityCommand("AP_Repair", 0), true), c_orderQueueAddToEnd);
         AISetUnitScriptControlled(auto5B138040_var, false);
     }
     return true;
@@ -3149,9 +3175,12 @@ bool gt_DefenseOutpost02Create_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(292), PointFromId(434), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(293), PointFromId(435), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
-    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(341), PointFromId(442), 4, "Marine", 1, "Medic", 1, "SCV", 0.5);
+    libABFE498B_gf_AP_Triggers_Terran_unlockMarine(gv_p9_ALLIED_GREEN);
+    libABFE498B_gf_AP_Triggers_Terran_unlockMedic(gv_p9_ALLIED_GREEN);
+    libABFE498B_gf_AP_Triggers_Terran_unlockBunker(gv_p9_ALLIED_GREEN);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(292), PointFromId(434), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(293), PointFromId(435), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
+    gf_SpawnDropPod(gv_p9_ALLIED_GREEN, PointFromId(341), PointFromId(442), 4, "AP_Marine", 1, "AP_Medic", 1, "AP_SCV", 0.5);
     Wait(5.0, c_timeGame);
     AIToggleBulliesInRegion(gv_p9_ALLIED_GREEN, RegionFromId(6), true);
     auto93529AFD_g = UnitGroup(null, gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
@@ -3162,12 +3191,12 @@ bool gt_DefenseOutpost02Create_Func (bool testConds, bool runActions) {
         AISetUnitScriptControlled(auto93529AFD_var, false);
     }
     Wait(5.0, c_timeGame);
-    auto190CD919_g = UnitGroup("SCV", gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto190CD919_g = UnitGroup("AP_SCV", gv_p9_ALLIED_GREEN, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto190CD919_u = UnitGroupCount(auto190CD919_g, c_unitCountAll);
     for (;; auto190CD919_u -= 1) {
         auto190CD919_var = UnitGroupUnitFromEnd(auto190CD919_g, auto190CD919_u);
         if (auto190CD919_var == null) { break; }
-        UnitIssueOrder(auto190CD919_var, OrderSetAutoCast(AbilityCommand("Repair", 0), true), c_orderQueueReplace);
+        UnitIssueOrder(auto190CD919_var, OrderSetAutoCast(AbilityCommand("AP_Repair", 0), true), c_orderQueueReplace);
         AISetUnitScriptControlled(auto190CD919_var, false);
     }
     return true;
@@ -3189,7 +3218,7 @@ bool gt_SCVReturn_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "SCV"))) {
+        if (!((UnitGetType(EventUnit()) == "AP_SCV"))) {
             return false;
         }
     }
@@ -3330,8 +3359,8 @@ bool gt_ALLYAttackWavesMainBase_Func (bool testConds, bool runActions) {
     if (auto95CD12D3_val == 0) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p5_DOMINION_GREY));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(4, 4, 4, 4, "Marine");
-        AIAttackWaveAddUnits4(1, 1, 1, 1, "Medic");
+        AIAttackWaveAddUnits4(4, 4, 4, 4, "AP_Marine");
+        AIAttackWaveAddUnits4(1, 1, 1, 1, "AP_Medic");
         if ((TimerGetRemaining(gv_maraudersComeOnline) == 0.0)) {
             AIAttackWaveAddUnits4(1, 1, 1, 1, "Marauder");
         }
@@ -3340,16 +3369,16 @@ bool gt_ALLYAttackWavesMainBase_Func (bool testConds, bool runActions) {
     else if (auto95CD12D3_val == 1) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p4_DOMINION_PURPLE));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(6, 6, 6, 6, "Marine");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Marauder");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Medic");
+        AIAttackWaveAddUnits4(6, 6, 6, 6, "AP_Marine");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "AP_Marauder");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "AP_Medic");
     }
     else if (auto95CD12D3_val == 2) {
         AIAttackWaveSetTargetPlayer(gv_p2_RAYNOR_LIGHTBLUE, PlayerGroupSingle(gv_p3_DOMINION_RED));
         gf_SetWaypoints(gv_p2_RAYNOR_LIGHTBLUE, 1, gv_waypointCount);
-        AIAttackWaveAddUnits4(8, 8, 8, 8, "Marine");
-        AIAttackWaveAddUnits4(3, 3, 3, 3, "Marauder");
-        AIAttackWaveAddUnits4(2, 2, 2, 2, "Medic");
+        AIAttackWaveAddUnits4(8, 8, 8, 8, "AP_Marine");
+        AIAttackWaveAddUnits4(3, 3, 3, 3, "AP_Marauder");
+        AIAttackWaveAddUnits4(2, 2, 2, 2, "AP_Medic");
     }
     else {
     }
@@ -3413,8 +3442,8 @@ bool gt_ALLYAttackWavesCellBlockA_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libNtve_gf_RescueUnit(UnitGroupUnit(UnitGroup("Diamondback", 0, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_p11_ALLIED_CELLBLOCK_A, true);
-    autoCF6BBBEF_g = UnitGroup("Diamondback", gv_p11_ALLIED_CELLBLOCK_A, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    libNtve_gf_RescueUnit(UnitGroupUnit(UnitGroup("AP_Diamondback", 0, RegionFromId(18), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1), gv_p11_ALLIED_CELLBLOCK_A, true);
+    autoCF6BBBEF_g = UnitGroup("AP_Diamondback", gv_p11_ALLIED_CELLBLOCK_A, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     autoCF6BBBEF_u = UnitGroupCount(autoCF6BBBEF_g, c_unitCountAll);
     for (;; autoCF6BBBEF_u -= 1) {
         autoCF6BBBEF_var = UnitGroupUnitFromEnd(autoCF6BBBEF_g, autoCF6BBBEF_u);
@@ -3424,7 +3453,7 @@ bool gt_ALLYAttackWavesCellBlockA_Func (bool testConds, bool runActions) {
         UnitSetState(autoCF6BBBEF_var, c_unitStateInvulnerable, false);
     }
     gf_SetWaypoints(gv_p11_ALLIED_CELLBLOCK_A, 8, gv_waypointCount);
-    AIAttackWaveAddUnits4(1, 1, 1, 1, "Diamondback");
+    AIAttackWaveAddUnits4(1, 1, 1, 1, "AP_Diamondback");
     AIAttackWaveSend(gv_p11_ALLIED_CELLBLOCK_A, 0, false);
     return true;
 }
@@ -3487,7 +3516,7 @@ bool gt_ALLYAttackWavesCellBlockB_Func (bool testConds, bool runActions) {
     }
 
     if ((RandomInt(1, 2) == 1)) {
-        lv_chosenTank = UnitGroupUnit(UnitGroup("SiegeTank", 0, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+        lv_chosenTank = UnitGroupUnit(UnitGroup("AP_SiegeTank", 0, RegionFromId(20), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
         libNtve_gf_RescueUnit(lv_chosenTank, gv_p12_ALLIED_CELLBLOCK_B, true);
         UnitSetState(lv_chosenTank, c_unitStateTargetable, true);
         UnitSetState(lv_chosenTank, c_unitStateStatusBar, true);
@@ -3495,7 +3524,7 @@ bool gt_ALLYAttackWavesCellBlockB_Func (bool testConds, bool runActions) {
         UnitIssueOrder(lv_chosenTank, OrderTargetingPoint(AbilityCommand("attack", 0), PointFromId(1958)), c_orderQueueReplace);
     }
     else {
-        lv_chosenTank = UnitGroupUnit(UnitGroup("SiegeTank", 0, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+        lv_chosenTank = UnitGroupUnit(UnitGroup("AP_SiegeTank", 0, RegionFromId(19), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
         libNtve_gf_RescueUnit(lv_chosenTank, gv_p12_ALLIED_CELLBLOCK_B, true);
         UnitSetState(lv_chosenTank, c_unitStateTargetable, true);
         UnitSetState(lv_chosenTank, c_unitStateStatusBar, true);
@@ -5573,7 +5602,13 @@ void gt_onDifficultyBrutal_Init () {
 // Trigger: Arch Init
 //--------------------------------------------------------------------------------------------------
 bool gt_ArchInit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    playergroup lv_apPlayerGroup;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+    lv_apPlayerGroup = PlayerGroupEmpty();
+
     // Actions
     if (!runActions) {
         return true;
@@ -5582,6 +5617,14 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     TriggerExecute(lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor, true, false);
     TriggerExecute(gt_Init02Players, true, false);
     libABFE498B_gf_AP_Triggers_MapConfig_setMissionBuild(false);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p0_NEUTRAL);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p1_USER);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p2_RAYNOR_LIGHTBLUE);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p8_ALLIED_PINK);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p9_ALLIED_GREEN);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p11_ALLIED_CELLBLOCK_A);
+    PlayerGroupAdd(lv_apPlayerGroup, gv_p12_ALLIED_CELLBLOCK_B);
+    lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers(lv_apPlayerGroup);
     lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p1_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
     lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
     libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);

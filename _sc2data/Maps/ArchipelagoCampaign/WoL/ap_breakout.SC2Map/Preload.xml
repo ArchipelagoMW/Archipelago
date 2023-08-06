@@ -123,9 +123,6 @@
 <Terrain id="NewFolsom"/>
 <TerrainObject id="NewFolsomPrisonFloorTerrainObjectR2"/>
 <TerrainObject id="NewFolsomPrisonFloorTerrainObjectL2"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
 <Unit id="Barracks"/>
 <Unit id="EngineeringBay"/>
 <Unit id="MissileTurret"/>
@@ -135,10 +132,7 @@
 <Unit id="Starport"/>
 <Unit id="Armory"/>
 <Unit id="SiegeTankSieged"/>
-<Unit id="SiegeTank"/>
 <Unit id="VikingAssault"/>
-<Unit id="BarracksTechLab"/>
-<Unit id="BarracksReactor"/>
 <Unit id="SCV"/>
 <Unit id="Marine"/>
 <Unit id="Reaper"/>
@@ -162,7 +156,6 @@
 <Unit id="DestructibleGateDiagonalBLURLowered"/>
 <Unit id="DestructibleGateDiagonalULBRLowered"/>
 <Unit id="SecurityGateDiagonalULBR"/>
-<Unit id="Diamondback"/>
 <Unit id="PrisonerCivilian"/>
 <Unit id="DestructibleSandbags" Variations="0,1,2"/>
 <Unit id="PrisonerSpectre"/>
@@ -170,4 +163,20 @@
 <Unit id="Food1000"/>
 <Unit id="Medic"/>
 <Unit id="NewFolsomPrisonEntrance"/>
+<Unit id="AP_SiegeTank"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksTechLab"/>
+<Unit id="AP_BarracksReactor"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Marauder"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Diamondback"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_GhostAcademy"/>
 </Preload>

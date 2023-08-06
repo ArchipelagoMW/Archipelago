@@ -2451,6 +2451,7 @@
         <EffectArray Reference="Unit,AP_LiberatorAG,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_LiberatorAG,EnergyMax" Value="100"/>
     </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsPreplacedNoBuild" parent="AP_BaseTerranInfantryArmors"/>
     <CUpgrade id="AP_TerranInfantryArmorsLevel1" parent="AP_BaseTerranInfantryArmors">
         <!-- Set the icon here -->
         <Name value="Upgrade/Name/AP_TerranInfantryArmorsLevel1"/>
@@ -2565,6 +2566,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
         <LeaderLevel value="3"/>
     </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsPreplacedNoBuild" parent="AP_BaseTerranInfantryWeapons"/>
     <CUpgrade id="AP_TerranInfantryWeaponsLevel1" parent="AP_BaseTerranInfantryWeapons">
         <Name value="Upgrade/Name/AP_TerranInfantryWeaponsLevel1"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>

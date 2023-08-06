@@ -20,4 +20,24 @@
         <Abil value="AP_MorphToSwarmHostUprooted"/>
         <Validator value="AP_TacticalBurrowSwarmHostUp"/>
     </CTacticalOrder>
+    <CTacticalOrder id="AP_SiegeTank">
+        <Abil value="AP_SiegeMode"/>
+        <Validator value="TacticalSiegeTankSeige"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_SiegeTankSieged">
+        <Abil value="AP_Unsiege"/>
+        <Validator value="TacticalSiegeTankUnsiege"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_Marine">
+        <Abil value="AP_Stimpack"/>
+        <Validator value="TacticalStimpack"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_Marauder">
+        <Abil value="AP_Stimpack"/>
+        <Validator value="TacticalStimpack"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_SupplyDepot">
+        <Abil value="AP_SupplyDepotLower"/>
+        <Validator value="TacticalSupplyDepotDown"/>
+    </CTacticalOrder>
 </Catalog>
