@@ -15,7 +15,7 @@ class WarpTest(CV64TestBase):
 
 
 # class ShopTest(CV64TestBase):
-#    options = {
+#     options = {
 #         "stage_shuffle": True,
 #         "shopsanity": True
 #     }

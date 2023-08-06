@@ -158,8 +158,8 @@ class CV64World(World):
             if stage in self.active_stage_list or stage is None:
                 active_regions[name] = Region(name, self.player, self.multiworld)
 
-        if self.multiworld.shopsanity[self.player]:
-            active_regions[RName.renon] = Region(RName.renon, self.player, self.multiworld)
+        if not self.multiworld.shopsanity[self.player]:
+            del(active_regions[RName.renon])
 
         create_locations(self.multiworld, self.player, active_regions)
 
