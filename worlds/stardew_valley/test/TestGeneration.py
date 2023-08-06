@@ -187,10 +187,11 @@ class TestLocationAndItemCount(SVTestCase):
         self.assertGreaterEqual(len(valid_locations), len(multiworld.itempool))
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 994
+        expected_locations = 1053
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
-        number_locations = len(get_real_locations(self, multiworld))
+        real_locations = get_real_locations(self, multiworld)
+        number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
         if number_locations != expected_locations:
@@ -200,10 +201,11 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 1246
+        expected_locations = 1305
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
-        number_locations = len(get_real_locations(self, multiworld))
+        real_locations = get_real_locations(self, multiworld)
+        number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
         print(f"\nStardew Valley - Allsanity Locations with all mods: {number_locations}")
         if number_locations != expected_locations:
