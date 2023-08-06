@@ -72,77 +72,77 @@ class BaseTrapWeight(Choice):
 
 class OmochaoTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which spawns several Omochao around the player
+    Likelihood of receiving a trap which spawns several Omochao around the player
     """
     display_name = "OmoTrap Weight"
 
 
 class TimestopTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which briefly stops time
+    Likelihood of receiving a trap which briefly stops time
     """
     display_name = "Chaos Control Trap Weight"
 
 
 class ConfusionTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which causes the controls to be skewed for a period of time
+    Likelihood of receiving a trap which causes the controls to be skewed for a period of time
     """
     display_name = "Confusion Trap Weight"
 
 
 class TinyTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which causes the player to become tiny
+    Likelihood of receiving a trap which causes the player to become tiny
     """
     display_name = "Tiny Trap Weight"
 
 
 class GravityTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which increases gravity
+    Likelihood of receiving a trap which increases gravity
     """
     display_name = "Gravity Trap Weight"
 
 
 class ExpositionTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which tells you the story
+    Likelihood of receiving a trap which tells you the story
     """
     display_name = "Exposition Trap Weight"
 
 
 class DarknessTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which makes the world dark
+    Likelihood of receiving a trap which makes the world dark
     """
     display_name = "Darkness Trap Weight"
 
 
 class IceTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which makes the world slippery
+    Likelihood of receiving a trap which makes the world slippery
     """
     display_name = "Ice Trap Weight"
 
 
 class SlowTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which makes you gotta go slow
+    Likelihood of receiving a trap which makes you gotta go slow
     """
     display_name = "Slow Trap Weight"
 
 
 class CutsceneTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which makes you watch an unskippable cutscene
+    Likelihood of receiving a trap which makes you watch an unskippable cutscene
     """
     display_name = "Cutscene Trap Weight"
 
 
 class ReverseTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which reverses your controls
+    Likelihood of receiving a trap which reverses your controls
     """
     display_name = "Reverse Trap Weight"
 

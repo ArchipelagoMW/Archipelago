@@ -106,12 +106,12 @@ class SA2BWorld(World):
             "ChaoStatsFrequency": self.multiworld.chao_stats_frequency[self.player].value,
             "ChaoStatsStamina": self.multiworld.chao_stats_stamina[self.player].value,
             "ChaoStatsHidden": self.multiworld.chao_stats_hidden[self.player].value,
-            "ChaoStatsFrequency": self.multiworld.chao_stats_frequency[self.player].value,
             "ChaoAnimalParts": self.multiworld.chao_animal_parts[self.player].value,
             "ChaoKindergarten": self.multiworld.chao_kindergarten[self.player].value,
             "BlackMarketSlots": self.multiworld.black_market_slots[self.player].value,
             "BlackMarketData": self.generate_black_market_data(),
             "BlackMarketUnlockCosts": self.black_market_costs,
+            "BlackMarketUnlockSetting": self.multiworld.black_market_unlock_costs[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
@@ -252,7 +252,7 @@ class SA2BWorld(World):
             if self.multiworld.goal[self.player].value in [1, 2, 6]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
-                    itempool += self.create_item(item)
+                    itempool.append(self.create_item(item))
 
             # Black Market
             itempool += [self.create_item(ItemName.market_token) for _ in range(self.multiworld.black_market_slots[self.player].value)]
