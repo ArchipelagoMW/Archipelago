@@ -2213,7 +2213,7 @@ def set_rules(multiworld: MultiWorld, player: int, gate_bosses: typing.Dict[int,
 
         for i in range(multiworld.black_market_slots[player].value):
             add_rule(multiworld.get_location(LocationName.chao_black_market_base + str(i + 1), player),
-                     lambda state: (state.has(ItemName.market_token, player, black_market_costs[i])))
+                     lambda state, i=i: (state.has(ItemName.market_token, player, black_market_costs[i])))
 
     if multiworld.goal[player] in [4, 5, 6]:
         for i in range(16):
