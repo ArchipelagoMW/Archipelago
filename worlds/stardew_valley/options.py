@@ -8,13 +8,14 @@ from .mods.mod_data import ModNames
 class Goal(Choice):
     """What's your goal with this play-through?
     Community Center: Complete the Community Center.
-    Grandpa's Evaluation: Succeed grandpa's evaluation with 4 lit candles.
+    Grandpa's Evaluation: Succeed Grandpa's evaluation with 4 lit candles.
     Bottom of the Mines: Reach level 120 in the mineshaft.
     Cryptic Note: Complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
     Master Angler: Catch every fish in the game. Pairs well with Fishsanity.
     Complete Collection: Complete the museum by donating every possible item. Pairs well with Museumsanity.
     Full House: Get married and have two children. Pairs well with Friendsanity.
     Greatest Walnut Hunter: Find all 130 Golden Walnuts
+    Protector of the Valley: Complete all the monster slayer goals. Pairs well with Monstersanity
     Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
@@ -28,12 +29,12 @@ class Goal(Choice):
     option_complete_collection = 5
     option_full_house = 6
     option_greatest_walnut_hunter = 7
+    option_protector_of_the_valley = 8
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =
     # option_craft_master =
     # option_mystery_of_the_stardrops =
-    # option_protector_of_the_valley =
     # option_full_shipment =
     # option_legend =
     # option_beloved_farmer =
