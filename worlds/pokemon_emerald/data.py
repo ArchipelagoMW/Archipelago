@@ -954,12 +954,8 @@ def _init() -> None:
     data.maps.sort(key=lambda map: map.name)
 
     # Create warp map
-    # TODO: Consider creating this lazily; this loop is responsible for about half of import time
-    for encoded_warp, warp in data.warps.items():
-        for encoded_other_warp, other_warp in data.warps.items():
-            if warp.connects_to(other_warp):
-                data.warp_map[encoded_warp] = encoded_other_warp
-                break
+    for warp, destination in extracted_data["warps"].items():
+        data.warp_map[warp] = None if destination == "" else destination
 
         if encoded_warp not in data.warp_map:
             data.warp_map[encoded_warp] = None
