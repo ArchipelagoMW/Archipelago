@@ -753,6 +753,7 @@ class SA2BWorld(World):
                 continue
             exit_choice = self.random.choice(possible_exits)
             all_exits_copy.remove(exit_choice)
+            all_destinations_copy.remove(exit_room)
 
             destination = self.random.choice(all_destinations_copy)
             all_destinations_copy.remove(destination)
@@ -765,6 +766,5 @@ class SA2BWorld(World):
             er_layout[reverse_exit] = exit_room
 
             all_exits_copy.remove(reverse_exit)
-            all_destinations_copy.remove(exit_room)
 
         return er_layout
