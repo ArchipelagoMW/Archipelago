@@ -451,7 +451,7 @@ class ShuffleStartingChaoEggs(DefaultOnToggle):
     display_name = "Shuffle Starting Chao Eggs"
 
 
-class ChaoEntranceRandomization(DefaultOnToggle):
+class ChaoEntranceRandomization(Toggle):
     """
     Determines whether entrances in Chao World are randomized
     """
