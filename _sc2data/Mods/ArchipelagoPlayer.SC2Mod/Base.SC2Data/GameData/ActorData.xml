@@ -3021,13 +3021,13 @@
     <CActorModel id="AP_GhostNukeDrop">
         <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
         <On Terms="Effect.AP_NukeDetonate.Start" Send="$Birth"/>
-        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <On Terms="Effect.AP_NukeDamage.Start" Send="Destroy"/>
         <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
         <Model value="GhostNukeDrop"/>
     </CActorModel>
     <CActorSound id="AP_GhostNukeDropSound" parent="SoundContinuous">
         <On Terms="Effect.AP_NukeDetonate.Start" Send="Create"/>
-        <On Terms="Effect.NukeDamage.Start" Send="Destroy"/>
+        <On Terms="Effect.AP_NukeDamage.Start" Send="Destroy"/>
         <Sound value="Ghost_NukeDrop"/>
     </CActorSound>
     <CActorSquib id="AP_GhostNukeExplode">
@@ -6024,12 +6024,12 @@
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingCocoon" Send="$Birth 0 0.000000"/>
         <On Terms="Upgrade.AP_HotSHunter.Add" Send="Create AP_HotSHunter"/>
         <On Terms="Upgrade.AP_HotSHunter.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHunter" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotsSplitterling.Add" Send="Create AP_HotSSplitterlingBig"/>
         <On Terms="Upgrade.AP_HotsSplitterling.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSplitterling" Send="Create AP_HotSSplitterlingBig"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSplitterling" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSplitterling" Send="Create AP_HotSSplitterlingBig"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSplitterling" Send="Destroy"/>
     </CActorUnit>
     <CActorMissile id="AP_HotSHunter" parent="AP_BanelingBase" unitName="AP_HotSHunter">
         <Model value="AP_Hunter"/>
@@ -6046,8 +6046,8 @@
     <CActorUnit id="AP_HotSSplitterlingBig" parent="AP_BanelingBase" unitName="AP_HotSSplitterlingBig">
         <On Terms="Upgrade.AP_HotSHunter.Add" Send="Create AP_HotSHunter"/>
         <On Terms="Upgrade.AP_HotSHunter.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHunter" Send="Destroy"/>
         <Model value="AP_HotSSplitterlingBig"/>
         <BuildModel value="AP_HotSSplitterlingBig"/>
         <PlacementModel value="AP_HotSSplitterlingBig"/>
@@ -7150,12 +7150,12 @@
         <On Terms="UnitBirth.AP_HydraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="Upgrade.AP_HotSLurker.Add" Send="Create AP_HydraliskLurker"/>
         <On Terms="Upgrade.AP_HotSLurker.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSLurker" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSImpaler.Add" Send="Create AP_HydraliskImpaler"/>
         <On Terms="Upgrade.AP_HotSImpaler.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Create AP_HydraliskImpaler"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSImpaler" Send="Create AP_HydraliskImpaler"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSImpaler" Send="Destroy"/>
     </CActorUnit>
     <CActorAction id="AP_HydraliskAttack" parent="GenericAttack" effectImpact="AP_NeedleSpinesDamage" effectLaunch="AP_NeedleSpinesLaunchMissile">
         <LaunchSiteOps Ops="SOpAttachHarness SOpForwardImpactGuide"/>
@@ -7184,8 +7184,8 @@
     <CActorUnit id="AP_HydraliskImpaler" parent="AP_HydraliskBase" unitName="AP_HydraliskImpaler">
         <On Terms="Upgrade.AP_HotSLurker.Add" Send="Create AP_HydraliskLurker"/>
         <On Terms="Upgrade.AP_HotSLurker.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSLurker" Send="Destroy"/>
         <Model value="AP_HydraliskImpaler"/>
         <BuildModel value="AP_HydraliskImpaler"/>
         <PlacementModel value="AP_HydraliskImpaler"/>
@@ -7834,19 +7834,19 @@
         <On Terms="UnitBirth.AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Create AP_SwarmHostSplitB"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="Create AP_SwarmHostSplitB"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitB" Send="Create AP_SwarmHostSplitB"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitB" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitA.Add" Send="Create AP_SwarmHostSplitA"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitA.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitA" Send="Create AP_SwarmHostSplitA"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitA" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitA" Send="Create AP_SwarmHostSplitA"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitA" Send="Destroy"/>
     </CActorUnit>
     <CActorUnit id="AP_SwarmHostSplitA" parent="AP_SwarmHostBase" unitName="AP_SwarmHostSplitA">
         <On index="92" Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,DontResetOnUnhide"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Create AP_SwarmHostSplitB"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="Create AP_SwarmHostSplitB"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitB" Send="Create AP_SwarmHostSplitB"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSSwarmHostSplitB" Send="Destroy"/>
         <Model value="AP_SwarmHostSplitA"/>
         <BuildModel value="AP_SwarmHostSplitA"/>
         <PlacementModel value="AP_SwarmHostSplitA"/>
@@ -10521,12 +10521,12 @@
     <CActorUnit id="AP_Mutalisk" parent="AP_MutaliskBase" unitName="AP_Mutalisk">
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Create AP_MutaliskViper"/>
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskViper" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSMutaliskBroodlord.Add" Send="Create AP_MutaliskBroodlord"/>
         <On Terms="Upgrade.AP_HotSMutaliskBroodlord.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskBroodlord" Send="Create AP_MutaliskBroodlord"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskBroodlord" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskBroodlord" Send="Create AP_MutaliskBroodlord"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskBroodlord" Send="Destroy"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Zerg-Mutalisk.dds"/>
         </GroupIcon>
@@ -10537,8 +10537,8 @@
     <CActorUnit id="AP_MutaliskBroodlord" parent="AP_MutaliskBase" unitName="AP_MutaliskBroodlord">
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Create AP_MutaliskViper"/>
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSMutaliskViper" Send="Destroy"/>
         <DeathArray index="Normal" ModelLink="AP_MutaliskBroodlordDeath"/>
         <PortraitModel value="AP_MutaliskBroodlordPortrait"/>
         <GroupIcon>
@@ -18895,21 +18895,27 @@
     </CActorSound>
     <CActorSound id="AP_LiberatorAGSoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <On Terms="UnitDeath.AP_LiberatorAG" Send="Destroy"/>
-        <On Terms="UnitDeath.AP_VikingFighter" Send="Destroy"/>
-        <On Terms="UnitDeath.AP_HelsAngelFighter" Send="Destroy"/>
         <Sound value="AP_Liberator_AG_Morph_Servo"/>
     </CActorSound>
     <CActorSound id="AP_LiberatorAASoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_Liberator; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
+        <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
+        <Sound value="AP_Liberator_AA_Morph_Servo"/>
+    </CActorSound>
+    <CActorSound id="AP_VikingFighterSoundServo" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="UnitDeath.AP_VikingFighter" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_HelsAngelFighter" Send="Destroy"/>
+        <Sound value="AP_HHViking_SpeedMorphToFighterMode"/>
+    </CActorSound>
+    <CActorSound id="AP_VikingAssaultSoundServo" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
-        <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
         <On Terms="UnitDeath.AP_VikingAssault" Send="Destroy"/>
         <On Terms="UnitDeath.AP_HelsAngelAssault" Send="Destroy"/>
-        <Sound value="AP_Liberator_AA_Morph_Servo"/>
+        <Sound value="AP_HHViking_SpeedMorphToAssaultMode"/>
     </CActorSound>
     <CActorSiteOpBankerUnit id="AP_SOpBankerLiberator">
         <RollMax value="30.000000,10.000000"/>
@@ -18930,12 +18936,12 @@
         <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Create AP_UltraliskNoxious"/>
         <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Create AP_UltraliskNoxious"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSNoxious" Send="Create AP_UltraliskNoxious"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSNoxious" Send="Destroy"/>
     </CActorUnit>
     <CActorUnit id="AP_UltraliskTorrasque" parent="AP_UltraliskBase" unitName="AP_HotSTorrasque">
         <Model value="AP_HotSTorrasque"/>
@@ -23120,6 +23126,9 @@
         <Host Subject="_Target"/>
         <Sound value="AP_ShadowFuryStrikLaunch"/>
     </CActorSound>
+    <CActorSplat id="AP_DarkTemplarShadowFuryCursorSplat" parent="ProtossCursorSplat" abil="AP_DarkTemplarShadowFury">
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
     <CActorSound id="AP_VoidHighTemplarMindBlastImpactSound" parent="SoundOneShot">
         <On Terms="Effect.AP_VoidHighTemplarMindBlastDamage.Start; At Target" Send="Create"/>
         <Sound value="AP_HighTemplar_MindBlast_Impact"/>
@@ -23201,6 +23210,10 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_HotSSwarmling" parent="AP_ZerglingBase" unitName="AP_HotSSwarmling">
+        <On Terms="Upgrade.AP_HotSHaveRaptor.Add" Send="Create AP_HotSRaptor"/>
+        <On Terms="Upgrade.AP_HotSHaveRaptor.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHaveRaptor" Send="Create AP_HotSRaptor"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSHaveRaptor" Send="Destroy"/>
         <DeathArray index="Normal" ModelLink="AP_HotSSwarmlingDeath"/>
         <DeathCustoms ModelLink="AP_HotSSwarmlingUpgradeDeath" SoundLink="Zergling_Explode" Name="Upgrade"/>
         <PortraitModel value="AP_SwarmlingPortrait"/>

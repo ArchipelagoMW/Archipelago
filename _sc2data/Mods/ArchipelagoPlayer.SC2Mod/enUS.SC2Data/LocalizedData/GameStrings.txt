@@ -1382,7 +1382,7 @@ Button/Tooltip/AP_InfestorConsumption=Drains up to 75 life from a friendly Zerg 
 Button/Tooltip/AP_InfestorPassive=Infestation Pit enables you to morph Infestors.
 Button/Tooltip/AP_Interceptor=Builds Interceptors that automatically attack the Carrier's target. Carriers may not attack without Interceptors.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_InterceptorUnit=Combat drones that automatically strafe their Carrier's target. Carriers may not attack without Interceptors.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
+Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,AP_Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
 Button/Tooltip/AP_JackhammerConcussionGrenade=Marauder attack temporarily slows all units in target area.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
 Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.

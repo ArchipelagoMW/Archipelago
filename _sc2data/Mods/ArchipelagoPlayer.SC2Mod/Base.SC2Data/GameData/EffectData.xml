@@ -1973,8 +1973,6 @@
     </CEffectApplyBehavior>
     <CEffectEnumArea id="AP_LiberatorTargetMorphSearchArea">
         <EditorCategories value="Race:Terran"/>
-        <AINotifyFlags index="HurtEnemy" value="1"/>
-        <AINotifyFlags index="MinorDanger" value="1"/>
         <SearchFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="5" Effect="AP_LiberatorTargetMorphSearchAB"/>
     </CEffectEnumArea>
@@ -4262,8 +4260,7 @@
         <AreaArray Radius="1.2" Fraction="0.5"/>
         <AreaArray Radius="2.4" Fraction="0.25"/>
         <ExcludeArray Value="Target"/>
-        <ExcludeArray Value="Target"/>
-        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="SameCliff" value="0"/>
     </CEffectDamage>
     <CEffectCreatePersistent id="AP_NovaRavenSeekerMissileLaunchCP">
@@ -11103,7 +11100,7 @@
         <LaunchLocation Value="TargetPoint"/>
         <ImpactLocation Value="TargetPoint"/>
         <SearchFilters value="-;Hidden,Invulnerable"/>
-        <AreaArray Radius="1.875" Effect="AP_ScienceVesselSCBWEMPShockwave@Set"/>
+        <AreaArray Radius="3" Effect="AP_ScienceVesselSCBWEMPShockwave@Set"/>
     </CEffectEnumArea>
     <CEffectSet id="AP_ScienceVesselSCBWEMPShockwave@Set">
         <EditorCategories value="Race:Terran"/>
@@ -11515,7 +11512,7 @@
         <SpawnCount value="10"/>
     </CEffectCreateUnit>
     <CEffectCreatePersistent id="AP_ZerglingRespawnTrainCP">
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <ValidatorArray value="NotHidden"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichLocation Value="CasterUnit"/>
@@ -11598,7 +11595,7 @@
         <AmmoUnit value="AP_ZerglingRespawnWeapon"/>
     </CEffectLaunchMissile>
     <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrder">
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <Abil value="AP_ZerglingRespawnTrain"/>
@@ -11606,7 +11603,7 @@
     </CEffectIssueOrder>
     <CEffectIssueOrder id="AP_ZerglingRespawnTrainOrderSwarmling">
         <ValidatorArray value="AP_HaveHotSHaveSwarmling"/>
-        <ValidatorArray value="FoodAvailableOneHalf"/>
+        <ValidatorArray value="AP_FoodAvailableOneHalf"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
         <Abil value="AP_ZerglingRespawnTrain"/>
