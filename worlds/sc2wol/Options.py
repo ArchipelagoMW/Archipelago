@@ -176,7 +176,7 @@ class ExtendedItems(Toggle):
 
 
 class MaxNbUpgrades(Range):
-    """If turned on, original items that did not appear in Campaign mode may appear in the world."""
+    """Set a maximum to the number of upgrades a unit/structure can have."""
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
     # Do not know the maximum, but it is less than 123!
