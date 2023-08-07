@@ -254,12 +254,12 @@ def set_rules(world: "KDL3World") -> None:
                                            LocationName.iceberg_dedede],
                                           range(1, 6)):
         set_rule(world.multiworld.get_location(boss_flag, world.player),
-                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
+                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                     and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
                                                         world.multiworld.ow_boss_requirement[world.player]))
         set_rule(world.multiworld.get_location(purification, world.player),
-                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
+                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                     and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
                                                         world.multiworld.ow_boss_requirement[world.player]))
@@ -270,7 +270,7 @@ def set_rules(world: "KDL3World") -> None:
                      lambda state, i=level: state.has(f"Level {i - 1} Boss Purified", world.player))
 
     set_rule(world.multiworld.get_entrance("To Level 6", world.player),
-             lambda state: state.has("Heart Star", world.player, world.required_heart_stars[world.player]))
+             lambda state: state.has("Heart Star", world.player, world.required_heart_stars))
 
     for level in range(2, 6):
         add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),

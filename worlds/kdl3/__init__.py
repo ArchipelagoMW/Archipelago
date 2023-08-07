@@ -9,38 +9,36 @@ from .Items import item_table, item_names, copy_ability_table, animal_friend_tab
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
-from .Regions import create_levels
+from .Regions import create_levels, default_levels
 from .Options import kdl3_options
 from .Names import LocationName
 from .Rules import set_rules
 from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
 from .Client import KDL3SNIClient
 
-from typing import Dict, TextIO
+from typing import Dict, TextIO, Optional, List
 import os
 import math
 import threading
 import base64
-from Main import __version__ as APVersion
+import settings
 from worlds.LauncherComponents import components
 
 logger = logging.getLogger("Kirby's Dream Land 3")
 
+
 # SNIComponent = next(x for x in components if x.display_name == "SNI Client")
 # SNIComponent.file_identifier.suffixes.append(".apkdl3")
 
-if APVersion == "0.4.2":
-    import settings
 
+class KDL3Settings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the KDL3 JP or EN rom"""
+        description = "Kirby's Dream Land 3 ROM File"
+        copy_to = "Kirby's Dream Land 3.sfc"
+        md5s = [KDL3JHASH, KDL3UHASH]
 
-    class KDL3Settings(settings.Group):
-        class RomFile(settings.SNESRomPath):
-            """File name of the KDL3 JP or EN rom"""
-            description = "Kirby's Dream Land 3 ROM File"
-            copy_to = "Kirby's Dream Land 3.sfc"
-            md5s = [KDL3JHASH, KDL3UHASH]
-
-        rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class KDL3WebWorld(WebWorld):
@@ -70,20 +68,18 @@ class KDL3World(World):
     item_name_groups = item_names
     data_version = 0
     web = KDL3WebWorld()
-    required_heart_stars = dict()
-    boss_requirements = dict()
-    player_levels = dict()
-    stage_shuffle_enabled = False
-    boss_butch_bosses = dict()
-
-    if APVersion == "0.4.2":
-        settings: typing.ClassVar[KDL3Settings]
+    settings: typing.ClassVar[KDL3Settings]
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name = None
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        self.copy_abilities = vanilla_enemies.copy()
+        self.copy_abilities: Dict[str, str] = vanilla_enemies.copy()
+        self.required_heart_stars: int = 0  # we fill this during create_items
+        self.boss_requirements: Dict[int, int] = dict()
+        self.player_levels = default_levels.copy()
+        self.stage_shuffle_enabled = False
+        self.boss_butch_bosses: List[Optional[bool]] = list()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -104,14 +100,14 @@ class KDL3World(World):
         return KDL3Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choices(list(filler_item_weights.keys()),
-                                              weights=list(filler_item_weights.values()))[0]
+        return self.random.choices(list(filler_item_weights.keys()),
+                                   weights=list(filler_item_weights.values()))[0]
 
     def get_trap_item_name(self) -> str:
-        return self.multiworld.random.choices(["Gooey Bag", "Slowness", "Eject Ability"],
-                                              weights=[self.multiworld.gooey_trap_weight[self.player],
-                                                       self.multiworld.slow_trap_weight[self.player],
-                                                       self.multiworld.ability_trap_weight[self.player]])[0]
+        return self.random.choices(["Gooey Bag", "Slowness", "Eject Ability"],
+                                   weights=[self.multiworld.gooey_trap_weight[self.player],
+                                            self.multiworld.slow_trap_weight[self.player],
+                                            self.multiworld.ability_trap_weight[self.player]])[0]
 
     def generate_early(self) -> None:
         # just check for invalid option combos here
@@ -130,7 +126,7 @@ class KDL3World(World):
             # Not having ChuChu here makes the room impossible (since only she has vertical burning)
             self.multiworld.get_location("Ripple Field 5 - Animal 2", self.player) \
                 .place_locked_item(self.create_item("Pitch Spawn"))
-            guaranteed_animal = self.multiworld.per_slot_randoms[self.player].choice(["Kine Spawn", "Coo Spawn"])
+            guaranteed_animal = self.random.choice(["Kine Spawn", "Coo Spawn"])
             self.multiworld.get_location("Sand Canyon 6 - Animal 1", self.player) \
                 .place_locked_item(self.create_item(guaranteed_animal))
             # Ripple Field 5 - Animal 2 needs to be Pitch to ensure accessibility on non-door rando
@@ -140,7 +136,7 @@ class KDL3World(World):
                                                 "Iceberg 4 - Animal 1"]]
             else:
                 animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
-                animal_pool = [self.multiworld.per_slot_randoms[self.player].choice(animal_base)
+                animal_pool = [self.random.choice(animal_base)
                                for _ in range(len(animal_friend_spawns) - 9)]
                 # have to guarantee one of each animal
                 animal_pool.extend(animal_base)
@@ -171,13 +167,13 @@ class KDL3World(World):
                     else:
                         available_enemies.append(enemy)
                 else:
-                    chosen_enemy = self.multiworld.per_slot_randoms[self.player].choice(available_enemies)
-                    chosen_ability = self.multiworld.per_slot_randoms[self.player].choice(tuple(abilities))
+                    chosen_enemy = self.random.choice(available_enemies)
+                    chosen_ability = self.random.choice(tuple(abilities))
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
             # place remaining
             for enemy in enemies_to_set:
-                self.copy_abilities[enemy] = self.multiworld.per_slot_randoms[self.player] \
+                self.copy_abilities[enemy] = self.random \
                     .choice(valid_abilities)
 
         for enemy in enemy_mapping:
@@ -199,19 +195,19 @@ class KDL3World(World):
         trap_amount = math.floor(filler_amount * (self.multiworld.trap_percentage[self.player] / 100.0))
         filler_amount -= trap_amount
         non_required_heart_stars = filler_items - filler_amount - trap_amount
-        self.required_heart_stars[self.player] = required_heart_stars
+        self.required_heart_stars = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
         if self.multiworld.boss_requirement_random[self.player]:
             for i in range(4):
-                requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
+                requirements.append(self.random.randint(
                     min(3, required_heart_stars), required_heart_stars))
-                self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
+                self.random.shuffle(requirements)
         else:
             quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
             for i in range(1, 5):
                 requirements.insert(i - 1, quotient * i)
-        self.boss_requirements[self.player] = requirements
+        self.boss_requirements = requirements
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
         itempool.extend([self.create_item(self.get_filler_item_name())
                          for _ in range(filler_amount + (remaining_items - total_heart_stars))])
@@ -220,9 +216,9 @@ class KDL3World(World):
         itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
         self.multiworld.itempool += itempool
 
-        for level in self.player_levels[self.player]:
+        for level in self.player_levels:
             for stage in range(0, 6):
-                self.multiworld.get_location(location_table[self.player_levels[self.player][level][stage]]
+                self.multiworld.get_location(location_table[self.player_levels[level][stage]]
                                              .replace("Complete", "Stage Completion"), self.player) \
                     .place_locked_item(KDL3Item(
                     f"{LocationName.level_names_inverse[level]}"
@@ -241,14 +237,15 @@ class KDL3World(World):
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
-        self.boss_butch_bosses[self.player] = [False for _ in range(6)]
+        # this can technically be done at any point
+        self.boss_butch_bosses.extend([None for _ in range(6)])
         if self.multiworld.allow_bb[self.player]:
             for i in range(6):
                 if self.multiworld.allow_bb[self.player] == 1:
-                    self.boss_butch_bosses[self.player][i] = self.multiworld.per_slot_randoms[self.player].choice(
+                    self.boss_butch_bosses[i] = self.random.choice(
                         [True, False])
                 else:
-                    self.boss_butch_bosses[self.player][i] = True
+                    self.boss_butch_bosses[i] = True
 
     def generate_output(self, output_directory: str):
         rom_path = ""
@@ -257,11 +254,12 @@ class KDL3World(World):
             player = self.player
 
             rom = RomData(get_base_rom_path())
-            patch_rom(self.multiworld, self.player, rom, self.required_heart_stars[self.player],
-                      self.boss_requirements[self.player],
-                      self.player_levels[self.player],
-                      self.boss_butch_bosses[self.player],
-                      self.copy_abilities)
+            patch_rom(self.multiworld, self.player, rom, self.required_heart_stars,
+                      self.boss_requirements,
+                      self.player_levels,
+                      self.boss_butch_bosses,
+                      self.copy_abilities,
+                      self.random)
 
             rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rom_path)
@@ -290,16 +288,16 @@ class KDL3World(World):
         if self.stage_shuffle_enabled:
             spoiler_handle.write(f"\nLevel Layout ({self.multiworld.get_player_name(self.player)}):\n")
             for level in LocationName.level_names:
-                for stage, i in zip(self.player_levels[self.player][LocationName.level_names[level]], range(1, 7)):
+                for stage, i in zip(self.player_levels[LocationName.level_names[level]], range(1, 7)):
                     spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         if self.stage_shuffle_enabled:
             regions = {LocationName.level_names[level]: level for level in LocationName.level_names}
             level_hint_data = {}
-            for level in self.player_levels[self.player]:
-                for i in range(len(self.player_levels[self.player][level]) - 1):
-                    stage = self.player_levels[self.player][level][i]
+            for level in self.player_levels:
+                for i in range(len(self.player_levels[level]) - 1):
+                    stage = self.player_levels[level][i]
                     level_hint_data[stage] = regions[level] + f" {i + 1}"
                     if stage & 0x200 == 0:
                         level_hint_data[stage + 0x100] = regions[level] + f" {i + 1}"

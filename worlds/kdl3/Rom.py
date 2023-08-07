@@ -366,7 +366,7 @@ class KDL3DeltaPatch(APDeltaPatch):
 
 
 def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
-              shuffled_levels, bb_boss_enabled, copy_abilities):
+              shuffled_levels, bb_boss_enabled, copy_abilities, slot_random):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
@@ -1106,12 +1106,12 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
     if multiworld.music_shuffle[player] > 0:
         if multiworld.music_shuffle[player] == 1:
             shuffled_music = music_choices.copy()
-            multiworld.per_slot_randoms[player].shuffle(shuffled_music)
+            slot_random.shuffle(shuffled_music)
             music_map = dict(zip(music_choices, shuffled_music))
             # Avoid putting star twinkle in the pool
-            music_map[5] = multiworld.per_slot_randoms[player].choice(music_choices)
+            music_map[5] = slot_random.choice(music_choices)
             # Heart Star music doesn't work on regular stages
-            music_map[8] = multiworld.per_slot_randoms[player].choice(music_choices)
+            music_map[8] = slot_random.choice(music_choices)
             for room in rooms:
                 room.music = music_map[room.music]
             for room in room_pointers:
@@ -1128,17 +1128,17 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
             rom.write_byte(0x4A38D, music_map[0x1D])
         elif multiworld.music_shuffle[player] == 2:
             for room in rooms:
-                room.music = multiworld.per_slot_randoms[player].choice(music_choices)
+                room.music = slot_random.choice(music_choices)
             for room in room_pointers:
-                rom.write_byte(room + 2, multiworld.per_slot_randoms[player].choice(music_choices))
+                rom.write_byte(room + 2, slot_random.choice(music_choices))
             for i in range(5):
                 # level themes
-                rom.write_byte(0x133F2 + i, multiworld.per_slot_randoms[player].choice(music_choices))
+                rom.write_byte(0x133F2 + i, slot_random.choice(music_choices))
             # Zero
-            rom.write_byte(0x9AE79, multiworld.per_slot_randoms[player].choice(music_choices))
+            rom.write_byte(0x9AE79, slot_random.choice(music_choices))
             # Heart Star success and fail
-            rom.write_byte(0x4A388, multiworld.per_slot_randoms[player].choice(music_choices))
-            rom.write_byte(0x4A38D, multiworld.per_slot_randoms[player].choice(music_choices))
+            rom.write_byte(0x4A388, slot_random.choice(music_choices))
+            rom.write_byte(0x4A38D, slot_random.choice(music_choices))
 
     for room in rooms:
         room.patch(rom)

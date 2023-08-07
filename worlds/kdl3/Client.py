@@ -149,8 +149,8 @@ class KDL3SNIClient(SNIClient):
             item_idx = item.item & 0x0000FF
             if item_idx == 0x21:
                 # 1-Up
-                life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
-                life_bytes = pack("H", life_count[0] + 1)
+                life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 2)
+                life_bytes = pack("H", unpack("H", life_count)[0] + 1)
                 snes_buffered_write(ctx, KDL3_LIFE_COUNT, life_bytes)
                 snes_buffered_write(ctx, KDL3_LIFE_VISUAL, life_bytes)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x33]))
@@ -160,10 +160,10 @@ class KDL3SNIClient(SNIClient):
                 gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
                 if gooey_hp[0] > 0x00:
-                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x08]))
-                    snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08]))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x08, 0x00]))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08, 0x00]))
                 else:
-                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A]))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A, 0x00]))
             elif item_idx == 0x23:
                 # Invincibility Candy
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
@@ -228,8 +228,8 @@ class KDL3SNIClient(SNIClient):
                 level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
                 self.levels[i] = unpack("HHHHHHH", level_data)
 
-        recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 1)
-        recv_amount = recv_count[0]
+        recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
+        recv_amount = unpack("H", recv_count)[0]
         if recv_amount < len(ctx.items_received):
             item = ctx.items_received[recv_amount]
             recv_amount += 1
@@ -250,7 +250,7 @@ class KDL3SNIClient(SNIClient):
             elif item.item == 0x770020:
                 # Heart Star
                 heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
-                snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", heart_star_count[0] + 1))
+                snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", unpack("H", heart_star_count)[0] + 1))
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x16]))
             else:
                 self.item_queue.append(item)

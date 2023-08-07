@@ -85,9 +85,9 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
             if any(["Complete" in location.name for location in room.locations]):
                 room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None}, KDL3Location)
 
-    for level in world.player_levels[world.player]:
+    for level in world.player_levels:
         for stage in range(6):
-            proper_stage = world.player_levels[world.player][level][stage]
+            proper_stage = world.player_levels[level][stage]
             level_regions[level].add_exits([first_rooms[proper_stage].name],
                                            {first_rooms[proper_stage].name:
                                             (lambda state: True) if world.multiworld.open_world[world.player] or
@@ -138,7 +138,7 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                                         or (enforce_pattern == enforce_world)
                                         ]
                     new_stage = generate_valid_level(level, stage, stage_candidates,
-                                                     world.multiworld.per_slot_randoms[world.player])
+                                                     world.random)
                     possible_stages.remove(new_stage)
                     levels[level][stage] = new_stage
             except Exception:
@@ -167,17 +167,17 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
 
     if boss_shuffle > 0:
         if boss_shuffle == 2:
-            possible_bosses = [default_levels[world.multiworld.per_slot_randoms[world.player].randint(1, 5)][6]
+            possible_bosses = [default_levels[world.random.randint(1, 5)][6]
                                for _ in range(5 - len(plando_bosses))]
         elif boss_shuffle == 3:
-            boss = world.multiworld.per_slot_randoms[world.player].randint(1, 5)
+            boss = world.random.randint(1, 5)
             possible_bosses = [default_levels[boss][6] for _ in range(5 - len(plando_bosses))]
         else:
             possible_bosses = [default_levels[level][6] for level in default_levels
                                if default_levels[level][6] not in plando_bosses]
         for level in levels:
             if levels[level][6] is None:
-                boss = world.multiworld.per_slot_randoms[world.player].choice(possible_bosses)
+                boss = world.random.choice(possible_bosses)
                 levels[level][6] = boss
                 possible_bosses.remove(boss)
     else:
@@ -194,8 +194,6 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
 
 def create_levels(world: World) -> None:
     menu = Region("Menu", world.player, world.multiworld)
-    start = Entrance(world.player, "Start Game", menu)
-    menu.exits.append(start)
     level1 = Region("Grass Land", world.player, world.multiworld)
     level2 = Region("Ripple Field", world.player, world.multiworld)
     level3 = Region("Sand Canyon", world.player, world.multiworld)
@@ -209,32 +207,21 @@ def create_levels(world: World) -> None:
         4: level4,
         5: level5,
     }
-    start.connect(level1)
     level_shuffle = world.multiworld.stage_shuffle[world.player]
     if level_shuffle != 0:
-        world.player_levels[world.player] = generate_valid_levels(
+        world.player_levels = generate_valid_levels(
             world,
             level_shuffle == 1,
             level_shuffle == 2)
-    else:
-        world.player_levels[world.player] = default_levels.copy()
+
     generate_rooms(world, False, levels)
 
     level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
 
-    tlv2 = Entrance(world.player, "To Level 2", level1)
-    level1.exits.append(tlv2)
-    tlv2.connect(level2)
-    tlv3 = Entrance(world.player, "To Level 3", level2)
-    level2.exits.append(tlv3)
-    tlv3.connect(level3)
-    tlv4 = Entrance(world.player, "To Level 4", level3)
-    level3.exits.append(tlv4)
-    tlv4.connect(level4)
-    tlv5 = Entrance(world.player, "To Level 5", level4)
-    level4.exits.append(tlv5)
-    tlv5.connect(level5)
-    tlv6 = Entrance(world.player, "To Level 6", menu)
-    menu.exits.append(tlv6)
-    tlv6.connect(level6)
+    menu.connect(level1, "Start Game")
+    level1.connect(level2, "To Level 2")
+    level2.connect(level3, "To Level 3")
+    level3.connect(level4, "To Level 4")
+    level4.connect(level5, "To Level 5")
+    menu.connect(level6, "To Level 6")  # put the connection on menu, since you can reach it before level 5 on fast goal
     world.multiworld.regions += [menu, level1, level2, level3, level4, level5, level6]
