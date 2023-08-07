@@ -221,12 +221,16 @@ class WitnessPlayerItems:
             if plando_setting.get("from_pool", True):
                 for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
                     if type(plando_setting[item_setting_key]) is str:
-                        output.remove(plando_setting[item_setting_key])
+                        output -= {plando_setting[item_setting_key]}
                     elif type(plando_setting[item_setting_key]) is dict:
                         output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
                     else:
                         # Assume this is some other kind of iterable.
-                        output -= plando_setting[item_setting_key]
+                        for inner_item in plando_setting[item_setting_key]:
+                            if type(inner_item) is str:
+                                output -= {inner_item}
+                            elif type(inner_item) is dict:
+                                output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(list(output))
