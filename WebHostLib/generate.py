@@ -106,7 +106,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         meta: Dict[str, Any] = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
-    race = meta["generator_options"].setdefault("race", False)
+    race = meta.setdefault("generator_options", {}).setdefault("race", False)
 
     def task():
         target = tempfile.TemporaryDirectory()
@@ -123,13 +123,14 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         erargs = parse_arguments(['--multi', str(playercount)])
         erargs.seed = seed
         erargs.name = {x: "" for x in range(1, playercount + 1)}  # only so it can be overwritten in mystery
-        erargs.spoiler = meta["generator_options"]["spoiler"]
+        erargs.spoiler = meta["generator_options"].get("spoiler", 0)
         erargs.race = race
         erargs.outputname = seedname
         erargs.outputpath = target.name
         erargs.teams = 1
         erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
                                                                        {"bosses", "items", "connections", "texts"}))
+        erargs.skip_prog_balancing = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import List
 
 from worlds.stardew_valley import LocationData
-from worlds.stardew_valley.items import load_item_csv, Group, ItemData, load_resource_pack_csv, friendship_pack
+from worlds.stardew_valley.items import load_item_csv, Group, ItemData
 from worlds.stardew_valley.locations import load_location_csv
 
 RESOURCE_PACK_CODE_OFFSET = 5000
@@ -53,21 +53,22 @@ if __name__ == "__main__":
                                        for item in loaded_items
                                        if Group.RESOURCE_PACK not in item.groups
                                        and item.code_without_offset is not None) + 1)
+
+    resource_pack_counter = itertools.count(max(item.code_without_offset
+                                       for item in loaded_items
+                                       if Group.RESOURCE_PACK in item.groups
+                                       and item.code_without_offset is not None) + 1)
     items_to_write = []
     for item in loaded_items:
-        if item.has_any_group(Group.RESOURCE_PACK, Group.FRIENDSHIP_PACK):
-            continue
-
         if item.code_without_offset is None:
-            items_to_write.append(ItemData(next(item_counter), item.name, item.classification, item.groups))
+            if Group.RESOURCE_PACK in item.groups:
+                new_code = next(resource_pack_counter)
+            else:
+                new_code = next(item_counter)
+            items_to_write.append(ItemData(new_code, item.name, item.classification, item.groups))
             continue
 
         items_to_write.append(item)
-
-    all_resource_packs = load_resource_pack_csv() + [friendship_pack]
-    resource_pack_counter = itertools.count(RESOURCE_PACK_CODE_OFFSET)
-    items_to_write.extend(
-        item for resource_pack in all_resource_packs for item in resource_pack.as_item_data(resource_pack_counter))
 
     write_item_csv(items_to_write)
 
