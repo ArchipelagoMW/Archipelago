@@ -7,7 +7,7 @@ from .Locations import SA2BLocation, boss_gate_location_table, boss_gate_set,\
                                      chao_stat_swim_table, chao_stat_fly_table, chao_stat_run_table,\
                                      chao_stat_power_table, chao_stat_stamina_table,\
                                      chao_stat_luck_table, chao_stat_intelligence_table, chao_animal_event_location_table,\
-                                     chao_kindergarten_location_table, black_market_location_table
+                                     chao_kindergarten_location_table, chao_kindergarten_basics_location_table, black_market_location_table
 from .Names import LocationName, ItemName
 from .GateBosses import get_boss_name, all_gate_bosses_table, king_boom_boo
 
@@ -1655,7 +1655,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
         conditional_regions += [animal_phoenix_region]
 
     if multiworld.chao_kindergarten[player]:
-        chao_kindergarten_region_locations = list(chao_kindergarten_location_table.keys())
+        chao_kindergarten_region_locations = list(chao_kindergarten_location_table.keys()) + list(chao_kindergarten_basics_location_table.keys())
         chao_kindergarten_region = create_region(multiworld, player, active_locations, LocationName.chao_kindergarten_region,
                                                  chao_kindergarten_region_locations)
         conditional_regions += [chao_kindergarten_region]

@@ -1323,6 +1323,11 @@ chao_kindergarten_maracas    = "Chao Kindergarten - Maracas"
 chao_kindergarten_trumpet    = "Chao Kindergarten - Trumpet"
 chao_kindergarten_tambourine = "Chao Kindergarten - Tambourine"
 
+chao_kindergarten_any_drawing    = "Chao Kindergarten - Any Drawing"
+chao_kindergarten_any_dance      = "Chao Kindergarten - Any Dance"
+chao_kindergarten_any_song       = "Chao Kindergarten - Any Song"
+chao_kindergarten_any_instrument = "Chao Kindergarten - Any Instrument"
+
 
 # Chao Goal Locations
 chaos_chao        = "Chaos Chao"

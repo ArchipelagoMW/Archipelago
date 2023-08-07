@@ -403,12 +403,18 @@ class ChaoAnimalParts(Toggle):
     display_name = "Chao Animal Parts"
 
 
-class ChaoKindergarten(Toggle):
+class ChaoKindergarten(Choice):
     """
     Determines whether learning the lessons from the Kindergarten Classroom grants checks
-    (23 Locations)
+    None: No Kindergarten classes have checks
+    Basics: One class from each category (Drawing, Dance, Song, and Instrument) is a check (4 Locations)
+    Full: Every class is a check (23 Locations)
     """
-    display_name = "Chao Kindergarten"
+    display_name = "Chao Kindergarten Checks"
+    option_none = 0
+    option_basics = 1
+    option_full = 2
+    default = 0
 
 
 class BlackMarketSlots(Range):

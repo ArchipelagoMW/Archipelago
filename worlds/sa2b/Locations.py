@@ -1499,6 +1499,13 @@ chao_kindergarten_location_table = {
     LocationName.chao_kindergarten_tambourine: 0xFF12EF,
 }
 
+chao_kindergarten_basics_location_table = {
+    LocationName.chao_kindergarten_any_drawing:    0xFF12F0,
+    LocationName.chao_kindergarten_any_dance:      0xFF12F1,
+    LocationName.chao_kindergarten_any_song:       0xFF12F2,
+    LocationName.chao_kindergarten_any_instrument: 0xFF12F3,
+}
+
 black_market_location_table = { LocationName.chao_black_market_base + str(index): (0xFF1300 + index) for index in range(1,65) }
 
 kart_race_beginner_location_table = {
@@ -1596,6 +1603,7 @@ all_locations = {
     **chao_stat_intelligence_table,
     **chao_animal_part_location_table,
     **chao_kindergarten_location_table,
+    **chao_kindergarten_basics_location_table,
     **black_market_location_table,
 }
 
@@ -1746,7 +1754,9 @@ def setup_locations(multiworld: MultiWorld, player: int, mission_map: typing.Dic
         if multiworld.chao_animal_parts[player]:
             location_table.update({**chao_animal_part_location_table})
 
-        if multiworld.chao_kindergarten[player]:
+        if multiworld.chao_kindergarten[player].value == 1:
+            location_table.update({**chao_kindergarten_basics_location_table})
+        elif multiworld.chao_kindergarten[player].value == 2:
             location_table.update({**chao_kindergarten_location_table})
 
         for index in range(1, multiworld.black_market_slots[player].value + 1):
