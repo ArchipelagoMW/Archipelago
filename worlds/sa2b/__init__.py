@@ -512,8 +512,6 @@ class SA2BWorld(World):
 
             name_list_base += self.multiworld.per_slot_randoms[self.player].sample(sample_chao_names, number_of_names - len(name_list_base))
 
-        self.multiworld.random.shuffle(name_list_base)
-
         for name in name_list_base:
             for char_idx in range(7):
                 if char_idx < len(name):
