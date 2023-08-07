@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
-from .Options import get_option_value
+from .Options import get_option_value, MissionOrder, FinalMap
 from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
@@ -30,7 +30,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
-    mission_count = len(mission_orders[mission_order_type]) - 1
+    final_map = get_option_value(multiworld, player, "final_map")
     mission_pools = {
         MissionPools.STARTER: no_build_regions_list[:],
         MissionPools.EASY: easy_regions_list[:],
@@ -38,21 +38,18 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
         MissionPools.HARD: hard_regions_list[:],
         MissionPools.FINAL: []
     }
-    if mission_order_type == 0:
+    if mission_order_type == MissionOrder.option_vanilla:
         # Vanilla uses the entire mission pool
         mission_pools[MissionPools.FINAL] = ['All-In']
         return mission_pools
-    elif mission_order_type == 1:
-        # Vanilla Shuffled ignores the player-provided excluded missions
-        excluded_missions = set()
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
         excluded_missions = excluded_missions.union(no_build_regions_list)
     # Omitting Protoss missions if not shuffling protoss
     if not shuffle_protoss:
         excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
-    # Replacing All-In on low mission counts
-    if mission_count < 14:
+    # Replacing All-In with alternate ending depending on option
+    if final_map == FinalMap.option_random_hard:
         final_mission = multiworld.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
         excluded_missions.add(final_mission)
     else:

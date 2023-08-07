@@ -3,6 +3,8 @@ from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
 from .MissionTables import vanilla_mission_req_table
 
+ORDER_VANILLA = 0
+ORDER_VANILLA_SHUFFLED = 1
 
 class GameDifficulty(Choice):
     """The difficulty of the campaign, affects enemy AI, starting units, and game speed."""
@@ -22,6 +24,22 @@ class GameSpeed(Choice):
     option_fast = 4
     option_faster = 5
     default = option_default
+
+class FinalMap(Choice):
+    """
+    Determines if the final map and goal of the campaign.
+    All in: You need to beat All-in map
+    Random Hard: A random hard mission is selected as a goal.
+                Beat this mission in order to complete the game.
+                All-in map won't be in the campaign
+
+    Vanilla mission order always ends with All in mission!
+
+    This option is short-lived. It may be changed in the future
+    """
+    display_name = "Final Map"
+    option_all_in = 0
+    option_random_hard = 1
 
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
@@ -197,6 +215,7 @@ sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "game_speed": GameSpeed,
     "all_in_map": AllInMap,
+    "final_map": FinalMap,
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
     "shuffle_protoss": ShuffleProtoss,
