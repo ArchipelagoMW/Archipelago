@@ -10,7 +10,8 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
-from .AestheticData import chao_name_conversion, sample_chao_names
+from .AestheticData import chao_name_conversion, sample_chao_names, all_exits, all_destinations, multi_rooms, single_rooms, \
+                           room_to_exits_map, exit_to_room_map
 from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
@@ -112,6 +113,7 @@ class SA2BWorld(World):
             "BlackMarketData": self.generate_black_market_data(),
             "BlackMarketUnlockCosts": self.black_market_costs,
             "BlackMarketUnlockSetting": self.multiworld.black_market_unlock_costs[self.player].value,
+            "ChaoERLayout": self.generate_er_layout(),
             "DeathLink": self.multiworld.death_link[self.player].value,
             "EmblemPercentageForCannonsCore": self.multiworld.emblem_percentage_for_cannons_core[self.player].value,
             "RequiredCannonsCoreMissions": self.multiworld.required_cannons_core_missions[self.player].value,
@@ -668,3 +670,103 @@ class SA2BWorld(World):
             #market_data[(item_idx * 40) + 37] = unlock_cost[item_idx]
 
         return market_data
+
+    def generate_er_layout(self) -> typing.Dict[int, int]:
+        if not self.multiworld.chao_entrance_randomization[self.player]:
+            return {}
+
+        er_layout = {}
+
+        start_exit = self.random.randint(0, 3)
+        accessible_rooms = []
+
+        multi_rooms_copy      = multi_rooms.copy()
+        single_rooms_copy     = single_rooms.copy()
+        all_exits_copy        = all_exits.copy()
+        all_destinations_copy = all_destinations.copy()
+
+        multi_rooms_copy.remove(0x07)
+        accessible_rooms.append(0x07)
+
+        loop_guard = 0
+        while len(multi_rooms_copy) > 0:
+            loop_guard += 1
+            if loop_guard > 200:
+                return {}
+
+            exit_room = self.random.choice(accessible_rooms)
+            possible_exits = [exit for exit in room_to_exits_map[exit_room] if exit in all_exits_copy]
+            if len(possible_exits) == 0:
+                continue
+            exit_choice = self.random.choice(possible_exits)
+            all_exits_copy.remove(exit_choice)
+
+            destination = self.random.choice(multi_rooms_copy)
+            multi_rooms_copy.remove(destination)
+            all_destinations_copy.remove(destination)
+            accessible_rooms.append(destination)
+
+            er_layout[exit_choice] = destination
+
+            reverse_exit = self.random.choice(room_to_exits_map[destination])
+
+            er_layout[reverse_exit] = exit_room
+
+            all_exits_copy.remove(reverse_exit)
+            all_destinations_copy.remove(exit_room)
+
+
+        loop_guard = 0
+        while len(single_rooms_copy) > 0:
+            loop_guard += 1
+            if loop_guard > 200:
+                return {}
+
+            exit_room = self.random.choice(accessible_rooms)
+            possible_exits = [exit for exit in room_to_exits_map[exit_room] if exit in all_exits_copy]
+            if len(possible_exits) == 0:
+                continue
+            exit_choice = self.random.choice(possible_exits)
+            all_exits_copy.remove(exit_choice)
+
+            destination = self.random.choice(single_rooms_copy)
+            single_rooms_copy.remove(destination)
+            all_destinations_copy.remove(destination)
+            accessible_rooms.append(destination)
+
+            er_layout[exit_choice] = destination
+
+            reverse_exit = self.random.choice(room_to_exits_map[destination])
+
+            er_layout[reverse_exit] = exit_room
+
+            all_exits_copy.remove(reverse_exit)
+            all_destinations_copy.remove(exit_room)
+
+        loop_guard = 0
+        while len(all_exits_copy) > 0:
+            loop_guard += 1
+            if loop_guard > 2000:
+                return {}
+
+            exit_room = self.random.choice(accessible_rooms)
+            possible_exits = [exit for exit in room_to_exits_map[exit_room] if exit in all_exits_copy]
+            if len(possible_exits) == 0:
+                continue
+            exit_choice = self.random.choice(possible_exits)
+            all_exits_copy.remove(exit_choice)
+
+            destination = self.random.choice(all_destinations_copy)
+            all_destinations_copy.remove(destination)
+
+            er_layout[exit_choice] = destination
+
+            possible_reverse_exits = [exit for exit in room_to_exits_map[destination] if exit in all_exits_copy]
+            reverse_exit = self.random.choice(possible_reverse_exits)
+
+            er_layout[reverse_exit] = exit_room
+
+            all_exits_copy.remove(reverse_exit)
+            all_destinations_copy.remove(exit_room)
+
+        return er_layout

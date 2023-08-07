@@ -451,6 +451,13 @@ class ShuffleStartingChaoEggs(DefaultOnToggle):
     display_name = "Shuffle Starting Chao Eggs"
 
 
+class ChaoEntranceRandomization(DefaultOnToggle):
+    """
+    Determines whether entrances in Chao World are randomized
+    """
+    display_name = "Chao Entrance Randomization"
+
+
 class RequiredCannonsCoreMissions(Choice):
     """
     Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
@@ -798,6 +805,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "black_market_unlock_costs": BlackMarketUnlockCosts,
     "black_market_ring_costs": BlackMarketRingCosts,
     "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
+    "chao_entrance_randomization": ChaoEntranceRandomization,
 
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
