@@ -44,6 +44,9 @@ def set_access_rules(multiworld, player):
     add_rule(multiworld.get_location(LocationName.Madra_Cyclone_Chip, player),
              lambda state: state.has(ItemName.Gabombo_Statue_Completed, player))
 
+    add_rule(multiworld.get_location(LocationName.Char, player),
+             lambda state: state.has(ItemName.Healing_Fungus, player))
+
     #Madra Catacombs
     add_rule(multiworld.get_location(LocationName.Madra_Catacombs_Ruin_Key, player),
              lambda state: state.has(ItemName.Tremor_Bit, player) and state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Frost_Jewel, player))
@@ -120,6 +123,88 @@ def set_access_rules(multiworld, player):
 
     add_rule(multiworld.get_location(LocationName.Alhafran_Cave_Psy_Crystal, player),
              lambda state: state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Frost_Jewel, player))
+
+
+    #Mikasalla
+    add_rule(multiworld.get_location(LocationName.Spark, player),
+             lambda state: state.has(ItemName.Scoop_Gem, player))
+
+
+    #Osenia Cavern
+    add_rule(multiworld.get_location(LocationName.Osenia_Cavern_Megaera, player),
+             lambda state: state.has(ItemName.Scoop_Gem, player))
+
+
+    #Garoh
+    add_rule(multiworld.get_location(LocationName.Garoh_Hypnos_Sword, player),
+             lambda state: state.has(ItemName.Reveal, player))
+
+    add_rule(multiworld.get_location(LocationName.Ether, player),
+             lambda state: state.has(ItemName.Reveal, player))
+
+
+    #Airs Rock
+    add_rule(multiworld.get_location(LocationName.Airs_Rock_Vial, player),
+             lambda state: state.has(ItemName.Frost_Jewel, player))
+
+    add_rule(multiworld.get_location(LocationName.Airs_Rock_Psy_Crystal, player),
+             lambda state: state.has(ItemName.Reveal, player))
+
+    #Gondowan Cliffs
+    add_rule(multiworld.get_location(LocationName.Gondowan_Cliffs_Healing_Fungus, player),
+             lambda state: state.has(ItemName.Frost_Jewel, player))
+
+    #Naribwe
+    add_rule(multiworld.get_location(LocationName.Naribwe_Thorn_Crown, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_location(LocationName.Naribwe_Unicorn_Ring, player),
+             lambda state: state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
+
+    #Kibombo Mountains
+    add_rule(multiworld.get_location(LocationName.Kibombo_Mountains_Power_Bread, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player) or state.has(ItemName.Gabombo_Statue_Completed, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Mountains_Tear_Stone, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player) or state.has(ItemName.Gabombo_Statue_Completed, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Mountains_Smoke_Bomb, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player) or state.has(ItemName.Gabombo_Statue_Completed, player))
+
+    add_rule(multiworld.get_location(LocationName.Waft, player),
+             lambda state: state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Growth, player))
+
+    #Kibombo
+    add_rule(multiworld.get_location(LocationName.Kibombo_Douse_Drop, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Frost_Jewel, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_location(LocationName.Spring, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_location(LocationName.Shade, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Lucky_Medal, player),
+             lambda state: state.has(ItemName.Gabombo_Statue_Completed, player))
+
+    add_rule(multiworld.get_location(LocationName.Kibombo_Nut, player),
+             lambda state: state.has(ItemName.Gabombo_Statue_Completed, player))
+
+
+    #Gabomba Statue
+    add_rule(multiworld.get_location(LocationName.Gabombo_Statue, player),
+             lambda state: state.has(ItemName.Pound_Cube, player))
+
+    add_rule(multiworld.get_location(LocationName.Steel, player),
+             lambda state: state.has(ItemName.Pound_Cube, player))
+
+    add_rule(multiworld.get_location(LocationName.Gabomba_Statue_Black_Crystal, player),
+             lambda state: state.has(ItemName.Gabombo_Statue_Completed, player))
+
+
 
 
 

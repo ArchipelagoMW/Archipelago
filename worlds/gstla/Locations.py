@@ -468,6 +468,8 @@ psyenergy_locations = [
 ]
 
 test_locations = [
+    LocationData(1, LocationName.Idejima_Shamans_Rod, [16384202], 128, ItemName.Shamans_Rod),
+
     LocationData(1, LocationName.Daila_Herb, [991776, 991796], 2, ItemName.Herb, LocationType.Hidden),
     LocationData(2, LocationName.Daila_Smoke_Bomb, [991784, 991804], 3, ItemName.Smoke_Bomb, LocationType.Hidden),
     LocationData(3, LocationName.Daila_Psy_Crystal, [991812], 131, ItemName.Psy_Crystal),
@@ -525,7 +527,59 @@ test_locations = [
     LocationData(106, LocationName.Alhafran_Cave_Power_Bread, [992348], 2, ItemName.Power_Bread, LocationType.Hidden),
     LocationData(106, LocationName.Alhafran_Cave_777_coins, [992360], 128, ItemName.Herb),
     LocationData(106, LocationName.Alhafran_Cave_Potion, [992368], 128, ItemName.Potion),
-    LocationData(106, LocationName.Alhafran_Cave_Psy_Crystal, [992376], 128, ItemName.Psy_Crystal)
+    LocationData(106, LocationName.Alhafran_Cave_Psy_Crystal, [992376], 128, ItemName.Psy_Crystal),
+
+    LocationData(106, LocationName.Mikasalla_Nut, [992396], 13, ItemName.Nut, LocationType.Hidden),
+    LocationData(106, LocationName.Mikasalla_Herb, [992424], 2, ItemName.Herb, LocationType.Hidden),
+    LocationData(106, LocationName.Mikasalla_Elixir, [992404], 3, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Mikasalla_82_coins, [992388], 128, ItemName.Herb),
+    LocationData(106, LocationName.Mikasalla_Lucky_Pepper, [992416], 3, ItemName.Lucky_Pepper, LocationType.Hidden),
+
+    LocationData(106, LocationName.Garoh_Nut, [992456], 3, ItemName.Nut, LocationType.Hidden),
+    LocationData(106, LocationName.Garoh_Elixir, [992484], 2, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Garoh_Sleep_Bomb, [992476], 3, ItemName.Sleep_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Garoh_Smoke_Bomb, [992464], 3, ItemName.Smoke_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Garoh_Hypnos_Sword, [992444], 128, ItemName.Hypnos_Sword),
+
+    LocationData(106, LocationName.Airs_Rock_Mimic, [992520], 129, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Airs_Rock_Cookie, [992504], 128, ItemName.Cookie),
+    LocationData(106, LocationName.Airs_Rock_Elixir, [992608], 128, ItemName.Elixir),
+    LocationData(106, LocationName.Airs_Rock_666_coins, [992644], 128, ItemName.Herb),
+    LocationData(106, LocationName.Airs_Rock_Clarity_Circlet, [992584], 128, ItemName.Clarity_Circlet),
+    LocationData(106, LocationName.Airs_Rock_Fujin_Shield, [992552], 128, ItemName.Fujin_Shield),
+    LocationData(106, LocationName.Airs_Rock_Psy_Crystal, [992620], 128, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Airs_Rock_Sleep_Bomb, [992540], 128, ItemName.Sleep_Bomb),
+    LocationData(106, LocationName.Airs_Rock_Smoke_Bomb, [992496], 128, ItemName.Smoke_Bomb),
+    LocationData(106, LocationName.Airs_Rock_Storm_Brand, [992512], 128, ItemName.Storm_Brand),
+    LocationData(106, LocationName.Airs_Rock_Vial, [992532], 128, ItemName.Vial), #Frost locked
+    LocationData(106, LocationName.Airs_Rock_VialTwo, [992564], 128, ItemName.Vial),
+    LocationData(106, LocationName.Airs_Rock_VialThree, [992596], 128, ItemName.Vial),
+
+
+    LocationData(106, LocationName.Gondowan_Cliffs_Healing_Fungus, [992656], 131, ItemName.Healing_Fungus),
+    LocationData(106, LocationName.Gondowan_Cliffs_Laughing_Fungus, [992664], 131, ItemName.Laughing_Fungus),
+    LocationData(106, LocationName.Gondowan_Cliffs_Sleep_Bomb, [992672], 128, ItemName.Sleep_Bomb),
+
+    LocationData(106, LocationName.Naribwe_Unicorn_Ring, [992692], 128, ItemName.Unicorn_Ring),
+    LocationData(106, LocationName.Naribwe_Thorn_Crown, [992684], 128, ItemName.Thorn_Crown),
+    LocationData(106, LocationName.Naribwe_Elixir, [992700], 2, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Naribwe_Sleep_Bomb, [992720], 2, ItemName.Sleep_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Naribwe_18_coins, [992712], 2, ItemName.Herb, LocationType.Hidden),
+
+    LocationData(106, LocationName.Kibombo_Mountains_Tear_Stone, [992740], 128, ItemName.Tear_Stone),
+    LocationData(106, LocationName.Kibombo_Mountains_Smoke_Bomb, [992764], 13, ItemName.Smoke_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Kibombo_Mountains_Power_Bread, [992732], 128, ItemName.Power_Bread),
+    LocationData(106, LocationName.Kibombo_Mountains_Disk_Axe, [992752], 128, ItemName.Disk_Axe),
+
+    LocationData(106, LocationName.Kibombo_Nut, [992832], 3, ItemName.Nut, LocationType.Hidden),
+    LocationData(106, LocationName.Kibombo_Lucky_Pepper, [992800, 992812], 2, ItemName.Lucky_Pepper, LocationType.Hidden),
+    LocationData(106, LocationName.Kibombo_Lucky_Medal, [992824], 2, ItemName.Lucky_Medal, LocationType.Hidden),
+
+
+    LocationData(106, LocationName.Gabomba_Statue_Black_Crystal, [16384172], 128, ItemName.Black_Crystal),
+    LocationData(106, LocationName.Gabomba_Statue_Mimic, [992852], 129, ItemName.Hard_Nut),
+    LocationData(106, LocationName.Gabomba_Statue_Elixir, [992864], 128, ItemName.Elixir),
+    LocationData(106, LocationName.Gabomba_Statue_Bone_Armlet, [992844], 128, ItemName.Bone_Armlet)
 ]
 
 events = [

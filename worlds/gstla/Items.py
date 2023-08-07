@@ -665,6 +665,8 @@ djinn_items: List[ItemData] =[
 ]
 
 test_items: List[ItemData] = [
+   ItemData(58, ItemName.Shamans_Rod, ItemClassification.progression, 732816, ItemType.KeyItem, 65, 128),
+
    ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 180, 2),
    ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 226, 3),
    ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 227, 3),
@@ -698,7 +700,29 @@ test_items: List[ItemData] = [
     ItemData(57, ItemName.Apple, ItemClassification.useful, 738448, ItemType.Consumable, 193, 2),
     ItemData(58, ItemName.Ixion_Mail, ItemClassification.useful, 744608, ItemType.Armor, 333, 128),
     ItemData(58, ItemName.Power_Bread, ItemClassification.useful, 738360, ItemType.Consumable, 191, 128),
-    ItemData(58, ItemName.Potion, ItemClassification.filler, 742496, ItemType.Consumable, 183, 128)
+    ItemData(58, ItemName.Potion, ItemClassification.filler, 742496, ItemType.Consumable, 183, 128),
+
+    ItemData(58, ItemName.Hypnos_Sword, ItemClassification.useful, 742716, ItemType.Weapon, 290, 128),
+
+    ItemData(58, ItemName.Cookie, ItemClassification.useful, 738404, ItemType.Consumable, 192, 128),
+    ItemData(58, ItemName.Clarity_Circlet, ItemClassification.useful, 747292, ItemType.Helm, 394, 128),
+    ItemData(58, ItemName.Fujin_Shield, ItemClassification.useful, 745708, ItemType.Shield, 358, 128),
+    ItemData(58, ItemName.Storm_Brand, ItemClassification.useful, 742232, ItemType.Weapon, 279, 128),
+    ItemData(58, ItemName.Vial, ItemClassification.useful, 737964, ItemType.Consumable, 182, 128),
+
+    ItemData(58, ItemName.Laughing_Fungus, ItemClassification.filler, 749712, ItemType.KeyItem, 449, 131),
+    ItemData(58, ItemName.Healing_Fungus, ItemClassification.progression, 749668, ItemType.KeyItem, 448, 131),
+
+    ItemData(58, ItemName.Thorn_Crown, ItemClassification.useful, 992684, ItemType.Helm, 384, 128),
+    ItemData(58, ItemName.Unicorn_Ring, ItemClassification.useful, 992692, ItemType.Ring, 266, 128),
+
+    ItemData(58, ItemName.Tear_Stone, ItemClassification.useful, 748832, ItemType.Forgeable, 429, 128),
+    ItemData(58, ItemName.Disk_Axe, ItemClassification.useful, 743156, ItemType.Weapon, 300, 128),
+
+    ItemData(58, ItemName.Lucky_Pepper, ItemClassification.useful, 738580, ItemType.Consumable, 196, 2),
+
+    ItemData(58, ItemName.Black_Crystal, ItemClassification.progression, 740604, ItemType.KeyItem, 242, 128),
+    ItemData(58, ItemName.Bone_Armlet, ItemClassification.useful, 746236, ItemType.Shield, 242, 128)
 ]
 
 events = [

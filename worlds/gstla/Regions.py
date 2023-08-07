@@ -46,8 +46,8 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_region(multiworld, player, RegionName.Idejima, [
         LocationName.Idejima_Mind_Read,
         LocationName.Idejima_Whirlwind,
-        LocationName.Idejima_Growth
-        #Todo, add shaman rod
+        LocationName.Idejima_Growth,
+        LocationName.Idejima_Shamans_Rod
     ])
 
     create_region(multiworld, player, RegionName.Daila,
@@ -171,16 +171,39 @@ def create_regions(multiworld: MultiWorld, player: int):
     ])
     create_region(multiworld, player, RegionName.Mikasalla,
     [
+        LocationName.Mikasalla_Nut,
+        LocationName.Mikasalla_Herb,
+        LocationName.Mikasalla_Elixir,
+        LocationName.Mikasalla_82_coins,
+        LocationName.Mikasalla_Lucky_Pepper,
         LocationName.Sour,
         LocationName.Spark
     ])
 
     create_region(multiworld, player, RegionName.Garoh,
     [
+        LocationName.Garoh_Nut,
+        LocationName.Garoh_Elixir,
+        LocationName.Garoh_Sleep_Bomb,
+        LocationName.Garoh_Smoke_Bomb,
+        LocationName.Garoh_Hypnos_Sword,
         LocationName.Ether
     ])
     create_region(multiworld, player, RegionName.AirsRock,
     [
+        LocationName.Airs_Rock_Mimic,
+        LocationName.Airs_Rock_Cookie,
+        LocationName.Airs_Rock_Elixir,
+        LocationName.Airs_Rock_666_coins,
+        LocationName.Airs_Rock_Clarity_Circlet,
+        LocationName.Airs_Rock_Fujin_Shield,
+        LocationName.Airs_Rock_Psy_Crystal,
+        LocationName.Airs_Rock_Sleep_Bomb,
+        LocationName.Airs_Rock_Smoke_Bomb,
+        LocationName.Airs_Rock_Storm_Brand,
+        LocationName.Airs_Rock_Vial,
+        LocationName.Airs_Rock_VialTwo,
+        LocationName.Airs_Rock_VialThree,
         LocationName.Airs_Rock_Flora,
         LocationName.Airs_Rock_Reveal
     ])
@@ -189,23 +212,38 @@ def create_regions(multiworld: MultiWorld, player: int):
     ])
 
     #South East Gondowan
-    create_region(multiworld, player, RegionName.GondowanCliffsEast, [])
-    create_region(multiworld, player, RegionName.GondowanCliffsWest,
+    create_region(multiworld, player, RegionName.GondowanCliffs,
     [
+        LocationName.Gondowan_Cliffs_Healing_Fungus,
+        LocationName.Gondowan_Cliffs_Laughing_Fungus,
+        LocationName.Gondowan_Cliffs_Sleep_Bomb,
         LocationName.Kindle
     ])
+
     create_region(multiworld, player, RegionName.Naribwe,
     [
+        LocationName.Naribwe_Elixir,
+        LocationName.Naribwe_18_coins,
+        LocationName.Naribwe_Sleep_Bomb,
+        LocationName.Naribwe_Thorn_Crown,
+        LocationName.Naribwe_Unicorn_Ring,
         LocationName.Chill
     ])
 
     create_region(multiworld, player, RegionName.KibomboMountains,
-                  [
+    [
+        LocationName.Kibombo_Mountains_Disk_Axe,
+        LocationName.Kibombo_Mountains_Power_Bread,
+        LocationName.Kibombo_Mountains_Smoke_Bomb,
+        LocationName.Kibombo_Mountains_Tear_Stone,
         LocationName.Waft
     ])
 
     create_region(multiworld, player, RegionName.Kibombo,
     [
+        LocationName.Kibombo_Lucky_Medal,
+        LocationName.Kibombo_Lucky_Pepper,
+        LocationName.Kibombo_Nut,
         LocationName.Kibombo_Douse_Drop,
         LocationName.Kibombo_Frost_Jewel,
         LocationName.Spring,
@@ -214,6 +252,10 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.GabombaStatue,
     [
+        LocationName.Gabomba_Statue_Black_Crystal,
+        LocationName.Gabomba_Statue_Mimic,
+        LocationName.Gabomba_Statue_Elixir,
+        LocationName.Gabomba_Statue_Bone_Armlet,
         LocationName.Gabombo_Statue,
         LocationName.Steel
     ])
@@ -426,12 +468,15 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_connect(multiworld, player, RegionName.Garoh, RegionName.AirsRock, lambda state: state.has(ItemName.Whirlwind, player))
     create_connect(multiworld, player, RegionName.Garoh, RegionName.YampiDesertBack, lambda state: state.has(ItemName.Sand, player))
 
-    create_connect(multiworld, player, RegionName.Madra, RegionName.GondowanCliffsEast)
-    create_connect(multiworld, player, RegionName.GondowanCliffsEast, RegionName.GondowanCliffsWest, lambda state: state.has(ItemName.Frost_Jewel, player))
-    create_connect(multiworld, player, RegionName.GondowanCliffsWest, RegionName.Naribwe)
+    create_connect(multiworld, player, RegionName.Madra, RegionName.GondowanCliffs, lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Scoop_Gem, player), True)
+    create_connect(multiworld, player, RegionName.GondowanCliffs, RegionName.Madra, one_way=True)
+    create_connect(multiworld, player, RegionName.GondowanCliffs, RegionName.Naribwe, lambda state: state.has(ItemName.Briggs_defeated), True)
+    create_connect(multiworld, player, RegionName.Naribwe, RegionName.GondowanCliffs, one_way=True)
+
     create_connect(multiworld, player, RegionName.Naribwe, RegionName.KibomboMountains)
-    create_connect(multiworld, player, RegionName.KibomboMountains, RegionName.Kibombo, lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Lash_Pebble, player))
-    create_connect(multiworld, player, RegionName.Kibombo, RegionName.GabombaStatue, lambda state: state.has(ItemName.Lash_Pebble, player))
+    create_connect(multiworld, player, RegionName.KibomboMountains, RegionName.Kibombo, lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Whirlwind, player), True)
+    create_connect(multiworld, player, RegionName.Kibombo, RegionName.KibomboMountains, one_way=True)
+    create_connect(multiworld, player, RegionName.Kibombo, RegionName.GabombaStatue, lambda state: state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Scoop_Gem, player))
     create_connect(multiworld, player, RegionName.GabombaStatue, RegionName.GabombaCatacombs)
 
 
