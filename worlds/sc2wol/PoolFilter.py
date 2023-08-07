@@ -1,6 +1,6 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list, spider_mine_sources
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
 from .Options import get_option_value, MissionOrder, FinalMap
@@ -208,13 +208,27 @@ class ValidInventory:
         if not spider_mine_sources & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
         if not BARRACKS_UNITS & self.logical_inventory:
-            inventory = [item for item in inventory if not item.name.startswith("Progressive Infantry")]
+            inventory = [item for item in inventory if
+                         not (item.name.startswith("Progressive Infantry") or item.name == "Orbital Strike")]
         if not FACTORY_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Vehicle")]
         if not STARPORT_UNITS & self.logical_inventory:
             inventory = [item for item in inventory if not item.name.startswith("Progressive Ship")]
 
-        return inventory + locked_items
+        # Cull finished, adding locked items back into inventory
+        inventory += locked_items
+
+        # Replacing empty space with generically useful items
+        replacement_items = [item for item in self.item_pool
+                             if (item not in inventory
+                                 and item not in self.locked_items
+                                 and item.name in second_pass_placeable_items)]
+        self.multiworld.random.shuffle(replacement_items)
+        while len(inventory) < inventory_size and len(replacement_items) > 0:
+            item = replacement_items.pop()
+            inventory.append(item)
+
+        return inventory
 
     def _read_logic(self):
         self._sc2wol_has_common_unit = lambda world, player: SC2WoLLogic._sc2wol_has_common_unit(self, world, player)

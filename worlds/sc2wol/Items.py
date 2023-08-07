@@ -289,6 +289,42 @@ for item, data in get_full_item_list().items():
         item_name_groups[short_name] = [item]
 item_name_groups["Missions"] = ["Beat " + mission_name for mission_name in vanilla_mission_req_table]
 
+
+# Items that can be placed before resources if not already in
+# General upgrades and Mercs
+second_pass_placeable_items: typing.Tuple[str, ...] = (
+    # Buildings without upgrades
+    "Sensor Tower",
+    "Hive Mind Emulator",
+    "Psi Disrupter",
+    "Perdition Turret",
+    # General upgrades without any dependencies
+    "Advanced Construction (SCV)",
+    "Dual-Fusion Welders (SCV)",
+    "Fire-Suppression System (Building)",
+    "Orbital Command (Building)",
+    "Ultra-Capacitors",
+    "Vanadium Plating",
+    "Orbital Depots",
+    "Micro-Filtering",
+    "Automated Refinery",
+    "Command Center Reactor",
+    "Tech Reactor",
+    "Planetary Fortress",
+    "Cellular Reactor",
+    "Progressive Regenerative Bio-Steel",  # Place only L1
+    # Mercenaries
+    "War Pigs",
+    "Devil Dogs",
+    "Hammer Securities",
+    "Spartan Company",
+    "Siege Breakers",
+    "Hel's Angel",
+    "Dusk Wings",
+    "Jackson's Revenge"
+)
+
+
 filler_items: typing.Tuple[str, ...] = (
     '+15 Starting Minerals',
     '+15 Starting Vespene'
