@@ -1208,6 +1208,11 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
         rom.write_byte(0x2F90E2, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
         rom.write_byte(0x2F9109, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
 
+        if multiworld.copy_ability_randomization[player] == 2:
+            for enemy in enemy_remap:
+                # we just won't include it for minibosses
+                rom.write_bytes(0xB3E40 + (enemy_remap[enemy] << 1), struct.pack("h", slot_random.randint(-1, 2)))
+
     # write jumping goal
     rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))
     rom.write_bytes(0x944E, struct.pack("H", multiworld.jumping_target[player]))
