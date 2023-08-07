@@ -122,6 +122,7 @@ events_locations = [
     LocationData(None, Region.museum, Goal.complete_museum),
     LocationData(None, Region.farm_house, Goal.full_house),
     LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
+    LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 

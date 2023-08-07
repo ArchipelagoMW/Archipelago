@@ -27,6 +27,7 @@ from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
 from .wallet_logic import WalletLogic
+from ..data.monster_data import all_monsters_by_category
 from ..mods.logic.mod_logic import ModLogic
 from .. import options
 from ..data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
@@ -645,6 +646,13 @@ class StardewLogic:
                                self.wallet.has_rusty_key(),  # Rusty key not expected
                                ]
         return Count(12, rules_worth_a_point)
+
+    def can_complete_all_monster_slaying_goals(self) -> StardewRule:
+        rules = [self.time.has_lived_max_months()]
+        for category in all_monsters_by_category:
+            rules.append(self.combat.can_kill_all_monsters(all_monsters_by_category[category]))
+
+        return And(rules)
 
     def can_win_egg_hunt(self) -> StardewRule:
         number_of_movement_buffs: int = self.options[options.NumberOfMovementBuffs]

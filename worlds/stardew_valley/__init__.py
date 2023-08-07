@@ -210,8 +210,12 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
                                        self.logic.has_walnut(130).simplify(),
                                        "Victory")
-        elif self.options.goal == Goal.option_perfection:
-            self.create_event_location(location_table[GoalName.perfection],
+        elif self.options[options.Goal] == options.Goal.option_protector_of_the_valley:
+            self.create_event_location(location_table[Goal.protector_of_the_valley],
+                                       self.logic.can_complete_all_monster_slaying_goals.simplify(),
+                                       "Victory")
+        elif self.options[options.Goal] == options.Goal.option_perfection:
+            self.create_event_location(location_table[Goal.perfection],
                                        self.logic.has_everything(self.all_progression_items).simplify(),
                                        "Victory")
 

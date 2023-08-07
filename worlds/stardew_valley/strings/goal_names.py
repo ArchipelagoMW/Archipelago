@@ -7,4 +7,5 @@ class Goal:
     complete_museum = "Complete the Museum Collection"
     full_house = "Full House"
     greatest_walnut_hunter = "Greatest Walnut Hunter"
+    protector_of_the_valley = "Protector of the Valley"
     perfection = "Perfection"
