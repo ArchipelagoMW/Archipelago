@@ -1,11 +1,14 @@
 import typing
 from pkgutil import get_data
+from random import Random
 
 import Utils
-from typing import Optional
+from typing import Optional, Dict, List
 import hashlib
 import os
 import struct
+
+from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
@@ -279,6 +282,11 @@ class RomData:
         with open(file, 'rb') as stream:
             self.file = bytearray(stream.read())
 
+    def write_crc(self):
+        crc = (sum(self.file[:0x7FDC] + self.file[0x7FE0:]) + 0x01FE) & 0xFFFF
+        inv = crc ^ 0xFFFF
+        self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+
 
 def handle_level_sprites(stages, sprites, palettes):
     palette_by_level = list()
@@ -362,11 +370,13 @@ class KDL3DeltaPatch(APDeltaPatch):
                                      0x50, 0xC4, 0x39])
         if rom.read_bytes(0x3D018, 1)[0] > 0:
             write_consumable_sprites(rom)
+        rom.write_crc()
         rom.write_to_file(target)
 
 
-def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements,
-              shuffled_levels, bb_boss_enabled, copy_abilities, slot_random):
+def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_required: int,
+              boss_requirements: Dict[int, int], shuffled_levels: Dict[int, List[int]], bb_boss_enabled: Dict[int, int],
+              copy_abilities: Dict[str, str], slot_random: Random):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
