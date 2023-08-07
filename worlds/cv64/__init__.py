@@ -3,7 +3,6 @@ import random
 import typing
 # import math
 import threading
-import copy
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, key_table, special_table, \
@@ -52,12 +51,12 @@ class CV64World(World):
     data_version = 0
     remote_items = False
 
-    item_name_to_id = {name: code + 0xC64000 for name, code in item_table.items()}
+    item_name_to_id = {name: code + base_id for name, code in item_table.items()}
     location_name_to_id = {name: data.code + base_id for name, data in all_locations.items()}
 
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
-    active_stage_exits: typing.Dict[str, typing.List]
+    active_stage_exits: typing.Dict[str, typing.Dict]
     total_available_bosses = 0
     required_s2s = 0
     web = CV64Web()
@@ -88,7 +87,7 @@ class CV64World(World):
                 self.multiworld.random.randint(self.multiworld.special2s_required[self.player].value, 70)
 
         self.active_stage_list = vanilla_stage_order.copy()
-        self.active_stage_exits = copy.deepcopy(vanilla_stage_exits)
+        self.active_stage_exits = {name: vanilla_stage_exits[name].copy() for name in vanilla_stage_exits}
 
         stage_1_blacklist = []
 
@@ -105,8 +104,8 @@ class CV64World(World):
             del (self.active_stage_exits[RName.underground_waterway])
             del (self.active_stage_exits[RName.tower_of_science])
             del (self.active_stage_exits[RName.tower_of_sorcery])
-            self.active_stage_exits[RName.villa][2] = RName.tunnel
-            self.active_stage_exits[RName.castle_center][2] = RName.duel_tower
+            self.active_stage_exits[RName.villa]["alt"] = RName.tunnel
+            self.active_stage_exits[RName.castle_center]["alt"] = RName.duel_tower
         elif self.multiworld.character_stages[self.player].value == 3:
             self.active_stage_list.remove(RName.tunnel)
             self.active_stage_list.remove(RName.duel_tower)
@@ -114,8 +113,8 @@ class CV64World(World):
             del (self.active_stage_exits[RName.tunnel])
             del (self.active_stage_exits[RName.duel_tower])
             del (self.active_stage_exits[RName.tower_of_execution])
-            self.active_stage_exits[RName.villa][1] = RName.underground_waterway
-            self.active_stage_exits[RName.castle_center][1] = RName.tower_of_science
+            self.active_stage_exits[RName.villa]["next"] = RName.underground_waterway
+            self.active_stage_exits[RName.castle_center]["next"] = RName.tower_of_science
 
         if self.multiworld.stage_shuffle[self.player]:
             shuffle_stages(self.multiworld, self.player, self.active_stage_list, self.active_stage_exits,
@@ -123,7 +122,8 @@ class CV64World(World):
         elif self.multiworld.character_stages[self.player].value != 0:
             # Update the stage numbers here if we have branching paths disabled and not shuffling stages.
             for i in range(len(self.active_stage_list)):
-                self.active_stage_exits[self.active_stage_list[i]][3] = i + 1
+                self.active_stage_exits[self.active_stage_list[i]]["position"] = i + 1
+                self.active_stage_exits[self.active_stage_list[i]]["path"] = " "
 
         # Create a list of warps from the active stage list. They are in a random order by default and will never
         # include the starting stage.
@@ -538,34 +538,34 @@ class CV64World(World):
             for stage in self.active_stage_exits:
 
                 # Start loading zones
-                if self.active_stage_exits[stage][0] == "Menu":
+                if self.active_stage_exits[stage]["prev"] == "Menu":
                     offsets_to_ids[stage_info[stage].startzone_map_offset] = 0xFF
                     offsets_to_ids[stage_info[stage].startzone_spawn_offset] = 0x00
-                elif self.active_stage_exits[stage][0]:
+                elif self.active_stage_exits[stage]["prev"]:
                     offsets_to_ids[stage_info[stage].startzone_map_offset] = stage_info[
-                        self.active_stage_exits[stage][0]].end_map_id
+                        self.active_stage_exits[stage]["prev"]].end_map_id
                     offsets_to_ids[stage_info[stage].startzone_spawn_offset] = stage_info[
-                        self.active_stage_exits[stage][0]].end_spawn_id
+                        self.active_stage_exits[stage]["prev"]].end_spawn_id
                     # Change CC's end-spawn ID to put you at Carrie's exit if appropriate
-                    if self.active_stage_exits[stage][0] == RName.castle_center:
+                    if self.active_stage_exits[stage]["prev"] == RName.castle_center:
                         if self.multiworld.character_stages[self.player].value == 3 or \
-                                (self.active_stage_exits[RName.castle_center][2] == stage
+                                (self.active_stage_exits[RName.castle_center]["alt"] == stage
                                  and self.multiworld.character_stages[self.player].value == 0):
                             offsets_to_ids[stage_info[stage].startzone_spawn_offset] += 1
 
                 # End loading zones
-                if self.active_stage_exits[stage][1]:
+                if self.active_stage_exits[stage]["next"]:
                     offsets_to_ids[stage_info[stage].endzone_map_offset] = stage_info[
-                        self.active_stage_exits[stage][1]].start_map_id
+                        self.active_stage_exits[stage]["next"]].start_map_id
                     offsets_to_ids[stage_info[stage].endzone_spawn_offset] = stage_info[
-                        self.active_stage_exits[stage][1]].start_spawn_id
+                        self.active_stage_exits[stage]["next"]].start_spawn_id
 
                 # Alternate end loading zones
-                if self.active_stage_exits[stage][2]:
+                if self.active_stage_exits[stage]["alt"]:
                     offsets_to_ids[stage_info[stage].altzone_map_offset] = stage_info[
-                        self.active_stage_exits[stage][2]].start_map_id
+                        self.active_stage_exits[stage]["alt"]].start_map_id
                     offsets_to_ids[stage_info[stage].altzone_spawn_offset] = stage_info[
-                        self.active_stage_exits[stage][2]].start_spawn_id
+                        self.active_stage_exits[stage]["alt"]].start_spawn_id
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
                       self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
@@ -593,15 +593,10 @@ class CV64World(World):
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         # Write the stage order to the spoiler log
         spoiler_handle.write(f"\nCastlevania 64 stage order for {self.multiworld.player_name[self.player]}:\n")
-        used_numbers = []
         for stage in self.active_stage_list:
-            num = str(self.active_stage_exits[stage][3]).zfill(2)
-            if self.active_stage_exits[stage][3] in used_numbers:
-                alt_stage = "'"
-            else:
-                alt_stage = " "
-                used_numbers.append(self.active_stage_exits[stage][3])
-            spoiler_handle.writelines(f"Stage {num}{alt_stage}:\t{stage}\n")
+            num = str(self.active_stage_exits[stage]["position"]).zfill(2)
+            path = self.active_stage_exits[stage]["path"]
+            spoiler_handle.writelines(f"Stage {num}{path}:\t{stage}\n")
 
         # Write the warp order to the spoiler log
         spoiler_handle.writelines(f"\nStart :\t{self.active_stage_list[0]}\n")
@@ -628,3 +623,16 @@ class CV64World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        # Attach each location's stage's position to its hint information if Stage Shuffle is on.
+        if self.multiworld.stage_shuffle[self.player]:
+            stage_pos_data = {}
+            for loc in self.multiworld.get_locations(self.player):
+                if loc.cv64_stage is not None and loc.address is not None:
+                    num = str(self.active_stage_exits[loc.cv64_stage]["position"]).zfill(2)
+                    path = self.active_stage_exits[loc.cv64_stage]["path"]
+                    stage_pos_data[loc.address] = f"Stage {num}"
+                    if path != " ":
+                        stage_pos_data[loc.address] += path
+            hint_data[self.player] = stage_pos_data

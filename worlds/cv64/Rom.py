@@ -602,7 +602,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     for stage in active_stage_list:
         for offset in stage_info[stage].stage_number_offset_list:
-            rom.write_byte(offset, active_stage_exits[stage][3])
+            rom.write_byte(offset, active_stage_exits[stage]["position"])
 
     # CC top elevator switch check
     rom.write_int32(0x6CF0A0, 0x0C0FF0B0)  # JAL 0x803FC2C0

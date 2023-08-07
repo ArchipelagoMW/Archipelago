@@ -17,18 +17,18 @@ class EntranceData(typing.NamedTuple):
 def create_entrances(multiworld, player: int, active_stage_exits, active_warp_list, active_regions):
     def get_prev_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            if active_stage_exits[source_stage][0] != "Menu":
-                return stage_info[active_stage_exits[source_stage][0]].end_region_name
+            if active_stage_exits[source_stage]["prev"] != "Menu":
+                return stage_info[active_stage_exits[source_stage]["prev"]].end_region_name
         return "Menu"
 
     def get_next_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            return stage_info[active_stage_exits[source_stage][1]].start_region_name
+            return stage_info[active_stage_exits[source_stage]["next"]].start_region_name
         return "Menu"
 
     def get_alt_stage_start(source_stage):
         if source_stage in active_stage_exits:
-            return stage_info[active_stage_exits[source_stage][2]].start_region_name
+            return stage_info[active_stage_exits[source_stage]["alt"]].start_region_name
         return "Menu"
 
     all_entrances = [

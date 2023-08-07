@@ -264,21 +264,32 @@ vanilla_stage_order = ["Forest of Silence", "Castle Wall", "Villa", "Tunnel", "U
                        "Duel Tower", "Tower of Execution", "Tower of Science", "Tower of Sorcery", "Room of Clocks",
                        "Clock Tower", "Castle Keep"]
 
-#                                               Previous stage      Next stage            Alternate next stage    Number
-vanilla_stage_exits = {"Forest of Silence":    [None,               "Castle Wall",        None,                   1],
-                       "Castle Wall":          [None,               "Villa",              None,                   2],
-                       "Villa":                [None,               "Tunnel",             "Underground Waterway", 3],
-                       "Tunnel":               [None,               "Castle Center",      None,                   4],
-                       "Underground Waterway": [None,               "Castle Center",      None,                   4],
-                       "Castle Center":        [None,               "Duel Tower",         "Tower of Science",     5],
-                       "Duel Tower":           ["Castle Center",    "Tower of Execution", None,                   6],
-                       "Tower of Execution":   ["Duel Tower",       "Room of Clocks",     None,                   7],
-                       "Tower of Science":     ["Castle Center",    "Tower of Sorcery",   None,                   6],
-                       "Tower of Sorcery":     ["Tower of Science", "Room of Clocks",     None,                   7],
-                       "Room of Clocks":       [None,               "Clock Tower",        None,                   8],
-                       "Clock Tower":          [None,               "Castle Keep",        None,                   9],
-                       "Castle Keep":          [None,               None,                 None,                   10]}
-
+vanilla_stage_exits = {RName.forest_of_silence:    {"prev": None, "next": RName.castle_wall,
+                                                    "alt": None, "position": 1, "path": " "},
+                       RName.castle_wall:          {"prev": None, "next": RName.villa,
+                                                    "alt": None, "position": 2, "path": " "},
+                       RName.villa:                {"prev": None, "next": RName.tunnel,
+                                                    "alt": RName.underground_waterway, "position": 3, "path": " "},
+                       RName.tunnel:               {"prev": None, "next": RName.castle_center,
+                                                    "alt": None, "position": 4, "path": " "},
+                       RName.underground_waterway: {"prev": None, "next": RName.castle_center,
+                                                    "alt": None, "position": 4, "path": "'"},
+                       RName.castle_center:        {"prev": None, "next": RName.duel_tower,
+                                                    "alt": RName.tower_of_science, "position": 5, "path": " "},
+                       RName.duel_tower:           {"prev": RName.castle_center, "next": RName.tower_of_execution,
+                                                    "alt": None, "position": 6, "path": " "},
+                       RName.tower_of_execution:   {"prev": RName.duel_tower, "next": RName.room_of_clocks,
+                                                    "alt": None, "position": 7, "path": " "},
+                       RName.tower_of_science:     {"prev": RName.castle_center, "next": RName.tower_of_sorcery,
+                                                    "alt": None, "position": 6, "path": "'"},
+                       RName.tower_of_sorcery:     {"prev": RName.tower_of_science, "next": RName.room_of_clocks,
+                                                    "alt": None, "position": 7, "path": "'"},
+                       RName.room_of_clocks:       {"prev": None, "next": RName.clock_tower,
+                                                    "alt": None, "position": 8, "path": " "},
+                       RName.clock_tower:          {"prev": None, "next": RName.castle_keep,
+                                                    "alt": None, "position": 9, "path": " "},
+                       RName.castle_keep:          {"prev": None, "next": None,
+                                                    "alt": None, "position": 10, "path": " "}}
 
 # def set_custom_stage_order(multiworld, player, active_stage_list, active_stage_exits):
 #     valid = True
@@ -338,45 +349,49 @@ def shuffle_stages(multiworld, player, active_stage_list, active_stage_exits, st
     # Update the dictionary of stage exits
     current_stage_number = 1
     for i in range(len(active_stage_list)):
-        # Stage number
-        active_stage_exits[active_stage_list[i]][3] = current_stage_number
+        # Stage position number and alternate path indicator
+        active_stage_exits[active_stage_list[i]]["position"] = current_stage_number
+        if active_stage_list[i] in alt_villa_stage + alt_cc_stages:
+            active_stage_exits[active_stage_list[i]]["path"] = "'"
+        else:
+            active_stage_exits[active_stage_list[i]]["path"] = " "
 
         # Previous stage
-        if active_stage_exits[active_stage_list[i]][0]:
+        if active_stage_exits[active_stage_list[i]]["prev"]:
             if i - 1 < 0:
-                active_stage_exits[active_stage_list[i]][0] = "Menu"
+                active_stage_exits[active_stage_list[i]]["prev"] = "Menu"
             elif multiworld.character_stages[player].value == 0:
                 if active_stage_list[i - 1] == alt_villa_stage[0] or active_stage_list[i] == alt_villa_stage[0]:
-                    active_stage_exits[active_stage_list[i]][0] = active_stage_list[i - 2]
+                    active_stage_exits[active_stage_list[i]]["prev"] = active_stage_list[i - 2]
                 elif active_stage_list[i - 1] == alt_cc_stages[1] or active_stage_list[i] == alt_cc_stages[0]:
-                    active_stage_exits[active_stage_list[i]][0] = active_stage_list[i - 3]
+                    active_stage_exits[active_stage_list[i]]["prev"] = active_stage_list[i - 3]
                 else:
-                    active_stage_exits[active_stage_list[i]][0] = active_stage_list[i - 1]
+                    active_stage_exits[active_stage_list[i]]["prev"] = active_stage_list[i - 1]
             else:
-                active_stage_exits[active_stage_list[i]][0] = active_stage_list[i - 1]
+                active_stage_exits[active_stage_list[i]]["prev"] = active_stage_list[i - 1]
 
         # Next stage
-        if active_stage_exits[active_stage_list[i]][1]:
+        if active_stage_exits[active_stage_list[i]]["next"]:
             if multiworld.character_stages[player].value == 0:
                 if active_stage_list[i + 1] == alt_villa_stage[0]:
-                    active_stage_exits[active_stage_list[i]][1] = active_stage_list[i + 2]
+                    active_stage_exits[active_stage_list[i]]["next"] = active_stage_list[i + 2]
                     current_stage_number -= 1
                 elif active_stage_list[i + 1] == alt_cc_stages[0]:
-                    active_stage_exits[active_stage_list[i]][1] = active_stage_list[i + 3]
+                    active_stage_exits[active_stage_list[i]]["next"] = active_stage_list[i + 3]
                     current_stage_number -= 2
                 else:
-                    active_stage_exits[active_stage_list[i]][1] = active_stage_list[i + 1]
+                    active_stage_exits[active_stage_list[i]]["next"] = active_stage_list[i + 1]
             else:
-                active_stage_exits[active_stage_list[i]][1] = active_stage_list[i + 1]
+                active_stage_exits[active_stage_list[i]]["next"] = active_stage_list[i + 1]
 
         # Alternate next stage
-        if active_stage_exits[active_stage_list[i]][2]:
+        if active_stage_exits[active_stage_list[i]]["alt"]:
             if multiworld.character_stages[player].value == 0:
                 if active_stage_list[i] == RName.villa:
-                    active_stage_exits[active_stage_list[i]][2] = alt_villa_stage[0]
+                    active_stage_exits[active_stage_list[i]]["alt"] = alt_villa_stage[0]
                 else:
-                    active_stage_exits[active_stage_list[i]][2] = alt_cc_stages[0]
+                    active_stage_exits[active_stage_list[i]]["alt"] = alt_cc_stages[0]
             else:
-                active_stage_exits[active_stage_list[i]][2] = active_stage_list[i + 1]
+                active_stage_exits[active_stage_list[i]]["alt"] = active_stage_list[i + 1]
 
         current_stage_number += 1
