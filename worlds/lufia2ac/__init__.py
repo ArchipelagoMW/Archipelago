@@ -2,10 +2,10 @@ import base64
 import itertools
 import os
 from enum import IntFlag
-from random import Random
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+import settings
+from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import AssembleOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
@@ -20,6 +20,16 @@ from .Utils import constrained_choices, constrained_shuffle
 from .basepatch import apply_basepatch
 
 CHESTS_PER_SPHERE: int = 5
+
+
+class L2ACSettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the US rom"""
+        description = "Lufia II ROM File"
+        copy_to = "Lufia II - Rise of the Sinistrals (USA).sfc"
+        md5s = [L2ACDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class L2ACWeb(WebWorld):
@@ -45,6 +55,7 @@ class L2ACWorld(World):
     web: ClassVar[WebWorld] = L2ACWeb()
 
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = get_type_hints(L2ACOptions)
+    settings: ClassVar[L2ACSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = l2ac_item_name_to_id
     location_name_to_id: ClassVar[Dict[str, int]] = l2ac_location_name_to_id
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {
@@ -90,11 +101,9 @@ class L2ACWorld(World):
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
-        menu.exits.append(Entrance(self.player, "AncientDungeonEntrance", menu))
         self.multiworld.regions.append(menu)
 
         ancient_dungeon = Region("AncientDungeon", self.player, self.multiworld, "Ancient Dungeon")
-        ancient_dungeon.exits.append(Entrance(self.player, "FinalFloorEntrance", ancient_dungeon))
         item_count: int = int(self.o.blue_chest_count)
         if self.o.shuffle_capsule_monsters:
             item_count += len(self.item_name_groups["Capsule monsters"])
@@ -102,11 +111,11 @@ class L2ACWorld(World):
             item_count += len(self.item_name_groups["Party members"])
         for location_name, location_id in itertools.islice(l2ac_location_name_to_id.items(), item_count):
             ancient_dungeon.locations.append(L2ACLocation(self.player, location_name, location_id, ancient_dungeon))
-        prog_chest_access = L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player)
         for i in range(CHESTS_PER_SPHERE, item_count, CHESTS_PER_SPHERE):
             chest_access = \
                 L2ACLocation(self.player, f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", None, ancient_dungeon)
-            chest_access.place_locked_item(prog_chest_access)
+            chest_access.place_locked_item(
+                L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
             ancient_dungeon.locations.append(chest_access)
         for iris in self.item_name_groups["Iris treasures"]:
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
@@ -125,14 +134,12 @@ class L2ACWorld(World):
         final_floor.locations.append(boss)
         self.multiworld.regions.append(final_floor)
 
-        self.multiworld.get_entrance("AncientDungeonEntrance", self.player) \
-            .connect(self.multiworld.get_region("AncientDungeon", self.player))
-        self.multiworld.get_entrance("FinalFloorEntrance", self.player) \
-            .connect(self.multiworld.get_region("FinalFloor", self.player))
+        menu.connect(ancient_dungeon, "AncientDungeonEntrance")
+        ancient_dungeon.connect(final_floor, "FinalFloorEntrance")
 
     def create_items(self) -> None:
-        item_pool: List[str] = self.multiworld.random.choices(sorted(self.item_name_groups["Blue chest items"]),
-                                                              k=self.o.blue_chest_count - self.o.custom_item_pool.count)
+        item_pool: List[str] = self.random.choices(sorted(self.item_name_groups["Blue chest items"]),
+                                                   k=self.o.blue_chest_count - self.o.custom_item_pool.count)
         item_pool += [item_name for item_name, count in self.o.custom_item_pool.items() for _ in range(count)]
 
         if self.o.shuffle_capsule_monsters:
@@ -142,9 +149,7 @@ class L2ACWorld(World):
             item_pool += self.item_name_groups["Party members"]
             self.o.blue_chest_count.value += len(self.item_name_groups["Party members"])
         for item_name in item_pool:
-            item_data: ItemData = l2ac_item_table[item_name]
-            item_id: int = items_start_id + item_data.code
-            self.multiworld.itempool.append(L2ACItem(item_name, item_data.classification, item_id, self.player))
+            self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
         for i in range(1, self.o.blue_chest_count):
@@ -257,7 +262,7 @@ class L2ACWorld(World):
 
     def get_filler_item_name(self) -> str:
         return ["Potion", "Hi-Magic", "Miracle", "Hi-Potion", "Potion", "Ex-Potion", "Regain", "Ex-Magic", "Hi-Magic"][
-            (self.multiworld.random.randrange(9) + self.multiworld.random.randrange(9)) // 2]
+            (self.random.randrange(9) + self.random.randrange(9)) // 2]
 
     # end of overridden AutoWorld.py methods
 
@@ -311,33 +316,31 @@ class L2ACWorld(World):
         index_set: Set[int] = set(used_indices)
         used_pointers: List[bytes] = [pointer for index, pointer in enumerate(pointers) if index in index_set]
 
-        slot_random: Random = self.multiworld.per_slot_randoms[self.player]
-
         d: int = 2 * 6
         if self.o.enemy_floor_numbers == EnemyFloorNumbers.option_shuffle:
-            constrained_shuffle(used_formations, d, random=slot_random)
+            constrained_shuffle(used_formations, d, random=self.random)
         elif self.o.enemy_floor_numbers == EnemyFloorNumbers.option_randomize:
-            used_formations = constrained_choices(used_formations, d, k=len(used_formations), random=slot_random)
+            used_formations = constrained_choices(used_formations, d, k=len(used_formations), random=self.random)
 
         if self.o.enemy_sprites == EnemySprites.option_shuffle:
-            slot_random.shuffle(used_sprites)
+            self.random.shuffle(used_sprites)
         elif self.o.enemy_sprites == EnemySprites.option_randomize:
-            used_sprites = slot_random.choices(tuple(dict.fromkeys(used_sprites)), k=len(used_sprites))
+            used_sprites = self.random.choices(tuple(dict.fromkeys(used_sprites)), k=len(used_sprites))
         elif self.o.enemy_sprites == EnemySprites.option_singularity:
-            used_sprites = [slot_random.choice(tuple(dict.fromkeys(used_sprites)))] * len(used_sprites)
+            used_sprites = [self.random.choice(tuple(dict.fromkeys(used_sprites)))] * len(used_sprites)
         elif self.o.enemy_sprites.sprite:
             used_sprites = [self.o.enemy_sprites.sprite] * len(used_sprites)
 
         if self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_pattern:
-            slot_random.shuffle(used_pointers)
+            self.random.shuffle(used_pointers)
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_pattern:
-            used_pointers = slot_random.choices(tuple(dict.fromkeys(used_pointers)), k=len(used_pointers))
+            used_pointers = self.random.choices(tuple(dict.fromkeys(used_pointers)), k=len(used_pointers))
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_shuffle_by_sprite:
-            slot_random.shuffle(used_indices)
+            self.random.shuffle(used_indices)
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_randomize_by_sprite:
-            used_indices = slot_random.choices(tuple(dict.fromkeys(used_indices)), k=len(used_indices))
+            used_indices = self.random.choices(tuple(dict.fromkeys(used_indices)), k=len(used_indices))
         elif self.o.enemy_movement_patterns == EnemyMovementPatterns.option_singularity:
-            used_indices = [slot_random.choice(tuple(dict.fromkeys(used_indices)))] * len(used_indices)
+            used_indices = [self.random.choice(tuple(dict.fromkeys(used_indices)))] * len(used_indices)
         elif self.o.enemy_movement_patterns.sprite:
             used_indices = [indices[self.o.enemy_movement_patterns.sprite - 128]] * len(used_indices)
 

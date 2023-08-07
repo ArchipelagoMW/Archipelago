@@ -433,6 +433,20 @@ class TestFillRestrictive(unittest.TestCase):
         self.assertTrue(multi_world.state.prog_items[item.name, item.player], "Sweep did not collect - Test flawed")
         self.assertEqual(multi_world.state.prog_items[item.name, item.player], 1, "Sweep collected multiple times")
 
+    def test_correct_item_instance_removed_from_pool(self):
+        multi_world = generate_multi_world()
+        player1 = generate_player_data(multi_world, 1, 2, 2)
+
+        player1.prog_items[0].name = "Different_item_instance_but_same_item_name"
+        player1.prog_items[1].name = "Different_item_instance_but_same_item_name"
+        loc0 = player1.locations[0]
+
+        fill_restrictive(multi_world, multi_world.state,
+                         [loc0], player1.prog_items)
+
+        self.assertEqual(1, len(player1.prog_items))
+        self.assertIsNot(loc0.item, player1.prog_items[0], "Filled item was still present in item pool")
+
 
 class TestDistributeItemsRestrictive(unittest.TestCase):
     def test_basic_distribute(self):

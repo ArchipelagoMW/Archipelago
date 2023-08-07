@@ -14,44 +14,42 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
+import copy
 import Utils
-from worlds.alttp import Options as LttPOptions
-from worlds.generic import PlandoConnection
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, user_path
-from worlds.alttp.EntranceRandomizer import parse_arguments
-from Main import main as ERmain
-from BaseClasses import seeddigits, get_seed, PlandoOptions
 import Options
+from BaseClasses import seeddigits, get_seed, PlandoOptions
+from Main import main as ERmain
+from settings import get_settings
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, user_path
+from worlds.alttp import Options as LttPOptions
+from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
-import copy
+from worlds.generic import PlandoConnection
 
 
 def mystery_argparse():
-    options = get_options()
-    defaults = options["generator"]
-
-    def resolve_path(path: str, resolver: Callable[[str], str]) -> str:
-        return path if os.path.isabs(path) else resolver(path)
+    options = get_settings()
+    defaults = options.generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
-    parser.add_argument('--weights_file_path', default=defaults["weights_file_path"],
+    parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
                         help='Path to the weights file to use for rolling game settings, urls are also valid')
     parser.add_argument('--samesettings', help='Rolls settings per weights file rather than per player',
                         action='store_true')
-    parser.add_argument('--player_files_path', default=resolve_path(defaults["player_files_path"], user_path),
+    parser.add_argument('--player_files_path', default=defaults.player_files_path,
                         help="Input directory for player files.")
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
-    parser.add_argument('--multi', default=defaults["players"], type=lambda value: max(int(value), 1))
-    parser.add_argument('--spoiler', type=int, default=defaults["spoiler"])
-    parser.add_argument('--outputpath', default=resolve_path(options["general_options"]["output_path"], user_path),
+    parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
+    parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
+    parser.add_argument('--outputpath', default=options.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
-    parser.add_argument('--race', action='store_true', default=defaults["race"])
-    parser.add_argument('--meta_file_path', default=defaults["meta_file_path"])
+    parser.add_argument('--race', action='store_true', default=defaults.race)
+    parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default='info', help='Sets log level')
     parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
-    parser.add_argument('--plando', default=defaults["plando_options"],
+    parser.add_argument('--plando', default=defaults.plando_options,
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
@@ -71,6 +69,8 @@ def get_seed_name(random_source) -> str:
 def main(args=None, callback=ERmain):
     if not args:
         args, options = mystery_argparse()
+    else:
+        options = get_settings()
 
     seed = get_seed(args.seed)
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
@@ -86,7 +86,7 @@ def main(args=None, callback=ERmain):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
         except Exception as e:
-            raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.weights_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Weights: {args.weights_file_path} >> "
                      f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
 
@@ -94,7 +94,7 @@ def main(args=None, callback=ERmain):
         try:
             meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
-            raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
+            raise ValueError(f"File {args.meta_file_path} is invalid. Please fix your yaml.") from e
         logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
@@ -114,7 +114,7 @@ def main(args=None, callback=ERmain):
             try:
                 weights_cache[fname] = read_weights_yamls(path)
             except Exception as e:
-                raise ValueError(f"File {fname} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items())}
@@ -137,7 +137,7 @@ def main(args=None, callback=ERmain):
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
-    erargs.glitch_triforce = options["generator"]["glitch_triforce_room"]
+    erargs.glitch_triforce = options.generator.glitch_triforce_room
     erargs.spoiler = args.spoiler
     erargs.race = args.race
     erargs.outputname = seed_name
@@ -195,7 +195,7 @@ def main(args=None, callback=ERmain):
 
                     player += 1
             except Exception as e:
-                raise ValueError(f"File {path} is destroyed. Please fix your yaml.") from e
+                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
         else:
             raise RuntimeError(f'No weights specified for player {player}')
 
@@ -374,7 +374,7 @@ def roll_linked_options(weights: dict) -> dict:
             else:
                 logging.debug(f"linked option {option_set['name']} skipped.")
         except Exception as e:
-            raise ValueError(f"Linked option {option_set['name']} is destroyed. "
+            raise ValueError(f"Linked option {option_set['name']} is invalid. "
                              f"Please fix your linked option.") from e
     return weights
 
@@ -404,7 +404,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
                     update_weights(currently_targeted_weights, category_options, "Triggered", option_set["option_name"])
 
         except Exception as e:
-            raise ValueError(f"Your trigger number {i + 1} is destroyed. "
+            raise ValueError(f"Your trigger number {i + 1} is invalid. "
                              f"Please fix your triggers.") from e
     return weights
 

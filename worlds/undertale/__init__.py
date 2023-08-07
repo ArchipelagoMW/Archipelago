@@ -13,12 +13,13 @@ from multiprocessing import Process
 
 def run_client():
     print('running undertale client')
-    from UndertaleClient import main  # lazy import
+    from .UndertaleClient import main  # lazy import
     p = Process(target=main)
     p.start()
 
 
 components.append(Component("Undertale Client", "UndertaleClient"))
+# components.append(Component("Undertale Client", func=run_client))
 
 
 def data_path(file_name: str):
@@ -46,13 +47,12 @@ class UndertaleWorld(World):
     """
     game = "Undertale"
     option_definitions = undertale_options
-    topology_present = True
     web = UndertaleWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 5
+    data_version = 6
 
     def _get_undertale_data(self):
         return {
@@ -106,9 +106,6 @@ class UndertaleWorld(World):
             self.multiworld.push_precollected(self.create_item("ITEM"))
         self.multiworld.push_precollected(self.create_item("FIGHT"))
         self.multiworld.push_precollected(self.create_item("ACT"))
-        chosen_key_start = self.multiworld.per_slot_randoms[self.player].choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
-        self.multiworld.push_precollected(self.create_item(chosen_key_start))
-        itempool.remove(chosen_key_start)
         self.multiworld.push_precollected(self.create_item("MERCY"))
         if self.multiworld.route_required[self.player] == "genocide":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and
