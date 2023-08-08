@@ -58,14 +58,22 @@ class ShiversWorld(World):
             e = self.multiworld.get_entrance(entr_name, self.player)
             r = self.multiworld.get_region(region_name, self.player)
             e.connect(r)
+        
+        # Locations
+        # Build exclusion list
+        self.removed_locations = set()
+        if not self.multiworld.include_information_plaques[self.player]:
+            self.removed_locations.update(Constants.exclusion_info["plaques"])
 
         # Add locations
         for region_name, locations in Constants.location_info["locations_by_region"].items():
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
-                loc = ShiversLocation(self.player, loc_name,
-                                      self.location_name_to_id.get(loc_name, None), region)
-                region.locations.append(loc)
+                if loc_name not in self.removed_locations:
+                    loc = ShiversLocation(self.player, loc_name,
+                                          self.location_name_to_id.get(loc_name, None), region)
+                    region.locations.append(loc)
+                
 
     def create_items(self) -> Item:
         # Add pots
@@ -79,7 +87,7 @@ class ShiversWorld(World):
 
         #Add Filler
         filler = []
-        filler += [self.create_item("Easier Lyre") for i in range(10)]
+        filler += [self.create_item("Easier Lyre") for i in range(49 - len(self.removed_locations))]
         filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
 
         #Place library escape items. Choose a location to place the escape item
@@ -104,20 +112,37 @@ class ShiversWorld(World):
             
             keys = [key for key in keys if key.name not in ["Key for Three Floor Elevator", "Key for Egypt Room"]]
                 
+
+
+        #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
+        lobby_access_keys = 1
+        if self.multiworld.front_door_usable[self.player]:
+            lobby_access_keys = random.randint(1, 2)
+            keys += [self.create_item("Key for Front Door")]
+        else:
+            filler += [self.create_item("Easier Lyre")]
+
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
         self.multiworld.itempool += abilities
         self.multiworld.itempool += filler
 
         #Lobby acess:
+        print(lobby_access_keys)
         if get_option_value(self.multiworld, self.player, "lobby_access") == 1:
-            self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
-            self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
-            self.multiworld.early_items[self.player]["Key for Lobby"] = 1
+            if lobby_access_keys == 1:
+                self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
+                self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
+                self.multiworld.early_items[self.player]["Key for Office"] = 1
+            elif lobby_access_keys == 2:
+                self.multiworld.early_items[self.player]["Key for Front Door"] = 1
         if get_option_value(self.multiworld, self.player, "lobby_access") == 2:
-            self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
-            self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
-            self.multiworld.local_early_items[self.player]["Key for Lobby"] = 1
+            if lobby_access_keys == 1:
+                self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
+                self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
+                self.multiworld.local_early_items[self.player]["Key for Office"] = 1
+            elif lobby_access_keys == 2:
+                self.multiworld.early_items[self.player]["Key for Front Door"] = 1
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:

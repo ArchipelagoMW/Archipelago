@@ -1,5 +1,5 @@
 from typing import Dict, FrozenSet, Union
-from Options import Choice, Option, DefaultOnToggle
+from Options import Choice, Option, DefaultOnToggle, Toggle
 from BaseClasses import MultiWorld
 
 
@@ -19,10 +19,19 @@ class PuzzleHintsRequired(DefaultOnToggle):
     allows for greater randomization."""
     display_name = "Puzzle Hints Required"
 
+class InformationPlaques(Toggle):
+    """Adds Information Plaques as checks."""
+    display_name = "Include Information Plaques"
+
+class FrontDoorUsable(Toggle):
+    """Adds a key to unlock the front door of the museum."""
+    display_name = "Front Door Usable"
+
 Shivers_options: Dict[str, Option] = {
     "lobby_access": LobbyAccess,
-
-    "puzzle_hints_required": PuzzleHintsRequired
+    "puzzle_hints_required": PuzzleHintsRequired,
+    "include_information_plaques": InformationPlaques,
+    "front_door_usable": FrontDoorUsable
 }
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:

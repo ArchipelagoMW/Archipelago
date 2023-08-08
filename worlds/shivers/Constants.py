@@ -12,4 +12,6 @@ location_info = load_data_file("locations.json")
 location_name_to_id = {name: location_id_offset + index \
 	for index, name in enumerate(location_info["all_locations"])}
 
+exclusion_info = load_data_file("excluded_locations.json")
+
 region_info = load_data_file("regions.json")

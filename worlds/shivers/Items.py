@@ -39,7 +39,7 @@ item_table = {
     "Key for Bedroom Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 21, "key"),
     "Key for Three Floor Elevator": ItemData(SHIVERS_ITEM_ID_OFFSET + 22, "key"),
     "Key for Workshop": ItemData(SHIVERS_ITEM_ID_OFFSET + 23, "key"),
-    "Key for Lobby": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, "key"),
+    "Key for Office": ItemData(SHIVERS_ITEM_ID_OFFSET + 24, "key"),
     "Key for Prehistoric Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 25, "key"),
     "Key for Greenhouse Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 26, "key"),
     "Key for Ocean Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 27, "key"),
@@ -54,6 +54,7 @@ item_table = {
     "Key for Bedroom": ItemData(SHIVERS_ITEM_ID_OFFSET + 36, "key"),
     "Key for Underground Lake Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 37, "key"),
     "Key for Janitor Closet": ItemData(SHIVERS_ITEM_ID_OFFSET + 38, "key"),
+    "Key for Front Door": ItemData(SHIVERS_ITEM_ID_OFFSET + 39, "key-optional"),
 
     #Abilities
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
