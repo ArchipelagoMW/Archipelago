@@ -406,6 +406,7 @@ class ChaoAnimalParts(Toggle):
 class ChaoKindergarten(Choice):
     """
     Determines whether learning the lessons from the Kindergarten Classroom grants checks
+    (WARNING: VERY SLOW)
     None: No Kindergarten classes have checks
     Basics: One class from each category (Drawing, Dance, Song, and Instrument) is a check (4 Locations)
     Full: Every class is a check (23 Locations)
