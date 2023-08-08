@@ -98,6 +98,13 @@ gauntlet_order = [
     FillMission(MissionPools.FINAL, [5], "Final", completion_critical=True)
 ]
 
+mini_gauntlet_order = [
+    FillMission(MissionPools.STARTER, [-1], "I", completion_critical=True),
+    FillMission(MissionPools.EASY, [0], "II", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [1], "III", completion_critical=True),
+    FillMission(MissionPools.FINAL, [2], "Final", completion_critical=True)
+]
+
 grid_order = [
     FillMission(MissionPools.STARTER, [-1], "_1"),
     FillMission(MissionPools.EASY, [0], "_1"),
@@ -129,6 +136,13 @@ mini_grid_order = [
     FillMission(MissionPools.FINAL, [5, 7], "_3", or_requirements=True)
 ]
 
+tiny_grid_order = [
+    FillMission(MissionPools.STARTER, [-1], "_1"),
+    FillMission(MissionPools.MEDIUM, [0], "_1"),
+    FillMission(MissionPools.EASY, [0], "_2"),
+    FillMission(MissionPools.FINAL, [1, 2], "_2", or_requirements=True),
+]
+
 blitz_order = [
     FillMission(MissionPools.STARTER, [-1], "I"),
     FillMission(MissionPools.EASY, [-1], "I"),
@@ -144,7 +158,17 @@ blitz_order = [
     FillMission(MissionPools.FINAL, [0, 1], "Final", number=5, or_requirements=True)
 ]
 
-mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_campaign_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
+mission_orders = [
+    vanilla_shuffle_order,
+    vanilla_shuffle_order,
+    mini_campaign_order,
+    grid_order,
+    mini_grid_order,
+    blitz_order,
+    gauntlet_order,
+    mini_gauntlet_order,
+    tiny_grid_order
+]
 
 
 vanilla_mission_req_table = {
