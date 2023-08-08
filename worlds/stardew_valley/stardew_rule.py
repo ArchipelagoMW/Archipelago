@@ -8,6 +8,11 @@ from .items import item_table
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
 
+should_do_complex_flatten_init = False
+should_do_simple_flatten_init = True
+should_do_complex_flatten_simplify = False
+should_do_simple_flatten_simplify = False
+
 
 class StardewRule:
     def __call__(self, state: CollectionState) -> bool:
@@ -293,7 +298,7 @@ class TotalReceived(StardewRule):
         assert items_list, "Can't create a Total Received conditions without items"
         for item in items_list:
             assert item_table[item].classification & ItemClassification.progression, \
-                "Item has to be progression to be used in logic"
+                f"Item [{item_table[item].name}] has to be progression to be used in logic"
 
         self.player = player
         self.items = items_list
