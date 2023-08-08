@@ -569,17 +569,17 @@ def addBootsControls(rom, boots_controls: BootsControls):
         BootsControls.option_press_a: """
         ; Check if we are using the A slot
         cp  J_A
-        jr  nz, .yesBoots
+        jr  z, .yesBoots
         ld   a, [hl]
         """,
         BootsControls.option_press_b: """
         ; Check if we are using the B slot
         cp  J_B
-        jr  nz, .yesBoots
+        jr  z, .yesBoots
         ld   a, [hl]
         """
     }[boots_controls.value]
-
+    
     # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
     boots_code = assembler.ASM("""
 CheckBoots:
