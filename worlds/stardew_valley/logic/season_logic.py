@@ -19,29 +19,44 @@ class SeasonLogic:
         self.season_option = season_option
         self.received = received_logic
         self.time = time
+        self.has_season_rules = {
+            Generic.any: True_()
+        }
+        self.has_any_season_rules = {}
+        self.has_all_season_rules = {}
+        self.has_any_not_winter_rule = self.has_any([Season.spring, Season.summer, Season.fall])
 
     def has(self, season: str) -> StardewRule:
-        if season == Generic.any:
-            return True_()
+        if season in self.has_season_rules:
+            return self.has_season_rules[season]
         seasons_order = [Season.spring, Season.summer, Season.fall, Season.winter]
         if self.season_option == options.SeasonRandomization.option_progressive:
-            return self.received(Season.progressive, seasons_order.index(season))
-        if self.season_option == options.SeasonRandomization.option_disabled:
+            self.has_season_rules[season] = self.received(Season.progressive, seasons_order.index(season))
+        elif self.season_option == options.SeasonRandomization.option_disabled:
             if season == Season.spring:
-                return True_()
-            return self.time.has_lived_months(1)
-        return self.received(season)
+                self.has_season_rules[season] = True_()
+            else:
+                self.has_season_rules[season] = self.time.has_lived_months(1)
+        else:
+            self.has_season_rules[season] = self.received(season)
+        return self.has_season_rules[season]
 
     def has_any(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return Or([self.has(season) for season in seasons])
+        key = ",".join(seasons)
+        if key not in self.has_any_season_rules:
+            self.has_any_season_rules[key] = Or([self.has(season) for season in seasons])
+        return self.has_any_season_rules[key]
 
     def has_any_not_winter(self):
-        return self.has_any([Season.spring, Season.summer, Season.fall])
+        return self.has_any_not_winter_rule
 
     def has_all(self, seasons: Iterable[str]):
         if not seasons:
             return True_()
-        return And([self.has(season) for season in seasons])
+        key = ",".join(seasons)
+        if key not in self.has_all_season_rules:
+            self.has_all_season_rules[key] = And([self.has(season) for season in seasons])
+        return self.has_all_season_rules[key]
 

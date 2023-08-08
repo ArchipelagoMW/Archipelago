@@ -7,6 +7,7 @@ from ..mods.logic.magic_logic import MagicLogic
 from ..stardew_rule import StardewRule, Or, And
 from ..strings.performance_names import Performance
 from ..items import all_items, Group
+from ..strings.region_names import Region
 
 
 class CombatLogic:
@@ -19,6 +20,11 @@ class CombatLogic:
         self.player = player
         self.region = region
         self.received = received
+        self.has_any_weapon_rule = self.can_buy_weapon(self.has_received_any_weapon())
+        self.has_decent_weapon_rule = self.can_buy_weapon(self.has_received_decent_weapon())
+        self.has_good_weapon_rule = self.can_buy_weapon(self.has_received_good_weapon())
+        self.has_great_weapon_rule = self.can_buy_weapon(self.has_received_great_weapon())
+        self.has_galaxy_weapon_rule = self.can_buy_weapon(self.has_received_galaxy_weapon())
 
     def set_magic(self, magic: MagicLogic):
         self.magic = magic
@@ -35,33 +41,48 @@ class CombatLogic:
         if level == Performance.galaxy:
             return self.has_galaxy_weapon() | self.magic.has_amazing_spells()
         if level == Performance.maximum:
-            return self.has_galaxy_weapon() | self.magic.has_amazing_spells() # Someday we will have the ascended weapons in AP
+            return self.has_galaxy_weapon() | self.magic.has_amazing_spells()  # Someday we will have the ascended weapons in AP
 
     def has_any_weapon(self) -> StardewRule:
-        higher_weapon_rule = self.has_decent_weapon()
-        this_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups)
-        return higher_weapon_rule | this_weapon_rule
+        return self.has_any_weapon_rule
 
     def has_decent_weapon(self) -> StardewRule:
-        higher_weapon_rule = self.has_good_weapon()
-        this_weapon_rule = self.received(item.name for item in all_items
-                              if Group.WEAPON in item.groups and (Group.MINES_FLOOR_50 in item.groups or Group.MINES_FLOOR_60 in item.groups))
-        return (higher_weapon_rule | this_weapon_rule) & self.received("Adventurer's Guild")
+        return self.has_decent_weapon_rule
 
     def has_good_weapon(self) -> StardewRule:
-        higher_weapon_rule = self.has_great_weapon()
-        this_weapon_rule = self.received(item.name for item in all_items
-                               if Group.WEAPON in item.groups and (Group.MINES_FLOOR_80 in item.groups or Group.MINES_FLOOR_90 in item.groups))
-        return (higher_weapon_rule | this_weapon_rule) & self.received("Adventurer's Guild")
+        return self.has_good_weapon_rule
 
     def has_great_weapon(self) -> StardewRule:
-        higher_weapon_rule = self.has_galaxy_weapon()
-        this_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.MINES_FLOOR_110 in item.groups)
-        return (higher_weapon_rule | this_weapon_rule) & self.received("Adventurer's Guild")
+        return self.has_great_weapon_rule
 
     def has_galaxy_weapon(self) -> StardewRule:
-        this_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.GALAXY_WEAPONS in item.groups)
-        return this_weapon_rule & self.received("Adventurer's Guild")
+        return self.has_galaxy_weapon_rule
+
+    def has_received_any_weapon(self) -> StardewRule:
+        return self.received(item.name for item in all_items if Group.WEAPON in item.groups)
+
+    def has_received_decent_weapon(self) -> StardewRule:
+        decent_weapon_rule = self.received(item.name for item in all_items
+                                           if Group.WEAPON in item.groups and (Group.MINES_FLOOR_50 in item.groups or Group.MINES_FLOOR_60 in item.groups))
+        return decent_weapon_rule | self.has_received_good_weapon()
+
+    def has_received_good_weapon(self) -> StardewRule:
+        good_weapon_rule = self.received(item.name for item in all_items
+                                         if Group.WEAPON in item.groups and (Group.MINES_FLOOR_80 in item.groups or Group.MINES_FLOOR_90 in item.groups))
+        return good_weapon_rule | self.has_received_great_weapon()
+
+    def has_received_great_weapon(self) -> StardewRule:
+        great_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.MINES_FLOOR_110 in item.groups)
+        return great_weapon_rule | self.has_received_galaxy_weapon()
+
+    def has_received_galaxy_weapon(self) -> StardewRule:
+        return self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.GALAXY_WEAPONS in item.groups)
+
+    def can_buy_weapon(self, weapon_rule: StardewRule = None) -> StardewRule:
+        adventure_guild_rule = self.region.can_reach(Region.adventurer_guild)
+        if weapon_rule is None:
+            return adventure_guild_rule
+        return adventure_guild_rule & weapon_rule
 
     def can_kill_monster(self, monster: StardewMonster) -> StardewRule:
         region_rule = self.region.can_reach_any(monster.locations)
@@ -75,4 +96,3 @@ class CombatLogic:
     def can_kill_all_monsters(self, monsters: Iterable[StardewMonster]) -> StardewRule:
         rules = [self.can_kill_monster(monster) for monster in monsters]
         return And(rules)
-

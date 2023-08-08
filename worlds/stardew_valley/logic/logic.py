@@ -649,8 +649,12 @@ class StardewLogic:
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:
         rules = [self.time.has_lived_max_months()]
+        exclude_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+        island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west]
         for category in all_monsters_by_category:
-            rules.append(self.combat.can_kill_all_monsters(all_monsters_by_category[category]))
+            if exclude_island and all(monster.locations[0] in island_regions for monster in all_monsters_by_category[category]):
+                continue
+            rules.append(self.combat.can_kill_any_monster(all_monsters_by_category[category]))
 
         return And(rules)
 
