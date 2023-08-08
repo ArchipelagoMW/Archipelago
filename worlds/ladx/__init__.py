@@ -514,18 +514,21 @@ class LinksAwakeningWorld(World):
     def modify_multidata(self, multidata: dict):
         multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    def collect(self, state, item: Item) -> bool:
-        change = super().collect(state, item)
-        if change:
-            rupees = self.rupees.get(item.name, 0)
-            state.prog_items["RUPEES", item.player] += rupees
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> typing.Tuple[str, int]:
+        if "Rupees" in item.name:
+            return "RUPEES", self.rupees.get(item.name, 0)
+        return item.name, 1
 
-        return change
+    def collect(self, state, item: Item) -> bool:
+        if item.advancement:
+            name, count = self.collect_item(state, item)
+            state.prog_items[name, self.player] += count
+            return True
+        return False
 
     def remove(self, state, item: Item) -> bool:
-        change = super().remove(state, item)
-        if change:
-            rupees = self.rupees.get(item.name, 0)
-            state.prog_items["RUPEES", item.player] -= rupees
-
-        return change
+        if item.advancement:
+            name, count = self.collect_item(state, item)
+            state.prog_items[name, self.player] -= count
+            return True
+        return False
