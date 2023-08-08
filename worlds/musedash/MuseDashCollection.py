@@ -52,6 +52,8 @@ class MuseDashCollections:
 
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
+        self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
+
         self.vfx_trap_items.update({k: (v + start_item_id) for (k, v) in self.vfx_trap_items.items()})
         self.sfx_trap_items.update({k: (v + start_item_id) for (k, v) in self.sfx_trap_items.items()})
 
