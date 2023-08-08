@@ -467,7 +467,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE111/NORTH",
-      "REGION_ROUTE111/SOUTH"
+      "REGION_ROUTE111/MIDDLE"
     ],
     "warps": [
       "MAP_ROUTE111:1/MAP_DESERT_RUINS:0",
