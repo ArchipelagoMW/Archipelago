@@ -135,14 +135,17 @@ class ValidInventory:
             while existing_items:
                 existing_item = existing_items.pop()
                 items_to_lock = self.cascade_removal_map.get(existing_item, [existing_item])
-                for item in items_to_lock:
-                    if item in inventory:
-                        for _ in range(inventory.count(item)):
-                            inventory.remove(item)
-                        if item not in locked_items:
-                            # Lock all the associated items if not already locked
-                            for _ in range(get_item_quantity(item)):
-                                locked_items.append(copy_item(item))
+                if get_full_item_list()[existing_item.name].type != "Upgrade":
+                    # Don't process general upgrades, they may have been pre-locked per-level
+                    for item in items_to_lock:
+                        if item in inventory:
+                            # Unit upgrades, lock all levels
+                            for _ in range(inventory.count(item)):
+                                inventory.remove(item)
+                            if item not in locked_items:
+                                # Lock all the associated items if not already locked
+                                for _ in range(get_item_quantity(item)):
+                                    locked_items.append(copy_item(item))
                     if item in existing_items:
                         existing_items.remove(item)
 
