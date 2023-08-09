@@ -210,7 +210,7 @@ Sent to clients to provide what is known as a 'data package' which contains info
 | data | [DataPackageObject](#Data-Package-Contents) | The data package as a JSON object. |
 
 ### Bounced
-Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) package.
+Sent to clients after a client requested this message be sent to them, more info in the [Bounce](#Bounce) packet.
 
 #### Arguments
 | Name | Type | Notes |
@@ -218,7 +218,7 @@ Sent to clients after a client requested this message be sent to them, more info
 | games | list\[str\] | Optional. Game names this message is targeting |
 | slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
 | tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
-| data | dict | The data in the [Bounce](#Bounce) package copied |
+| data | dict | The data in the [Bounce](#Bounce) packet copied |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
@@ -239,18 +239,18 @@ Sent to clients if the server caught a problem with a packet. This only occurs f
 | arguments | Arguments of the faulty packet which were not correct. |
 
 ### Retrieved
-Sent to clients as a response the a [Get](#Get) package.
+Sent to clients as a response the a [Get](#Get) packet.
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) package. |
+| keys | dict\[str\, any] | A key-value collection containing all the values for the keys requested in the [Get](#Get) packet. |
 
 If a requested key was not present in the server's data, the associated value will be `null`.
 
-Additional arguments added to the [Get](#Get) package that triggered this [Retrieved](#Retrieved) will also be passed along.
+Additional arguments added to the [Get](#Get) packet that triggered this [Retrieved](#Retrieved) will also be passed along.
 
 ### SetReply
-Sent to clients in response to a [Set](#Set) package if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) package. SetReply packages are sent even if a [Set](#Set) package did not alter the value for the key.
+Sent to clients in response to a [Set](#Set) packet if want_reply was set to true, or if the client has registered to receive updates for a certain key using the [SetNotify](#SetNotify) packet. SetReply packets are sent even if a [Set](#Set) packet did not alter the value for the key.
 #### Arguments
 | Name           | Type | Notes                                                                                      |
 |----------------|------|--------------------------------------------------------------------------------------------|
@@ -258,7 +258,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
 
-Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
+Additional arguments added to the [Set](#Set) packet that triggered this [SetReply](#SetReply) will also be passed along.
 
 ## (Client -> Server)
 These packets are sent purely from client to server. They are not accepted by clients.
@@ -303,7 +303,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 Many, if not all, other packets require a successfully authenticated client. This is described in more detail in [Archipelago Connection Handshake](#Archipelago-Connection-Handshake).
 
 ### ConnectUpdate
-Update arguments from the Connect package, currently only updating tags and items_handling is supported.
+Update arguments from the Connect packet, currently only updating tags and items_handling is supported.
 
 #### Arguments
 | Name | Type | Notes |
@@ -355,7 +355,7 @@ Requests the data package from the server. Does not require client authenticatio
 #### Arguments
 | Name  | Type | Notes                                                                                                                           |
 |-------| ----- |---------------------------------------------------------------------------------------------------------------------------------|
-| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Datapackage with only Factorio data. |
+| games | list\[str\]  | Optional. If specified, will only send back the specified data. Such as, \["Factorio"\] -> Data package with only Factorio data. |
 
 ### Bounce
 Send this message to the server, tell it which clients should receive the message and 
@@ -370,13 +370,13 @@ the server will forward the message to all those targets to which any one requir
 | data | dict | Any data you want to send |
 
 ### Get
-Used to request a single or multiple values from the server's data storage, see the [Set](#Set) package for how to write values to the data storage. A Get package will be answered with a [Retrieved](#Retrieved) package.
+Used to request a single or multiple values from the server's data storage, see the [Set](#Set) packet for how to write values to the data storage. A Get packet will be answered with a [Retrieved](#Retrieved) packet.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
 | keys | list\[str\] | Keys to retrieve the values for. |
 
-Additional arguments sent in this package will also be added to the [Retrieved](#Retrieved) package it triggers.
+Additional arguments sent in this packet will also be added to the [Retrieved](#Retrieved) packet it triggers.
 
 Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
@@ -387,7 +387,7 @@ Some special keys exist with specific return data, all of them have the prefix `
 | item_name_groups_{game_name}  | dict\[str, list\[str\]\] | item_name_groups belonging to the requested game. |
 
 ### Set
-Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
+Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) packet, or monitored with a [SetNotify](#SetNotify) packet.
 Keys that start with `_read_` cannot be set.
 #### Arguments
 | Name       | Type                                                  | Notes                                                                                                                  |
@@ -397,10 +397,10 @@ Keys that start with `_read_` cannot be set.
 | want_reply | bool                                                  | If true, the server will send a [SetReply](#SetReply) response back to the client.                                     |
 | operations | list\[[DataStorageOperation](#DataStorageOperation)\] | Operations to apply to the value, multiple operations can be present and they will be executed in order of appearance. |
 
-Additional arguments sent in this package will also be added to the [SetReply](#SetReply) package it triggers.
+Additional arguments sent in this packet will also be added to the [SetReply](#SetReply) packet it triggers.
 
 #### DataStorageOperation
-A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s package `default` is used if the key does not exist on the server already.
+A DataStorageOperation manipulates or alters the value of a key in the data storage. If the operation transforms the value from one state to another then the current value of the key is used as the starting point otherwise the [Set](#Set)'s packet `default` is used if the key does not exist on the server already.
 DataStorageOperations consist of an object containing both the operation to be applied, provided in the form of a string, as well as the value to be used for that operation, Example:
 ```json
 {"operation": "add", "value": 12}
@@ -410,7 +410,7 @@ The following operations can be applied to a datastorage key
 | Operation | Effect |
 | ------ | ----- |
 | replace | Sets the current value of the key to `value`. |
-| default | If the key has no value yet, sets the current value of the key to `default` of the [Set](#Set)'s package (`value` is ignored). |
+| default | If the key has no value yet, sets the current value of the key to `default` of the [Set](#Set)'s packet (`value` is ignored). |
 | add | Adds `value` to the current value of the key, if both the current value and `value` are arrays then `value` will be appended to the current value. |
 | mul | Multiplies the current value of the key by `value`. |
 | pow | Multiplies the current value of the key to the power of `value`. |
@@ -427,11 +427,11 @@ The following operations can be applied to a datastorage key
 | update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
 
 ### SetNotify
-Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
+Used to register your current session for receiving all [SetReply](#SetReply) packets of certain keys to allow your client to keep track of changes.
 #### Arguments
 | Name | Type | Notes |
 | ------ | ----- | ------ |
-| keys | list\[str\] | Keys to receive all [SetReply](#SetReply) packages for. |
+| keys | list\[str\] | Keys to receive all [SetReply](#SetReply) packets for. |
 
 ## Appendix
 
