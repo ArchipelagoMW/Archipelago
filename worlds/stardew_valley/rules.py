@@ -63,6 +63,10 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     # 1min36 - 1min38 # After the combat not duplicating a bunch of stuff
     # 1min28 - 1min30 # with the caching of combat rules
     # 1min25 - 1min26 # after caching seasons
+    # 1min19 - 1min25 # moved some progression items to useful
+    # 1min30 - 1min32 # with the flattening
+    # 1min25 - 1min36 # with zero flattening
+    # 1min36 - 1min40 # with complex flattening only in simplify
 
 
 def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
@@ -380,7 +384,7 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_volcano_dwarf, player),
                              logic.wallet.can_speak_dwarf())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.climb_to_volcano_10, player),
-                             (logic.ability.can_mine_perfectly() & logic.tool.can_water(1) & logic.received("Volcano Exit Shortcut")).simplify())
+                             (logic.ability.can_mine_perfectly() & logic.tool.can_water(1)).simplify())
     parrots = [Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_jungle_to_volcano,
                Entrance.parrot_express_dig_site_to_volcano, Entrance.parrot_express_docks_to_dig_site,
                Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_volcano_to_dig_site,

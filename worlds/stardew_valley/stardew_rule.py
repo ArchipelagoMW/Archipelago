@@ -8,11 +8,6 @@ from .items import item_table
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
 
-should_do_complex_flatten_init = False
-should_do_simple_flatten_init = True
-should_do_complex_flatten_simplify = False
-should_do_simple_flatten_simplify = False
-
 
 class StardewRule:
     def __call__(self, state: CollectionState) -> bool:
@@ -194,6 +189,8 @@ class And(StardewRule):
         self.rules = frozenset(rules_list)
         self._simplified = False
 
+        self.rules = frozenset(rules_list)
+
     def __call__(self, state: CollectionState) -> bool:
         result = all(rule(state) for rule in self.rules)
         return result
@@ -279,7 +276,8 @@ class Count(StardewRule):
         return max(rule.get_difficulty() for rule in easiest_n_rules)
 
     def simplify(self):
-        return Count(self.count, [rule.simplify() for rule in self.rules])
+        return self
+        # return Count(self.count, [rule.simplify() for rule in self.rules])
 
 
 class TotalReceived(StardewRule):
@@ -387,4 +385,5 @@ class Has(StardewRule):
         return hash(self.item)
 
     def simplify(self) -> StardewRule:
-        return self.other_rules[self.item].simplify()
+        return self
+        # return self.other_rules[self.item].simplify()

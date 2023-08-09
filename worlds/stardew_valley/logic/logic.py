@@ -259,7 +259,7 @@ class StardewLogic:
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
             ArtisanGood.green_tea: self.artisan.can_keg(Vegetable.tea_leaves),
-            Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_south)),
+            Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
             Forageable.hay: self.buildings.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
             Forageable.hazelnut: self.tool.can_forage(Season.fall),
             Forageable.holly: self.tool.can_forage(Season.winter),

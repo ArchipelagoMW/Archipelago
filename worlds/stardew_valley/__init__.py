@@ -221,13 +221,16 @@ class StardewValleyWorld(World):
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def create_item(self, item: Union[str, ItemData]) -> StardewItem:
+    def create_item(self, item: Union[str, ItemData], override_classification: ItemClassification = None) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]
 
-        if item.classification == ItemClassification.progression:
+        if override_classification is None:
+            override_classification = item.classification
+
+        if override_classification == ItemClassification.progression:
             self.all_progression_items.add(item.name)
-        return StardewItem(item.name, item.classification, item.code, self.player)
+        return StardewItem(item.name, override_classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
         if rule is None:

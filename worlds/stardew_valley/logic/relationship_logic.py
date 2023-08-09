@@ -56,7 +56,8 @@ class RelationshipLogic:
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         if number_children <= 0:
             return True_()
-        return self.can_get_married() & self.buildings.has_house(2) & self.has_hearts(Generic.bachelor, 12) & self.has_children(number_children - 1)
+        baby_rules = [self.can_get_married(), self.buildings.has_house(2), self.has_hearts(Generic.bachelor, 12), self.has_children(number_children - 1)]
+        return And(baby_rules)
 
     def has_hearts(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
