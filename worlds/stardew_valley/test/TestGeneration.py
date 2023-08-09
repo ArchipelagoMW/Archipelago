@@ -31,7 +31,6 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore = [event.name for event in items.events]
         items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
-        items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
