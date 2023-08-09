@@ -2,8 +2,7 @@
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
-config file.
+The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 
@@ -16,11 +15,11 @@ preventing them from being used until they are unlocked.<br>
 Enemy randomization is also available and can be turned on in the client mod.
 
 ## What is the goal of TUNIC when randomized?
-The goal is the same as the vanilla game, which is to find the three hexagon keys, at which point you may either Take Your
+The standard goal is the same as the vanilla game, which is to find the three hexagon keys, at which point you may either Take Your
 Rightful Place or seek another path and Share Your Wisdom.
 
 Alternatively, Hexagon Quest is a mode that shuffles 30 Golden Hexagons into the item pool, with the goal 
-being to find 20 of them in order to end the game.
+being to find 20 of them and then Share Your Wisdom.
 
 ## What items from TUNIC can appear in another player's world?
 Every item has a chance to appear in another player's world.
