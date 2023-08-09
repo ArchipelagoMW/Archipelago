@@ -59,7 +59,7 @@ Visit the [TUNIC settings page](/games/Tunic/player-settings) to generate a YAML
 ### Configure Your Mod Settings
 In the `Randomizer` folder you downloaded earlier, there will be a file called `ArchipelagoSettings.json`. 
 Open this file in a text editor and look for `ConnectionSettings` at the top. Fill in *Player*, *Hostname*, *Port*, and *Password* with the correct
-information relevant to your room. The rest of the settings you see can be ignored; they can be viewed and changed through the in-game options menu.
+information for your room. The rest of the settings in this file can be viewed and toggled through the in-game options menu.
 
 Once your player settings have been saved, launch the game. The game should automatically connect to the room when you reach the title screen 
 (or, if the game is already running, press *Reload Settings* and then *Connect* on the title screen). An error message will display if
