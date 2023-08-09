@@ -4,14 +4,16 @@ from ..generic.Rules import set_rule, forbid_item
 from BaseClasses import MultiWorld
 
 hexagon_quest_abilities: Dict[str, int] = {}
+
+
 def set_abilities(multiworld: MultiWorld, player: int):
-    abilities = [5, 10, 15]
-    hexagon_quest_abilities["prayer"] = multiworld.per_slot_randoms[player].choice(abilities)
-    abilities.remove(hexagon_quest_abilities["prayer"])
-    hexagon_quest_abilities["holy_cross"] = multiworld.per_slot_randoms[player].choice(abilities)
-    abilities.remove(hexagon_quest_abilities["holy_cross"])
-    hexagon_quest_abilities["ice_combo"] = multiworld.per_slot_randoms[player].choice(abilities)
-    abilities.remove(hexagon_quest_abilities["ice_combo"])
+    ability_requirement = [5, 10, 15]
+    abilities = ["prayer", "holy_cross", "ice_rod"]
+    multiworld.per_slot_randoms[player].shuffle(ability_requirement)
+    multiworld.per_slot_randoms[player].shuffle(abilities)
+    for i in range(3):
+        hexagon_quest_abilities[abilities.pop()] = ability_requirement.pop()
+
 
 def set_region_rules(multiworld: MultiWorld, player: int):
     laurels = "Hero's Laurels"
@@ -72,24 +74,24 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     coins = "Golden Coin"
     prayer = "Pages 24-25 (Prayer)"
     holy_cross = "Pages 42-43 (Holy Cross)"
-    ice_combo = "Pages 52-53 (Ice Rod)"
+    ice_rod = "Pages 52-53 (Ice Rod)"
     key = "Key"
     house_key = "Old House Key"
     vault_key = "Fortress Vault Key"
 
     prayer_amount = 1
     holy_cross_amount = 1
-    ice_combo_amount = 1
+    ice_rod_amount = 1
 
     ability_shuffle = multiworld.ability_shuffling[player].value
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 
     if multiworld.hexagon_quest[player].value:
-        prayer, holy_cross, ice_combo = ["Gold Hexagon", "Gold Hexagon", "Gold Hexagon"]
+        prayer, holy_cross, ice_rod = ["Gold Hexagon", "Gold Hexagon", "Gold Hexagon"]
         prayer_amount = hexagon_quest_abilities["prayer"]
         holy_cross_amount = hexagon_quest_abilities["holy_cross"]
-        ice_combo_amount = hexagon_quest_abilities["ice_combo"]
+        ice_rod_amount = hexagon_quest_abilities["ice_rod"]
 
     # Ability Shuffle Exclusive Rules
     if ability_shuffle:
@@ -176,7 +178,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand,
                                                                                            player) and state.has(
-            ice_combo, ice_combo_amount, player)) if ability_shuffle else (
+            ice_rod, ice_rod_amount, player)) if ability_shuffle else (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand, player)))
 
     # West Garden

@@ -20,26 +20,10 @@ class KeysBehindBosses(Toggle):
 
 class AbilityShuffling(Toggle):
     """Choose whether to lock the usage of Prayer, Holy Cross*, and Ice Rod until the relevant poge of the manual is found.
+        In Hexagon Quest, abilities are randomly unlocked at 5, 10, and 15 Gold Hexagons.
         *Certain Holy Cross usages are still allowed, such as free bombs, the seeking spell and other player-facing codes.
     """
     display_name = "Ability Shuffling"
-
-
-'''
-class BonusUpgrades(Toggle):
-    """Makes the Hero Relics and Golden Trophy Collectibles award bonus stat upgrades when found. (Can also be turned
-    on or off from in-game.)"""
-    display_name = "Bonus Upgrades"
-
-class FoolTraps(Choice):
-    """Replaces lower-value money rewards with various traps that damage the player. Increasing the setting increases
-    the threshold of money drops that get turned into traps. (Can be adjusted or turned off once in-game as well.)"""
-    display_name = "Fool Traps"
-    option_none = 0
-    option_normal = 1
-    option_double = 2
-    option_onslaught = 3
-'''
 
 
 class HexagonQuest(Toggle):

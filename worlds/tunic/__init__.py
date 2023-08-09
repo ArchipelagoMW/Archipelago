@@ -62,7 +62,6 @@ class TunicWorld(World):
         location_base_id += 1
 
     def create_item(self, name: str) -> TunicItem:
-        # print(name)
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
@@ -76,23 +75,19 @@ class TunicWorld(World):
         items = []
         for item_name in item_table:
             item_data = item_table[item_name]
-            if self.multiworld.hexagon_quest[self.player].value:
-
-                pass
-            else:
-                pass
 
             if item_name == "Gold Hexagon":
                 # if hexagon quest is on, add the gold hexagons in
                 if self.multiworld.hexagon_quest[self.player].value:
                     # if keys are behind bosses, place 3 manually
+                    gold_hexes = item_data.quantity_in_item_pool
                     if self.multiworld.keys_behind_bosses[self.player].value:
                         for location in hexagon_locations.values():
                             self.multiworld.get_location(location, self.player)\
                                 .place_locked_item(self.create_item("Gold Hexagon"))
-                        item_data.quantity_in_item_pool = 27
+                        gold_hexes -= 3
 
-                    for i in range(0, item_data.quantity_in_item_pool):
+                    for i in range(0, gold_hexes):
                         items.append(self.create_item(item_name))
                     # adding a money x1 to even out the pool with this option
                     items.append(self.create_item("Money x1"))
@@ -100,7 +95,7 @@ class TunicWorld(World):
                     # if not doing hexagon quest, just skip the gold hexagons
                     continue
             elif self.multiworld.hexagon_quest[self.player].value and \
-                    ("Pages" in item_name or item_name in ["Red Hexagon", "Green Hexagon", "Blue Hexagon"]):
+                    ("Pages" in item_name or item_name in hexagon_locations.keys()):
                 continue
             elif self.multiworld.keys_behind_bosses[self.player].value and item_name in hexagon_locations.keys():
                 self.multiworld.get_location(hexagon_locations[item_name], self.player)\
@@ -136,7 +131,6 @@ class TunicWorld(World):
         set_abilities(self.multiworld, self.player)
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
-        # print(hexagon_quest_abilities["prayer"])
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(filler_items)
@@ -144,7 +138,7 @@ class TunicWorld(World):
     def fill_slot_data(self) -> Dict[str, any]:
         # Find items for generating hints in-game
         stick = self.multiworld.find_item("Stick", self.player).item
-        sword = self.multiworld.find_item("Sword", self.player).item
+        swords = self.multiworld.find_item_locations("Sword", self.player, False)
         stundagger = self.multiworld.find_item("Magic Dagger", self.player).item
         techbow = self.multiworld.find_item("Magic Wand", self.player).item
         grapple = self.multiworld.find_item("Magic Orb", self.player).item
@@ -172,7 +166,8 @@ class TunicWorld(World):
             "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
             "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
             "Stick": [stick.location.name, stick.location.player],
-            "Sword": [sword.location.name, sword.location.player],
+            "Sword": [swords[0].item.location.name, swords[0].item.location.player, swords[1].item.location.name,
+                      swords[1].item.location.player, swords[2].item.location.name, swords[2].item.location.player],
             "Magic Dagger": [stundagger.location.name, stundagger.location.player],
             "Magic Wand": [techbow.location.name, techbow.location.player],
             "Magic Orb": [grapple.location.name, grapple.location.player],
@@ -212,12 +207,9 @@ class TunicWorld(World):
             hexagon_gold = golden_hexagons.pop()
             hexagon_gold2 = golden_hexagons.pop()
             hexagon_gold3 = golden_hexagons.pop()
-            # print(self.multiworld.find_item_locations("Gold Hexagon", self.player, False))
-            slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player]
-            slot_data["Gold Hexagon"] = [hexagon_gold2.name, hexagon_gold2.player]
-            slot_data["Gold Hexagon"] = [hexagon_gold3.name, hexagon_gold3.player]
-            # print(slot_data["Gold Hexagon 1"])
-            # print(slot_data["Gold Hexagon 2"])
-            # print(slot_data["Gold Hexagon 3"])
-
+            slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player, hexagon_gold2.name,
+                                         hexagon_gold2.player, hexagon_gold3.name, hexagon_gold3.player]
+            slot_data["Hexagon Quest Prayer"] = hexagon_quest_abilities["prayer"]
+            slot_data['Hexagon Quest Holy Cross'] = hexagon_quest_abilities["holy_cross"]
+            slot_data['Hexagon Quest Ice Rod'] = hexagon_quest_abilities["ice_rod"]
         return slot_data
