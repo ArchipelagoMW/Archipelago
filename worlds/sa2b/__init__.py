@@ -123,42 +123,6 @@ class SA2BWorld(World):
             "PlayerNum": self.player,
         }
 
-    def get_levels_per_gate(self) -> list:
-        levels_per_gate = list()
-        max_gate_index = self.multiworld.number_of_level_gates[self.player]
-        average_level_count = 30 / (max_gate_index + 1)
-        levels_added = 0
-
-        for i in range(max_gate_index + 1):
-            levels_per_gate.append(average_level_count)
-            levels_added += average_level_count
-        additional_count_iterator = 0
-        while levels_added < 30:
-            levels_per_gate[additional_count_iterator] += 1
-            levels_added += 1
-            additional_count_iterator += 1 if additional_count_iterator < max_gate_index else -max_gate_index
-
-        if self.multiworld.level_gate_distribution[self.player] == 0 or self.multiworld.level_gate_distribution[self.player] == 2:
-            early_distribution = self.multiworld.level_gate_distribution[self.player] == 0
-            levels_to_distribute = 5
-            gate_index_offset = 0
-            while levels_to_distribute > 0:
-                if levels_per_gate[0 + gate_index_offset] == 1 or \
-                        levels_per_gate[max_gate_index - gate_index_offset] == 1:
-                    break
-                if early_distribution:
-                    levels_per_gate[0 + gate_index_offset] += 1
-                    levels_per_gate[max_gate_index - gate_index_offset] -= 1
-                else:
-                    levels_per_gate[0 + gate_index_offset] -= 1
-                    levels_per_gate[max_gate_index - gate_index_offset] += 1
-                gate_index_offset += 1
-                if gate_index_offset > math.floor(max_gate_index / 2):
-                    gate_index_offset = 0
-                levels_to_distribute -= 1
-
-        return levels_per_gate
-
     def generate_early(self):
         if self.multiworld.goal[self.player].value == 3:
             # Turn off everything else for Grand Prix goal
@@ -483,6 +447,42 @@ class SA2BWorld(World):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
                 key=lambda item: 0 if (item.name != 'Emblem') else 1)
+
+    def get_levels_per_gate(self) -> list:
+        levels_per_gate = list()
+        max_gate_index = self.multiworld.number_of_level_gates[self.player]
+        average_level_count = 30 / (max_gate_index + 1)
+        levels_added = 0
+
+        for i in range(max_gate_index + 1):
+            levels_per_gate.append(average_level_count)
+            levels_added += average_level_count
+        additional_count_iterator = 0
+        while levels_added < 30:
+            levels_per_gate[additional_count_iterator] += 1
+            levels_added += 1
+            additional_count_iterator += 1 if additional_count_iterator < max_gate_index else -max_gate_index
+
+        if self.multiworld.level_gate_distribution[self.player] == 0 or self.multiworld.level_gate_distribution[self.player] == 2:
+            early_distribution = self.multiworld.level_gate_distribution[self.player] == 0
+            levels_to_distribute = 5
+            gate_index_offset = 0
+            while levels_to_distribute > 0:
+                if levels_per_gate[0 + gate_index_offset] == 1 or \
+                        levels_per_gate[max_gate_index - gate_index_offset] == 1:
+                    break
+                if early_distribution:
+                    levels_per_gate[0 + gate_index_offset] += 1
+                    levels_per_gate[max_gate_index - gate_index_offset] -= 1
+                else:
+                    levels_per_gate[0 + gate_index_offset] -= 1
+                    levels_per_gate[max_gate_index - gate_index_offset] += 1
+                gate_index_offset += 1
+                if gate_index_offset > math.floor(max_gate_index / 2):
+                    gate_index_offset = 0
+                levels_to_distribute -= 1
+
+        return levels_per_gate
 
     def any_chao_locations_active(self) -> bool:
         if self.multiworld.chao_race_difficulty[self.player].value > 0 or \
