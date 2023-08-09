@@ -63,10 +63,6 @@ class SA2BWorld(World):
 
     location_table: typing.Dict[str, int]
 
-    music_map: typing.Dict[int, int]
-    voice_map: typing.Dict[int, int]
-    default_egg_map: typing.Dict[int, int]
-    default_chao_name_map: typing.Dict[int, int]
     mission_map: typing.Dict[int, int]
     mission_count_map: typing.Dict[int, int]
     emblems_for_cannons_core: int
@@ -78,14 +74,14 @@ class SA2BWorld(World):
 
     web = SA2BWeb()
 
-    def _get_slot_data(self):
+    def fill_slot_data(self) -> dict:
         return {
             "ModVersion": 202,
             "Goal": self.multiworld.goal[self.player].value,
-            "MusicMap": self.music_map,
-            "VoiceMap": self.voice_map,
-            "DefaultEggMap": self.default_egg_map,
-            "DefaultChaoNameMap": self.default_chao_name_map,
+            "MusicMap": self.generate_music_data(),
+            "VoiceMap": self.generate_voice_data(),
+            "DefaultEggMap": self.generate_chao_egg_data(),
+            "DefaultChaoNameMap": self.generate_chao_name_data(),
             "MissionMap": self.mission_map,
             "MissionCountMap": self.mission_count_map,
             "MusicShuffle": self.multiworld.music_shuffle[self.player].value,
@@ -126,15 +122,6 @@ class SA2BWorld(World):
             "BossRushMap": self.boss_rush_map,
             "PlayerNum": self.player,
         }
-
-    def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        slot_data["MusicMap"] = self.music_map
-        for option_name in sa2b_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
-
-        return slot_data
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()
@@ -392,134 +379,6 @@ class SA2BWorld(World):
 
         self.multiworld.itempool += itempool
 
-        # Music Shuffle
-        if self.multiworld.music_shuffle[self.player] == "levels":
-            musiclist_o = list(range(0, 47))
-            musiclist_s = musiclist_o.copy()
-            self.multiworld.random.shuffle(musiclist_s)
-            musiclist_o.extend(range(47, 78))
-            musiclist_s.extend(range(47, 78))
-
-            if self.multiworld.sadx_music[self.player].value == 1:
-                musiclist_s = [x+100 for x in musiclist_s]
-            elif self.multiworld.sadx_music[self.player].value == 2:
-                for i in range(len(musiclist_s)):
-                    if self.multiworld.random.randint(0,1):
-                        musiclist_s[i] += 100
-
-            self.music_map = dict(zip(musiclist_o, musiclist_s))
-        elif self.multiworld.music_shuffle[self.player] == "full":
-            musiclist_o = list(range(0, 78))
-            musiclist_s = musiclist_o.copy()
-            self.multiworld.random.shuffle(musiclist_s)
-
-            if self.multiworld.sadx_music[self.player].value == 1:
-                musiclist_s = [x+100 for x in musiclist_s]
-            elif self.multiworld.sadx_music[self.player].value == 2:
-                for i in range(len(musiclist_s)):
-                    if self.multiworld.random.randint(0,1):
-                        musiclist_s[i] += 100
-
-            self.music_map = dict(zip(musiclist_o, musiclist_s))
-        elif self.multiworld.music_shuffle[self.player] == "singularity":
-            musiclist_o = list(range(0, 78))
-            musiclist_s = [self.multiworld.random.choice(musiclist_o)] * len(musiclist_o)
-
-            if self.multiworld.sadx_music[self.player].value == 1:
-                musiclist_s = [x+100 for x in musiclist_s]
-            elif self.multiworld.sadx_music[self.player].value == 2:
-                if self.multiworld.random.randint(0,1):
-                    musiclist_s = [x+100 for x in musiclist_s]
-
-            self.music_map = dict(zip(musiclist_o, musiclist_s))
-        else:
-            musiclist_o = list(range(0, 78))
-            musiclist_s = musiclist_o.copy()
-
-            if self.multiworld.sadx_music[self.player].value == 1:
-                musiclist_s = [x+100 for x in musiclist_s]
-            elif self.multiworld.sadx_music[self.player].value == 2:
-                for i in range(len(musiclist_s)):
-                    if self.multiworld.random.randint(0,1):
-                        musiclist_s[i] += 100
-
-            self.music_map = dict(zip(musiclist_o, musiclist_s))
-
-        # Voice Shuffle
-        if self.multiworld.voice_shuffle[self.player] == "shuffled":
-            voicelist_o = list(range(0, 2623))
-            voicelist_s = voicelist_o.copy()
-            self.multiworld.random.shuffle(voicelist_s)
-
-            self.voice_map = dict(zip(voicelist_o, voicelist_s))
-        elif self.multiworld.voice_shuffle[self.player] == "rude":
-            voicelist_o = list(range(0, 2623))
-            voicelist_s = voicelist_o.copy()
-            self.multiworld.random.shuffle(voicelist_s)
-
-            for i in range(len(voicelist_s)):
-                if self.multiworld.random.randint(1,100) > 80:
-                    voicelist_s[i] = 17
-
-            self.voice_map = dict(zip(voicelist_o, voicelist_s))
-        elif self.multiworld.voice_shuffle[self.player] == "chao":
-            voicelist_o = list(range(0, 2623))
-            voicelist_s = voicelist_o.copy()
-            self.multiworld.random.shuffle(voicelist_s)
-
-            for i in range(len(voicelist_s)):
-                voicelist_s[i] = self.multiworld.random.choice(range(2586, 2608))
-
-            self.voice_map = dict(zip(voicelist_o, voicelist_s))
-        elif self.multiworld.voice_shuffle[self.player] == "singularity":
-            voicelist_o = list(range(0, 2623))
-            voicelist_s = [self.multiworld.random.choice(voicelist_o)] * len(voicelist_o)
-
-            self.voice_map = dict(zip(voicelist_o, voicelist_s))
-        else:
-            voicelist_o = list(range(0, 2623))
-            voicelist_s = voicelist_o.copy()
-
-            self.voice_map = dict(zip(voicelist_o, voicelist_s))
-
-        # Default Egg Color Shuffle
-        if self.multiworld.shuffle_starting_chao_eggs[self.player]:
-            egglist_o = list(range(0, 4))
-            egglist_s = self.multiworld.per_slot_randoms[self.player].sample(range(0,54), 4)
-
-            self.default_egg_map = dict(zip(egglist_o, egglist_s))
-        else:
-            # Indicate these are not shuffled
-            egglist_o = [0, 1, 2, 3]
-            egglist_s = [255, 255, 255, 255]
-
-            self.default_egg_map = dict(zip(egglist_o, egglist_s))
-
-        # Default Chao Names
-        number_of_names = 30
-        name_list_o = list(range(number_of_names * 7))
-        name_list_s = []
-
-        name_list_base = []
-        name_list_copy = list(self.multiworld.player_name.values())
-        name_list_copy.remove(self.multiworld.player_name[self.player])
-
-        if len(name_list_copy) >= number_of_names:
-            name_list_base = self.multiworld.per_slot_randoms[self.player].sample(name_list_copy, number_of_names)
-        else:
-            name_list_base = name_list_copy
-            self.multiworld.random.shuffle(name_list_base)
-
-            name_list_base += self.multiworld.per_slot_randoms[self.player].sample(sample_chao_names, number_of_names - len(name_list_base))
-
-        for name in name_list_base:
-            for char_idx in range(7):
-                if char_idx < len(name):
-                    name_list_s.append(chao_name_conversion[name[char_idx]])
-                else:
-                    name_list_s.append(0x00)
-
-        self.default_chao_name_map = dict(zip(name_list_o, name_list_s))
 
 
     def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
@@ -635,6 +494,135 @@ class SA2BWorld(World):
             return True;
 
         return False
+
+    def generate_music_data(self) -> typing.Dict[int, int]:
+        if self.multiworld.music_shuffle[self.player] == "levels":
+            musiclist_o = list(range(0, 47))
+            musiclist_s = musiclist_o.copy()
+            self.random.shuffle(musiclist_s)
+            musiclist_o.extend(range(47, 78))
+            musiclist_s.extend(range(47, 78))
+
+            if self.multiworld.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.multiworld.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.random.randint(0,1):
+                        musiclist_s[i] += 100
+
+            return dict(zip(musiclist_o, musiclist_s))
+        elif self.multiworld.music_shuffle[self.player] == "full":
+            musiclist_o = list(range(0, 78))
+            musiclist_s = musiclist_o.copy()
+            self.random.shuffle(musiclist_s)
+
+            if self.multiworld.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.multiworld.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.random.randint(0,1):
+                        musiclist_s[i] += 100
+
+            return dict(zip(musiclist_o, musiclist_s))
+        elif self.multiworld.music_shuffle[self.player] == "singularity":
+            musiclist_o = list(range(0, 78))
+            musiclist_s = [self.random.choice(musiclist_o)] * len(musiclist_o)
+
+            if self.multiworld.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.multiworld.sadx_music[self.player].value == 2:
+                if self.random.randint(0,1):
+                    musiclist_s = [x+100 for x in musiclist_s]
+
+            return dict(zip(musiclist_o, musiclist_s))
+        else:
+            musiclist_o = list(range(0, 78))
+            musiclist_s = musiclist_o.copy()
+
+            if self.multiworld.sadx_music[self.player].value == 1:
+                musiclist_s = [x+100 for x in musiclist_s]
+            elif self.multiworld.sadx_music[self.player].value == 2:
+                for i in range(len(musiclist_s)):
+                    if self.random.randint(0,1):
+                        musiclist_s[i] += 100
+
+            return dict(zip(musiclist_o, musiclist_s))
+
+    def generate_voice_data(self) -> typing.Dict[int, int]:
+        if self.multiworld.voice_shuffle[self.player] == "shuffled":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.random.shuffle(voicelist_s)
+
+            return dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "rude":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.random.shuffle(voicelist_s)
+
+            for i in range(len(voicelist_s)):
+                if self.random.randint(1,100) > 80:
+                    voicelist_s[i] = 17
+
+            return dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "chao":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.random.shuffle(voicelist_s)
+
+            for i in range(len(voicelist_s)):
+                voicelist_s[i] = self.random.choice(range(2586, 2608))
+
+            return dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "singularity":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = [self.random.choice(voicelist_o)] * len(voicelist_o)
+
+            return dict(zip(voicelist_o, voicelist_s))
+        else:
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+
+            return dict(zip(voicelist_o, voicelist_s))
+
+    def generate_chao_egg_data(self) -> typing.Dict[int, int]:
+        if self.multiworld.shuffle_starting_chao_eggs[self.player]:
+            egglist_o = list(range(0, 4))
+            egglist_s = self.random.sample(range(0,54), 4)
+
+            return dict(zip(egglist_o, egglist_s))
+        else:
+            # Indicate these are not shuffled
+            egglist_o = [0, 1, 2, 3]
+            egglist_s = [255, 255, 255, 255]
+
+            return dict(zip(egglist_o, egglist_s))
+
+    def generate_chao_name_data(self) -> typing.Dict[int, int]:
+        number_of_names = 30
+        name_list_o = list(range(number_of_names * 7))
+        name_list_s = []
+
+        name_list_base = []
+        name_list_copy = list(self.multiworld.player_name.values())
+        name_list_copy.remove(self.multiworld.player_name[self.player])
+
+        if len(name_list_copy) >= number_of_names:
+            name_list_base = self.random.sample(name_list_copy, number_of_names)
+        else:
+            name_list_base = name_list_copy
+            self.random.shuffle(name_list_base)
+
+            name_list_base += self.random.sample(sample_chao_names, number_of_names - len(name_list_base))
+
+        for name in name_list_base:
+            for char_idx in range(7):
+                if char_idx < len(name):
+                    name_list_s.append(chao_name_conversion[name[char_idx]])
+                else:
+                    name_list_s.append(0x00)
+
+        return dict(zip(name_list_o, name_list_s))
 
     def generate_black_market_data(self) -> typing.Dict[int, int]:
         if self.multiworld.black_market_slots[self.player].value == 0:
