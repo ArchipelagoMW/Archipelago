@@ -336,14 +336,6 @@ class Received(StardewRule):
         return f"Received {self.count} {self.item}"
 
     def get_difficulty(self):
-        if self.item == "Spring":
-            return 0
-        if self.item == "Summer":
-            return 1
-        if self.item == "Fall":
-            return 2
-        if self.item == "Winter":
-            return 3
         return self.count
 
 

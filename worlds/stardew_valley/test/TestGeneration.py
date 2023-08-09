@@ -1,6 +1,6 @@
-import typing
+from typing import List
 
-from BaseClasses import ItemClassification, MultiWorld
+from BaseClasses import ItemClassification, MultiWorld, Item
 from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_with_mods, \
     allsanity_options_without_mods, minimal_locations_maximal_items
 from .. import locations, items, location_table, options
@@ -32,7 +32,6 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(footwear.name for footwear in items.items_by_group[Group.FOOTWEAR])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
@@ -81,7 +80,6 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
-        items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
                              and item.name not in items_to_ignore]
@@ -118,34 +116,98 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                 self.assertTrue(count == 0 or count == 2)
 
 
-class TestRemixedMineRewards(SVTestBase):
-    def test_when_generate_world_then_one_reward_is_added_per_chest(self):
-        # assert self.world.create_item("Rusty Sword") in self.multiworld.itempool
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_10]))
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_20]))
-        self.assertIn(self.world.create_item("Slingshot"), self.multiworld.itempool)
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_50]))
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_60]))
-        self.assertIn(self.world.create_item("Master Slingshot"), self.multiworld.itempool)
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_80]))
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_90]))
-        self.assertIn(self.world.create_item("Stardrop"), self.multiworld.itempool)
-        self.assertTrue(any(self.world.create_item(item) in self.multiworld.itempool
-                   for item in items_by_group[Group.MINES_FLOOR_110]))
-        self.assertIn(self.world.create_item("Skull Key"), self.multiworld.itempool)
+class TestMonstersanityNone(SVTestBase):
+    options = {options.Monstersanity.internal_name: options.Monstersanity.option_none}
 
-    # This test has a 1/90,000 chance to fail... Sorry in advance
-    def test_when_generate_world_then_rewards_are_not_all_vanilla(self):
-        self.assertFalse(all(self.world.create_item(item) in self.multiworld.itempool
-                       for item in
-                       ["Leather Boots", "Steel Smallsword", "Tundra Boots", "Crystal Dagger", "Firewalker Boots",
-                        "Obsidian Edge", "Space Boots"]))
+    def test_when_generate_world_then_5_generic_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Weapon"), 5)
+
+    def test_when_generate_world_then_zero_specific_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Sword"), 0)
+        self.assertEqual(item_pool.count("Progressive Club"), 0)
+        self.assertEqual(item_pool.count("Progressive Dagger"), 0)
+
+    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
+
+    def test_when_generate_world_then_3_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Footwear"), 3)
+
+
+class TestMonstersanityGoals(SVTestBase):
+    options = {options.Monstersanity.internal_name: options.Monstersanity.option_goals}
+
+    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
+
+    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Sword"), 5)
+        self.assertEqual(item_pool.count("Progressive Club"), 5)
+        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
+
+    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
+
+    def test_when_generate_world_then_4_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
+
+
+class TestMonstersanityOnePerCategory(SVTestBase):
+    options = {options.Monstersanity.internal_name: options.Monstersanity.option_one_per_category}
+
+    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
+
+    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Sword"), 5)
+        self.assertEqual(item_pool.count("Progressive Club"), 5)
+        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
+
+    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
+
+    def test_when_generate_world_then_4_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
+
+
+class TestMonstersanityProgressive(SVTestBase):
+    options = {options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals}
+
+    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
+
+    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Sword"), 5)
+        self.assertEqual(item_pool.count("Progressive Club"), 5)
+        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
+
+    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
+
+    def test_when_generate_world_then_4_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
+
+    def test_when_generate_world_then_many_rings_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertIn("Hot Java Ring", item_pool)
+        self.assertIn("Wedding Ring", item_pool)
+        self.assertIn("Slime Charmer Ring", item_pool)
 
 
 class TestProgressiveElevator(SVTestBase):
@@ -156,18 +218,49 @@ class TestProgressiveElevator(SVTestBase):
     }
 
     def test_given_elevator_to_floor_105_when_find_another_elevator_then_has_access_to_floor_120(self):
-        self.collect([self.get_item_by_name("Progressive Pickaxe")] * 2)
-        self.collect([self.get_item_by_name("Progressive Mine Elevator")] * 21)
-        self.collect(self.multiworld.create_item("Bone Sword", self.player))
-        self.collect([self.get_item_by_name("Combat Level")] * 4)
-        self.collect(self.get_item_by_name("Adventurer's Guild"))
-        floor_120 = self.multiworld.get_region("The Mines - Floor 120", self.player)
+        items_for_115 = self.generate_items_for_mine_115()
+        last_elevator = self.get_item_by_name("Progressive Mine Elevator")
+        self.collect(items_for_115)
+        floor_115 = self.multiworld.get_region("The Mines - Floor 115", self.player)        floor_120 = self.multiworld.get_region("The Mines - Floor 120", self.player)
 
+        self.assertTrue(floor_115.can_reach(self.multiworld.state))
         self.assertFalse(floor_120.can_reach(self.multiworld.state))
 
-        self.collect(self.get_item_by_name("Progressive Mine Elevator"))
+        self.collect(last_elevator)
 
         self.assertTrue(floor_120.can_reach(self.multiworld.state))
+
+
+    def test_given_access_to_floor_115_when_find_another_pickaxe_and_dagger_then_does_not_have_access_to_floor_120(self):
+        items_for_115 = self.generate_items_for_mine_115()
+        items_for_120 = self.generate_items_for_extra_mine_levels("Progressive Dagger")
+        self.collect(items_for_115)
+
+        self.assertTrue(self.multiworld.get_region("The Mines - Floor 115", self.player).can_reach(self.multiworld.state))
+        self.assertFalse(self.multiworld.get_region("The Mines - Floor 120", self.player).can_reach(self.multiworld.state))
+
+        self.collect(items_for_120)
+
+        self.assertTrue(self.multiworld.get_region("The Mines - Floor 115", self.player).can_reach(self.multiworld.state))
+        self.assertFalse(self.multiworld.get_region("The Mines - Floor 120", self.player).can_reach(self.multiworld.state))
+
+        self.remove(items_for_115)
+        self.remove(items_for_120)
+
+    def generate_items_for_mine_115(self) -> List[Item]:
+        pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
+        elevators = [self.get_item_by_name("Progressive Mine Elevator")] * 21
+        swords = [self.get_item_by_name("Progressive Sword")] * 3
+        combat_levels = [self.get_item_by_name("Combat Level")] * 4
+        guild = self.get_item_by_name("Adventurer's Guild")
+        return [*combat_levels, *elevators, guild, *pickaxes, *swords]
+
+    def generate_items_for_extra_mine_levels(self, weapon_name: str) -> List[Item]:
+        last_pickaxe = self.get_item_by_name("Progressive Pickaxe")
+        last_weapon = self.multiworld.create_item(weapon_name, self.player)
+        second_last_combat_level = self.get_item_by_name("Combat Level")
+        last_combat_level = self.get_item_by_name("Combat Level")
+        return [last_pickaxe, last_weapon, second_last_combat_level, last_combat_level]
 
 
 class TestLocationGeneration(SVTestBase):

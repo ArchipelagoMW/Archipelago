@@ -21,8 +21,9 @@ TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
     for item in multiworld.get_items():
         multiworld.state.collect(item)
-
-    tester.assertTrue(multiworld.find_item("Victory", 1).can_reach(multiworld.state))
+    victory = multiworld.find_item("Victory", 1)
+    can_reach_victory = victory.can_reach(multiworld.state)
+    tester.assertTrue(can_reach_victory)
 
 
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):

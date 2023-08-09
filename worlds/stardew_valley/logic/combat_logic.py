@@ -5,9 +5,11 @@ from .region_logic import RegionLogic
 from ..data.monster_data import StardewMonster
 from ..mods.logic.magic_logic import MagicLogic
 from ..stardew_rule import StardewRule, Or, And
+from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.performance_names import Performance
-from ..items import all_items, Group
 from ..strings.region_names import Region
+
+valid_weapons = [APWeapon.weapon, APWeapon.sword, APWeapon.club, APWeapon.dagger]
 
 
 class CombatLogic:
@@ -59,24 +61,19 @@ class CombatLogic:
         return self.has_galaxy_weapon_rule
 
     def has_received_any_weapon(self) -> StardewRule:
-        return self.received(item.name for item in all_items if Group.WEAPON in item.groups)
+        return self.received(valid_weapons, 1)
 
     def has_received_decent_weapon(self) -> StardewRule:
-        decent_weapon_rule = self.received(item.name for item in all_items
-                                           if Group.WEAPON in item.groups and (Group.MINES_FLOOR_50 in item.groups or Group.MINES_FLOOR_60 in item.groups))
-        return decent_weapon_rule | self.has_received_good_weapon()
+        return Or(self.received(weapon, 2) for weapon in valid_weapons)
 
     def has_received_good_weapon(self) -> StardewRule:
-        good_weapon_rule = self.received(item.name for item in all_items
-                                         if Group.WEAPON in item.groups and (Group.MINES_FLOOR_80 in item.groups or Group.MINES_FLOOR_90 in item.groups))
-        return good_weapon_rule | self.has_received_great_weapon()
+        return Or(self.received(weapon, 3) for weapon in valid_weapons)
 
     def has_received_great_weapon(self) -> StardewRule:
-        great_weapon_rule = self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.MINES_FLOOR_110 in item.groups)
-        return great_weapon_rule | self.has_received_galaxy_weapon()
+        return Or(self.received(weapon, 4) for weapon in valid_weapons)
 
     def has_received_galaxy_weapon(self) -> StardewRule:
-        return self.received(item.name for item in all_items if Group.WEAPON in item.groups and Group.GALAXY_WEAPONS in item.groups)
+        return Or(self.received(weapon, 5) for weapon in valid_weapons)
 
     def can_buy_weapon(self, weapon_rule: StardewRule = None) -> StardewRule:
         adventure_guild_rule = self.region.can_reach(Region.adventurer_guild)

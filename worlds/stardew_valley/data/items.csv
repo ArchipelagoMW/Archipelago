@@ -10,45 +10,42 @@ id,name,classification,groups,mod_name
 22,Movie Theater,useful,,
 23,Stardrop,progression,,
 24,Progressive Backpack,progression,,
-25,Rusty Sword,progression,WEAPON,
-26,Leather Boots,progression,"FOOTWEAR,MINES_FLOOR_10",
-27,Work Boots,useful,"FOOTWEAR,MINES_FLOOR_10",
-28,Wooden Blade,progression,"MINES_FLOOR_10,WEAPON",
-29,Iron Dirk,progression,"MINES_FLOOR_10,WEAPON",
-30,Wind Spire,progression,"MINES_FLOOR_10,WEAPON",
-31,Femur,progression,"MINES_FLOOR_10,WEAPON",
-32,Steel Smallsword,progression,"MINES_FLOOR_20,WEAPON",
-33,Wood Club,progression,"MINES_FLOOR_20,WEAPON",
-34,Elf Blade,progression,"MINES_FLOOR_20,WEAPON",
-35,Glow Ring,useful,"MINES_FLOOR_20,RING",
-36,Magnet Ring,useful,"MINES_FLOOR_20,RING",
-37,Slingshot,progression,WEAPON,
-38,Tundra Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-39,Thermal Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-40,Combat Boots,useful,"FOOTWEAR,MINES_FLOOR_50",
-41,Silver Saber,progression,"MINES_FLOOR_50,WEAPON",
-42,Pirate's Sword,progression,"MINES_FLOOR_50,WEAPON",
-43,Crystal Dagger,progression,"MINES_FLOOR_60,WEAPON",
-44,Cutlass,progression,"MINES_FLOOR_60,WEAPON",
-45,Iron Edge,progression,"MINES_FLOOR_60,WEAPON",
-46,Burglar's Shank,progression,"MINES_FLOOR_60,WEAPON",
-47,Wood Mallet,progression,"MINES_FLOOR_60,WEAPON",
-48,Master Slingshot,progression,WEAPON,
-49,Firewalker Boots,useful,"FOOTWEAR,MINES_FLOOR_80",
-50,Dark Boots,useful,"FOOTWEAR,MINES_FLOOR_80",
-51,Claymore,progression,"MINES_FLOOR_80,WEAPON",
-52,Templar's Blade,progression,"MINES_FLOOR_80,WEAPON",
-53,Kudgel,progression,"MINES_FLOOR_80,WEAPON",
-54,Shadow Dagger,progression,"MINES_FLOOR_80,WEAPON",
-55,Obsidian Edge,progression,"MINES_FLOOR_90,WEAPON",
-56,Tempered Broadsword,progression,"MINES_FLOOR_90,WEAPON",
-57,Wicked Kris,progression,"MINES_FLOOR_90,WEAPON",
-58,Bone Sword,progression,"MINES_FLOOR_90,WEAPON",
-59,Ossified Blade,progression,"MINES_FLOOR_90,WEAPON",
-60,Space Boots,useful,"FOOTWEAR,MINES_FLOOR_110",
-61,Crystal Shoes,useful,"FOOTWEAR,MINES_FLOOR_110",
-62,Steel Falchion,progression,"MINES_FLOOR_110,WEAPON",
-63,The Slammer,progression,"MINES_FLOOR_110,WEAPON",
+25,Progressive Weapon,progression,"WEAPON,WEAPON_GENERIC",
+26,Progressive Sword,progression,"WEAPON,WEAPON_SWORD",
+27,Progressive Club,progression,"WEAPON,WEAPON_CLUB",
+28,Progressive Dagger,progression,"WEAPON,WEAPON_DAGGER",
+29,Progressive Slingshot,progression,"WEAPON,WEAPON_SLINGSHOT",
+30,Progressive Footwear,useful,"FOOTWEAR",
+31,Small Glow Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+32,Glow Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+33,Small Magnet Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+34,Magnet Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+35,Slime Charmer Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+36,Warrior Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+37,Vampire Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+38,Savage Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+39,Ring of Yoba,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+40,Sturdy Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+41,Burglar's Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+42,Iridium Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+43,Jukebox Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+44,Amethyst Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+45,Topaz Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+46,Aquamarine Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+47,Jade Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+48,Emerald Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+49,Ruby Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+50,Wedding Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+51,Crabshell Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+52,Napalm Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+53,Thorns Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+54,Lucky Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+55,Hot Java Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+56,Protection Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+57,Soul Sapper Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+58,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+59,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+60,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
 64,Skull Key,progression,,
 65,Progressive Hoe,progression,PROGRESSIVE_TOOLS,
 66,Progressive Pickaxe,progression,PROGRESSIVE_TOOLS,
@@ -91,12 +88,8 @@ id,name,classification,groups,mod_name
 103,JotPK: Extra Life,progression,ARCADE_MACHINE_BUFFS,
 104,JotPK: Increased Drop Rate,progression,ARCADE_MACHINE_BUFFS,
 105,Junimo Kart: Extra Life,progression,ARCADE_MACHINE_BUFFS,
-106,Galaxy Sword,progression,"GALAXY_WEAPONS,WEAPON",
-107,Galaxy Dagger,progression,"GALAXY_WEAPONS,WEAPON",
-108,Galaxy Hammer,progression,"GALAXY_WEAPONS,WEAPON",
 109,Movement Speed Bonus,progression,,
 110,Luck Bonus,progression,,
-111,Lava Katana,progression,"MINES_FLOOR_110,WEAPON",
 112,Progressive House,progression,,
 113,Traveling Merchant: Sunday,progression,TRAVELING_MERCHANT_DAY,
 114,Traveling Merchant: Monday,progression,TRAVELING_MERCHANT_DAY,

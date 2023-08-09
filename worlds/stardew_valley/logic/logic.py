@@ -40,6 +40,7 @@ from ..regions import vanilla_regions
 from ..stardew_rule import False_, Or, True_, Count, And, Has, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
+from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
@@ -354,7 +355,6 @@ class StardewLogic:
             Animal.sheep: self.can_buy_animal(Animal.sheep),
             Fish.shrimp: self.skill.can_crab_pot(Region.beach),
             Loot.slime: self.mine.can_mine_in_the_mines_floor_1_40(),
-            Weapon.any_slingshot: self.received(Weapon.slingshot) | self.received(Weapon.master_slingshot),
             Fish.snail: self.skill.can_crab_pot(Region.town),
             Forageable.snow_yam: self.tool.can_forage(Season.winter, Region.beach, True),
             Trash.soggy_newspaper: self.skill.can_crab_pot(),
@@ -781,7 +781,7 @@ class StardewLogic:
         reach_caves = And(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
                           self.region.can_reach(Region.gourmand_frog_cave),
                           self.region.can_reach(Region.colored_crystals_cave),
-                          self.region.can_reach(Region.shipwreck), self.has(Weapon.any_slingshot))
+                          self.region.can_reach(Region.shipwreck), self.received(APWeapon.slingshot))
         reach_entire_island = And(reach_outside_areas, reach_all_volcano,
                                   reach_caves, reach_southeast, reach_pirate_cove)
         if number <= 5:

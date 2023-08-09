@@ -12,6 +12,7 @@ from .data.villagers_data import all_villagers
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, Friendsanity, Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations
+from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 
 ITEM_CODE_OFFSET = 717000
@@ -25,23 +26,20 @@ class Group(enum.Enum):
     FRIENDSHIP_PACK = enum.auto()
     COMMUNITY_REWARD = enum.auto()
     TRASH = enum.auto()
-    MINES_FLOOR_10 = enum.auto()
-    MINES_FLOOR_20 = enum.auto()
-    MINES_FLOOR_50 = enum.auto()
-    MINES_FLOOR_60 = enum.auto()
-    MINES_FLOOR_80 = enum.auto()
-    MINES_FLOOR_90 = enum.auto()
-    MINES_FLOOR_110 = enum.auto()
     FOOTWEAR = enum.auto()
     HATS = enum.auto()
     RING = enum.auto()
     WEAPON = enum.auto()
+    WEAPON_GENERIC = enum.auto()
+    WEAPON_SWORD = enum.auto()
+    WEAPON_CLUB = enum.auto()
+    WEAPON_DAGGER = enum.auto()
+    WEAPON_SLINGSHOT = enum.auto()
     PROGRESSIVE_TOOLS = enum.auto()
     SKILL_LEVEL_UP = enum.auto()
     BUILDING = enum.auto()
     WIZARD_BUILDING = enum.auto()
     ARCADE_MACHINE_BUFFS = enum.auto()
-    GALAXY_WEAPONS = enum.auto()
     BASE_RESOURCE = enum.auto()
     WARP_TOTEM = enum.auto()
     GEODE = enum.auto()
@@ -171,7 +169,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
 
     create_backpack_items(item_factory, options, items)
-    create_mine_rewards(item_factory, items, random)
+    create_weapons(item_factory, world_options, items)
+    items.append(item_factory("Skull Key"))
     create_elevators(item_factory, options, items)
     create_tools(item_factory, options, items)
     create_skills(item_factory, options, items)
@@ -184,7 +183,6 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_stardrops(item_factory, options, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
-    items.append(item_factory(random.choice(items_by_group[Group.GALAXY_WEAPONS])))
     create_player_buffs(item_factory, options, items)
     create_traveling_merchant_items(item_factory, items)
     items.append(item_factory("Return Scepter"))
@@ -209,22 +207,31 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
             items.append(item_factory("Progressive Backpack"))
 
 
-def create_mine_rewards(item_factory: StardewItemFactory, items: List[Item], random: Random):
-    items.append(item_factory("Rusty Sword"))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_10])))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_20])))
-    items.append(item_factory("Slingshot"))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_50])))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_60])))
-    items.append(item_factory("Master Slingshot"))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_80])))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_90])))
-    items.append(item_factory(random.choice(items_by_group[Group.MINES_FLOOR_110])))
-    items.append(item_factory("Skull Key"))
+def create_weapons(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
+    monstersanity = options.Monstersanity
+    monstersanity_option = world_options[monstersanity]
+    if monstersanity_option == options.Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
+        items.extend(item_factory(item) for item in [APWeapon.weapon] * 5)
+        items.extend(item_factory(item) for item in [APWeapon.footwear] * 3)  # 1-2 | 3-4 | 6-7-8
+        return
+
+    items.extend(item_factory(item) for item in [APWeapon.sword] * 5)
+    items.extend(item_factory(item) for item in [APWeapon.club] * 5)
+    items.extend(item_factory(item) for item in [APWeapon.dagger] * 5)
+    items.extend(item_factory(item) for item in [APWeapon.footwear] * 4)  # 1-2 | 3-4 | 6-7-8 | 11-13
+    if monstersanity_option == monstersanity.option_goals or monstersanity_option == monstersanity.option_one_per_category or \
+            monstersanity_option == monstersanity.option_short_goals or monstersanity_option == monstersanity.option_very_short_goals:
+        return
+    if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
+        rings_items = [item for item in items_by_group[Group.RING] if item.classification is not ItemClassification.filler]
+    else:
+        rings_items = [item for item in items_by_group[Group.RING]]
+    items.extend(item_factory(item) for item in rings_items)
 
 
-def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.elevator_progression == ElevatorProgression.option_vanilla:
+def create_elevators(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    if world_options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
         return
 
     items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
@@ -343,7 +350,8 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     need_all_hearts_up_to_date = world_is_perfection(world_options)
     government_assigned_bachelor = random.choice([villager.name for villager in all_villagers if villager.bachelor and
                                                   (villager.mod_name is None or villager.mod_name in mods)])
-    need_recipes = world_options[options.Shipsanity] == options.Shipsanity.option_everything or world_options[options.Shipsanity] == options.Shipsanity.option_quality_everything
+    need_recipes = world_options[options.Shipsanity] == options.Shipsanity.option_everything or world_options[
+        options.Shipsanity] == options.Shipsanity.option_quality_everything
     for villager in all_villagers:
         if villager.mod_name not in mods and villager.mod_name is not None:
             continue
@@ -363,7 +371,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
             if heart % heart_size == 0 or heart == heart_cap:
                 items.append(item_factory(f"{villager.name} <3", classification))
                 if should_next_hearts_be_useful(need_all_hearts_up_to_date, government_assigned_bachelor, need_recipes,
-                                                                      villager, heart, heart_size, heart_cap):
+                                                villager, heart, heart_size, heart_cap):
                     classification = ItemClassification.useful
     if not exclude_non_bachelors:
         need_pet = world_options[options.Goal] == options.Goal.option_grandpa_evaluation
@@ -567,7 +575,8 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     required_resource_pack -= number_priority_items
     all_filler_packs = [filler_pack for filler_pack in all_filler_packs
                         if Group.MAXIMUM_ONE not in filler_pack.groups or
-                        filler_pack.name not in [priority_item.name for priority_item in priority_filler_items]]
+                        (filler_pack.name not in [priority_item.name for priority_item in
+                                                  priority_filler_items] and filler_pack.name not in items_already_added_names)]
 
     while required_resource_pack > 0:
         resource_pack = random.choice(all_filler_packs)

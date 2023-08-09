@@ -276,23 +276,25 @@ class TestWeaponsLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Bus Repair"), event=True)
         self.multiworld.state.collect(self.world.create_item("Skull Key"), event=True)
 
-        self.GiveItemAndCheckReachableMine("Rusty Sword", 1)
-        self.GiveItemAndCheckReachableMine("Wooden Blade", 1)
-        self.GiveItemAndCheckReachableMine("Elf Blade", 1)
+        self.GiveItemAndCheckReachableMine("Progressive Sword", 1)
+        self.GiveItemAndCheckReachableMine("Progressive Dagger", 1)
+        self.GiveItemAndCheckReachableMine("Progressive Club", 1)
 
-        self.GiveItemAndCheckReachableMine("Silver Saber", 2)
-        self.GiveItemAndCheckReachableMine("Crystal Dagger", 2)
+        self.GiveItemAndCheckReachableMine("Progressive Sword", 2)
+        self.GiveItemAndCheckReachableMine("Progressive Dagger", 2)
+        self.GiveItemAndCheckReachableMine("Progressive Club", 2)
 
-        self.GiveItemAndCheckReachableMine("Claymore", 3)
-        self.GiveItemAndCheckReachableMine("Obsidian Edge", 3)
-        self.GiveItemAndCheckReachableMine("Bone Sword", 3)
+        self.GiveItemAndCheckReachableMine("Progressive Sword", 3)
+        self.GiveItemAndCheckReachableMine("Progressive Dagger", 3)
+        self.GiveItemAndCheckReachableMine("Progressive Club", 3)
 
-        self.GiveItemAndCheckReachableMine("The Slammer", 4)
-        self.GiveItemAndCheckReachableMine("Lava Katana", 4)
+        self.GiveItemAndCheckReachableMine("Progressive Sword", 4)
+        self.GiveItemAndCheckReachableMine("Progressive Dagger", 4)
+        self.GiveItemAndCheckReachableMine("Progressive Club", 4)
 
-        self.GiveItemAndCheckReachableMine("Galaxy Sword", 5)
-        self.GiveItemAndCheckReachableMine("Galaxy Hammer", 5)
-        self.GiveItemAndCheckReachableMine("Galaxy Dagger", 5)
+        self.GiveItemAndCheckReachableMine("Progressive Sword", 5)
+        self.GiveItemAndCheckReachableMine("Progressive Dagger", 5)
+        self.GiveItemAndCheckReachableMine("Progressive Club", 5)
 
     def GiveItemAndCheckReachableMine(self, item_name: str, reachable_level: int):
         item = self.multiworld.create_item(item_name, self.player)
@@ -321,8 +323,6 @@ class TestWeaponsLogic(SVTestBase):
             self.assertTrue(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
         else:
             self.assertFalse(self.world.logic.ability.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state))
-
-        self.remove(item)
 
 
 class TestMonstersanityProgressiveRules(SVTestBase):
