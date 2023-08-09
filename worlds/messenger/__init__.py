@@ -1,14 +1,14 @@
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
-from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
-from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
-from .SubClasses import MessengerRegion, MessengerItem
+from BaseClasses import CollectionState, Item, ItemClassification, MultiWorld, Tutorial
+from worlds.AutoWorld import WebWorld, World
 from . import Rules
+from .Constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
+from .Options import Goal, Logic, NotesNeeded, PowerSeals, messenger_options
+from .Regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
+from .Shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
+from .SubClasses import MessengerItem, MessengerRegion
 
 
 class MessengerWeb(WebWorld):
