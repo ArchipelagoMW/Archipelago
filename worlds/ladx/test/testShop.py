@@ -11,11 +11,11 @@ class PlandoTest(LADXTestBase):
     options = {
         "plando_items": [{
             "items": {
-                "Progressive Sword": 2
+                "Progressive Sword": 2,
             },
             "locations": [
                 "Shop 200 Item (Mabe Village)",
-                "Shop 980 Item (Mabe Village)"
+                "Shop 980 Item (Mabe Village)",
             ],
         }],
     }
