@@ -10,8 +10,8 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
     gate_0_blacklist_regions
 from .Rules import set_rules
 from .Names import ItemName, LocationName
-from .AestheticData import chao_name_conversion, sample_chao_names, all_exits, all_destinations, multi_rooms, single_rooms, \
-                           room_to_exits_map, exit_to_room_map
+from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
+                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map
 from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
@@ -646,12 +646,19 @@ class SA2BWorld(World):
         item_names = []
         player_names = []
         progression_flags = []
+        totally_real_item_names_copy = totally_real_item_names.copy()
         location_names = [(LocationName.chao_black_market_base + str(i)) for i in range(1, self.multiworld.black_market_slots[self.player].value + 1)]
         locations = [self.multiworld.get_location(location_name, self.player) for location_name in location_names]
         for location in locations:
-            item_names.append(location.item.name)
+            if location.item.classification & ItemClassification.trap:
+                item_name = self.random.choice(totally_real_item_names_copy)
+                totally_real_item_names_copy.remove(item_name)
+                item_names.append(item_name)
+            else:
+                item_names.append(location.item.name)
             player_names.append(self.multiworld.player_name[location.item.player])
-            if location.item.classification & ItemClassification.progression:
+
+            if location.item.classification & ItemClassification.progression or location.item.classification & ItemClassification.trap:
                 progression_flags.append(2)
             elif location.item.classification & ItemClassification.useful:
                 progression_flags.append(1)
@@ -659,13 +666,12 @@ class SA2BWorld(World):
                 progression_flags.append(0)
 
         for item_idx in range(self.multiworld.black_market_slots[self.player].value):
-            for chr_idx in range(len(item_names[item_idx][:20])):
-                market_data[(item_idx * 40) + chr_idx] = ord(item_names[item_idx][chr_idx])
+            for chr_idx in range(len(item_names[item_idx][:26])):
+                market_data[(item_idx * 46) + chr_idx] = ord(item_names[item_idx][chr_idx])
             for chr_idx in range(len(player_names[item_idx][:16])):
-                market_data[(item_idx * 40) + 20 + chr_idx] = ord(player_names[item_idx][chr_idx])
+                market_data[(item_idx * 46) + 26 + chr_idx] = ord(player_names[item_idx][chr_idx])
 
-            market_data[(item_idx * 40) + 36] = ring_costs[self.multiworld.black_market_ring_costs[self.player].value][progression_flags[item_idx]]
-            #market_data[(item_idx * 40) + 37] = unlock_cost[item_idx]
+            market_data[(item_idx * 46) + 42] = ring_costs[self.multiworld.black_market_ring_costs[self.player].value][progression_flags[item_idx]]
 
         return market_data
 

@@ -145,6 +145,97 @@ sample_chao_names = [
 	"Lan",
 	"Rin",
 	"Doomguy",
+	"Guide",
+]
+
+totally_real_item_names = [
+	"Mallet",
+	"Lava Rod",
+	"Master Knife",
+	"Slippers",
+	"Spade",
+
+	"Progressive Car Upgrade",
+	"Bonus Token",
+
+	"Shortnail",
+	"Runmaster",
+
+	"Courage Form",
+	"Auto Courage",
+	"Donald Defender",
+	"Goofy Blizzard",
+	"Ultimate Weapon",
+
+	"Song of the Sky Whale",
+	"Gryphon Shoes",
+	"Wing Key",
+	"Strength Anklet",
+
+	"Hairclip",
+
+	"Key of Wisdom",
+
+	"Baking",
+	"Progressive Block Mining",
+
+	"Jar",
+	"Whistle of Space",
+	"Rito Tunic",
+
+	"Kitchen Sink",
+
+	"Rock Badge",
+	"Key Card",
+	"Pikachu",
+	"Eevee",
+	"HM02 Strength",
+
+	"Progressive Astromancers",
+	"Progressive Chefs",
+	"The Living Safe",
+	"Lady Quinn",
+
+	"Dio's Worst Enemy",
+
+	"Pink Chaos Emerald",
+	"Black Chaos Emerald",
+	"Tails - Large Cannon",
+	"Eggman - Bazooka",
+	"Eggman - Booster",
+	"Knuckles - Shades",
+	"Sonic - Magic Shoes",
+	"Shadow - Bounce Bracelet",
+	"Rouge - Air Necklace",
+	"Big Key (Eggman's Pyramid)",
+
+	"Sensor Bunker",
+	"Phantom",
+	"Soldier",
+
+	"Plasma Suit",
+	"Gravity Beam",
+	"Hi-Jump Ball",
+
+	"Cannon Unlock LLL",
+	"Feather Cap",
+
+	"Progressive Yoshi",
+	"Purple Switch Palace",
+	"Cape Feather",
+
+	"Cane of Bryan",
+
+	"Van Repair",
+	"Autumn",
+	"Galaxy Knife",
+	"Green Cabbage Seeds",
+
+	"Timespinner Cog 1",
+
+	"Ladder",
+
+	"Visible Dots",
 ]
 
 all_exits = [
