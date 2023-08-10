@@ -37,6 +37,8 @@ Jokes:
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
+1101 - Tutorial Outpost Entry (Panel) - 0x0A171
+1102 - Tutorial Outpost Exit (Panel) - 0x04CA4
 1105 - Symmetry Island Lower (Panel) - 0x000B0
 1107 - Symmetry Island Upper (Panel) - 0x1C349
 1110 - Desert Light Room Entry (Panel) - 0x0C339
@@ -53,6 +55,10 @@ Doors:
 1127 - Quarry Boathouse Ramp Horizontal Control (Panel) - 0x03858
 1129 - Quarry Boathouse Hook Control (Panel) - 0x275FA
 1131 - Shadows Door Timer (Panel) - 0x334DB,0x334DC
+1140 - Keep Hedge Maze 1 (Panel) - 0x00139
+1142 - Keep Hedge Maze 2 (Panel) - 0x019DC
+1144 - Keep Hedge Maze 3 (Panel) - 0x019E7
+1146 - Keep Hedge Maze 4 (Panel) - 0x01A0F
 1150 - Monastery Entry Left (Panel) - 0x00B10
 1151 - Monastery Entry Right (Panel) - 0x00C92
 1156 - Monastery Shutters Control (Panel) - 0x09D9B
@@ -233,10 +239,12 @@ Doors:
 2035 - Mountain&Caves Control Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB,0x335AB,0x335AC,0x3369D
 
 2100 - Symmetry Island Panels - 0x1C349,0x000B0
+2101 - Tutorial Outpost Panels - 0x0A171,0x04CA4
 2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249
 2110 - Quarry Outside Panels - 0x17C09,0x09E57,0x17CC4
 2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675
 2120 - Quarry Boathouse Panels - 0x03852,0x03858,0x275FA
+2122 - Keep Hedge Maze Panels - 0x00139,0x019DC,0x019E7,0x01A0F
 2125 - Monastery Panels - 0x09D9B,0x00C92,0x00B10
 2130 - Town Church & RGB House Panels - 0x28998,0x28A0D,0x334D8
 2135 - Town Maze Panels - 0x2896A,0x28A79

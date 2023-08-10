@@ -1,9 +1,11 @@
 Items:
 Symmetry Island Panels
+Tutorial Outpost Panels
 Desert Panels
 Quarry Outside Panels
 Quarry Stoneworks Panels
 Quarry Boathouse Panels
+Keep Hedge Maze Panels
 Monastery Panels
 Town Church & RGB House Panels
 Town Maze Panels
