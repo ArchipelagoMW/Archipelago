@@ -7,14 +7,6 @@ from .Rules import create_rules
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up the Blasphemous randomizer connected to an Archipelago Multiworld",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["TRPG"]
-    )]
 
 base_item_id = 82000
 class ShortHikeWorld(World):
@@ -34,7 +26,7 @@ class ShortHikeWorld(World):
     item_name_groups = group_table
     # option_definitions = short_hike_options
 
-    # required_client_version = (0, 4, 2)
+    required_client_version = (1, 9)
 
 
     def __init__(self, multiworld, player):
