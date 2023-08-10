@@ -69,7 +69,7 @@ class TestBase(unittest.TestCase):
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
         """
-        def setup_link_multiworld(world_type: Type[World]) -> MultiWorld:
+        def setup_link_multiworld(world_type: Type[World], link_replace: bool) -> None:
             multiworld = MultiWorld(2)
             multiworld.game = {1: world_type.game, 2: world_type.game}
             multiworld.player_name = {1: "Linker 1", 2: "Linker 2"}
@@ -77,7 +77,7 @@ class TestBase(unittest.TestCase):
             item_link_group = [{
                 "name": "ItemLinkTest",
                 "item_pool": ["Everything"],
-                "link_replacement": True,
+                "link_replacement": link_replace,
                 "replacement_item": None,
             }]
             args = Namespace()
@@ -93,15 +93,16 @@ class TestBase(unittest.TestCase):
             gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic")
             for step in gen_steps:
                 call_all(multiworld, step)
-            return multiworld
+            # link the items together and attempt to fill
+            multiworld.link_items()
+            multiworld._recache()
+            multiworld._all_state = None
+            call_all(multiworld, "pre_fill")
+            distribute_items_restrictive(multiworld)
+            call_all(multiworld, "post_fill")
         
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game=game_name):
-                multiworld = setup_link_multiworld(world_type)
-                # link the items together and attempt to fill
-                multiworld.link_items()
-                multiworld._recache()
-                multiworld._all_state = None
-                call_all(multiworld, "pre_fill")
-                distribute_items_restrictive(multiworld)
-                call_all(multiworld, "post_fill")
+            with self.subTest("Can generate with link replacement", game=game_name):
+                setup_link_multiworld(world_type, True)
+            with self.subTest("Can generate without link replacement", game=game_name):
+                setup_link_multiworld(world_type, False)
