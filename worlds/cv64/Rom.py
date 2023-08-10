@@ -121,24 +121,24 @@ rom_empty_breakables_flags = {
 }
 
 rom_axe_cross_lower_values = {
-    0xC6400A: [0x7C7F97, 0x07],  # Forest
-    0xC64015: [0x7C7FA6, 0xF9],
+    0x0A: [0x7C7F97, 0x07],  # Forest
+    0x15: [0x7C7FA6, 0xF9],
 
-    0xC64041: [0x83A60A, 0x71],  # Villa hallway
-    0xC64042: [0x83A617, 0x26],
-    0xC6403F: [0x83A624, 0x6E],
+    0x41: [0x83A60A, 0x71],  # Villa hallway
+    0x42: [0x83A617, 0x26],
+    0x3F: [0x83A624, 0x6E],
 
-    0xC64049: [0x850FE6, 0x07],  # Villa maze
+    0x49: [0x850FE6, 0x07],  # Villa maze
 
-    0xC64089: [0x8C44D3, 0x08],  # CC factory floor
-    0xC6408D: [0x8C44E1, 0x08],
+    0x89: [0x8C44D3, 0x08],  # CC factory floor
+    0x8D: [0x8C44E1, 0x08],
 
-    0xC64091: [0x8DF77C, 0x07],  # CC invention area
-    0xC640A8: [0x90FD37, 0x43],
-    0xC6409C: [0xBFCC2B, 0x43],
-    0xC640A5: [0x90FBA1, 0x51],
-    0xC640A3: [0x90FBAD, 0x50],
-    0xC6409D: [0x90FE56, 0x43]
+    0x91: [0x8DF77C, 0x07],  # CC invention area
+    0xA8: [0x90FD37, 0x43],
+    0x9C: [0xBFCC2B, 0x43],
+    0xA5: [0x90FBA1, 0x51],
+    0xA3: [0x90FBAD, 0x50],
+    0x9D: [0x90FE56, 0x43]
 }
 
 rom_looping_music_fade_ins = {
@@ -187,8 +187,8 @@ renon_item_dialogue = {
           "Just what you need!",
     0x03: "Galamoth told me it's\n"
           "a heart in other times.",
-    0x04: "Collect a lot to make\n"
-          "the place your oyster!",
+    0x04: "Who needs Warp Rooms\n"
+          "when you have these?",
     0x05: "I was told to safeguard\n"
           "this, but I dunno why.",
     0x06: "Fresh off a Behemoth!\n"
@@ -206,9 +206,9 @@ renon_item_dialogue = {
     0x0D: "Arthur was far better\n"
           "with it than you!",
     0x0E: "Night Creatures handle\n"
-          "carefully!",
-    0x0F: "Or Banshee Boomerang,\n"
-          "according to some.",
+          "with care!",
+    0x0F: "Some may call it a\n"
+          "\"Banshee Boomerang.\"",
     0x10: "No weapon triangle\n"
           "advantages with this.",
     0x15: "This non-volatile kind\n"
@@ -218,7 +218,7 @@ renon_item_dialogue = {
     0x17: "Calls the morning sun\n"
           "to vanquish the night.",
     0x18: "1 on-demand horrible\n"
-          "night. Demons love it!",
+          "night. Devils love it!",
     0x1A: "Want to study here?\n"
           "It will cost you.",
     0x1B: "\"Let them eat cake!\"\n"
@@ -235,8 +235,8 @@ renon_item_dialogue = {
           "time is slowing down.",
     0x21: "Only one thing beind\n"
           "this. Do you dare?",
-    0x22: "The key 2 exploring\n"
-          "both Science halves!",
+    0x22: "The key 2 Science!\n"
+          "Both halves of it!",
     0x23: "This warehouse can\n"
           "be yours for a fee.",
     0x24: "Long road ahead if you\n"
@@ -496,6 +496,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Disable or guarantee vampire Vincent's fight
     if multiworld.vincent_fight_condition[player] == "never":
         rom.write_int32(0xAACC0, 0x24010001)  # ADDIU AT, R0, 0x0001
+        rom.write_int32(0xAACE0, 0x24180000)  # ADDIU T8, R0, 0x0000
     elif multiworld.vincent_fight_condition[player] == "always":
         rom.write_int32(0xAACE0, 0x24180010)  # ADDIU T8, R0, 0x0010
     else:
@@ -521,6 +522,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32s(0xBFC690, Patches.renon_cutscene_checker_jr)
     else:
         rom.write_int32s(0xBFC690, Patches.renon_cutscene_checker)
+
+    # NOP the Easy Mode check when buying a thing from Renon, so he can be triggered even on this mode.
+    rom.write_int32(0xBD8B4, 0x00000000)
 
     # Disable or guarantee the Bad Ending
     if multiworld.bad_ending_condition[player] == "never":
@@ -670,8 +674,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
     if multiworld.draculas_condition[player] == 1:
-        rom.write_int32(0x6C8A54, 0x0C0FF089)  # JAL 0x803FC224
-        rom.write_int32s(0xBFC224, Patches.crystal_special2_giver)
+        rom.write_int32(0x6C8A54, 0x0C0FF0C1)  # JAL 0x803FC304
+        rom.write_int32s(0xBFC304, Patches.crystal_special2_giver)
         rom.write_byte(0xADE8F, 0x01)
         rom.write_bytes(0xBFCC6E, cv64_text_converter(f"It won't budge!\n"
                                                       f"You'll need the power\n"
@@ -755,20 +759,20 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_byte(0x9B518F, 0x01)
 
     # Slightly move some once-invisible freestanding items to be more visible
-    # if multiworld.reveal_invisible_items[player]:
-    rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
-    rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
-    rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
-    rom.write_byte(0x83A626, 0xC2)  # Villa living room painting
-    # rom.write_byte(0x83A62F, 0x64)  # Villa Mary's room table
-    rom.write_byte(0x8985DD, 0xF5)  # CC torture instrument rack
-    rom.write_byte(0x8C44D5, 0x22)  # CC red carpet hallway knight
-    rom.write_byte(0x8DF57C, 0xF1)  # CC cracked wall hallway flamethrower
-    rom.write_byte(0x90FCD6, 0xA5)  # CC nitro hallway flamethrower
-    rom.write_byte(0x90FB9F, 0x9A)  # CC invention room round machine
-    rom.write_byte(0x90FBAF, 0x03)  # CC invention room giant famicart
-    rom.write_byte(0x90FE54, 0x97)  # CC staircase knight (x)
-    rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
+    if multiworld.invisible_items[player].value == 1:
+        rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
+        rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
+        rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
+        rom.write_byte(0x83A626, 0xC2)  # Villa living room painting
+        # rom.write_byte(0x83A62F, 0x64)  # Villa Mary's room table
+        rom.write_byte(0xBFCB97, 0xF5)  # CC torture instrument rack
+        rom.write_byte(0x8C44D5, 0x22)  # CC red carpet hallway knight
+        rom.write_byte(0x8DF57C, 0xF1)  # CC cracked wall hallway flamethrower
+        rom.write_byte(0x90FCD6, 0xA5)  # CC nitro hallway flamethrower
+        rom.write_byte(0x90FB9F, 0x9A)  # CC invention room round machine
+        rom.write_byte(0x90FBAF, 0x03)  # CC invention room giant famicart
+        rom.write_byte(0x90FE54, 0x97)  # CC staircase knight (x)
+        rom.write_byte(0x90FE58, 0xFB)  # CC staircase knight (z)
 
     # Change bitflag on item in upper coffin in Forest final switch gate tomb to one that's not used by something else
     rom.write_int32(0x10C77C, 0x00000002)
@@ -783,29 +787,31 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     elif multiworld.post_behemoth_boss[player].value == 2:
         rom.write_byte(0xEEDAD, 0x00)
         rom.write_byte(0xEEDD9, 0x03)
+        # Put both on the same flag so changing character won't trigger a rematch with the same boss.
+        rom.write_byte(0xEED8B, 0x40)
     elif multiworld.post_behemoth_boss[player].value == 3:
         rom.write_byte(0xEEDAD, 0x03)
         rom.write_byte(0xEEDD9, 0x00)
+        rom.write_byte(0xEED8B, 0x40)
 
     # Change the RoC boss depending on the option for Room of Clocks Boss
-    if multiworld.post_behemoth_boss[player].value == 1:
+    if multiworld.room_of_clocks_boss[player].value == 1:
         rom.write_byte(0x109FB3, 0x56)
         rom.write_byte(0x109FBF, 0x44)
         rom.write_byte(0xD9D44, 0x14)
         rom.write_byte(0xD9D4C, 0x14)
-    elif multiworld.post_behemoth_boss[player].value == 2:
-        rom.write_byte(0x109FB3, 0x56)
-        rom.write_byte(0xD9D45, 0x00)
-    elif multiworld.post_behemoth_boss[player].value == 3:
+    elif multiworld.room_of_clocks_boss[player].value == 2:
         rom.write_byte(0x109FBF, 0x44)
+        rom.write_byte(0xD9D45, 0x00)
+        # Put both on the same flag so changing character won't trigger a rematch with the same boss.
+        rom.write_byte(0x109FB7, 0x90)
+        rom.write_byte(0x109FC3, 0x90)
+    elif multiworld.room_of_clocks_boss[player].value == 3:
+        rom.write_byte(0x109FB3, 0x56)
         rom.write_int32(0xD9D44, 0x00000000)
         rom.write_byte(0xD9D4D, 0x00)
-
-    # Put the character-specific post-Behemoth and RoC bosses on the same flags so that they can only count as 1 towards
-    # the Bosses goal, for now.
-    rom.write_byte(0xEED8B, 0x40)
-    rom.write_byte(0x109FB7, 0x90)
-    rom.write_byte(0x109FC3, 0x90)
+        rom.write_byte(0x109FB7, 0x90)
+        rom.write_byte(0x109FC3, 0x90)
 
     # Tunnel gondola skip
     if multiworld.skip_gondolas[player]:
@@ -837,7 +843,17 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Increase shimmy speed
     if multiworld.increase_shimmy_speed[player]:
-        rom.write_byte(0xA4241, 0x62)
+        rom.write_byte(0xA4241, 0x5A)
+
+    # Disable landing fall damage
+    if multiworld.fall_guard[player]:
+        rom.write_byte(0x27B23, 0x00)
+
+    # Enable the unused film reel effect on all cutscenes
+    if multiworld.cinematic_experience[player]:
+        rom.write_int32(0xAA33C, 0x240A0001)  # ADDIU T2, R0, 0x0001
+        rom.write_byte(0xAA34B, 0x0C)
+        rom.write_int32(0xAA4C4, 0x24090001)  # ADDIU T1, R0, 0x0001
 
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:

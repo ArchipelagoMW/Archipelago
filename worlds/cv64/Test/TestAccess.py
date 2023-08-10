@@ -8,10 +8,12 @@ class WarpTest(CV64TestBase):
     }
 
     def testWarps(self):
-        self.assertFalse(self.can_reach_entrance("Warp 3"))
-        self.collect([self.get_item_by_name("Special1")] * 9)
-        current_s1s = self.count("Special1")
-        self.assertTrue(self.can_reach_entrance("Warp 3"))
+        for i in range(1, 8):
+            self.assertFalse(self.can_reach_entrance(f"Warp {i}"))
+            self.collect([self.get_item_by_name("Special1")] * 2)
+            self.assertFalse(self.can_reach_entrance(f"Warp {i}"))
+            self.collect([self.get_item_by_name("Special1")] * 1)
+            self.assertTrue(self.can_reach_entrance(f"Warp {i}"))
 
 
 # class ShopTest(CV64TestBase):

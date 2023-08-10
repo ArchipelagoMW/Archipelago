@@ -131,14 +131,14 @@ class CV64World(World):
         del (possible_warps[0])
         self.active_warp_list = self.multiworld.random.sample(possible_warps, 7)
 
-        if self.multiworld.warp_shuffle[self.player].value == 0:
+        if self.multiworld.warp_order[self.player].value == 0:
             # Arrange the warps to be in the seed's stage order
             new_list = self.active_stage_list.copy()
             for warp in self.active_stage_list:
                 if warp not in self.active_warp_list:
                     new_list.remove(warp)
             self.active_warp_list = new_list
-        elif self.multiworld.warp_shuffle[self.player].value == 2:
+        elif self.multiworld.warp_order[self.player].value == 1:
             # Arrange the warps to be in the vanilla game's stage order
             new_list = vanilla_stage_order.copy()
             for warp in vanilla_stage_order:
@@ -180,7 +180,7 @@ class CV64World(World):
             classification = ItemClassification.filler
 
         if name in item_table:
-            code = item_table[name]
+            code = item_table[name] + base_id
         else:
             code = None
             classification = ItemClassification.progression
@@ -271,19 +271,19 @@ class CV64World(World):
             extras_count += item_counts["special_counts"][IName.special_two]
 
         # Determine the extra key counts if applicable
-        if self.multiworld.extra_keys[self.player].value == 1:
+        if self.multiworld.spare_keys[self.player].value == 1:
             for key in item_counts["key_counts"]:
-                extra_copies = item_counts["key_counts"][key]
-                item_counts["key_counts"][key] += extra_copies
-                extras_count += extra_copies
-        elif self.multiworld.extra_keys[self.player].value == 2:
+                spare_keys = item_counts["key_counts"][key]
+                item_counts["key_counts"][key] += spare_keys
+                extras_count += spare_keys
+        elif self.multiworld.spare_keys[self.player].value == 2:
             for key in item_counts["key_counts"]:
-                extra_copies = 0
+                spare_keys = 0
                 if item_counts["key_counts"][key] > 0:
                     for i in range(item_counts["key_counts"][key]):
-                        extra_copies += self.multiworld.random.randint(0, 1)
-                item_counts["key_counts"][key] += extra_copies
-                extras_count += extra_copies
+                        spare_keys += self.multiworld.random.randint(0, 1)
+                item_counts["key_counts"][key] += spare_keys
+                extras_count += spare_keys
 
         # Subtract from the junk tables the total number of "extra" items we're adding. Tier 1 will be subtracted from
         # first until it runs out, at which point we'll start subtracting from Tier 2.
@@ -368,9 +368,6 @@ class CV64World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            # Use the world's slot seed for the slot-specific random elements
-            random.seed(self.multiworld.per_slot_randoms[self.player])
-
             # Handle sub-weapon shuffle here.
             sub_weapon_dict = rom_sub_weapon_offsets.copy()
 
@@ -379,7 +376,7 @@ class CV64World(World):
 
             if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
                 sub_bytes = list(sub_weapon_dict.values())
-                random.shuffle(sub_bytes)
+                self.random.shuffle(sub_bytes)
                 sub_weapon_dict = dict(zip(sub_weapon_dict, sub_bytes))
 
             # Handle music shuffle/disable here.
@@ -399,11 +396,11 @@ class CV64World(World):
                         fade_in_songs[i] = i
                 # Shuffle the looping songs
                 rando_looping_songs = looping_songs.copy()
-                random.shuffle(rando_looping_songs)
+                self.random.shuffle(rando_looping_songs)
                 looping_songs = dict(zip(looping_songs, rando_looping_songs))
                 # Shuffle the non-looping songs
                 rando_non_looping_songs = non_looping_songs.copy()
-                random.shuffle(rando_non_looping_songs)
+                self.random.shuffle(rando_non_looping_songs)
                 non_looping_songs = dict(zip(non_looping_songs, rando_non_looping_songs))
                 non_looping_songs[0x72] = 0x72
                 # Figure out the new fade-in songs if applicable
@@ -433,7 +430,7 @@ class CV64World(World):
                         if sub_entry not in [3, 7, 11, 15] and entry != 4:
                             # The fourth entry in the lighting table affects the lighting on some item pickups; skip it
                             offsets_to_ids[0x1091A0 + (entry * 28) + sub_entry] = \
-                                random.randint(0, 255)
+                                self.random.randint(0, 255)
 
             # Handle randomized shop prices here.
             shop_price_list = []
@@ -441,9 +438,9 @@ class CV64World(World):
                 min_price = self.multiworld.minimum_gold_price[self.player].value
                 max_price = self.multiworld.maximum_gold_price[self.player].value
                 if min_price > max_price:
-                    min_price = random.randint(0, max_price)
+                    min_price = self.random.randint(0, max_price)
 
-                shop_price_list = [random.randint(min_price * 100, max_price * 100) for i in range(7)]
+                shop_price_list = [self.random.randint(min_price * 100, max_price * 100) for i in range(7)]
 
             world = self.multiworld
             player = self.player
@@ -479,19 +476,19 @@ class CV64World(World):
                         offsets_to_ids[loc.cv64_rom_offset - 1] = item_table[loc.item.name]
 
                 # Apply the invisibility variable depending on the "invisible items" setting.
-                if (inv_setting == 1 and loc.cv64_loc_type == "inv") or \
+                if (inv_setting == 0 and loc.cv64_loc_type == "inv") or \
                         (inv_setting == 2 and loc.cv64_loc_type not in ["npc", "shop"]):
                     offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
                 elif inv_setting == 3 and loc.cv64_loc_type not in ["npc", "shop"]:
-                    invisible = random.randint(0, 1)
+                    invisible = self.random.randint(0, 1)
                     if invisible:
                         offsets_to_ids[loc.cv64_rom_offset - 1] = 0xC0
 
                 # If it's an Axe or Cross in a higher freestanding location, lower it into grab range.
                 # KCEK made these spawn 3.2 units higher for some reason.
-                if loc.address in rom_axe_cross_lower_values and loc.item.code in [0xC6400F, 0xC64010]:
-                    offsets_to_ids[rom_axe_cross_lower_values[loc.address][0]] = \
-                        rom_axe_cross_lower_values[loc.address][1]
+                if loc.address - base_id in rom_axe_cross_lower_values and loc.item.code - base_id in [0x0F, 0x10]:
+                    offsets_to_ids[rom_axe_cross_lower_values[loc.address - base_id][0]] = \
+                        rom_axe_cross_lower_values[loc.address - base_id][1]
 
                 # Figure out the list of shop names and descriptions here.
                 if loc.parent_region.name == RName.renon:
@@ -592,7 +589,7 @@ class CV64World(World):
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         # Write the stage order to the spoiler log
-        spoiler_handle.write(f"\nCastlevania 64 stage order for {self.multiworld.player_name[self.player]}:\n")
+        spoiler_handle.write(f"\nCastlevania 64 stage & warp orders for {self.multiworld.player_name[self.player]}:\n")
         for stage in self.active_stage_list:
             num = str(self.active_stage_exits[stage]["position"]).zfill(2)
             path = self.active_stage_exits[stage]["path"]

@@ -272,7 +272,7 @@ npc_item_hack = [
     0x10000003,  # B             [forward 0x03]
     0x240C0002,  # ADDIU T4, R0, 0x0002
     0x240B0002,  # ADDIU T3, R0, 0x0002
-    0x240C0005,  # ADDIU T4, R0, 0x0005
+    0x240C000E,  # ADDIU T4, R0, 0x000E
     0x012C7021,  # ADDU  T6, T1, T4
     0x91CA9CA4,  # LBU   T2, 0x9CA4 (T6)
     0x3C0D8040,  # LUI   T5, 0x8040
@@ -905,17 +905,6 @@ boss_special2_giver = [
     0x240D0005,  # ADDIU T5, R0, 0x0005
     0xA22D9BDF,  # SB    T5, 0x9BDF (S1)
     0xA22D9BE0,  # SB    T5, 0x9BE0 (S1)
-    0x03E00008   # JR    RA
-]
-
-crystal_goal_checker = [
-    # Checks the Castle Center basement crystal's flag to see if it has been activated and puts 0x0004 in V0 to disallow
-    # opening Dracula's door if it hasn't been.
-    0x3C0A8039,  # LUI   T2, 0x8039
-    0x914B9C1B,  # LBU   T3, 0x9C1B (T2)
-    0x316A0001,  # ANDI  T2, T3, 0x0001
-    0x51400001,  # BEQZL T2, [forward 0x01]
-    0x24020004,  # ADDIU V0, R0, 0x0004
     0x03E00008   # JR    RA
 ]
 

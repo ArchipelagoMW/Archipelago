@@ -3,7 +3,7 @@ import typing
 from BaseClasses import Location
 from .Names import LName, RName
 
-base_id = 0xC640000
+base_id = 0xC64000
 
 
 class CV64Location(Location):
@@ -85,7 +85,7 @@ main_location_table = {
     LName.villafo_rear_l:                LocationData(0x33, 0x10C8BF, RName.villa_main),
     LName.villafo_pot_r:                 LocationData(0x34, 0x10C8AF, RName.villa_main),
     LName.villafo_pot_l:                 LocationData(0x35, 0x10C8B7, RName.villa_main),
-    LName.villafo_sofa:                  LocationData(0x36, 0x81F07C, RName.villa_main),
+    LName.villafo_sofa:                  LocationData(0x36, 0x81F07C, RName.villa_main, "inv"),
     LName.villala_hallway_stairs:        LocationData(0x37, 0x10C927, RName.villa_main),
     LName.villala_bedroom_chairs:        LocationData(0x38, 0x83A588, RName.villa_main),
     LName.villala_bedroom_bed:           LocationData(0x39, 0xBFC95B, RName.villa_main),
@@ -97,7 +97,7 @@ main_location_table = {
     LName.villala_llivingroom_painting:  LocationData(0x3F, 0xBFC907, RName.villa_main, "inv"),
     LName.villala_llivingroom_light:     LocationData(0x40, 0x10C91F, RName.villa_main),
     LName.villala_llivingroom_lion:      LocationData(0x41, 0x83A610, RName.villa_main, "inv"),
-    LName.villala_exit_knight:           LocationData(0x42, 0xBFC967, RName.villa_main),
+    LName.villala_exit_knight:           LocationData(0x42, 0xBFC967, RName.villa_main, "inv"),
     LName.villala_storeroom_l:           LocationData(0x43, 0xBFC95F, RName.villa_storeroom),
     LName.villala_storeroom_r:           LocationData(0x44, 0xBFC8FF, RName.villa_storeroom),
     LName.villala_storeroom_s:           LocationData(0x45, 0xBFC963, RName.villa_storeroom, "inv"),

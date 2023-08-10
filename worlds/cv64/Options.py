@@ -36,32 +36,30 @@ class StageShuffle(Toggle):
 #     valid_keys_casefold = True
 
 
-class WarpShuffle(Choice):
-    """Shuffles the order of the stages on the warp menu and thus the order they're unlocked in. Vanilla gives a warp
-    list resembling the vanilla game's stage order even if the seed's stage order is shuffled."""
-    display_name = "Warp Shuffle"
-    option_off = 0
-    option_on = 1
-    option_vanilla = 2
+class WarpOrder(Choice):
+    """Arranges the warps in the warp menu in whichever stage order chosen,
+    thus changing the order they are unlocked in."""
+    display_name = "Warp Order"
+    option_seed_stage_order = 0
+    option_vanilla_stage_order = 1
+    option_randomized_order = 2
     default = 0
 
 
 class SubWeaponShuffle(Choice):
-    """Shuffles all sub-weapons in the game within their own pool or in the main item pool (keeping them local or
-    allowing them to be anywhere)."""
+    """Shuffles all sub-weapons in the game within their own pool or in the main item pool."""
     display_name = "Sub-weapon Shuffle"
     option_off = 0
     option_own_pool = 1
-    option_own_world = 2
-    option_any_world = 3
+    option_anywhere = 2
     default = 0
 
 
-class ExtraKeys(Choice):
+class SpareKeys(Choice):
     """Puts an additional copy of every key item in the pool for every key item that there is to ensure fewer specific
     locations are required. Chance gives each key item a 50% chance of having a duplicate instead of guaranteeing one
     for all of them."""
-    display_name = "Extra Keys"
+    display_name = "Spare Keys"
     option_off = 0
     option_on = 1
     option_chance = 2
@@ -172,7 +170,7 @@ class ShopPrices(Choice):
 class MinimumGoldPrice(Range):
     """The lowest amount of gold an item can cost in Renon's shop, divided by 100.
     Only applies if shop prices are randomized."""
-    display_name = "Shop Prices Total"
+    display_name = "Minimum Gold Price"
     range_start = 0
     range_end = 50
     default = 2
@@ -181,7 +179,7 @@ class MinimumGoldPrice(Range):
 class MaximumGoldPrice(Range):
     """The highest amount of gold an item can cost in Renon's shop, divided by 100.
     Only applies if shop prices are randomized."""
-    display_name = "Shop Prices Total"
+    display_name = "Maximum Gold Price"
     range_start = 0
     range_end = 50
     default = 30
@@ -200,7 +198,7 @@ class PostBehemothBoss(Choice):
 
 class RoomOfClocksBoss(Choice):
     """Sets which boss is fought at Room of Clocks by which characters."""
-    display_name = "Post-Behemoth Boss"
+    display_name = "Room of Clocks Boss"
     option_vanilla = 0
     option_inverted = 1
     option_always_death = 2
@@ -315,6 +313,11 @@ class IncreaseShimmySpeed(Toggle):
     display_name = "Increase Shimmy Speed"
 
 
+class FallGuard(Toggle):
+    """Removes fall damage from landing hard. Note that falling for too long will still result in instant death."""
+    display_name = "Fall Guard"
+
+
 class BackgroundMusic(Choice):
     """Randomizes or disables the music heard throughout the game. Randomized music is split into two pools: songs that
     loop and songs that don't."""
@@ -334,13 +337,18 @@ class MapLighting(Choice):
     default = 0
 
 
+class CinematicExperience(Toggle):
+    """Enables an unused film reel effect on every cutscene in the game. Purely cosmetic."""
+    display_name = "Cinematic Experience"
+
+
 cv64_options: Dict[str, Option] = {
     "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
     # "custom_stage_order": CustomStageOrder,
-    "warp_shuffle": WarpShuffle,
+    "warp_order": WarpOrder,
     "sub_weapon_shuffle": SubWeaponShuffle,
-    "extra_keys": ExtraKeys,
+    "spare_keys": SpareKeys,
     "special1s_per_warp": Special1sPerWarp,
     "total_special1s": TotalSpecial1s,
     "draculas_condition": DraculasCondition,
@@ -374,5 +382,7 @@ cv64_options: Dict[str, Option] = {
     "increase_shimmy_speed": IncreaseShimmySpeed,
     "background_music": BackgroundMusic,
     "map_lighting": MapLighting,
+    "fall_guard": FallGuard,
+    "cinematic_experience": CinematicExperience,
     "death_link": DeathLink,
 }
