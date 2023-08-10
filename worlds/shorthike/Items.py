@@ -48,9 +48,10 @@ item_table: List[ItemDict] = [
     {"name": "27 Coins", "id": base_id + 33, "count": 1, "classification": ItemClassification.filler},
     {"name": "32 Coins", "id": base_id + 34, "count": 1, "classification": ItemClassification.filler},
     {"name": "33 Coins", "id": base_id + 35, "count": 6, "classification": ItemClassification.filler},
+    {"name": "50 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.filler},
 ]
 
 group_table: Dict[str, Set[str]] = {
-    "Coins": {"7 Coins", "13 Coins", "15 Coins", "18 Coins", "21 Coins", "25 Coins", "27 Coins", "32 Coins", "33 Coins"},
+    "Coins": {"7 Coins", "13 Coins", "15 Coins", "18 Coins", "21 Coins", "25 Coins", "27 Coins", "32 Coins", "33 Coins", "50 Coins"},
     "Maps": {"A Stormy View Map", "The King Map", "The Treasure of Sid Beach Map", "In Her Shadow Map"},
 }
