@@ -1,6 +1,7 @@
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_table
+from worlds.generic.Rules import forbid_item
+from .Items import item_table, group_table
 from .Locations import location_table
 from .Rules import create_rules
 
@@ -30,7 +31,7 @@ class ShortHikeWorld(World):
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {loc["name"]: loc["id"] for loc in location_table}
 
-    item_name_groups = {}
+    item_name_groups = group_table
     # option_definitions = short_hike_options
 
     # required_client_version = (0, 4, 2)
@@ -77,6 +78,9 @@ class ShortHikeWorld(World):
         self.multiworld.regions.append(main_region)
 
         menu_region.connect(main_region)
+
+    def set_rules(self):
+        create_rules(self, location_table)
 
 
 class ShortHikeItem(Item):

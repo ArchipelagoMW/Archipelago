@@ -7,7 +7,7 @@ class LocationDict(TypedDict):
     needsShovel: bool
     purchase: bool
 
-# IDs from 81000 to 81125
+# IDs from 81000 to 81127
 
 ID = 81000
 
@@ -33,6 +33,8 @@ location_table: List[LocationDict] = [
     {"name": "Airstream Island North Seashell", "id": ID + 18, "needsShovel": False, "purchase": False},
     {"name": "Airstream Island South Seashell", "id": ID + 19, "needsShovel": False, "purchase": False},
     {"name": "Secret Island Beach Seashell", "id": ID + 20, "needsShovel": False, "purchase": False},
+    {"name": "Meteor Lake Seashell", "id": ID + 126, "needsShovel": False, "purchase": False},
+    {"name": "Good Creek Path Seashell", "id": ID + 127, "needsShovel": False, "purchase": False},
 
     # Visitor's Center Shop
     {"name": "Visitor's Center Shop Golden Feather 1", "id": ID + 21, "needsShovel": False, "purchase": True},
