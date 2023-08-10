@@ -337,7 +337,7 @@ function process_request (req)
 
         local data_is_validated = true
         for i, byte in ipairs(actual_data) do
-            if (byte ~= expected_data[i]) then
+            if byte ~= expected_data[i] then
                 data_is_validated = false
                 break
             end
@@ -384,7 +384,7 @@ function send_receive ()
 
     -- Handle errors
     if err == "closed" then
-        if (current_state == STATE_CONNECTED) then
+        if current_state == STATE_CONNECTED then
             print("Connection to client closed")
         end
         current_state = STATE_NOT_CONNECTED
@@ -438,7 +438,7 @@ end
 
 function main ()
     server, err = socket.bind("localhost", SOCKET_PORT)
-    if (err ~= nil) then
+    if err ~= nil then
         print(err)
         return
     end
@@ -449,16 +449,16 @@ function main ()
         message_timer = message_timer - (current_time - prev_time)
         prev_time = current_time
 
-        if (message_timer <= 0 and not message_queue:is_empty()) then
+        if message_timer <= 0 and not message_queue:is_empty() then
             gui.addmessage(message_queue:shift())
             message_timer = message_interval
         end
 
-        if (current_state == STATE_NOT_CONNECTED) then
-            if (emu.framecount() % 60 == 0) then
+        if current_state == STATE_NOT_CONNECTED then
+            if emu.framecount() % 60 == 0 then
                 server:settimeout(2)
                 local client, timeout = server:accept()
-                if (timeout == nil) then
+                if timeout == nil then
                     print("Client connected")
                     current_state = STATE_CONNECTED
                     client_socket = client
@@ -472,7 +472,7 @@ function main ()
                 send_receive()
             until not locked
 
-            if (timeout_timer <= 0) then
+            if timeout_timer <= 0 then
                 print("Client timed out")
                 current_state = STATE_NOT_CONNECTED
             end
