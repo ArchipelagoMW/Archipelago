@@ -44,8 +44,7 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
         client class, so you do not need to check the system yourself.
 
         Once this function has determined that the ROM should be handled by this client, it should also modify `ctx`
-        as necessary (such as setting `ctx.game = self.game`, modifying `ctx.items_handling`, etc...). If you can read
-        the slot name from ROM, set `ctx.auth` here as well. Otherwise the user will be prompted after this."""
+        as necessary (such as setting `ctx.game = self.game`, modifying `ctx.items_handling`, etc...)."""
         ...
 
     async def set_auth(self, ctx: BizHawkClientContext) -> None:
@@ -57,10 +56,7 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     @abc.abstractmethod
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         """Runs on a loop with the approximate interval `ctx.watcher_timeout`. The currently loaded ROM is guaranteed
-        to have passed your validator when this function is called, and the emulator is very likely to be connected.
-        
-        Your client is also expected to send `Connect` from here. Make sure you don't send them repeatedly and check the
-        server connection first."""
+        to have passed your validator when this function is called, and the emulator is very likely to be connected."""
         ...
 
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
