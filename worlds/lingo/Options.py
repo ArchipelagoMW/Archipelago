@@ -113,14 +113,3 @@ lingo_options: Dict[str, type] = {
     "puzzle_skip_percentage": PuzzleSkipPercentage,
     "death_link": DeathLink
 }
-
-
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[bool, int]:
-    option = getattr(multiworld, name, None)
-
-    if option is None:
-        return 0
-
-    if issubclass(lingo_options[name], Toggle):
-        return bool(option[player].value)
-    return option[player].value

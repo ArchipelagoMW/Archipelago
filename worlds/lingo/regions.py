@@ -2,7 +2,6 @@ from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .locations import LingoLocation
 from .player_logic import LingoPlayerLogic
-from .Options import get_option_value
 from .rules import make_location_lambda
 from worlds.generic.Rules import set_rule
 from .items import LingoItem
@@ -71,9 +70,11 @@ def create_regions(multiworld: MultiWorld, player: int, static_logic: StaticLing
     for room in static_logic.ALL_ROOMS:
         create_region(room, multiworld, player, player_logic)
 
+    painting_shuffle = bool(getattr(multiworld, "shuffle_paintings")[player])
+
     for room in static_logic.ALL_ROOMS:
         for entrance in room.entrances:
-            if entrance.painting and get_option_value(multiworld, player, "shuffle_paintings"):
+            if entrance.painting and painting_shuffle:
                 # Don't use the vanilla painting connections if we are shuffling paintings.
                 continue
 
@@ -81,6 +82,6 @@ def create_regions(multiworld: MultiWorld, player: int, static_logic: StaticLing
 
     handle_pilgrim_room(multiworld, player, player_logic)
 
-    if get_option_value(multiworld, player, "shuffle_paintings"):
+    if painting_shuffle:
         for warp_enter, warp_exit in player_logic.PAINTING_MAPPING.items():
             connect_painting(warp_enter, warp_exit, multiworld, player, static_logic, player_logic)

@@ -1,7 +1,6 @@
 from typing import Dict, List, Optional, NamedTuple
 from BaseClasses import MultiWorld
 from .testing import LingoTestOptions
-from .Options import get_option_value
 from .locations import LocationData, StaticLingoLocations
 from .static_logic import RoomAndPanel, StaticLingoLogic, Door
 from .items import ItemData, StaticLingoItems
@@ -44,7 +43,7 @@ class LingoPlayerLogic:
                                 static_logic: StaticLingoLogic):
         if room_name in static_logic.PROGRESSION_BY_ROOM \
                 and door_data.name in static_logic.PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not get_option_value(multiworld, player, "progressive_orange_tower"):
+            if room_name == "Orange Tower" and not getattr(multiworld, "progressive_orange_tower")[player]:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
             else:
                 progressive_item_name = static_logic.PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
@@ -66,6 +65,11 @@ class LingoPlayerLogic:
         self.PAINTING_MAPPING = {}
         self.FORCED_GOOD_ITEM = ""
 
+        door_shuffle = getattr(multiworld, "shuffle_doors")[player]
+        color_shuffle = getattr(multiworld, "shuffle_colors")[player]
+        painting_shuffle = getattr(multiworld, "shuffle_paintings")[player]
+        victory_condition = getattr(multiworld, "victory_condition")[player]
+
         # Create an event for every room that represents being able to reach that room.
         for room_name in StaticLingoLogic.ROOMS.keys():
             roomloc_name = f"{room_name} (Reached)"
@@ -76,7 +80,7 @@ class LingoPlayerLogic:
         # doors that are event-only.
         for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():
-                if get_option_value(multiworld, player, "shuffle_doors") == 0:  # no door shuffle
+                if door_shuffle == 0:  # no door shuffle
                     itemloc_name = f"{room_name} - {door_name} (Opened)"
                     self.add_location(room_name, PlayerLocation(itemloc_name, None, door_data.panels))
                     self.EVENT_LOC_TO_ITEM[itemloc_name] = itemloc_name
@@ -84,7 +88,7 @@ class LingoPlayerLogic:
                 else:  # door shuffle
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
-                        if door_data.group is not None and get_option_value(multiworld, player, "shuffle_doors") == 1:
+                        if door_data.group is not None and door_shuffle == 1:
                             # Grouped doors are handled differently if shuffle doors is on simple.
                             self.set_door_item(room_name, door_name, door_data.group)
                         else:
@@ -105,7 +109,7 @@ class LingoPlayerLogic:
                                                                 [RoomAndPanel(room_name, panel_name)]))
                     self.EVENT_LOC_TO_ITEM[event_name] = "Mastery Achievement"
 
-                if not panel_data.non_counting and get_option_value(multiworld, player, "victory_condition") == 2:
+                if not panel_data.non_counting and victory_condition == 2: # LEVEL 2
                     event_name = room_name + " - " + panel_name + " (Counted)"
                     self.add_location(room_name, PlayerLocation(event_name, None,
                                                                 [RoomAndPanel(room_name, panel_name)]))
@@ -116,17 +120,17 @@ class LingoPlayerLogic:
         self.MASTERY_LOCATION = "Orange Tower Seventh Floor - THE MASTER"
         self.LEVEL_2_LOCATION = "N/A"
 
-        if get_option_value(multiworld, player, "victory_condition") == 0:
+        if victory_condition == 0:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE END"
             self.add_location("Orange Tower Seventh Floor", PlayerLocation("The End (Solved)"))
             self.EVENT_LOC_TO_ITEM["The End (Solved)"] = "Victory"
-        elif get_option_value(multiworld, player, "victory_condition") == 1:
+        elif victory_condition == 1:
             self.VICTORY_CONDITION = "Orange Tower Seventh Floor - THE MASTER"
             self.MASTERY_LOCATION = "Orange Tower Seventh Floor - Mastery Achievements"
 
             self.add_location("Orange Tower Seventh Floor", PlayerLocation(self.MASTERY_LOCATION, None, []))
             self.EVENT_LOC_TO_ITEM[self.MASTERY_LOCATION] = "Victory"
-        elif get_option_value(multiworld, player, "victory_condition") == 2:
+        elif victory_condition == 2:
             self.VICTORY_CONDITION = "Second Room - LEVEL 2"
             self.LEVEL_2_LOCATION = "Second Room - Unlock Level 2"
 
@@ -136,8 +140,7 @@ class LingoPlayerLogic:
         # Instantiate all real locations.
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
             if location_name != self.VICTORY_CONDITION:
-                if get_option_value(multiworld, player, "reduce_checks")\
-                        and get_option_value(multiworld, player, "shuffle_doors") == 0\
+                if getattr(multiworld, "reduce_checks")[player] and door_shuffle == 0\
                         and not location_data.include_reduce:
                     continue
 
@@ -151,7 +154,7 @@ class LingoPlayerLogic:
                 self.REAL_ITEMS.append(name)
 
         # Create the paintings mapping, if painting shuffle is on.
-        if get_option_value(multiworld, player, "shuffle_paintings"):
+        if painting_shuffle:
             # Shuffle paintings until we get something workable.
             workable_paintings = False
             for i in range(0, 20):
@@ -164,7 +167,7 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if get_option_value(multiworld, player, "shuffle_doors") > 0 and test_options.disable_forced_good_item is False:
+        if door_shuffle > 0 and test_options.disable_forced_good_item is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but you the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded
             # right now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there
@@ -172,13 +175,13 @@ class LingoPlayerLogic:
             # door shuffle is on simple, because otherwise there are no extra checks in there.
             good_item_options: List[str] = ["Starting Room - Back Right Door"]
 
-            if not get_option_value(multiworld, player, "shuffle_colors"):
+            if not color_shuffle:
                 good_item_options.append("Pilgrim Room - Sun Painting")
 
-            if get_option_value(multiworld, player, "shuffle_doors") == 1:
+            if door_shuffle == 1:
                 good_item_options += ["Entry Doors", "Welcome Back Doors"]
 
-                if not get_option_value(multiworld, player, "shuffle_colors"):
+                if not color_shuffle:
                     good_item_options.append("Rhyme Room Doors")
             else:
                 good_item_options += ["Starting Room - Main Door", "Welcome Back Area - Shortcut to Starting Room"]
@@ -188,8 +191,7 @@ class LingoPlayerLogic:
                     continue
 
                 # If painting shuffle is on, we only want to consider paintings that actually go somewhere.
-                if get_option_value(multiworld, player, "shuffle_paintings")\
-                        and painting_obj.id not in self.PAINTING_MAPPING.keys():
+                if painting_shuffle and painting_obj.id not in self.PAINTING_MAPPING.keys():
                     continue
 
                 pdoor = static_logic.DOORS_BY_ROOM[painting_obj.required_door.room][painting_obj.required_door.door]
@@ -221,10 +223,12 @@ class LingoPlayerLogic:
     def randomize_paintings(self, multiworld: MultiWorld, player: int, static_logic: StaticLingoLogic) -> bool:
         self.PAINTING_MAPPING.clear()
 
+        door_shuffle = getattr(multiworld, "shuffle_doors")[player]
+
         # Determine the set of exit paintings. All required-exit paintings are included, as are all
         # required-when-no-doors paintings if door shuffle is off. We then fill the set with random other paintings.
         chosen_exits = []
-        if get_option_value(multiworld, player, "shuffle_doors") == 0:
+        if door_shuffle == 0:
             chosen_exits = [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
                             if painting.required_when_no_doors]
         chosen_exits += [painting_id for painting_id, painting in StaticLingoLogic.PAINTINGS.items()
@@ -249,7 +253,7 @@ class LingoPlayerLogic:
             warp_enter_room = static_logic.PAINTINGS[warp_enter].room
 
             required_painting_rooms = static_logic.REQUIRED_PAINTING_ROOMS
-            if get_option_value(multiworld, player, "shuffle_doors") == 0:
+            if door_shuffle == 0:
                 required_painting_rooms += static_logic.REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
             if warp_exit_room in required_painting_rooms and warp_enter_room in required_painting_rooms:
@@ -273,9 +277,7 @@ class LingoPlayerLogic:
         # Just for sanity's sake, ensure that all required painting rooms are accessed.
         for painting_id, painting in static_logic.PAINTINGS.items():
             if painting_id not in self.PAINTING_MAPPING.values()\
-                    and (painting.required
-                         or (painting.required_when_no_doors
-                             and get_option_value(multiworld, player, "shuffle_doors") == 0)):
+                    and (painting.required or (painting.required_when_no_doors and door_shuffle == 0)):
                 return False
 
         return True

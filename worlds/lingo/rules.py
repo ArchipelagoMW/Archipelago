@@ -1,6 +1,5 @@
 from typing import Optional, List
 from BaseClasses import MultiWorld
-from .Options import get_option_value
 from .static_logic import StaticLingoLogic, RoomAndDoor
 from worlds.AutoWorld import LogicMixin
 from .locations import StaticLingoLocations, LocationData
@@ -47,10 +46,10 @@ class LingoLogic(LogicMixin):
         return True
 
     def lingo_can_use_mastery_location(self, multiworld: MultiWorld, player: int):
-        return self.has("Mastery Achievement", player, get_option_value(multiworld, player, "mastery_achievements"))
+        return self.has("Mastery Achievement", player, getattr(multiworld, "mastery_achievements")[player])
 
     def lingo_can_use_level_2_location(self, multiworld: MultiWorld, player: int):
-        return self.has("Counting Panel Solved", player, get_option_value(multiworld, player, "level_2_requirement"))
+        return self.has("Counting Panel Solved", player, getattr(multiworld, "level_2_requirement")[player])
 
     def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
         """
@@ -82,7 +81,7 @@ class LingoLogic(LogicMixin):
             if not self._lingo_can_solve_panel(start_room, room if req_panel.room is None else req_panel.room,
                                                req_panel.panel, multiworld, player, player_logic):
                 return False
-        if len(panel_object.colors) > 0 and get_option_value(multiworld, player, "shuffle_colors") is True:
+        if len(panel_object.colors) > 0 and getattr(multiworld, "shuffle_colors")[player]:
             for color in panel_object.colors:
                 if not self.has(color.capitalize(), player):
                     return False

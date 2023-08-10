@@ -1,6 +1,5 @@
 from typing import Dict, NamedTuple, Optional, List
 from BaseClasses import Item, MultiWorld, ItemClassification
-from .Options import get_option_value
 from .static_logic import StaticLingoLogic
 
 
@@ -17,17 +16,17 @@ class ItemData(NamedTuple):
 
     def should_include(self, multiworld: MultiWorld, player: int) -> bool:
         if self.mode == "colors":
-            return get_option_value(multiworld, player, "shuffle_colors") > 0
+            return getattr(multiworld, "shuffle_colors")[player] > 0
         elif self.mode == "doors":
-            return get_option_value(multiworld, player, "shuffle_doors") > 0
+            return getattr(multiworld, "shuffle_doors")[player] > 0
         elif self.mode == "orange tower":
             # door shuffle is on and tower isn't progressive
-            return get_option_value(multiworld, player, "shuffle_doors") > 0\
-                and not get_option_value(multiworld, player, "progressive_orange_tower")
+            return getattr(multiworld, "shuffle_doors")[player] > 0\
+                and not getattr(multiworld, "progressive_orange_tower")[player]
         elif self.mode == "complex door":
-            return get_option_value(multiworld, player, "shuffle_doors") == 2  # complex doors
+            return getattr(multiworld, "shuffle_doors")[player] == 2  # complex doors
         elif self.mode == "door group":
-            return get_option_value(multiworld, player, "shuffle_doors") == 1  # simple doors
+            return getattr(multiworld, "shuffle_doors")[player] == 1  # simple doors
         elif self.mode == "special":
             return False
         else:

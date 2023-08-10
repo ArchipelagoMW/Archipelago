@@ -8,7 +8,7 @@ from worlds.AutoWorld import World, WebWorld
 from .static_logic import StaticLingoLogic, Room, RoomEntrance
 from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
-from .Options import lingo_options, get_option_value
+from .Options import lingo_options
 from .testing import LingoTestOptions
 from worlds.generic.Rules import set_rule
 from .player_logic import LingoPlayerLogic
@@ -72,12 +72,12 @@ class LingoWorld(World):
 
         item_difference = len(self.player_logic.REAL_LOCATIONS) - len(pool)
         if item_difference:
-            trap_percentage = get_option_value(self.multiworld, self.player, "trap_percentage")
+            trap_percentage = getattr(self.multiworld, "trap_percentage")[self.player]
             traps = int(item_difference * trap_percentage / 100.0)
             non_traps = item_difference - traps
 
             if non_traps:
-                skip_percentage = get_option_value(self.multiworld, self.player, "puzzle_skip_percentage")
+                skip_percentage = getattr(self.multiworld, "puzzle_skip_percentage")[self.player]
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
@@ -108,9 +108,9 @@ class LingoWorld(World):
 
         for option_name in ["death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings",
                             "shuffle_panels", "mastery_achievements", "level_2_requirement", "reduce_checks"]:
-            slot_data[option_name] = get_option_value(self.multiworld, self.player, option_name)
+            slot_data[option_name] = getattr(self.multiworld, option_name)[self.player]
 
-        if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
+        if getattr(self.multiworld, "shuffle_paintings")[self.player]:
             slot_data["painting_entrance_to_exit"] = self.player_logic.PAINTING_MAPPING
 
         return slot_data
