@@ -7,7 +7,7 @@ class LocationDict(TypedDict):
     needsShovel: bool
     purchase: bool
 
-# IDs from 81000 to 81127
+# IDs from 81000 to 81131
 
 ID = 81000
 
@@ -62,6 +62,8 @@ location_table: List[LocationDict] = [
     {"name": "Catch 3 Fish Reward", "id": ID + 37, "needsShovel": False, "purchase": False},
     {"name": "Catch All Fish Reward", "id": ID + 38, "needsShovel": False, "purchase": False},
     {"name": "Permit Guy Bribe", "id": ID + 39, "needsShovel": False, "purchase": False},
+    {"name": "Catch Fish with Permit", "id": ID + 129, "needsShovel": False, "purchase": False},
+    {"name": "Return Camping Permit", "id": ID + 130, "needsShovel": False, "purchase": False},
 
     # Original Pickaxe Locations
     {"name": "Blocked Mine Pickaxe 1", "id": ID + 40, "needsShovel": False, "purchase": False},
@@ -73,6 +75,7 @@ location_table: List[LocationDict] = [
     {"name": "Shirley's Point Beach Toy Shovel", "id": ID + 44, "needsShovel": False, "purchase": False},
     {"name": "Visitor's Center Rock Toy Shovel", "id": ID + 45, "needsShovel": False, "purchase": False},
     {"name": "Blackwood Trail Rock Toy Shovel", "id": ID + 46, "needsShovel": False, "purchase": False},
+    {"name": "Beach Hut Cliff Toy Shovel", "id": ID + 128, "needsShovel": False, "purchase": False},
 
     # Original Stick Locations
     {"name": "Secret Island Beach Trail Stick", "id": ID + 47, "needsShovel": False, "purchase": False},
@@ -169,4 +172,5 @@ location_table: List[LocationDict] = [
     {"name": "Lighthouse Race Reward", "id": ID + 123, "needsShovel": False, "purchase": False},
     {"name": "Old Building Race Reward", "id": ID + 124, "needsShovel": False, "purchase": False},
     {"name": "Hawk Peak Race Reward", "id": ID + 125, "needsShovel": False, "purchase": False},
+    {"name": "Lose Race Gift", "id": ID + 131, "needsShovel": False, "purchase": False},
 ]

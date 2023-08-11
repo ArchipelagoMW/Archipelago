@@ -18,6 +18,15 @@ def create_rules(self, location_table):
     forbid_item(world.get_location("Catch All Fish Reward", player), "Fishing Journal", player)
     set_rule(world.get_location("Catch All Fish Reward", player),
         lambda state: state.has("Fishing Journal", self.player))
+    forbid_item(world.get_location("Catch 3 Fish Reward", player), "Fishing Rod", player)
+    set_rule(world.get_location("Catch 3 Fish Reward", player),
+        lambda state: state.has("Fishing Rod", self.player))
+    forbid_item(world.get_location("Catch Fish with Permit", player), "Fishing Rod", player)
+    set_rule(world.get_location("Catch Fish with Permit", player),
+        lambda state: state.has("Fishing Rod", self.player))
+    forbid_item(world.get_location("Return Camping Permit", player), "Camping Permit", player)
+    set_rule(world.get_location("Return Camping Permit", player),
+        lambda state: state.has("Camping Permit", self.player))
     forbid_item(world.get_location("Boat Challenge Reward", player), "Motorboat Key", player)
     set_rule(world.get_location("Boat Challenge Reward", player),
         lambda state: state.has("Motorboat Key", self.player))
