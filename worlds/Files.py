@@ -187,11 +187,13 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
                                     compress_type=zipfile.ZIP_STORED if file.endswith(".bsdiff4") else None)
 
     def get_file(self, file: str) -> bytes:
+        """ Retrieves a file from the patch package."""
         if file not in self.files:
             self.read()
         return self.files[file]
 
     def write_file(self, file_name: str, file: bytes) -> None:
+        """ Writes a file to the patch package, to be retrieved upon patching. """
         self.files[file_name] = file
 
     def patch(self, target: str):
