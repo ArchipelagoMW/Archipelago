@@ -267,7 +267,7 @@ def enemy_skips_allowed(logic: int, enemy: int) -> bool:
 
 
 def obscure_skips_allowed(logic):
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def precise_skips_allowed(logic):
