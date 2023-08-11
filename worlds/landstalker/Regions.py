@@ -1,9 +1,9 @@
 from typing import Dict, List, NamedTuple, Optional
 from BaseClasses import MultiWorld, Region, Entrance
-from worlds.landstalker.data.world_node import WORLD_NODES_JSON
-from worlds.landstalker.data.world_path import WORLD_PATHS_JSON
-from worlds.landstalker.data.world_region import WORLD_REGIONS_JSON
-from worlds.landstalker.data.world_teleport_tree import WORLD_TELEPORT_TREES_JSON
+from .data.world_node import WORLD_NODES_JSON
+from .data.world_path import WORLD_PATHS_JSON
+from .data.world_region import WORLD_REGIONS_JSON
+from .data.world_teleport_tree import WORLD_TELEPORT_TREES_JSON
 
 
 class LandstalkerRegion(Region):
@@ -43,9 +43,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     # Create a path between the fake Menu location and the starting location
     starting_region = get_starting_region(multiworld, player, regions_table)
-    game_entrance = Entrance(player, "menu -> " + starting_region.code, menu_region)
-    menu_region.exits.append(game_entrance)
-    game_entrance.connect(starting_region)
+    menu_region.connect(starting_region, f"menu -> {starting_region.code}")
 
     add_specific_paths(multiworld, player, regions_table)
 
@@ -103,12 +101,7 @@ def get_starting_region(multiworld: MultiWorld, player: int, regions_table: Dict
 
 
 def get_darkenable_regions():
-    darkenable_region_ids = {}
-    for data in WORLD_REGIONS_JSON:
-        if "darkMapIds" in data:
-            darkenable_region_ids[data["name"]] = data["nodeIds"]
-    return darkenable_region_ids
-
+    return {data["name"]: data["nodeIds"] for data in WORLD_REGIONS_JSON if "darkMapIds" in data}
 
 def load_teleport_trees():
     pairs = []

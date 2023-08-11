@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 from BaseClasses import Location, Region
-from worlds.landstalker.data.item_source import ITEM_SOURCES_JSON
+from .data.item_source import ITEM_SOURCES_JSON
 
 BASE_LOCATION_ID = 4000
 BASE_GROUND_LOCATION_ID = BASE_LOCATION_ID + 256

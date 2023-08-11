@@ -1,8 +1,9 @@
-from BaseClasses import MultiWorld
-from worlds.landstalker.data.hint_source import HINT_SOURCES_JSON
+import random
+from BaseClasses import MultiWorld, Location
+from .data.hint_source import HINT_SOURCES_JSON
 
 
-def generate_blurry_location_hint(location, random):
+def generate_blurry_location_hint(location: Location, random: random.Random):
     cleaned_location_name = location.hint_text.lower().translate({ord(c): None for c in '(),:'})
     cleaned_location_name.replace('-', ' ')
     cleaned_location_name.replace('/', ' ')
@@ -11,10 +12,10 @@ def generate_blurry_location_hint(location, random):
 
     random_word_1 = "mysterious"
     random_word_2 = "place"
-    if len(location_name_words) > 0:
+    if location_name_words:
         random_word_1 = random.choice(location_name_words)
         location_name_words.remove(random_word_1)
-        if len(location_name_words) > 0:
+        if location_name_words:
             random_word_2 = random.choice(location_name_words)
     return [random_word_1, random_word_2]
 
@@ -32,7 +33,7 @@ def generate_lithograph_hint(multiworld: MultiWorld, player: int):
         words[0] = words[0].upper()
         words[1] = words[1].upper()
         words.append(item.name.split(' ')[0].upper())
-        words.append(multiworld.player_name[item.location.player].upper())
+        words.append(multiworld.get_player_name(item.location.player).upper())
         multiworld.per_slot_randoms[player].shuffle(words)
         hint_text += f"{words[0]} {words[1]} {words[2]} {words[3]}\n"
     return hint_text.rstrip('\n')
@@ -40,9 +41,8 @@ def generate_lithograph_hint(multiworld: MultiWorld, player: int):
 
 def generate_random_hints(multiworld: MultiWorld, this_player: int):
     hints = {}
-    random = multiworld.per_slot_randoms[this_player]
-
     hint_texts = []
+    random = multiworld.per_slot_randoms[this_player]
 
     # Exclude Life Stock from the hints as some of them are considered as progression for Fahl, but isn't really
     # exciting when hinted
@@ -67,14 +67,14 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
 
     # Hint-type #2: Remote progression item in own world
     for item in local_unowned_progression_items:
-        other_player = multiworld.player_name[item.player]
+        other_player = multiworld.get_player_name(item.player)
         own_local_region = item.location.parent_region.hint_text
         hint_texts.append(f"You might find something useful for {other_player} {own_local_region}. "
                           f"It is a {item.name}, to be precise.")
 
     # Hint-type #3: Own progression item in remote location
     for item in remote_own_progression_items:
-        other_player = multiworld.player_name[item.location.player]
+        other_player = multiworld.get_player_name(item.location.player)
         if item.location.game == 'Landstalker':
             region_hint_name = item.location.parent_region.hint_text
             hint_texts.append(f"If you need {item.name}, tell {other_player} to look {region_hint_name}.")
@@ -87,11 +87,11 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
 
     # Hint-type #4: Remote progression item in remote location
     for item in remote_unowned_progression_items:
-        owner_name = multiworld.player_name[item.player]
+        owner_name = multiworld.get_player_name(item.player)
         if item.location.player == item.player:
             world_name = "their own world"
         else:
-            world_name = f"{multiworld.player_name[item.location.player]}'s world"
+            world_name = f"{multiworld.get_player_name(item.location.player)}'s world"
         [word_1, word_2] = generate_blurry_location_hint(item.location, random)
         if word_1 == "mysterious" and word_2 == "place":
             continue
@@ -99,8 +99,9 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
                           f"I remember \"{word_1} {word_2}\"... Does that make any sense?")
 
     # Hint-type #5: Jokes
-    other_player_names = [name for player, name in multiworld.player_name.items() if player != this_player]
-    if len(other_player_names) != 0:
+    other_player_names = [multiworld.get_player_name(player) for player in multiworld.player_ids if
+                          player != this_player]
+    if other_player_names:
         random_player_name = random.choice(other_player_names)
         hint_texts.append(f"{random_player_name}'s world is objectively better than yours.")
 

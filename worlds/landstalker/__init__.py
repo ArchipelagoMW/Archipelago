@@ -2,12 +2,13 @@ import threading
 from typing import List
 from BaseClasses import Tutorial, LocationProgressType
 from worlds.AutoWorld import WebWorld, World
-from .Options import ls_options
+from .Options import ls_options, ProgressiveArmors, LandstalkerGoal, TeleportTreeRequirements
 from .Items import *
 from .Regions import *
 from .Locations import *
 from .Rules import *
 from .Hints import *
+
 
 class LandstalkerWeb(WebWorld):
     theme = "grass"
@@ -58,7 +59,7 @@ class LandstalkerWorld(World):
 
         # Put options, locations' contents and some additional data inside slot data
         slot_data = {option_name: self.get_setting(option_name).value for option_name in ls_options}
-        slot_data["seed"] = self.multiworld.per_slot_randoms[self.player].randint(0, 4294967295)
+        slot_data["seed"] = self.random.randint(0, 4294967295)
         slot_data["dark_region"] = self.dark_dungeon_id
 
         slot_data["locations"] = {}
@@ -71,17 +72,14 @@ class LandstalkerWorld(World):
                 slot_data['locations'][location.name]['price'] = location.price
 
         slot_data["hints"] = self.hints
-
-        slot_data["teleport_tree_pairs"] = []
-        for pair in self.teleport_tree_pairs:
-            slot_data["teleport_tree_pairs"].append([pair[0]['name'], pair[1]['name']])
+        slot_data["teleport_tree_pairs"] = [[pair[0]['name'], pair[1]['name']] for pair in self.teleport_tree_pairs]
 
         return slot_data
 
     def generate_early(self):
         # Randomly pick a set of dark regions where Lantern is needed
         darkenable_regions = get_darkenable_regions()
-        self.dark_dungeon_id = self.multiworld.random.choices(list(darkenable_regions.keys()))[0]
+        self.dark_dungeon_id = self.random.choice(list(darkenable_regions))
         self.dark_region_ids = darkenable_regions[self.dark_dungeon_id]
 
     def create_regions(self):
@@ -100,12 +98,12 @@ class LandstalkerWorld(World):
         item_pool: List[LandstalkerItem] = []
         for name, data in item_table.items():
             # If item is an armor and progressive armors are enabled, transform it into a progressive armor item
-            if self.get_setting('progressive_armors').value == 1 and 'Breast' in name:
+            if self.get_setting('progressive_armors') and 'Breast' in name:
                 name = 'Progressive Armor'
             item_pool += [self.create_item(name) for _ in range(0, data.quantity)]
 
         # If the appropriate setting is on, place one EkeEke in one shop in every town in the game
-        if self.get_setting("ensure_ekeeke_in_shops").value == 1:
+        if self.get_setting("ensure_ekeeke_in_shops"):
             SHOPS_TO_FILL = [
                 "Massan: Shop item #1",
                 "Gumi: Inn item #1",
@@ -130,9 +128,8 @@ class LandstalkerWorld(World):
         item_pool += [self.create_item("Life Stock") for _ in range(lifestock_count)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
-        jewel_count = self.get_setting('jewel_count').value
         required_jewels = ["Red Jewel", "Purple Jewel", "Green Jewel", "Blue Jewel", "Yellow Jewel"]
-        del required_jewels[jewel_count:]
+        del required_jewels[self.get_setting('jewel_count'):]
         item_pool += [self.create_item(name) for name in required_jewels]
 
         # Add a pre-placed fake win condition item
@@ -140,35 +137,35 @@ class LandstalkerWorld(World):
         self.multiworld.get_location("End", self.player).place_locked_item(win_condition_item)
 
         # Fill the rest of the item pool with EkeEke
-        unfilled_location_count = len(self.multiworld.get_unfilled_locations(self.player))
-        while len(item_pool) < unfilled_location_count:
-            item_pool.append(self.create_item("EkeEke"))
+        remaining_items = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
+        item_pool += [self.create_item("EkeEke") for _ in range(remaining_items)]
 
         self.multiworld.itempool += item_pool
 
     def create_teleportation_trees(self):
         self.teleport_tree_pairs = load_teleport_trees()
 
+        def pairwise(iterable):
+            """Yields pairs of elements from the given list -> [0,1], [2,3]..."""
+            a = iter(iterable)
+            return zip(a, a)
+
         # Shuffle teleport tree pairs if the matching setting is on
-        if self.multiworld.shuffle_trees[self.player].value == 1:
-            all_trees = []
-            for pair in self.teleport_tree_pairs:
-                all_trees += [pair[0], pair[1]]
+        if self.get_setting("shuffle_trees"):
+            all_trees = [item for pair in self.teleport_tree_pairs for item in pair]
             self.multiworld.random.shuffle(all_trees)
-            self.teleport_tree_pairs = []
-            while len(all_trees) > 0:
-                self.teleport_tree_pairs.append([all_trees[0], all_trees[1]])
-                all_trees = all_trees[2:]
+            self.teleport_tree_pairs = [[x, y] for x, y in pairwise(all_trees)]
 
         # If a specific setting is set, teleport trees are potentially active without visiting both sides.
         # This means we need to add those as explorable paths for the generation algorithm.
-        teleport_trees_mode = self.multiworld.teleport_tree_requirements[self.player].value
+        teleport_trees_mode = self.get_setting("teleport_tree_requirements")
         created_entrances = []
-        if teleport_trees_mode < 2:
+        if teleport_trees_mode in [TeleportTreeRequirements.option_none, TeleportTreeRequirements.option_clear_tibor]:
             for pair in self.teleport_tree_pairs:
                 entrances = create_entrance(pair[0]['region'], pair[1]['region'], True, self.player, self.regions_table)
                 created_entrances += entrances
-        if teleport_trees_mode == 1:  # Teleport trees are open but require access to Tibor in order to work
+        # Teleport trees are open but require access to Tibor in order to work
+        if teleport_trees_mode == TeleportTreeRequirements.option_clear_tibor:
             for entrance in created_entrances:
                 entrance.access_rule = make_path_requirement_lambda(self.player, [], [self.regions_table['tibor']])
 
@@ -178,7 +175,7 @@ class LandstalkerWorld(World):
         # In "Reach Kazalt" goal, player doesn't have access to Kazalt, King Nole's Labyrinth & King Nole's Palace.
         # As a consequence, all locations inside those regions must be excluded and the teleporter from
         # King Nole's Cave to Kazalt must go to the end region instead.
-        if self.get_setting("goal").value == 1:
+        if self.get_setting("goal") == LandstalkerGoal.option_reach_kazalt:
             kazalt_tp = self.multiworld.get_entrance("king_nole_cave -> kazalt", self.player)
             kazalt_tp.connected_region = self.regions_table["end"]
 
@@ -200,7 +197,7 @@ class LandstalkerWorld(World):
                     location.progress_type = LocationProgressType.EXCLUDED
 
     def get_starting_health(self):
-        spawn_id = self.get_setting('spawn_region').value
+        spawn_id = self.get_setting('spawn_region')
         if spawn_id == "destel":
             return 20
         elif spawn_id == "verla":
@@ -226,22 +223,22 @@ class LandstalkerWorld(World):
         endgame_price_factor = 2.0
         factor_diff = endgame_price_factor - earlygame_price_factor
 
-        global_price_factor = self.get_setting("shop_prices_factor").value / 100.0
+        global_price_factor = self.get_setting("shop_prices_factor") / 100.0
 
         spheres = list(self.multiworld.get_spheres())
         sphere_id = 0
         sphere_count = len(spheres)
         for sphere in spheres:
             for location in sphere:
-                if location.player == self.player and location.type_string == 'shop':
-                    current_playthrough_progression = sphere_id / sphere_count
-                    progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
+                if location.player != self.player or location.type_string != 'shop':
+                    continue
+                current_playthrough_progression = sphere_id / sphere_count
+                progression_price_factor = earlygame_price_factor + (current_playthrough_progression * factor_diff)
 
-                    price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
-                    price *= progression_price_factor
-                    price *= global_price_factor
-                    price -= price % 5
-                    if price < 5:
-                        price = 5
-                    location.price = int(price)
+                price = location.item.price_in_shops if location.item.game == 'Landstalker' else unknown_items_price
+                price *= progression_price_factor
+                price *= global_price_factor
+                price -= price % 5
+                price = max(price, 5)
+                location.price = int(price)
             sphere_id += 1
