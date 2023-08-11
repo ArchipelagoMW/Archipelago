@@ -378,7 +378,26 @@ class Palette(Choice):
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
+
+class Music(Choice, LADXROption):
+    """
+    [Vanilla] Regular Music
+    [Shuffled] Shuffled Music
+    [Off] No music
+    """
+    ladxr_name = "music"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_off = 2
+
     
+    def to_ladxr_option(self, all_options):
+        s = self.name_lookup[self.value]
+        if s == "shuffled":
+            s = "random"
+        return self.ladxr_name, s
+
+
 links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'logic': Logic,
     # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
@@ -408,6 +427,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_maps': ShuffleMaps,
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
+    'music': Music,
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
