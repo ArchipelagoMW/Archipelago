@@ -19,10 +19,11 @@
 
 ## Joining a MultiWorld Game
 
-1. Launch APDoomLauncher.exe
-2. Enter the Archipelago server address, slot name, and password (if you have one)
-3. Press "Launch DOOM"
-4. Enjoy!
+1. Launch apdoom-launcher.exe
+2. Select `Ultimate DOOM` from the drop-down
+3. Enter the Archipelago server address, slot name, and password (if you have one)
+4. Press "Launch DOOM"
+5. Enjoy!
 
 To continue a game, follow the same connection steps.
 Connecting with a different seed won't erase your progress in other seeds.
