@@ -422,7 +422,8 @@ regions:List[RegionDict] = [
      "episode":3,
      "connections":[
         {"target":"Limbo (E3M7) Red","pro":False},
-        {"target":"Limbo (E3M7) Blue","pro":False}]},
+        {"target":"Limbo (E3M7) Blue","pro":False},
+        {"target":"Limbo (E3M7) Pink","pro":False}]},
     {"name":"Limbo (E3M7) Blue",
      "connects_to_hub":False,
      "episode":3,
@@ -432,11 +433,24 @@ regions:List[RegionDict] = [
      "episode":3,
      "connections":[
         {"target":"Limbo (E3M7) Main","pro":False},
-        {"target":"Limbo (E3M7) Yellow","pro":False}]},
+        {"target":"Limbo (E3M7) Yellow","pro":False},
+        {"target":"Limbo (E3M7) Green","pro":False}]},
     {"name":"Limbo (E3M7) Yellow",
      "connects_to_hub":False,
      "episode":3,
      "connections":[{"target":"Limbo (E3M7) Red","pro":False}]},
+    {"name":"Limbo (E3M7) Pink",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[
+        {"target":"Limbo (E3M7) Green","pro":False},
+        {"target":"Limbo (E3M7) Main","pro":False}]},
+    {"name":"Limbo (E3M7) Green",
+     "connects_to_hub":False,
+     "episode":3,
+     "connections":[
+        {"target":"Limbo (E3M7) Pink","pro":False},
+        {"target":"Limbo (E3M7) Red","pro":False}]},
 
     # Dis (E3M8)
     {"name":"Dis (E3M8) Main",
