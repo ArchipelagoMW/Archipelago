@@ -242,7 +242,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         patches.core.quickswap(rom, 1)
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
-    
+
     world_setup = logic.world_setup
 
     JUNK_HINT = 0.33
@@ -265,7 +265,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             name = "Your"
         else:
             name = f"{multiworld.player_name[location.item.player]}'s"
-        
+
         if isinstance(location, LinksAwakeningLocation):
             location_name = location.ladxr_item.metadata.name
         else:
@@ -443,7 +443,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 packed = rgb_to_bin(r, g, b)
                 rom.banks[bank][address] = packed & 0xFF
                 rom.banks[bank][address + 1] = packed >> 8
-   
+
     SEED_LOCATION = 0x0134
     # Patch over the title
     assert(len(auth) == 12)
