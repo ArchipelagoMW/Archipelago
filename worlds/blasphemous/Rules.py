@@ -255,23 +255,23 @@ def opened_botss_ladder(state: CollectionState, player: int) -> bool:
 
 
 def upwarp_skips_allowed(logic: int) -> bool:
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def mourning_skips_allowed(logic: int) -> bool:
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def enemy_skips_allowed(logic: int, enemy: int) -> bool:
-    return True if logic >= 2 and enemy == 0 else False
+    return logic >= 2 and enemy == 0
 
 
 def obscure_skips_allowed(logic):
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def precise_skips_allowed(logic):
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) -> bool:
@@ -412,7 +412,7 @@ def guilt_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has(item, player) for item in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def sword_rooms(state: CollectionState, player: int, number: int) -> bool:
@@ -428,7 +428,7 @@ def sword_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has_any(items, player) for items in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def redento(state: CollectionState, world, player: int, number: int) -> bool:
@@ -479,7 +479,7 @@ def amanecida_rooms(state: CollectionState, logic: int, player: int, number: int
 
     total = sum(can_beat_boss(state, boss, logic, player) for boss in bosses)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def chalice_rooms(state: CollectionState, player: int, number: int) -> bool:
@@ -491,7 +491,7 @@ def chalice_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has_any(items, player) for items in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def rules(blasphemousworld):
