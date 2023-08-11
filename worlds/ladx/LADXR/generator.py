@@ -377,6 +377,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
+    patches.core.addWarpImprovements(rom, True)
 
     palette = ap_settings["palette"]
     if palette != Palette.option_normal:

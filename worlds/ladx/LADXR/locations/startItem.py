@@ -10,7 +10,6 @@ class StartItem(DroppedKey):
     # We need to give something here that we can use to progress.
     # FEATHER
     OPTIONS = [SWORD, SHIELD, POWER_BRACELET, OCARINA,  BOOMERANG, MAGIC_ROD, TAIL_KEY, SHOVEL, HOOKSHOT, PEGASUS_BOOTS, MAGIC_POWDER, BOMB]
-
     MULTIWORLD = False
 
     def __init__(self):

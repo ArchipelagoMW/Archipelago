@@ -387,7 +387,7 @@ class WarpImprovements(DefaultOffToggle):
 
 class AdditionalWarpPoints(DefaultOffToggle):
     """
-    [On] Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
+    [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
     [Off] No change
     """
      
@@ -413,6 +413,8 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
     'link_palette': LinkPalette,
+    'warp_improvements': WarpImprovements,
+    'additional_warp_points': AdditionalWarpPoints,
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,

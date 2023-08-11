@@ -539,9 +539,7 @@ OAMData:
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
 
-def addAdditionalWarps(rom, warp_list):
-
-def addWarpImprovements(rom):
+def addWarpImprovements(rom, extra_warps):
     # Patch in a warp icon
     tile = utils.createTileData( \
 """11111111
@@ -553,8 +551,10 @@ def addWarpImprovements(rom):
 10230020
 10000000""", key="0231")
     MINIMAP_BASE = 0x3800
+    
+    # This is replacing a junk tile never used on the minimap
     rom.banks[0x2C][MINIMAP_BASE + len(tile) * 0x65 : MINIMAP_BASE + len(tile) * 0x66] = tile
-
+    
     # Allow using ENTITY_WARP for finding which map sections are warps
     # Interesting - 3CA0 should be free, but something has pushed all the code forward a byte
     rom.patch(0x02, 0x3CA1, None, ASM("""
@@ -584,6 +584,7 @@ def addWarpImprovements(rom):
         jp   $512B
 
     """))
+
     # Insert redirect to above code
     rom.patch(0x02, 0x1109, ASM("""
     ldh a, [$F6]
@@ -607,7 +608,8 @@ def addWarpImprovements(rom):
         ret
     """), fill_nop=True)
 
-    # Use this check byte for deciding if warp allowed
+    # Patch over some instructions that decided if we are in debug mode holding some 
+    # buttons with instead checking for FFDD (why FFDD? It appears to be never used anywhere, so we repurpose it for "is in teleport mode")
     rom.banks[0x01][0x17B8] = 0xDD
     rom.banks[0x01][0x17B9] = 0xFF
     rom.banks[0x01][0x17FD] = 0xDD
@@ -639,8 +641,9 @@ def addWarpImprovements(rom):
     # Patch the icon for all teleports
     all_warps = [0x01, 0x95, 0x2C, 0xEC]
 
-    ADD_MAMU = True
-    if ADD_MAMU:
+
+    if extra_warps:
+        # mamu
         all_warps.append(0x45)
         # Tweak the flute location
         rom.banks[0x14][0x0E95] += 0x10
@@ -653,8 +656,8 @@ def addWarpImprovements(rom):
         mamu_pond.addEntity(3, 5, 0x61)
 
         mamu_pond.store(rom)
-    ADD_EAGLE = True
-    if ADD_EAGLE:
+
+        # eagle
         all_warps.append(0x0F)
         room = RoomEditor(rom, 0x0F)
         # Move one cliff edge and change it into a pit
@@ -674,6 +677,7 @@ def addWarpImprovements(rom):
                 room.overlay[object.x + object.count + object.y * 10] = object.type_id
                 object.count += 1
         room.store(rom)
+    
     for warp in all_warps:
         # Set icon
         rom.banks[0x20][0x168B + warp] = 0x55
@@ -685,22 +689,23 @@ def addWarpImprovements(rom):
 
     # Setup [?!] icon on map and associated text
     rom.banks[0x01][0x1909 + 0x42] = 0x2B
-    rom.texts[0x02B] = formatText('Warp')
+    rom.texts[0x02B] = utils.formatText('Warp')
 
-    # call warp function (why not just jmp?)
+    # call warp function (why not just jmp?!)
     rom.patch(0x01, 0x17C3, None, ASM("""
     call $7E7B
     ret
     """))
     
+    # Build a switch statement by hand
     warp_jump = "".join(f"cp ${hex(warp)[2:]}\njr z, success\n" for warp in all_warps)
 
-        rom.patch(0x01, 0x3E7B, None, ASM(f"""
+    rom.patch(0x01, 0x3E7B, None, ASM(f"""
 TeleportHandler:
 
     ld  a, [$DBB4] ; Load the current selected tile
     ; TODO: check if actually revealed so we can have free movement
-    ; Check cursor against different tiles
+    ; Check cursor against different tiles to see if we are selecting a warp
     {warp_jump}
     jr exit
 
