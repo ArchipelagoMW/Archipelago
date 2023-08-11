@@ -1,5 +1,6 @@
 from .Items import SongData, AlbumData
 from typing import Dict, List, Optional
+from collections import ChainMap
 
 
 def load_text_file(name: str) -> str:
@@ -10,6 +11,7 @@ def load_text_file(name: str) -> str:
 class MuseDashCollections:
     """Contains all the data of Muse Dash, loaded from MuseDashData.txt."""
 
+    MUSIC_SHEET_NAME: str = "Music Sheet"
     MUSIC_SHEET_CODE: int
 
     FREE_ALBUMS = [
@@ -45,11 +47,15 @@ class MuseDashCollections:
         "Error SFX Trap": 9,
     }
 
+    item_names_to_id = ChainMap({}, sfx_trap_items, vfx_trap_items)
+    location_names_to_id = ChainMap(song_locations, album_locations)
+
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
+        self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
 
-        self.vfx_trap_items = {k: (v + start_item_id) for (k, v) in self.vfx_trap_items.items()}
-        self.sfx_trap_items = {k: (v + start_item_id) for (k, v) in self.sfx_trap_items.items()}
+        self.vfx_trap_items.update({k: (v + start_item_id) for (k, v) in self.vfx_trap_items.items()})
+        self.sfx_trap_items.update({k: (v + start_item_id) for (k, v) in self.sfx_trap_items.items()})
 
         item_id_index = start_item_id + 50
         location_id_index = start_item_id
@@ -84,6 +90,9 @@ class MuseDashCollections:
             self.song_items[song_name] = SongData(item_id_index, song_is_free, steamer_mode,
                                                   diff_of_easy, diff_of_hard, diff_of_master)
             item_id_index += 1
+
+        self.item_names_to_id.update({name: data.code for name, data in self.song_items.items()})
+        self.item_names_to_id.update({name: data.code for name, data in self.album_items.items()})
 
         for name in self.album_items.keys():
             for i in range(0, items_per_location):
