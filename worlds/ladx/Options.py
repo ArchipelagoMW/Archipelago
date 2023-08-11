@@ -392,9 +392,11 @@ class Music(Choice, LADXROption):
 
     
     def to_ladxr_option(self, all_options):
-        s = self.name_lookup[self.value]
-        if s == "shuffled":
+        s = ""
+        if self.value == self.option_shuffled:
             s = "random"
+        elif self.value == self.option_off:
+            s = "off"
         return self.ladxr_name, s
 
 
