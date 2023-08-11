@@ -543,6 +543,7 @@ class EasterEgg(FreeText):
     """
     ???
     """
+    default = "Example Passphrase"
 
 
 option_definitions: Dict[str, Option] = {
