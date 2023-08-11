@@ -641,22 +641,31 @@ def set_monstersanity_monster_rules(all_location_names: List[str], logic: Starde
         MultiWorldRules.set_rule(location, rule.simplify())
 
 
-def set_monstersanity_progressive_category_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, monstersanity_option):
+def set_monstersanity_progressive_category_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):
     for monster_category in all_monsters_by_category:
-        location_names = [name for name in all_location_names if name.startswith(monster_eradication_prefix) and name.endswith(monster_category)]
-        if not location_names:
-            continue
-        location_names = sorted(location_names, key=lambda name: get_monster_eradication_number(name, monster_category))
-        for i in range(5):
-            location_name = location_names[i]
-            if location_name not in all_location_names:
-                continue
-            location = multi_world.get_location(location_name, player)
-            if i < 3:
-                rule = logic.combat.can_kill_any_monster(all_monsters_by_category[monster_category]) & logic.time.has_lived_months((i+1) * 2)
-            else:
-                rule = logic.combat.can_kill_all_monsters(all_monsters_by_category[monster_category]) & logic.time.has_lived_months(i * 3)
-            MultiWorldRules.set_rule(location, rule.simplify())
+        set_monstersanity_progressive_single_category_rules(all_location_names, logic, multi_world, player, monster_category)
+
+
+def set_monstersanity_progressive_single_category_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, monster_category: str):
+    location_names = [name for name in all_location_names if name.startswith(monster_eradication_prefix) and name.endswith(monster_category)]
+    if not location_names:
+        return
+    location_names = sorted(location_names, key=lambda name: get_monster_eradication_number(name, monster_category))
+    for i in range(5):
+        location_name = location_names[i]
+        set_monstersanity_progressive_single_category_rules(all_location_names, logic, multi_world, monster_category, location_name, i)
+
+
+def set_monstersanity_progressive_category_rule(all_location_names: List[str], logic: StardewLogic, multi_world, player,
+                                                monster_category: str, location_name: str, goal_index):
+    if location_name not in all_location_names:
+        return
+    location = multi_world.get_location(location_name, player)
+    if goal_index < 3:
+        rule = logic.combat.can_kill_any_monster(all_monsters_by_category[monster_category]) & logic.time.has_lived_months((goal_index + 1) * 2)
+    else:
+        rule = logic.combat.can_kill_all_monsters(all_monsters_by_category[monster_category]) & logic.time.has_lived_months(goal_index * 3)
+    MultiWorldRules.set_rule(location, rule.simplify())
 
 
 def get_monster_eradication_number(location_name, monster_category) -> int:
