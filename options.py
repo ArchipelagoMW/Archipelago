@@ -27,6 +27,14 @@ class RequiredJewels(Range):
     display_name = 'Required Jewels'
 
 
+class SmashThroughHardBlocks(Toggle):
+    """
+    Break hard, teal blocks with the dash attack and super ground pound without stopping,
+    as in Pizza Tower and Wario Land: Shake It!
+    """
+    display_name = "Smash Hard Blocks Without Stopping"
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
@@ -53,6 +61,7 @@ class WarioVoiceShuffle(Toggle):
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
     'required_jewels': RequiredJewels,
+    'smash_through_hard_blocks': SmashThroughHardBlocks,
     'death_link': DeathLink,
     'music_shuffle': MusicShuffle,
     'wario_voice_shuffle': WarioVoiceShuffle,
