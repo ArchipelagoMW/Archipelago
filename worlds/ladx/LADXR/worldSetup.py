@@ -74,9 +74,7 @@ class WorldSetup:
             start_location = start_locations[rnd.randrange(len(start_locations))]
             if start_location != "start_house":
                 self.entrance_mapping[start_location] = "start_house"
-        
-        #self.entrance_mapping["start_house"] = "right_taltal_connector6"
-        #self.entrance_mapping["right_taltal_connector6"] = "start_house"
+                self.entrance_mapping["start_house"] = start_location
         
         entrances = self.getEntrancePool(settings)
         for entrance in entrances.copy():
