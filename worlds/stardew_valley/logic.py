@@ -7,6 +7,7 @@ from typing import Dict, Union, Optional, Iterable, Sized, List, Set
 from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
+from .data.crops_data import crops_by_name
 from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items, dwarf_scrolls
 from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, FriendshipSource, QueenOfSauceSource, \
@@ -139,7 +140,7 @@ class StardewLogic:
         self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
         self.crop_rules.update({
             Seed.coffee: (self.has_season(Season.spring) | self.has_season(
-                Season.summer)) & self.has_traveling_merchant(),
+                Season.summer)) & self.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
                              self.can_reach_region(Region.greenhouse) & self.has(Machine.seed_maker),
         })
