@@ -19,6 +19,7 @@ class WL4DeltaPatch(APDeltaPatch):
     hash = MD5_US_EU
     game = "Wario Land 4"
     patch_file_ending = ".apwl4"
+    result_file_ending = ".gba"
 
     @classmethod
     def get_source_data(cls) -> bytes:
