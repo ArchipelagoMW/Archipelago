@@ -623,7 +623,7 @@ def set_monstersanity_rules(all_location_names: List[str], logic: StardewLogic, 
         return
 
     if monstersanity_option == options.Monstersanity.option_progressive_goals:
-        set_monstersanity_progressive_category_rules(all_location_names, logic, multi_world, player, monstersanity_option)
+        set_monstersanity_progressive_category_rules(all_location_names, logic, multi_world, player)
         return
 
     set_monstersanity_category_rules(all_location_names, logic, multi_world, player, monstersanity_option)
@@ -653,7 +653,7 @@ def set_monstersanity_progressive_single_category_rules(all_location_names: List
     location_names = sorted(location_names, key=lambda name: get_monster_eradication_number(name, monster_category))
     for i in range(5):
         location_name = location_names[i]
-        set_monstersanity_progressive_single_category_rules(all_location_names, logic, multi_world, monster_category, location_name, i)
+        set_monstersanity_progressive_category_rule(all_location_names, logic, multi_world, player, monster_category, location_name, i)
 
 
 def set_monstersanity_progressive_category_rule(all_location_names: List[str], logic: StardewLogic, multi_world, player,
