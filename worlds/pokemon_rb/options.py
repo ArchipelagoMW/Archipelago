@@ -297,8 +297,8 @@ class DexSanity(SpecialRange):
     range_start = 0
     range_end = 100
     special_range_names = {
-        "false": 0,
-        "true": 100
+        "disabled": 0,
+        "full": 100
     }
 
 
