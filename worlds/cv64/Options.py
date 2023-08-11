@@ -171,7 +171,7 @@ class MinimumGoldPrice(Range):
     """The lowest amount of gold an item can cost in Renon's shop, divided by 100.
     Only applies if shop prices are randomized."""
     display_name = "Minimum Gold Price"
-    range_start = 0
+    range_start = 1
     range_end = 50
     default = 2
 
@@ -180,7 +180,7 @@ class MaximumGoldPrice(Range):
     """The highest amount of gold an item can cost in Renon's shop, divided by 100.
     Only applies if shop prices are randomized."""
     display_name = "Maximum Gold Price"
-    range_start = 0
+    range_start = 1
     range_end = 50
     default = 30
 
