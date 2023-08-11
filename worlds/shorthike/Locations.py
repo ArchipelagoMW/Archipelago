@@ -73,7 +73,7 @@ location_table: List[LocationDict] = [
     # Original Toy Shovel Locations
     {"name": "Blackwood Trail Lookout Toy Shovel", "id": ID + 43, "needsShovel": False, "purchase": False},
     {"name": "Shirley's Point Beach Toy Shovel", "id": ID + 44, "needsShovel": False, "purchase": False},
-    {"name": "Visitor's Center Rock Toy Shovel", "id": ID + 45, "needsShovel": False, "purchase": False},
+    {"name": "Visitor's Center Beach Toy Shovel", "id": ID + 45, "needsShovel": False, "purchase": False},
     {"name": "Blackwood Trail Rock Toy Shovel", "id": ID + 46, "needsShovel": False, "purchase": False},
     {"name": "Beach Hut Cliff Toy Shovel", "id": ID + 128, "needsShovel": False, "purchase": False},
 

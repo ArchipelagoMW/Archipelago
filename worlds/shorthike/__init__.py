@@ -26,7 +26,7 @@ class ShortHikeWorld(World):
     item_name_groups = group_table
     # option_definitions = short_hike_options
 
-    required_client_version = (1, 9)
+    required_client_version = (0, 1, 9)
 
 
     def __init__(self, multiworld, player):
