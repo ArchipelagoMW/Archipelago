@@ -271,7 +271,7 @@ def obscure_skips_allowed(logic):
 
 
 def precise_skips_allowed(logic):
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) -> bool:
