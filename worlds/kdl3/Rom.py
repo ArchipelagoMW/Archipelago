@@ -370,6 +370,8 @@ class KDL3DeltaPatch(APDeltaPatch):
                                      0x50, 0xC4, 0x39])
         if rom.read_bytes(0x3D018, 1)[0] > 0:
             write_consumable_sprites(rom)
+        rom_name = rom.read_bytes(0x3C000, 21)
+        rom.write_bytes(0x7FC0, rom_name)
         rom.write_crc()
         rom.write_to_file(target)
 

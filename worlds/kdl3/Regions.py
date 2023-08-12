@@ -46,7 +46,8 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
     for room_entry in room_data:
         room = Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"], room_entry["stage"],
                     room_entry["room"], room_entry["pointer"], room_entry["music"], room_entry["default_exits"],
-                    room_entry["animal_pointers"], room_entry["enemies"])
+                    room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
+                    room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
         None for location in room_entry["locations"] if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.multiworld.consumables[world.player]}, KDL3Location)
