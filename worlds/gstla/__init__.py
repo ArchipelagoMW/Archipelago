@@ -97,14 +97,14 @@ class GSTLAWorld(World):
         world = self.multiworld
         player = self.player
 
-        print(f'generating output:')
+        rom.write_story_flags()
+        rom.apply_qol_patches()
+
         locations = location_name_to_id
         for location in locations:
             ap_location = world.get_location(location, player)
             location_data = location_name_to_id[location]
             ap_item = ap_location.item
-
-            print(f'{ap_location} - {ap_item}')
 
             item_data = item_table[ap_item.name]
             if item_data.type == ItemType.Djinn:
@@ -115,17 +115,16 @@ class GSTLAWorld(World):
         rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
 
         try:
-
+            rom.write_to_file(rompath)
             patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
                                     player_name=world.player_name[player], patched_path=rompath)
-            rom.write_to_file(rompath)
+
             patch.write()
         except:
             raise()
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
-
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]

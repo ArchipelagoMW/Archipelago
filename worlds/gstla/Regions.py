@@ -139,10 +139,16 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Yampi_Desert_Trainers_Whip,
         LocationName.Yampi_Desert_Hard_Nut,
         LocationName.Yampi_Desert_Blow_Mace,
-        LocationName.Yampi_Desert_315_coins
+        LocationName.Yampi_Desert_315_coins,
+        LocationName.Yampi_Desert_Cave_Water_of_Life
     ])
+
     create_region(multiworld, player, RegionName.YampiDesertCave,
     [
+        LocationName.Yampi_Desert_Cave_Orihalcon,
+        LocationName.Yampi_Desert_Cave_Dark_Matter,
+        LocationName.Yampi_Desert_Cave_Mythril_Silver,
+        LocationName.Yampi_Desert_Cave_Valukar,
         LocationName.Yampi_Desert_Cave_Daedalus,
         LocationName.Crystal
     ])
@@ -262,133 +268,326 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.GabombaCatacombs,
     [
+        LocationName.Gabomba_Catacombs_Mint,
+        LocationName.Gabomba_Catacombs_Tomegathericon,
         LocationName.Mud
+    ])
+
+    create_region(multiworld, player, RegionName.Lemurian_Ship,
+    [
+        LocationName.Lemurian_Ship_Elixir,
+        LocationName.Lemurian_Ship_Potion,
+        LocationName.Lemurian_Ship_Oil_Drop,
+        LocationName.Lemurian_Ship_Antidote,
+        LocationName.Lemurian_Ship_Mist_Potion,
+        LocationName.Lemurian_Ship_Aqua_Hydra,
+        #todo, when not start with ship, get ship from this location LocationName.Lemurian_Ship_Engine
     ])
 
     #Eastern Sea
     create_region(multiworld, player, RegionName.EasternSea, [])
 
-    create_region(multiworld, player, RegionName.WestIndraIslet, [])
+    create_region(multiworld, player, RegionName.EastTundariaIslet,
+    [
+        LocationName.E_Tundaria_Islet_Lucky_Medal,
+        LocationName.E_Tundaria_Islet_Pretty_Stone
+    ])
 
-    create_region(multiworld, player, RegionName.NorthOseniaIslet, [])
-    create_region(multiworld, player, RegionName.SouthEastAngaraIslet, [])
-    create_region(multiworld, player, RegionName.SeaOfTimeIslet, [])
+    create_region(multiworld, player, RegionName.WestIndraIslet,
+    [
+        LocationName.W_Indra_Islet_Lucky_Medal,
+        LocationName.W_Indra_Islet_Lil_Turtle
+    ])
+
+    create_region(multiworld, player, RegionName.SouthEastAngaraIslet,
+    [
+        LocationName.SE_Angara_Islet_Lucky_Medal,
+        LocationName.SE_Angara_Islet_Red_Cloth
+    ])
+
+    create_region(multiworld, player, RegionName.NorthOseniaIslet,
+    [
+        LocationName.N_Osenia_Islet_Lucky_Medal,
+        LocationName.N_Osenia_Islet_Milk
+    ])
+
+    create_region(multiworld, player, RegionName.SeaOfTimeIslet,
+    [
+        LocationName.Sea_of_Time_Islet_Lucky_Medal
+    ])
+
     create_region(multiworld, player, RegionName.IsletCave,
     [
+        LocationName.Islet_Cave_Turtle_Boots,
+        LocationName.Islet_Cave_Rusty_Staff,
+        LocationName.Islet_Cave_Sentinel,
         LocationName.Islet_Cave_Catastrophe,
         LocationName.Meld,
         LocationName.Serac
     ])
 
-    create_region(multiworld, player, RegionName.Champa, [])
-    create_region(multiworld, player, RegionName.AnkohlRuins, [])
-
-    create_region(multiworld, player, RegionName.Yallam, [])
-    create_region(multiworld, player, RegionName.TaopoSwamp,
-    [
-        LocationName.Flower
-    ])
-
-    create_region(multiworld, player, RegionName.TundariaTower,
-    [
-        LocationName.Tundaria_Tower_Burst_Brooch,
-        LocationName.Wheeze,
-        LocationName.Reflux
-    ])
-
-    create_region(multiworld, player, RegionName.EastTundariaIslet, [])
-
-    create_region(multiworld, player, RegionName.SeaOfTime, [])
-
-    create_region(multiworld, player, RegionName.Lemuria,
-    [
-        LocationName.Lemuria_Eclipse,
-        LocationName.Lemuria_Grindstone,
-        LocationName.Rime
-    ])
-
     create_region(multiworld, player, RegionName.ApojiiIslands,
     [
+        LocationName.Apojii_Islands_Herb,
+        LocationName.Apojii_Islands_Mint,
+        LocationName.Apojii_Islands_32_coins,
+        LocationName.Apojii_Islands_182_coins,
+        LocationName.Apojii_Islands_Bramble_Seed,
         LocationName.Haze
     ])
 
     create_region(multiworld, player, RegionName.AquaRock,
     [
+        LocationName.Aqua_Rock_Nut,
+        LocationName.Aqua_Rock_Vial,
+        LocationName.Aqua_Rock_Mimic,
+        LocationName.Aqua_Rock_Elixir,
+        LocationName.Aqua_Rock_Aquarius_Stone,
+        LocationName.Aqua_Rock_Crystal_Powder,
+        LocationName.Aqua_Rock_Lucky_Pepper,
+        LocationName.Aqua_Rock_Mist_Sabre,
+        LocationName.Aqua_Rock_Oil_Drop,
+        LocationName.Aqua_Rock_Rusty_Sword,
+        LocationName.Aqua_Rock_Tear_Stone,
+        LocationName.Aqua_Rock_Water_of_Life,
         LocationName.Aqua_Rock_Parch,
         LocationName.Steam
     ])
 
     create_region(multiworld, player, RegionName.Izumo,
     [
+        LocationName.Izumo_Elixir,
+        LocationName.Izumo_Antidote,
+        LocationName.Izumo_Antidote_Two,
+        LocationName.Izumo_Lucky_Medal,
+        LocationName.Izumo_Smoke_Bomb,
+        LocationName.Izumo_Festival_Coat,
+        LocationName.Izumo_Phantasmal_Mail,
+        LocationName.Izumo_Water_of_Life,
         LocationName.Izumo_Ulysses,
         LocationName.Coal
     ])
 
     create_region(multiworld, player, RegionName.GaiaRock,
     [
+        LocationName.Gaia_Rock_Nut,
+        LocationName.Gaia_Rock_Apple,
+        LocationName.Gaia_Rock_Mimic,
+        LocationName.Gaia_Rock_Rusty_Mace,
+        LocationName.Gaia_Rock_Cloud_Brand,
+        LocationName.Gaia_Rock_Dancing_Idol,
+        LocationName.Gaia_Rock_Serpent,
         LocationName.Gaia_Rock_Sand
     ])
 
     create_region(multiworld, player, RegionName.TreasureIsland, [
+        LocationName.Treasure_Isle_161_coins,
+        LocationName.Treasure_Isle_Lucky_Medal,
+        LocationName.Treasure_Isle_Empty,
+        LocationName.Treasure_Isle_Empty_Two,
+        LocationName.Treasure_Isle_Empty_Three,
+        LocationName.Treasure_Isle_Empty_Four,
+        LocationName.Treasure_Isle_Empty_Five,
+        LocationName.Treasure_Isle_Empty_Six,
+        LocationName.Treasure_Isle_Empty_Seven,
+        LocationName.Treasure_Isle_Empty_Eight,
+        LocationName.Treasure_Isle_Empty_Nine,
+        LocationName.Treasure_Isle_Empty_Ten,
+    ])
+
+    create_region(multiworld, player, RegionName.TreasureIsland_Grindstone,
+    [
+
+        LocationName.Treasure_Isle_911_coins,
+        LocationName.Treasure_Isle_Psy_Crystal,
+        LocationName.Treasure_Isle_Cookie,
+        LocationName.Treasure_Isle_Sylph_Feather,
+        LocationName.Treasure_Isle_Rusty_Axe,
+        LocationName.Treasure_Isle_Star_Dust,
+        LocationName.Treasure_Isle_Jesters_Armlet,
+        LocationName.Treasure_Isle_Mimic,
+    ])
+
+    create_region(multiworld, player, RegionName.TreasureIsland_PostReunion,
+    [
+        LocationName.Gale,
+        LocationName.Treasure_Isle_Iris_Robe,
+        LocationName.Treasure_Isle_Fire_Brand,
+        LocationName.Treasure_Isle_Star_Magican,
         LocationName.Treasure_Isle_Azul,
-        LocationName.Gale
+    ])
+
+    create_region(multiworld, player, RegionName.TundariaTower,
+    [
+        LocationName.Tundaria_Tower_Center_Prong,
+        LocationName.Wheeze,
+    ])
+
+    create_region(multiworld, player, RegionName.TundariaTower_Parched,
+    [
+        LocationName.Tundaria_Tower_Mint,
+        LocationName.Tundaria_Tower_Vial,
+        LocationName.Tundaria_Tower_365_coins,
+        LocationName.Tundaria_Tower_Hard_Nut,
+        LocationName.Tundaria_Tower_Crystal_Powder,
+        LocationName.Tundaria_Tower_Lightning_Sword,
+        LocationName.Tundaria_Tower_Lucky_Medal,
+        LocationName.Tundaria_Tower_Sylph_Feather,
+        LocationName.Tundaria_Tower_Burst_Brooch,
+        LocationName.Reflux
+    ])
+
+    create_region(multiworld, player, RegionName.AnkohlRuins,
+    [
+        LocationName.Ankohl_Ruins_Empty,
+        LocationName.Ankohl_Ruins_Empty_Two,
+        LocationName.Ankohl_Ruins_Empty_Three,
+        LocationName.Ankohl_Ruins_Empty_Four,
+        LocationName.Ankohl_Ruins_Empty_Five,
+        LocationName.Ankohl_Ruins_Empty_Six,
+        LocationName.Ankohl_Ruins_210_coins,
+        LocationName.Ankohl_Ruins_Crystal_Powder
+    ])
+
+    create_region(multiworld, player, RegionName.AnkohlRuins_Sand,
+    [
+        LocationName.Ankohl_Ruins_Potion,
+        LocationName.Ankohl_Ruins_Nut,
+        LocationName.Ankohl_Ruins_Thanatos_Mace,
+        LocationName.Ankohl_Ruins_Power_Bread,
+        LocationName.Ankohl_Ruins_Muni_Robe,
+        LocationName.Ankohl_Ruins_365_coins,
+        LocationName.Ankohl_Ruins_Sylph_Feather,
+        LocationName.Ankohl_Ruins_Vial,
+        LocationName.Ankohl_Ruins_Left_Prong
+    ])
+
+    create_region(multiworld, player, RegionName.Champa,
+    [
+        LocationName.Champa_Elixir,
+        LocationName.Champa_Trident,
+        LocationName.Champa_12_coins,
+        LocationName.Champa_Sleep_Bomb,
+        LocationName.Champa_Smoke_Bomb,
+        LocationName.Champa_Lucky_Medal,
+        LocationName.Champa_Viking_Helm,
+        LocationName.Champa_Avimander
+    ])
+
+    create_region(multiworld, player, RegionName.Yallam,
+    [
+        LocationName.Yallam_Nut,
+        LocationName.Yallam_Elixir,
+        LocationName.Yallam_Antidote,
+        LocationName.Yallam_Masamune,
+        LocationName.Yallam_Oil_Drop,
+        LocationName.Yallam_16_coins
+    ])
+
+    create_region(multiworld, player, RegionName.TaopoSwamp,
+    [
+        LocationName.Taopo_Swamp_Vial,
+        LocationName.Taopo_Swamp_Cookie,
+        LocationName.Taopo_Swamp_Star_Dust,
+        LocationName.Taopo_Swamp_Bramble_Seed,
+        LocationName.Taopo_Swamp_Tear_Stone,
+        LocationName.Taopo_Swamp_Tear_Stone_Two,
+        LocationName.Flower
+    ])
+
+    create_region(multiworld, player, RegionName.SeaOfTime,
+    [
+        LocationName.SeaOfTime_Poseidon
+    ])
+
+    create_region(multiworld, player, RegionName.Lemuria,
+    [
+        LocationName.Lemuria_Bone,
+        LocationName.Lemuria_Hard_Nut,
+        LocationName.Lemuria_Star_Dust,
+        LocationName.Lemuria_Lucky_Medal,
+        LocationName.Lemuria_Lucky_Medal_Two,
+        LocationName.Lemuria_Rusty_Sword,
+        LocationName.Lemuria_Eclipse,
+        LocationName.Lemuria_Grindstone,
+        LocationName.Rime
     ])
 
     #Western Sea
     create_region(multiworld, player, RegionName.WesternSea, [])
 
-    create_region(multiworld, player, RegionName.GondowanSettlement, [])
-    create_region(multiworld, player, RegionName.MagmaRock, [
-        LocationName.Magma_Rock_Blaze,
-        LocationName.Fury
+    create_region(multiworld, player, RegionName.SouthWestAttekaIslet,
+    [
+        LocationName.SW_Atteka_Islet_Dragon_Skin
     ])
 
-    create_region(multiworld, player, RegionName.Loho,
+    create_region(multiworld, player, RegionName.HesperiaSettlement,
     [
-        LocationName.Lull
+        LocationName.Hesperia_Settlement_166_coins,
+        LocationName.Tinder
     ])
-    create_region(multiworld, player, RegionName.AngaraCavern,
-    [
-        LocationName.Angara_Cavern_Haures
-    ])
-
 
     create_region(multiworld, player, RegionName.ShamanVillageCave,
     [
         LocationName.Petra,
         LocationName.Eddy
     ])
+
     create_region(multiworld, player, RegionName.ShamanVillage,
     [
+        LocationName.Shaman_Village_Elixir,
+        LocationName.Shaman_Village_Spirit_Gloves,
+        LocationName.Shaman_Village_Hard_Nut,
+        LocationName.Shaman_Village_Lucky_Medal,
+        LocationName.Shaman_Village_Lucky_Pepper,
+        LocationName.Shaman_Village_Weasels_Claw,
+        LocationName.Shaman_Village_Moapa,
         LocationName.Shaman_Village_Hover_Jade,
         LocationName.Aroma,
-        LocationName.Whorl,
         LocationName.Gasp
     ])
 
-    create_region(multiworld, player, RegionName.HesperiaSettlement,
-    [
-        LocationName.Tinder
-    ])
-
-
     create_region(multiworld, player, RegionName.AttekaInlet,
     [
+        LocationName.Atteka_Inlet_Vial,
         LocationName.Geode
     ])
-    create_region(multiworld, player, RegionName.AttekaCavern,
-    [
-        LocationName.Atteka_Cavern_Coatlicue
-    ])
+
     create_region(multiworld, player, RegionName.Contigo,
+    [
+        LocationName.Contigo_Corn,
+        LocationName.Contigo_Bramble_Seed,
+        LocationName.Contigo_Dragon_Skin,
+        LocationName.Contigo_Power_Bread,
+        LocationName.Salt,
+        LocationName.Core,
+        LocationName.Shine,
+    ])
+
+    create_region(multiworld, player, RegionName.JupiterLighthouse,
+    [
+        LocationName.Jupiter_Lighthouse_Mint,
+        LocationName.Jupiter_Lighthouse_Blue_Key,
+        LocationName.Jupiter_Lighthouse_Erinyes_Tunic,
+        LocationName.Jupiter_Lighthouse_Meditation_Rod,
+        LocationName.Jupiter_Lighthouse_Phaetons_Blade,
+        LocationName.Jupiter_Lighthouse_306_coins,
+        LocationName.Jupiter_Lighthouse_Mimic,
+        LocationName.Jupiter_Lighthouse_Mist_Potion,
+        LocationName.Jupiter_Lighthouse_Potion,
+        LocationName.Jupiter_Lighthouse_Psy_Crystal,
+        LocationName.Jupiter_Lighthouse_Red_Key,
+        LocationName.Jupiter_Lighthouse_Water_of_Life,
+        LocationName.Whorl,
+        LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst
+    ])
+
+    create_region(multiworld, player, RegionName.Reunion,
     [
         LocationName.Contigo_Carry_Stone,
         LocationName.Contigo_Lifting_Gem,
         LocationName.Contigo_Orb_of_Force,
         LocationName.Contigo_Catch_Beads,
-        LocationName.Salt,
-        LocationName.Core,
-        LocationName.Shine,
         LocationName.Flint,
         LocationName.Granite,
         LocationName.Quartz,
@@ -418,14 +617,58 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Squall,
         LocationName.Luff
     ])
-    create_region(multiworld, player, RegionName.JupiterLighthouse, [])
+
+    create_region(multiworld, player, RegionName.AttekaCavern,
+    [
+        LocationName.Atteka_Cavern_Coatlicue
+    ])
+
     create_region(multiworld, player, RegionName.AnemosSanctum,
     [
+        LocationName.Anemos_Inner_Sanctum_Orihalcon,
+        LocationName.Anemos_Inner_Sanctum_Dark_Matter,
+        LocationName.Anemos_Inner_Sanctum_Dullahan,
         LocationName.Anemos_Inner_Sanctum_Charon,
         LocationName.Anemos_Inner_Sanctum_Iris
     ])
 
-    create_region(multiworld, player, RegionName.SouthWestAttekaIslet, [])
+    create_region(multiworld, player, RegionName.GondowanSettlement,
+    [
+        LocationName.Gondowan_Settlement_Lucky_Medal,
+        LocationName.Gondowan_Settlement_Star_Dust
+    ])
+
+    create_region(multiworld, player, RegionName.MagmaRock,
+    [
+        LocationName.Magma_Rock_Mimic,
+        LocationName.Magma_Rock_Salamander_Tail,
+        LocationName.Magma_Rock_383_coins,
+        LocationName.Magma_Rock_Oil_Drop
+    ])
+
+    create_region(multiworld, player, RegionName.MagmaRockInterior,
+    [
+        LocationName.Fury,
+        LocationName.Magma_Rock_Lucky_Medal,
+        LocationName.Magma_Rock_Mist_Potion,
+        LocationName.Magma_Rock_Salamander_Tail_Two,
+        LocationName.Magma_Rock_Golem_Core,
+        LocationName.Magma_Rock_Blaze,
+        LocationName.Magma_Rock_Magma_Ball
+    ])
+
+    create_region(multiworld, player, RegionName.Loho,
+    [
+        LocationName.Loho_Crystal_Powder,
+        LocationName.Loho_Mythril_Silver,
+        LocationName.Loho_Golem_Core,
+        LocationName.Loho_Golem_Core_Two,
+        LocationName.Lull
+    ])
+    create_region(multiworld, player, RegionName.AngaraCavern,
+    [
+        LocationName.Angara_Cavern_Haures
+    ])
 
     create_region(multiworld, player, RegionName.KaltIsland,
     [
@@ -434,16 +677,33 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.Prox,
     [
+        LocationName.Prox_Cookie,
+        LocationName.Prox_Potion,
+        LocationName.Prox_Dark_Matter,
+        LocationName.Prox_Sacred_Feather,
         LocationName.Mold
     ])
+
     create_region(multiworld, player, RegionName.MarsLighthouse,
     [
-        LocationName.Mars_Lighthouse_Doom_Dragon,
+        LocationName.Mars_Lighthouse_Mars_Star,
+        LocationName.Mars_Lighthouse_Sol_Blade,
+        LocationName.Mars_Lighthouse_Apple,
+        LocationName.Mars_Lighthouse_Mimic,
+        LocationName.Mars_Lighthouse_Orihalcon,
+        LocationName.Mars_Lighthouse_Valkyrie_Mail,
+        LocationName.Mars_Lighthouse_Flame_Dragons,
         LocationName.Mars_Lighthouse_Teleport_Lapis,
         LocationName.Balm,
-        LocationName.Fugue
     ])
 
+    create_region(multiworld, player, RegionName.MarsLighthouse_Activated,
+    [
+        LocationName.Fugue,
+        LocationName.Mars_Lighthouse_Alastors_Hood,
+        LocationName.Mars_Lighthouse_Psy_Crystal,
+        LocationName.Mars_Lighthouse_Doom_Dragon
+    ])
 
 
     create_connect(multiworld, player, RegionName.Menu, RegionName.Idejima)
@@ -456,11 +716,14 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_connect(multiworld, player, RegionName.Madra, RegionName.MadraCatacombs, lambda state: state.has(ItemName.Reveal, player))
     create_connect(multiworld, player, RegionName.Madra, RegionName.IndraCavern)
 
+    create_connect(multiworld, player, RegionName.Lemuria, RegionName.Lemurian_Ship, one_way=True)
+    create_connect(multiworld, player, RegionName.AttekaInlet, RegionName.Lemurian_Ship, one_way=True)
+
     create_connect(multiworld, player, RegionName.Madra, RegionName.OseniaCliffs)
     create_connect(multiworld, player, RegionName.OseniaCliffs, RegionName.Mikasalla)
     create_connect(multiworld, player, RegionName.Mikasalla, RegionName.YampiDesertFront)
     create_connect(multiworld, player, RegionName.YampiDesertFront, RegionName.YampiDesertBack, lambda state: state.has(ItemName.Scoop_Gem, player))
-    create_connect(multiworld, player, RegionName.YampiDesertBack, RegionName.YampiDesertCave, lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Reveal, player))
+    create_connect(multiworld, player, RegionName.YampiDesertBack, RegionName.YampiDesertCave, lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Burst_Brooch, player))
     create_connect(multiworld, player, RegionName.YampiDesertBack, RegionName.Alhafra)
     create_connect(multiworld, player, RegionName.Alhafra, RegionName.AlhafraCave, lambda state: (state.has(ItemName.Briggs_defeated, player) and state.has(ItemName.Tremor_Bit, player)) or state.has(ItemName.Briggs_escaped, player))
     create_connect(multiworld, player, RegionName.Mikasalla, RegionName.Garoh)
@@ -477,7 +740,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_connect(multiworld, player, RegionName.KibomboMountains, RegionName.Kibombo, lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Whirlwind, player), True)
     create_connect(multiworld, player, RegionName.Kibombo, RegionName.KibomboMountains, one_way=True)
     create_connect(multiworld, player, RegionName.Kibombo, RegionName.GabombaStatue, lambda state: state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Scoop_Gem, player))
-    create_connect(multiworld, player, RegionName.GabombaStatue, RegionName.GabombaCatacombs)
+    create_connect(multiworld, player, RegionName.GabombaStatue, RegionName.GabombaCatacombs, lambda state: state.has(ItemName.Gabombo_Statue_Completed, player) and state.has(ItemName.Cyclone_Chip, player))
 
 
     create_connect(multiworld, player, RegionName.Daila, RegionName.EasternSea, lambda state: state.has(ItemName.Ship, player))
@@ -492,15 +755,18 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.NorthOseniaIslet)
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.SouthEastAngaraIslet)
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.SeaOfTimeIslet)
-    create_connect(multiworld, player, RegionName.SeaOfTimeIslet, RegionName.IsletCave)
+    create_connect(multiworld, player, RegionName.SeaOfTimeIslet, RegionName.IsletCave, lambda state: state.has(ItemName.Mind_Read, player) and state.has(ItemName.Lil_Turtle, player))
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.SeaOfTime)
-    create_connect(multiworld, player, RegionName.SeaOfTime, RegionName.Lemuria)
+    create_connect(multiworld, player, RegionName.SeaOfTime, RegionName.Lemuria, lambda state: state.has(ItemName.Poseidon_defeated, player) or state.has(ItemName.Grindstone, player))
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.TreasureIsland)
+    create_connect(multiworld, player, RegionName.TreasureIsland, RegionName.TreasureIsland_Grindstone, lambda state: state.has(ItemName.Grindstone, player))
+    create_connect(multiworld, player, RegionName.TreasureIsland_Grindstone, RegionName.TreasureIsland_PostReunion, lambda state: state.has(ItemName.Lifting_Gem, player))
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.Champa)
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.AnkohlRuins)
+    create_connect(multiworld, player, RegionName.AnkohlRuins, RegionName.AnkohlRuins_Sand, lambda state: state.has(ItemName.Sand, player))
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.Izumo)
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.GaiaRock)
@@ -513,12 +779,14 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.EastTundariaIslet)
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.TundariaTower)
+    create_connect(multiworld, player, RegionName.TundariaTower, RegionName.TundariaTower_Parched, lambda state: state.has(ItemName.Parch, player))
 
 
     create_connect(multiworld, player, RegionName.EasternSea, RegionName.WesternSea, lambda state: state.has(ItemName.Grindstone, player))
 
 
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.MagmaRock, lambda state: state.has(ItemName.Lifting_Gem, player))
+    create_connect(multiworld, player, RegionName.MagmaRock, RegionName.MagmaRockInterior, lambda state: state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Growth, player) and state.has(ItemName.Lash_Pebble, player))
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.GondowanSettlement)
 
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.SouthWestAttekaIslet)
@@ -528,17 +796,19 @@ def create_regions(multiworld: MultiWorld, player: int):
     create_connect(multiworld, player, RegionName.AttekaInlet, RegionName.Contigo)
     create_connect(multiworld, player, RegionName.Contigo, RegionName.AnemosSanctum, lambda state: state.has(ItemName.Teleport_Lapis, player) and state.count_group(ItemType.Djinn, player) >= 72)
     create_connect(multiworld, player, RegionName.Contigo, RegionName.JupiterLighthouse, lambda state: state.has(ItemName.Cyclone_Chip, player))
-    create_connect(multiworld, player, RegionName.WesternSea, RegionName.AttekaCavern)
+    create_connect(multiworld, player, RegionName.Contigo, RegionName.Reunion, lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
 
+    create_connect(multiworld, player, RegionName.WesternSea, RegionName.AttekaCavern, lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
 
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.Loho)
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.AngaraCavern)
 
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.HesperiaSettlement)
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.ShamanVillageCave)
-    create_connect(multiworld, player, RegionName.ShamanVillageCave, RegionName.ShamanVillage)
+    create_connect(multiworld, player, RegionName.ShamanVillageCave, RegionName.ShamanVillage, lambda state: state.has(ItemName.Whirlwind, player))
 
     create_connect(multiworld, player, RegionName.WesternSea, RegionName.KaltIsland)
 
-    create_connect(multiworld, player, RegionName.WesternSea, RegionName.Prox)
+    create_connect(multiworld, player, RegionName.WesternSea, RegionName.Prox, lambda state: state.has(ItemName.Magma_Ball, player))
     create_connect(multiworld, player, RegionName.Prox, RegionName.MarsLighthouse)
+    create_connect(multiworld, player, RegionName.MarsLighthouse, RegionName.MarsLighthouse_Activated, lambda state: state.has(ItemName.Flamedragons_defeated, player) and state.has(ItemName.Mars_Star, player))

@@ -10,6 +10,7 @@ class LocationType(str, Enum):
    Djinn = "Djinn"
    Psyenergy = "Psyenergy"
    Hidden = "Hidden"
+   Trade = "Trade"
 
 
 def always_on(multiworld, player):
@@ -512,6 +513,11 @@ test_locations = [
     LocationData(105, LocationName.Yampi_Desert_Blow_Mace, [992180], 128, ItemName.Blow_Mace),
     LocationData(106, LocationName.Yampi_Desert_Hard_Nut, [992172], 128, ItemName.Hard_Nut),
 
+    LocationData(106, LocationName.Yampi_Desert_Cave_Water_of_Life, [992192], 128, ItemName.Water_of_Life),
+    LocationData(106, LocationName.Yampi_Desert_Cave_Orihalcon, [992232], 128, ItemName.Orihalcon),
+    LocationData(106, LocationName.Yampi_Desert_Cave_Mythril_Silver, [992204], 131, ItemName.Mythril_Silver),
+    LocationData(106, LocationName.Yampi_Desert_Cave_Dark_Matter, [992224], 128, ItemName.Dark_Matter),
+
 
     LocationData(106, LocationName.Alhafra_Psy_Crystal, [992244], 128, ItemName.Psy_Crystal),
     LocationData(106, LocationName.Alhafra_Sleep_Bomb, [992252], 2, ItemName.Sleep_Bomb, LocationType.Hidden),
@@ -579,7 +585,219 @@ test_locations = [
     LocationData(106, LocationName.Gabomba_Statue_Black_Crystal, [16384172], 128, ItemName.Black_Crystal),
     LocationData(106, LocationName.Gabomba_Statue_Mimic, [992852], 129, ItemName.Hard_Nut),
     LocationData(106, LocationName.Gabomba_Statue_Elixir, [992864], 128, ItemName.Elixir),
-    LocationData(106, LocationName.Gabomba_Statue_Bone_Armlet, [992844], 128, ItemName.Bone_Armlet)
+    LocationData(106, LocationName.Gabomba_Statue_Bone_Armlet, [992844], 128, ItemName.Bone_Armlet),
+
+    LocationData(106, LocationName.Gabomba_Catacombs_Tomegathericon, [992888], 131, ItemName.Tomegathericon),
+    LocationData(106, LocationName.Gabomba_Catacombs_Mint, [992876], 131, ItemName.Mint),
+
+    LocationData(106, LocationName.Lemurian_Ship_Elixir, [992908], 3, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Lemurian_Ship_Potion, [992900], 128, ItemName.Potion),
+    LocationData(106, LocationName.Lemurian_Ship_Oil_Drop, [992936], 3, ItemName.Oil_Drop, LocationType.Hidden),
+    LocationData(106, LocationName.Lemurian_Ship_Antidote, [992916], 13, ItemName.Antidote, LocationType.Hidden),
+    LocationData(106, LocationName.Lemurian_Ship_Mist_Potion, [992928], 128, ItemName.Mist_Potion),
+
+    LocationData(106, LocationName.E_Tundaria_Islet_Pretty_Stone, [16384176], 128, ItemName.Pretty_Stone, LocationType.Trade),
+    LocationData(106, LocationName.E_Tundaria_Islet_Lucky_Medal, [992432], 2, ItemName.Lucky_Medal, LocationType.Hidden),
+
+    LocationData(106, LocationName.SE_Angara_Islet_Red_Cloth, [16384178], 128, ItemName.Red_Cloth, LocationType.Trade),
+    LocationData(106, LocationName.SE_Angara_Islet_Lucky_Medal, [993016], 13, ItemName.Lucky_Medal, LocationType.Hidden),
+
+    LocationData(106, LocationName.N_Osenia_Islet_Milk, [16384180], 128, ItemName.Milk, LocationType.Trade),
+    LocationData(106, LocationName.N_Osenia_Islet_Lucky_Medal, [991824], 3, ItemName.Lucky_Medal, LocationType.Hidden),
+
+    LocationData(106, LocationName.W_Indra_Islet_Lil_Turtle, [16384182], 128, ItemName.Lil_Turtle, LocationType.Trade),
+    LocationData(106, LocationName.W_Indra_Islet_Lucky_Medal, [992992], 3, ItemName.Lucky_Medal, LocationType.Hidden),
+
+    LocationData(106, LocationName.Sea_of_Time_Islet_Lucky_Medal, [993028], 3, ItemName.Lucky_Medal, LocationType.Hidden),
+
+
+    LocationData(106, LocationName.Islet_Cave_Turtle_Boots, [993504], 128, ItemName.Turtle_Boots),
+    LocationData(106, LocationName.Islet_Cave_Rusty_Staff, [993512], 128, ItemName.Rusty_Staff),
+
+
+    LocationData(106, LocationName.Apojii_Islands_Herb, [993172], 131, ItemName.Herb),
+    LocationData(106, LocationName.Apojii_Islands_Mint, [993164], 131, ItemName.Mint),
+    LocationData(106, LocationName.Apojii_Islands_32_coins, [993192], 3, ItemName.Herb, LocationType.Hidden),
+    LocationData(106, LocationName.Apojii_Islands_182_coins, [993180], 2, ItemName.Herb, LocationType.Hidden),
+    LocationData(106, LocationName.Apojii_Islands_Bramble_Seed, [993204], 131, ItemName.Bramble_Seed),
+
+    LocationData(106, LocationName.Aqua_Rock_Nut, [993216], 128, ItemName.Nut),
+    LocationData(106, LocationName.Aqua_Rock_Vial, [993332], 128, ItemName.Vial),
+    LocationData(106, LocationName.Aqua_Rock_Mimic, [993268], 129, ItemName.Potion),
+    LocationData(106, LocationName.Aqua_Rock_Elixir, [993224], 128, ItemName.Elixir),
+    LocationData(106, LocationName.Aqua_Rock_Aquarius_Stone, [993280], 128, ItemName.Aquarius_Stone),
+    LocationData(106, LocationName.Aqua_Rock_Crystal_Powder, [993312], 128, ItemName.Crystal_Powder),
+    LocationData(106, LocationName.Aqua_Rock_Lucky_Pepper, [993288], 128, ItemName.Lucky_Pepper),
+    LocationData(106, LocationName.Aqua_Rock_Mist_Sabre, [993236], 128, ItemName.Mist_Sabre),
+    LocationData(106, LocationName.Aqua_Rock_Oil_Drop, [993244], 128, ItemName.Oil_Drop),
+    LocationData(106, LocationName.Aqua_Rock_Rusty_Sword, [993300], 128, ItemName.Rusty_Sword),
+    LocationData(106, LocationName.Aqua_Rock_Tear_Stone, [993344], 128, ItemName.Tear_Stone),
+    LocationData(106, LocationName.Aqua_Rock_Water_of_Life, [993256], 128, ItemName.Water_of_Life),
+
+    LocationData(106, LocationName.Izumo_Elixir, [993384], 2, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Izumo_Antidote, [993360], 131, ItemName.Antidote),
+    LocationData(106, LocationName.Izumo_Antidote_Two, [993368], 131, ItemName.Antidote),
+    LocationData(106, LocationName.Izumo_Lucky_Medal, [993376], 131, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Izumo_Smoke_Bomb, [993404], 2, ItemName.Smoke_Bomb),
+    LocationData(106, LocationName.Izumo_Festival_Coat, [993412], 13, ItemName.Festival_Coat, LocationType.Hidden),
+    LocationData(106, LocationName.Izumo_Phantasmal_Mail, [993432], 128, ItemName.Phantasmal_Mail),
+    LocationData(106, LocationName.Izumo_Water_of_Life, [993392], 2, ItemName.Water_of_Life, LocationType.Hidden),
+
+    LocationData(106, LocationName.Gaia_Rock_Nut, [993444], 128, ItemName.Nut),
+    LocationData(106, LocationName.Gaia_Rock_Apple, [993464], 128, ItemName.Apple),
+    LocationData(106, LocationName.Gaia_Rock_Mimic, [993476], 129, ItemName.Potion),
+    LocationData(106, LocationName.Gaia_Rock_Rusty_Mace, [993484], 128, ItemName.Rusty_Mace),
+    LocationData(106, LocationName.Gaia_Rock_Cloud_Brand, [993492], 131, ItemName.Cloud_Brand),
+    LocationData(106, LocationName.Gaia_Rock_Dancing_Idol, [993456], 131, ItemName.Dancing_Idol),
+
+    LocationData(106, LocationName.Treasure_Isle_161_coins, [994108], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Iris_Robe, [994288], 128, ItemName.Iris_Robe),
+    LocationData(106, LocationName.Treasure_Isle_911_coins, [994208], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Cookie, [994224], 128, ItemName.Cookie),
+    LocationData(106, LocationName.Treasure_Isle_Fire_Brand, [994280], 128, ItemName.Fire_Brand),
+    LocationData(106, LocationName.Treasure_Isle_Jesters_Armlet, [994260], 128, ItemName.Jesters_Armlet),
+    LocationData(106, LocationName.Treasure_Isle_Lucky_Medal, [994116], 128, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Treasure_Isle_Mimic, [994268], 129, ItemName.Power_Bread),
+    LocationData(106, LocationName.Treasure_Isle_Psy_Crystal, [994216], 128, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Treasure_Isle_Rusty_Axe, [994240], 128, ItemName.Rusty_Axe),
+    LocationData(106, LocationName.Treasure_Isle_Star_Dust, [994248], 128, ItemName.Star_Dust),
+    LocationData(106, LocationName.Treasure_Isle_Sylph_Feather, [994232], 128, ItemName.Sylph_Feather),
+    LocationData(106, LocationName.Treasure_Isle_Empty, [994124], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Two, [994132], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Three, [994140], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Four, [994148], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Five, [994160], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Six, [994168], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Seven, [994176], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Eight, [994184], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Nine, [994192], 128, ItemName.Herb),
+    LocationData(106, LocationName.Treasure_Isle_Empty_Ten, [994200], 128, ItemName.Herb),
+
+    LocationData(106, LocationName.Tundaria_Tower_Center_Prong, [16384200], 128, ItemName.Center_Prong),
+    LocationData(106, LocationName.Tundaria_Tower_Mint, [993796], 128, ItemName.Mint),
+    LocationData(106, LocationName.Tundaria_Tower_Vial, [993760], 128, ItemName.Vial),
+    LocationData(106, LocationName.Tundaria_Tower_365_coins, [993788], 128, ItemName.Herb),
+    LocationData(106, LocationName.Tundaria_Tower_Hard_Nut, [993808], 128, ItemName.Hard_Nut),
+    LocationData(106, LocationName.Tundaria_Tower_Crystal_Powder, [993816], 128, ItemName.Crystal),
+    LocationData(106, LocationName.Tundaria_Tower_Lightning_Sword, [993768], 128, ItemName.Lightning_Sword),
+    LocationData(106, LocationName.Tundaria_Tower_Lucky_Medal, [993752], 128, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Tundaria_Tower_Sylph_Feather, [993744], 128, ItemName.Sylph_Feather),
+
+    LocationData(106, LocationName.Ankohl_Ruins_Nut, [993640], 128, ItemName.Nut),
+    LocationData(106, LocationName.Ankohl_Ruins_Vial, [993708], 128, ItemName.Vial),
+    LocationData(106, LocationName.Ankohl_Ruins_Potion, [993720], 128, ItemName.Potion),
+    LocationData(106, LocationName.Ankohl_Ruins_210_coins, [993632], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_365_coins, [993692], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Crystal_Powder, [993652], 128, ItemName.Crystal_Powder),
+    LocationData(106, LocationName.Ankohl_Ruins_Left_Prong, [993732], 131, ItemName.Left_Prong),
+    LocationData(106, LocationName.Ankohl_Ruins_Muni_Robe, [993680], 128, ItemName.Muni_Robe),
+    LocationData(106, LocationName.Ankohl_Ruins_Power_Bread, [993672], 128, ItemName.Power_Bread),
+    LocationData(106, LocationName.Ankohl_Ruins_Sylph_Feather, [993700], 128, ItemName.Sylph_Feather),
+    LocationData(106, LocationName.Ankohl_Ruins_Thanatos_Mace, [993664], 128, ItemName.Thanatos_Mace),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty, [993584], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty_Two, [993592], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty_Three, [993600], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty_Four, [993608], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty_Five, [993616], 128, ItemName.Herb),
+    LocationData(106, LocationName.Ankohl_Ruins_Empty_Six, [993624], 128, ItemName.Herb),
+
+    LocationData(106, LocationName.Champa_Elixir, [993560], 13, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Champa_Trident, [16384174], 128, ItemName.Trident),
+    LocationData(106, LocationName.Champa_12_coins, [993540], 13, ItemName.Herb, LocationType.Hidden),
+    LocationData(106, LocationName.Champa_Sleep_Bomb, [993572], 3, ItemName.Sleep_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Champa_Smoke_Bomb, [993532], 13, ItemName.Smoke_Bomb, LocationType.Hidden),
+    LocationData(106, LocationName.Champa_Lucky_Medal, [993548], 2, ItemName.Lucky_Medal, LocationType.Hidden),
+    LocationData(106, LocationName.Champa_Viking_Helm, [993524], 128, ItemName.Viking_Helm),
+
+    LocationData(106, LocationName.Yallam_Nut, [993040], 131, ItemName.Nut),
+    LocationData(106, LocationName.Yallam_Elixir, [993076], 13, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Yallam_Antidote, [993056], 131, ItemName.Antidote),
+    LocationData(106, LocationName.Yallam_Masamune, [993064], 128, ItemName.Masamune),
+    LocationData(106, LocationName.Yallam_Oil_Drop, [993084], 3, ItemName.Oil_Drop, LocationType.Hidden),
+    LocationData(106, LocationName.Yallam_16_coins, [993048], 2, ItemName.Herb, LocationType.Hidden),
+
+    LocationData(106, LocationName.Taopo_Swamp_Vial, [993128], 128, ItemName.Vial),
+    LocationData(106, LocationName.Taopo_Swamp_Cookie, [993096], 128, ItemName.Cookie),
+    LocationData(106, LocationName.Taopo_Swamp_Star_Dust, [993140], 131, ItemName.Star_Dust),
+    LocationData(106, LocationName.Taopo_Swamp_Bramble_Seed, [993152], 131, ItemName.Bramble_Seed),
+    LocationData(106, LocationName.Taopo_Swamp_Tear_Stone, [993108], 131, ItemName.Tear_Stone),
+    LocationData(106, LocationName.Taopo_Swamp_Tear_Stone_Two, [993116], 131, ItemName.Tear_Stone),
+
+
+    LocationData(106, LocationName.Lemuria_Bone, [993888], 131, ItemName.Bone),
+    LocationData(106, LocationName.Lemuria_Hard_Nut, [993880], 131, ItemName.Hard_Nut),
+    LocationData(106, LocationName.Lemuria_Star_Dust, [993896], 131, ItemName.Star_Dust),
+    LocationData(106, LocationName.Lemuria_Lucky_Medal, [993864], 131, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Lemuria_Lucky_Medal_Two, [993924], 3, ItemName.Lucky_Medal, LocationType.Hidden),
+    LocationData(106, LocationName.Lemuria_Rusty_Sword, [993872], 131, ItemName.Rusty_Sword),
+
+    LocationData(106, LocationName.SW_Atteka_Islet_Dragon_Skin, [993984], 128, ItemName.Dragon_Skin),
+
+    LocationData(106, LocationName.Hesperia_Settlement_166_coins, [993960], 128, ItemName.Herb),
+
+    LocationData(106, LocationName.Shaman_Village_Elixir, [994072], 2, ItemName.Elixir, LocationType.Hidden),
+    LocationData(106, LocationName.Shaman_Village_Spirit_Gloves, [994044], 128, ItemName.Spirit_Gloves),
+    LocationData(106, LocationName.Shaman_Village_Hard_Nut, [994096], 128, ItemName.Hard_Nut),
+    LocationData(106, LocationName.Shaman_Village_Lucky_Medal, [994052], 2, ItemName.Lucky_Medal, LocationType.Hidden),
+    LocationData(106, LocationName.Shaman_Village_Lucky_Pepper, [994084], 128, ItemName.Lucky_Pepper, LocationType.Hidden),
+    LocationData(106, LocationName.Shaman_Village_Weasels_Claw, [994064], 3, ItemName.Weasels_Claw),
+
+    LocationData(106, LocationName.Atteka_Inlet_Vial, [993996], 128, ItemName.Vial),
+
+    LocationData(106, LocationName.Contigo_Corn, [994024], 131, ItemName.Corn),
+    LocationData(106, LocationName.Contigo_Bramble_Seed, [994032], 131, ItemName.Bramble_Seed),
+    LocationData(106, LocationName.Contigo_Dragon_Skin, [994716], 128, ItemName.Dragon_Skin),
+    LocationData(106, LocationName.Contigo_Power_Bread, [994016], 3, ItemName.Power_Bread, LocationType.Hidden),
+
+    LocationData(106, LocationName.Jupiter_Lighthouse_Mint, [994312], 131, ItemName.Mint),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Blue_Key, [994396], 131, ItemName.Blue_Key),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Erinyes_Tunic, [994336], 128, ItemName.Erinyes_Tunic),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Meditation_Rod, [994368], 128, ItemName.Meditation_Rod),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Phaetons_Blade, [994436], 128, ItemName.Phaetons_Blade),
+    LocationData(106, LocationName.Jupiter_Lighthouse_306_coins, [994412], 128, ItemName.Herb),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Mimic, [994388], 129, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Mist_Potion, [994404], 128, ItemName.Mist_Potion),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Potion, [994348], 128, ItemName.Potion),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Psy_Crystal, [994356], 128, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Red_Key, [994376], 131, ItemName.Red_Key),
+    LocationData(106, LocationName.Jupiter_Lighthouse_Water_of_Life, [994424], 128, ItemName.Water_of_Life),
+
+    LocationData(106, LocationName.Anemos_Inner_Sanctum_Orihalcon, [994736], 128, ItemName.Orihalcon),
+    LocationData(106, LocationName.Anemos_Inner_Sanctum_Dark_Matter, [994728], 128, ItemName.Dark_Matter),
+
+    LocationData(106, LocationName.Gondowan_Settlement_Lucky_Medal, [993948], 8, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Gondowan_Settlement_Star_Dust, [993936], 128, ItemName.Star_Dust),
+
+    LocationData(106, LocationName.Magma_Rock_Golem_Core, [994524], 128, ItemName.Golem_Core),
+    LocationData(106, LocationName.Magma_Rock_Magma_Ball, [16384188], 128, ItemName.Magma_Ball),
+    LocationData(106, LocationName.Magma_Rock_Mimic, [994536], 129, ItemName.Apple),
+    LocationData(106, LocationName.Magma_Rock_Salamander_Tail, [994468], 128, ItemName.Salamander_Tail),
+    LocationData(106, LocationName.Magma_Rock_Salamander_Tail_Two, [994504], 128, ItemName.Salamander_Tail),
+    LocationData(106, LocationName.Magma_Rock_383_coins, [994460], 128, ItemName.Herb),
+    LocationData(106, LocationName.Magma_Rock_Lucky_Medal, [994480], 128, ItemName.Lucky_Medal),
+    LocationData(106, LocationName.Magma_Rock_Mist_Potion, [994492], 128, ItemName.Mist_Potion),
+    LocationData(106, LocationName.Magma_Rock_Oil_Drop, [994448], 128, ItemName.Oil_Drop),
+
+    LocationData(106, LocationName.Loho_Crystal_Powder, [994572], 3, ItemName.Crystal, LocationType.Hidden),
+    LocationData(106, LocationName.Loho_Mythril_Silver, [994548], 131, ItemName.Mythril_Silver),
+    LocationData(106, LocationName.Loho_Golem_Core, [994556], 131, ItemName.Golem_Core),
+    LocationData(106, LocationName.Loho_Golem_Core_Two, [994564], 131, ItemName.Golem_Core),
+
+
+    LocationData(106, LocationName.Prox_Cookie, [994592], 2, ItemName.Cookie, LocationType.Hidden),
+    LocationData(106, LocationName.Prox_Potion, [994604], 2, ItemName.Potion, LocationType.Hidden),
+    LocationData(106, LocationName.Prox_Dark_Matter, [994584], 131, ItemName.Dark_Matter),
+    LocationData(106, LocationName.Prox_Sacred_Feather, [994612], 13, ItemName.Sacred_Feather, LocationType.Hidden),
+
+    LocationData(106, LocationName.Mars_Lighthouse_Alastors_Hood, [994656], 128, ItemName.Alastors_Hood),
+    LocationData(106, LocationName.Mars_Lighthouse_Mars_Star, [16384170], 128, ItemName.Mars_Star),
+    LocationData(106, LocationName.Mars_Lighthouse_Sol_Blade, [994692], 128, ItemName.Sol_Blade),
+    LocationData(106, LocationName.Mars_Lighthouse_Apple, [994624], 128, ItemName.Apple),
+    LocationData(106, LocationName.Mars_Lighthouse_Mimic, [994644], 129, ItemName.Cookie),
+    LocationData(106, LocationName.Mars_Lighthouse_Orihalcon, [994668], 128, ItemName.Orihalcon),
+    LocationData(106, LocationName.Mars_Lighthouse_Psy_Crystal, [994704], 128, ItemName.Psy_Crystal),
+    LocationData(106, LocationName.Mars_Lighthouse_Valkyrie_Mail, [994680], 128, ItemName.Valkyrie_Mail)
+
 ]
 
 events = [
@@ -588,7 +806,18 @@ events = [
     LocationData(None, LocationName.Yampi_Desert_King_Scorpion, [0], 0, ItemName.King_Scorpion_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
-    LocationData(None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True)
+    LocationData(None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True),
+    LocationData(None, LocationName.Yampi_Desert_Cave_Valukar, [0], 0, ItemName.Valukar_defated, LocationType.Event, True),
+    LocationData(None, LocationName.Islet_Cave_Sentinel, [0], 0, ItemName.Sentinel_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Gaia_Rock_Serpent, [0], 0, ItemName.Serpent_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Treasure_Isle_Star_Magican, [0], 0, ItemName.Star_Magician_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Champa_Avimander, [0], 0, ItemName.Avimander_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.SeaOfTime_Poseidon, [0], 0, ItemName.Poseidon_defeated, LocationType.Event,True),
+    LocationData(None, LocationName.Lemurian_Ship_Aqua_Hydra, [0], 0, ItemName.Aqua_Hydra_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Shaman_Village_Moapa, [0], 0, ItemName.Moapa_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, [0], 0, ItemName.Jupiter_Beacon_Lit, LocationType.Event, True),
+    LocationData(None, LocationName.Anemos_Inner_Sanctum_Dullahan, [0], 0, ItemName.Dullahan_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True)
 ]
 
 def create_loctype_to_datamapping():
@@ -601,5 +830,5 @@ def create_loctype_to_datamapping():
 
 
 all_locations: List[LocationData] = test_locations + djinn_locations + psyenergy_locations + summon_tablets + events
-location_name_to_id: Dict[str, LocationData] =  {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
+location_name_to_id: Dict[str, LocationData] = {location.name: location for location in all_locations if location.loc_type != LocationType.Event}
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

@@ -24,6 +24,44 @@ class LocalRom:
 
         self.rom_data = bytearray(get_patched_rom_bytes(file))
 
+
+    def apply_qol_patches(self):
+        #Gametickets no longer offered by shops, randomizer does not need them either
+        self.rom_data[0xAFED4] = 0x70
+        self.rom_data[0xAFED5] = 0x47
+
+        #ship speed increased on overworld
+        self.rom_data[0x285A4] = 0xF0
+
+        #Trial Road inventory snapshotting fix
+        self.rom_data[0xB10A4] = 0x8C
+        self.rom_data[0xB10A5] = 0xE0
+
+        # Remove "Update" option from main menu
+        self.rom_data[0x4D62E] = 0x0
+        self.rom_data[0x4D62F] = 0xE0
+
+    def write_story_flags(self):
+        flags = [0xf22, 0x873]
+
+        if True: #Flagset for skipping many cutscenes. Some cutscenes still play and are tied to map data
+            flags = [0xf22, 0x890, 0x891, 0x892, 0x893, 0x894, 0x895, 0x896, 0x848, 0x86c, 0x86d, 0x86e, 0x86f,
+            0x916, 0x844, 0x863, 0x864, 0x865, 0x867, 0x872, 0x873, 0x84b, 0x91b, 0x91c, 0x91d, 0x8b2, 0x8b3, 0x8b4,
+            0x8a9, 0x8ac, 0x904, 0x971, 0x973, 0x974, 0x924, 0x928, 0x929, 0x92a, 0x880, 0x8f1, 0x8f3, 0x8f5, 0xa6c,
+            0x8f6, 0x8fc, 0x8fe, 0x910, 0x911, 0x913, 0x980, 0x981, 0x961, 0x964, 0x965, 0x966, 0x968, 0x962, 0x969,
+            0x96a, 0xa8c, 0x88f, 0x8f0, 0x9b1, 0xa78, 0x90c, 0xa2e, 0x9c0, 0x9c1, 0x9c2, 0x908, 0x94F]
+
+        if True: #Ship door unlocked, no need to do gabomba
+            flags.extend([0x985])
+            if True: #Ship is available from the start
+                flags.extend([0x982, 0x983, 0x8de, 0x907])
+
+        addr = 0xF4280
+        for idx, flag in enumerate(flags):
+            self.rom_data[addr] = flag & 0xFF
+            self.rom_data[addr + 1] = flag >> 8
+            addr += 2
+
     def write_to_file(self, out_path):
         with open(out_path, "wb") as rom:
             rom.write(self.rom_data)
