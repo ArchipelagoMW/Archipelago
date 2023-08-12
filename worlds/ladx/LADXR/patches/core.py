@@ -722,7 +722,7 @@ success:
     ld   a, $68
     ld   [$D404], a                  ; wWarp0DestinationX
     ldh  [$98], a                    ; LinkPositionY
-    ld a, [$D475] ; spin lonk?
+    ld  [$D475], a
     ld   a, $70
     ld   [$D405], a                  ; wWarp0DestinationY
     ldh  [$99], a                    ; LinkPositionX
@@ -733,6 +733,9 @@ success:
     ldh a, [$A2]
     ld  [$DBC8], a
     call $0C83                       ; ApplyMapFadeOutTransition
+    xor  a                                        ; $5DF3: $AF
+    ld   [$C167], a                               ; $5DF4: $EA $67 $C1
+
 exit:
     ret
         """))
