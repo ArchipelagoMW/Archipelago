@@ -117,7 +117,7 @@ items_by_id: typing.Dict[int, ItemData] = {item.id: item for item in all_items}
 starting_area_dict: typing.Dict[int, ItemData] = {
     0: item_table[ItemNames.Lumbridge],
     1: item_table[ItemNames.Al_Kharid],
-    2: item_table[ItemNames.East_Of_Varrock],
+    2: item_table[ItemNames.Central_Varrock],
     3: item_table[ItemNames.West_Varrock],
     4: item_table[ItemNames.Edgeville],
     5: item_table[ItemNames.Falador],

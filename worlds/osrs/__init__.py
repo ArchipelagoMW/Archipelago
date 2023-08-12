@@ -8,7 +8,7 @@ from .Regions import all_regions, regions_by_name
 from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location_Items, \
     chunksanity_starting_chunks, QP_Items
 from .Locations import OSRSLocation, all_locations
-from .Options import OSRSOptions
+from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
 
 
@@ -46,18 +46,17 @@ class OSRSWorld(World):
         starting_area = self.multiworld.starting_area[self.player]
         allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
 
-        if starting_area.value < 8:
-            self.starting_area_item = starting_area_dict[starting_area.value]
-        elif starting_area.value == 8:
-            random_bank = rnd.randint(0, 7)
-            self.starting_area_item = starting_area_dict[random_bank]
-        else:
+        if starting_area.value < StartingArea.option_chunksanity:
             chunksanity_random = rnd.randint(0, len(chunksanity_starting_chunks) - 1)
             self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
+        elif starting_area.value == StartingArea.option_any_bank:
+            random_bank = rnd.randint(0, len(starting_area_dict) - 1)
+            self.starting_area_item = starting_area_dict[random_bank]
+        else:
+            self.starting_area_item = starting_area_dict[starting_area.value]
 
         # Set Starting Chunk
         self.multiworld.push_precollected(self.create_item(self.starting_area_item.itemName))
-        print(f"Precollected: {self.multiworld.precollected_items}")
 
     def create_regions(self) -> None:
         """
