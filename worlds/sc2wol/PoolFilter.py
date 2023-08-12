@@ -178,9 +178,9 @@ class ValidInventory:
                         unit_nb_upgrades[cItem.parent_item] += 1
             # Making sure that the upgrades being removed is random 
             # Currently, only for combat shield vs Stabilizer Medpacks...
-            suffled_unit_list = list(unit_avail_upgrades.keys())
-            self.multiworld.random.shuffle(suffled_unit_list)
-            for unit in suffled_unit_list:
+            shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
+            self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
+            for unit in shuffled_unit_upgrade_list:
                 while (unit_nb_upgrades[unit] > maxUpgrad) \
                          and (len(unit_avail_upgrades[unit]) > 0):
                     itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
