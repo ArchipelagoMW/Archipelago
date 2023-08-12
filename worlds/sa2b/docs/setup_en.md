@@ -127,9 +127,6 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 - Mission 1 is missing a texture in the stage select UI.
 	- Most likely another mod is conflicting and overwriting the texture pack. It is recommeded to have the SA2B Archipelago mod load last in the mod loader.
 
-- Received Cutscene Traps don't play after beating a level.
-	- Make sure you don't have the "`Skip Intro`" option enabled in the mod manager.
-
 ## Save File Safeguard (Advanced Option)
 
 The mod contains a save file safeguard which associates a savefile to a specific Archipelago seed. By default, save files can only connect to Archipelago servers that match their seed. The safeguard can be disabled in the mod config.ini by setting `IgnoreFileSafety` to true. This is NOT recommended for the standard user as it will allow any save file to connect and send items to the Archipelago server.
