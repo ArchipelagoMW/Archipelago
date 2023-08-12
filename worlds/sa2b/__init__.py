@@ -217,7 +217,7 @@ class SA2BWorld(World):
                 black_market_unlock_mult = 0.75
 
             for i in range(self.multiworld.black_market_slots[self.player].value):
-                self.black_market_costs[i] = math.floor(i * black_market_unlock_mult)
+                self.black_market_costs[i] = math.floor((i + 1) * black_market_unlock_mult)
 
         # Cap at player-specified Emblem count
         raw_emblem_count = total_required_locations - len(itempool)
