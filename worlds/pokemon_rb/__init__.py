@@ -263,6 +263,8 @@ class PokemonRedBlueWorld(World):
                         break
                     else:
                         unplaced_items.append(item)
+            else:
+                raise FillError(f"Pokemon Red and Blue local item fill failed for player {loc.player}: could not place {item.name}")
             progitempool += [item for item in unplaced_items if item.advancement]
             usefulitempool += [item for item in unplaced_items if item.useful]
             filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
