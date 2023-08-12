@@ -678,7 +678,7 @@ test_locations = [
     LocationData(106, LocationName.Tundaria_Tower_Vial, [993760], 128, ItemName.Vial),
     LocationData(106, LocationName.Tundaria_Tower_365_coins, [993788], 128, ItemName.Herb),
     LocationData(106, LocationName.Tundaria_Tower_Hard_Nut, [993808], 128, ItemName.Hard_Nut),
-    LocationData(106, LocationName.Tundaria_Tower_Crystal_Powder, [993816], 128, ItemName.Crystal),
+    LocationData(106, LocationName.Tundaria_Tower_Crystal_Powder, [993816], 128, ItemName.Crystal_Powder),
     LocationData(106, LocationName.Tundaria_Tower_Lightning_Sword, [993768], 128, ItemName.Lightning_Sword),
     LocationData(106, LocationName.Tundaria_Tower_Lucky_Medal, [993752], 128, ItemName.Lucky_Medal),
     LocationData(106, LocationName.Tundaria_Tower_Sylph_Feather, [993744], 128, ItemName.Sylph_Feather),
@@ -778,7 +778,7 @@ test_locations = [
     LocationData(106, LocationName.Magma_Rock_Mist_Potion, [994492], 128, ItemName.Mist_Potion),
     LocationData(106, LocationName.Magma_Rock_Oil_Drop, [994448], 128, ItemName.Oil_Drop),
 
-    LocationData(106, LocationName.Loho_Crystal_Powder, [994572], 3, ItemName.Crystal, LocationType.Hidden),
+    LocationData(106, LocationName.Loho_Crystal_Powder, [994572], 3, ItemName.Crystal_Powder, LocationType.Hidden),
     LocationData(106, LocationName.Loho_Mythril_Silver, [994548], 131, ItemName.Mythril_Silver),
     LocationData(106, LocationName.Loho_Golem_Core, [994556], 131, ItemName.Golem_Core),
     LocationData(106, LocationName.Loho_Golem_Core_Two, [994564], 131, ItemName.Golem_Core),

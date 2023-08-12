@@ -54,6 +54,9 @@ class GSTLAWorld(World):
                 continue
 
             ap_item = self.create_item(location.vanilla_item)
+
+            print(f'{location.name} - {location.vanilla_item}')
+
             if location.loc_type == LocationType.Djinn:
                 self.djinnlist.append(ap_item)
             else:
@@ -125,6 +128,7 @@ class GSTLAWorld(World):
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
+
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]

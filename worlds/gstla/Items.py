@@ -549,7 +549,7 @@ djinn_items: List[ItemData] =[
                 814184, [12, 0, 6, 0, 0, 0]),
    DjinItemData(base_djinn_index + 16, ItemName.Mold, ItemClassification.progression_skip_balancing, 16384032, 16, ElementType.Earth,
                 814196, [8, 0, 4, 0, 2, 1]),
-   DjinItemData(base_djinn_index + 17, ItemName.Crystal, ItemClassification.progression_skip_balancing, 16384034, 16,
+   DjinItemData(base_djinn_index + 17, ItemName.Crystal, ItemClassification.progression_skip_balancing, 16384034, 17,
                 ElementType.Earth, 814208, [10, 5, 0, 2, 0, 0]),
 
    DjinItemData(base_djinn_index + 18, ItemName.Fizz, ItemClassification.progression_skip_balancing, 16384036, 0, ElementType.Water,
