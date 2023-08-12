@@ -49,6 +49,20 @@ class RandomPickups(Choice):
     default = 1
 
 
+class FlipLevels(Choice):
+    """
+    Flip levels on one axis.
+    vanilla: No flipping
+    flipped: All levels are flipped
+    random: Random levels are flipped
+    """
+    display_name = "Flip Levels"
+    option_vanilla = 0
+    option_flipped = 1
+    option_randomly_flipped = 2
+    default = 0
+
+
 class AllowDeathLogic(Toggle):
     """Some locations require a timed puzzle that can only be tried once.
     After which, if the player failed to get it, the location cannot be checked anymore.
@@ -97,6 +111,7 @@ options: typing.Dict[str, AssembleOptions] = {
     "difficulty": Difficulty,
     "random_monsters": RandomMonsters,
     "random_pickups": RandomPickups,
+    "flip_levels": FlipLevels,
     "allow_death_logic": AllowDeathLogic,
     "pro": Pro,
     "start_with_computer_area_maps": StartWithComputerAreaMaps,
