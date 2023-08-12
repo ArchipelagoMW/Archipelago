@@ -81,7 +81,7 @@ location_table: List[LocationDict] = [
     {"name": "Secret Island Beach Trail Stick", "id": ID + 47, "needsShovel": False, "purchase": False},
     {"name": "Below Lighthouse Walkway Stick", "id": ID + 48, "needsShovel": False, "purchase": False},
     {"name": "Beach Hut Rocky Pool Sand Stick", "id": ID + 49, "needsShovel": False, "purchase": False},
-    {"name": "Cliff Overlooking East River Waterfall Stick", "id": ID + 50, "needsShovel": False, "purchase": False},
+    {"name": "Cliff Overlooking West River Waterfall Stick", "id": ID + 50, "needsShovel": False, "purchase": False},
     {"name": "Trail to Tough Bird Salesman Stick", "id": ID + 51, "needsShovel": False, "purchase": False},
     {"name": "North Beach Stick", "id": ID + 52, "needsShovel": False, "purchase": False},
     {"name": "Beachstickball Court Stick", "id": ID + 53, "needsShovel": False, "purchase": False},
