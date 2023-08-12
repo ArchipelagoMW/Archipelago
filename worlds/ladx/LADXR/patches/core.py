@@ -730,8 +730,8 @@ success:
     ld   [$D416], a                  ; wWarp0PositionTileIndex
     ld   a, $07
     ld   [$DB96], a                  ; wGameplaySubtype
-    ld a, $78 ; Set link Z pos, doesn't work
-    ldh [$A2], a
+    ldh a, [$A2]
+    ld  [$DBC8], a
     call $0C83                       ; ApplyMapFadeOutTransition
 exit:
     ret
