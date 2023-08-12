@@ -19,13 +19,20 @@ booster_contents = {
         "Dark Elf",
         "Summoned Skull",
         "Sangan",
-        "7 Colored Fish"
+        "7 Colored Fish",
+        "Tribute to The Doomed"
     },
     "PHARAOH'S SERVANT": {
         "Beast of Talwar",
         "Jinzo",
         "Gearfried the Iron Knight",
-        "Harpie's Brother"
+        "Harpie's Brother",
+        "Gravity Bind",
+        "Solemn Wishes",
+        "Kiseitai",
+        "Morphing Jar #2",
+        "The Shallow Grave",
+        "Nobleman of Crossout"
     },
     "PHARAONIC GUARDIAN": {
         "Don Zaloog",
@@ -40,7 +47,10 @@ booster_contents = {
         "Book of Life",
         "Call of the Mummy",
         "Gravekeeper's Spy",
-        "Gravekeeper's Guard"
+        "Gravekeeper's Guard",
+        "A Cat of Ill Omen",
+        "Jowls of Dark Demise",
+        "Non Aggression Area"
     },
     "SPELL RULER": {
         "Ritual",
@@ -52,7 +62,10 @@ booster_contents = {
         "Mother Grizzly",
         "UFO Turtle",
         "Flying Kamakiri 1",
-        "Giant Germ"
+        "Giant Germ",
+        "Nimble Momonga",
+        "Cyber Jar",
+        "Spear Cretin"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -72,7 +85,10 @@ booster_contents = {
         "Gemini Elf",
         "Amphibian Beast",
         "Revival Jam",
-        "Dancing Fairy"
+        "Dancing Fairy",
+        "Cure Mermaid",
+        "The Last Warrior from Another Planet",
+        "United We Stand"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
@@ -174,7 +190,8 @@ booster_contents = {
         "Sea Serpent Warrior of Darkness",
         "Giga Gagagigo",
         "Terrorking Salmon",
-        "Blazing Inpachi"
+        "Blazing Inpachi",
+        "Stealth Bird"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
@@ -184,7 +201,9 @@ booster_contents = {
         "Zaborg the Thunder Monarch",
         "Regenerating Mummy",
         "The End of Anubis",
-        "Solar Flare Dragon"
+        "Solar Flare Dragon",
+        "Level Limit - Area B",
+        "King of the Swamp"
     },
     "SOUL OF THE DUELIST": {
         "Ninja Grandmaster Sasuke",
@@ -209,13 +228,22 @@ booster_contents = {
         "Insect Knight",
         "Chiron the Mage",
         "Granmarg the Rock Monarch",
-        "Silent Swordsman Lv5"
+        "Silent Swordsman Lv5",
+        "The Dark - Hex-Sealed Fusion",
+        "The Earth - Hex-Sealed Fusion",
+        "The Light - Hex-Sealed Fusion"
     },
     "THE LOST MILLENIUM": {
         "Ritual",
         "Megarock Dragon",
         "D.D. Survivor",
-        "Hieracosphinx"
+        "Hieracosphinx",
+        "Elemental Hero Flame Wingman",
+        "Elemental Hero Avian",
+        "Elemental Hero Burstinatrix",
+        "Elemental Hero Clayman",
+        "Elemental Hero Sparkman",
+        "Elemental Hero Thunder Giant"
     },
     "CYBERNETIC REVOLUTION": {
         "Power Bond",
@@ -223,7 +251,9 @@ booster_contents = {
         "Cyber Twin Dragon",
         "Cybernetic Magician",
         "Indomitable Fighter Lei Lei",
-        "Protective Soul Ailin"
+        "Protective Soul Ailin",
+        "Miracle Fusion",
+        "Elemental Hero Bubbleman"
     },
     "ELEMENTAL ENERGY": {
         "V-Tiger Jet",
@@ -237,7 +267,13 @@ booster_contents = {
         "Familiar-Possessed - Hiita",
         "Familiar-Possessed - Wynn",
         "Oxygeddon",
-        "Roll Out!"
+        "Roll Out!",
+        "Dark World Lightning",
+        "Elemental Hero Rampart Blaster",
+        "Elemental Hero Shining Flare Wingman",
+        "Elemental Hero WildEdge",
+        "Elemental Hero Wildheart",
+        "Elemental Hero Bladedge"
     },
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
@@ -246,9 +282,11 @@ booster_contents = {
         "Ritual",
         "Treeborn Frog",
         "Saber Beetle",
-        "Tenkabito Shien"
+        "Tenkabito Shien",
+        "Princess Pikeru"
     },
     "GAME GIFT COLLECTION": {
+        "Ritual",
         "Valkyrion the Magna Warrior",
         "Alpha the Magnet Warrior",
         "Beta the Magnet Warrior",
@@ -261,7 +299,8 @@ booster_contents = {
         "Slate Warrior",
         "Cyber-Tech Alligator",
         "D.D. Assailant",
-        "Goblin Zombie"
+        "Goblin Zombie",
+        "Elemental Hero Madballman"
     },
     "Special Gift Collection": {
         "Gate Guardian",
@@ -274,7 +313,8 @@ booster_contents = {
         "Cyber Harpie Lady",
         "Dandylion",
         "Blade Knight",
-        "Curse of Vampire"
+        "Curse of Vampire",
+        "Elemental Hero Flame Wingman"
     },
     "Fairy Collection": {
         "Silpheed",
@@ -287,10 +327,12 @@ booster_contents = {
         "Zolga",
         "Kelbek",
         "Mudora",
-        "Protective Soul Ailin"
+        "Protective Soul Ailin",
+        "Marshmallon",
+        "Goddess with the Third Eye"
     },
     "Dragon Collection": {
-        "Victory D",
+        "Victory D.",
         "Chaos Emperor Dragon - Envoy of the End",
         "Kaiser Glider",
         "Horus the Black Flame Dragon LV6",
@@ -311,7 +353,8 @@ booster_contents = {
         "Gate Guardian",
         "Gearfried the Iron Knight",
         "Dimensional Warrior",
-        "Command Knight"
+        "Command Knight",
+        "The Last Warrior from Another Planet"
     },
     "Warrior Collection B": {
         "Don Zaloog",
@@ -342,7 +385,9 @@ booster_contents = {
         "Summoned Skull",
         "Beast of Talwar",
         "Sangan",
-        "Giant Germ"
+        "Giant Germ",
+        "Spear Cretin",
+        "Versago the Destroyer"
     },
     "Fiend Collection B": {
         "Raviel, Lord of Phantasms",
@@ -363,7 +408,9 @@ booster_contents = {
         "Newdoria",
         "Slate Warrior",
         "Giant Orc",
-        "Second Goblin"
+        "Second Goblin",
+        "Kiseitai",
+        "Jowls of Dark Demise"
     },
     "Machine Collection A": {
         "Cyber-Stein",
@@ -399,7 +446,8 @@ booster_contents = {
         "Magician of Faith",
         "Dark Elf",
         "Gemini Elf",
-        "Injection Fairy Lily"
+        "Injection Fairy Lily",
+        "Cosmo Queen"
     },
     "Spellcaster Collection B": {
         "Jowgen the Spiritualist",
@@ -421,7 +469,8 @@ booster_contents = {
         "Gravekeeper's Guard",
         "Summon Priest",
         "Old Vindictive Magician",
-        "Apprentice Magician"
+        "Apprentice Magician",
+        "Princess Pikeru"
     },
     "Zombie Collection": {
         "Regenerating Mummy",
@@ -468,7 +517,22 @@ booster_contents = {
         "Horus the Black Flame Dragon LV4",
         "Armed Dragon LV3"
         "Armed Dragon LV5",
-        "Silent Swordsman Lv5"
+        "Silent Swordsman Lv5",
+        "Elemental Hero Flame Wingman",
+        "Elemental Hero Avian",
+        "Elemental Hero Burstinatrix",
+        "Miracle Fusion",
+        "Elemental Hero Madballman",
+        "Elemental Hero Bubbleman",
+        "Elemental Hero Clayman",
+        "Elemental Hero Rampart Blaster",
+        "Elemental Hero Shining Flare Wingman",
+        "Elemental Hero Sparkman",
+        "Elemental Hero Steam Healer",
+        "Elemental Hero Thunder Giant",
+        "Elemental Hero WildEdge",
+        "Elemental Hero Wildheart",
+        "Elemental Hero Bladedge"
     },
     "Reverse Collection": {
         "Magical Merchant",
@@ -478,7 +542,15 @@ booster_contents = {
         "Blade Knight",
         "Gravekeeper's Spy",
         "Gravekeeper's Guard",
-        "Old Vindictive Magician"
+        "Old Vindictive Magician",
+        "A Cat of Ill Omen",
+        "Jowls of Dark Demise",
+        "Cyber Jar",
+        "Morphing Jar",
+        "Morphing Jar #2",
+        "Needle Worm",
+        "Spear Cretin",
+        "Nobleman of Crossout"
     },
     "LP Recovery Collection": {
         "Mystik Wok",
@@ -486,7 +558,13 @@ booster_contents = {
         "Hysteric Fairy",
         "Dancing Fairy",
         "Zolga",
-        "Cestus of Dagla"
+        "Cestus of Dagla",
+        "Nimble Momonga",
+        "Solemn Wishes",
+        "Cure Mermaid",
+        "Princess Pikeru",
+        "Kiseitai",
+        "Elemental Hero Steam Healer"
     },
     "Special Summon Collection A": {
         "Perfectly Ultimate Great Moth",
@@ -514,7 +592,13 @@ booster_contents = {
         "Decayed Commander",
         "Zombie Tiger",
         "Vampire Orchis",
-        "Des Dendle"
+        "Des Dendle",
+        "Nimble Momonga",
+        "The Last Warrior from Another Planet",
+        "Embodiment of Apophis",
+        "Cyber Jar",
+        "Morphing Jar #2",
+        "Spear Cretin"
     },
     "Special Summon Collection B": {
         "Monster Gate",
@@ -535,7 +619,9 @@ booster_contents = {
         "The Tricky",
         "Magical Dimension",
         "Frontline Base",
-        "Formation Union"
+        "Formation Union",
+        "Princess Pikeru",
+        "Skull Zoma"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
@@ -551,11 +637,17 @@ booster_contents = {
         "Warrior Lady of the Wasteland",
         "Dandylion",
         "Curse of Vampire",
-        "Summon Priest"
+        "Summon Priest",
+        "Miracle Fusion",
+        "Elemental Hero Bubbleman",
+        "The Dark - Hex-Sealed Fusion",
+        "The Earth - Hex-Sealed Fusion",
+        "The Light - Hex-Sealed Fusion"
     },
     "Equipment Collection": {
         "Megamorph",
-        "Cestus of Dagla"
+        "Cestus of Dagla",
+        "United We Stand"
     },
     "Continuous Spell/Trap A": {
         "Destiny Board",
@@ -565,7 +657,10 @@ booster_contents = {
         "Spirit Message 'L'",
         "Messenger of Peace",
         "Fairy Box",
-        "Ultimate Offering"
+        "Ultimate Offering",
+        "Gravity Bind",
+        "Solemn Wishes",
+        "Embodiment of Apophis"
     },
     "Continuous Spell/Trap B": {
         "Hamon, Lord of Striking Thunder",
@@ -575,7 +670,9 @@ booster_contents = {
         "Wall of Revealing Light",
         "Dark Snake Syndrome",
         "Call of the Mummy",
-        "Frontline Base"
+        "Frontline Base",
+        "Level Limit - Area B",
+        "Skull Zoma"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
@@ -605,12 +702,16 @@ booster_contents = {
         "Airknight Parshath",
         "Vampire Lord",
         "Stamping Destruction",
-        "Decayed Commander"
+        "Decayed Commander",
+        "Jowls of Dark Demise",
+        "Stealth Bird",
+        "Elemental Hero Bladedge"
     },
     "Direct Attack Collection": {
-        "Victory D",
+        "Victory D.",
         "Dark Scorpion Combination",
-        "Spirit Reaper"
+        "Spirit Reaper",
+        "Elemental Hero Rampart Blaster"
     },
     "Monster Destroy Collection": {
         "Hamon, Lord of Striking Thunder",
@@ -628,7 +729,13 @@ booster_contents = {
         "Element Dragon",
         "Old Vindictive Magician",
         "Magical Dimension",
-        "Des Dendle"
+        "Des Dendle",
+        "Nobleman of Crossout",
+        "Shield Crash",
+        "Tribute to The Doomed",
+        "Elemental Hero Flame Wingman",
+        "Elemental Hero Shining Flare Wingman",
+        "Elemental Hero Steam Healer"
     },
 }
 

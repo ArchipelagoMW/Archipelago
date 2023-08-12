@@ -51,10 +51,12 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                              multiworld.ThirdTier5CampaignBossChallenges[
                                                  player].value) and state.yugioh06_difficulty(player, 5)),
         OpponentData("Sacred Phoenix of Nephthys", [], 5, 4,
-                     lambda state: multiworld.FourthTier5CampaignBossChallenges[player].value and \
-                                   state.yugioh06_difficulty(player, 6)),
+                     lambda state: state.has("Challenge Beaten", player,
+                                             multiworld.FourthTier5CampaignBossChallenges[player].value)
+                                   and state.yugioh06_difficulty(player, 6)),
         OpponentData("Cyber End Dragon", ["Goal"], 5, 5,
-                     lambda state: multiworld.FinalCampaignBossChallenges[player].value \
+                     lambda state: state.has("Challenge Beaten", player,
+                                             multiworld.FinalCampaignBossChallenges[player].value)
                                    and state.yugioh06_difficulty(player, 7)),
     ]
     return tuple(opponents_table)

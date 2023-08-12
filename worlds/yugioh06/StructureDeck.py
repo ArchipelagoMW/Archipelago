@@ -5,7 +5,8 @@ structure_contents = {
         "Armed Dragon LV5",
         "Masked Dragon",
         "Twin-Headed Behemoth",
-        "Stamping Destruction"
+        "Stamping Destruction",
+        "Nobleman of Crossout"
     },
     "zombie_madness": {
         "Pyramid Turtle",
@@ -19,11 +20,14 @@ structure_contents = {
         "Solar Flare Dragon",
         "UFO Turtle",
         "Ultimate Baseball Kid",
-        "Fire Beaters"
+        "Fire Beaters",
+        "Tribute to The Doomed",
+        "Level Limit - Area B"
     },
     "fury_from_the_deep": {
         "Mother Grizzly",
-        "Water Beaters"
+        "Water Beaters",
+        "Gravity Bind"
     },
     "warriors_triumph": {
         "Gearfried the Iron Knight",

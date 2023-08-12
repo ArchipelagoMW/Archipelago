@@ -50,7 +50,9 @@ class YuGiOh06Logic(LogicMixin):
 
     def yugioh06_can_last_turn_win(self, player):
         # TODO: add more ways to set it up
-        return self.has_all(["Last Turn", "Wall of Revealing Light", "Jowgen the Spiritualist"], player)
+        return self.has_all(["Last Turn", "Wall of Revealing Light"], player) and\
+               (self.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"], player)
+                or self.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player))
 
     def yugioh06_can_yata_lock(self, player):
         return self.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)\
@@ -61,7 +63,13 @@ class YuGiOh06Logic(LogicMixin):
                 self.has_all(["Mystik Wok", "Barox", "Cyber-Stein", "Poison of the Old Man"], player)) and\
                 self.yugioh06_difficulty(player, 8)
 
-    def yugioh06_has_individual(self, items: Set[str], player: int):
+    def yugioh06_can_stall_with_monsters(self, player):
+        return self.yugioh06_has_individual(["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2
+
+    def yugioh06_can_stall_with_st(self, player):
+        return self.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], player) >= 2
+
+    def yugioh06_has_individual(self, items: list[str], player: int):
         amount = 0
         for item in items:
             if self.has(item, player):
