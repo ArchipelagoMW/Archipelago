@@ -13,9 +13,9 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 
-def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order: Optional[list], luigi_pieces: Optional[int]) -> Tuple[LocationData, ...]:
+def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_order: Optional[list], luigi_pieces: Optional[int]) -> Tuple[LocationData, ...]:
 
-    logic = YoshiLogic(world, player, boss_order, luigi_pieces)
+    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces)
 
     location_table: List[LocationData] = [
 
@@ -275,7 +275,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
     LocationData("King Bowser's Castle", "King Bowser's Castle: Stars", 0x3050DF, lambda state: logic._68Stars(state))
     ]
 
-    if not world or get_option_value(world, player, "extras_enabled") == 1:
+    if not multiworld or get_option_value(multiworld, player, "extras_enabled") == 1:
         location_table += ( 
             LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Red Coins", 0x3050E0, lambda state: logic._1ECoins(state)),
             LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Flowers", 0x3050E1, lambda state: logic._1EFlowers(state)),
@@ -308,7 +308,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
             LocationData("Castles - Masterpiece Set", "Castles - Masterpiece Set: Level Clear", 0x3050F7, lambda state: logic._6EClear(state)),
         )
 
-    if not world or get_option_value(world, player, "minigame_checks") == 1 or get_option_value(world, player, "minigame_checks") == 3:
+    if not multiworld or get_option_value(multiworld, player, "minigame_checks") == 1 or get_option_value(multiworld, player, "minigame_checks") == 3:
         location_table += ( 
             LocationData("The Cave Of Chomp Rock", "The Cave Of Chomp Rock: Bandit Game", 0x3050F8, lambda state: logic._13Game(state)),
             LocationData("Touch Fuzzy Get Dizzy", "Touch Fuzzy Get Dizzy: Bandit Game", 0x3050F9, lambda state: logic._17Game(state)),
@@ -326,7 +326,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
             LocationData("KEEP MOVING!!!!", "KEEP MOVING!!!!: Bandit Game", 0x305105, lambda state: logic._67Game(state)),
         )
 
-    if not world or get_option_value(world, player, "minigame_checks") == 2 or get_option_value(world, player, "minigame_checks") == 3:
+    if not multiworld or get_option_value(multiworld, player, "minigame_checks") == 2 or get_option_value(multiworld, player, "minigame_checks") == 3:
         location_table += ( 
             LocationData("Flip Cards", "Flip Cards: Victory", 0x305106),
             LocationData("Scratch And Match", "Scratch And Match: Victory", 0x305107),
@@ -336,18 +336,18 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
             LocationData("Slot Machine", "Slot Machine: Victory", 0x30510B),
         )
 
-    if not world or get_option_value(world, player, "item_logic") == 1:
+    if not multiworld or get_option_value(multiworld, player, "item_logic") == 1:
         location_table += ( 
             LocationData("Flip Cards", 'Flip Cards', EventId),
             LocationData("Drawing Lots", 'Drawing Lots', EventId),
             LocationData("Match Cards", 'Match Cards', EventId),
         )
 
-    if not world or get_option_value(world, player, "goal") == 1:
+    if not multiworld or get_option_value(multiworld, player, "goal") == 1:
         location_table += ( 
             LocationData("Overworld", 'Saved Baby Luigi', EventId, lambda state: logic.ReconstituteLuigi(state)),
         )
-    if not world or get_option_value(world, player, "goal") == 0:
+    if not multiworld or get_option_value(multiworld, player, "goal") == 0:
         location_table += ( 
             LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._68Clear(state)),
         )

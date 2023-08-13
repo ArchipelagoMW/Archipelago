@@ -201,6 +201,7 @@ class YIWorld(World):
 
 
     def generate_basic(self):
+        self.topology_present = self.multiworld.level_shuffle[self.player]
 
         self.multiworld.get_location("Burt The Bashful Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
@@ -255,7 +256,7 @@ class YIWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-def get_excluded_items(self: YIWorld, world: MultiWorld, player: int) -> Set[str]:
+def get_excluded_items(self: YIWorld, multiworld: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
     
     if self.multiworld.starting_world[self.player] == 0:
@@ -308,48 +309,48 @@ def get_excluded_items(self: YIWorld, world: MultiWorld, player: int) -> Set[str
 
     return excluded_items
 
-def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: YIWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
 
     if self.playergoal == 1:
-        for i in range(world.luigi_pieces_in_pool[player].value):
+        for i in range(multiworld.luigi_pieces_in_pool[player].value):
             pool += [self.create_item('Piece of Luigi')]
 
     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
-        item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
+        item = create_item_with_correct_settings(multiworld, player, self.get_filler_item_name())
         pool.append(item)
 
-def var_boss(self: YIWorld, world: MultiWorld, player: int):
-    self.playergoal = world.goal[player].value
-    if world.luigi_pieces_in_pool[player].value < world.luigi_pieces_required[player].value:
-        world.luigi_pieces_in_pool[self.player].value = world.random.randint(world.luigi_pieces_required[self.player].value, 100)
-    self.luigi_pieces = world.luigi_pieces_required[player].value
+def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
+    self.playergoal = multiworld.goal[player].value
+    if multiworld.luigi_pieces_in_pool[player].value < multiworld.luigi_pieces_required[player].value:
+        multiworld.luigi_pieces_in_pool[self.player].value = multiworld.random.randint(multiworld.luigi_pieces_required[self.player].value, 100)
+    self.luigi_pieces = multiworld.luigi_pieces_required[player].value
 
-    if world.starting_lives[player] > 255:
-        self.lives_high = world.starting_lives[player].value >> 8
-        self.lives_low = (world.starting_lives[player].value - self.lives_high) - ((255 * self.lives_high))
+    if multiworld.starting_lives[player] > 255:
+        self.lives_high = multiworld.starting_lives[player].value >> 8
+        self.lives_low = (multiworld.starting_lives[player].value - self.lives_high) - ((255 * self.lives_high))
     else:
         self.lives_high = 0x00
-        self.lives_low = world.starting_lives[player].value
+        self.lives_low = multiworld.starting_lives[player].value
 
     self.level_colors = []
     self.color_order = []
     for i in range(72):
-            self.level_colors.append(world.random.randint(0,7))
-    if world.yoshi_colors[player].value == 3:
-        singularity_color = world.yoshi_singularity_color[player].value
+            self.level_colors.append(multiworld.random.randint(0,7))
+    if multiworld.yoshi_colors[player].value == 3:
+        singularity_color = multiworld.yoshi_singularity_color[player].value
         for i in range(len(self.level_colors)):
                     self.level_colors[i] = singularity_color
-    elif world.yoshi_colors[player].value == 1:
-        self.leader_color = world.random.randint(0,7)
+    elif multiworld.yoshi_colors[player].value == 1:
+        self.leader_color = multiworld.random.randint(0,7)
         for i in range(7):
-            self.color_order.append(world.random.randint(0,7))
+            self.color_order.append(multiworld.random.randint(0,7))
 
     bonus_valid = [0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]
 
     self.world_bonus = []
     for i in range(12):
-        self.world_bonus.append(world.random.choice(bonus_valid))
+        self.world_bonus.append(multiworld.random.choice(bonus_valid))
 
     safe_baby_sounds = [0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
     0x21, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40,
@@ -357,9 +358,9 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x73, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86,
     0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2]
 
-    if world.baby_mario_sound[player] == 2:
-        self.baby_mario_sfx = world.random.choice(safe_baby_sounds)
-    elif world.baby_mario_sound == 1:
+    if multiworld.baby_mario_sound[player] == 2:
+        self.baby_mario_sfx = multiworld.random.choice(safe_baby_sounds)
+    elif multiworld.baby_mario_sound == 1:
         self.baby_mario_sfx = 0x42
     else:
         self.baby_mario_sfx = 0x44
@@ -373,7 +374,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
 
     self.boss_order = []
 
-    if world.boss_shuffle[player].value == 0:
+    if multiworld.boss_shuffle[player].value == 0:
         self.boss_order.append("Burt The Bashful's Boss Room")
         self.boss_order.append("Salvo The Slime's Boss Room")
         self.boss_order.append("Bigger Boo's Boss Room")
@@ -385,9 +386,9 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         self.boss_order.append("Sluggy The Unshaven's Boss Room")
         self.boss_order.append("Raphael The Raven's Boss Room")
         self.boss_order.append("Tap-Tap The Red Nose's Boss Room")
-    elif world.boss_shuffle[player] == 1:
+    elif multiworld.boss_shuffle[player] == 1:
         for i in range(11):
-            world.random.shuffle(self.boss_list)
+            multiworld.random.shuffle(self.boss_list)
             self.boss_order = self.boss_list
 
     self.burt_pointers = [0x3D, 0x05, 0x63, 0x00]
@@ -600,30 +601,30 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     self.norm_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0E, 0x10, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x28, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
     self.hard_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0D, 0x0E, 0x10, 0x11, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2B, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
     self.diff_index = [self.easy_start_lv, self.norm_start_lv, self.hard_start_lv]
-    self.diff_level = self.diff_index[world.stage_logic[player].value]
+    self.diff_level = self.diff_index[multiworld.stage_logic[player].value]
     self.boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
     self.world_start_lv = [0, 8, 16, 24, 32, 40]
-    if world.shuffle_midrings[player].value == 1:
+    if multiworld.shuffle_midrings[player].value == 1:
         self.easy_start_lv.extend([0x1A, 0x24, 0x34])
         self.norm_start_lv.extend([0x24, 0x37, 0x3C])
         self.hard_start_lv.extend([0x1D, 0x3C])
 
-    if world.level_shuffle[player].value != 1:
+    if multiworld.level_shuffle[player].value != 1:
         self.norm_start_lv.extend([0x37, 0x3C])
         self.hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
-        if world.shuffle_midrings[player].value ==1:
+        if multiworld.shuffle_midrings[player].value ==1:
             self.easy_start_lv.extend([0x1B])
             self.norm_start_lv.extend([0x1B, 0x2B, 0x37])
 
-    self.starting_level = world.random.choice(self.diff_level)
-    self.starting_level_entrance = self.world_start_lv[world.starting_world[player].value]
-    if world.level_shuffle[player].value != 0:
+    self.starting_level = multiworld.random.choice(self.diff_level)
+    self.starting_level_entrance = self.world_start_lv[multiworld.starting_world[player].value]
+    if multiworld.level_shuffle[player].value != 0:
         self.global_level_list.remove(self.starting_level)
-        world.random.shuffle(self.global_level_list)
-        if world.level_shuffle[player].value == 1:
+        multiworld.random.shuffle(self.global_level_list)
+        if multiworld.level_shuffle[player].value == 1:
             for i in range(11):
                 self.global_level_list = [item for item in self.global_level_list if item not in self.boss_lv]
-            world.random.shuffle(self.boss_lv)
+            multiworld.random.shuffle(self.boss_lv)
             self.global_level_list.insert(3 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[0]) #1 if starting world is 1, 0 otherwise
             self.global_level_list.insert(7 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[1])
             self.global_level_list.insert(11 - self.world_2_offsets[world.starting_world[player].value], self.boss_lv[2])
@@ -758,7 +759,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
                     5: [0xB8, 0x05, 0x77, 0x00]
     }
 
-    self.castle_door = castle_door_dict[world.bowser_door_mode[player].value]
+    self.castle_door = castle_door_dict[multiworld.bowser_door_mode[player].value]
     
 
     
@@ -767,18 +768,18 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
 
 
 
-def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+def get_item_pool(multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
     pool: List[Item] = []
 
     for name, data in item_table.items():
         if name not in excluded_items:
             for _ in range(data.count):
-                item = create_item_with_correct_settings(world, player, name)
+                item = create_item_with_correct_settings(multiworld, player, name)
                 pool.append(item)
 
     return pool
 
-def create_item_with_correct_settings(world: MultiWorld, player: int, name: str) -> Item:
+def create_item_with_correct_settings(multiworld: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
     if data.useful:
         classification = ItemClassification.useful
@@ -793,19 +794,19 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     if not item.advancement:
         return item
 
-    if (name == 'Car Morph' and get_option_value(world, player, "stage_logic") != 0):
+    if (name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0):
         item.classification = ItemClassification.useful
 
-    if (name == 'Secret Lens' and (get_option_value(world, player, "hidden_object_visibility") >= 2 or get_option_value(world, player, "stage_logic") != 0)):
+    if (name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0)):
         item.classification = ItemClassification.useful
 
-    if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(world, player, "minigame_checks") <= 2):
+    if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 2):
         item.classification = ItemClassification.useful
 
-    if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(world, player, "item_logic") == 1):
+    if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
         item.classification = ItemClassification.progression
 
-    for i in range((world.luigi_pieces_in_pool[player].value) - (world.luigi_pieces_required[player].value)):
+    for i in range((multiworld.luigi_pieces_in_pool[player].value) - (multiworld.luigi_pieces_required[player].value)):
         if name == 'Piece of Luigi':
             item.classification = ItemClassification.Useful
 
