@@ -62,7 +62,6 @@ class YIWorld(World):
 
         self.locked_locations= []
         self.location_cache= []
-        self.playergoal = world.goal[player].value
         self.NumLuigiPieces = world.luigi_pieces_required[player].value
 
     @classmethod
@@ -321,6 +320,7 @@ def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: in
         pool.append(item)
 
 def var_boss(self: YIWorld, world: MultiWorld, player: int):
+    self.playergoal = world.goal[player].value
     if world.luigi_pieces_in_pool[player].value < world.luigi_pieces_required[player].value:
         world.luigi_pieces_in_pool[self.player].value = world.random.randint(world.luigi_pieces_required[self.player].value, 100)
 
