@@ -188,7 +188,7 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.West_Varrock, None, self.player)
         ))
         add_rule(self.multiworld.get_location(LocationNames.Q_Sheep_Shearer, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge_Farms, None, self.player) and
+                state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) and
                 state.can_reach(RegionNames.Spinning_Wheel, None, self.player)
         ))
         add_rule(self.multiworld.get_location(LocationNames.Q_Shield_of_Arrav, self.player), lambda state: (
@@ -233,7 +233,7 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.Varrock_Palace, None, self.player) and
                 state.can_reach(RegionNames.Mudskipper_Point, None, self.player) and
                 state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                (state.can_reach(RegionNames.Lumbridge_Farms, None, self.player) or state.can_reach(
+                (state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) or state.can_reach(
                     RegionNames.West_Varrock, None, self.player))
         ))
         add_rule(self.multiworld.get_location(LocationNames.Q_Goblin_Diplomacy, self.player), lambda state: (
@@ -241,7 +241,7 @@ class OSRSWorld(World):
                 state.can_reach(RegionNames.Draynor_Village, None, self.player) and
                 state.can_reach(RegionNames.Falador, None, self.player) and
                 state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                (state.can_reach(RegionNames.Lumbridge_Farms, None, self.player) or state.can_reach(
+                (state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) or state.can_reach(
                     RegionNames.Rimmington, None, self.player))
         ))
         add_rule(self.multiworld.get_location(LocationNames.Q_Pirates_Treasure, self.player), lambda state: (

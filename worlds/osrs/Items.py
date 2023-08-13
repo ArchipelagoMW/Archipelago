@@ -22,7 +22,7 @@ Location_Items: typing.List[ItemData] = [
     ItemData(0x070001, ItemNames.Lumbridge_Swamp, ItemClassification.progression,
              unlocksRegion=RegionNames.Lumbridge_Swamp),
     ItemData(0x070002, ItemNames.Lumbridge_Farms, ItemClassification.progression,
-             unlocksRegion=RegionNames.Lumbridge_Farms),
+             unlocksRegion=RegionNames.Lumbridge_Farms_West),
     ItemData(0x070003, ItemNames.HAM_Hideout, ItemClassification.progression,
              unlocksRegion=RegionNames.HAM_Hideout),
     ItemData(0x070004, ItemNames.Draynor_Village, ItemClassification.progression,
