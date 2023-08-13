@@ -23,12 +23,12 @@ class ShortHikeWorld(World):
 
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {loc["name"]: loc["id"] for loc in location_table}
+    location_name_to_game_id = {loc["name"]: loc["inGameId"] for loc in location_table}
 
     item_name_groups = group_table
     # option_definitions = short_hike_options
 
     required_client_version = (0, 1, 9)
-
 
     def __init__(self, multiworld, player):
         super(ShortHikeWorld, self).__init__(multiworld, player)
@@ -77,7 +77,7 @@ class ShortHikeWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
-        locations = Dict[int, Any] = {}
+        locations: Dict[int, Any] = {}
 
         world = self.multiworld
         player = self.player
@@ -88,12 +88,12 @@ class ShortHikeWorld(World):
             else:
                 data = {
                     "ap_id": loc.address,
-                    "name": loc.item.name,
+                    "item_name": loc.item.name,
                     "player_name": world.player_name[loc.item.player],
                     "type": int(loc.item.classification)
                 }
 
-                locations[loc.address] = data
+                locations[self.location_name_to_game_id[loc.name]] = data
     
         slot_data = {
             "locations": locations
