@@ -30,14 +30,14 @@ class SpireWorld(World):
     option_definitions = spire_options
     game = "Slay the Spire"
     topology_present = False
-    data_version = 1
+    data_version = 2
     web = SpireWeb()
     required_client_version = (0, 3, 7)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    def generate_basic(self):
+    def create_items(self):
         # Fill out our pool with our items from item_pool, assuming 1 item if not present in item_pool
         pool = []
         for name, data in item_table.items():
@@ -52,9 +52,6 @@ class SpireWorld(World):
         for event, item in event_item_pairs.items():
             event_item = SpireItem(item, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
-
-        if self.multiworld.logic[self.player] != 'no logic':
-            self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def set_rules(self):
         set_rules(self.multiworld, self.player)

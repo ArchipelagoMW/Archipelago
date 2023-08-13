@@ -78,6 +78,7 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 # - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
 # - Lake is connected to The Laboratory, since the boss is hard without specific set-ups (which means late game)
 # - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
+# - Ancient Laboratory is connected to the Coal Pits, so that Ylialkemisti isn't sphere 1
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
@@ -96,12 +97,12 @@ noita_connections: Dict[str, Set[str]] = {
     "Lava Lake": {"Mines", "Abyss Orb Room"},
     "Abyss Orb Room": {"Lava Lake"},
     "Below Lava Lake": {"Snowy Depths"},
-    "Dark Cave": {"Ancient Laboratory", "Collapsed Mines"},
-    "Ancient Laboratory": {"Dark Cave"},
+    "Dark Cave": {"Collapsed Mines"},
+    "Ancient Laboratory": {"Coal Pits"},
 
     ###
     "Coal Pits Holy Mountain": {"Coal Pits"},
-    "Coal Pits": {"Coal Pits Holy Mountain", "Fungal Caverns", "Snowy Depths Holy Mountain"},
+    "Coal Pits": {"Coal Pits Holy Mountain", "Fungal Caverns", "Snowy Depths Holy Mountain", "Ancient Laboratory"},
     "Fungal Caverns": {"Coal Pits"},
 
     ###

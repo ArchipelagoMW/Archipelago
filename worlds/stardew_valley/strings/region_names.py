@@ -1,4 +1,4 @@
-class SVRegion:
+class Region:
     menu = "Menu"
     stardew_valley = "Stardew Valley"
     farm_house = "Farmhouse"
@@ -10,6 +10,7 @@ class SVRegion:
     forest = "Forest"
     bus_stop = "Bus Stop"
     backwoods = "Backwoods"
+    bus_tunnel = "Bus Tunnel"
     railroad = "Railroad"
     secret_woods = "Secret Woods"
     community_center = "Community Center"
@@ -19,17 +20,49 @@ class SVRegion:
     boiler_room = "Boiler Room"
     vault = "Vault"
     bulletin_board = "Bulletin Board"
-    desert = "The Desert"
+    desert = "Desert"
+    oasis = "Oasis"
+    casino = "Casino"
     mines = "The Mines"
+    mines_dwarf_shop = "Mines Dwarf Shop"
     skull_cavern_entrance = "Skull Cavern Entrance"
     skull_cavern = "Skull Cavern"
-    sewers = "Sewers"
+    sewer = "Sewer"
     mutant_bug_lair = "Mutant Bug Lair"
     witch_swamp = "Witch's Swamp"
-    ginger_island = "Ginger Island"
-    pirate_cove = ginger_island
-    dig_site = ginger_island
-    perfect_skull_cavern = "Skull Cavern Floor 100"
+    witch_hut = "Witch's Hut"
+    island_south = "Island South"
+    island_resort = "Island Resort"
+    island_south_east = "Island Southeast"
+    pirate_cove = "Pirate Cove"
+    island_east = "Island East"
+    island_north = "Island North"
+    island_shrine = "Island Shrine"
+    leo_hut = "Leo's Hut"
+    leo_treehouse = "Leo's TreeHouse"
+    island_farmhouse = "Island Farmhouse"
+    dig_site = "Dig Site"
+    professor_snail_cave = "Professor Snail Cave"
+    field_office = "Field Office"
+    volcano = "Volcano Entrance"
+    volcano_secret_beach = "Volcano Secret Beach"
+    island_trader = "Island Trader"
+    volcano_floor_5 = "Volcano - Floor 5"
+    volcano_dwarf_shop = "Volcano Dwarf Shop"
+    volcano_floor_10 = "Volcano - Floor 10"
+    island_west = "Island West"
+    gourmand_frog_cave = "Gourmand Frog Cave"
+    colored_crystals_cave = "Colored Crystals Cave"
+    shipwreck = "Shipwreck"
+    qi_walnut_room = "Qi's Walnut Room"
+    skull_cavern_25 = "Skull Cavern Floor 25"
+    skull_cavern_50 = "Skull Cavern Floor 50"
+    skull_cavern_75 = "Skull Cavern Floor 75"
+    skull_cavern_100 = "Skull Cavern Floor 100"
+    skull_cavern_125 = "Skull Cavern Floor 125"
+    skull_cavern_150 = "Skull Cavern Floor 150"
+    skull_cavern_175 = "Skull Cavern Floor 175"
+    skull_cavern_200 = "Skull Cavern Floor 200"
     hospital = "Hospital"
     carpenter = "Carpenter Shop"
     alex_house = "Alex's House"
@@ -38,12 +71,12 @@ class SVRegion:
     traveling_cart = "Traveling Cart"
     farm_cave = "Farmcave"
     greenhouse = "Greenhouse"
-    tunnel = "Tunnel"
     tunnel_entrance = "Tunnel Entrance"
     leah_house = "Leah's Cottage"
     wizard_tower = "Wizard Tower"
     wizard_basement = "Wizard Basement"
     tent = "Tent"
+    maru_room = "Maru's Room"
     sebastian_room = "Sebastian's Room"
     adventurer_guild = "Adventurer's Guild"
     quarry = "Quarry"
@@ -62,6 +95,7 @@ class SVRegion:
     sam_house = "Sam's House"
     jojamart = "JojaMart"
     fish_shop = "Willy's Fish Shop"
+    boat_tunnel = "Boat Tunnel"
     tide_pools = "Tide Pools"
     bathhouse_entrance = "Bathhouse Entrance"
     locker_room = "Locker Room"
@@ -97,3 +131,52 @@ class SVRegion:
     mines_floor_115 = "The Mines - Floor 115"
     mines_floor_120 = "The Mines - Floor 120"
 
+
+class DeepWoodsRegion:
+    main_lichtung = "Entrance to the Deep Woods"
+    abandoned_home = "Abandoned Home in Deep Woods"
+    woods_obelisk_menu = "Woods Obelisk Menu"
+    floor_10 = "The Deep Woods Depth 10"
+    floor_20 = "The Deep Woods Depth 20"
+    floor_30 = "The Deep Woods Depth 30"
+    floor_40 = "The Deep Woods Depth 40"
+    floor_50 = "The Deep Woods Depth 50"
+    floor_60 = "The Deep Woods Depth 60"
+    floor_70 = "The Deep Woods Depth 70"
+    floor_80 = "The Deep Woods Depth 80"
+    floor_90 = "The Deep Woods Depth 90"
+    floor_100 = "The Deep Woods Depth 100"
+
+
+class EugeneRegion:
+    eugene_garden = "Eugene's Garden"
+    eugene_bedroom = "Eugene's Bedroom"
+
+
+class MagicRegion:
+    altar = "Magic Altar"
+
+
+class JasperRegion:
+    jasper_bedroom = "Jasper's Bedroom"
+
+
+class AlecRegion:
+    pet_store = "Alec's Pet Shop"
+    alec_bedroom = "Alec's Bedroom"
+
+
+class YobaRegion:
+    yoba_clearing = "Yoba's Clearing"
+
+
+class JunaRegion:
+    juna_cave = "Juna's Cave"
+
+
+class AyeishaRegion:
+    mail_van = "Ayeisha's Mail Van"
+
+
+class RileyRegion:
+    riley_house = "Riley's House"
