@@ -4,7 +4,7 @@ from itertools import groupby
 
 class TunicLocationData(NamedTuple):
     region: str
-    location_group: str = ""
+    location_group: str = "region"
 
 
 location_table: Dict[str, TunicLocationData] = {
@@ -162,22 +162,22 @@ location_table: Dict[str, TunicLocationData] = {
     "Ruined Shop - Chest 2": TunicLocationData("Overworld"),
     "Ruined Shop - Chest 3": TunicLocationData("Overworld"),
     "Ruined Passage - Page Pickup": TunicLocationData("Overworld"),
-    "Shop - Potion 1": TunicLocationData("Overworld"),
-    "Shop - Potion 2": TunicLocationData("Overworld"),
-    "Shop - Coin 1": TunicLocationData("Overworld"),
-    "Shop - Coin 2": TunicLocationData("Overworld"),
+    "Shop - Potion 1": TunicLocationData("Overworld", "shop"),
+    "Shop - Potion 2": TunicLocationData("Overworld", "shop"),
+    "Shop - Coin 1": TunicLocationData("Overworld", "shop"),
+    "Shop - Coin 2": TunicLocationData("Overworld", "shop"),
     "Special Shop - Secret Page Pickup": TunicLocationData("Overworld"),
     "Stick House - Stick Chest": TunicLocationData("Overworld"),
     "Sealed Temple - Page Pickup": TunicLocationData("Overworld"),
     "Hourglass Cave - Hourglass Chest": TunicLocationData("Overworld"),
     "Far Shore - Secret Chest": TunicLocationData("Overworld"),
     "Far Shore - Page Pickup": TunicLocationData("Overworld"),
-    "Coins in the Well - 10 Coins": TunicLocationData("Overworld"),
-    "Coins in the Well - 15 Coins": TunicLocationData("Overworld"),
-    "Coins in the Well - 3 Coins": TunicLocationData("Overworld"),
-    "Coins in the Well - 6 Coins": TunicLocationData("Overworld"),
-    "Secret Gathering Place - 20 Fairy Reward": TunicLocationData("Overworld"),
-    "Secret Gathering Place - 10 Fairy Reward": TunicLocationData("Overworld"),
+    "Coins in the Well - 10 Coins": TunicLocationData("Overworld", "well"),
+    "Coins in the Well - 15 Coins": TunicLocationData("Overworld", "well"),
+    "Coins in the Well - 3 Coins": TunicLocationData("Overworld", "well"),
+    "Coins in the Well - 6 Coins": TunicLocationData("Overworld", "well"),
+    "Secret Gathering Place - 20 Fairy Reward": TunicLocationData("Overworld", "fairies"),
+    "Secret Gathering Place - 10 Fairy Reward": TunicLocationData("Overworld", "fairies"),
     "Overworld - [West] Moss Wall Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
     "Overworld - [Southwest] Flowers Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
     "Overworld - [Southwest] Fountain Holy Cross": TunicLocationData("Overworld Holy Cross", "holy cross"),
@@ -314,7 +314,11 @@ location_table: Dict[str, TunicLocationData] = {
 
 
 def get_loc_group(location_name: str) -> str:
-    return location_table[location_name].location_group
+    loc_group = location_table[location_name].location_group
+    if loc_group == "region":
+        # set loc_group as the region name. Typically, location groups are lowercase
+        loc_group = location_table[location_name].region.lower()
+    return loc_group
 
 
 location_name_groups: Dict[str, Set[str]] = {
