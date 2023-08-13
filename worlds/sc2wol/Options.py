@@ -199,6 +199,16 @@ class ExtendedItems(Toggle):
     display_name = "Extended Items"
 
 
+class MaxNbUpgrades(Range):
+    """Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited. 
+    Note that most unit have 4 or 6 upgrades."""
+    display_name = "Maximum number of upgrades per unit/structure"
+    range_start = -1
+    # Do not know the maximum, but it is less than 123!
+    range_end = 123
+    default = -1
+
+
 class LockedItems(ItemSet):
     """Guarantees that these items will be unlockable"""
     display_name = "Locked Items"
@@ -237,7 +247,8 @@ sc2wol_options: Dict[str, Option] = {
     "excluded_missions": ExcludedMissions,
     "nco_items": NovaCovertOpsItems,
     "bw_items": BroodWarItems,
-    "ext_items": ExtendedItems
+    "ext_items": ExtendedItems,
+    "max_nb_upgrades": MaxNbUpgrades
 }
 
 

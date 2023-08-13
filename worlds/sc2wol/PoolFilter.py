@@ -129,6 +129,64 @@ class ValidInventory:
         cascade_keys = self.cascade_removal_map.keys()
         units_always_have_upgrades = get_option_value(self.multiworld, self.player, "units_always_have_upgrades")
 
+        def attempt_removal(item: Item) -> bool:
+            # If item can be removed and has associated items, remove them as well
+            inventory.remove(item)
+            # Only run logic checks when removing logic items
+            if item.name in self.logical_inventory:
+                self.logical_inventory.remove(item.name)
+                if not all(requirement(self) for requirement in requirements):
+                    # If item cannot be removed, lock or revert
+                    self.logical_inventory.add(item.name)
+                    for _ in range(get_item_quantity(item)):
+                        locked_items.append(copy_item(item))
+                    return False
+            return True
+        
+        # Limit the maximum number of upgrades 
+        maxUpgrad = get_option_value(self.multiworld, self.player, 
+                            "max_nb_upgrades")
+        if maxUpgrad != -1:
+            unit_avail_upgrades = {}
+            # Needed to take into account locked/existing items
+            unit_nb_upgrades = {}
+            for item in inventory:
+                cItem = get_full_item_list()[item.name]
+                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_avail_upgrades[cItem.parent_item] = [item]
+                        unit_nb_upgrades[cItem.parent_item] = 1
+                    else:
+                        unit_avail_upgrades[cItem.parent_item].append(item)
+                        unit_nb_upgrades[cItem.parent_item] += 1
+            # For those two categories, we count them but dont include them in removal
+            for item in locked_items + self.existing_items:
+                cItem = get_full_item_list()[item.name]
+                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                    unit_avail_upgrades[item.name] = []
+                    unit_nb_upgrades[item.name] = 0
+                elif cItem.parent_item is not None:
+                    if cItem.parent_item not in unit_avail_upgrades:
+                        unit_nb_upgrades[cItem.parent_item] = 1
+                    else:
+                        unit_nb_upgrades[cItem.parent_item] += 1
+            # Making sure that the upgrades being removed is random 
+            # Currently, only for combat shield vs Stabilizer Medpacks...
+            shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
+            self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
+            for unit in shuffled_unit_upgrade_list:
+                while (unit_nb_upgrades[unit] > maxUpgrad) \
+                         and (len(unit_avail_upgrades[unit]) > 0):
+                    itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
+                    _ = attempt_removal(itemCandidate)
+                    # Whatever it succeed to remove the iventory or it fails and thus 
+                    # lock it, the upgrade is no longer available for removal
+                    unit_avail_upgrades[unit].remove(itemCandidate)
+                    unit_nb_upgrades[unit] -= 1
+
         # Locking associated items for items that have already been placed when units_always_have_upgrades is on
         if units_always_have_upgrades:
             existing_items = set(self.existing_items[:] + locked_items)
@@ -151,20 +209,6 @@ class ValidInventory:
 
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
             requirements.append(lambda state: state.has_units_per_structure())
-
-        def attempt_removal(item: Item) -> bool:
-            # If item can be removed and has associated items, remove them as well
-            inventory.remove(item)
-            # Only run logic checks when removing logic items
-            if item.name in self.logical_inventory:
-                self.logical_inventory.remove(item.name)
-                if not all(requirement(self) for requirement in requirements):
-                    # If item cannot be removed, lock or revert
-                    self.logical_inventory.add(item.name)
-                    for _ in range(get_item_quantity(item)):
-                        locked_items.append(copy_item(item))
-                    return False
-            return True
 
         # Determining if the full-size inventory can complete campaign
         if not all(requirement(self) for requirement in requirements):
