@@ -196,7 +196,7 @@ item_table = {
     "Executioner Missiles (Widow Mine)": ItemData(378 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 28, parent_item="Widow Mine", origin={"ext"}),
 
     # Just lazy to create a new group for one unit
-    "Enhanced Cluster Launchers (Valkyrie)": ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 16, parent_item="Valkyrie", origin={"ext"}),
+    "Enhanced Cluster Launchers (Valkyrie)": ItemData(379 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 17, parent_item="Valkyrie", origin={"ext"}),
     "Shaped Hull (Valkyrie)": ItemData(380 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 20, classification=ItemClassification.filler, parent_item="Valkyrie", origin={"ext"}),
     "Burst Lasers (Valkyrie)": ItemData(381 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 21, parent_item="Valkyrie", origin={"ext"}),
     "Afterburners (Valkyrie)": ItemData(382 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 22, classification=ItemClassification.filler, parent_item="Valkyrie", origin={"ext"}),
