@@ -55,7 +55,7 @@ class Group(enum.Enum):
     RARECROW = enum.auto()
     TRAP = enum.auto()
     MAXIMUM_ONE = enum.auto()
-    EXACTLY_TWO = enum.auto
+    EXACTLY_TWO = enum.auto()
     DEPRECATED = enum.auto()
     RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
@@ -226,7 +226,7 @@ def create_elevators(item_factory: StardewItemFactory, world_options: StardewOpt
 
     items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
     if ModNames.deepwoods in world_options[options.Mods]:
-        items.extend([item_factory(item) for item in ["Progressive Wood Obelisk Sigils"] * 10])
+        items.extend([item_factory(item) for item in ["Progressive Woods Obelisk Sigils"] * 10])
     if ModNames.skull_cavern_elevator in world_options[options.Mods]:
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
@@ -415,6 +415,7 @@ def create_walnut_purchase_rewards(item_factory: StardewItemFactory, world_optio
     items.extend([item_factory("Boat Repair"),
                   item_factory("Open Professor Snail Cave"),
                   item_factory("Ostrich Incubator Recipe"),
+                  item_factory("Treehouse"),
                   *[item_factory(item) for item in items_by_group[Group.WALNUT_PURCHASE]]])
 
 

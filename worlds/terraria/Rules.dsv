@@ -428,7 +428,7 @@ Duke Fishron;                       Location | Item;                            
 Pumpkin Moon;                       ;                                           Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar);
 Spooky Armor;                       ArmorMinions(4);                            Pumpkin Moon;
 Mourning Wood;                      Location | Item;                            Pumpkin Moon;
-Necromantic Scroll;                 Minions(1);                                 Mourning Wood;
+Necromantic Scroll;                 Minions(1);                                 #Mourning Wood;
 Papyrus Scarab;                     Minions(1);                                 Tinkerer's Workshop & Hercules Beetle & Necromantic Scroll;
 Pumpking;                           Location | Item;                            Pumpkin Moon;
 The Horseman's Blade;               ;                                           #Pumpking;
@@ -455,8 +455,8 @@ Empress of Light;                   Location | Item | Goal;                     
 # empress_of_light
 
 // Lunatic Cultist
-Lunatic Cultist;                    Location | Item;                            (@calamity | (Dungeon & Golem)) & Wall of Flesh;
-Astrum Deus;                        Calamity | Location | Item;                 Titan Heart;
+Lunatic Cultist;                    Location | Item | Goal;                     (@calamity | (Dungeon & Golem)) & Wall of Flesh;
+Astrum Deus;                        Calamity | Location | Item | Goal;          Titan Heart;
 # lunatic_cultist
 # astrum_deus
 Ancient Manipulator;                ;                                           #Lunatic Cultist;

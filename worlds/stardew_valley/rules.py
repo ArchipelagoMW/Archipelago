@@ -211,8 +211,7 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_wizard_basement, player),
                              logic.has_relationship(NPC.wizard, 4))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_leo_treehouse, player),
-                             logic.has_relationship(NPC.leo, 6) & logic.can_reach_region(Region.island_south) &
-                             logic.can_reach_region(Region.island_east) & logic.can_reach_region(Region.leo_hut))
+                             logic.received("Treehouse"))
     if ModNames.alec in world_options[options.Mods]:
         MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
                                  (logic.has_relationship(ModNPC.alec, 2) | magic.can_blink(logic)).simplify())
@@ -358,25 +357,51 @@ def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, 
             MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
 
 
-def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world_options):
-    desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
-    for i in range(0, desired_number_help_wanted):
-        prefix = "Help Wanted:"
-        delivery = "Item Delivery"
-        rule = logic.has_lived_months(i).simplify()
-        fishing_rule = rule & logic.can_fish()
-        slay_rule = rule & logic.can_do_combat_at_level("Basic")
-        item_delivery_index = (i * 4) + 1
-        for j in range(item_delivery_index, item_delivery_index + 4):
-            location_name = f"{prefix} {delivery} {j}"
-            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule)
+help_wanted_prefix = "Help Wanted:"
+item_delivery = "Item Delivery"
+gathering = "Gathering"
+fishing = "Fishing"
+slay_monsters = "Slay Monsters"
 
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i + 1}", player),
-                                 rule)
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i + 1}", player),
-                                 fishing_rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i + 1}", player),
-                                 slay_rule.simplify())
+
+def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world_options):
+    help_wanted_number = world_options[options.HelpWantedLocations]
+    for i in range(0, help_wanted_number):
+        set_number = i // 7
+        month_rule = logic.has_lived_months(set_number).simplify()
+        quest_number = set_number + 1
+        quest_number_in_set = i % 7
+        if quest_number_in_set < 4:
+            quest_number = set_number * 4 + quest_number_in_set + 1
+            set_help_wanted_delivery_rule(multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 4:
+            set_help_wanted_fishing_rule(logic, multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 5:
+            set_help_wanted_slay_monsters_rule(logic, multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 6:
+            set_help_wanted_gathering_rule(multi_world, player, month_rule, quest_number)
+
+
+def set_help_wanted_delivery_rule(multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {item_delivery} {quest_number}"
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), month_rule)
+
+
+def set_help_wanted_gathering_rule(multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {gathering} {quest_number}"
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), month_rule)
+
+
+def set_help_wanted_fishing_rule(logic: StardewLogic, multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {fishing} {quest_number}"
+    fishing_rule = month_rule & logic.can_fish()
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), fishing_rule.simplify())
+
+
+def set_help_wanted_slay_monsters_rule(logic: StardewLogic, multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {slay_monsters} {quest_number}"
+    slay_rule = month_rule & logic.can_do_combat_at_level("Basic")
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), slay_rule.simplify())
 
 
 def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world: MultiWorld, player: int):
