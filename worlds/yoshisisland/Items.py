@@ -5,6 +5,7 @@ class ItemData(NamedTuple):
     code: int
     count: int = 1
     progression: bool = False
+    progression_skip_balancing: bool = False
     useful: bool = False
     trap: bool = False
 

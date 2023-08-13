@@ -21,9 +21,9 @@ class YIWeb(WebWorld):
 
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Super Adventure Island 2 randomizer and connecting to an Archipelago server.",
+        "A guide to setting up the Yoshi's Island randomizer and connecting to an Archipelago server.",
         "English",
-        "sai2_setup_en.md",
+        "setup.md",
         "setup/en",
         ["Pink Switch"]
     )
@@ -752,9 +752,9 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
     if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(world, player, "item_logic") == 1):
         item.classification = ItemClassification.progression
 
-    for i in range(world.luigi_pieces_required[player].value):
+    for i in range((world.luigi_pieces_in_pool[player].value) - (world.luigi_pieces_required[player].value)):
         if name == 'Piece of Luigi':
-            item.classification = ItemClassification.progression
+            item.classification = ItemClassification.Useful
 
     return item
 
