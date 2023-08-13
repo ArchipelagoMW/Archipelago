@@ -256,6 +256,10 @@ class YIWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+        if self.topology_present:
+            er_hint_data = {}
+            multidata['er_hint_data'][self.player] = er_hint_data
+
 def get_excluded_items(self: YIWorld, multiworld: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
     
@@ -625,16 +629,16 @@ def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
             for i in range(11):
                 self.global_level_list = [item for item in self.global_level_list if item not in self.boss_lv]
             multiworld.random.shuffle(self.boss_lv)
-            self.global_level_list.insert(3 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[0]) #1 if starting world is 1, 0 otherwise
-            self.global_level_list.insert(7 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[1])
-            self.global_level_list.insert(11 - self.world_2_offsets[world.starting_world[player].value], self.boss_lv[2])
-            self.global_level_list.insert(15 - self.world_2_offsets[world.starting_world[player].value], self.boss_lv[3])
-            self.global_level_list.insert(19 - self.world_3_offsets[world.starting_world[player].value], self.boss_lv[4])
-            self.global_level_list.insert(23 - self.world_3_offsets[world.starting_world[player].value], self.boss_lv[5])
-            self.global_level_list.insert(27 - self.world_4_offsets[world.starting_world[player].value], self.boss_lv[6])
-            self.global_level_list.insert(31 - self.world_4_offsets[world.starting_world[player].value], self.boss_lv[7])
-            self.global_level_list.insert(35 - self.world_5_offsets[world.starting_world[player].value], self.boss_lv[8])
-            self.global_level_list.insert(39 - self.world_5_offsets[world.starting_world[player].value], self.boss_lv[9])
+            self.global_level_list.insert(3 - self.world_1_offsets[multiworld.starting_world[player].value], self.boss_lv[0]) #1 if starting world is 1, 0 otherwise
+            self.global_level_list.insert(7 - self.world_1_offsets[multiworld.starting_world[player].value], self.boss_lv[1])
+            self.global_level_list.insert(11 - self.world_2_offsets[multiworld.starting_world[player].value], self.boss_lv[2])
+            self.global_level_list.insert(15 - self.world_2_offsets[multiworld.starting_world[player].value], self.boss_lv[3])
+            self.global_level_list.insert(19 - self.world_3_offsets[multiworld.starting_world[player].value], self.boss_lv[4])
+            self.global_level_list.insert(23 - self.world_3_offsets[multiworld.starting_world[player].value], self.boss_lv[5])
+            self.global_level_list.insert(27 - self.world_4_offsets[multiworld.starting_world[player].value], self.boss_lv[6])
+            self.global_level_list.insert(31 - self.world_4_offsets[multiworld.starting_world[player].value], self.boss_lv[7])
+            self.global_level_list.insert(35 - self.world_5_offsets[multiworld.starting_world[player].value], self.boss_lv[8])
+            self.global_level_list.insert(39 - self.world_5_offsets[multiworld.starting_world[player].value], self.boss_lv[9])
             self.global_level_list.insert(43 - 1, self.boss_lv[10])
         self.global_level_list.insert(self.starting_level_entrance, self.starting_level)
     self.level_location_list = [level_id_list[LevelID] for LevelID in self.global_level_list]
