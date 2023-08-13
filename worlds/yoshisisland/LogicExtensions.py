@@ -8,11 +8,13 @@ class YoshiLogic:
     midring_start: bool
     clouds_always_visible: bool
     consumable_logic: bool
+    luigi_pieces: int
 
 
-    def __init__(self, world: MultiWorld, player: int, boss_order: Optional[list]):
+    def __init__(self, world: MultiWorld, player: int, boss_order: Optional[list], luigi_pieces: int):
         self.player = player
         self.boss_order = boss_order
+        self.luigi_pieces = luigi_pieces
 
         
         if get_option_value(world, player, "stage_logic") == 0:
@@ -55,7 +57,7 @@ class YoshiLogic:
             return state.has('Middle Ring', self.player)
 
     def ReconstituteLuigi(self, state: CollectionState) -> bool:
-        return state.has('Piece of Luigi', self.player)
+        return state.has('Piece of Luigi', self.player, self.luigi_pieces)
 
     def bandit_bonus(self, state: CollectionState) -> bool:
         return (state.has('Seed Spitting Contest', self.player) or state.has('Touch Fuzzy Get Dizzy: Gather Coins', self.player) or state.has("Lakitu's Wall: Gather Coins", self.player) or state.has('Ride Like The Wind: Gather Coins', self.player))
@@ -2056,27 +2058,27 @@ class YoshiLogic:
 
     def _68Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player)
+            return state.has_all({'Helicopter Morph'}, self.player) and self._68Route(state)
 
     def _68Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player) and self.has_midring(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self.has_midring(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player) and self.has_midring(state)
+            return state.has_all({'Helicopter Morph'}, self.player) and self._68Route(state)
 
     def _68Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return True
+            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Giant Eggs'}, self.player) and self._68Route(state)
         elif self.game_logic == "Normal":
-            return True
+            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Giant Eggs'}, self.player) and self._68Route(state)
         else:
-            return True
+            return state.has_all({'Helicopter Morph', 'Giant Eggs'}, self.player) and self._68Route(state)
 ######################################################################################################################
     def _6ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

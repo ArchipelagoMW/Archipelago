@@ -13,9 +13,9 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 
-def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order: Optional[list]) -> Tuple[LocationData, ...]:
+def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order: Optional[list], luigi_pieces: Optional[int]) -> Tuple[LocationData, ...]:
 
-    logic = YoshiLogic(world, player, boss_order)
+    logic = YoshiLogic(world, player, boss_order, luigi_pieces)
 
     location_table: List[LocationData] = [
 
@@ -272,8 +272,7 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
 
     LocationData("King Bowser's Castle", "King Bowser's Castle: Red Coins", 0x3050DD, lambda state: logic._68Coins(state)),
     LocationData("King Bowser's Castle", "King Bowser's Castle: Flowers", 0x3050DE, lambda state: logic._68Flowers(state)),
-    LocationData("King Bowser's Castle", "King Bowser's Castle: Stars", 0x3050DF, lambda state: logic._68Stars(state)),
-    LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._1ECoins(state))
+    LocationData("King Bowser's Castle", "King Bowser's Castle: Stars", 0x3050DF, lambda state: logic._68Stars(state))
     ]
 
     if not world or get_option_value(world, player, "extras_enabled") == 1:
@@ -347,5 +346,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
     if not world or get_option_value(world, player, "goal") == 1:
         location_table += ( 
             LocationData("Overworld", 'Saved Baby Luigi', EventId, lambda state: logic.ReconstituteLuigi(state)),
+        )
+    if not world or get_option_value(world, player, "goal") == 0:
+        location_table += ( 
+            LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._68Clear(state)),
         )
     return tuple(location_table)

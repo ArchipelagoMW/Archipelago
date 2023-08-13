@@ -5,8 +5,8 @@ from .LogicExtensions import YoshiLogic
 from .Options import get_option_value
 from .SetupBosses import BossReqs
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar, boss_order: list, level_location_list: list):
-    logic = YoshiLogic(world, player, boss_order)
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar, boss_order: list, level_location_list: list, luigi_pieces: int):
+    logic = YoshiLogic(world, player, boss_order, luigi_pieces)
 
     locations_per_region = get_locations_per_region(locations)
 

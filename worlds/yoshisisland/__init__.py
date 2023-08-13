@@ -41,7 +41,7 @@ class YIWorld(World):
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None)}
     item_name_groups = get_item_names_per_category()
 
     locked_locations: List[str]
@@ -55,6 +55,7 @@ class YIWorld(World):
     leader_color: int
     boss_order: list
     boss_burt: int
+    luigi_pieces: int
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -96,59 +97,58 @@ class YIWorld(World):
         spoiler_handle.write(f"Raphael The Raven's Boss Door:     {self.boss_order[9]}\n")
         spoiler_handle.write(f"Tap-Tap The Red Nose's Boss Door:  {self.boss_order[10]}\n")
         spoiler_handle.write(f"\nLevels:\n1-1: {self.level_location_list[0]}\n")
-        spoiler_handle.write(f"1-2: {self.level_location_list[1]}\n")
-        spoiler_handle.write(f"1-3: {self.level_location_list[2]}\n")
-        spoiler_handle.write(f"1-4: {self.level_location_list[3]}\n")
-        spoiler_handle.write(f"1-5: {self.level_location_list[4]}\n")
-        spoiler_handle.write(f"1-6: {self.level_location_list[5]}\n")
-        spoiler_handle.write(f"1-7: {self.level_location_list[6]}\n")
-        spoiler_handle.write(f"1-8: {self.level_location_list[7]}\n")
+        spoiler_handle.write(f"1-2: {self.level_name_list[1]}\n")
+        spoiler_handle.write(f"1-3: {self.level_name_list[2]}\n")
+        spoiler_handle.write(f"1-4: {self.level_name_list[3]}\n")
+        spoiler_handle.write(f"1-5: {self.level_name_list[4]}\n")
+        spoiler_handle.write(f"1-6: {self.level_name_list[5]}\n")
+        spoiler_handle.write(f"1-7: {self.level_name_list[6]}\n")
+        spoiler_handle.write(f"1-8: {self.level_name_list[7]}\n")
 
-        spoiler_handle.write(f"\n2-1: {self.level_location_list[8]}\n")
-        spoiler_handle.write(f"2-2: {self.level_location_list[9]}\n")
-        spoiler_handle.write(f"2-3: {self.level_location_list[10]}\n")
-        spoiler_handle.write(f"2-4: {self.level_location_list[11]}\n")
-        spoiler_handle.write(f"2-5: {self.level_location_list[12]}\n")
-        spoiler_handle.write(f"2-6: {self.level_location_list[13]}\n")
-        spoiler_handle.write(f"2-7: {self.level_location_list[14]}\n")
-        spoiler_handle.write(f"2-8: {self.level_location_list[15]}\n")
+        spoiler_handle.write(f"\n2-1: {self.level_name_list[8]}\n")
+        spoiler_handle.write(f"2-2: {self.level_name_list[9]}\n")
+        spoiler_handle.write(f"2-3: {self.level_name_list[10]}\n")
+        spoiler_handle.write(f"2-4: {self.level_name_list[11]}\n")
+        spoiler_handle.write(f"2-5: {self.level_name_list[12]}\n")
+        spoiler_handle.write(f"2-6: {self.level_name_list[13]}\n")
+        spoiler_handle.write(f"2-7: {self.level_name_list[14]}\n")
+        spoiler_handle.write(f"2-8: {self.level_name_list[15]}\n")
 
-        spoiler_handle.write(f"\n3-1: {self.level_location_list[16]}\n")
-        spoiler_handle.write(f"3-2: {self.level_location_list[17]}\n")
-        spoiler_handle.write(f"3-3: {self.level_location_list[18]}\n")
-        spoiler_handle.write(f"3-4: {self.level_location_list[19]}\n")
-        spoiler_handle.write(f"3-5: {self.level_location_list[20]}\n")
-        spoiler_handle.write(f"3-6: {self.level_location_list[21]}\n")
-        spoiler_handle.write(f"3-7: {self.level_location_list[22]}\n")
-        spoiler_handle.write(f"3-8: {self.level_location_list[23]}\n")
+        spoiler_handle.write(f"\n3-1: {self.level_name_list[16]}\n")
+        spoiler_handle.write(f"3-2: {self.level_name_list[17]}\n")
+        spoiler_handle.write(f"3-3: {self.level_name_list[18]}\n")
+        spoiler_handle.write(f"3-4: {self.level_name_list[19]}\n")
+        spoiler_handle.write(f"3-5: {self.level_name_list[20]}\n")
+        spoiler_handle.write(f"3-6: {self.level_name_list[21]}\n")
+        spoiler_handle.write(f"3-7: {self.level_name_list[22]}\n")
+        spoiler_handle.write(f"3-8: {self.level_name_list[23]}\n")
 
-        spoiler_handle.write(f"\n4-1: {self.level_location_list[24]}\n")
-        spoiler_handle.write(f"4-2: {self.level_location_list[25]}\n")
-        spoiler_handle.write(f"4-3: {self.level_location_list[26]}\n")
-        spoiler_handle.write(f"4-4: {self.level_location_list[27]}\n")
-        spoiler_handle.write(f"4-5: {self.level_location_list[28]}\n")
-        spoiler_handle.write(f"4-6: {self.level_location_list[29]}\n")
-        spoiler_handle.write(f"4-7: {self.level_location_list[30]}\n")
-        spoiler_handle.write(f"4-8: {self.level_location_list[31]}\n")
+        spoiler_handle.write(f"\n4-1: {self.level_name_list[24]}\n")
+        spoiler_handle.write(f"4-2: {self.level_name_list[25]}\n")
+        spoiler_handle.write(f"4-3: {self.level_name_list[26]}\n")
+        spoiler_handle.write(f"4-4: {self.level_name_list[27]}\n")
+        spoiler_handle.write(f"4-5: {self.level_name_list[28]}\n")
+        spoiler_handle.write(f"4-6: {self.level_name_list[29]}\n")
+        spoiler_handle.write(f"4-7: {self.level_name_list[30]}\n")
+        spoiler_handle.write(f"4-8: {self.level_name_list[31]}\n")
 
-        spoiler_handle.write(f"\n5-1: {self.level_location_list[32]}\n")
-        spoiler_handle.write(f"5-2: {self.level_location_list[33]}\n")
-        spoiler_handle.write(f"5-3: {self.level_location_list[34]}\n")
-        spoiler_handle.write(f"5-4: {self.level_location_list[35]}\n")
-        spoiler_handle.write(f"5-5: {self.level_location_list[36]}\n")
-        spoiler_handle.write(f"5-6: {self.level_location_list[37]}\n")
-        spoiler_handle.write(f"5-7: {self.level_location_list[38]}\n")
-        spoiler_handle.write(f"5-8: {self.level_location_list[39]}\n")
+        spoiler_handle.write(f"\n5-1: {self.level_name_list[32]}\n")
+        spoiler_handle.write(f"5-2: {self.level_name_list[33]}\n")
+        spoiler_handle.write(f"5-3: {self.level_name_list[34]}\n")
+        spoiler_handle.write(f"5-4: {self.level_name_list[35]}\n")
+        spoiler_handle.write(f"5-5: {self.level_name_list[36]}\n")
+        spoiler_handle.write(f"5-6: {self.level_name_list[37]}\n")
+        spoiler_handle.write(f"5-7: {self.level_name_list[38]}\n")
+        spoiler_handle.write(f"5-8: {self.level_name_list[39]}\n")
 
-        spoiler_handle.write(f"\n6-1: {self.level_location_list[40]}\n")
-        spoiler_handle.write(f"6-2: {self.level_location_list[41]}\n")
-        spoiler_handle.write(f"6-3: {self.level_location_list[42]}\n")
-        spoiler_handle.write(f"6-4: {self.level_location_list[43]}\n")
-        spoiler_handle.write(f"6-5: {self.level_location_list[44]}\n")
-        spoiler_handle.write(f"6-6: {self.level_location_list[45]}\n")
-        spoiler_handle.write(f"6-7: {self.level_location_list[46]}\n")
+        spoiler_handle.write(f"\n6-1: {self.level_name_list[40]}\n")
+        spoiler_handle.write(f"6-2: {self.level_name_list[41]}\n")
+        spoiler_handle.write(f"6-3: {self.level_name_list[42]}\n")
+        spoiler_handle.write(f"6-4: {self.level_name_list[43]}\n")
+        spoiler_handle.write(f"6-5: {self.level_name_list[44]}\n")
+        spoiler_handle.write(f"6-6: {self.level_name_list[45]}\n")
+        spoiler_handle.write(f"6-7: {self.level_name_list[46]}\n")
         spoiler_handle.write(f"6-8: King Bowser's Castle\n")
-        spoiler_handle.write(f"Test.StartLV{self.starting_level}\n")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -170,8 +170,8 @@ class YIWorld(World):
         return item
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc),
-                        self.location_cache, self, self.boss_ap_loc, self.level_location_list)
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces),
+                        self.location_cache, self, self.boss_ap_loc, self.level_location_list, self.luigi_pieces)
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.multiworld.trap_percent[self.player].value
@@ -322,6 +322,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     self.playergoal = world.goal[player].value
     if world.luigi_pieces_in_pool[player].value < world.luigi_pieces_required[player].value:
         world.luigi_pieces_in_pool[self.player].value = world.random.randint(world.luigi_pieces_required[self.player].value, 100)
+    self.luigi_pieces = world.luigi_pieces_required[player].value
 
     if world.starting_lives[player] > 255:
         self.lives_high = world.starting_lives[player].value >> 8
@@ -539,6 +540,56 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
                     0x42: "KEEP MOVING!!!!"
                         }
 
+    level_names = {
+                    0x00: "Make Eggs, Throw Eggs",
+                    0x01: "Watch Out Below!",
+                    0x02: "The Cave Of Chomp Rock",
+                    0x03: "Burt The Bashful's Fort",
+                    0x04: "Hop! Hop! Donut Lifts",
+                    0x05: "Shy-Guys On Stilts",
+                    0x06: "Touch Fuzzy Get Dizzy",
+                    0x07: "Salvo The Slime's Castle",
+                    0x0C: "Visit Koopa And Para-Koopa",
+                    0x0D: "The Baseball Boys",
+                    0x0E: "What's Gusty Taste Like?",
+                    0x0F: "Bigger Boo's Fort",
+                    0x10: "Watch Out For Lakitu",
+                    0x11: "The Cave Of The Mystery Maze",
+                    0x12: "Lakitu's Wall",
+                    0x13: "The Potted Ghost's Castle",
+                    0x18: "Welcome To Monkey World!",
+                    0x19: "Jungle Rhythm...",
+                    0x1A: "Nep-Enuts' Domain",
+                    0x1B: "Prince Froggy's Fort",
+                    0x1C: "Jammin' Through The Trees",
+                    0x1D: "The Cave Of Harry Hedgehog",
+                    0x1E: "Monkeys' Favorite Lake",
+                    0x1F: "Naval Piranha's Castle",
+                    0x24: "GO! GO! MARIO!!",
+                    0x25: "The Cave Of The Lakitus",
+                    0x26: "Don't Look Back!",
+                    0x27: "Marching Milde's Fort",
+                    0x28: "Chomp Rock Zone",
+                    0x29: "Lake Shore Paradise",
+                    0x2A: "Ride Like The Wind",
+                    0x2B: "Hookbill The Koopa's Castle",
+                    0x30: "BLIZZARD!!!",
+                    0x31: "Ride The Ski Lifts",
+                    0x32: "Danger - Icy Conditions Ahead",
+                    0x33: "Sluggy The Unshaven's Fort",
+                    0x34: "Goonie Rides!",
+                    0x35: "Welcome To Cloud World",
+                    0x36: "Shifting Platforms Ahead",
+                    0x37: "Raphael The Raven's Castle",
+                    0x3C: "Scary Skeleton Goonies!",
+                    0x3D: "The Cave Of The Bandits",
+                    0x3E: "Beware The Spinning Logs",
+                    0x3F: "Tap-Tap The Red Nose's Fort",
+                    0x40: "The Very Loooooong Cave",
+                    0x41: "The Deep, Underground Maze",
+                    0x42: "KEEP MOVING!!!!"
+                        }
+
     self.world_1_offsets = [0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
     self.world_2_offsets = [0x01, 0x01, 0x00, 0x00, 0x00, 0x00]
     self.world_3_offsets = [0x01, 0x01, 0x01, 0x00, 0x00, 0x00]
@@ -585,6 +636,7 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
             self.global_level_list.insert(43 - 1, self.boss_lv[10])
         self.global_level_list.insert(self.starting_level_entrance, self.starting_level)
     self.level_location_list = [level_id_list[LevelID] for LevelID in self.global_level_list]
+    self.level_name_list = [level_names[LevelID] for LevelID in self.global_level_list]
 
     level_panel_dict = {
                     0x00: [0x04, 0x04, 0x53],
