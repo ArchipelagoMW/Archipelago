@@ -34,6 +34,7 @@ YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
 DEATHMUSIC_FLAG = WRAM_START + 0x004F
 DEATHFLAG = WRAM_START + 0x00DB
 DEATHLINKRECV = WRAM_START + 0x00E0
+GOALFLAG = WRAM_START + 0x14B5
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
@@ -83,6 +84,7 @@ class YISNIClient(SNIClient):
         game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
         death_flag = await snes_read(ctx, DEATHFLAG, 0x1)
         deathlink_death = await snes_read(ctx, DEATHLINKRECV, 0x1)
+        goal_flag = await snes_read(ctx, GOALFLAG, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
             currently_dead = (game_music[0] == 0x07 or game_mode[0] == 0x12 or (death_flag [0] == 0x00 and game_mode[0] == 0x11)) and deathlink_death[0] == 0x00
@@ -90,7 +92,7 @@ class YISNIClient(SNIClient):
 
         if game_mode is None:
             return
-        elif game_mode[0] == 0x1D:
+        elif goal_flag[0] == 0x01:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         elif game_mode[0] not in VALID_GAME_STATES:

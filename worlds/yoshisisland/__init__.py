@@ -312,7 +312,7 @@ def get_excluded_items(self: YIWorld, world: MultiWorld, player: int) -> Set[str
 def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
 
-    if world.goal[player].value == 1:
+    if self.playergoal == 1:
         for i in range(world.luigi_pieces_in_pool[player].value):
             pool += [self.create_item('Piece of Luigi')]
 
@@ -321,6 +321,9 @@ def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: in
         pool.append(item)
 
 def var_boss(self: YIWorld, world: MultiWorld, player: int):
+    if world.luigi_pieces_in_pool[player].value < world.luigi_pieces_required[player].value:
+        world.luigi_pieces_in_pool[self.player].value = world.random.randint(world.luigi_pieces_required[self.player].value, 100)
+
     if world.starting_lives[player] > 255:
         self.lives_high = world.starting_lives[player].value >> 8
         self.lives_low = (world.starting_lives[player].value - self.lives_high) - ((255 * self.lives_high))
