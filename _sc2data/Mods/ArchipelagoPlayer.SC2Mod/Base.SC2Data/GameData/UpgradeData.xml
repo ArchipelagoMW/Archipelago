@@ -288,6 +288,7 @@
         <EffectArray Reference="Weapon,AP_BacklashRockets,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ATSLaserBattery,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ATALaserBattery,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_AllPurposeLaserBattery,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LanzerTorpedoes,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_TwinGatlingCannon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_WraithG,RateMultiplier" Value="0.05"/>
@@ -302,6 +303,8 @@
         <EffectArray Reference="Weapon,AP_DRBattlecruiserG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_DRCannonsG,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRAllPurposeLaserBattery,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRAllPurposeCannons,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
