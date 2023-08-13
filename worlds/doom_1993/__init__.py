@@ -173,7 +173,6 @@ class DOOM1993World(World):
         return DOOM1993Item(name, Items.item_table[item_id]["classification"], item_id, self.player)
 
     def create_items(self):
-        is_only_first_episode: bool = self.get_episode_count() == 1 and self.included_episodes[0]
         itempool: List[DOOM1993Item] = []
         start_with_computer_area_maps: bool = getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value
 
@@ -187,9 +186,6 @@ class DOOM1993World(World):
 
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
-
-            if item["name"] in {"BFG9000", "Plasma Gun"} and is_only_first_episode:
-                continue  # Don't include those guns if only first episode
 
             count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
