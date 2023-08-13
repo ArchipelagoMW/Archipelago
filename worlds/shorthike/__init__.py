@@ -1,6 +1,6 @@
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from typing import Dict, Any
+from BaseClasses import Region, Location, Item, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import forbid_item
 from .Items import item_table, group_table
 from .Locations import location_table
 from .Rules import create_rules
@@ -8,6 +8,7 @@ from .Rules import create_rules
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
 
+base_loc_id = 81000
 base_item_id = 82000
 class ShortHikeWorld(World):
     """
@@ -73,6 +74,33 @@ class ShortHikeWorld(World):
 
     def set_rules(self):
         create_rules(self, location_table)
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data: Dict[str, Any] = {}
+        locations = Dict[int, Any] = {}
+
+        world = self.multiworld
+        player = self.player
+
+        for loc in world.get_filled_locations(player):
+            if loc.item.code == None:
+                continue
+            else:
+                data = {
+                    "id": self.location_name_to_game_id[loc.name],
+                    "ap_id": loc.address,
+                    "name": loc.item.name,
+                    "player_name": world.player_name[loc.item.player],
+                    "type": int(loc.item.classification)
+                }
+
+                locations[loc.address] = data
+    
+        slot_data = {
+            "locations": locations
+        }
+    
+        return slot_data
 
 
 class ShortHikeItem(Item):
