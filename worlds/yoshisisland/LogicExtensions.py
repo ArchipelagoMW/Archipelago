@@ -1301,11 +1301,11 @@ class YoshiLogic:
 
     def _45Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return (state.has_all({'Chomp Rock'}, self.player) or self.combat_item(state)) and (self.has_midring(state) and self.cansee_clouds(state))
+            return state.has_all({'Chomp Rock', '! Switch', 'Spring Ball', 'Dashed Platform'}, self.player)
         elif self.game_logic == "Normal":
-            return (state.has_all({'Chomp Rock'}, self.player) or self.combat_item(state)) and (self.has_midring(state) and self.cansee_clouds(state))
+            return state.has_all({'Chomp Rock', '! Switch', 'Dashed Platform'}, self.player)
         else:
-            return True
+            return state.has_all({'Chomp Rock', '! Switch'}, self.player)
 
     def _45Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -2069,11 +2069,11 @@ class YoshiLogic:
 
     def _68Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch', 'Giant Eggs'}, self.player)
+            return True
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Giant Eggs'}, self.player)
+            return True
         else:
-            return state.has_all({'Helicopter Morph', 'Giant Eggs'}, self.player)
+            return True
 ######################################################################################################################
     def _6ECoins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

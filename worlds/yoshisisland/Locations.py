@@ -275,7 +275,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
     LocationData("King Bowser's Castle", "King Bowser's Castle: Stars", 0x3050DF, lambda state: logic._68Stars(state))
     ]
     if not world or get_option_value(world, player, "goal") == 0:
-        LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._68Clear(state))
+        location_table += (
+           LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._1ECoins(state)),
+        )
 
     if not world or get_option_value(world, player, "extras_enabled") == 1:
         location_table += ( 
