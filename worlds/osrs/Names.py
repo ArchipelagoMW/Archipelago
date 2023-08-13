@@ -2,6 +2,8 @@ class RegionNames:
     Lumbridge = "Lumbridge"
     Lumbridge_Swamp = "Lumbridge Swamp"
     Lumbridge_Farms = "Lumbridge Farms"
+    Lumbridge_Farms_East = "Lumbridge Farms East"
+    Lumbridge_Farms_West = "Lumbridge Farms West"
     HAM_Hideout = "HAM Hideout"
     Draynor_Village = "Draynor Village"
     Draynor_Manor = "Draynor Manor"

@@ -104,13 +104,25 @@ all_regions = [
                    LocationNames.QP_Misthalin_Mystery,
                ],
                ),
-    RegionInfo(RegionNames.Lumbridge_Farms,
+    RegionInfo(RegionNames.Lumbridge_Farms_East,
+               lambda player: lambda state: state.has(ItemNames.Lumbridge_Farms, player),
+               [
+                   RegionNames.Lumbridge,
+                   RegionNames.South_Of_Varrock
+               ],
+               [
+                   RegionNames.Egg,
+                   RegionNames.Milk,
+                   RegionNames.Imp
+               ],
+               [],
+               ),
+    RegionInfo(RegionNames.Lumbridge_Farms_West,
                lambda player: lambda state: state.has(ItemNames.Lumbridge_Farms, player),
                [
                    RegionNames.Lumbridge,
                    RegionNames.HAM_Hideout,
-                   RegionNames.Draynor_Village,
-                   RegionNames.South_Of_Varrock
+                   RegionNames.Draynor_Village
                ],
                [
                    RegionNames.Egg,
