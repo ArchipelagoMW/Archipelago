@@ -41,7 +41,7 @@ class YIWorld(World):
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None)}
     item_name_groups = get_item_names_per_category()
 
     locked_locations: List[str]
@@ -62,6 +62,8 @@ class YIWorld(World):
 
         self.locked_locations= []
         self.location_cache= []
+        self.playergoal = world.goal[player].value
+        self.NumLuigiPieces = world.luigi_pieces_required[player].value
 
     @classmethod
     def stage_assert_generate(cls, world):
@@ -94,6 +96,60 @@ class YIWorld(World):
         spoiler_handle.write(f"Sluggy The Unshaven's Boss Door:   {self.boss_order[8]}\n")
         spoiler_handle.write(f"Raphael The Raven's Boss Door:     {self.boss_order[9]}\n")
         spoiler_handle.write(f"Tap-Tap The Red Nose's Boss Door:  {self.boss_order[10]}\n")
+        spoiler_handle.write(f"\nLevels:\n1-1: {self.level_location_list[0]}\n")
+        spoiler_handle.write(f"1-2: {self.level_location_list[1]}\n")
+        spoiler_handle.write(f"1-3: {self.level_location_list[2]}\n")
+        spoiler_handle.write(f"1-4: {self.level_location_list[3]}\n")
+        spoiler_handle.write(f"1-5: {self.level_location_list[4]}\n")
+        spoiler_handle.write(f"1-6: {self.level_location_list[5]}\n")
+        spoiler_handle.write(f"1-7: {self.level_location_list[6]}\n")
+        spoiler_handle.write(f"1-8: {self.level_location_list[7]}\n")
+
+        spoiler_handle.write(f"\n2-1: {self.level_location_list[8]}\n")
+        spoiler_handle.write(f"2-2: {self.level_location_list[9]}\n")
+        spoiler_handle.write(f"2-3: {self.level_location_list[10]}\n")
+        spoiler_handle.write(f"2-4: {self.level_location_list[11]}\n")
+        spoiler_handle.write(f"2-5: {self.level_location_list[12]}\n")
+        spoiler_handle.write(f"2-6: {self.level_location_list[13]}\n")
+        spoiler_handle.write(f"2-7: {self.level_location_list[14]}\n")
+        spoiler_handle.write(f"2-8: {self.level_location_list[15]}\n")
+
+        spoiler_handle.write(f"\n3-1: {self.level_location_list[16]}\n")
+        spoiler_handle.write(f"3-2: {self.level_location_list[17]}\n")
+        spoiler_handle.write(f"3-3: {self.level_location_list[18]}\n")
+        spoiler_handle.write(f"3-4: {self.level_location_list[19]}\n")
+        spoiler_handle.write(f"3-5: {self.level_location_list[20]}\n")
+        spoiler_handle.write(f"3-6: {self.level_location_list[21]}\n")
+        spoiler_handle.write(f"3-7: {self.level_location_list[22]}\n")
+        spoiler_handle.write(f"3-8: {self.level_location_list[23]}\n")
+
+        spoiler_handle.write(f"\n4-1: {self.level_location_list[24]}\n")
+        spoiler_handle.write(f"4-2: {self.level_location_list[25]}\n")
+        spoiler_handle.write(f"4-3: {self.level_location_list[26]}\n")
+        spoiler_handle.write(f"4-4: {self.level_location_list[27]}\n")
+        spoiler_handle.write(f"4-5: {self.level_location_list[28]}\n")
+        spoiler_handle.write(f"4-6: {self.level_location_list[29]}\n")
+        spoiler_handle.write(f"4-7: {self.level_location_list[30]}\n")
+        spoiler_handle.write(f"4-8: {self.level_location_list[31]}\n")
+
+        spoiler_handle.write(f"\n5-1: {self.level_location_list[32]}\n")
+        spoiler_handle.write(f"5-2: {self.level_location_list[33]}\n")
+        spoiler_handle.write(f"5-3: {self.level_location_list[34]}\n")
+        spoiler_handle.write(f"5-4: {self.level_location_list[35]}\n")
+        spoiler_handle.write(f"5-5: {self.level_location_list[36]}\n")
+        spoiler_handle.write(f"5-6: {self.level_location_list[37]}\n")
+        spoiler_handle.write(f"5-7: {self.level_location_list[38]}\n")
+        spoiler_handle.write(f"5-8: {self.level_location_list[39]}\n")
+
+        spoiler_handle.write(f"\n6-1: {self.level_location_list[40]}\n")
+        spoiler_handle.write(f"6-2: {self.level_location_list[41]}\n")
+        spoiler_handle.write(f"6-3: {self.level_location_list[42]}\n")
+        spoiler_handle.write(f"6-4: {self.level_location_list[43]}\n")
+        spoiler_handle.write(f"6-5: {self.level_location_list[44]}\n")
+        spoiler_handle.write(f"6-6: {self.level_location_list[45]}\n")
+        spoiler_handle.write(f"6-7: {self.level_location_list[46]}\n")
+        spoiler_handle.write(f"6-8: King Bowser's Castle\n")
+        spoiler_handle.write(f"Test.StartLV{self.starting_level}\n")
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -115,8 +171,8 @@ class YIWorld(World):
         return item
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player),
-                        self.location_cache, self)
+        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc),
+                        self.location_cache, self, self.boss_ap_loc, self.level_location_list)
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.multiworld.trap_percent[self.player].value
@@ -129,7 +185,10 @@ class YIWorld(World):
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
+        if self.playergoal == 0:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
+        else:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has('Piece of Luigi', self.player, self.NumLuigiPieces)
 
     def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
         excluded_items.add(item)
@@ -252,6 +311,11 @@ def get_excluded_items(self: YIWorld, world: MultiWorld, player: int) -> Set[str
 
 def fill_item_pool_with_dummy_items(self: YIWorld, world: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
+
+    if world.goal[player].value == 1:
+        for i in range(world.luigi_pieces_in_pool[player].value):
+            pool += [self.create_item('Piece of Luigi')]
+
     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
         item = create_item_with_correct_settings(world, player, self.get_filler_item_name())
         pool.append(item)
@@ -364,8 +428,23 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
         "Tap-Tap The Red Nose's Boss Room": 10,
     }
 
+    boss_check_list = {
+        "Burt The Bashful's Boss Room": "Burt The Bashful Defeated",
+        "Salvo The Slime's Boss Room": "Salvo The Slime Defeated",
+        "Bigger Boo's Boss Room": "Bigger Boo Defeated",
+        "Roger The Ghost's Boss Room": "Roger The Ghost Defeated",
+        "Prince Froggy's Boss Room": "Prince Froggy Defeated",
+        "Naval Piranha's Boss Room": "Naval Piranha Defeated",
+        "Marching Milde's Boss Room": "Marching Milde Defeated",
+        "Hookbill The Koopa's Boss Room": "Hookbill The Koopa Defeated",
+        "Sluggy The Unshaven's Boss Room": "Sluggy The Unshaven Defeated",
+        "Raphael The Raven's Boss Room": "Raphael The Raven Defeated",
+        "Tap-Tap The Red Nose's Boss Room": "Tap-Tap The Red Nose Defeated",
+    }
+
     self.boss_room_id = [boss_room_idlist[roomnum] for roomnum in self.boss_order]
     self.tap_tap_room = boss_levels[self.boss_room_id.index(10)]
+    self.boss_ap_loc = [boss_check_list[roomnum] for roomnum in self.boss_order]
 
 
     for i in range(4):
@@ -401,6 +480,236 @@ def var_boss(self: YIWorld, world: MultiWorld, player: int):
     for i in range(4):
         self.boss_tap_data = (pointer_dict[self.boss_room_id[10]])
 
+    
+    self.global_level_list = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+                              0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13,
+                              0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
+                              0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B,
+                              0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                              0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42]
+    level_id_list = {
+                    0x00: "Make Eggs, Throw Eggs",
+                    0x01: "Watch Out Below!",
+                    0x02: "The Cave Of Chomp Rock",
+                    0x03: "Burt The Bashful's Fort",
+                    0x04: "Hop! Hop! Donut Lifts",
+                    0x05: "Shy-Guys On Stilts",
+                    0x06: "Touch Fuzzy Get Dizzy",
+                    0x07: "Salvo The Slime's Castle",
+                    0x0C: "Visit Koopa And Para-Koopa",
+                    0x0D: "The Baseball Boys",
+                    0x0E: "What's Gusty Taste Like?",
+                    0x0F: "Bigger Boo's Fort",
+                    0x10: "Watch Out For Lakitu",
+                    0x11: "The Cave Of The Mystery Maze",
+                    0x12: "Lakitu's Wall",
+                    0x13: "The Potted Ghost's Castle",
+                    0x18: "Welcome To Monkey World!",
+                    0x19: "Jungle Rhythm...",
+                    0x1A: "Nep-Enuts' Domain",
+                    0x1B: "Prince Froggy's Fort",
+                    0x1C: "Jammin' Through The Trees",
+                    0x1D: "The Cave Of Harry Hedgehog",
+                    0x1E: "Monkeys' Favorite Lake",
+                    0x1F: "Naval Piranha's Castle",
+                    0x24: "GO! GO! MARIO!!",
+                    0x25: "The Cave Of The Lakitus",
+                    0x26: "Don't Look Back!",
+                    0x27: "Marching Milde's Fort",
+                    0x28: "Chomp Rock Zone",
+                    0x29: "Lake Shore Paradise",
+                    0x2A: "Ride Like The Wind",
+                    0x2B: "Hookbill The Koopa's Castle",
+                    0x30: "BLIZZARD!!!",
+                    0x31: "Ride The Ski Lifts",
+                    0x32: "Danger - Icy Conditions Ahead",
+                    0x33: "Sluggy The Unshaven's Fort",
+                    0x34: "Goonie Rides!",
+                    0x35: "Welcome To Cloud World",
+                    0x36: "Shifting Platforms Ahead",
+                    0x37: "Raphael The Raven's Castle",
+                    0x3C: "Scary Skeleton Goonies!",
+                    0x3D: "The Cave Of The Bandits",
+                    0x3E: "Beware The Spinning Logs",
+                    0x3F: "Tap-Tap The Red Nose's Fort",
+                    0x40: "The Very Loooooong Cave",
+                    0x41: "The Deep, Underground Maze",
+                    0x42: "KEEP MOVING!!!!"
+                        }
+
+    self.world_1_offsets = [0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
+    self.world_2_offsets = [0x01, 0x01, 0x00, 0x00, 0x00, 0x00]
+    self.world_3_offsets = [0x01, 0x01, 0x01, 0x00, 0x00, 0x00]
+    self.world_4_offsets = [0x01, 0x01, 0x01, 0x01, 0x00, 0x00]
+    self.world_5_offsets = [0x01, 0x01, 0x01, 0x01, 0x01, 0x01]
+    self.easy_start_lv = [0x02, 0x04, 0x06, 0x0E, 0x10, 0x18, 0x1C, 0x28, 0x30, 0x31, 0x35, 0x36, 0x3E, 0x40, 0x42]
+    self.norm_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0E, 0x10, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x28, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
+    self.hard_start_lv = [0x00, 0x01, 0x02, 0x04, 0x06, 0x0D, 0x0E, 0x10, 0x11, 0x12, 0x18, 0x1A, 0x1C, 0x1E, 0x24, 0x25, 0x26, 0x28, 0x29, 0x2B, 0x30, 0x31, 0x34, 0x35, 0x36, 0x3D, 0x3E, 0x40, 0x42]
+    self.diff_index = [self.easy_start_lv, self.norm_start_lv, self.hard_start_lv]
+    self.diff_level = self.diff_index[world.stage_logic[player].value]
+    self.boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
+    self.world_start_lv = [0, 8, 16, 24, 32, 35]
+    if world.shuffle_midrings[player].value == 1:
+        self.easy_start_lv.extend([0x1A, 0x24, 0x34])
+        self.norm_start_lv.extend([0x24, 0x37, 0x3C])
+        self.hard_start_lv.extend([0x1D, 0x3C])
+
+    if world.level_shuffle[player].value != 1:
+        self.norm_start_lv.extend([0x37, 0x3C])
+        self.hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
+        if world.shuffle_midrings[player].value ==1:
+            self.easy_start_lv.extend([0x1B])
+            self.norm_start_lv.extend([0x1B, 0x2B, 0x37])
+
+    self.starting_level = world.random.choice(self.diff_level)
+    self.starting_level_entrance = self.world_start_lv[world.starting_world[player].value]
+    if world.level_shuffle[player].value != 0:
+        self.global_level_list.remove(self.starting_level)
+        world.random.shuffle(self.global_level_list)
+        if world.level_shuffle[player].value == 1:
+            for i in range(11):
+                self.global_level_list = [item for item in self.global_level_list if item not in self.boss_lv]
+            world.random.shuffle(self.boss_lv)
+            self.global_level_list.insert(3 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[0]) #1 if starting world is 1, 0 otherwise
+            self.global_level_list.insert(7 - self.world_1_offsets[world.starting_world[player].value], self.boss_lv[1])
+            self.global_level_list.insert(11 - self.world_2_offsets[world.starting_world[player].value], self.boss_lv[2])
+            self.global_level_list.insert(15 - self.world_2_offsets[world.starting_world[player].value], self.boss_lv[3])
+            self.global_level_list.insert(19 - self.world_3_offsets[world.starting_world[player].value], self.boss_lv[4])
+            self.global_level_list.insert(23 - self.world_3_offsets[world.starting_world[player].value], self.boss_lv[5])
+            self.global_level_list.insert(27 - self.world_4_offsets[world.starting_world[player].value], self.boss_lv[6])
+            self.global_level_list.insert(31 - self.world_4_offsets[world.starting_world[player].value], self.boss_lv[7])
+            self.global_level_list.insert(35 - self.world_5_offsets[world.starting_world[player].value], self.boss_lv[8])
+            self.global_level_list.insert(39 - self.world_5_offsets[world.starting_world[player].value], self.boss_lv[9])
+            self.global_level_list.insert(43 - 1, self.boss_lv[10])
+        self.global_level_list.insert(self.starting_level_entrance, self.starting_level)
+    self.level_location_list = [level_id_list[LevelID] for LevelID in self.global_level_list]
+
+    level_panel_dict = {
+                    0x00: [0x04, 0x04, 0x53],
+                    0x01: [0x20, 0x04, 0x53],
+                    0x02: [0x3C, 0x04, 0x53],
+                    0x03: [0x58, 0x04, 0x53],
+                    0x04: [0x74, 0x04, 0x53],
+                    0x05: [0x90, 0x04, 0x53],
+                    0x06: [0xAC, 0x04, 0x53],
+                    0x07: [0xC8, 0x04, 0x53],
+                    0x0C: [0x04, 0x24, 0x53],
+                    0x0D: [0x20, 0x24, 0x53],
+                    0x0E: [0x3C, 0x24, 0x53],
+                    0x0F: [0x58, 0x24, 0x53],
+                    0x10: [0x74, 0x24, 0x53],
+                    0x11: [0x90, 0x24, 0x53],
+                    0x12: [0xAC, 0x24, 0x53],
+                    0x13: [0xC8, 0x24, 0x53],
+                    0x18: [0x04, 0x44, 0x53],
+                    0x19: [0x20, 0x44, 0x53],
+                    0x1A: [0x3C, 0x44, 0x53],
+                    0x1B: [0x58, 0x44, 0x53],
+                    0x1C: [0x74, 0x44, 0x53],
+                    0x1D: [0x90, 0x44, 0x53],
+                    0x1E: [0xAC, 0x44, 0x53],
+                    0x1F: [0xC8, 0x44, 0x53],
+                    0x24: [0x04, 0x64, 0x53],
+                    0x25: [0x20, 0x64, 0x53],
+                    0x26: [0x3C, 0x64, 0x53],
+                    0x27: [0x58, 0x64, 0x53],
+                    0x28: [0x74, 0x64, 0x53],
+                    0x29: [0x90, 0x64, 0x53],
+                    0x2A: [0xAC, 0x64, 0x53],
+                    0x2B: [0xC8, 0x64, 0x53],
+                    0x30: [0x04, 0x04, 0x53],
+                    0x31: [0x20, 0x04, 0x53],
+                    0x32: [0x3C, 0x04, 0x53],
+                    0x33: [0x58, 0x04, 0x53],
+                    0x34: [0x74, 0x04, 0x53],
+                    0x35: [0x90, 0x04, 0x53],
+                    0x36: [0xAC, 0x04, 0x53],
+                    0x37: [0xC8, 0x04, 0x53],
+                    0x3C: [0x04, 0x24, 0x53],
+                    0x3D: [0x20, 0x24, 0x53],
+                    0x3E: [0x3C, 0x24, 0x53],
+                    0x3F: [0x58, 0x24, 0x53],
+                    0x40: [0x74, 0x24, 0x53],
+                    0x41: [0x90, 0x24, 0x53],
+                    0x42: [0xAC, 0x24, 0x53]
+                        }
+    self.panel_palette_1 = [0x00, 0x03, 0x04, 0x05, 0x0C, 0x10, 0x12, 0x13, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x24, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x30, 0x32, 0x34, 0x35, 0x37, 0x3C, 0x3D, 0x40, 0x41] #000C
+    self.panel_palette_2 = [0x01, 0x02, 0x06, 0x07, 0x0D, 0x0E, 0x0F, 0x11, 0x18, 0x1E, 0x1F, 0x25, 0x28, 0x31, 0x33, 0x36, 0x3E, 0x3F, 0x42] #0010
+
+    stage_number = 0
+    world_number = 1
+    for i in range(47):
+        stage_number += 1
+        if stage_number >= 9:
+            world_number += 1
+            stage_number = 1
+        for j in range(3):
+            setattr(self, f'_{world_number}{stage_number}StageGFX', level_panel_dict[self.global_level_list[i]])
+
+    self.level_gfx_table = []
+    self.palette_panel_list = []
+
+    for i in range(47):
+        if self.global_level_list[i] >=0x30:
+            self.level_gfx_table.append(0x15)
+        else:
+            self.level_gfx_table.append(0x11)
+        
+        if self.global_level_list[i] in self.panel_palette_1:
+            self.palette_panel_list.extend([0x00, 0x0C])
+        elif self.global_level_list[i] in self.panel_palette_2:
+            self.palette_panel_list.extend([0x00, 0x10])
+
+    self.palette_panel_list[16:16] = [0x00, 0x0c, 0x00, 0x0c, 0x00, 0x18, 0x00, 0x18]
+    self.palette_panel_list[40:40] = [0x00, 0x0c, 0x00, 0x0c, 0x00, 0x18, 0x00, 0x18]
+    self.palette_panel_list[64:64] = [0x00, 0x0c, 0x00, 0x0c, 0x00, 0x18, 0x00, 0x18]
+    self.palette_panel_list[88:88] = [0x00, 0x0c, 0x00, 0x0c, 0x00, 0x18, 0x00, 0x18]
+    self.palette_panel_list[112:112] = [0x00, 0x0c, 0x00, 0x0c, 0x00, 0x18, 0x00, 0x18]
+
+    self.level_gfx_table.insert(8, 0x15)
+    self.level_gfx_table.insert(8, 0x15)
+    self.level_gfx_table.insert(8, 0x15)
+    self.level_gfx_table.insert(8, 0x11)
+
+    self.level_gfx_table.insert(20, 0x15)
+    self.level_gfx_table.insert(20, 0x15)
+    self.level_gfx_table.insert(20, 0x15)
+    self.level_gfx_table.insert(20, 0x11)
+
+    self.level_gfx_table.insert(32, 0x15)
+    self.level_gfx_table.insert(32, 0x15)
+    self.level_gfx_table.insert(32, 0x15)
+    self.level_gfx_table.insert(32, 0x11)
+
+    self.level_gfx_table.insert(44, 0x15)
+    self.level_gfx_table.insert(44, 0x15)
+    self.level_gfx_table.insert(44, 0x15)
+    self.level_gfx_table.insert(44, 0x11)
+
+    self.level_gfx_table.insert(56, 0x15)
+    self.level_gfx_table.insert(56, 0x15)
+    self.level_gfx_table.insert(56, 0x15)
+    self.level_gfx_table.insert(56, 0x15)
+    
+    
+    #Need to make this more efficient. I need to find the values to insert for worlds 5 and 6 in the morning. Probably just 9 more, probably all 15. Also, maybe double check the level GFX?
+
+    castle_door_dict = {
+                    0: [0xB8, 0x05, 0x77, 0x00],
+                    1: [0xB8, 0x05, 0x77, 0x00],
+                    2: [0xC6, 0x07, 0x7A, 0x00],
+                    3: [0xCD, 0x05, 0x5B, 0x00],
+                    4: [0xD3, 0x00, 0x77, 0x06],
+                    5: [0xB8, 0x05, 0x77, 0x00]
+    }
+
+    self.castle_door = castle_door_dict[world.bowser_door_mode[player].value]
+    
+
+    
+
+
+
 
 
 def get_item_pool(world: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
@@ -430,7 +739,7 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
         return item
 
     if (name == 'Car Morph' and get_option_value(world, player, "stage_logic") != 0):
-        item.classification = ItemClassification.filler
+        item.classification = ItemClassification.useful
 
     if (name == 'Secret Lens' and (get_option_value(world, player, "hidden_object_visibility") >= 2 or get_option_value(world, player, "stage_logic") != 0)):
         item.classification = ItemClassification.useful
@@ -440,6 +749,10 @@ def create_item_with_correct_settings(world: MultiWorld, player: int, name: str)
 
     if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(world, player, "item_logic") == 1):
         item.classification = ItemClassification.progression
+
+    for i in range(world.luigi_pieces_required[player].value):
+        if name == 'Piece of Luigi':
+            item.classification = ItemClassification.progression
 
     return item
 

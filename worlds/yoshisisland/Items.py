@@ -77,11 +77,14 @@ item_table: Dict[str, ItemData] = {
     '2-Up': ItemData('Items', 0x30208D),
     '3-Up': ItemData('Items', 0x30208E),
     '10-Up': ItemData('Items', 0x30208F, 5, useful=True),
+
     'Fuzzy Trap': ItemData('Traps', 0x302090, 0, trap=True),
     'Reversal Trap': ItemData('Traps', 0x302091, 0, trap=True),
     'Darkness Trap': ItemData('Traps', 0x302092, 0, trap=True),
     'Freeze Trap': ItemData('Traps', 0x302093, 0, trap=True),
-    'Boss Clear': ItemData('Items', 0x302094, 0, progression=True)
+
+    'Boss Clear': ItemData('Items', 0x302094, 0, progression=True),
+    'Piece of Luigi': ItemData('Items', 0x302095, 0, useful=True)
 }
 
 filler_items: Tuple[str, ...] = (

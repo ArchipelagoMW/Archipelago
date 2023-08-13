@@ -39,7 +39,7 @@ class StageLogic(Choice):
     option_loose = 1
     option_expert = 2
     #option_glitched = 3
-    default = 1
+    default = 0
 
 class ShuffleMiddleRings(Toggle):
     """If enabled, Middle Rings will be added to the item pool."""
@@ -90,23 +90,69 @@ class StartingLives(Range):
     range_end = 999
     default = 3
 
+class PlayerGoal(Choice):
+    """This sets the goal. Bowser goal requires defeating Bowser at the end of 6-8, while Luigi Hunt requires collecting all required Luigi Pieces."""
+    display_name = "Goal"
+    option_bowser = 0
+    option_luigi_hunt = 1
+    default = 0
+
+class LuigiPiecesReq(Range):
+    """This will set how many Luigi Pieces are required to trigger a victory."""
+    display_name = "Luigi Pieces Required"
+    range_start = 1
+    range_end = 100
+    default = 25
+
+class LuigiPiecesAmt(Range):
+    """This well set how many Luigi Pieces are in the item pool. If the number in the pool is lower than the number required, the amount in the pool will be randomized, with the minimum being the amount required."""
+    display_name = "Amount of Luigi Pieces"
+    range_start = 1
+    range_end = 100
+    default = 50
+
 class FinalLevelBosses(Range):
     """This sets how many bosses need to be defeated to access 6-8. You can check this in-game by pressing SELECT while in any level."""
-    display_name = "Boss Required for 6-8 Unlock"
+    display_name = "Bosses Required for 6-8 Unlock"
     range_start = 0
     range_end = 11
     default = 5
 
 class FinalBossBosses(Range):
     """This sets how many bosses need to be defeated to access the boss of 6-8. You can check this in-game by pressing SELECT while in any level."""
-    display_name = "Boss Required for 6-8 Clear"
+    display_name = "Bosses Required for 6-8 Clear"
     range_start = 0
     range_end = 11
+    default = 0
+
+class BowserDoor(Choice):
+    """This will set which route you take through 6-8.
+    Manual: You go through the door that you hit with an egg, as normal.
+    Doors: Route will be forced to be the door chosen here, regardless of which door you hit.
+    Gauntlet: You will be forced to go through all 4 routes in order before the final hallway."""
+    display_name = "Bowser's Castle Doors"
+    option_manual = 0
+    option_door_1 = 1
+    option_door_2 = 2
+    option_door_3 = 3
+    option_door_4 = 4
+    option_gauntlet = 5
     default = 0
 
 class BossShuffle(Toggle):
     """This whill shuffle which boss each boss door will lead to. Each boss can only appear once, and Baby Bowser is left alone."""
     display_name = "Boss Shuffle"
+
+class LevelShuffle(Choice):
+    """Disabled: All levels will appear in their normal location.
+    Bosses Guranteed: All worlds will have a boss on -4 and -8.
+    Full: Worlds may have more than 2 or no bosses in them.
+    Regardless of the setting, 6-8 and Extra stages are not shuffled."""
+    display_name = "Level Shuffle"
+    option_disabled = 0
+    option_bosses_guranteed = 1
+    option_full = 2
+    default = 0
 
 class YoshiColors(Choice):
     """Sets the Yoshi color for each level.
@@ -126,8 +172,8 @@ class SinguColor(Choice):
     display_name = "Singularity Yoshi Color"
     option_green = 0
     option_pink = 1
-    option_cyan = 2
-    option_yellow = 3
+    option_cyan = 3
+    option_yellow = 2
     option_purple = 4
     option_brown = 5
     option_red = 6
@@ -160,11 +206,42 @@ class TrapPercent(Range):
     #range_end = 255
     #default = 3
 
+#class BackgroundColors(Range):
+ #   """This sets the amount of lives Yoshi will have upon loading the game."""
+  #  display_name = "Starting Life Count"
+   # range_start = 1
+    #range_end = 255
+    #default = 3
+
+#class Foreground Colors(Range):
+ #   """This sets the amount of lives Yoshi will have upon loading the game."""
+  #  display_name = "Starting Life Count"
+   # range_start = 1
+    #range_end = 255
+    #default = 3
+
+#class Music Shuffle(Range):
+ #   """This sets the amount of lives Yoshi will have upon loading the game."""
+  #  display_name = "Starting Life Count"
+   # range_start = 1
+    #range_end = 255
+    #default = 3
+
+#class Star Loss Rate(Range):
+ #   """This sets the amount of lives Yoshi will have upon loading the game."""
+  #  display_name = "Starting Life Count"
+   # range_start = 1
+    #range_end = 255
+    #default = 3
+
 
 
 yoshi_options: Dict[str, Option] ={
     "starting_world": StartingWorld,
     "starting_lives": StartingLives,
+    "goal": PlayerGoal,
+    "luigi_pieces_required": LuigiPiecesReq,
+    "luigi_pieces_in_pool": LuigiPiecesAmt,
     "extras_enabled":  ExtrasEnabled,
     "minigame_checks": MinigameChecks,
     "split_extras": SplitExtras,
@@ -178,6 +255,8 @@ yoshi_options: Dict[str, Option] ={
     "softlock_prevention": SoftlockPrevention,
     "castle_open_condition": FinalLevelBosses,
     "castle_clear_condition": FinalBossBosses,
+    "bowser_door_mode": BowserDoor,
+    "level_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
     "yoshi_colors": YoshiColors,
     "yoshi_singularity_color": SinguColor,

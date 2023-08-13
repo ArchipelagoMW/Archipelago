@@ -5,8 +5,8 @@ from .LogicExtensions import YoshiLogic
 from .Options import get_option_value
 from .SetupBosses import BossReqs
 
-def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar):
-    logic = YoshiLogic(world, player)
+def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar, boss_order: list, level_location_list: list):
+    logic = YoshiLogic(world, player, boss_order)
 
     locations_per_region = get_locations_per_region(locations)
 
@@ -30,7 +30,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Touch Fuzzy Get Dizzy'),
         create_region(world, player, locations_per_region, location_cache, "Salvo The Slime's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Salvo The Slime's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Poochy Ain't Stupid"),
         create_region(world, player, locations_per_region, location_cache, "Flip Cards"),
 
         create_region(world, player, locations_per_region, location_cache, "Visit Koopa And Para-Koopa"),
@@ -43,7 +42,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Lakitu's Wall"),
         create_region(world, player, locations_per_region, location_cache, "The Potted Ghost's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Roger The Ghost's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Hit That Switch!!"),
         create_region(world, player, locations_per_region, location_cache, "Scratch And Match"),
 
         create_region(world, player, locations_per_region, location_cache, "Welcome To Monkey World!"),
@@ -56,7 +54,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Monkeys' Favorite Lake"),
         create_region(world, player, locations_per_region, location_cache, "Naval Piranha's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Naval Piranha's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "More Monkey Madness"),
         create_region(world, player, locations_per_region, location_cache, "Drawing Lots"),
 
         create_region(world, player, locations_per_region, location_cache, "GO! GO! MARIO!!"),
@@ -69,7 +66,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Ride Like The Wind"),
         create_region(world, player, locations_per_region, location_cache, "Hookbill The Koopa's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Hookbill The Koopa's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "The Impossible? Maze"),
         create_region(world, player, locations_per_region, location_cache, "Match Cards"),
 
         create_region(world, player, locations_per_region, location_cache, "BLIZZARD!!!"),
@@ -82,7 +78,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Shifting Platforms Ahead"),
         create_region(world, player, locations_per_region, location_cache, "Raphael The Raven's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Raphael The Raven's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Kamek's Revenge"),
         create_region(world, player, locations_per_region, location_cache, "Roulette"),
 
         create_region(world, player, locations_per_region, location_cache, "Scary Skeleton Goonies!"),
@@ -95,12 +90,16 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "KEEP MOVING!!!!"),
         create_region(world, player, locations_per_region, location_cache, "King Bowser's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Bowser's Room"),
-        create_region(world, player, locations_per_region, location_cache, "Castles - Masterpiece Set"),
         create_region(world, player, locations_per_region, location_cache, "Slot Machine")
 
-
     ]
-
+    if get_option_value(world, player, "extras_enabled") == 1:
+        regions.insert(72, create_region(world, player, locations_per_region, location_cache, "Castles - Masterpiece Set")),
+        regions.insert(62, create_region(world, player, locations_per_region, location_cache, "Kamek's Revenge")),
+        regions.insert(51, create_region(world, player, locations_per_region, location_cache, "The Impossible? Maze")),
+        regions.insert(40, create_region(world, player, locations_per_region, location_cache, "More Monkey Madness")),
+        regions.insert(30, create_region(world, player, locations_per_region, location_cache, "Hit That Switch!!")),
+        regions.insert(18, create_region(world, player, locations_per_region, location_cache, "Poochy Ain't Stupid"))
     world.regions += regions
 
     connectStartingRegion(world, player)
@@ -116,83 +115,83 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'Overworld', 'World 5', lambda state: state.has('World 5 Gate', player)),
     connect(world, player, names, 'Overworld', 'World 6', lambda state: state.has('World 6 Gate', player)),
 
-    connect(world, player, names, 'World 1', 'Make Eggs, Throw Eggs'),
-    connect(world, player, names, 'World 1', 'Watch Out Below!'),
-    connect(world, player, names, 'World 1', 'The Cave Of Chomp Rock'),
-    connect(world, player, names, 'World 1', "Burt The Bashful's Fort"),
-    connect(world, player, names, 'World 1', "Hop! Hop! Donut Lifts"),
-    connect(world, player, names, 'World 1', "Shy-Guys On Stilts"),
-    connect(world, player, names, 'World 1', "Touch Fuzzy Get Dizzy"),
-    connect(world, player, names, 'World 1', "Salvo The Slime's Castle"),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[0]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[1]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[2]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[3]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[4]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[5]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[6]),
+    connect(world, player, names, 'World 1', gamevar.level_location_list[7]),
     connect(world, player, names, 'World 1', "Poochy Ain't Stupid", lambda state: state.has('Extra Panels', player) or state.has('Extra 1', player)),
     connect(world, player, names, 'World 1', "Flip Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 1', player)),
     connect(world, player, names, "Burt The Bashful's Fort", gamevar.boss_order[0], lambda state: logic._14Clear(state)),
     connect(world, player, names, "Salvo The Slime's Castle", gamevar.boss_order[1], lambda state: logic._18Clear(state)),
 
-    connect(world, player, names, 'World 2', "Visit Koopa And Para-Koopa"),
-    connect(world, player, names, 'World 2', "The Baseball Boys"),
-    connect(world, player, names, 'World 2', "What's Gusty Taste Like?"),
-    connect(world, player, names, 'World 2', "Bigger Boo's Fort"),
-    connect(world, player, names, 'World 2', "Watch Out For Lakitu"),
-    connect(world, player, names, 'World 2', "The Cave Of The Mystery Maze"),
-    connect(world, player, names, 'World 2', "Lakitu's Wall"),
-    connect(world, player, names, 'World 2', "The Potted Ghost's Castle"),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[8]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[9]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[10]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[11]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[12]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[13]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[14]),
+    connect(world, player, names, 'World 2', gamevar.level_location_list[15]),
     connect(world, player, names, 'World 2', "Hit That Switch!!", lambda state: state.has('Extra Panels', player) or state.has('Extra 2', player)),
     connect(world, player, names, 'World 2', "Scratch And Match", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 2', player)),
     connect(world, player, names, "Bigger Boo's Fort", gamevar.boss_order[2], lambda state: logic._24Clear(state)),
     connect(world, player, names, "The Potted Ghost's Castle", gamevar.boss_order[3], lambda state: logic._28Clear(state)),
 
-    connect(world, player, names, 'World 3', "Welcome To Monkey World!"),
-    connect(world, player, names, 'World 3', "Jungle Rhythm..."),
-    connect(world, player, names, 'World 3', "Nep-Enuts' Domain"),
-    connect(world, player, names, 'World 3', "Prince Froggy's Fort"),
-    connect(world, player, names, 'World 3', "Jammin' Through The Trees"),
-    connect(world, player, names, 'World 3', "The Cave Of Harry Hedgehog"),
-    connect(world, player, names, 'World 3', "Monkeys' Favorite Lake"),
-    connect(world, player, names, 'World 3', "Naval Piranha's Castle"),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[16]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[17]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[18]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[19]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[20]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[21]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[22]),
+    connect(world, player, names, 'World 3', gamevar.level_location_list[23]),
     connect(world, player, names, 'World 3', "More Monkey Madness", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
     connect(world, player, names, 'World 3', "Drawing Lots", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 3', player)),
     connect(world, player, names, "Prince Froggy's Fort", gamevar.boss_order[4], lambda state: logic._34Clear(state)),
     connect(world, player, names, "Naval Piranha's Castle", gamevar.boss_order[5], lambda state: logic._38Clear(state)),
 
-    connect(world, player, names, 'World 4', "GO! GO! MARIO!!"),
-    connect(world, player, names, 'World 4', "The Cave Of The Lakitus"),
-    connect(world, player, names, 'World 4', "Don't Look Back!"),
-    connect(world, player, names, 'World 4', "Marching Milde's Fort"),
-    connect(world, player, names, 'World 4', "Chomp Rock Zone"),
-    connect(world, player, names, 'World 4', "Lake Shore Paradise"),
-    connect(world, player, names, 'World 4', "Ride Like The Wind"),
-    connect(world, player, names, 'World 4', "Hookbill The Koopa's Castle"),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[24]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[25]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[26]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[27]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[28]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[29]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[30]),
+    connect(world, player, names, 'World 4', gamevar.level_location_list[31]),
     connect(world, player, names, 'World 4', "The Impossible? Maze", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
     connect(world, player, names, 'World 4', "Match Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 4', player)),
     connect(world, player, names, "Marching Milde's Fort", gamevar.boss_order[6], lambda state: logic._44Clear(state)),
     connect(world, player, names, "Hookbill The Koopa's Castle", gamevar.boss_order[7], lambda state: logic._48Clear(state)),
 
-    connect(world, player, names, 'World 5', "BLIZZARD!!!"),
-    connect(world, player, names, 'World 5', "Ride The Ski Lifts"),
-    connect(world, player, names, 'World 5', "Danger - Icy Conditions Ahead"),
-    connect(world, player, names, 'World 5', "Sluggy The Unshaven's Fort"),
-    connect(world, player, names, 'World 5', "Goonie Rides!"),
-    connect(world, player, names, 'World 5', "Welcome To Cloud World"),
-    connect(world, player, names, 'World 5', "Shifting Platforms Ahead"),
-    connect(world, player, names, 'World 5', "Raphael The Raven's Castle"),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[32]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[33]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[34]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[35]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[36]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[37]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[38]),
+    connect(world, player, names, 'World 5', gamevar.level_location_list[39]),
     connect(world, player, names, 'World 5', "Kamek's Revenge", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
     connect(world, player, names, 'World 5', "Roulette", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 5', player)),
     connect(world, player, names, "Sluggy The Unshaven's Fort", gamevar.boss_order[8], lambda state: logic._54Clear(state)),
     connect(world, player, names, "Raphael The Raven's Castle", gamevar.boss_order[9], lambda state: logic._58Clear(state)),
 
-    connect(world, player, names, 'World 6', "Scary Skeleton Goonies!"),
-    connect(world, player, names, 'World 6', "The Cave Of The Bandits"),
-    connect(world, player, names, 'World 6', "Beware The Spinning Logs"),
-    connect(world, player, names, 'World 6', "Tap-Tap The Red Nose's Fort"),
-    connect(world, player, names, 'World 6', "The Very Loooooong Cave"),
-    connect(world, player, names, 'World 6', "The Deep, Underground Maze"),
-    connect(world, player, names, 'World 6', "KEEP MOVING!!!!"),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[40]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[41]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[42]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[43]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[44]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[45]),
+    connect(world, player, names, 'World 6', gamevar.level_location_list[46]),
     connect(world, player, names, 'World 6', "King Bowser's Castle", lambda state: bosses.castle_access(state)),
     connect(world, player, names, "King Bowser's Castle", "Bowser's Room", lambda state: bosses.castle_clear(state)),
     connect(world, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player)),
-    connect(world, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player))
-    connect(world, player, names, "Tap-Tap The Red Nose's Fort", gamevar.boss_order[10], lambda state: logic._64Clear(state)),
+    connect(world, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player)),
+    connect(world, player, names, "Tap-Tap The Red Nose's Fort", gamevar.boss_order[10], lambda state: logic._64Clear(state))
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)

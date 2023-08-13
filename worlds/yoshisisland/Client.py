@@ -1,7 +1,9 @@
 import logging
+import struct
 import asyncio
 import typing
 import time
+from struct import unpack, pack
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
@@ -24,7 +26,6 @@ YOSHISISLAND_ROMHASH_START = 0x007FC0
 ROMHASH_SIZE = 0x0F
 
 ITEMQUEUE_HIGH = WRAM_START + 0x1465
-ITEMQUEUE_LOW = WRAM_START + 0x1466
 ITEM_RECEIVED = WRAM_START + 0x1467
 DEATH_RECEIVED = WRAM_START + 0x7E23B0
 GAME_MODE = WRAM_START + 0x0118
@@ -32,6 +33,7 @@ YOSHI_STATE = SRAM_START + 0x00AC
 YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
 DEATHMUSIC_FLAG = WRAM_START + 0x004F
 DEATHFLAG = WRAM_START + 0x00DB
+DEATHLINKRECV = WRAM_START + 0x00E0
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
@@ -50,6 +52,7 @@ class YISNIClient(SNIClient):
 
 
         snes_buffered_write(ctx, WRAM_START + 0x026A, bytes([0x01]))
+        snes_buffered_write(ctx, WRAM_START + 0x00E0, bytes([0x01]))
         await snes_flush_writes(ctx)
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
@@ -79,9 +82,10 @@ class YISNIClient(SNIClient):
         item_received = await snes_read(ctx, ITEM_RECEIVED, 0x1)
         game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
         death_flag = await snes_read(ctx, DEATHFLAG, 0x1)
+        deathlink_death = await snes_read(ctx, DEATHLINKRECV, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            currently_dead = game_music[0] == 0x07 or game_mode[0] == 0x12 or (death_flag [0] == 0x00 and game_mode[0] == 0x11)
+            currently_dead = (game_music[0] == 0x07 or game_mode[0] == 0x12 or (death_flag [0] == 0x00 and game_mode[0] == 0x11)) and deathlink_death[0] == 0x00
             await ctx.handle_deathlink_state(currently_dead)
 
         if game_mode is None:
@@ -119,14 +123,8 @@ class YISNIClient(SNIClient):
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
-        recv_count = await snes_read(ctx, ITEMQUEUE_HIGH, 1)
-        if recv_count[0] >= 255:
-            recv_count = await snes_read(ctx, ITEMQUEUE_LOW, 1)
-            high_check = 1
-        else:
-            high_check = 0
-        recv_index = recv_count[0]
-
+        recv_count = await snes_read(ctx, ITEMQUEUE_HIGH, 2)
+        recv_index = struct.unpack("H", recv_count)[0]
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
             recv_index += 1
@@ -135,11 +133,7 @@ class YISNIClient(SNIClient):
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
-            if high_check == 1:
-                recv_index -= 10
-                snes_buffered_write(ctx, ITEMQUEUE_LOW, bytes([recv_index]))
-            else:
-                snes_buffered_write(ctx, ITEMQUEUE_HIGH, bytes([recv_index]))
+            snes_buffered_write(ctx, ITEMQUEUE_HIGH, pack("H", recv_index))
             if item.item in item_values:
                 item_count = await snes_read(ctx, WRAM_START + item_values[item.item][0], 0x1)
                 increment = item_values[item.item][1]
