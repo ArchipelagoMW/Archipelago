@@ -87,7 +87,6 @@ class ShortHikeWorld(World):
                 continue
             else:
                 data = {
-                    "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "name": loc.item.name,
                     "player_name": world.player_name[loc.item.player],
