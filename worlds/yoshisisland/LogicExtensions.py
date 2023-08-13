@@ -37,6 +37,17 @@ class YoshiLogic:
         else:
             self.clouds_always_visible = False
 
+        if get_option_value(world, player, "bowser_door_mode") == 0:
+            self.bowser_door = 0
+        elif get_option_value(world, player, "bowser_door_mode") == 1:
+            self.bowser_door = 1
+        elif get_option_value(world, player, "bowser_door_mode") == 2:
+            self.bowser_door = 2
+        elif get_option_value(world, player, "bowser_door_mode") == 5:
+            self.bowser_door = 5
+        else:
+            self.bowser_door = 3
+
     def has_midring(self, state: CollectionState) -> bool:
         if self.midring_start == True:
             return True
@@ -112,15 +123,15 @@ class YoshiLogic:
             return True
 
     def _68Route(self, state: CollectionState) -> bool:
-        if get_option_value(world, player, "bowser_door_mode") == 0:
+        if self.bowser_door == 0:
             return True
-        elif get_option_value(world, player, "bowser_door_mode") == 1:
+        elif self.bowser_door == 1:
             return self.bowserdoor_1(state)
-        elif get_option_value(world, player, "bowser_door_mode") == 2:
+        elif self.bowser_door == 2:
             return self.bowserdoor_2(state)
-        elif get_option_value(world, player, "bowser_door_mode") == (3 or 4):
+        elif self.bowser_door == 3:
             return self.bowserdoor_3(state)
-        elif get_option_value(world, player, "bowser_door_mode") == 5:
+        elif self.bowser_door == 5:
             return self.bowserdoor_1(state) and self.bowserdoor_2(state) and self.bowserdoor_3(state)
 
     ############################################################
@@ -2034,11 +2045,11 @@ class YoshiLogic:
 ###########################################################################################################################
     def _68Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant', 'Key', '! Switch'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player)
+            return state.has_all({'Helicopter Morph'}, self.player) and self._68Route(state)
 
     def _68Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

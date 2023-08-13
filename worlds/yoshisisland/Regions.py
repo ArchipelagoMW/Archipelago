@@ -123,7 +123,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 1', gamevar.level_location_list[5]),
     connect(world, player, names, 'World 1', gamevar.level_location_list[6]),
     connect(world, player, names, 'World 1', gamevar.level_location_list[7]),
-    connect(world, player, names, 'World 1', "Poochy Ain't Stupid", lambda state: state.has('Extra Panels', player) or state.has('Extra 1', player)),
     connect(world, player, names, 'World 1', "Flip Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 1', player)),
     connect(world, player, names, "Burt The Bashful's Fort", gamevar.boss_order[0], lambda state: logic._14Clear(state)),
     connect(world, player, names, "Salvo The Slime's Castle", gamevar.boss_order[1], lambda state: logic._18Clear(state)),
@@ -136,7 +135,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 2', gamevar.level_location_list[13]),
     connect(world, player, names, 'World 2', gamevar.level_location_list[14]),
     connect(world, player, names, 'World 2', gamevar.level_location_list[15]),
-    connect(world, player, names, 'World 2', "Hit That Switch!!", lambda state: state.has('Extra Panels', player) or state.has('Extra 2', player)),
     connect(world, player, names, 'World 2', "Scratch And Match", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 2', player)),
     connect(world, player, names, "Bigger Boo's Fort", gamevar.boss_order[2], lambda state: logic._24Clear(state)),
     connect(world, player, names, "The Potted Ghost's Castle", gamevar.boss_order[3], lambda state: logic._28Clear(state)),
@@ -149,7 +147,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 3', gamevar.level_location_list[21]),
     connect(world, player, names, 'World 3', gamevar.level_location_list[22]),
     connect(world, player, names, 'World 3', gamevar.level_location_list[23]),
-    connect(world, player, names, 'World 3', "More Monkey Madness", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
     connect(world, player, names, 'World 3', "Drawing Lots", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 3', player)),
     connect(world, player, names, "Prince Froggy's Fort", gamevar.boss_order[4], lambda state: logic._34Clear(state)),
     connect(world, player, names, "Naval Piranha's Castle", gamevar.boss_order[5], lambda state: logic._38Clear(state)),
@@ -162,7 +159,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 4', gamevar.level_location_list[29]),
     connect(world, player, names, 'World 4', gamevar.level_location_list[30]),
     connect(world, player, names, 'World 4', gamevar.level_location_list[31]),
-    connect(world, player, names, 'World 4', "The Impossible? Maze", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
     connect(world, player, names, 'World 4', "Match Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 4', player)),
     connect(world, player, names, "Marching Milde's Fort", gamevar.boss_order[6], lambda state: logic._44Clear(state)),
     connect(world, player, names, "Hookbill The Koopa's Castle", gamevar.boss_order[7], lambda state: logic._48Clear(state)),
@@ -175,7 +171,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 5', gamevar.level_location_list[37]),
     connect(world, player, names, 'World 5', gamevar.level_location_list[38]),
     connect(world, player, names, 'World 5', gamevar.level_location_list[39]),
-    connect(world, player, names, 'World 5', "Kamek's Revenge", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
     connect(world, player, names, 'World 5', "Roulette", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 5', player)),
     connect(world, player, names, "Sluggy The Unshaven's Fort", gamevar.boss_order[8], lambda state: logic._54Clear(state)),
     connect(world, player, names, "Raphael The Raven's Castle", gamevar.boss_order[9], lambda state: logic._58Clear(state)),
@@ -189,9 +184,16 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 6', gamevar.level_location_list[46]),
     connect(world, player, names, 'World 6', "King Bowser's Castle", lambda state: bosses.castle_access(state)),
     connect(world, player, names, "King Bowser's Castle", "Bowser's Room", lambda state: bosses.castle_clear(state)),
-    connect(world, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player)),
     connect(world, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player)),
     connect(world, player, names, "Tap-Tap The Red Nose's Fort", gamevar.boss_order[10], lambda state: logic._64Clear(state))
+
+    if get_option_value(world, player, "extras_enabled") == 1:
+        connect(world, player, names, 'World 1', "Poochy Ain't Stupid", lambda state: state.has('Extra Panels', player) or state.has('Extra 1', player)),
+        connect(world, player, names, 'World 2', "Hit That Switch!!", lambda state: state.has('Extra Panels', player) or state.has('Extra 2', player)),
+        connect(world, player, names, 'World 3', "More Monkey Madness", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
+        connect(world, player, names, 'World 4', "The Impossible? Maze", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
+        connect(world, player, names, 'World 5', "Kamek's Revenge", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
+        connect(world, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player)),
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
