@@ -44,6 +44,8 @@ class YIWorld(World):
     location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None)}
     item_name_groups = get_item_names_per_category()
 
+    web = YIWeb()
+
     locked_locations: List[str]
     location_cache: List[Location]
     set_req_bosses: str
@@ -63,7 +65,6 @@ class YIWorld(World):
 
         self.locked_locations= []
         self.location_cache= []
-        self.NumLuigiPieces = world.luigi_pieces_required[player].value
 
     @classmethod
     def stage_assert_generate(cls, world):
