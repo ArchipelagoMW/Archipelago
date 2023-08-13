@@ -14,12 +14,15 @@ const adjustTableHeight = () => {
     }
 };
 
+/**
+ * Convert an integer number of seconds into a human readable HH:MM format
+ * @param {Number} seconds
+ * @returns {string}
+ */
 const secondsToHours = (seconds) => {
     let hours   = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds - (hours * 3600)) / 60);
-
-    if (minutes < 10) {minutes = "0"+minutes;}
-    return hours+':'+minutes;
+    let minutes = Math.floor((seconds - (hours * 3600)) / 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
 };
 
 window.addEventListener('load', () => {
@@ -36,10 +39,10 @@ window.addEventListener('load', () => {
             return JSON.parse(localStorage.getItem(`DataTables_${settings.sInstance}_/tracker`));
         },
         footerCallback: function(tfoot, data, start, end, display) {
-            let activityData = this.api().column('lastActivity:name').data();
-            if (activityData) {
-                let filteredActivityData = activityData.toArray().filter(x => !isNaN(x));
-                $(tfoot).find("td.last-activity").html(filteredActivityData.length ? secondsToHours(Math.min(...filteredActivityData)) : "None");
+            if (tfoot) {
+                const activityData = this.api().column('lastActivity:name').data().toArray().filter(x => !isNaN(x));
+                Array.from(tfoot?.children).find(td => td.classList.contains('last-activity')).innerText =
+                  (activityData.length) ? secondsToHours(Math.min(...activityData)) : 'None';
             }
         },
         columnDefs: [
