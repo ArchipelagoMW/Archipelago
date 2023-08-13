@@ -54,6 +54,9 @@ class YoshiLogic:
         else:
             return state.has('Middle Ring', self.player)
 
+    def ReconstituteLuigi(self, state: CollectionState) -> bool:
+        return state.has('Piece of Luigi', self.player)
+
     def bandit_bonus(self, state: CollectionState) -> bool:
         return (state.has('Seed Spitting Contest', self.player) or state.has('Touch Fuzzy Get Dizzy: Gather Coins', self.player) or state.has("Lakitu's Wall: Gather Coins", self.player) or state.has('Ride Like The Wind: Gather Coins', self.player))
 

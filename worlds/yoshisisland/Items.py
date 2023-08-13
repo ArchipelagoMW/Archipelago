@@ -84,7 +84,7 @@ item_table: Dict[str, ItemData] = {
     'Freeze Trap': ItemData('Traps', 0x302093, 0, trap=True),
 
     'Boss Clear': ItemData('Items', 0x302094, 0, progression=True),
-    'Piece of Luigi': ItemData('Items', 0x302095, 0, useful=True)
+    'Piece of Luigi': ItemData('Items', 0x302095, 0, progression=True)
 }
 
 filler_items: Tuple[str, ...] = (

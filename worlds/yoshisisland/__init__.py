@@ -184,10 +184,9 @@ class YIWorld(World):
     def set_rules(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        if self.playergoal == 0:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has('Piece of Luigi', self.player, self.NumLuigiPieces)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
+        #else:
+            #self.multiworld.completion_condition[self.player] = lambda state: state.has('Piece of Luigi', self.player, self.NumLuigiPieces)
 
     def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
         excluded_items.add(item)

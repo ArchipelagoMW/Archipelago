@@ -30,7 +30,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, 'Touch Fuzzy Get Dizzy'),
         create_region(world, player, locations_per_region, location_cache, "Salvo The Slime's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Salvo The Slime's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Flip Cards"),
 
         create_region(world, player, locations_per_region, location_cache, "Visit Koopa And Para-Koopa"),
         create_region(world, player, locations_per_region, location_cache, "The Baseball Boys"),
@@ -42,7 +41,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Lakitu's Wall"),
         create_region(world, player, locations_per_region, location_cache, "The Potted Ghost's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Roger The Ghost's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Scratch And Match"),
 
         create_region(world, player, locations_per_region, location_cache, "Welcome To Monkey World!"),
         create_region(world, player, locations_per_region, location_cache, "Jungle Rhythm..."),
@@ -54,7 +52,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Monkeys' Favorite Lake"),
         create_region(world, player, locations_per_region, location_cache, "Naval Piranha's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Naval Piranha's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Drawing Lots"),
 
         create_region(world, player, locations_per_region, location_cache, "GO! GO! MARIO!!"),
         create_region(world, player, locations_per_region, location_cache, "The Cave Of The Lakitus"),
@@ -66,7 +63,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Ride Like The Wind"),
         create_region(world, player, locations_per_region, location_cache, "Hookbill The Koopa's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Hookbill The Koopa's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Match Cards"),
 
         create_region(world, player, locations_per_region, location_cache, "BLIZZARD!!!"),
         create_region(world, player, locations_per_region, location_cache, "Ride The Ski Lifts"),
@@ -78,7 +74,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "Shifting Platforms Ahead"),
         create_region(world, player, locations_per_region, location_cache, "Raphael The Raven's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Raphael The Raven's Boss Room"),
-        create_region(world, player, locations_per_region, location_cache, "Roulette"),
 
         create_region(world, player, locations_per_region, location_cache, "Scary Skeleton Goonies!"),
         create_region(world, player, locations_per_region, location_cache, "The Cave Of The Bandits"),
@@ -90,7 +85,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         create_region(world, player, locations_per_region, location_cache, "KEEP MOVING!!!!"),
         create_region(world, player, locations_per_region, location_cache, "King Bowser's Castle"),
         create_region(world, player, locations_per_region, location_cache, "Bowser's Room"),
-        create_region(world, player, locations_per_region, location_cache, "Slot Machine")
 
     ]
     if get_option_value(world, player, "extras_enabled") == 1:
@@ -100,6 +94,14 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         regions.insert(40, create_region(world, player, locations_per_region, location_cache, "More Monkey Madness")),
         regions.insert(30, create_region(world, player, locations_per_region, location_cache, "Hit That Switch!!")),
         regions.insert(18, create_region(world, player, locations_per_region, location_cache, "Poochy Ain't Stupid"))
+
+    if get_option_value(world, player, "minigame_checks") >= 2:
+        regions.insert(74, create_region(world, player, locations_per_region, location_cache, "Slot Machine")),
+        regions.insert(60, create_region(world, player, locations_per_region, location_cache, "Roulette")),
+        regions.insert(51, create_region(world, player, locations_per_region, location_cache, "Match Cards")),
+        regions.insert(40, create_region(world, player, locations_per_region, location_cache, "Drawing Lots")),
+        regions.insert(30, create_region(world, player, locations_per_region, location_cache, "Scratch And Match")),
+        regions.insert(18, create_region(world, player, locations_per_region, location_cache, "Flip Cards"))
     world.regions += regions
 
     connectStartingRegion(world, player)
@@ -123,7 +125,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 1', gamevar.level_location_list[5]),
     connect(world, player, names, 'World 1', gamevar.level_location_list[6]),
     connect(world, player, names, 'World 1', gamevar.level_location_list[7]),
-    connect(world, player, names, 'World 1', "Flip Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 1', player)),
     connect(world, player, names, "Burt The Bashful's Fort", gamevar.boss_order[0], lambda state: logic._14Clear(state)),
     connect(world, player, names, "Salvo The Slime's Castle", gamevar.boss_order[1], lambda state: logic._18Clear(state)),
 
@@ -135,7 +136,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 2', gamevar.level_location_list[13]),
     connect(world, player, names, 'World 2', gamevar.level_location_list[14]),
     connect(world, player, names, 'World 2', gamevar.level_location_list[15]),
-    connect(world, player, names, 'World 2', "Scratch And Match", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 2', player)),
     connect(world, player, names, "Bigger Boo's Fort", gamevar.boss_order[2], lambda state: logic._24Clear(state)),
     connect(world, player, names, "The Potted Ghost's Castle", gamevar.boss_order[3], lambda state: logic._28Clear(state)),
 
@@ -147,7 +147,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 3', gamevar.level_location_list[21]),
     connect(world, player, names, 'World 3', gamevar.level_location_list[22]),
     connect(world, player, names, 'World 3', gamevar.level_location_list[23]),
-    connect(world, player, names, 'World 3', "Drawing Lots", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 3', player)),
     connect(world, player, names, "Prince Froggy's Fort", gamevar.boss_order[4], lambda state: logic._34Clear(state)),
     connect(world, player, names, "Naval Piranha's Castle", gamevar.boss_order[5], lambda state: logic._38Clear(state)),
 
@@ -159,7 +158,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 4', gamevar.level_location_list[29]),
     connect(world, player, names, 'World 4', gamevar.level_location_list[30]),
     connect(world, player, names, 'World 4', gamevar.level_location_list[31]),
-    connect(world, player, names, 'World 4', "Match Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 4', player)),
     connect(world, player, names, "Marching Milde's Fort", gamevar.boss_order[6], lambda state: logic._44Clear(state)),
     connect(world, player, names, "Hookbill The Koopa's Castle", gamevar.boss_order[7], lambda state: logic._48Clear(state)),
 
@@ -171,7 +169,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 5', gamevar.level_location_list[37]),
     connect(world, player, names, 'World 5', gamevar.level_location_list[38]),
     connect(world, player, names, 'World 5', gamevar.level_location_list[39]),
-    connect(world, player, names, 'World 5', "Roulette", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 5', player)),
     connect(world, player, names, "Sluggy The Unshaven's Fort", gamevar.boss_order[8], lambda state: logic._54Clear(state)),
     connect(world, player, names, "Raphael The Raven's Castle", gamevar.boss_order[9], lambda state: logic._58Clear(state)),
 
@@ -184,7 +181,6 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
     connect(world, player, names, 'World 6', gamevar.level_location_list[46]),
     connect(world, player, names, 'World 6', "King Bowser's Castle", lambda state: bosses.castle_access(state)),
     connect(world, player, names, "King Bowser's Castle", "Bowser's Room", lambda state: bosses.castle_clear(state)),
-    connect(world, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player)),
     connect(world, player, names, "Tap-Tap The Red Nose's Fort", gamevar.boss_order[10], lambda state: logic._64Clear(state))
 
     if get_option_value(world, player, "extras_enabled") == 1:
@@ -193,7 +189,15 @@ def create_regions(world: MultiWorld, player: int, locations: Tuple[LocationData
         connect(world, player, names, 'World 3', "More Monkey Madness", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
         connect(world, player, names, 'World 4', "The Impossible? Maze", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
         connect(world, player, names, 'World 5', "Kamek's Revenge", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
-        connect(world, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player)),
+        connect(world, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player))
+
+    if get_option_value(world, player, "minigame_checks") >= 2:
+        connect(world, player, names, 'World 1', "Flip Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 1', player)),
+        connect(world, player, names, 'World 2', "Scratch And Match", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 2', player)),
+        connect(world, player, names, 'World 3', "Drawing Lots", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 3', player)),
+        connect(world, player, names, 'World 4', "Match Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 4', player)),
+        connect(world, player, names, 'World 5', "Roulette", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 5', player)),
+        connect(world, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player)),
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)

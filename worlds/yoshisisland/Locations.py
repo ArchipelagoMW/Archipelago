@@ -343,4 +343,9 @@ def get_locations(world: Optional[MultiWorld], player: Optional[int], boss_order
             LocationData("Drawing Lots", 'Drawing Lots', EventId),
             LocationData("Match Cards", 'Match Cards', EventId),
         )
+
+    if not world or get_option_value(world, player, "goal") == 1:
+        location_table += ( 
+            LocationData("Overworld", 'Saved Baby Luigi', EventId, lambda state: logic.ReconstituteLuigi(state)),
+        )
     return tuple(location_table)
