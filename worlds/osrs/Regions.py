@@ -68,7 +68,6 @@ all_regions = [
                    # Canoe
                    RegionNames.South_Of_Varrock,
                    RegionNames.Barbarian_Village,
-                   RegionNames.Edgeville
                ],
                [
                    RegionNames.Spinning_Wheel,
@@ -313,7 +312,9 @@ all_regions = [
                    RegionNames.Wilderness,
                    RegionNames.West_Varrock,
                    RegionNames.Monastery,
-                   RegionNames.Barbarian_Village
+                   RegionNames.Barbarian_Village,
+                   #Canoe
+                   RegionNames.South_Of_Varrock
                ],
                [
                    RegionNames.Imp,
