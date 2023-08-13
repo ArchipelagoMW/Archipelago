@@ -1,3 +1,4 @@
+from collections import defaultdict
 
 class EntranceInfo:
     def __init__(self, room, alt_room=None, *, type=None, dungeon=None, index=None, instrument_room=None, target=None):
@@ -134,3 +135,8 @@ ENTRANCE_INFO = {
     "animal_cave":                  EntranceInfo(0xCD, target=0x2f7, type="single", index=0),
     "desert_cave":                  EntranceInfo(0xCF, target=0x1f9, type="single"),
 }
+
+entrances_by_type = defaultdict(list)
+
+for name, entrance in ENTRANCE_INFO.items():
+    entrances_by_type[entrance.type or "dungeon"].append(name)

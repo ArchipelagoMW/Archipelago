@@ -1,7 +1,7 @@
 import os.path
 import typing
 import logging
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, FreeText, OptionList
 from collections import defaultdict
 import Utils
 
@@ -71,14 +71,32 @@ class EntranceShuffle(Choice):
     option_mixed = 2
     alias_false = option_vanilla
 
-class StartShuffle(EntranceShuffle):
+class StartShufflePool(OptionList):
     """
     Shuffle Start Location
-    [Vanilla] No changes
-    [Simple] Your start location will be mixed with the dummy pool, or swapped with a "dummy" entrance (if there is no dummy shuffle)
-    [Mixed] Your start location will be shuffled among all other non-connector entrances, or swapped with a random non-connector (if there are no other shuffles enabled)
+
+    Decides which entrance pool(s) the start location is allowed to pull from.
+
+    If the chosen entrance isn't shuffled, a swap will be performed instead.
+
+    Connectors aren't allowed for now, due to having to work out which connectors are legal or not.
     """
-    entrance_type=["start"]
+    valid_keys = [
+        "single",
+        "dummy",
+        "trade",
+        "annoying",
+        "water",
+        # "connector",
+        "dungeon"
+    ]
+    # option_single = 1
+    # option_dummy = 2
+    # option_trade = 3
+    # option_annoying = 4
+    # option_water = 5
+    # option_connector = 6
+    # option_dungeon = 7
 
 class SingleEntranceShuffle(EntranceShuffle):
     """
@@ -431,7 +449,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
-    'start_shuffle': StartShuffle,
+    'start_shuffle': StartShufflePool,
     'single_entrance_shuffle': SingleEntranceShuffle,
     'dummy_entrance_shuffle': DummyEntranceShuffle,
     'annoying_entrance_shuffle': AnnoyingEntranceShuffle,

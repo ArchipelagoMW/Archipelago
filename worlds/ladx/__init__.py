@@ -4,7 +4,7 @@ import os
 import copy
 import itertools
 from .Locations import connector_info
-from .LADXR.entranceInfo import ENTRANCE_INFO
+from .LADXR.entranceInfo import ENTRANCE_INFO, entrances_by_type
 import pkgutil
 import settings
 import typing
@@ -140,12 +140,27 @@ class LinksAwakeningWorld(World):
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
     
     def randomize_entrances(self):
+        
+        
+        from .LADXR.logic.overworld import World
         entrance_pools = {}
         indoor_pools = {}
         entrance_pool_mapping = {}
-        for option in self.player_options.values():
+
+        random = self.multiworld.per_slot_randoms[self.player]
+        world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
+        # First shuffle the start location, if needed
+        start = world.start
+        start_entrance = "start_house"
+        start_shuffle = self.player_options["start_shuffle"]
+
+        start_type_mappings = {}
+
+        for option_name, option in self.player_options.items():
             if isinstance(option, EntranceShuffle):
-                print(option)
+                print(option_name, option)
+                for cat in option.entrance_type:
+                    start_type_mappings[option_name] = cat
                 if option.value == EntranceShuffle.option_simple:
                     entrance_pool_mapping[option.entrance_type[0]] = option.entrance_type[0]
                 elif option.value == EntranceShuffle.option_mixed:
@@ -154,6 +169,8 @@ class LinksAwakeningWorld(World):
                     continue
                 pool = entrance_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
                 indoor_pool = indoor_pools.setdefault(entrance_pool_mapping[option.entrance_type[0]], [])
+
+                # Gross N*M behavior, we can just iterate the entrance info once or twice
                 for entrance_name, entrance in ENTRANCE_INFO.items():
                     if entrance.type in option.entrance_type:
                         pool.append(entrance_name)
@@ -161,16 +178,39 @@ class LinksAwakeningWorld(World):
                         if entrance.type != "connector":
                             indoor_pool.append(entrance_name)
 
+
+        if start_shuffle.value:
+            start_candidates = []
+            
+            for category in start_shuffle.value:
+                start_candidates += entrances_by_type[category]
+                if category == "single":
+                    start_candidates += entrances_by_type["trade"]
+
+            start_candidates.sort()
+
+            # Ugh this is wrong
+            start_entrance = random.choice(start_candidates)
+            self.world_setup.entrance_mapping[start_entrance] = "start_house"
+            print("Picked " + start_entrance)
+            for pool in entrance_pools:
+                if start_entrance in pool:
+                    pool.remove(start_entrance)
+                    pool.add("start_house")
+                    assert False
+                    break
+            else:
+                # This entrance wasn't shuffled, just map back
+                self.world_setup.entrance_mapping["start_house"] = start_entrance
+
+
         for pool in itertools.chain(entrance_pools.values(), indoor_pools.values()):
             # Sort first so that we get the same result every time
             pool.sort()
-        
-        from .LADXR.logic.overworld import World
 
         has_castle_button = False
 
-        random = self.multiworld.per_slot_randoms[self.player]
-        world = World(self.laxdr_options, self.world_setup, RequirementsSettings(self.laxdr_options))
+        
 
         # NOTE: this code uses LADXR terms for things where:
         # Region -> Location
@@ -185,8 +225,7 @@ class LinksAwakeningWorld(World):
             gate_names = ("Kanalet Castle Front Door", "Ukuku Prairie")
             return a.name not in gate_names or b.name not in gate_names
 
-        walked_cache = set()
-        def walk_locations(callback, n, filter=lambda _: True, walked=None):
+        def walk_locations(callback, n, filter=lambda _: True, walked=None) -> None:
             walked = walked or set()
             if n in walked:
                 return
@@ -200,15 +239,6 @@ class LinksAwakeningWorld(World):
                     walk_locations(callback, o, filter, walked)
 
 
-        # First shuffle the start location, if needed
-        
-        if "start" in entrance_pool_mapping:
-            # if simple, swap with a random dummy entrance
-            
-            # if mixed, swap with any random entrance
-            pass
-        else:
-            start = world.start
 
         # First shuffle connectors, as they will fail if shuffled randomly
         if "connector" in entrance_pool_mapping:
@@ -468,7 +498,7 @@ class LinksAwakeningWorld(World):
         allowed_locations_by_item = {}
 
         # For now, special case first item
-        FORCE_START_ITEM = True
+        FORCE_START_ITEM = self.multiworld.players > 1
         if FORCE_START_ITEM:
             self.force_start_item()
 
