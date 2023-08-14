@@ -553,6 +553,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
 
     priority_filler_items = []
     priority_filler_items.extend(useful_resource_packs)
+
     if include_traps:
         priority_filler_items.extend(trap_items)
 
