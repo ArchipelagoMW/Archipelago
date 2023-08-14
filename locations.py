@@ -1,4 +1,4 @@
-import typing
+from typing import Dict, Optional
 
 from BaseClasses import Location, MultiWorld
 
@@ -7,7 +7,7 @@ from .names import LocationName
 class WL4Location(Location):
     game: str = "Wario Land 4"
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
+    def __init__(self, player: int, name: str, address: Optional[int], parent):
         super().__init__(player, name, address, parent)
         self.event = not address
 
@@ -191,4 +191,4 @@ def setup_locations(world: MultiWorld, player: int):
     return location_table
 
 
-lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
+lookup_id_to_name: Dict[int, str] = {id: name for name, _ in all_locations.items()}

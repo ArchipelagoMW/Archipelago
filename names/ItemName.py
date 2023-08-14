@@ -1,5 +1,5 @@
-import typing
 import string
+from typing import NamedTuple, Optional
 
 from . import JewelPieces, RegionName
 
@@ -7,9 +7,9 @@ from . import JewelPieces, RegionName
 name_format = string.Template("$item ($location)")
 
 
-class Level(typing.NamedTuple):
+class Level(NamedTuple):
     keyzer: str
-    cd: typing.Optional[str]
+    cd: Optional[str]
 
     @classmethod
     def from_region(cls, name, cd_title=None):

@@ -1,4 +1,4 @@
-import typing
+from typing import ClassVar, List
 import settings
 
 from BaseClasses import Item, ItemClassification, Tutorial
@@ -48,7 +48,7 @@ class WL4World(World):
 
     game: str = "Wario Land 4"
     option_definitions = wl4_options
-    settings: typing.ClassVar[WL4Settings]
+    settings: ClassVar[WL4Settings]
     topology_present = False
 
     data_version = 0
@@ -69,7 +69,7 @@ class WL4World(World):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
 
-        itempool: typing.List[WL4Item] = []
+        itempool: List[WL4Item] = []
 
         connect_regions(self.multiworld, self.player)
 

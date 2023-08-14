@@ -1,5 +1,6 @@
-import typing
 
+
+from typing import Callable, Dict, Optional, Sequence
 from BaseClasses import MultiWorld, Region, Entrance
 
 from .locations import WL4Location
@@ -257,7 +258,7 @@ def create_regions(world: MultiWorld, player: int, location_table: dict):
 
 
 def connect_regions(world, player):
-    names: typing.Dict[str, int] = {}
+    names: Dict[str, int] = {}
 
     connect(world, player, names, "Menu", RegionName.entry_passage)
     connect(world, player, names, RegionName.entry_passage, RegionName.hall_of_hieroglyphs)
@@ -310,7 +311,7 @@ def create_region(
     player: int,
     location_table: dict,
     name: str,
-    locations: typing.Sequence[str] = ()
+    locations: Sequence[str] = ()
 ):
     region = Region(name, player, world)
     for location in locations:
@@ -325,10 +326,10 @@ def create_region(
 def connect(
     world: MultiWorld,
     player: int,
-    used_names: typing.Dict[str, int],
+    used_names: Dict[str, int],
     source: str,
     target: str,
-    rule: typing.Optional[typing.Callable] = None,
+    rule: Optional[Callable] = None,
 ):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)

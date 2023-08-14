@@ -1,5 +1,5 @@
-import typing
 import string
+from typing import NamedTuple, Optional
 
 from . import JewelPieces, RegionName
 
@@ -8,11 +8,11 @@ name_format = string.Template("$level $check")
 boss_format = string.Template("Defeat $boss")
 
 
-class Level(typing.NamedTuple):
+class Level(NamedTuple):
     jewels: JewelPieces
     keyzer: str
-    cd_box: typing.Optional[str]
-    fullhealth: typing.Optional[str]
+    cd_box: Optional[str]
+    fullhealth: Optional[str]
 
     @classmethod
     def _with_cd_health(cls, name, cd, fullhealth):

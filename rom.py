@@ -2,8 +2,8 @@ import enum
 import hashlib
 import itertools
 import logging
-import typing
 from pathlib import Path
+from typing import Dict, NamedTuple, Optional
 
 import bsdiff4
 
@@ -95,7 +95,7 @@ class LocalRom():
             stream.write(self.buffer)
 
 
-def _get_symbols(symbol_file: Path) -> typing.Dict[str, int]:
+def _get_symbols(symbol_file: Path) -> Dict[str, int]:
     symbols = {}
     with open(symbol_file, 'r') as stream:
         for line in stream:
@@ -114,7 +114,7 @@ def _get_symbols(symbol_file: Path) -> typing.Dict[str, int]:
     return symbols
 
 
-def _get_charset(charset_file: Path) -> typing.Dict[str, int]:
+def _get_charset(charset_file: Path) -> Dict[str, int]:
     charset = {}
     with open(charset_file, 'r', encoding="utf-8") as stream:
         for line in stream:
@@ -142,7 +142,7 @@ def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
     # TODO skip cutscene so Wario doesn't walk through locked doors
 
 
-class MultiworldItem(typing.NamedTuple):
+class MultiworldItem(NamedTuple):
     receiver: str
     name: str
 
@@ -190,8 +190,8 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
 
 
 def create_strings(rom: LocalRom,
-                   multiworld_items: typing.Dict[int, typing.Optional[MultiworldItem]]
-                   ) -> typing.Dict[typing.Optional[str], int]:
+                   multiworld_items: Dict[int, Optional[MultiworldItem]]
+                   ) -> Dict[Optional[str], int]:
     receivers = set()
     items = set()
     address = symbols["multiworldstringdump"]
@@ -214,8 +214,8 @@ def create_strings(rom: LocalRom,
 
 
 def write_multiworld_table(rom: LocalRom,
-                           multiworld_items: typing.Dict[int, typing.Optional[MultiworldItem]],
-                           strings: typing.Dict[typing.Optional[str], int]):
+                           multiworld_items: Dict[int, Optional[MultiworldItem]],
+                           strings: Dict[Optional[str], int]):
     table_address = symbols["itemextdatatable"]
     entry_address = symbols["multiworldstringdump"]
     for locationid, item in multiworld_items.items():

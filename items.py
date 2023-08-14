@@ -1,5 +1,4 @@
-import typing
-
+from typing import Dict, NamedTuple, Optional
 from BaseClasses import Item, ItemClassification
 
 from .names import ItemName
@@ -9,8 +8,8 @@ class WL4Item(Item):
     game: str = "Wario Land 4"
 
 
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+class ItemData(NamedTuple):
+    code: Optional[int]
     classification: ItemClassification
     quantity: int = 1
 
@@ -122,6 +121,6 @@ item_table = {
     **junk_table,
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {
+lookup_id_to_name: Dict[int, str] = {
     data.code: item_name for item_name, data in item_table.items() if data.code
 }
