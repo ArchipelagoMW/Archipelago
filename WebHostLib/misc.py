@@ -36,9 +36,21 @@ def start_playing():
     return render_template(f"startPlaying.html")
 
 
+# TODO for back compat. remove around 0.4.5
+@app.route('/weighted-settings')
+def route_weighted_options():
+    return redirect(weighted_options(), 301)
+
+
 @app.route('/weighted-options')
 def weighted_options():
     return render_template(f"weighted-options.html")
+
+
+# TODO for back compat. remove around 0.4.5
+@app.route('/games/<string:game>/player-settings')
+def route_player_options():
+    return redirect(player_options(), 301)
 
 
 # Player options pages
