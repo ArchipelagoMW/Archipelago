@@ -1,9 +1,9 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, filler_items
 from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
     mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
-from .Options import get_option_value, MissionOrder, FinalMap
+from .Options import get_option_value, MissionOrder, FinalMap, MissionProgressLocations, LocationInclusion
 from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
@@ -145,14 +145,14 @@ class ValidInventory:
         
         # Limit the maximum number of upgrades 
         maxUpgrad = get_option_value(self.multiworld, self.player, 
-                            "max_nb_upgrades")
+                            "max_number_of_upgrades")
         if maxUpgrad != -1:
             unit_avail_upgrades = {}
             # Needed to take into account locked/existing items
             unit_nb_upgrades = {}
             for item in inventory:
                 cItem = get_full_item_list()[item.name]
-                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:
@@ -165,7 +165,7 @@ class ValidInventory:
             # For those two categories, we count them but dont include them in removal
             for item in locked_items + self.existing_items:
                 cItem = get_full_item_list()[item.name]
-                if cItem.type == "Unit" and item.name not in unit_avail_upgrades:
+                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:

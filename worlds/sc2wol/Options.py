@@ -115,7 +115,12 @@ class ShuffleNoBuild(DefaultOnToggle):
 
 
 class EarlyUnit(DefaultOnToggle):
-    """Guarantees that the first mission will contain a unit."""
+    """
+    Guarantees that the first mission will contain a unit.
+
+    Each mission available to be the first mission has a pre-defined location where the unit should spawn.
+    This location gets overriden over any exclusion. It's guaranteed to be reachable with an empty inventory.
+    """
     display_name = "Early Unit"
 
 
@@ -148,6 +153,7 @@ class GenericUpgradeMissions(Range):
     range_end = 100
     default = 0
 
+
 class GenericUpgradeResearch(Choice):
     """Determines how weapon and armor upgrades affect missions once unlocked.
 
@@ -162,6 +168,7 @@ class GenericUpgradeResearch(Choice):
     option_auto_in_no_build = 1
     option_auto_in_build = 2
     option_always_auto = 3
+
 
 class GenericUpgradeItems(Choice):
     """Determines how weapon and armor upgrades are split into items.  All options produce 3 levels of each item.
@@ -187,19 +194,22 @@ class GenericUpgradeItems(Choice):
 class NovaCovertOpsItems(Toggle):
     """If turned on, the equipment upgrades from Nova Covert Ops may be present in the world."""
     display_name = "Nova Covert Ops Items"
+    default = Toggle.option_true
 
 
 class BroodWarItems(Toggle):
     """If turned on, returning items from StarCraft: Brood War may appear in the world."""
     display_name = "Brood War Items"
+    default = Toggle.option_true
 
 
 class ExtendedItems(Toggle):
     """If turned on, original items that did not appear in Campaign mode may appear in the world."""
     display_name = "Extended Items"
+    default = Toggle.option_true
 
 
-class MaxNbUpgrades(Range):
+class MaxNumberOfUpgrades(Range):
     """Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited. 
     Note that most unit have 4 or 6 upgrades."""
     display_name = "Maximum number of upgrades per unit/structure"
@@ -226,6 +236,82 @@ class ExcludedMissions(OptionSet):
     display_name = "Excluded Missions"
     valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
 
+
+class LocationInclusion(Choice):
+    option_enabled = 0
+    option_trash = 1
+    option_nothing = 2
+
+
+class MissionProgressLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for progressing (not finishing) a mission.
+    Progressing a mission is usually a task of completing or progressing into a main objective.
+    Clearing an expansion base also counts here.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Trash: Forces a trash item in
+    Nothing: No rewards for this type of tasks, effectively disabling such locations
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    Warning: The generation may fail if too many locations are excluded by this way.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Mission Progress Locations"
+
+
+class BonusLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for completing bonus tasks.
+    Bonus tasks are those giving you a campaign-wide or mission-wide bonus in vanilla game:
+    Research, credits, bonus units or resources, etc.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Trash: Forces a trash item in
+    Nothing: No rewards for this type of tasks, effectively disabling such locations
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    Warning: The generation may fail if too many locations are excluded by this way.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Bonus Locations"
+
+
+class ChallengeLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for completing challenge tasks.
+    Challenges are tasks that have usually higher requirements to be completed
+    than to complete the mission they're in successfully.
+    You might be required to visit the same mission later when getting stronger in order to finish these tasks.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Trash: Forces a trash item in
+    Nothing: No rewards for this type of tasks, effectively disabling such locations
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    Warning: The generation may fail if too many locations are excluded by this way.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Challenge Locations"
+
+
+class OptionalBossLocations(LocationInclusion):
+    """
+    Enables or disables item rewards for defeating optional bosses.
+    An optional boss is any boss that's not required to kill in order to finish the mission successfully.
+    All Brutalisks, Loki, etc. belongs here.
+
+    Enabled: All locations fitting into this do their normal rewards
+    Trash: Forces a trash item in
+    Nothing: No rewards for this type of tasks, effectively disabling such locations
+
+    Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
+    Warning: The generation may fail if too many locations are excluded by this way.
+    See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
+    """
+    display_name = "Challenge Locations"
+
+
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
@@ -248,7 +334,11 @@ sc2wol_options: Dict[str, Option] = {
     "nco_items": NovaCovertOpsItems,
     "bw_items": BroodWarItems,
     "ext_items": ExtendedItems,
-    "max_nb_upgrades": MaxNbUpgrades
+    "max_number_of_upgrades": MaxNumberOfUpgrades,
+    "mission_progress_locations": MissionProgressLocations,
+    "bonus_locations": BonusLocations,
+    "challenge_locations": ChallengeLocations,
+    "optional_boss_locations": OptionalBossLocations
 }
 
 
