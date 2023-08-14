@@ -191,7 +191,7 @@ def validate_conditions(
 def mark_progression(
     conditions: List[
         Tuple[
-            bool, int, Union[str, tuple[Union[bool, None], list]], Union[str, int, None]
+            bool, int, Union[str, Tuple[Union[bool, None], list]], Union[str, int, None]
         ]
     ],
     progression: Set[str],
