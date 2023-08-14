@@ -397,7 +397,6 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.TreasureIsland_Grindstone,
     [
-
         LocationName.Treasure_Isle_911_coins,
         LocationName.Treasure_Isle_Psy_Crystal,
         LocationName.Treasure_Isle_Cookie,
@@ -410,6 +409,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.TreasureIsland_PostReunion,
     [
+        LocationName.Bane,  # Random Venus djinn from Gs1
         LocationName.Gale,
         LocationName.Treasure_Isle_Iris_Robe,
         LocationName.Treasure_Isle_Fire_Brand,
@@ -518,6 +518,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.SouthWestAttekaIslet,
     [
+        LocationName.Luff, # Random djinn from gs1 spot
         LocationName.SW_Atteka_Islet_Dragon_Skin
     ])
 
@@ -594,28 +595,24 @@ def create_regions(multiworld: MultiWorld, player: int):
         LocationName.Vine,
         LocationName.Sap,
         LocationName.Ground,
-        LocationName.Bane,
         LocationName.Fizz,
         LocationName.Sleet,
         LocationName.Mist,
         LocationName.Spritz,
         LocationName.Hail,
         LocationName.Tonic,
-        LocationName.Dew,
         LocationName.Forge,
         LocationName.Fever,
         LocationName.Corona,
         LocationName.Scorch,
         LocationName.Ember,
         LocationName.Flash,
-        LocationName.Torch,
         LocationName.Gust,
         LocationName.Breeze,
         LocationName.Zephyr,
         LocationName.Smog,
         LocationName.Kite,
         LocationName.Squall,
-        LocationName.Luff
     ])
 
     create_region(multiworld, player, RegionName.AttekaCavern,
@@ -648,6 +645,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.MagmaRockInterior,
     [
+        LocationName.Torch,  # Random djinn from gs1 spot
         LocationName.Fury,
         LocationName.Magma_Rock_Lucky_Medal,
         LocationName.Magma_Rock_Mist_Potion,
@@ -677,6 +675,7 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     create_region(multiworld, player, RegionName.Prox,
     [
+        LocationName.Dew, #Random djinn from Gs1 spot
         LocationName.Prox_Cookie,
         LocationName.Prox_Potion,
         LocationName.Prox_Dark_Matter,

@@ -449,6 +449,8 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Grindstone, player) and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Tremor_Bit, player))
 
     #SW Atteka Islet
+    add_rule(multiworld.get_location(LocationName.Luff, player),
+             lambda state: state.has(ItemName.Lifting_Gem, player))
 
     #Hesperia Settlement
     add_rule(multiworld.get_location(LocationName.Hesperia_Settlement_166_coins, player),
