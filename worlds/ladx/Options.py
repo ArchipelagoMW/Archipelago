@@ -80,6 +80,8 @@ class StartShufflePool(OptionList):
     If the chosen entrance isn't shuffled, a swap will be performed instead.
 
     Connectors aren't allowed for now, due to having to work out which connectors are legal or not.
+
+    TODO: also allow specifying a specific entrance or list of entrances
     """
     valid_keys = [
         "single",

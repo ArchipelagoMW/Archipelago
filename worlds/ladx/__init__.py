@@ -140,7 +140,9 @@ class LinksAwakeningWorld(World):
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
     
     def randomize_entrances(self):
-        
+        banned_starts = [
+            "prarie_madbatter"
+        ]
         
         from .LADXR.logic.overworld import World
         entrance_pools = {}
@@ -193,11 +195,11 @@ class LinksAwakeningWorld(World):
             start_entrance = random.choice(start_candidates)
             self.world_setup.entrance_mapping[start_entrance] = "start_house"
             print("Picked " + start_entrance)
-            for pool in entrance_pools:
+            for pool in entrance_pools.values():
+                print(pool)
                 if start_entrance in pool:
                     pool.remove(start_entrance)
-                    pool.add("start_house")
-                    assert False
+                    pool.append("start_house")
                     break
             else:
                 # This entrance wasn't shuffled, just map back
