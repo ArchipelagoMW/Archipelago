@@ -643,6 +643,11 @@
         <Compare value="LT"/>
         <Range value="4"/>
     </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveK5ImprovedOverlords">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveK5ImprovedOverlords"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -883,6 +888,17 @@
     <CValidatorUnitFilters id="AP_IsInvulnerable">
         <Filters value="Invulnerable;-"/>
     </CValidatorUnitFilters>
+    <CValidatorCombine id="IsOverlord" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaOverlord"/>
+        <CombineArray value="AP_IsAPOverlord"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaOverlord">
+        <Value value="Overlord"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPOverlord">
+        <Value value="AP_Overlord"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="IsZergling" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaZergling"/>
@@ -1033,6 +1049,11 @@
         <ResultNoPlayer value="Error"/>
         <Value value="AP_HaveHeroicShieldCleanUp"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="NotOverlord" parent="CValidatorCombine">
+        <!-- Overrride -->
+        <CombineArray value="IsOverlord"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>
@@ -3081,7 +3102,7 @@
         <CombineArray value="NotFrenzied"/>
         <CombineArray value="AP_TargetNotUntargetable"/>
         <CombineArray value="AP_IsNotDisguisedChangeling"/>
-<!--        <CombineArray value="NoTimeStopImmune"/>-->
+        <!--        <CombineArray value="NoTimeStopImmune"/>-->
     </CValidatorCombine>
     <CValidatorUnitBehaviorState id="AP_TargetNotUntargetable">
         <BehaviorState value="Untargetable"/>
@@ -3089,8 +3110,8 @@
     <CValidatorCombine id="AP_IsNotPhasedUnit">
         <Type value="And"/>
         <CombineArray value="AP_Dummy"/>
-<!--        <CombineArray value="IsNotDisruptorPhased"/>-->
-<!--        <CombineArray value="IsNotAdeptShade"/>-->
+        <!--        <CombineArray value="IsNotDisruptorPhased"/>-->
+        <!--        <CombineArray value="IsNotAdeptShade"/>-->
     </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_IsNotDisguisedChangeling">
         <Compare value="NE"/>
@@ -3459,14 +3480,14 @@
         <CombineArray value="AP_TargetIsNotSentryAiur"/>
         <CombineArray value="AP_TargetIsNotSentryPurifier"/>
         <CombineArray value="AP_TargetIsNotSentryPhasing"/>
-<!--        <CombineArray value="AP_TargetIsNotReplicant"/>-->
+        <!--        <CombineArray value="AP_TargetIsNotReplicant"/>-->
         <CombineArray value="AP_TargetIsNotHighTemplarTaldarim"/>
         <CombineArray value="AP_TargetIsNotHighTemplarShakuras"/>
-<!--        <CombineArray value="TargetIsNotDisruptionWard"/>-->
+        <!--        <CombineArray value="TargetIsNotDisruptionWard"/>-->
         <CombineArray value="AP_TargetIsNotArbiterMP"/>
         <CombineArray value="AP_TargetIsNotCarrierAiur"/>
         <!-- TODO: Make this unit -->
-<!--        <CombineArray value="TargetIsNotCarrierTaldarim"/>-->
+        <!--        <CombineArray value="TargetIsNotCarrierTaldarim"/>-->
         <CombineArray value="AP_NotMaxVoidSentryChronoBeam"/>
     </CValidatorCombine>
     <CValidatorUnitType id="AP_TargetIsNotSentryAiur">
@@ -3481,10 +3502,10 @@
         <Value value="AP_SentryPhasing"/>
         <Find value="0"/>
     </CValidatorUnitType>
-<!--    <CValidatorUnitType id="AP_TargetIsNotReplicant">-->
-<!--        <Value value="Replicant"/>-->
-<!--        <Find value="0"/>-->
-<!--    </CValidatorUnitType>-->
+    <!--    <CValidatorUnitType id="AP_TargetIsNotReplicant">-->
+    <!--        <Value value="Replicant"/>-->
+    <!--        <Find value="0"/>-->
+    <!--    </CValidatorUnitType>-->
     <CValidatorUnitType id="AP_TargetIsNotHighTemplarTaldarim">
         <Value value="AP_HighTemplarTaldarim"/>
         <Find value="0"/>
@@ -3870,4 +3891,8 @@
         <Compare value="GE"/>
         <Value value="0.5"/>
     </CValidatorPlayerCompareFoodAvailable>
+    <CValidatorCombine id="WildMutationOverlord" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="IsOverlord"/>
+    </CValidatorCombine>
 </Catalog>

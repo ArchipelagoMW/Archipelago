@@ -2965,4 +2965,12 @@
         <OperandArray index="0" value="AP_CountUpgradeProtossAirWeaponsLevel2CompleteOnly"/>
         <OperandArray index="1" value="1"/>
     </CRequirementEq>
+    <CRequirementCountUpgrade id="AP_CountUpgradeK5ImprovedOverlordsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_K5ImprovedOverlords" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeoverlordtransportCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeoverlordtransportCompleteOnly2367625043"/>
+        <Count Link="AP_overlordtransport" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

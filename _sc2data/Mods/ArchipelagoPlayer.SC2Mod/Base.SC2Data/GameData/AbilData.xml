@@ -6633,4 +6633,26 @@
             <Button DefaultButtonFace="AP_WarpInAdept" State="Restricted" Requirements="AP_HaveCyberneticsCore"/>
         </InfoArray>
     </CAbilWarpTrain>
+    <CAbilTransport id="AP_OverlordTransport">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <MaxCargoCount value="8"/>
+        <MaxCargoSize value="8"/>
+        <TotalCargoSpace value="8"/>
+        <LoadTransportBehavior value="OverlordTransport"/>
+        <UnloadPeriod value="1"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="OverlordTransportLoad" Requirements="AP_UseOverlordTransport"/>
+        <CmdButtonArray index="UnloadAll">
+            <Flags index="Hidden" value="1"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt" DefaultButtonFace="OverlordTransportUnload"/>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="CargoDeath" value="1"/>
+        <AbilSetId value="ULdM"/>
+    </CAbilTransport>
 </Catalog>

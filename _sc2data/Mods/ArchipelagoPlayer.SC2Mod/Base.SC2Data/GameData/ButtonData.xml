@@ -3126,4 +3126,9 @@
         <EditorCategories value="Race:Protoss"/>
         <HotkeyAlias value="AP_Gateway"/>
     </CButton>
+    <CButton id="AP_K5ImprovedOverlords">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-improvedoverlords.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-kerrigan-improvedoverlords.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

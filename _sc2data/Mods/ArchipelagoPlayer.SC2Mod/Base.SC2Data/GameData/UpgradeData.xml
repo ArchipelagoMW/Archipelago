@@ -6075,4 +6075,37 @@
         <EffectArray Operation="Set" Reference="Actor,AP_PhoenixPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_TempestPurifier,ShieldArmorIcon" Value="Assets\Textures\btn-upgrade-protoss-shieldslevel3.dds"/>
     </CUpgrade>
+    <CUpgrade id="AP_DestroyerImprovedOverlords">
+        <EffectArray Operation="Set" Reference="Abil,AP_LarvaTrain,InfoArray[Train3].Time" Value="2.500000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Overlord,CostResource[Minerals]" Value="75"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_K5ImprovedOverlords">
+        <EffectArray Operation="Subtract" Reference="Abil,AP_LarvaTrain,InfoArray[Train3].Time" Value="24.500000"/>
+        <EffectArray Reference="Unit,AP_Overlord,Food" Value="4"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Overlord"/>
+    </CUpgrade>
+    <CUpgrade id="AP_overlordspeed">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-pneumatizedcarapace.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,Overseer,Speed" Value="0.875000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Overlord,Speed" Value="1.875"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Overlord"/>
+<!--        <AffectedUnitArray value="Overseer"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_overlordtransport">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-ventralsacs.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Overlord"/>
+    </CUpgrade>
 </Catalog>

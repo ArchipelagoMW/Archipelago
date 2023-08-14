@@ -4556,4 +4556,15 @@
         <Alignment value="Positive"/>
         <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
+    <CBehaviorCreepSource id="AP_makeCreep2x2Overlord">
+        <DisableValidatorArray value="CasterIsStationary"/>
+        <DisableValidatorArray value="Pathable"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Delay value="2"/>
+        <Period value="1"/>
+        <Birth value="Footprint2x2OverlordCreepSourceStart"/>
+        <Start value="Footprint2x2OverlordCreepSourceStart"/>
+        <Grown value="Footprint2x2OverlordCreepSourceGrown"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorCreepSource>
 </Catalog>

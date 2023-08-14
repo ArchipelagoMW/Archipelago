@@ -14536,8 +14536,8 @@
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkProbe"/>
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkProbe"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
-<!--        <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>-->
-<!--        <On Terms="Behavior.OracleCloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>-->
+        <!--        <On Terms="Behavior.OracleCloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>-->
+        <!--        <On Terms="Behavior.OracleCloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>-->
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Probe_Land"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
@@ -14606,7 +14606,6 @@
         <Sound value="Probe_Land"/>
     </CActorSound>
     <CActorAction id="AP_ProbeAttack" parent="GenericAttack" effectAttack="AP_ParticleBeam">
-        <Beam value="AP_ProbeAttackBeam"/>
         <ImpactMap index="None" Model="ProbeAttackImpact" Sound="Probe_AttackImpact"/>
         <ActionFlags index="LaunchForceSite" value="1"/>
     </CActorAction>
@@ -14617,6 +14616,109 @@
         <Sound value="Protoss_BuildingWarpStart"/>
         <On Terms="Abil.AP_ProtossBuild.BuiltStart" Send="Create"/>
     </CActorSound>
+    <CActorUnit id="AP_Overlord" parent="GenericUnitMorph" unitName="AP_Overlord">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="Abil.AP_OverlordTransport.TransportUnloadStart" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <On Terms="Abil.AP_OverlordTransport.TransportUnloadStop" Send="AnimClear Work"/>
+<!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepModel" Send="Destroy"/>-->
+<!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepSound" Send="Destroy"/>-->
+<!--        <On Terms="Abil.MorphToOverseer.Start" Send="AnimPlay Morph Stand,Morph,Start"/>-->
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Delay" Send="Create AP_OverlordGenerateCreepModel"/>
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Delay" Send="Create AP_OverlordGenerateCreepSound"/>
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Cancel" Target="AP_OverlordGenerateCreepModel" Send="Destroy"/>
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Cancel" Target="AP_OverlordGenerateCreepSound" Send="Destroy"/>
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Off" Target="AP_OverlordGenerateCreepModel" Send="Destroy"/>
+        <On Terms="Behavior.AP_makeCreep2x2Overlord.Off" Target="AP_OverlordGenerateCreepSound" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Overlord_Land"/>
+<!--        <On Terms="Abil.SpawnChangelingTarget.SourceCastStart" Send="$Spell"/>-->
+        <On Terms="ActorCreation; PlayerHasReward OverlordSkin" Send="StatusSet CE 1"/>
+        <On Terms="Upgrade.AP_K5ImprovedOverlords.Add" Send="SetScale 1.250000 1.000000"/>
+        <On Terms="Upgrade.AP_K5ImprovedOverlords.Remove" Send="SetScale 1.000000 1.000000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveK5ImprovedOverlords" Send="SetScale 1.250000"/>
+        <Model value="Overlord"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Overlord"/>
+        <DeathArray index="Normal" ModelLink="OverlordDeath" SoundLink=""/>
+        <DeathCustoms>
+            <ActorModel value="OverlordDeathRagdoll"/>
+            <ModelLink value="OverlordDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="Overlord"/>
+        <PortraitModel value="OverlordPortrait"/>
+        <BarOffset value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Overlord.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-overlord.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <NameOffset value="70"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Overlord_Ready"/>
+        <SoundArray index="What" value="Overlord_What"/>
+        <SoundArray index="Yes" value="Overlord_Yes"/>
+        <SoundArray index="Pissed" value="Overlord_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-overlord.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Overlord.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSound id="AP_OverlordGenerateCreepSound" parent="SoundContinuous">
+        <Sound value="Overlord_GenerateCreep"/>
+    </CActorSound>
+    <CActorModel id="AP_OverlordGenerateCreepModel" parent="ModelAddition">
+        <Model value="OverlordGenerateCreepModel"/>
+    </CActorModel>
+    <CActorSound id="AP_Overlord_Land" parent="SoundOneShot">
+        <Sound value="Overlord_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_Overlord_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Overlord; PassChance 25.000000" Send="Create"/>
+        <Sound value="Overlord_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_OverlordTransportLoadSound" parent="SoundOneShot">
+        <Sound value="Overlord_Load"/>
+        <On Terms="AbilTransport.AP_OverlordTransport.TransportLoad" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+    </CActorSound>
+    <CActorSound id="AP_OverlordTransportUnloadSound" parent="SoundOneShot">
+        <Sound value="Overlord_Unload"/>
+        <On Terms="AbilTransport.AP_OverlordTransport.TransportUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+    </CActorSound>
+    <CActorModel id="AP_OverlordUnload" parent="ModelAnimationStyleOneShot">
+        <Model value="ZergUnloadLaunch"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Host Subject="_Selectable"/>
+        <On Terms="AbilTransport.AP_OverlordTransport.TransportUnload" Send="Create"/>
+    </CActorModel>
     <CActorProgress id="ProtossConstruction">
         <!-- Override -->
         <On Terms="Abil.AP_ProtossBuild.BuiltStart" Send="Create"/>
@@ -14663,7 +14765,7 @@
         <On Terms="UnitConstruction.AP_ShieldBattery.Start" Send="Create"/>
         <On Terms="UnitConstruction.AP_AutomatedAssimilator.Start" Send="Create"/>
         <On Terms="UnitConstruction.AP_AutomatedAssimilatorRich.Start" Send="Create"/>
-<!--        <On Terms="UnitConstruction.SoACaster.Start" Send="Create"/>-->
+        <!--        <On Terms="UnitConstruction.SoACaster.Start" Send="Create"/>-->
         <On Terms="UnitConstruction.AP_KhaydarinMonolith.Start" Send="Create"/>
         <On Terms="UnitConstruction.AP_WarpGate.Start" Send="Create"/>
         <On Terms="UnitConstruction.AP_RoboticsFacilityWarp.Start" Send="Create"/>
@@ -17148,7 +17250,6 @@
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap ShieldBatteryTaldarim"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
-        <Model value="AP_ShieldBattery"/>
         <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
         <CreepHeightClass value="Tiny"/>
         <BuildModel value="AP_ShieldBatteryBirth"/>
@@ -19128,6 +19229,14 @@
         <On Terms="AbilTransport.AP_HerculesTransport.CargoUnload" Send="AnimBracketStop Unload"/>
         <On Terms="AbilTransport.AP_HerculesTransport.TransportLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End"/>
         <On Terms="AbilTransport.AP_HerculesTransport.TransportUnload" Send="AnimBracketStop Unload"/>
+        <!-- Add AP_Overlord to common transport load/unload animations -->
+        <On Terms="AbilTransport.AP_OverlordTransport.CargoLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.AP_OverlordTransport.CargoLoadSuppressed" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.AP_OverlordTransport.CargoUnload" Send="AnimBracketStop Unload"/>
+        <!-- Add AP_WarpPrism to common transport load/unload animations -->
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoadSuppressed" Send="AnimBracketStart Unload IGNORE Unload Unload,End DontResetOnUnhide"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoUnload" Send="AnimBracketStop Unload"/>
     </CActorEventMacro>
     <CActorUnit id="AP_ValkyrieSCBW" parent="GenericUnitBase" unitName="AP_ValkyrieSCBW">
         <Aliases value="_UnitLarge"/>

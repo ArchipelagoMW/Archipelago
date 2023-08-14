@@ -284,8 +284,8 @@
     </CRequirement>
     <CRequirement id="AP_AssaultModeHALORocketsResearched">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotPossibleVikingFighterCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHALORocketsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnVikingMissileUpgrade">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
@@ -528,8 +528,8 @@
     </CRequirement>
     <CRequirement id="AP_HaveWidowMineImprovedConcealmentUnburrowed">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeImprovedConcealmentCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotPossibleWidowMineBurrowedCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeImprovedConcealmentCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_WidowMineArmed">
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
@@ -1517,8 +1517,8 @@
     </CRequirement>
     <CRequirement id="AP_TankModeHaveSiegeTankSiegeModeProgressiveRangeIncease">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankSiegeModeProgressiveRangeInceaseCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveLaserTargetingSystemSiegeTank">
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
@@ -1530,8 +1530,8 @@
     </CRequirement>
     <CRequirement id="AP_TankModeHaveImprovedSiegeMode">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRaynorImprovedSiegeModeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveVikingMagWeapon">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -1539,8 +1539,8 @@
     </CRequirement>
     <CRequirement id="AP_FighterModeHaveVikingMagWeapon">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotPossibleVikingAssaultCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_VikingMagWeaponCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveMedivacSpeedBoost">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -1550,8 +1550,8 @@
         <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveHHWidowMineAttackRangeUnburrowed">
-        <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotPossibleWidowMineBurrowedCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineBurrowedRangeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveHHWidowMineDeathBlossom">
         <NodeArray index="Show" Link="AP_CountUpgradeHHWidowMineDeathBlossomCompleteOnly"/>
@@ -1801,5 +1801,13 @@
     <CRequirement id="AP_HaveNexusAndHaveSOAWarpTech">
         <NodeArray index="Use" Link="AP_CountUnitNexusCompleteOnlyTechTreeCheat"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveK5ImprovedOverlords">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5ImprovedOverlordsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseOverlordTransport">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeoverlordtransportCompleteOnlyTechTreeCheat"/>
     </CRequirement>
 </Catalog>
