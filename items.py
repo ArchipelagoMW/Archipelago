@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Item, ItemClassification
 
-from .Names import ItemName
+from .names import ItemName
 
 
 class WL4Item(Item):

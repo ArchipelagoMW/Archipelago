@@ -4,13 +4,13 @@ import settings
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
-from .Items import WL4Item, item_table
-from .Locations import all_locations, setup_locations
-from .Logic import WL4Logic
-from .Names import ItemName, LocationName
-from .Options import wl4_options
-from .Regions import connect_regions, create_regions
-from .Rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom 
+from .items import WL4Item, item_table
+from .locations import all_locations, setup_locations
+from .logic import WL4Logic
+from .names import ItemName, LocationName
+from .options import wl4_options
+from .regions import connect_regions, create_regions
+from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 
 
 class WL4Settings(settings.Group):
@@ -78,7 +78,7 @@ class WL4World(World):
         full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
         total_required_locations = diamond_pieces + cds + full_health_items
 
-        for item, data in Items.box_table.items():
+        for item, data in items.box_table.items():
             for _ in range(data.quantity):
                 itempool.append(self.create_item(item))
         

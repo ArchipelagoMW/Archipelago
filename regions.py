@@ -2,8 +2,8 @@ import typing
 
 from BaseClasses import MultiWorld, Region, Entrance
 
-from .Locations import WL4Location
-from .Names import LocationName, ItemName, RegionName
+from .locations import WL4Location
+from .names import LocationName, ItemName, RegionName
 
 
 def create_regions(world: MultiWorld, player: int, location_table: dict):

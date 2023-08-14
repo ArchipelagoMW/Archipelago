@@ -1,6 +1,6 @@
 from worlds.AutoWorld import LogicMixin
 
-from .Names import JewelPieces
+from .names import JewelPieces
 
 class WL4Logic(LogicMixin):
 	def wl4_has_full_jewels(self, player: int, jewel: JewelPieces, count: int):

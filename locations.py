@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import Location, MultiWorld
 
-from .Names import LocationName
+from .names import LocationName
 
 class WL4Location(Location):
     game: str = "Wario Land 4"

@@ -1,7 +1,7 @@
 import itertools
 
 from . import WL4TestBase
-from ..Names import LocationName, ItemName
+from ..names import LocationName, ItemName
 
 
 # I don't fully understand how these tests work so I'm reasonably sure these
