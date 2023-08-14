@@ -401,7 +401,7 @@ class TestDonationLogicRandomized(SVTestBase):
         guild_item = "Adventurer's Guild"
         swap_museum_and_guild(self.multiworld, self.player)
         collect_all_except(self.multiworld, guild_item)
-        donation_locations = [location for location in self.multiworld.get_locations() if LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
+        donation_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
 
         for donation in donation_locations:
             self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
