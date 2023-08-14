@@ -91,7 +91,7 @@ attr1_vf equ 1 << 0xD
 ; size
 .expfunc attr1_size(size), (size & 3) << 0xE
 
-; Attribute 2 - <palette> <priority> <id> 
+; Attribute 2 - <palette> <priority> <id>
 .expfunc attr2_id(id), id & 0x3FF
 .expfunc attr2_priority(prio), (prio & 3) << 0xA
 .expfunc attr2_palette(pal), (pal & 0xF) << 0xC

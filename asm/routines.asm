@@ -199,7 +199,7 @@ LoadTextSprites:
     mov r0, #0
 @@LoadText:
     bl CreateTextOAM
-    
+
 ; Count the timer
     ldr r0, =TextTimer
     ldrb r1, [r0]

@@ -38,7 +38,7 @@ GetItemAtLocation:
     lsl r1, r0, #1
     add r1, r1, r0
     lsl r1, r1, #1
-    
+
     ; r1 = (boxtype * 6 + passageID) * 4
     ldr r0, =PassageID
     ldrb r0, [r0]
@@ -96,7 +96,7 @@ GiveItem:
     lsl r1, r0, #31-4  ; we want the passage ID in bits 4:2
     lsr r1, r1, #31-2  ; r1 = passage ID
     lsl r3, r1, #1  ; passage*2
-    add r3, r3, r1  ; passage*3  
+    add r3, r3, r1  ; passage*3
     lsl r1, r3, #3  ; passage*24
 
     ; Get bits 1:0 into r2

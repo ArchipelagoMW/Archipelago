@@ -339,11 +339,11 @@ def connect(
     else:
         used_names[target] += 1
         name = target + (' ' * used_names[target])
-    
+
     connection = Entrance(player, name, source_region)
 
     if rule:
         connection.access_rule = rule
-    
+
     source_region.exits.append(connection)
     connection.connect(target_region)

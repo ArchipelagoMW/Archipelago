@@ -22,7 +22,7 @@ hook 0x8029F02, 0x8029F2A, SpawnRandomizedItemFromBox  ; Full health item
 
 
 ; Check if this box has been opened before and release the item if it hasn't.
-; 
+;
 ; In the past, this specifically changed the full health box because that one
 ; releases its item unconditionally in vanilla. While changing all the boxes is
 ; redundant for now, this opens up the possibility to apply or send native traps
@@ -38,7 +38,7 @@ SpawnRandomizedItemFromBox:
 ; The full health item uses a new variable so it's handled separately
     cmp r0, #0x05
     beq @@FullHealthBox
-    
+
 ; For jewel pieces/CDs, the relevant locations are adjacent in memory
     ldr r1, =HasJewelPiece1
     add r5, r1, r0
@@ -169,7 +169,7 @@ LoadRandomItemAnimation:
 
 ; Jewel/CD branch
     lsr r1, r6, #5
-    cmp r1, #0 
+    cmp r1, #0
     bne @@CD
 
 ; Jewel piece
@@ -241,7 +241,7 @@ CollectRandomItem:
 ; The full health item uses a new variable so it's handled separately
     cmp r5, #0x05
     beq @@FullHealthCheck
-    
+
 ; For jewel pieces/CDs, the relevant locations are adjacent in memory
     ldr r6, =HasJewelPiece1
     add r6, r6, r5
@@ -308,7 +308,7 @@ CollectRandomItem:
 
     ldr r0, =MultiworldState
     mov r1, #3
-    strb r1, [r0] 
+    strb r1, [r0]
     ldr r0, =TextTimer
     mov r1, #120
     strb r1, [r0]

@@ -41,16 +41,16 @@ ResultsScreenMessageState:
     beq @@DefaultCase
     ldr r0, =0x125
     call_using r1, m4aSongNumStart
-    
+
     bl ResultsScreenShowNextItem
     cmp r0, #0
     beq @@FadeOut
-    
+
     ldr r0, =ucSeldemoSeq
     ldrb r1, [r0]
     sub r1, #1
     strb r1, [r0]
-    
+
 @@DefaultCase:
     ldr r0, =0x8080D45
     mov pc, r0
@@ -181,7 +181,7 @@ PyramidScreenShowReceivedItem:
 
 .align 4
 @@JunkJumpTable:
-    .word @@FullHealthItem    
+    .word @@FullHealthItem
     .word @@BigBoardTrap  ; Wario transform
     .word @@Heart
     .word @@BigBoardTrap  ; Lightning damage
@@ -242,7 +242,7 @@ PyramidScreenShowReceivedItem:
     ldr r1, =dma_enable | dma_halfwords(16)
     str r1, [r3, #8]
     ldr r1, [r3, #8]
-    
+
     ; Get trap types
     ldr r6, =@WarioFormTrap
     cmp r0, #0x43
@@ -295,7 +295,7 @@ PyramidScreenShowReceivedItem:
 ;  a0: 1 if a new message was loaded, 0 if nothing left to display
 ResultsScreenShowNextItem:
     push {r4-r6, lr}
-    
+
     ldr r0, =HasJewelPiece1
     mov r2, #3
     ldr r3, =Jewel1BoxExtData
@@ -309,7 +309,7 @@ ResultsScreenShowNextItem:
     cmp r4, #0
     beq @@Jewel2
     b @@SetText
-    
+
 @@Jewel2:
     ldrb r1, [r0, #1]
     cmp r1, #1
@@ -371,7 +371,7 @@ ResultsScreenShowNextItem:
     add r6, r3  ; Set next tile
     ldr r0, =StrItemSent  ; a1
     call_using r3, MojiCreate
-    
+
     ; Item name
     ; Really long item names could lead to the text box being over-filled, but
     ; the background 2 tileset has tons of unused tiles (due in part to vanilla
@@ -385,7 +385,7 @@ ResultsScreenShowNextItem:
     add r6, r3  ; Set next tile
     mov r0, r4  ; a1
     call_using r3, MojiCreate
-    
+
     ; " to "
     mov r2, #4  ; a3 String length
     lsl r3, r2, #6
@@ -403,7 +403,7 @@ ResultsScreenShowNextItem:
     add r6, r3  ; Set next tile
     mov r0, r5  ; a1
     call_using r3, MojiCreate
-    
+
     ; Space filler
     ; The above being said, I would rather not tempt fate by filling almost 140
     ; extra tiles for no reason

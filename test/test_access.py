@@ -34,10 +34,10 @@ class TestAccess(WL4TestBase):
             LocationName.fiery_cavern.locations(),
             LocationName.hotel_horror.locations(),
         )
-        
+
         items = [[ItemName.defeated_boss]]
         self.assertAccessDependency(locations, items)
-    
+
     def test_cractus_access(self):
         """Test access to Cractus"""
         locations = [LocationName.cractus]
@@ -61,13 +61,13 @@ class TestAccess(WL4TestBase):
         locations = [LocationName.catbat]
         items = [ItemName.sapphire_passage_jewel]
         self.assertAccessDependency(locations, items)
-    
+
     def test_golden_passage_access(self):
         """Test access to the Golden Passage"""
         locations = LocationName.golden_passage.locations()
         items = [[ItemName.defeated_boss]]
         self.assertAccessDependency(locations, items)
-    
+
     def test_golden_diva_access(self):
         """Test access to the Golden Diva"""
         locations = [LocationName.golden_diva]

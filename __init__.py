@@ -35,7 +35,7 @@ class WL4Web(WebWorld):
         "setup/en",
         ["lil David"]
     )
-    
+
     tutorials = [setup_en]
 
 
@@ -81,7 +81,7 @@ class WL4World(World):
         for item, data in items.box_table.items():
             for _ in range(data.quantity):
                 itempool.append(self.create_item(item))
-        
+
         for _ in range(full_health_items):
             itempool.append(self.create_item(ItemName.full_health))
 
@@ -105,7 +105,7 @@ class WL4World(World):
             .place_locked_item(self.create_event(ItemName.victory)))
 
         self.multiworld.itempool += itempool
-    
+
     def generate_output(self, output_directory: str):
         from pathlib import Path
         output_directory: Path = Path(output_directory)
@@ -143,10 +143,10 @@ class WL4World(World):
         created_item = WL4Item(name, classification, data.code, self.player)
 
         return created_item
-    
+
     def create_event(self, name: str):
         return WL4Item(name, ItemClassification.progression, None, self.player)
-    
+
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
             lambda state: state.has(ItemName.victory, self.player))

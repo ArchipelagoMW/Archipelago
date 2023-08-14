@@ -57,12 +57,12 @@ class LocalRom():
         offset = AddressSpace.ROM.value - space.value
         startaddress -= offset
         return self.buffer[startaddress:startaddress + length]
-    
+
     def read_halfword(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
         assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
         halfword = self.read_bytes(address, 2, space)
         return int.from_bytes(halfword, "little")
-    
+
     def read_word(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
         assert address % 4 == 0, f"Misaligned word address: {address:x}"
         word = self.read_bytes(address, 4, space)
@@ -79,12 +79,12 @@ class LocalRom():
         startaddress -= offset
         assert startaddress >= 0, f"Address out of bounds: {startaddress:x}"
         self.buffer[startaddress:startaddress + len(values)] = values
-    
+
     def write_halfword(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
         assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
         halfword = value.to_bytes(2, "little")
         self.write_bytes(address, halfword, space)
-    
+
     def write_word(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
         assert address % 4 == 0, f"Misaligned word address: {address:x}"
         word = value.to_bytes(4, "little")
@@ -163,7 +163,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         else:
             itemid = 0xF0
         itemname = location.item.name
-        
+
         if playerid == player:
             playername = None
         else:
@@ -172,7 +172,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
             # for consistency with the senders' names.
             if len(playername) > 16:
                 playername = playername[:16]
-            
+
         location_offset = symbols["itemlocationtable"] + locationid
         rom.write_byte(location_offset, itemid)
 
@@ -180,7 +180,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
             multiworld_items[locationid] = MultiworldItem(playername, itemname)
         else:
             multiworld_items[locationid] = None
-    
+
     strings = create_strings(rom, multiworld_items)
     debug_string_list = [f'String addresses for player {world.player_name[player]}:']
     for str, addr in strings.items():
@@ -206,7 +206,7 @@ def create_strings(rom: LocalRom,
             # Cache, encode, and write the string, terminating with 0xFE
             strings[string] = address
             for c in string:
-                rom.write_byte(address, charset.get(c, 0xFF))                
+                rom.write_byte(address, charset.get(c, 0xFF))
                 address += 1
             rom.write_byte(address, 0xFE)
             address += 1
@@ -238,15 +238,15 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
         player_name = player_name[:16]
     rom.write_bytes(symbols["playername"], player_name)
     rom.write_byte(symbols["playerid"], player)
-    
+
     # Set deathlink
     rom.write_byte(symbols["deathlinkflag"], world.death_link[player].value)
-    
+
     # Force difficulty level
     mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
     rom.write_halfword(0x8091558, mov_r0)  # SramtoWork_Load(): Force difficulty (anti-cheese)
 
-    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selecting S-Hard 
+    rom.write_halfword(0x8091F8E, 0x2001)  # movs r0, r1  ; ReadySub_Level(): Allow selecting S-Hard
     rom.write_halfword(0x8091FCC, 0x46C0)  # nop  ; ReadySub_Level(): Force cursor to difficulty
     rom.write_halfword(0x8091FD2, 0xE007)  # b 0x8091FE4
     cmp_r0 = 0x2800 | world.difficulty[player].value  # cmp r0, #(world.difficulty[player].value)
@@ -266,7 +266,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         if MD5_US_EU != basemd5.hexdigest():
             raise Exception("Supplied base ROM does not match US/EU version."
                             "Please provide the correct ROM version")
-        
+
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

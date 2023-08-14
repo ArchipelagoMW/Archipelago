@@ -35,7 +35,7 @@ hook 0x808134C, 0x808135C, CheckLocations
     lsr r2, r0, #6
     cmp r2, #1
     beq @@DontGive
-    
+
 @@Give:
     bl GiveItem
 @@DontGive:
@@ -67,7 +67,7 @@ CheckLocations:
 ; Replaced code
     ldrb r0, [r6]
     lsl r0, r0, #2
-    ldrb r1, [r5] 
+    ldrb r1, [r5]
     lsl r1, r1, #4
     add r0, r0, r1
     add r0, r9
@@ -112,7 +112,7 @@ SpawnCollectionIndicator:
     ldrh r1, [r2, #18]
     sub r1, #0xC8  ; a2
     b @@Spawn
-    
+
 @@Zero:
     ldrh r0, [r2, #20]
     sub r0, #0xA0  ; a1
@@ -122,13 +122,13 @@ SpawnCollectionIndicator:
 @@Spawn:
     mov r2, r4  ; a3
     call_using r3, TOptObjSet
-    
+
     ldr r0, =LastCollectedItemID
     ldrb r1, [r0]
     mov r3, 0x80
     orr r1, r3
     strb r1, [r0]
-    
+
     pop {r4, lr}
 .pool
 .endautoregion
@@ -262,7 +262,7 @@ UpdateJewelIcon:
 
     ldr r1, =REG_DMA3SAD
     ldr r0, [r2]  ; Source (selected graphic)
-    str r0, [r1]  
+    str r0, [r1]
     ldr r0, [r3, #4]  ; Destination (tilemap position)
     str r0, [r1, #4]
     ldr r0, =dma_enable | dma_halfwords(0x10)
@@ -302,7 +302,7 @@ ReadCD:
 ; clear indicator
     ldr r1, =REG_DMA3SAD
     set_tile 0x60114C0, EmptyCDTile
-    
+
 ; Load collected CD
     ldr r0, =LastCollectedItemID
     ldrb r7, [r0]

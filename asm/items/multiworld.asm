@@ -14,7 +14,7 @@ ItemReceivedFeedbackSound:
     lsr r0, r0, #32-2
     cmp r0, #1
     bgt @@Return
-    beq @@CDSound    
+    beq @@CDSound
 
 @@MultiplayerItem:
     ldr r0, =0x13B  ; a1
@@ -83,7 +83,7 @@ LoadReceivedText:
     ldr r1, =TilesFrom4
     mov r2, #4
     bl LoadSpriteString
-    
+
     ldr r0, =IncomingItemSender
     ldr r1, =TilesSenderA8
     mov r2, #8

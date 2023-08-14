@@ -16,7 +16,7 @@ class WL4Location(Location):
 #
 # Each location type has its own table, which is then indexed with
 # (passage * 4) + level
-# 
+#
 # These location IDs are then prefixed with 0xEC, which is
 # Wario Land 4's checksum.
 

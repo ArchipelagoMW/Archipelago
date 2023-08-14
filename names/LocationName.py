@@ -35,7 +35,7 @@ class Level(typing.NamedTuple):
             name_format.substitute(level=name, check="CD Box"),
             name_format.substitute(level=name, check="Full Health Item Box"),
         )
-    
+
     @classmethod
     def without_cd(cls, name):
         return cls._with_cd_health(
@@ -43,7 +43,7 @@ class Level(typing.NamedTuple):
             None,
             name_format.substitute(level=name, check="Full Health Item Box"),
         )
-    
+
     @classmethod
     def without_health(cls, name):
         return cls._with_cd_health(
@@ -55,7 +55,7 @@ class Level(typing.NamedTuple):
     @classmethod
     def jewels_only(cls, name):
         return cls._with_cd_health(name, None, None)
-    
+
     def locations(self):
         return filter(None, (*self.jewels, self.cd_box, self.fullhealth))
 

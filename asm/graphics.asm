@@ -66,7 +66,7 @@ PyramidScreenCreateReceivedItemOAM:
 
 .align 4
 @@JunkJumpTable:
-    .word @@FullHealthItem    
+    .word @@FullHealthItem
     .word @@BigBoardTrap  ; Wario transform
     .word @@Heart
     .word @@BigBoardTrap  ; Lightning damage
@@ -76,7 +76,7 @@ PyramidScreenCreateReceivedItemOAM:
     strh r0, [r4]
     strh r1, [r4, #2]
     strh r2, [r4, #4]
-    
+
     ldr r0, =attr0_wide | attr0_4bpp | attr0_y(104 - 8)
     mov r1, #attr1_size(0) | attr1_x(120 - 8)
     add r2, #2
@@ -102,14 +102,14 @@ PyramidScreenCreateReceivedItemOAM:
     strh r0, [r4]
     strh r1, [r4, #2]
     strh r2, [r4, #4]
-    
+
     ldr r0, =attr0_tall | attr0_4bpp | attr0_y(104 - 4)
     ldr r7, =attr1_size(0) | attr1_x(120 + 4)
     add r2, #2
     strh r0, [r4, #8]
     strh r7, [r4, #10]
     strh r2, [r4, #12]
-    
+
     ; Wario is padded on the left. Lightning on the right.
     cmp r6, #0x43
     beq @@BigBoardSpriteBottom

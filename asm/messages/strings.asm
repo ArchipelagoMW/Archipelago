@@ -16,11 +16,11 @@ CreateTextOAM:
     ldr r2, =attr2_palette(3) | attr2_priority(0) | attr2_id(0x10C)
     ldr r3, =ucCntObj
     ldr r4, =OamBuf
-    
+
     ldrb r5, [r3]
     lsl r5, r5, #3
     add r4, r4, r5
-    
+
 ; 1st
     strh r0, [r4]
     strh r1, [r4, #2]
@@ -79,11 +79,11 @@ CreateTextOAM:
     ldrb r5, [r3]
     add r5, #7
     strb r5, [r3]
-    
+
     pop {r4-r6, pc}
 .pool
 
-.definelabel @ObjectPalette3, 0x5000260 
+.definelabel @ObjectPalette3, 0x5000260
 
 
 ; Copy text sprites into the sprite table. On encountering 0xFE, blank spaces
@@ -113,7 +113,7 @@ LoadSpriteString:
     cmp r0, #0xFE
     beq @@LoadCharacter
     add r4, r4, #1
-    
+
 @@LoadCharacter:
     mov r1, r5
     bl LoadSpriteCharacter
