@@ -164,8 +164,8 @@ location_table: List[LocationDict] = [
     {"name": "Orange Islands South Buried Chest", "id": base_id + 116, "inGameId": "(79.2, 19.7, 1150.5)", "needsShovel": True, "purchase": False}, 
     {"name": "Orange Islands West Chest", "id": base_id + 117, "inGameId": "(111.8, 16.6, 1305.4)", "needsShovel": False, "purchase": False}, 
     {"name": "Orange Islands North Buried Chest", "id": base_id + 118, "inGameId": "(88.4, 29.8, 1417.9)", "needsShovel": True, "purchase": False}, 
-    {"name": "Orange Islands East Chest", "id": base_id + 119, "inGameId": "(441.9, 12.3, 1250.2)", "needsShovel": False, "purchase": False}, 
-    {"name": "Orange Islands South Hidden Chest", "id": base_id + 120, "inGameId": "", "needsShovel": False, "purchase": False}, 
+    {"name": "Orange Islands East Chest", "id": base_id + 119, "inGameId": "(483.7, 16.8, 1424.6)", "needsShovel": False, "purchase": False}, 
+    {"name": "Orange Islands South Hidden Chest", "id": base_id + 120, "inGameId": "(441.9, 12.3, 1250.2)", "needsShovel": False, "purchase": False}, 
     {"name": "A Stormy View Buried Treasure Chest", "id": base_id + 121, "inGameId": "(319.5, 8.9, 1314.1)", "needsShovel": True, "purchase": False}, 
     {"name": "Orange Islands Ruins Buried Chest", "id": base_id + 122, "inGameId": "(406.6, 46.3, 1311.0)", "needsShovel": True, "purchase": False}, 
 
