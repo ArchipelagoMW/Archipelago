@@ -49,6 +49,13 @@ require('common')
 udp:setsockname('127.0.0.1', 55355)
 udp:settimeout(0)
 
+local domains = {
+    ["READ_CORE_MEMORY"] = "System Bus",
+    ["READ_CORE_RAM"] = "Main RAM",
+    ["WRITE_CORE_MEMORY"] = "System Bus",
+    ["WRITE_CORE_RAM"] = "Main RAM"
+}
+
 function on_vblank()
     -- Attempt to lessen the CPU load by only polling the UDP socket every x frames.
     -- x = 10 is entirely arbitrary, very little thought went into it.
@@ -95,7 +102,7 @@ function on_vblank()
                 -- NOTE: No newline is intentional here for 1:1 RetroArch compatibility
                 udp:sendto("GET_STATUS CONTENTLESS", msg_or_ip, port_or_nil)
             end
-        elseif command == "READ_CORE_MEMORY" then
+        elseif command == "READ_CORE_MEMORY" or command == "READ_CORE_RAM" then
             local _, address, length = string.match(data, "(%S+) (%S+) (%S+)")
             address = stripPrefix(address, "0x")
             address = tonumber(address, 16)
@@ -107,7 +114,7 @@ function on_vblank()
             --       Using memory.read_bytes_as_array() and explicitly using the System Bus
             --       as the active memory domain solves this incompatibility, allowing us
             --       to hopefully use whatever GB(C) emulator we want.
-            local mem = memory.read_bytes_as_array(address, length, "System Bus")
+            local mem = memory.read_bytes_as_array(address, length, domains[command])
             local hex_string = ""
             for _, v in ipairs(mem) do
                 hex_string = hex_string .. string.format("%02X ", v)
@@ -116,7 +123,7 @@ function on_vblank()
             hex_string = hex_string:sub(1, -2) -- Hang head in shame, remove last " "
             local reply = string.format("%s %02x %s\n", command, address, hex_string)
             udp:sendto(reply, msg_or_ip, port_or_nil)
-        elseif command == "WRITE_CORE_MEMORY" then
+        elseif command == "WRITE_CORE_MEMORY" or command == "WRITE_CORE_RAM" then
             local _, address = string.match(data, "(%S+) (%S+)")
             address = stripPrefix(address, "0x")
             address = tonumber(address, 16)
@@ -131,7 +138,7 @@ function on_vblank()
                 i = i + 1
             end
 
-            memory.write_bytes_as_array(address, to_write, "System Bus")
+            memory.write_bytes_as_array(address, to_write, domains[command])
             local reply = string.format("%s %02x %d\n", command, address, i - 3)
             udp:sendto(reply, msg_or_ip, port_or_nil)
         end
