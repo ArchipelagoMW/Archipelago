@@ -14622,9 +14622,9 @@
         <Macros value="PhysicsDeathsVoidAir"/>
         <On Terms="Abil.AP_OverlordTransport.TransportUnloadStart" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="Abil.AP_OverlordTransport.TransportUnloadStop" Send="AnimClear Work"/>
-<!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepModel" Send="Destroy"/>-->
-<!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepSound" Send="Destroy"/>-->
-<!--        <On Terms="Abil.MorphToOverseer.Start" Send="AnimPlay Morph Stand,Morph,Start"/>-->
+        <!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepModel" Send="Destroy"/>-->
+        <!--        <On Terms="Abil.MorphToOverseer.Start" Target="OverlordGenerateCreepSound" Send="Destroy"/>-->
+        <!--        <On Terms="Abil.MorphToOverseer.Start" Send="AnimPlay Morph Stand,Morph,Start"/>-->
         <On Terms="Behavior.AP_makeCreep2x2Overlord.Delay" Send="Create AP_OverlordGenerateCreepModel"/>
         <On Terms="Behavior.AP_makeCreep2x2Overlord.Delay" Send="Create AP_OverlordGenerateCreepSound"/>
         <On Terms="Behavior.AP_makeCreep2x2Overlord.Cancel" Target="AP_OverlordGenerateCreepModel" Send="Destroy"/>
@@ -14632,7 +14632,7 @@
         <On Terms="Behavior.AP_makeCreep2x2Overlord.Off" Target="AP_OverlordGenerateCreepModel" Send="Destroy"/>
         <On Terms="Behavior.AP_makeCreep2x2Overlord.Off" Target="AP_OverlordGenerateCreepSound" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Overlord_Land"/>
-<!--        <On Terms="Abil.SpawnChangelingTarget.SourceCastStart" Send="$Spell"/>-->
+        <!--        <On Terms="Abil.SpawnChangelingTarget.SourceCastStart" Send="$Spell"/>-->
         <On Terms="ActorCreation; PlayerHasReward OverlordSkin" Send="StatusSet CE 1"/>
         <On Terms="Upgrade.AP_K5ImprovedOverlords.Add" Send="SetScale 1.250000 1.000000"/>
         <On Terms="Upgrade.AP_K5ImprovedOverlords.Remove" Send="SetScale 1.000000 1.000000"/>
@@ -17788,6 +17788,27 @@
             <Image value="Assets\Textures\Wireframe-Protoss-warpgate-Shield02.dds"/>
             <Image value="Assets\Textures\Wireframe-Protoss-warpgate-Shield03.dds"/>
         </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_SpawningPool" parent="ZergBuildingEx" unitName="AP_SpawningPool">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ModelIsLowQuality" Send="Create SpawningPool_DeathLow"/>
+        <Model value="SpawningPool"/>
+        <BuildModel value="SpawningPool"/>
+        <DeathArray index="Normal" ModelLink="SpawningPoolDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="SpawningPoolDeathUnderConstruction" SoundLink="SpawningPool_Explode"/>
+        <PlacementModel value="SpawningPoolPlacement"/>
+        <PortraitModel value="SpawningPoolPortrait"/>
+        <BarOffset value="95"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-SpawningPool.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-spawningpool.dds"/>
+        <SoundArray index="Ready" value="SpawningPool_Ready"/>
+        <SoundArray index="What" value="SpawningPool_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-spawningpool.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-SpawningPool.dds"/>
+        </Wireframe>
     </CActorUnit>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->

@@ -1810,4 +1810,20 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeoverlordtransportCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HotSHaveQueen">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveQueenCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSpineCrawlerSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSpineCrawlerCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveRaptorSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveRaptorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSwarmlingSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndTechTreeCheatCountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirement>
 </Catalog>

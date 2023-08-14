@@ -3131,4 +3131,24 @@
         <AlertIcon value="Assets\Textures\btn-ability-kerrigan-improvedoverlords.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_QueenPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-queen.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-queen.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ZerglingPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ZerglingRaptorPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling-raptor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling-raptor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ZerglingSwarmlingPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling-swarmling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling-swarmling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

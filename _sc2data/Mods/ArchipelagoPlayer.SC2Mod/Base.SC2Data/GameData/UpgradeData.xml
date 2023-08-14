@@ -6108,4 +6108,6 @@
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Overlord"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSHaveQueen"/>
+    <CUpgrade id="AP_HotSHaveSpineCrawler"/>
 </Catalog>

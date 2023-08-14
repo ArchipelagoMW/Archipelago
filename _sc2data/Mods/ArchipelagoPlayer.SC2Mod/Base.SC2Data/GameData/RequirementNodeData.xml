@@ -2973,4 +2973,16 @@
         <Tooltip value="RequirementNode/Tooltip/CountUpgradeoverlordtransportCompleteOnly2367625043"/>
         <Count Link="AP_overlordtransport" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveQueenCompleteOnly">
+        <Count Link="AP_HotSHaveQueen" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSpineCrawlerCompleteOnly">
+        <Count Link="AP_HotSHaveSpineCrawler" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_AndTechTreeCheatCountUpgradeHotSHaveSwarmlingCompleteOnly">
+        <Flags index="TechTreeCheat" value="1"/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirementAnd>
 </Catalog>

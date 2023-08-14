@@ -770,6 +770,7 @@ Button/Name/AP_Interceptor=Build Interceptor
 Button/Name/AP_Irradiate=Irradiate
 Button/Name/AP_JackhammerConcussionGrenade=Concussive Shells
 Button/Name/AP_JuggernautPlating=Juggernaut Plating
+Button/Name/AP_K5ImprovedOverlords=Improved Overlords
 Button/Name/AP_KhaydarinMonolith=Warp In Khaydarin Monolith
 Button/Name/AP_LaserTargetingSystem=Laser Targeting System
 Button/Name/AP_Liberator=Build Liberator
@@ -1126,7 +1127,11 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_K5ImprovedOverlords=Improved Overlords
+Button/Name/AP_QueenPassive=Swarm Queen
+Button/Name/AP_SpineCrawlerPassive=Spine Crawler
+Button/Name/AP_ZerglingPassive=Zergling
+Button/Name/AP_ZerglingRaptorPassive=Zergling
+Button/Name/AP_ZerglingSwarmlingPassive=Zergling
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1386,6 +1391,7 @@ Button/Tooltip/AP_InterceptorUnit=Combat drones that automatically strafe their 
 Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,AP_Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
 Button/Tooltip/AP_JackhammerConcussionGrenade=Marauder attack temporarily slows all units in target area.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
+Button/Tooltip/AP_K5ImprovedOverlords=Overlords morph instantly and provide 50% more supply.
 Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
 Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
 Button/Tooltip/AP_Liberator=Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. Can switch into Defender Mode to provide siege support.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
@@ -1494,6 +1500,7 @@ Button/Tooltip/AP_OracleWeaponOff=Deactivates the Oracle's Pulsar Beam and preve
 Button/Tooltip/AP_OracleWeaponOn=Charges the Oracle's Pulsar Beam and allows it to attack enemy ground units.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_OracleWeapon,Modification.VitalRegenArray[2] + Unit,AP_Oracle,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_OrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/AP_OrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep ability. Can use the abilities Calldown: MULE and Calldown: Extra Supplies.
+Button/Tooltip/AP_Overlord=Increases supply. Supply allows you to create more units.<n/><n/><c val="ffff8a">Cannot attack.</c>
 Button/Tooltip/AP_PHSupplicantShieldArmor=Reduces the damage enemies deal to the Supplicant's shields.
 Button/Tooltip/AP_PerditionTurret=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PerditionTurretUnderground=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1786,8 +1793,12 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_K5ImprovedOverlords=Overlords morph instantly and provide 50% more supply.
-Button/Tooltip/AP_Overlord=Increases supply. Supply allows you to create more units.<n/><n/><c val="ffff8a">Cannot attack.</c>
+Button/Tooltip/AP_QueenPassive=Spawning Pool allows you to birth Swarm Queens from Hatcheries, Lairs, and Hives.
+Button/Tooltip/AP_SpawningPool=<c val="ffff8a">Enables:</c><n/>- Swarm Queens at the Hatchery, Lair, or Hive<n/>- Zerglings from Larvae<n/>- Spine Crawlers from Drones
+Button/Tooltip/AP_SpineCrawlerPassive=Spawning Pool allows you to mutate Drones into Spine Crawlers.
+Button/Tooltip/AP_ZerglingPassive=Spawning Pool enables you to morph Zerglings.
+Button/Tooltip/AP_ZerglingRaptorPassive=Raptor Strain<n/><n/>Spawning Pool enables you to morph Zerglings.
+Button/Tooltip/AP_ZerglingSwarmlingPassive=Swarmling Strain<n/><n/>Spawning Pool enables you to morph Zerglings.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -3315,6 +3326,7 @@ Unit/Name/AP_Oracle=Oracle
 Unit/Name/AP_OracleStasisTrap=Stasis Ward
 Unit/Name/AP_OrbitalCommand=Orbital Command
 Unit/Name/AP_OrbitalCommandFlying=Orbital Command
+Unit/Name/AP_Overlord=Overlord
 Unit/Name/AP_PerditionTurret=Perdition Turret
 Unit/Name/AP_PerditionTurretUnderground=Perdition Turret
 Unit/Name/AP_PhoenixAiur=Phoenix
@@ -3446,7 +3458,7 @@ Unit/Name/AP_Zergling=Zergling
 Unit/Name/AP_ZerglingRespawnControllerUnit=Zergling Reconstitution Controller Unit
 Unit/Name/AP_ZerglingRespawnWeapon=Zergling Reconstitution Weapon
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_Overlord=Overlord
+Unit/Name/AP_SpawningPool=Spawning Pool
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -3519,6 +3531,7 @@ Upgrade/Name/AP_CycloneLockOnDamageUpgrade=Mag-Field Accelerator
 Upgrade/Name/AP_CycloneLockOnRangeUpgrade=Targeting Optics
 Upgrade/Name/AP_CycloneRapidFireLaunchers=Rapid Fire Launchers
 Upgrade/Name/AP_DefensiveMatrix=Defensive Matrix
+Upgrade/Name/AP_DestroyerImprovedOverlords=Improved Overlords
 Upgrade/Name/AP_DistortionBlasters=Distortion Blasters
 Upgrade/Name/AP_DistortionSensors=Distortion Sensors
 Upgrade/Name/AP_DistortionThrusters=Distortion Thrusters
@@ -3615,6 +3628,7 @@ Upgrade/Name/AP_IncreasedRange=Increased Range
 Upgrade/Name/AP_JackhammerConcussionGrenades=Concussive Shells
 Upgrade/Name/AP_JuggernautPlating=Juggernaut Plating
 Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
+Upgrade/Name/AP_K5ImprovedOverlords=K5 Improved Overlords
 Upgrade/Name/AP_K5ZerglingRespawn=K5 Zergling Reconstitution
 Upgrade/Name/AP_LiberatorAGRangeUpgrade=Advanced Ballistics
 Upgrade/Name/AP_LiberatorMorph=Liberator Morph
@@ -3767,9 +3781,9 @@ Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
+Upgrade/Name/AP_overlordspeed=Pneumatized Carapace
+Upgrade/Name/AP_overlordtransport=Ventral Sacs
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/AP_DestroyerImprovedOverlords=Improved Overlords
-Upgrade/Name/AP_K5ImprovedOverlords=K5 Improved Overlords
 Upgrade/Name/ProtossAirArmorsLevel12=Protoss Air Armor Level 1
 Upgrade/Name/ProtossAirWeaponsLevel12=Protoss Air Weapons Level 1
 Upgrade/Name/ProtossGroundArmorsLevel32=Protoss Ground Armor Level 3
@@ -3777,8 +3791,6 @@ Upgrade/Name/ProtossGroundWeaponsLevel12=Protoss Ground Weapons Level 1
 Upgrade/Name/ProtossShieldsLevel12=Protoss Shields Level 1
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
-Upgrade/Name/AP_overlordspeed=Pneumatized Carapace
-Upgrade/Name/AP_overlordtransport=Ventral Sacs
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -3797,6 +3809,7 @@ Weapon/Name/AP_BroodlingEscort=Broodling Escort
 Weapon/Name/AP_BroodlingStrike=Broodling Strike
 Weapon/Name/AP_C10CanisterRifle=C-10 Canister Rifle
 Weapon/Name/AP_CenturionWarpBlades=Warp Blades
+Weapon/Name/AP_Claws=Claws
 Weapon/Name/AP_ColossusPurifierThermalLances=Incendiary Lance
 Weapon/Name/AP_ColossusTaldarimChargedBeam=Charged Blast
 Weapon/Name/AP_CrucioShockCannon=Crucio Shock Cannon
