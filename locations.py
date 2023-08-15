@@ -5,7 +5,7 @@ from BaseClasses import Location, MultiWorld
 from .names import LocationName
 
 class WL4Location(Location):
-    game: str = "Wario Land 4"
+    game: str = 'Wario Land 4'
 
     def __init__(self, player: int, name: str, address: Optional[int], parent):
         super().__init__(player, name, address, parent)

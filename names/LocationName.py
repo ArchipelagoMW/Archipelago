@@ -4,8 +4,8 @@ from typing import NamedTuple, Optional
 from . import JewelPieces, RegionName
 
 
-name_format = string.Template("$level $check")
-boss_format = string.Template("Defeat $boss")
+name_format = string.Template('$level $check')
+boss_format = string.Template('Defeat $boss')
 
 
 class Level(NamedTuple):
@@ -19,11 +19,11 @@ class Level(NamedTuple):
         return cls(
             JewelPieces(
                 *(
-                    name_format.substitute(level=name, check=f"Jewel Piece Box ({j})")
+                    name_format.substitute(level=name, check=f'Jewel Piece Box ({j})')
                     for j in JewelPieces.locations
                 )
             ),
-            name_format.substitute(level=name, check="Keyzer"),
+            name_format.substitute(level=name, check='Keyzer'),
             cd,
             fullhealth
         )
@@ -32,8 +32,8 @@ class Level(NamedTuple):
     def from_region(cls, name):
         return cls._with_cd_health(
             name,
-            name_format.substitute(level=name, check="CD Box"),
-            name_format.substitute(level=name, check="Full Health Item Box"),
+            name_format.substitute(level=name, check='CD Box'),
+            name_format.substitute(level=name, check='Full Health Item Box'),
         )
 
     @classmethod
@@ -41,14 +41,14 @@ class Level(NamedTuple):
         return cls._with_cd_health(
             name,
             None,
-            name_format.substitute(level=name, check="Full Health Item Box"),
+            name_format.substitute(level=name, check='Full Health Item Box'),
         )
 
     @classmethod
     def without_health(cls, name):
         return cls._with_cd_health(
             name,
-            name_format.substitute(level=name, check="CD Box"),
+            name_format.substitute(level=name, check='CD Box'),
             None
         )
 

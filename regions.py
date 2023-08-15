@@ -8,7 +8,7 @@ from .names import LocationName, ItemName, RegionName
 
 
 def create_regions(world: MultiWorld, player: int, location_table: dict):
-    menu_region = create_region(world, player, location_table, "Menu")
+    menu_region = create_region(world, player, location_table, 'Menu')
     map_region = create_region(world, player, location_table, RegionName.map)
 
     entry_passage = create_region(
@@ -260,11 +260,11 @@ def create_regions(world: MultiWorld, player: int, location_table: dict):
 def connect_regions(world, player):
     names: Dict[str, int] = {}
 
-    connect(world, player, names, "Menu", RegionName.entry_passage)
+    connect(world, player, names, 'Menu', RegionName.entry_passage)
     connect(world, player, names, RegionName.entry_passage, RegionName.hall_of_hieroglyphs)
     connect(world, player, names, RegionName.hall_of_hieroglyphs, RegionName.spoiled_rotten,
         lambda state: state.wl4_has_full_jewels(player, ItemName.entry_passage_jewel, 1))
-    connect(world, player, names, "Menu", RegionName.map,
+    connect(world, player, names, 'Menu', RegionName.map,
         lambda state: state.has(ItemName.defeated_boss, player))
 
     connect(world, player, names, RegionName.map, RegionName.emerald_passage)

@@ -9,13 +9,13 @@ from ..names import LocationName, ItemName
 
 class TestAccess(WL4TestBase):
     def test_spoiled_rotten(self):
-        """Test access to Spoiled Rotten"""
+        '''Test access to Spoiled Rotten'''
         locations = [LocationName.spoiled_rotten]
         items = [ItemName.entry_passage_jewel]
         self.assertAccessDependency(locations, items)
 
     def test_level_access(self):
-        """Test access to the sixteen main levels"""
+        '''Test access to the sixteen main levels'''
         locations = itertools.chain(
             LocationName.palm_tree_paradise.locations(),
             LocationName.wildflower_fields.locations(),
@@ -39,37 +39,37 @@ class TestAccess(WL4TestBase):
         self.assertAccessDependency(locations, items)
 
     def test_cractus_access(self):
-        """Test access to Cractus"""
+        '''Test access to Cractus'''
         locations = [LocationName.cractus]
         items = [ItemName.emerald_passage_jewel]
         self.assertAccessDependency(locations, items)
 
     def test_cuckoo_condor_access(self):
-        """Test access to Cuckoo Condor"""
+        '''Test access to Cuckoo Condor'''
         locations = [LocationName.cuckoo_condor]
         items = [ItemName.ruby_passage_jewel]
         self.assertAccessDependency(locations, items)
 
     def test_aerodent_access(self):
-        """Test access to Aerodent"""
+        '''Test access to Aerodent'''
         locations = [LocationName.aerodent]
         items = [ItemName.topaz_passage_jewel]
         self.assertAccessDependency(locations, items)
 
     def test_catbat_access(self):
-        """Test access to Catbat"""
+        '''Test access to Catbat'''
         locations = [LocationName.catbat]
         items = [ItemName.sapphire_passage_jewel]
         self.assertAccessDependency(locations, items)
 
     def test_golden_passage_access(self):
-        """Test access to the Golden Passage"""
+        '''Test access to the Golden Passage'''
         locations = LocationName.golden_passage.locations()
         items = [[ItemName.defeated_boss]]
         self.assertAccessDependency(locations, items)
 
     def test_golden_diva_access(self):
-        """Test access to the Golden Diva"""
+        '''Test access to the Golden Diva'''
         locations = [LocationName.golden_diva]
         items = [ItemName.golden_pyramid_jewel]
         self.assertAccessDependency(locations, items)

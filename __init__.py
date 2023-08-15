@@ -15,9 +15,9 @@ from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 
 class WL4Settings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the Wario Land 4 NA/EU ROM"""
-        description = "Wario Land 4 (U/E) ROM File"
-        copy_to = "Wario Land 4 (UE) [!].gba"
+        '''File name of the Wario Land 4 NA/EU ROM'''
+        description = 'Wario Land 4 (U/E) ROM File'
+        copy_to = 'Wario Land 4 (UE) [!].gba'
         md5s = [WL4DeltaPatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
@@ -25,28 +25,28 @@ class WL4Settings(settings.Group):
 
 
 class WL4Web(WebWorld):
-    theme = "jungle"
+    theme = 'jungle'
 
     setup_en = Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up the Wario Land 4 randomizer connected to an Archipelago Multiworld.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["lil David"]
+        'Multiworld Setup Guide',
+        'A guide to setting up the Wario Land 4 randomizer connected to an Archipelago Multiworld.',
+        'English',
+        'setup_en.md',
+        'setup/en',
+        ['lil David']
     )
 
     tutorials = [setup_en]
 
 
 class WL4World(World):
-    """
+    '''
     A golden pyramid has been discovered deep in the jungle, and Wario, has set
     out to rob it. But to make off with its legendary treasure, he has to first
     defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
-    """
+    '''
 
-    game: str = "Wario Land 4"
+    game: str = 'Wario Land 4'
     option_definitions = wl4_options
     settings: ClassVar[WL4Settings]
     topology_present = False
@@ -86,7 +86,7 @@ class WL4World(World):
             itempool.append(self.create_item(ItemName.full_health))
 
         junk_count = total_required_locations - len(itempool)
-        assert junk_count == 0, f"Mismatched location counts: {junk_count} empty checks"
+        assert junk_count == 0, f'Mismatched location counts: {junk_count} empty checks'
 
         boss_location_names = [
             LocationName.spoiled_rotten,
@@ -117,7 +117,7 @@ class WL4World(World):
             rom = LocalRom(get_base_rom_path())
             patch_rom(rom, self.multiworld, self.player)
 
-            rompath = output_directory / f"{world.get_out_file_name_base(player)}.gba"
+            rompath = output_directory / f'{world.get_out_file_name_base(player)}.gba'
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 

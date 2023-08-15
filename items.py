@@ -5,7 +5,7 @@ from .names import ItemName
 
 
 class WL4Item(Item):
-    game: str = "Wario Land 4"
+    game: str = 'Wario Land 4'
 
 
 class ItemData(NamedTuple):

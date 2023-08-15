@@ -7,4 +7,4 @@ class JewelPieces(NamedTuple):
     sw: str
     nw: str
 
-    locations = tuple("Top Right/Bottom Right/Bottom Left/Top Left".split("/"))
+    locations = tuple('Top Right/Bottom Right/Bottom Left/Top Left'.split('/'))

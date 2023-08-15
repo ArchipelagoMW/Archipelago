@@ -12,14 +12,14 @@ from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
 
-MD5_US_EU = "5fe47355a33e3fabec2a1607af88a404"
+MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
 
 
 class WL4DeltaPatch(APDeltaPatch):
     hash = MD5_US_EU
-    game = "Wario Land 4"
-    patch_file_ending = ".apwl4"
-    result_file_ending = ".gba"
+    game = 'Wario Land 4'
+    patch_file_ending = '.apwl4'
+    result_file_ending = '.gba'
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -36,8 +36,8 @@ class LocalRom():
         self.name = name
         self.hash = hash
 
-        patch_path = Path(__file__).parent / "data" / "basepatch.bsdiff"
-        with open(file, "rb") as rom_file, open(patch_path, "rb") as patch_file:
+        patch_path = Path(__file__).parent / 'data' / 'basepatch.bsdiff'
+        with open(file, 'rb') as rom_file, open(patch_path, 'rb') as patch_file:
             rom_bytes = rom_file.read()
             patch_bytes = patch_file.read()
             self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
@@ -59,35 +59,35 @@ class LocalRom():
         return self.buffer[startaddress:startaddress + length]
 
     def read_halfword(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
-        assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
+        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
         halfword = self.read_bytes(address, 2, space)
-        return int.from_bytes(halfword, "little")
+        return int.from_bytes(halfword, 'little')
 
     def read_word(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
-        assert address % 4 == 0, f"Misaligned word address: {address:x}"
+        assert address % 4 == 0, f'Misaligned word address: {address:x}'
         word = self.read_bytes(address, 4, space)
-        return int.from_bytes(word, "little")
+        return int.from_bytes(word, 'little')
 
     def write_byte(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
         offset = AddressSpace.ROM.value - space.value
         address -= offset
-        assert address >= 0, f"Address out of bounds: {address:x}"
+        assert address >= 0, f'Address out of bounds: {address:x}'
         self.buffer[address] = value
 
     def write_bytes(self, startaddress: int, values, space: AddressSpace = AddressSpace.SystemBus):
         offset = AddressSpace.ROM.value - space.value
         startaddress -= offset
-        assert startaddress >= 0, f"Address out of bounds: {startaddress:x}"
+        assert startaddress >= 0, f'Address out of bounds: {startaddress:x}'
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_halfword(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
-        assert address % 2 == 0, f"Misaligned halfword address: {address:x}"
-        halfword = value.to_bytes(2, "little")
+        assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
+        halfword = value.to_bytes(2, 'little')
         self.write_bytes(address, halfword, space)
 
     def write_word(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
-        assert address % 4 == 0, f"Misaligned word address: {address:x}"
-        word = value.to_bytes(4, "little")
+        assert address % 4 == 0, f'Misaligned word address: {address:x}'
+        word = value.to_bytes(4, 'little')
         self.write_bytes(address, word, space)
 
     def write_to_file(self, file: Path):
@@ -116,10 +116,10 @@ def _get_symbols(symbol_file: Path) -> Dict[str, int]:
 
 def _get_charset(charset_file: Path) -> Dict[str, int]:
     charset = {}
-    with open(charset_file, 'r', encoding="utf-8") as stream:
+    with open(charset_file, 'r', encoding='utf-8') as stream:
         for line in stream:
             try:
-                byte, character = line.strip().split("=")
+                byte, character = line.strip().split('=')
             except ValueError:
                 continue
 
@@ -128,8 +128,8 @@ def _get_charset(charset_file: Path) -> Dict[str, int]:
     return charset
 
 
-symbols = _get_symbols(Path(__file__).parent / "data/basepatch.sym")
-charset = _get_charset(Path(__file__).parent / "data/charset.tbl")
+symbols = _get_symbols(Path(__file__).parent / 'data/basepatch.sym')
+charset = _get_charset(Path(__file__).parent / 'data/charset.tbl')
 
 
 # Unused; written only for my future reference
@@ -173,7 +173,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
             if len(playername) > 16:
                 playername = playername[:16]
 
-        location_offset = symbols["itemlocationtable"] + locationid
+        location_offset = symbols['itemlocationtable'] + locationid
         rom.write_byte(location_offset, itemid)
 
         if playername is not None:
@@ -194,7 +194,7 @@ def create_strings(rom: LocalRom,
                    ) -> Dict[Optional[str], int]:
     receivers = set()
     items = set()
-    address = symbols["multiworldstringdump"]
+    address = symbols['multiworldstringdump']
     for item in filter(lambda i: i is not None, multiworld_items.values()):
         receivers.add(item.receiver)
         items.add(item.name)
@@ -216,8 +216,8 @@ def create_strings(rom: LocalRom,
 def write_multiworld_table(rom: LocalRom,
                            multiworld_items: Dict[int, Optional[MultiworldItem]],
                            strings: Dict[Optional[str], int]):
-    table_address = symbols["itemextdatatable"]
-    entry_address = symbols["multiworldstringdump"]
+    table_address = symbols['itemextdatatable']
+    entry_address = symbols['multiworldstringdump']
     for locationid, item in multiworld_items.items():
         locationaddr = table_address + 4 * locationid
         if item is None:
@@ -233,14 +233,14 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
     # Write player name and number
-    player_name = bytes(world.player_name[player], "utf-8")
+    player_name = bytes(world.player_name[player], 'utf-8')
     if len(player_name) > 16:
         player_name = player_name[:16]
-    rom.write_bytes(symbols["playername"], player_name)
-    rom.write_byte(symbols["playerid"], player)
+    rom.write_bytes(symbols['playername'], player_name)
+    rom.write_byte(symbols['playerid'], player)
 
     # Set deathlink
-    rom.write_byte(symbols["deathlinkflag"], world.death_link[player].value)
+    rom.write_byte(symbols['deathlinkflag'], world.death_link[player].value)
 
     # Force difficulty level
     mov_r0 = 0x2000 | world.difficulty[player].value # mov r0, #(world.difficulty[player].value)
@@ -255,26 +255,26 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     rom.write_halfword(0x8092268, 0x2001)  # movs r0, #1  ; ReadyObj_Win1Set(): Display S-Hard
 
 
-def get_base_rom_bytes(file_name: str = "") -> bytes:
-    base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
+def get_base_rom_bytes(file_name: str = '') -> bytes:
+    base_rom_bytes = getattr(get_base_rom_bytes, 'base_rom_bytes', None)
     if not base_rom_bytes:
         file_path = get_base_rom_path(file_name)
-        base_rom_bytes = bytes(open(file_path, "rb").read())
+        base_rom_bytes = bytes(open(file_path, 'rb').read())
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if MD5_US_EU != basemd5.hexdigest():
-            raise Exception("Supplied base ROM does not match US/EU version."
-                            "Please provide the correct ROM version")
+            raise Exception('Supplied base ROM does not match US/EU version.'
+                            'Please provide the correct ROM version')
 
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 
 
-def get_base_rom_path(file_name: str = "") -> Path:
+def get_base_rom_path(file_name: str = '') -> Path:
     options = Utils.get_options()
     if not file_name:
-        file_name = options["wl4_options"]["rom_file"]
+        file_name = options['wl4_options']['rom_file']
 
     file_path = Path(file_name)
     if file_path.exists():
