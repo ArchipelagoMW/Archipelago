@@ -39,7 +39,9 @@ item_table: List[ItemDict] = [
     {"name": "Running Shoes", "id": base_id + 26, "count": 1, "classification": ItemClassification.progression},
     {"name": "Camping Permit", "id": base_id + 27, "count": 1, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Walkie Talkie", "id": base_id + 28, "count": 1, "classification": ItemClassification.useful},
-    {"name": "Boating Manual", "id": base_id + 29, "count": 1, "classification": ItemClassification.filler},
+    
+    # Not in the item pool for now
+    # {"name": "Boating Manual", "id": base_id + 29, "count": 1, "classification": ItemClassification.filler},
 
     # Different Coin Amounts (Fillers)
     {"name": "7 Coins", "id": base_id + 30, "count": 3, "classification": ItemClassification.filler},

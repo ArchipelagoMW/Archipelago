@@ -8,7 +8,7 @@ class LocationDict(TypedDict):
     needsShovel: bool
     purchase: bool
 
-# base_ids from 81000 to 81131
+# base_ids from 81000 to 81132
 
 base_id = 81000
 
@@ -91,7 +91,9 @@ location_table: List[LocationDict] = [
     # Boating
     {"name": "Boat Rental", "id": base_id + 55, "inGameId": "DadDeer[0]", "needsShovel": False, "purchase": True},
     {"name": "Boat Challenge Reward", "id": base_id + 56, "inGameId": "DeerKidBoat[0]", "needsShovel": False, "purchase": False},
-    {"name": "Receive Boating Manual", "id": base_id + 133, "inGameId": "DadDeer[1]", "needsShovel": False, "purchase": False},
+
+    # Not a location for now, corresponding with the Boating Manual
+    # {"name": "Receive Boating Manual", "id": base_id + 133, "inGameId": "DadDeer[1]", "needsShovel": False, "purchase": False},
 
     # Original Map Locations
     {"name": "Outlook Point Dog Gift", "id": base_id + 57, "inGameId": "Dog_WalkingNPC_BlueEyed[0]", "needsShovel": False, "purchase": False},
@@ -161,7 +163,7 @@ location_table: List[LocationDict] = [
     {"name": "North Coast Buried Chest", "id": base_id + 111, "inGameId": "(441.2, 28.3, 1070.3)", "needsShovel": True, "purchase": False}, 
     {"name": "Small South Island Buried Chest", "id": base_id + 112, "inGameId": "(643.7, 20.1, 36.3)", "needsShovel": True, "purchase": False}, 
     {"name": "Secret Island Bottom Chest", "id": base_id + 113, "inGameId": "(816.0, 33.1, 141.3)", "needsShovel": False, "purchase": False}, 
-    {"name": "Secret Island Middle Chest", "id": base_id + 114, "inGameId": "(832.1, 95.1, 66.1)", "needsShovel": False, "purchase": False}, 
+    {"name": "Secret Island Treehouse Chest", "id": base_id + 114, "inGameId": "(832.1, 95.1, 66.1)", "needsShovel": False, "purchase": False}, 
     {"name": "Sunhat Island Buried Chest", "id": base_id + 115, "inGameId": "(972.8, 27.2, 984.0)", "needsShovel": True, "purchase": False}, 
     {"name": "Orange Islands South Buried Chest", "id": base_id + 116, "inGameId": "(79.2, 19.7, 1150.5)", "needsShovel": True, "purchase": False}, 
     {"name": "Orange Islands West Chest", "id": base_id + 117, "inGameId": "(111.8, 16.6, 1305.4)", "needsShovel": False, "purchase": False}, 
