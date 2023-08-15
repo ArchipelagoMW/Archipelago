@@ -12,7 +12,7 @@ base_id = 82000
 
 item_table: List[ItemDict] = [
     {"name": "Stick", "id": base_id + 1, "count": 8, "classification": ItemClassification.progression_skip_balancing},
-    {"name": "Seashell", "id": base_id + 2, "count": 22, "classification": ItemClassification.progression_skip_balancing},
+    {"name": "Seashell", "id": base_id + 2, "count": 23, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Golden Feather", "id": base_id + 3, "count": 20, "classification": ItemClassification.progression},
     {"name": "Silver Feather", "id": base_id + 4, "count": 2, "classification": ItemClassification.useful},
     {"name": "Bucket", "id": base_id + 5, "count": 2, "classification": ItemClassification.progression},
@@ -39,18 +39,19 @@ item_table: List[ItemDict] = [
     {"name": "Running Shoes", "id": base_id + 26, "count": 1, "classification": ItemClassification.progression},
     {"name": "Camping Permit", "id": base_id + 27, "count": 1, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Walkie Talkie", "id": base_id + 28, "count": 1, "classification": ItemClassification.useful},
+    {"name": "Boating Manual", "id": base_id + 29, "count": 1, "classification": ItemClassification.filler},
 
     # Different Coin Amounts (Fillers)
-    {"name": "7 Coins", "id": base_id + 29, "count": 3, "classification": ItemClassification.filler},
-    {"name": "13 Coins", "id": base_id + 30, "count": 21, "classification": ItemClassification.filler},
-    {"name": "15 Coins", "id": base_id + 31, "count": 1, "classification": ItemClassification.filler},
-    {"name": "18 Coins", "id": base_id + 32, "count": 1, "classification": ItemClassification.filler},
-    {"name": "21 Coins", "id": base_id + 33, "count": 2, "classification": ItemClassification.filler},
-    {"name": "25 Coins", "id": base_id + 34, "count": 7, "classification": ItemClassification.filler},
-    {"name": "27 Coins", "id": base_id + 35, "count": 1, "classification": ItemClassification.filler},
-    {"name": "32 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.filler},
-    {"name": "33 Coins", "id": base_id + 37, "count": 6, "classification": ItemClassification.filler},
-    {"name": "50 Coins", "id": base_id + 38, "count": 1, "classification": ItemClassification.filler},
+    {"name": "7 Coins", "id": base_id + 30, "count": 3, "classification": ItemClassification.filler},
+    {"name": "13 Coins", "id": base_id + 31, "count": 21, "classification": ItemClassification.filler},
+    {"name": "15 Coins", "id": base_id + 32, "count": 1, "classification": ItemClassification.filler},
+    {"name": "18 Coins", "id": base_id + 33, "count": 1, "classification": ItemClassification.filler},
+    {"name": "21 Coins", "id": base_id + 34, "count": 2, "classification": ItemClassification.filler},
+    {"name": "25 Coins", "id": base_id + 35, "count": 7, "classification": ItemClassification.filler},
+    {"name": "27 Coins", "id": base_id + 36, "count": 1, "classification": ItemClassification.filler},
+    {"name": "32 Coins", "id": base_id + 37, "count": 1, "classification": ItemClassification.filler},
+    {"name": "33 Coins", "id": base_id + 38, "count": 6, "classification": ItemClassification.filler},
+    {"name": "50 Coins", "id": base_id + 39, "count": 1, "classification": ItemClassification.filler},
 ]
 
 group_table: Dict[str, Set[str]] = {

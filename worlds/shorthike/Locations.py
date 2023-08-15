@@ -91,12 +91,14 @@ location_table: List[LocationDict] = [
     # Boating
     {"name": "Boat Rental", "id": base_id + 55, "inGameId": "DadDeer[0]", "needsShovel": False, "purchase": True},
     {"name": "Boat Challenge Reward", "id": base_id + 56, "inGameId": "DeerKidBoat[0]", "needsShovel": False, "purchase": False},
+    {"name": "Receive Boating Manual", "id": base_id + 133, "inGameId": "DadDeer[1]", "needsShovel": False, "purchase": False},
 
     # Original Map Locations
     {"name": "Outlook Point Dog Gift", "id": base_id + 57, "inGameId": "Dog_WalkingNPC_BlueEyed[0]", "needsShovel": False, "purchase": False},
 
     # Original Clothes Locations
     {"name": "Collect 15 Seashells", "id": base_id + 58, "inGameId": "LittleKidNPCVariant (1)[0]", "needsShovel": False, "purchase": False},
+    {"name": "Return to Shell Kid", "id": base_id + 132, "inGameId": "LittleKidNPCVariant (1)[1]", "needsShovel": False, "purchase": False},
     {"name": "Taylor the Turtle Headband Gift", "id": base_id + 59, "inGameId": "Turtle_WalkingNPC[0]", "needsShovel": False, "purchase": False},
     {"name": "Sue the Rabbit Shoes Reward", "id": base_id + 60, "inGameId": "Bunny_WalkingNPC (1)[0]", "needsShovel": False, "purchase": False},
     {"name": "Purchase Sunhat", "id": base_id + 61, "inGameId": "SittingNPC[0]", "needsShovel": False, "purchase": True},

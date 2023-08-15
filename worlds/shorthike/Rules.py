@@ -39,3 +39,6 @@ def create_rules(self, location_table):
     forbid_item(world.get_location("Sue the Rabbit Shoes Reward", player), "Headband", player)
     set_rule(world.get_location("Sue the Rabbit Shoes Reward", player),
         lambda state: state.has("Headband", self.player))
+    forbid_item(world.get_location("Return to Shell Kid", player), "Shell Necklace", player)
+    set_rule(world.get_location("Return to Shell Kid", player),
+        lambda state: state.has("Shell Necklace", self.player))
