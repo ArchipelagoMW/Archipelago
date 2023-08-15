@@ -1,7 +1,6 @@
-import itertools
-
 from . import WL4TestBase
-from ..names import LocationName, ItemName
+from ..locations import location_table
+from ..types import LocationType, Passage
 
 
 # I don't fully understand how these tests work so I'm reasonably sure these
@@ -10,66 +9,71 @@ from ..names import LocationName, ItemName
 class TestAccess(WL4TestBase):
     def test_spoiled_rotten(self):
         '''Test access to Spoiled Rotten'''
-        locations = [LocationName.spoiled_rotten]
-        items = [ItemName.entry_passage_jewel]
+        locations = ['Entry Passage Boss']
+        items = [['Top Right Entry Jewel Piece',
+                  'Bottom Right Entry Jewel Piece',
+                  'Bottom Left Entry Jewel Piece',
+                  'Top Left Entry Jewel Piece']]
         self.assertAccessDependency(locations, items)
 
     def test_level_access(self):
         '''Test access to the sixteen main levels'''
-        locations = itertools.chain(
-            LocationName.palm_tree_paradise.locations(),
-            LocationName.wildflower_fields.locations(),
-            LocationName.mystic_lake.locations(),
-            LocationName.monsoon_jungle.locations(),
-            LocationName.curious_factory.locations(),
-            LocationName.toxic_landfill.locations(),
-            LocationName.forty_below_fridge.locations(),
-            LocationName.pinball_zone.locations(),
-            LocationName.toy_block_tower.locations(),
-            LocationName.big_board.locations(),
-            LocationName.doodle_woods.locations(),
-            LocationName.domino_row.locations(),
-            LocationName.crescent_moon_village.locations(),
-            LocationName.arabian_night.locations(),
-            LocationName.fiery_cavern.locations(),
-            LocationName.hotel_horror.locations(),
-        )
-
-        items = [[ItemName.defeated_boss]]
+        locations = filter(lambda l: location_table[l].source == LocationType.BOX
+                                     and location_table[l].passage() not in (Passage.ENTRY, Passage.GOLDEN),
+                           location_table)
+        items = [['Entry Passage Clear']]
         self.assertAccessDependency(locations, items)
 
     def test_cractus_access(self):
         '''Test access to Cractus'''
-        locations = [LocationName.cractus]
-        items = [ItemName.emerald_passage_jewel]
+        locations = ['Cractus']
+        items = [['Top Right Emerald Piece',
+                  'Bottom Right Emerald Piece',
+                  'Bottom Left Emerald Piece',
+                  'Top Left Emerald Piece']]
         self.assertAccessDependency(locations, items)
 
     def test_cuckoo_condor_access(self):
         '''Test access to Cuckoo Condor'''
-        locations = [LocationName.cuckoo_condor]
-        items = [ItemName.ruby_passage_jewel]
+        locations = ['Cuckoo Condor']
+        items = [['Top Right Ruby Piece',
+                  'Bottom Right Ruby Piece',
+                  'Bottom Left Ruby Piece',
+                  'Top Left Ruby Piece']]
         self.assertAccessDependency(locations, items)
 
     def test_aerodent_access(self):
         '''Test access to Aerodent'''
-        locations = [LocationName.aerodent]
-        items = [ItemName.topaz_passage_jewel]
+        locations = ['Aerodent']
+        items = [['Top Right Topaz Piece',
+                  'Bottom Right Topaz Piece',
+                  'Bottom Left Topaz Piece',
+                  'Top Left Topaz Piece']]
         self.assertAccessDependency(locations, items)
 
     def test_catbat_access(self):
         '''Test access to Catbat'''
-        locations = [LocationName.catbat]
-        items = [ItemName.sapphire_passage_jewel]
+        locations = ['Catbat']
+        items = [['Top Right Sapphire Piece',
+                  'Bottom Right Sapphire Piece',
+                  'Bottom Left Sapphire Piece',
+                  'Top Left Sapphire Piece']]
         self.assertAccessDependency(locations, items)
 
     def test_golden_passage_access(self):
         '''Test access to the Golden Passage'''
-        locations = LocationName.golden_passage.locations()
-        items = [[ItemName.defeated_boss]]
+        locations = filter(lambda l: location_table[l].source == LocationType.BOX
+                                     and location_table[l].passage() == Passage.GOLDEN,
+                           location_table)
+        items = [['Emerald Passage Clear', 'Ruby Passage Clear',
+                  'Topaz Passage Clear', 'Sapphire Passage Clear']]
         self.assertAccessDependency(locations, items)
 
     def test_golden_diva_access(self):
         '''Test access to the Golden Diva'''
-        locations = [LocationName.golden_diva]
-        items = [ItemName.golden_pyramid_jewel]
+        locations = ['Golden Diva']
+        items = [['Top Right Golden Jewel Piece',
+                  'Bottom Right Golden Jewel Piece',
+                  'Bottom Left Golden Jewel Piece',
+                  'Top Left Golden Jewel Piece']]
         self.assertAccessDependency(locations, items)

@@ -1,16 +1,17 @@
-from typing import ClassVar, List
+from pathlib import Path
 import settings
+from typing import ClassVar
 
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
-from .items import WL4Item, item_table
-from .locations import all_locations, setup_locations
+from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
+from .locations import setup_locations
 from .logic import WL4Logic
-from .names import ItemName, LocationName
 from .options import wl4_options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
+from .types import ItemType, Passage
 
 
 class WL4Settings(settings.Group):
@@ -41,7 +42,7 @@ class WL4Web(WebWorld):
 
 class WL4World(World):
     '''
-    A golden pyramid has been discovered deep in the jungle, and Wario, has set
+    A golden pyramid has been discovered deep in the jungle, and Wario has set
     out to rob it. But to make off with its legendary treasure, he has to first
     defeat the five passage bosses and the pyramid's evil ruler, the Golden Diva.
     '''
@@ -53,62 +54,61 @@ class WL4World(World):
 
     data_version = 0
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = all_locations
+    item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
+                       if data[1] is not None}
+    location_name_to_id = locations.location_name_to_id
 
     web = WL4Web()
 
     def generate_early(self):
         if self.multiworld.early_entry_jewels[self.player]:
-            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.ne] = 1
-            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.se] = 1
-            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.sw] = 1
-            self.multiworld.local_early_items[self.player][ItemName.entry_passage_jewel.nw] = 1
+            for item in filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY):
+                self.multiworld.local_early_items[self.player][item] = 1
 
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
-
-        itempool: List[WL4Item] = []
-
         connect_regions(self.multiworld, self.player)
 
+        passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
+        for passage in passages:
+            location = self.multiworld.get_region(f'{passage} Passage Boss', self.player).locations[0]
+            location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
+            location.show_in_spoiler = False
+
+        golden_diva = self.multiworld.get_location('Golden Diva', self.player)
+        golden_diva.place_locked_item(self.create_item('Escape the Pyramid'))
+        golden_diva.show_in_spoiler = False
+
+    def create_items(self):
         diamond_pieces = 18 * 4
         cds = 16
         full_health_items = (9, 7, 5)[self.multiworld.difficulty[self.player].value]
         total_required_locations = diamond_pieces + cds + full_health_items
 
-        for item, data in items.box_table.items():
-            for _ in range(data.quantity):
-                itempool.append(self.create_item(item))
+        itempool = []
+
+        for name, item in filter_items(type=ItemType.JEWEL):
+            if item.passage() in (Passage.ENTRY, Passage.GOLDEN):
+                copies = 1
+            else:
+                copies = 4
+            for _ in range(copies):
+                itempool.append(self.create_item(name))
+
+        for name in filter_item_names(type=ItemType.CD):
+            itempool.append(self.create_item(name))
 
         for _ in range(full_health_items):
-            itempool.append(self.create_item(ItemName.full_health))
+            itempool.append(self.create_item('Full Health Item'))
 
         junk_count = total_required_locations - len(itempool)
         assert junk_count == 0, f'Mismatched location counts: {junk_count} empty checks'
 
-        boss_location_names = [
-            LocationName.spoiled_rotten,
-            LocationName.cractus,
-            LocationName.cuckoo_condor,
-            LocationName.aerodent,
-            LocationName.catbat,
-        ]
-        for location_name in boss_location_names:
-            (self.multiworld
-                .get_location(location_name, self.player)
-                .place_locked_item(self.create_event(ItemName.defeated_boss)))
-
-        (self.multiworld
-            .get_location(LocationName.golden_diva, self.player)
-            .place_locked_item(self.create_event(ItemName.victory)))
-
         self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
-        from pathlib import Path
-        output_directory: Path = Path(output_directory)
+        output_path = Path(output_directory)
 
         try:
             world = self.multiworld
@@ -117,7 +117,7 @@ class WL4World(World):
             rom = LocalRom(get_base_rom_path())
             patch_rom(rom, self.multiworld, self.player)
 
-            rompath = output_directory / f'{world.get_out_file_name_base(player)}.gba'
+            rompath = output_path / f'{world.get_out_file_name_base(player)}.gba'
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
@@ -134,19 +134,9 @@ class WL4World(World):
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         data = item_table[name]
-
-        if force_non_progression:
-            classification = ItemClassification.filler
-        else:
-            classification = data.classification
-
-        created_item = WL4Item(name, classification, data.code, self.player)
-
+        created_item = WL4Item(name, self.player, data, force_non_progression)
         return created_item
-
-    def create_event(self, name: str):
-        return WL4Item(name, ItemClassification.progression, None, self.player)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
-            lambda state: state.has(ItemName.victory, self.player))
+            lambda state: state.has('Escape the Pyramid', self.player))

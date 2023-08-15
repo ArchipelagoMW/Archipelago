@@ -1,17 +1,13 @@
-from typing import Dict, NamedTuple, Optional
-from BaseClasses import Item, ItemClassification
+from __future__ import annotations
 
-from .names import ItemName
+from typing import Any, Iterable, NamedTuple, Tuple
 
+from BaseClasses import Item
+from BaseClasses import ItemClassification as IC
 
-class WL4Item(Item):
-    game: str = 'Wario Land 4'
+from .data import ap_id_offset
+from .types import Box, ItemType, Passage
 
-
-class ItemData(NamedTuple):
-    code: Optional[int]
-    classification: ItemClassification
-    quantity: int = 1
 
 # Items are encoded as 8-bit numbers as follows:
 #                   | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
@@ -34,93 +30,135 @@ class ItemData(NamedTuple):
 #  - 1 = Wario form trap
 #  - 2 = Single heart recovery
 #  - 3 = Single heart damage
-#
-# For Archipelago, the IDs are the encoded values appended to 0xEC, which is
-# Wario Land 4's checksum.
 
-def item_id(encoded_id):
-    return 0xEC00 | encoded_id
 
-def jewel_id(passage, quadrant):
-    return item_id(passage << 2 | quadrant)
+def ap_id_from_wl4_data(data: ItemData):
+    cat, itemid, _ = data
+    if cat == ItemType.EVENT or itemid == None:
+        return None
+    if cat == ItemType.JEWEL:
+        passage, quad = itemid
+        return ap_id_offset | (passage << 2) | quad
+    elif cat == ItemType.CD:
+        passage, level = itemid
+        return ap_id_offset | (1 << 5) | (passage << 2) | level
+    elif cat == ItemType.ITEM:
+        return ap_id_offset | (1 << 6) | itemid
+    else:
+        raise ValueError(f'Unexpected WL4 item type: {data[0]}')
 
-def cd_id(track_no):
-    return item_id(1 << 5 | track_no + (1 << 2))
 
-def keyzer_id(level):
-    return 1 << 4 | cd_id(level)
+def wl4_data_from_ap_id(ap_id) -> Tuple[str, ItemData]:
+    val = ap_id - ap_id_offset
+    if val >> 5 == 0:
+        passage = (val & 0x1C) >> 2
+        quad = val & 3
+        return tuple(filter(lambda d: d[0] == quad and d[1] == passage, item_table.items()))
+    elif val >> 5 == 1:
+        passage = (val & 0x1C) >> 2
+        level = val & 3
+        return tuple(filter(lambda d: d[0] == ItemType.CD and d[1] == (passage, level), item_table.items()))
+    elif val >> 4 == 4:
+        item = val & 0xF
+        return tuple(filter(lambda d: d[0] == ItemType.ITEM and d[1] == item, item_table.items()))
+    else:
+        raise ValueError(f'Could not find WL4 item ID: {ap_id}')
 
-box_table = {
-    # Entry Passage
-    ItemName.entry_passage_jewel.ne: ItemData(jewel_id(0, 0), ItemClassification.progression),
-    ItemName.entry_passage_jewel.se: ItemData(jewel_id(0, 1), ItemClassification.progression),
-    ItemName.entry_passage_jewel.sw: ItemData(jewel_id(0, 2), ItemClassification.progression),
-    ItemName.entry_passage_jewel.nw: ItemData(jewel_id(0, 3), ItemClassification.progression),
-    # Emerald Passage
-    ItemName.emerald_passage_jewel.ne: ItemData(jewel_id(1, 0), ItemClassification.progression, 4),
-    ItemName.emerald_passage_jewel.se: ItemData(jewel_id(1, 1), ItemClassification.progression, 4),
-    ItemName.emerald_passage_jewel.sw: ItemData(jewel_id(1, 2), ItemClassification.progression, 4),
-    ItemName.emerald_passage_jewel.nw: ItemData(jewel_id(1, 3), ItemClassification.progression, 4),
-    ItemName.palm_tree_paradise.cd:    ItemData(cd_id(0), ItemClassification.filler),
-    ItemName.wildflower_fields.cd:     ItemData(cd_id(1), ItemClassification.filler),
-    ItemName.mystic_lake.cd:           ItemData(cd_id(2), ItemClassification.filler),
-    ItemName.monsoon_jungle.cd:        ItemData(cd_id(3), ItemClassification.filler),
-    # Ruby Passage
-    ItemName.ruby_passage_jewel.ne: ItemData(jewel_id(2, 0), ItemClassification.progression, 4),
-    ItemName.ruby_passage_jewel.se: ItemData(jewel_id(2, 1), ItemClassification.progression, 4),
-    ItemName.ruby_passage_jewel.sw: ItemData(jewel_id(2, 2), ItemClassification.progression, 4),
-    ItemName.ruby_passage_jewel.nw: ItemData(jewel_id(2, 3), ItemClassification.progression, 4),
-    ItemName.curious_factory.cd:    ItemData(cd_id(4), ItemClassification.filler),
-    ItemName.toxic_landfill.cd:     ItemData(cd_id(5), ItemClassification.filler),
-    ItemName.forty_below_fridge.cd: ItemData(cd_id(6), ItemClassification.filler),
-    ItemName.pinball_zone.cd:       ItemData(cd_id(7), ItemClassification.filler),
-    # Topaz Passage
-    ItemName.topaz_passage_jewel.ne: ItemData(jewel_id(3, 0), ItemClassification.progression, 4),
-    ItemName.topaz_passage_jewel.se: ItemData(jewel_id(3, 1), ItemClassification.progression, 4),
-    ItemName.topaz_passage_jewel.sw: ItemData(jewel_id(3, 2), ItemClassification.progression, 4),
-    ItemName.topaz_passage_jewel.nw: ItemData(jewel_id(3, 3), ItemClassification.progression, 4),
-    ItemName.toy_block_tower.cd:     ItemData(cd_id(8), ItemClassification.filler),
-    ItemName.big_board.cd:           ItemData(cd_id(9), ItemClassification.filler),
-    ItemName.doodle_woods.cd:        ItemData(cd_id(10), ItemClassification.filler),
-    ItemName.domino_row.cd:          ItemData(cd_id(11), ItemClassification.filler),
-    # Sapphire Passage
-    ItemName.sapphire_passage_jewel.ne: ItemData(jewel_id(4, 0), ItemClassification.progression, 4),
-    ItemName.sapphire_passage_jewel.se: ItemData(jewel_id(4, 1), ItemClassification.progression, 4),
-    ItemName.sapphire_passage_jewel.sw: ItemData(jewel_id(4, 2), ItemClassification.progression, 4),
-    ItemName.sapphire_passage_jewel.nw: ItemData(jewel_id(4, 3), ItemClassification.progression, 4),
-    ItemName.crescent_moon_village.cd:  ItemData(cd_id(12), ItemClassification.filler),
-    ItemName.arabian_night.cd:          ItemData(cd_id(13), ItemClassification.filler),
-    ItemName.fiery_cavern.cd:           ItemData(cd_id(14), ItemClassification.filler),
-    ItemName.hotel_horror.cd:           ItemData(cd_id(15), ItemClassification.filler),
-    # Golden Pyramid
-    ItemName.golden_pyramid_jewel.ne: ItemData(jewel_id(5, 0), ItemClassification.progression),
-    ItemName.golden_pyramid_jewel.se: ItemData(jewel_id(5, 1), ItemClassification.progression),
-    ItemName.golden_pyramid_jewel.sw: ItemData(jewel_id(5, 2), ItemClassification.progression),
-    ItemName.golden_pyramid_jewel.nw: ItemData(jewel_id(5, 3), ItemClassification.progression),
-}
 
-health_table = {
-    ItemName.full_health: ItemData(item_id(0x40), ItemClassification.useful),
-}
+class WL4Item(Item):
+    game: str = 'Wario Land 4'
+    type: ItemType
 
-event_table = {
-    ItemName.defeated_boss: ItemData(None, ItemClassification.progression),
-    ItemName.victory: ItemData(None, ItemClassification.progression),
-}
+    def __init__(self, name, player, data, force_non_progression):
+        type, id, prog = data
+        if force_non_progression:
+            prog = IC.filler
+        super(WL4Item, self).__init__(name, prog, ap_id_from_wl4_data(data), player)
+        self.type = type
+        if type in (ItemType.JEWEL, ItemType.CD):
+            self.passage, self.level = id
+        else:
+            self.passage = self.level = None
 
-junk_table = {
-    ItemName.wario_form: ItemData(item_id(0x41), ItemClassification.trap),
-    ItemName.health:     ItemData(item_id(0x42), ItemClassification.filler),
-    ItemName.lightning:  ItemData(item_id(0x43), ItemClassification.trap),
-}
+
+class ItemData(NamedTuple):
+    type: ItemType
+    id: Any
+    prog: IC
+
+    def passage(self):
+        return self.id[0]
+
+    def box(self):
+        if self.type == ItemType.CD:
+            return Box.CD
+        else:
+            return self.id[1]
+
 
 item_table = {
-    **box_table,
-    **health_table,
-    **event_table,
-    **junk_table,
+    # Item name                                  Item type        ID                                 Progression
+    'Top Right Entry Jewel Piece':      ItemData(ItemType.JEWEL, (Passage.ENTRY,    Box.JEWEL_NE),  IC.progression),
+    'Top Right Emerald Piece':          ItemData(ItemType.JEWEL, (Passage.EMERALD,  Box.JEWEL_NE),  IC.progression),
+    'Top Right Ruby Piece':             ItemData(ItemType.JEWEL, (Passage.RUBY,     Box.JEWEL_NE),  IC.progression),
+    'Top Right Topaz Piece':            ItemData(ItemType.JEWEL, (Passage.TOPAZ,    Box.JEWEL_NE),  IC.progression),
+    'Top Right Sapphire Piece':         ItemData(ItemType.JEWEL, (Passage.SAPPHIRE, Box.JEWEL_NE),  IC.progression),
+    'Top Right Golden Jewel Piece':     ItemData(ItemType.JEWEL, (Passage.GOLDEN,   Box.JEWEL_NE),  IC.progression),
+    'Bottom Right Entry Jewel Piece':   ItemData(ItemType.JEWEL, (Passage.ENTRY,    Box.JEWEL_SE),  IC.progression),
+    'Bottom Right Emerald Piece':       ItemData(ItemType.JEWEL, (Passage.EMERALD,  Box.JEWEL_SE),  IC.progression),
+    'Bottom Right Ruby Piece':          ItemData(ItemType.JEWEL, (Passage.RUBY,     Box.JEWEL_SE),  IC.progression),
+    'Bottom Right Topaz Piece':         ItemData(ItemType.JEWEL, (Passage.TOPAZ,    Box.JEWEL_SE),  IC.progression),
+    'Bottom Right Sapphire Piece':      ItemData(ItemType.JEWEL, (Passage.SAPPHIRE, Box.JEWEL_SE),  IC.progression),
+    'Bottom Right Golden Jewel Piece':  ItemData(ItemType.JEWEL, (Passage.GOLDEN,   Box.JEWEL_SE),  IC.progression),
+    'Bottom Left Entry Jewel Piece':    ItemData(ItemType.JEWEL, (Passage.ENTRY,    Box.JEWEL_SW),  IC.progression),
+    'Bottom Left Emerald Piece':        ItemData(ItemType.JEWEL, (Passage.EMERALD,  Box.JEWEL_SW),  IC.progression),
+    'Bottom Left Ruby Piece':           ItemData(ItemType.JEWEL, (Passage.RUBY,     Box.JEWEL_SW),  IC.progression),
+    'Bottom Left Topaz Piece':          ItemData(ItemType.JEWEL, (Passage.TOPAZ,    Box.JEWEL_SW),  IC.progression),
+    'Bottom Left Sapphire Piece':       ItemData(ItemType.JEWEL, (Passage.SAPPHIRE, Box.JEWEL_SW),  IC.progression),
+    'Bottom Left Golden Jewel Piece':   ItemData(ItemType.JEWEL, (Passage.GOLDEN,   Box.JEWEL_SW),  IC.progression),
+    'Top Left Entry Jewel Piece':       ItemData(ItemType.JEWEL, (Passage.ENTRY,    Box.JEWEL_NW),  IC.progression),
+    'Top Left Emerald Piece':           ItemData(ItemType.JEWEL, (Passage.EMERALD,  Box.JEWEL_NW),  IC.progression),
+    'Top Left Ruby Piece':              ItemData(ItemType.JEWEL, (Passage.RUBY,     Box.JEWEL_NW),  IC.progression),
+    'Top Left Topaz Piece':             ItemData(ItemType.JEWEL, (Passage.TOPAZ,    Box.JEWEL_NW),  IC.progression),
+    'Top Left Sapphire Piece':          ItemData(ItemType.JEWEL, (Passage.SAPPHIRE, Box.JEWEL_NW),  IC.progression),
+    'Top Left Golden Jewel Piece':      ItemData(ItemType.JEWEL, (Passage.GOLDEN,   Box.JEWEL_NW),  IC.progression),
+    'About that Shepherd CD':           ItemData(ItemType.CD,    (Passage.EMERALD,  0),             IC.filler),
+    'Things that Never Change CD':      ItemData(ItemType.CD,    (Passage.EMERALD,  1),             IC.filler),
+    "Tomorrow's Blood Pressure CD":     ItemData(ItemType.CD,    (Passage.EMERALD,  2),             IC.filler),
+    'Beyond the Headrush CD':           ItemData(ItemType.CD,    (Passage.EMERALD,  3),             IC.filler),
+    'Driftwood & the Island Dog CD':    ItemData(ItemType.CD,    (Passage.RUBY,     0),             IC.filler),
+    "The Judge's Feet CD":              ItemData(ItemType.CD,    (Passage.RUBY,     1),             IC.filler),
+    "The Moon's Lamppost CD":           ItemData(ItemType.CD,    (Passage.RUBY,     2),             IC.filler),
+    'Soft Shell CD':                    ItemData(ItemType.CD,    (Passage.RUBY,     3),             IC.filler),
+    'So Sleepy CD':                     ItemData(ItemType.CD,    (Passage.TOPAZ,    0),             IC.filler),
+    'The Short Futon CD':               ItemData(ItemType.CD,    (Passage.TOPAZ,    1),             IC.filler),
+    'Avocado Song CD':                  ItemData(ItemType.CD,    (Passage.TOPAZ,    2),             IC.filler),
+    'Mr. Fly CD':                       ItemData(ItemType.CD,    (Passage.TOPAZ,    3),             IC.filler),
+    "Yesterday's Words CD":             ItemData(ItemType.CD,    (Passage.SAPPHIRE, 0),             IC.filler),
+    'The Errand CD':                    ItemData(ItemType.CD,    (Passage.SAPPHIRE, 1),             IC.filler),
+    'You and Your Shoes CD':            ItemData(ItemType.CD,    (Passage.SAPPHIRE, 2),             IC.filler),
+    'Mr. Ether & Planaria CD':          ItemData(ItemType.CD,    (Passage.SAPPHIRE, 3),             IC.filler),
+    'Full Health Item':                 ItemData(ItemType.ITEM,  0x40,                              IC.useful),
+    'Wario Form Trap':                  ItemData(ItemType.ITEM,  0x41,                              IC.trap),
+    'Heart':                            ItemData(ItemType.ITEM,  0x42,                              IC.filler),
+    'Lightning Trap':                   ItemData(ItemType.ITEM,  0x43,                              IC.trap),
+    'Entry Passage Clear':              ItemData(ItemType.EVENT, None,                              IC.progression),
+    'Emerald Passage Clear':            ItemData(ItemType.EVENT, None,                              IC.progression),
+    'Ruby Passage Clear':               ItemData(ItemType.EVENT, None,                              IC.progression),
+    'Topaz Passage Clear':              ItemData(ItemType.EVENT, None,                              IC.progression),
+    'Sapphire Passage Clear':           ItemData(ItemType.EVENT, None,                              IC.progression),
+    'Escape the Pyramid':               ItemData(ItemType.EVENT, None,                              IC.progression),
 }
 
-lookup_id_to_name: Dict[int, str] = {
-    data.code: item_name for item_name, data in item_table.items() if data.code
-}
+
+def filter_items(*, type: ItemType = None, passage: Passage = None) -> Iterable[Tuple[str, ItemData]]:
+    items = item_table.items()
+    if type != None:
+        items = filter(lambda i: i[1].type == type, items)
+    if passage != None:
+        items = filter(lambda i: i[1].passage() == passage, items)
+    return items
+
+
+def filter_item_names(*, type: ItemType = None, passage: Passage = None) -> Iterable[str]:
+    return map(lambda entry: entry[0], filter_items(type=type, passage=passage))
