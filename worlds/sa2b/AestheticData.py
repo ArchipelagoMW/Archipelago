@@ -333,3 +333,10 @@ exit_to_room_map = {
 	#0x12: 0x0C,  # Transporter to Dark
 	0x13: 0x06,  # Kindergarten to Lobby
 }
+
+valid_kindergarten_exits = [
+	0x04,  # Neutral to Lobby
+	0x05,  # Neutral to Cave
+	0x07,  # Hero to Lobby
+	0x09,  # Dark to Lobby
+]

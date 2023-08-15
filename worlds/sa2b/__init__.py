@@ -11,7 +11,7 @@ from .Regions import create_regions, shuffleable_regions, connect_regions, Level
 from .Rules import set_rules
 from .Names import ItemName, LocationName
 from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
-                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map
+                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
 from worlds.AutoWorld import WebWorld, World
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
@@ -680,6 +680,27 @@ class SA2BWorld(World):
         multi_rooms_copy.remove(0x07)
         accessible_rooms.append(0x07)
 
+        # Place Kindergarten somewhere sane
+        exit_choice = self.random.choice(valid_kindergarten_exits)
+        exit_room = exit_to_room_map[exit_choice]
+        all_exits_copy.remove(exit_choice)
+
+        destination = 0x06
+        single_rooms_copy.remove(destination)
+        all_destinations_copy.remove(destination)
+        accessible_rooms.append(destination)
+
+        er_layout[exit_choice] = destination
+
+        reverse_exit = self.random.choice(room_to_exits_map[destination])
+
+        er_layout[reverse_exit] = exit_to_room_map[exit_choice]
+
+        all_exits_copy.remove(reverse_exit)
+        all_destinations_copy.remove(exit_room)
+        room_to_exits_map[exit_room].remove(exit_choice)
+
+        # Connect multi-exit rooms
         loop_guard = 0
         while len(multi_rooms_copy) > 0:
             loop_guard += 1
@@ -707,7 +728,7 @@ class SA2BWorld(World):
             all_exits_copy.remove(reverse_exit)
             all_destinations_copy.remove(exit_room)
 
-
+        # Connect dead-end rooms
         loop_guard = 0
         while len(single_rooms_copy) > 0:
             loop_guard += 1
@@ -735,6 +756,7 @@ class SA2BWorld(World):
             all_exits_copy.remove(reverse_exit)
             all_destinations_copy.remove(exit_room)
 
+        # Connect remaining exits
         loop_guard = 0
         while len(all_exits_copy) > 0:
             loop_guard += 1
