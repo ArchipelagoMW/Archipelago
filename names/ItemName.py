@@ -22,12 +22,12 @@ class Level(NamedTuple):
 
 
 def jewel_pieces(passage: str) -> JewelPieces:
-	return JewelPieces(
-		*(
-			name_format.substitute(item=f"{j} Jewel Piece", location=passage)
-			for j in JewelPieces.locations
-		)
-	)
+    return JewelPieces(
+        *(
+            name_format.substitute(item=f"{j} Jewel Piece", location=passage)
+            for j in JewelPieces.locations
+        )
+    )
 
 
 # Entry Passage
