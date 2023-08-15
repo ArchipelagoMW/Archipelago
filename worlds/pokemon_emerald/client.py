@@ -30,6 +30,8 @@ IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
 DEFEATED_NORMAN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_NORMAN_1"]
 
+# These flags are communicated to the tracker as a bitfield using this order.
+# Modifying the order will cause undetectable autotracking issues.
 TRACKER_EVENT_FLAGS = [
     "FLAG_DEFEATED_RUSTBORO_GYM",
     "FLAG_DEFEATED_DEWFORD_GYM",
@@ -52,7 +54,42 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA",                # Rayquaza departs for Sootopolis
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
+    # TODO: Add Harbor Mail event here
 ]
+EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
+
+KEY_LOCATION_FLAGS = [
+    "NPC_GIFT_RECEIVED_HM01",
+    "NPC_GIFT_RECEIVED_HM02",
+    "NPC_GIFT_RECEIVED_HM03",
+    "NPC_GIFT_RECEIVED_HM04",
+    "NPC_GIFT_RECEIVED_HM05",
+    "NPC_GIFT_RECEIVED_HM06",
+    "NPC_GIFT_RECEIVED_HM07",
+    "NPC_GIFT_RECEIVED_HM08",
+    "NPC_GIFT_RECEIVED_ACRO_BIKE",
+    "NPC_GIFT_RECEIVED_WAILMER_PAIL",
+    "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL",
+    "NPC_GIFT_RECEIVED_LETTER",
+    "NPC_GIFT_RECEIVED_METEORITE",
+    "NPC_GIFT_RECEIVED_GO_GOGGLES",
+    "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON",
+    "NPC_GIFT_RECEIVED_ITEMFINDER",
+    "NPC_GIFT_RECEIVED_DEVON_SCOPE",
+    "NPC_GIFT_RECEIVED_MAGMA_EMBLEM",
+    "NPC_GIFT_RECEIVED_POKEBLOCK_CASE",
+    "NPC_GIFT_RECEIVED_SS_TICKET",
+    "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY",
+    "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY",
+    "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY",
+    "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY",
+    "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER",
+    "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY",
+    "NPC_GIFT_RECEIVED_OLD_ROD",
+    "NPC_GIFT_RECEIVED_GOOD_ROD",
+    "NPC_GIFT_RECEIVED_SUPER_ROD",
+]
+KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
 
 class GBACommandProcessor(ClientCommandProcessor):
@@ -81,6 +118,7 @@ class GBAContext(CommonContext):
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
+        self.local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
 
     async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
@@ -131,8 +169,8 @@ async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
                 await ctx.server_auth(False)
 
     if "flag_bytes" in gba_data:
-        event_flag_map = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
         local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
+        local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
 
         # If flag is set and corresponds to a location, add to local_checked_locations
         for byte_i, byte in enumerate(gba_data["flag_bytes"]):
@@ -147,8 +185,11 @@ async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
                     if flag_id == ctx.goal_flag:
                         game_clear = True
 
-                    if flag_id in event_flag_map:
-                        local_set_events[event_flag_map[flag_id]] = True
+                    if flag_id in EVENT_FLAG_MAP:
+                        local_set_events[EVENT_FLAG_MAP[flag_id]] = True
+
+                    if flag_id in KEY_LOCATION_FLAG_MAP:
+                        local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
 
         if local_checked_locations != ctx.local_checked_locations:
             ctx.local_checked_locations = local_checked_locations
@@ -179,6 +220,21 @@ async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
                 "operations": [{"operation": "replace", "value": event_bitfield}]
             }])
             ctx.local_set_events = local_set_events
+
+        if local_found_key_items != ctx.local_found_key_items:
+            key_bitfield = 0
+            for i, location_name in enumerate(KEY_LOCATION_FLAGS):
+                if local_found_key_items[location_name]:
+                    key_bitfield |= 1 << i
+
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"pokemon_emerald_keys_{ctx.team}_{ctx.slot}",
+                "default": 0,
+                "want_reply": False,
+                "operations": [{"operation": "replace", "value": key_bitfield}]
+            }])
+            ctx.local_found_key_items = local_found_key_items
 
 
 async def gba_send_receive_task(ctx: GBAContext) -> None:
