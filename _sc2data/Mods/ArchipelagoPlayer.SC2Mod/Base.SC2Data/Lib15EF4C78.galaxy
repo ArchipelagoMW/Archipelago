@@ -512,6 +512,39 @@ void lib15EF4C78_gt_Set5SecondsMark_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: ZerglingRespawnInit
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ZerglingRespawnInit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup autoFB63C786_g;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoFB63C786_g = PlayerGroupAll();
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(autoFB63C786_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_ZerglingRespawnControllerUnit", 0, lv_currentPlayer, Point(0.0, 0.0));
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ZerglingRespawnInit_Init () {
+    lib15EF4C78_gt_ZerglingRespawnInit = TriggerCreate("lib15EF4C78_gt_ZerglingRespawnInit_Func");
+    TriggerAddEventMapInit(lib15EF4C78_gt_ZerglingRespawnInit);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: SlayerInit
 //--------------------------------------------------------------------------------------------------
 bool lib15EF4C78_gt_SlayerInit_Func (bool testConds, bool runActions) {
@@ -541,7 +574,7 @@ bool lib15EF4C78_gt_SlayerInit_Func (bool testConds, bool runActions) {
 //--------------------------------------------------------------------------------------------------
 void lib15EF4C78_gt_SlayerInit_Init () {
     lib15EF4C78_gt_SlayerInit = TriggerCreate("lib15EF4C78_gt_SlayerInit_Func");
-    TriggerAddEventTimeElapsed(lib15EF4C78_gt_SlayerInit, 5.0, c_timeGame);
+    TriggerAddEventMapInit(lib15EF4C78_gt_SlayerInit);
 }
 
 void lib15EF4C78_InitTriggers () {
@@ -563,6 +596,7 @@ void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init();
     lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init();
     lib15EF4C78_gt_Set5SecondsMark_Init();
+    lib15EF4C78_gt_ZerglingRespawnInit_Init();
     lib15EF4C78_gt_SlayerInit_Init();
 }
 

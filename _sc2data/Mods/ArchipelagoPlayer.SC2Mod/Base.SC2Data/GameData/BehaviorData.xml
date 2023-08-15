@@ -4567,4 +4567,87 @@
         <Grown value="Footprint2x2OverlordCreepSourceGrown"/>
         <InfoFlags index="Hidden" value="1"/>
     </CBehaviorCreepSource>
+    <CBehaviorSpawn id="AP_SpawnLarva">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <InfoArray>
+            <Unit value="AP_Larva"/>
+            <MaxCount value="3"/>
+            <Requirements value="HatcherySpawnLarva"/>
+            <Delay value="12"/>
+        </InfoArray>
+        <InfoArray>
+            <Unit value="AP_Larva"/>
+            <MaxCount value="19"/>
+            <Requirements value="HatcherySpawnMutantLarva"/>
+            <Delay value="0.25"/>
+            <Effect value="AP_LarvaRelease"/>
+        </InfoArray>
+        <InfoArray Unit="AP_Larva" Requirements="AP_HaveSpawnLarvaInstant" Effect="AP_SpawnLarvaInstantRemoveBehavior"/>
+        <Center value="0,-3"/>
+        <Offset value="0,-3"/>
+        <Offset value="1,-3"/>
+        <Offset value="2,-3"/>
+        <Offset value="3,-3"/>
+        <Offset value="3,-2"/>
+        <Offset value="3,-1"/>
+        <Offset value="3,0"/>
+        <Offset value="3,1"/>
+        <Offset value="3,2"/>
+        <Offset value="3,3"/>
+        <Offset value="2,3"/>
+        <Offset value="1,3"/>
+        <Offset value="0,3"/>
+        <Offset value="-1,3"/>
+        <Offset value="-2,3"/>
+        <Offset value="-3,3"/>
+        <Offset value="-3,2"/>
+        <Offset value="-3,1"/>
+        <Offset value="-3,0"/>
+        <Offset value="-3,-1"/>
+        <Offset value="-3,-2"/>
+        <Offset value="-3,-3"/>
+        <Offset value="-2,-3"/>
+        <Offset value="-1,-3"/>
+        <Slop value="1"/>
+        <Range value="1"/>
+        <Limit value="19"/>
+        <ConjoinedLink value="SpawnLarvaConjoined"/>
+    </CBehaviorSpawn>
+    <CBehaviorBuff id="AP_ZergBuildingDies9">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="ZergBuildingSpawnBroodling9Delay">
+                <Type index="Remove" value="0"/>
+            </DeathResponse>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorCreepSource id="AP_makeCreep8x6">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_NotHaveK5CreepBonuses"/>
+        <Period value="0.75"/>
+        <Build value="Footprint8x6CreepSourceBuild"/>
+        <Start value="Footprint8x6CreepSourceGrown"/>
+        <Birth value="Footprint8x6CreepSourceStart"/>
+        <Grown value="Footprint8x6CreepSourceGrown"/>
+    </CBehaviorCreepSource>
+    <CBehaviorCreepSource id="AP_makeCreep8x6Enhanced">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_HaveK5CreepBonuses"/>
+        <Period value="0.375"/>
+        <Build value="Footprint8x6CreepSourceBuild"/>
+        <Start value="Footprint8x6CreepSourceGrown"/>
+        <Birth value="Footprint8x6CreepSourceStart"/>
+        <Grown value="Footprint8x6CreepSourceGrown"/>
+    </CBehaviorCreepSource>
+    <CBehaviorWander id="AP_LarvaWander">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Leash value="1"/>
+        <Range value="0.6"/>
+        <Delay value="2"/>
+    </CBehaviorWander>
 </Catalog>

@@ -3151,4 +3151,158 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling-swarmling.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_Queen">
+        <Icon value="Assets\Textures\btn-unit-zerg-queen.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-queen.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Hive">
+        <Icon value="Assets\Textures\btn-building-zerg-hive.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-hive.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Lair">
+        <Icon value="Assets\Textures\btn-building-zerg-lair.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-lair.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Aberration">
+        <Icon value="Assets\Textures\btn-unit-zerg-aberration.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-aberration.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Drone">
+        <Icon value="Assets\Textures\btn-unit-zerg-drone.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-drone.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Hydralisk">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Infestor">
+        <Icon value="Assets\Textures\btn-unit-zerg-infestor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-infestor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MorphToCorpser">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Roach"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Roach"/>
+    </CButton>
+    <CButton id="AP_MorphToHotSNoxious">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk-noxious.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Ultralisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Ultralisk"/>
+    </CButton>
+    <CButton id="AP_MorphToHotSTorrasque">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Ultralisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Ultralisk"/>
+    </CButton>
+    <CButton id="AP_MorphToHydraliskImpaler">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk-impaler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk-impaler.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Hydralisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Hydralisk"/>
+    </CButton>
+    <CButton id="AP_MorphToHydraliskLurker">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Hydralisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Hydralisk"/>
+    </CButton>
+    <CButton id="AP_MorphToMutaliskBroodlord">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Mutalisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Mutalisk"/>
+    </CButton>
+    <CButton id="AP_MorphToMutaliskViper">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Mutalisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Mutalisk"/>
+    </CButton>
+    <CButton id="AP_MorphToRaptor">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling-raptor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling-raptor.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Zergling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Zergling"/>
+    </CButton>
+    <CButton id="AP_MorphToSwarmHostSplitA">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost-carrion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <Hotkey value="Button/Hotkey/AP_SwarmHostMP"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="SwarmHostMP"/>
+    </CButton>
+    <CButton id="AP_MorphToSwarmHostSplitB">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost-creeper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <Hotkey value="Button/Hotkey/AP_SwarmHostMP"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="SwarmHostMP"/>
+    </CButton>
+    <CButton id="AP_MorphToSwarmling">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling-swarmling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling-swarmling.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Zergling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Zergling"/>
+    </CButton>
+    <CButton id="AP_MorphToVile">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <Hotkey value="Button/Hotkey/AP_Roach"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="Roach"/>
+    </CButton>
+    <CButton id="AP_MorphtoDefiler">
+        <Icon value="Assets\Textures\btn-unit-zerg-infestor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Mutalisk">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Overlord">
+        <Icon value="Assets\Textures\btn-unit-zerg-overlord.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-overlord.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Roach">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmHostMP">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Ultralisk">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-ultralisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Zergling">
+        <Icon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

@@ -25,5 +25,6 @@ trigger lib15EF4C78_gt_TechReactorswaptoAP_Factory;
 trigger lib15EF4C78_gt_TechReactorswaptoAP_Starport;
 trigger lib15EF4C78_gt_AP_Player_setHolodecoyWeapon;
 trigger lib15EF4C78_gt_Set5SecondsMark;
+trigger lib15EF4C78_gt_ZerglingRespawnInit;
 trigger lib15EF4C78_gt_SlayerInit;
 

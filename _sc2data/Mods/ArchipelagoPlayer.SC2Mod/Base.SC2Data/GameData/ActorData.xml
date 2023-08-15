@@ -5024,6 +5024,24 @@
         <AutoScaleFactor value="1.000000"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
+    <CActorSiteOpForward id="AP_SOpForwardTargetPointFireBeam">
+        <HostForward Subject="_ThermalLancesFireBeamTargetModel" Scope="Target"/>
+        <HostForwardSiteOps Ops="SOpAttachCenter"/>
+    </CActorSiteOpForward>
+    <CActorModel id="AP_ThermalLancesFireBeamTargetModel" parent="ModelAnimationStyleContinuous">
+        <Model value="Invisible"/>
+        <On Terms="Effect.AP_ThermalLancesFireBeam.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_ThermalLancesFireBeam.Stop; FromEffectTreeDescendant" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Host Subject="_Unit"/>
+        <Aliases value="_ThermalLancesFireBeamTargetModel"/>
+    </CActorModel>
+    <CActorModel id="AP_ThermalLancesFireBeamModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_ThermalLancesFireBeamCP.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On Terms="Effect.AP_ThermalLancesFireBeamCP.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="AP_SOpForwardTargetPointFireBeam SOp90" HoldPosition="1" HoldRotation="1"/>
+    </CActorModel>
     <CActorSiteMover id="AP_ColossusPurifierAttackImpactSite">
         <Terms value="Cap 1"/>
         <Sharing value="PerEffectTree"/>
@@ -14719,6 +14737,234 @@
         <Host Subject="_Selectable"/>
         <On Terms="AbilTransport.AP_OverlordTransport.TransportUnload" Send="Create"/>
     </CActorModel>
+    <CActorUnit id="AP_Hive" parent="ZergBuildingEx" unitName="AP_Hive">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="MacroTownhallDeco_Zerg"/>
+        <Macros value="ZergHivePlayerDecalMacro"/>
+        <Macros value="AP_ZerglingRespawnAnim"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply C"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Create"/>
+        <On Terms="UnitBirth.AP_Hive; PlayerHasClanDecal" Send="Create ZergClanFlag"/>
+        <On Terms="UnitBirth.AP_Hive; PlayerHasTrophy" Send="Create ZergPlayerTrophy"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="Hive"/>
+        <BuildModel value="Hive"/>
+        <DeathArray index="Normal" ModelLink="HiveDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PortraitModel value="HivePortrait"/>
+        <BarOffset value="190"/>
+        <BarWidth value="260"/>
+        <GlossaryAnim value="Stand,C"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hive.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-hive.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Hive_Ready"/>
+        <SoundArray index="What" value="Hive_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-hive.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hive.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_LarvaRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_LarvaReleaseLM">
+        <LaunchAttachQuery Methods="AMFilterHardpoint AMRandom"/>
+    </CActorAction>
+    <CActorUnit id="AP_Hatchery" parent="ZergBuildingEx" unitName="AP_Hatchery">
+        <Aliases value="_ZergLairMorph"/>
+        <Aliases value="_UnitHuge"/>
+        <Macros value="MacroTownhallDeco_Zerg"/>
+        <Macros value="ZergHatcheryPlayerDecalMacro"/>
+        <Macros value="SprayHelperMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Create AP_ZergHatcheryToLair"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="AnimClearAllBut Stand"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="AnimPlay MorphCancel Cover,End,A"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_Hatchery" Send="Create PlayerLogoDoodadList"/>
+        <On Terms="UnitBirth.AP_Hatchery; PlayerHasClanDecal" Send="Create ZergClanFlag"/>
+        <On Terms="UnitBirth.AP_Hatchery; PlayerHasTrophy" Send="Create ZergPlayerTrophy"/>
+        <Model value="Hatchery"/>
+        <BuildModel value="Hatchery"/>
+        <DeathArray index="Normal" ModelLink="HatcheryDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="HatcheryDeathUnderConstruction" SoundLink="Hatchery_Explode"/>
+        <PlacementModel value="HatcheryPlacement"/>
+        <PortraitModel value="HatcheryPortrait"/>
+        <BarOffset value="135"/>
+        <BarWidth value="200"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hatchery.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-hatchery.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Hatchery_Ready"/>
+        <SoundArray index="What" value="Hatchery_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-hatchery.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hatchery.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_Lair" parent="ZergBuildingEx" unitName="AP_Lair">
+        <Aliases value="_ZergHiveMorph"/>
+        <Aliases value="_UnitHuge"/>
+        <Macros value="MacroTownhallDeco_Zerg"/>
+        <Macros value="ZergLairPlayerDecalMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Create AP_ZergLairToHive"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimGroupApply C"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimGroupRemove C"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimClearAllBut Stand"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="AnimPlay MorphCancel Cover,End,B"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_Lair; PlayerHasClanDecal" Send="Create ZergClanFlag"/>
+        <On Terms="UnitBirth.AP_Lair; PlayerHasTrophy" Send="Create ZergPlayerTrophy"/>
+        <Model value="Lair"/>
+        <BuildModel value="Lair"/>
+        <DeathArray index="Normal" ModelLink="LairDeath" SoundLink=""/>
+        <PortraitModel value="LairPortrait"/>
+        <BarOffset value="180"/>
+        <BarWidth value="230"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Lair.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-lair.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="Lair_Ready"/>
+        <SoundArray index="What" value="Lair_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-lair.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Lair.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorProgress id="AP_ZergHatcheryToLair">
+        <!-- remove progress if cancelled, killed or completed -->
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hatchery; MorphTo AP_Lair" Send="Destroy"/>
+        <!-- the animations -->
+        <StageArray AnimProps="Morph,Start,A" BlendTime="0.000000"/>
+        <StageArray AnimProps="Stand,Morph,A"/>
+        <StageArray AnimProps="Morph,End,A"/>
+        <!-- linked to -->
+        <Supporter Subject="_ZergLairMorph"/>
+    </CActorProgress>
+    <CActorProgress id="AP_ZergLairToHive">
+        <!-- remove progress if cancelled, killed or completed -->
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Destroy"/>
+        <!-- the animations -->
+        <StageArray AnimProps="Morph,Start,B" BlendTime="0.000000"/>
+        <StageArray AnimProps="Stand,Morph,B"/>
+        <StageArray AnimProps="Morph,End,B"/>
+        <!-- linked to -->
+        <Supporter Subject="_ZergHiveMorph"/>
+    </CActorProgress>
+    <CActorUnit id="AP_Larva" parent="GenericUnitMorph" unitName="AP_Larva">
+        <Aliases value="_UnitSmall"/>
+        <Model value="Larva"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Larva"/>
+        <DeathArray index="Normal" ModelLink="LarvaDeath" SoundLink="Larva_Explode"/>
+        <DeathArray index="TrainingComplete" SoundLink="Uni_DeathFXSilentKill"/>
+        <PlacementModel value="Larva"/>
+        <PortraitModel value="LarvaPortrait"/>
+        <WalkAnimMoveSpeed value="0.3984"/>
+        <BarOffset value="5"/>
+        <BarWidth value="30"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Larva.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-larva.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <SoundArray index="What" value="Larva_What"/>
+        <SoundArray index="Pissed" value="Larva_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-larva.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Larva.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorMissile id="AP_LarvaReleaseMissile" parent="GenericAttackMissile" unitName="AP_LarvaReleaseMissile">
+        <Model value="LarvaReleaseMissile"/>
+        <BarHeight value="7"/>
+        <BarOffset value="100"/>
+        <BarWidth value="60"/>
+        <GroupSoundArray index="Board" value="LarvaReleaseMissileGroupBoard"/>
+        <GroupSoundThreshold value="2"/>
+        <HeroIcon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_LarvaReleaseMissile"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <SoundArray index="Movement" value="LarvaReleaseMissileMovement"/>
+        <SoundArray index="Turning" value="LarvaReleaseMissileTurning"/>
+        <SoundArray index="Board" value="LarvaReleaseMissileBoard"/>
+        <SoundArray index="Click" value="LarvaReleaseMissileClick"/>
+        <SoundArray index="ClickError" value="LarvaReleaseMissileClickError"/>
+        <SoundArray index="Highlight" value="LarvaReleaseMissileHighlight"/>
+        <StatusColors index="Shields" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,0,0,255"/>
+        </StatusColors>
+        <StatusColors index="Life" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,208,34,0"/>
+            <ColorArray value="255,229,129,0"/>
+            <ColorArray value="255,229,221,0"/>
+            <ColorArray value="255,22,229,0"/>
+        </StatusColors>
+        <StatusColors index="Energy" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,150,40,220"/>
+        </StatusColors>
+        <StatusColors index="Cargo" BackgroundColor="255,0,0,0" EmptyColor="255,77,60,15">
+            <ColorArray value="255,255,200,50"/>
+        </StatusColors>
+        <StatusColors index="Progress" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,0,200,200"/>
+        </StatusColors>
+        <StatusColors index="Duration" BackgroundColor="255,0,0,0" EmptyColor="255,80,80,80">
+            <ColorArray value="255,200,200,200"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-missing-kaeo.dds"/>
+    </CActorMissile>
+    <CActorSound id="AP_Larva_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Larva; PassChance 25.000000" Send="Create"/>
+        <Sound value="Larva_Death"/>
+    </CActorSound>
+    <CActorSound id="Zerg_BuildingMorphStart">
+        <!-- Override -->
+        <On Terms="Abil.AP_ZergBuild.BuiltStart" Send="Create"/>
+        <On Terms="Abil.AP_QueenBuild.BuiltStart" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Send="Create"/>
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 0" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ZergHatcheryToLair.Start; Level 0" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ZergLairToHive.Start; Level 0" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ZergBuildingMorphModel.Start; Level 0" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Start; Level 0" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="ZergConstructionSoundLevel2">
+        <On Terms="ProgressLevel.AP_ZergConstructionAttached.Start; Level 2" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="ZergConstructionSoundLevel4">
+        <On Terms="ProgressLevel.AP_ZergConstructionAttached.Start; Level 4" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="Zerg_BuildingMorphEnd">
+        <!-- Override -->
+        <On Terms="ProgressLevel.AP_ZergConstructionAttached.Start; Level 6" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ZergHatcheryToLair.Start; Level 2" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ZergLairToHive.Start; Level 2" Send="Create"/>
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 2" Send="Create"/>
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Start; Level 2" Send="Create"/>
+    </CActorSound>
     <CActorProgress id="ProtossConstruction">
         <!-- Override -->
         <On Terms="Abil.AP_ProtossBuild.BuiltStart" Send="Create"/>
@@ -16324,21 +16570,21 @@
             <Image value="Assets\Textures\Wireframe-Zerg-RoachWarren.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="SOAAutomatedAssimilatorBeam2" parent="ModelAnimationStyleContinuous">
+    <CActorSound id="AP_QueenSpawnLarvaLarvaLandSound" parent="SoundOneShot">
+        <On Terms="UnitDeath.LarvaReleaseMissile" Send="Create"/>
+        <Sound value="Queen_SpawnLarvaLarvaLand"/>
+    </CActorSound>
+    <CActorModel id="AP_SOAAutomatedAssimilatorBeam" parent="ModelAnimationStyleContinuous">
         <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
-        <On Terms="Behavior.AutomatedAssimilatorBeam.On" Send="Create"/>
-        <On Terms="Behavior.AutomatedAssimilatorBeam.Off" Send="AnimBracketStop BSD"/>
-        <Model value="SOAAutomatedAssimilatorBeam"/>
+        <On Terms="Behavior.AP_AutomatedAssimilatorBeam.On" Send="Create"/>
+        <On Terms="Behavior.AP_AutomatedAssimilatorBeam.Off" Send="AnimBracketStop BSD"/>
         <ModelFlags index="AutomateGlobalLoops" value="1"/>
     </CActorModel>
-    <CActorSound id="SOAAutomatedAssimilatorBeam_ActorSoundLoop2" parent="SoundContinuous">
+    <CActorSound id="AP_SOAAutomatedAssimilatorBeam_ActorSoundLoop" parent="SoundContinuous">
         <FogVisibility value="Hidden"/>
-        <On Terms="Behavior.AutomatedAssimilatorBeam.On" Send="Create"/>
-        <On Terms="Behavior.AutomatedAssimilatorBeam.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_AutomatedAssimilatorBeam.On" Send="Create"/>
+        <On Terms="Behavior.AP_AutomatedAssimilatorBeam.Off" Send="Destroy"/>
         <Sound value="HarvestBeam_Loop"/>
-    </CActorSound>
-    <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
-        <Sound value="Mothership_RecallStart"/>
     </CActorSound>
     <CActorModel id="AP_SOAMothershipv4WarpIn" parent="ModelAnimationStyleOneShot">
         <On Terms="Behavior.AP_SOAMothershipTimedLife.On" Send="Create"/>
@@ -23676,6 +23922,24 @@
         <Sound value="WarpPrism_MorphToTransport"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrism" Send="Create"/>
     </CActorSound>
+    <CActorStateMonitor id="ZergBloodLargeBuilding2" parent="ZergBlood">
+        <On Terms="UnitCreation.Hatchery" Send="Create"/>
+        <On Terms="UnitCreation.Lair" Send="Create"/>
+        <On Terms="UnitCreation.AP_Hive" Send="Create"/>
+        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>
+        <On Terms="StateChange; StateValid ZergBleedLight; StateChanged ZergNormal" Send="Create ZergBloodSetBleedSmall"/>
+        <On Terms="StateChange; StateValid ZergBleedHeavy; StateChanged ZergNormal" Send="Create ZergBloodSetBleedHeavy"/>
+        <On Terms="StateChange; StateValid ZergBleedProfusely; StateChanged ZergNormal" Send="Create ZergBloodSetBleedProfusely"/>
+        <On Terms="StateChange; StateValid ZergBleedLight; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedSmall"/>
+        <On Terms="StateChange; StateValid ZergBleedHeavy; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedHeavy"/>
+        <On Terms="StateChange; StateValid ZergBleedProfusely; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedProfusely"/>
+        <On Terms="StateChange; StateValid ZergNormal; StateChanged ZergBleedLight" Target="ZergBloodSetBleedSmall" Send="Destroy"/>
+        <On Terms="StateChange; StateValid ZergBleedLight; StateChanged ZergBleedHeavy" Target="ZergBloodSetBleedHeavy" Send="Destroy"/>
+        <On Terms="StateChange; StateValid ZergBleedHeavy; StateChanged ZergBleedProfusely" Target="ZergBloodSetBleedProfusely" Send="Destroy"/>
+        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedSmall" Send="Destroy"/>
+        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedHeavy" Send="Destroy"/>
+        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedProfusely" Send="Destroy"/>
+    </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodMediumBuilding">
         <!-- Override -->
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
@@ -23704,6 +23968,13 @@
         <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
         <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
         <On Terms="UnitCreation.AP_EvolutionChamber" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorStateMonitor id="MechaFlamesLargeBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_Hatchery" Send="Create"/>
+        <On Terms="UnitCreation.AP_Lair" Send="Create"/>
+        <On Terms="UnitCreation.AP_Hive" Send="Create"/>
+        <!--        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>-->
     </CActorStateMonitor>
     <CActorMissile id="AP_GhostSCBWLockdown@Missile" parent="GenericAttackMissile" unitName="AP_GhostSCBWLockdown@Missile"/>
     <CActorRange id="AP_GhostSCBWLockdown@Range" parent="RangeAbil" abil="AP_GhostSCBWLockdown"/>

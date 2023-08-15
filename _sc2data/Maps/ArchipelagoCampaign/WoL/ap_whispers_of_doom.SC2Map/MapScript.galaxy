@@ -268,8 +268,8 @@ trigger gt_BanelingPuzzleBanelingSlowUnburrow;
 trigger gt_BanelingPuzzleBanelingAI;
 trigger gt_BanelingPuzzleRockBridge;
 trigger gt_HatcheryDiscovered2UltralisksQ;
-trigger gt_Hatchery2AI;
-trigger gt_DyingUltralisksHatchery2;
+trigger gt_AP_HatcheryAI;
+trigger gt_DyingUltralisksAP_Hatchery;
 trigger gt_AmbushInit;
 trigger gt_Crawlers;
 trigger gt_CrawlersQ;
@@ -4510,8 +4510,8 @@ bool gt_HatcheryDiscovered2UltralisksQ_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    TriggerEnable(gt_DyingUltralisksHatchery2, true);
-    TriggerExecute(gt_Hatchery2AI, true, false);
+    TriggerEnable(gt_DyingUltralisksAP_Hatchery, true);
+    TriggerExecute(gt_AP_HatcheryAI, true, false);
     libNtve_gf_ShowHideUnit(UnitFromId(336), true);
     gf_ActivatePatrolAIForUnit(UnitFromId(336), PointFromId(229), 5.0);
     TriggerQueueEnter();
@@ -4538,7 +4538,7 @@ void gt_HatcheryDiscovered2UltralisksQ_Init () {
 //--------------------------------------------------------------------------------------------------
 // Trigger: Hatchery 2 AI
 //--------------------------------------------------------------------------------------------------
-bool gt_Hatchery2AI_Func (bool testConds, bool runActions) {
+bool gt_AP_HatcheryAI_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -4563,14 +4563,14 @@ bool gt_Hatchery2AI_Func (bool testConds, bool runActions) {
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_Hatchery2AI_Init () {
-    gt_Hatchery2AI = TriggerCreate("gt_Hatchery2AI_Func");
+void gt_AP_HatcheryAI_Init () {
+    gt_AP_HatcheryAI = TriggerCreate("gt_AP_HatcheryAI_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
 // Trigger: Dying Ultralisks - Hatchery 2
 //--------------------------------------------------------------------------------------------------
-bool gt_DyingUltralisksHatchery2_Func (bool testConds, bool runActions) {
+bool gt_DyingUltralisksAP_Hatchery_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
@@ -4613,10 +4613,10 @@ bool gt_DyingUltralisksHatchery2_Func (bool testConds, bool runActions) {
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_DyingUltralisksHatchery2_Init () {
-    gt_DyingUltralisksHatchery2 = TriggerCreate("gt_DyingUltralisksHatchery2_Func");
-    TriggerEnable(gt_DyingUltralisksHatchery2, false);
-    TriggerAddEventUnitDamaged(gt_DyingUltralisksHatchery2, null, c_unitDamageTypeAny, c_unitDamageEither, null);
+void gt_DyingUltralisksAP_Hatchery_Init () {
+    gt_DyingUltralisksAP_Hatchery = TriggerCreate("gt_DyingUltralisksAP_Hatchery_Func");
+    TriggerEnable(gt_DyingUltralisksAP_Hatchery, false);
+    TriggerAddEventUnitDamaged(gt_DyingUltralisksAP_Hatchery, null, c_unitDamageTypeAny, c_unitDamageEither, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -10228,8 +10228,8 @@ void InitTriggers () {
     gt_BanelingPuzzleBanelingAI_Init();
     gt_BanelingPuzzleRockBridge_Init();
     gt_HatcheryDiscovered2UltralisksQ_Init();
-    gt_Hatchery2AI_Init();
-    gt_DyingUltralisksHatchery2_Init();
+    gt_AP_HatcheryAI_Init();
+    gt_DyingUltralisksAP_Hatchery_Init();
     gt_AmbushInit_Init();
     gt_Crawlers_Init();
     gt_CrawlersQ_Init();

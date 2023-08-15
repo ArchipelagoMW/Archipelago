@@ -11961,4 +11961,7 @@
             <Time value="1.200000"/>
         </Events>
     </CModel>
+    <CModel id="AP_SOAAutomatedAssimilatorBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\SOA_OrbitalAssimilator_Beam\SOA_OrbitalAssimilator_Beam.m3"/>
+    </CModel>
 </Catalog>

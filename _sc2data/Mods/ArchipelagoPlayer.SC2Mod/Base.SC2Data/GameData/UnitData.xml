@@ -6674,6 +6674,11 @@
         <AbilArray Link="AP_CommandCenterTrain"/>
         <AbilArray Link="que5PassiveCancelToSelection"/>
         <AbilArray Link="AP_CommandCenterTransport"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_CommandCenterQueue"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
@@ -6705,6 +6710,112 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="240"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_Larva">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Larva" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="25"/>
+        <LifeMax value="25"/>
+        <LifeArmor value="10"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Creep"/>
+        <Speed value="0.5625"/>
+        <Acceleration value="1000"/>
+        <Sight value="5"/>
+        <AttackTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="AP_LarvaTrain"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="AP_LarvaTrainSwarm"/>
+        <AbilArray Link="AP_LarvaTrainSwarmling"/>
+        <BehaviorArray Link="AP_LarvaWander"/>
+        <BehaviorArray Link="DeathOffCreep"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_Drone" Type="AbilCmd" AbilCmd="AP_LarvaTrain,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_MorphToRaptor" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarmling,0" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_MorphToSwarmling" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarmling,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_MorphToRaptor" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,6" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_Zergling" Type="AbilCmd" AbilCmd="AP_LarvaTrain,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_Overlord" Type="AbilCmd" AbilCmd="AP_LarvaTrain,2" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_MorphToCorpser" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,22" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_MorphToVile" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,0" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_Roach" Type="AbilCmd" AbilCmd="AP_LarvaTrain,9" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_Infestor" Type="AbilCmd" AbilCmd="AP_LarvaTrain,10" Row="1" Column="2"/>
+<!--            <LayoutButtons Face="AP_MorphtoDefiler" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,2" Row="1" Column="2"/>-->
+            <LayoutButtons Face="AP_MorphToSwarmHostSplitA" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,25" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_MorphToSwarmHostSplitB" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,26" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_SwarmHostMP" Type="AbilCmd" AbilCmd="AP_LarvaTrain,14" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_MorphToMutaliskBroodlord" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,23" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MorphToMutaliskViper" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,24" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_Mutalisk" Type="AbilCmd" AbilCmd="AP_LarvaTrain,4" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MorphToHydraliskImpaler" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,20" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MorphToHydraliskLurker" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,21" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_Hydralisk" Type="AbilCmd" AbilCmd="AP_LarvaTrain,3" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MorphToHotSTorrasque" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,16" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_MorphToHotSNoxious" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,17" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_Ultralisk" Type="AbilCmd" AbilCmd="AP_LarvaTrain,6" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_Aberration" Type="AbilCmd" AbilCmd="AP_LarvaTrainSwarm,27" Row="0" Column="3"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que1,CancelLast" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.125"/>
+        <SeparationRadius value="0"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="0.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <AIEvalFactor value="0"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeProducedUnitArray value="Drone"/>
+        <TechTreeProducedUnitArray value="Overlord"/>
+        <TechTreeProducedUnitArray value="Zergling"/>
+        <TechTreeProducedUnitArray value="HotSRaptor"/>
+        <TechTreeProducedUnitArray value="HotSSwarmling"/>
+        <TechTreeProducedUnitArray value="Roach"/>
+        <TechTreeProducedUnitArray value="RoacVile"/>
+        <TechTreeProducedUnitArray value="RoachCorpser"/>
+        <TechTreeProducedUnitArray value="Hydralisk"/>
+        <TechTreeProducedUnitArray value="HydraliskLurker"/>
+        <TechTreeProducedUnitArray value="HydraliskImpaler"/>
+        <TechTreeProducedUnitArray value="SwarmHost"/>
+        <TechTreeProducedUnitArray value="SwarmHostSplitA"/>
+        <TechTreeProducedUnitArray value="SwarmHostSplitB"/>
+        <TechTreeProducedUnitArray value="Infestor"/>
+        <TechTreeProducedUnitArray value="Mutalisk"/>
+        <TechTreeProducedUnitArray value="MutaliskBroodlord"/>
+        <TechTreeProducedUnitArray value="MutaliskViper"/>
+        <TechTreeProducedUnitArray value="InfestedAbomination"/>
+        <TechTreeProducedUnitArray value="Ultralisk"/>
+        <TechTreeProducedUnitArray value="HotSTorrasque"/>
+        <TechTreeProducedUnitArray value="HotSNoxious"/>
+    </CUnit>
+    <CUnit id="AP_LarvaReleaseMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <Mover value="LarvaReleaseMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="PlanetaryFortress">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
     </CUnit>
     <CUnit id="AP_MULE">
         <DeathRevealRadius value="3"/>
@@ -6826,6 +6937,11 @@
         <AbilArray Link="AP_CommandCenterTrain"/>
         <AbilArray Link="AP_ScannerSweep"/>
         <AbilArray Link="AP_OrbitalLiftOff"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_CommandCenterQueue"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
@@ -6854,6 +6970,15 @@
         <TechAliasArray value="Alias_CommandCenter"/>
         <GlossaryPriority value="30"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="OrbitalCommand">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
     </CUnit>
     <CUnit id="AP_OrbitalCommandFlying">
         <DeathRevealRadius value="3"/>
@@ -6970,6 +7095,11 @@
         <AbilArray Link="AP_UpgradeToPlanetaryFortress"/>
         <AbilArray Link="AP_ScannerSweep"/>
         <AbilArray Link="AP_CalldownMULE"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_CommandCenterQueue"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
@@ -7009,6 +7139,15 @@
         <TechTreeProducedUnitArray value="SCV"/>
         <TechTreeProducedUnitArray value="PlanetaryFortress"/>
         <TechTreeProducedUnitArray value="OrbitalCommand"/>
+    </CUnit>
+    <CUnit id="CommandCenter">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
     </CUnit>
     <CUnit id="AP_CommandCenterFlying">
         <Name value="Unit/Name/CommandCenter"/>
@@ -11734,6 +11873,11 @@
         <AbilArray Link="AP_NexusTrainMothershipCore"/>
         <AbilArray Link="AP_attackProtossBuilding"/>
         <AbilArray Link="AP_ChampionWarpTrain"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
         <BehaviorArray Link="AP_NexusDeath"/>
         <BehaviorArray Link="AP_SOARadar"/>
         <BehaviorArray Link="AP_GameTime5Seconds"/>
@@ -11769,6 +11913,15 @@
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
         <TechTreeProducedUnitArray value="Probe"/>
+    </CUnit>
+    <CUnit id="Nexus">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
     </CUnit>
     <CUnit id="AP_MothershipCoreWeaponWeapon" parent="MISSILE">
         <Race value="Prot"/>
@@ -12717,7 +12870,7 @@
         <SubgroupPriority value="2"/>
         <MinimapRadius value="1"/>
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
-        <TechAliasArray value="Alias_Spire"/>
+        <TechAliasArray value="Alias_AP_Spire"/>
         <GlossaryPriority value="244"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
     </CUnit>
@@ -12777,6 +12930,7 @@
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ZergStory"/>
+        <TechAliasArray value="Alias_AP_HydraliskDen"/>
     </CUnit>
     <CUnit id="AP_ImpalerDen">
         <DeathRevealRadius value="3"/>
@@ -12834,6 +12988,7 @@
         <ScoreResult value="BuildOrder"/>
         <SubgroupPriority value="2"/>
         <MinimapRadius value="1.5"/>
+        <TechAliasArray value="Alias_AP_HydraliskDen"/>
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ZergStory"/>
@@ -12967,7 +13122,7 @@
         <SubgroupPriority value="2"/>
         <MinimapRadius value="1.5"/>
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
-        <TechAliasArray value="Alias_HydraliskDen"/>
+        <TechAliasArray value="Alias_AP_HydraliskDen"/>
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
     </CUnit>
@@ -13818,6 +13973,298 @@
         <GlossaryCategory value="Unit/Category/ZergUnits"/>
         <GlossaryPriority value="201"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
+    </CUnit>
+    <CUnit id="AP_Hive">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventReveal" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="TownCamera" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <ResourceDropOff index="Minerals" value="1"/>
+        <ResourceDropOff index="Vespene" value="1"/>
+        <ResourceDropOff index="Terrazine" value="1"/>
+        <ResourceDropOff index="Custom" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="2500"/>
+        <LifeMax value="2500"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="12"/>
+        <Food value="2"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="700"/>
+        <CostResource index="Vespene" value="250"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_RallyHatchery"/>
+        <AbilArray Link="AP_TrainQueen"/>
+        <AbilArray Link="que5CancelToSelection"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+        <AbilArray Link="RallyBlock"/>
+        <BehaviorArray Link="AP_makeCreep8x6"/>
+        <BehaviorArray Link="AP_SpawnLarva"/>
+        <BehaviorArray Link="AP_ZergBuildingDies9"/>
+        <!--        <BehaviorArray Link="QueenofVenomHatcherySearch"/>-->
+        <!-- The Behavior doesn't exist -->
+        <BehaviorArray Link="AP_makeCreep8x6Enhanced"/>
+        <CardLayouts>
+            <LayoutButtons Face="Larva" Type="SelectLarva" Row="0" Column="0"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5CancelToSelection,0" Row="2" Column="4"/>
+            <LayoutButtons Face="RallyEgg" Type="AbilCmd" AbilCmd="AP_RallyHatchery,1" Row="1" Column="3"/>
+            <LayoutButtons Face="SetRallyPoint2" Type="AbilCmd" AbilCmd="AP_RallyHatchery,0" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_Queen" Type="AbilCmd" AbilCmd="AP_TrainQueen,0" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_RespawnZergling" Type="AbilCmd" AbilCmd="AP_ZerglingRespawn,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <CardLayouts>
+            <LayoutButtons Face="RallyBlock" Type="AbilCmd" AbilCmd="RallyBlock,Execute" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="2"/>
+        <SeparationRadius value="2"/>
+        <Footprint value="Footprint6x5DropOffCreepSourceContour"/>
+        <PlacementFootprint value="Footprint6x5DropOffCreepSource"/>
+        <ScoreMake value="900"/>
+        <ScoreKill value="950"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="2.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Hive"/>
+        <AIEvalFactor value="0"/>
+        <TechAliasArray value="Alias_AP_Hatchery"/>
+        <TechAliasArray value="Alias_AP_Lair"/>
+        <GlossaryPriority value="18"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+    </CUnit>
+    <CUnit id="Hatchery">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+    </CUnit>
+    <CUnit id="Lair">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+    </CUnit>
+    <CUnit id="Hive">
+        <!-- Override -->
+        <!-- Zergling respawn -->
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+    </CUnit>
+    <CUnit id="AP_Hatchery">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventReveal" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="TownCamera" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <ResourceDropOff index="Minerals" value="1"/>
+        <ResourceDropOff index="Vespene" value="1"/>
+        <ResourceDropOff index="Terrazine" value="1"/>
+        <ResourceDropOff index="Custom" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1250"/>
+        <LifeMax value="1250"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="10"/>
+        <Food value="2"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="350"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_UpgradeToLair"/>
+        <AbilArray Link="AP_RallyHatchery"/>
+        <AbilArray Link="AP_TrainQueen"/>
+        <AbilArray Link="que5CancelToSelection"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+        <AbilArray Link="RallyBlock"/>
+        <BehaviorArray Link="AP_makeCreep8x6"/>
+        <BehaviorArray Link="AP_SpawnLarva"/>
+        <BehaviorArray Link="AP_ZergBuildingDies9"/>
+        <!--        <BehaviorArray Link="QueenofVenomHatcherySearch"/>-->
+        <!-- The Behavior doesn't exist -->
+        <BehaviorArray Link="AP_makeCreep8x6Enhanced"/>
+        <EffectArray index="Create" value="HatcheryCreateSet"/>
+        <EffectArray index="Birth" value="HatcheryBirthSet"/>
+        <CardLayouts>
+            <LayoutButtons Face="Larva" Type="SelectLarva" Row="0" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5CancelToSelection,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelMutateMorph" Type="AbilCmd" AbilCmd="AP_UpgradeToLair,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Lair" Type="AbilCmd" AbilCmd="AP_UpgradeToLair,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="RallyEgg" Type="AbilCmd" AbilCmd="AP_RallyHatchery,Rally2" Row="1" Column="3"/>
+            <LayoutButtons Face="Queen" Type="AbilCmd" AbilCmd="AP_TrainQueen,Train1" Row="0" Column="1"/>
+            <LayoutButtons Face="SetRallyPoint2" Type="AbilCmd" AbilCmd="AP_RallyHatchery,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="RespawnZergling" Type="AbilCmd" AbilCmd="ZerglingRespawn,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <CardLayouts>
+            <LayoutButtons Face="RallyBlock" Type="AbilCmd" AbilCmd="RallyBlock,Execute" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="2"/>
+        <SeparationRadius value="2"/>
+        <Footprint value="Footprint6x5DropOffCreepSourceContour"/>
+        <PlacementFootprint value="Footprint6x5DropOffCreepSource"/>
+        <ScoreMake value="300"/>
+        <ScoreKill value="350"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="2.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <AIEvalFactor value="0"/>
+        <TechAliasArray value="Alias_AP_Hatchery"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeProducedUnitArray value="Larva"/>
+        <TechTreeProducedUnitArray value="Queen"/>
+    </CUnit>
+    <CUnit id="AP_Lair">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventReveal" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="TownCamera" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <ResourceDropOff index="Minerals" value="1"/>
+        <ResourceDropOff index="Vespene" value="1"/>
+        <ResourceDropOff index="Terrazine" value="1"/>
+        <ResourceDropOff index="Custom" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1800"/>
+        <LifeMax value="1800"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="11"/>
+        <Food value="2"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="500"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_UpgradeToHive"/>
+        <AbilArray Link="AP_RallyHatchery"/>
+        <AbilArray Link="AP_TrainQueen"/>
+        <AbilArray Link="que5CancelToSelection"/>
+        <AbilArray Link="AP_ZerglingRespawnPrimary"/>
+        <AbilArray Link="AP_ZerglingRespawnDeath"/>
+        <AbilArray Link="AP_ZerglingRespawn"/>
+        <AbilArray Link="AP_ZerglingRespawnCounter"/>
+        <AbilArray Link="AP_ZerglingRespawnTrain"/>
+        <AbilArray Link="RallyBlock"/>
+        <BehaviorArray Link="AP_makeCreep8x6"/>
+        <BehaviorArray Link="AP_SpawnLarva"/>
+        <BehaviorArray Link="AP_ZergBuildingDies9"/>
+        <!--        <BehaviorArray Link="QueenofVenomHatcherySearch"/>-->
+        <!-- The Behavior doesn't exist -->
+        <BehaviorArray Link="AP_makeCreep8x6Enhanced"/>
+        <CardLayouts>
+            <LayoutButtons Face="Larva" Type="SelectLarva" Row="0" Column="0"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5CancelToSelection,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelMutateMorph" Type="AbilCmd" AbilCmd="AP_UpgradeToHive,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_Hive" Type="AbilCmd" AbilCmd="AP_UpgradeToHive,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="RallyEgg" Type="AbilCmd" AbilCmd="AP_RallyHatchery,Rally2" Row="1" Column="3"/>
+            <LayoutButtons Face="SetRallyPoint2" Type="AbilCmd" AbilCmd="AP_RallyHatchery,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="Queen" Type="AbilCmd" AbilCmd="AP_TrainQueen,Train1" Row="0" Column="1"/>
+            <LayoutButtons Face="RespawnZergling" Type="AbilCmd" AbilCmd="ZerglingRespawn,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <CardLayouts>
+            <LayoutButtons Face="RallyBlock" Type="AbilCmd" AbilCmd="RallyBlock,Execute" Row="2" Column="3"/>
+        </CardLayouts>
+        <Radius value="2"/>
+        <SeparationRadius value="2"/>
+        <Footprint value="Footprint6x5DropOffCreepSourceContour"/>
+        <PlacementFootprint value="Footprint6x5DropOffCreepSource"/>
+        <ScoreMake value="550"/>
+        <ScoreKill value="600"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="2.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <AIEvalFactor value="0"/>
+        <TechAliasArray value="Alias_AP_Hatchery"/>
+        <TechAliasArray value="Alias_AP_Lair"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeUnlockedUnitArray value="Overseer"/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
@@ -15914,7 +16361,7 @@
         <SubgroupPriority value="2"/>
         <MinimapRadius value="1"/>
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
-        <TechAliasArray value="Alias_Spire"/>
+        <TechAliasArray value="Alias_AP_Spire"/>
         <GlossaryPriority value="241"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
         <TechTreeUnlockedUnitArray value="Mutalisk"/>

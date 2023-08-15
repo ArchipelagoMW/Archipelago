@@ -121,7 +121,7 @@ Staffs_Table = {
     ItemName.PreciousMushroom2: ItemData(0x13004F, 1, 550, 0x369F),
     ItemName.PremiumMushroom:   ItemData(0x130050, 1, 551, 0x36A0),
     ItemName.RisingDragon:      ItemData(0x130051, 1, 154, 0x35F5),
-    ItemName.SaveTheQueen2:     ItemData(0x130052, 1, 503, 0x3692),
+    ItemName.SaveTheAP_Queen:     ItemData(0x130052, 1, 503, 0x3692),
     ItemName.ShamansRelic:      ItemData(0x130053, 1, 156, 0x35F7),
 }
 Shields_Table = {
@@ -451,7 +451,7 @@ CheckDupingItems = {
             ItemName.PreciousMushroom2,
             ItemName.PremiumMushroom,
             ItemName.RisingDragon,
-            ItemName.SaveTheQueen2,
+            ItemName.SaveTheAP_Queen,
             ItemName.ShamansRelic,
         },
         "Shields":   {
@@ -821,7 +821,7 @@ Progression_Dicts = {
         ItemName.PreciousMushroom2,
         ItemName.PremiumMushroom,
         ItemName.RisingDragon,
-        ItemName.SaveTheQueen2,
+        ItemName.SaveTheAP_Queen,
         ItemName.ShamansRelic,
         # Shields
         ItemName.AkashicRecord,

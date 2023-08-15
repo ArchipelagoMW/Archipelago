@@ -5109,18 +5109,18 @@
         <InfoArray index="Build15" Unit="AP_CyberneticsCore" Time="50">
             <Button DefaultButtonFace="AP_CyberneticsCore" State="Restricted" Requirements="AP_HaveGatewayOrStargate"/>
         </InfoArray>
-<!--        <InfoArray index="Build20" Unit="PsionicAmplifier" Time="40">-->
-<!--            <Button DefaultButtonFace="PsionicAmplifier" State="Restricted"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Build21" Unit="VoidPylon" Time="60">-->
-<!--            <Button DefaultButtonFace="VoidPylon"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Build20" Unit="PsionicAmplifier" Time="40">-->
+        <!--            <Button DefaultButtonFace="PsionicAmplifier" State="Restricted"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Build21" Unit="VoidPylon" Time="60">-->
+        <!--            <Button DefaultButtonFace="VoidPylon"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Build22" Unit="AP_ShieldBattery" Time="30">
             <Button DefaultButtonFace="AP_ShieldBattery" Requirements="AP_HaveNexus"/>
         </InfoArray>
-<!--        <InfoArray index="Build23" Unit="SoACaster" Time="40">-->
-<!--            <Button DefaultButtonFace="WarpinSoACaster" Requirements="NoSoACaster"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Build23" Unit="SoACaster" Time="40">-->
+        <!--            <Button DefaultButtonFace="WarpinSoACaster" Requirements="NoSoACaster"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Build24" Unit="AP_AutomatedAssimilator" Time="30">
             <Button DefaultButtonFace="AP_AutomatedAssimilator" Requirements="AP_HaveSOAAutoAssimilator"/>
         </InfoArray>
@@ -5138,6 +5138,182 @@
         </InfoArray>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
+    <CAbilRally id="AP_RallyHatchery">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Rally2" DefaultButtonFace="RallyEgg"/>
+        <InfoArray index="0">
+            <SetValidators value="NotResourcesOrEnemyTargetType"/>
+            <UseValidators value="NotDroneAndNotOverlord"/>
+        </InfoArray>
+        <InfoArray SetOnGround="0">
+            <UseValidators value="IsDroneOrOverlord"/>
+        </InfoArray>
+        <InfoArray SetOnGround="0">
+            <SetValidators value="Failure"/>
+        </InfoArray>
+    </CAbilRally>
+    <CAbilTrain id="AP_LarvaTrain">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <Activity value="UI/Morphing"/>
+        <Flags index="DisableCollision" value="1"/>
+        <Flags index="KillOnCancel" value="1"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="Egg"/>
+        <Range value="4"/>
+        <InfoArray index="Train1" Time="17" Alert="TrainWorkerComplete">
+            <Button DefaultButtonFace="AP_Drone"/>
+            <Unit value="AP_Drone"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="24">
+            <Button DefaultButtonFace="AP_Zergling" Requirements="AP_HaveSpawningPool"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="25">
+            <Button DefaultButtonFace="AP_Overlord"/>
+            <Unit value="AP_Overlord"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="33">
+            <Button DefaultButtonFace="AP_Hydralisk" Requirements="AP_HaveHydraliskDen"/>
+            <Unit value="AP_Hydralisk"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="33">
+            <Button DefaultButtonFace="AP_Mutalisk" Requirements="AP_HaveSpire"/>
+            <Unit value="AP_Mutalisk"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="70">
+            <Button DefaultButtonFace="AP_Ultralisk" Requirements="AP_HaveUltraliskCavern"/>
+            <Unit value="AP_Ultralisk"/>
+        </InfoArray>
+<!--        <InfoArray index="Train8" Time="35">-->
+<!--            <Button DefaultButtonFace="AP_Baneling" Requirements="HaveBanelingNest"/>-->
+<!--            <Unit value="AP_Baneling"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train10" Time="27">
+            <Button DefaultButtonFace="AP_Roach" Requirements="AP_HaveRoachWarren"/>
+            <Unit value="AP_Roach"/>
+        </InfoArray>
+        <InfoArray index="Train11" Time="50">
+            <Button DefaultButtonFace="AP_Infestor" Requirements="AP_HaveInfestationPit"/>
+            <Unit value="AP_Infestor"/>
+        </InfoArray>
+<!--        <InfoArray index="Train12" Time="40">-->
+<!--            <Button DefaultButtonFace="AP_Corruptor" Requirements="HaveSpire"/>-->
+<!--            <Unit value="AP_Corruptor"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train15" Time="40">
+            <Button DefaultButtonFace="AP_SwarmHost" Requirements="AP_HaveInfestationPit"/>
+            <Unit value="AP_SwarmHost"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilTrain id="AP_LarvaTrainSwarm">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="DisableCollision" value="1"/>
+        <Flags index="KillOnCancel" value="1"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="Egg"/>
+        <Range value="4"/>
+        <InfoArray index="Train1" Time="27">
+            <Button DefaultButtonFace="AP_RoachVile" Requirements="AP_HaveRoachWarrenAndVile"/>
+            <Unit value="AP_Roach"/>
+        </InfoArray>
+<!--        <InfoArray index="Train3" Time="50">-->
+<!--            <Button DefaultButtonFace="MorphtoDefiler" State="Suppressed" Requirements="HaveInfestationPit"/>-->
+<!--            <Unit value="Defiler"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train4" Time="40">-->
+<!--            <Button DefaultButtonFace="MorphtoDevourer" State="Suppressed" Requirements="HaveSpire"/>-->
+<!--            <Unit value="Devourer"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train7" Time="24">
+            <Button DefaultButtonFace="AP_MorphToRaptor" Requirements="AP_HaveSpawningPoolAndRaptor"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value=""/>
+            <Unit value=""/>
+        </InfoArray>
+<!--        <InfoArray index="Train10" Time="24">-->
+<!--            <Resource index="Minerals" value="50"/>-->
+<!--            <Button DefaultButtonFace="AP_MorphToSwarmling" State="Suppressed" Requirements="AP_HaveSpawningPool"/>-->
+<!--            <Unit value="AP_Zergling"/>-->
+<!--            <Unit value="AP_Zergling"/>-->
+<!--            <Unit value=""/>-->
+<!--            <Unit value=""/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train13" Time="40">-->
+<!--            <Button DefaultButtonFace="Lurker" State="Suppressed" Requirements="HaveLurkerDen"/>-->
+<!--            <Unit value="Lurker"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train17" Time="60">
+            <Button DefaultButtonFace="AP_HotSTorrasque" Requirements="AP_HaveUltraliskCavernAndTorrasque"/>
+            <Unit value="AP_Ultralisk"/>
+        </InfoArray>
+        <InfoArray index="Train18" Time="60">
+            <Button DefaultButtonFace="AP_HotSNoxious" Requirements="AP_HaveUltraliskCavernAndNoxious"/>
+            <Unit value="AP_Ultralisk"/>
+        </InfoArray>
+        <InfoArray index="Train21" Time="30">
+            <Button DefaultButtonFace="AP_HydraliskImpaler" Requirements="AP_HaveHydraliskDenAndImpaler"/>
+            <Unit value="AP_Hydralisk"/>
+        </InfoArray>
+        <InfoArray index="Train22" Time="30">
+            <Button DefaultButtonFace="AP_HydraliskLurker" Requirements="AP_HaveHydraliskDenAndLurker"/>
+            <Unit value="AP_Hydralisk"/>
+        </InfoArray>
+        <InfoArray index="Train23" Time="27">
+            <Button DefaultButtonFace="AP_MorphToCorpser" Requirements="AP_HaveRoachWarrenAndCorpser"/>
+            <Unit value="AP_Roach"/>
+        </InfoArray>
+        <InfoArray index="Train24" Time="33">
+            <Button DefaultButtonFace="AP_MutaliskBroodlord" Requirements="AP_HaveSpireAndBroodLord"/>
+            <Unit value="AP_Mutalisk"/>
+        </InfoArray>
+        <InfoArray index="Train25" Time="33">
+            <Button DefaultButtonFace="AP_MutaliskViper" Requirements="AP_HaveSpireAndViper"/>
+            <Unit value="AP_Mutalisk"/>
+        </InfoArray>
+        <InfoArray index="Train26" Time="40">
+            <Button DefaultButtonFace="AP_SwarmHostSplitA" Requirements="AP_HaveInfestationPitAndCarrion"/>
+            <Unit value="AP_SwarmHost"/>
+        </InfoArray>
+        <InfoArray index="Train27" Time="40">
+            <Button DefaultButtonFace="AP_SwarmHostSplitB" Requirements="AP_HaveInfestationPitAndCreeper"/>
+            <Unit value="AP_SwarmHost"/>
+        </InfoArray>
+        <InfoArray index="Train28" Time="30">
+            <Button DefaultButtonFace="AP_InfestedAbomination" Requirements="AP_HaveLairAndEvolutionChamber"/>
+            <Unit value="AP_InfestedAbomination"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilTrain id="AP_LarvaTrainSwarmling">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="DisableCollision" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="KillOnCancel" value="1"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="Egg"/>
+        <Range value="4"/>
+        <InfoArray index="Train1" Time="2.4">
+            <Resource index="Minerals" value="50"/>
+            <Button DefaultButtonFace="AP_MorphToSwarmling" State="Suppressed" Requirements="AP_HaveSpawningPoolAndSwarmling"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="2.4">
+            <Resource index="Minerals" value="50"/>
+            <Button DefaultButtonFace="AP_MorphToRaptor" State="Suppressed" Requirements="AP_HaveSpawningPoolAndRaptorSwarmling"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+            <Unit value="AP_Zergling"/>
+        </InfoArray>
+    </CAbilTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5460,6 +5636,11 @@
         </InfoArray>
         <Alert value="UpgradeComplete"/>
         <ValidatorArray value="HasNoCargo"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnPrimary"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnDeath"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawn"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnCounter"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnTrain"/>
     </CAbilMorph>
     <CAbilBuild id="AP_TerranBuild">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -6655,4 +6836,80 @@
         <Flags index="CargoDeath" value="1"/>
         <AbilSetId value="ULdM"/>
     </CAbilTransport>
+    <CAbilTrain id="AP_TrainQueen">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Spawning"/>
+        <InfoArray index="Train1" Time="30" Effect="QueenBirth">
+            <Button DefaultButtonFace="AP_Queen" Requirements="AP_HaveSpawningPool">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Unit value="AP_Queen"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="90">
+            <Button DefaultButtonFace="HotSLeviathan" Requirements="HaveDestroyerLeviathan"/>
+            <Unit value="HotSLeviathan"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilMorph id="AP_UpgradeToHive">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Hive" Requirements="AP_HaveInfestationPit"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelMutateMorph"/>
+        <ActorKey value="HiveUpgrade"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_Hive">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="100"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnPrimary"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnDeath"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawn"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnCounter"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnTrain"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToLair">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Lair" Requirements="AP_HaveSpawningPool"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelMutateMorph"/>
+        <ActorKey value="LairUpgrade"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_Lair">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="80"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="80"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="80"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnPrimary"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnDeath"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawn"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnCounter"/>
+        <AbilLinkEnableArray value="AP_ZerglingRespawnTrain"/>
+    </CAbilMorph>
 </Catalog>

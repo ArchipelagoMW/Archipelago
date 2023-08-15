@@ -769,7 +769,7 @@ weaponSlots = {
     LocationName.PreciousMushroom2:   WorldLocationData(0x369F, 1),
     LocationName.PremiumMushroom:     WorldLocationData(0x36A0, 1),
     LocationName.RisingDragon:        WorldLocationData(0x35F5, 1),
-    LocationName.SaveTheQueen2:       WorldLocationData(0x3692, 1),
+    LocationName.SaveTheAP_Queen:       WorldLocationData(0x3692, 1),
     LocationName.ShamansRelic:        WorldLocationData(0x35F7, 1),
     LocationName.VictoryBell:         WorldLocationData(0x35F0, 1),
     LocationName.WisdomWand:          WorldLocationData(0x35F4, 1),

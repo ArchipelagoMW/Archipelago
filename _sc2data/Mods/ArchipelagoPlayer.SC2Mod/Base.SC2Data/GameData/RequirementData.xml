@@ -1079,7 +1079,7 @@
     </CRequirement>
     <CRequirement id="AP_HaveLurkerDen">
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
-        <NodeArray index="Use" Link="CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat"/>
+        <NodeArray index="Use" Link="AP_CountUnitLurkerDenCompleteOnlyTechTreeCheat"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSLurkerCompleteOnly"/>
         <CanBeSuppressed index="Show" value="1"/>
     </CRequirement>
@@ -1825,5 +1825,109 @@
     <CRequirement id="AP_HotSHaveSwarmlingSpawningPool">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_AndTechTreeCheatCountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitSpawningPoolCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpawningPoolAndRaptor">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitSpawningPoolCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveRaptorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpawningPoolAndSwarmling">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitSpawningPoolCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpawningPoolAndRaptorSwarmling">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitSpawningPoolCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveRaptorSwarmlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveK5CreepBonuses">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeK5CreepBonusesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveK5CreepBonuses">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5CreepBonusesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveInfestationPit">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitInfestationPitCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveInfestationPitAndCarrion">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitInfestationPitCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveInfestationPitAndCreeper">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitInfestationPitCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHydraliskDen">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_HydraliskDenCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHydraliskDenAndImpaler">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_HydraliskDenCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSImpalerCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHydraliskDenAndLurker">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_HydraliskDenCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotsLurkerCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoachWarren">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitRoachWarrenCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoachWarrenAndCorpser">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitRoachWarrenCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveCorpserCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoachWarrenAndVile">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitRoachWarrenCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveVileCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpire">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_SpireCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpireAndBroodLord">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_SpireCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpireAndViper">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_SpireCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveUltraliskCavern">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitUltraliskCavernCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveUltraliskCavernAndTorrasque">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitUltraliskCavernCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSTorrasqueCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveUltraliskCavernAndNoxious">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitUltraliskCavernCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSNoxiousCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLairAndEvolutionChamber">
+        <NodeArray index="Use" Link="AP_AndCountUnitAlias_LairCompleteOnlyTechTreeCheatCountUnitEvolutionChamberCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpawnLarvaInstant">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_AndLTCountUnitLarvaCompleteOnlyAtUnit3CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit"/>
     </CRequirement>
 </Catalog>

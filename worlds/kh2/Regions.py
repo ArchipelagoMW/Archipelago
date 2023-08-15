@@ -868,7 +868,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.PreciousMushroom2,
         LocationName.PremiumMushroom,
         LocationName.RisingDragon,
-        LocationName.SaveTheQueen2,
+        LocationName.SaveTheAP_Queen,
         LocationName.ShamansRelic,
         LocationName.VictoryBell,
         LocationName.WisdomWand,

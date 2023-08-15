@@ -8,6 +8,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HotSHaveRaptor" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveRaptorSwarmlingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSHaveRaptorSwarmling" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementAllowUnit id="AP_AllowUnitMarine">
         <Link value="AP_Marine"/>
     </CRequirementAllowUnit>
@@ -2043,7 +2047,7 @@
         <Tooltip value=""/>
         <Count Link="AP_ZerglingRespawnPrimary" State="CompleteOnlyAtUnit"/>
     </CRequirementCountBehavior>
-    <CRequirementCountUnit id="CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat">
+    <CRequirementCountUnit id="AP_CountUnitLurkerDenCompleteOnlyTechTreeCheat">
         <Count Link="AP_LurkerDen" State="CompleteOnly"/>
     </CRequirementCountUnit>
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSLurkerCompleteOnly">
@@ -2985,4 +2989,57 @@
         <Flags index="TechTreeCheat" value="1"/>
         <OperandArray value="AP_CountUpgradeHotSHaveSwarmlingCompleteOnly"/>
     </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitSpawningPoolCompleteOnlyTechTreeCheat">
+        <Count Link="AP_SpawningPool" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUpgradeK5CreepBonusesCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeK5CreepBonusesCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeK5CreepBonusesCompleteOnly">
+        <Count Link="AP_K5CreepBonuses" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitInfestationPitCompleteOnlyTechTreeCheat">
+        <Count Link="AP_InfestationPit" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitAlias_HydraliskDenCompleteOnlyTechTreeCheat">
+        <Tooltip value="Unit/Name/HydraliskDen"/>
+        <Count Link="Alias_AP_HydraliskDen" State="CompleteOnly" Unlock="AP_HydraliskDen"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitRoachWarrenCompleteOnlyTechTreeCheat">
+        <Count Link="AP_RoachWarren" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitAlias_SpireCompleteOnlyTechTreeCheat">
+        <Tooltip value="Unit/Name/AP_Spire"/>
+        <Count Link="Alias_AP_Spire" State="CompleteOnly" Unlock="Spire"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitUltraliskCavernCompleteOnlyTechTreeCheat">
+        <Count Link="AP_UltraliskCavern" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndCountUnitAlias_LairCompleteOnlyTechTreeCheatCountUnitEvolutionChamberCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_CountUnitAlias_LairCompleteOnlyTechTreeCheat"/>
+        <OperandArray value="AP_CountUnitEvolutionChamberCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitEvolutionChamberCompleteOnlyTechTreeCheat">
+        <Count Link="AP_EvolutionChamber" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitAlias_LairCompleteOnlyTechTreeCheat">
+        <Tooltip value="Unit/Name/AP_Lair"/>
+        <Count Link="Alias_AP_Lair" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndLTCountUnitLarvaCompleteOnlyAtUnit3CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit">
+        <OperandArray value="AP_LTCountUnitLarvaCompleteOnlyAtUnit3"/>
+        <OperandArray value="AP_CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementLT id="AP_LTCountUnitLarvaCompleteOnlyAtUnit3">
+        <OperandArray index="0" value="AP_CountUnitLarvaCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="3"/>
+    </CRequirementLT>
+    <CRequirementCountUnit id="AP_CountUnitLarvaCompleteOnlyAtUnit">
+        <Count Link="AP_Larva" State="CompleteOnlyAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUnit>
+    <CRequirementCountBehavior id="AP_CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit">
+        <Count Link="AP_SpawnLarvaInstant" State="QueuedOrBetterAtUnit"/>
+    </CRequirementCountBehavior>
 </Catalog>

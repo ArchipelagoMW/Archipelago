@@ -11627,4 +11627,10 @@
         <EditorCategories value="Race:Protoss"/>
         <Amount value="5"/>
     </CEffectDamage>
+    <CEffectRemoveBehavior id="AP_SpawnLarvaInstantRemoveBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <BehaviorLink value="AP_SpawnLarvaInstant"/>
+        <WhichUnit Value="Source"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
 </Catalog>
