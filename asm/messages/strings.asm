@@ -9,79 +9,79 @@
 ; Arguments:
 ;   r0: No gaps between objects if 0; otherwise, add spaces around the third object
 CreateTextOAM:
-    push {r4-r6, lr}
-    mov r6, r0
-    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(146)
-    ldr r1, =attr1_size(1) | attr1_x(8)
-    ldr r2, =attr2_palette(3) | attr2_priority(0) | attr2_id(0x10C)
-    ldr r3, =ucCntObj
-    ldr r4, =OamBuf
+        push {r4-r6, lr}
+        mov r6, r0
+        ldr r0, =attr0_wide | attr0_4bpp | attr0_y(146)
+        ldr r1, =attr1_size(1) | attr1_x(8)
+        ldr r2, =attr2_palette(3) | attr2_priority(0) | attr2_id(0x10C)
+        ldr r3, =ucCntObj
+        ldr r4, =OamBuf
 
-    ldrb r5, [r3]
-    lsl r5, r5, #3
-    add r4, r4, r5
+        ldrb r5, [r3]
+        lsl r5, r5, #3
+        add r4, r4, r5
 
-; 1st
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-; 2nd
-    add r1, #32
-    add r2, #4
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-; 3rd
-    cmp r6, #0
-    beq @@NoSpace3
-    add r1, #8
-@@NoSpace3:
-    add r1, #32
-    add r2, #4
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-    ; 4th
-    cmp r6, #0
-    beq @@NoSpace4
-    add r1, #8
-@@NoSpace4:
-    add r1, #32
-    add r2, #0x130-0x114
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-; 5th
-    add r1, #32
-    add r2, #4
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-; 6th
-    add r1, #32
-    add r2, #0x20-4
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-; 7th
-    add r1, #32
-    add r2, #4
-    add r4, #8
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
+    ; 1st
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+    ; 2nd
+        add r1, #32
+        add r2, #4
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+    ; 3rd
+        cmp r6, #0
+        beq @@NoSpace3
+        add r1, #8
+    @@NoSpace3:
+        add r1, #32
+        add r2, #4
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+        ; 4th
+        cmp r6, #0
+        beq @@NoSpace4
+        add r1, #8
+    @@NoSpace4:
+        add r1, #32
+        add r2, #0x130-0x114
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+    ; 5th
+        add r1, #32
+        add r2, #4
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+    ; 6th
+        add r1, #32
+        add r2, #0x20-4
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+    ; 7th
+        add r1, #32
+        add r2, #4
+        add r4, #8
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
 
-    ldrb r5, [r3]
-    add r5, #7
-    strb r5, [r3]
+        ldrb r5, [r3]
+        add r5, #7
+        strb r5, [r3]
 
-    pop {r4-r6, pc}
-.pool
+        pop {r4-r6, pc}
+    .pool
 
 .definelabel @ObjectPalette3, 0x5000260
 
@@ -96,59 +96,59 @@ CreateTextOAM:
 ;   r0: Pointer to byte after the last one loaded. If the end of the string was
 ;       hit, this will point to 0xFE.
 LoadSpriteString:
-    push {lr}
-    push {r4-r6}
-    mov r4, r0
-    mov r5, r1
-    mov r6, r2
+        push {lr}
+        push {r4-r6}
+        mov r4, r0
+        mov r5, r1
+        mov r6, r2
 
-; Override OBP3 color 2 with white.
-; TODO: find where the overridden purple color is used and change methods if necessary
-    ldr r1, =@ObjectPalette3 + 4
-    ldr r0, =0x7FFF
-    strh r0, [r1]
+    ; Override OBP3 color 2 with white.
+    ; TODO: find where the overridden purple color is used and change methods if necessary
+        ldr r1, =@ObjectPalette3 + 4
+        ldr r0, =0x7FFF
+        strh r0, [r1]
 
-@@LoadFromString:
-    ldrb r0, [r4]
-    cmp r0, #0xFE
-    beq @@LoadCharacter
-    add r4, r4, #1
+    @@LoadFromString:
+        ldrb r0, [r4]
+        cmp r0, #0xFE
+        beq @@LoadCharacter
+        add r4, r4, #1
 
-@@LoadCharacter:
-    mov r1, r5
-    bl LoadSpriteCharacter
-    add r5, #0x20
-    sub r6, r6, #1
+    @@LoadCharacter:
+        mov r1, r5
+        bl LoadSpriteCharacter
+        add r5, #0x20
+        sub r6, r6, #1
 
-@@CheckNChars:
-    cmp r6, #0
-    bne @@LoadFromString
-@@Return:
-    mov r0, r4
-    pop {r4-r6}
-    pop {pc}
-.pool
+    @@CheckNChars:
+        cmp r6, #0
+        bne @@LoadFromString
+    @@Return:
+        mov r0, r4
+        pop {r4-r6}
+        pop {pc}
+    .pool
 
 ; Load a character into the sprite table.
 ; Parameters:
 ;   r0: Pointer to character
 ;   r1: Pointer to destination
 LoadSpriteCharacter:
-    lsl r0, r0, #2
-    ldr r2, =LetterToSpriteTile
-    add r0, r2, r0
-    ldr r0, [r0]
+        lsl r0, r0, #2
+        ldr r2, =LetterToSpriteTile
+        add r0, r2, r0
+        ldr r0, [r0]
 
-    ldr r2, =REG_DMA3SAD
-    str r0, [r2]
-    mov r0, r1
-    str r0, [r2, #4]
-    ldr r0, =dma_enable | dma_words(8)
-    str r0, [r2, #8]
-    ldr r0, [r2, #8]
+        ldr r2, =REG_DMA3SAD
+        str r0, [r2]
+        mov r0, r1
+        str r0, [r2, #4]
+        ldr r0, =dma_enable | dma_words(8)
+        str r0, [r2, #8]
+        ldr r0, [r2, #8]
 
-    mov pc, lr
-.pool
+        mov pc, lr
+    .pool
 
 
 ; Count up to the next 0xFE byte.
@@ -157,20 +157,20 @@ LoadSpriteCharacter:
 ; Returns:
 ;  r0: The length of the string
 StrLen:
-    mov r1, #0
+        mov r1, #0
 
-@@Next:
-    ldrb r2, [r0]
-    cmp r2, #0xFE
-    beq @@Return
-    add r0, #1
-    add r1, #1
-    b @@Next
+    @@Next:
+        ldrb r2, [r0]
+        cmp r2, #0xFE
+        beq @@Return
+        add r0, #1
+        add r1, #1
+        b @@Next
 
-@@Return:
-    mov r0, r1
-    mov pc, lr
-.pool
+    @@Return:
+        mov r0, r1
+        mov pc, lr
+    .pool
 
 
 .align 4

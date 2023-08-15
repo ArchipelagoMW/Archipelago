@@ -4,183 +4,183 @@
 ; SelectDmapOamCreate returning
 .org 0x807ca64
 .area 0x807ca6c-.
-    ldr r0, =PyramidScreenCreateReceivedItemOAM | 1
-    bx r0
-.pool
+        ldr r0, =PyramidScreenCreateReceivedItemOAM | 1
+        bx r0
+    .pool
 .endarea
 
 .autoregion
 .align 2
 PyramidScreenCreateReceivedItemOAM:
-    ldr r0, =MultiworldState
-    ldrb r0, [r0]
-    cmp r0, #2
-    bne @@Return
+        ldr r0, =MultiworldState
+        ldrb r0, [r0]
+        cmp r0, #2
+        bne @@Return
 
-    ldr r3, =ucCntObj
-    ldrb r5, [r3]
-    ldr r4, =OamBuf
-    lsl r0, r5, #3
-    add r4, r4, r0
+        ldr r3, =ucCntObj
+        ldrb r5, [r3]
+        ldr r4, =OamBuf
+        lsl r0, r5, #3
+        add r4, r4, r0
 
-    ldr r0, =attr0_square | attr0_4bpp | attr0_y(104)
-    ldr r2, =attr2_palette(0xF) | attr2_priority(0) | attr2_id(0x200)
+        ldr r0, =attr0_square | attr0_4bpp | attr0_y(104)
+        ldr r2, =attr2_palette(0xF) | attr2_priority(0) | attr2_id(0x200)
 
-    ldr r6, =IncomingItemID
-    ldrb r6, [r6]
-    lsl r1, r6, #31-6
-    lsr r1, r1, #31
-    cmp r1, #0
-    bne @@JunkItem
+        ldr r6, =IncomingItemID
+        ldrb r6, [r6]
+        lsl r1, r6, #31-6
+        lsr r1, r1, #31
+        cmp r1, #0
+        bne @@JunkItem
 
-; Jewel Pieces or CD
-    add r5, #1
+    ; Jewel Pieces or CD
+        add r5, #1
 
-    lsl r1, r6, #31-5
-    lsr r1, r1, #31
-    cmp r1, #0
-    bne @@CD
+        lsl r1, r6, #31-5
+        lsr r1, r1, #31
+        cmp r1, #0
+        bne @@CD
 
-; Jewel pieces
-    ldr r1, =attr1_size(1) | attr1_x(120 - 8)
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-    b @@Return
+    ; Jewel pieces
+        ldr r1, =attr1_size(1) | attr1_x(120 - 8)
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+        b @@Return
 
-@@CD:
-    sub r0, #8
-    ldr r1, =attr1_size(2) | attr1_x(120 - 16)
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
-    b @@Return
+    @@CD:
+        sub r0, #8
+        ldr r1, =attr1_size(2) | attr1_x(120 - 16)
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
+        b @@Return
 
-@@JunkItem:
-    lsl r1, r6, #31-3
-    lsr r1, r1, #31-3-2
-    ldr r7, =@@JunkJumpTable
-    add r1, r7
-    ldr r1, [r1]
-    mov pc, r1
+    @@JunkItem:
+        lsl r1, r6, #31-3
+        lsr r1, r1, #31-3-2
+        ldr r7, =@@JunkJumpTable
+        add r1, r7
+        ldr r1, [r1]
+        mov pc, r1
 
-.align 4
-@@JunkJumpTable:
-    .word @@FullHealthItem
-    .word @@BigBoardTrap  ; Wario transform
-    .word @@Heart
-    .word @@BigBoardTrap  ; Lightning damage
+    .align 4
+    @@JunkJumpTable:
+        .word @@FullHealthItem
+        .word @@BigBoardTrap  ; Wario transform
+        .word @@Heart
+        .word @@BigBoardTrap  ; Lightning damage
 
-@@FullHealthItem:
-    ldr r1, =attr1_size(1) | attr1_x(120 - 8)
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
+    @@FullHealthItem:
+        ldr r1, =attr1_size(1) | attr1_x(120 - 8)
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
 
-    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(104 - 8)
-    mov r1, #attr1_size(0) | attr1_x(120 - 8)
-    add r2, #2
-    strh r0, [r4, #8]
-    strh r1, [r4, #10]
-    strh r2, [r4, #12]
+        ldr r0, =attr0_wide | attr0_4bpp | attr0_y(104 - 8)
+        mov r1, #attr1_size(0) | attr1_x(120 - 8)
+        add r2, #2
+        strh r0, [r4, #8]
+        strh r1, [r4, #10]
+        strh r2, [r4, #12]
 
-    add r5, #2
-    b @@Return
+        add r5, #2
+        b @@Return
 
-@@Heart:
-    ldr r1, =attr1_size(1) | attr1_x(120 - 8)
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
+    @@Heart:
+        ldr r1, =attr1_size(1) | attr1_x(120 - 8)
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
 
-    add r5, #1
-    b @@Return
+        add r5, #1
+        b @@Return
 
-@@BigBoardTrap:
-    sub r0, #4
-    ldr r1, =attr1_size(1) | attr1_x(120 - 12)
-    strh r0, [r4]
-    strh r1, [r4, #2]
-    strh r2, [r4, #4]
+    @@BigBoardTrap:
+        sub r0, #4
+        ldr r1, =attr1_size(1) | attr1_x(120 - 12)
+        strh r0, [r4]
+        strh r1, [r4, #2]
+        strh r2, [r4, #4]
 
-    ldr r0, =attr0_tall | attr0_4bpp | attr0_y(104 - 4)
-    ldr r7, =attr1_size(0) | attr1_x(120 + 4)
-    add r2, #2
-    strh r0, [r4, #8]
-    strh r7, [r4, #10]
-    strh r2, [r4, #12]
+        ldr r0, =attr0_tall | attr0_4bpp | attr0_y(104 - 4)
+        ldr r7, =attr1_size(0) | attr1_x(120 + 4)
+        add r2, #2
+        strh r0, [r4, #8]
+        strh r7, [r4, #10]
+        strh r2, [r4, #12]
 
-    ; Wario is padded on the left. Lightning on the right.
-    cmp r6, #0x43
-    beq @@BigBoardSpriteBottom
-    sub r1, #8
+        ; Wario is padded on the left. Lightning on the right.
+        cmp r6, #0x43
+        beq @@BigBoardSpriteBottom
+        sub r1, #8
 
-@@BigBoardSpriteBottom:
-    ldr r0, =attr0_wide | attr0_4bpp | attr0_y(104 - 4 + 16)
-    add r2, #1
-    strh r0, [r4, #16]
-    strh r1, [r4, #18]
-    strh r2, [r4, #20]
+    @@BigBoardSpriteBottom:
+        ldr r0, =attr0_wide | attr0_4bpp | attr0_y(104 - 4 + 16)
+        add r2, #1
+        strh r0, [r4, #16]
+        strh r1, [r4, #18]
+        strh r2, [r4, #20]
 
-    add r5, #3
+        add r5, #3
 
-@@Return:
-    strb r5, [r3]  ; Write object count back
+    @@Return:
+        strb r5, [r3]  ; Write object count back
 
-; Return from SelectDmapOamCreate
-    pop {r4-r7}
-    pop {r0}
-    bx r0
-.pool
+    ; Return from SelectDmapOamCreate
+        pop {r4-r7}
+        pop {r0}
+        bx r0
+    .pool
 
 
 LoadMessageBG:
-    ldr r0, =REG_BG3CNT
-    ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(2) | bg_priority(0)
-    strh r1, [r0]
+        ldr r0, =REG_BG3CNT
+        ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(2) | bg_priority(0)
+        strh r1, [r0]
 
-    ; Miraculously, BGP 6 color 2 isn't used at all as far as I can tell
-    ldr r0, =0x50000C4
-    ldr r1, =0xFFFF
-    strh r1, [r0]
+        ; Miraculously, BGP 6 color 2 isn't used at all as far as I can tell
+        ldr r0, =0x50000C4
+        ldr r1, =0xFFFF
+        strh r1, [r0]
 
-    ldr r0, =REG_DMA3SAD
-    ldr r1, =SaveTutorialTilemap
-    str r1, [r0]
-    ldr r1, =0x600F000
-    str r1, [r0, #4]
-    ldr r1, =dma_enable | dma_halfwords(0x800)
-    str r1, [r0, #8]
-    ldr r1, [r0, #8]
+        ldr r0, =REG_DMA3SAD
+        ldr r1, =SaveTutorialTilemap
+        str r1, [r0]
+        ldr r1, =0x600F000
+        str r1, [r0, #4]
+        ldr r1, =dma_enable | dma_halfwords(0x800)
+        str r1, [r0, #8]
+        ldr r1, [r0, #8]
 
-    ldr r1, =PortalTileset2
-    str r1, [r0]
-    ldr r1, =0x6008000
-    str r1, [r0, #4]
-    ldr r1, =dma_enable | dma_words(0x1000)
-    str r1, [r0, #8]
-    ldr r1, [r0, #8]
+        ldr r1, =PortalTileset2
+        str r1, [r0]
+        ldr r1, =0x6008000
+        str r1, [r0, #4]
+        ldr r1, =dma_enable | dma_words(0x1000)
+        str r1, [r0, #8]
+        ldr r1, [r0, #8]
 
-    mov pc, lr
-.pool
+        mov pc, lr
+    .pool
 
 
 LoadPyramidBG3:
-    ldr r0, =REG_BG3CNT
-    ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(0) | bg_priority(0)
-    strh r1, [r0]
+        ldr r0, =REG_BG3CNT
+        ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(0) | bg_priority(0)
+        strh r1, [r0]
 
-    ldr r0, =REG_DMA3SAD
-    ldr r1, =PortalTilemap3
-    str r1, [r0]
-    ldr r1, =0x600F000
-    str r1, [r0, #4]
-    ldr r1, =dma_enable | dma_halfwords(0x800)
-    str r1, [r0, #8]
-    ldr r1, [r0, #8]
+        ldr r0, =REG_DMA3SAD
+        ldr r1, =PortalTilemap3
+        str r1, [r0]
+        ldr r1, =0x600F000
+        str r1, [r0, #4]
+        ldr r1, =dma_enable | dma_halfwords(0x800)
+        str r1, [r0, #8]
+        ldr r1, [r0, #8]
 
-    mov pc, lr
-.pool
+        mov pc, lr
+    .pool
 
 
 PassagePaletteTable:
@@ -195,23 +195,23 @@ PassagePaletteTable:
 
 ; Set the end of object palette 4 to the colors matching the passage in r0
 SetTreasurePalette:
-    ldr r1, =PassagePaletteTable
-    lsl r2, r0, #2
-    add r0, r2, r0
-    lsl r0, r0, #1
-    add r0, r1, r0
+        ldr r1, =PassagePaletteTable
+        lsl r2, r0, #2
+        add r0, r2, r0
+        lsl r0, r0, #1
+        add r0, r1, r0
 
-; DMA transfer - 5 halfwords from palette table entry
-    ldr r1, =REG_DMA3SAD
-    str r0, [r1]
-    ldr r0, =ObjectPalette4 + 0x296 - 0x280
-    str r0, [r1, #4]
-    ldr r0, =dma_enable | dma_halfwords(5)
-    str r0, [r1, #8]
-    ldr r0, [r1, #8]
+    ; DMA transfer - 5 halfwords from palette table entry
+        ldr r1, =REG_DMA3SAD
+        str r0, [r1]
+        ldr r0, =ObjectPalette4 + 0x296 - 0x280
+        str r0, [r1, #4]
+        ldr r0, =dma_enable | dma_halfwords(5)
+        str r0, [r1, #8]
+        ldr r0, [r1, #8]
 
-    mov pc, lr
-.pool
+        mov pc, lr
+    .pool
 
 .align 2
 APLogoObj:
