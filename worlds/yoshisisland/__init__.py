@@ -201,7 +201,8 @@ class YIWorld(World):
 
 
     def generate_basic(self):
-        self.topology_present = self.multiworld.level_shuffle[self.player]
+        #self.topology_present = self.multiworld.level_shuffle[self.player]
+        self.luigi_count = 0
 
         self.multiworld.get_location("Burt The Bashful Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
@@ -217,7 +218,7 @@ class YIWorld(World):
 
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
-        pool = get_item_pool(self.multiworld, self.player, excluded_items)
+        pool = get_item_pool(self, self.multiworld, self.player, excluded_items)
 
         fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
@@ -255,10 +256,6 @@ class YIWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
-        if self.topology_present:
-            er_hint_data = {}
-            multidata['er_hint_data'][self.player] = er_hint_data
 
 def get_excluded_items(self: YIWorld, multiworld: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
@@ -318,10 +315,11 @@ def fill_item_pool_with_dummy_items(self: YIWorld, multiworld: MultiWorld, playe
 
     if self.playergoal == 1:
         for i in range(multiworld.luigi_pieces_in_pool[player].value):
-            pool += [self.create_item('Piece of Luigi')]
+            item = create_item_with_correct_settings(self, multiworld, player, "Piece of Luigi")
+            pool.append(item)
 
     for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
-        item = create_item_with_correct_settings(multiworld, player, self.get_filler_item_name())
+        item = create_item_with_correct_settings(self, self.multiworld, player, self.get_filler_item_name())
         pool.append(item)
 
 def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
@@ -497,53 +495,53 @@ def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
                               0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
                               0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42]
     level_id_list = {
-                    0x00: "Make Eggs, Throw Eggs",
-                    0x01: "Watch Out Below!",
-                    0x02: "The Cave Of Chomp Rock",
-                    0x03: "Burt The Bashful's Fort",
-                    0x04: "Hop! Hop! Donut Lifts",
-                    0x05: "Shy-Guys On Stilts",
-                    0x06: "Touch Fuzzy Get Dizzy",
-                    0x07: "Salvo The Slime's Castle",
-                    0x0C: "Visit Koopa And Para-Koopa",
-                    0x0D: "The Baseball Boys",
-                    0x0E: "What's Gusty Taste Like?",
-                    0x0F: "Bigger Boo's Fort",
-                    0x10: "Watch Out For Lakitu",
-                    0x11: "The Cave Of The Mystery Maze",
-                    0x12: "Lakitu's Wall",
-                    0x13: "The Potted Ghost's Castle",
-                    0x18: "Welcome To Monkey World!",
-                    0x19: "Jungle Rhythm...",
-                    0x1A: "Nep-Enuts' Domain",
-                    0x1B: "Prince Froggy's Fort",
-                    0x1C: "Jammin' Through The Trees",
-                    0x1D: "The Cave Of Harry Hedgehog",
-                    0x1E: "Monkeys' Favorite Lake",
-                    0x1F: "Naval Piranha's Castle",
-                    0x24: "GO! GO! MARIO!!",
-                    0x25: "The Cave Of The Lakitus",
-                    0x26: "Don't Look Back!",
-                    0x27: "Marching Milde's Fort",
-                    0x28: "Chomp Rock Zone",
-                    0x29: "Lake Shore Paradise",
-                    0x2A: "Ride Like The Wind",
-                    0x2B: "Hookbill The Koopa's Castle",
-                    0x30: "BLIZZARD!!!",
-                    0x31: "Ride The Ski Lifts",
-                    0x32: "Danger - Icy Conditions Ahead",
-                    0x33: "Sluggy The Unshaven's Fort",
-                    0x34: "Goonie Rides!",
-                    0x35: "Welcome To Cloud World",
-                    0x36: "Shifting Platforms Ahead",
-                    0x37: "Raphael The Raven's Castle",
-                    0x3C: "Scary Skeleton Goonies!",
-                    0x3D: "The Cave Of The Bandits",
-                    0x3E: "Beware The Spinning Logs",
-                    0x3F: "Tap-Tap The Red Nose's Fort",
-                    0x40: "The Very Loooooong Cave",
-                    0x41: "The Deep, Underground Maze",
-                    0x42: "KEEP MOVING!!!!"
+                    0x00: "1-1",
+                    0x01: "1-2",
+                    0x02: "1-3",
+                    0x03: "1-4",
+                    0x04: "1-5",
+                    0x05: "1-6",
+                    0x06: "1-7",
+                    0x07: "1-8",
+                    0x0C: "2-1",
+                    0x0D: "2-2",
+                    0x0E: "2-3",
+                    0x0F: "2-4",
+                    0x10: "2-5",
+                    0x11: "2-6",
+                    0x12: "2-7",
+                    0x13: "2-8",
+                    0x18: "3-1",
+                    0x19: "3-2",
+                    0x1A: "3-3",
+                    0x1B: "3-4",
+                    0x1C: "3-5",
+                    0x1D: "3-6",
+                    0x1E: "3-7",
+                    0x1F: "3-8",
+                    0x24: "4-1",
+                    0x25: "4-2",
+                    0x26: "4-3",
+                    0x27: "4-4",
+                    0x28: "4-5",
+                    0x29: "4-6",
+                    0x2A: "4-7",
+                    0x2B: "4-8",
+                    0x30: "5-1",
+                    0x31: "5-2",
+                    0x32: "5-3",
+                    0x33: "5-4",
+                    0x34: "5-5",
+                    0x35: "5-6",
+                    0x36: "5-7",
+                    0x37: "5-8",
+                    0x3C: "6-1",
+                    0x3D: "6-2",
+                    0x3E: "6-3",
+                    0x3F: "6-4",
+                    0x40: "6-5",
+                    0x41: "6-6",
+                    0x42: "6-7"
                         }
 
     level_names = {
@@ -772,18 +770,18 @@ def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
 
 
 
-def get_item_pool(multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+def get_item_pool(self: YIWorld, multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
     pool: List[Item] = []
 
     for name, data in item_table.items():
         if name not in excluded_items:
             for _ in range(data.count):
-                item = create_item_with_correct_settings(multiworld, player, name)
+                item = create_item_with_correct_settings(self, multiworld, player, name)
                 pool.append(item)
 
     return pool
 
-def create_item_with_correct_settings(multiworld: MultiWorld, player: int, name: str) -> Item:
+def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, player: int, name: str) -> Item:
     data = item_table[name]
     if data.useful:
         classification = ItemClassification.useful
@@ -810,9 +808,12 @@ def create_item_with_correct_settings(multiworld: MultiWorld, player: int, name:
     if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
         item.classification = ItemClassification.progression
 
-    for i in range((multiworld.luigi_pieces_in_pool[player].value) - (multiworld.luigi_pieces_required[player].value)):
-        if name == 'Piece of Luigi':
-            item.classification = ItemClassification.Useful
+    if (name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0):
+        if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
+            item.classification = ItemClassification.useful
+        else:
+            item.classification = ItemClassification.progression_skip_balancing
+            self.luigi_count += 1
 
     return item
 

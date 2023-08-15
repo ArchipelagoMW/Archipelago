@@ -34,7 +34,7 @@ YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
 DEATHMUSIC_FLAG = WRAM_START + 0x004F
 DEATHFLAG = WRAM_START + 0x00DB
 DEATHLINKRECV = WRAM_START + 0x00E0
-GOALFLAG = WRAM_START + 0x14B5
+GOALFLAG = WRAM_START + 0x14B6
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
@@ -92,7 +92,7 @@ class YISNIClient(SNIClient):
 
         if game_mode is None:
             return
-        elif goal_flag[0] == 0x01:
+        elif goal_flag[0] != 0x00:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         elif game_mode[0] not in VALID_GAME_STATES:
