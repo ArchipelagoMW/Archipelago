@@ -44,7 +44,7 @@ class MuseDashWorld(World):
     web = MuseDashWebWorld()
 
     # Necessary Data
-    md_collection = MuseDashCollections(2900000, 2)
+    md_collection = MuseDashCollections()
 
     item_name_to_id = md_collection.item_names_to_id
     location_name_to_id = md_collection.location_names_to_id
