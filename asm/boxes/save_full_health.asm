@@ -1,12 +1,18 @@
 .gba
 
-; Add the full health item to the load routine
 
-; Hook into ItemGetFlgSet_LoadSavestateInfo2RAM()
+; ItemGetFlgSet_LoadSavestateInfo2RAM() - Before checking anything else
 hook 0x8075F10, 0x8075F20, ItemGetFlagFullHealth
+
+
+; SeisanSave() - Just before Keyzer check
+hook 0x8081262, 0x8081284, SeisanSaveFullHealthItem
+
 
 .autoregion
 .align 2
+
+
 ItemGetFlagFullHealth:
     ; Load level state flags into r1
         add r1, r4, r6
@@ -46,16 +52,9 @@ ItemGetFlagFullHealth:
         mov pc, lr
 
     .pool
-.endautoregion
 
 
 ; Add the full health item to the save routine
-
-; Hook into SeisanSave() where it checks Keyzer
-hook 0x8081262, 0x8081284, SeisanSaveFullHealthItem
-
-.autoregion
-.align 2
 SeisanSaveFullHealthItem:
         ldr r3, =LevelStatusTable
         ldrb r1, [r6]
@@ -91,4 +90,6 @@ SeisanSaveFullHealthItem:
         mov pc, lr
 
     .pool
+
+
 .endautoregion

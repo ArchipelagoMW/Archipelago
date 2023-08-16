@@ -4,9 +4,9 @@
 
 
 .autoregion
+
+
 .align 2
-
-
 ItemReceivedFeedbackSound:
         push {lr}
 
@@ -71,6 +71,7 @@ ReceiveNextItem:
         mov pc, lr
     .pool
 
+
 LoadReceivedText:
         push {lr}
 
@@ -93,5 +94,6 @@ LoadReceivedText:
 
         pop {pc}
     .pool
+
 
 .endautoregion

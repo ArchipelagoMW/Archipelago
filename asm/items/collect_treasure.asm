@@ -5,12 +5,28 @@
 
 ; Give the player their progression items from what they collected in the level.
 
-; Hook into SeisanSave() where the high score is recorded
+
+; SeisanSave() - High score recorded
 hook 0x808134C, 0x808135C, CheckLocations
 
-.autoregion
-.align 2
 
+; TKakeraIconDsp_main()
+.org 0x8078E68
+.word ReadJewelPieces  ; case 0
+.word UpdateJewelIcon  ; case 1
+.word UpdateJewelIcon  ; case 2
+.word UpdateJewelIcon  ; case 3
+.word UpdateJewelIcon  ; case 4
+
+
+; TCardIconDsp_main()
+hook_branch 0x80790B6, 0x80790CC, 0x80790D8, ReadCD
+
+
+.autoregion
+
+
+.align 2
 ; If Wario has the item specified in HasLocation, check level r4's entry in
 ; LocationTable. If that item is your own junk item, don't do anything because
 ; you would've gotten it in the level already
@@ -144,13 +160,6 @@ SpawnCollectionIndicator:
         ldr r0, [r1, #8]
 .endmacro
 
-; Override jump table
-.org 0x8078E68
-.word ReadJewelPieces  ; case 0
-.word UpdateJewelIcon  ; case 1
-.word UpdateJewelIcon  ; case 2
-.word UpdateJewelIcon  ; case 3
-.word UpdateJewelIcon  ; case 4
 
 .autoregion
 ReadJewelPieces:
@@ -288,11 +297,9 @@ JewelGraphicTable:
     .word EmptyJewel3Tile, 0x6012000, CarryingJewel3Tile, HasJewel3Tile
     .word EmptyJewel4Tile, 0x6011C00, CarryingJewel4Tile, HasJewel4Tile
 
-.endautoregion
 
 
-hook_branch 0x80790B6, 0x80790CC, 0x80790D8, ReadCD
-.autoregion
+
 ReadCD:
         push {r7}
 
@@ -328,5 +335,6 @@ ReadCD:
         mov pc, lr
 
     .pool
+
 
 .endautoregion

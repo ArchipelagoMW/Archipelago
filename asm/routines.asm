@@ -3,9 +3,23 @@
 
 hook 0x8000728, 0x8000738, PreGamePrep
 
-; Initialize randomizer variables
+; GameSelect() case 2
+.org 0x80799E0
+.word PyramidScreen
+
+; GameMain() case 2
+.org 0x801B8EC
+.word LevelScreen
+
+; GameMain() case 2 (near the end)
+hook 0x801BB7A, 0x801BB90, LoadTextSprites
+
+
 .autoregion
 .align 2
+
+
+; Initialize randomizer variables
 PreGamePrep:
     ; Copy deathlink option from ROM
         ldr r0, =DeathLinkFlag
@@ -32,15 +46,8 @@ PreGamePrep:
 
         mov pc, lr
     .pool
-.endautoregion
 
 
-; Hook into GameSelect() case 2
-.org 0x80799E0
-.word PyramidScreen
-
-.autoregion
-.align 2
 ; Receive multiworld items (level select)
 PyramidScreen:
         push {r4}
@@ -103,15 +110,8 @@ PyramidScreen:
         mov pc, r0
     .pool
 
-.endautoregion
 
 
-; Hook into GameMain() case 2
-.org 0x801B8EC
-.word LevelScreen
-
-.autoregion
-.align 2
 ; Receive multiworld items and collect junk (in level)
 LevelScreen:
         push {r4}
@@ -156,14 +156,8 @@ LevelScreen:
         ldr r0, =0x801B950
         mov pc, r0
     .pool
-.endautoregion
 
 
-; Hook into the end of GameMain() case 2
-hook 0x801BB7A, 0x801BB90, LoadTextSprites
-
-.autoregion
-.align 2
 LoadTextSprites:
         push {lr}
 
@@ -217,5 +211,6 @@ LoadTextSprites:
 
         pop {pc}
     .pool
+
 
 .endautoregion

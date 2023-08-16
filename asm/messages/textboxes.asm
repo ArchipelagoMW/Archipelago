@@ -1,18 +1,21 @@
 .gba
 
-org 0x8080CD8
-    mov r0, #15  ; Lets the player flip through all the items if they want
-
-; Hook into GameSelectSeisan() case 7
+; GameSelectSeisan() case 7 - Show item text box
 hook 0x8080C5C, 0x8080C6C, ResultsScreenShowItems
 
-; GameSelectSeisan() jump table case 9
+; GameSelectSeisan() case 8 - Let the player flip through items quickly
+org 0x8080CD8
+    mov r0, #15
+
+; GameSelectSeisan() case 9 - Repeatedly show text box
 .org 0x8080AB0
 .word ResultsScreenMessageState
 
-.autoregion
-.align 2
 
+.autoregion
+
+
+.align 2
 ResultsScreenShowItems:
         push {lr}
 
@@ -421,5 +424,6 @@ ResultsScreenShowNextItem:
     @@Return:
         pop {r4-r6, pc}
     .pool
+
 
 .endautoregion

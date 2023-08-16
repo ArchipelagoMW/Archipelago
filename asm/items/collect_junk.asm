@@ -5,6 +5,7 @@
 .autoregion
 .align 2
 
+
 CollectJunkItems:
         push {lr}
 
@@ -171,5 +172,6 @@ GiveLightningTrap:
 
         pop pc
     .pool
+
 
 .endautoregion

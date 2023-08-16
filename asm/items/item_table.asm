@@ -2,10 +2,12 @@
 
 .autoregion
 
+
 ; 24 available level IDs, not all of which are used.
 @levels equ 6 * 4
 
 invalid_item equ 0xFF
+
 
 ; Maps locations to the 8-bit IDs of the items they contain.
 ; After Archipelago patches the ROM, the "invalid" value should only be in
@@ -65,6 +67,7 @@ GetItemAtLocation:
 
         mov pc, lr
     .pool
+
 
 ; Collect the item in r0. If the item is this player's junk, it will be stored
 ; and given to Wario later.
@@ -160,5 +163,6 @@ GiveItem:
         pop r4-r5, pc
 
     .pool
+
 
 .endautoregion
