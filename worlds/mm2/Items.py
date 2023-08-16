@@ -1,11 +1,12 @@
 from BaseClasses import Item
 import typing
-import Names
+from .Names import *
 
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
     progression: bool
+    skip_balancing: bool = False
 
 
 class MM2Item(Item):
@@ -13,45 +14,45 @@ class MM2Item(Item):
 
 
 robot_master_weapon_table = {
-    Names.atomic_fire: ItemData(0x880001, True),
-    Names.air_shooter: ItemData(0x880002, True),
-    Names.leaf_shield: ItemData(0x880003, True),
-    Names.bubble_lead: ItemData(0x880004, True),
-    Names.quick_boomerang: ItemData(0x880005, True),
-    Names.time_stopper: ItemData(0x880006, True),
-    Names.metal_blade: ItemData(0x880007, True),
-    Names.crash_bomber: ItemData(0x880008, True),
+    atomic_fire: ItemData(0x880001, True),
+    air_shooter: ItemData(0x880002, True),
+    leaf_shield: ItemData(0x880003, True),
+    bubble_lead: ItemData(0x880004, True),
+    quick_boomerang: ItemData(0x880005, True),
+    time_stopper: ItemData(0x880006, True),
+    metal_blade: ItemData(0x880007, True),
+    crash_bomber: ItemData(0x880008, True),
 }
 
 stage_access_table = {
-    Names.heat_man_stage: ItemData(0x880101, True),
-    Names.air_man_stage: ItemData(0x880102, True),
-    Names.wood_man_stage: ItemData(0x880103, True),
-    Names.bubble_man_stage: ItemData(0x880104, True),
-    Names.quick_man_stage: ItemData(0x880105, True),
-    Names.flash_man_stage: ItemData(0x880106, True),
-    Names.metal_man_stage: ItemData(0x880107, True),
-    Names.crash_man_stage: ItemData(0x880108, True),
+    heat_man_stage: ItemData(0x880101, True),
+    air_man_stage: ItemData(0x880102, True),
+    wood_man_stage: ItemData(0x880103, True),
+    bubble_man_stage: ItemData(0x880104, True),
+    quick_man_stage: ItemData(0x880105, True),
+    flash_man_stage: ItemData(0x880106, True),
+    metal_man_stage: ItemData(0x880107, True),
+    crash_man_stage: ItemData(0x880108, True),
 }
 
 item_item_table = {
-    Names.item_1: ItemData(0x880011, True),
-    Names.item_2: ItemData(0x880012, True),
-    Names.item_3: ItemData(0x880013, True)
+    item_1: ItemData(0x880011, True, True),
+    item_2: ItemData(0x880012, True, True),
+    item_3: ItemData(0x880013, True, True)
 }
 
 filler_item_table = {
-    Names.one_up: ItemData(0x880020, False),
-    Names.weapon_energy: ItemData(0x880021, False),
-    Names.health_energy: ItemData(0x880022, False),
-    Names.e_tank: ItemData(0x880023, False),
+    one_up: ItemData(0x880020, False),
+    weapon_energy: ItemData(0x880021, False),
+    health_energy: ItemData(0x880022, False),
+    e_tank: ItemData(0x880023, False),
 }
 
 filler_item_weights = {
-    Names.one_up: 4,
-    Names.weapon_energy: 1,
-    Names.health_energy: 1,
-    Names.e_tank: 2,
+    one_up: 1,
+    weapon_energy: 4,
+    health_energy: 1,
+    e_tank: 2,
 }
 
 item_table = {
