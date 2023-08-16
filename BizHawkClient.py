@@ -457,7 +457,7 @@ async def _main():
         ctx.run_gui()
     ctx.run_cli()
 
-    if args.patch_file is not None:
+    if args.patch_file != "":
         Utils.async_start(_patch_and_run_game(args.patch_file))
 
     watcher_task = asyncio.create_task(_game_watcher(ctx), name="GameWatcher")
