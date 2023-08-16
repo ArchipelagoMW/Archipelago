@@ -23,7 +23,8 @@ __all__ = ["main"]
 
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
     if not baked_server_options:
-        baked_server_options = get_settings().server_options
+        baked_server_options = get_settings().server_options.as_dict()
+    assert isinstance(baked_server_options, dict)
     if args.outputpath:
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
@@ -132,12 +133,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world.non_local_items[player].value -= world.local_items[player].value
         world.non_local_items[player].value -= set(world.local_early_items[player])
 
-    if world.players > 1:
-        locality_rules(world)
-    else:
-        world.non_local_items[1].value = set()
-        world.local_items[1].value = set()
-
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
@@ -146,6 +141,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for location_name in world.priority_locations[player].value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
+    # Set local and non-local item rules.
+    if world.players > 1:
+        locality_rules(world)
+    else:
+        world.non_local_items[1].value = set()
+        world.local_items[1].value = set()
+    
     AutoWorld.call_all(world, "generate_basic")
 
     # remove starting inventory from pool items.
@@ -372,7 +374,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "connect_names": {name: (0, player) for player, name in world.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
-                    "server_options": baked_server_options.as_dict(),
+                    "server_options": baked_server_options,
                     "er_hint_data": er_hint_data,
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,

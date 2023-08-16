@@ -16,6 +16,7 @@ class DS3LocationCategory(IntEnum):
     MISC = 8
     HEALTH = 9
     PROGRESSIVE_ITEM = 10
+    EVENT = 11
 
 
 class DS3LocationData(NamedTuple):
@@ -529,6 +530,7 @@ location_tables = {
         DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY),
         DS3LocationData("DH: Ring of Favor+3",                     "Ring of Favor+3",                         DS3LocationCategory.RING),
         DS3LocationData("DH: Covetous Silver Serpent Ring+3",      "Covetous Silver Serpent Ring+3",          DS3LocationCategory.RING),
+        DS3LocationData("DH: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
     ],
     "Ringed City": [
         DS3LocationData("RC: Ruin Sentinel Helm",                  "Ruin Sentinel Helm",                      DS3LocationCategory.ARMOR),
@@ -568,7 +570,6 @@ location_tables = {
         DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.BOSS),
         DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
         DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING),
-        DS3LocationData("RC: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
         DS3LocationData("RC: Covetous Gold Serpent Ring+3",        "Covetous Gold Serpent Ring+3",            DS3LocationCategory.RING),
         DS3LocationData("RC: Ring of the Evil Eye+3",              "Ring of the Evil Eye+3",                  DS3LocationCategory.RING),
         DS3LocationData("RC: Wolf Ring+3",                         "Wolf Ring+3",                             DS3LocationCategory.RING),
