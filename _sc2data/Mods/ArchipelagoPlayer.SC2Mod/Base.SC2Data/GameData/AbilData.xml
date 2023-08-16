@@ -2113,6 +2113,16 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
         <InfoArray Unit="AP_AutomatedAssimilatorRich" CollideRange="0"/>
     </CAbilMorph>
+    <CAbilMorph id="AP_ExtractorToAutomatedExtractor">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_AutomatedExtractor" CollideRange="0"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_ExtractorToAutomatedExtractorRich">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_AutomatedExtractorRich" CollideRange="0"/>
+    </CAbilMorph>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -3123,6 +3133,11 @@
         <AutoCastValidatorArray value="TargetNotChangeling"/>
         <AutoCastRange value="2"/>
         <AutoCastCountMin value="1"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_ExtractorPipesToExtractor">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_Extractor" CollideRange="0"/>
     </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
@@ -5187,10 +5202,10 @@
             <Button DefaultButtonFace="AP_Ultralisk" Requirements="AP_HaveUltraliskCavern"/>
             <Unit value="AP_Ultralisk"/>
         </InfoArray>
-<!--        <InfoArray index="Train8" Time="35">-->
-<!--            <Button DefaultButtonFace="AP_Baneling" Requirements="HaveBanelingNest"/>-->
-<!--            <Unit value="AP_Baneling"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train8" Time="35">-->
+        <!--            <Button DefaultButtonFace="AP_Baneling" Requirements="HaveBanelingNest"/>-->
+        <!--            <Unit value="AP_Baneling"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train10" Time="27">
             <Button DefaultButtonFace="AP_Roach" Requirements="AP_HaveRoachWarren"/>
             <Unit value="AP_Roach"/>
@@ -5199,10 +5214,10 @@
             <Button DefaultButtonFace="AP_Infestor" Requirements="AP_HaveInfestationPit"/>
             <Unit value="AP_Infestor"/>
         </InfoArray>
-<!--        <InfoArray index="Train12" Time="40">-->
-<!--            <Button DefaultButtonFace="AP_Corruptor" Requirements="HaveSpire"/>-->
-<!--            <Unit value="AP_Corruptor"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train12" Time="40">-->
+        <!--            <Button DefaultButtonFace="AP_Corruptor" Requirements="HaveSpire"/>-->
+        <!--            <Unit value="AP_Corruptor"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train15" Time="40">
             <Button DefaultButtonFace="AP_SwarmHost" Requirements="AP_HaveInfestationPit"/>
             <Unit value="AP_SwarmHost"/>
@@ -5221,14 +5236,14 @@
             <Button DefaultButtonFace="AP_RoachVile" Requirements="AP_HaveRoachWarrenAndVile"/>
             <Unit value="AP_Roach"/>
         </InfoArray>
-<!--        <InfoArray index="Train3" Time="50">-->
-<!--            <Button DefaultButtonFace="MorphtoDefiler" State="Suppressed" Requirements="HaveInfestationPit"/>-->
-<!--            <Unit value="Defiler"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train4" Time="40">-->
-<!--            <Button DefaultButtonFace="MorphtoDevourer" State="Suppressed" Requirements="HaveSpire"/>-->
-<!--            <Unit value="Devourer"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train3" Time="50">-->
+        <!--            <Button DefaultButtonFace="MorphtoDefiler" State="Suppressed" Requirements="HaveInfestationPit"/>-->
+        <!--            <Unit value="Defiler"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train4" Time="40">-->
+        <!--            <Button DefaultButtonFace="MorphtoDevourer" State="Suppressed" Requirements="HaveSpire"/>-->
+        <!--            <Unit value="Devourer"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train7" Time="24">
             <Button DefaultButtonFace="AP_MorphToRaptor" Requirements="AP_HaveSpawningPoolAndRaptor"/>
             <Unit value="AP_Zergling"/>
@@ -5236,18 +5251,18 @@
             <Unit value=""/>
             <Unit value=""/>
         </InfoArray>
-<!--        <InfoArray index="Train10" Time="24">-->
-<!--            <Resource index="Minerals" value="50"/>-->
-<!--            <Button DefaultButtonFace="AP_MorphToSwarmling" State="Suppressed" Requirements="AP_HaveSpawningPool"/>-->
-<!--            <Unit value="AP_Zergling"/>-->
-<!--            <Unit value="AP_Zergling"/>-->
-<!--            <Unit value=""/>-->
-<!--            <Unit value=""/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train13" Time="40">-->
-<!--            <Button DefaultButtonFace="Lurker" State="Suppressed" Requirements="HaveLurkerDen"/>-->
-<!--            <Unit value="Lurker"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train10" Time="24">-->
+        <!--            <Resource index="Minerals" value="50"/>-->
+        <!--            <Button DefaultButtonFace="AP_MorphToSwarmling" State="Suppressed" Requirements="AP_HaveSpawningPool"/>-->
+        <!--            <Unit value="AP_Zergling"/>-->
+        <!--            <Unit value="AP_Zergling"/>-->
+        <!--            <Unit value=""/>-->
+        <!--            <Unit value=""/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train13" Time="40">-->
+        <!--            <Button DefaultButtonFace="Lurker" State="Suppressed" Requirements="HaveLurkerDen"/>-->
+        <!--            <Unit value="Lurker"/>-->
+        <!--        </InfoArray>-->
         <InfoArray index="Train17" Time="60">
             <Button DefaultButtonFace="AP_HotSTorrasque" Requirements="AP_HaveUltraliskCavernAndTorrasque"/>
             <Unit value="AP_Ultralisk"/>

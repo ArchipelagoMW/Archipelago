@@ -6207,4 +6207,13 @@
         <EffectArray Reference="Abil,AP_CreepTumorBuild,Range" Value="3"/>
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_K5GasBonuses">
+        <EffectArray Operation="Set" Reference="Abil,AP_DroneHarvest,ResourceAmountMultiplier[Vespene]" Value="1.25"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespene,Resources" Value="-5"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespeneRich,Resources" Value="-10"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_K5AutoExtractor">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

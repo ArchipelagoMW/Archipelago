@@ -3305,4 +3305,13 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-zergling.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_K5AutoExtractor">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-automatedextractors.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_K5GasBonuses">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-vespeneefficiency.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

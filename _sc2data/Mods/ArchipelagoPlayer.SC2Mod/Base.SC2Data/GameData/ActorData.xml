@@ -6194,6 +6194,177 @@
             <Image value="Assets\Textures\Wireframe-Zerg-BanelingNest.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_AutomatedExtractor" parent="ZergBuilding" unitName="AP_AutomatedExtractor">
+        <Macros value="ExtractAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedExtractor; MorphFrom AP_Extractor" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Extractor; MorphFrom AP_AutomatedExtractor" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply D"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 1"/>
+        <On Terms="ActorCreation" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupRemove D"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneZerg.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneZerg.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; !ValidateUnit AP_HaveK5GasBonuses" Send="Create AP_AutomatedExtractorTextKicker4"/>
+        <On Terms="Effect.AP_AutoHarvestVespene.Start; ValidateUnit AP_HaveK5GasBonuses" Send="Create AP_AutomatedExtractorTextKicker5"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_AutomatedExtractor" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <Model value="AP_AutomatedExtractor"/>
+        <BuildModel value="AP_AutomatedExtractor"/>
+        <DeathArray index="Normal" ModelLink="AP_AutomatedExtractorDeath" SoundLink="Extractor_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ZergLargeBuildingDeath" SoundLink="Extractor_Explode"/>
+        <DeathCustoms ModelLink="AP_AutomatedExtractorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="ExtractorPlacement"/>
+        <PlacementSound value="Zerg_BuildingPlacement"/>
+        <PlaceholderActorModel value="PlaceholderModel"/>
+        <PortraitModel value="OverlordPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="Extractor_Ready"/>
+        <SoundArray index="What" value="Extractor_What"/>
+        <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-ability-kerrigan-automatedextractors.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_AutomatedExtractorRich" parent="ZergBuilding" unitName="AP_AutomatedExtractorRich">
+        <Macros value="ExtractAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedExtractorRich; MorphFrom AP_ExtractorRich" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ExtractorRich; MorphFrom AP_AutomatedExtractorRich" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply D"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 1"/>
+        <On Terms="ActorCreation" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; IsStatus Mining 0" Send="AnimGroupApply D"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupRemove D"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneZergRich.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneZergRich.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; !ValidateUnit AP_HaveK5GasBonuses" Send="Create AP_AutomatedExtractorTextKicker8"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneRich.Start; ValidateUnit AP_HaveK5GasBonuses" Send="Create AP_AutomatedExtractorTextKicker10"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_AutomatedExtractor" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <Model value="AP_AutomatedExtractor"/>
+        <BuildModel value="AP_AutomatedExtractor"/>
+        <DeathArray index="Normal" ModelLink="AP_AutomatedExtractorDeath" SoundLink="Extractor_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ZergLargeBuildingDeath" SoundLink="Extractor_Explode"/>
+        <DeathCustoms ModelLink="AP_AutomatedExtractorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="ExtractorPlacement"/>
+        <PlacementSound value="Zerg_BuildingPlacement"/>
+        <PlaceholderActorModel value="PlaceholderModel"/>
+        <PortraitModel value="OverlordPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="Extractor_Ready"/>
+        <SoundArray index="What" value="Extractor_What"/>
+        <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-ability-kerrigan-automatedextractors.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_AutomatedExtractorBuild" parent="ModelConstruction">
+        <Aliases value="_ZergBuildModel"/>
+        <HostSiteOps Ops="SOpShadow ExtractorBuildFacing"/>
+        <On Terms="ActorCreation" Send="Create ZergConstructionAttached"/>
+    </CActorModel>
+    <CActorText id="AP_AutomatedExtractorTextKicker4">
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <HeightOffset value="3.500000"/>
+        <AlignV value="Bottom"/>
+        <Text value="Button/Tooltip/AP_AutomatedExtractorTextKicker4"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedExtractorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedExtractorTextKicker5">
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <HeightOffset value="3.500000"/>
+        <AlignV value="Bottom"/>
+        <Text value="Button/Tooltip/AP_AutomatedExtractorTextKicker5"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedExtractorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedExtractorTextKicker8">
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <HeightOffset value="3.500000"/>
+        <AlignV value="Bottom"/>
+        <Text value="Button/Tooltip/AP_AutomatedExtractorTextKicker8"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedExtractorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedExtractorTextKicker10">
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <HeightOffset value="3.500000"/>
+        <AlignV value="Bottom"/>
+        <Text value="Button/Tooltip/AP_AutomatedExtractorTextKicker10"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedExtractorTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorText>
+    <CActorSiteMover id="AP_AutomatedExtractorTextMover">
+        <Terms value="Cap 1"/>
+        <Acceleration value="5.000000"/>
+        <Deceleration value="1.000000"/>
+        <Speed value="0.800000"/>
+        <SpeedMax value="0.800000"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="RefSetFromMsg ::Host ::Sender"/>
+        <On Terms="ActorCreation" Send="MoverSetDestinationH 3.000000"/>
+        <On Terms="ActorCreation" Send="MoverMove"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+    </CActorSiteMover>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -14748,7 +14919,7 @@
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_Lair; MorphTo AP_Hive" Send="Create"/>
         <On Terms="UnitBirth.AP_Hive; PlayerHasClanDecal" Send="Create ZergClanFlag"/>
         <On Terms="UnitBirth.AP_Hive; PlayerHasTrophy" Send="Create ZergPlayerTrophy"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
         <Model value="Hive"/>
         <BuildModel value="Hive"/>
         <DeathArray index="Normal" ModelLink="HiveDeath" SoundLink=""/>
@@ -14940,6 +15111,74 @@
         <On Terms="UnitDeath.AP_Larva; PassChance 25.000000" Send="Create"/>
         <Sound value="Larva_Death"/>
     </CActorSound>
+    <CActorUnit id="AP_Extractor" parent="ZergBuildingEx" unitName="AP_Extractor">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <Model value="Extractor"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGasZerg.Restore" Send="AnimGroupApply D"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.Extractor" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedExtractor; MorphFrom AP_Extractor" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Extractor; MorphFrom AP_AutomatedExtractor" Send="Create"/>
+        <On Terms="UnitBirth.AP_ExtractorPipes" Send="Create"/>
+        <DeathCustoms ModelLink="ExtractorEmptyDeath" Name="Empty"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PortraitModel value="ExtractorPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_Extractor"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_ExtractorRich" parent="ZergBuildingEx" unitName="AP_ExtractorRich">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGasZerg.Restore" Send="AnimGroupApply D"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_ExtractorRich" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedExtractorRich; MorphFrom AP_ExtractorRich" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ExtractorRich; MorphFrom AP_AutomatedExtractorRich" Send="Create"/>
+        <Model value="ExtractorRich"/>
+        <BuildModel value="ExtractorRich"/>
+        <DeathArray index="Normal" ModelLink="ExtractorRichDeath" SoundLink="Extractor_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ExtractorDeathUnderConstruction" SoundLink="Extractor_Explode"/>
+        <DeathCustoms ModelLink="ExtractorEmptyDeath" Name="Empty"/>
+        <PlacementModel value="ExtractorPlacement"/>
+        <PortraitModel value="ExtractorPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <SoundArray index="Ready" value="Extractor_Ready"/>
+        <SoundArray index="What" value="Extractor_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorSound id="Zerg_BuildingMorphStart">
         <!-- Override -->
         <On Terms="Abil.AP_ZergBuild.BuiltStart" Send="Create"/>

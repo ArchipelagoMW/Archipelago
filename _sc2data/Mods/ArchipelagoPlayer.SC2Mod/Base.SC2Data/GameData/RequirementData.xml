@@ -1930,4 +1930,19 @@
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_AndLTCountUnitLarvaCompleteOnlyAtUnit3CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HaveK5GasBonuses">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5GasBonusesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveHatchery">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_NotCountUnitAlias_HatcheryCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveK5AutoExtractor">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeK5AutoExtractorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseAutomatedExtractor">
+        <NodeArray index="Show" Link="AP_CountUpgradeKerriganVespeneTransfusionCompleteOnly"/>
+    </CRequirement>
 </Catalog>

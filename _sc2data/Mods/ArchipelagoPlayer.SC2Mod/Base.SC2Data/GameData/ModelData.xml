@@ -11964,4 +11964,39 @@
     <CModel id="AP_SOAAutomatedAssimilatorBeam" parent="PersistentSpellFX">
         <Model value="Assets\Effects\Protoss\SOA_OrbitalAssimilator_Beam\SOA_OrbitalAssimilator_Beam.m3"/>
     </CModel>
+    <CModel id="AP_AutomatedExtractor" parent="Building" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\AutomatedExtractor\AutomatedExtractor.m3"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.400000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <Radius value="1.500000"/>
+        <ShadowRadius value="2.400000"/>
+    </CModel>
+    <CModel id="AP_AutomatedExtractorPlacement" parent="Placement" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\ExtractorPlacement\ExtractorPlacement.m3"/>
+        <SelectionRadius value="0.000000"/>
+        <Radius value="-1.000000"/>
+        <Lighting value="Assimilator"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <LowQualityModel value="Extractor"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_AutomatedExtractorDeath" parent="BuildingDeath" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\AutomatedExtractorDeath\AutomatedExtractorDeath.m3"/>
+        <SquibTypeDefault value="Flesh"/>
+        <LowQualityModel value="ZergLargeBuildingDeathLow"/>
+    </CModel>
+    <CModel id="AP_AutomatedExtractorEmptyDeath" parent="BuildingDeath" Race="Zerg">
+        <Model value="Assets\Buildings\Zerg\ExtractorEmptyDeath\ExtractorEmptyDeath.m3"/>
+        <SquibTypeDefault value="Flesh"/>
+        <LowQualityModel value="ZergLargeBuildingDeathLow"/>
+    </CModel>
+    <CModel id="AP_AutomatedExtractorBuild" parent="ZergBuildingBuild3x3">
+        <Model value="Assets\Buildings\Zerg\ExtractorBuild\ExtractorBuild.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
 </Catalog>

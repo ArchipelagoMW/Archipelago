@@ -11633,4 +11633,32 @@
         <WhichUnit Value="Source"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
+    <CEffectModifyUnit id="AP_AutoHarvestVespene">
+        <EditorCategories value=""/>
+        <Resources value="-4"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_AutoHarvestVespeneRich">
+        <EditorCategories value=""/>
+        <Resources value="-8"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_AutomatedExtractorMorph">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_ExtractorToAutomatedExtractor"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_AutomatedExtractorMorphRich">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_ExtractorToAutomatedExtractorRich"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_ExtractorPipesMorph">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_ExtractorPipesToExtractor"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
 </Catalog>

@@ -17,6 +17,7 @@ Abil/Name/AP_AssaultMode=Assault Mode
 Abil/Name/AP_AssimilatorPipesMorph=Assimilator Pipes Morph
 Abil/Name/AP_AssimilatorToAutomatedAssimilator=Assimilator To Automated Assimilator
 Abil/Name/AP_AttackRedirect=Attack Redirect
+Abil/Name/AP_AutomatedExtractorToExtractor=Automated Extractor To Extractor
 Abil/Name/AP_BansheeCloak=Cloaking Field
 Abil/Name/AP_BarracksAddOns=AddOns
 Abil/Name/AP_BarracksLand=Land
@@ -89,6 +90,7 @@ Abil/Name/AP_Explode=Explode
 Abil/Name/AP_ExplodeHeal=Explode Heal
 Abil/Name/AP_ExplodeHealSmall=Explode Heal Small
 Abil/Name/AP_ExplodeSmall=Explode Small
+Abil/Name/AP_ExtractorPipesToExtractor=Extractor Pipes To Extractor
 Abil/Name/AP_FactoryAddOns=AddOns
 Abil/Name/AP_FactoryLand=Land
 Abil/Name/AP_FactoryLiftOff=Lift Off
@@ -121,6 +123,7 @@ Abil/Name/AP_ImmortalOverload=Barrier
 Abil/Name/AP_ImmortalShakurasShadowCannon=Shadow Cannon
 Abil/Name/AP_InfestorConsumption=Infestor Consumption
 Abil/Name/AP_Irradiate=Irradiate
+Abil/Name/AP_LarvaTrain=Morph Unit (Larva -> Basic)
 Abil/Name/AP_LiberatorAATarget=AA Target
 Abil/Name/AP_LiberatorAGTarget=AG Target
 Abil/Name/AP_LiberatorMorphtoAA=Morph to AA
@@ -333,7 +336,6 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_LarvaTrain=Morph Unit (Larva -> Basic)
 Abil/Name/LarvaTrainSwarm2=Morph Unit (Larva -> Swarm Story)
 Abil/Name/LarvaTrainSwarmling2=Morph Unit (Larva -> Swarmling)
 Abil/Name/MercCompoundResearch=Research
@@ -568,6 +570,7 @@ Behavior/Tooltip/AP_ZerglingSunder=This unit receives extra damage from ranged a
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
+Button/Name/AP_Aberration=Morph to Aberration
 Button/Name/AP_AberrationPassive=Aberration
 Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
@@ -677,6 +680,7 @@ Button/Name/AP_DisablingCloud=Disabling Cloud
 Button/Name/AP_DisplacementField=Displacement Field
 Button/Name/AP_Dragoon=Warp In Dragoon
 Button/Name/AP_DrillClaws=Drilling Claws
+Button/Name/AP_Drone=Morph to Drone
 Button/Name/AP_EMP=EMP Round
 Button/Name/AP_EnableBuildingAttack=Enable Structure Attack
 Button/Name/AP_EnableBuildingAttackSplitterling=Enable Structure Attack
@@ -751,6 +755,7 @@ Button/Name/AP_HotSRoachShield=Adaptive Plating
 Button/Name/AP_HotSZerglingFrenzy=Adrenal Overload
 Button/Name/AP_HunterCliffJumper=Cliff Jumper
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
+Button/Name/AP_Hydralisk=Morph to Hydralisk
 Button/Name/AP_HydraliskDenImpalerPassive=Hydralisk
 Button/Name/AP_HydraliskDenLurkerPassive=Hydralisk
 Button/Name/AP_HydraliskFrenzy=Frenzy
@@ -773,12 +778,15 @@ Button/Name/AP_ImpalerPassive=Impaler
 Button/Name/AP_ImprovedSiegeMode=Advanced Siege Tech
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
+Button/Name/AP_Infestor=Morph to Infestor
 Button/Name/AP_InfestorConsumption=Consumption
 Button/Name/AP_InfestorPassive=Infestor
 Button/Name/AP_Interceptor=Build Interceptor
 Button/Name/AP_Irradiate=Irradiate
 Button/Name/AP_JackhammerConcussionGrenade=Concussive Shells
 Button/Name/AP_JuggernautPlating=Juggernaut Plating
+Button/Name/AP_K5AutoExtractor=Automated Extractors
+Button/Name/AP_K5GasBonuses=Vespene Efficiency
 Button/Name/AP_K5ImprovedOverlords=Improved Overlords
 Button/Name/AP_KhaydarinMonolith=Warp In Khaydarin Monolith
 Button/Name/AP_Lair=Mutate into Lair
@@ -823,16 +831,30 @@ Button/Name/AP_MonarchBlades=Monarch Blades
 Button/Name/AP_Monitor=Warp in Havoc
 Button/Name/AP_MorphBackToRoboticsFacility=Transform to Robotics Facility
 Button/Name/AP_MorphBackToStargate=Transform to Stargate
+Button/Name/AP_MorphToCorpser=Morph to Roach
 Button/Name/AP_MorphToHellion=Hellion Mode
 Button/Name/AP_MorphToHellionTank=Hellbat Mode
+Button/Name/AP_MorphToHotSNoxious=Morph to Ultralisk
+Button/Name/AP_MorphToHotSTorrasque=Morph to Ultralisk
+Button/Name/AP_MorphToHydraliskImpaler=Morph to Hydralisk
+Button/Name/AP_MorphToHydraliskLurker=Morph to Hydralisk
+Button/Name/AP_MorphToMutaliskBroodlord=Morph to Mutalisk
+Button/Name/AP_MorphToMutaliskViper=Morph to Mutalisk
+Button/Name/AP_MorphToRaptor=Morph to Zergling
 Button/Name/AP_MorphToSwarmHost=Morph to Swarm Host
 Button/Name/AP_MorphToSwarmHostBurrowed=Morph to Swarm Host
+Button/Name/AP_MorphToSwarmHostSplitA=Morph to Swarm Host
+Button/Name/AP_MorphToSwarmHostSplitB=Morph to Swarm Host
+Button/Name/AP_MorphToSwarmling=Morph to Zergling
+Button/Name/AP_MorphToVile=Morph to Roach
+Button/Name/AP_MorphtoDefiler=Morph to Defiler
 Button/Name/AP_MorphtoHunter=Morph to Baneling
 Button/Name/AP_MorphtoSplitterling=Morph to Baneling
 Button/Name/AP_Mothership=Warp In Mothership
 Button/Name/AP_MothershipCore=Warp In Mothership Core
 Button/Name/AP_MoveChampions=Move
 Button/Name/AP_MultiLockTargetingSystem=Multi-Lock Weapons System
+Button/Name/AP_Mutalisk=Morph to Mutalisk
 Button/Name/AP_MutaliskBroodlordPassive=Mutalisk
 Button/Name/AP_MutaliskBroodlordPassiveGreater=Mutalisk
 Button/Name/AP_MutaliskPassive=Mutalisk
@@ -881,6 +903,7 @@ Button/Name/AP_OracleBuildStasisTrap=Stasis Ward
 Button/Name/AP_OracleRevelation=Revelation
 Button/Name/AP_OracleWeaponOff=Deactivate Pulsar Beam
 Button/Name/AP_OracleWeaponOn=Activate Pulsar Beam
+Button/Name/AP_Overlord=Morph to Overlord
 Button/Name/AP_PHSupplicantShieldArmor=Blood Shields
 Button/Name/AP_PerditionTurret=Build Perdition Turret
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
@@ -941,6 +964,7 @@ Button/Name/AP_ResearchSpiderMinesSC1=Research Spider Mines
 Button/Name/AP_RespawnZergling=Zergling Reconstitution
 Button/Name/AP_RetributionField=Lightning Field
 Button/Name/AP_RipwaveMissiles=Ripwave Missiles
+Button/Name/AP_Roach=Morph to Roach
 Button/Name/AP_RoachCorpserPassive=Roach
 Button/Name/AP_RoachPassive=Roach
 Button/Name/AP_RoachVilePassive=Roach
@@ -1018,6 +1042,7 @@ Button/Name/AP_SwarmHostCarrionPassive=Swarm Host
 Button/Name/AP_SwarmHostCreeperPassive=Swarm Host
 Button/Name/AP_SwarmHostDeepBurrow=Deep Tunnel
 Button/Name/AP_SwarmHostGenerateCreep=Generate Creep
+Button/Name/AP_SwarmHostMP=Morph to Swarm Host
 Button/Name/AP_SwarmHostPassive=Swarm Host
 Button/Name/AP_SwarmHostRoot=Root
 Button/Name/AP_SwarmHostRootBurrow=Burrow
@@ -1057,6 +1082,7 @@ Button/Name/AP_TriLithiumPowerCells=Tri-Lithium Power Cell
 Button/Name/AP_TunnelingClaws=Tunneling Claws
 Button/Name/AP_TwinLinkedFlameThrowers=Twin-Linked Flame Thrower
 Button/Name/AP_U238Rounds=U-238 Rounds
+Button/Name/AP_Ultralisk=Morph to Ultralisk
 Button/Name/AP_UltraliskNoxiousPassive=Ultralisk
 Button/Name/AP_UltraliskPassive=Ultralisk
 Button/Name/AP_UltraliskTorrasquePassive=Ultralisk
@@ -1124,6 +1150,7 @@ Button/Name/AP_Zealot=Warp In Zealot
 Button/Name/AP_ZealotAiur=Warp in Zealot
 Button/Name/AP_ZealotPurifier=Warp in Sentinel
 Button/Name/AP_ZealotShakuras=Warp in Centurion
+Button/Name/AP_Zergling=Morph to Zergling
 Button/Name/AP_ZerglingPassive=Zergling
 Button/Name/AP_ZerglingRaptorPassive=Zergling
 Button/Name/AP_ZerglingSwarmlingPassive=Zergling
@@ -1142,32 +1169,10 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_Aberration=Morph to Aberration
-Button/Name/AP_Drone=Morph to Drone
-Button/Name/AP_Hydralisk=Morph to Hydralisk
-Button/Name/AP_Infestor=Morph to Infestor
-Button/Name/AP_MorphToCorpser=Morph to Roach
-Button/Name/AP_MorphToHotSNoxious=Morph to Ultralisk
-Button/Name/AP_MorphToHotSTorrasque=Morph to Ultralisk
-Button/Name/AP_MorphToHydraliskImpaler=Morph to Hydralisk
-Button/Name/AP_MorphToHydraliskLurker=Morph to Hydralisk
-Button/Name/AP_MorphToMutaliskBroodlord=Morph to Mutalisk
-Button/Name/AP_MorphToMutaliskViper=Morph to Mutalisk
-Button/Name/AP_MorphToRaptor=Morph to Zergling
-Button/Name/AP_MorphToSwarmHostSplitA=Morph to Swarm Host
-Button/Name/AP_MorphToSwarmHostSplitB=Morph to Swarm Host
-Button/Name/AP_MorphToSwarmling=Morph to Zergling
-Button/Name/AP_MorphToVile=Morph to Roach
-Button/Name/AP_MorphtoDefiler=Morph to Defiler
-Button/Name/AP_Mutalisk=Morph to Mutalisk
-Button/Name/AP_Overlord=Morph to Overlord
-Button/Name/AP_Roach=Morph to Roach
-Button/Name/AP_SwarmHostMP=Morph to Swarm Host
-Button/Name/AP_Ultralisk=Morph to Ultralisk
-Button/Name/AP_Zergling=Morph to Zergling
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_Aberration=Aberrations are durable units that deal heavy damage to armored targets.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_AberrationPassive=Evolution Chamber allows you to morph Aberrations.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -1198,6 +1203,11 @@ Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorA
 Button/Tooltip/AP_AutomatedAssimilator=Warped in over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_AutomatedAssimilatorTextKicker4=<s val="Kicker_Refinery">+4</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedAssimilatorTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-protoss.dds" height="28" width="28"/>
+Button/Tooltip/AP_AutomatedExtractor=Mutated over a Vespene Geyser to allow automatic harvesting of vespene gas.
+Button/Tooltip/AP_AutomatedExtractorTextKicker10=<s val="Kicker_Refinery">+10 </s><IMG path="Assets\Textures\icon-gas-zerg.dds" height="28" width="28"/>
+Button/Tooltip/AP_AutomatedExtractorTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-zerg.dds" height="28" width="28"/>
+Button/Tooltip/AP_AutomatedExtractorTextKicker5=<s val="Kicker_Refinery">+5 </s><IMG path="Assets\Textures\icon-gas-zerg.dds" height="28" width="28"/>
+Button/Tooltip/AP_AutomatedExtractorTextKicker8=<s val="Kicker_Refinery">+8 </s><IMG path="Assets\Textures\icon-gas-zerg.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
 Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
@@ -1301,6 +1311,7 @@ Button/Tooltip/AP_Disruptor=Robotic disruption unit. Can use Purification Nova t
 Button/Tooltip/AP_DisruptorPhased=Robotic disruption unit. Can use Purification Nova to deal heavy area damage.
 Button/Tooltip/AP_Dragoon=Aiur Faction<n/>Ranged assault strider. Has enhanced life and attack damage.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_DrillClaws=This unit burrows faster.
+Button/Tooltip/AP_Drone=Basic worker unit. Can harvest minerals and vespene gas. Can mutate into structures.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_DukesRevenge=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_DuskWing=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_EMP=Creates an electromagnetic pulse that does 100 damage to shields and drains all energy from units in the targeted area. Cloaked units hit by EMP are revealed for a short time.
@@ -1310,6 +1321,8 @@ Button/Tooltip/AP_EngineeringBay=Contains upgrades for Terran infantry units. En
 Button/Tooltip/AP_EvolutionChamber=Contains upgrades for Zerg ground units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Spore Crawlers from Drones
 Button/Tooltip/AP_ExplosiveGlaive=Mutalisk gains +9 damage vs. armored units. Attacks no longer bounce to additional targets.
 Button/Tooltip/AP_ExplosiveMode=Arms the Thor's Javelin missile launchers. Javelin missiles deal splash damage to nearby air units and additional damage vs. light units.
+Button/Tooltip/AP_Extractor=Mutated over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/AP_ExtractorRich=Mutated over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_FaceEmbrace=Pulls target unit to the Viper. Enemy is stunned for 1 second.
 Button/Tooltip/AP_Factory=Vehicle-production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Hellions
 Button/Tooltip/AP_FactoryFlying=Factory must land to start unit production.
@@ -1426,9 +1439,12 @@ Button/Tooltip/AP_InterceptorUnit=Combat drones that automatically strafe their 
 Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,AP_Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
 Button/Tooltip/AP_JackhammerConcussionGrenade=Marauder attack temporarily slows all units in target area.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
+Button/Tooltip/AP_K5AutoExtractor=Extractors automatically extract vespene gas without Drones.
+Button/Tooltip/AP_K5GasBonuses=Vespene gas harvesting efficiency increased by 25%.
 Button/Tooltip/AP_K5ImprovedOverlords=Overlords morph instantly and provide 50% more supply.
 Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
 Button/Tooltip/AP_Lair=Evolved version of the Hatchery that allows additional upgrades and structures to be produced. Also spawns all Zerg units and receives gathered resources.
+Button/Tooltip/AP_Larva=Morphs into Zerg units.
 Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
 Button/Tooltip/AP_Liberator=Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. Can switch into Defender Mode to provide siege support.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_LiberatorAAMode=Reverts to Fighter Mode. In this mode Liberators can move, but they can only attack air targets.
@@ -1473,8 +1489,21 @@ Button/Tooltip/AP_MonarchBlades=Splash damage of Ultralisk attacks increased to 
 Button/Tooltip/AP_Monitor=Tal'darim Faction<n/>Robotic support unit. Can use Target Lock, Squad Sight, and Force Field.
 Button/Tooltip/AP_MorphBackToRoboticsFacility=Transforms this Warp Robotics Facility back to a Robotics Facility.
 Button/Tooltip/AP_MorphBackToStargate=Transforms this Warp Stargate back to a Stargate.
+Button/Tooltip/AP_MorphToCorpser=Corpser Strain<n/><n/>Assault unit. Regenerates life quickly while burrowed. Can infest the enemy with Roachlings. <n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHotSNoxious=Noxious Strain<n/><n/>Heavy assault beast. Has an area-damage cleave attack. Poisons enemies.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHotSTorrasque=Torrasque Strain<n/><n/>Heavy assault beast. Has an area-damage cleave attack. When killed, can be revived.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHydraliskImpaler=Impaler Strain<n/><n/>High-damage ranged unit. Can morph into an Impaler.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MorphToHydraliskLurker=Lurker Strain<n/><n/>High-damage ranged unit. Can morph into a Lurker.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MorphToMutaliskBroodlord=Brood Lord Strain<n/><n/>Air unit. Bounces its shot to strike multiple targets. Can morph into a Brood Lord.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MorphToMutaliskViper=Viper Strain<n/><n/>Air unit. Bounces its shot to strike multiple targets. Can morph into a Viper.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MorphToRaptor=Raptor Strain<n/><n/>Fast melee unit. Leaps over obstacles and onto targets from range. Deals increased damage. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToSwarmHostSplitA=Carrion Strain<n/><n/>Living host. Can burrow to spawn an endless wave of flying Locust minions. Flying Locusts are faster and deal more damage, but have less life than ground Locusts.<n/><n/><c val="ffff8a">Minions can attack ground units.</c>
+Button/Tooltip/AP_MorphToSwarmHostSplitB=Creeper Strain<n/><n/>Living host. Can burrow to spawn an endless wave of Locust minions. Can use the Deep Tunnel ability and generate creep while burrowed.<n/><n/><c val="ffff8a">Minions can attack ground units.</c>
+Button/Tooltip/AP_MorphToSwarmling=Swarmling Strain<n/><n/>Fast melee unit. Spawns in groups of three. Morphs almost instantly. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToVile=Vile Strain<n/><n/>Assault unit. Regenerates life quickly while burrowed. Can debilitate the enemy.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_MorphtoDefiler=Caster
 Button/Tooltip/AP_MorphtoHunter=Hunter Strain<n/><n/>Suicide unit. Deals damage over a small area upon death. Launches toward enemies at range 6.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_MorphtoSplitterling=Splitter Strain<n/><n/>Suicide unit. Deals damage over a small area upon death. Splits into smaller units as it dies. <n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_Mothership=Ultimate Protoss vessel. Can use Photon Overcharge, Mass Recall, and Time Warp abilities. Cloaks nearby friendly units and structures.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1696,6 +1725,7 @@ Button/Tooltip/AP_SwarmHostCarrionPassive=Carrion Strain<n/><n/>Infestation Pit 
 Button/Tooltip/AP_SwarmHostCreeperPassive=Creeper Strain<n/><n/>Infestation Pit enables you to morph Swarm Hosts.
 Button/Tooltip/AP_SwarmHostDeepBurrow=Can travel quickly to any location with creep.
 Button/Tooltip/AP_SwarmHostGenerateCreep=Generates creep while Swarm Host is burrowed or rooted.
+Button/Tooltip/AP_SwarmHostMP=Siege unit that attacks while burrowed by spawning Locust minions.<n/><n/><c val="#ColorAttackInfo">Locusts can attack ground units.</c>
 Button/Tooltip/AP_SwarmHostPassive=Infestation Pit enables you to morph Swarm Hosts.
 Button/Tooltip/AP_SwarmHostRoot=Roots the Swarm Host. Prevents it from moving, but allows it to spawn Locusts.
 Button/Tooltip/AP_SwarmHostRootBurrow=Burrows the Swarm Host. Prevents it from moving, but allows it to spawn Locusts.
@@ -1835,30 +1865,6 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_Aberration=Aberrations are durable units that deal heavy damage to armored targets.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_Drone=Basic worker unit. Can harvest minerals and vespene gas. Can mutate into structures.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_Infestor=Infestation specialist. Can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities.<n/><n/><c val="ffff8a">Cannot attack.</c>
-Button/Tooltip/Larva2=Morphs into Zerg units.
-Button/Tooltip/AP_MorphToCorpser=Corpser Strain<n/><n/>Assault unit. Regenerates life quickly while burrowed. Can infest the enemy with Roachlings. <n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToHotSNoxious=Noxious Strain<n/><n/>Heavy assault beast. Has an area-damage cleave attack. Poisons enemies.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToHotSTorrasque=Torrasque Strain<n/><n/>Heavy assault beast. Has an area-damage cleave attack. When killed, can be revived.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToHydraliskImpaler=Impaler Strain<n/><n/>High-damage ranged unit. Can morph into an Impaler.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_MorphToHydraliskLurker=Lurker Strain<n/><n/>High-damage ranged unit. Can morph into a Lurker.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_MorphToMutaliskBroodlord=Brood Lord Strain<n/><n/>Air unit. Bounces its shot to strike multiple targets. Can morph into a Brood Lord.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_MorphToMutaliskViper=Viper Strain<n/><n/>Air unit. Bounces its shot to strike multiple targets. Can morph into a Viper.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_MorphToRaptor=Raptor Strain<n/><n/>Fast melee unit. Leaps over obstacles and onto targets from range. Deals increased damage. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToSwarmHostSplitA=Carrion Strain<n/><n/>Living host. Can burrow to spawn an endless wave of flying Locust minions. Flying Locusts are faster and deal more damage, but have less life than ground Locusts.<n/><n/><c val="ffff8a">Minions can attack ground units.</c>
-Button/Tooltip/AP_MorphToSwarmHostSplitB=Creeper Strain<n/><n/>Living host. Can burrow to spawn an endless wave of Locust minions. Can use the Deep Tunnel ability and generate creep while burrowed.<n/><n/><c val="ffff8a">Minions can attack ground units.</c>
-Button/Tooltip/AP_MorphToSwarmling=Swarmling Strain<n/><n/>Fast melee unit. Spawns in groups of three. Morphs almost instantly. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToVile=Vile Strain<n/><n/>Assault unit. Regenerates life quickly while burrowed. Can debilitate the enemy.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_MorphtoDefiler=Caster
-Button/Tooltip/AP_Mutalisk=Air unit. Bounces its shot to strike multiple targets.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_Overlord=Increases supply. Supply allows you to create more units.<n/><n/><c val="ffff8a">Cannot attack.</c>
-Button/Tooltip/AP_Roach=Assault unit. Regenerates life quickly when burrowed.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_SwarmHostMP=Siege unit that attacks while burrowed by spawning Locust minions.<n/><n/><c val="#ColorAttackInfo">Locusts can attack ground units.</c>
-Button/Tooltip/AP_Ultralisk=Heavy assault unit. Has an area-damage cleave attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_Zergling=Fast melee creature. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1935,6 +1941,7 @@ Effect/Name/AP_ArcliteShockCannonSet=Arclite Shock Cannon Set
 Effect/Name/AP_AscendantSacrifice=Ascendant Sacrifice
 Effect/Name/AP_AscendantSacrificeDamage=Ascendant Sacrifice Damage
 Effect/Name/AP_AssimilatorMorph=Assimilator Morph
+Effect/Name/AP_AutoHarvestVespene=Auto Harvest Vespene
 Effect/Name/AP_AutoHarvestVespene4=Auto Harvest Vespene 4
 Effect/Name/AP_AutoHarvestVespeneTerran=Auto Harvest Vespene
 Effect/Name/AP_AutoTurretRelease=Auto Turret Release
@@ -1942,6 +1949,7 @@ Effect/Name/AP_AutoTurretReleaseLM=Auto Turret Release
 Effect/Name/AP_AutoTurretReleaseLaunch=Auto Turret Release Launch
 Effect/Name/AP_AutoTurretSet=Auto Turret (Set)
 Effect/Name/AP_AutomatedAssimilatorMorph=Automated Assimilator Morph
+Effect/Name/AP_AutomatedExtractorMorph=Automated Extractor Morph
 Effect/Name/AP_AutoturretTimedLife=Auto turret Timed Life
 Effect/Name/AP_BacklashRockets=Backlash Rockets
 Effect/Name/AP_BacklashRocketsLM=Backlash Rockets
@@ -2165,6 +2173,7 @@ Effect/Name/AP_EMPModifyUnit=EMP
 Effect/Name/AP_EMPSearch=EMP
 Effect/Name/AP_EMPSet=EMP
 Effect/Name/AP_ExplosiveSpinesDamage=Explosive Spines Damage
+Effect/Name/AP_ExtractorPipesMorph=Extractor Pipes Morph
 Effect/Name/AP_Feedback=Feedback
 Effect/Name/AP_FeedbackEnergyLoss=Feedback
 Effect/Name/AP_FeedbackSet=Feedback
@@ -3218,6 +3227,8 @@ Unit/Name/AP_AssimilatorShakurasGeyser=Assimilator
 Unit/Name/AP_AutoTurret=Auto-Turret
 Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
 Unit/Name/AP_AutomatedAssimilator=Orbital Assimilator
+Unit/Name/AP_AutomatedExtractor=Automated Extractor
+Unit/Name/AP_AutomatedExtractorRich=Automated Extractor
 Unit/Name/AP_AutomatedRefinery=Automated Refinery
 Unit/Name/AP_AutomatedRefineryRich=Automated Refinery
 Unit/Name/AP_BacklashRocketsLMWeapon=Backlash Rockets
@@ -3269,6 +3280,9 @@ Unit/Name/AP_DuskWingWeapon=Dusk Wing
 Unit/Name/AP_EMP2Weapon=EMP
 Unit/Name/AP_EngineeringBay=Engineering Bay
 Unit/Name/AP_EvolutionChamber=Evolution Chamber
+Unit/Name/AP_Extractor=Extractor
+Unit/Name/AP_ExtractorPipes=Extractor
+Unit/Name/AP_ExtractorRich=Extractor
 Unit/Name/AP_Factory=Factory
 Unit/Name/AP_FactoryTechReactor=Tech Reactor
 Unit/Name/AP_Firebat=Firebat
@@ -3523,7 +3537,6 @@ Unit/Name/AP_ZealotShakuras=Centurion
 Unit/Name/AP_Zergling=Zergling
 Unit/Name/AP_ZerglingRespawnControllerUnit=Zergling Reconstitution Controller Unit
 Unit/Name/AP_ZerglingRespawnWeapon=Zergling Reconstitution Weapon
-Unit/Name/Larva2=Larva
 Unit/Name/LarvaReleaseMissile2=Larva Release Missile
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields

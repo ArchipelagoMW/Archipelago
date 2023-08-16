@@ -4650,4 +4650,75 @@
         <Range value="0.6"/>
         <Delay value="2"/>
     </CBehaviorWander>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneZerg">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestZerg"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="2.1"/>
+        <PeriodicEffect value="AP_AutoHarvestVespene"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneZergRich">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvestZerg"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="2.1"/>
+        <PeriodicEffect value="AP_AutoHarvestVespeneRich"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutomatedExtractorMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_UseAutomatedExtractor"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AutomatedExtractorMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutomatedExtractorMorphRich">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Requirements value="AP_UseAutomatedExtractor"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_AutomatedExtractorMorphRich"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarryHarvestableVespeneGeyserGasZerg">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ExtractorPipesMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_ExtractorPipesMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableVespeneGeyserGasZerg">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Capacity value="2500"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableVespeneGeyserGasZerg"/>
+    </CBehaviorResource>
+    <CBehaviorResource id="AP_HarvestableRichVespeneGeyserGasZerg">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGasZerg"/>
+    </CBehaviorResource>
 </Catalog>

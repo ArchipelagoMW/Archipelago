@@ -3042,4 +3042,23 @@
     <CRequirementCountBehavior id="AP_CountBehaviorSpawnLarvaInstantQueuedOrBetterAtUnit">
         <Count Link="AP_SpawnLarvaInstant" State="QueuedOrBetterAtUnit"/>
     </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeK5GasBonusesCompleteOnly">
+        <Count Link="AP_K5GasBonuses" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitAlias_HatcheryCompleteOnlyTechTreeCheat">
+        <OperandArray index="0" value="AP_CountUnitAlias_HatcheryCompleteOnlyTechTreeCheat"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitAlias_HatcheryCompleteOnlyTechTreeCheat">
+        <Tooltip value="Unit/Name/AP_Hatchery"/>
+        <Count Link="Alias_AP_Hatchery" State="CompleteOnly" Unlock="AP_Hatchery"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeKerriganVespeneTransfusionCompleteOnly">
+        <Count Link="AP_K5AutoExtractor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeK5AutoExtractorCompleteOnly">
+        <Count Link="AP_K5AutoExtractor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

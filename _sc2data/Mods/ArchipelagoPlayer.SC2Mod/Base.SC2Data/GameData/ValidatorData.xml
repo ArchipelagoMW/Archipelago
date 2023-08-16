@@ -3895,4 +3895,13 @@
         <!-- Override -->
         <CombineArray value="IsOverlord"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveK5GasBonuses">
+        <Value value="AP_HaveK5GasBonuses"/>
+        <Find value="1"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_AutoHarvesterHarvestZerg">
+        <Value value="AP_DontHaveHatchery"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
 </Catalog>
