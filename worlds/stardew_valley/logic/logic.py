@@ -27,6 +27,7 @@ from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogic
 from .tool_logic import ToolLogic
 from .wallet_logic import WalletLogic
+from ..data.crops_data import crops_by_name
 from ..data.monster_data import all_monsters_by_category
 from ..mods.logic.mod_logic import ModLogic
 from .. import options
@@ -172,7 +173,7 @@ class StardewLogic:
         self.crop_rules.update({crop.name: self.crop.can_grow(crop) for crop in all_crops})
         self.crop_rules.update({
             Seed.coffee: (self.season.has(Season.spring) | self.season.has(
-                Season.summer)) & self.has_traveling_merchant(),
+                Season.summer)) & self.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
                              self.region.can_reach(Region.greenhouse) & self.has(Machine.seed_maker),
         })
@@ -486,8 +487,8 @@ class StardewLogic:
             FestivalCheck.mermaid_pearl: self.season.has(Season.winter) & self.region.can_reach(Region.beach),
             FestivalCheck.cone_hat: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(2500),
             FestivalCheck.iridium_fireplace: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(15000),
-            FestivalCheck.rarecrow_7: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_find_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_find_museum_items(40),
+            FestivalCheck.rarecrow_7: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_donate_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_donate_museum_items(40),
             FestivalCheck.lupini_red_eagle: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
             FestivalCheck.lupini_portrait_mermaid: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
             FestivalCheck.lupini_solar_kingdom: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
@@ -632,7 +633,7 @@ class StardewLogic:
                                self.money.can_have_earned_total(1000000),  # 1 000 000g second point
                                self.skill.has_total_level(30),  # Total Skills: 30
                                self.skill.has_total_level(50),  # Total Skills: 50
-                               # Completing the museum not expected
+                               self.museum.can_complete_museum(),  # Completing the museum for a point
                                # Catching every fish not expected
                                # Shipping every item not expected
                                self.relationship.can_get_married() & self.buildings.has_house(2),
@@ -643,7 +644,7 @@ class StardewLogic:
                                self.can_complete_community_center(),  # CC Ceremony first point
                                self.can_complete_community_center(),  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.wallet.has_rusty_key(),  # Rusty key not expected
+                               self.wallet.has_rusty_key(),  # Rusty key obtained
                                ]
         return Count(12, rules_worth_a_point)
 

@@ -408,12 +408,12 @@ class TestDonationLogicAll(SVTestBase):
         collect_all_except(self.multiworld, guild_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
-            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
-            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
 
 class TestDonationLogicRandomized(SVTestBase):
@@ -428,12 +428,12 @@ class TestDonationLogicRandomized(SVTestBase):
         donation_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
 
         for donation in donation_locations:
-            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
 
         for donation in donation_locations:
-            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
 
 class TestDonationLogicMilestones(SVTestBase):
@@ -447,12 +447,12 @@ class TestDonationLogicMilestones(SVTestBase):
         collect_all_except(self.multiworld, guild_item)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
-            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertFalse(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
 
         for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
-            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+            self.assertTrue(self.world.logic.region.can_reach_location(donation.name)(self.multiworld.state))
 
 
 def swap_museum_and_guild(multiworld, player):

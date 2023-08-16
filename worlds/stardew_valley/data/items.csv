@@ -271,42 +271,42 @@ id,name,classification,groups,mod_name
 286,Deluxe Scarecrow Recipe,progression,"FESTIVAL,RARECROW",
 287,Treehouse,progression,"GINGER_ISLAND",
 288,Coffee Bean,progression,CROPSANITY,
-288,Progressive Weapon,progression,"WEAPON,WEAPON_GENERIC",
-289,Progressive Sword,progression,"WEAPON,WEAPON_SWORD",
-290,Progressive Club,progression,"WEAPON,WEAPON_CLUB",
-291,Progressive Dagger,progression,"WEAPON,WEAPON_DAGGER",
-292,Progressive Slingshot,progression,"WEAPON,WEAPON_SLINGSHOT",
-293,Progressive Footwear,useful,"FOOTWEAR",
-294,Small Glow Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-295,Glow Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-296,Small Magnet Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-297,Magnet Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-298,Slime Charmer Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-299,Warrior Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-300,Vampire Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-301,Savage Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-302,Ring of Yoba,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-303,Sturdy Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-304,Burglar's Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-305,Iridium Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-306,Jukebox Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-307,Amethyst Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-308,Topaz Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-309,Aquamarine Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-310,Jade Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-311,Emerald Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-312,Ruby Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-313,Wedding Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-314,Crabshell Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-315,Napalm Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-316,Thorns Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-317,Lucky Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-318,Hot Java Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-319,Protection Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-320,Soul Sapper Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-321,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-322,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
-323,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+289,Progressive Weapon,progression,"WEAPON,WEAPON_GENERIC",
+290,Progressive Sword,progression,"WEAPON,WEAPON_SWORD",
+291,Progressive Club,progression,"WEAPON,WEAPON_CLUB",
+292,Progressive Dagger,progression,"WEAPON,WEAPON_DAGGER",
+293,Progressive Slingshot,progression,"WEAPON,WEAPON_SLINGSHOT",
+294,Progressive Footwear,useful,"FOOTWEAR",
+295,Small Glow Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+296,Glow Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+297,Small Magnet Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+298,Magnet Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+299,Slime Charmer Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+300,Warrior Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+301,Vampire Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+302,Savage Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+303,Ring of Yoba,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+304,Sturdy Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+305,Burglar's Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+306,Iridium Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+307,Jukebox Ring,filler,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+308,Amethyst Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+309,Topaz Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+310,Aquamarine Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+311,Jade Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+312,Emerald Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+313,Ruby Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+314,Wedding Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+315,Crabshell Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+316,Napalm Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+317,Thorns Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+318,Lucky Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+319,Hot Java Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+320,Protection Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+321,Soul Sapper Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+322,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+323,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
+324,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE"
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,

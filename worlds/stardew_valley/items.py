@@ -350,8 +350,7 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     need_all_hearts_up_to_date = world_is_perfection(world_options)
     government_assigned_bachelor = random.choice([villager.name for villager in all_villagers if villager.bachelor and
                                                   (villager.mod_name is None or villager.mod_name in mods)])
-    need_recipes = world_options[options.Shipsanity] == options.Shipsanity.option_everything or world_options[
-        options.Shipsanity] == options.Shipsanity.option_quality_everything
+    need_recipes = world_options[options.Shipsanity] == options.Shipsanity.option_everything
     for villager in all_villagers:
         if villager.mod_name not in mods and villager.mod_name is not None:
             continue
