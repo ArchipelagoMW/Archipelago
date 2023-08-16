@@ -56,8 +56,8 @@ class Room(Region):
                 is_progression = location.item.classification & ItemClassification.progression
                 if load_len == 8:
                     # edge case, there is exactly 1 room with 8 entities and only 1 consumable among them
-                    if not any(x not in self.entity_load for x in [[0, 22], [1, 22]]) \
-                            and any(x not in self.entity_load for x in [[2, 22], [3, 22]]):
+                    if not (any(x in self.entity_load for x in [[0, 22], [1, 22]])
+                            and any(x in self.entity_load for x in [[2, 22], [3, 22]])):
                         replacement_target = self.entity_load.index(
                             next(x for x in self.entity_load if x in [[0, 22], [1, 22], [2, 22], [3, 22]]))
                         if is_progression:
@@ -74,7 +74,7 @@ class Room(Region):
                     else:
                         if any(x not in self.entity_load for x in [[2, 22], [3, 22]]):
                             # edge case: if (1, 22) is in, we need to load (3, 22) instead
-                            if (1, 22) in self.entity_load:
+                            if [1, 22] in self.entity_load:
                                 self.entity_load.append([3, 22])
                             else:
                                 self.entity_load.append([2, 22])

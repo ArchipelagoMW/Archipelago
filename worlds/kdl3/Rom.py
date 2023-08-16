@@ -954,6 +954,73 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
                               0x6B,  # RTL
                               ])
 
+    # display received items in pause menu
+    rom.write_bytes(0x8406, [0x50, 0xA5, 0x07])
+    rom.write_bytes(0x3A550, [0x22, 0x9F, 0xD2, 0x00,  # JSL $00D29F
+                              0xDA,  # PHX
+                              0x5A,  # PHY
+                              0xA9, 0x00, 0x33,  # LDA #$3300
+                              0x8F, 0x16, 0x21, 0x00,  # STA VMADDL
+                              0xA9, 0x07, 0x00,  # LDA #$0007
+                              0x8F, 0x04, 0x43, 0x00,  # STA A1B0
+                              0xA9, 0x00, 0xF0,  # LDA #$F000
+                              0x8F, 0x02, 0x43, 0x00,  # STA A1T0L
+                              0xA9, 0xC0, 0x01,  # LDA #$01C0
+                              0x8F, 0x05, 0x43, 0x00,  # STA DAS0L
+                              0xE2, 0x20,  # SEP #$20
+                              0xA9, 0x01,  # LDA #$01
+                              0x8F, 0x00, 0x43, 0x00,  # STA DMAP0
+                              0xA9, 0x18,  # LDA #$18
+                              0x8F, 0x01, 0x43, 0x00,  # STA BBAD0
+                              0xA9, 0x01,  # LDA #$01
+                              0x8F, 0x0B, 0x42, 0x00,  # MDMAEN
+                              0xC2, 0x20,  # REP #$20
+                              0xA0, 0x00, 0x00,  # LDY #$0000
+                              0xC8,  # INY - loop head
+                              0xC0, 0x09, 0x00,  # CPY #$0009
+                              0x10, 0x1B,  # BPL $07A5AC
+                              0x98,  # TYA
+                              0x0A,  # ASL
+                              0xAA,  # TAX
+                              0xBD, 0x20, 0x80,  # LDA $8020, X
+                              0xF0, 0xF2,  # BEQ $07A58B - return to loop head
+                              0x98,  # TYA
+                              0x18,  # CLC
+                              0x69, 0xE2, 0x31,  # ADC #$31E2
+                              0x8F, 0x16, 0x21, 0x00,  # STA VMADDL
+                              0xBF, 0x20, 0xE0, 0x07,  # LDA $07E020, X
+                              0x8F, 0x18, 0x21, 0x00,  # STA VMDATAL
+                              0x80, 0xDF,  # BRA $07A58B - return to loop head
+                              0xA0, 0xFF, 0xFF,  # LDY #$FFFF
+                              0xC8,  # INY - loop head
+                              0xC0, 0x07, 0x00,  # CPY #$0007
+                              0x10, 0x1B,  # BPL $07A5D0
+                              0x98,  # TYA
+                              0x0A,  # ASL
+                              0xAA,  # TAX
+                              0xBD, 0x00, 0x80,  # LDA $8000, X
+                              0xF0, 0xF2,  # BEQ $07A5AF - return to loop head
+                              0x98,  # TYA
+                              0x18,  # CLC
+                              0x69, 0x03, 0x32,  # ADC #$3203
+                              0x8F, 0x16, 0x21, 0x00,  # STA VMADDL
+                              0xBF, 0x40, 0xE0, 0x07,  # LDA $07E040, X
+                              0x8F, 0x18, 0x21, 0x00,  # STA VMDATAL
+                              0x80, 0xDF,  # BRA $07A5AF - retun to loop head
+                              0x7A,  # PLY
+                              0xFA,  # PLX
+                              0x6B,  # RTL
+                              ])
+
+    # data writing for prior
+    rom.write_bytes(0x3E020,
+                    [0x00, 0x0C, 0x30, 0x09, 0x31, 0x09, 0x32, 0x09, 0x33, 0x09, 0x34, 0x09, 0x35, 0x09, 0x36, 0x09,
+                     0x37, 0x09,
+                     ])
+    rom.write_bytes(0x3E040, [0x38, 0x05, 0x39, 0x05, 0x3A, 0x01, 0x3B, 0x05, 0x3C, 0x05, 0x3D, 0x05, ])
+    tiles = get_data(__name__, os.path.join("data", "APPauseIcons.dat"))
+    rom.write_bytes(0x3F000, tiles)
+
     # base patch done, write relevant slot info
 
     # Write strict bosses patch
@@ -1198,9 +1265,11 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
     if multiworld.copy_ability_randomization[player] > 0:
         for enemy in copy_abilities:
             if enemy in miniboss_remap:
-                rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1), struct.pack("H", ability_remap[copy_abilities[enemy]]))
+                rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1),
+                                struct.pack("H", ability_remap[copy_abilities[enemy]]))
             else:
-                rom.write_bytes(0xB3CAC + (enemy_remap[enemy] << 1), struct.pack("H", ability_remap[copy_abilities[enemy]]))
+                rom.write_bytes(0xB3CAC + (enemy_remap[enemy] << 1),
+                                struct.pack("H", ability_remap[copy_abilities[enemy]]))
         # following only needs done on non-door rando
         # incredibly lucky this follows the same order (including 5E == star block)
         rom.write_byte(0x2F77EA, 0x5E + (ability_remap[copy_abilities["Sparky"]] << 1))

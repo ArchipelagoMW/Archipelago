@@ -249,7 +249,7 @@ class KDL3SNIClient(SNIClient):
                 snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), bytes([friend + 1]))
             elif item.item == 0x770020:
                 # Heart Star
-                heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 1)
+                heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 2)
                 snes_buffered_write(ctx, KDL3_HEART_STAR_COUNT, pack("H", unpack("H", heart_star_count)[0] + 1))
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x16]))
             else:
