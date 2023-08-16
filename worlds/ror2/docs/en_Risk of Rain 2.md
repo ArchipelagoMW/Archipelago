@@ -22,7 +22,7 @@ Classic Mode:
 Explore Mode:
 
   - Chests will continue to work as they did in Classic Mode, the difference being that each environment
-  will have a set amount of items that can be sent out. In addition, shrines, radio scanners, newt shrines, 
+  will have a set amount of items that can be sent out. In addition, shrines, radio scanners, newt altars, 
   and scavenger bags will need to be checked, depending on your settings.
   This mode also makes each environment an item. In order to access a particular stage, you'll need it to be 
   sent in the multiworld.
