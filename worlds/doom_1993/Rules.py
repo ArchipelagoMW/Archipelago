@@ -374,16 +374,14 @@ def set_episode3_rules(player, world):
         state.has("Plasma gun", player, 1)) and
        (state.has("Rocket launcher", player, 1) or
         state.has("BFG9000", player, 1)))
-    set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Red", player), lambda state:
-        state.has("Warrens (E3M9) - Red skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Blue", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Blue trigger", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
-    set_rule(world.get_entrance("Warrens (E3M9) Red -> Warrens (E3M9) Main", player), lambda state:
-        state.has("Warrens (E3M9) - Red skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Blue -> Warrens (E3M9) Main", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
+    set_rule(world.get_entrance("Warrens (E3M9) Blue -> Warrens (E3M9) Red", player), lambda state:
+        state.has("Warrens (E3M9) - Red skull key", player, 1))
 
 
 def set_episode4_rules(player, world):
