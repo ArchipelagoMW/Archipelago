@@ -99,6 +99,7 @@ class UndertaleContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.pieces_needed = 0
+        self.finished_game = False
         self.game = "Undertale"
         self.got_deathlink = False
         self.syncing = False
@@ -239,8 +240,6 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
             f.close()
-        message = [{"cmd": "LocationChecks", "locations": [79067]}]
-        await ctx.send_msgs(message)
     elif cmd == "LocationInfo":
         for l in args["locations"]:
             locationid = l.location
@@ -436,9 +435,9 @@ async def game_watcher(ctx: UndertaleContext):
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
                                 sending = sending + [int(l.rstrip('\n'))+12000]
+                    finally:
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
                                                           "create_as_hint": int(2)}])
-                    finally:
                         os.remove(root+"/"+file)
                 if "check.spot" in file:
                     sending = []
@@ -447,10 +446,8 @@ async def game_watcher(ctx: UndertaleContext):
                             lines = f.readlines()
                         for l in lines:
                             sending = sending+[(int(l.rstrip('\n')))+12000]
-                        message = [{"cmd": "LocationChecks", "locations": sending}]
-                        await ctx.send_msgs(message)
                     finally:
-                        pass
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:
