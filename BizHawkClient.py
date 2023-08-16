@@ -472,6 +472,8 @@ async def _main():
 
 
 if __name__ == "__main__":
+    Utils.init_logging("BizHawkClient", exception_logger="Client")
+
     import colorama
     colorama.init()
     asyncio.run(_main())
