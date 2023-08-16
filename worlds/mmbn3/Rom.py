@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 
 import Utils
 import os
@@ -7,9 +7,9 @@ import hashlib
 import bsdiff4
 from .lz10 import gba_decompress, gba_compress
 
-from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
+from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le, \
     generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
-    generate_external_item_message, generate_text_bytes
+    generate_external_item_message, generate_text_bytes, dictChar
 
 from .Items import ItemType
 
@@ -45,29 +45,42 @@ class ArchiveScript:
         self.messageBoxes = []
 
         message_box = []
+        # message_box_chars = []
 
         command_index = 0
+        byte_index = 0
         for byte in message_bytes:
+            byte_index += 1
             if command_index <= 0 and (byte == 0xE9 or byte == 0xE7):
                 if byte == 0xE9:  # More textboxes to come, don't end it yet
                     message_box.append(byte)
+                    # message_box_chars.append(hex(byte))
                     self.messageBoxes.append(message_box)
                 else:  # It's the end of the script, add another message to end it after this one
                     self.messageBoxes.append(message_box)
                     self.messageBoxes.append([0xE7])
+
                 message_box = []
+                message_box_chars = []
 
             else:
-                if command_index <- 0:
+                if command_index <= 0:
                     # We can hit a command that might contain an E9 or an E7. If we do, skip checking the next few bytes
                     if byte == 0xF6:  # CheckItem
                         command_index = 7
                     if byte == 0xF3:  # CheckFlag
-                        command_index = 7
+                        # For whatever reason, the "Check Navi Customizer" command is one byte shorter than the other
+                        # Check flags. If the next byte is 0x28, our command is only 5 bytes long.
+                        if message_bytes[byte_index] == 0x28:
+                            command_index = 5
+                        else:
+                            command_index = 6
                     if byte == 0xF2:  # FlagSet
                         command_index = 4
                 command_index -= 1
                 message_box.append(byte)
+                # message_box_chars.append(dictChar[byte] if byte in dictChar else hex(byte))
+
         # If there's still bytes left over, add them even if we didn't hit an end
         if len(message_box) > 0:
             self.messageBoxes.append(message_box)
