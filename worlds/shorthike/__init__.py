@@ -4,6 +4,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table
 from .Locations import location_table
 from .Rules import create_rules
+from .Options import short_hike_options
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
@@ -26,7 +27,7 @@ class ShortHikeWorld(World):
     location_name_to_game_id = {loc["name"]: loc["inGameId"] for loc in location_table}
 
     item_name_groups = group_table
-    # option_definitions = short_hike_options
+    option_definitions = short_hike_options
 
     required_client_version = (0, 1, 9)
 
@@ -94,9 +95,16 @@ class ShortHikeWorld(World):
                 }
 
                 locations[self.location_name_to_game_id[loc.name]] = data
+
+        settings = {
+            "goal": world.goal[player].value,
+            "showGoldenChests": bool(world.show_golden_chests[player].value),
+            "skipCutscenes": bool(world.skip_cutscenes[player].value),
+        }
     
         slot_data = {
-            "locations": locations
+            "locations": locations,
+            "settings": settings,
         }
     
         return slot_data
