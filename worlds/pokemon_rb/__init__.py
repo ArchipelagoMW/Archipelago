@@ -69,7 +69,7 @@ class PokemonRedBlueWorld(World):
     settings: typing.ClassVar[PokemonSettings]
 
     data_version = 9
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 2)
 
     topology_present = True
 
@@ -263,6 +263,8 @@ class PokemonRedBlueWorld(World):
                         break
                     else:
                         unplaced_items.append(item)
+            else:
+                raise FillError(f"Pokemon Red and Blue local item fill failed for player {loc.player}: could not place {item.name}")
             progitempool += [item for item in unplaced_items if item.advancement]
             usefulitempool += [item for item in unplaced_items if item.useful]
             filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
@@ -520,10 +522,12 @@ class PokemonRedBlueWorld(World):
             for location in locations:
                 if not location.can_reach(all_state):
                     pokedex.locations.remove(location)
+                    if location in self.local_locs:
+                        self.local_locs.remove(location)
                     self.dexsanity_table[poke_data.pokemon_dex[location.name.split(" - ")[1]] - 1] = False
                     remove_items += 1
 
-            for _ in range(remove_items - 5):
+            for _ in range(remove_items):
                 balls.append(balls.pop(0))
                 for ball in balls:
                     try:
