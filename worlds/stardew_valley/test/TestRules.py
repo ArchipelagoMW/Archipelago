@@ -2,10 +2,12 @@ from collections import Counter
 
 from . import SVTestBase
 from .. import options
+from ..locations import locations_by_tag, LocationTags, location_table
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.crop_names import Vegetable
+from ..strings.entrance_names import Entrance
 from ..strings.food_names import Meal
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
@@ -369,3 +371,76 @@ class TestRecipeLogic(SVTestBase):
     #     self.assertTrue(logic.has(Machine.cheese_press)(self.multiworld.state))
     #     self.assertTrue(logic.has(ArtisanGood.cheese)(self.multiworld.state))
     #     self.assertTrue(logic.has(Meal.pizza)(self.multiworld.state))
+
+
+class TestDonationLogicAll(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_all
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+class TestDonationLogicRandomized(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_randomized
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+        donation_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
+
+        for donation in donation_locations:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in donation_locations:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+class TestDonationLogicMilestones(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_milestones
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+def swap_museum_and_guild(multiworld, player):
+    museum_region = multiworld.get_region(Region.museum, player)
+    guild_region = multiworld.get_region(Region.adventurer_guild, player)
+    museum_entrance = multiworld.get_entrance(Entrance.town_to_museum, player)
+    guild_entrance = multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player)
+    museum_entrance.connect(guild_region)
+    guild_entrance.connect(museum_region)
+
+
+def collect_all_except(multiworld, item_to_not_collect: str):
+    for item in multiworld.get_items():
+        if item.name != item_to_not_collect:
+            multiworld.state.collect(item)
