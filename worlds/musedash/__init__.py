@@ -40,24 +40,14 @@ class MuseDashWorld(World):
     game = "Muse Dash"
     option_definitions = musedash_options
     topology_present = False
-    data_version = 7
+    data_version = 8
     web = MuseDashWebWorld()
-
-    music_sheet_name: str = "Music Sheet"
 
     # Necessary Data
     md_collection = MuseDashCollections(2900000, 2)
 
-    item_name_to_id = {
-        name: data.code for name, data in md_collection.album_items.items() | md_collection.song_items.items()
-    }
-    item_name_to_id[music_sheet_name] = md_collection.MUSIC_SHEET_CODE
-    for item in md_collection.sfx_trap_items.items() | md_collection.vfx_trap_items.items():
-        item_name_to_id[item[0]] = item[1]
-
-    location_name_to_id = {
-        name: id for name, id in md_collection.album_locations.items() | md_collection.song_locations.items()
-    }
+    item_name_to_id = md_collection.item_names_to_id
+    location_name_to_id = md_collection.location_names_to_id
 
     # Working Data
     victory_song_name: str = ""
@@ -165,7 +155,7 @@ class MuseDashWorld(World):
             self.location_count = minimum_location_count
 
     def create_item(self, name: str) -> Item:
-        if name == self.music_sheet_name:
+        if name == self.md_collection.MUSIC_SHEET_NAME:
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.md_collection.MUSIC_SHEET_CODE, self.player)
 
@@ -191,7 +181,7 @@ class MuseDashWorld(World):
 
         # First add all goal song tokens
         for _ in range(0, item_count):
-            self.multiworld.itempool.append(self.create_item(self.music_sheet_name))
+            self.multiworld.itempool.append(self.create_item(self.md_collection.MUSIC_SHEET_NAME))
 
         # Then add all traps
         trap_count = self.get_trap_count()
@@ -255,7 +245,7 @@ class MuseDashWorld(World):
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count())
+            state.has(self.md_collection.MUSIC_SHEET_NAME, self.player, self.get_music_sheet_win_count())
 
     def get_available_traps(self) -> List[str]:
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
