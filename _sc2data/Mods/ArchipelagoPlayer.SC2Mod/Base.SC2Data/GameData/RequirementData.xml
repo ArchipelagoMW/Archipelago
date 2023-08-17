@@ -1945,4 +1945,15 @@
     <CRequirement id="AP_UseAutomatedExtractor">
         <NodeArray index="Show" Link="AP_CountUpgradeKerriganVespeneTransfusionCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HideExtractor">
+        <NodeArray index="Show" Link="AP_NotCountUpgradeK5AutoExtractorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHatchery">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_HatcheryCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveEvolutionChamber">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitEvolutionChamberCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

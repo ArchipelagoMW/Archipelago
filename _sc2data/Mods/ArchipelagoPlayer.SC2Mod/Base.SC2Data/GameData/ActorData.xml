@@ -6194,6 +6194,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-BanelingNest.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_BanelingNestBuild" parent="ZergBuildingBuild">
+        <Model value="BanelingNestBuild"/>
+    </CActorModel>
     <CActorUnit id="AP_AutomatedExtractor" parent="ZergBuilding" unitName="AP_AutomatedExtractor">
         <Macros value="ExtractAnim"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_AutomatedExtractor; MorphFrom AP_Extractor" Send="Create"/>
@@ -6301,6 +6304,12 @@
         </Wireframe>
     </CActorUnit>
     <CActorModel id="AP_AutomatedExtractorBuild" parent="ModelConstruction">
+        <Aliases value="_ZergBuildModel"/>
+        <HostSiteOps Ops="SOpShadow ExtractorBuildFacing"/>
+        <On Terms="ActorCreation" Send="Create ZergConstructionAttached"/>
+    </CActorModel>
+    <CActorModel id="AP_AutomatedExtractorRichBuild" parent="ModelConstruction">
+        <Model value="AP_AutomatedExtractorBuild"/>
         <Aliases value="_ZergBuildModel"/>
         <HostSiteOps Ops="SOpShadow ExtractorBuildFacing"/>
         <On Terms="ActorCreation" Send="Create ZergConstructionAttached"/>
@@ -14455,6 +14464,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-InfestationPit.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_InfestationPitBuild" parent="ZergBuildingBuild">
+        <Model value="InfestationPitBuild"/>
+    </CActorModel>
     <CActorTurret id="AP_KhaydarinMonolithTurret">
         <On Terms="TurretEnable.AP_KhaydarinMonolith" Send="Create"/>
     </CActorTurret>
@@ -14553,6 +14565,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-HydraliskDen.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_HydraliskDenBuild" parent="ZergBuildingBuild">
+        <Model value="HydraliskDenBuild"/>
+    </CActorModel>
     <CActorProgress id="AP_LurkerDenMorph">
         <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 0" Send="SetTransferOverrideAnim Morph,Stand"/>
         <On Terms="ProgressLevel.AP_LurkerDenMorph.Stop; Level 0" Send="SetTransferOverrideAnim"/>
@@ -14605,6 +14620,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-EvolutionChamber.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_EvolutionChamberBuild" parent="ZergBuildingBuild">
+        <Model value="EvolutionChamberBuild"/>
+    </CActorModel>
     <CActorUnit id="AP_Gateway" parent="ProtossBuildingEx" unitName="AP_Gateway">
         <Aliases value="_UnitHuge"/>
         <Macros value="ProtossBuildingPowerUp"/>
@@ -14982,6 +15000,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-Hatchery.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_HatcheryBuild" parent="ZergBuildingBuild">
+        <Model value="HatcheryBuild"/>
+    </CActorModel>
     <CActorUnit id="AP_Lair" parent="ZergBuildingEx" unitName="AP_Lair">
         <Aliases value="_ZergHiveMorph"/>
         <Aliases value="_UnitHuge"/>
@@ -15130,6 +15151,7 @@
         <On Terms="UnitBirth.AP_ExtractorPipes" Send="Create"/>
         <DeathCustoms ModelLink="ExtractorEmptyDeath" Name="Empty"/>
         <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="ExtractorPlacement"/>
         <PortraitModel value="ExtractorPortrait"/>
         <BarOffset value="140"/>
         <BarWidth value="120"/>
@@ -15179,6 +15201,12 @@
             <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_ExtractorRichBuild" parent="ModelConstruction">
+        <Aliases value="_ZergBuildModel"/>
+        <HostSiteOps Ops="SOpShadow ExtractorBuildFacing"/>
+        <On Terms="ActorCreation" Send="Create ZergConstructionAttached"/>
+        <Model value="ExtractorBuild"/>
+    </CActorModel>
     <CActorSound id="Zerg_BuildingMorphStart">
         <!-- Override -->
         <On Terms="Abil.AP_ZergBuild.BuiltStart" Send="Create"/>
@@ -16809,6 +16837,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-RoachWarren.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_RoachWarrenBuild" parent="ZergBuildingBuild">
+        <Model value="RoachWarrenBuild"/>
+    </CActorModel>
     <CActorSound id="AP_QueenSpawnLarvaLarvaLandSound" parent="SoundOneShot">
         <On Terms="UnitDeath.LarvaReleaseMissile" Send="Create"/>
         <Sound value="Queen_SpawnLarvaLarvaLand"/>
@@ -17844,6 +17875,10 @@
             <Image value="Assets\Textures\Wireframe-Zerg-UltraliskCavern.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_UltraliskCavernBuild" parent="ZergBuildingBuild">
+        <Model value="UltraliskCavernBuild"/>
+
+    </CActorModel>
     <CActorUnit id="AP_Spire" parent="ZergBuildingEx" unitName="AP_Spire">
         <Aliases value="_UnitHuge"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Send="StatusSet Morphing 1"/>
@@ -17885,6 +17920,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-Spire.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SpireBuild" parent="ZergBuildingBuild">
+        <Model value="SpireBuild"/>
+    </CActorModel>
     <CActorModel id="AP_SpireMorph">
         <Model value="SpireMorph"/>
         <Host Subject="_Selectable"/>
@@ -18007,6 +18045,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-SpineCrawler.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SpineCrawlerBuild" parent="ZergBuildingBuild">
+        <Model value="SpineCrawlerBuild"/>
+    </CActorModel>
     <CActorAction id="AP_SpineCrawlerAttack" parent="GenericAttack" effectImpact="AP_ImpalerTentacleU" effectLaunch="AP_ImpalerTentacleLM">
         <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
         <LaunchAttachQuery Methods="Weapon"/>
@@ -18295,6 +18336,9 @@
             <Image value="Assets\Textures\Wireframe-Zerg-SpawningPool.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SpawningPoolBuild" parent="ZergBuildingBuild">
+        <Model value="SpawningPoolBuild"/>
+    </CActorModel>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
@@ -24161,23 +24205,12 @@
         <Sound value="WarpPrism_MorphToTransport"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrism" Send="Create"/>
     </CActorSound>
-    <CActorStateMonitor id="ZergBloodLargeBuilding2" parent="ZergBlood">
-        <On Terms="UnitCreation.Hatchery" Send="Create"/>
-        <On Terms="UnitCreation.Lair" Send="Create"/>
+    <CActorStateMonitor id="ZergBloodLargeBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_Hatchery" Send="Create"/>
+        <On Terms="UnitCreation.AP_Lair" Send="Create"/>
         <On Terms="UnitCreation.AP_Hive" Send="Create"/>
-        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>
-        <On Terms="StateChange; StateValid ZergBleedLight; StateChanged ZergNormal" Send="Create ZergBloodSetBleedSmall"/>
-        <On Terms="StateChange; StateValid ZergBleedHeavy; StateChanged ZergNormal" Send="Create ZergBloodSetBleedHeavy"/>
-        <On Terms="StateChange; StateValid ZergBleedProfusely; StateChanged ZergNormal" Send="Create ZergBloodSetBleedProfusely"/>
-        <On Terms="StateChange; StateValid ZergBleedLight; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedSmall"/>
-        <On Terms="StateChange; StateValid ZergBleedHeavy; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedHeavy"/>
-        <On Terms="StateChange; StateValid ZergBleedProfusely; !StateChanged ZergNormal" Send="Create ZergBloodSetBleedProfusely"/>
-        <On Terms="StateChange; StateValid ZergNormal; StateChanged ZergBleedLight" Target="ZergBloodSetBleedSmall" Send="Destroy"/>
-        <On Terms="StateChange; StateValid ZergBleedLight; StateChanged ZergBleedHeavy" Target="ZergBloodSetBleedHeavy" Send="Destroy"/>
-        <On Terms="StateChange; StateValid ZergBleedHeavy; StateChanged ZergBleedProfusely" Target="ZergBloodSetBleedProfusely" Send="Destroy"/>
-        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedSmall" Send="Destroy"/>
-        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedHeavy" Send="Destroy"/>
-        <On Terms="StateChange; StateValid ZergNormal" Target="ZergBloodSetBleedProfusely" Send="Destroy"/>
+<!--        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>-->
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodMediumBuilding">
         <!-- Override -->
@@ -24238,4 +24271,77 @@
         <On Terms="Behavior.AP_GhostSCBWLockdown.Off" Send="ModelMaterialRemoveFrom ::Main"/>
         <On Terms="Behavior.AP_GhostSCBWLockdown.Off" Send="Destroy"/>
     </CActorModelMaterial>
+    <CActorUnit id="AP_Drone" parent="GenericBurrowerStandard" unitName="AP_Drone">
+        <Model value="Drone"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <On Terms="Abil.AP_DroneHarvest.Start" Send="AnimPlay Work Work PlayForever"/>
+        <On Terms="Abil.AP_DroneHarvest.Stop" Send="AnimClear Work"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Drone; MorphTo AP_DroneBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Drone; MorphFrom AP_DroneBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Drone; MorphFrom AP_DroneBurrowed" Send="AnimClear Burrow"/>
+        <!-- cloaking sound setup, different to other units -->
+        <On Terms="Abil.AP_DroneHarvest.Start" Send="StatusSet CloakSound 1"/>
+        <On Terms="Behavior.CarryHarvestableVespeneGeyserGasZerg.Create" Send="StatusSet CloakSound 1"/>
+        <On Terms="Confirmation.AP_Drone.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
+        <On Terms="Behavior.AP_CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="CarryAnim"/>
+        <Macros value="BuildAnim"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergSmallBurrowEffects"/>
+        <Macros value="MacroWorkerHat"/>
+        <DeathArray index="Normal" ModelLink="DroneDeath" SoundLink="Drone_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="DroneDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="DroneDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PortraitModel value="DronePortrait"/>
+        <BarWidth value="42"/>
+        <BarOffset value="40"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-drone.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-drone.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Drone.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Drone.dds"/>
+        </Wireframe>
+        <SoundArray index="Help" value="Alert_ZergEconomyUnderAttack"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <Aliases value="_UnitSmall"/>
+    </CActorUnit>
+    <CActorSound id="AP_Drone_Death" parent="SoundOneShot">
+        <Sound value="Drone_Death"/>
+        <On Terms="UnitDeath.AP_Drone; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeath.AP_DroneBurrowed; PassChance 25.000000" Send="Create"/>
+    </CActorSound>
+    <!--                                                                                         -->
+    <CActorAction id="AP_DroneAttack" parent="GenericAttack" effectAttack="AP_Spines">
+        <ImpactMap index="None" Sound="Drone_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_DroneAttackLaunch" parent="SoundOneShot">
+        <Sound value="Drone_AttackLaunch"/>
+        <On Terms="WeaponStart.AP_Spines.AttackStart" Send="Create"/>
+    </CActorSound>
+    <!--                                                                                         -->
+    <CActorSplat id="AP_DroneBurrowedSplat" parent="BurrowedSplat" unitName="Drone"/>
+    <CActorProgress id="ZergConstruction">
+        <!-- Override -->
+        <On Terms="Abil.AP_ZergBuild.BuiltStart" Send="Create"/>
+    </CActorProgress>
+    <CActorSound id="ZergBuildingStopSound">
+        <!-- Override -->
+        <On Terms="Abil.AP_HatcheryBuild.BuiltStop" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lair; MorphFrom AP_Hatchery" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hive" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_LurkerDen" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_GreaterSpire" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="ZergBuildingMorphCancel">
+        <!-- Override -->
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_Lair" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_Hive" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="Create"/>
+    </CActorSound>
 </Catalog>

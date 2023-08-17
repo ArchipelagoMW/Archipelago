@@ -3139,6 +3139,33 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
         <InfoArray Unit="AP_Extractor" CollideRange="0"/>
     </CAbilMorph>
+    <CAbilMorph id="AP_BurrowDroneDown">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="DroneBurrowed" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.333"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="0.8332"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1.1665"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilHarvest id="AP_DroneHarvest">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+    </CAbilHarvest>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -6927,4 +6954,69 @@
         <AbilLinkEnableArray value="AP_ZerglingRespawnCounter"/>
         <AbilLinkEnableArray value="AP_ZerglingRespawnTrain"/>
     </CAbilMorph>
+    <CAbilBuild id="AP_ZergBuild">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <FlagArray index="PeonHide" value="1"/>
+        <FlagArray index="PeonKillFinish" value="1"/>
+        <FlagArray index="RangeIncludesBuilding" value="0"/>
+        <InfoArray index="Build1" Unit="AP_Hatchery" Time="60">
+            <Button DefaultButtonFace="AP_Hatchery"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_CreepTumor" Time="15">
+            <Button DefaultButtonFace="AP_CreepTumor"/>
+        </InfoArray>
+        <InfoArray index="Build3" Unit="AP_Extractor" Time="30">
+            <Button DefaultButtonFace="AP_Extractor" Requirements="AP_HideExtractor"/>
+            <ValidatorArray value="HasVespene"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_SpawningPool" Time="30">
+            <Button DefaultButtonFace="AP_SpawningPool" State="Suppressed" Requirements="AP_HaveHatchery"/>
+        </InfoArray>
+        <InfoArray index="Build5" Unit="AP_EvolutionChamber" Time="40">
+            <Button DefaultButtonFace="AP_EvolutionChamber" State="Suppressed" Requirements="AP_HaveHatchery"/>
+        </InfoArray>
+        <InfoArray index="Build6" Unit="AP_HydraliskDen" Time="40">
+            <Button DefaultButtonFace="AP_HydraliskDen" State="Suppressed" Requirements="AP_HaveLair"/>
+        </InfoArray>
+        <InfoArray index="Build7" Unit="AP_Spire" Time="40">
+            <Button DefaultButtonFace="AP_Spire" State="Suppressed" Requirements="AP_HaveLair"/>
+        </InfoArray>
+        <InfoArray index="Build8" Unit="AP_UltraliskCavern" Time="50">
+            <Button DefaultButtonFace="AP_UltraliskCavern" State="Suppressed" Requirements="AP_HaveHive"/>
+        </InfoArray>
+        <InfoArray index="Build9" Unit="AP_InfestationPit" Time="40">
+            <Button DefaultButtonFace="AP_InfestationPit" State="Suppressed" Requirements="AP_HaveLair"/>
+        </InfoArray>
+<!--        <InfoArray index="Build10" Unit="AP_NydusNetwork" Time="50">-->
+<!--            <Button DefaultButtonFace="AP_NydusNetwork" State="Suppressed" Requirements="AP_HaveLair"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Build11" Unit="AP_BanelingNest" Time="30">
+            <Button DefaultButtonFace="AP_BanelingNest" State="Suppressed" Requirements="AP_HaveSpawningPool"/>
+        </InfoArray>
+        <InfoArray index="Build13" Time="70"/>
+        <InfoArray index="Build14" Unit="AP_RoachWarren" Time="40">
+            <Button DefaultButtonFace="AP_RoachWarren" State="Suppressed" Requirements="AP_HaveSpawningPool"/>
+        </InfoArray>
+        <InfoArray index="Build15" Unit="AP_SpineCrawler" Time="30">
+            <Button DefaultButtonFace="AP_SpineCrawler" State="Suppressed" Requirements="AP_HaveSpawningPool"/>
+        </InfoArray>
+        <InfoArray index="Build16" Unit="SporeCrawler" Time="30">
+            <Button DefaultButtonFace="SporeCrawler" State="Suppressed" Requirements="AP_HaveEvolutionChamber"/>
+        </InfoArray>
+<!--        <InfoArray index="Build17" Unit="AP_LurkerDen" Time="40">-->
+<!--            <Button DefaultButtonFace="AP_LurkerDen" State="Suppressed" Requirements="AP_HaveLair"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Build18" Unit="Virophage" Time="15">-->
+<!--            <Button DefaultButtonFace="MorphToPlaguebringer"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Build19" Unit="AP_AutomatedExtractor" Time="30">
+            <Button DefaultButtonFace="AP_AutomatedExtractor" Requirements="AP_UseAutomatedExtractor"/>
+        </InfoArray>
+<!--        <InfoArray index="Build20" Unit="KorhalSporeCannon" Time="120">-->
+<!--            <Button DefaultButtonFace="BuildKorhalSporeCannon"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Build21" Unit="Digester" Time="30">-->
+<!--            <Button DefaultButtonFace="Digester" Requirements="HaveSpawningPool"/>-->
+<!--        </InfoArray>-->
+    </CAbilBuild>
 </Catalog>

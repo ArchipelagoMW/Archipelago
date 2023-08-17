@@ -6111,9 +6111,6 @@
     <CUpgrade id="AP_HotSHaveQueen"/>
     <CUpgrade id="AP_HotSHaveSpineCrawler"/>
     <CUpgrade id="AP_K5CreepBonuses">
-        <EffectArray Operation="Set" Reference="Abil,AP_LarvaTrain,InfoArray[Train1].Unit[1]" Value="NullUnit"/>
-        <EffectArray Operation="Set" Reference="Abil,AP_DroneHarvest,ResourceAmountMultiplier[Vespene]" Value="1.0"/>
-        <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespene,Resources" Value="-4"/>
         <EffectArray Reference="Unit,AP_CreepTumor,Sight" Value="8"/>
         <EffectArray Reference="Unit,AP_CreepTumorBurrowed,Sight" Value="8"/>
         <EffectArray Reference="Unit,AP_CreepTumorUsed,Sight" Value="8"/>
@@ -6128,17 +6125,17 @@
         <EffectArray Reference="Unit,AP_InfestedAbomination,AttackSpeedMultiplierCreep" Value="0.3"/>
         <EffectArray Reference="Unit,AP_Queen,AttackSpeedMultiplierCreep" Value="0.3"/>
         <EffectArray Reference="Unit,AP_K5Kerrigan,AttackSpeedMultiplierCreep" Value="0.3"/>
-<!--        <EffectArray Reference="Unit,InfestedStukov,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,StukovInfestedTerran,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,InfestedTerranCampaign,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,InfestedCivilian,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,Dehaka,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,DehakaMirrorImage,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,SwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,LargeSwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,HugeSwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,Locust,AttackSpeedMultiplierCreep" Value="0.3"/>-->
-<!--        <EffectArray Reference="Unit,Brutalisk,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedStukov,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,StukovInfestedTerran,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedTerranCampaign,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedCivilian,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,Dehaka,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,DehakaMirrorImage,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,SwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,LargeSwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,HugeSwarmQueen,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,Locust,AttackSpeedMultiplierCreep" Value="0.3"/>-->
+        <!--        <EffectArray Reference="Unit,Brutalisk,AttackSpeedMultiplierCreep" Value="0.3"/>-->
         <EffectArray Reference="Unit,AP_Hatchery,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_Lair,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_Hive,LifeRegenRate" Value="0.820200"/>
@@ -6185,25 +6182,25 @@
         <EffectArray Reference="Unit,AP_QueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_K5Kerrigan,LifeRegenRateCreep" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_K5KerriganBurrowed,LifeRegenRateCreep" Value="0.820200"/>
-<!--        <EffectArray Reference="Unit,InfestedStukov,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,StukovInfestedTerran,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,InfestedTerranCampaign,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,InfestedCivilian,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,Dehaka,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,DehakaBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,DehakaMirrorImage,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,DehakaMirrorImageBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,SwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,SwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,LargeSwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,LargeSwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,HugeSwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
-<!--        <EffectArray Reference="Unit,HugeSwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedStukov,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,StukovInfestedTerran,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedTerranCampaign,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,InfestedCivilian,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,Dehaka,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,DehakaBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,DehakaMirrorImage,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,DehakaMirrorImageBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,SwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,SwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,LargeSwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,LargeSwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,HugeSwarmQueen,LifeRegenRateCreep" Value="0.820200"/>-->
+        <!--        <EffectArray Reference="Unit,HugeSwarmQueenBurrowed,LifeRegenRateCreep" Value="0.820200"/>-->
         <EffectArray Reference="Unit,AP_Locust,LifeRegenRateCreep" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_SwarmHost,LifeRegenRateCreep" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_SwarmHostBurrowed,LifeRegenRateCreep" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_SwarmHostRooted,LifeRegenRateCreep" Value="0.820200"/>
-        <EffectArray Reference="Unit,Brutalisk,LifeRegenRateCreep" Value="0.820200"/>
+<!--        <EffectArray Reference="Unit,Brutalisk,LifeRegenRateCreep" Value="0.820200"/>-->
         <EffectArray Reference="Abil,AP_CreepTumorBuild,Range" Value="3"/>
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
     </CUpgrade>
@@ -6215,5 +6212,36 @@
     </CUpgrade>
     <CUpgrade id="AP_K5AutoExtractor">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_K5TwoDrones">
+        <EffectArray Operation="Set" Reference="Abil,AP_LarvaTrain,InfoArray[Train1].Unit[1]" Value="AP_Drone"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Drone,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_DroneBurrowed,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Hatchery,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Lair,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Hive,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Extractor,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_SpawningPool,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_EvolutionChamber,CostResource[Minerals]" Value="25"/>
+<!--        <EffectArray Operation="Subtract" Reference="Unit,AP_NydusNetwork,CostResource[Minerals]" Value="25"/>-->
+        <EffectArray Operation="Subtract" Reference="Unit,AP_SporeCrawler,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_SporeCrawlerUprooted,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_SpineCrawler,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_SpineCrawlerUprooted,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_RoachWarren,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_BanelingNest,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_HydraliskDen,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_LurkerDen,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_InfestationPit,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Spire,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_GreaterSpire,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_UltraliskCavern,CostResource[Minerals]" Value="25"/>
+<!--        <EffectArray Operation="Subtract" Reference="Unit,Virophage,CostResource[Minerals]" Value="25"/>-->
+        <EffectArray Operation="Subtract" Reference="Unit,AP_AutomatedExtractor,CostResource[Minerals]" Value="25"/>
+<!--        <EffectArray Operation="Subtract" Reference="Unit,KorhalSporeCannon,CostResource[Minerals]" Value="25"/>-->
+        <EffectArray Reference="Unit,AP_Drone,Food" Value="0.5"/>
+        <EffectArray Reference="Unit,AP_DroneBurrowed,Food" Value="0.5"/>
+        <AffectedUnitArray value="AP_Drone"/>
+        <AffectedUnitArray value="AP_DroneBurrowed"/>
     </CUpgrade>
 </Catalog>

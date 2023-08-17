@@ -2167,4 +2167,12 @@
         <Range value="0.1"/>
         <Period value="1.5"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Spines">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.5"/>
+    </CWeaponLegacy>
 </Catalog>

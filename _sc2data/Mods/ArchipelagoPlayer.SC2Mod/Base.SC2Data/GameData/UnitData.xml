@@ -6860,7 +6860,7 @@
         <BuiltOn value="SpacePlatformGeyser"/>
         <BuiltOn value="RichVespeneGeyser"/>
         <BuiltOn value="ProtossVespeneGeyser"/>
-        <BuildOnAs value="AP_ExtractorRich"/>
+        <BuildOnAs value="AP_AutomatedExtractorRich"/>
         <ScoreMake value="50"/>
         <ScoreKill value="150"/>
         <ScoreResult value="BuildOrder"/>
@@ -7111,6 +7111,160 @@
         <GlossaryPriority value="10"/>
         <GlossaryAlias value="Extractor"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
+    </CUnit>
+    <CUnit id="AP_Drone">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Worker" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <DefaultAcquireLevel value="Defensive"/>
+        <Response value="Flee"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="2.8125"/>
+        <Acceleration value="2.5"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-1"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AIOverideTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_ZergBuild"/>
+        <AbilArray Link="AP_DroneHarvest"/>
+        <AbilArray Link="AP_BurrowDroneDown"/>
+        <AbilArray Link="DroneCarcassHarvest"/>
+        <WeaponArray Link="AP_Spines"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="AttackWorker" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="AP_DroneHarvest,1" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_ZergBuild"/>
+                <Type value="Submenu"/>
+                <AbilCmd value="255"/>
+                <SubmenuCardId value="ZBl1"/>
+                <Row value="2"/>
+                <Column value="0"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_ZergBuildAdvanced"/>
+                <Type value="Submenu"/>
+                <AbilCmd value="255"/>
+                <SubmenuCardId value="ZBl2"/>
+                <Row value="2"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="AP_BurrowDroneDown,0" Row="2" Column="4"/>
+            <LayoutButtons Face="GatherZerg" Type="AbilCmd" AbilCmd="AP_DroneHarvest,0" Row="1" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="DroneCarcassHarvest,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <CardLayouts CardId="ZBl1">
+            <LayoutButtons Face="AP_Hatchery" Type="AbilCmd" AbilCmd="AP_ZergBuild,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_Extractor" Type="AbilCmd" AbilCmd="AP_ZergBuild,2" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_SpawningPool" Type="AbilCmd" AbilCmd="AP_ZergBuild,3" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_EvolutionChamber" Type="AbilCmd" AbilCmd="AP_ZergBuild,4" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_BanelingNest" Type="AbilCmd" AbilCmd="AP_ZergBuild,10" Row="1" Column="3"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_RoachWarren" Type="AbilCmd" AbilCmd="AP_ZergBuild,13" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_SpineCrawler" Type="AbilCmd" AbilCmd="AP_ZergBuild,14" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SporeCrawler" Type="AbilCmd" AbilCmd="AP_ZergBuild,15" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_AutomatedExtractor" Type="AbilCmd" AbilCmd="AP_ZergBuild,18" Row="0" Column="1"/>
+        </CardLayouts>
+        <CardLayouts CardId="ZBl2">
+            <LayoutButtons Face="AP_Spire" Type="AbilCmd" AbilCmd="AP_ZergBuild,6" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_UltraliskCavern" Type="AbilCmd" AbilCmd="AP_ZergBuild,7" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <!--            <LayoutButtons Face="AP_NydusNetwork" Type="AbilCmd" AbilCmd="AP_ZergBuild,9" Row="1" Column="1"/>-->
+            <LayoutButtons Face="AP_InfestationPit" Type="AbilCmd" AbilCmd="AP_ZergBuild,8" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_HydraliskDen" Type="AbilCmd" AbilCmd="AP_ZergBuild,5" Row="0" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="1"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="50"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="4"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Drone"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="20"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+    </CUnit>
+    <CUnit id="AP_DroneBurrowed">
+        <Name value="Unit/Name/Drone"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Worker" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Burrowed"/>
+        <Sight value="4"/>
+        <Food value="-1"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AIOverideTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="AP_BurrowDroneUp"/>
+        <CardLayouts>
+            <LayoutButtons Face="AttackWorker" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowDroneUp,Execute" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0"/>
+        <InnerRadius value="0.375"/>
+        <ScoreKill value="50"/>
+        <SubgroupPriority value="4"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <LeaderAlias value="Drone"/>
+        <HotkeyAlias value="Drone"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <AIEvaluateAlias value="Drone"/>
     </CUnit>
     <CUnit id="PlanetaryFortress">
         <!-- Override -->

@@ -11661,4 +11661,8 @@
         <Abil value="AP_ExtractorPipesToExtractor"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
+    <CEffectDamage id="AP_Spines" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="5"/>
+    </CEffectDamage>
 </Catalog>

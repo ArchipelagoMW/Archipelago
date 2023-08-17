@@ -3061,4 +3061,11 @@
         <Count Link="AP_K5AutoExtractor" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeK5AutoExtractorCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeK5AutoExtractorCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirement id="AP_HaveLair">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitAlias_LairCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>
