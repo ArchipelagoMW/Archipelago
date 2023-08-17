@@ -31,6 +31,7 @@ UnusedRomStart equ 0x0878F97C
 .include "asm/patches.asm"
 .include "asm/graphics.asm"
 .include "asm/messages/textboxes.asm"
+.include "asm/messages/draw_text.asm"
 .include "asm/messages/strings.asm"
 
 .close

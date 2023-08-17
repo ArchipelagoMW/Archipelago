@@ -147,7 +147,6 @@ SpawnCollectionIndicator:
 
         pop {r4, lr}
     .pool
-.endautoregion
 
 
 .macro set_tile, TileId, RomId
@@ -160,8 +159,6 @@ SpawnCollectionIndicator:
         ldr r0, [r1, #8]
 .endmacro
 
-
-.autoregion
 ReadJewelPieces:
         push {r7}
 
@@ -296,8 +293,6 @@ JewelGraphicTable:
     .word EmptyJewel2Tile, 0x6012020, CarryingJewel2Tile, HasJewel2Tile
     .word EmptyJewel3Tile, 0x6012000, CarryingJewel3Tile, HasJewel3Tile
     .word EmptyJewel4Tile, 0x6011C00, CarryingJewel4Tile, HasJewel4Tile
-
-
 
 
 ReadCD:
