@@ -66,7 +66,7 @@ rom_sub_weapon_flags = {
     0x10C704: 0x4000FF04,
 
     0x10C831: 0x08,  # Castle Wall
-    0x10C828: 0x10,
+    0x10C829: 0x10,
     0x10C821: 0x20,
 
     # Villa
@@ -80,7 +80,7 @@ rom_sub_weapon_flags = {
     0x10C999: 0x40,
     0x10CF77: 0x80,
 
-    0x10CA59: 0x40FF0E,  # Tunnel
+    0x10CA58: 0x4000FF0E,  # Tunnel
     0x10CA6B: 0x80,
     0x10CA60: 0x1000FF05,
     0x10CA70: 0x2000FF05,
@@ -121,24 +121,24 @@ rom_empty_breakables_flags = {
 }
 
 rom_axe_cross_lower_values = {
-    0x0A: [0x7C7F97, 0x07],  # Forest
-    0x15: [0x7C7FA6, 0xF9],
+    0x6: [0x7C7F97, 0x07],  # Forest
+    0x8: [0x7C7FA6, 0xF9],
 
-    0x41: [0x83A60A, 0x71],  # Villa hallway
-    0x42: [0x83A617, 0x26],
-    0x3F: [0x83A624, 0x6E],
+    0x30: [0x83A60A, 0x71],  # Villa hallway
+    0x27: [0x83A617, 0x26],
+    0x2C: [0x83A624, 0x6E],
 
-    0x49: [0x850FE6, 0x07],  # Villa maze
+    0x16C: [0x850FE6, 0x07],  # Villa maze
 
-    0x89: [0x8C44D3, 0x08],  # CC factory floor
-    0x8D: [0x8C44E1, 0x08],
+    0x10A: [0x8C44D3, 0x08],  # CC factory floor
+    0x109: [0x8C44E1, 0x08],
 
-    0x91: [0x8DF77C, 0x07],  # CC invention area
-    0xA8: [0x90FD37, 0x43],
-    0x9C: [0xBFCC2B, 0x43],
-    0xA5: [0x90FBA1, 0x51],
-    0xA3: [0x90FBAD, 0x50],
-    0x9D: [0x90FE56, 0x43]
+    0x74: [0x8DF77C, 0x07],  # CC invention area
+    0x60: [0x90FD37, 0x43],
+    0x55: [0xBFCC2B, 0x43],
+    0x65: [0x90FBA1, 0x51],
+    0x64: [0x90FBAD, 0x50],
+    0x61: [0x90FE56, 0x43]
 }
 
 rom_looping_music_fade_ins = {
@@ -329,7 +329,7 @@ class LocalRom(object):
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, active_stage_list, active_stage_exits,
               active_warp_list, required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list,
-              shop_price_list):
+              shop_price_list, slot_name):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -1022,6 +1022,11 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
             rom.write_int24(offset, item_id)
         else:
             rom.write_int32(offset, item_id)
+
+    # Write the slot name
+    rom.write_int32s(0x976F0, [0x00000000, 0x00000000, 0x00000000, 0x00000000])
+    for i in range(len(slot_name)):
+        rom.write_byte(0x976F0 + i, slot_name[i])
 
 
 class CV64DeltaPatch(APDeltaPatch):

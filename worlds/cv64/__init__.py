@@ -15,6 +15,7 @@ from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
 from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, \
     rom_looping_music_fade_ins, rom_axe_cross_lower_values
+from .Client import Castlevania64Client
 
 
 # import math
@@ -343,8 +344,8 @@ class CV64World(World):
                 self.multiworld.bosses_required[self.player].value = \
                     self.multiworld.random.randint(1, self.total_available_bosses)
                 self.required_s2s = self.multiworld.bosses_required[self.player].value
-        elif self.multiworld.draculas_condition[self.player].value == 0:
-            self.required_s2s = 0
+        elif self.multiworld.draculas_condition[self.player].value == 3:
+            self.required_s2s = self.multiworld.special2s_required[self.player].value
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(IName.victory, self.player)
         self.multiworld.get_entrance(RName.ck_drac_chamber, self.player).access_rule = \
@@ -564,9 +565,11 @@ class CV64World(World):
                     offsets_to_ids[stage_info[stage].altzone_spawn_offset] = stage_info[
                         self.active_stage_exits[stage]["alt"]].start_spawn_id
 
+            slot_name = self.multiworld.player_name[self.player].encode("utf-8")
+
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
                       self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
-                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list)
+                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, slot_name)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
