@@ -2019,6 +2019,10 @@
         <Race value="Terr"/>
         <ScoreAmount value="300"/>
         <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[0]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[1]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[2]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[3]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[4]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[5]" Value="0.294"/>
         <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicPeriodArray[6]" Value="0.294"/>
