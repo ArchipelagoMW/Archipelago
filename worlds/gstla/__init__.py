@@ -8,8 +8,9 @@ from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
 from .Items import GSTLAItem, item_table, all_items, ItemType
 from .Locations import GSTLALocation, all_locations, location_name_to_id, LocationType, location_type_to_data
-from .Rules import set_access_rules, set_item_rules
+from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
+from .Connections import create_connections
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from .Names.RegionName import RegionName
@@ -43,6 +44,7 @@ class GSTLAWorld(World):
 
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.player)
+        create_connections(self.multiworld, self.player)
 
 
     def create_items(self) -> None:
@@ -54,9 +56,6 @@ class GSTLAWorld(World):
                 continue
 
             ap_item = self.create_item(location.vanilla_item)
-
-            print(f'{location.name} - {location.vanilla_item}')
-
             if location.loc_type == LocationType.Djinn:
                 self.djinnlist.append(ap_item)
             else:
@@ -67,6 +66,7 @@ class GSTLAWorld(World):
 
 
     def set_rules(self) -> None:
+        set_entrance_rules(self.multiworld, self.player)
         set_item_rules(self.multiworld, self.player)
         set_access_rules(self.multiworld, self.player)
 
@@ -128,7 +128,6 @@ class GSTLAWorld(World):
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
-
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]

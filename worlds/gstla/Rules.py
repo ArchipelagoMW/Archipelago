@@ -3,8 +3,98 @@ from typing import Set
 from .Items import ItemType, all_items
 from .Names.LocationName import LocationName
 from .Names.ItemName import ItemName
+from .Names.EntranceName import EntranceName
 from .Locations import location_type_to_data, LocationType
+from BaseClasses import MultiWorld
 
+
+def set_entrance_rules(multiworld: MultiWorld, player: int):
+    add_rule(multiworld.get_entrance(EntranceName.DailaToShrineOfTheSeaGod, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.DailaToKandoreanTemple, player),
+             lambda state: state.has(ItemName.Whirlwind, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.MadraToMadraCatacombs, player),
+             lambda state: state.has(ItemName.Reveal, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.YampiDesertFrontToYampiDesertBack, player),
+             lambda state: state.has(ItemName.Scoop_Gem, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.YampiDesertBackToYampiDesertCave, player),
+             lambda state: state.has(ItemName.Sand, player)  and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Burst_Brooch, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.AlhafraToAlhafraCave, player),
+             lambda state: (state.has(ItemName.Briggs_defeated, player) and state.has(ItemName.Tremor_Bit, player)) or state.has(ItemName.Briggs_escaped, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.GarohToAirsRock, player),
+             lambda state: state.has(ItemName.Whirlwind, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.GarohToYampiDesertBack, player),
+             lambda state: state.has(ItemName.Sand, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.MadraToGondowanCliffs, player),
+             lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Scoop_Gem, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.GondowanCliffsToNaribwe, player),
+             lambda state: state.has(ItemName.Briggs_defeated, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.KibomboMountainsToKibombo, player),
+             lambda state: state.has(ItemName.Frost_Jewel, player) or state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Whirlwind, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.KibomboToGabombaStatue, player),
+             lambda state: state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Scoop_Gem, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.GabombaStatueToGabombaCatacombs, player),
+             lambda state: state.has(ItemName.Gabombo_Statue_Completed, player) and state.has(ItemName.Cyclone_Chip, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.MadraToEasternSea, player),
+             lambda state: state.has(ItemName.Ship, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.SeaOfTimeIsletToIsletCave, player),
+             lambda state: state.has(ItemName.Mind_Read, player) and state.has(ItemName.Lil_Turtle, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.SeaOfTimeToLemuria, player),
+             lambda state: state.has(ItemName.Poseidon_defeated, player) or state.has(ItemName.Grindstone, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.TreasureIslandToTreasureIsland_Grindstone, player),
+             lambda state: state.has(ItemName.Grindstone, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.TreasureIsland_GrindstoneToTreasureIsland_PostReunion, player),
+             lambda state: state.has(ItemName.Lifting_Gem, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.AnkohlRuinsToAnkohlRuins_Sand, player),
+             lambda state: state.has(ItemName.Sand, player))
+    add_rule(multiworld.get_entrance(EntranceName.EasternSeaToAquaRock, player),
+             lambda state: state.has(ItemName.Douse_Drop, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.TundariaTowerToTundariaTower_Parched, player),
+             lambda state: state.has(ItemName.Parch, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.EasternSeaToWesternSea, player),
+             lambda state: state.has(ItemName.Grindstone, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.WesternSeaToMagmaRock, player),
+             lambda state: state.has(ItemName.Lifting_Gem, player))
+    add_rule(multiworld.get_entrance(EntranceName.MagmaRockToMagmaRockInterior, player),
+             lambda state: state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Growth, player) and state.has(ItemName.Lash_Pebble, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.ContigoToAnemosInnerSanctum, player),
+             lambda state: state.has(ItemName.Teleport_Lapis, player) and state.count_group(ItemType.Djinn, player) >= 72)
+
+    add_rule(multiworld.get_entrance(EntranceName.ContigoToJupiterLighthouse, player),
+             lambda state: state.has(ItemName.Cyclone_Chip, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.ContigoToReunion, player),
+             lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.ShamanVillageCaveToShamanVillage, player),
+             lambda state: state.has(ItemName.Whirlwind, player))
+
+    add_rule(multiworld.get_entrance(EntranceName.WesternSeaToProx, player),
+             lambda state: state.has(ItemName.Magma_Ball, player))
+    add_rule(multiworld.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated, player),
+             lambda state: state.has(ItemName.Flamedragons_defeated, player) and state.has(ItemName.Mars_Star, player))
 
 def set_access_rules(multiworld, player):
     #Daila
