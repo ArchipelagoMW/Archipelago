@@ -25,6 +25,7 @@ class ShortHikeWorld(World):
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {loc["name"]: loc["id"] for loc in location_table}
     location_name_to_game_id = {loc["name"]: loc["inGameId"] for loc in location_table}
+    location_name_to_chest_angle = {loc["name"]: loc["chestAngle"] for loc in location_table}
 
     item_name_groups = group_table
     option_definitions = short_hike_options
@@ -91,7 +92,8 @@ class ShortHikeWorld(World):
                     "ap_id": loc.address,
                     "item_name": loc.item.name,
                     "player_name": world.player_name[loc.item.player],
-                    "type": int(loc.item.classification)
+                    "type": int(loc.item.classification),
+                    "chest_angle": self.location_name_to_chest_angle[loc.name],
                 }
 
                 locations[self.location_name_to_game_id[loc.name]] = data
