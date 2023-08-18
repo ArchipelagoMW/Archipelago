@@ -4721,4 +4721,36 @@
         <IdealHarvesterCount value="3"/>
         <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGasZerg"/>
     </CBehaviorResource>
+    <CBehaviorBuff id="AP_CreepFrenzy13CreepTumor">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-ability-zerg-creepMove.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveK5CreepBonuses"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PrecursorCreepTumor">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <RateMultiplierArray index="Progress" value="0.1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CreepTumorExhausted">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InitialEffect value="AP_CreepTumorUsed"/>
+    </CBehaviorBuff>
+    <CBehaviorCreepSource id="AP_makeCreep4x4Enhanced">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_HaveK5CreepBonuses"/>
+        <Period value="0.375"/>
+        <!--Start value="Footprint4x4CreepSourceGrown"/>
+        <Birth value="Footprint4x4CreepSourceStart"/>
+        <Grown value="Footprint4x4CreepSourceGrown"/-->
+        <Start value="Footprint4x4CreepSourceGrownUpgraded"/>
+        <Birth value="Footprint4x4CreepSourceStart"/>
+        <Grown value="Footprint4x4CreepSourceGrownUpgraded"/>
+    </CBehaviorCreepSource>
 </Catalog>

@@ -3068,4 +3068,10 @@
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitAlias_LairCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirementNot id="AP_NotCountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountBehavior id="AP_CountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit">
+        <Count Link="AP_CreepTumorExhausted" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
 </Catalog>

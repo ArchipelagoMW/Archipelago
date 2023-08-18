@@ -8,6 +8,7 @@
             <Item Type="Category" Library="15EF4C78" Id="E329AFFA"/>
             <Item Type="Category" Library="15EF4C78" Id="CCF0CC2F"/>
             <Item Type="Category" Library="15EF4C78" Id="124C4260"/>
+            <Item Type="Category" Library="15EF4C78" Id="5044099F"/>
         </Root>
         <Element Type="Trigger" Id="A5D195AA">
             <Action Type="Comment" Library="15EF4C78" Id="B1C6C33B"/>
@@ -2271,6 +2272,69 @@
             <Value>AP_SlayerConfig</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="Category" Id="5044099F">
+            <Item Type="Trigger" Library="15EF4C78" Id="B25D3592"/>
+        </Element>
+        <Element Type="Trigger" Id="B25D3592">
+            <Event Type="FunctionCall" Library="15EF4C78" Id="8CDE9114"/>
+            <Action Type="FunctionCall" Library="15EF4C78" Id="DDB1776B"/>
+        </Element>
+        <Element Type="FunctionCall" Id="8CDE9114">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="D00F9D6F"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="3F8B9AF5"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="94F0DF14"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="6546687A"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="EFBAE86A"/>
+        </Element>
+        <Element Type="Param" Id="3F8B9AF5">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="EE631277"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="C84C7A78"/>
+        </Element>
+        <Element Type="Param" Id="94F0DF14">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="BB4C37B6"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="8DB1A372"/>
+        </Element>
+        <Element Type="Param" Id="6546687A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ACC52290"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="03977D39"/>
+        </Element>
+        <Element Type="Param" Id="EFBAE86A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3F2584C8"/>
+            <Value>AP_CreepTumorBuild</Value>
+            <ValueType Type="abilcmd"/>
+        </Element>
+        <Element Type="FunctionCall" Id="DDB1776B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C47C0524"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="09D145D3"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="858AA13C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="8073C36A"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="B59E9802"/>
+        </Element>
+        <Element Type="Param" Id="09D145D3">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="6F19F7ED"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="858AA13C">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="9A6B09E3"/>
+            <Value>AP_CreepTumorExhausted</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="8073C36A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="2E722704"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="71D28C28"/>
+        </Element>
+        <Element Type="FunctionCall" Id="71D28C28">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000092"/>
+        </Element>
+        <Element Type="Param" Id="B59E9802">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="02BBDCC1"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="B5D84527"/>
+        </Element>
+        <Element Type="FunctionCall" Id="B5D84527">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000092"/>
         </Element>
     </Library>
 </TriggerData>

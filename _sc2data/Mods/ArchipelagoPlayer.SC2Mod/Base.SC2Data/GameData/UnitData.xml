@@ -7266,6 +7266,171 @@
         <RankDisplay value="Always"/>
         <AIEvaluateAlias value="Drone"/>
     </CUnit>
+    <CUnit id="AP_CreepTumor">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <EditorFlags index="NoPlacement" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="CreepTumor" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="11"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_BurrowCreepTumorDown"/>
+        <AbilArray Link="AP_CreepTumorUsed"/>
+        <BehaviorArray Link="makeCreep4x4"/>
+        <!--        <BehaviorArray Link="QueenofVenomCreepTumorSearch"/>-->
+        <BehaviorArray Link="AP_makeCreep4x4Enhanced"/>
+        <BehaviorArray Link="AP_CreepFrenzy13CreepTumor"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_CreepTumorPassive" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_K5CreepBonuses" Type="Passive" Requirements="HaveK5CreepBonuses" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.5"/>
+        <Footprint value="CreepTumor"/>
+        <PlacementFootprint value="CreepTumor"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <AIEvalFactor value="0"/>
+        <HotkeyAlias value="CreepTumorBurrowed"/>
+        <SubgroupAlias value="CreepTumorBurrowed"/>
+        <TechAliasArray value="Alias_CreepTumor"/>
+    </CUnit>
+    <CUnit id="AP_CreepTumorBurrowed">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="11"/>
+        <AttackTargetPriority value="19"/>
+        <AbilArray Link="AP_CreepTumorBuild"/>
+        <AbilArray Link="BuildInProgress"/>
+        <BehaviorArray Link="makeCreep4x4"/>
+        <BehaviorArray Link="AP_makeCreep4x4Enhanced"/>
+        <BehaviorArray Link="AP_CreepFrenzy13CreepTumor"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_CreepTumorBuild,Halt" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_BuildCreepTumorPropagate" Type="AbilCmd" AbilCmd="AP_CreepTumorBuild,Build1" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_CreepTumorPassive" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_K5CreepBonuses" Type="Passive" Requirements="HaveK5CreepBonuses" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.5"/>
+        <Footprint value="Footprint1x1Underground"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkCreepTumor"/>
+        <AIEvalFactor value="0"/>
+        <LeaderAlias value="CreepTumor"/>
+        <SelectAlias value="CreepTumor"/>
+        <TechAliasArray value="Alias_CreepTumor"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+    </CUnit>
+    <CUnit id="AP_CreepTumorUsed">
+        <Description value="Button/Tooltip/CreepTumorBurrowed"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="CreepTumor" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="11"/>
+        <AttackTargetPriority value="19"/>
+        <BehaviorArray Link="makeCreep4x4"/>
+        <!--        <BehaviorArray Link="QueenofVenomCreepTumorSearch"/>-->
+        <BehaviorArray Link="AP_makeCreep4x4Enhanced"/>
+        <BehaviorArray Link="AP_CreepFrenzy13CreepTumor"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_CreepTumorPassive" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_K5CreepBonuses" Type="Passive" Requirements="AP_HaveK5CreepBonuses" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <InnerRadius value="0.5"/>
+        <Footprint value="CreepTumorBurrowed"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="250"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkCreepTumor"/>
+        <AIEvalFactor value="0"/>
+        <SelectAlias value="CreepTumor"/>
+        <GlossaryPriority value="10"/>
+    </CUnit>
     <CUnit id="PlanetaryFortress">
         <!-- Override -->
         <!-- Zergling respawn -->
@@ -18560,5 +18725,41 @@
         <Race value="Zerg"/>
         <Mover value="LarvaReleaseMissile"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_Egg">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <LifeStart value="200"/>
+        <LifeMax value="200"/>
+        <LifeArmor value="10"/>
+        <LifeRegenRate value="0.2734"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <AttackTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <SubgroupPriority value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Sight value="5"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="Rally"/>
+        <CardLayouts>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="CancelCocoon" Type="AbilCmd" AbilCmd="que1,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+        </CardLayouts>
+        <Attributes index="Biological" value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value="Larva"/>
     </CUnit>
 </Catalog>

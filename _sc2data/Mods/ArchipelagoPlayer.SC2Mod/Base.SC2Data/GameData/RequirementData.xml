@@ -1956,4 +1956,8 @@
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitEvolutionChamberCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_CreepTumorExhausted">
+        <NodeArray index="Use" Link="AP_NotCountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_NotCountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit"/>
+    </CRequirement>
 </Catalog>

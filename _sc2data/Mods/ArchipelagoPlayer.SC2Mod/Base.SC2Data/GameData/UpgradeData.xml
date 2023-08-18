@@ -6147,7 +6147,9 @@
         <EffectArray Reference="Unit,AP_CreepTumorUsed,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_SpawningPool,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_Extractor,LifeRegenRate" Value="0.820200"/>
+        <EffectArray Reference="Unit,AP_ExtractorRich,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_AutomatedExtractor,LifeRegenRate" Value="0.820200"/>
+        <EffectArray Reference="Unit,AP_AutomatedExtractorRich,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_EvolutionChamber,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_RoachWarren,LifeRegenRate" Value="0.820200"/>
         <EffectArray Reference="Unit,AP_HydraliskDen,LifeRegenRate" Value="0.820200"/>
@@ -6225,6 +6227,7 @@
         <EffectArray Operation="Subtract" Reference="Unit,AP_Lair,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_Hive,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_Extractor,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_ExtractorRich,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_SpawningPool,CostResource[Minerals]" Value="25"/>
         <EffectArray Operation="Subtract" Reference="Unit,AP_EvolutionChamber,CostResource[Minerals]" Value="25"/>
 <!--        <EffectArray Operation="Subtract" Reference="Unit,AP_NydusNetwork,CostResource[Minerals]" Value="25"/>-->
@@ -6242,6 +6245,7 @@
         <EffectArray Operation="Subtract" Reference="Unit,AP_UltraliskCavern,CostResource[Minerals]" Value="25"/>
 <!--        <EffectArray Operation="Subtract" Reference="Unit,Virophage,CostResource[Minerals]" Value="25"/>-->
         <EffectArray Operation="Subtract" Reference="Unit,AP_AutomatedExtractor,CostResource[Minerals]" Value="25"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_AutomatedExtractorRich,CostResource[Minerals]" Value="25"/>
 <!--        <EffectArray Operation="Subtract" Reference="Unit,KorhalSporeCannon,CostResource[Minerals]" Value="25"/>-->
         <EffectArray Reference="Unit,AP_Drone,Food" Value="0.5"/>
         <EffectArray Reference="Unit,AP_DroneBurrowed,Food" Value="0.5"/>

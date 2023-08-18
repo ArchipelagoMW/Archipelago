@@ -11665,4 +11665,10 @@
         <EditorCategories value="Race:Zerg"/>
         <Amount value="5"/>
     </CEffectDamage>
+    <CEffectIssueOrder id="AP_CreepTumorUsed">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <Player Value="Source"/>
+        <Abil value="AP_CreepTumorUsed"/>
+    </CEffectIssueOrder>
 </Catalog>

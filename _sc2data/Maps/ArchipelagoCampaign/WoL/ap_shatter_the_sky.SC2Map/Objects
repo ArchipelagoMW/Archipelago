@@ -3612,7 +3612,7 @@
     </ObjectPoint>
     <ObjectPoint Id="1155" Position="79.6464,129.4868,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - TL - 05" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="1002" Position="80.3894,136.3337,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - TL - 03" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
-    <ObjectPoint Id="1932" Position="74.5598,52.48,0" Scale="1,1,1" Type="Normal" Name="CreepTumor22-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1932" Position="74.5598,52.48,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor2-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="1868" Position="101.5,124.5,0" Scale="1,1,1" Type="StartLoc" Name="P10_LEVIATHAN" Color="0,0,0,0"/>
     <ObjectPoint Id="1475" Position="76.836,111.3017,0" Scale="1,1,1" Type="Normal" Name="Leviathan Patrol Path 03" Color="0,0,0,0"/>
     <ObjectPoint Id="224" Position="143.2917,50.4714,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - BR - 07" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
@@ -3628,8 +3628,8 @@
     <ObjectPoint Id="664" Position="143.0444,70.923,0" Scale="1,1,1" Type="Normal" Name="Comsat 19" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1872" Position="47.5798,137.42,0" Scale="1,1,1" Type="Normal" Name="CreepTumor24-TL" Color="0,0,0,0"/>
-    <ObjectPoint Id="1936" Position="34.48,61.5197,0" Scale="1,1,1" Type="Normal" Name="CreepTumor27-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1872" Position="47.5798,137.42,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor4-TL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1936" Position="34.48,61.5197,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor7-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="526" Position="47.1572,21.0622,0" Scale="1,1,1" Type="Normal" Name="GasCan - BL - 04" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="2339" Position="187.4072,129.0961,0" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Right Flank" Color="255,255,0,0"/>
     <ObjectPoint Id="1164" Position="73.4794,126.7094,0" Scale="1,1,1" Type="Normal" Name="GasCan - TL - 03" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
@@ -3664,7 +3664,7 @@
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="201" Position="179.5,29.45,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - BR - 03" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
-    <ObjectPoint Id="1934" Position="60.63,66.5197,0" Scale="1,1,1" Type="Normal" Name="CreepTumor25-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1934" Position="60.63,66.5197,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor5-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="162" Position="106.579,78.478,0" Scale="1,1,1" Type="Normal" Name="P07 Expansion Base 01" Color="0,0,0,0"/>
     <ObjectPoint Id="1473" Position="104.204,124.7912,0" Scale="1,1,1" Type="Normal" Name="Leviathan Patrol Path 01" Color="0,0,0,0"/>
     <ObjectPoint Id="98" Position="141.0224,44.5852,0" Scale="1,1,1" Type="Normal" Name="GasCan - BR - 07" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
@@ -3672,7 +3672,7 @@
     <ObjectPoint Id="1888" Position="82.66,144.6098,0" Scale="1,1,1" Type="Normal" Name="CreepTumor40-TL" Color="0,0,0,0"/>
     <ObjectPoint Id="1327" Position="25.7497,83.7321,0" Scale="1,1,1" Type="Normal" Name="CINEMuta01" Color="0,0,0,0"/>
     <ObjectPoint Id="204" Position="177.46,31.3398,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - BR - 04" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
-    <ObjectPoint Id="1931" Position="86.49,44.44,0" Scale="1,1,1" Type="Normal" Name="CreepTumor21-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1931" Position="86.49,44.44,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor1-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="1476" Position="90.3872,103.3503,0" Scale="1,1,1" Type="Normal" Name="Leviathan Patrol Path 04" Color="0,0,0,0"/>
     <ObjectPoint Id="1893" Position="148.5798,114.66,0" Scale="1,1,1" Type="Normal" Name="CreepTumor07-TR" Color="0,0,0,0"/>
     <ObjectPoint Id="1156" Position="76.0888,130.9294,0" Scale="1,1,1" Type="Normal" Name="GasCan - TL - 01" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
@@ -3682,7 +3682,7 @@
     <ObjectPoint Id="602" Position="152.842,61.5043,0" Scale="1,1,1" Type="Normal" Name="Comsat 12" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
-    <ObjectPoint Id="1938" Position="48.5498,56.3398,0" Scale="1,1,1" Type="Normal" Name="CreepTumor29-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1938" Position="48.5498,56.3398,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor9-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="1331" Position="30.8115,96.9907,0" Scale="1,1,1" Type="Normal" Name="CINEMuta05" Color="0,0,0,0"/>
     <ObjectPoint Id="1181" Position="133,119.0698,0" Rotation="0.3627" Scale="1,1,1" Type="Normal" Name="Briefing Banshee Move 1" Color="0,0,0,0"/>
     <ObjectPoint Id="543" Position="146.3417,126.5336,0" Scale="1,1,1" Type="Normal" Name="Comsat 10" Color="0,0,0,0"/>
@@ -3746,7 +3746,7 @@
     <ObjectPoint Id="509" Position="73.971,28.901,0" Scale="1,1,1" Type="Normal" Name="GasCan - BL - 03" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="342" Position="167.435,57.047,0" Scale="1,1,1" Type="Normal" Name="Platform Air Ping 04" Color="0,0,0,0"/>
     <ObjectPoint Id="1328" Position="28.4304,93.1372,0" Scale="1,1,1" Type="Normal" Name="CINEMuta02" Color="0,0,0,0"/>
-    <ObjectPoint Id="1937" Position="46.5097,66.39,0" Scale="1,1,1" Type="Normal" Name="CreepTumor28-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1937" Position="46.5097,66.39,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor8-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="189" Position="60.97,148.45,0" Scale="1,1,1" Type="Normal" Name="Platform Ground Ping 06" Color="0,0,0,0"/>
     <ObjectPoint Id="1850" Position="175.3437,123.1562,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 005" Color="0,0,0,0"/>
     <ObjectPoint Id="1873" Position="42.65,131.47,0" Scale="1,1,1" Type="Normal" Name="CreepTumor35-TL" Color="0,0,0,0"/>
@@ -3763,7 +3763,7 @@
     <ObjectPoint Id="97" Position="171.532,133.1682,0" Scale="1,1,1" Type="Normal" Name="Comsat 01" Color="0,0,0,0"/>
     <ObjectPoint Id="1003" Position="82.8076,131.8791,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - TL - 04" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="202" Position="135.073,30.6564,0" Scale="1,1,1" Type="Normal" Name="Platform Air Ping 02" Color="0,0,0,0"/>
-    <ObjectPoint Id="1933" Position="66.49,59.47,0" Scale="1,1,1" Type="Normal" Name="CreepTumor23-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1933" Position="66.49,59.47,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor3-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="356" Position="38.1516,75.9152,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - BL - 09" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="1847" Position="155.5058,165.7897,0" Scale="1,1,1" Type="BlockPathing" Name="Block Pathing 002" Color="0,0,0,0"/>
     <ObjectPoint Id="959" Position="81.0444,134.8225,0" Scale="1,1,1" Type="Normal" Name="MineralCrystal - TL - 01" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
@@ -3796,7 +3796,7 @@
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>
     <ObjectPoint Id="1477" Position="107.8325,105.581,0" Scale="1,1,1" Type="Normal" Name="Leviathan Patrol Path 05" Color="0,0,0,0"/>
-    <ObjectPoint Id="1930" Position="139.6198,57.48,0" Scale="1,1,1" Type="Normal" Name="CreepTumor20-BR" Color="0,0,0,0"/>
+    <ObjectPoint Id="1930" Position="139.6198,57.48,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor0-BR" Color="0,0,0,0"/>
     <ObjectPoint Id="937" Position="36.0524,70.517,0" Scale="1,1,1" Type="Normal" Name="GasCan - BL - 07" Color="0,0,0,0" PathingRadiusSoft="5" PathingRadiusHard="7.75"/>
     <ObjectPoint Id="1892" Position="134.8098,129.69,0" Scale="1,1,1" Type="Normal" Name="CreepTumor06-TR" Color="0,0,0,0"/>
     <ObjectPoint Id="711" Position="80.8034,164.3403,0" Scale="1,1,1" Type="Normal" Name="Comsat 24" Color="0,0,0,0">
@@ -3813,7 +3813,7 @@
     <ObjectPoint Id="1725" Position="168.9492,121.7697,0" Scale="1,1,1" Type="Normal" Name="Attack Waypoint Right" Color="255,255,0,0"/>
     <ObjectPoint Id="1335" Position="27.492,97.7563,0" Scale="1,1,1" Type="Normal" Name="CINELord02" Color="0,0,0,0"/>
     <ObjectPoint Id="1871" Position="62.5297,146.5998,0" Scale="1,1,1" Type="Normal" Name="CreepTumor13-TL" Color="0,0,0,0"/>
-    <ObjectPoint Id="1935" Position="52.63,75.44,0" Scale="1,1,1" Type="Normal" Name="CreepTumor26-BL" Color="0,0,0,0"/>
+    <ObjectPoint Id="1935" Position="52.63,75.44,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor6-BL" Color="0,0,0,0"/>
     <ObjectPoint Id="556" Position="174.9052,54.359,0" Scale="1,1,1" Type="Normal" Name="Comsat 11" Color="0,0,0,0">
         <Flag Index="PointHidden" Value="1"/>
     </ObjectPoint>

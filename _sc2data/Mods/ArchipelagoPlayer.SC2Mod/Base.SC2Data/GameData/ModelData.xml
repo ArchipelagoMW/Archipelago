@@ -11999,4 +11999,8 @@
         <ScaleMax value="1.000000,1.000000,1.000000"/>
         <ScaleMin value="1.000000,1.000000,1.000000"/>
     </CModel>
+    <CModel id="AP_CreepFrenzy13CreepTumor" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\CreepTumorFrenzy\CreepTumorFrenzy.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
 </Catalog>

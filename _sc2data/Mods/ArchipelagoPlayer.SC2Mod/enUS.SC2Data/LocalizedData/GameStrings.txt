@@ -40,6 +40,7 @@ Abil/Name/AP_BunkerTransport=Load-Unload (Bunker)
 Abil/Name/AP_BurrowBanelingDown=Burrow (Baneling)
 Abil/Name/AP_BurrowBanelingUp=Unburrow (Baneling)
 Abil/Name/AP_BurrowChargeRevD=Burrow Charge Rev D
+Abil/Name/AP_BurrowDroneDown=Burrow (Drone)
 Abil/Name/AP_BurrowHotSSplitterlingMediumDown=Burrow (Splitter, Medium)
 Abil/Name/AP_BurrowHotSSplitterlingMediumUp=Unburrow (Splitter, Medium)
 Abil/Name/AP_BurrowHydraliskDown=Burrow (Hydralisk)
@@ -79,6 +80,7 @@ Abil/Name/AP_DarkTemplarShadowFury=Shadow Fury
 Abil/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Abil/Name/AP_DefensiveMatrix=Defensive Matrix
 Abil/Name/AP_DisablingCloud=Disabling Cloud
+Abil/Name/AP_DroneHarvest=Gather (Drone)
 Abil/Name/AP_DropToSupplyDepot=Drop To Supply Depot
 Abil/Name/AP_DukesRevengeDefensiveMatrix=Defensive Matrix
 Abil/Name/AP_DukesRevengeMissilePods=Missile Pods
@@ -321,6 +323,7 @@ Abil/Name/AP_WreckingCrewAssaultMode=Hel's Angels Assault Mode
 Abil/Name/AP_WreckingCrewFighterMode=Hel's Angels Fighter Mode
 Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_Yoink=Abduct
+Abil/Name/AP_ZergBuild=Morph Unit (Drone -> Zerg Buildings)
 Abil/Name/AP_ZerglingRespawn=Zergling Reconstitution
 Abil/Name/AP_ZerglingRespawnCounter=Zergling Reconstitution Counter
 Abil/Name/AP_ZerglingRespawnDeath=Zergling Reconstitution Death
@@ -336,12 +339,11 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_BurrowDroneDown=Burrow (Drone)
-Abil/Name/AP_DroneHarvest=Gather (Drone)
+Abil/Name/AP_BurrowCreepTumorDown=Burrow
+Abil/Name/AP_CreepTumorUsed=Creep Tumor Used
 Abil/Name/LarvaTrainSwarm2=Morph Unit (Larva -> Swarm Story)
 Abil/Name/LarvaTrainSwarmling2=Morph Unit (Larva -> Swarmling)
 Abil/Name/MercCompoundResearch=Research
-Abil/Name/AP_ZergBuild=Morph Unit (Drone -> Zerg Buildings)
 Abil/Name/que5CancelToSelection2=Queue (5) (Cancel To Selection)
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
@@ -599,11 +601,13 @@ Button/Name/AP_AscendantSacrifice=Sacrifice
 Button/Name/AP_Assimilator=Warp In Assimilator
 Button/Name/AP_AttackChampions=Attack
 Button/Name/AP_AutomatedAssimilator=Orbital Assimilator
+Button/Name/AP_AutomatedExtractor=Mutate into Automated Extractor
 Button/Name/AP_AutomatedRefinery=Build Automated Refinery
 Button/Name/AP_BanelingCorrosiveBile=Corrosive Acid
 Button/Name/AP_BanelingHeal=Regenerative Acid
 Button/Name/AP_BanelingHealSmall=Regenerative Acid
 Button/Name/AP_BanelingHunterPassive=Baneling
+Button/Name/AP_BanelingNest=Mutate into Baneling Nest
 Button/Name/AP_BanelingPassive=Baneling
 Button/Name/AP_BanelingSplitterlingPassive=Baneling
 Button/Name/AP_BanelingSplitterlingSplitPassive=Division
@@ -688,8 +692,10 @@ Button/Name/AP_EMP=EMP Round
 Button/Name/AP_EnableBuildingAttack=Enable Structure Attack
 Button/Name/AP_EnableBuildingAttackSplitterling=Enable Structure Attack
 Button/Name/AP_EngineeringBay=Build Engineering Bay
+Button/Name/AP_EvolutionChamber=Mutate into Evolution Chamber
 Button/Name/AP_ExplosiveGlaive=Sundering Glave
 Button/Name/AP_ExplosiveMode=Explosive Payload
+Button/Name/AP_Extractor=Mutate into Extractor
 Button/Name/AP_FaceEmbrace=Abduct
 Button/Name/AP_Factory=Build Factory
 Button/Name/AP_Feedback=Feedback
@@ -717,6 +723,7 @@ Button/Name/AP_GuardianShield=Guardian Shield
 Button/Name/AP_HHWidowMineDeathBlossom=Executioner Missiles
 Button/Name/AP_HHWidowMineRangeAttack=Black Market Launchers
 Button/Name/AP_HardenedShield=Hardened Shield
+Button/Name/AP_Hatchery=Mutate into Hatchery
 Button/Name/AP_HaveBarrier=Improved Barrier
 Button/Name/AP_HaveNovaGadgetDefensiveDroneSummon=[PH] Place Defensive Drone
 Button/Name/AP_Heal=Heal
@@ -759,6 +766,7 @@ Button/Name/AP_HotSZerglingFrenzy=Adrenal Overload
 Button/Name/AP_HunterCliffJumper=Cliff Jumper
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
 Button/Name/AP_Hydralisk=Morph to Hydralisk
+Button/Name/AP_HydraliskDen=Mutate into Hydralisk Den
 Button/Name/AP_HydraliskDenImpalerPassive=Hydralisk
 Button/Name/AP_HydraliskDenLurkerPassive=Hydralisk
 Button/Name/AP_HydraliskFrenzy=Frenzy
@@ -781,6 +789,7 @@ Button/Name/AP_ImpalerPassive=Impaler
 Button/Name/AP_ImprovedSiegeMode=Advanced Siege Tech
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
+Button/Name/AP_InfestationPit=Mutate into Infestation Pit
 Button/Name/AP_Infestor=Morph to Infestor
 Button/Name/AP_InfestorConsumption=Consumption
 Button/Name/AP_InfestorPassive=Infestor
@@ -897,6 +906,7 @@ Button/Name/AP_NovaWeaponSwap=Weapon Swap
 Button/Name/AP_NoxiousCloud=Noxious Cloud
 Button/Name/AP_NukeArm=Arm Silo with Nuke
 Button/Name/AP_NukeCalldown=Tac Nuke Strike
+Button/Name/AP_NydusNetwork=Mutate into Greater Nydus Network
 Button/Name/AP_NyxClassCloakingModule=Nyx-Class Cloaking Module
 Button/Name/AP_Obliterate=Psionic Lash
 Button/Name/AP_Observer=Warp In Observer
@@ -971,6 +981,7 @@ Button/Name/AP_Roach=Morph to Roach
 Button/Name/AP_RoachCorpserPassive=Roach
 Button/Name/AP_RoachPassive=Roach
 Button/Name/AP_RoachVilePassive=Roach
+Button/Name/AP_RoachWarren=Mutate into Roach Warren
 Button/Name/AP_RoboticsBay=Warp In Robotics Bay
 Button/Name/AP_RoboticsFacility=Warp In Robotics Facility
 Button/Name/AP_RuptureUpgrade=Rupture
@@ -1000,6 +1011,7 @@ Button/Name/AP_SiegeTankJumpJet=Jump Jets
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
 Button/Name/AP_SlayerBlink=Phase Blink
 Button/Name/AP_Snipe=Sniper Round
+Button/Name/AP_SpawningPool=Mutate into Spawning Pool
 Button/Name/AP_SpecterPsiRound=Spectre Psi Round
 Button/Name/AP_Spectre=Train Spectre
 Button/Name/AP_SpectreConsumption=Consumption
@@ -1016,6 +1028,7 @@ Button/Name/AP_SpineCrawlerPassive=Spine Crawler
 Button/Name/AP_SpineCrawlerRoot=Root
 Button/Name/AP_SpineCrawlerRootCancel=Cancel Root command
 Button/Name/AP_SpineCrawlerUproot=Uproot
+Button/Name/AP_Spire=Mutate into Spire
 Button/Name/AP_SporeCrawler=Mutate into Spore Crawler
 Button/Name/AP_SporeCrawlerPassive=Spore Crawler
 Button/Name/AP_SporeCrawlerRoot=Root
@@ -1086,6 +1099,7 @@ Button/Name/AP_TunnelingClaws=Tunneling Claws
 Button/Name/AP_TwinLinkedFlameThrowers=Twin-Linked Flame Thrower
 Button/Name/AP_U238Rounds=U-238 Rounds
 Button/Name/AP_Ultralisk=Morph to Ultralisk
+Button/Name/AP_UltraliskCavern=Mutate into Ultralisk Cavern
 Button/Name/AP_UltraliskNoxiousPassive=Ultralisk
 Button/Name/AP_UltraliskPassive=Ultralisk
 Button/Name/AP_UltraliskTorrasquePassive=Ultralisk
@@ -1153,6 +1167,8 @@ Button/Name/AP_Zealot=Warp In Zealot
 Button/Name/AP_ZealotAiur=Warp in Zealot
 Button/Name/AP_ZealotPurifier=Warp in Sentinel
 Button/Name/AP_ZealotShakuras=Warp in Centurion
+Button/Name/AP_ZergBuild=Basic Mutation
+Button/Name/AP_ZergBuildAdvanced=Advanced Mutation
 Button/Name/AP_Zergling=Morph to Zergling
 Button/Name/AP_ZerglingPassive=Zergling
 Button/Name/AP_ZerglingRaptorPassive=Zergling
@@ -1172,22 +1188,9 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_AutomatedExtractor=Mutate into Automated Extractor
-Button/Name/AP_BanelingNest=Mutate into Baneling Nest
-Button/Name/AP_EvolutionChamber=Mutate into Evolution Chamber
-Button/Name/AP_Extractor=Mutate into Extractor
-Button/Name/AP_Hatchery=Mutate into Hatchery
-Button/Name/AP_HydraliskDen=Mutate into Hydralisk Den
-Button/Name/AP_InfestationPit=Mutate into Infestation Pit
-Button/Name/AP_NydusNetwork=Mutate into Greater Nydus Network
-Button/Name/AP_RoachWarren=Mutate into Roach Warren
-Button/Name/AP_SpawningPool=Mutate into Spawning Pool
-Button/Name/AP_SpineCrawler=Mutate into Spine Crawler
-Button/Name/AP_Spire=Mutate into Spire
-Button/Name/AP_SporeCrawler=Mutate into Spore Crawler
-Button/Name/AP_UltraliskCavern=Mutate into Ultralisk Cavern
-Button/Name/AP_ZergBuild=Basic Mutation
-Button/Name/AP_ZergBuildAdvanced=Advanced Mutation
+Button/Name/AP_CreepTumorPassive=Creep Generator
+Button/Name/AP_K5CreepBonuses=Malignant Creep
+Button/Name/AP_BuildCreepTumorPropagate=Spawn Creep Tumor
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1572,6 +1575,7 @@ Button/Tooltip/AP_NovaWeaponSwap=Select a different weapon.
 Button/Tooltip/AP_NoxiousCloud=Nearby enemy ground units take <d ref="(Effect,AP_NoxiousFumesDamage,Amount) / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> damage per second.
 Button/Tooltip/AP_NukeArm=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
 Button/Tooltip/AP_NukeCalldown=Calls down a Nuclear Strike at a target location. Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage to enemies in a large radius.
+Button/Tooltip/AP_NydusNetwork=Friendly ground units can use the Nydus Network to instantly travel to any other Nydus Network or Nydus Worm owned by the player.<n/><n/><c val="ffff8a">Enables:</c><n/>- Greater Nydus Worm
 Button/Tooltip/AP_NyxClassCloakingModule=Cloak no longer requires energy.
 Button/Tooltip/AP_Obliterate=Deals 200 damage to a single target.
 Button/Tooltip/AP_Observer=Flying spy. Cloak renders the unit invisible to enemies without detection.<n/><n/><c val="FFE303">Detector</c>
@@ -1865,6 +1869,8 @@ Button/Tooltip/AP_Zealot=Powerful melee warrior. Can use Charge.<n/><n/><c val="
 Button/Tooltip/AP_ZealotAiur=Aiur Faction<n/>Powerful melee warrior. Has Charge and Whirlwind abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ZealotPurifier=Purifier Faction<n/>Powerful melee warrior. Has Charge and Reconstruction abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ZealotShakuras=Nerazim Faction<n/>Powerful melee warrior. Has Shadow Charge and Darkcoil abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_ZergBuild=A list of basic structures.
+Button/Tooltip/AP_ZergBuildAdvanced=A list of advanced structures.
 Button/Tooltip/AP_Zergling=Fast melee creature. Can morph into a Baneling.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
 Button/Tooltip/AP_ZerglingPassive=Spawning Pool enables you to morph Zerglings.
 Button/Tooltip/AP_ZerglingRaptorPassive=Raptor Strain<n/><n/>Spawning Pool enables you to morph Zerglings.
@@ -1884,23 +1890,11 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_AutomatedExtractor=Mutated over a Vespene Geyser to allow automatic harvesting of vespene gas.
-Button/Tooltip/AP_BanelingNest=<c val="ffff8a">Enables:</c><n/>- Banelings from Zerglings
-Button/Tooltip/AP_Drone=Basic worker unit. Can harvest minerals and vespene gas. Can mutate into structures.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_EvolutionChamber=Contains upgrades for Zerg ground units. <n/><n/><c val="ffff8a">Enables:</c><n/>- Spore Crawlers from Drones
-Button/Tooltip/AP_Extractor=Mutated over a Vespene Geyser to allow harvesting of vespene gas.
-Button/Tooltip/AP_Hatchery=Primary structure. Used to spawn all Zerg units and receive gathered resources. Grows creep used to feed nearby Zerg structures. Can mutate into a Lair.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
-Button/Tooltip/AP_HydraliskDen=<c val="ffff8a">Enables:</c><n/>- Hydralisks from Larvae
-Button/Tooltip/AP_InfestationPit=<c val="ffff8a">Enables:</c><n/>- Infestors from Larvae<n/>- Swarm Hosts from Larvae
-Button/Tooltip/AP_NydusNetwork=Friendly ground units can use the Nydus Network to instantly travel to any other Nydus Network or Nydus Worm owned by the player.<n/><n/><c val="ffff8a">Enables:</c><n/>- Greater Nydus Worm
-Button/Tooltip/AP_RoachWarren=<c val="ffff8a">Enables:</c><n/>- Roaches from Larvae
-Button/Tooltip/AP_SpawningPool=<c val="ffff8a">Enables:</c><n/>- Swarm Queens at the Hatchery, Lair, or Hive<n/>- Zerglings from Larvae<n/>- Spine Crawlers from Drones
-Button/Tooltip/AP_SpineCrawler=Anti-ground defensive structure. <n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
-Button/Tooltip/AP_SporeCrawler=Anti-air defensive structure. <n/><n/><c val="ffff8a">Can attack air units.</c><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_UltraliskCavern=<c val="ffff8a">Enables:</c><n/>- Ultralisks from Larvae
-Button/Tooltip/AP_ZergBuild=A list of basic structures.
-Button/Tooltip/AP_ZergBuildAdvanced=A list of advanced structures.
+Button/Tooltip/AP_CreepTumor=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_CreepTumorBurrowed=A burrowed creep generator. Creep feeds nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_CreepTumorPassive=Automatically produces creep to feed nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_K5CreepBonuses=Your units and structures gain increased life regeneration and 30% increased attack speed while on creep. Creep Tumors also spread creep faster and farther.
+Button/Tooltip/AP_BuildCreepTumorPropagate=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2894,6 +2888,7 @@ Effect/Name/AP_SpectreNukeSuicide=Spectre Nuke Suicide
 Effect/Name/AP_SpectreWeaponsFree=Spectre Weapons Free
 Effect/Name/AP_SpiderMineInvulnerable=Spider Mine Invulnerable
 Effect/Name/AP_SpiderMineVulnerable=Spider Mine Vulnerable
+Effect/Name/AP_Spines=Spines
 Effect/Name/AP_SporeCrawler=Spore Crawler (Missile)
 Effect/Name/AP_SporeCrawlerU=Spore Crawler (Damage)
 Effect/Name/AP_StalkerEntropyLanceSearch=Stalker - Entropy Lance (Search)
@@ -3204,7 +3199,6 @@ Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
-Effect/Name/AP_Spines=Spines
 Error/AP_AlreadyChronoBoosted=Target is already accelerated
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
@@ -3311,6 +3305,7 @@ Unit/Name/AP_DevilDog=Devil Dog
 Unit/Name/AP_Diamondback=Diamondback
 Unit/Name/AP_Disruptor=Disruptor
 Unit/Name/AP_DisruptorPhased=Disruptor
+Unit/Name/AP_Drone=Drone
 Unit/Name/AP_DukesRevenge=Jackson's Revenge
 Unit/Name/AP_DuskWing=Dusk Wings
 Unit/Name/AP_DuskWingWeapon=Dusk Wing
@@ -3574,9 +3569,12 @@ Unit/Name/AP_ZealotShakuras=Centurion
 Unit/Name/AP_Zergling=Zergling
 Unit/Name/AP_ZerglingRespawnControllerUnit=Zergling Reconstitution Controller Unit
 Unit/Name/AP_ZerglingRespawnWeapon=Zergling Reconstitution Weapon
-Unit/Name/AP_Drone=Drone
-Unit/Name/LarvaReleaseMissile2=Larva Release Missile
-Unit/Name/NeuralParasiteWeapon2=Neural Parasite
+Unit/Name/AP_CreepTumor=Creep Tumor
+Unit/Name/AP_CreepTumorBurrowed=Creep Tumor
+Unit/Name/AP_CreepTumorUsed=Creep Tumor
+Unit/Name/AP_LarvaReleaseMissile=Larva Release Missile
+Unit/Name/AP_NeuralParasiteWeapon=Neural Parasite
+Unit/Name/AP_Egg=Zerg Cocoon
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -3747,6 +3745,7 @@ Upgrade/Name/AP_JackhammerConcussionGrenades=Concussive Shells
 Upgrade/Name/AP_JuggernautPlating=Juggernaut Plating
 Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
 Upgrade/Name/AP_K5ImprovedOverlords=K5 Improved Overlords
+Upgrade/Name/AP_K5TwoDrones=K5 Two Drones
 Upgrade/Name/AP_K5ZerglingRespawn=K5 Zergling Reconstitution
 Upgrade/Name/AP_LiberatorAGRangeUpgrade=Advanced Ballistics
 Upgrade/Name/AP_LiberatorMorph=Liberator Morph
@@ -3902,8 +3901,7 @@ Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/AP_overlordspeed=Pneumatized Carapace
 Upgrade/Name/AP_overlordtransport=Ventral Sacs
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/K5CreepBonuses2=K5 Creep Bonuses
-Upgrade/Name/AP_K5TwoDrones=K5 Two Drones
+Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
 Upgrade/Name/ProtossAirArmorsLevel12=Protoss Air Armor Level 1
 Upgrade/Name/ProtossAirWeaponsLevel12=Protoss Air Weapons Level 1
 Upgrade/Name/ProtossGroundArmorsLevel32=Protoss Ground Armor Level 3
@@ -4051,6 +4049,7 @@ Weapon/Name/AP_SpartanCompanyG=Gatling Cannon
 Weapon/Name/AP_SpartanCompanyGUpgraded=Gatling Cannon
 Weapon/Name/AP_Specter=AGR-14 Gauss Rifle
 Weapon/Name/AP_SpectreShadowClone=Shadow Clone
+Weapon/Name/AP_Spines=Claws
 Weapon/Name/AP_SupplicantWeapon=Blood Orb
 Weapon/Name/AP_TempestPurifier=Kinetic Overload
 Weapon/Name/AP_TempestPurifierGround=Resonance Coil
@@ -4072,7 +4071,6 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_Spines=Claws
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

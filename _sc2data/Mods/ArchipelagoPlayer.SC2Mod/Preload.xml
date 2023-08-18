@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Preload>
 <Actor id="SYSTEM_ActorConfig"/>
+<Behavior id="AP_CreepTumorExhausted"/>
 <Unit id="AP_ZerglingRespawnControllerUnit"/>
 </Preload>

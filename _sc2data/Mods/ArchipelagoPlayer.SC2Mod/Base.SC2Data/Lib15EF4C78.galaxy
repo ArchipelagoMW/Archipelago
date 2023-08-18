@@ -577,6 +577,26 @@ void lib15EF4C78_gt_SlayerInit_Init () {
     TriggerAddEventMapInit(lib15EF4C78_gt_SlayerInit);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Trigger: Creep Tumor Build
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_CreepTumorBuild_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitBehaviorAdd(EventUnit(), "AP_CreepTumorExhausted", EventUnit(), 1);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_CreepTumorBuild_Init () {
+    lib15EF4C78_gt_CreepTumorBuild = TriggerCreate("lib15EF4C78_gt_CreepTumorBuild_Func");
+    TriggerAddEventUnitAbility(lib15EF4C78_gt_CreepTumorBuild, null, AbilityCommand("AP_CreepTumorBuild", 0), c_abilBuildStageFinish, false);
+}
+
 void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Init();
     lib15EF4C78_gt_ReactorswaptoAP_Barracks_Init();
@@ -598,6 +618,7 @@ void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_Set5SecondsMark_Init();
     lib15EF4C78_gt_ZerglingRespawnInit_Init();
     lib15EF4C78_gt_SlayerInit_Init();
+    lib15EF4C78_gt_CreepTumorBuild_Init();
 }
 
 //--------------------------------------------------------------------------------------------------

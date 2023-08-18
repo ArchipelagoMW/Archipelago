@@ -3963,7 +3963,7 @@
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectDoodad>
     <ObjectPoint Id="313" Position="84.4611,9.2285,0" Scale="1,1,1" Type="Normal" Name="Prepare Drop Spawn" Color="0,0,0,0"/>
-    <ObjectPoint Id="151" Position="124.578,93.498,0" Scale="1,1,1" Type="Normal" Name="CreepTumor21" Color="0,0,0,0"/>
+    <ObjectPoint Id="151" Position="124.578,93.498,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor1" Color="0,0,0,0"/>
     <ObjectPoint Id="536" Position="165.0971,89.2834,0" Rotation="2.5451" Scale="1,1,1" Type="Normal" Name="WarfieldShipCrashFinalDest" Color="255,255,255,0"/>
     <ObjectPoint Id="669" Position="124.5,3.5,0" Rotation="1.4235" Scale="1,1,1" Type="StartLoc" Name="P0_PALLETS" Color="0,0,0,0"/>
     <ObjectPoint Id="920" Position="46.5598,53.93,0" Rotation="5.2587" Scale="1,1,1" Type="Normal" Name="Gank_Starport_Ultralisk" Color="255,255,0,255"/>
@@ -4011,7 +4011,7 @@
     <ObjectPoint Id="697" Position="156.8698,86.88,0" Scale="1,1,1" Type="Normal" Name="Sandbag02" Color="255,128,64,64"/>
     <ObjectPoint Id="1168" Position="88.6098,53.3298,0" Rotation="4.1423" Scale="1,1,1" Type="Normal" Name="Briefing Attack Spawn 2" Color="0,0,0,0"/>
     <ObjectPoint Id="307" Position="159.96,102.0998,0" Scale="1,1,1" Type="Normal" Name="SporeCannonTarget02" Color="255,255,0,128"/>
-    <ObjectPoint Id="157" Position="175.6374,14.6105,0" Scale="1,1,1" Type="Normal" Name="CreepTumor27" Color="0,0,0,0"/>
+    <ObjectPoint Id="157" Position="175.6374,14.6105,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor7" Color="0,0,0,0"/>
     <ObjectPoint Id="1275" Position="168.0397,91.5,0" Scale="1,1,1" Type="Normal" Name="WarfieldCrashMarineDest09" Color="255,128,0,255"/>
     <ObjectPoint Id="246" Position="146.48,56.4472,0" Scale="1,1,1" Type="Normal" Name="CreepTumor48" Color="0,0,0,0"/>
     <ObjectPoint Id="1214" Position="163.506,89.4106,0" Scale="1,1,1" Type="Normal" Name="FireCrash06.2" Color="255,255,0,0"/>
@@ -4045,7 +4045,7 @@
     <ObjectPoint Id="1258" Position="43.24,65.0397,0" Scale="1,1,1" Type="Normal" Name="Reward04.1" Color="255,255,128,0"/>
     <ObjectPoint Id="1153" Position="39.696,43.7817,0" Rotation="1.7973" Scale="1,1,1" Type="Normal" Name="Briefing 2 Marine 1" Color="0,0,0,0"/>
     <ObjectPoint Id="140" Position="162.5786,109.4028,0" Scale="1,1,1" Type="Normal" Name="CreepTumor16" Color="0,0,0,0"/>
-    <ObjectPoint Id="167" Position="177.5683,37.6333,0" Scale="1,1,1" Type="Normal" Name="CreepTumor28" Color="0,0,0,0"/>
+    <ObjectPoint Id="167" Position="177.5683,37.6333,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor8" Color="0,0,0,0"/>
     <ObjectPoint Id="1194" Position="167.147,84.9057,0" Scale="1,1,1" Type="Normal" Name="WarfieldCrashMarineDest02" Color="255,128,0,255"/>
     <ObjectPoint Id="1092" Position="163.134,96.072,0" Scale="1,1,1" Type="Normal" Name="WarfieldCrashMarineDest06" Color="255,128,0,255"/>
     <ObjectPoint Id="73" Position="32.5117,81.743,0" Rotation="0.976" Scale="1,1,1" Type="Normal" Name="BaseViking03" Color="255,255,128,255"/>
@@ -4072,7 +4072,7 @@
     <ObjectPoint Id="31" Position="36.6843,27.363,0" Rotation="2.097" Scale="1,1,1" Type="Normal" Name="AI GATHER_P06" Color="255,0,255,0"/>
     <ObjectPoint Id="1145" Position="108.643,78.366,0" Scale="1,1,1" Type="Normal" Name="CrashFactory02" Color="255,128,0,0"/>
     <ObjectPoint Id="702" Position="42.5197,69.7797,0" Scale="1,1,1" Type="Normal" Name="Gank_Factory_Spine04" Color="255,255,0,255"/>
-    <ObjectPoint Id="154" Position="129.4973,64.5588,0" Scale="1,1,1" Type="Normal" Name="CreepTumor23" Color="0,0,0,0"/>
+    <ObjectPoint Id="154" Position="129.4973,64.5588,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor3" Color="0,0,0,0"/>
     <ObjectPoint Id="241" Position="163.4931,43.564,0" Scale="1,1,1" Type="Normal" Name="CreepTumor44" Color="0,0,0,0"/>
     <ObjectPoint Id="1276" Position="167.97,90.13,0" Scale="1,1,1" Type="Normal" Name="WarfieldCrashMarineDest10" Color="255,128,0,255"/>
     <ObjectPoint Id="218" Position="84.5168,25.598,0" Scale="1,1,1" Type="Normal" Name="CreepTumor42" Color="0,0,0,0"/>
@@ -4089,7 +4089,7 @@
     <ObjectPoint Id="1985" Position="14.9304,122.0722,0" Scale="1,1,1" Type="BlockPathing" Name="Pathing Cliff Fill 002" Color="0,0,0,0"/>
     <ObjectPoint Id="1163" Position="32.13,76.5498,0" Rotation="1.533" Scale="1,1,1" Type="Normal" Name="Briefing 2 Marine 9" Color="0,0,0,0"/>
     <ObjectPoint Id="134" Position="142.5673,114.4992,0" Scale="1,1,1" Type="Normal" Name="CreepTumor10" Color="0,0,0,0"/>
-    <ObjectPoint Id="156" Position="169.5517,15.5725,0" Scale="1,1,1" Type="Normal" Name="CreepTumor26" Color="0,0,0,0"/>
+    <ObjectPoint Id="156" Position="169.5517,15.5725,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor6" Color="0,0,0,0"/>
     <ObjectPoint Id="1169" Position="61.22,75.75,0" Rotation="5.3286" Scale="1,1,1" Type="Normal" Name="Briefing Attack Spawn 3" Color="0,0,0,0"/>
     <ObjectPoint Id="247" Position="158.578,63.5124,0" Scale="1,1,1" Type="Normal" Name="CreepTumor49" Color="0,0,0,0"/>
     <ObjectPoint Id="1758" Position="170.246,81.432,0" Scale="1,1,1" Type="Normal" Name="HydraCrashStart" Color="255,0,128,255"/>
@@ -4112,12 +4112,12 @@
     <ObjectPoint Id="128" Position="114.5898,91.5744,0" Scale="1,1,1" Type="Normal" Name="CreepTumor07" Color="0,0,0,0"/>
     <ObjectPoint Id="1382" Position="165.44,79.93,0" Scale="1,1,1" Type="Normal" Name="Sandbag07" Color="255,128,64,64"/>
     <ObjectPoint Id="242" Position="156.452,44.6723,0" Scale="1,1,1" Type="Normal" Name="CreepTumor45" Color="0,0,0,0"/>
-    <ObjectPoint Id="153" Position="131.484,51.573,0" Scale="1,1,1" Type="Normal" Name="CreepTumor22" Color="0,0,0,0"/>
+    <ObjectPoint Id="153" Position="131.484,51.573,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor2" Color="0,0,0,0"/>
     <ObjectPoint Id="311" Position="102.0812,48.845,0" Rotation="4.596" Scale="1,1,1" Type="Normal" Name="AI WAYPOINT01A_P2" Color="255,128,0,255"/>
     <ObjectPoint Id="119" Position="20.5832,104.5173,0" Scale="1,1,1" Type="Normal" Name="CreepTumor33" Color="0,0,0,0"/>
     <ObjectPoint Id="1041" Position="108.944,48.9675,0" Scale="1,1,1" Type="Normal" Name="Briefing Spore Crawler 3" Color="0,0,0,0"/>
     <ObjectPoint Id="760" Position="59.5097,27.13,0" Scale="1,1,1" Type="Normal" Name="SporeCannonTarget05" Color="255,255,0,128"/>
-    <ObjectPoint Id="28" Position="16.6564,20.5227,0" Scale="1,1,1" Type="Normal" Name="CreepTumor24" Color="0,0,0,0"/>
+    <ObjectPoint Id="28" Position="16.6564,20.5227,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor4" Color="0,0,0,0"/>
     <ObjectPoint Id="1233" Position="23.0344,52.0361,0" Scale="1,1,1" Type="Normal" Name="ScourgeDest02" Color="0,0,0,0"/>
     <ObjectPoint Id="220" Position="149.3745,41.7331,0" Scale="1,1,1" Type="Normal" Name="CreepTumor43" Color="0,0,0,0"/>
     <ObjectPoint Id="595" Position="157.2092,88.0407,0" Scale="1,1,1" Type="Normal" Name="Sandbag01" Color="255,128,64,64"/>
@@ -4125,7 +4125,7 @@
     <ObjectPoint Id="1159" Position="39.93,57.2697,0" Rotation="1.844" Scale="1,1,1" Type="Normal" Name="Briefing 2 Medic 2" Color="0,0,0,0"/>
     <ObjectPoint Id="138" Position="168.433,116.4792,0" Scale="1,1,1" Type="Normal" Name="CreepTumor14" Color="0,0,0,0"/>
     <ObjectPoint Id="399" Position="99.97,8.95,0" Rotation="3.1384" Scale="1,1,1" Type="Normal" Name="PrepDrop05" Color="255,255,0,255"/>
-    <ObjectPoint Id="33" Position="16.6247,32.585,0" Scale="1,1,1" Type="Normal" Name="CreepTumor29" Color="0,0,0,0"/>
+    <ObjectPoint Id="33" Position="16.6247,32.585,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor9" Color="0,0,0,0"/>
     <ObjectPoint Id="747" Position="150.41,20.45,0" Scale="1,1,1" Type="Normal" Name="SporeCannonTarget04" Color="255,255,0,128"/>
     <ObjectPoint Id="1388" Position="163.99,84.66,0" Scale="1,1,1" Type="Normal" Name="SCV02FinalMove" Color="0,0,0,0"/>
     <ObjectPoint Id="1218" Position="73.0488,60.4133,0" Scale="1,1,1" Type="Normal" Name="ZergAmbientAttackDest" Color="0,0,0,0"/>
@@ -4139,7 +4139,7 @@
     <ObjectPoint Id="125" Position="21.519,115.4631,0" Scale="1,1,1" Type="Normal" Name="CreepTumor05" Color="0,0,0,0"/>
     <ObjectPoint Id="22" Position="28.473,15.5378,0" Scale="1,1,1" Type="Normal" Name="CreepTumor13" Color="0,0,0,0"/>
     <ObjectPoint Id="403" Position="159.5375,92.2043,0" Rotation="4.0615" Scale="1,1,1" Type="Normal" Name="Crate05" Color="255,0,255,0"/>
-    <ObjectPoint Id="150" Position="128.5017,108.612,0" Scale="1,1,1" Type="Normal" Name="CreepTumor20" Color="0,0,0,0"/>
+    <ObjectPoint Id="150" Position="128.5017,108.612,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor0" Color="0,0,0,0"/>
     <ObjectPoint Id="1179" Position="160.5373,80.763,0" Scale="1,1,1" Type="Normal" Name="FireCrash03" Color="255,255,0,0"/>
     <ObjectPoint Id="1307" Position="54.5197,62.2897,0" Scale="1,1,1" Type="Normal" Name="ZerglingAmbient01" Color="0,0,0,0"/>
     <ObjectPoint Id="184" Position="129.5,3.5,0" Rotation="1.4243" Scale="1,1,1" Type="StartLoc" Name="P11_ZERG_YELLOW(SPORECANNON)" Color="0,0,0,0"/>
@@ -4177,7 +4177,7 @@
     <ObjectPoint Id="678" Position="93.96,8.91,0" Rotation="3.1384" Scale="1,1,1" Type="Normal" Name="PrepDrop06" Color="255,255,0,255"/>
     <ObjectPoint Id="1167" Position="51.7358,54.053,0" Rotation="4.144" Scale="1,1,1" Type="Normal" Name="Briefing Attack Spawn 1" Color="0,0,0,0"/>
     <ObjectPoint Id="1043" Position="106,64.98,0" Scale="1,1,1" Type="Normal" Name="Briefing Spore Crawler 5" Color="0,0,0,0"/>
-    <ObjectPoint Id="155" Position="134.4685,72.485,0" Scale="1,1,1" Type="Normal" Name="CreepTumor25" Color="0,0,0,0"/>
+    <ObjectPoint Id="155" Position="134.4685,72.485,0" Scale="1,1,1" Type="Normal" Name="AP_CreepTumor5" Color="0,0,0,0"/>
     <ObjectPoint Id="1277" Position="162.0598,90.0898,0" Scale="1,1,1" Type="Normal" Name="WarfieldCrashMedic01" Color="255,255,255,0"/>
     <ObjectPoint Id="350" Position="152.75,76.5898,0" Scale="1,1,1" Type="Normal" Name="ZerglingAttackBattlecruiser01" Color="0,0,0,0"/>
     <ObjectPoint Id="890" Position="65.811,37.3825,0" Rotation="2.2446" Scale="1,1,1" Type="Normal" Name="Rescue_StarportDropGas" Color="255,255,0,255"/>

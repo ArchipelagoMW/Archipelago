@@ -2,6 +2,7 @@
 Category/Name/lib_15EF4C78_124C4260=ProtossUnits
 Category/Name/lib_15EF4C78_1912941C=Add-on stealing
 Category/Name/lib_15EF4C78_22668676=Nova Holodecoy weapon assignment
+Category/Name/lib_15EF4C78_5044099F=Creep Tumor
 Category/Name/lib_15EF4C78_76518CE2=Tech Reactor
 Category/Name/lib_15EF4C78_CCF0CC2F=ZerglingRespawn
 Category/Name/lib_15EF4C78_E329AFFA=ProtossStructures
@@ -23,6 +24,7 @@ Trigger/Name/lib_15EF4C78_92C51F4B=Tech Lab swap to Barracks
 Trigger/Name/lib_15EF4C78_A5D195AA=ArchipelagoPlayerHandlersConstructor
 Trigger/Name/lib_15EF4C78_AE88165D=Reactor swap to Starport
 Trigger/Name/lib_15EF4C78_AF84632C=Tech Lab swap to AP_Factory
+Trigger/Name/lib_15EF4C78_B25D3592=Creep Tumor Build
 Trigger/Name/lib_15EF4C78_BC70F496=Tech Lab swap to AP_Starport
 Trigger/Name/lib_15EF4C78_C970113D=AP_Player_setHolodecoyWeapon
 Trigger/Name/lib_15EF4C78_CD08D748=Tech Reactor swap to AP_Factory

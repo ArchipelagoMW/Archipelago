@@ -337,3 +337,4 @@ Button/Hotkey/AP_SporeCrawler=A
 Button/Hotkey/AP_UltraliskCavern=U
 Button/Hotkey/AP_ZergBuild=B
 Button/Hotkey/AP_ZergBuildAdvanced=V
+Button/Hotkey/AP_BuildCreepTumorPropagate=C

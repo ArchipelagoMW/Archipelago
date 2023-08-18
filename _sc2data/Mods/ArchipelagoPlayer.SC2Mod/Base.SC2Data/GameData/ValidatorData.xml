@@ -3904,4 +3904,18 @@
         <Value value="AP_DontHaveHatchery"/>
         <WhichPlayer Value="Caster"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsNotVanillaEgg">
+        <Value value="Egg"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotAPEgg">
+        <Value value="AP_Egg"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsNotEgg" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotVanillaEgg"/>
+        <CombineArray value="AP_IsNotAPEgg"/>
+    </CValidatorCombine>
 </Catalog>

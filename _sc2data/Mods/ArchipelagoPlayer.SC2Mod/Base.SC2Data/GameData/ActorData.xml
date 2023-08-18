@@ -6224,8 +6224,6 @@
         <On Terms="UnitBirth.AP_AutomatedExtractor" Send="TimerSet 0.100000 HideGeyser"/>
         <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
         <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
-        <Model value="AP_AutomatedExtractor"/>
-        <BuildModel value="AP_AutomatedExtractor"/>
         <DeathArray index="Normal" ModelLink="AP_AutomatedExtractorDeath" SoundLink="Extractor_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="ZergLargeBuildingDeath" SoundLink="Extractor_Explode"/>
         <DeathCustoms ModelLink="AP_AutomatedExtractorEmptyDeath" Name="Empty"/>
@@ -13475,7 +13473,92 @@
     <CActorSound id="AP_Archon_Land" parent="SoundOneShot">
         <Sound value="Archon_Land"/>
     </CActorSound>
-    <CActorAction id="DarkArchonAttack2" parent="GenericAttack" effectAttack="AP_DarkArchonWeaponDamage">
+    <CActorModel id="AP_CreepFrenzy13CreepTumor" parent="ModelAddition">
+        <On Terms="Behavior.AP_CreepFrenzy13CreepTumor.On" Send="Create"/>
+        <On Terms="Behavior.AP_CreepFrenzy13CreepTumor.Off" Send="AnimBracketStop BSD"/>
+        <Model value="AP_CreepFrenzy13CreepTumor"/>
+    </CActorModel>
+    <CActorUnit id="AP_CreepTumor" parent="ZergBuildingEx" unitName="AP_CreepTumor">
+        <Aliases value="_UnitSmall"/>
+        <Remove Terms="UnitConstruction.AP_CreepTumor.Start" Send="Create AP_CreepTumorBuild"/>
+        <On Terms="UnitConstruction.AP_CreepTumorBurrowed.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_CreepTumorBurrowed.Finish" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_CreepTumorBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_CreepTumorQueen" Send="Create"/>
+        <On Terms="UnitConstruction.AP_CreepTumor.Start" Send="SetScale 0.100000"/>
+        <On Terms="UnitConstruction.AP_CreepTumor.Start" Send="SetScale 1.000000 3.000000"/>
+        <On Terms="UnitConstruction.AP_CreepTumor.Start" Send="TimerSet 13.333000 BurrowAnim"/>
+        <On Terms="UnitConstruction.AP_CreepTumor.Start" Send="AnimPlay MorphStart Stand,Morph,Start"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Start" Send="SetScale 0.100000"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Start" Send="SetScale 1.000000 3.000000"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Start" Send="TimerSet 13.333000 BurrowAnim"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Start" Send="AnimPlay MorphStart Stand,Morph,Start"/>
+        <On Terms="AnimDone.*.Complete; AnimName MorphStart" Send="AnimPlay Morph Stand,Morph PlayForever"/>
+        <On Terms="TimerExpired; TimerName BurrowAnim" Send="AnimPlay MorphEnd Stand,Morph,End PlayForever"/>
+        <On Terms="TimerExpired; TimerName BurrowAnim" Send="AnimClear Morph"/>
+        <On Terms="UnitBirth" Send="AnimClear MorphEnd"/>
+        <On Terms="UnitBirth" Send="AnimPlay Cover Cover PlayForever 0.000000 0.000000"/>
+        <On Terms="UnitBirth" Send="AnimPlay CoverStart Cover,Start 0 0.000000"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerStart" Send="AnimPlay SpellStart Cover,Spell,Start"/>
+        <On Terms="AnimDone.*.Complete; AnimName SpellStart" Send="AnimPlay Spell Cover,Spell PlayForever,NonLooping -1.000000 -1.000000 15.000000 AsDuration"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerStop" Send="AnimClear SpellStart"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerStop" Send="AnimClear Spell"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerCancel" Send="AnimClear SpellStart"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerCancel" Send="AnimClear Spell"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Start" Send="Create"/>
+        <On Terms="UnitConstruction.AP_CreepTumorQueen.Finish" Send="AnimPlay ConstructionDeath Stand,Birth,Death FullMatch"/>
+        <On Terms="AbilCharge.AP_CreepTumorBuild.Regen" Send="AnimPlay Cover Cover PlayForever"/>
+        <On Terms="AbilCharge.AP_CreepTumorBuild.Spend" Send="AnimClear Cover"/>
+        <On Terms="ActorCreation" Send="StatusSet NotVisible 0"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="SetScale 0.100000"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="SetScale 1.000000 3.000000"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="TimerKill BurrowAnim"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="TimerSet 13.333000 BurrowAnim"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="AnimClear MorphStart"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="AnimPlay MorphStart Stand,Morph,Start"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.On" Send="StatusSet NotVisible 1"/>
+        <On Terms="Behavior.AP_PrecursorCreepTumor.Off" Send="StatusSet NotVisible 0"/>
+        <On Terms="UnitDeathCustomize; IsStatus NotVisible 1" Send="DeathCustomize Variation0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <On Terms="Abil.AP_CreepTumorBuild.WorkerStop" Send="AnimPlay Cover Cover PlayForever 0.000000 0.000000"/>
+        <On Terms="Behavior.AP_CreepTumorExhausted.On" Send="AnimClear Cover"/>
+        <Model value="CreepTumor"/>
+        <BuildModel value="CreepTumor"/>
+        <DeathArray index="Normal" ModelLink="CreepTumorDeath" SoundLink="CreepTumor_Explode"/>
+        <DeathArray index="UnderConstruction" SoundLink="CreepTumor_Explode"/>
+        <DeathCustoms ModelLink="Invisible" Name="Variation0"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <DeathActorModel value="UnitDeathModelUnscaled"/>
+        <PlacementModel value="CreepTumorPlacement"/>
+        <PlacementSound value="Zerg_BuildingPlacementSmall"/>
+        <PortraitModel value="CreepTumorPortrait"/>
+        <BarOffset value="20"/>
+        <BarWidth value="40"/>
+        <ErrorArray Error="CantSeeBuildLocation" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantSeeLandLocation" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="CantLandLocationInvalid" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <ErrorArray Error="TargetIsOutOfRange" Sound="Alert_ZergBuildError" GroupSound="Alert_ZergBuildError"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-CreepTumor.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-creeptumor.dds"/>
+        <SoundArray index="Ready" value="CreepTumor_Ready"/>
+        <SoundArray index="Help" value="Alert_ZergCreepTumorUnderAttack"/>
+        <SoundArray index="What" value="CreepTumor_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-creeptumor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-CreepTumor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_CreepTumorBuild" parent="ZergBuildingBuild">
+        <Model value="CreepTumorBuild"/>
+    </CActorModel>
+    <CActorRange id="AP_CreepTumorBuildRange" parent="RangeAbil" abil="AP_CreepTumorBuild">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorAction id="AP_DarkArchonAttack" parent="GenericAttack" effectAttack="AP_DarkArchonWeaponDamage">
         <LaunchAssets Sound="Archon_AttackLaunch"/>
         <Beam value="AP_DarkArchonAttackBeam"/>
         <BeamScope value="Caster"/>
@@ -15159,7 +15242,6 @@
             <Image value="Assets\Textures\Wireframe-Zerg-Extractor.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_Extractor"/>
         <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
         <UnitIcon value="Assets\Textures\btn-building-zerg-extractor.dds"/>
         <Wireframe>
@@ -17877,7 +17959,6 @@
     </CActorUnit>
     <CActorModel id="AP_UltraliskCavernBuild" parent="ZergBuildingBuild">
         <Model value="UltraliskCavernBuild"/>
-
     </CActorModel>
     <CActorUnit id="AP_Spire" parent="ZergBuildingEx" unitName="AP_Spire">
         <Aliases value="_UnitHuge"/>
@@ -24210,7 +24291,7 @@
         <On Terms="UnitCreation.AP_Hatchery" Send="Create"/>
         <On Terms="UnitCreation.AP_Lair" Send="Create"/>
         <On Terms="UnitCreation.AP_Hive" Send="Create"/>
-<!--        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>-->
+        <!--        <On Terms="UnitCreation.NydusNetwork" Send="Create"/>-->
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodMediumBuilding">
         <!-- Override -->
@@ -24227,6 +24308,12 @@
         <!-- Override -->
         <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
         <On Terms="UnitCreation.AP_Spire" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorStateMonitor id="ZergBloodTinyBuilding">
+        <!-- Override -->
+        <On Terms="UnitCreation.AP_CreepTumor" Send="Create"/>
+        <On Terms="UnitCreation.AP_CreepTumorBurrowed" Send="Create"/>
+        <On Terms="UnitCreation.AP_CreepTumorQueen" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="MechaFlamesMediumBuilding">
         <!-- Override -->
@@ -24343,5 +24430,64 @@
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_Hive" Send="Create"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Create"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="Create"/>
+    </CActorSound>
+    <CActorUnit id="AP_Egg" parent="GenericUnitStandard" unitName="Egg">
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Egg" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel" Send="Destroy"/>
+        <On Terms="ActorCreation; ModelName Egg" Send="TextureSelectBySlot main"/>
+        <On Terms="ActorCreation; ModelName Egg" Send="TextureSelectByMatch main.specular main"/>
+        <On Terms="ActorCreation; ModelName Egg" Send="TextureSelectByMatch main.normal main"/>
+        <On Terms="ActorCreation; ModelName Egg" Send="TextureSelectByMatch main.emissive main"/>
+        <On Terms="AbilTrain.AP_LarvaTrain.Finish; ModelVariation 0" Send="Create EggsplosionGeneric0"/>
+        <On Terms="AbilTrain.AP_LarvaTrain.Finish; ModelVariation 1" Send="Create EggsplosionGeneric1"/>
+        <On Terms="AbilTrain.AP_LarvaTrain.Finish; ModelVariation 2" Send="Create EggsplosionGeneric2"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarm.Finish; ModelVariation 0" Send="Create EggsplosionGeneric0"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarm.Finish; ModelVariation 1" Send="Create EggsplosionGeneric1"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarm.Finish; ModelVariation 2" Send="Create EggsplosionGeneric2"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarmling.Finish; ModelVariation 0" Send="Create EggsplosionGeneric0"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarmling.Finish; ModelVariation 1" Send="Create EggsplosionGeneric1"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarmling.Finish; ModelVariation 2" Send="Create EggsplosionGeneric2"/>
+        <On Terms="UnitDeathCustomize.AP_Egg; ModelVariation 0" Send="Create EggsplosionGeneric0"/>
+        <On Terms="UnitDeathCustomize.AP_Egg; ModelVariation 1" Send="Create EggsplosionGeneric1"/>
+        <On Terms="UnitDeathCustomize.AP_Egg; ModelVariation 2" Send="Create EggsplosionGeneric2"/>
+        <DeathArray index="Normal" ModelLink="ZergSmallUnitDeath" SoundLink="Egg_Explode"/>
+        <DeathArray index="TrainingComplete" SoundLink="Uni_DeathFXSilentKill"/>
+        <PortraitModel value="EggPortrait"/>
+        <BarWidth value="36"/>
+        <BarOffset value="40"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Egg.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Egg.dds"/>
+        </Wireframe>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <Aliases value="_UnitSmall"/>
+    </CActorUnit>
+    <CActorSound id="LarvaEggBirth">
+        <!-- Override -->
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Egg" Send="Create"/>
+    </CActorSound>
+    <CActorProgress id="LarvaTrain">
+        <!-- Override -->
+        <On Terms="Abil.AP_LarvaTrain.Start" Send="Create"/>
+        <On Terms="Abil.AP_LarvaTrain.Stop" Send="Destroy"/>
+        <On Terms="Abil.AP_LarvaTrainSwarm.Start" Send="Create"/>
+        <On Terms="Abil.AP_LarvaTrainSwarm.Stop" Send="Destroy"/>
+        <On Terms="Abil.AP_LarvaTrainSwarmling.Start" Send="Create"/>
+        <On Terms="Abil.AP_LarvaTrainSwarmling.Stop" Send="Destroy"/>
+    </CActorProgress>
+    <CActorSound id="Egg_Death">
+        <!-- Override -->
+        <On Terms="UnitDeath.AP_Egg; PassChance 25.000000" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="Egg_Ready">
+        <!-- Override -->
+        <On Terms="AbilTrain.AP_LarvaTrain.Finish" Send="Create"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarm.Finish" Send="Create"/>
+        <On Terms="AbilTrain.AP_LarvaTrainSwarmling.Finish" Send="Create"/>
     </CActorSound>
 </Catalog>

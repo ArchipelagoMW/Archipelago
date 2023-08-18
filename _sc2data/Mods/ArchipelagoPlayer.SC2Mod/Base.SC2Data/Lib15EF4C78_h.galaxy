@@ -27,4 +27,5 @@ trigger lib15EF4C78_gt_AP_Player_setHolodecoyWeapon;
 trigger lib15EF4C78_gt_Set5SecondsMark;
 trigger lib15EF4C78_gt_ZerglingRespawnInit;
 trigger lib15EF4C78_gt_SlayerInit;
+trigger lib15EF4C78_gt_CreepTumorBuild;
 
