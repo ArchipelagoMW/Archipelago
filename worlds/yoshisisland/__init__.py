@@ -40,7 +40,7 @@ class YIWorld(World):
     data_version = 0
     required_client_version = (0, 3, 5)
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None)}
     item_name_groups = get_item_names_per_category()
 
