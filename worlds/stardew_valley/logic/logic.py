@@ -29,6 +29,7 @@ from .tool_logic import ToolLogic
 from .wallet_logic import WalletLogic
 from ..data.crops_data import crops_by_name
 from ..data.monster_data import all_monsters_by_category
+from ..locations import LocationTags, locations_by_tag
 from ..mods.logic.mod_logic import ModLogic
 from .. import options
 from ..data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
@@ -815,4 +816,14 @@ class StardewLogic:
         for rarecrow_number in range(1, 9):
             rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
         return And(rules)
+
+    def can_ship(self, item: str) -> StardewRule:
+        return self.buildings.has_building(Building.shipping_bin) & self.has(item)
+
+    def can_ship_everything(self) -> StardewRule:
+        shipsanity_prefix = "Shipsanity: "
+        all_items_to_ship = []
+        for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
+            all_items_to_ship.append(location.name[len(shipsanity_prefix):])
+        return self.buildings.has_building(Building.shipping_bin) & And([self.has(item) for item in all_items_to_ship])
 

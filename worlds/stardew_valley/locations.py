@@ -126,6 +126,7 @@ events_locations = [
     LocationData(None, Region.farm_house, Goal.full_house),
     LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
     LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
+    LocationData(None, Region.farm, Goal.full_shipment),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 
@@ -322,6 +323,26 @@ def extend_monstersanity_locations(randomized_locations: List[LocationData], wor
     randomized_locations.extend(filtered_progressive_goal_locations)
 
 
+def extend_shipsanity_locations(randomized_locations: List[LocationData], world_options):
+    shipsanity = world_options[options.Shipsanity]
+    if shipsanity == options.Shipsanity.option_none:
+        return
+    if shipsanity == options.Shipsanity.option_everything:
+        ship_locations = [location for location in locations_by_tag[LocationTags.SHIPSANITY]]
+        filtered_ship_locations = filter_disabled_locations(world_options, ship_locations)
+        randomized_locations.extend(filtered_ship_locations)
+        return
+    shipsanity_locations = set()
+    if shipsanity == options.Shipsanity.option_fish or shipsanity == options.Shipsanity.option_full_shipment_with_fish:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FISH]})
+    if shipsanity == options.Shipsanity.option_crops:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_CROP]})
+    if shipsanity == options.Shipsanity.option_full_shipment or shipsanity == options.Shipsanity.option_full_shipment_with_fish:
+        shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]})
+
+    filtered_shipsanity_locations = filter_disabled_locations(world_options, list(shipsanity_locations))
+    randomized_locations.extend(filtered_shipsanity_locations)
+
 
 def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
@@ -363,6 +384,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_walnut_purchase_locations(randomized_locations, options)
 
     extend_monstersanity_locations(randomized_locations, world_options)
+    extend_shipsanity_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

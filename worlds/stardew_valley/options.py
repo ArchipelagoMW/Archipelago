@@ -16,6 +16,7 @@ class Goal(Choice):
     Full House: Get married and have two children. Pairs well with Friendsanity.
     Greatest Walnut Hunter: Find all 130 Golden Walnuts
     Protector of the Valley: Complete all the monster slayer goals. Pairs well with Monstersanity
+    Full Shipment: Ship every item in the collection tab. Pairs well with Shipsanity
     Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
@@ -30,6 +31,7 @@ class Goal(Choice):
     option_full_house = 6
     option_greatest_walnut_hunter = 7
     option_protector_of_the_valley = 8
+    option_full_shipment = 9
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =

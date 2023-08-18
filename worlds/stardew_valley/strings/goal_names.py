@@ -8,4 +8,5 @@ class Goal:
     full_house = "Full House"
     greatest_walnut_hunter = "Greatest Walnut Hunter"
     protector_of_the_valley = "Protector of the Valley"
+    full_shipment = "Full Shipment"
     perfection = "Perfection"

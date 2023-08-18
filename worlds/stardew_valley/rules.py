@@ -39,25 +39,33 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_ginger_island_rules(logic, multi_world, player, world_options)
     # 36.281 - 38.453
 
-    set_tool_rules(logic, multiworld, player, world_options)
-    set_skills_rules(logic, multiworld, player, world_options)
-    set_bundle_rules(current_bundles, logic, multiworld, player)
-    set_building_rules(logic, multiworld, player, world_options)
-    set_cropsanity_rules(all_location_names, logic, multiworld, player, world_options)
-    set_story_quests_rules(all_location_names, logic, multiworld, player, world_options)
-    set_special_order_rules(all_location_names, logic, multiworld, player, world_options)
-    set_help_wanted_quests_rules(logic, multiworld, player, world_options)
-    set_fishsanity_rules(all_location_names, logic, multiworld, player)
-    set_museumsanity_rules(all_location_names, logic, multiworld, player, world_options)
-    set_friendsanity_rules(all_location_names, logic, multiworld, player)
-    set_backpack_rules(logic, multiworld, player, world_options)
-    set_festival_rules(all_location_names, logic, multiworld, player)
-    set_monstersanity_rules(all_location_names, logic, multiworld, player, world_options)
-    set_isolated_locations_rules(logic, multiworld, player)
-    set_traveling_merchant_rules(logic, multiworld, player)
-    set_arcade_machine_rules(logic, multiworld, player, world_options)
-    set_deepwoods_rules(logic, multiworld, player, world_options)
-    set_magic_spell_rules(logic, multiworld, player, world_options)
+    set_tool_rules(logic, multi_world, player, world_options)
+    # 36.980 - 37.228
+
+    set_skills_rules(logic, multi_world, player, world_options)
+    set_bundle_rules(current_bundles, logic, multi_world, player)
+    set_building_rules(logic, multi_world, player, world_options)
+    set_cropsanity_rules(all_location_names, logic, multi_world, player, world_options)
+    set_story_quests_rules(all_location_names, logic, multi_world, player, world_options)
+    # 1min09 - 1min14
+
+    set_special_order_rules(all_location_names, logic, multi_world, player, world_options)
+    set_help_wanted_quests_rules(logic, multi_world, player, world_options)
+    set_fishsanity_rules(all_location_names, logic, multi_world, player)
+    set_museumsanity_rules(all_location_names, logic, multi_world, player, world_options)
+    # 1min34 - 1min46
+
+    set_friendsanity_rules(all_location_names, logic, multi_world, player)
+    set_backpack_rules(logic, multi_world, player, world_options)
+    set_festival_rules(all_location_names, logic, multi_world, player)
+    set_monstersanity_rules(all_location_names, logic, multi_world, player, world_options)
+    set_shipsanity_rules(all_location_names, logic, multi_world, player, world_options)
+    set_isolated_locations_rules(logic, multi_world, player)
+    set_traveling_merchant_rules(logic, multi_world, player)
+    set_arcade_machine_rules(logic, multi_world, player, world_options)
+
+    set_deepwoods_rules(logic, multi_world, player, world_options)
+    set_magic_spell_rules(logic, multi_world, player, world_options)
     # 1min52 - 1min53 # These times are for TestOptions
     # 1min36 - 1min38 # After the combat not duplicating a bunch of stuff
     # 1min28 - 1min30 # with the caching of combat rules
@@ -685,6 +693,20 @@ def set_monstersanity_category_rules(all_location_names: List[str], logic: Stard
         else:
             rule = logic.combat.can_kill_all_monsters(all_monsters_by_category[monster_category]) & logic.time.has_lived_max_months()
         MultiWorldRules.set_rule(location, rule.simplify())
+
+
+def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options):
+    shipsanity_option = world_options[options.Shipsanity]
+    if shipsanity_option == options.Monstersanity.option_none:
+        return
+
+    shipsanity_prefix = "Shipsanity: "
+    for location in locations.locations_by_tag[LocationTags.SHIPSANITY]:
+        if location.name not in all_location_names:
+            continue
+        item_to_ship = location.name[len(shipsanity_prefix):]
+        MultiWorldRules.set_rule(multi_world.get_location(location.name, player),
+                                 logic.can_ship(item_to_ship))
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multi_world: MultiWorld, player: int):
