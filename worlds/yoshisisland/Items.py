@@ -78,18 +78,18 @@ item_table: Dict[str, ItemData] = {
     '2-Up': ItemData('Items', 0x30208D, 0),
     '3-Up': ItemData('Items', 0x30208E, 0),
     '10-Up': ItemData('Items', 0x30208F, 5, useful=True),
-    'Bonus Consumables': ItemData('Items', None, 0, progression=True),
-    'Bandit Consumables': ItemData('Items', None, 0, progression=True),
-    'Bandit Watermelons': ItemData('Items', None, 0, progression=True),
+    'Bonus Consumables': ItemData('Events', None, 0, progression=True),
+    'Bandit Consumables': ItemData('Events', None, 0, progression=True),
+    'Bandit Watermelons': ItemData('Events', None, 0, progression=True),
 
     'Fuzzy Trap': ItemData('Traps', 0x302090, 0, trap=True),
     'Reversal Trap': ItemData('Traps', 0x302091, 0, trap=True),
     'Darkness Trap': ItemData('Traps', 0x302092, 0, trap=True),
     'Freeze Trap': ItemData('Traps', 0x302093, 0, trap=True),
 
-    'Boss Clear': ItemData('Items', None, 0, progression=True),
+    'Boss Clear': ItemData('Events', None, 0, progression=True),
     'Piece of Luigi': ItemData('Items', 0x302095, 0, progression=True),
-    'Saved Baby Luigi': ItemData('Items', None, 0, progression=True)
+    'Saved Baby Luigi': ItemData('Events', None, 0, progression=True)
 }
 
 filler_items: Tuple[str, ...] = (
@@ -116,8 +116,10 @@ trap_items: Tuple[str, ...] = (
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
+    event_items = ["Saved Baby Luigi"]
 
     for name, data in item_table.items():
-        categories.setdefault(data.category, set()).add(name)
+        if data.category != "Events":
+            categories.setdefault(data.category, set()).add(name)
 
     return categories
