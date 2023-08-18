@@ -410,6 +410,8 @@ class LinksAwakeningWorld(World):
         return Item(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
+        itempool = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         dungeon_item_types = {
@@ -450,7 +452,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Master Stalfos' Message"))
+                    itempool.append(self.create_item("Master Stalfos' Message"))
                 else:
                     item = self.create_item(item_name)
 
@@ -490,9 +492,9 @@ class LinksAwakeningWorld(World):
                                 self.prefill_own_dungeons.append(item)
                                 self.pre_fill_items.append(item)
                             else:
-                                self.multiworld.itempool.append(item)
+                                itempool.append(item)
                     else:
-                        self.multiworld.itempool.append(item)
+                        itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -517,8 +519,13 @@ class LinksAwakeningWorld(World):
                         self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
+        FORCE_START_ITEM = True # self.multiworld.players > 1
+        if FORCE_START_ITEM:
+            self.force_start_item(itempool)
 
-    def force_start_item(self):
+        self.multiworld.itempool += itempool
+
+    def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
             """
@@ -535,25 +542,20 @@ class LinksAwakeningWorld(World):
                 # collection_state.update_reachable_regions(self.player)
                 return len(collection_state.reachable_regions[self.player]) > reachable_count
             
-            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                if item.player == self.player and not item.location and item.advancement and gives_progression(item)]
+            possible_start_items = [item for item in itempool if item.advancement]
+            self.random.shuffle(possible_start_items)
 
-            if possible_start_items:
-                index = self.multiworld.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
-                start_loc.place_locked_item(start_item)
-
+            for item in possible_start_items:
+                if gives_progression(item):
+                    itempool.remove(item)
+                    start_loc.place_locked_item(item)
+                    return
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
-
-        # For now, special case first item
-        FORCE_START_ITEM = True # self.multiworld.players > 1
-        if FORCE_START_ITEM:
-            self.force_start_item()
 
         # Set up filter rules
 
