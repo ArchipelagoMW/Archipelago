@@ -3403,4 +3403,25 @@
         <AlertIcon value="Assets\Textures\btn-building-zerg-creeptumor.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BuildCreepTumor">
+        <Icon value="Assets\Textures\btn-building-zerg-creeptumor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-creeptumor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BurrowDown">
+        <Icon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_QueenBurstHeal">
+        <Icon value="Assets\Textures\btn-ability-zerg-transfusion-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-transfusion-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_DeepTunnel">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-Burrow.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Zerg-Burrow.dds"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

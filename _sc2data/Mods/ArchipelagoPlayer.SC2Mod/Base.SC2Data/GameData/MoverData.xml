@@ -1544,4 +1544,14 @@
             <AdaptableParabolaAccels index="Land" value="17"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_TalonsMissileWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Speed value="40"/>
+            <MaxSpeed value="40"/>
+            <ActorTracking value="Actual"/>
+            <RotationLaunchActorType value="LaunchToTarget"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

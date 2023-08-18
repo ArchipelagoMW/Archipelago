@@ -6252,4 +6252,11 @@
         <AffectedUnitArray value="AP_Drone"/>
         <AffectedUnitArray value="AP_DroneBurrowed"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSCampaignLarvaCount">
+        <!-- TODO: 12 delay and 6 MaxCount on Hard/Brutal -->
+        <EffectArray Operation="Set" Reference="Behavior,AP_SpawnLarva,InfoArray[0].Delay" Value="9.000000"/>
+        <EffectArray Operation="Set" Reference="Behavior,AP_SpawnLarva,InfoArray[0].Requirements" Value="AP_HatcherySpawnLarvaCampaign"/>
+        <EffectArray Operation="Set" Reference="Behavior,AP_SpawnLarva,InfoArray[0].MaxCount" Value="9"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CUpgrade>
 </Catalog>

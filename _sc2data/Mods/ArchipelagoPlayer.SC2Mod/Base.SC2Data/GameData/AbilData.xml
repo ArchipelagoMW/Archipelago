@@ -3198,6 +3198,46 @@
         <Flags index="WaitUntilStopped" value="0"/>
         <InfoArray Unit="AP_CreepTumorUsed"/>
     </CAbilMorph>
+    <CAbilMorph id="AP_BurrowQueenDown">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_QueenBurrowed" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.8332"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="0.5556"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.6665"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_DeepTunnel">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <TargetFilters value="Structure;Ally,Neutral,Enemy,Dead"/>
+        <Range value="500"/>
+        <CastIntroTime value="1"/>
+        <FinishTime value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DeepTunnel" State="Restricted">
+            <Flags index="ShowInGlossary" value="0"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5389,6 +5429,68 @@
             <Unit value="AP_Zergling"/>
         </InfoArray>
     </CAbilTrain>
+    <CAbilBehavior id="AP_KerriganEnhance">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="KerriganEnhance" State="Restricted">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="KerriganEnhanceOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="AP_KerriganEnhanceBeam"/>
+    </CAbilBehavior>
+    <CAbilBuild id="AP_QueenBuild">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <FlagArray index="PeonMaintained" value="0"/>
+        <FlagArray index="RangeIncludesBuilding" value="0"/>
+        <Alert value="BuildComplete_Zerg"/>
+        <InfoArray index="Build1" Unit="AP_CreepTumorQueen" Delay="2" Time="15">
+            <Vital index="Energy" value="25"/>
+            <Button DefaultButtonFace="AP_CreepTumor">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+        </InfoArray>
+        <InfoArray index="Build2" Time="30"/>
+        <InfoArray index="Build3" Time="30"/>
+    </CAbilBuild>
+    <CAbilEffectTarget id="AP_QueenBurstHeal">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TargetMessage value="Abil/TargetMessage/HealTargetMessage"/>
+        <Effect index="0" value="AP_QueenBurstHealApplyBehavior"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="10"/>
+            <Cooldown Location="Unit" TimeUse="3"/>
+        </Cost>
+        <TargetFilters value="Biological,Visible;Self,Enemy,Missile,Uncommandable,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLifeFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="4"/>
+        <Arc value="14.9963"/>
+        <SmartValidatorArray value="healSmartTargetFilters"/>
+        <SmartValidatorArray value="NotWarpingIn"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy,Missile,Stasis,Dead,Invulnerable"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="healCasterMinEnergy"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="AP_NotTimedLifeUnitAndNotLarva"/>
+        <AutoCastValidatorArray value="AP_UnitOrSpineOrSpore"/>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="QueenBurstHeal"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -7056,14 +7158,51 @@
         <Alert value="BuildComplete_Zerg"/>
         <Range value="10"/>
         <InfoArray index="Build1" Unit="AP_CreepTumor" Time="3">
-            <Charge CountMax="0" CountStart="0" CountUse="0">
-                <Location value="Unit"/>
-            </Charge>
-            <Button DefaultButtonFace="CreepTumor" Requirements="AP_CreepTumorExhausted"/>
+            <Charge Location="Unit"/>
             <Cooldown Location="Unit" TimeStart="15" TimeUse="15"/>
+            <Button DefaultButtonFace="CreepTumor" Requirements="AP_CreepTumorExhausted"/>
         </InfoArray>
         <TargetMessage value="Abil/TargetMessage/CreepTumorBuild"/>
         <SharedFlags index="RegisterChargeEvent" value="1"/>
         <SharedFlags index="RegisterCooldownEvent" value="1"/>
     </CAbilBuild>
+    <CAbilEffectTarget id="AP_Transfusion">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="Transfusion"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Link="TransfusionAP_Transfusion" TimeUse="1"/>
+        </Cost>
+        <TargetFilters value="Biological,Visible;Self,Neutral,Enemy,Missile,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <CastIntroTime value="0.2"/>
+        <FinishTime value="0.8"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Transfusion"/>
+    </CAbilEffectTarget>
+    <CAbilMorph id="AP_BurrowQueenUp">
+        <AbilSetId value="BrwU"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <ActorKey value="BurrowUp"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden"/>
+        <AutoCastRange value="5"/>
+        <AutoCastCountMin value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowUp">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_Queen" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="0.4443"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+    </CAbilMorph>
 </Catalog>

@@ -3074,4 +3074,9 @@
     <CRequirementCountBehavior id="AP_CountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit">
         <Count Link="AP_CreepTumorExhausted" State="CompleteOnlyAtUnit"/>
     </CRequirementCountBehavior>
+    <CRequirementLT id="AP_LTCountUnitLarvaCompleteOnlyAtUnit9">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUnitLarvaCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="9"/>
+    </CRequirementLT>
 </Catalog>

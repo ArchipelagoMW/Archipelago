@@ -12003,4 +12003,25 @@
         <Model value="Assets\Effects\Zerg\CreepTumorFrenzy\CreepTumorFrenzy.m3"/>
         <EditorCategories value="Race:Zerg"/>
     </CModel>
+    <CModel id="AP_QueenHealBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\MedivacBeam\MedivacBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_QueenHealModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\MedicHeal\MedicHeal.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_QueenBurstHealModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\MendBuff\MendBuff.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_QueenBurstHealCastModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\ZergTransfusionCast\ZergTransfusionCast.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_SwarmQueenDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\ExpeditionQueenLevel1Death\ExpeditionQueenLevel1Death.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
 </Catalog>

@@ -3918,4 +3918,41 @@
         <CombineArray value="AP_IsNotVanillaEgg"/>
         <CombineArray value="AP_IsNotAPEgg"/>
     </CValidatorCombine>
+    <CValidatorCombine id="AP_UnitOrSpineOrSpore">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="AP_IsSpineCrawler"/>
+        <CombineArray value="AP_IsSporeCrawler"/>
+<!--        <CombineArray value="IsZerus02Chrysalis"/>-->
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotTimedLifeUnitAndNotLarva">
+        <Type value="And"/>
+<!--        <CombineArray value="NotInfestedTerran"/>-->
+<!--        <CombineArray value="NotInfestedTerranCampaign"/>-->
+<!--        <CombineArray value="NotInfestedTerranCampaignBurrowed"/>-->
+<!--        <CombineArray value="NotStukovInfestedTerran"/>-->
+<!--        <CombineArray value="NotKerriganInfestedTerran"/>-->
+<!--        <CombineArray value="NotKerriganInfestedTerranBurrowed"/>-->
+        <CombineArray value="AP_NotLocust"/>
+        <CombineArray value="AP_NotBroodling"/>
+<!--        <CombineArray value="NotKerriganNydusWyrm"/>-->
+<!--        <CombineArray value="NotKerriganNydusWyrmBroodling"/>-->
+<!--        <CombineArray value="NotKerriganBroodling"/>-->
+        <CombineArray value="NotLarva"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotLocust">
+        <Value value="AP_Locust"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotLocustFlying">
+        <Value value="AP_LocustFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotBroodling">
+        <Value value="AP_Broodling"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoQueenBurstHeal">
+        <Behavior value="AP_QueenBurstHeal"/>
+        <ResultFailed value="Error,Error/QueenAlreadyHealing"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

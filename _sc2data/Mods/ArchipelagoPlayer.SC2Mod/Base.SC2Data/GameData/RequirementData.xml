@@ -1960,4 +1960,8 @@
         <NodeArray index="Use" Link="AP_NotCountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit"/>
         <NodeArray index="Show" Link="AP_NotCountBehaviorCreepTumorExhaustedCompleteOnlyAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HatcherySpawnLarvaCampaign">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_LTCountUnitLarvaCompleteOnlyAtUnit9"/>
+    </CRequirement>
 </Catalog>

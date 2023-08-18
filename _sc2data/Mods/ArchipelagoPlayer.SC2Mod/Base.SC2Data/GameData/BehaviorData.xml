@@ -4753,4 +4753,25 @@
         <Birth value="Footprint4x4CreepSourceStart"/>
         <Grown value="Footprint4x4CreepSourceGrownUpgraded"/>
     </CBehaviorCreepSource>
+    <CBehaviorBuff id="AP_QueenBurstHeal">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-transfusion.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="2.43"/>
+        <Period value="0.5"/>
+        <InitialEffect value="AP_QueenBurstHeal"/>
+        <PeriodicEffect value="AP_QueenBurstHeal"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_KerriganEnhanceBeam">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressFidgeting" value="1"/>
+            <AbilLinkEnableArray value="AP_KerriganEnhance"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

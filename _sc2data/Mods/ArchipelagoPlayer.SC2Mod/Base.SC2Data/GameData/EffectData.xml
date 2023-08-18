@@ -3389,12 +3389,6 @@
         <Amount value="16"/>
         <Death value="Disintegrate"/>
     </CEffectDamage>
-    <CEffectLaunchMissile id="AP_AcidSpinesLM">
-        <EditorCategories value="Race:Zerg"/>
-        <ImpactEffect value="AcidSpines"/>
-        <AmmoUnit value="AP_AcidSpinesWeapon"/>
-        <Movers Link="AP_AcidSpinesWeapon"/>
-    </CEffectLaunchMissile>
     <CEffectApplyBehavior id="AP_BileDuctsApplyBehavior">
         <ValidatorArray index="0" value="UseBileDucts"/>
         <EditorCategories value="Race:Zerg"/>
@@ -11671,4 +11665,74 @@
         <Player Value="Source"/>
         <Abil value="AP_CreepTumorUsed"/>
     </CEffectIssueOrder>
+    <CEffectDamage id="AP_AcidSpines" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Kind value="Ranged"/>
+        <Amount value="9"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_AcidSpinesLM">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_AcidSpines"/>
+        <AmmoUnit value="AP_AcidSpinesWeapon"/>
+        <Movers Link="AcidSpinesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectTeleport id="AP_DeepTunnel">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <MinDistance value="5"/>
+        <PlacementArc value="360"/>
+        <PlacementRange value="15"/>
+        <TargetLocation Value="TargetUnit"/>
+    </CEffectTeleport>
+    <CEffectModifyUnit id="AP_QueenBurstHeal">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life">
+            <Change value="5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_QueenBurstHealApplyBehavior">
+        <ValidatorArray value="LifeNotFull"/>
+        <ValidatorArray value="AP_NoQueenBurstHeal"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_QueenBurstHeal"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_Talons" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+        <AttributeBonus index="Armored" value="2"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_TalonsBurst">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_Talons"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.3"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_TalonsLM">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_TalonsMissileDamage"/>
+        <AmmoUnit value="AP_TalonsMissileWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_TalonsMissileBurst">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_TalonsLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.3"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_TalonsMissileDamage" parent="DU_WEAP">
+        <Name value="Effect/Name/Talons"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Effect/Talons"/>
+        <AttributeBonus index="Armored" value="2"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+    </CEffectDamage>
 </Catalog>

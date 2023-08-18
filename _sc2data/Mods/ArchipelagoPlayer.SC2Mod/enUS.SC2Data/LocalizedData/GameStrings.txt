@@ -40,6 +40,7 @@ Abil/Name/AP_BunkerTransport=Load-Unload (Bunker)
 Abil/Name/AP_BurrowBanelingDown=Burrow (Baneling)
 Abil/Name/AP_BurrowBanelingUp=Unburrow (Baneling)
 Abil/Name/AP_BurrowChargeRevD=Burrow Charge Rev D
+Abil/Name/AP_BurrowCreepTumorDown=Burrow
 Abil/Name/AP_BurrowDroneDown=Burrow (Drone)
 Abil/Name/AP_BurrowHotSSplitterlingMediumDown=Burrow (Splitter, Medium)
 Abil/Name/AP_BurrowHotSSplitterlingMediumUp=Unburrow (Splitter, Medium)
@@ -70,6 +71,7 @@ Abil/Name/AP_CommandCenterLiftOff=Lift Off (Command Center)
 Abil/Name/AP_CommandCenterTrain=Train (Command Center)
 Abil/Name/AP_CommandCenterTransport=Load-Unload (Command Center)
 Abil/Name/AP_CorsairMPDisruptionWeb=Disruption Web
+Abil/Name/AP_CreepTumorUsed=Creep Tumor Used
 Abil/Name/AP_CyberneticsCoreResearch=Research
 Abil/Name/AP_D8Charge=G-4 Charge
 Abil/Name/AP_DarkArchonConfusion=Confusion
@@ -339,11 +341,15 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_BurrowCreepTumorDown=Burrow
-Abil/Name/AP_CreepTumorUsed=Creep Tumor Used
+Abil/Name/AP_BurrowQueenDown=Burrow
+Abil/Name/AP_DeepTunnel=Deep Tunnel
+Abil/Name/AP_KerriganEnhance=Kerrigan Enhance
 Abil/Name/LarvaTrainSwarm2=Morph Unit (Larva -> Swarm Story)
 Abil/Name/LarvaTrainSwarmling2=Morph Unit (Larva -> Swarmling)
 Abil/Name/MercCompoundResearch=Research
+Abil/Name/AP_QueenBuild=Build
+Abil/Name/AP_QueenBurstHeal=Queen Burst Heal
+Abil/Name/AP_Transfusion=Transfusion
 Abil/Name/que5CancelToSelection2=Queue (5) (Cancel To Selection)
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
@@ -481,6 +487,7 @@ Behavior/Name/AP_ZerglingFury5=Fury
 Behavior/Name/AP_ZerglingRespawnControllerRebirth=Zergling Reconstitution Controller Rebirth
 Behavior/Name/AP_ZerglingRespawnControllerSearch=Zergling Reconstitution Controller Search
 Behavior/Name/AP_ZerglingSunder=Sundered
+Behavior/Name/AP_QueenBurstHeal=Rapid Transfusion
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -572,6 +579,7 @@ Behavior/Tooltip/AP_ZerglingFury3=Attacking <d ref="(Behavior,AP_ZerglingFury3,M
 Behavior/Tooltip/AP_ZerglingFury4=Attacking <d ref="(Behavior,AP_ZerglingFury4,Modification.AttackSpeedMultiplier - 1) * 100"/>% faster.
 Behavior/Tooltip/AP_ZerglingFury5=Attacking <d ref="(Behavior,AP_ZerglingFury5,Modification.AttackSpeedMultiplier - 1) * 100"/>% faster.
 Behavior/Tooltip/AP_ZerglingSunder=This unit receives extra damage from ranged attacks.
+Behavior/Tooltip/AP_QueenBurstHeal=Regenerating life.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -620,6 +628,7 @@ Button/Name/AP_Blink=Blink
 Button/Name/AP_BlinkShieldRestoreUpgrade=Phase Reactor
 Button/Name/AP_BroodLordPassive=Brood Lord
 Button/Name/AP_BuildAutoTurret=Build Auto-Turret
+Button/Name/AP_BuildCreepTumorPropagate=Spawn Creep Tumor
 Button/Name/AP_BuildCyclone=Build Cyclone
 Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
 Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
@@ -657,6 +666,7 @@ Button/Name/AP_CommandCenterUnloadAll=Unload All
 Button/Name/AP_CommanderPrestigeAlarakMechBuff=Reliquary of Souls
 Button/Name/AP_CorpserPassive=Infest Roachlings
 Button/Name/AP_CorsairMPDisruptionWeb=Disruption Web
+Button/Name/AP_CreepTumorPassive=Creep Generator
 Button/Name/AP_CripplingPsionicStorm=Crippling Psionic Storm
 Button/Name/AP_CriusSuit=Crius Suit
 Button/Name/AP_CrossSpectrumDampeners=Cross-Spectrum Dampeners
@@ -798,6 +808,7 @@ Button/Name/AP_Irradiate=Irradiate
 Button/Name/AP_JackhammerConcussionGrenade=Concussive Shells
 Button/Name/AP_JuggernautPlating=Juggernaut Plating
 Button/Name/AP_K5AutoExtractor=Automated Extractors
+Button/Name/AP_K5CreepBonuses=Malignant Creep
 Button/Name/AP_K5GasBonuses=Vespene Efficiency
 Button/Name/AP_K5ImprovedOverlords=Improved Overlords
 Button/Name/AP_KhaydarinMonolith=Warp In Khaydarin Monolith
@@ -1188,9 +1199,10 @@ Button/Name/AP_zergmeleeweapons3=Evolve Melee Attacks Level 3
 Button/Name/AP_zergmissileweapons1=Evolve Missile Attacks Level 1
 Button/Name/AP_zergmissileweapons2=Evolve Missile Attacks Level 2
 Button/Name/AP_zergmissileweapons3=Evolve Missile Attacks Level 3
-Button/Name/AP_CreepTumorPassive=Creep Generator
-Button/Name/AP_K5CreepBonuses=Malignant Creep
-Button/Name/AP_BuildCreepTumorPropagate=Spawn Creep Tumor
+Button/Name/AP_BuildCreepTumor=Spawn Creep Tumor
+Button/Name/AP_BurrowDown=Burrow
+Button/Name/AP_QueenBurstHeal=Rapid Transfusion
+Button/Name/AP_DeepTunnel=Deep Tunnel
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1258,6 +1270,7 @@ Button/Tooltip/AP_BroodLordCocoon=This cocoon contains a Mutalisk that is morphi
 Button/Tooltip/AP_BroodLordPassive=Greater Spire enables you to morph Brood Lords from Mutalisks.
 Button/Tooltip/AP_Broodling=Fast melee creature that will last for a short duration.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_BuildCreepTumorPropagate=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
 Button/Tooltip/AP_BuildCyclone=Mobile assault vehicle. Can use Lock On to quickly fire while moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildFortifiedBunker=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
 Button/Tooltip/AP_BuildHercules=Massive transport ship. Deploys loaded troops almost instantly.
@@ -1301,6 +1314,9 @@ Button/Tooltip/AP_CommanderPrestigeAlarakMechBuffCharges=<d ref="$BehaviorStackC
 Button/Tooltip/AP_CorpserPassive=Enemies damaged by the Roach become infested and will spawn two Roachlings if killed quickly.
 Button/Tooltip/AP_CorsairMP=Nerazim Faction<n/>Air superiority starfighter. Can use Disruption Web.<n/><n/><c val="ffff8a">Can attack air units.</c>
 Button/Tooltip/AP_CorsairMPDisruptionWeb=Creates a web of energy on the ground that prevents enemy structures and ground units from attacking for <d time="10"/>.
+Button/Tooltip/AP_CreepTumor=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_CreepTumorBurrowed=A burrowed creep generator. Creep feeds nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_CreepTumorPassive=Automatically produces creep to feed nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
 Button/Tooltip/AP_CripplingPsionicStorm=Creates a storm of psionic energy that lasts 4 seconds, causing up to 80 damage to all enemy units in the target area. Does NOT damage friendly units.
 Button/Tooltip/AP_CriusSuit=Cloak no longer requires energy.
 Button/Tooltip/AP_CrossSpectrumDampeners=Banshee can remain cloaked twice as long.
@@ -1462,6 +1478,7 @@ Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time
 Button/Tooltip/AP_JackhammerConcussionGrenade=Marauder attack temporarily slows all units in target area.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
 Button/Tooltip/AP_K5AutoExtractor=Extractors automatically extract vespene gas without Drones.
+Button/Tooltip/AP_K5CreepBonuses=Your units and structures gain increased life regeneration and 30% increased attack speed while on creep. Creep Tumors also spread creep faster and farther.
 Button/Tooltip/AP_K5GasBonuses=Vespene gas harvesting efficiency increased by 25%.
 Button/Tooltip/AP_K5ImprovedOverlords=Overlords morph instantly and provide 50% more supply.
 Button/Tooltip/AP_KhaydarinMonolith=Extremely powerful defensive structure. Has superior range and damage, but is very expensive and attacks slowly.<n/><n/><c val="ffff8a">Can attack ground and air units.
@@ -1890,11 +1907,11 @@ Button/Tooltip/AP_zergmeleeweapons3=Maximizes all Zerg melee attacks.
 Button/Tooltip/AP_zergmissileweapons1=Upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons2=Further upgrades the attacks of all Zerg ground ranged units.
 Button/Tooltip/AP_zergmissileweapons3=Maximizes the attacks of all Zerg ground ranged units.
-Button/Tooltip/AP_CreepTumor=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
-Button/Tooltip/AP_CreepTumorBurrowed=A burrowed creep generator. Creep feeds nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
-Button/Tooltip/AP_CreepTumorPassive=Automatically produces creep to feed nearby Zerg structures.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
-Button/Tooltip/AP_K5CreepBonuses=Your units and structures gain increased life regeneration and 30% increased attack speed while on creep. Creep Tumors also spread creep faster and farther.
-Button/Tooltip/AP_BuildCreepTumorPropagate=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_BuildCreepTumor=A burrowed creep generator. Creep feeds nearby Zerg structures. A Creep Tumor can spawn additional Creep Tumors.<n/><n/><c val="#ColorAttackInfo">Bonus: Zerg move faster on creep.</c>
+Button/Tooltip/AP_BurrowDown=Buries the unit underground. Burrowed units are unable to move or attack, but they cannot be seen without detection.
+Button/Tooltip/AP_Queen=Support unit. Can use Spawn Creep Tumor and Rapid Transfusion.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_QueenBurstHeal=Heals a unit or structure for 25 life over time.
+Button/Tooltip/AP_DeepTunnel=The Queen tunnels deep underground and surfaces at target Zerg structure.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -3182,8 +3199,11 @@ Effect/Name/AP_ZerglingRespawnTrainSet=Zergling Respawn Train Set
 Effect/Name/AP_ZerglingRespawnWorkingAB=Zergling Respawn Working AB
 Effect/Name/AP_ZerglingSunder=Zergling Sunder
 Effect/Name/AP_heal=Heal
+Effect/Name/AP_AcidSpines=Acid Spines
+Effect/Name/AP_AcidSpinesLM=Acid Spines
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
+Effect/Name/AP_DeepTunnel=Deep Tunnel
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
 Effect/Name/HotSRaptorClaws2=Hot SRaptor Claws
@@ -3195,10 +3215,16 @@ Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
+Effect/Name/AP_QueenBurstHeal=Queen Burst Heal
+Effect/Name/AP_QueenBurstHealApplyBehavior=Queen Burst Heal Apply Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
+Effect/Name/AP_Talons=Talons
+Effect/Name/AP_TalonsBurst=Talons
+Effect/Name/AP_TalonsLM=Talons LM
+Effect/Name/AP_TalonsMissileBurst=Talons Missile Burst
 Error/AP_AlreadyChronoBoosted=Target is already accelerated
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
@@ -3286,6 +3312,9 @@ Unit/Name/AP_ColossusPurifier=Colossus
 Unit/Name/AP_ColossusTaldarim=Wrathwalker
 Unit/Name/AP_CommandCenter=Command Center
 Unit/Name/AP_CorsairMP=Corsair
+Unit/Name/AP_CreepTumor=Creep Tumor
+Unit/Name/AP_CreepTumorBurrowed=Creep Tumor
+Unit/Name/AP_CreepTumorUsed=Creep Tumor
 Unit/Name/AP_CyberneticsCore=Cybernetics Core
 Unit/Name/AP_Cyclone=Cyclone
 Unit/Name/AP_CycloneMissile=Cyclone Missile
@@ -3310,6 +3339,7 @@ Unit/Name/AP_DukesRevenge=Jackson's Revenge
 Unit/Name/AP_DuskWing=Dusk Wings
 Unit/Name/AP_DuskWingWeapon=Dusk Wing
 Unit/Name/AP_EMP2Weapon=EMP
+Unit/Name/AP_Egg=Zerg Cocoon
 Unit/Name/AP_EngineeringBay=Engineering Bay
 Unit/Name/AP_EvolutionChamber=Evolution Chamber
 Unit/Name/AP_Extractor=Extractor
@@ -3420,6 +3450,7 @@ Unit/Name/AP_Mutalisk=Mutalisk
 Unit/Name/AP_MutaliskBroodlord=Mutalisk
 Unit/Name/AP_MutaliskViper=Mutalisk
 Unit/Name/AP_NPSwarmWeapon=NP Swarm Weapon
+Unit/Name/AP_NeuralParasiteWeapon=Neural Parasite
 Unit/Name/AP_Nexus=Nexus
 Unit/Name/AP_NovaDefensiveDrone=Defensive Drone
 Unit/Name/AP_NovaDefensiveDroneRelease=Nova Defensive Drone Release
@@ -3569,12 +3600,9 @@ Unit/Name/AP_ZealotShakuras=Centurion
 Unit/Name/AP_Zergling=Zergling
 Unit/Name/AP_ZerglingRespawnControllerUnit=Zergling Reconstitution Controller Unit
 Unit/Name/AP_ZerglingRespawnWeapon=Zergling Reconstitution Weapon
-Unit/Name/AP_CreepTumor=Creep Tumor
-Unit/Name/AP_CreepTumorBurrowed=Creep Tumor
-Unit/Name/AP_CreepTumorUsed=Creep Tumor
-Unit/Name/AP_LarvaReleaseMissile=Larva Release Missile
-Unit/Name/AP_NeuralParasiteWeapon=Neural Parasite
-Unit/Name/AP_Egg=Zerg Cocoon
+Unit/Name/AP_AcidSpinesWeapon=Acid Spines Weapon
+Unit/Name/AP_Queen=Swarm Queen
+Unit/Name/AP_TalonsMissileWeapon=Talons Missile
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -3901,7 +3929,6 @@ Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/AP_overlordspeed=Pneumatized Carapace
 Upgrade/Name/AP_overlordtransport=Ventral Sacs
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
 Upgrade/Name/ProtossAirArmorsLevel12=Protoss Air Armor Level 1
 Upgrade/Name/ProtossAirWeaponsLevel12=Protoss Air Weapons Level 1
 Upgrade/Name/ProtossGroundArmorsLevel32=Protoss Ground Armor Level 3
@@ -4071,8 +4098,13 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_AcidSpines=Acid Spines
+Weapon/Name/AP_Talons=Talons
+Weapon/Name/AP_TalonsMissile=Talons
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>
 Weapon/Tip/AP_LocustLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>
 Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
+Weapon/Tip/AP_AcidSpines=
+Weapon/Tip/AP_Talons=
