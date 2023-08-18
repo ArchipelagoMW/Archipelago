@@ -72,20 +72,24 @@ item_table: Dict[str, ItemData] = {
     'Pocket Fire Melon': ItemData('Items', 0x302087, 0),
     'Pocket Ice Melon': ItemData('Items', 0x302088, 0),
     'Magnifying Glass': ItemData('Items', 0x302089, 0),
-    '+10 Stars': ItemData('Items', 0x30208A, useful=True),
-    '+20 Stars': ItemData('Items', 0x30208B, useful=True),
-    '1-Up': ItemData('Items', 0x30208C),
-    '2-Up': ItemData('Items', 0x30208D),
-    '3-Up': ItemData('Items', 0x30208E),
+    '+10 Stars': ItemData('Items', 0x30208A, 0, useful=True),
+    '+20 Stars': ItemData('Items', 0x30208B, 0, useful=True),
+    '1-Up': ItemData('Items', 0x30208C, 0),
+    '2-Up': ItemData('Items', 0x30208D, 0),
+    '3-Up': ItemData('Items', 0x30208E, 0),
     '10-Up': ItemData('Items', 0x30208F, 5, useful=True),
+    'Bonus Consumables': ItemData('Items', None, 0, progression=True),
+    'Bandit Consumables': ItemData('Items', None, 0, progression=True),
+    'Bandit Watermelons': ItemData('Items', None, 0, progression=True),
 
     'Fuzzy Trap': ItemData('Traps', 0x302090, 0, trap=True),
     'Reversal Trap': ItemData('Traps', 0x302091, 0, trap=True),
     'Darkness Trap': ItemData('Traps', 0x302092, 0, trap=True),
     'Freeze Trap': ItemData('Traps', 0x302093, 0, trap=True),
 
-    'Boss Clear': ItemData('Items', 0x302094, 0, progression=True),
-    'Piece of Luigi': ItemData('Items', 0x302095, 0, progression=True)
+    'Boss Clear': ItemData('Items', None, 0, progression=True),
+    'Piece of Luigi': ItemData('Items', 0x302095, 0, progression=True),
+    'Saved Baby Luigi': ItemData('Items', None, 0, progression=True)
 }
 
 filler_items: Tuple[str, ...] = (

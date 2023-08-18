@@ -98,8 +98,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     if get_option_value(multiworld, player, "minigame_checks") >= 2:
         regions.insert(69, create_region(multiworld, player, locations_per_region, location_cache, "Slot Machine")),
         regions.insert(59, create_region(multiworld, player, locations_per_region, location_cache, "Roulette")),
-        regions.insert(49, create_region(multiworld, player, locations_per_region, location_cache, "Match Cards")),
-        regions.insert(39, create_region(multiworld, player, locations_per_region, location_cache, "Drawing Lots")),
+        regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "Match Cards")),
+        regions.insert(41, create_region(multiworld, player, locations_per_region, location_cache, "Drawing Lots")),
         regions.insert(29, create_region(multiworld, player, locations_per_region, location_cache, "Scratch And Match")),
         regions.insert(19, create_region(multiworld, player, locations_per_region, location_cache, "Flip Cards"))
     multiworld.regions += regions

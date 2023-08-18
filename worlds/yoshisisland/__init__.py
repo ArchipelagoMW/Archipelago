@@ -7,7 +7,7 @@ import pdb
 from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
-from .Locations import get_locations, EventId
+from .Locations import get_locations
 from .LogicExtensions import YoshiLogic
 from .Options import yoshi_options, get_option_value
 from .Regions import create_regions
@@ -97,7 +97,7 @@ class YIWorld(World):
         spoiler_handle.write(f"Sluggy The Unshaven's Boss Door:   {self.boss_order[8]}\n")
         spoiler_handle.write(f"Raphael The Raven's Boss Door:     {self.boss_order[9]}\n")
         spoiler_handle.write(f"Tap-Tap The Red Nose's Boss Door:  {self.boss_order[10]}\n")
-        spoiler_handle.write(f"\nLevels:\n1-1: {self.level_location_list[0]}\n")
+        spoiler_handle.write(f"\nLevels:\n1-1: {self.level_name_list[0]}\n")
         spoiler_handle.write(f"1-2: {self.level_name_list[1]}\n")
         spoiler_handle.write(f"1-3: {self.level_name_list[2]}\n")
         spoiler_handle.write(f"1-4: {self.level_name_list[3]}\n")
@@ -183,7 +183,6 @@ class YIWorld(World):
             return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
-        setup_events(self.player, self.locked_locations, self.location_cache)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
         #else:
@@ -215,6 +214,20 @@ class YIWorld(World):
         self.multiworld.get_location("Sluggy The Unshaven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Raphael The Raven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Tap-Tap The Red Nose Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
+        if self.multiworld.goal[self.player].value == 1:
+            self.multiworld.get_location("Reconstituted Luigi", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))
+        else:
+            self.multiworld.get_location("King Bowser's Castle: Level Clear", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))
+
+        self.multiworld.get_location("Touch Fuzzy Get Dizzy: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
+        self.multiworld.get_location("The Cave Of the Mystery Maze: Seed Spitting Contest", self.player).place_locked_item(self.create_item("Bandit Watermelons"))
+        self.multiworld.get_location("Lakitu's Wall: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
+        self.multiworld.get_location("Ride Like The Wind: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
+
+        self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+        self.multiworld.get_location("Drawing Lots", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+        self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+
 
         excluded_items = get_excluded_items(self, self.multiworld, self.player)
 
@@ -816,12 +829,3 @@ def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, pla
             self.luigi_count += 1
 
     return item
-
-def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
-    for location in location_cache:
-        if location.address == EventId:
-            item = Item(location.name, ItemClassification.progression, EventId, player)
-
-            locked_locations.append(location.name)
-
-            location.place_locked_item(item)

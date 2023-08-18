@@ -60,10 +60,10 @@ class YoshiLogic:
         return state.has('Piece of Luigi', self.player, self.luigi_pieces)
 
     def bandit_bonus(self, state: CollectionState) -> bool:
-        return (state.has('Seed Spitting Contest', self.player) or state.has('Touch Fuzzy Get Dizzy: Gather Coins', self.player) or state.has("Lakitu's Wall: Gather Coins", self.player) or state.has('Ride Like The Wind: Gather Coins', self.player))
+        return (state.has('Bandit Consumables', self.player) or state.has('Bandit Watermelons', self.player))
 
     def item_bonus(self, state: CollectionState) -> bool:
-        return state.has_any({'Flip Cards', 'Drawing Lots', 'Match Cards'}, self.player)
+        return state.has_any({'Bonus Consumables'}, self.player)
 
     def combat_item(self, state: CollectionState) -> bool:
         if self.consumable_logic == False:
@@ -81,7 +81,7 @@ class YoshiLogic:
             if self.game_logic == "Easy":
                 return self.item_bonus(state)
             else:
-                return state.has('Seed Spitting Contest', self.player) or self.item_bonus(state)
+                return state.has('Bandit Watemrlons', self.player) or self.item_bonus(state)
 
     def default_vis(self, state: CollectionState) -> bool:
         if self.clouds_always_visible == True:

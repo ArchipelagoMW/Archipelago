@@ -3,8 +3,6 @@ from BaseClasses import MultiWorld
 from .LogicExtensions import YoshiLogic
 from .Options import get_option_value
 
-EventId: Optional[int] = None
-
 
 class LocationData(NamedTuple):
     region: str
@@ -38,7 +36,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("1-4", "Burt The Bashful's Fort: Flowers", 0x30502D, lambda state: logic._14Flowers(state)),
     LocationData("1-4", "Burt The Bashful's Fort: Stars", 0x30502E, lambda state: logic._14Stars(state)),
     LocationData("1-4", "Burt The Bashful's Fort: Level Clear", 0x30502F, lambda state: logic._14CanFightBoss(state)),
-    LocationData("Burt The Bashful's Boss Room", 'Burt The Bashful Defeated', 0x305030, lambda state: logic._14Boss(state)),
+    LocationData("Burt The Bashful's Boss Room", 'Burt The Bashful Defeated', None, lambda state: logic._14Boss(state)),
 
     LocationData("1-5", "Hop! Hop! Donut Lifts: Red Coins", 0x305031, lambda state: logic._15Coins(state)),
     LocationData("1-5", "Hop! Hop! Donut Lifts: Flowers", 0x305032, lambda state: logic._15Flowers(state)),
@@ -54,13 +52,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("1-7", "Touch Fuzzy Get Dizzy: Flowers", 0x30503A, lambda state: logic._17Flowers(state)),
     LocationData("1-7", "Touch Fuzzy Get Dizzy: Stars", 0x30503B, lambda state: logic._17Stars(state)),
     LocationData("1-7", "Touch Fuzzy Get Dizzy: Level Clear", 0x30503C, lambda state: logic._17Clear(state)),
-    LocationData("1-7", 'Touch Fuzzy Get Dizzy: Gather Coins', EventId, lambda state: logic._17Game(state)),
+    LocationData("1-7", 'Touch Fuzzy Get Dizzy: Gather Coins', None, lambda state: logic._17Game(state)),
 
     LocationData("1-8", "Salvo The Slime's Castle: Red Coins", 0x30503D, lambda state: logic._18Coins(state)),
     LocationData("1-8", "Salvo The Slime's Castle: Flowers", 0x30503E, lambda state: logic._18Flowers(state)),
     LocationData("1-8", "Salvo The Slime's Castle: Stars", 0x30503F, lambda state: logic._18Stars(state)),
     LocationData("1-8", "Salvo The Slime's Castle: Level Clear", 0x305040, lambda state: logic._18CanFightBoss(state)),
-    LocationData("Salvo The Slime's Boss Room", 'Salvo The Slime Defeated', 0x30510C, lambda state: logic._18Boss(state)),
+    LocationData("Salvo The Slime's Boss Room", 'Salvo The Slime Defeated', None, lambda state: logic._18Boss(state)),
+
+    LocationData("Flip Cards", 'Flip Cards', None),
     ############################################################################################
     LocationData("2-1", "Visit Koopa And Para-Koopa: Red Coins", 0x305041, lambda state: logic._21Coins(state)),
     LocationData("2-1", "Visit Koopa And Para-Koopa: Flowers", 0x305042, lambda state: logic._21Flowers(state)),
@@ -81,7 +81,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("2-4", "Bigger Boo's Fort: Flowers", 0x30504E, lambda state: logic._24Flowers(state)),
     LocationData("2-4", "Bigger Boo's Fort: Stars", 0x30504F, lambda state: logic._24Stars(state)),
     LocationData("2-4", "Bigger Boo's Fort: Level Clear", 0x305050, lambda state: logic._24CanFightBoss(state)),
-    LocationData("Bigger Boo's Boss Room", 'Bigger Boo Defeated', 0x30510D, lambda state: logic._24Boss(state)),
+    LocationData("Bigger Boo's Boss Room", 'Bigger Boo Defeated', None, lambda state: logic._24Boss(state)),
 
     LocationData("2-5", "Watch Out For Lakitu: Red Coins", 0x305051, lambda state: logic._25Coins(state)),
     LocationData("2-5", "Watch Out For Lakitu: Flowers", 0x305052, lambda state: logic._25Flowers(state)),
@@ -92,19 +92,19 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("2-6", "The Cave Of The Mystery Maze: Flowers", 0x305056, lambda state: logic._26Flowers(state)),
     LocationData("2-6", "The Cave Of The Mystery Maze: Stars", 0x305057, lambda state: logic._26Stars(state)),
     LocationData("2-6", "The Cave Of The Mystery Maze: Level Clear", 0x305058, lambda state: logic._26Clear(state)),
-    LocationData("2-6", 'Seed Spitting Contest', EventId, lambda state: logic._26Game(state)),
+    LocationData("2-6", 'The Cave Of the Mystery Maze: Seed Spitting Contest', None, lambda state: logic._26Game(state)),
 
     LocationData("2-7", "Lakitu's Wall: Red Coins", 0x305059, lambda state: logic._27Coins(state)),
     LocationData("2-7", "Lakitu's Wall: Flowers", 0x30505A, lambda state: logic._27Flowers(state)),
     LocationData("2-7", "Lakitu's Wall: Stars", 0x30505B, lambda state: logic._27Stars(state)),
     LocationData("2-7", "Lakitu's Wall: Level Clear", 0x30505C, lambda state: logic._27Clear(state)),
-    LocationData("2-7", "Lakitu's Wall: Gather Coins", EventId, lambda state: logic._27Game(state)),
+    LocationData("2-7", "Lakitu's Wall: Gather Coins", None, lambda state: logic._27Game(state)),
 
     LocationData("2-8", "The Potted Ghost's Castle: Red Coins", 0x30505D, lambda state: logic._28Coins(state)),
     LocationData("2-8", "The Potted Ghost's Castle: Flowers", 0x30505E, lambda state: logic._28Flowers(state)),
     LocationData("2-8", "The Potted Ghost's Castle: Stars", 0x30505F, lambda state: logic._28Stars(state)),
     LocationData("2-8", "The Potted Ghost's Castle: Level Clear", 0x305060, lambda state: logic._28CanFightBoss(state)),
-    LocationData("Roger The Ghost's Boss Room", 'Roger The Ghost Defeated', 0x30510E, lambda state: logic._28Boss(state)),
+    LocationData("Roger The Ghost's Boss Room", 'Roger The Ghost Defeated', None, lambda state: logic._28Boss(state)),
     ###############################################################################################
     LocationData("3-1", "Welcome To Monkey World!: Red Coins", 0x305061, lambda state: logic._31Coins(state)),
     LocationData("3-1", "Welcome To Monkey World!: Flowers", 0x305062, lambda state: logic._31Flowers(state)),
@@ -125,7 +125,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("3-4", "Prince Froggy's Fort: Flowers", 0x30506E, lambda state: logic._34Flowers(state)),
     LocationData("3-4", "Prince Froggy's Fort: Stars", 0x30506F, lambda state: logic._34Stars(state)),
     LocationData("3-4", "Prince Froggy's Fort: Level Clear", 0x305070, lambda state: logic._34CanFightBoss(state)),
-    LocationData("Prince Froggy's Boss Room", 'Prince Froggy Defeated', 0x30510F, lambda state: logic._34Boss(state)),
+    LocationData("Prince Froggy's Boss Room", 'Prince Froggy Defeated', None, lambda state: logic._34Boss(state)),
 
     LocationData("3-5", "Jammin' Through The Trees: Red Coins", 0x305071, lambda state: logic._35Coins(state)),
     LocationData("3-5", "Jammin' Through The Trees: Flowers", 0x305072, lambda state: logic._35Flowers(state)),
@@ -146,7 +146,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("3-8", "Naval Piranha's Castle: Flowers", 0x30507E, lambda state: logic._38Flowers(state)),
     LocationData("3-8", "Naval Piranha's Castle: Stars", 0x30507F, lambda state: logic._38Stars(state)),
     LocationData("3-8", "Naval Piranha's Castle: Level Clear", 0x305080, lambda state: logic._38CanFightBoss(state)),
-    LocationData("Naval Piranha's Boss Room", 'Naval Piranha Defeated', 0x305110, lambda state: logic._38Boss(state)),
+    LocationData("Naval Piranha's Boss Room", 'Naval Piranha Defeated', None, lambda state: logic._38Boss(state)),
+
+    LocationData("Drawing Lots", 'Drawing Lots', None),
     ##############################################################################################
     LocationData("4-1", "GO! GO! MARIO!!: Red Coins", 0x305081, lambda state: logic._41Coins(state)),
     LocationData("4-1", "GO! GO! MARIO!!: Flowers", 0x305082, lambda state: logic._41Flowers(state)),
@@ -167,7 +169,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("4-4", "Marching Milde's Fort: Flowers", 0x30508E, lambda state: logic._44Flowers(state)),
     LocationData("4-4", "Marching Milde's Fort: Stars", 0x30508F, lambda state: logic._44Stars(state)),
     LocationData("4-4", "Marching Milde's Fort: Level Clear", 0x305090, lambda state: logic._44CanFightBoss(state)),
-    LocationData("Marching Milde's Boss Room", 'Marching Milde Defeated', 0x305111, lambda state: logic._44Boss(state)),
+    LocationData("Marching Milde's Boss Room", 'Marching Milde Defeated', None, lambda state: logic._44Boss(state)),
 
     LocationData("4-5", "Chomp Rock Zone: Red Coins", 0x305091, lambda state: logic._45Coins(state)),
     LocationData("4-5", "Chomp Rock Zone: Flowers", 0x305092, lambda state: logic._45Flowers(state)),
@@ -183,13 +185,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("4-7", "Ride Like The Wind: Flowers", 0x30509A, lambda state: logic._47Flowers(state)),
     LocationData("4-7", "Ride Like The Wind: Stars", 0x30509B, lambda state: logic._47Stars(state)),
     LocationData("4-7", "Ride Like The Wind: Level Clear", 0x30509C, lambda state: logic._47Clear(state)),
-    LocationData("4-7", 'Ride Like The Wind: Gather Coins', EventId, lambda state: logic._47Game(state)),
+    LocationData("4-7", 'Ride Like The Wind: Gather Coins', None, lambda state: logic._47Game(state)),
 
     LocationData("4-8", "Hookbill The Koopa's Castle: Red Coins", 0x30509D, lambda state: logic._48Coins(state)),
     LocationData("4-8", "Hookbill The Koopa's Castle: Flowers", 0x30509E, lambda state: logic._48Flowers(state)),
     LocationData("4-8", "Hookbill The Koopa's Castle: Stars", 0x30509F, lambda state: logic._48Stars(state)),
     LocationData("4-8", "Hookbill The Koopa's Castle: Level Clear", 0x3050A0, lambda state: logic._48CanFightBoss(state)),
-    LocationData("Hookbill The Koopa's Boss Room", 'Hookbill The Koopa Defeated', 0x305112, lambda state: logic._48Boss(state)),
+    LocationData("Hookbill The Koopa's Boss Room", 'Hookbill The Koopa Defeated', None, lambda state: logic._48Boss(state)),
+
+    LocationData("Match Cards", 'Match Cards', None),
     ######################################################################################################
     LocationData("5-1", "BLIZZARD!!!: Red Coins", 0x3050A1, lambda state: logic._51Coins(state)),
     LocationData("5-1", "BLIZZARD!!!: Flowers", 0x3050A2, lambda state: logic._51Flowers(state)),
@@ -210,7 +214,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("5-4", "Sluggy The Unshaven's Fort: Flowers", 0x3050AE, lambda state: logic._54Flowers(state)),
     LocationData("5-4", "Sluggy The Unshaven's Fort: Stars", 0x3050AF, lambda state: logic._54Stars(state)),
     LocationData("5-4", "Sluggy The Unshaven's Fort: Level Clear", 0x3050B0, lambda state: logic._54CanFightBoss(state)),
-    LocationData("Sluggy The Unshaven's Boss Room", 'Sluggy The Unshaven Defeated', 0x305113, lambda state: logic._54Boss(state)),
+    LocationData("Sluggy The Unshaven's Boss Room", 'Sluggy The Unshaven Defeated', None, lambda state: logic._54Boss(state)),
 
     LocationData("5-5", "Goonie Rides!: Red Coins", 0x3050B1, lambda state: logic._55Coins(state)),
     LocationData("5-5", "Goonie Rides!: Flowers", 0x3050B2, lambda state: logic._55Flowers(state)),
@@ -231,7 +235,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("5-8", "Raphael The Raven's Castle: Flowers", 0x3050BE, lambda state: logic._58Flowers(state)),
     LocationData("5-8", "Raphael The Raven's Castle: Stars", 0x3050BF, lambda state: logic._58Stars(state)),
     LocationData("5-8", "Raphael The Raven's Castle: Level Clear", 0x3050C0, lambda state: logic._58CanFightBoss(state)),
-    LocationData("Raphael The Raven's Boss Room", 'Raphael The Raven Defeated', 0x305114, lambda state: logic._58Boss(state)),
+    LocationData("Raphael The Raven's Boss Room", 'Raphael The Raven Defeated', None, lambda state: logic._58Boss(state)),
     ######################################################################################################
 
     LocationData("6-1", "Scary Skeleton Goonies!: Red Coins", 0x3050C1, lambda state: logic._61Coins(state)),
@@ -253,7 +257,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("6-4", "Tap-Tap The Red Nose's Fort: Flowers", 0x3050CE, lambda state: logic._64Flowers(state)),
     LocationData("6-4", "Tap-Tap The Red Nose's Fort: Stars", 0x3050CF, lambda state: logic._64Stars(state)),
     LocationData("6-4", "Tap-Tap The Red Nose's Fort: Level Clear", 0x3050D0, lambda state: logic._64CanFightBoss(state)),
-    LocationData("Tap-Tap The Red Nose's Boss Room", 'Tap-Tap The Red Nose Defeated', 0x305115, lambda state: logic._64Boss(state)),
+    LocationData("Tap-Tap The Red Nose's Boss Room", 'Tap-Tap The Red Nose Defeated', None, lambda state: logic._64Boss(state)),
 
     LocationData("6-5", "The Very Loooooong Cave: Red Coins", 0x3050D1, lambda state: logic._65Coins(state)),
     LocationData("6-5", "The Very Loooooong Cave: Flowers", 0x3050D2, lambda state: logic._65Flowers(state)),
@@ -336,19 +340,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
             LocationData("Slot Machine", "Slot Machine: Victory", 0x30510B),
         )
 
-    if not multiworld or get_option_value(multiworld, player, "item_logic") == 1:
-        location_table += ( 
-            LocationData("Flip Cards", 'Flip Cards', EventId),
-            LocationData("Drawing Lots", 'Drawing Lots', EventId),
-            LocationData("Match Cards", 'Match Cards', EventId),
-        )
-
     if not multiworld or get_option_value(multiworld, player, "goal") == 1:
         location_table += ( 
-            LocationData("Overworld", 'Saved Baby Luigi', EventId, lambda state: logic.ReconstituteLuigi(state)),
+            LocationData("Overworld", 'Reconstituted Luigi', None, lambda state: logic.ReconstituteLuigi(state)),
         )
     if not multiworld or get_option_value(multiworld, player, "goal") == 0:
         location_table += ( 
-            LocationData("Bowser's Room", 'Saved Baby Luigi', EventId, lambda state: logic._68Clear(state)),
+            LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, lambda state: logic._68Clear(state)),
         )
     return tuple(location_table)
