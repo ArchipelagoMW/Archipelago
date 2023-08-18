@@ -224,9 +224,10 @@ class YIWorld(World):
         self.multiworld.get_location("Lakitu's Wall: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
         self.multiworld.get_location("Ride Like The Wind: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
 
-        self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
-        self.multiworld.get_location("Drawing Lots", self.player).place_locked_item(self.create_item("Bonus Consumables"))
-        self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+        if self.multiworld.minigame_checks[self.player].value >= 2:
+            self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+            self.multiworld.get_location("Drawing Lots", self.player).place_locked_item(self.create_item("Bonus Consumables"))
+            self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
 
 
         excluded_items = get_excluded_items(self, self.multiworld, self.player)

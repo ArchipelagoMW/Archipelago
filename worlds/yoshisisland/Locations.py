@@ -330,7 +330,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
             LocationData("6-7", "KEEP MOVING!!!!: Bandit Game", 0x305105, lambda state: logic._67Game(state)),
         )
 
-    if not multiworld or get_option_value(multiworld, player, "minigame_checks") == 2 or get_option_value(multiworld, player, "minigame_checks") == 3:
+    if not multiworld or get_option_value(multiworld, player, "minigame_checks") >= 2:
         location_table += ( 
             LocationData("Flip Cards", "Flip Cards: Victory", 0x305106),
             LocationData("Scratch And Match", "Scratch And Match: Victory", 0x305107),
