@@ -1,3 +1,5 @@
+import math
+
 from worlds.generic.Rules import add_rule, add_item_rule
 from typing import Set
 from .Items import ItemType, all_items
@@ -155,7 +157,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Pound_Cube, player) or state.has(ItemName.Sand, player))
 
     add_rule(multiworld.get_location(LocationName.Yampi_Desert_Scoop_Gem, player),
-             lambda state: state.has(ItemName.Pound_Cube, player) and state.count_group(ItemType.Djinn, player) >= 3)
+             lambda state: state.has(ItemName.Pound_Cube, player))
 
     #Yamp Desert Backside
     add_rule(multiworld.get_location(LocationName.Yampi_Desert_Lucky_Medal, player),
@@ -183,10 +185,6 @@ def set_access_rules(multiworld, player):
     #Alhafra
     add_rule(multiworld.get_location(LocationName.Alhafra_Psy_Crystal, player),
              lambda state: state.has(ItemName.Reveal, player))
-
-
-    add_rule(multiworld.get_location(LocationName.Alhafra_Briggs, player),
-             lambda state: state.count_group(ItemType.Djinn, player) >= 6)
 
     add_rule(multiworld.get_location(LocationName.Alhafra_Prison_Briggs, player),
              lambda state: state.has(ItemName.Briggs_defeated, player) and state.has(ItemName.Lash_Pebble, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Pound_Cube, player))
@@ -296,7 +294,7 @@ def set_access_rules(multiworld, player):
     add_rule(multiworld.get_location(LocationName.Lemurian_Ship_Mist_Potion, player),
              lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Parch, player) and (state.has(ItemName.Grindstone, player) or state.has(ItemName.Poseidon_defeated, player)))
     add_rule(multiworld.get_location(LocationName.Lemurian_Ship_Aqua_Hydra, player),
-             lambda state: state.has(ItemName.Frost_Jewel, player) and state.count_group(ItemType.Djinn, player) >= 10)
+             lambda state: state.has(ItemName.Frost_Jewel, player))
 
 
 
@@ -404,8 +402,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Whirlwind, player))
 
     add_rule(multiworld.get_location(LocationName.Gaia_Rock_Serpent, player),
-             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Dancing_Idol, player) and
-                           (state.count_group(ItemType.Djinn, player) >= 24 or (state.count_group(ItemType.Djinn, player) >= 16 and state.has(ItemName.Whirlwind, player))))
+             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Dancing_Idol, player))
 
 
     #Tundaria Tower
@@ -439,8 +436,8 @@ def set_access_rules(multiworld, player):
 
     #Champa
     add_rule(multiworld.get_location(LocationName.Champa_Trident, player),
-             lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.count_group(ItemType.Djinn, player) >= 20 and
-                           state.has(ItemName.Left_Prong, player) and state.has(ItemName.Center_Prong, player) and state.has(ItemName.Right_Prong, player))
+             lambda state: state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Left_Prong, player)
+                           and state.has(ItemName.Center_Prong, player) and state.has(ItemName.Right_Prong, player))
 
     add_rule(multiworld.get_location(LocationName.Champa_Viking_Helm, player),
              lambda state: state.has(ItemName.Reveal, player))
@@ -474,7 +471,7 @@ def set_access_rules(multiworld, player):
 
     #Sea Of Time
     add_rule(multiworld.get_location(LocationName.SeaOfTime_Poseidon, player),
-             lambda state: state.has(ItemName.Trident, player) and state.count_group(ItemType.Djinn, player) >= 24)
+             lambda state: state.has(ItemName.Trident, player))
 
 
     #Lemuria
@@ -531,7 +528,7 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Shamans_Rod, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Hover_Jade, player) and state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Reveal, player))
 
     add_rule(multiworld.get_location(LocationName.Shaman_Village_Moapa, player),
-             lambda state: state.has(ItemName.Shamans_Rod, player) and state.count_group(ItemType.Djinn, player) >= 28)
+             lambda state: state.has(ItemName.Shamans_Rod, player))
 
     #Atteka Inlet
     add_rule(multiworld.get_location(LocationName.Geode, player),
@@ -675,7 +672,7 @@ def set_access_rules(multiworld, player):
 
     add_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Flame_Dragons, player),
              lambda state: state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Pound_Cube, player) and
-                           state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Reveal, player) and state.count_group(ItemType.Djinn, player) >= 48)
+                           state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Reveal, player))
 
 
     #Mars Lighthouse activated
@@ -684,8 +681,44 @@ def set_access_rules(multiworld, player):
              lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player))
 
     add_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Doom_Dragon, player),
-             lambda state: state.count_group(ItemType.Djinn, player) >= 56 and state.has(ItemName.Cyclone_Chip, player) and
-                           state.has(ItemName.Hover_Jade, player) and state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Carry_Stone, player) and state.has(ItemName.Sand, player))
+             lambda state: state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and
+                           state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Carry_Stone, player) and state.has(ItemName.Sand, player))
+
+    #djinn logic
+    if multiworld.djinn_logic[player] > 0:
+        djinn_percentage = multiworld.djinn_logic[player] / 100
+
+        add_rule(multiworld.get_location(LocationName.Yampi_Desert_Scoop_Gem, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(3 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Alhafra_Briggs, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(6 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Lemurian_Ship_Aqua_Hydra, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(10 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Gaia_Rock_Serpent, player),
+                 lambda state: (state.count_group(ItemType.Djinn, player) >= math.ceil(24 * djinn_percentage) or
+                                (state.count_group(ItemType.Djinn, player) >= math.ceil(16 * djinn_percentage) and state.has(ItemName.Whirlwind, player))))
+
+        add_rule(multiworld.get_location(LocationName.Champa_Trident, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(20 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.SeaOfTime_Poseidon, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(24 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Shaman_Village_Moapa, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(28 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Flame_Dragons, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(48 * djinn_percentage))
+
+        add_rule(multiworld.get_location(LocationName.Mars_Lighthouse_Doom_Dragon, player),
+                 lambda state: state.count_group(ItemType.Djinn, player) >= math.ceil(56 * djinn_percentage))
+    else:
+        #Force whirldwind to be able to get all 4 light orbs to make serpent as weak as possible to beat it logically without djinn
+        add_rule(multiworld.get_location(LocationName.Gaia_Rock_Serpent, player),
+                 lambda state: state.has(ItemName.Whirlwind, player))
 
     #Optional Super Boss content
     if multiworld.super_bosses[player] > 0:
@@ -697,6 +730,7 @@ def set_access_rules(multiworld, player):
 
         #Treasure Isle
         add_rule(multiworld.get_location(LocationName.Treasure_Isle_Azul, player), lambda state: state.count_group(ItemType.Djinn, player) >= 64)
+
 
     if multiworld.super_bosses[player] > 1:
         #Anemos Inner Sanctum

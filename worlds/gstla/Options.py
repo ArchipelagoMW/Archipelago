@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice
+from Options import Choice, SpecialRange
 
 class StartWithShip(Choice):
     display_name = "Start with ship"
@@ -23,8 +23,21 @@ class SuperBosses(Choice):
     option_allincluded = 2
     default = 0
 
+class DjinnLogic(SpecialRange):
+    display_name = "Djinn Logic"
+    range_start = 0
+    range_end = 100
+    default = 100
+
+    special_range_names = {
+        "casual": 100,
+        "hard": 50,
+        "none": 0
+    }
+
 GSTLAOptions = {
     "starter_ship": StartWithShip,
     "hidden_items": HiddenItems,
-    "super_bosses": SuperBosses
+    "super_bosses": SuperBosses,
+    "djinn_logic": DjinnLogic
 }
