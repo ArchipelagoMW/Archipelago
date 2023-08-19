@@ -5,6 +5,7 @@ from struct import unpack, pack
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
+from .Locations import boss_locations
 
 snes_logger = logging.getLogger("SNES")
 
@@ -18,6 +19,7 @@ SRAM_1_START = 0xE00000
 KDL3_ROMNAME = SRAM_1_START + 0x8100
 KDL3_DEATH_LINK_ADDR = SRAM_1_START + 0x9010
 KDL3_GOAL_ADDR = SRAM_1_START + 0x9012
+KDL3_CONSUMABLE_FLAG = SRAM_1_START + 0x9018
 KDL3_LEVEL_ADDR = SRAM_1_START + 0x9020
 KDL3_IS_DEMO = SRAM_1_START + 0x5AD5
 KDL3_GAME_STATE = SRAM_1_START + 0x36D0
@@ -97,9 +99,8 @@ consumable_addrs = {
 
 class KDL3SNIClient(SNIClient):
     game = "Kirby's Dream Land 3"
-    latest_world = 0x01
-    latest_level = 0x01
     levels = None
+    consumables = None
     item_queue = []
 
     async def deathlink_kill_player(self, ctx) -> None:
@@ -193,6 +194,9 @@ class KDL3SNIClient(SNIClient):
 
     async def game_watcher(self, ctx) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        rom = await snes_read(ctx, KDL3_ROMNAME, 0x15)
+        if rom != ctx.rom:
+            ctx.rom = None
         halken = await snes_read(ctx, WRAM_START, 6)
         if halken != b"halken":
             return
@@ -228,6 +232,10 @@ class KDL3SNIClient(SNIClient):
                 level_data = await snes_read(ctx, KDL3_LEVEL_ADDR + (14 * i), 14)
                 self.levels[i] = unpack("HHHHHHH", level_data)
 
+        if self.consumables is None:
+            consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
+            self.consumables = consumables[0] == 0x01
+
         recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
         recv_amount = unpack("H", recv_count)[0]
         if recv_amount < len(ctx.items_received):
@@ -246,7 +254,7 @@ class KDL3SNIClient(SNIClient):
             elif item.item & 0x000010 > 0:
                 friend = (item.item & 0x00000F)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
-                snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), bytes([friend + 1]))
+                snes_buffered_write(ctx, KDL3_ANIMAL_FRIENDS + (friend << 1), pack("H", friend + 1))
             elif item.item == 0x770020:
                 # Heart Star
                 heart_star_count = await snes_read(ctx, KDL3_HEART_STAR_COUNT, 2)
@@ -268,7 +276,7 @@ class KDL3SNIClient(SNIClient):
             loc_id = 0x770000 + i + 1
             if stages[i] == 1 and loc_id not in ctx.checked_locations:
                 new_checks.append(loc_id)
-            elif stages[i] == 0 and loc_id in ctx.checked_locations:
+            elif loc_id in ctx.checked_locations:
                 snes_buffered_write(ctx, KDL3_COMPLETED_STAGES + (i * 2), struct.pack("H", 1))
 
         # heart star status
@@ -280,35 +288,23 @@ class KDL3SNIClient(SNIClient):
                 loc_id = 0x770100 + (6 * i) + j
                 if heart_stars[level_ind] and loc_id not in ctx.checked_locations:
                     new_checks.append(loc_id)
-                elif not heart_stars[level_ind] and loc_id in ctx.checked_locations:
-                    # only handle collected heart stars
+                elif loc_id in ctx.checked_locations:
                     snes_buffered_write(ctx, KDL3_HEART_STARS + level_ind, bytes([0x01]))
         await snes_flush_writes(ctx)
         # consumable status
         consumables = await snes_read(ctx, KDL3_CONSUMABLES, 1920)
         for consumable in consumable_addrs:
             # TODO: see if this can be sped up in any way
-            if consumables[consumable_addrs[consumable]] == 0x01:
-                loc_id = 0x770300 + consumable
-                if loc_id not in ctx.checked_locations:
-                    new_checks.append(loc_id)
+            loc_id = 0x770300 + consumable
+            if loc_id not in ctx.checked_locations and consumables[consumable_addrs[consumable]] == 0x01:
+                new_checks.append(loc_id)
+
         # boss status
         boss_flag_bytes = await snes_read(ctx, KDL3_BOSS_STATUS, 2)
         boss_flag = unpack("H", boss_flag_bytes)[0]
-        if boss_flag & 2 > 0 and 0x770200 not in ctx.checked_locations:
-            new_checks.append(0x770200)
-        if boss_flag & 8 > 0 and 0x770201 not in ctx.checked_locations:
-            new_checks.append(0x770201)
-        if boss_flag & 32 > 0 and 0x770202 not in ctx.checked_locations:
-            new_checks.append(0x770202)
-        if boss_flag & 128 > 0 and 0x770203 not in ctx.checked_locations:
-            new_checks.append(0x770203)
-        if boss_flag & 512 > 0 and 0x770204 not in ctx.checked_locations:
-            new_checks.append(0x770204)
-
-        rom = await snes_read(ctx, KDL3_ROMNAME, 0x15)
-        if rom != ctx.rom:
-            ctx.rom = None
+        for bitmask, boss in zip(range(1, 11, 2), boss_locations.keys()):
+            if boss_flag & (1 << bitmask) > 0 and boss not in ctx.checked_locations:
+                new_checks.append(boss)
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
