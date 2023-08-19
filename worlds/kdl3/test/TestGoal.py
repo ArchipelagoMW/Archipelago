@@ -3,6 +3,7 @@ from . import KDL3TestBase
 
 class TestFastGoal(KDL3TestBase):
     options = {
+        "open_world": False,
         "goal_speed": "fast",
         "total_heart_stars": 30,
         "heart_stars_required": 50,
@@ -25,7 +26,9 @@ class TestFastGoal(KDL3TestBase):
 
 
 class TestNormalGoal(KDL3TestBase):
+    # TODO: open world tests
     options = {
+        "open_world": False,
         "goal_speed": "normal",
         "total_heart_stars": 30,
         "heart_stars_required": 50,

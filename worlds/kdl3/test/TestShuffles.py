@@ -1,10 +1,11 @@
 from typing import List, Tuple
 
 from . import KDL3TestBase
-from .TestGoal import TestNormalGoal
+
 
 class TestCopyAbilityShuffle(KDL3TestBase):
     options = {
+        "open_world": False,
         "goal_speed": "normal",
         "total_heart_stars": 30,
         "heart_stars_required": 50,
@@ -75,10 +76,9 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         assert self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
 
 
-
-
 class TestAnimalShuffle(KDL3TestBase):
     options = {
+        "open_world": False,
         "goal_speed": "normal",
         "total_heart_stars": 30,
         "heart_stars_required": 50,
