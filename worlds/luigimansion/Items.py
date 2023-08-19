@@ -53,7 +53,7 @@ item_table: Dict[str, ItemData] = {
     "Mario's Letter": ItemData('Mario Item', 8535, ItemClassification.progression),
     "Mario's Star": ItemData('Mario Item', 8536, ItemClassification.progression),
     "Mario's Shoe": ItemData('Mario Item', 8537, ItemClassification.progression),
-    "Boo": ItemData('Boo', 8538, ItemClassification.progression, count=35),
+    "Boo": ItemData('Boo Item', 8538, ItemClassification.progression, count=35),
     "Boo Radar": ItemData('Upgrade', 8539, ItemClassification.progression),
     # does the Boo release cutscene trigger the butler, or is it acquiring the boo radar?
     "Poltergust 4000": ItemData('Upgrade', 8540, ItemClassification.useful),
