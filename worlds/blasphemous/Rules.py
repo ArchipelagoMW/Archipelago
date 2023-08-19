@@ -255,23 +255,23 @@ def opened_botss_ladder(state: CollectionState, player: int) -> bool:
 
 
 def upwarp_skips_allowed(logic: int) -> bool:
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def mourning_skips_allowed(logic: int) -> bool:
-    return True if logic >= 2 else False
+    return logic >= 2
 
 
 def enemy_skips_allowed(logic: int, enemy: int) -> bool:
-    return True if logic >= 2 and enemy == 0 else False
+    return logic >= 2 and enemy == 0
 
 
-#def unknown_skips_allowed():
-#    return False
+def obscure_skips_allowed(logic):
+    return logic >= 2
 
 
-#def precise_skips_allowed():
-#    return False
+def precise_skips_allowed(logic):
+    return logic >= 2
 
 
 def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) -> bool:
@@ -412,7 +412,7 @@ def guilt_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has(item, player) for item in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def sword_rooms(state: CollectionState, player: int, number: int) -> bool:
@@ -428,7 +428,7 @@ def sword_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has_any(items, player) for items in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def redento(state: CollectionState, world, player: int, number: int) -> bool:
@@ -479,7 +479,7 @@ def amanecida_rooms(state: CollectionState, logic: int, player: int, number: int
 
     total = sum(can_beat_boss(state, boss, logic, player) for boss in bosses)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def chalice_rooms(state: CollectionState, player: int, number: int) -> bool:
@@ -491,7 +491,7 @@ def chalice_rooms(state: CollectionState, player: int, number: int) -> bool:
 
     total: int = sum(state.has_any(items, player) for items in doors)
 
-    return True if total >= number else False
+    return total >= number
 
 
 def rules(blasphemousworld):
@@ -575,12 +575,13 @@ def rules(blasphemousworld):
             state.has("RodeGOTPElevator", player)
             or pillar(state, player)
             or state.has("Cante Jondo of the Three Sisters", player)
-            or state.has("D01Z02S03[NW]", player) and (
-                can_cross_gap(state, logic, player, 2)
+            or state.has("Purified Hand of the Nun", player)
+            or state.has("D01Z02S03[NW]", player) 
+            and (
+                can_cross_gap(state, logic, player, 1)
                 or state.has("Lorquiana", player)
                 or aubade(state, player)
                 or state.has("Cantina of the Blue Rose", player)
-                or can_air_stall(state, logic, player)
                 or charge_beam(state, player)
             )
         ))
@@ -705,6 +706,7 @@ def rules(blasphemousworld):
             or aubade(state, player)
             or charge_beam(state, player)
             or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+            or precise_skips_allowed(logic)
         ))
     # Doors
     set_rule(world.get_entrance("D01Z03S07[-Cherubs]", player),
@@ -926,10 +928,24 @@ def rules(blasphemousworld):
     # D01Z05S25 (Desecrated Cistern)
     # Items
     set_rule(world.get_location("DC: Elevator shaft ledge", player),
-        lambda state: state.has("Linen of Golden Thread", player))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            or (
+                state.has("Purified Hand of the Nun", player)
+                and state.has_any({"D01Z05S25[SW]", "D01Z05S25[SE]", "D01Z05S25[NE]"}, player)
+            )
+        ))
     set_rule(world.get_location("DC: Elevator shaft Child of Moonlight", player),
         lambda state: (
             state.has("Linen of Golden Thread", player)
+            or (
+                obscure_skips_allowed(logic)
+                and state.has_any({"D01Z05S25[SW]", "D01Z05S25[SE]", "D01Z05S25[NE]"}, player)
+                and (
+                    aubade(state, player)
+                    or state.has("Cantina of the Blue Rose", player)
+                )
+            )
             or (
                 pillar(state, player)
                 and (
@@ -995,27 +1011,33 @@ def rules(blasphemousworld):
         lambda state: state.has("D01Z05S25[EchoesE]", player))
     add_rule(world.get_entrance("D01Z05S25[EchoesW]", player),
         lambda state: (
-            (
-                state.has("D01Z05S25[EchoesE]", player)
-                and (
-                    state.has("Blood Perpetuated in Sand", player)
-                    or can_cross_gap(state, logic, player, 8)
-                )
+            state.has("D01Z05S25[EchoesE]", player)
+            and (
+                state.has("Blood Perpetuated in Sand", player)
+                or can_cross_gap(state, logic, player, 8)
             )
-            or state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player)
+            or state.has("Linen of Golden Thread", player)
+            and (
+                can_cross_gap(state, logic, player, 5)
+                or can_air_stall(state, logic, player)
+                and state.has("Blood Perpetuated in Sand", player)
+            )
         ))
     set_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: state.has("D01Z05S25[EchoesW]", player))
     add_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: (
-            (
-                state.has("D01Z05S25[EchoesW]", player)
-                and (
-                    state.has("Blood Perpetuated in Sand", player)
-                    or can_cross_gap(state, logic, player, 8)
-                )
+            state.has("D01Z05S25[EchoesW]", player)
+            and (
+                state.has("Blood Perpetuated in Sand", player)
+                or can_cross_gap(state, logic, player, 8)
             )
-            or state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player)
+            or state.has("Linen of Golden Thread", player)
+            and (
+                can_cross_gap(state, logic, player, 5)
+                or can_air_stall(state, logic, player)
+                and state.has("Blood Perpetuated in Sand", player)
+            )
         ))
 
 
@@ -1193,16 +1215,14 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WOTW: Underground ledge", player),
         lambda state: (
-            state.has_all({"Wall Climb Ability", "Blood Perpetuated in Sand"}, player)
+            state.has("Wall Climb Ability", player)
             and (
-                state.has("Dash Ability", player)
-                or state.has("D02Z01S06[Cherubs]", player)
-            )
-            or state.has("Purified Hand of the Nun", player)
-            and (
-                state.has("D02Z01S06[Cherubs]", player)
-                or state.has("D02Z01S06[E]", player)
-                or state.has_any({"Wall Climb Ability", "Dash Ability"}, player)
+                state.has("Purified Hand of the Nun", player)
+                or state.has("Blood Perpetuated in Sand", player)
+                and (
+                    state.has("Dash Ability", player)
+                    or state.has("D02Z01S06[Cherubs]", player)
+                )
             )
         ))
     set_rule(world.get_location("WOTW: Underground Child of Moonlight", player),
@@ -1210,20 +1230,26 @@ def rules(blasphemousworld):
             (
                 state.has("D02Z01S06[W]", player)
                 or state.has("Dash Ability", player)
-                or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or state.has("Purified Hand of the Nun", player)
+                and state.has("Wall Climb Ability", player)
             )
             and (
                 pillar(state, player)
                 or state.has("Cante Jondo of the Three Sisters", player)
+                or can_dive_laser(state, logic, player)
             )
             or (
-                state.has("D02Z01S06[W]", player)
-                or state.has_any({"Purified Hand of the Nun", "Dash Ability"}, player)
+                state.has("Wall Climb Ability", player)
+                and (
+                    state.has("D02Z01S06[W]", player)
+                    or state.has("Purified Hand of the Nun", player)
+                    or state.has("Dash Ability", player)
+                )
             )
-            and state.has("Wall Climb Ability", player)
             and (
-                state.has_any({"Lorquiana", "Cantina of the Blue Rose"}, player)
+                state.has("Lorquiana", player)
                 or aubade(state, player)
+                or state.has("Cantina of the Blue Rose", player)
                 or can_air_stall(state, logic, player)
             )
         ))
@@ -1353,17 +1379,13 @@ def rules(blasphemousworld):
         ))
     set_rule(world.get_location("GotP: Upper east shaft", player),
         lambda state: (
-            (
-                can_climb_on_root(state, player)
-                and state.has("Purified Hand of the Nun", player)
+            can_climb_on_root(state, player)
+            and (
+                state.has("D02Z02S03[NE]", player)
+                or state.has("Purified Hand of the Nun", player)
+                or state.has("Blood Perpetuated in Sand", player)
             )
-            or (
-                state.has("Blood Perpetuated in Sand", player)
-                and (
-                    state.has("Purified Hand of the Nun", player)
-                    or can_climb_on_root(state, player)
-                )
-            )
+            or state.has_all({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
         ))
     # Doors
     set_rule(world.get_entrance("D02Z02S03[NW]", player),
@@ -1549,6 +1571,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("GotP: Shop cave Child of Moonlight", player),
         lambda state: (
             state.has("D02Z02S08[CherubsR]", player)
+            or can_dive_laser(state, logic, player)
             or state.has("Blood Perpetuated in Sand", player)
             or pillar(state, player)
             or can_cross_gap(state, logic, player, 8)
@@ -2055,13 +2078,6 @@ def rules(blasphemousworld):
         lambda state: broke_jondo_bell_e(state, logic, enemy, player))
 
 
-    # D03Z02S07 (Jondo)
-    # Items
-    set_rule(world.get_location("Jondo: Lower west lift alcove", player),
-        lambda state: state.has("Dash Ability", player))
-    # No doors
-
-
     # D03Z02S08 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Lower west bell alcove", player),
@@ -2116,29 +2132,36 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("Jondo: Spike tunnel statue", player),
         lambda state: (
-            state.has("Dash Ability", player)
+            state.has("D03Z02S11[W]", player)
+            and state.has("Purified Hand of the Nun", player)
+            or state.has("D03Z02S11[E]", player)
+            and state.has("Dash Ability", player)
             and (
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
-                or state.has("D03Z02S11[E]", player)
-                and can_cross_gap(state, logic, player, 2)
+                state.has("Wall Climb Ability", player)
+                or can_cross_gap(state, logic, player, 2)
+                or precise_skips_allowed(logic)
+                and can_cross_gap(state, logic, player, 1)
             )
         ))
     set_rule(world.get_location("Jondo: Spike tunnel Child of Moonlight", player),
         lambda state: (
-            state.has("Dash Ability", player)
+            state.has("D03Z02S11[W]", player)
             and (
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
-                or state.has("D03Z02S11[W]", player)
+                state.has("Purified Hand of the Nun", player)
+                or state.has("Dash Ability", player)
                 and (
-                    can_cross_gap(state, logic, player, 2)
+                    state.has("Wall Climb Ability", player)
+                    or can_cross_gap(state, logic, player, 2)
                     and can_enemy_bounce(logic, enemy)
                     or can_cross_gap(state, logic, player, 3)
                 )
-                or state.has("D03Z02S11[E]", player)
-                and (
-                    can_cross_gap(state, logic, player, 1)
-                    or can_enemy_bounce(logic, enemy)
-                )
+            )
+            or state.has("D03Z02S11[E]", player)
+            and state.has("Dash Ability", player)
+            and (
+                can_cross_gap(state, logic, player, 1)
+                or state.has("Wall Climb Ability", player)
+                or can_enemy_bounce(logic, enemy)
             )
         ))
     # Doors
@@ -2146,14 +2169,21 @@ def rules(blasphemousworld):
         lambda state: (
             state.has("Dash Ability", player)
             and (
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                state.has("Wall Climb Ability", player)
                 or can_cross_gap(state, logic, player, 2)
+                or precise_skips_allowed(logic)
+                and can_cross_gap(state, logic, player, 1)
             )
         ))
     set_rule(world.get_entrance("D03Z02S11[E]", player),
         lambda state: (
             state.has("Dash Ability", player)
-            and state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            and (
+                state.has("Wall Climb Ability", player)
+                or state.has("Purified Hand of the Nun", player)
+                or can_cross_gap(state, logic, player, 2)
+                and can_enemy_bounce(logic, enemy)
+            )
         ))
 
     # D03Z02S13 (Jondo)
@@ -2224,7 +2254,11 @@ def rules(blasphemousworld):
         ))
     set_rule(world.get_entrance("D03Z03S04[NE]", player),
         lambda state: (
-            state.has("Wall Climb Ability", player)
+            (
+                state.has("Wall Climb Ability", player)
+                or state.has("Purified Hand of the Nun", player)
+                and can_enemy_bounce(logic, enemy)
+            )
             and (
                 state.has("D03Z03S04[NW]", player)
                 or state.has("D03Z03S04[E]", player)
@@ -2280,7 +2314,12 @@ def rules(blasphemousworld):
     set_rule(world.get_location("GA: Miasma room treasure", player),
         lambda state: state.has("Wall Climb Ability", player))
     set_rule(world.get_location("GA: Miasma room Child of Moonlight", player),
-        lambda state: state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or can_cross_gap(state, logic, player, 11)
+            and state.has("Taranto to my Sister", player)
+            and obscure_skips_allowed(logic)
+        ))
     # No doors
 
 
@@ -2579,8 +2618,11 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("MoM: East chandelier platform", player),
         lambda state: (
-            state.has("Blood Perpetuated in Sand", player)
-            or can_cross_gap(state, logic, player, 3)
+            state.has("Dash Ability", player)
+            and (
+                state.has("Blood Perpetuated in Sand", player)
+                or can_cross_gap(state, logic, player, 3)
+            )
         ))
     # No doors
 
@@ -2764,13 +2806,18 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
         lambda state: (
-            state.has("Zarabanda of the Safe Haven", player)
-            or state.has("Blood Perpetuated in Sand", player)
+            state.has("Blood Perpetuated in Sand", player)
             and (
                 can_walk_on_root(state, player)
                 or state.has("Purified Hand of the Nun", player)
                 or can_cross_gap(state, logic, player, 5)
                 and pillar(state, player)
+            )
+            or obscure_skips_allowed(logic)
+            and (
+                state.has("Zarabanda of the Safe Haven", player)
+                or aubade(state, player)
+                or state.has("Cantina of the Blue Rose", player)
             )
         ))
     # Doors
@@ -3784,6 +3831,11 @@ def rules(blasphemousworld):
             and (
                 state.has("D09Z01S09[NW]", player)
                 or state.has("D09Z01S09[Cell19]", player)
+                or state.has("Purified Hand of the Nun", player)
+                and (
+                    can_air_stall(state, logic, player)
+                    or can_dawn_jump(state, logic, player)
+                )
             )
         ))
     # Doors
@@ -3803,6 +3855,14 @@ def rules(blasphemousworld):
         lambda state: (
             state.has("D09Z01S09[Cell19]", player)
             or state.has("Dash Ability", player)
+            and (
+                state.has("D09Z01S09[Cell24]", player)
+                or state.has("Purified Hand of the Nun", player)
+                and (
+                    can_air_stall(state, logic, player)
+                    or can_dawn_jump(state, logic, player)
+                )
+            )
         ))
     set_rule(world.get_entrance("D09Z01S09[E]", player),
         lambda state: (
@@ -3817,8 +3877,19 @@ def rules(blasphemousworld):
             or state.has("D09Z01S09[Cell19]", player)
         ))
     add_rule(world.get_entrance("D09Z01S09[Cell24]", player),
-        lambda state: state.has("Dash Ability", player))
-    set_rule(world.get_entrance("D09Z01S09[Cell24]", player),
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has("D09Z01S09[NW]", player)
+                or state.has("D09Z01S09[Cell19]", player)
+                or state.has("Purified Hand of the Nun", player)
+                and (
+                    can_air_stall(state, logic, player)
+                    or can_dawn_jump(state, logic, player)
+                )
+            )
+        ))
+    set_rule(world.get_entrance("D09Z01S09[Cell19]", player),
         lambda state: (
             state.has("D09Z01S09[NW]", player)
             or state.has("D09Z01S09[Cell24]", player)
@@ -3827,6 +3898,14 @@ def rules(blasphemousworld):
         lambda state: (
             state.has("D09Z01S09[NW]", player)
             or state.has("Dash Ability", player)
+            and (
+                state.has("D09Z01S09[Cell24]", player)
+                or state.has("Purified Hand of the Nun", player)
+                and (
+                    can_air_stall(state, logic, player)
+                    or can_dawn_jump(state, logic, player)
+                )
+            )
         ))
     set_rule(world.get_entrance("D09Z01S09[Cell20]", player),
         lambda state: (
