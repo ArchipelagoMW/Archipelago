@@ -1,6 +1,8 @@
 from . import KH2TestBase
 from ..Names import ItemName, LocationName
 
+global_all_possible_forms = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm, ItemName.FinalForm] + [ItemName.AutoValor, ItemName.AutoWisdom, ItemName.AutoLimit, ItemName.AutoMaster, ItemName.AutoFinal]
+
 
 class KH2TestFormBase(KH2TestBase):
     allForms = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm, ItemName.FinalForm]
@@ -22,7 +24,8 @@ class KH2TestFormBase(KH2TestBase):
         ItemName.MasterForm: ItemName.AutoMaster,
         ItemName.LimitForm:  ItemName.AutoLimit,
         ItemName.WisdomForm: ItemName.AutoWisdom,
-        ItemName.ValorForm:  ItemName.AutoValor, }
+        ItemName.ValorForm:  ItemName.AutoValor,
+    }
     AutoToDrive = {Auto: Drive for Drive, Auto in driveToAuto.items()}
     driveFormMap = {
         ItemName.ValorForm:  [LocationName.Valorlvl2,
@@ -55,19 +58,21 @@ class KH2TestFormBase(KH2TestBase):
                               LocationName.Finallvl5,
                               LocationName.Finallvl6,
                               LocationName.Finallvl7],
-
     }
+    #global_all_possible_forms = allForms + autoForms
 
 
 class TestDefaultForms(KH2TestFormBase):
     """
     Test default form access rules.
     """
-    options = {"AutoFormLogic":  False,
-               "FinalFormLogic": "light_and_darkness"}
+    options = {
+        "AutoFormLogic":  False,
+        "FinalFormLogic": "light_and_darkness"
+    }
 
     def testDefaultAutoFormLogic(self):
-        allPossibleForms = self.allForms + self.autoForms
+        allPossibleForms = global_all_possible_forms
         # this tests with a light and darkness in the inventory.
         self.collect_all_but(allPossibleForms)
         for form in self.allForms:
@@ -76,7 +81,7 @@ class TestDefaultForms(KH2TestFormBase):
             self.assertFalse((self.can_reach_location(self.driveFormMap[form][0])), form)
 
     def testDefaultFinalForm(self):
-        allPossibleForms = self.allForms + self.autoForms
+        allPossibleForms = global_all_possible_forms
         self.collect_all_but(allPossibleForms)
         self.collect_by_name(ItemName.FinalForm)
         self.assertTrue((self.can_reach_location(LocationName.Finallvl2)))
@@ -144,8 +149,10 @@ class TestDefaultForms(KH2TestFormBase):
 
 class TestJustAForm(KH2TestFormBase):
     # this test checks if you can unlock final form with just a form.
-    options = {"AutoFormLogic":  False,
-               "FinalFormLogic": "just_a_form"}
+    options = {
+        "AutoFormLogic":  False,
+        "FinalFormLogic": "just_a_form"
+    }
 
     def testNothing(self):
         for form_location in self.allLevel2:
@@ -185,8 +192,10 @@ class TestJustAForm(KH2TestFormBase):
 
 
 class TestAutoForms(KH2TestFormBase):
-    options = {"AutoFormLogic":  True,
-               "FinalFormLogic": "light_and_darkness"}
+    options = {
+        "AutoFormLogic":  True,
+        "FinalFormLogic": "light_and_darkness"
+    }
 
     def testNothing(self):
         for form_location in self.allLevel2:

@@ -1,16 +1,17 @@
-from BaseClasses import Tutorial, ItemClassification
 import logging
+from typing import List, Set
 
+from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
-from .Rules import *
+# from .Rules import set_rules
+from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
 from .Regions import create_regions, connect_regions
-# from .Rules import set_rules
-from worlds.AutoWorld import World, WebWorld
+from .Rules import *
 
 
 class KingdomHearts2Web(WebWorld):
@@ -42,34 +43,33 @@ class KH2World(World):
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
 
+    keyblade_ability_pool: List[KH2Item]
+    goofy_get_bonus_abilities: List[KH2Item]
+    goofy_weapon_abilities: List[KH2Item]
+    donald_get_bonus_abilities: List[KH2Item]
+    donald_weapon_abilities: List[KH2Item]
+    visitlocking_dict: Dict[str, int]
+    plando_locations: Dict[str, str]
+    lucky_emblem_amount: int
+    lucky_emblem_required: int
+    bounties_required: int
+    bounties_amount: int
+    filler_items: List[str]
+    item_quantity_dict: Dict[str, int]
+    local_items: Dict[int, int]
+
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.keyblade_ability_pool = None
-        self.goofy_get_bonus_abilities = None
-        self.goofy_weapon_abilities = None
-        self.donald_get_bonus_abilities = None
-        self.donald_weapon_abilities = None
-
-        self.valid_abilities = None
-        self.visitlocking_dict = None
-        self.plando_locations = None
-        self.lucky_emblem_amount = None
-        self.lucky_emblem_required = None
-        self.bounties_required = None
-        self.bounties_amount = None
+        # slot_data_duping:Set[str)
+        # random_super_boss_list:List[str)
+        # growth_list:List[str)
+        # total_location:int
+        self.slot_data_duping = set()
         self.random_super_boss_list = list()
-        self.filler_items = list()
-        self.item_quantity_dict = {}
-
-        self.sora_keyblade_ability_pool = list()
-        self.keyblade_slot_copy = list(Locations.Keyblade_Slots.keys())
-        self.keyblade_slot_copy.remove(LocationName.KingdomKeySlot)
-        self.total_locations = len(all_locations.keys())
         self.growth_list = list()
+        self.total_locations = len(all_locations.keys())
         for x in range(4):
             self.growth_list.extend(Movement_Table.keys())
-        self.slot_data_duping = set()
-        self.local_items = dict()
 
     def fill_slot_data(self) -> dict:
         # localItems filling done here instead of OpenKH for the unit test.
@@ -86,12 +86,12 @@ class KH2World(World):
                             and location.name not in all_weapon_slot}
 
         return {
-            "hitlist":              [],
-            "LocalItems":           self.local_items,
-            "Goal":                 self.multiworld.Goal[self.player].value,
-            "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
-            "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
-            "BountyRequired":       self.multiworld.BountyRequired[self.player].value,
+            "hitlist":                [],
+            "LocalItems":             self.local_items,
+            "Goal":                   self.multiworld.Goal[self.player].value,
+            "FinalXemnas":            self.multiworld.FinalXemnas[self.player].value,
+            "LuckyEmblemsRequired":   self.multiworld.LuckyEmblemsRequired[self.player].value,
+            "BountyRequired":         self.multiworld.BountyRequired[self.player].value,
             "PoptrackerVersionCheck": 4.2
         }
 
@@ -330,7 +330,7 @@ class KH2World(World):
         # take one of the 2 out
         # randomize the list with only
         state = self.multiworld.get_all_state(False)
-        fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities,single_player_placement=True, lock=True)
+        fill_restrictive(self.multiworld, state, goofy_weapon_location_list, self.goofy_weapon_abilities, single_player_placement=True, lock=True)
         if not self.multiworld.DonaldGoofyStatsanity:
             # plando goofy get bonuses
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]

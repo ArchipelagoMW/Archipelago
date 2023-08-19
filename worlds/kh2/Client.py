@@ -4,11 +4,10 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 import json
-import Utils
 from pymem import pymem
-from worlds.kh2 import all_locations, item_dictionary_table, exclusion_table, exclusion_item_table, CheckDupingItems
-
-from worlds.kh2.WorldLocations import *
+from .Locations import all_locations, exclusion_table
+from .Items import item_dictionary_table, exclusion_item_table, CheckDupingItems
+from .WorldLocations import *
 
 from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
