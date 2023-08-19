@@ -19,7 +19,7 @@ class OSRSTask:
     task_name: str
     task_category: str
     location_id: int
-    skills_required: typing.List[SkillRequirement] = []
     regions_required: typing.List[RegionAccessRequirement] = []
+    skills_required: typing.List[SkillRequirement] = []
     items_required: typing.List[ItemRequirement] = []
 
