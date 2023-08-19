@@ -88,6 +88,12 @@ class ExclamationBoxes(Choice):
     option_Off = 0
     option_1Ups_Only = 1
 
+class CompletionType(Choice):
+    """Set goal for game completion"""
+    display_name = "Completion Goal"
+    option_Last_Bowser_Stage = 0
+    option_All_Bowser_Stages = 1
+
 
 class ProgressiveKeys(DefaultOnToggle):
     """Keys will first grant you access to the Basement, then to the Secound Floor"""
@@ -110,4 +116,5 @@ sm64_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "BuddyChecks": BuddyChecks,
     "ExclamationBoxes": ExclamationBoxes,
+    "CompletionType" : CompletionType,
 }
