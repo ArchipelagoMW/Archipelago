@@ -334,7 +334,11 @@ regions: Dict[str, EntranceData] = {
         LocationName.Lemurian_Ship_Mist_Potion,
         LocationName.Lemurian_Ship_Aqua_Hydra,
     ]),
-    RegionName.EasternSea: EntranceData(RegionName.EasternSea, None,
+    RegionName.EasternSea: EntranceData(RegionName.EasternSea,
+    [
+        LocationName.EasternSea_RustyAxe,
+        LocationName.EasternSea_RustyMace
+    ],
     [
         EntranceName.EasternSeaToAlhafra,
         EntranceName.EasternSeaToKibombo,
@@ -577,7 +581,12 @@ regions: Dict[str, EntranceData] = {
         LocationName.Lemuria_Grindstone,
         LocationName.Rime
     ]),
-    RegionName.WesternSea: EntranceData(RegionName.WesternSea, None,
+    RegionName.WesternSea: EntranceData(RegionName.WesternSea,
+    [
+        LocationName.WesternSea_RustySword,
+        LocationName.WesternSea_RustySword_Two,
+        LocationName.WesternSea_RustyStaff
+    ],
     [
         EntranceName.WesternSeaToSouthWestAttekaIslet,
         EntranceName.WesternSeaToHesperiaSettlement,

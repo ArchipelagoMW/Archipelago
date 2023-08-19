@@ -493,6 +493,10 @@ def set_access_rules(multiworld, player):
     add_rule(multiworld.get_location(LocationName.Rime, player),
              lambda state: state.has(ItemName.Grindstone, player) and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Tremor_Bit, player))
 
+    #Western Sea
+    add_rule(multiworld.get_location(LocationName.WesternSea_RustySword_Two, player),
+             lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
+
     #SW Atteka Islet
     add_rule(multiworld.get_location(LocationName.Luff, player),
              lambda state: state.has(ItemName.Lifting_Gem, player))
