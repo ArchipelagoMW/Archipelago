@@ -109,13 +109,6 @@ class KDL3World(World):
                                             self.multiworld.slow_trap_weight[self.player],
                                             self.multiworld.ability_trap_weight[self.player]])[0]
 
-    def generate_early(self) -> None:
-        # just check for invalid option combos here
-        if self.multiworld.strict_bosses[self.player] and self.multiworld.boss_requirement_random[self.player]:
-            logger.warning(f"boss_requirement_random forced to false for player {self.player}" +
-                           f" because of strict_bosses set to true")
-            self.multiworld.boss_requirement_random[self.player] = False
-
     def pre_fill(self) -> None:
         # fill animals
         if self.multiworld.animal_randomization[self.player] != 0:
@@ -198,13 +191,20 @@ class KDL3World(World):
         self.required_heart_stars = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
+        quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
         if self.multiworld.boss_requirement_random[self.player]:
-            for i in range(4):
-                requirements.append(self.random.randint(
-                    min(3, required_heart_stars), required_heart_stars))
+            for i in range(1, 5):
+                if self.multiworld.strict_bosses[self.player]:
+                    max_stars = quotient * i
+                else:
+                    max_stars = required_heart_stars
+                requirements.insert(i, self.random.randint(
+                    min(1, max_stars), max_stars))
+            if self.multiworld.strict_bosses[self.player]:
+                requirements.sort()
+            else:
                 self.random.shuffle(requirements)
         else:
-            quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
             for i in range(1, 5):
                 requirements.insert(i - 1, quotient * i)
         self.boss_requirements = requirements

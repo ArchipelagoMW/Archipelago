@@ -165,9 +165,10 @@ class OpenWorldBossRequirement(Range):
 
 class BossRequirementRandom(Toggle):
     """
-    If enabled, boss purification will unlock in any order, requiring a random amount of Heart Stars.
+    If enabled, boss purification will require a random amount of Heart Stars. Depending on options, this may have
+    boss purification unlock in a random order.
     """
-    display_name = "Randomize Purification Order"
+    display_name = "Randomize Purification Requirement"
 
 
 class JumpingTarget(Range):
