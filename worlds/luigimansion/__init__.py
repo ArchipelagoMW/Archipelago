@@ -107,7 +107,7 @@ class LuigiMansionWorld(World):
                     item_id, self.player)
 
     def set_rules(self) -> None:
-        self.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice([item_name for item_name in filler_items])
