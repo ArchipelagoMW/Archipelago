@@ -16,7 +16,7 @@ import Utils
 from NetUtils import ClientStatus
 from worlds.gstla.Items import items_by_id
 from worlds.gstla.Rom import get_base_rom_path
-from worlds.gstla.Locations import all_locations, scoutable_locations
+from worlds.gstla.Locations import all_locations
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -36,7 +36,7 @@ locations_checked = []
 items_sent = []
 itemIndex = 1
 
-CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
+CHECKSUM_BLUE = "8efe8b2aaed97149e897570cd123ff6e"
 
 
 class GS2CommandProcessor(ClientCommandProcessor):
@@ -171,16 +171,6 @@ async def parse_payload(payload: dict, ctx: GS2Context, force: bool):
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
             "locations": locs
-        }])
-
-    # If trade hinting is enabled, send scout checks
-    if ctx.slot_data.get("trade_quest_hinting", 0) == 2:
-        scouted_locs = [loc.id for loc in scoutable_locations
-                        if check_location_scouted(loc, payload["locations"])]
-        await ctx.send_msgs([{
-            "cmd": "LocationScouts",
-            "locations": scouted_locs,
-            "create_as_hint": 2
         }])
 
 

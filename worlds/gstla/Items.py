@@ -1,7 +1,8 @@
 from typing import List, NamedTuple, Dict, Optional
 from enum import Enum, IntEnum
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification, MultiWorld
 from .Names.ItemName import ItemName
+from .Names.LocationName import LocationName
 
 class ElementType(IntEnum):
    Earth = 0
@@ -35,7 +36,7 @@ class ItemData(NamedTuple):
    progression: ItemClassification
    addr: int
    type: ItemType
-   gstla_id: int
+   gstla_id: Optional[int]
    event_type: int = 131
 
 class DjinItemData(ItemData):
@@ -48,6 +49,14 @@ class DjinItemData(ItemData):
         self.element = element
         self.stats_addr = stats_addr
         self.stats = stats
+        return self
+
+class EventItemData(ItemData):
+    location: str
+
+    def __new__(cls, location, name):
+        self = super(ItemData, cls).__new__(cls, (0, name, ItemClassification.progression, 0, ItemType.Event, 0, 0 ))
+        self.location = location
         return self
 
 class GSTLAItem(Item):
@@ -346,20 +355,20 @@ test_items: List[ItemData] = [
     ItemData(2, ItemName.Herb, ItemClassification.filler, 737876, ItemType.Consumable, 180, 2),
     ItemData(20, ItemName.Smoke_Bomb, ItemClassification.filler, 739900, ItemType.Consumable, 226, 3),
     ItemData(21, ItemName.Sleep_Bomb, ItemClassification.filler, 739944, ItemType.Consumable, 227, 3),
-    ItemData(8, ItemName.Psy_Crystal, ItemClassification.filler, 738140, ItemType.Consumable, 186, 131),
+    ItemData(8, ItemName.Psy_Crystal, ItemClassification.useful, 738140, ItemType.Consumable, 186, 131),
     ItemData(3, ItemName.Nut, ItemClassification.filler, 737920, ItemType.Consumable, 181, 128),
     ItemData(10, ItemName.Elixir, ItemClassification.filler, 738228, ItemType.Consumable, 188, 128),
-    ItemData(17, ItemName.Mint, ItemClassification.filler, 738536, ItemType.Consumable, 195, 128),
+    ItemData(17, ItemName.Mint, ItemClassification.useful, 738536, ItemType.Consumable, 195, 128),
     ItemData(9, ItemName.Antidote, ItemClassification.filler, 738184, ItemType.Consumable, 187, 128),
-    ItemData(15, ItemName.Apple, ItemClassification.filler, 738448, ItemType.Consumable, 193, 128),
+    ItemData(15, ItemName.Apple, ItemClassification.useful, 738448, ItemType.Consumable, 193, 128),
     ItemData(23, ItemName.Lucky_Medal, ItemClassification.filler, 740032, ItemType.Consumable, 229, 128),
-    ItemData(12, ItemName.Mist_Potion, ItemClassification.filler, 738316, ItemType.Consumable, 190, 128),
+    ItemData(12, ItemName.Mist_Potion, ItemClassification.useful, 738316, ItemType.Consumable, 190, 128),
     ItemData(56, ItemName.Hard_Nut, ItemClassification.useful, 738492, ItemType.Consumable, 194, 128),
     ItemData(57, ItemName.Apple, ItemClassification.useful, 738448, ItemType.Consumable, 193, 2),
     ItemData(58, ItemName.Power_Bread, ItemClassification.useful, 738360, ItemType.Consumable, 191, 128),
-    ItemData(58, ItemName.Potion, ItemClassification.filler, 742496, ItemType.Consumable, 183, 128),
+    ItemData(58, ItemName.Potion, ItemClassification.useful, 742496, ItemType.Consumable, 183, 128),
     ItemData(58, ItemName.Cookie, ItemClassification.useful, 738404, ItemType.Consumable, 192, 128),
-    ItemData(58, ItemName.Vial, ItemClassification.useful, 737964, ItemType.Consumable, 182, 128),
+    ItemData(58, ItemName.Vial, ItemClassification.filler, 737964, ItemType.Consumable, 182, 128),
     ItemData(58, ItemName.Tear_Stone, ItemClassification.useful, 748832, ItemType.Forgeable, 429, 128),
     ItemData(58, ItemName.Lucky_Pepper, ItemClassification.useful, 738580, ItemType.Consumable, 196, 2),
     ItemData(58, ItemName.Water_of_Life, ItemClassification.useful, 738272, ItemType.Consumable, 189, 128),
@@ -374,22 +383,74 @@ test_items: List[ItemData] = [
     ItemData(58, ItemName.Dragon_Skin, ItemClassification.useful, 748964, ItemType.Forgeable, 432, 128),
     ItemData(58, ItemName.Weasels_Claw, ItemClassification.filler, 740472, ItemType.Consumable, 239, 3),
     ItemData(58, ItemName.Corn, ItemClassification.filler, 740208, ItemType.Consumable, 233, 3),
-    ItemData(58, ItemName.Golem_Core, ItemClassification.filler, 749052, ItemType.Forgeable, 434, 128),
-    ItemData(58, ItemName.Salamander_Tail, ItemClassification.filler, 749008, ItemType.Forgeable, 433, 128),
+    ItemData(58, ItemName.Golem_Core, ItemClassification.useful, 749052, ItemType.Forgeable, 434, 128),
+    ItemData(58, ItemName.Salamander_Tail, ItemClassification.useful, 749008, ItemType.Forgeable, 433, 128),
     ItemData(58, ItemName.Sacred_Feather, ItemClassification.filler, 740340, ItemType.Consumable, 236, 128),
 ]
 
-events = [
-   ItemData(None, ItemName.Ship, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Victory, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Gabombo_Statue_Completed, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Serpent_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Poseidon_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Aqua_Hydra_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Moapa_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Jupiter_Beacon_Lit, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Flamedragons_defeated, ItemClassification.progression, 0, ItemType.Event, 0)
+events: List[EventItemData] = [
+   EventItemData(LocationName.Lemurian_Ship_Engine, ItemName.Ship),
+   EventItemData(LocationName.Mars_Lighthouse_Doom_Dragon, ItemName.Victory),
+   EventItemData(LocationName.Gabombo_Statue, ItemName.Gabombo_Statue_Completed),
+   EventItemData(LocationName.Gaia_Rock_Serpent, ItemName.Serpent_defeated),
+   EventItemData(LocationName.SeaOfTime_Poseidon, ItemName.Poseidon_defeated),
+   EventItemData(LocationName.Lemurian_Ship_Aqua_Hydra, ItemName.Aqua_Hydra_defeated),
+   EventItemData(LocationName.Shaman_Village_Moapa, ItemName.Moapa_defeated),
+   EventItemData(LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, ItemName.Jupiter_Beacon_Lit),
+   EventItemData(LocationName.Mars_Lighthouse_Flame_Dragons, ItemName.Flamedragons_defeated),
+   EventItemData(LocationName.Alhafra_Briggs, ItemName.Briggs_defeated),
+   EventItemData(LocationName.Alhafra_Prison_Briggs, ItemName.Briggs_escaped)
 ]
 
 all_items: List[ItemData] = test_items + djinn_items + psyenergy_as_item_list + psynergy_list + summon_list + events + unique_items + gear
 item_table: Dict[str, ItemData] = {item.itemName: item for item in all_items}
+items_by_id: Dict[int, ItemData] = {item.ap_id: item for item in all_items}
+pre_fillitems: List[Item] = []
+
+
+def create_item(name: str, player :int) -> "Item":
+    item = item_table[name]
+    return GSTLAItem(item.itemName, item.progression, item.ap_id, player)
+
+
+def create_events(multiworld: MultiWorld, player: int):
+    for event in events:
+        event_item = create_item(event.itemName, player)
+
+        if event.location == LocationName.Lemurian_Ship_Engine and multiworld.starter_ship[player] == 0:
+            multiworld.push_precollected(event_item)
+            continue
+
+        event_location = multiworld.get_location(event.location, player)
+        event_location.place_locked_item(event_item)
+
+def create_items(multiworld: MultiWorld, player: int):
+    if multiworld.starter_ship[player] == 2:
+        ap_location = multiworld.get_location(LocationName.Gabomba_Statue_Black_Crystal, player)
+        ap_item = create_item(ItemName.Black_Crystal, player)
+        ap_location.place_locked_item(ap_item)
+
+    sum_locations = len(multiworld.get_unfilled_locations(player))
+
+    for item in unique_items + psyenergy_as_item_list + psynergy_list:
+        if multiworld.starter_ship[player] != 2 and item.itemName == ItemName.Black_Crystal:
+            continue
+
+        ap_item = create_item(item.itemName, player)
+        multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    for item in djinn_items:
+        ap_item = create_item(item.itemName, player)
+        pre_fillitems.append(ap_item)
+        sum_locations -= 1
+
+    for item in gear + summon_list:
+        ap_item = create_item(item.itemName, player)
+        multiworld.itempool.append(ap_item)
+        sum_locations -= 1
+
+    for item in multiworld.random.choices(population=test_items, k=sum_locations):
+        ap_item = create_item(item.itemName, player)
+        multiworld.itempool.append(ap_item)
+

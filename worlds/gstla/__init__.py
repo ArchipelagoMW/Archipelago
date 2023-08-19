@@ -6,7 +6,7 @@ from typing import List
 from .Options import GSTLAOptions
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification,\
     LocationProgressType, Region, Entrance
-from .Items import GSTLAItem, item_table, all_items, ItemType
+from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, pre_fillitems, create_item
 from .Locations import GSTLALocation, all_locations, location_name_to_id, LocationType, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
@@ -25,7 +25,6 @@ class GSTLAWorld(World):
     game = "Golden Sun The Lost Age"
     option_definitions = GSTLAOptions
     data_version = 1
-    djinnlist = []
 
     item_name_to_id = {item.itemName: item.ap_id for item in all_items if item.type != ItemType.Event}
     location_name_to_id = {location: location_name_to_id[location].id for location in location_name_to_id}
@@ -41,43 +40,13 @@ class GSTLAWorld(World):
         if self.multiworld.starter_ship[self.player] == 0:
             self.multiworld.start_inventory[self.player].value[ "Ship" ] = 1
 
-
-
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.player)
         create_connections(self.multiworld, self.player)
 
-
     def create_items(self) -> None:
-        for location in all_locations:
-            if location.loc_type == LocationType.Hidden and self.multiworld.hidden_items[self.player] == 2:
-                continue
-
-            if location.event:
-                if location.name == LocationName.Lemurian_Ship_Engine and self.multiworld.starter_ship[self.player] == 0:
-                    self.multiworld.push_precollected(self.create_event(ItemName.Ship))
-                    continue
-
-                ap_item = self.create_event(location.vanilla_item)
-                ap_location = self.multiworld.get_location(location.name, self.player)
-                ap_location.place_locked_item(ap_item)
-                continue
-
-            ap_item = self.create_item(location.vanilla_item)
-
-            if location.vanilla_item == ItemName.Black_Crystal and location.name == LocationName.Gabomba_Statue_Black_Crystal and self.multiworld.starter_ship[self.player] == 2:
-                ap_location = self.multiworld.get_location(location.name, self.player)
-                ap_location.place_locked_item(ap_item)
-                continue
-
-            if location.loc_type == LocationType.Djinn:
-                self.djinnlist.append(ap_item)
-            else:
-                self.multiworld.itempool.append(ap_item)
-
-
-
-
+        create_events(self.multiworld, self.player)
+        create_items(self.multiworld, self.player)
 
     def set_rules(self) -> None:
         set_entrance_rules(self.multiworld, self.player)
@@ -90,8 +59,8 @@ class GSTLAWorld(World):
     def generate_basic(self):
         pass
 
-    def get_pre_fill_items(self) -> List["Item"]:
-        return self.djinnlist
+    def get_prefill_items(self) -> List["Item"]:
+        return pre_fillitems
 
     def pre_fill(self) -> None:
         from Fill import fill_restrictive, FillError
@@ -101,13 +70,14 @@ class GSTLAWorld(World):
         for loc in location_type_to_data[LocationType.Djinn]:
             locs.append(self.multiworld.get_location(loc.name, self.player))
 
+        djinnList = self.get_prefill_items()
         self.multiworld.random.shuffle(locs)
-        self.multiworld.random.shuffle(self.djinnlist)
+        self.multiworld.random.shuffle(djinnList)
 
-        for ap_item in self.djinnlist:
+        for ap_item in djinnList:
             all_state.remove(ap_item)
 
-        fill_restrictive(self.multiworld, all_state, locs, self.djinnlist, True, True)
+        fill_restrictive(self.multiworld, all_state, locs, djinnList, True, True)
 
     def generate_output(self, output_directory: str):
         rom = LocalRom(get_base_rom_path())
@@ -145,10 +115,5 @@ class GSTLAWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
-
     def create_item(self, name: str) -> "Item":
-        item = item_table[name]
-        return GSTLAItem(item.itemName, item.progression, item.ap_id, self.player)
-
-    def create_event(self, event: str):
-        return GSTLAItem(event, ItemClassification.progression, None, self.player)
+        return create_item(name, self.player)

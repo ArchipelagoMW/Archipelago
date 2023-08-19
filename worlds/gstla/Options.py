@@ -13,7 +13,7 @@ class HiddenItems(Choice):
     display_name = "Hidden items"
     option_revealrequired = 0
     option_included = 1
-    option_vanilla = 2
+    option_excluded = 2
     default = 0
 
 class SuperBosses(Choice):
