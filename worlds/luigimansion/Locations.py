@@ -130,7 +130,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                          rule=lambda state: state.has("Water Element Medal", player)),
             LocationData('Wardrobe Balcony', 'Wardrobe Balcony Plant 2', 8565,
                          rule=lambda state: state.has("Water Element Medal", player)),
-            LocationData('Wardrobe Balcony', 'Wardrobe Balcony Plant 3', 8561,
+            LocationData('Wardrobe Balcony', 'Wardrobe Balcony Plant 3', 8566,
                          rule=lambda state: state.has("Water Element Medal", player)),
             LocationData('Wardrobe Balcony', 'Wardrobe Balcony Plant 4', 8567,
                          rule=lambda state: state.has("Water Element Medal", player)),

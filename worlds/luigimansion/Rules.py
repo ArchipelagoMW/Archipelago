@@ -7,7 +7,3 @@ def set_ghost_type(multiworld: MultiWorld, ghost_list: dict):
     for region_name in ghost_list:
         ghost_type = multiworld.random.choice(["Fire", "Water", "Ice", "No Element"])
         ghost_list.update({region_name: ghost_type})
-
-
-def set_rules(multiworld: MultiWorld, player) -> None:
-    multiworld.completion_condition[player] = lambda state: state.has("Mario's Painting", player)
