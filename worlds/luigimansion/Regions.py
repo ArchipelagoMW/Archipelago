@@ -205,7 +205,6 @@ def create_location(player: int, location_data: LocationData, region: Region,  #
 def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
     region = Region(name, player, multiworld)
-    region.multiworld = multiworld
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
