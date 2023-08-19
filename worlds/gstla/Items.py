@@ -803,19 +803,12 @@ test_items: List[ItemData] = [
 events = [
    ItemData(None, ItemName.Ship, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Victory, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Chestbeaters_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.King_Scorpion_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Gabombo_Statue_Completed, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Valukar_defated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Sentinel_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Serpent_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Star_Magician_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Avimander_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Poseidon_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Aqua_Hydra_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Moapa_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Jupiter_Beacon_Lit, ItemClassification.progression, 0, ItemType.Event, 0),
-   ItemData(None, ItemName.Dullahan_defeated, ItemClassification.progression, 0, ItemType.Event, 0),
    ItemData(None, ItemName.Flamedragons_defeated, ItemClassification.progression, 0, ItemType.Event, 0)
 ]
 

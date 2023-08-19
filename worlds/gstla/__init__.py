@@ -35,10 +35,11 @@ class GSTLAWorld(World):
         ItemType.Djinn: {item.itemName for item in all_items if item.type == ItemType.Djinn}
     }
 
-
     def generate_early(self) -> None:
         self.multiworld.non_local_items[self.player].value -= self.item_name_groups[ItemType.Djinn]
-        self.multiworld.start_inventory[self.player].value[ "Ship" ] = 1
+
+        if self.multiworld.starter_ship[self.player] == 0:
+            self.multiworld.start_inventory[self.player].value[ "Ship" ] = 1
 
 
 
@@ -49,19 +50,32 @@ class GSTLAWorld(World):
 
     def create_items(self) -> None:
         for location in all_locations:
+            if location.loc_type == LocationType.Hidden and self.multiworld.hidden_items[self.player] == 2:
+                continue
+
             if location.event:
+                if location.name == LocationName.Lemurian_Ship_Engine and self.multiworld.starter_ship[self.player] == 0:
+                    self.multiworld.push_precollected(self.create_event(ItemName.Ship))
+                    continue
+
                 ap_item = self.create_event(location.vanilla_item)
                 ap_location = self.multiworld.get_location(location.name, self.player)
                 ap_location.place_locked_item(ap_item)
                 continue
 
             ap_item = self.create_item(location.vanilla_item)
+
+            if location.vanilla_item == ItemName.Black_Crystal and location.name == LocationName.Gabomba_Statue_Black_Crystal and self.multiworld.starter_ship[self.player] == 2:
+                ap_location = self.multiworld.get_location(location.name, self.player)
+                ap_location.place_locked_item(ap_item)
+                continue
+
             if location.loc_type == LocationType.Djinn:
                 self.djinnlist.append(ap_item)
             else:
                 self.multiworld.itempool.append(ap_item)
 
-        self.multiworld.push_precollected(self.create_event(ItemName.Ship))
+
 
 
 
@@ -103,24 +117,26 @@ class GSTLAWorld(World):
         rom.write_story_flags()
         rom.apply_qol_patches()
 
-        locations = location_name_to_id
-        for location in locations:
-            ap_location = world.get_location(location, player)
-            location_data = location_name_to_id[location]
-            ap_item = ap_location.item
+        for region in self.multiworld.get_regions(self.player):
+            for location in region.locations:
+                if location.event:
+                    continue
 
-            item_data = item_table[ap_item.name]
-            if item_data.type == ItemType.Djinn:
-                rom.write_djinn(location_data, item_data)
-            else:
-                rom.write_item(location_data, item_data)
+                location_data = location_name_to_id[location.name]
+                ap_item = location.item
+
+                item_data = item_table[ap_item.name]
+                if item_data.type == ItemType.Djinn:
+                    rom.write_djinn(location_data, item_data)
+                else:
+                    rom.write_item(location_data, item_data)
 
         rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
 
         try:
             rom.write_to_file(rompath)
             patch = GSTLADeltaPatch(os.path.splitext(rompath)[0]+GSTLADeltaPatch.patch_file_ending, player=player,
-                                    player_name=world.player_name[player], patched_path=rompath)
+                        player_name=world.player_name[player], patched_path=rompath)
 
             patch.write()
         except:
@@ -128,6 +144,7 @@ class GSTLAWorld(World):
         finally:
             if os.path.exists(rompath):
                 os.unlink(rompath)
+
 
     def create_item(self, name: str) -> "Item":
         item = item_table[name]

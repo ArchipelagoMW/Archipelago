@@ -509,7 +509,7 @@ test_locations = [
     LocationData(101, LocationName.Yampi_Desert_Guardian_Ring, [992092], 128, ItemName.Guardian_Ring),
     LocationData(102, LocationName.Yampi_Desert_Trainers_Whip, [992148], 128, ItemName.Trainers_Whip),
     LocationData(103, LocationName.Yampi_Desert_Lucky_Medal, [992140], 128, ItemName.Lucky_Medal),
-    LocationData(104, LocationName.Yampi_Desert_315_coins, [992128], 131, ItemName.Herb, LocationType.Hidden),
+    LocationData(104, LocationName.Yampi_Desert_315_coins, [992128], 131, ItemName.Herb),
     LocationData(105, LocationName.Yampi_Desert_Blow_Mace, [992180], 128, ItemName.Blow_Mace),
     LocationData(106, LocationName.Yampi_Desert_Hard_Nut, [992172], 128, ItemName.Hard_Nut),
 
@@ -802,22 +802,16 @@ test_locations = [
 
 events = [
     LocationData(None, LocationName.Mars_Lighthouse_Doom_Dragon, [0], 0, ItemName.Victory, LocationType.Event, True),
-    LocationData(None, LocationName.Kandorean_Temple_Chestbeaters, [0], 0, ItemName.Chestbeaters_defeated, LocationType.Event, True),
-    LocationData(None, LocationName.Yampi_Desert_King_Scorpion, [0], 0, ItemName.King_Scorpion_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Alhafra_Briggs, [0], 0, ItemName.Briggs_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Alhafra_Prison_Briggs, [0], 0, ItemName.Briggs_escaped, LocationType.Event, True),
     LocationData(None, LocationName.Gabombo_Statue, [0], 0, ItemName.Gabombo_Statue_Completed, LocationType.Event, True),
-    LocationData(None, LocationName.Yampi_Desert_Cave_Valukar, [0], 0, ItemName.Valukar_defated, LocationType.Event, True),
-    LocationData(None, LocationName.Islet_Cave_Sentinel, [0], 0, ItemName.Sentinel_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Gaia_Rock_Serpent, [0], 0, ItemName.Serpent_defeated, LocationType.Event, True),
-    LocationData(None, LocationName.Treasure_Isle_Star_Magican, [0], 0, ItemName.Star_Magician_defeated, LocationType.Event, True),
-    LocationData(None, LocationName.Champa_Avimander, [0], 0, ItemName.Avimander_defeated, LocationType.Event, True),
     LocationData(None, LocationName.SeaOfTime_Poseidon, [0], 0, ItemName.Poseidon_defeated, LocationType.Event,True),
     LocationData(None, LocationName.Lemurian_Ship_Aqua_Hydra, [0], 0, ItemName.Aqua_Hydra_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Shaman_Village_Moapa, [0], 0, ItemName.Moapa_defeated, LocationType.Event, True),
     LocationData(None, LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst, [0], 0, ItemName.Jupiter_Beacon_Lit, LocationType.Event, True),
-    LocationData(None, LocationName.Anemos_Inner_Sanctum_Dullahan, [0], 0, ItemName.Dullahan_defeated, LocationType.Event, True),
-    LocationData(None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True)
+    LocationData(None, LocationName.Mars_Lighthouse_Flame_Dragons, [0], 0, ItemName.Flamedragons_defeated, LocationType.Event, True),
+    LocationData(None, LocationName.Lemurian_Ship_Engine, [0], 0, ItemName.Ship, LocationType.Event, True)
 ]
 
 def create_loctype_to_datamapping():

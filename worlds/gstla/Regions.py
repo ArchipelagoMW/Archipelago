@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from BaseClasses import MultiWorld, Region, Entrance
 from worlds.gstla.Locations import GSTLALocation, location_name_to_id, LocationType
 from . import ItemType
@@ -24,15 +24,16 @@ class EntranceData:
         self.exits = _exits
 
 
-
-
 def create_region(multiworld: MultiWorld, player: int, regionData: EntranceData):
     region = Region(regionData.name, player, multiworld)
     for location in regionData.locations:
         location_data = location_name_to_id.get(location, None)
+
         if location_data is None:
             loc = GSTLALocation(player, location, None, region)
         else:
+            if multiworld.hidden_items[player] == 2 and location_data.loc_type == LocationType.Hidden:
+                continue
             loc = GSTLALocation(player, location, location_data.id, region)
 
         region.locations.append(loc)
@@ -44,14 +45,27 @@ def create_region(multiworld: MultiWorld, player: int, regionData: EntranceData)
 
 
 def create_regions(multiworld: MultiWorld, player: int):
-    for region in regions:
+    if multiworld.super_bosses[player] > 0:
+        regions[RegionName.YampiDesertCave].locations.append(LocationName.Yampi_Desert_Cave_Daedalus)
+        regions[RegionName.IsletCave].locations.append(LocationName.Islet_Cave_Catastrophe)
+        regions[RegionName.TreasureIsland_PostReunion].locations.append(LocationName.Treasure_Isle_Azul)
+
+    if multiworld.super_bosses[player] > 1:
+        regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Orihalcon)
+        regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Iris)
+        regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Charon)
+        regions[RegionName.AnemosSanctum].locations.append(LocationName.Anemos_Inner_Sanctum_Dark_Matter)
+
+    if multiworld.starter_ship[player] > 0:
+        regions[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine)
+
+    for region in regions.values():
         create_region(multiworld, player, region)
 
 
-regions: List[EntranceData] = \
-[
-    EntranceData(RegionName.Menu, None, [EntranceName.Menu_StartGame]),
-    EntranceData(RegionName.Idejima,
+regions: Dict[str, EntranceData] = {
+    RegionName.Menu: EntranceData(RegionName.Menu, None, [EntranceName.Menu_StartGame]),
+    RegionName.Idejima: EntranceData(RegionName.Idejima,
     [
         LocationName.Idejima_Mind_Read,
         LocationName.Idejima_Whirlwind,
@@ -61,7 +75,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.IdejimaToDaila
     ]),
-    EntranceData(RegionName.Daila,
+    RegionName.Daila: EntranceData(RegionName.Daila,
     [
         LocationName.Daila_Herb,
         LocationName.Daila_3_coins,
@@ -77,20 +91,19 @@ regions: List[EntranceData] = \
         EntranceName.DailaToKandoreanTemple,
         EntranceName.DailaToDehkanPlateau
     ]),
-    EntranceData(RegionName.KandoreamTemple,
+    RegionName.KandoreamTemple: EntranceData(RegionName.KandoreamTemple,
     [
         LocationName.Kandorean_Temple_Mimic,
         LocationName.Kandorean_Temple_Lash_Pebble,
         LocationName.Kandorean_Temple_Mysterious_Card,
-        LocationName.Kandorean_Temple_Chestbeaters,
         LocationName.Fog
     ]),
-    EntranceData(RegionName.ShrineOfTheSeaGod, [
+    RegionName.ShrineOfTheSeaGod: EntranceData(RegionName.ShrineOfTheSeaGod, [
         LocationName.Breath,
         LocationName.Shrine_of_the_Sea_God_Rusty_Staff,
         LocationName.Shrine_of_the_Sea_God_Right_Prong
     ]),
-    EntranceData(RegionName.DehkanPlateau,
+    RegionName.DehkanPlateau: EntranceData(RegionName.DehkanPlateau,
     [
         LocationName.Dehkan_Plateau_Elixir,
         LocationName.Dehkan_Plateau_Pound_Cube,
@@ -103,11 +116,11 @@ regions: List[EntranceData] = \
     [
         EntranceName.DehkanPlateauToMadra
     ]),
-    EntranceData(RegionName.IndraCavern,
+    RegionName.IndraCavern: EntranceData(RegionName.IndraCavern,
     [
         LocationName.Indra_Cavern_Zagan
     ]),
-    EntranceData(RegionName.Madra,
+    RegionName.Madra: EntranceData(RegionName.Madra,
     [
         LocationName.Madra_Elixir,
         LocationName.Madra_Antidote,
@@ -127,7 +140,7 @@ regions: List[EntranceData] = \
         EntranceName.MadraToEasternSea,
         EntranceName.MadraToLemurianShip
     ]),
-    EntranceData(RegionName.MadraCatacombs,
+    RegionName.MadraCatacombs: EntranceData(RegionName.MadraCatacombs,
     [
         LocationName.Madra_Catacombs_Ruin_Key,
         LocationName.Madra_Catacombs_Tremor_Bit,
@@ -136,25 +149,24 @@ regions: List[EntranceData] = \
         LocationName.Madra_Catacombs_Mist_Potion,
         LocationName.Madra_Catacombs_Moloch
     ]),
-    EntranceData(RegionName.OseniaCliffs,
+    RegionName.OseniaCliffs: EntranceData(RegionName.OseniaCliffs,
     [
         LocationName.Osenia_Cliffs_Pirates_Sword
     ],
     [
         EntranceName.OseniaCliffsToMikasalla
     ]),
-    EntranceData(RegionName.YampiDesertFront,
+    RegionName.YampiDesertFront: EntranceData(RegionName.YampiDesertFront,
     [
         LocationName.Yampi_Desert_Antidote,
         LocationName.Yampi_Desert_Guardian_Ring,
         LocationName.Yampi_Desert_Scoop_Gem,
-        LocationName.Yampi_Desert_King_Scorpion,
         LocationName.Blitz
     ],
     [
         EntranceName.YampiDesertFrontToYampiDesertBack
     ]),
-    EntranceData(RegionName.YampiDesertBack,
+    RegionName.YampiDesertBack: EntranceData(RegionName.YampiDesertBack,
     [
         LocationName.Yampi_Desert_Lucky_Medal,
         LocationName.Yampi_Desert_Trainers_Whip,
@@ -167,16 +179,14 @@ regions: List[EntranceData] = \
         EntranceName.YampiDesertBackToAlhafra,
         EntranceName.YampiDesertBackToYampiDesertCave
     ]),
-    EntranceData(RegionName.YampiDesertCave,
+    RegionName.YampiDesertCave: EntranceData(RegionName.YampiDesertCave,
     [
         LocationName.Yampi_Desert_Cave_Orihalcon,
         LocationName.Yampi_Desert_Cave_Dark_Matter,
         LocationName.Yampi_Desert_Cave_Mythril_Silver,
-        LocationName.Yampi_Desert_Cave_Valukar,
-        LocationName.Yampi_Desert_Cave_Daedalus,
         LocationName.Crystal
     ]),
-    EntranceData(RegionName.Alhafra,
+    RegionName.Alhafra: EntranceData(RegionName.Alhafra,
     [
         LocationName.Alhafra_Psy_Crystal,
         LocationName.Alhafra_Sleep_Bomb,
@@ -192,7 +202,7 @@ regions: List[EntranceData] = \
         EntranceName.AlhafraToYampiDesertBack,
         EntranceName.AlhafraToAlhafraCave,
     ]),
-    EntranceData(RegionName.AlhafraCave,
+    RegionName.AlhafraCave: EntranceData(RegionName.AlhafraCave,
     [
         LocationName.Alhafran_Cave_123_coins,
         LocationName.Alhafran_Cave_Ixion_Mail,
@@ -202,7 +212,7 @@ regions: List[EntranceData] = \
         LocationName.Alhafran_Cave_Potion,
         LocationName.Alhafran_Cave_Psy_Crystal
     ]),
-    EntranceData(RegionName.Mikasalla,
+    RegionName.Mikasalla: EntranceData(RegionName.Mikasalla,
     [
         LocationName.Mikasalla_Nut,
         LocationName.Mikasalla_Herb,
@@ -217,7 +227,7 @@ regions: List[EntranceData] = \
         EntranceName.MikasallaToGaroh,
         EntranceName.MikasallaToOseniaCavern
     ]),
-    EntranceData(RegionName.Garoh,
+    RegionName.Garoh: EntranceData(RegionName.Garoh,
     [
         LocationName.Garoh_Nut,
         LocationName.Garoh_Elixir,
@@ -230,7 +240,7 @@ regions: List[EntranceData] = \
         EntranceName.GarohToAirsRock,
         EntranceName.GarohToYampiDesertBack
     ]),
-    EntranceData(RegionName.AirsRock,
+    RegionName.AirsRock: EntranceData(RegionName.AirsRock,
     [
         LocationName.Airs_Rock_Mimic,
         LocationName.Airs_Rock_Cookie,
@@ -248,10 +258,10 @@ regions: List[EntranceData] = \
         LocationName.Airs_Rock_Flora,
         LocationName.Airs_Rock_Reveal
     ]),
-    EntranceData(RegionName.OseniaCavern, [
+    RegionName.OseniaCavern: EntranceData(RegionName.OseniaCavern, [
         LocationName.Osenia_Cavern_Megaera
     ]),
-    EntranceData(RegionName.GondowanCliffs,
+    RegionName.GondowanCliffs: EntranceData(RegionName.GondowanCliffs,
     [
         LocationName.Gondowan_Cliffs_Healing_Fungus,
         LocationName.Gondowan_Cliffs_Laughing_Fungus,
@@ -261,7 +271,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.GondowanCliffsToNaribwe
     ]),
-    EntranceData(RegionName.Naribwe,
+    RegionName.Naribwe: EntranceData(RegionName.Naribwe,
     [
         LocationName.Naribwe_Elixir,
         LocationName.Naribwe_18_coins,
@@ -273,7 +283,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.NaribweToKibomboMountains,
     ]),
-    EntranceData(RegionName.KibomboMountains,
+    RegionName.KibomboMountains: EntranceData(RegionName.KibomboMountains,
     [
         LocationName.Kibombo_Mountains_Disk_Axe,
         LocationName.Kibombo_Mountains_Power_Bread,
@@ -284,7 +294,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.KibomboMountainsToKibombo
     ]),
-    EntranceData(RegionName.Kibombo,
+    RegionName.Kibombo: EntranceData(RegionName.Kibombo,
     [
         LocationName.Kibombo_Lucky_Medal,
         LocationName.Kibombo_Lucky_Pepper,
@@ -297,7 +307,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.KibomboToGabombaStatue,
     ]),
-    EntranceData(RegionName.GabombaStatue,
+    RegionName.GabombaStatue: EntranceData(RegionName.GabombaStatue,
     [
         LocationName.Gabomba_Statue_Black_Crystal,
         LocationName.Gabomba_Statue_Mimic,
@@ -309,13 +319,13 @@ regions: List[EntranceData] = \
     [
         EntranceName.GabombaStatueToGabombaCatacombs
     ]),
-    EntranceData(RegionName.GabombaCatacombs,
+    RegionName.GabombaCatacombs: EntranceData(RegionName.GabombaCatacombs,
     [
         LocationName.Gabomba_Catacombs_Mint,
         LocationName.Gabomba_Catacombs_Tomegathericon,
         LocationName.Mud
     ]),
-    EntranceData(RegionName.Lemurian_Ship,
+    RegionName.Lemurian_Ship: EntranceData(RegionName.Lemurian_Ship,
     [
         LocationName.Lemurian_Ship_Elixir,
         LocationName.Lemurian_Ship_Potion,
@@ -323,9 +333,8 @@ regions: List[EntranceData] = \
         LocationName.Lemurian_Ship_Antidote,
         LocationName.Lemurian_Ship_Mist_Potion,
         LocationName.Lemurian_Ship_Aqua_Hydra,
-        #todo, when not start with ship, get ship from this location LocationName.Lemurian_Ship_Engine
     ]),
-    EntranceData(RegionName.EasternSea, None,
+    RegionName.EasternSea: EntranceData(RegionName.EasternSea, None,
     [
         EntranceName.EasternSeaToAlhafra,
         EntranceName.EasternSeaToKibombo,
@@ -347,43 +356,41 @@ regions: List[EntranceData] = \
         EntranceName.EasternSeaToAquaRock,
         EntranceName.EasternSeaToWesternSea
     ]),
-    EntranceData(RegionName.EastTundariaIslet,
+    RegionName.EastTundariaIslet: EntranceData(RegionName.EastTundariaIslet,
     [
         LocationName.E_Tundaria_Islet_Lucky_Medal,
         LocationName.E_Tundaria_Islet_Pretty_Stone
     ]),
-    EntranceData(RegionName.WestIndraIslet,
+    RegionName.WestIndraIslet: EntranceData(RegionName.WestIndraIslet,
     [
         LocationName.W_Indra_Islet_Lucky_Medal,
         LocationName.W_Indra_Islet_Lil_Turtle
     ]),
-    EntranceData(RegionName.SouthEastAngaraIslet,
+    RegionName.SouthEastAngaraIslet:EntranceData(RegionName.SouthEastAngaraIslet,
     [
         LocationName.SE_Angara_Islet_Lucky_Medal,
         LocationName.SE_Angara_Islet_Red_Cloth
     ]),
-    EntranceData(RegionName.NorthOseniaIslet,
+    RegionName.NorthOseniaIslet:EntranceData(RegionName.NorthOseniaIslet,
     [
         LocationName.N_Osenia_Islet_Lucky_Medal,
         LocationName.N_Osenia_Islet_Milk
     ]),
-    EntranceData(RegionName.SeaOfTimeIslet,
+    RegionName.SeaOfTimeIslet:EntranceData(RegionName.SeaOfTimeIslet,
     [
         LocationName.Sea_of_Time_Islet_Lucky_Medal
     ],
     [
         EntranceName.SeaOfTimeIsletToIsletCave
     ]),
-    EntranceData(RegionName.IsletCave,
+    RegionName.IsletCave:EntranceData(RegionName.IsletCave,
     [
         LocationName.Islet_Cave_Turtle_Boots,
         LocationName.Islet_Cave_Rusty_Staff,
-        LocationName.Islet_Cave_Sentinel,
-        LocationName.Islet_Cave_Catastrophe,
         LocationName.Meld,
         LocationName.Serac
     ]),
-    EntranceData(RegionName.ApojiiIslands,
+    RegionName.ApojiiIslands:EntranceData(RegionName.ApojiiIslands,
     [
         LocationName.Apojii_Islands_Herb,
         LocationName.Apojii_Islands_Mint,
@@ -392,7 +399,7 @@ regions: List[EntranceData] = \
         LocationName.Apojii_Islands_Bramble_Seed,
         LocationName.Haze
     ]),
-    EntranceData(RegionName.AquaRock,
+    RegionName.AquaRock:EntranceData(RegionName.AquaRock,
     [
         LocationName.Aqua_Rock_Nut,
         LocationName.Aqua_Rock_Vial,
@@ -409,7 +416,7 @@ regions: List[EntranceData] = \
         LocationName.Aqua_Rock_Parch,
         LocationName.Steam
     ]),
-    EntranceData(RegionName.Izumo,
+    RegionName.Izumo:EntranceData(RegionName.Izumo,
     [
         LocationName.Izumo_Elixir,
         LocationName.Izumo_Antidote,
@@ -422,7 +429,7 @@ regions: List[EntranceData] = \
         LocationName.Izumo_Ulysses,
         LocationName.Coal
     ]),
-    EntranceData(RegionName.GaiaRock,
+    RegionName.GaiaRock:EntranceData(RegionName.GaiaRock,
     [
         LocationName.Gaia_Rock_Nut,
         LocationName.Gaia_Rock_Apple,
@@ -433,7 +440,8 @@ regions: List[EntranceData] = \
         LocationName.Gaia_Rock_Serpent,
         LocationName.Gaia_Rock_Sand
     ]),
-    EntranceData(RegionName.TreasureIsland, [
+    RegionName.TreasureIsland: EntranceData(RegionName.TreasureIsland,
+    [
         LocationName.Treasure_Isle_161_coins,
         LocationName.Treasure_Isle_Lucky_Medal,
         LocationName.Treasure_Isle_Empty,
@@ -450,7 +458,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.TreasureIslandToTreasureIsland_Grindstone
     ]),
-    EntranceData(RegionName.TreasureIsland_Grindstone,
+    RegionName.TreasureIsland_Grindstone: EntranceData(RegionName.TreasureIsland_Grindstone,
     [
         LocationName.Treasure_Isle_911_coins,
         LocationName.Treasure_Isle_Psy_Crystal,
@@ -464,16 +472,14 @@ regions: List[EntranceData] = \
     [
         EntranceName.TreasureIsland_GrindstoneToTreasureIsland_PostReunion
     ]),
-    EntranceData(RegionName.TreasureIsland_PostReunion,
+    RegionName.TreasureIsland_PostReunion: EntranceData(RegionName.TreasureIsland_PostReunion,
     [
         LocationName.Bane,  # Random Venus djinn from Gs1
         LocationName.Gale,
         LocationName.Treasure_Isle_Iris_Robe,
         LocationName.Treasure_Isle_Fire_Brand,
-        LocationName.Treasure_Isle_Star_Magican,
-        LocationName.Treasure_Isle_Azul,
     ]),
-    EntranceData(RegionName.TundariaTower,
+    RegionName.TundariaTower: EntranceData(RegionName.TundariaTower,
     [
         LocationName.Tundaria_Tower_Center_Prong,
         LocationName.Wheeze,
@@ -481,7 +487,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.TundariaTowerToTundariaTower_Parched
     ]),
-    EntranceData(RegionName.TundariaTower_Parched,
+    RegionName.TundariaTower_Parched: EntranceData(RegionName.TundariaTower_Parched,
     [
         LocationName.Tundaria_Tower_Mint,
         LocationName.Tundaria_Tower_Vial,
@@ -494,7 +500,7 @@ regions: List[EntranceData] = \
         LocationName.Tundaria_Tower_Burst_Brooch,
         LocationName.Reflux
     ]),
-    EntranceData(RegionName.AnkohlRuins,
+    RegionName.AnkohlRuins: EntranceData(RegionName.AnkohlRuins,
     [
         LocationName.Ankohl_Ruins_Empty,
         LocationName.Ankohl_Ruins_Empty_Two,
@@ -508,7 +514,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.AnkohlRuinsToAnkohlRuins_Sand
     ]),
-    EntranceData(RegionName.AnkohlRuins_Sand,
+    RegionName.AnkohlRuins_Sand: EntranceData(RegionName.AnkohlRuins_Sand,
     [
         LocationName.Ankohl_Ruins_Potion,
         LocationName.Ankohl_Ruins_Nut,
@@ -520,7 +526,7 @@ regions: List[EntranceData] = \
         LocationName.Ankohl_Ruins_Vial,
         LocationName.Ankohl_Ruins_Left_Prong
     ]),
-    EntranceData(RegionName.Champa,
+    RegionName.Champa: EntranceData(RegionName.Champa,
     [
         LocationName.Champa_Elixir,
         LocationName.Champa_Trident,
@@ -528,10 +534,9 @@ regions: List[EntranceData] = \
         LocationName.Champa_Sleep_Bomb,
         LocationName.Champa_Smoke_Bomb,
         LocationName.Champa_Lucky_Medal,
-        LocationName.Champa_Viking_Helm,
-        LocationName.Champa_Avimander
+        LocationName.Champa_Viking_Helm
     ]),
-    EntranceData(RegionName.Yallam,
+    RegionName.Yallam: EntranceData(RegionName.Yallam,
     [
         LocationName.Yallam_Nut,
         LocationName.Yallam_Elixir,
@@ -543,7 +548,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.YallamToTaopoSwamp
     ]),
-    EntranceData(RegionName.TaopoSwamp,
+    RegionName.TaopoSwamp: EntranceData(RegionName.TaopoSwamp,
     [
         LocationName.Taopo_Swamp_Vial,
         LocationName.Taopo_Swamp_Cookie,
@@ -553,14 +558,14 @@ regions: List[EntranceData] = \
         LocationName.Taopo_Swamp_Tear_Stone_Two,
         LocationName.Flower
     ]),
-    EntranceData(RegionName.SeaOfTime,
+    RegionName.SeaOfTime: EntranceData(RegionName.SeaOfTime,
     [
         LocationName.SeaOfTime_Poseidon
     ],
     [
         EntranceName.SeaOfTimeToLemuria
     ]),
-    EntranceData(RegionName.Lemuria,
+    RegionName.Lemuria: EntranceData(RegionName.Lemuria,
     [
         LocationName.Lemuria_Bone,
         LocationName.Lemuria_Hard_Nut,
@@ -572,7 +577,7 @@ regions: List[EntranceData] = \
         LocationName.Lemuria_Grindstone,
         LocationName.Rime
     ]),
-    EntranceData(RegionName.WesternSea, None,
+    RegionName.WesternSea: EntranceData(RegionName.WesternSea, None,
     [
         EntranceName.WesternSeaToSouthWestAttekaIslet,
         EntranceName.WesternSeaToHesperiaSettlement,
@@ -586,17 +591,17 @@ regions: List[EntranceData] = \
         EntranceName.WesternSeaToKaltIsland,
         EntranceName.WesternSeaToProx
     ]),
-    EntranceData(RegionName.SouthWestAttekaIslet,
+    RegionName.SouthWestAttekaIslet: EntranceData(RegionName.SouthWestAttekaIslet,
     [
         LocationName.Luff, # Random djinn from gs1 spot
         LocationName.SW_Atteka_Islet_Dragon_Skin
     ]),
-    EntranceData(RegionName.HesperiaSettlement,
+    RegionName.HesperiaSettlement: EntranceData(RegionName.HesperiaSettlement,
     [
         LocationName.Hesperia_Settlement_166_coins,
         LocationName.Tinder
     ]),
-    EntranceData(RegionName.ShamanVillageCave,
+    RegionName.ShamanVillageCave: EntranceData(RegionName.ShamanVillageCave,
     [
         LocationName.Petra,
         LocationName.Eddy
@@ -604,7 +609,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.ShamanVillageCaveToShamanVillage
     ]),
-    EntranceData(RegionName.ShamanVillage,
+    RegionName.ShamanVillage: EntranceData(RegionName.ShamanVillage,
     [
         LocationName.Shaman_Village_Elixir,
         LocationName.Shaman_Village_Spirit_Gloves,
@@ -617,7 +622,7 @@ regions: List[EntranceData] = \
         LocationName.Aroma,
         LocationName.Gasp
     ]),
-    EntranceData(RegionName.AttekaInlet,
+    RegionName.AttekaInlet: EntranceData(RegionName.AttekaInlet,
     [
         LocationName.Atteka_Inlet_Vial,
         LocationName.Geode
@@ -625,7 +630,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.AttekaInletToContigo
     ]),
-    EntranceData(RegionName.Contigo,
+    RegionName.Contigo: EntranceData(RegionName.Contigo,
     [
         LocationName.Contigo_Corn,
         LocationName.Contigo_Bramble_Seed,
@@ -640,7 +645,7 @@ regions: List[EntranceData] = \
         EntranceName.ContigoToAnemosInnerSanctum,
         EntranceName.ContigoToReunion
     ]),
-    EntranceData(RegionName.JupiterLighthouse,
+    RegionName.JupiterLighthouse: EntranceData(RegionName.JupiterLighthouse,
     [
         LocationName.Jupiter_Lighthouse_Mint,
         LocationName.Jupiter_Lighthouse_Blue_Key,
@@ -657,7 +662,7 @@ regions: List[EntranceData] = \
         LocationName.Whorl,
         LocationName.Jupiter_Lighthouse_Aeri_Agatio_and_Karst
     ]),
-    EntranceData(RegionName.Reunion,
+    RegionName.Reunion: EntranceData(RegionName.Reunion,
     [
         LocationName.Contigo_Carry_Stone,
         LocationName.Contigo_Lifting_Gem,
@@ -688,24 +693,18 @@ regions: List[EntranceData] = \
         LocationName.Kite,
         LocationName.Squall,
     ]),
-    EntranceData(RegionName.AttekaCavern,
+    RegionName.AttekaCavern: EntranceData(RegionName.AttekaCavern,
     [
         LocationName.Atteka_Cavern_Coatlicue
     ]),
-    EntranceData(RegionName.AnemosSanctum,
-    [
-        LocationName.Anemos_Inner_Sanctum_Orihalcon,
-        LocationName.Anemos_Inner_Sanctum_Dark_Matter,
-        LocationName.Anemos_Inner_Sanctum_Dullahan,
-        LocationName.Anemos_Inner_Sanctum_Charon,
-        LocationName.Anemos_Inner_Sanctum_Iris
-    ]),
-    EntranceData(RegionName.GondowanSettlement,
+    RegionName.AnemosSanctum: EntranceData(RegionName.AnemosSanctum,
+    []),
+    RegionName.GondowanSettlement: EntranceData(RegionName.GondowanSettlement,
     [
         LocationName.Gondowan_Settlement_Lucky_Medal,
         LocationName.Gondowan_Settlement_Star_Dust
     ]),
-    EntranceData(RegionName.MagmaRock,
+    RegionName.MagmaRock: EntranceData(RegionName.MagmaRock,
     [
         LocationName.Magma_Rock_Mimic,
         LocationName.Magma_Rock_Salamander_Tail,
@@ -715,7 +714,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.MagmaRockToMagmaRockInterior
     ]),
-    EntranceData(RegionName.MagmaRockInterior,
+    RegionName.MagmaRockInterior: EntranceData(RegionName.MagmaRockInterior,
     [
         LocationName.Torch,  # Random djinn from gs1 spot
         LocationName.Fury,
@@ -726,7 +725,7 @@ regions: List[EntranceData] = \
         LocationName.Magma_Rock_Blaze,
         LocationName.Magma_Rock_Magma_Ball
     ]),
-    EntranceData(RegionName.Loho,
+    RegionName.Loho: EntranceData(RegionName.Loho,
     [
         LocationName.Loho_Crystal_Powder,
         LocationName.Loho_Mythril_Silver,
@@ -734,15 +733,15 @@ regions: List[EntranceData] = \
         LocationName.Loho_Golem_Core_Two,
         LocationName.Lull
     ]),
-    EntranceData(RegionName.AngaraCavern,
+    RegionName.AngaraCavern: EntranceData(RegionName.AngaraCavern,
     [
         LocationName.Angara_Cavern_Haures
     ]),
-    EntranceData(RegionName.KaltIsland,
+    RegionName.KaltIsland: EntranceData(RegionName.KaltIsland,
     [
         LocationName.Gel
     ]),
-    EntranceData(RegionName.Prox,
+    RegionName.Prox: EntranceData(RegionName.Prox,
     [
         LocationName.Dew, #Random djinn from Gs1 spot
         LocationName.Prox_Cookie,
@@ -754,7 +753,7 @@ regions: List[EntranceData] = \
     [
         EntranceName.ProxToMarsLighthouse
     ]),
-    EntranceData(RegionName.MarsLighthouse,
+    RegionName.MarsLighthouse: EntranceData(RegionName.MarsLighthouse,
     [
         LocationName.Mars_Lighthouse_Mars_Star,
         LocationName.Mars_Lighthouse_Sol_Blade,
@@ -769,11 +768,11 @@ regions: List[EntranceData] = \
     [
         EntranceName.MarsLighthouseToMarsLighthouse_Activated
     ]),
-    EntranceData(RegionName.MarsLighthouse_Activated,
+    RegionName.MarsLighthouse_Activated: EntranceData(RegionName.MarsLighthouse_Activated,
     [
         LocationName.Fugue,
         LocationName.Mars_Lighthouse_Alastors_Hood,
         LocationName.Mars_Lighthouse_Psy_Crystal,
         LocationName.Mars_Lighthouse_Doom_Dragon
     ])
-]
+}
