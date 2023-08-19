@@ -9,7 +9,7 @@ class Goal(Choice):
     """
     Zero: collect the Heart Stars, and defeat Zero in the Hyper Zone.
     Boss Butch: collect the Heart Stars, and then complete the boss rematches in the Boss Butch mode.
-    MG5: collect the Heart Stars, and then complete a perfect run through the minigame gauntlet within the MG5
+    MG5: collect the Heart Stars, and then complete a perfect run through the minigame gauntlet within the Super MG5
     Jumping: collect the Heart Stars, and then reach a designated score within the Jumping sub-game
     """
     display_name = "Goal"
@@ -145,7 +145,7 @@ class StrictBosses(DefaultOnToggle):
     display_name = "Strict Bosses"
 
 
-class OpenWorld(Toggle):
+class OpenWorld(DefaultOnToggle):
     """
     If enabled, all 6 stages will be unlocked upon entering a world for the first time. A certain amount of stages
     will need to be completed in order to unlock the bosses
@@ -202,7 +202,7 @@ class FillerPercentage(Range):
 
 class TrapPercentage(Range):
     """
-    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    Percentage of filler items to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
     """
     display_name = "Trap Percentage"
     range_start = 0

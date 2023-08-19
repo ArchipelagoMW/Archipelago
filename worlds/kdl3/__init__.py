@@ -237,7 +237,7 @@ class KDL3World(World):
                 .place_locked_item(
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
-        # this can technically be done at any point
+        # this can technically be done at any point before generate_output
         self.boss_butch_bosses.extend([None for _ in range(6)])
         if self.multiworld.allow_bb[self.player]:
             for i in range(6):
