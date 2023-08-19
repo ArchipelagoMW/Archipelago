@@ -27,11 +27,13 @@ class RandomMonsters(Choice):
     vanilla: No randomization
     shuffle: Monsters are shuffled within the level
     random_balanced: Monsters are completely randomized, but balanced based on existing ratio in the level. (Small monsters vs medium vs big)
+    random_chaotic: Monsters are completely randomized, but balanced based on existing ratio in the entire game.    
     """
     display_name = "Random Monsters"
     option_vanilla = 0
     option_shuffle = 1
     option_random_balanced = 2
+    option_random_chaotic = 3
     default = 1
 
 
