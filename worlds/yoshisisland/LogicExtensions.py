@@ -514,7 +514,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball', 'Mole Tank Morph'}, self.player)
         else:
-            return state.has_all({'Super Star', 'Large Spring Ball', 'Mole Tank Morph'}, self.player)
+            return state.has_all({'Large Spring Ball', 'Mole Tank Morph'}, self.player)
 
     def _22Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -522,13 +522,13 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Super Star', 'Large Spring Ball', 'Beanstalk', 'Spring Ball'}, self.player)
         else:
-            return state.has_all({'Super Star', 'Large Spring Ball'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
 
     def _22Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
             return (self.has_midring(state) and (state.has('Tulip', self.player))) and state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball', 'Egg Launcher'}, self.player)
         elif self.game_logic == "Normal":
-            return (self.has_midring(state) or (state.has('Tulip', self.player))) and state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball'}, self.player)
+            return (self.has_midring(state) or (state.has('Tulip', self.player))) and state.has_all({'Beanstalk', 'Large Spring Ball'}, self.player)
         else:
             return True
 
@@ -538,7 +538,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball'}, self.player)
         else:
-            return state.has_all({'Super Star', 'Large Spring Ball'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player)
 #################################################################################
     def _23Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

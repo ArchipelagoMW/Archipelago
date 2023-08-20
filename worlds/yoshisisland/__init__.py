@@ -74,7 +74,7 @@ class YIWorld(World):
 
     def _get_slot_data(self):
         return {
-            #"death_link": self.multiworld.death_link[self.player].value,
+            "active_levels": self.global_level_list,
         }
 
     def fill_slot_data(self) -> dict:
@@ -183,26 +183,7 @@ class YIWorld(World):
             return self.multiworld.random.choice(filler_items)
 
     def set_rules(self):
-
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
-        #else:
-            #self.multiworld.completion_condition[self.player] = lambda state: state.has('Piece of Luigi', self.player, self.NumLuigiPieces)
-
-    def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
-        excluded_items.add(item)
-
-        item = self.create_item(item)
-
-        self.multiworld.get_location(location, self.player).place_locked_item(item)
-
-    def generate_early(self):
-        var_boss(self, self.multiworld, self.player)
-
-
-    def generate_basic(self):
-        #self.topology_present = self.multiworld.level_shuffle[self.player]
-        self.luigi_count = 0
-
         self.multiworld.get_location("Burt The Bashful Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Bigger Boo Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
@@ -214,6 +195,7 @@ class YIWorld(World):
         self.multiworld.get_location("Sluggy The Unshaven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Raphael The Raven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Tap-Tap The Red Nose Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
+
         if self.multiworld.goal[self.player].value == 1:
             self.multiworld.get_location("Reconstituted Luigi", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))
         else:
@@ -223,6 +205,23 @@ class YIWorld(World):
         self.multiworld.get_location("The Cave Of the Mystery Maze: Seed Spitting Contest", self.player).place_locked_item(self.create_item("Bandit Watermelons"))
         self.multiworld.get_location("Lakitu's Wall: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
         self.multiworld.get_location("Ride Like The Wind: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
+
+    def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
+        excluded_items.add(item)
+
+        item = self.create_item(item)
+
+        self.multiworld.get_location(location, self.player).place_locked_item(item)
+
+    def generate_early(self):
+        setup_gamevars(self, self.multiworld, self.player)
+        
+
+
+    def create_items(self):
+        #self.topology_present = self.multiworld.level_shuffle[self.player]
+        self.luigi_count = 0
+        
 
         if self.multiworld.minigame_checks[self.player].value >= 2:
             self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
@@ -234,7 +233,7 @@ class YIWorld(World):
 
         pool = get_item_pool(self, self.multiworld, self.player, excluded_items)
 
-        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
+        generate_filler(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
         self.multiworld.itempool += pool
 
@@ -324,19 +323,18 @@ def get_excluded_items(self: YIWorld, multiworld: MultiWorld, player: int) -> Se
 
     return excluded_items
 
-def fill_item_pool_with_dummy_items(self: YIWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
+def generate_filler(self: YIWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
-
     if self.playergoal == 1:
         for i in range(multiworld.luigi_pieces_in_pool[player].value):
             item = create_item_with_correct_settings(self, multiworld, player, "Piece of Luigi")
             pool.append(item)
 
-    for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
+    for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 16):
         item = create_item_with_correct_settings(self, self.multiworld, player, self.get_filler_item_name())
         pool.append(item)
 
-def var_boss(self: YIWorld, multiworld: MultiWorld, player: int):
+def setup_gamevars(self: YIWorld, multiworld: MultiWorld, player: int):
     self.playergoal = multiworld.goal[player].value
     if multiworld.luigi_pieces_in_pool[player].value < multiworld.luigi_pieces_required[player].value:
         multiworld.luigi_pieces_in_pool[self.player].value = multiworld.random.randint(multiworld.luigi_pieces_required[self.player].value, 100)
@@ -816,7 +814,7 @@ def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, pla
     if (name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0)):
         item.classification = ItemClassification.useful
 
-    if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 2):
+    if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1):
         item.classification = ItemClassification.useful
 
     if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
