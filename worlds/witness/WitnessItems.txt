@@ -142,7 +142,7 @@ Doors:
 1699 - Keep Pressure Plates 4 Exit (Door) - 0x01D40
 1702 - Keep Shadows Shortcut (Door) - 0x09E3D
 1705 - Keep Tower Shortcut (Door) - 0x04F8F
-1708 - Monastery Shortcut (Door) - 0x0364E
+1708 - Monastery Laser Shortcut (Door) - 0x0364E
 1711 - Monastery Entry Inner (Door) - 0x0C128
 1714 - Monastery Entry Outer (Door) - 0x0C153
 1717 - Monastery Garden Entry (Door) - 0x03750
@@ -162,7 +162,7 @@ Doors:
 1756 - Theater Exit Right (Door) - 0x3CCDF
 1759 - Jungle Bamboo Laser Shortcut (Door) - 0x3873B
 1760 - Jungle Popup Wall (Door) - 0x1475B
-1762 - River Monastery Shortcut (Door) - 0x0CF2A
+1762 - River Monastery Garden Shortcut (Door) - 0x0CF2A
 1765 - Bunker Entry (Door) - 0x0C2A4
 1768 - Bunker Tinted Glass Door - 0x17C79
 1771 - Bunker UV Room Entry (Door) - 0x0C2A3

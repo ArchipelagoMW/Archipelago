@@ -39,7 +39,7 @@ Keep Pressure Plates 3 Exit (Door)
 Keep Pressure Plates 4 Exit (Door)
 Keep Shadows Shortcut (Door)
 Keep Tower Shortcut (Door)
-Monastery Shortcut (Door)
+Monastery Laser Shortcut (Door)
 Monastery Entry Inner (Door)
 Monastery Entry Outer (Door)
 Monastery Garden Entry (Door)
@@ -59,7 +59,7 @@ Theater Exit Left (Door)
 Theater Exit Right (Door)
 Jungle Bamboo Laser Shortcut (Door)
 Jungle Popup Wall (Door)
-River Monastery Shortcut (Door)
+River Monastery Garden Shortcut (Door)
 Bunker Entry (Door)
 Bunker Tinted Glass Door
 Bunker UV Room Entry (Door)
@@ -133,7 +133,7 @@ Keep Pressure Plates 3
 Keep Pressure Plates 4
 Keep Shadows Shortcut Panel
 Keep Tower Shortcut Panel
-Monastery Shortcut Panel
+Monastery Laser Shortcut Panel
 Monastery Entry Left
 Monastery Entry Right
 Monastery Outside 3
@@ -153,7 +153,7 @@ Theater Exit Left Panel
 Theater Exit Right Panel
 Jungle Laser Shortcut Panel
 Jungle Popup Wall Control
-River Monastery Shortcut Panel
+River Monastery Garden Shortcut Panel
 Bunker Entry Panel
 Bunker Tinted Glass Door Panel
 Bunker Glass Room 3

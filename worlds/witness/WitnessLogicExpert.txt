@@ -591,8 +591,8 @@ Door - 0x3873B (Laser Shortcut) - 0x337FA
 159351 - 0x035CF (Bamboo CW EP) - True - True
 
 Outside Jungle River (River) - Main Island - True - Monastery Garden - 0x0CF2A:
-158267 - 0x17CAA (Monastery Shortcut Panel) - True - True
-Door - 0x0CF2A (Monastery Shortcut) - 0x17CAA
+158267 - 0x17CAA (Monastery Garden Shortcut Panel) - True - True
+Door - 0x0CF2A (Monastery Garden Shortcut) - 0x17CAA
 158663 - 0x15ADD (Vault) - True - Black/White Squares & Dots
 158664 - 0x03702 (Vault Box) - 0x15ADD - True
 159110 - 0x03AC5 (Green Leaf Moss EP) - True - True
@@ -876,7 +876,7 @@ Mountainside (Mountainside) - Main Island - True - Mountaintop - True:
 Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
 158406 - 0x09F7F (Box Short) - 7 Lasers - True
-158407 - 0x17C34 (Trap Door Triple Exit) - 0x09F7F - Stars & Black/White Squares & Stars + Same Colored Symbol & Triangles
+158407 - 0x17C34 (Mountain Entry Panel) - 0x09F7F - Stars & Black/White Squares & Stars + Same Colored Symbol & Triangles
 158800 - 0xFFF00 (Box Long) - 7 Lasers & 11 Lasers & 0x17C34 - True
 159300 - 0x001A3 (River Shape EP) - True - True
 159320 - 0x3370E (Arch Black EP) - True - True

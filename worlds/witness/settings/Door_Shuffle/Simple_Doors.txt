@@ -67,7 +67,7 @@ Keep Pressure Plates 3
 Keep Pressure Plates 4
 Keep Shadows Shortcut Panel
 Keep Tower Shortcut Panel
-Monastery Shortcut Panel
+Monastery Laser Shortcut Panel
 Monastery Entry Left
 Monastery Entry Right
 Monastery Outside 3
@@ -87,7 +87,7 @@ Theater Exit Left Panel
 Theater Exit Right Panel
 Jungle Laser Shortcut Panel
 Jungle Popup Wall Control
-River Monastery Shortcut Panel
+River Monastery Garden Shortcut Panel
 Bunker Entry Panel
 Bunker Tinted Glass Door Panel
 Bunker Glass Room 3

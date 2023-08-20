@@ -132,7 +132,7 @@ class StaticWitnessLocations:
         "Jungle Laser Panel",
 
         "River Vault Box",
-        "River Monastery Shortcut Panel",
+        "River Monastery Garden Shortcut Panel",
 
         "Bunker Entry Panel",
         "Bunker Intro Left 5",
@@ -383,7 +383,7 @@ class StaticWitnessLocations:
         "Tunnels Theater Flowers EP",
         "Tutorial Gate EP",
 
-        "Mountaintop Trap Door Triple Exit",
+        "Mountaintop Mountain Entry Panel",
 
         "Mountain Floor 1 Light Bridge Controller",
 
