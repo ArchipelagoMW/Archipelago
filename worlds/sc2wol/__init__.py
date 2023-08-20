@@ -257,7 +257,7 @@ def filter_locations(multiworld: MultiWorld, player, locked_locations: List[str]
     bonus_locations = get_option_value(multiworld, player, "bonus_locations")
     challenge_locations = get_option_value(multiworld, player, "challenge_locations")
     optional_boss_locations = get_option_value(multiworld, player, "optional_boss_locations")
-    location_data = Locations.get_locations(multiworld, player)
+    location_data = get_locations(multiworld, player)
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
