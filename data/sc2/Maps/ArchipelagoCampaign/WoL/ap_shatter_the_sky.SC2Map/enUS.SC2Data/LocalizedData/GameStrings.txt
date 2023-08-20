@@ -1,0 +1,90 @@
+﻿Conversation/TValerian02BBriefing/Line00001=The zerg fliers are using this old orbital platform as their base of operations. 
+DocInfo/Author=Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TValerian02B
+DocInfo/Name=Shatter the Sky
+MapInfo/Player00/Name=Neutral
+MapInfo/Player01/Name=Raynor's Raiders
+MapInfo/Player02/Name=Platform Buildings
+MapInfo/Player03/Name=Zerg Swarm
+MapInfo/Player04/Name=Zerg Swarm
+MapInfo/Player05/Name=Zerg Swarm
+MapInfo/Player06/Name=Zerg Swarm
+MapInfo/Player07/Name=Zerg Swarm
+MapInfo/Player08/Name=Infested Platform
+MapInfo/Player09/Name=Orbital Command
+MapInfo/Player10/Name=Leviathan
+MapInfo/Player11/Name=Platform
+Param/Expression/3E1FEF24=Remaining time to kill = ~A~
+Param/Value/054ABB9E=P8 Muta Units = 
+Param/Value/06F1D37B=Destroying the coolant towers will make the platform overheat and explode.
+Param/Value/07DB1EB1=Infested Tower
+Param/Value/09462CD7=Destroy the Coolant Towers
+Param/Value/0BCA1AE6=The zerg leviathan has come in from orbit to guard the last of the coolant towers.  Kill the leviathan.
+Param/Value/0D402B82=Coolant Tower
+Param/Value/0E961019= <n/>
+Param/Value/110C6836=P3 BR Units = 
+Param/Value/11D44882=P4 BL Units = 
+Param/Value/12370C31=Destroy the Coolant Towers (
+Param/Value/1504CE50=One platform destroyed.
+Param/Value/1F4AD758=Destroy Hatcheries at Resouce Nodes (
+Param/Value/1FA08795=Destroy the Coolant Towers (
+Param/Value/2D444915=Coolant Tower
+Param/Value/2F9B939E=Platform Explosion
+Param/Value/35D8F648=Heavy ground defenses detected
+Param/Value/36BCAB71=Leviathan
+Param/Value/37D1D46B=
+Param/Value/45CC2087=<c val="00FF00">Zerg Tunnel Entrance</c>
+Param/Value/4C8584A2=Platform Explosion
+Param/Value/546942F9=Two platforms destroyed.
+Param/Value/54A6DD26=Units Lost to Enemies
+Param/Value/5F50BFF5=Leviathan
+Param/Value/646090B4= <n/>
+Param/Value/6856AC4A=Platform Explosion Kills
+Param/Value/6A242E34=Platform Explosion
+Param/Value/6A356103=P2 Towers Units = 
+Param/Value/6DA36160= <n/>
+Param/Value/6F0A8AE0=
+Param/Value/6F4200A1=Three platforms destroyed.
+Param/Value/70CFAF35=P11 Platforms Units = 
+Param/Value/714F0207=P7 EXP Units = 
+Param/Value/739C328F=Kill the Zerg Leviathan (1 Check)
+Param/Value/75D55A97=Coolant Tower
+Param/Value/78CF50B7=Mission Start
+Param/Value/79CF9CE3= Checks Left)
+Param/Value/8397B923= Checks Left)
+Param/Value/935F9D1F=P6 TR Units = 
+Param/Value/9B53B6F0=<c val="00FF00">Coolant Tower</c>
+Param/Value/9F8EB4AB= <n/>
+Param/Value/A10B0F2F=P9 Horner Units = 
+Param/Value/A7F03864= <n/>
+Param/Value/A85A90A1=Coolant Tower
+Param/Value/A9E6264B=Coolant Tower
+Param/Value/AD56BF00=Platform Explosion
+Param/Value/B0492186= <n/>
+Param/Value/B796C28E= <n/>
+Param/Value/B8769560=Kill the Zerg Leviathan
+Param/Value/B9C43A84=P1 Units = 
+Param/Value/BBBF1D4C= Checks Left)
+Param/Value/BE0DAE7D=Coolant Tower
+Param/Value/BF779107=Destroy Hatcheries at Resouce Nodes (
+Param/Value/C048D02E=Platform Explosion Losses
+Param/Value/C4B1EEB0=
+Param/Value/C75FDDE3=Destroy to cause the platform to explode.
+Param/Value/CD6A4A56= <n/>
+Param/Value/CDAD72B4=
+Param/Value/D09C0E7C=Anniversary_TValerian_02B granted
+Param/Value/D25FAA3E=>> P6 <c val="FF0000">cannot</c> attack
+Param/Value/D3234E71=First Platform Gone
+Param/Value/E69BF1E8= Checks Left)
+Param/Value/E7BF8BDE=All of your structures have been destroyed.
+Param/Value/EA5459E5=>> P6 <c val="00FF00">can</c> attack
+Param/Value/EBA46453=Mutalisks will come out of this<n/>tunnel entrance.
+Param/Value/ED291930=Coolant Tower
+Param/Value/F02592E2=Coolant Tower
+Param/Value/F2CC1EC9=P5 TL Units = 
+Param/Value/F74232D8=
+Param/Value/F7A0C2B9=In order to get additional resources for our mission we must destroy the Hatcheries occupying those spots
+Param/Value/FDC2FAE5=
+Param/Value/FEE5CD49=
+Param/Value/FF589C01=Heavy air defenses detected

@@ -1,0 +1,79 @@
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner04 /// THorner04
+DocInfo/Name=Blitz mediatico /// Media Blitz
+MapInfo/Player00/Name=Neutrale /// Neutral
+MapInfo/Player01/Name=Randagi di Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=Dominio /// The Dominion
+MapInfo/Player03/Name=Dominio /// The Dominion
+MapInfo/Player04/Name=Dominio /// The Dominion
+MapInfo/Player05/Name=Dominio /// The Dominion
+MapInfo/Player06/Name=Civili di Korhal /// Korhal Civilians
+MapInfo/Player07/Name=Randagi di Raynor /// Raynor's Raiders
+MapInfo/Player08/Name=Dominio /// The Dominion
+Param/Value/05E3338B=Accedi alla torre di trasmissione 1 /// Access Broadcast Tower 1
+Param/Value/0930E285=Inizio missione /// Mission Start
+Param/Value/0A4F3766=Accedi alla torre di trasmissione 2 /// Access Broadcast Tower 2
+Param/Value/10B0314C=Avamposto di sicurezza /// Security Outpost
+Param/Value/10F24A77=
+Param/Value/159C9C00=Usa l'Odin per annientare quante più unità del Dominio possibile prima che si mobilitino. /// Use the Odin to destroy as many Dominion units as possible before they can mobilize.
+Param/Value/16C0437F=
+Param/Value/1B8B3377=Avamposto di sicurezza /// Security Outpost
+Param/Value/1D6989D7=Torre di trasmissione 2 /// Broadcast Tower 2
+Param/Value/26108934=Accedi alla torre di trasmissione 1 /// Access Broadcast Tower 1
+Param/Value/2642EE49=Base /// Base
+Param/Value/36760F8C=No /// No
+Param/Value/37412DFF=Accesso a una torre di trasmissione del Dominio effettuato /// One Dominion Broadcast Tower accessed
+Param/Value/3A40DEA3=
+Param/Value/3DF4DD57=Dopo l'attacco a sorpresa dell'Odin /// After Odin sneak attack
+Param/Value/4111D2AB=<c val="00FF00">Trasmissione completa</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/4377BBC3=Segreto scoperto /// Secret Found
+Param/Value/43AA9BFF=Occupa le tre torri di trasmissione del Dominio e mantienine il possesso abbastanza a lungo da mandare in onda la prova della perfidia di Mengsk. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/47D958C6=Torre di trasmissione 3 /// Broadcast Tower 3
+Param/Value/4F602271=<c val="00FF00">Progresso trasmissione</c> /// <c val="00FF00">Upload Progress</c>
+Param/Value/523513A8=Avamposto di sicurezza /// Security Outpost
+Param/Value/574A6351=Avamposto di sicurezza /// Security Outpost
+Param/Value/5F35D842=Annienta le forze del Dominio durante l'attacco a sorpresa /// Destroy Dominion during the Surprise Attack
+Param/Value/60581E90=Accedi alla torre di trasmissione 3 /// Access Broadcast Tower 3
+Param/Value/63E47237=Segreto scoperto /// Secret Found
+Param/Value/64685A91=
+Param/Value/70C4D678=Torre di trasmissione 3 /// Broadcast Tower 3
+Param/Value/719688DC=Sì /// Yes
+Param/Value/7B03FE31=Accedi alla torre di trasmissione 2 /// Access Broadcast Tower 2
+Param/Value/7B98881E=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/7C54A1E1=Occupa le tre torri di trasmissione del Dominio e mantienine il possesso abbastanza a lungo da mandare in onda la prova della perfidia di Mengsk. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7F6061D4=Torre di trasmissione 1 /// Broadcast Tower 1
+Param/Value/813608F7=
+Param/Value/8F359BA8=Avamposto di sicurezza /// Security Outpost
+Param/Value/8F385175=<c val="00FF00">Trasmissione completa</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/9293FAA1=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/9A97EDD4=Accesso a due torri di trasmissione del Dominio effettuato /// Two Dominion Broadcast Towers accessed
+Param/Value/A5099609=Ingaggia le forze del Dominio per dare il via all'attacco a sorpresa. /// Attack the Dominion to begin the surprise attack.
+Param/Value/A9280EFD=Occupa le tre torri di trasmissione del Dominio e mantienine il possesso abbastanza a lungo da mandare in onda la prova della perfidia di Mengsk. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/AA6A68E5=Questi documenti fanno riferimento a un laboratorio segreto del Dominio. /// These documents reference a secret<n/>Dominion lab.
+Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">!</c></s> /// <s val="Kicker_Minerals"><c val="FF0000">!</c></s>
+Param/Value/BAA72864=Tieni qualsiasi unità di terra sul segnalatore<n/>per mandare in onda la registrazione.  /// Keep any ground unit on the<n/>Beacon to upload the signal. 
+Param/Value/C2EAFB32=<c val="00FF00"> /// <c val="00FF00">
+Param/Value/C51AE4DC=
+Param/Value/CA64DF53=Annienta le forze del Dominio durante l'attacco a sorpresa /// Destroy Dominion during the Surprise Attack
+Param/Value/CB469595=
+Param/Value/CCA9A3B1=Torre di trasmissione 2 /// Broadcast Tower 2
+Param/Value/CE0A4A63=Accedi alla torre di trasmissione 3 /// Access Broadcast Tower 3
+Param/Value/CF471179=Unità eliminate dall'Odin /// Units Killed By Odin
+Param/Value/D9C73D1B=Torre di trasmissione 1 /// Broadcast Tower 1
+Param/Value/DAF7934D=Missione segreta sbloccata /// Secret Mission Unlocked
+Param/Value/DE6AF8A1=
+Param/Value/E10677B6=
+Param/Value/E2C19B85=Avamposto di sicurezza /// Security Outpost
+Param/Value/E4408F4A=%</c> /// %</c>
+Param/Value/E6030984=<c val="00FF00">Documenti segreti</c> /// <c val="00FF00">Secret Documents</c>
+Param/Value/E6304B93=Fine dell'attacco a sorpresa fra: /// Surprise Attack Ends In:
+Param/Value/E9217D45=Tutte le tue strutture sono state distrutte. /// All of your structures have been destroyed.
+Param/Value/EBD210CF=
+Param/Value/FCB0FE8A=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/FFD0115C=
+Sound/Name/PlaceholderSoundFile2=File audio provvisorio (Nave madre) /// PlaceholderSoundFile (Mothership)
+Unit/Name/Civilian=Civile /// Civilian
+Unit/Name/CivilianFemale=Civile /// Civilian
+Unit/Name/Odin=Odin /// Odin
+Water/Name/Template 2=Template 2 /// Template 2

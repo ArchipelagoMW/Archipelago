@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\btn-unit-terran-dominiontrain.dds" Type="Image"/>
+<Achievement id="Anniversary_THorner01"/>
+<Achievement id="THorner01_1"/>
+<Achievement id="THorner01_2"/>
+<Achievement id="THorner01_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="AgriaDebris" Variations="0,1"/>
+<Actor id="AgriaTree" Variations="5"/>
+<Actor id="AgriaUnderbrush" Variations="2"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="Brambles" Variations="0,1,2,3,4,5,6"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,1,2"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="Bush" Variations="0,1,2,3,4"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="0,2,3"/>
+<Actor id="ChainLinkFencePost"/>
+<Actor id="ChainLinkFenceStraight" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="CommandCenterWrecked"/>
+<Actor id="Crate" Variations="0,1,2,4,5"/>
+<Actor id="DustStorms"/>
+<Actor id="Floodlight" Variations="0"/>
+<Actor id="Garage" Variations="0,1"/>
+<Actor id="GarageLarge" Variations="0,1"/>
+<Actor id="HavenUnderbrush" Variations="2,3"/>
+<Actor id="KorhalBuilding" Variations="2,9"/>
+<Actor id="KorhalBuildingWrecked" Variations="0,1,2,3,4,5,6"/>
+<Actor id="KorhalStoreFront" Variations="4"/>
+<Actor id="MarSaraGroundProps" Variations="0,1,3,4"/>
+<Actor id="PortZionGroundMix" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="PortZionJunkPile" Variations="1"/>
+<Actor id="PortZionTower" Variations="2,3,5"/>
+<Actor id="PortZionTowerDestroyed" Variations="0,2,3,4,5,6,7"/>
+<Actor id="Rock" Variations="0,1,2,3,5,7,8,9,10"/>
+<Actor id="RockLarge" Variations="1,2,3,4"/>
+<Actor id="RockSmall" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="Rubble" Variations="0,1,2,3,4"/>
+<Actor id="RubbleBuilding" Variations="0,1"/>
+<Actor id="RubbleWall45" Variations="1,2,4"/>
+<Actor id="RubbleWall90" Variations="5"/>
+<Actor id="RubbleWallCorner" Variations="0,1"/>
+<Actor id="Searchlight" Variations="0,1,2"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="SpacePlatformExhaust" Variations="2,3"/>
+<Actor id="SpacePlatformGenerator" Variations="0"/>
+<Actor id="SpacePlatformSignDestructible" Variations="1"/>
+<Actor id="TarsonisFoliage" Variations="0,1,2,3,4,5"/>
+<Actor id="TarsonisTree" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WaterTankTall" Variations="0,1"/>
+<Actor id="WindTurbine"/>
+<Actor id="WreckedMule" Variations="0,1,2"/>
+<Actor id="WreckedNomad"/>
+<Actor id="WreckedVehicles" Variations="0,2,5"/>
+<Actor id="ColonistVehicleWrecked" Variations="0"/>
+<Actor id="WreckedCargoTruck" Variations="1,2"/>
+<Actor id="TrainDockingDoor"/>
+<Actor id="TarsonisWall"/>
+<Actor id="TarsonisArrow"/>
+<Actor id="TarsonisCharger"/>
+<Actor id="TarsonisStation" Variations="0,1"/>
+<Actor id="TRaynor01RadarDish"/>
+<Behavior id="KillSquad"/>
+<Behavior id="AP_BurstCapacitorsDamageBuff"/>
+<Model id="PingArrow"/>
+<Model id="PingBoss"/>
+<Model id="PingObjective"/>
+<Model id="PingSimple"/>
+<Model id="BelShirSkyBox"/>
+<Sound id="Bunker_What"/>
+<Sound id="SiegeTank_Explode"/>
+<Sound id="UI_TerranPing" Variations="0"/>
+<Sound id="UI_TerranReminderPing" Variations="0"/>
+<Sound id="THorner01BriefingHorner00002"/>
+<Sound id="THorner01BriefingHorner00004"/>
+<Sound id="THorner01BriefingHorner00006"/>
+<Sound id="THorner01BriefingRaynor00007"/>
+<Sound id="THorner01BriefingHorner00008"/>
+<Sound id="THorner01BriefingRaynor00009"/>
+<Sound id="THorner01BriefingRaynor00018"/>
+<Sound id="THorner01Horner00001"/>
+<Sound id="THorner01Swann00002"/>
+<Sound id="THorner01Horner00003"/>
+<Sound id="THorner01ConfederateAdjutant00004"/>
+<Sound id="THorner01Swann00005"/>
+<Sound id="THorner01Tychus00006"/>
+<Sound id="THorner01Swann00007"/>
+<Sound id="THorner01Horner00008"/>
+<Sound id="THorner01Adjutant00009"/>
+<Sound id="THorner01Raynor00010"/>
+<Sound id="THorner01Horner00011"/>
+<Sound id="THorner01Horner00012"/>
+<Sound id="THorner01Tychus00013"/>
+<Sound id="THorner01Raynor00016"/>
+<Sound id="THorner01Adjutant00017"/>
+<Sound id="THorner01Adjutant00018"/>
+<Sound id="THorner01Horner00019"/>
+<Sound id="THorner01Horner00020"/>
+<Sound id="THorner01Horner00021" Variations="0"/>
+<Sound id="THorner01Horner00022"/>
+<Sound id="THorner01Horner00023"/>
+<Sound id="THorner01Horner00024"/>
+<Sound id="THorner01Horner00025"/>
+<Sound id="THorner01Adjutant00038"/>
+<Sound id="THorner01Adjutant00039"/>
+<Sound id="THorner01Adjutant00040"/>
+<Sound id="THorner01Adjutant00041"/>
+<Soundtrack id="THorner01MusicEventA"/>
+<Soundtrack id="THorner01MusicIntro"/>
+<Soundtrack id="THorner01MusicMain"/>
+<Soundtrack id="THorner01MusicOutro"/>
+<Terrain id="Tarsonis"/>
+<Unit id="CommandCenter"/>
+<Unit id="SupplyDepot"/>
+<Unit id="Refinery"/>
+<Unit id="Barracks"/>
+<Unit id="EngineeringBay"/>
+<Unit id="MissileTurret"/>
+<Unit id="Bunker"/>
+<Unit id="Factory"/>
+<Unit id="Starport"/>
+<Unit id="Armory"/>
+<Unit id="AutoTurret"/>
+<Unit id="SiegeTankSieged"/>
+<Unit id="SCV"/>
+<Unit id="Marine"/>
+<Unit id="Marauder"/>
+<Unit id="Raven"/>
+<Unit id="PlanetaryFortress"/>
+<Unit id="Lyote"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="DevilDog"/>
+<Unit id="BarracksTechReactor"/>
+<Unit id="FactoryTechReactor"/>
+<Unit id="StarportTechReactor"/>
+<Unit id="DominionKillTeam"/>
+<Unit id="Firebat"/>
+<Unit id="Diamondback"/>
+<Unit id="DefilerBoneSample" Variations="0,1,2"/>
+<Unit id="AdjutantCapsule"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="TarsonisEngine"/>
+<Unit id="TarsonisEngineFast"/>
+<Unit id="FreightCar"/>
+<Unit id="Caboose"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_FactoryTechLab"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Diamondback"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
+</Preload>

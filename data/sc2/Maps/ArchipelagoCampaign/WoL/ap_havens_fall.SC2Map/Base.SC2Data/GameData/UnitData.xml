@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="InfestedArmory">
+        <Name value="Unit/Name/Armory"/>
+    </CUnit>
+    <CUnit id="InfestedBarracks">
+        <Name value="Unit/Name/Barracks"/>
+    </CUnit>
+    <CUnit id="InfestedBunker">
+        <Name value="Unit/Name/Bunker"/>
+    </CUnit>
+    <CUnit id="InfestedCC">
+        <Name value="Unit/Name/CommandCenter"/>
+    </CUnit>
+    <CUnit id="InfestedEngBay">
+        <Name value="Unit/Name/EngineeringBay"/>
+    </CUnit>
+    <CUnit id="InfestedFactory">
+        <Name value="Unit/Name/Factory"/>
+    </CUnit>
+    <CUnit id="InfestedRefinery">
+        <Name value="Unit/Name/Refinery"/>
+    </CUnit>
+    <CUnit id="InfestedStarport">
+        <Name value="Unit/Name/Starport"/>
+    </CUnit>
+    <CUnit id="InfestedSupply">
+        <Name value="Unit/Name/SupplyDepot"/>
+    </CUnit>
+</Catalog>

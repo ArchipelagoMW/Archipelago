@@ -1,0 +1,79 @@
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner04 /// THorner04
+DocInfo/Name=Sondermeldung /// Media Blitz
+MapInfo/Player00/Name=Neutral /// Neutral
+MapInfo/Player01/Name=Raynor's Raiders /// Raynor's Raiders
+MapInfo/Player02/Name=Die Liga /// The Dominion
+MapInfo/Player03/Name=Die Liga /// The Dominion
+MapInfo/Player04/Name=Die Liga /// The Dominion
+MapInfo/Player05/Name=Die Liga /// The Dominion
+MapInfo/Player06/Name=Zivilisten von Korhal /// Korhal Civilians
+MapInfo/Player07/Name=Raynor's Raiders /// Raynor's Raiders
+MapInfo/Player08/Name=Die Liga /// The Dominion
+Param/Value/05E3338B=Zugriff auf Sendeturm 1 /// Access Broadcast Tower 1
+Param/Value/0930E285=Missionsstart /// Mission Start
+Param/Value/0A4F3766=Zugriff auf Sendeturm 2 /// Access Broadcast Tower 2
+Param/Value/10B0314C=Sicherheitsaußenposten /// Security Outpost
+Param/Value/10F24A77=
+Param/Value/159C9C00=Benutzen Sie den Odin, um so viele Einheiten der Liga wie möglich zu zerstören, bevor sie sich mobilisieren können. /// Use the Odin to destroy as many Dominion units as possible before they can mobilize.
+Param/Value/16C0437F=
+Param/Value/1B8B3377=Sicherheitsaußenposten /// Security Outpost
+Param/Value/1D6989D7=Sendeturm 2 /// Broadcast Tower 2
+Param/Value/26108934=Zugriff auf Sendeturm 1 /// Access Broadcast Tower 1
+Param/Value/2642EE49=Basis /// Base
+Param/Value/36760F8C=Nein /// No
+Param/Value/37412DFF=Zugriff auf einen Sendeturm der Liga /// One Dominion Broadcast Tower accessed
+Param/Value/3A40DEA3=
+Param/Value/3DF4DD57=Nach Odin-Schleichangriff /// After Odin sneak attack
+Param/Value/4111D2AB=<c val="00FF00">Upload abgeschlossen!</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/4377BBC3=Geheimnis entdeckt /// Secret Found
+Param/Value/43AA9BFF=Besetzen Sie die drei Sendetürme der Liga und halten Sie die Stellung dort lange genug, um die Beweise für Mengsks Verrat hochzuladen. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/47D958C6=Sendeturm 3 /// Broadcast Tower 3
+Param/Value/4F602271=<c val="00FF00">Upload-Fortschritt</c> /// <c val="00FF00">Upload Progress</c>
+Param/Value/523513A8=Sicherheitsaußenposten /// Security Outpost
+Param/Value/574A6351=Sicherheitsaußenposten /// Security Outpost
+Param/Value/5F35D842=Vernichten Sie die Truppen der Liga während des Überraschungsangriffs /// Destroy Dominion during the Surprise Attack
+Param/Value/60581E90=Zugriff auf Sendeturm 3 /// Access Broadcast Tower 3
+Param/Value/63E47237=Geheimnis entdeckt /// Secret Found
+Param/Value/64685A91=
+Param/Value/70C4D678=Sendeturm 3 /// Broadcast Tower 3
+Param/Value/719688DC=Ja /// Yes
+Param/Value/7B03FE31=Zugriff auf Sendeturm 2 /// Access Broadcast Tower 2
+Param/Value/7B98881E=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/7C54A1E1=Besetzen Sie die drei Sendetürme der Liga und halten Sie die Stellung dort lange genug, um die Beweise für Mengsks Verrat hochzuladen. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7F6061D4=Sendeturm 1 /// Broadcast Tower 1
+Param/Value/813608F7=
+Param/Value/8F359BA8=Sicherheitsaußenposten /// Security Outpost
+Param/Value/8F385175=<c val="00FF00">Upload abgeschlossen!</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/9293FAA1=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/9A97EDD4=Auf zwei Sendetürme der Liga zugegriffen /// Two Dominion Broadcast Towers accessed
+Param/Value/A5099609=Greifen Sie die Truppen der Liga an, um mit dem Überraschungsangriff zu beginnen. /// Attack the Dominion to begin the surprise attack.
+Param/Value/A9280EFD=Besetzen Sie die drei Sendetürme der Liga und halten Sie die Stellung dort lange genug, um die Beweise für Mengsks Verrat hochzuladen. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/AA6A68E5=Diese Dokumente berichten von einem<n/>geheimen Labor der Liga. /// These documents reference a secret<n/>Dominion lab.
+Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">!</c></s> /// <s val="Kicker_Minerals"><c val="FF0000">!</c></s>
+Param/Value/BAA72864=Lassen Sie eine Bodeneinheit auf dem<n/> Signal, um die Übertragung hochzuladen. /// Keep any ground unit on the<n/>Beacon to upload the signal. 
+Param/Value/C2EAFB32=<c val="00FF00"> /// <c val="00FF00">
+Param/Value/C51AE4DC=
+Param/Value/CA64DF53=Vernichten Sie die Truppen der Liga während des Überraschungsangriffs /// Destroy Dominion during the Surprise Attack
+Param/Value/CB469595=
+Param/Value/CCA9A3B1=Sendeturm 2 /// Broadcast Tower 2
+Param/Value/CE0A4A63=Zugriff auf Sendeturm 3 /// Access Broadcast Tower 3
+Param/Value/CF471179=Vom Odin getötete Einheiten /// Units Killed By Odin
+Param/Value/D9C73D1B=Sendeturm 1 /// Broadcast Tower 1
+Param/Value/DAF7934D=Geheime Mission freigeschaltet /// Secret Mission Unlocked
+Param/Value/DE6AF8A1=
+Param/Value/E10677B6=
+Param/Value/E2C19B85=Sicherheitsaußenposten /// Security Outpost
+Param/Value/E4408F4A=%</c> /// %</c>
+Param/Value/E6030984=<c val="00FF00">Geheime Dokumente</c> /// <c val="00FF00">Secret Documents</c>
+Param/Value/E6304B93=Überraschungsangriff endet in: /// Surprise Attack Ends In:
+Param/Value/E9217D45=All Ihre Gebäude wurden zerstört. /// All of your structures have been destroyed.
+Param/Value/EBD210CF=
+Param/Value/FCB0FE8A=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/FFD0115C=
+Sound/Name/PlaceholderSoundFile2=PlaceholderSoundFile (Mothership) /// PlaceholderSoundFile (Mothership)
+Unit/Name/Civilian=Zivilist /// Civilian
+Unit/Name/CivilianFemale=Zivilist /// Civilian
+Unit/Name/Odin=Odin /// Odin
+Water/Name/Template 2=Vorlage 2 /// Template 2

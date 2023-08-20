@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Char">
+        <FogDensity value="0.500000"/>
+        <FogFalloff value="0.270000"/>
+        <WindTurbulenceSpeed value="0.200000"/>
+        <FogColor value="255,255,19,6"/>
+        <FogStartingHeight value="0.000000"/>
+        <WindSpeed value="0.200000"/>
+    </CTerrain>
+</Catalog>

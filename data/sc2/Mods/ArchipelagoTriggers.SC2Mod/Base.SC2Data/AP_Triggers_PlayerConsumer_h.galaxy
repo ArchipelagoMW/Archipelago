@@ -1,0 +1,5 @@
+include "TriggerLibs/natives"
+
+void ap_triggers_PlayerConsumer_sig(int player);
+
+typedef funcref<ap_triggers_PlayerConsumer_sig> ap_triggers_PlayerConsumer_t;

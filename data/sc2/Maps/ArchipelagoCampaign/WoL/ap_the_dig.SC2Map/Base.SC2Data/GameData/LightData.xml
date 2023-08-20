@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CLight id="Avernus">
+        <ToDInfoArray index="0" AmbientColor="0.549020,0.552941,0.556863" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.100000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.180000"/>
+            <Param index="AONoOcclusion" value="3.000000"/>
+            <DirectionalLight index="Fill" Color="0.937255,0.670588,0.286275"/>
+        </ToDInfoArray>
+    </CLight>
+    <CLight id="Xil">
+        <ToDInfoArray index="0" AmbientColor="0.635294,0.623529,0.505882" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <Param index="AONoOcclusion" value="3.000000"/>
+            <DirectionalLight index="Key" Color="0.611765,0.611765,0.611765"/>
+            <DirectionalLight index="Fill" Color="0.129412,0.486275,0.662745"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

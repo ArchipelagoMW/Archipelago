@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="Korhal">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.000000"/>
+            <Color value="0.078431,0.176471,0.196078,0.250000"/>
+            <ColorFallOff value="0.115000"/>
+            <CausticsFallOff value="0.291000"/>
+            <Specularity value="982.500000"/>
+            <SpecularScaler value="0.500000"/>
+            <UvRate value="-0.000031,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="1.959000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.015000"/>
+            <RefractionDistortion value="0.001500"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.188000"/>
+            <ReflectivityPower value="6.930000"/>
+        </State>
+        <ReceiveShadows value="1"/>
+    </CWater>
+    <CWater id="Agria">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="8.000000"/>
+            <Color value="0.098039,0.349020,0.498039,0.300000"/>
+            <ColorFallOff value="0.100000"/>
+            <Specularity value="100.000000"/>
+            <SpecularScaler value="2.450000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <ReflectionDistortion value="0.012000"/>
+            <RefractionDistortion value="0.020000"/>
+            <MinReflection value="0.300000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+</Catalog>

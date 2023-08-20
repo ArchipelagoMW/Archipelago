@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Avernus">
+        <WindTurbulenceSpeed value="1.000000"/>
+    </CTerrain>
+    <CTerrain id="Ulnar">
+        <FogColor value="255,0,0,0"/>
+        <FogDensity value="0.000000"/>
+    </CTerrain>
+</Catalog>

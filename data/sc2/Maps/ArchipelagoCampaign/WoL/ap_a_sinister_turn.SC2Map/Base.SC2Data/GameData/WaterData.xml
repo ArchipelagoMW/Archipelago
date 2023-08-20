@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="Shakuras">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.000000"/>
+            <Color value="0.000000,0.701961,0.541176,0.052000"/>
+            <ColorFallOff value="0.030000"/>
+            <Specularity value="1000.000000"/>
+            <SpecularScaler value="2.000000"/>
+            <UvRate value="-0.000658,-0.000753,0.000000,0.000000"/>
+            <UvRotate value="5.556604"/>
+            <MeshRoughness value="0.579000"/>
+            <TextureRoughness value="0.579000"/>
+            <ReflectionDistortion value="0.015000"/>
+            <RefractionDistortion value="0.004000"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.100000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+        <ReceiveShadows value="0"/>
+    </CWater>
+    <CWater id="ZhakulDas">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.500000"/>
+            <Color value="0.000000,0.078431,0.137255,0.601000"/>
+            <ColorFallOff value="0.130000"/>
+            <CausticsFallOff value="0.752000"/>
+            <Specularity value="651.500000"/>
+            <SpecularScaler value="0.150000"/>
+            <UvRate value="0.000292,0.000956,0.000000,0.000000"/>
+            <MeshRoughness value="1.578000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.032000"/>
+            <RefractionDistortion value="0.002500"/>
+            <MinReflection value="0.109000"/>
+            <ReflectivityPower value="7.170000"/>
+        </State>
+        <ReceiveShadows value="1"/>
+    </CWater>
+</Catalog>

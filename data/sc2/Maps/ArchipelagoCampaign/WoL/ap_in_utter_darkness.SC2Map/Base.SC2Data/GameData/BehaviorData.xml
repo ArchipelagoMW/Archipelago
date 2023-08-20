@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CBehaviorSpawn id="SpawnLarva">
+        <InfoArray index="0" Unit="Larva" MaxCount="3" Delay="0.2"/>
+    </CBehaviorSpawn>
+</Catalog>

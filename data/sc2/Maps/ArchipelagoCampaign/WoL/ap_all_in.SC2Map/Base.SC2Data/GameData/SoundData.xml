@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSound id="GenericRescue" parent="Alert">
+        <AssetArray File="LocalizedData\Sounds\Misc\TRescue.wav"/>
+    </CSound>
+    <CSound id="TValerian03MusicOutro">
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+    <CSound id="VictoryCinematic1" parent="MUSIC">
+        <AssetArray File="Assets\Music\Mission_MusicCue002.ogg" LoopCount="1" LoopTime="44868,1348012"/>
+        <Select value="Sequential"/>
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+    <CSound id="VictoryCinematic2" parent="MUSIC">
+        <AssetArray File="Assets\Sounds\CinematicsSFX\TS03_SC2Logo.ogg" LoopCount="1" LoopTime="44868,1348012"/>
+        <Select value="Sequential"/>
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+</Catalog>

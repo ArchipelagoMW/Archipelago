@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CFootprint id="Footprint3x3">
+        <Layers index="Pathing" Area="0,0,0,0">
+            <Rows value="..."/>
+            <Rows value="..."/>
+            <Rows value="..."/>
+        </Layers>
+        <Shape>
+            <Offsets value="-1.5,-1.5;1.5,-1.5;-1.5,1.5;1.5,1.5"/>
+            <Borders value="0,2,2;1,0,2;2,3,2;3,1,2"/>
+        </Shape>
+    </CFootprint>
+    <CFootprint id="Footprint4x4CreepSourceGrown">
+        <Layers index="Pathing" Area="0,0,0,0">
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+            <Rows value="...................."/>
+        </Layers>
+        <Shape Offsets="-10,-10;10,-10;-10,10;10,10"/>
+    </CFootprint>
+</Catalog>

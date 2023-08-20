@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="Egg">
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeArmor value="2"/>
+    </CUnit>
+    <CUnit id="GenesisPit"/>
+    <CUnit id="NukePack">
+        <FlagArray index="IgnoreTerrainZInit" value="1"/>
+        <Height value="8"/>
+    </CUnit>
+    <CUnit id="Omegalisk">
+        <Speed value="1.5"/>
+    </CUnit>
+    <CUnit id="Queen">
+        <LifeStart value="3000"/>
+        <LifeMax value="3000"/>
+        <Speed value="2.5"/>
+        <AbilArray index="3" Link="BurrowQueenDown"/>
+        <AbilArray index="4" Link="EggPop"/>
+        <AbilArray index="5" Link="Transfusion"/>
+        <AbilArray index="6" Link="QueenShockwave"/>
+        <EnergyStart value="0"/>
+        <EnergyMax value="0"/>
+        <EnergyRegenRate value="0"/>
+        <InnerRadius value="0.875"/>
+    </CUnit>
+    <CUnit id="QueenBurrowed">
+        <LifeStart value="3000"/>
+        <LifeMax value="3000"/>
+    </CUnit>
+    <CUnit id="SeismicThumper">
+        <LifeStart value="500"/>
+        <LifeMax value="500"/>
+    </CUnit>
+    <CUnit id="InfestationSpire">
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <BehaviorArray index="0" removed="1"/>
+        <BehaviorArray index="1" removed="1"/>
+    </CUnit>
+    <CUnit id="Infestor"/>
+    <CUnit id="Feederling">
+        <Speed value="1.1992"/>
+    </CUnit>
+</Catalog>

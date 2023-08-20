@@ -1,0 +1,10 @@
+[Light]
+
+[Terrain]
+id=Typhon
+path=Assets\Textures\.dds
+asset=Creep,CreepEdgeNormal,CreepHeight,CreepNoise,CreepSpecularMask
+Light
+Soundtrack=Ambience_##id##
+TerrainTex=##id##1,##id##2,##id##3,##id##4,##id##5,##id##6,##id##7,##id##8
+

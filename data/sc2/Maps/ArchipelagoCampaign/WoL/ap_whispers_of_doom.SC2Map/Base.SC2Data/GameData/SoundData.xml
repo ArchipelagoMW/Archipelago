@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSound id="PlaceholderSoundFile2" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Protoss\Zeratul\UZeWht03.wav"/>
+    </CSound>
+    <CSound id="PlaceholderSoundFile3" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Misc\PRescue.wav"/>
+    </CSound>
+</Catalog>

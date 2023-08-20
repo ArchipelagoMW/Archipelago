@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="Civilian">
+        <AttackTargetPriority value="19"/>
+        <WeaponArray index="0" removed="1"/>
+        <PushPriority value="11"/>
+    </CUnit>
+    <CUnit id="CivilianFemale">
+        <AttackTargetPriority value="19"/>
+        <WeaponArray index="0" removed="1"/>
+        <PushPriority value="11"/>
+    </CUnit>
+    <CUnit id="CivilianHut"/>
+    <CUnit id="ColonistHut">
+        <FlagArray index="Unradarable" value="1"/>
+    </CUnit>
+    <CUnit id="ColonistShip"/>
+    <CUnit id="ColonistTransport">
+        <AttackTargetPriority value="19"/>
+    </CUnit>
+</Catalog>

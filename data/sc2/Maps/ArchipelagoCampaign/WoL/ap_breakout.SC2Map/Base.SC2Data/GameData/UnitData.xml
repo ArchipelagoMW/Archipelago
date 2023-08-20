@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUnit id="DestructibleGateDiagonalULBR">
+        <Collide index="Ground" value="0"/>
+        <Collide index="Small" value="0"/>
+        <Footprint value=""/>
+    </CUnit>
+    <CUnit id="DestructibleGateDiagonalULBRLowered">
+        <Footprint value=""/>
+        <Collide index="Ground" value="0"/>
+        <Collide index="Small" value="0"/>
+    </CUnit>
+    <CUnit id="DestructibleSandbags">
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="UseLineOfSight" value="0"/>
+        <FlagArray index="KillCredit" value="0"/>
+    </CUnit>
+    <CUnit id="ExplodingBarrelLarge">
+        <LifeStart value="30"/>
+        <LifeMax value="30"/>
+    </CUnit>
+    <CUnit id="ExplosivesFodder1">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="ExplodingBarrelLarge"/>
+        <FlagArray index="Movable" value="0"/>
+        <FlagArray index="CreateVisible" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="Destructible" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="ShowResources" value="0"/>
+        <FogVisibility value="Snapshot"/>
+        <EditorFlags index="NeutralDefault" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <BehaviorArray/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Destructible,ObjectFamily:Campaign"/>
+        <TacticalAI value=""/>
+        <LeaderAlias value="ExplodingBarrelLarge"/>
+        <SelectAlias value="ExplodingBarrelLarge"/>
+        <AIEvaluateAlias value=""/>
+    </CUnit>
+    <CUnit id="ExplosivesFodder2">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="ExplodingBarrelLarge"/>
+        <FlagArray index="Movable" value="0"/>
+        <FlagArray index="CreateVisible" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="Destructible" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="ShowResources" value="0"/>
+        <FogVisibility value="Snapshot"/>
+        <EditorFlags index="NeutralDefault" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <LifeStart value="40"/>
+        <LifeMax value="40"/>
+        <BehaviorArray/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Destructible,ObjectFamily:Campaign"/>
+        <TacticalAI value=""/>
+        <LeaderAlias value="ExplodingBarrelLarge"/>
+        <SelectAlias value="ExplodingBarrelLarge"/>
+        <AIEvaluateAlias value=""/>
+    </CUnit>
+    <CUnit id="NewFolsomPrisonEntrance">
+        <Footprint value=""/>
+        <Collide index="Burrow" value="0"/>
+        <Collide index="Ground" value="0"/>
+        <Collide index="Structure" value="0"/>
+    </CUnit>
+    <CUnit id="SecurityGateDiagonalULBR">
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="ShowResources" value="0"/>
+    </CUnit>
+    <CUnit id="SecurityGateDiagonalULBRLowered">
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="ShowResources" value="0"/>
+    </CUnit>
+</Catalog>

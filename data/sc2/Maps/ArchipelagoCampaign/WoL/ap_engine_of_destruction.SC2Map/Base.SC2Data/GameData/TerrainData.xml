@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Valhalla">
+        <FogColor value="255,35,115,168"/>
+        <FogDensity value="0.070000"/>
+        <FogFalloff value="0.300000"/>
+        <WindTurbulenceSpeed value="1.000000"/>
+    </CTerrain>
+</Catalog>

@@ -1,0 +1,103 @@
+Button/Name/Drop Item=Оставить предмет /// Drop Item
+Button/Name/PickUpItem=Подобрать предмет /// Pick Up Item
+Button/Name/YamatoCannonEngine=Пушка «Ямато» /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=Пушка «Ямато» /// Yamato Cannon Engine
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor02 /// TRaynor02
+DocInfo/Name=Вне закона /// The Outlaws
+MapInfo/Player00/Name=Нейтральный /// Neutral
+MapInfo/Player01/Name=Рейдеры Рейнора /// Raynor's Raiders
+MapInfo/Player02/Name=Доминион /// The Dominion
+MapInfo/Player03/Name=Колонисты Мар-Сары /// Mar Sara Colonists
+MapInfo/Player04/Name=Повстанцы Мар-Сары /// Mar Sara Rebels
+MapInfo/Player05/Name=Доминион /// The Dominion
+MapInfo/Player06/Name=Lvl80 ETC /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=Обучает пехоту. /// Trains infantry units.
+Param/Value/09D741B1=Возведение строений /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">Веспеновый гейзер</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=Подведите сюда любой наземный отряд, чтобы спасти повстанцев. /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=Для возведения строений и обучения новых бойцов вам необходимы минералы и газ веспен. Для сбора ресурсов выберите КСМ и щелкните правой кнопкой по месторождению минералов или перерабатывающему заводу. /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=Доминион насильно посылал поселенцев со станции «Дальняя» на раскопки у Белой Скалы за неким ценным артефактом. Вам предстоит разрушить базу и захватить этот артефакт. /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">Хранилище</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=Спасти повстанцев /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=Используйте КСМ, чтобы построить здесь перерабатывающий завод. /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. минералов. /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=Спасти повстанцев /// Rescue the Rebels
+Param/Value/30C0C1F4=Все ваши строения уничтожены. /// All of your structures have been destroyed.
+Param/Value/315FAFA9=Обучает дополнительных морпехов. /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">Казармы</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=Увеличивает максимальное количество припасов. /// Increases maximum supply.
+Param/Value/459758FC=Для обучения бойцов вам необходимы припасы. Чтобы увеличить количество доступных припасов, постройте хранилища. /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=Прикажите этому КСМ построить хранилище. /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=Позволяет создавать больше боевых единиц.<n/>Для строительства нужен КСМ. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. минералов. /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=Нападение на станцию «Дальняя» спровоцировало мятеж на Мар-Саре. Горстка повстанцев окружена силами Доминиона. Помогите бунтовщикам дать отпор угнетателям. /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">Командный центр</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">Хранилище</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=Подведите сюда любой наземный отряд, чтобы спасти повстанцев. /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=Позволяет создавать больше боевых единиц.<n/>Для строительства нужен КСМ. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=Добыча ресурсов /// Gathering Resources
+Param/Value/7EC9B6E6=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. веспена. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=Нет, пощадите нас! /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=Обучено медиков /// Medics Trained
+Param/Value/8BA552E2=Повстанцы спасены. /// Rebels rescued.
+Param/Value/8BC6DA5C=Строит дополнительные КСМ. /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=Обучение /// Tutorials
+Param/Value/A0322401=Отряд подкрепления КСМ. /// SCV reinforcements.
+Param/Value/A087C9B6=Подкрепление /// Reinforcements
+Param/Value/A089141C=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. веспена. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=КСМ /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">Контейнер с минералами</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=Чтобы просмотреть обучающие ролики, откройте меню <c val="FFFF00">«Справка (F12)»</c> и выберите в нем пункт <c val="FFFF00">«Обучение»</c>. /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=В казармах вы можете обучать морпехов и других бойцов. Чтобы начать обучение морпеха, выберите казармы и нажмите кнопку «Обучить морпеха». /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=Обучение бойцов /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=Обучение /// Tutorials
+Param/Value/B32015BB=Строения выполняют различные функции — от обучения войск до разработки улучшений брони, оружия и техники. Для возведения строения выберите КСМ и отдайте ему приказ построить здание. /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">Хранилище</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. минералов. /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=База Доминиона /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">Контейнер с газом</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=Увеличивает максимальное количество припасов. /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=Спасти повстанцев /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">Месторождение минералов</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=Медик /// Medic
+Param/Value/D35CB257=Позволяет создавать больше боевых единиц.<n/>Для строительства нужен КСМ. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=Уничтожить базу Доминиона /// Destroy the Dominion Base
+Param/Value/E0ECCB59=База повстанцев атакована /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=Подведите к контейнеру любую наземную единицу,<n/>чтобы получить 100 ед. веспена. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=Подведите сюда любой наземный отряд, чтобы <n/>спасти повстанцев. /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=Строит КСМ, которые могут добывать минералы и строить здания. /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=Используйте КСМ для добычи минералов. /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=Уничтожить базу Доминиона /// Destroy the Dominion Base
+Param/Value/F5878C5F=Припасы /// Supply
+Param/Value/F60E71B0=Найдено контейнеров с ресурсами /// Resource Pallets Found
+Param/Value/F6A2B90D=Увеличивает максимальное количество припасов. /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=Спасение повстанцев /// RebelRescue

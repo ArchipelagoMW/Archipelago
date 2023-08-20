@@ -1,0 +1,16 @@
+[Light]
+id=Char
+Actor=TerrainMgr
+id=BraxisAlpha
+Actor=TerrainMgr
+
+[Terrain]
+id=BraxisAlpha
+path=Assets\Textures\.dds
+asset=Creep,CreepEdgeNormal,CreepHeight,CreepNoise,CreepSpecularMask
+Actor=TerrainMgr
+Light
+Model=CharSkyBox,CharSkyParallax
+Soundtrack=Ambience_##id##
+TerrainTex=##id##DarkPlates,##id##Mesh,##id##Metal,##id##MetalDetail,##id##Plates,##id##Rock,##id##Rust,##id##WreckedPlates
+

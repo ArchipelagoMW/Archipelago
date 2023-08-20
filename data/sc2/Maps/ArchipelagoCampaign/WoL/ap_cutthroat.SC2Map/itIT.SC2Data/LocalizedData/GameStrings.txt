@@ -1,0 +1,103 @@
+Conversation/THorner02Briefing/Line00005=Perché tu e Matthew siete più simpatici di lui, ovviamente! Pareggia l'offerta di Orlan e ti aiuterò ad acciuffarlo. Mi paga in minerali, quindi vi offro lo stesso accordo. /// Because I like you and Matthew better than him, of course! Match Orlan's offer and I'll help you take him out instead. He's paying in minerals, so I'll give you the same deal.
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner02 /// THorner02
+DocInfo/Name=Relazioni pericolose /// Cutthroat
+MapInfo/Player00/Name=Neutrale /// Neutral
+MapInfo/Player01/Name=Randagi di Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=Forze di Orlan /// Orlan's Forces
+MapInfo/Player03/Name=Mercenari di Mira Han /// Mira Han's Mercenaries
+MapInfo/Player04/Name=Dominio /// The Dominion
+MapInfo/Player05/Name=Rottami riciclabili /// Salvageable Scrap
+MapInfo/Player06/Name=Rottamatore /// Port Junker
+MapInfo/Player07/Name=Strutture abbandonate /// Derelict Structures
+MapInfo/Player08/Name=Armeria di Swann /// Swann's Armory
+MapInfo/Player09/Name=Reliquie protoss /// Protoss Relics
+Param/Value/018921A4=Centro di comando di Orlan /// Orlan Command Center
+Param/Value/024F788C=Assolda i mercenari prima che lo faccia Orlan /// Buy Merc Contract Before Orlan
+Param/Value/03FAE0EC=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/04B51D63=
+Param/Value/057D9AD4=Trova le reliquie protoss di contrabbando  /// Find Protoss Relic Contraband 
+Param/Value/088E0A54=Distruggi la fortezza dei mercenari di Orlan /// Destroy Orlan's Mercenary Fortress
+Param/Value/0DF11F79=Da distruggere per rallentare le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral gathering rate.
+Param/Value/1117E451=
+Param/Value/149F8BF7=Distruggi la fortezza dei mercenari di Orlan per rimpadronirti dell'aiutante confederata. /// Destroy Colonel Orlan's mercenary fortress to retrieve the decrypted Confederate adjutant.
+Param/Value/1589E053=Assolda i mercenari prima di Orlan<n/>( /// Buy Merc Contract Before Orlan<n/>(
+Param/Value/16EA3C4A=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/1B75B417=/ /// /
+Param/Value/29858229=Trova le reliquie protoss di contrabbando  /// Find Protoss Relic Contraband 
+Param/Value/2A2F1DEC=
+Param/Value/2A95D303=Centro di comando di Orlan /// Orlan Command Center
+Param/Value/306B371C=Le forze di Mira Han sono state annientate. /// Mira Han's forces have been destroyed.
+Param/Value/31A856E3=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/332D48ED=I trituratori produrranno rottami a intervalli di qualche minuto. /// Shredders will generate more salvage every few minutes.
+Param/Value/359DECC7=Tutte le tue strutture sono state distrutte. /// All of your structures have been destroyed.
+Param/Value/364128DD=
+Param/Value/39C56F84=SCV aggiuntivi in fase di attivazione /// Activating additional SCV's
+Param/Value/3D90DF9D=
+Param/Value/42238026=
+Param/Value/46EFAF90=Trova le reliquie protoss di contrabbando /// Find Protoss Relic Contraband
+Param/Value/4950C282=Moto Vulture /// Vulture Bikes
+Param/Value/53398AFD=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/57034AFD=Usa qualunque unità di terra per effettuare la raccolta. /// Use any ground unit to pick up.
+Param/Value/5807D76A=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/5B13ECF2=Mira Han è stata assoldata da Orlan. /// Mira Han was bought by Orlan.
+Param/Value/5B8CE1E1=<c val="00FF00">Rottame riciclabile</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/5CE95A1D=
+Param/Value/65743651=
+Param/Value/6783E46E= minerali) ///  Minerals)
+Param/Value/6AF13D92=Rottami /// Scrap
+Param/Value/6C4C2088=Uccisioni con Mine ragno /// Spider Mine Kills
+Param/Value/6D92663B=<c val="00FF00">Rottame riciclabile</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/6DF56EB6=Punti ricerca protoss ottenuti /// Protoss Research Earned
+Param/Value/72CDDCCB=Minerali riciclati /// Minerals Salvaged
+Param/Value/7B4624DB=</c> /// </c>
+Param/Value/7F6AA35A=
+Param/Value/8072BBF0=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/813453E8=Nuova base /// New Base
+Param/Value/825A8B19=Reliquie di contrabbando trovate /// Relic Contraband Found
+Param/Value/8903569B=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/8A9CA656=Centro di comando di Orlan /// Orlan Command Center
+Param/Value/8E76FFC9=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/90F3079C=3 /// 3
+Param/Value/923FBA10=
+Param/Value/92B49FB8=Minerali di Orlan:  /// Orlan's Minerals: 
+Param/Value/9590FC4A=%Minerals% /// %Minerals%
+Param/Value/994D0392=Da distruggere per ottenere dei rottami riciclabili. /// Destroy to make Scrap Salvage.
+Param/Value/9D3B121D=
+Param/Value/9FFE53DF=Distruggi la fortezza dei mercenari di Orlan /// Destroy Orlan's Mercenary Fortress
+Param/Value/A0D4A53F=
+Param/Value/A41B1BD8=
+Param/Value/A79B6B3E=Minerali di Orlan:  /// Orlan's Minerals: 
+Param/Value/A8244073=Minerali estratti dagli SCV /// Minerals Harvested by SCVs
+Param/Value/B4F093E9=<c val="00FF00">Costo del contratto:  /// <c val="00FF00">Contract Price: 
+Param/Value/B8443135=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/BA28B7AE=
+Param/Value/BB78BE99=<c val="00FF00">Rottame riciclabile</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/BBBD9501=Trova le reliquie protoss di contrabbando sepolte nei relitti delle navi abbandonate. /// Find the protoss relic contraband items buried in the wreckage of derelict ships.
+Param/Value/BC8609EA=Minerali di Raynor:  /// Raynor's Minerals: 
+Param/Value/BCDBD54A=
+Param/Value/BD509D57=
+Param/Value/BECFC09F=
+Param/Value/C18BAED4=Azzeramento minerali di Orlan /// 0'ing Orlan's minerals
+Param/Value/C92B9D15=Usa qualunque unità di terra per effettuare la raccolta. /// Use any ground unit to pick up.
+Param/Value/D16B38BA=Reliquia protoss trovata! /// Protoss Contraband found!
+Param/Value/D33401E3=%Minerals% minerali /// %Minerals% Minerals
+Param/Value/D5C8138A=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/D6816819=
+Param/Value/D8EEADBA=Da distruggere per rallentare le operazioni minerarie di Orlan. /// Destroy to slow Orlan 's mineral gathering rate.
+Param/Value/DB71EC73=Minerali di Raynor:  /// Raynor's Minerals: 
+Param/Value/E0A46055=Da distruggere per rallentare<n/>le operazioni minerarie di Orlan. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/E1F86B1E=Fortezza di Orlan /// Orlan's Fortress
+Param/Value/E34FDDD9=
+Param/Value/E4147BF2=Utilizza qualsiasi unità di terra per<n/>raccogliere minerali bonus. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E41F86F3=Rottami /// Scrap
+Param/Value/E4C2663E=Reliquia protoss /// Protoss Relic
+Param/Value/E63DF6EC=<c val="00FF00">Centro di comando di Orlan</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/E88A79BA=Usa qualunque unità di terra per<n/>raccogliere i minerali bonus. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E8C55C35=) /// )
+Param/Value/E915DCCD=
+Param/Value/EADB19A4=Raccogli abbastanza minerali per assoldare i mercenari di Mira Han prima che lo faccia Orlan. /// Gather enough minerals and scrap to buy the contract of mercenary leader Mira Han before Colonel Orlan does.
+Param/Value/FF684E25=Dopo aver stipulato il contratto con Mira Han. /// After Mira Han's Contract has been purchased.
+Water/Name/Template 1=Template 1 /// Template 1
+Water/Name/Template 2=Template 2 /// Template 2

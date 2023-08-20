@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTurret id="AP_Hellion">
+        <Idle value="ResetIfMoving"/>
+        <YawArc value="360"/>
+        <YawRate value="999.8437"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_Goliath">
+        <YawArc value="135"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+    </CTurret>
+    <CTurret id="AP_Diamondback">
+        <Idle value="ResetIfMoving"/>
+        <YawArc value="360"/>
+        <YawRate value="539.2968"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SiegeTank" parent="FreeRotate">
+        <Idle value="ResetIfMoving"/>
+    </CTurret>
+    <CTurret id="AP_SiegeTankSieged" parent="FreeRotate">
+        <YawStart value="-180"/>
+        <YawRate value="360"/>
+    </CTurret>
+    <CTurret id="AP_Battlecruiser">
+        <YawArc value="90"/>
+        <YawRate value="1999.8632"/>
+    </CTurret>
+    <CTurret id="AP_AutoTurret" parent="FreeRotate">
+        <Idle value="Spin"/>
+        <YawIdleRate value="-45"/>
+    </CTurret>
+    <CTurret id="AP_PointDefenseDrone" parent="FreeRotate">
+        <YawRate value="2857.5"/>
+    </CTurret>
+    <CTurret id="AP_ScienceVesselRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="8.9648"/>
+        <YawIdleRate value="-8.9648"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_Liberator">
+        <Idle value="ResetIfMoving"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10">
+            <ChanceArray index="Anim" value="0"/>
+            <ChanceArray index="Idle" value="100"/>
+            <ChanceArray index="Turn" value="0"/>
+        </Fidget>
+    </CTurret>
+    <CTurret id="AP_LiberatorAG">
+        <Idle value="ResetIfMoving"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10">
+            <ChanceArray index="Anim" value="0"/>
+            <ChanceArray index="Idle" value="100"/>
+            <ChanceArray index="Turn" value="0"/>
+        </Fidget>
+    </CTurret>
+    <CTurret id="AP_Cyclone">
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10">
+            <ChanceArray index="Turn" value="0"/>
+        </Fidget>
+    </CTurret>
+    <CTurret id="AP_CycloneWeaponTurret">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SpartanCompany">
+        <YawArc value="135"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+    </CTurret>
+    <CTurret id="AP_PerditionTurret">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="-45"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_ShrikeTurret">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="29.8828"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_MissileTurret">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="45"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_HiveMindEmulatorRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="12.832"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_PlanetaryFortress">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="90"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_RailGunTurret">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="-45"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_Phoenix">
+        <Idle value="ResetIfMoving"/>
+        <YawArc value="360"/>
+        <YawRate value="539.2968"/>
+        <Fidget DelayMax="30" DelayMin="10" TurnAngle="0">
+            <ChanceArray index="Anim" value="50"/>
+            <ChanceArray index="Idle" value="50"/>
+            <ChanceArray index="Turn" value="0"/>
+        </Fidget>
+    </CTurret>
+    <CTurret id="AP_Immortal">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_Colossus">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="999.8437"/>
+        <YawIdleRate value="90"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_PylonCrystalRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="27.9492"/>
+        <YawIdleRate value="27.9492"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_PylonRingRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="54.8437"/>
+        <YawIdleRate value="54.8437"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_PhotonCannon">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_Nexus">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_MothershipRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="7.207"/>
+        <YawIdleRate value="-7.207"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_WarpPrismPhasingRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="71.8945"/>
+        <YawIdleRate value="-71.8945"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_KhaydarinMonolith">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="180"/>
+        <YawIdleRate value="14.9414"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SpineCrawler">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SpineCrawlerUprooted">
+        <Idle value="FollowMovementReverse"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="720"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SporeCrawler">
+        <Idle value="Hold"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_SporeCrawlerUprooted">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+</Catalog>

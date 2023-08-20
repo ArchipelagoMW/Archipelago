@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\icon-mineral-zerg.dds" Type="Image"/>
+<Asset path="assets\textures\icon-mineral-terran.dds" Type="Image"/>
+<Achievement id="Anniversary_THorner02"/>
+<Achievement id="THorner02_1"/>
+<Achievement id="THorner02_2"/>
+<Achievement id="THorner02_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="TriggerRegion"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="PathingBlocker2x2Doodad"/>
+<Actor id="AlarmLight" Variations="0"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="BillboardDestroyed" Variations="5"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="CableLight"/>
+<Actor id="CarbonMarineBlock"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="0,2,3"/>
+<Actor id="ChainLinkFencePost"/>
+<Actor id="ChainLinkFenceStraight" Variations="0,3,4,5,6"/>
+<Actor id="CommandCenterWrecked"/>
+<Actor id="Decal" Variations="1,3,9,21,22,23,24"/>
+<Actor id="Dumpster" Variations="0,2,3"/>
+<Actor id="ExhaustPipes" Variations="4"/>
+<Actor id="FanVent" Variations="0,1"/>
+<Actor id="JunkPileSpaceShips" Variations="0,1,2"/>
+<Actor id="LandingLights" Variations="0,1,2"/>
+<Actor id="Outhouse" Variations="0,2"/>
+<Actor id="PipesCorner" Variations="2"/>
+<Actor id="PipesCorner45" Variations="0,1"/>
+<Actor id="PipesLong" Variations="2"/>
+<Actor id="PipesLong45" Variations="0,1,2,3"/>
+<Actor id="PipesShort45" Variations="0"/>
+<Actor id="PipesStack" Variations="0,1"/>
+<Actor id="PortZionBarrel" Variations="0,1"/>
+<Actor id="PortZionCompactor"/>
+<Actor id="PortZionCrane"/>
+<Actor id="PortZionCrusherDoodad"/>
+<Actor id="PortZionDumpster"/>
+<Actor id="PortZionGarbagePile" Variations="1,3,4"/>
+<Actor id="PortZionGroundMix" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="PortZionJunkPile" Variations="0,1"/>
+<Actor id="PortZionScrapConveyorBelt" Variations="0,1"/>
+<Actor id="PortZionStorage"/>
+<Actor id="PortZionTires" Variations="0,1,2"/>
+<Actor id="PortZionTower" Variations="2,3,4,5,6,7,8,9"/>
+<Actor id="PortZionTowerDestroyed" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="RockGiant" Variations="0,1,2,3,4,5,6,7,8,9,10,11,12,14,17"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4,5,9,10,12,14,15,16,17,18,21"/>
+<Actor id="RockSmall" Variations="3,4,6,7,9"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="SpacePlatformCautionLights" Variations="0"/>
+<Actor id="SpacePlatformSignTowerLarge" Variations="0"/>
+<Actor id="SuperCrane"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WreckedCargoTruck" Variations="0,1,2"/>
+<Actor id="PipeGroundBig" Variations="0,2,3,5,6"/>
+<Actor id="PortZionGridFloorCompactorDoodad"/>
+<Actor id="PortZionGridFloorDoodad"/>
+<Actor id="PortZionScrapElevatorLeft"/>
+<Model id="PingObjective"/>
+<Model id="GhostNukeIndicator"/>
+<Model id="BriefingUnitSelect"/>
+<Model id="BraxisAlphaSkyBox"/>
+<Sound id="Medivac_Unload" Variations="0"/>
+<Sound id="IncomingTransmission"/>
+<Sound id="UI_TechConsole_Purchase"/>
+<Sound id="TUI_StarmapMenuPopup"/>
+<Sound id="THorner02BriefingHorner00001"/>
+<Sound id="THorner02BriefingRaynor00002"/>
+<Sound id="THorner02BriefingHan00005"/>
+<Sound id="THorner02BriefingRaynor00006"/>
+<Sound id="THorner02BriefingHorner00007"/>
+<Sound id="THorner02BriefingHorner00008"/>
+<Sound id="THorner02BriefingRaynor00009"/>
+<Sound id="THorner02BriefingHorner00011"/>
+<Sound id="THorner02BriefingRaynor00013"/>
+<Sound id="THorner02BriefingRaynor00018"/>
+<Sound id="THorner02Raynor00001"/>
+<Sound id="THorner02Han00002"/>
+<Sound id="THorner02Han00003"/>
+<Sound id="THorner02Han00004"/>
+<Sound id="THorner02Horner00010"/>
+<Sound id="THorner02Raynor00011"/>
+<Sound id="THorner02Orlan00012"/>
+<Sound id="THorner02Orlan00013"/>
+<Sound id="THorner02Raynor00014" Variations="0"/>
+<Sound id="THorner02Raynor00015" Variations="0"/>
+<Sound id="THorner02Horner00016"/>
+<Sound id="THorner02Han00017"/>
+<Sound id="THorner02Han00018"/>
+<Sound id="THorner02Orlan00019" Variations="0"/>
+<Sound id="THorner02Raynor00020" Variations="0"/>
+<Sound id="THorner02Han00021" Variations="0"/>
+<Sound id="THorner02Han00022"/>
+<Sound id="THorner02Tychus00023"/>
+<Sound id="THorner02Raynor00024"/>
+<Soundtrack id="THorner02MusicEventA"/>
+<Soundtrack id="THorner02MusicIntro"/>
+<Soundtrack id="THorner02MusicMain"/>
+<Soundtrack id="THorner02MusicOutro"/>
+<Terrain id="PortZion"/>
+<TerrainObject id="PortZionScrapElevatorLeftTO1"/>
+<TerrainObject id="PortZionScrapElevatorRightTO1"/>
+<TerrainObject id="PortZionGridFloorTO1"/>
+<TerrainObject id="PortZionGridFloorTO2"/>
+<TerrainObject id="PortZionGridFloorTO3"/>
+<TerrainObject id="PortZionGridFloorCircleTO1"/>
+<TerrainObject id="PortZionGridFloorCircleTO2"/>
+<TerrainObject id="PortZionCrusher1"/>
+<Unit id="CommandCenter"/>
+<Unit id="SupplyDepot"/>
+<Unit id="Barracks"/>
+<Unit id="EngineeringBay"/>
+<Unit id="MissileTurret"/>
+<Unit id="Bunker"/>
+<Unit id="GhostAcademy"/>
+<Unit id="Factory"/>
+<Unit id="Starport"/>
+<Unit id="MercCompound"/>
+<Unit id="Armory"/>
+<Unit id="FusionCore"/>
+<Unit id="AutoTurret"/>
+<Unit id="SiegeTankSieged"/>
+<Unit id="BarracksTechLab"/>
+<Unit id="FactoryTechLab"/>
+<Unit id="SCV"/>
+<Unit id="Marine"/>
+<Unit id="Ghost"/>
+<Unit id="Marauder"/>
+<Unit id="Medivac"/>
+<Unit id="Raven"/>
+<Unit id="Battlecruiser"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="SiegeBreakerSieged"/>
+<Unit id="SpartanCompany"/>
+<Unit id="HammerSecurity"/>
+<Unit id="HelsAngelFighter"/>
+<Unit id="DukesRevenge"/>
+<Unit id="StarportTechReactor"/>
+<Unit id="Vulture"/>
+<Unit id="Wraith"/>
+<Unit id="Firebat"/>
+<Unit id="ElevatorBlocker"/>
+<Unit id="Goliath"/>
+<Unit id="AdjutantCapsule"/>
+<Unit id="ScrapHuge"/>
+<Unit id="ScrapSalvage1x1" Variations="0,1,2,3,4,5,6,7,8"/>
+<Unit id="ScrapSalvage2x2" Variations="0,1,2"/>
+<Unit id="MercenaryFortress"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="Civilian"/>
+<Unit id="ProtossRelic" Variations="1,4"/>
+<Unit id="MineralCrystal"/>
+<Unit id="PalletGas"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
+<Unit id="PortJunker"/>
+<Unit id="AP_SiegeBreaker"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksFlying"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_TechLab"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_FactoryFlying"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenterFlying"/>
+<Unit id="AP_Diamondback"/>
+<Unit id="AP_Vulture"/>
+<Unit id="AP_WarPig"/>
+<Unit id="AP_SpartanCompany"/>
+<Unit id="AP_HammerSecurity"/>
+<Unit id="AP_PlanetaryFortress"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
+<Unit id="AP_Armory"/>
+</Preload>

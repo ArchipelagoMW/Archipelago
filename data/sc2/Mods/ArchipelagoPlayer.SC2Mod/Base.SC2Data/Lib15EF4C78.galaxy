@@ -1,0 +1,584 @@
+include "TriggerLibs/NativeLib"
+
+include "Lib15EF4C78_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Archipelago Player Handlers
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib15EF4C78_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Functions
+string lib15EF4C78_gf_AP_Player_findNovaWeapon (unit lp_sourceNovaUnit) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponCanisterRifle") == true)) {
+        return "AP_NovaWeaponCanisterRifle";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponHellfireShotgun") == true)) {
+        return "AP_NovaWeaponHellfireShotgun";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponPlasmaRifle") == true)) {
+        return "AP_NovaWeaponPlasmaRifle";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponPsiBlade") == true)) {
+        return "AP_NovaWeaponPsiBlade";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponBlazefireBlade") == true)) {
+        return "AP_NovaWeaponBlazefireBlade";
+    }
+    return null;
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: ArchipelagoPlayerHandlersConstructor
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Init () {
+    lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor = TriggerCreate("lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to AP_Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoAP_Barracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_BarracksReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoAP_Barracks_Init () {
+    lib15EF4C78_gt_ReactorswaptoAP_Barracks = TriggerCreate("lib15EF4C78_gt_ReactorswaptoAP_Barracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoAP_Barracks, null, "AP_BarracksReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoBarracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "BarracksReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoBarracks_Init () {
+    lib15EF4C78_gt_ReactorswaptoBarracks = TriggerCreate("lib15EF4C78_gt_ReactorswaptoBarracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoBarracks, null, "BarracksReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to AP_Factory
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoAP_Factory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_FactoryReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoAP_Factory_Init () {
+    lib15EF4C78_gt_ReactorswaptoAP_Factory = TriggerCreate("lib15EF4C78_gt_ReactorswaptoAP_Factory_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoAP_Factory, null, "AP_FactoryReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to Factory
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoFactory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "FactoryReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoFactory_Init () {
+    lib15EF4C78_gt_ReactorswaptoFactory = TriggerCreate("lib15EF4C78_gt_ReactorswaptoFactory_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoFactory, null, "FactoryReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to AP_Starport
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoAP_Starport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_StarportReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoAP_Starport_Init () {
+    lib15EF4C78_gt_ReactorswaptoAP_Starport = TriggerCreate("lib15EF4C78_gt_ReactorswaptoAP_Starport_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoAP_Starport, null, "AP_StarportReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Reactor swap to Starport
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_ReactorswaptoStarport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "StarportReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "Reactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_ReactorswaptoStarport_Init () {
+    lib15EF4C78_gt_ReactorswaptoStarport = TriggerCreate("lib15EF4C78_gt_ReactorswaptoStarport_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_ReactorswaptoStarport, null, "StarportReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to AP_Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoAP_Barracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_BarracksTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoAP_Barracks_Init () {
+    lib15EF4C78_gt_TechLabswaptoAP_Barracks = TriggerCreate("lib15EF4C78_gt_TechLabswaptoAP_Barracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoAP_Barracks, null, "AP_BarracksTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoBarracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "BarracksTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoBarracks_Init () {
+    lib15EF4C78_gt_TechLabswaptoBarracks = TriggerCreate("lib15EF4C78_gt_TechLabswaptoBarracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoBarracks, null, "BarracksTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to AP_Factory
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoAP_Factory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_FactoryTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoAP_Factory_Init () {
+    lib15EF4C78_gt_TechLabswaptoAP_Factory = TriggerCreate("lib15EF4C78_gt_TechLabswaptoAP_Factory_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoAP_Factory, null, "AP_FactoryTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to Factory
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoFactory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "FactoryTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoFactory_Init () {
+    lib15EF4C78_gt_TechLabswaptoFactory = TriggerCreate("lib15EF4C78_gt_TechLabswaptoFactory_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoFactory, null, "FactoryTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to AP_Starport
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoAP_Starport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_StarportTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoAP_Starport_Init () {
+    lib15EF4C78_gt_TechLabswaptoAP_Starport = TriggerCreate("lib15EF4C78_gt_TechLabswaptoAP_Starport_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoAP_Starport, null, "AP_StarportTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Lab swap to Starport
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechLabswaptoStarport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "StarportTechLab"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechLab", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechLabswaptoStarport_Init () {
+    lib15EF4C78_gt_TechLabswaptoStarport = TriggerCreate("lib15EF4C78_gt_TechLabswaptoStarport_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechLabswaptoStarport, null, "StarportTechLab", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to AP_Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechReactorswaptoAP_Barracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_BarracksTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechReactorswaptoAP_Barracks_Init () {
+    lib15EF4C78_gt_TechReactorswaptoAP_Barracks = TriggerCreate("lib15EF4C78_gt_TechReactorswaptoAP_Barracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechReactorswaptoAP_Barracks, null, "AP_BarracksTechReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to AP_Factory
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechReactorswaptoAP_Factory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_FactoryTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechReactorswaptoAP_Factory_Init () {
+    lib15EF4C78_gt_TechReactorswaptoAP_Factory = TriggerCreate("lib15EF4C78_gt_TechReactorswaptoAP_Factory_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechReactorswaptoAP_Factory, null, "AP_FactoryTechReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to AP_Starport
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_TechReactorswaptoAP_Starport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "AP_StarportTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "AP_TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init () {
+    lib15EF4C78_gt_TechReactorswaptoAP_Starport = TriggerCreate("lib15EF4C78_gt_TechReactorswaptoAP_Starport_Func");
+    TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechReactorswaptoAP_Starport, null, "AP_StarportTechReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Player_setHolodecoyWeapon
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnitCreatedUnit()) == "AP_NovaHoloDecoy"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitBehaviorAdd(EventUnitCreatedUnit(), lib15EF4C78_gf_AP_Player_findNovaWeapon(EventUnit()), EventUnitCreatedUnit(), 1);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init () {
+    lib15EF4C78_gt_AP_Player_setHolodecoyWeapon = TriggerCreate("lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Func");
+    TriggerAddEventUnitCreated(lib15EF4C78_gt_AP_Player_setHolodecoyWeapon, null, null, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Set5SecondsMark
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_Set5SecondsMark_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup autoEC3833D4_g;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoEC3833D4_g = PlayerGroupAll();
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(autoEC3833D4_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_currentPlayer, "AP_GameTimeGreaterthan5Seconds", 1);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_Set5SecondsMark_Init () {
+    lib15EF4C78_gt_Set5SecondsMark = TriggerCreate("lib15EF4C78_gt_Set5SecondsMark_Func");
+    TriggerAddEventTimeElapsed(lib15EF4C78_gt_Set5SecondsMark, 5.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: SlayerInit
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_SlayerInit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup auto999E0912_g;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto999E0912_g = PlayerGroupAll();
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto999E0912_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_currentPlayer, "AP_SlayerConfig", 1);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_SlayerInit_Init () {
+    lib15EF4C78_gt_SlayerInit = TriggerCreate("lib15EF4C78_gt_SlayerInit_Func");
+    TriggerAddEventTimeElapsed(lib15EF4C78_gt_SlayerInit, 5.0, c_timeGame);
+}
+
+void lib15EF4C78_InitTriggers () {
+    lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Init();
+    lib15EF4C78_gt_ReactorswaptoAP_Barracks_Init();
+    lib15EF4C78_gt_ReactorswaptoBarracks_Init();
+    lib15EF4C78_gt_ReactorswaptoAP_Factory_Init();
+    lib15EF4C78_gt_ReactorswaptoFactory_Init();
+    lib15EF4C78_gt_ReactorswaptoAP_Starport_Init();
+    lib15EF4C78_gt_ReactorswaptoStarport_Init();
+    lib15EF4C78_gt_TechLabswaptoAP_Barracks_Init();
+    lib15EF4C78_gt_TechLabswaptoBarracks_Init();
+    lib15EF4C78_gt_TechLabswaptoAP_Factory_Init();
+    lib15EF4C78_gt_TechLabswaptoFactory_Init();
+    lib15EF4C78_gt_TechLabswaptoAP_Starport_Init();
+    lib15EF4C78_gt_TechLabswaptoStarport_Init();
+    lib15EF4C78_gt_TechReactorswaptoAP_Barracks_Init();
+    lib15EF4C78_gt_TechReactorswaptoAP_Factory_Init();
+    lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init();
+    lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init();
+    lib15EF4C78_gt_Set5SecondsMark_Init();
+    lib15EF4C78_gt_SlayerInit_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_InitLib_completed = false;
+
+void lib15EF4C78_InitLib () {
+    if (lib15EF4C78_InitLib_completed) {
+        return;
+    }
+
+    lib15EF4C78_InitLib_completed = true;
+
+    lib15EF4C78_InitLibraries();
+    lib15EF4C78_InitTriggers();
+}
+

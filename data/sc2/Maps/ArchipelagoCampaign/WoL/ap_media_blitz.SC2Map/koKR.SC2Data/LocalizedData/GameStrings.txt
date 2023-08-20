@@ -1,0 +1,79 @@
+DocInfo/Author=블리자드 엔터테인먼트 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=테란 호너 04 /// THorner04
+DocInfo/Name=언론의 힘 /// Media Blitz
+MapInfo/Player00/Name=중립 /// Neutral
+MapInfo/Player01/Name=레이너 특공대 /// Raynor's Raiders
+MapInfo/Player02/Name=자치령 /// The Dominion
+MapInfo/Player03/Name=자치령 /// The Dominion
+MapInfo/Player04/Name=자치령 /// The Dominion
+MapInfo/Player05/Name=자치령 /// The Dominion
+MapInfo/Player06/Name=코랄 민간인 /// Korhal Civilians
+MapInfo/Player07/Name=레이너 특공대 /// Raynor's Raiders
+MapInfo/Player08/Name=자치령 /// The Dominion
+Param/Value/05E3338B=방송 전송탑 1에서 데이터 전송 /// Access Broadcast Tower 1
+Param/Value/0930E285=프로토스 고대 물품 /// Mission Start
+Param/Value/0A4F3766=방송 전송탑 2에서 데이터 전송 /// Access Broadcast Tower 2
+Param/Value/10B0314C=보안 초소 /// Security Outpost
+Param/Value/10F24A77=
+Param/Value/159C9C00=자치령 유닛이 움직일 수 있기 전에 오딘으로 가능한 한 많이 처치하십시오. /// Use the Odin to destroy as many Dominion units as possible before they can mobilize.
+Param/Value/16C0437F=
+Param/Value/1B8B3377=보안 초소 /// Security Outpost
+Param/Value/1D6989D7=방송 전송탑 2 /// Broadcast Tower 2
+Param/Value/26108934=방송 전송탑 1에서 데이터 전송 /// Access Broadcast Tower 1
+Param/Value/2642EE49=기지 /// Base
+Param/Value/36760F8C=아니요 /// No
+Param/Value/37412DFF=자치령 방송 전송탑 하나에서 데이터 전송 /// One Dominion Broadcast Tower accessed
+Param/Value/3A40DEA3=
+Param/Value/3DF4DD57=오딘이 기습 공격한 후. /// After Odin sneak attack
+Param/Value/4111D2AB=<c val="00FF00">전송 완료</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/4377BBC3=비밀 발견 /// Secret Found
+Param/Value/43AA9BFF=자치령 방송 전송탑 3개를 점령하고 멩스크가 저지른 기만행위의 증거를 전송할 때까지 사수하십시오. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/47D958C6=방송 전송탑 3 /// Broadcast Tower 3
+Param/Value/4F602271=<c val="00FF00">전송 진행 상황</c> /// <c val="00FF00">Upload Progress</c>
+Param/Value/523513A8=보안 초소 /// Security Outpost
+Param/Value/574A6351=보안 초소 /// Security Outpost
+Param/Value/5F35D842=자치령에 기습 공격 감행 /// Destroy Dominion during the Surprise Attack
+Param/Value/60581E90=방송 전송탑 3에서 데이터 전송 /// Access Broadcast Tower 3
+Param/Value/63E47237=비밀 발견 /// Secret Found
+Param/Value/64685A91=
+Param/Value/70C4D678=방송 전송탑 3 /// Broadcast Tower 3
+Param/Value/719688DC=예 /// Yes
+Param/Value/7B03FE31=방송 전송탑 2에서 데이터 전송 /// Access Broadcast Tower 2
+Param/Value/7B98881E=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/7C54A1E1=자치령 방송 전송탑 3개를 점령하고 멩스크가 저지른 기만행위의 증거를 전송할 때까지 사수하십시오. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7F6061D4=방송 전송탑 1 /// Broadcast Tower 1
+Param/Value/813608F7=
+Param/Value/8F359BA8=보안 초소 /// Security Outpost
+Param/Value/8F385175=<c val="00FF00">전송 완료</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/9293FAA1=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/9A97EDD4=자치령 방송 전송탑 하나에서 데이터 전송 /// Two Dominion Broadcast Towers accessed
+Param/Value/A5099609=자치령을 공격하여 기습 공격을 시작하십시오. /// Attack the Dominion to begin the surprise attack.
+Param/Value/A9280EFD=자치령 방송 전송탑 3개를 점령하고 멩스크가 저지른 기만행위의 증거를 전송할 때까지 사수하십시오. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/AA6A68E5=이 문서에는 비밀 자치령 실험실이<n/>언급되어 있습니다. /// These documents reference a secret<n/>Dominion lab.
+Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">!</c></s> /// <s val="Kicker_Minerals"><c val="FF0000">!</c></s>
+Param/Value/BAA72864=신호를 보내려면 지상 유닛을<n/>신호소 위에 대기시키십시오. /// Keep any ground unit on the<n/>Beacon to upload the signal. 
+Param/Value/C2EAFB32=<c val="00FF00"> /// <c val="00FF00">
+Param/Value/C51AE4DC=
+Param/Value/CA64DF53=자치령에 기습 공격 감행 /// Destroy Dominion during the Surprise Attack
+Param/Value/CB469595=
+Param/Value/CCA9A3B1=방송 전송탑 2 /// Broadcast Tower 2
+Param/Value/CE0A4A63=방송 전송탑 3에서 데이터 전송 /// Access Broadcast Tower 3
+Param/Value/CF471179=오딘이 처치한 유닛 /// Units Killed By Odin
+Param/Value/D9C73D1B=방송 전송탑 1 /// Broadcast Tower 1
+Param/Value/DAF7934D=비밀 임무가 열렸습니다. /// Secret Mission Unlocked
+Param/Value/DE6AF8A1=
+Param/Value/E10677B6=
+Param/Value/E2C19B85=보안 초소 /// Security Outpost
+Param/Value/E4408F4A=%</c> /// %</c>
+Param/Value/E6030984=<c val="00FF00">비밀 문서</c> /// <c val="00FF00">Secret Documents</c>
+Param/Value/E6304B93=남은 기습 공격 시간: /// Surprise Attack Ends In:
+Param/Value/E9217D45=모든 구조물이 파괴되었습니다. /// All of your structures have been destroyed.
+Param/Value/EBD210CF=
+Param/Value/FCB0FE8A=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/FFD0115C=
+Sound/Name/PlaceholderSoundFile2=자리 표시자 소리 파일 (모선) /// PlaceholderSoundFile (Mothership)
+Unit/Name/Civilian=민간인 /// Civilian
+Unit/Name/CivilianFemale=민간인 /// Civilian
+Unit/Name/Odin=오딘 /// Odin
+Water/Name/Template 2=템플릿 2 /// Template 2

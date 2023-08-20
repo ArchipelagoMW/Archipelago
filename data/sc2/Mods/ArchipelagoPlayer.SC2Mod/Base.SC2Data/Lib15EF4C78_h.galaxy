@@ -1,0 +1,29 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Archipelago Player Handlers
+//--------------------------------------------------------------------------------------------------
+// Function Declarations
+string lib15EF4C78_gf_AP_Player_findNovaWeapon (unit lp_sourceNovaUnit);
+
+// Trigger Declarations
+trigger lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor;
+trigger lib15EF4C78_gt_ReactorswaptoAP_Barracks;
+trigger lib15EF4C78_gt_ReactorswaptoBarracks;
+trigger lib15EF4C78_gt_ReactorswaptoAP_Factory;
+trigger lib15EF4C78_gt_ReactorswaptoFactory;
+trigger lib15EF4C78_gt_ReactorswaptoAP_Starport;
+trigger lib15EF4C78_gt_ReactorswaptoStarport;
+trigger lib15EF4C78_gt_TechLabswaptoAP_Barracks;
+trigger lib15EF4C78_gt_TechLabswaptoBarracks;
+trigger lib15EF4C78_gt_TechLabswaptoAP_Factory;
+trigger lib15EF4C78_gt_TechLabswaptoFactory;
+trigger lib15EF4C78_gt_TechLabswaptoAP_Starport;
+trigger lib15EF4C78_gt_TechLabswaptoStarport;
+trigger lib15EF4C78_gt_TechReactorswaptoAP_Barracks;
+trigger lib15EF4C78_gt_TechReactorswaptoAP_Factory;
+trigger lib15EF4C78_gt_TechReactorswaptoAP_Starport;
+trigger lib15EF4C78_gt_AP_Player_setHolodecoyWeapon;
+trigger lib15EF4C78_gt_Set5SecondsMark;
+trigger lib15EF4C78_gt_SlayerInit;
+

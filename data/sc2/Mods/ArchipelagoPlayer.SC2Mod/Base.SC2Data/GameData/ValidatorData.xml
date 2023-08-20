@@ -1,0 +1,3873 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CValidatorCombine default="1" id="AP_SCBW_Effect">
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine default="1" id="AP_SCBW_Behavior">
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHaveRaptor">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHaveRaptor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSImpaler">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSImpaler"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSLurker">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSLurker"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMutaliskViper">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMutaliskViper"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMutaliskBroodlord">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMutaliskBroodlord"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NotHaveHotSSwarmHostSplitA">
+        <CombineArray value="AP_HaveHotSSwarmHostSplitA"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_PunisherGrenadesResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_JackhammerConcussionGrenadesResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_PunisherGrenadesSlowTargetFilters">
+        <Filters value="-;Massive"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_BearclawNozzlesPurchased">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_BearclawNozzlesResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FirebatUpgraded">
+        <CombineArray value="AP_JuggernautPlatingPurchased"/>
+        <CombineArray value="AP_BearclawNozzlesPurchased"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_JuggernautPlatingPurchased">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_JuggernautPlatingResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsKillSquad">
+        <WhichUnit Value="Source"/>
+        <Value value="1"/>
+        <Behavior value="AP_KillSquad"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_D8ClusterBombsResearched">
+        <Find value="1"/>
+        <Value value="AP_HaveD8ClusterBomb"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_D8ChargeUnitLink">
+        <Value value="AP_D8Charge"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasHellionInfernalPreIgniter">
+        <Find value="1"/>
+        <Value value="AP_UseHellionInfernalPreIgniter"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NapalmFuelTanksPurchased">
+        <Find value="1"/>
+        <Value value="AP_NapalmFuelTanksResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasHighCapacityBarrels">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_UseHighCapacityBarrels"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasTwinLinkedFlameThrowers">
+        <Find value="1"/>
+        <Value value="AP_UseTwinLinkedFlameThrowers"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaHellion">
+        <Value value="Hellion"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHellion">
+        <Value value="AP_Hellion"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotVanillaHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotAPHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="AP_Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_SourceIsNotHellion">
+        <CombineArray value="AP_SourceIsNotVanillaHellion"/>
+        <CombineArray value="AP_SourceIsNotAPHellion"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_AtLeastOneHealBeamBusy">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="AP_MedivacHealBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_AuxilaryMedBotsPurchased">
+        <Find value="1"/>
+        <Value value="AP_AuxiliaryMedBotsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_ExpandedHullPurchased">
+        <Find value="1"/>
+        <Value value="AP_ExpandedHullResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HealBeamAvailable">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <Behavior value="AP_MedivacHealBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_HealPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_MedivacIsHealing"/>
+        <CombineArray value="LifeGTZero"/>
+        <CombineArray value="AP_NotMaxHP"/>
+        <CombineArray value="AP_HealTargetInRange"/>
+        <CombineArray value="NotHidden"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_HealScanPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_AtLeastOneHealBeamBusy"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_HealTargetInRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LE"/>
+        <Range value="4"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HALORocketsResearched">
+        <Find value="1"/>
+        <Value value="AP_HALORocketsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_ClusterWarheadsPurchased">
+        <Find value="1"/>
+        <Value value="AP_ClusterWarheadsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaBanshee">
+        <Value value="Banshee"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBanshee">
+        <Value value="AP_Banshee"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_GhostHoldingFire">
+        <Compare value="GT"/>
+        <Behavior value="AP_GhostHoldFire"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_GhostNotHoldingFire">
+        <Behavior value="AP_GhostHoldFire"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_GhostPermanentCloakNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_GhostPermanentCloak"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveGhostAlternate">
+        <Find value="1"/>
+        <Value value="AP_HaveGhostAlternate"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HaveGhostAlternateorGhostJunker">
+        <CombineArray value="AP_HaveGhostAlternate"/>
+        <CombineArray value="AP_HaveGhostJunker"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveGhostJunker">
+        <Find value="1"/>
+        <Value value="AP_HaveGhostJunker"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveRewardThorSkin">
+        <Find value="1"/>
+        <Value value="AP_HaveRewardThorSkin"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasLiberatorMorphBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_LiberatorTargetMorphBehavior"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasNoLiberatorYoink">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_YoinkTentacle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_DontDamageOwnedWidowMines">
+        <CombineArray value="AP_IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="AP_OwnedBySelf"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveWidowMineImprovedConcealmentUpgrade">
+        <Find value="1"/>
+        <Value value="AP_HaveWidowMineImprovedConcealment"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveCycloneLockOnDamageUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveCycloneLockOnDamageUpgrade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveCycloneLockOnRangeUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_CycloneLockOnRangeUpgrade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_CampaignNeoSteelFramePurchased">
+        <Value value="AP_CampaignNeoSteelFramePurchased"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FortifiedAndShrike">
+        <Type value="And"/>
+        <CombineArray value="AP_HasFortifiedCarapace"/>
+        <CombineArray value="AP_HasShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FortifiedNoShrike">
+        <Type value="And"/>
+        <CombineArray value="AP_HasFortifiedCarapace"/>
+        <CombineArray value="AP_NoShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NoShrikeTurret">
+        <Find value="1"/>
+        <Value value="AP_ShrikeTurretNotResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasFortifiedCarapace">
+        <Find value="1"/>
+        <Value value="AP_FortifiedCarapace"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HiveMindEmulatorTargetFilters">
+        <ResultFailed value="OKPlaceholder"/>
+        <Type value="And"/>
+        <CombineArray value="NotLarva"/>
+        <CombineArray value="NotLarvaEgg"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_CasterIsVanillaCommandCenter">
+        <WhichUnit Value="Caster"/>
+        <Value value="CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_CasterIsAPCommandCenter">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeMinimumRange">
+        <ResultFailed value="TargetIsTooClose"/>
+        <Compare value="GT"/>
+        <Range value="2"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeCampaignDistance">
+        <WhichLocation Effect="AP_BurrowChargePoint"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeCampaignDistanceStructure">
+        <WhichLocation Effect="AP_BurrowChargeStructure" Value="TargetUnit"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeDistance">
+        <WhichLocation Effect="AP_BurrowChargeInitialRevD"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitFilters id="AP_BurrowChargeEnemyTarget">
+        <WhichUnit Effect="AP_BurrowChargeMPForcePersistent"/>
+        <Filters value="-;Player,Ally,Neutral"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_BurrowChargeRevDValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeDistance"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_BurrowChargeStructureValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeCampaignDistanceStructure"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_BurrowChargeValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeCampaignDistance"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_CarrierRepairDroneHealNotCasting">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_CarrierRepairDroneHealController"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CarrierRepairDroneHealTargetNotBeingHealed">
+        <ResultFailed value="Error,VoidScienceVesselNanoRepairTargetNotBeingHealed"/>
+        <Behavior value="AP_CarrierRepairDroneHealTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_BroodlingEscortFilters">
+        <WhichUnit Effect="AP_BroodlingEscort"/>
+        <Filters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="CasterIsCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_CasterIsVanillaCommandCenter"/>
+        <CombineArray value="AP_CasterIsAPCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_CommandCenterReactorPurchased">
+        <Find value="1"/>
+        <Value value="AP_CommandCenterReactorResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CommandCenterReactorPurchasedAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_CommandCenterReactorPurchased"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_CommandCenterTransportSCV">
+        <Value value="AP_SCV"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPArmory">
+        <Value value="AP_Armory"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaArmory">
+        <Value value="Armory"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareDamageTakenTime id="AP_CasterNotInCombatShort">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="0.25"/>
+    </CValidatorUnitCompareDamageTakenTime>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMonarchBlades">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMonarchBlades"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSTissueAssimilation">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSTissueAssimilation"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSTorrasque">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSTorrasque"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSNoxious">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSNoxious"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_UseBaseUltraliskModel">
+        <CombineArray value="AP_HaveHotSTorrasque"/>
+        <CombineArray value="AP_HaveHotSNoxious"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHaveHotSTorrasque">
+        <CombineArray value="AP_HaveHotSTorrasque"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_UseNoxiousUltraliskModel">
+        <CombineArray value="AP_NotHaveHotSTorrasque"/>
+        <CombineArray value="AP_HaveHotSNoxious"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPUltraliskBurrowed">
+        <Value value="AP_UltraliskBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_ImpalerIsBurrowed">
+        <ResultFailed value="Error,Error/AP_ImpalerBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ImpalerWeaponDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSExplosiveSpines">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSExplosiveSpines"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSwarmHostSplitA">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HotSHaveSwarmHostSplitA"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSwarmHostSplitB">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HotSHaveSwarmHostSplitB"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareSpeed id="AP_InterceptorIsNotStationary">
+        <Compare value="NE"/>
+    </CValidatorUnitCompareSpeed>
+    <CValidatorPlayerRequirement id="AP_HotSKeneticMitosisResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSKeneticMitosis"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSEngorgedAppendages">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSEngorgedAppendages"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSExplosiveGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSExplosiveGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRapidRegeneration">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRapidRegeneration"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSViciousGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack11Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="11"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack13Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="13"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack15Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="15"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack3Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="3"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack5Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="5"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack7Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="7"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack9Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="9"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_ImmortalShakurasShadowCannonTargetFilters">
+        <WhichUnit Effect="AP_ImmortalShakurasShadowCannonTargetingCP"/>
+        <Filters value="-;Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ImmortalShakurasShadowCannonValidators">
+        <Type value="And"/>
+        <CombineArray value="CasterIsNotHidden"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+        <CombineArray value="AP_ImmortalShakurasShadowCannonTargetFilters"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_CasterNotStunned">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stunned"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_CentrificalHooksResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveCentrificalHooks"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgrade">
+        <Type value="And"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgradeAndIsConstructing">
+        <Type value="And"/>
+        <CombineArray value="IsConstructing"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgradeAndTargetFullLife">
+        <Type value="And"/>
+        <CombineArray value="TargetLifeFull"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSplitterlingHiddenBuff">
+        <WhichUnit Value="Source"/>
+        <Value value="1"/>
+        <Behavior value="AP_BanelingTimedLifeHiddenBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSBanelingHeal">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSCorrosiveBile">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSBanelingCorrosiveBile"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HaveHotSCorrosiveBileAndNotStructure">
+        <Type value="And"/>
+        <CombineArray value="AP_HaveHotSCorrosiveBile"/>
+        <CombineArray value="NotStructure"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHunter">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHunter"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRupture">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRupture"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSplitterling">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSSplitterling"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVolatileBurstBuilding">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VolatileBurstBuilding"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_HunterCliffCompare">
+        <CombineArray value="AP_HunterCliffCheckEqualLevel"/>
+        <CombineArray value="AP_HunterCliffCompare12"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel2"/>
+        <CombineArray value="AP_HunterCliffCompare32"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel1">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="1"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel2">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="2"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel3">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="3"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckEqualLevel">
+        <OtherLocation Value="CasterPoint"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckTargetLevel2">
+        <Value value="2"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorCombine id="AP_HunterCliffCompare12">
+        <Type value="And"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel1"/>
+        <CombineArray value="AP_HunterCliffCheckTargetLevel2"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_HunterCliffCompare32">
+        <Type value="And"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel3"/>
+        <CombineArray value="HunterCliffCheckTargetLevel2"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOAHeroicShield">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveSOAHeroicShield"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DoesNotHaveHeroicShieldWeakness">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_VoidZealotTerazineFuryWeakness"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSOAHeroicShieldImmunity">
+        <Compare value="GT"/>
+        <Behavior value="AP_SOAHeroicShieldImmunity"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHeroicShieldCleanUp">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHeroicShieldCleanUp"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DoesNotHaveSOAHeroicShieldWeakness">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_SOAHeroicShieldWeakness"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury1">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury1"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury2">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury2"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury3">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury3"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury4">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury4"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveHotSZerglingFury5">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingFury5"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingFury">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingFury"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingRange">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingRange"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingSunder">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingSunder"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHaveSwarmling">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHaveSwarmling"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveZerglingRangeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_ZerglingRange"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSZerglingFrenzy">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSZerglingFrenzy"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_HotSRaptorChargeMaxDistance">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="4"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaArmory"/>
+        <CombineArray value="AP_IsAPArmory"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBanshee"/>
+        <CombineArray value="AP_IsAPBanshee"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_BattlecruiserUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveWeaponRefit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaBattlecruiser">
+        <Value value="Battlecruiser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBattlecruiser">
+        <Value value="AP_Battlecruiser"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaBarracks">
+        <Value value="Barracks"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBarracks">
+        <Value value="AP_Barracks"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBarracks" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBarracks"/>
+        <CombineArray value="AP_IsAPBarracks"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsBattlecruiser" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBattlecruiser"/>
+        <CombineArray value="AP_IsAPBattlecruiser"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaBarracksTechLab">
+        <Value value="BarracksTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBarracksTechLab">
+        <Value value="AP_BarracksTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBarracksTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBarracksTechLab"/>
+        <CombineArray value="AP_IsAPBarracksTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaFactoryTechLab">
+        <Value value="FactoryTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPFactoryTechLab">
+        <Value value="AP_FactoryTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPFactory">
+        <Value value="AP_Factory"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaFactory">
+        <Value value="Factory"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsFactory" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFactory"/>
+        <CombineArray value="AP_IsAPFactory"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsCasterCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <!-- There are two same validators in Vanilla, we just delegate then -->
+        <CombineArray value="CasterIsCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaCommandCenter">
+        <Value value="CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCommandCenter">
+        <Value value="AP_CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCommandCenter"/>
+        <CombineArray value="AP_IsAPCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaCommandCenterFlying">
+        <WhichUnit Value="Outer"/>
+        <Value value="CommandCenterFlying"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCommandCenterFlying">
+        <WhichUnit Value="Outer"/>
+        <Value value="AP_CommandCenterFlying"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCommandCenterFlying" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCommandCenterFlying"/>
+        <CombineArray value="AP_IsAPCommandCenterFlying"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPRoach">
+        <Value value="AP_Roach"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPRoachBurrowed">
+        <Value value="AP_RoachBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsRoachVileStructureTarget">
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <CombineArray value="AP_IsAPBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsSpineCrawler"/>
+        <CombineArray value="AP_IsSporeCrawler"/>
+        <CombineArray value="IsPlanetaryFortress"/>
+        <CombineArray value="IsAutoTurret"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsRoachling">
+        <Value value="AP_Roachling"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBurrowCharging">
+        <Behavior value="AP_BurrowCharging"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBurrowChargingRevD">
+        <Behavior value="AP_BurrowChargingRevD"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoBurrowChargingRevD">
+        <ResultFailed value="Error,Error/CantTargetBurrowCharging"/>
+        <Behavior value="AP_BurrowChargingRevD"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsNotLurkerCocoon">
+        <Value value="AP_HydraliskLurkerEgg"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_LurkerIsBurrowed">
+        <ResultFailed value="Error,Error/AP_LurkerBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LurkerWeaponDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsKillerPhantasm">
+        <Value value="1"/>
+        <Behavior value="AP_KillerPhantasm"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsHellionTank">
+        <Value value="AP_HellionTank"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotHellionTank">
+        <!-- TODO: Add vanilla HellionTank in ArchipelagoPlayerHotS/LotV -->
+        <ResultFailed value="CantLoadThatUnit"/>
+        <Value value="AP_HellionTank"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHostBurrowed">
+        <Value value="AP_SwarmHostBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHost">
+        <Value value="AP_SwarmHost"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHostRooted">
+        <Value value="AP_SwarmHostRooted"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsInfestorBurrowed">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_InfestorBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotBroodlingFate">
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="AP_BroodlingFate"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotBroodlord">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_BroodLord"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotBroodlordCocoon">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_BroodLordCocoon"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsHatchery" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHatchery"/>
+        <CombineArray value="AP_IsAPHatchery"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaHatchery">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Hatchery"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHatchery">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Hatchery"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsHive" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHive"/>
+        <CombineArray value="AP_IsAPHive"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaHive">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Hive"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPHive">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Hive"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsLair" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaLair"/>
+        <CombineArray value="AP_IsAPLair"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaLair">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="Lair"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPLair">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_Lair"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsImmortal">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalAiur">
+        <Value value="AP_ImmortalAiur"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalShakuras">
+        <Value value="AP_ImmortalShakuras"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalTaldarim">
+        <Value value="AP_ImmortalTaldarim"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotImmortal">
+        <CombineArray value="IsImmortal"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsInvulnerableAndHasSOAHeroicShieldImmunity">
+        <Type value="And"/>
+        <CombineArray value="AP_IsInvulnerable"/>
+        <CombineArray value="AP_HasSOAHeroicShieldImmunity"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsSOACaster">
+        <Value value="AP_SoACaster"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsInvulnerable">
+        <Filters value="Invulnerable;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="IsZergling" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaZergling"/>
+        <CombineArray value="AP_IsAPZergling"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaZergling">
+        <Value value="Zergling"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPZergling">
+        <Value value="AP_Zergling"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsZerglingBurrowed" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaZerglingBurrowed"/>
+        <CombineArray value="AP_IsAPZerglingBurrowed"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaZerglingBurrowed">
+        <Value value="ZerglingBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPZerglingBurrowed">
+        <Value value="AP_ZerglingBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <CombineArray value="IsCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotFlyingCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="IsCommandCenterFlying"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsCasterVanillaPlanetaryFortress">
+        <WhichUnit Value="Caster"/>
+        <Value value="PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCasterAPPlanetaryFortress">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCasterPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsCasterVanillaPlanetaryFortress"/>
+        <CombineArray value="AP_IsCasterAPPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsFactoryTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFactoryTechLab"/>
+        <CombineArray value="AP_IsAPFactoryTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaGhostAcademy">
+        <Value value="GhostAcademy"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPGhostAcademy">
+        <Value value="AP_GhostAcademy"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsGhostAcademy" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaGhostAcademy"/>
+        <CombineArray value="AP_IsAPGhostAcademy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaHellion"/>
+        <CombineArray value="AP_IsAPHellion"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaEngineeringBay">
+        <Value value="EngineeringBay"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPEngineeringBay">
+        <Value value="AP_EngineeringBay"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsEngineeringBay" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaEngineeringBay"/>
+        <CombineArray value="AP_IsAPEngineeringBay"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPMedivac">
+        <Value value="AP_Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaMedivac">
+        <Value value="Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMedivac" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMedivac"/>
+        <CombineArray value="AP_IsAPMedivac"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaMULE">
+        <Value value="MULE"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPMULE">
+        <Value value="AP_MULE"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMULE" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMULE"/>
+        <CombineArray value="AP_IsAPMULE"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NotHaveHotSMonarchBlades">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSMonarchBlades"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotFungalGrowthed">
+        <Value value="1"/>
+        <!-- Used to remove AP_FungalGrowthMovement behavior, -->
+        <!-- so should ignore vanilla FungalGrowth -->
+        <Behavior value="AP_FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotInfestorBurrowed">
+        <Value value="AP_InfestorBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotMothershipCore">
+        <ResultFailed value="Error,Error/NotMothershipCore"/>
+        <!-- TODO: Replace with MothershipCore in ArchipelagoPlayerHotS/LotV -->
+        <Value value="AP_Dummy"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NotHotSExplosiveGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSExplosiveGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NotHotSExplosiveGlaiveAndHaveHotSViciousGlaive">
+        <Type value="And"/>
+        <CombineArray value="AP_NotHotSExplosiveGlaive"/>
+        <CombineArray value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHotSExplosiveGlaiveAndNotHotSViciousGlaive">
+        <Type value="And"/>
+        <CombineArray value="AP_NotHotSExplosiveGlaive"/>
+        <CombineArray value="AP_NotHotSViciousGlaive"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NotHotSViciousGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_NotSpineCrawlerUprooted">
+        <Value value="AP_SpineCrawlerUprooted"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotSporeCrawlerUprooted">
+        <Value value="AP_SporeCrawlerUprooted"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NotHaveHeroicShieldCleanUp">
+        <ResultNoPlayer value="Error"/>
+        <Value value="AP_HaveHeroicShieldCleanUp"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
+        <!-- Overrride -->
+        <CombineArray value="IsMULE"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_MedivacIsHealing">
+        <AbilLink value="AP_MedivacDoubleBeamHeal"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_MedivacUpgrade">
+        <CombineArray value="AP_RapidDeploymentPurchased"/>
+        <CombineArray value="AP_ExpandedHullPurchased"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareMarkerCount id="AP_NoMedivacMarkers">
+        <ResultFailed value="AlreadyTargeted"/>
+        <WhichUnit Effect="AP_MedivacHeal"/>
+    </CValidatorUnitCompareMarkerCount>
+    <CValidatorUnitType id="AP_IsAPThorBaseMode">
+        <Value value="AP_Thor"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPThorAltMode">
+        <Value value="AP_Thor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAPThor">
+        <CombineArray value="AP_IsAPThorBaseMode"/>
+        <CombineArray value="AP_IsAPThorAltMode"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaThor">
+        <Value value="Thor"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSupplyDepotLowered">
+        <Value value="SupplyDepotLowered"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPSupplyDepotLowered">
+        <Value value="AP_SupplyDepotLowered"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaPlanetaryFortress">
+        <Value value="PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPlanetaryFortress">
+        <Value value="AP_PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPlanetaryFortress"/>
+        <CombineArray value="AP_IsAPPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <CombineArray value="IsPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaOrbitalCommand">
+        <Value value="OrbitalCommand"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPOrbitalCommand">
+        <Value value="AP_OrbitalCommand"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaOrbitalCommand"/>
+        <CombineArray value="AP_IsAPOrbitalCommand"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <CombineArray value="IsOrbitalCommand"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingOrbitalCommand">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="OrbitalCommandFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingOrbitalCommand">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_OrbitalCommandFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingOrbitalCommand"/>
+        <CombineArray value="AP_NotAPFlyingOrbitalCommand"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorLocationPlacement id="AP_MULEPlacementCheck">
+        <Range value="2"/>
+        <Unit value="AP_MULE"/>
+    </CValidatorLocationPlacement>
+    <CValidatorLocationType id="AP_MULETargetCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Point value="AP_MULEPlacementCheck"/>
+        <Unit value="AP_MULEUnitCheck"/>
+    </CValidatorLocationType>
+    <CValidatorCombine id="AP_MULEUnitCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Type value="And"/>
+        <CombineArray value="Minerals"/>
+        <CombineArray value="AP_MULEPlacementCheck"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPStarport">
+        <Value value="AP_Starport"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStarport">
+        <Value value="Starport"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarport"/>
+        <CombineArray value="AP_IsAPStarport"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaMercCompound">
+        <Value value="MercCompound"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPMercCompound">
+        <Value value="AP_MercCompound"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMercCompound" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMercCompound"/>
+        <CombineArray value="AP_IsAPMercCompound"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsSupplyDepotLowered" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>
+        <CombineArray value="AP_IsAPSupplyDepotLowered"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPMissileTurret">
+        <Value value="AP_MissileTurret"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaMissileTurret">
+        <Value value="MissileTurret"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMissileTurret" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarportTechLab"/>
+        <CombineArray value="AP_IsAPStarportTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPStarportTechLab">
+        <Value value="AP_StarportTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStarportTechLab">
+        <Value value="StarportTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStarportTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarportTechLab"/>
+        <CombineArray value="AP_IsAPStarportTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsAPSupplyDepotMorphing">
+        <ResultFailed value="MustTargetStructures,Error/CantTargetWhileMorphing"/>
+        <Behavior value="AP_SupplyDepotMorphing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsVanillaSupplyDepotMorphing">
+        <ResultFailed value="MustTargetStructures,Error/CantTargetWhileMorphing"/>
+        <Behavior value="SupplyDepotMorphing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsSupplyDepotMorphing" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSupplyDepotMorphing"/>
+        <CombineArray value="AP_IsAPSupplyDepotMorphing"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsTechReactor">
+        <Value value="AP_TechReactor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsThor" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaThor"/>
+        <CombineArray value="AP_IsAPThor"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPRaven">
+        <Value value="AP_Raven"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaRaven">
+        <Value value="Raven"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsRaven" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaRaven"/>
+        <CombineArray value="AP_IsAPRaven"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaPointDefenseDrone">
+        <Value value="PointDefenseDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit,Error/CantTargetPointDefenseDrone"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPPointDefenseDrone">
+        <Value value="AP_PointDefenseDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit,Error/CantTargetPointDefenseDrone"/>
+    </CValidatorUnitType>
+    <CValidatorLocationCompareRange id="AP_LiberatorAGNotOutOfRange">
+        <Compare value="LE"/>
+        <Range value="9"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorAGTargets">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LiberatorTargetMorphAGAttackable"/>
+        <RequireCasterUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_LiberatorMorphValidatorCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_HasLiberatorMorphBehavior"/>
+        <CombineArray value="AP_HasNoLiberatorYoink"/>
+        <CombineArray value="AP_LiberatorNotRecallingMothership"/>
+        <CombineArray value="AP_LiberatorNotRecallingMothershipCore"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
+        <CombineArray value="AP_LiberatorAGNotOutOfRange"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorNotRecallingMothership">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_LiberatorNotRecallingMothershipCore">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="MothershipCoreRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsWidowMine">
+        <Value value="AP_WidowMine"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsWidowMineBurrowed">
+        <Value value="AP_WidowMineBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsWidowMineOrWidowMineBurrowed">
+        <CombineArray value="AP_IsWidowMine"/>
+        <CombineArray value="AP_IsWidowMineBurrowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHaveWidowMineImprovedConcealmentUpgrade">
+        <CombineArray value="AP_HaveWidowMineImprovedConcealmentUpgrade"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NeosteelFrameNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_JumboBunkerNotResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NeosteelFramePurchased">
+        <CombineArray value="AP_NeosteelFrameNotPurchased"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_MissileTurretUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveReinforcedSuperstructure"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_MissileTurretUpgradedNoConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_MissileTurretUpgraded"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingBarracks">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="BarracksFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingBarracks">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_BarracksFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingBarracks" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingBarracks"/>
+        <CombineArray value="AP_NotAPFlyingBarracks"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingFactory">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="FactoryFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingFactory">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_FactoryFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingFactory" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingFactory"/>
+        <CombineArray value="AP_NotAPFlyingFactory"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingStarport">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="StarportFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingStarport">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_StarportFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingStarport"/>
+        <CombineArray value="AP_NotAPFlyingStarport"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotGhostAcademy" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Negate value="1"/>
+        <CombineArray value="IsGhostAcademy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotMissileTurret" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Negate value="1"/>
+        <CombineArray value="IsMissileTurret"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_NotVanillaPointDefenseDrone"/>
+        <CombineArray value="AP_NotAPPointDefenseDrone"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_PointDefenseDroneUnitFilter">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Type value="And"/>
+        <CombineArray value="noMarkers"/>
+        <CombineArray value="MissileIsActive"/>
+        <CombineArray value="NotRoachMissile"/>
+    </CValidatorCombine>
+    <!-- Vanilla IsViking works based on SelectAlias, not need to override -->
+    <CValidatorUnitType id="AP_IsVanillaVikingAssault">
+        <Value value="VikingAssault"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPVikingAssault">
+        <Value value="AP_VikingAssault"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsVikingAssault" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaVikingAssault"/>
+        <CombineArray value="AP_IsAPVikingAssault"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaVikingFighter">
+        <Value value="VikingFighter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPVikingFighter">
+        <Value value="AP_VikingFighter"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsVikingFighter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaVikingFighter"/>
+        <CombineArray value="AP_IsAPVikingAssault"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_LockdownTargetFilters">
+        <Filters value="Mechanical,Visible;Self,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="NotHellion" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="IsHellion"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVulture">
+        <Value value="AP_Vulture"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasCerberusMines">
+        <Find value="1"/>
+        <Value value="AP_UseCerberusMines"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_NotSpiderMine">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_SpiderMine"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotSpiderMineBurrowed">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_SpiderMineBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareChargeUsed id="AP_SpiderMineUsed">
+        <ResultFailed value="Error,VultureMineMax"/>
+        <Compare value="GT"/>
+        <ChargeLink value="Abil/AP_VultureSpiderMines"/>
+        <Location value="Unit"/>
+    </CValidatorUnitCompareChargeUsed>
+    <CValidatorPlayerRequirement id="AP_BurstCapacitorsPurchased">
+        <Find value="1"/>
+        <Value value="AP_BurstCapacitorsResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_DiamondbackCharged">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_BurstCapacitorsDamageBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_DiamondbackNotAttacking">
+        <Behavior value="AP_BurstCapacitorsAttacking"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HasShapedBlast">
+        <Find value="1"/>
+        <Value value="AP_UseShapedBlast"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsAPSiegeTank">
+        <Value value="AP_SiegeTank"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSiegeTank">
+        <Value value="SiegeTank"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsSiegeTank" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSiegeTank"/>
+        <CombineArray value="AP_IsAPSiegeTank"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotSiegeTank" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="IsSiegeTank"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NoShapedBlast">
+        <Find value="1"/>
+        <Value value="AP_NoShapedBlast"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_RapidDeploymentPurchased">
+        <Find value="1"/>
+        <Value value="AP_RapidDeploymentResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingHealed">
+        <Behavior value="AP_MedivacTargetBeingHealed"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitOrderQueue id="AP_NotStopping">
+        <AbilLink value="stop"/>
+        <Find value="0"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitCompareVital id="AP_NotMaxHP">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Type value="Fraction"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorLocationCompareRange id="AP_VikingTargetInRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="12"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitFilters id="AP_IsCloaked">
+        <Filters value="Cloaked;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TacticalBansheeCloakOff" parent="TacticalCloakSharedOff" unitLink="AP_Banshee"/>
+    <CValidatorCombine id="AP_TacticalBansheeCloakOn" parent="TacticalCloakSharedOn" unitLink="AP_Banshee"/>
+    <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearch" parent="TacticalCloakThreatSearch" unitLink="AP_Banshee"/>
+    <CValidatorLocationEnumArea id="AP_TacticalBansheeCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Banshee"/>
+    <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensAP_Banshee" parent="UnitThreatens" unitLink="AP_Banshee"/>
+    <CValidatorUnitFilters id="AP_YamatoTargetFilters">
+        <Filters value="-;Self,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TacticalGhostCloakOff" parent="TacticalCloakSharedOff" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_TacticalGhostCloakOn">
+        <Type value="And"/>
+        <CombineArray value="AP_TacticalGhostSharedOn"/>
+        <CombineArray value="TacticalCloakNotDetected"/>
+    </CValidatorCombine>
+    <CValidatorLocationEnumArea id="AP_TacticalGhostCloakThreatSearch" parent="TacticalCloakThreatSearch" unitLink="AP_Ghost"/>
+    <CValidatorLocationEnumArea id="AP_TacticalGhostCloakThreatSearchEmpty" parent="TacticalCloakThreatSearchEmpty" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_TacticalGhostSharedOn" parent="TacticalCloakSharedOn" unitLink="AP_Ghost"/>
+    <CValidatorUnitCompareAttackPriority id="AP_UnitThreatensGhost" parent="UnitThreatens" unitLink="AP_Ghost"/>
+    <CValidatorCombine id="AP_SpectreLockdown">
+        <ResultFailed value="CantLockdown"/>
+        <Type value="And"/>
+        <CombineArray value="LockdownTargetFilters"/>
+        <CombineArray value="NotMothership"/>
+        <CombineArray value="NotTrain"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_SpectrePermanentCloakNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_SpectrePermanentCloak"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_NotThorWreckage">
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Value value="AP_ThorWreckage"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_empUTargetFilters">
+        <Filters value="-;Stasis,Dead,Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVoidShade">
+        <Value value="1"/>
+        <Behavior value="VoidShade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveTerrazineShadow">
+        <Value value="1"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotWidowMineTarget">
+        <ResultFailed value="Error,Error/NotWidowMineTarget"/>
+        <Behavior value="AP_MineDroneCountdown"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareCooldown id="AP_WidowMineAttackNotOnCooldown">
+        <CooldownLink value="Abil/WidowMineAttack"/>
+        <Ability value="AP_WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitCompareCooldown id="AP_WidowMineAttackOnCooldown">
+        <Compare value="NE"/>
+        <CooldownLink value="Abil/AP_WidowMineAttack"/>
+        <Ability value="AP_WidowMineAttack"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitFilters id="AP_OwnedBySelf">
+        <Filters value="-;Ally,Neutral,Enemy"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnAirTargetNotDead">
+        <WhichUnit Effect="AP_LockOnAirFireSet"/>
+        <Filters value="Air;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnCasterFilters">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stasis,Dead,Hidden,Stunned"/>
+    </CValidatorUnitFilters>
+    <CValidatorLocationCompareRange id="AP_LockOnCasterNearTarget">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="12"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_LockOnCasterNearTargetUpgraded">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="15"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_LockOnGroundAirPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+        <!-- <CombineArray value="CasterDoesNotHaveScramblerMissileBehavior"/> -->
+        <!-- Not Applicable to WoL environment -->
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_LockOnPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTarget"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_LockOnPeriodicValidatorsUpgraded">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_LockOnTargetFilters">
+        <Filters value="Visible;Player,Ally,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnTargetNotDead">
+        <WhichUnit Effect="AP_LockOnFireSet"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnTargetNotDeadNew">
+        <WhichUnit Effect="AP_LockOnInitialSetNew"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_LockOnTargetNotDeadSet">
+        <CombineArray value="AP_LockOnTargetNotDead"/>
+        <CombineArray value="AP_LockOnAirTargetNotDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_LockingOn">
+        <ResultFailed value="Error,AP_NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotLockingOn">
+        <ResultFailed value="Error,NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotLockOn">
+        <Behavior value="AP_LockOn"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterLockingOn">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CycloneWeaponLaunchMissileAlternate">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_CycloneWeaponLaunchMissileAlternate"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVanillaBunker">
+        <Value value="Bunker"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBunker">
+        <Value value="AP_Bunker"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAnyBunker">
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <CombineArray value="AP_IsAPBunker"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsDefensiveStructure">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <CombineArray value="AP_IsAPBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsSpineCrawler"/>
+        <CombineArray value="AP_IsSporeCrawler"/>
+        <CombineArray value="IsPlanetaryFortress"/>
+        <CombineArray value="IsAutoTurret"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotVanillaInterceptor">
+        <Value value="Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsVanillaSpineCrawler">
+        <CombineArray value="AP_IsVanillaSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaSpineCrawlerRooted">
+        <Value value="SpineCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSpineCrawlerUprooted">
+        <Value value="SpineCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAPSpineCrawler">
+        <CombineArray value="AP_IsAPSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsAPSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPSpineCrawlerRooted">
+        <Value value="AP_SpineCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPSpineCrawlerUprooted">
+        <Value value="AP_SpineCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsVanillaSporeCrawler">
+        <CombineArray value="AP_IsVanillaSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaSporeCrawlerRooted">
+        <Value value="SporeCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSporeCrawlerUprooted">
+        <Value value="SporeCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAPSporeCrawler">
+        <CombineArray value="AP_IsAPSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsAPSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPSporeCrawlerRooted">
+        <Value value="AP_SporeCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPSporeCrawlerUprooted">
+        <Value value="AP_SporeCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NoMarineShield">
+        <Value value="AP_UseShieldWall"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasMaelstromRounds">
+        <Find value="1"/>
+        <Value value="AP_UseMaelstromRounds"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_FriendlyOrNeutralTarget">
+        <Filters value="-;Self,Enemy"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitType id="AP_IsAPFusionCore">
+        <Value value="AP_FusionCore"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaFusionCore">
+        <Value value="FusionCore"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsFusionCore" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFusionCore"/>
+        <CombineArray value="AP_IsAPFusionCore"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareResourceContents id="AP_AutoHarvesterFinish">
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AutomaticHarvestableVespene"/>
+    </CValidatorUnitCompareResourceContents>
+    <CValidatorPlayerRequirement id="AP_AutoHarvesterHarvest">
+        <Value value="AP_DontHaveCommandCenter"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasMicroFiltering">
+        <Find value="1"/>
+        <Value value="AP_HaveMicroFiltering"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotBarracks">
+        <Behavior value="AP_BarracksReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotFactory">
+        <Behavior value="AP_FactoryReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotStarport">
+        <Behavior value="AP_StarportReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TechReactorIsDetached">
+        <Type value="And"/>
+        <CombineArray value="AP_IsTechReactor"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareOrderCount id="AP_NotAttacking">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="attack"/>
+    </CValidatorUnitCompareOrderCount>
+    <CValidatorCombine id="AP_ShrikeNoFortified">
+        <Type value="And"/>
+        <CombineArray value="AP_NoFortifiedCarapace"/>
+        <CombineArray value="AP_HasShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HasShrikeTurret">
+        <Find value="1"/>
+        <Value value="AP_ShrikeTurretResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NoFortifiedCarapace">
+        <Find value="1"/>
+        <Value value="AP_NotFortifiedCarapace"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NeosteelFramePurchasedNoConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NeosteelFramePurchased"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotAPFactory">
+        <Behavior value="AP_FactoryTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotVanillaFactory">
+        <Behavior value="FactoryTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_OrbitalRelayUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveOrbitalRelay"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_OrbitalRelayUpgradedAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_OrbitalRelayUpgraded"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsMassive">
+        <Filters value="Massive;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_IsUnstoppable">
+        <Filters value="Unstoppable;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeSlowed">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeSlow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeStunned">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeStun"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TargetNotShadowStunnedAndNotShadowSlowed">
+        <Type value="And"/>
+        <CombineArray value="AP_TargetNotShadowChargeStunned"/>
+        <CombineArray value="AP_TargetNotShadowChargeSlowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_TargetMassiveOrHeroicOrUnstoppable">
+        <CombineArray value="AP_IsHeroic"/>
+        <CombineArray value="AP_IsMassive"/>
+        <CombineArray value="AP_IsUnstoppable"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotHarmless">
+        <Behavior value="AP_Harmless"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SelfNotUltraliskOutOfCombat2">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskOutOfCombat2"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationEnumArea id="AP_PoisonNovaEnemiesNearby">
+        <AreaArray Compare="GE" Count="1" Radius="2"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Air,Structure,RawResource,HarvestableResource,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotNoxiousDamaged">
+        <Behavior value="AP_NoxiousDamage"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorFunction id="AP_TacticalBurrowImpalerDown">
+        <Line Failure="CasterForceUnburrow"/>
+        <Line Test="TacticalBurrowHostileSearchEmpty" Failure="CasterWantsToMove"/>
+    </CValidatorFunction>
+    <CValidatorCombine id="AP_TacticalBurrowImpalerUp">
+        <CombineArray value="AP_TacticalBurrowImpalerDown"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_TargetIsAirAndHaveExplosiveSpines">
+        <Type value="And"/>
+        <CombineArray value="AP_HaveHotSExplosiveSpines"/>
+        <CombineArray value="TargetIsAir"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_TargetIsNotUnstoppable">
+        <Filters value="-;Unstoppable"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_SwarmHostBurrowed">
+        <ResultFailed value="Error,Error/AP_SwarmHostBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LocustLaunchDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorFunction id="AP_TacticalBurrowSwarmHostDown">
+        <Line Failure="CasterForceUnburrow"/>
+        <Line Test="TacticalBurrowHostileSearchEmpty" Failure="CasterWantsToMove"/>
+    </CValidatorFunction>
+    <CValidatorCombine id="AP_TacticalBurrowSwarmHostUp">
+        <CombineArray value="AP_TacticalBurrowSwarmHostDown"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReleaseInterceptorsBeaconHasNoStacks">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ReleaseInterceptorsBeacon"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_ReleaseInterceptorsDestinationNotReached">
+        <Type value="And"/>
+        <CombineArray value="AP_ReleaseInterceptorsNotNearDestination"/>
+        <CombineArray value="AP_InterceptorIsNotStationary"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_ReleaseInterceptorsNotNearDestination">
+        <WhichLocation Effect="AP_ReleaseInterceptorsSet"/>
+        <Compare value="GE"/>
+        <Value Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_ReleaseInterceptorsNotNearStartingPoint">
+        <WhichLocation Effect="AP_ReleaseInterceptorsSet"/>
+        <Compare value="GT"/>
+        <Range value="15"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_SelfNotMutaliskOutOfCombat2">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_MutaliskOutOfCombat2"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortal">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_Immortal"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalAiur">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalAiur"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalShakuras">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalShakuras"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalTaldarim">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalTaldarim"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_RaptorDeathValidators">
+        <!-- Changed from vanilla IsRaptor checks -->
+        <CombineArray value="IsZergling"/>
+        <CombineArray value="IsZerglingBurrowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_TechLabNotVanillaFactory"/>
+        <CombineArray value="AP_TechLabNotAPFactory"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotAPStarport">
+        <Behavior value="AP_StarportTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotVanillaStarport">
+        <Behavior value="StarportTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="TechLabNotStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_TechLabNotVanillaStarport"/>
+        <CombineArray value="AP_TechLabNotAPStarport"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotVanillaSupplyDrop">
+        <Behavior value="SupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAPSupplyDrop">
+        <Behavior value="AP_SupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NotSupplyDrop" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_NotVanillaSupplyDrop"/>
+        <CombineArray value="AP_NotAPSupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotVanillaSupplyDropEnRoute">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="SupplyDropEnRoute"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAPSupplyDropEnRoute">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="AP_SupplyDropEnRoute"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NotSupplyDropEnRoute" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_NotVanillaSupplyDropEnRoute"/>
+        <CombineArray value="AP_NotAPSupplyDropEnRoute"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_SCVUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveFusionWelder"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveAutoHarvester">
+        <Find value="1"/>
+        <Value value="AP_AutoHarvesterResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_RoachCorpserFilters">
+        <Filters value="-;Player,Ally,Summoned"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_RoachUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveOrganicCarapace"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRoachShield">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRoachShield"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_IsHeroic">
+        <Filters value="Heroic;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHeroic">
+        <Filters value="-;Heroic"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_HaveRoachVile">
+        <Find value="1"/>
+        <Value value="AP_HaveRoachVile"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveRoachCorpser">
+        <Find value="1"/>
+        <Value value="AP_HaveRoachCorpser"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CommandCenterTransportCombine">
+        <CombineArray value="AP_CommandCenterTransportSCV"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_UltraliskBurrowChargeRangeFinder">
+        <CombineArray value="AP_UltraliskBurrowChargeRangeFinderMaxRange"/>
+        <CombineArray value="AP_UltraliskOutOfCombat3"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_UltraliskBurrowChargeRangeFinderMaxRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="5.1"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_UltraliskHasntRecentlyAttacked">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskBurrowChargeHold"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_UltraliskOutOfCombat3">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskOutOfCombat3"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TorrasqueCantRevive">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_TorrasqueTimerBehavior"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_UseParalyticSpines">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSParalyticSpines"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_NovaRavenSeekerMissileMaxLaunchRange">
+        <WhichLocation Effect="AP_NovaRavenSeekerMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_IsMechanicalOrIsPsionic">
+        <CombineArray value="AP_IsMechanical"/>
+        <CombineArray value="AP_IsPsionic"/>
+        <ResultFailed value="Error,Error/MustTargetMechanicalorPsionic"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsMechanical">
+        <Filters value="Mechanical;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_IsPsionic">
+        <Filters value="Psionic;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TargetNotTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <CombineArray value="AP_TargetTacticalJumping"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_TargetTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <WhichUnit Value="Target"/>
+        <AbilLink value="AP_Hyperjump"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorLocationCompareRange id="AP_RavenShredderMissileLaunchRange">
+        <WhichLocation Effect="AP_RavenShredderMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverSiegeTank">
+        <Find value="1"/>
+        <Value value="AP_HaveHoverSiegeTank"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveGoliathJumpJets">
+        <Find value="1"/>
+        <Value value="AP_HaveGoliathJumpJets"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_HellbatChargeMaxDistance">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="6"/>
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverHellbat">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHoverHellbat"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitInWeaponRange id="AP_TargetInWeaponRange">
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorUnitInWeaponRange>
+    <CValidatorUnitWeaponFiring id="AP_CasterIsFiringWeapon">
+        <!-- This mutates in Multi -->
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponFiring>
+    <CValidatorUnitWeaponAnimating id="AP_CasterIsAnimatingWeapon">
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponAnimating>
+    <CValidatorCombine id="AP_CasterIsFiringOrAnimatingWeapon">
+        <!-- See https://www.sc2mapster.com/forums/development/data/183335-solved-how-could-i-make-marauders-stimpack -->
+        <CombineArray value="AP_CasterIsFiringWeapon"/>
+        <CombineArray value="AP_CasterIsAnimatingWeapon"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsStone">
+        <Value value="NovaStoneHeroic"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareDamageTakenTime id="AP_CasterNotInCombat10s">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Value value="10"/>
+    </CValidatorUnitCompareDamageTakenTime>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasNovaPsiStrikeWalkSpeed">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaPsiStrikeWalkSpeed"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationEnumArea id="AP_NovaWeaponBlazefireBladeShadowFuryTargetsInArea">
+        <AreaArray Compare="GT" Count="0" Radius="5"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <ResultFailed value="LoadAllNoTargetsFound,No Targets Found"/>
+        <WhichLocation Effect="AP_NovaWeaponBlazefireBladeShadowFuryPersistent"/>
+        <SearchFlags index="SameCliff" value="1"/>
+        <LaunchLocation Effect="AP_NovaWeaponBlazefireBladeShadowFuryPersistent" Value="TargetPoint"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasNovaWeaponBlazefireBladeShadowFury">
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFury"/>
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TempShieldsNotEmptyOrNoTempShields">
+        <CombineArray value="hasShields"/>
+        <CombineArray value="AP_CasterMaxShieldEQ0"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareVital id="AP_CasterMaxShieldEQ0">
+        <WhichUnit Value="Caster"/>
+        <Type value="Maximum"/>
+        <Vital value="Shields"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitType id="AP_IsNotVanillaRoach">
+        <!-- TODO: AP_Roach? -->
+        <Value value="Roach"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotVanillaHydralisk">
+        <!-- TODO: AP_Hydralisk? -->
+        <Value value="Hydralisk"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotVanillaSonarDrone">
+        <!-- TODO: Verify this -->
+        <Value value="NovaSonarDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_NotStructureorIsStructureandNotDetector">
+        <CombineArray value="NotStructureTarget"/>
+        <CombineArray value="AP_NotStructureandNotDetector"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotStructureandNotDetector">
+        <Type value="And"/>
+        <CombineArray value="AP_IsDetectorUnitFlag"/>
+        <CombineArray value="IsStructureTarget"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsDetectorUnitFlag">
+        <Filters value="Detector;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_IsNotHerculesCombined">
+        <CombineArray value="AP_IsHerculesCombine"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsHerculesCombine">
+        <CombineArray value="AP_IsAPHercules"/>
+        <!--        <CombineArray value="IsHercules"/>-->
+        <!--        <CombineArray value="IsHerculesLander"/>-->
+        <!--        <CombineArray value="IsHerculesLanderFlying"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPHercules">
+        <Value value="AP_Hercules"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_EnemyTarget">
+        <Filters value="-;Self,Player,Ally,Neutral"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotNovaPsiStriked">
+        <Behavior value="AP_NovaPsiStrikeDamaged"/>
+        <Compare value="LE"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_EnemyTargetYoink">
+        <WhichUnit Effect="AP_YoinkLaunchMissile"/>
+        <Filters value="-;Self,Player,Ally"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotVanillaMothershipCorePurifyNexus">
+        <ResultFailed value="Error,Error/MothershipCorePurifyNexus"/>
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="MothershipCorePurifyNexus"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotAPMothershipCorePurifyNexus">
+        <ResultFailed value="Error,Error/MothershipCorePurifyNexus"/>
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="AP_MothershipCorePurifyNexus"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsNotMothershipCorePurifyNexus">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotAPMothershipCorePurifyNexus"/>
+        <CombineArray value="AP_IsNotVanillaMothershipCorePurifyNexus"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_NotHiddenYoink">
+        <WhichUnit Effect="AP_YoinkLaunchMissile"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHiddenYoinkVikingAir">
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingAir"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHiddenYoinkVikingGround">
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingGround"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_CantYoinkYet">
+        <Behavior value="AP_YoinkWait"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsNotRecallingCombine">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_Dummy"/>
+    <CValidatorCombine id="AP_NotDummy">
+        <CombineArray value="AP_Dummy"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoYoink">
+        <Behavior value="AP_YoinkMarker"/>
+        <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_CasterIsCloaked">
+        <WhichUnit Value="Caster"/>
+        <Filters value="Cloaked;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareField id="AP_TargetRadiusGT0Dot75">
+        <Compare value="GT"/>
+        <Field value="Radius"/>
+        <Value value=".75"/>
+    </CValidatorUnitCompareField>
+    <CValidatorPlayerRequirement id="AP_HaveNovaArmorStealthSuit">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaArmorStealthSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaHelmetGhostVisor">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaHelmetGhostVisor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaHelmetSensorVisor">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaHelmetSensorVisor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveDetectionEnemy">
+        <Value value="AP_HaveDetectionEnemy"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareVital id="AP_NotFullLife">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Type value="Fraction"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorPlayerRequirement id="AP_HaveNovaArmorJumpSuit">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaArmorJumpSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSuperStimpackNova">
+        <Find value="1"/>
+        <Value value="AP_HaveSuperStimpackNova"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponCanisterRifleBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponCanisterRifle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponHellfireShotgunBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponHellfireShotgun"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponPlasmaRifleBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponPlasmaRifle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponPsiBladeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponPsiBlade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponBlazefireBladeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponBlazefireBlade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice1">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice1"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice2">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice2"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice3">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice3"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice4">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice4"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice5">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice5"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice6">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice6"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWarpOut">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaWarpOut"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareOrderTargetRange id="AP_NovaHelmetDominationRangeCheck">
+        <Compare value="GT"/>
+        <AbilLink value="AP_NovaHelmetDomination"/>
+        <Value value="7"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponCanisterRifle">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToCanisterRifle"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponHellfireShotgun">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToHellfireShotgun"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponPlasmaRifle">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToPlasmaRifle"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponPsiBlade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToPsiBlade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponBlazefireBlade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToBlazefireBlade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_UnitIsBiological">
+        <Filters value="Biological;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosLiberator">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosLiberator"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosHellion">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosHellion"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosSiegeTank">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosSiegeTank"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosViking">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosViking"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosThor">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosThor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase1">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase2CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase2CountHigh">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase3CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVoidRayTaldarim">
+        <Value value="AP_VoidRayTaldarim"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase2CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase2CountHigh">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase3CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_VoidRayChargeBeamRangeCounterCheckPhase2Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase2CountHigh"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase2CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamRangeCounterCheckPhase3Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase3CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamCounterCheckPhase2Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase2CountHigh"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase2CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamCounterCheckPhase3Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase3CountLow"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVoidRaySwarmDamageBoost">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidRaySwarmDamageBoost"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVoidRayChargeBeamPhase2">
+        <Behavior value="AP_VoidRayChargeBeamPhase2"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVoidRayChargeBeamPhase3">
+        <Behavior value="AP_VoidRayChargeBeamPhase3"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveVoidRayBeamCanCharge">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidRayBeamCanCharge"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_VoidRayChargeBeamPhase1">
+        <Type value="And"/>
+        <CombineArray value="AP_NoVoidRayChargeBeamPhase2"/>
+        <CombineArray value="AP_NoVoidRayChargeBeamPhase3"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamPhase2">
+        <Behavior value="AP_VoidRayChargeBeamPhase2"/>
+        <Compare value="NE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamPhase3">
+        <Behavior value="AP_VoidRayChargeBeamPhase3"/>
+        <Compare value="NE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_NoDarkProtoss">
+        <Value value="AP_UseDarkProtoss"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasPurifierProtoss">
+        <Value value="AP_UsePurifierProtoss"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasTerrazineShadow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasVoidShade">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="VoidShade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationCompareRange id="AP_CasterisGreaterThan5">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="GT"/>
+        <Range value="5"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_ReleaseInterceptorsNotNearStartingPointOrNotDoingStuff">
+        <CombineArray value="AP_ReleaseInterceptorsNotNearStartingPoint"/>
+        <CombineArray value="AP_ReleaseInterceptorsNotDoingStuff"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_ReleaseInterceptorsNotDoingStuff">
+        <CombineArray value="AP_InterceptorNotPatrolling"/>
+        <CombineArray value="AP_InterceptorNotAttacking"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_InterceptorNotPatrolling">
+        <AbilLink value="move"/>
+        <Find value="0"/>
+        <AbilCmdIndex value="1"/>
+        <WhichUnit Value="Source"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_InterceptorNotAttacking">
+        <AbilLink value="attack"/>
+        <Find value="0"/>
+        <WhichUnit Value="Source"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorPlayerRequirement id="AP_HaveVoidCarrierBombingRun">
+        <Value value="AP_HaveVoidCarrierBombingRun"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsTerrazineShadow">
+        <Value value="1"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitOrderQueue id="AP_CasterIsNotMoving">
+        <AbilLink value="move"/>
+        <Find value="0"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_CasterIsStopped">
+        <AbilLink value="stop"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_CasterIsNotMovingOrStopped">
+        <CombineArray value="AP_CasterIsNotMoving"/>
+        <CombineArray value="AP_CasterIsStopped"/>
+        <CombineArray value="CasterHasNoOrders"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotVanillaLarva">
+        <Value value="Larva"/>
+        <Find value="0"/>
+        <ResultFailed value="Error,Error/CantTargetLarva"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotLarva">
+        <CombineArray value="AP_IsNotVanillaLarva"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveVoidPhoenixGravitonDamage">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidPhoenixGravitonDamage"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVanillaGravitonBeamInProgress">
+        <Behavior value="GravitonBeam"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoAPGravitonBeamInProgress">
+        <Behavior value="AP_GravitonBeam"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NoGravitonBeamInProgress" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetAirUnits"/>
+        <CombineArray value="AP_NoVanillaGravitonBeamInProgress"/>
+        <CombineArray value="AP_NoAPGravitonBeamInProgress"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAbducted">
+        <Compare value="LE"/>
+        <Behavior value="AP_Yoink"/>
+        <ResultFailed value="Error,Error/NotAbducted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_NoReaperKD8Knockback">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="GravitonBeamValidators">
+        <!-- Override -->
+        <!-- At index 0 there is CasterHasEnergyAndNotDead and LotV Phoenixes don't use energy -->
+        <CombineArray index="0" value="AP_CasterHasEnergyIfAvailableAndNotDead"/>
+        <CombineArray value="AP_NotAbducted"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveVoidPhoenixDoubleGraviton">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidPhoenixDoubleGraviton"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationEnumArea id="AP_VoidPhoenixDoubleGravitonEnemyNearTarget" parent="HostileSearch">
+        <WhichLocation Value="TargetUnit"/>
+        <AreaArray Radius="2.5"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Massive,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareVital id="AP_CasterMaxEnergyGT0">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Type value="Maximum"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_CasterNotHaveEnergyBar">
+        <CombineArray value="AP_CasterMaxEnergyGT0"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_CasterHasEnergyOrNotHaveEnergyBar">
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_CasterNotHaveEnergyBar"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_CasterHasEnergyIfAvailableAndNotDead">
+        <Type value="And"/>
+        <CombineArray value="AP_CasterHasEnergyOrNotHaveEnergyBar"/>
+        <CombineArray value="NotDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterCanUseGravitonDoubleBeam">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_CanUseGravitonDoubleBeam"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_YoinkCancelOrder">
+        <Type value="And"/>
+        <CombineArray value="NotSiegeTank"/>
+        <CombineArray value="NotHellion"/>
+        <CombineArray value="AP_IsNotHellionTank"/>
+        <CombineArray value="AP_NotMothershipCore"/>
+        <CombineArray value="NotWarpPrism"/>
+        <CombineArray value="NotThor"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_UseImmortalRevive">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_UseImmortalRevive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidImmortalWeaponSplash">
+        <Value value="AP_HaveVoidImmortalWeaponSplash"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareField id="AP_TargetRadiusLE0Dot125">
+        <Compare value="LE"/>
+        <Field value="Radius"/>
+        <Value value="0.125"/>
+    </CValidatorUnitCompareField>
+    <CValidatorCombine id="AP_DarkProtossAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DarkProtossAndUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotLaserTentacle">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotVoidCrystal">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotOmniaClaw">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotAnimaSpike">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="CasterIsColossus">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsColossus">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPObserver">
+        <Value value="AP_Observer"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaObserver">
+        <Value value="Observer"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsObserver" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaObserver"/>
+        <CombineArray value="AP_IsAPObserver"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_ShadowFuryAutoCast">
+        <CombineArray value="AP_DarkTemplarShadowFuryNotTargetted"/>
+        <CombineArray value="AP_ShadowFuryTargetLifeAndBehaviorCheck"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_DarkTemplarShadowFuryNotTargetted">
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_ShadowFuryTargetLifeAndBehaviorCheck">
+        <Type value="And"/>
+        <CombineArray value="AP_DarkTemplarShadowFuryTargetted"/>
+        <CombineArray value="AP_LifeGT35"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_DarkTemplarShadowFuryTargetted">
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareVital id="AP_LifeGT35">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="GT"/>
+        <Value value="35"/>
+        <!--Type value="Fraction"/-->
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_DarkTemplarVoidStasis">
+        <CombineArray value="AP_HasDetector8"/>
+        <CombineArray value="AP_HasDetector9"/>
+        <CombineArray value="HasDetector10"/>
+        <CombineArray value="HasDetector11"/>
+        <CombineArray value="HasDetector12"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasDetector8">
+        <Behavior value="Detector8"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasDetector9">
+        <Behavior value="Detector9"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareOrderTargetRange id="AP_DarkTemplarBlinkRangeCheck">
+        <Compare value="GT"/>
+        <AbilLink value="AP_DarkTemplarBlink"/>
+        <Value value="30"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotAPFungalGrowthed">
+        <ResultFailed value="Error,Error/CantBlinkWhileRooted"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotVanillaFungalGrowthed">
+        <ResultFailed value="Error,Error/CantBlinkWhileRooted"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_CasterNotFungalGrowthed">
+        <Type value="And"/>
+        <CombineArray value="AP_CasterNotVanillaFungalGrowthed"/>
+        <CombineArray value="AP_CasterNotAPFungalGrowthed"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotRecentlyRecalled">
+        <Behavior value="AP_DarkTemplarRecentlyRecalled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HasDarkShrine">
+        <Find value="1"/>
+        <Value value="AP_HasPoweredDarkShrine"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationEnumArea id="AP_DarkTemplarShadowFuryTargetsInArea">
+        <AreaArray Compare="GT" Count="0" Radius="5"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <ResultFailed value="LoadAllNoTargetsFound,No Targets Found"/>
+        <WhichLocation Effect="AP_DarkTemplarShadowFuryPersistent"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasDarkTemplarShadowFury">
+        <Behavior value="AP_DarkTemplarShadowFury"/>
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationCompareCliffLevel id="AP_ShadowFuryCliffLevelEqual">
+        <ResultFailed value="Error,Error\ShadowFuryCliffLevel"/>
+        <OtherLocation Value="OriginUnit"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorUnitFilters id="AP_NotStasis">
+        <Filters value="-;Stasis"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitType id="IsDarkTemplar">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasSeveredCordsUpgrade">
+        <Find value="1"/>
+        <Value value="AP_UseSeveredCords"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidHighTemplarPsiStormFilter">
+        <Value value="AP_HaveVoidHighTemplarPsiStormFilter"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_DontHaveVoidHighTemplarPsiStormFilter">
+        <Value value="AP_HaveVoidHighTemplarPsiStormFilter"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareVital id="AP_TargetLifeGreaterThan1">
+        <Compare value="GT"/>
+        <Value value="1"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeCasterEnergyLE175">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LE"/>
+        <Value value="175"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeTargetLifeGT25">
+        <Compare value="GT"/>
+        <Value value="25"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeCasterEnergyLE195">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LE"/>
+        <Value value="195"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeTargetLifeGT5">
+        <Compare value="GT"/>
+        <Value value="5"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasCripple">
+        <Behavior value="AP_HighTemplarCripple"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_CasterIsHighTemplarShakuras">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_HighTemplarShakuras"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveVoidStalkerMultishot">
+        <Value value="AP_HaveVoidStalkerMultishot"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoMatrixOverloadTarget">
+        <Behavior value="AP_MatrixOverloadTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVanillaPylon">
+        <Value value="Pylon"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPylon">
+        <Value value="AP_Pylon"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPylon" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPylon"/>
+        <CombineArray value="AP_IsAPPylon"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOAMatrixOverload">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveSOAMatrixOverload"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss">
+        <Type value="And"/>
+        <CombineArray value="HasNoPower"/>
+        <CombineArray value="IsNotConstructing"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsChronoSurged">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="AP_SOASuperChrono"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveProdigalEngineer">
+        <Compare value="GT"/>
+        <Behavior value="AP_ProdigalEngineerProductionTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech">
+        <CombineArray value="AP_HaveSOAWarpTech"/>
+        <CombineArray value="AP_GameTimeGreaterthan5Seconds"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_GameTimeGreaterthan5Seconds">
+        <Value value="AP_GameTimeGreaterthan5Seconds"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAWarpTech">
+        <Value value="AP_HaveSOAWarpTech"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="TimewarpProduction">
+        <!-- Override -->
+        <CombineArray value="AP_IsStargateWarp"/>
+        <CombineArray value="AP_IsRoboticsFacilityWarp"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsStargateWarp">
+        <Value value="AP_StargateWarp"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsRoboticsFacilityWarp">
+        <Value value="AP_RoboticsFacilityWarp"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStargate">
+        <Value value="Stargate"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPStargate">
+        <Value value="AP_Stargate"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStarGate" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStargate"/>
+        <CombineArray value="AP_IsAPStargate"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaRoboticsFacility">
+        <Value value="RoboticsFacility"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPRoboticsFacility">
+        <Value value="AP_RoboticsFacility"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsRoboticsFacility" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaRoboticsFacility"/>
+        <CombineArray value="AP_IsAPRoboticsFacility"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOARadar">
+        <Value value="AP_HaveSOARadar"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaDarkShrine">
+        <Value value="DarkShrine"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPDarkShrine">
+        <Value value="AP_DarkShrine"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsDarkShrine" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaDarkShrine"/>
+        <CombineArray value="AP_IsAPDarkShrine"/>
+    </CValidatorCombine>
+    <CValidatorUnitComparePowerUserLevel id="AP_HasPower">
+        <Value value="1"/>
+        <Compare value="GE"/>
+    </CValidatorUnitComparePowerUserLevel>
+    <CValidatorUnitComparePowerUserLevel id="AP_CasterHasPower">
+        <Value value="1"/>
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+    </CValidatorUnitComparePowerUserLevel>
+    <CValidatorUnitCompareVital id="AP_PhotonCannonTeleportTargetLifeSmaller">
+        <OtherUnit Value="Caster"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_PhotonCannonTeleportTargetLifeGreater">
+        <OtherUnit Value="Caster"/>
+        <Compare value="GE"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorPlayerRequirement id="AP_HaveSOAPhotonCannon">
+        <Value value="AP_HaveSOAPhotonCannon"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAQuatro">
+        <Value value="AP_HaveSOAQuatro"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidCasualRallyBlock">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidCasualRallyBlock"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NotHaveVoidCasualRallyBlock">
+        <ResultNoPlayer value="Error"/>
+        <Value value="AP_NotHaveVoidCasualRallyBlock"/>
+        <Find value="1"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_DarkProtossIsConstructing">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DarkProtossIsNotConstructing">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsMothershipCoreAndHasPurifyNexus">
+        <Type value="And"/>
+        <CombineArray value="AP_IsMothershipCore"/>
+        <CombineArray value="AP_HasMothershipCorePurifyNexus"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsMothershipCore">
+        <!-- TODO -->
+        <CombineArray value="AP_NotDummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasMothershipCorePurifyNexus">
+        <Behavior value="AP_MothershipCorePurifyNexus"/>
+        <Value value="1"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotVanillaChronoBoosted">
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Behavior value="TimeWarpProduction"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotAPChronoBoosted">
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Behavior value="AP_TimeWarpProduction"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsNotChronoBoosted" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotVanillaChronoBoosted"/>
+        <CombineArray value="AP_IsNotAPChronoBoosted"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_PreviousChronoBoostTargetIsDead">
+        <!-- Used when target of chrono boost is dead, then the caster gets automatically the boost -->
+        <WhichUnit Effect="AP_TimeWarpCP"/>
+        <Filters value="Dead;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitType id="AP_IsVanillaCyberneticsCore">
+        <Value value="CyberneticsCore"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCyberneticsCore">
+        <Value value="AP_CyberneticsCore"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCyberneticsCore" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCyberneticsCore"/>
+        <CombineArray value="AP_IsAPCyberneticsCore"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaForge">
+        <Value value="Forge"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPForge">
+        <Value value="AP_Forge"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsForge" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaForge"/>
+        <CombineArray value="AP_IsAPForge"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaNexus">
+        <Value value="Nexus"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPNexus">
+        <Value value="AP_Nexus"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsNexus" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaNexus"/>
+        <CombineArray value="AP_IsAPNexus"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NoRecallingBehaviors">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsBrutalisk">
+        <!-- TODO: Override in campaign -->
+        <CombineArray value="AP_NotDummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotArbiterMP">
+        <Value value="AP_ArbiterMP"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotArbiterRecalling">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ArbiterMPRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotDisruptionWebbed">
+        <Behavior value="AP_CorsairMPDisruptionWeb"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_DisruptionWebFilters">
+        <CombineArray value="TargetAttacksAir"/>
+        <CombineArray value="TargetAttacksGround"/>
+    </CValidatorCombine>
+    <CValidatorLocationEnumArea id="AP_CorsairFakeWeaponBehaviorDisable">
+        <WhichLocation Value="CasterUnit"/>
+        <AreaArray>
+            <Compare value="GT"/>
+            <Count value="0"/>
+            <Radius value="9"/>
+            <Validator value="IsFlying"/>
+        </AreaArray>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleport">
+        <Behavior value="AP_HyperjumpTeleport"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleportIn">
+        <Behavior value="AP_HyperjumpTeleportIn"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleportOut">
+        <Behavior value="AP_HyperjumpTeleportOut"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_BattlecruiserNotJumping">
+        <CombineArray value="AP_HyperjumpTeleport"/>
+        <CombineArray value="AP_HyperjumpTeleportIn"/>
+        <CombineArray value="AP_HyperjumpTeleportOut"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotHaveTempestDisintegration">
+        <ResultFailed value="Error,Error/AP_TempestDisintegration"/>
+        <Behavior value="AP_LightningBomb"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveAlarakStalkerPhasingArmor">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakStalkerPhasingArmor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsSupplicant">
+        <Value value="AP_Supplicant"/>
+        <ResultNoUnit value="CantTargetThatUnit,Error/NeedSupplicant"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveAlarakLightningStrikes">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakLightningStrikes"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_AlarakSupplicantSacrificeCDR">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakSupplicantSacrificeCDR"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotOracleStasisTrapped">
+        <Behavior value="AP_OracleStasisTrapTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareVital id="AP_OracleHasEnergy">
+        <WhichUnit Value="Caster"/>
+        <ResultFailed value="NotEnoughEnergy"/>
+        <Compare value="GE"/>
+        <Value value="0.1"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_ActivateStasisWardValidators">
+        <CombineArray value="AP_IsNotPhasedUnit"/>
+        <CombineArray value="NotFrenzied"/>
+        <CombineArray value="AP_TargetNotUntargetable"/>
+        <CombineArray value="AP_IsNotDisguisedChangeling"/>
+<!--        <CombineArray value="NoTimeStopImmune"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitBehaviorState id="AP_TargetNotUntargetable">
+        <BehaviorState value="Untargetable"/>
+    </CValidatorUnitBehaviorState>
+    <CValidatorCombine id="AP_IsNotPhasedUnit">
+        <Type value="And"/>
+        <CombineArray value="AP_Dummy"/>
+<!--        <CombineArray value="IsNotDisruptorPhased"/>-->
+<!--        <CombineArray value="IsNotAdeptShade"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotDisguisedChangeling">
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="ChangelingDisable"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_OracleStasisTrapBuildingSet">
+        <CombineArray value="AP_ProbeBuildingCombine"/>
+        <CombineArray value="AP_ZergBuildingCombine"/>
+        <CombineArray value="AP_TerranBuildingCombine"/>
+        <!-- TODO: AP Workers? -->
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_ProbeBuildingCombine">
+        <CombineArray value="AP_ProbeBuildingNexus"/>
+        <CombineArray value="AP_ProbeBuildingPylon"/>
+        <CombineArray value="AP_ProbeBuildingAssimilator"/>
+        <CombineArray value="AP_ProbeBuildingCyberneticsCore"/>
+        <CombineArray value="AP_ProbeBuildingForge"/>
+        <CombineArray value="AP_ProbeBuildingGateway"/>
+        <CombineArray value="AP_ProbeBuildingPhotonCannon"/>
+        <CombineArray value="AP_ProbeBuildingTwilightCouncil"/>
+        <CombineArray value="AP_ProbeBuildingStargate"/>
+        <CombineArray value="AP_ProbeBuildingRoboticsFacility"/>
+        <CombineArray value="AP_ProbeBuildingRoboticsBay"/>
+        <CombineArray value="AP_ProbeBuildingTemplarArchives"/>
+        <CombineArray value="AP_ProbeBuildingFleetBeacon"/>
+        <CombineArray value="AP_ProbeBuildingDarkShrine"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingNexus">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingPylon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="1"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingAssimilator">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingCyberneticsCore">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="14"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingForge">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingGateway">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingPhotonCannon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="7"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingTwilightCouncil">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingStargate">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingRoboticsFacility">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingRoboticsBay">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="12"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingTemplarArchives">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingFleetBeacon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingDarkShrine">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="11"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_ZergBuildingCombine">
+        <CombineArray value="AP_DroneBuildingHatchery"/>
+        <CombineArray value="AP_DroneBuildingExtractor"/>
+        <CombineArray value="AP_DroneBuildingEvolutionChamber"/>
+        <CombineArray value="AP_DroneBuildingSpawningPool"/>
+        <CombineArray value="AP_DroneBuildingRoachWarren"/>
+        <CombineArray value="AP_DroneBuildingBanelingNest"/>
+        <CombineArray value="AP_DroneBuildingSpineCrawler"/>
+        <CombineArray value="AP_DroneBuildingSporeCrawler"/>
+        <CombineArray value="AP_DroneBuildingHydraliskDen"/>
+        <CombineArray value="AP_DroneBuildingInfestationPit"/>
+        <CombineArray value="AP_DroneBuildingSpire"/>
+        <CombineArray value="AP_DroneBuildingNydusNetwork"/>
+        <CombineArray value="AP_DroneBuildingUltraliskCavern"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingHatchery">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingExtractor">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingEvolutionChamber">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpawningPool">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingRoachWarren">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingBanelingNest">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpineCrawler">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="14"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSporeCrawler">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="15"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingHydraliskDen">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingInfestationPit">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="8"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpire">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingNydusNetwork">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingUltraliskCavern">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="7"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_TerranBuildingCombine">
+        <CombineArray value="AP_SCVBuildingCommandCenter"/>
+        <CombineArray value="AP_SCVBuildingRefinery"/>
+        <CombineArray value="AP_SCVBuildingSupplyDepot"/>
+        <CombineArray value="AP_SCVBuildingBarracks"/>
+        <CombineArray value="AP_SCVBuildingEngineeringBay"/>
+        <CombineArray value="AP_SCVBuildingBunker"/>
+        <CombineArray value="AP_SCVBuildingMissileTurret"/>
+        <CombineArray value="AP_SCVBuildingSensorTower"/>
+        <CombineArray value="AP_SCVBuildingGhostAcademy"/>
+        <CombineArray value="AP_SCVBuildingFactory"/>
+        <CombineArray value="AP_SCVBuildingArmory"/>
+        <CombineArray value="AP_SCVBuildingStarport"/>
+        <CombineArray value="AP_SCVBuildingFusionCore"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingCommandCenter">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingRefinery">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingSupplyDepot">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="1"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingBarracks">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingEngineeringBay">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingBunker">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingMissileTurret">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingSensorTower">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="8"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingGhostAcademy">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingFactory">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingArmory">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingStarport">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="11"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingFusionCore">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="15"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorLocationEnumArea id="AP_ActivateStasisWardTargetInRange">
+        <ResultFailed value="CantFindEnoughTargets"/>
+        <WhichLocation Value="SourceUnit"/>
+        <AreaArray>
+            <Compare value="GE"/>
+            <Count value="1"/>
+            <Radius value="3"/>
+            <Validator value="AP_ActivateStasisWardValidators"/>
+        </AreaArray>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Dead,Hidden"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorCombine id="AP_NoFlashFreeze">
+        <!-- TODO: HotS Flash Freeze -->
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_Domination">
+        <Type value="And"/>
+        <CombineArray value="NotDead"/>
+        <CombineArray value="CasterNotDead"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_ScarabNotArmed">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_ScarabNotArmed"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsAPDisruptor">
+        <Value value="AP_Disruptor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsDisruptor">
+        <CombineArray value="AP_IsAPDisruptor"/>
+    </CValidatorCombine>
+    <CValidatorLocationVision id="AP_TargetHasVisionOfSource">
+        <WhichLocation Value="SourceUnit"/>
+        <WhichPlayer Value="Target"/>
+    </CValidatorLocationVision>
+    <CValidatorCombine id="AP_DisruptorDamageFilter">
+        <CombineArray value="AP_IsNotDisruptor"/>
+        <CombineArray value="AP_DisruptorPhasedDamageFilter"/>
+        <CombineArray value="AP_IsNotFriendly"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotAPDisruptor">
+        <Value value="AP_Disruptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotDisruptor">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotAPDisruptor"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DisruptorPhasedDamageFilter">
+        <CombineArray value="AP_APDisruptorPhasedDamageFilter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_APDisruptorPhasedDamageFilter">
+        <Value value="AP_DisruptorPhased"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsNotFriendly">
+        <Filters value="-;Self,Player,Ally"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoPurificationNova">
+        <Behavior value="AP_PurificationNova"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBeingAbducted">
+        <Behavior value="AP_Yoink"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotAbducted">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_Yoink"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterIsNotPhaseShifting">
+        <WhichUnit Effect="AP_AdeptPhaseShiftCU" Value="Caster"/>
+        <Behavior value="AP_AdeptPhaseShiftCancelDummy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_UnderConstructionOrDead">
+        <CombineArray value="AP_TargetIsUnderConstruction"/>
+        <CombineArray value="IsDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_TargetIsUnderConstruction">
+        <Filters value="UnderConstruction;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorLocationEnumArea id="AP_VoidSentryNearbyFriendlyUnitInCombat">
+        <WhichLocation Value="SourceUnit"/>
+        <AreaArray Radius="4.5" Validator="AP_VoidSentryTargetInCombatAndDoesntHaveGuardianShield"/>
+        <SearchFilters value="-;Neutral,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorCombine id="AP_VoidSentryTargetInCombatAndDoesntHaveGuardianShield">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidSentryTargetDoesntHaveGuardianShield"/>
+        <CombineArray value="TargetInCombat"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidSentryTargetDoesntHaveGuardianShield">
+        <Behavior value="AP_GuardianShield"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotHaveTargetLock">
+        <Behavior value="AP_ObserverTargetLock"/>
+        <ResultFailed value="Error,Error\TargetLock"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotAPInterceptor">
+        <Value value="AP_Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotVanillaInterceptor">
+        <Value value="Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_NotInterceptor">
+        <Type value="And"/>
+        <CombineArray value="AP_NotAPInterceptor"/>
+        <CombineArray value="AP_NotVanillaInterceptor"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_SentryChronoBeamTargetExlusion">
+        <Type value="And"/>
+        <CombineArray value="AP_TargetIsNotSentryAiur"/>
+        <CombineArray value="AP_TargetIsNotSentryPurifier"/>
+        <CombineArray value="AP_TargetIsNotSentryPhasing"/>
+<!--        <CombineArray value="AP_TargetIsNotReplicant"/>-->
+        <CombineArray value="AP_TargetIsNotHighTemplarTaldarim"/>
+        <CombineArray value="AP_TargetIsNotHighTemplarShakuras"/>
+<!--        <CombineArray value="TargetIsNotDisruptionWard"/>-->
+        <CombineArray value="AP_TargetIsNotArbiterMP"/>
+        <CombineArray value="AP_TargetIsNotCarrierAiur"/>
+        <!-- TODO: Make this unit -->
+<!--        <CombineArray value="TargetIsNotCarrierTaldarim"/>-->
+        <CombineArray value="AP_NotMaxVoidSentryChronoBeam"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_TargetIsNotSentryAiur">
+        <Value value="AP_SentryAiur"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotSentryPurifier">
+        <Value value="AP_SentryPurifier"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotSentryPhasing">
+        <Value value="AP_SentryPhasing"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+<!--    <CValidatorUnitType id="AP_TargetIsNotReplicant">-->
+<!--        <Value value="Replicant"/>-->
+<!--        <Find value="0"/>-->
+<!--    </CValidatorUnitType>-->
+    <CValidatorUnitType id="AP_TargetIsNotHighTemplarTaldarim">
+        <Value value="AP_HighTemplarTaldarim"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotHighTemplarShakuras">
+        <Value value="AP_HighTemplarShakuras"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotArbiterMP">
+        <Value value="AP_ArbiterMP"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_TargetIsNotCarrierAiur">
+        <Value value="AP_CarrierAiur"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotMaxVoidSentryChronoBeam">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidSentryChronoBeam"/>
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingRepaired">
+        <Behavior value="AP_SentryTargetBeingRepaired"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_RepairBeamAvailable">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <Behavior value="AP_SentryRepairBeamBusy"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_RepairPeriodicCombine">
+        <Type value="And"/>
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_SentryIsRepairing"/>
+        <!--CombineArray value="LifeGTZero"/-->
+        <!--CombineArray value="NotMaxHP"/-->
+        <CombineArray value="ShieldsNotFull"/>
+        <CombineArray value="RepairTargetInRange"/>
+        <CombineArray value="NotHidden"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_SentryIsRepairing">
+        <AbilLink value="AP_VoidSentryShieldRepairDouble"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_UnitOrAttackingStructure">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsKhaydarinMonolith"/>
+        <CombineArray value="AP_IsAnyBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsSpineCrawler"/>
+        <CombineArray value="AP_IsSporeCrawler"/>
+        <CombineArray value="AP_HasSOARadar"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaPhotonCannon">
+        <Value value="PhotonCannon"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPhotonCannon">
+        <Value value="AP_PhotonCannon"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPhotonCannon" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPhotonCannon"/>
+        <CombineArray value="AP_IsAPPhotonCannon"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawler">
+        <CombineArray value="AP_IsSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawlerRooted">
+        <CombineArray value="AP_IsAPSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSpineCrawlerRooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSpineCrawlerUprooted">
+        <CombineArray value="AP_IsAPSpineCrawlerUprooted"/>
+        <CombineArray value="AP_IsVanillaSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawler">
+        <CombineArray value="AP_IsSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawlerRooted">
+        <CombineArray value="AP_IsAPSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSporeCrawlerRooted"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsSporeCrawlerUprooted">
+        <CombineArray value="AP_IsAPSporeCrawlerUprooted"/>
+        <CombineArray value="AP_IsVanillaSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSOARadar">
+        <Compare value="GT"/>
+        <Behavior value="AP_SOARadar"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsKhaydarinMonolith">
+        <Value value="AP_KhaydarinMonolith"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareField id="AP_TargetLockUnitRadiusLarge">
+        <Compare value="GE"/>
+        <Field value="Radius"/>
+        <Value value="0.75"/>
+    </CValidatorUnitCompareField>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotMaxTargetLocks">
+        <Behavior value="AP_ObserverTargetLockCaster"/>
+        <Compare value="LT"/>
+        <Value value="2"/>
+        <WhichUnit Value="Caster"/>
+        <ResultFailed value="Error,Error/AP_TooManyLockTargets"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_MonitorTargetLockChecks">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+        <CombineArray value="TargetNotDead"/>
+        <CombineArray value="AP_MonitorTargetLockRangeCheck"/>
+        <CombineArray value="HiddenCompareAB"/>
+        <CombineArray value="HiddenCompareBA"/>
+        <CombineArray value="NotInvulnerable"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_MonitorTargetLockRangeCheck">
+        <ResultFailed value="TargetIsOutOfRange"/>
+        <WhichLocation Value="CasterUnit"/>
+        <Compare value="LT"/>
+        <Range value="10"/>
+        <Value Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_VoidSentryChronoBeam">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="NotDead"/>
+        <CombineArray value="AP_VoidSentryChronoBeamCasterHasEnergy"/>
+        <CombineArray value="AP_NotMaxVoidSentryChronoBeam"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareVital id="AP_VoidSentryChronoBeamCasterHasEnergy">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="5"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotBeingShieldRepaired">
+        <Behavior value="AP_SentryShieldRepairDoubleHealing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareField id="AP_TargetLockUnitRadiusSmall">
+        <Compare value="LT"/>
+        <Field value="Radius"/>
+        <Value value="0.75"/>
+    </CValidatorUnitCompareField>
+    <CValidatorUnitCompareVital id="AP_KhaydarinBeamDamageHighCheck">
+        <Compare value="GT"/>
+        <Value value="80"/>
+        <Type value="Maximum"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_KhaydarinBeamDamageLowCheck">
+        <Compare value="LE"/>
+        <Value value="80"/>
+        <Type value="Maximum"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_ShieldBatteryHasEnergy">
+        <Compare value="GE"/>
+        <Value value="10"/>
+        <Vital value="Energy"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasZergGenericDeath">
+        <Value value="1"/>
+        <Behavior value="AP_ZergGenericDeath"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease0">
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease1">
+        <Value value="1"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease2">
+        <Value value="2"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease3">
+        <Value value="3"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease4">
+        <Value value="4"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SiegeTankSiegeModeProgressiveRangeIncease5">
+        <Value value="5"/>
+        <Behavior value="AP_SiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsSiegeTankSiegedOrMerc">
+        <CombineArray value="AP_IsSiegeTankSieged"/>
+        <CombineArray value="AP_IsMercSiegeTankSieged"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsSiegeTankSieged">
+        <Value value="AP_SiegeTankSieged"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsMercSiegeTankSieged">
+        <Value value="AP_SiegeBreakerSieged"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease">
+        <Find value="1"/>
+        <Value value="AP_HaveSiegeTankSiegeModeProgressiveRangeIncease"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HHWidowMineAttackRangeUpgraded">
+        <Find value="1"/>
+        <Value value="AP_HaveHHWidowMineAttackRange"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HHWidowMineDeathBlossomUpgraded">
+        <Find value="1"/>
+        <Value value="AP_HaveHHWidowMineDeathBlossom"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HHWidowMineCombine">
+        <CombineArray value="AP_IsWidowMineOrWidowMineBurrowed"/>
+        <CombineArray value="AP_HHWidowMineDeathBlossomUpgraded"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareCooldown id="AP_HHWidowMineBlossomNotOnCooldown">
+        <WhichUnit Value="Caster"/>
+        <CooldownLink value="Abil/AP_HHWidowMineBlossom"/>
+        <Ability value="AP_HHWidowMineBlossom"/>
+    </CValidatorUnitCompareCooldown>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoMineDroneCountdown">
+        <Behavior value="AP_MineDroneCountdown"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_UseGhostOcularImplants">
+        <Find value="1"/>
+        <Value value="AP_UseGhostOcularImplants"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_UseGhostCriusSuit">
+        <Find value="1"/>
+        <Value value="AP_UseGhostCriusSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_NotStunnedorStasised">
+        <Filters value="-;Stasis,Stunned"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_UseSpectreNyxSuit">
+        <Find value="1"/>
+        <Value value="AP_UseSpectreNyxSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveImpalerRounds">
+        <Find value="1"/>
+        <Value value="AP_HaveImpalerRounds"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_HighTemplarSCBWHallucination@KillHallucinationTargetFilters">
+        <Filters value="Hallucination;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@ModifyUnit" parent="AP_SCBW_Effect">
+        <CombineArray value="AP_ScienceVesselSCBWEMPShockwave@TargetFilters"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_ScienceVesselSCBWEMPShockwave@TargetFilters">
+        <Filters value="-;Stasis,Dead,Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@Decloak@Disable" parent="AP_SCBW_Behavior"/>
+    <CValidatorCombine id="AP_ScienceVesselSCBWEMPShockwave@Decloak@Remove" parent="AP_SCBW_Behavior">
+        <CombineArray value="IsNotBuried"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsGoliath">
+        <Value value="AP_Goliath"/>
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsVoidRay">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorLocationEnumArea id="AP_VoidZealotWhirlwindCheck">
+        <WhichLocation Value="CasterUnit"/>
+        <AreaArray Compare="GE" Count="2" Radius="1.5"/>
+        <Compare value="GE"/>
+        <Count value="2"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasVoidZealotWhirlwind">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotWhirlwind"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_CasterNotDeadAndCasterNotStunned">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareOrderTargetRange id="AP_VoidZealotShadowStunRange">
+        <WhichUnit Value="Caster"/>
+        <OtherUnit Value="Target"/>
+        <Compare value="LT"/>
+        <AbilLink value="attack"/>
+        <Value value="0.1"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidZealotNotShadowCharging">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_ShadowCharging"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="IsCarrier">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCyclone">
+        <Value value="Cyclone"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsPhoenix">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsTempest">
+        <Value value="AP_Tempest"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsScienceVessel">
+        <Value value="AP_ScienceVessel"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCorsairMP">
+        <Value value="AP_CorsairMP"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaWarpgate">
+        <Value value="WarpGate"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPWarpgate">
+        <Value value="AP_WarpGate"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsWarpgate" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaWarpgate"/>
+        <CombineArray value="AP_IsAPWarpgate"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaGateway">
+        <Value value="Gateway"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPGateway">
+        <Value value="AP_Gateway"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsGateway" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaGateway"/>
+        <CombineArray value="AP_IsAPGateway"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveCinematicModeDisabled">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveCinematicMode"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAAutoAssimilator">
+        <Value value="AP_HaveSOAAutoAssimilator"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_AutomatedAssimilatorBeam">
+        <Type value="And"/>
+        <CombineArray value="IsNotConstructing"/>
+        <CombineArray value="AP_HaveSOAAutoAssimilator"/>
+        <CombineArray value="HasVespene"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_AutoHarvesterHarvestProtoss">
+        <Value value="AP_DontHaveNexus"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareOrderTargetRange id="AP_ZerglingAttackRangeHigh">
+        <Compare value="LT"/>
+        <AbilLink value="attack"/>
+        <Value value="2.5"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareOrderTargetRange id="AP_ZerglingAttackRangeLow">
+        <Compare value="GT"/>
+        <AbilLink value="attack"/>
+        <Value value="0.5"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitOrderQueue id="AP_ZerglingAttacking">
+        <AbilLink value="attack"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_ZerglingRangeAttackValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_ZerglingAttackRangeLow"/>
+        <CombineArray value="AP_ZerglingAttackRangeHigh"/>
+        <CombineArray value="AP_ZerglingAttacking"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_ZerglingRangeWait">
+        <WhichUnit Value="Source"/>
+        <Compare value="GE"/>
+        <Value value="7"/>
+        <Behavior value="AP_ZerglingRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerCompareFoodAvailable id="AP_FoodAvailableOneHalf">
+        <ResultFailed value="NotEnoughFood"/>
+        <WhichPlayer Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="0.5"/>
+    </CValidatorPlayerCompareFoodAvailable>
+</Catalog>

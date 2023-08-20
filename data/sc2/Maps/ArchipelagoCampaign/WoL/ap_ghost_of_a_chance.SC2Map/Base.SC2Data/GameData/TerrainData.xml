@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Avernus">
+        <FogColor value="255,12,35,58"/>
+        <FogDensity value="0.210000"/>
+        <FogFalloff value="0.330000"/>
+    </CTerrain>
+</Catalog>

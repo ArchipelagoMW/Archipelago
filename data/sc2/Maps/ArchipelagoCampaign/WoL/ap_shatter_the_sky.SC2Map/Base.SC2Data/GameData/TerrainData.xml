@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="BraxisAlpha">
+        <FogColor value="255,181,6,6"/>
+        <FixedSkyboxModel value="CharSkyBox"/>
+        <NonFixedSkyboxModel value="CharSkyParallax"/>
+    </CTerrain>
+</Catalog>

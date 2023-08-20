@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CActorDoodad id="CharRibs">
+        <Footprint value=""/>
+    </CActorDoodad>
+    <CActorDoodad id="ColonistShipWrecked">
+        <Footprint value=""/>
+    </CActorDoodad>
+</Catalog>

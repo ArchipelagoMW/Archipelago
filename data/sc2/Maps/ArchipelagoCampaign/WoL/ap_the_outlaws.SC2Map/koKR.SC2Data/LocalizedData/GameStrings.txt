@@ -1,0 +1,103 @@
+Button/Name/Drop Item=아이템 내려놓기 /// Drop Item
+Button/Name/PickUpItem=아이템 줍기 /// Pick Up Item
+Button/Name/YamatoCannonEngine=야마토 포 엔진 /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=야마토 포 엔진 /// Yamato Cannon Engine
+DocInfo/Author=블리자드 엔터테인먼트 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=테란 레이너 02 /// TRaynor02
+DocInfo/Name=무법자들 /// The Outlaws
+MapInfo/Player00/Name=중립 /// Neutral
+MapInfo/Player01/Name=레이너 특공대 /// Raynor's Raiders
+MapInfo/Player02/Name=자치령 /// The Dominion
+MapInfo/Player03/Name=마 사라 거주민 /// Mar Sara Colonists
+MapInfo/Player04/Name=마 사라 반란군 /// Mar Sara Rebels
+MapInfo/Player05/Name=자치령 /// The Dominion
+MapInfo/Player06/Name=80 레벨 정예 타우렌 족장 /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=보병 유닛을 훈련하십시오. /// Trains infantry units.
+Param/Value/09D741B1=구조물 건설 /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">베스핀 간헐천</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=지상 유닛을 이리로 이동하여 반란군을 구출하십시오. /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=유닛을 훈련하고 구조물을 건설하려면 광물과 베스핀 가스가 필요합니다. 자원을 모으려면 건설로봇을 선택하고 광물 지대나 정제소를 오른쪽 클릭하십시오. /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=자치령은 백워터 기지에서 시민을 강제로 수송하여 화이트 록 기지에서 귀중한 외계 유물을 파내도록 했습니다. 기지를 파괴하고 유물을 확보하십시오. /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">보급고</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=반란군 구출 /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=건설로봇으로 정제소를 건설하십시오. /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=지상 유닛으로 광물 100을 획득하십시오. /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=반란군 구출 /// Rescue the Rebels
+Param/Value/30C0C1F4=모든 구조물이 파괴되었습니다. /// All of your structures have been destroyed.
+Param/Value/315FAFA9=해병을 추가로 훈련하십시오. /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">병영</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=최대 보급량을 늘립니다. /// Increases maximum supply.
+Param/Value/459758FC=보급품이 모자라면 유닛을 훈련할 수 없습니다. 더 많은 보급고를 건설해 보급품을 늘리십시오. /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=이 건설로봇으로 보급고를 건설하십시오. /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=더 많은 수의 유닛을 훈련할 수 있습니다.<n/>건설로봇을 사용하여 건설하십시오. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=지상 유닛으로 광물 100을 획득하십시오. /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=백워터 기지에 가해진 공격으로 마 사라 전반에 걸쳐 반란이 일어났습니다. 자치령 병력이 소규모 반란군을 포위 중입니다. 반란군을 도와 자치령 압제자에 맞서 싸우십시오. /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">사령부</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">보급고</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=지상 유닛을 이리로 이동하여 반란군을 구출하십시오. /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=더 많은 수의 유닛을 훈련할 수 있습니다.<n/>건설로봇을 사용하여 건설하십시오. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=자원 채취 /// Gathering Resources
+Param/Value/7EC9B6E6=지상 유닛으로 베스핀 가스 100을 획득하십시오. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=안돼요! 우릴 죽이지 마세요! /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=훈련한 의무관 /// Medics Trained
+Param/Value/8BA552E2=반란군이 구출되었습니다. /// Rebels rescued.
+Param/Value/8BC6DA5C=건설로봇을 추가로 훈련하십시오. /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=게임 설명 /// Tutorials
+Param/Value/A0322401=건설로봇 지원군 /// SCV reinforcements.
+Param/Value/A087C9B6=지원군 /// Reinforcements
+Param/Value/A089141C=지상 유닛으로 베스핀 가스 100을 획득하십시오. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=건설로봇 /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">광물 운반함</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=게임 설명 영상을 보려면 <c val="FFFF00">도움말 (F12)</c> 메뉴의 <c val="FFFF00">게임 설명</c>을 클릭하십시오. /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=병영에서 해병을 포함한 기타 유닛을 훈련할 수 있습니다. 해병을 훈련하려면 먼저 병영을 선택하고 해병 훈련 버튼을 클릭하십시오. /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=유닛 훈련 /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=게임 설명 /// Tutorials
+Param/Value/B32015BB=구조물을 통해 유닛을 훈련하고 병력을 업그레이드할 수 있습니다. 구조물을 건설하려면 건설로봇을 선택하고 구조물 건설 능력을 사용하십시오. /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">보급고</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=지상 유닛으로 광물 100을 획득하십시오. /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=자치령 기지 /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">가스 운반함</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=최대 보급량을 늘립니다. /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=반란군 구출 /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">광물 지대</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=의무관 /// Medic
+Param/Value/D35CB257=더 많은 수의 유닛을 훈련할 수 있습니다.<n/>건설로봇을 사용하여 건설하십시오. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=자치령 기지 파괴 /// Destroy the Dominion Base
+Param/Value/E0ECCB59=반란군 기지 공격받음 /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=지상 유닛으로 베스핀 가스 100을 획득하십시오. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=지상 유닛을 이리로 이동하여<n/>반란군을 구출하십시오. /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=건설로봇을 훈련하여 자원을 채취하고<n/>건물을 건설하십시오. /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=건설로봇으로 이 광물지대에서 채취하십시오. /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=자치령 기지 파괴 /// Destroy the Dominion Base
+Param/Value/F5878C5F=보급품 /// Supply
+Param/Value/F60E71B0=자원 운반함 발견 /// Resource Pallets Found
+Param/Value/F6A2B90D=최대 보급량을 늘립니다. /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=반란군 구출 /// RebelRescue

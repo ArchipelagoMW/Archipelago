@@ -1,0 +1,239 @@
+include "TriggerLibs/natives"
+include "AP_Triggers_Util_h"
+include "AP_Triggers_PlayerConsumer"
+include "AP_Triggers_PlayerUpgradeLevelBiConsumer"
+
+void ap_triggers_processBitsInBitArray(
+    int player,
+    int bitArrayValue,
+    ap_triggers_PlayerConsumer_t value0Consumer,
+    ap_triggers_PlayerConsumer_t value1Consumer,
+    ap_triggers_PlayerConsumer_t value2Consumer,
+    ap_triggers_PlayerConsumer_t value3Consumer,
+    ap_triggers_PlayerConsumer_t value4Consumer,
+    ap_triggers_PlayerConsumer_t value5Consumer,
+    ap_triggers_PlayerConsumer_t value6Consumer,
+    ap_triggers_PlayerConsumer_t value7Consumer,
+    ap_triggers_PlayerConsumer_t value8Consumer,
+    ap_triggers_PlayerConsumer_t value9Consumer,
+    ap_triggers_PlayerConsumer_t value10Consumer,
+    ap_triggers_PlayerConsumer_t value11Consumer,
+    ap_triggers_PlayerConsumer_t value12Consumer,
+    ap_triggers_PlayerConsumer_t value13Consumer,
+    ap_triggers_PlayerConsumer_t value14Consumer,
+    ap_triggers_PlayerConsumer_t value15Consumer,
+    ap_triggers_PlayerConsumer_t value16Consumer,
+    ap_triggers_PlayerConsumer_t value17Consumer,
+    ap_triggers_PlayerConsumer_t value18Consumer,
+    ap_triggers_PlayerConsumer_t value19Consumer,
+    ap_triggers_PlayerConsumer_t value20Consumer,
+    ap_triggers_PlayerConsumer_t value21Consumer,
+    ap_triggers_PlayerConsumer_t value22Consumer,
+    ap_triggers_PlayerConsumer_t value23Consumer,
+    ap_triggers_PlayerConsumer_t value24Consumer,
+    ap_triggers_PlayerConsumer_t value25Consumer,
+    ap_triggers_PlayerConsumer_t value26Consumer,
+    ap_triggers_PlayerConsumer_t value27Consumer,
+    ap_triggers_PlayerConsumer_t value28Consumer,
+    ap_triggers_PlayerConsumer_t value29Consumer
+) {
+    if ((ModI(bitArrayValue, PowI(2.0, (0 + 1))) >= PowI(2.0, 0.0))) {
+        value0Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (1 + 1))) >= PowI(2.0, 1.0))) {
+        value1Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (2 + 1))) >= PowI(2.0, 2.0))) {
+        value2Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (3 + 1))) >= PowI(2.0, 3.0))) {
+        value3Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (4 + 1))) >= PowI(2.0, 4.0))) {
+        value4Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (5 + 1))) >= PowI(2.0, 5.0))) {
+        value5Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (6 + 1))) >= PowI(2.0, 6.0))) {
+        value6Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (7 + 1))) >= PowI(2.0, 7.0))) {
+        value7Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (8 + 1))) >= PowI(2.0, 8.0))) {
+        value8Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (9 + 1))) >= PowI(2.0, 9.0))) {
+        value9Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (10 + 1))) >= PowI(2.0, 10.0))) {
+        value10Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (11 + 1))) >= PowI(2.0, 11.0))) {
+        value11Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (12 + 1))) >= PowI(2.0, 12.0))) {
+        value12Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (13 + 1))) >= PowI(2.0, 13.0))) {
+        value13Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (14 + 1))) >= PowI(2.0, 14.0))) {
+        value14Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (15 + 1))) >= PowI(2.0, 15.0))) {
+        value15Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (16 + 1))) >= PowI(2.0, 16.0))) {
+        value16Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (17 + 1))) >= PowI(2.0, 17.0))) {
+        value17Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, PowI(2.0, (18 + 1))) >= PowI(2.0, 18.0))) {
+        value18Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 1048576) >= 524288)) {
+        value19Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 2097152) >= 1048576)) {
+        value20Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 4194304) >= 2097152)) {
+        value21Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 8388608) >= 4194304)) {
+        value22Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 16777216) >= 8388608)) {
+        value23Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 33554432) >= 16777216)) {
+        value24Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 67108864) >= 33554432)) {
+        value25Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 134217728) >= 67108864)) {
+        value26Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 268435456) >= 134217728)) {
+        value27Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, 536870912) >= 268435456)) {
+        value28Consumer(player);
+    }
+
+    if ((ModI(bitArrayValue, (1073741824)) >= 536870912)) {
+        value29Consumer(player);
+    }
+}
+
+void ap_triggers_processUpgrades(
+    int player,
+    int bitArrayValue,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade0handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade1handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade2handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade3handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade4handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade5handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade6handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade7handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade8handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade9handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade10handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade11handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade12handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade13handler,
+    ap_triggers_PlayerUpgradeLevelBiConsumer_t upgrade14handler
+) {
+    int level;
+    level = ModI(bitArrayValue, 4);
+    upgrade0handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade1handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade2handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade3handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade4handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade5handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade6handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade7handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade8handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade9handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade10handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade11handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade12handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade13handler(player, level);
+
+    bitArrayValue = bitArrayValue >> 2;
+    level = ModI(bitArrayValue, 4);
+    upgrade14handler(player, level);
+}

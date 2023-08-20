@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="2">
+        <name value="Protoss P03 Base"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="46.8652,92.6713"/>
+            <radius value="18.1982"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Protoss P04 Base"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="138.6091,53.708"/>
+            <radius value="20.5515"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Victory Cine - Protoss Units"/>
+        <shape type="circle">
+            <center value="209.1386,71.856"/>
+            <radius value="4.2546"/>
+        </shape>
+        <shape type="circle">
+            <center value="202.7663,66.1867"/>
+            <radius value="2.503"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Victory Cine - Player Units"/>
+        <shape type="circle">
+            <center value="209.378,64.0373"/>
+            <radius value="6.3891"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Mid Cine - Dropship Outtro"/>
+        <shape type="circle">
+            <center value="97.173,18.4438"/>
+            <radius value="2.4685"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Intro Base"/>
+        <color value="255,0,0,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="67.4567,37.9201"/>
+            <radius value="15.8322"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.5605,48.637"/>
+            <radius value="6.837"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.1535,40.6274"/>
+            <radius value="6.0187"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.3234,52.0332"/>
+            <radius value="6.0187"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.0424,26.7421"/>
+            <radius value="6.1604"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.1494,17.306"/>
+            <radius value="8.9028"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Mid Cine - Barracks Landing"/>
+        <shape type="rect">
+            <quad value="73.189,45.9316,76.2204,48.9155"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Mid Cine - Factory Landing"/>
+        <shape type="rect">
+            <quad value="66.048,44.9291,69.1525,47.9174"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Mid Cine - Starport Landing"/>
+        <shape type="rect">
+            <quad value="76.2731,40.0463,79.3046,43.0302"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Mission Stage 1 Playable"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="9.9968,7.97,87.9882,55.5395"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Briefing Protoss Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="57.7885,60.4682"/>
+            <radius value="5.4448"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Super Warpgate Area"/>
+        <shape type="rect">
+            <quad value="1.4013,1.2163,6.6428,11.7902"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Stage 1 Enemies"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="68.185,39.29"/>
+            <radius value="15.6174"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Briefing Burning Trees 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="12.4296,39.46,28.7202,103.46"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Briefing Burning Trees 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="51.5388,24.916,61.864,50.054"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Prism Retreat Point"/>
+        <shape type="circle">
+            <center value="63.054,106.2111"/>
+            <radius value="2.1308"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Mission Stage 2 Playable"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10.036,7.9963,222.0571,108.0051"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Relic 01 Area"/>
+        <shape type="circle">
+            <center value="95.2231,48.4084"/>
+            <radius value="6.9604"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Pre-Fire Region"/>
+        <shape type="rect">
+            <quad value="0.1823,0.4448,6.968,119.7995"/>
+        </shape>
+    </region>
+</Regions>

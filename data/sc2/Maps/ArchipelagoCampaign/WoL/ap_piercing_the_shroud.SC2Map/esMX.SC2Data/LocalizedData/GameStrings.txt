@@ -1,0 +1,237 @@
+Conversation/THorner05S/Line00011=Parece como si la misma criatura hubiera sido mutada y clonada una y otra vez. Matt, ¿tienes info adicional? /// Looks like the same creature was mutated and cloned over and over. Matt, you got any additional info? 
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner05S /// THorner05S
+DocInfo/Name=Perforación del manto /// Piercing the Shroud
+MapInfo/Player00/Name=Neutral /// Neutral
+MapInfo/Player01/Name=Los Rebeldes de Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=El Dominio /// The Dominion
+MapInfo/Player03/Name=Hércules /// Hercules
+MapInfo/Player04/Name=Híbrido /// Hybrid
+MapInfo/Player05/Name=Especímenes de laboratorio /// Lab Specimens
+MapInfo/Player06/Name=Especímenes de laboratorio /// Lab Specimens
+MapInfo/Player07/Name=Neutral /// Neutral
+MapInfo/Player08/Name=El Dominio /// The Dominion
+MapInfo/Player09/Name=Ataquebot /// Attack-bot
+MapInfo/Player10/Name=Científicos /// Scientists
+MapInfo/Player11/Name=Brutalisco /// Brutalisk
+MapInfo/Player12/Name=El Dominio /// The Dominion
+MapInfo/Player13/Name=El Dominio /// The Dominion
+Param/Value/00228AC0=<c val="00FF00">Terminal informática</c> /// <c val="00FF00">Computer Terminal</c>
+Param/Value/055EC923=Municiones de granadas /// Grenade Ammo
+Param/Value/06CBBC96=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/0725AA97=Investigación zerg adquirida /// Zerg Research Earned
+Param/Value/08B18B76=  ///  
+Param/Value/09781FD7=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/09830014=
+Param/Value/09B2F7A5=
+Param/Value/09DF416D=Mueve a unidades terrestres aquí para cargarlas en el Hércules. /// Move ground units here to load into the Hercules.
+Param/Value/0B54EACA=Unidades eliminadas por Raynor /// Units Killed by Raynor
+Param/Value/0BFAB47A=Raynor debe sobrevivir /// Raynor Must Survive
+Param/Value/0C0A6F8B=Mueve a cualquier unidad terrestre hacia aquí para<n/>activar el Guerrabot. /// Move any ground unit here to<n/>activate the Warbot.
+Param/Value/0CA5CD4B=<s val="THorner05sAllButtons">Armar con Misiles<n/>antiblindaje</s> /// <s val="THorner05sAllButtons">Arm with Anti-Armor<n/>Missiles</s>
+Param/Value/0E2AB04E=Eliminar al Brutalisco /// Kill the Brutalisk
+Param/Value/0E6B1062=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/12F822AB=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/141ECFDD=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/1457697A=
+Param/Value/163D9C3F=<s val="THorner05sAllButtons">Liberar 20 Zelots</s> /// <s val="THorner05sAllButtons">Release 20 Zealots</s>
+Param/Value/17F59DAF=Usa a cualquier unidad terrestre para recoger. /// Use any ground unit to pickup.
+Param/Value/1A4547FA=<s val="THorner05sAllButtons">Liberar 75 Zergueznos</s> /// <s val="THorner05sAllButtons">Release 75 Zerglings</s>
+Param/Value/1BFAE0E5=Carga de restauración /// Restoration Charge
+Param/Value/1E1BB522=
+Param/Value/1F273B6C=Cañón de plasma + 6 Municiones /// Plasma Gun +6 Rounds
+Param/Value/21A2E42C=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/21C884CE=Municiones de granadas /// Grenade Ammo
+Param/Value/21D24269= ///  
+Param/Value/21E41046=<s val="THorner05sAllButtons">Liberar a 17 Zelots</s> /// <s val="THorner05sAllButtons">Release 17 Zealots</s>
+Param/Value/25108B5E=El laboratorio del Dominio obtiene energía de un reactor de fusión. Destrúyelo para detener las operaciones del laboratorio. /// The Dominion Lab is powered by a fusion reactor. Destroy it to shut down lab operations.
+Param/Value/2529EEA7=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/26E26C95=
+Param/Value/2739659D=
+Param/Value/27AF4044=<s val="THorner05sAllButtons">Atrás</s> /// <s val="THorner05sAllButtons">Back</s>
+Param/Value/281988E0=<s val="THorner05sAllButtons">Liberar 4 Ultraliscos</s> /// <s val="THorner05sAllButtons">Release 4 Ultralisks</s>
+Param/Value/28F7B3F3=+6 Granadas /// +6 Grenades
+Param/Value/29B20723=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/2A815D7A=Usa a cualquier unidad terrestre para recoger. /// Use any ground unit to pickup.
+Param/Value/2B2188EF=Escapar del Híbrido /// Escape From The Facility
+Param/Value/2D006445=Armas recolectadas /// Weapons Collected
+Param/Value/2D902983=<s val="THorner05sAllButtons">Solicitud: 4 Camazotes</s> /// <s val="THorner05sAllButtons">Request: 4 Firebats</s>
+Param/Value/2FFFD9B8=
+Param/Value/304679E2=<s val="THorner05sAllButtons">Atrás</s> /// <s val="THorner05sAllButtons">Back</s>
+Param/Value/30CE4193=Reliquias protoss encontradas /// Protoss Relics Found
+Param/Value/31655236=Encontrar las Reliquias protoss:  /// Find Protoss Relics: 
+Param/Value/31FE07F1=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/32123B42=Reliquia protoss /// Protoss Relic
+Param/Value/322A1BDF=Recolecta Reliquias protoss para que Stetmann las investigue en el laboratorio del Hiperión. /// Collect Protoss Relics for Stetmann's research in the Hyperion lab.
+Param/Value/336600A8=Investigación protoss adquirida /// Protoss Research Earned
+Param/Value/34C7B4D6=Restaura la vida y la energía de las unidades. /// Restores units' health and energy.
+Param/Value/3742AD03=
+Param/Value/37F32875=<s val="THorner05sAllButtons">Atrás</s> /// <s val="THorner05sAllButtons">Back</s>
+Param/Value/38995714=¡Manténganlos a raya! /// Hold 'em back!
+Param/Value/39F32FF0=+5 Granadas /// +5 Grenades
+Param/Value/3A100204=<s val="THorner05sAllButtons">Liberar 65 Zergueznos</s> /// <s val="THorner05sAllButtons">Release 65 Zerglings</s>
+Param/Value/3AA81C0C=Raynor no debe morir; sería malo para su reputación. /// Raynor must not die; it would be bad for his reputation.
+Param/Value/3BF968F3=</s> /// </s>
+Param/Value/3C495105=
+Param/Value/41437E4C=<c val="FF0000"><s val="THorner05sAllButtons">Liberar al Brutalisco</s></c> /// <c val="FF0000"><s val="THorner05sAllButtons">Release Brutalisk</s></c>
+Param/Value/44583A89=<s val="THorner05sAllButtons">Cámara de seguridad del Brutalisco</s> /// <s val="THorner05sAllButtons">Brutalisk Security Cam</s>
+Param/Value/45CD0F73=Descubre los secretos de este laboratorio oculto del Dominio. /// Uncover the secrets of this hidden Dominion lab.
+Param/Value/4600DB3D=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/4684D028=Municiones de cronofisura /// Chrono Rift Ammo
+Param/Value/48B84FF9=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/48F6638A=
+Param/Value/4A3E218A=Encontrar las Reliquias protoss:  /// Find Protoss Relics: 
+Param/Value/4A593973=
+Param/Value/4B0759D3=Reliquia protoss /// Protoss Relic
+Param/Value/4CB42B6B=Carga de restauración /// Restoration Charge
+Param/Value/52EC3FCD=
+Param/Value/54E83A5D=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/55B025F4=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/562DBCEF=  ///  
+Param/Value/57B7604E=Restaura la vida y la energía de las unidades. /// Restores units' health and energy.
+Param/Value/5A202899=
+Param/Value/5ACF9436=Restaura la vida y la energía de las unidades. /// Restores units' health and energy.
+Param/Value/5B696962=Terminal informática /// Computer Terminal
+Param/Value/5C7FD2E2=<s val="THorner05sAllButtons">Cámara de seguridad</s> /// <s val="THorner05sAllButtons">Security Camera</s>
+Param/Value/5CCF6C8F=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/5D283B44=No /// No
+Param/Value/6000CEA9= ///  
+Param/Value/601B41BF=<s val="ScreenButtonText"><c val="FFFFFF">Opcional</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Optional</c></s>
+Param/Value/6194ABE5=Reliquia protoss /// Protoss Relic
+Param/Value/61B19EDA=Municiones de granadas /// Grenade Ammo
+Param/Value/62441C9A=Destruir el Núcleo de energía del complejo /// Destroy the Facility Power Core
+Param/Value/6315777C=  ///  
+Param/Value/648076DB=  ///  
+Param/Value/64F6E3B4=<s val="THorner05sAllButtons">Liberar 65 Zergueznos</s> /// <s val="THorner05sAllButtons">Release 65 Zerglings</s>
+Param/Value/66AEA8D4=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/6714DB79=
+Param/Value/679B78A0=Brutalisco eliminado /// Brutalisk Killed
+Param/Value/67B552AD=
+Param/Value/6829C698=  ///  
+Param/Value/68848EF0=
+Param/Value/68B52C1E=<s val="THorner05sAllButtons">Armar con Cañones<n/>multiuso</s> /// <s val="THorner05sAllButtons">Arm with All-Purpose<n/>Cannons</s>
+Param/Value/69893BF3=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/69AB9669=+1 Cronocarga /// +1 Chrono Charge
+Param/Value/6B206A3F=Reliquia protoss /// Protoss Relic
+Param/Value/6DD35D5F=<s val="THorner05sAllButtons">Pirateando... ... ...</s> /// <s val="THorner05sAllButtons">hacking... ... ...</s>
+Param/Value/6E3CDFD4=
+Param/Value/70B2C489=<s val="THorner05sAllButtons">Liberar 5 Ultraliscos</s> /// <s val="THorner05sAllButtons">Release 5 Ultralisks</s>
+Param/Value/735B7ADE=<s val="THorner05sAllButtons">Pirateando... ...    </s> /// <s val="THorner05sAllButtons">hacking... ...    </s>
+Param/Value/78CA164E=
+Param/Value/7A521723=<s val="THorner05sAllButtons">Pirateando... ... ...</s> /// <s val="THorner05sAllButtons">hacking... ... ...</s>
+Param/Value/7D3BE86B=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/7DB47E6B=  ///  
+Param/Value/7F3E9E69=Investigar el laboratorio del Dominio /// Investigate the Dominion Lab
+Param/Value/7F47886C=  ///  
+Param/Value/7F817154=<s val="THorner05sAllButtons">Liberar 19 Zelots</s> /// <s val="THorner05sAllButtons">Release 19 Zealots</s>
+Param/Value/801C9BF8=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/8031F396=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/81439D52=Restaura la vida y la energía de las unidades. /// Restores units' health and energy.
+Param/Value/824EB5D4=Municiones de plasma /// Plasma Ammo
+Param/Value/83B523C5=
+Param/Value/83C01CB2=
+Param/Value/853BB4CF= ///  
+Param/Value/85521715=
+Param/Value/85560A41=Municiones de plasma /// Plasma Ammo
+Param/Value/8654E60D=
+Param/Value/87ABCDA4=Carga de restauración /// Restoration Charge
+Param/Value/88F88025=<s val="THorner05sAllButtons">Liberar a 15 Zelots</s> /// <s val="THorner05sAllButtons">Release 15 Zealots</s>
+Param/Value/8964CA54=
+Param/Value/89F27F0D=La fuga /// The Escape
+Param/Value/8CC100B0=Híbrido desaparecido /// Hybrid Disappeared
+Param/Value/8E6D4431=<s val="ObjRewardSummary_Protoss">Encontrar las Reliquias protoss  /// <s val="ObjRewardSummary_Protoss">Find Protoss Relics
+Param/Value/9067AA1F=Escapar del complejo /// Escape From The Facility
+Param/Value/91EABE95=  ///  
+Param/Value/91F3CB3D=Eliminar al Brutalisco:  /// Kill the Brutalisk: 
+Param/Value/92BB493E=  ///  
+Param/Value/9303EA1D=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/9427A838=Usa a cualquier unidad terrestre para recoger. /// Use any ground unit to pickup.
+Param/Value/982164E9=
+Param/Value/98FB3C48=Carga de restauración /// Restoration Charge
+Param/Value/99DF0C11=Dispositivo de cronofisura /// Chrono Rift Device
+Param/Value/9BD3E383=+3 Granadas /// +3 Grenades
+Param/Value/9C1BA11F=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/9C68C38F=Inicio de la misión /// Mission Start
+Param/Value/9D8B3F83=  ///  
+Param/Value/9E1B7C4C=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/9E253B87=
+Param/Value/9F164517=Encontrar las Reliquias protoss:  /// Find Protoss Relics: 
+Param/Value/9F59187B=Escapar /// Escape
+Param/Value/A43486E9=Encontrar las Reliquias protoss:  /// Find Protoss Relics: 
+Param/Value/A47D0EB0=Sí /// Yes
+Param/Value/A7331FF6=  ///  
+Param/Value/AA275322=  ///  
+Param/Value/AADB0788=  ///  
+Param/Value/AF4A6014=El Dominio está investigando un Brutalisco. Elimínalo para asestar un golpe a los planes del Dominio. /// The Dominion is researching a Brutalisk. Destroy it to deal a blow to their efforts.
+Param/Value/B2ACFA86=Brutalisco eliminado /// Brutalisk Killed
+Param/Value/B3153C44=<s val="THorner05sAllButtons">Liberar 4 Ultraliscos</s> /// <s val="THorner05sAllButtons">Release 4 Ultralisks</s>
+Param/Value/B3607D5C=<s val="THorner05sAllButtons">Solicitud: 3 Merodeadores</s> /// <s val="THorner05sAllButtons">Request: 3 Marauders</s>
+Param/Value/B8A55D31=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/BAB21FB6=+2 Municiones de plasma /// +2 Plasma Rounds
+Param/Value/BB0EF13C=<s val="THorner05sAllButtons">Solicitud: 3 Marines,<n/>3 Médicas</s> /// <s val="THorner05sAllButtons">Request: 3 Marines,<n/>3 Medics</s>
+Param/Value/BCCAA3AC=  ///  
+Param/Value/BDF0093D=
+Param/Value/BE866312=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/C0CD930D=Vida y energía restituidas /// Health & Energy Restored
+Param/Value/C0D11339=<s val="THorner05sAllButtons">Solicitud: 8 Marines</s> /// <s val="THorner05sAllButtons">Request: 8 Marines</s>
+Param/Value/C1906276=<s val="THorner05sAllButtons">Pirateando...        </s> /// <s val="THorner05sAllButtons">hacking...        </s>
+Param/Value/C1C2DF09=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/C2FF6FE6=Encontrar las Reliquias protoss:  /// Find Protoss Relics: 
+Param/Value/C31BC14C=<s val="ScreenButtonText"><c val="FFFFFF">Selecciona uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/C57E2841=  ///  
+Param/Value/C6DE4E0F=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/C8D9919C=Jim Raynor ha muerto /// Jim Raynor has died
+Param/Value/C8F06BE4=Destruir el Reactor de fusión /// Destroy the Fusion Reactor
+Param/Value/C9CE141C=<s val="THorner05sAllButtons">Atrás</s> /// <s val="THorner05sAllButtons">Back</s>
+Param/Value/CBAEDFC9=  ///  
+Param/Value/CC0A0AF7=
+Param/Value/CC5D376D=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/CC5F84C4=
+Param/Value/CC9ADFD9=<s val="THorner05sAllButtons">Activar armas del lado derecho</s> /// <s val="THorner05sAllButtons">Activate Right Side Guns</s>
+Param/Value/D02808D8=  ///  
+Param/Value/D20106AB=El híbrido está suelto. Es demasiado poderoso para poder eliminarlo. Escapar es la única opción. /// The hybrid is loose. It is too powerful to kill. Escape is the only option.
+Param/Value/D4519C80=Municiones de cronofisura /// Chrono Rift Ammo
+Param/Value/D4546CB9=Matt, tenemos que reventar este lugar. No podemos dejarlo así como está. /// Matt, we've gotta blow this place sky high. No way we can just leave it standing.
+Param/Value/D8282D88=Escapar /// Escape
+Param/Value/DA645A23=  ///  
+Param/Value/DAB0A3B0=
+Param/Value/DB2720BB=Municiones de cronofisura /// Chrono Rift Ammo
+Param/Value/DCBED363=<s val="ScreenButtonText"><c val="FFFFFF">Hacer clic para usar</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Click To Use</c></s>
+Param/Value/DF845446=<s val="THorner05sAllButtons">Liberar 70 Zergueznos</s> /// <s val="THorner05sAllButtons">Release 70 Zerglings</s>
+Param/Value/E0AB3011=Ubicación del Brutalisco /// Brutalisk Location
+Param/Value/E1FE759F=Usa a cualquier unidad terrestre para recoger. /// Use any ground unit to pickup.
+Param/Value/E38056A1=/ /// /
+Param/Value/E59B7255=<s val="THorner05sAllButtons">Armar con Napalm<n/>antipersonal</s> /// <s val="THorner05sAllButtons">Arm with Anti-Personnel<n/>Napalm</s>
+Param/Value/E624C386=<s val="THorner05sAllButtons">Liberar 5 Ultraliscos</s> /// <s val="THorner05sAllButtons">Release 5 Ultralisks</s>
+Param/Value/E6AE60D0=+1 Cronocarga /// +1 Chrono Charge
+Param/Value/E94F8409=<s val="ScreenButtonText"><c val="FFFFFF">Seleccionar uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/E971B55B=
+Param/Value/E9797FD9=Mueve a cualquier unidad terrestre hacia aquí para<n/>activar la cámara de seguridad. /// Move any ground unit here to<n/>activate security camera.
+Param/Value/EA2B4AA7=  ///  
+Param/Value/EA5A26DE=Encontrar Reliquias protoss /// Find Protoss Relics
+Param/Value/EAB4BA13=Municiones de plasma /// Plasma Ammo
+Param/Value/EC539FE4=<s val="THorner05sAllButtons">Pirateando... ...    </s> /// <s val="THorner05sAllButtons">hacking... ...    </s>
+Param/Value/ECD96742=  ///  
+Param/Value/ED378059=Reactor de fusión /// Fusion Reactor
+Param/Value/EDE6B222=Cañón de plasma + 5 Municiones /// Plasma Gun +5 Rounds
+Param/Value/EE248095=Dispositivo de cronofisura /// Chrono Rift Device
+Param/Value/EEC0388A=<s val="ScreenButtonText"><c val="FFFFFF">Selecciona uno</c></s> /// <s val="ScreenButtonText"><c val="FFFFFF">Select One</c></s>
+Param/Value/F02B5B60=Usa cualquier unidad terrestre para recoger municiones para Raynor. /// Use any ground unit to pickup weapon rounds for Raynor.
+Param/Value/F03D5FA5=<s val="THorner05sAllButtons">Pirateando...        </s> /// <s val="THorner05sAllButtons">hacking...        </s>
+Param/Value/F2D7048C=+3 Municiones de plasma /// +3 Plasma Rounds
+Param/Value/F54E31A4=<s val="THorner05sAllButtons">Activar cámara de seguridad</s> /// <s val="THorner05sAllButtons">Activate Security Camera</s>
+Param/Value/F5C7AC1A=/13 /// /13
+Param/Value/F6A253F7=
+Param/Value/F6FE2311=+2 Granadas /// +2 Grenades
+Param/Value/F7927309=Destruir el Núcleo de energía del complejo /// Destroy the Facility Power Core
+Param/Value/F7EEB73B=Municiones de plasma /// Plasma Ammo
+Param/Value/F81CFBC7=<s val="THorner05sAllButtons">Activar armas del lado izquierdo</s> /// <s val="THorner05sAllButtons">Activate Left Side Guns</s>
+Param/Value/F8BA0C74=Eliminar al Brutalisco:  /// Kill the Brutalisk: 
+Param/Value/FA1FB40A=<s val="THorner05sAllButtons">Atrás</s> /// <s val="THorner05sAllButtons">Back</s>
+Param/Value/FC067EC6=Municiones de granadas /// Grenade Ammo
+Param/Value/FC3BF07C=Municiones de granadas /// Grenade Ammo
+Param/Value/FCB36CB8=Municiones de cronofisura /// Chrono Rift Ammo
+Param/Value/FD376361=  ///  
+Param/Value/FD7595D3= ///  
+Param/Value/FF4B30F8=Raynor debe sobrevivir /// Raynor Must Survive

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Char">
+        <FogColor value="255,54,255,54"/>
+    </CTerrain>
+</Catalog>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CBehaviorBuff id="Sprint">
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+        <Duration value="12"/>
+    </CBehaviorBuff>
+</Catalog>

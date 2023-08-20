@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\btn-unit-terran-thor.dds" Type="Image"/>
+<Achievement id="Anniversary_THorner03"/>
+<Achievement id="THorner03_1"/>
+<Achievement id="THorner03_2"/>
+<Achievement id="THorner03_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniBlueLarge"/>
+<Actor id="LightOmniRedLarge"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="PathingBlocker2x2Doodad"/>
+<Actor id="AlarmLight" Variations="0,1"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="TerranCliffGapFiller" Variations="0,1,2"/>
+<Actor id="Brambles" Variations="0,1,2,3,6,7"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,1,2"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="CastanarDissectionArm"/>
+<Actor id="CastanarLightboard" Variations="0,2"/>
+<Actor id="CastanarMonitorFloor" Variations="0"/>
+<Actor id="CastanarMonitorWall" Variations="1"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="1"/>
+<Actor id="ChainLinkFenceStraight" Variations="1,5"/>
+<Actor id="Crate" Variations="0,1,2,3,4,5"/>
+<Actor id="Decal" Variations="0,1,2,3,4,7,11,15,16,21,22,23,25,26,27"/>
+<Actor id="ExhaustPipes" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="FanVent" Variations="0,1"/>
+<Actor id="FanVentCliff" Variations="0"/>
+<Actor id="FireMedium"/>
+<Actor id="Floodlight" Variations="0,1,3"/>
+<Actor id="JunkPileSpaceShips" Variations="0,1,2"/>
+<Actor id="KorhalStoreFront" Variations="4,6,7,8"/>
+<Actor id="LandingLights" Variations="0,1"/>
+<Actor id="MarSaraCrack" Variations="0,3,4,5"/>
+<Actor id="MarSaraGroundProps" Variations="0,1,2,3"/>
+<Actor id="MeinhoffCrater" Variations="0,1,2"/>
+<Actor id="MeinhoffCraterLarge" Variations="1"/>
+<Actor id="MeinhoffCraterSmall" Variations="0,1"/>
+<Actor id="MetalWall" Variations="0,1,2,3,4"/>
+<Actor id="MetalWallCorner" Variations="1,3"/>
+<Actor id="MetalWallDiagonal" Variations="1,2,3,4"/>
+<Actor id="PipesCorner" Variations="0,1,2,3"/>
+<Actor id="PipesCorner45" Variations="0,1"/>
+<Actor id="PipesLong" Variations="0,2"/>
+<Actor id="PipesLong45" Variations="0,2,3"/>
+<Actor id="PipesShort" Variations="0,2"/>
+<Actor id="PipesShort45" Variations="0,1"/>
+<Actor id="PipesStack" Variations="0"/>
+<Actor id="PortZionBarrel" Variations="1"/>
+<Actor id="PortZionGroundMix" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="PortZionJunkPile" Variations="0,1"/>
+<Actor id="PortZionStorage"/>
+<Actor id="PortZionTires" Variations="0,1,2"/>
+<Actor id="Rock" Variations="2,3,5,6,7,8,9,10"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4,5"/>
+<Actor id="RockSmall" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="SecurityFenceDiagonal" Variations="0,1"/>
+<Actor id="SignsFunny" Variations="1"/>
+<Actor id="SignsWarning" Variations="0,1"/>
+<Actor id="SpacePlatformArchwayLarge" Variations="0"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1,2,3"/>
+<Actor id="SpacePlatformCliffDoor" Variations="1"/>
+<Actor id="SpacePlatformFan" Variations="0"/>
+<Actor id="SpacePlatformFanLarge" Variations="0,1"/>
+<Actor id="SpacePlatformGroundDecals" Variations="15"/>
+<Actor id="SpacePlatformHatch"/>
+<Actor id="SpacePlatformRadar" Variations="0,1"/>
+<Actor id="SpacePlatformSignTowerLarge" Variations="0,1"/>
+<Actor id="SpacePlatformTower" Variations="0,2"/>
+<Actor id="SpacePlatformWallLight" Variations="1"/>
+<Actor id="Spires" Variations="0,1,2,3,4,5,6,7,8"/>
+<Actor id="SpiresLarge" Variations="0,1,2,3"/>
+<Actor id="SupplyTanks"/>
+<Actor id="TerranTarmac" Variations="0,1,5,7"/>
+<Actor id="WaterTank" Variations="1,2"/>
+<Actor id="WreckedBattlecruiser"/>
+<Actor id="WreckedJackal"/>
+<Actor id="WreckedMule" Variations="0,2"/>
+<Actor id="WreckedNomad"/>
+<Actor id="WreckedCargoTruck" Variations="1,3"/>
+<Actor id="ValhallaCabinet" Variations="0,1,2,5,6"/>
+<Actor id="ValhallaGenerator" Variations="0,1"/>
+<Actor id="TerrainObjectValhallaAircraftElevatorDoodad"/>
+<Actor id="ValhallaThorConstruction" Variations="0,1,2"/>
+<Actor id="TerrainObjectValhallaGlassFloorDoodad" Variations="1"/>
+<Actor id="TerrainObjectValhallaGrid45FloorDoodad" Variations="0,1"/>
+<Actor id="AircraftAssembly" Variations="0"/>
+<Actor id="PipesSmallCorner" Variations="0,1,2,5"/>
+<Actor id="PipesSmallLong"/>
+<Actor id="PipesSmallShort45"/>
+<Actor id="TRaynor01RadarDish"/>
+<Actor id="ValhallaCamera" Variations="2,3"/>
+<Actor id="ValhallaWindowLargeDiagonal"/>
+<Actor id="ValhallaWorkstation" Variations="0,1,3,4"/>
+<Actor id="BattlecruiserLokiDock"/>
+<Behavior id="ScanRangeBonus"/>
+<Light id="Valhalla"/>
+<Model id="PingSimple"/>
+<Model id="PingWarning"/>
+<Model id="BriefingUnitSelectRed"/>
+<Model id="BraxisAlphaSkyBox"/>
+<Sound id="Barracks_Explode" Variations="1"/>
+<Sound id="Thor_Movement" Variations="0"/>
+<Sound id="Medivac_Load" Variations="0"/>
+<Sound id="Alert_TerranCalldownLaunch"/>
+<Sound id="Ghost_DropPodImpact"/>
+<Sound id="UI_TerranKlaxonAlert" Variations="0"/>
+<Sound id="TUIWarningPing" Variations="0"/>
+<Sound id="ScienceObjectiveCalloutsStetmann00001" Variations="0"/>
+<Sound id="ScienceObjectiveCalloutsStetmann00005" Variations="0"/>
+<Sound id="ScienceObjectiveCalloutsStetmann00007" Variations="0"/>
+<Sound id="THorner03BriefingHorner00001" Variations="0"/>
+<Sound id="THorner03BriefingHorner00002" Variations="0"/>
+<Sound id="THorner03BriefingTychus00003" Variations="0"/>
+<Sound id="THorner03BriefingHorner00004" Variations="0"/>
+<Sound id="THorner03BriefingRaynor00005" Variations="0"/>
+<Sound id="THorner03BriefingHorner00012" Variations="0"/>
+<Sound id="THorner03BriefingRaynor00013" Variations="0"/>
+<Sound id="THorner03BriefingHorner00014" Variations="0"/>
+<Sound id="THorner03BriefingRaynor00015" Variations="0"/>
+<Sound id="THorner03BriefingHorner00016" Variations="0"/>
+<Sound id="THorner03BriefingRaynor00017" Variations="0"/>
+<Sound id="THorner03BriefingHorner00018" Variations="0"/>
+<Sound id="THorner03BriefingTychus00019" Variations="0"/>
+<Sound id="THorner03Tychus00001" Variations="0"/>
+<Sound id="THorner03Tychus00002" Variations="0"/>
+<Sound id="THorner03Tychus00003" Variations="0"/>
+<Sound id="THorner03Raynor00004" Variations="0"/>
+<Sound id="THorner03Tychus00005" Variations="0"/>
+<Sound id="THorner03Tychus00006" Variations="0"/>
+<Sound id="THorner03Tychus00007" Variations="0"/>
+<Sound id="THorner03Tychus00008" Variations="0"/>
+<Sound id="THorner03Tychus00009" Variations="0"/>
+<Sound id="THorner03Tychus00010" Variations="0"/>
+<Sound id="THorner03Tychus00011" Variations="0"/>
+<Sound id="THorner03Horner00012" Variations="0"/>
+<Sound id="THorner03Horner00013" Variations="0"/>
+<Sound id="THorner03Raynor00014" Variations="0"/>
+<Sound id="THorner03Raynor00015" Variations="0"/>
+<Sound id="THorner03Tychus00016" Variations="0"/>
+<Sound id="THorner03Raynor00017" Variations="0"/>
+<Sound id="THorner03Tychus00018" Variations="0"/>
+<Sound id="THorner03Tychus00019" Variations="0"/>
+<Sound id="THorner03Tychus00020" Variations="0"/>
+<Sound id="THorner03Horner00021" Variations="0"/>
+<Sound id="THorner03Tychus00022" Variations="0"/>
+<Sound id="THorner03Tychus00023" Variations="0"/>
+<Sound id="THorner03Tychus00024" Variations="0"/>
+<Sound id="THorner03Tychus00025" Variations="0"/>
+<Sound id="THorner03DominionMarine100029" Variations="0"/>
+<Sound id="THorner03Tychus00030" Variations="0"/>
+<Sound id="THorner03Tychus00031" Variations="0"/>
+<Sound id="THorner03Tychus00032" Variations="0"/>
+<Sound id="THorner03Tychus00033" Variations="0"/>
+<Sound id="THorner03Tychus00034" Variations="0"/>
+<Sound id="THorner03Tychus00035" Variations="0"/>
+<Sound id="THorner03Horner00036" Variations="0"/>
+<Sound id="THorner03Tychus00037" Variations="0"/>
+<Sound id="THorner03Tychus00038" Variations="0"/>
+<Sound id="THorner03Raynor00039" Variations="0"/>
+<Sound id="THorner03Raynor00040" Variations="0"/>
+<Sound id="THorner03Tychus00041" Variations="0"/>
+<Sound id="THorner03Horner00042" Variations="0"/>
+<Sound id="THorner03Raynor00043" Variations="0"/>
+<Sound id="THorner03Tychus00044" Variations="0"/>
+<Sound id="THorner03Tychus00045" Variations="0"/>
+<Sound id="THorner03Tychus00046" Variations="0"/>
+<Sound id="THorner03Tychus00047" Variations="0"/>
+<Sound id="THorner03Horner00048" Variations="0"/>
+<Sound id="THorner03Tychus00049" Variations="0"/>
+<Sound id="THorner03Tychus00050" Variations="0"/>
+<Sound id="THorner03Battlecruiser00051" Variations="0"/>
+<Sound id="THorner03Tychus00052" Variations="0"/>
+<Sound id="THorner03Tychus00054" Variations="0"/>
+<Sound id="THorner03Swann00055" Variations="0"/>
+<Sound id="THorner03Tychus00056" Variations="0"/>
+<Sound id="THorner03Tychus00057" Variations="0"/>
+<Soundtrack id="THorner03MusicSwann"/>
+<Soundtrack id="THorner03MusicAlt"/>
+<Soundtrack id="THorner03MusicEventA"/>
+<Soundtrack id="THorner03MusicIntro"/>
+<Soundtrack id="THorner03MusicMain"/>
+<Soundtrack id="THorner03MusicOutro"/>
+<Terrain id="Valhalla"/>
+<TerrainObject id="TOValhallaAircraftElevator2"/>
+<TerrainObject id="ValhallaGlassFloor1"/>
+<TerrainObject id="ValhallaGlassFloor2"/>
+<TerrainObject id="ValhallaGridFloor1"/>
+<TerrainObject id="ValhallaGridFloor2"/>
+<TerrainObject id="ValhallaGrid45Floor1"/>
+<TerrainObject id="ValhallaGrid45Floor3"/>
+<Unit id="CommandCenter"/>
+<Unit id="SupplyDepot"/>
+<Unit id="Refinery"/>
+<Unit id="Barracks"/>
+<Unit id="EngineeringBay"/>
+<Unit id="MissileTurret"/>
+<Unit id="Bunker"/>
+<Unit id="GhostAcademy"/>
+<Unit id="Factory"/>
+<Unit id="Starport"/>
+<Unit id="Armory"/>
+<Unit id="FusionCore"/>
+<Unit id="SiegeTankSieged"/>
+<Unit id="VikingFighter"/>
+<Unit id="CommandCenterFlying"/>
+<Unit id="FactoryFlying"/>
+<Unit id="SCV"/>
+<Unit id="BarracksFlying"/>
+<Unit id="Marine"/>
+<Unit id="Reaper"/>
+<Unit id="Ghost"/>
+<Unit id="Marauder"/>
+<Unit id="Medivac"/>
+<Unit id="Banshee"/>
+<Unit id="Raven"/>
+<Unit id="Battlecruiser"/>
+<Unit id="PlanetaryFortress"/>
+<Unit id="Beacon_Terran"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="DestructibleSearchlight" Variations="1"/>
+<Unit id="DestructibleBullhornLights" Variations="1"/>
+<Unit id="DestructibleRock6x6"/>
+<Unit id="SiegeBreakerSieged"/>
+<Unit id="PerditionTurret"/>
+<Unit id="SpartanCompany"/>
+<Unit id="HelsAngelFighter"/>
+<Unit id="DuskWing"/>
+<Unit id="BarracksTechReactor"/>
+<Unit id="FactoryTechReactor"/>
+<Unit id="StarportTechReactor"/>
+<Unit id="MetalGateDiagonalULBRLowered"/>
+<Unit id="MetalGateStraightVerticalLFLowered"/>
+<Unit id="Odin"/>
+<Unit id="Vulture"/>
+<Unit id="Loki"/>
+<Unit id="Firebat"/>
+<Unit id="Diamondback"/>
+<Unit id="DevourerTissueSampleTube"/>
+<Unit id="Goliath"/>
+<Unit id="ValhallaBaseDestructibleDoorDead"/>
+<Unit id="ValhallaBaseDestructibleDoor"/>
+<Unit id="TychusChaingun"/>
+<Unit id="ExplodingBarrelLarge"/>
+<Unit id="Scientist" Variations="0,1,2,3"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
+<Unit id="BreachingCharge"/>
+<Unit id="ValhallaDestructibleWall"/>
+<Unit id="OdinBuild"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_StarportFlying"/>
+<Unit id="AP_Wraith"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
+</Preload>

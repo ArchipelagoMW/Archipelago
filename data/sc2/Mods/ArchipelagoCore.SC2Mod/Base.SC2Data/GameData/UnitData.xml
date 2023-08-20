@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUnit id="AP_Core_Controller">
+        <ReviveType value="CloakModelLow"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Uncursorable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="ClearRallyOnTargetLost" value="0"/>
+        <FlagArray index="CameraFollow" value="0"/>
+        <LifeStart value="38281"/>
+        <LifeMax value="38281"/>
+        <MinimapRadius value="0"/>
+        <TacticalAI value="SOpAttachHardPoint10"/>
+        <LeaderAlias value="CloakModelLow"/>
+        <HotkeyAlias value="CloakModelLow"/>
+        <SelectAlias value="CloakModelLow"/>
+        <SubgroupAlias value="CloakModelLow"/>
+        <AIEvaluateAlias value="CloakModelLow"/>
+    </CUnit>
+    <CUnit id="AP_Core_SupplyHolder">
+        <ReviveType value="CloakModelLow"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Uncursorable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="ClearRallyOnTargetLost" value="0"/>
+        <FlagArray index="CameraFollow" value="0"/>
+        <MinimapRadius value="0"/>
+        <TacticalAI value="SOpAttachHardPoint10"/>
+        <LeaderAlias value="CloakModelLow"/>
+        <HotkeyAlias value="CloakModelLow"/>
+        <SelectAlias value="CloakModelLow"/>
+        <SubgroupAlias value="CloakModelLow"/>
+        <AIEvaluateAlias value="CloakModelLow"/>
+    </CUnit>
+</Catalog>

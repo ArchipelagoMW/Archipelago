@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="TaurenSpaceMarine">
+        <LifeArmor value="3"/>
+        <Speed value="2.25"/>
+        <FlagArray index="Hero" value="1"/>
+    </CUnit>
+    <CUnit id="Wraith"/>
+    <CUnit id="SuperMarine">
+        <LifeStart value="300"/>
+        <LifeMax value="300"/>
+        <LifeArmor value="3"/>
+        <Speed value="2.25"/>
+    </CUnit>
+</Catalog>

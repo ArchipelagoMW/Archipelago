@@ -1,0 +1,85 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: ArchipelagoCore
+//--------------------------------------------------------------------------------------------------
+// Constants
+const int lib5BD4895D_gv_aP_Core_locationVictory = 0;
+const int lib5BD4895D_gv_aP_Core_locationInit = -1;
+const fixed lib5BD4895D_gv_aP_Core_rainbowCyclePeriod = 0.5;
+
+// Structures
+struct lib5BD4895D_gs_chatbox {
+    int lv_mainpanel;
+    int lv_chatpanel;
+    int lv_hiddenpanel;
+    int lv_chatlabel;
+    int lv_scrollupbtn;
+    int lv_scrolldownbtn;
+    int lv_scrollbottonbtn;
+    int lv_maxmessages;
+    int lv_scrollstrength;
+    text[50] lv_chatmessage;
+    int lv_sizeupbtn;
+    int lv_sizedownbtn;
+    int lv_size;
+    int lv_countlabel;
+    int lv_messagecount;
+    int lv_hidebtn;
+    int lv_showbtn;
+};
+
+// Variable Declarations
+bool lib5BD4895D_gv_aP_Core_initFinished;
+playergroup lib5BD4895D_gv_aP_Core_affectedPlayers;
+string[21] lib5BD4895D_gv_aP_Core_playerFactions;
+int lib5BD4895D_gv_aP_Core_chatboxAnchor;
+int lib5BD4895D_gv_aP_Core_chatbox_x;
+int lib5BD4895D_gv_aP_Core_chatbox_y;
+int lib5BD4895D_gv_aP_Core_chatbox_offsetX;
+int lib5BD4895D_gv_aP_Core_chatbox_offsetY;
+trigger lib5BD4895D_gv_aP_Core_mapInit;
+string lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS;
+string lib5BD4895D_gv_aP_Core_Faction_TERRAN_DOMINION;
+string lib5BD4895D_gv_aP_Core_Faction_PRIMAL_ZERG;
+string lib5BD4895D_gv_aP_Core_Faction_KERRIGAN_SWARM;
+string lib5BD4895D_gv_aP_Core_Faction_DAELAAM;
+unit lib5BD4895D_gv_aP_Core_controller;
+int lib5BD4895D_gv_aP_Core_controllerStatus;
+lib5BD4895D_gs_chatbox lib5BD4895D_gv_chatbox;
+
+// Function Declarations
+void lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers (playergroup lp_players);
+void lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction (int lp_player, string lp_faction);
+void lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition (int lp_anchor, int lp_x, int lp_y, int lp_offsetX, int lp_offsetY);
+void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger);
+bool lib5BD4895D_gf_AP_Core_IsControllerNotInitialized ();
+void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal);
+void lib5BD4895D_gf_AP_Core_refreshController ();
+text lib5BD4895D_gf_getchatboxcontent ();
+void lib5BD4895D_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
+void lib5BD4895D_gf_showhidechatbox (int lp_player, bool lp_visible);
+void lib5BD4895D_gf_sendchatmessage (int lp_fromplayer, string lp_message);
+void lib5BD4895D_gf_AP_Core_rainbowController (int lp_player);
+int lib5BD4895D_gf_AP_Core_getPlayerColorByIndex (int lp_colorIndex);
+void lib5BD4895D_gf_AP_Core_giveBonusSupplies (int lp_player, int lp_amount);
+void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorIndex);
+void lib5BD4895D_gf_AP_Core_onLoadFinished ();
+void lib5BD4895D_gf_AP_Core_setObjectiveCompleted (int lp_objective);
+void lib5BD4895D_gf_AP_Core_setObjectiveFailed (int lp_objective);
+
+// Trigger Declarations
+trigger lib5BD4895D_gt_AP_Core_controllerInit;
+trigger lib5BD4895D_gt_AP_Core_dontHideController;
+trigger lib5BD4895D_gt_AP_Core_keepControllerAlive;
+trigger lib5BD4895D_gt_updatechatbox;
+trigger lib5BD4895D_gt_chatboxbuttons;
+trigger lib5BD4895D_gt_chatboxshow;
+trigger lib5BD4895D_gt_AP_Core_giveStartingResources;
+trigger lib5BD4895D_gt_AP_Core_setFactionColorHandler;
+trigger lib5BD4895D_gt_AP_Triggers_loadFinished;
+trigger lib5BD4895D_gt_AP_Core_clearChat;
+
+// Library Initialization
+void lib5BD4895D_InitVariables ();
+

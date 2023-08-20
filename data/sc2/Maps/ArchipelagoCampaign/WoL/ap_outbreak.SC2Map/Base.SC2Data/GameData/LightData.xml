@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CLight id="Meinhoff">
+        <ToDInfoArray index="0" AmbientColor="0.466667,0.466667,0.474510" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.000000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRDiffuse" value="1.000000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key" Color="0.823529,0.839216,0.901961" ColorMultiplier="1.000000" Direction="0.724693,-0.124265,-0.677775"/>
+            <DirectionalLight index="Fill" Color="0.258824,0.184314,0.164706" ColorMultiplier="3.000000" Direction="-0.463854,-0.769851,0.438371"/>
+            <DirectionalLight index="Back" Color="0.082353,0.121569,0.200000" ColorMultiplier="1.496000" Direction="-0.668793,-0.021251,0.743145"/>
+        </ToDInfoArray>
+    </CLight>
+    <CLight id="MeinhoffCampaignDay">
+        <ToDInfoArray index="0" TimeOfDay="00" AmbientColor="0.466667,0.466667,0.474510" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.000000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRDiffuse" value="1.000000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key" Color="0.823529,0.839216,0.901961" ColorMultiplier="1.000000" Direction="0.724693,-0.124265,-0.677775"/>
+            <DirectionalLight index="Fill" Color="0.258824,0.184314,0.164706" ColorMultiplier="3.000000" Direction="-0.463854,-0.769851,0.438371"/>
+            <DirectionalLight index="Back" Color="0.082353,0.121569,0.200000" ColorMultiplier="1.496000" Direction="-0.668793,-0.021251,0.743145"/>
+        </ToDInfoArray>
+    </CLight>
+</Catalog>

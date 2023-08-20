@@ -1,0 +1,1276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="5">
+        <name value="Zerg Left 1"/>
+        <shape type="rect">
+            <quad value="15.9956,113.3913,17.9953,131.8745"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Zerg Left 2"/>
+        <shape type="rect">
+            <quad value="16.07,29.8806,18.0698,49.8806"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Zerg Left 3"/>
+        <shape type="rect">
+            <quad value="42.945,8.0078,62.6533,10.0075"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Zerg Right 1"/>
+        <shape type="rect">
+            <quad value="33.0917,146.0146,53.0915,148.0144"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Zerg Right 2"/>
+        <shape type="rect">
+            <quad value="126.984,145.9802,147.984,147.9802"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Zerg Right 3"/>
+        <shape type="rect">
+            <quad value="149.9484,82.1057,151.9484,106.1057"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Zerg Air Behind"/>
+        <shape type="rect">
+            <quad value="135.8906,8.0424,151.8903,10.0424"/>
+        </shape>
+        <shape type="rect">
+            <quad value="149.9995,9.9567,151.935,23.8886"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Area Left 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.9956,17.3178"/>
+            <radius value="8.743"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.6381,15.1574"/>
+            <radius value="11.4702"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.7253,15.124"/>
+            <radius value="12.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.453,14.0944"/>
+            <radius value="12.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.4523,24.8957"/>
+            <radius value="8.142"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.2253,27.379"/>
+            <radius value="8.142"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.185,34.2004"/>
+            <radius value="4.4724"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Area Left 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="27.913,41.4807"/>
+            <radius value="21.2602"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.5144,34.9833"/>
+            <radius value="6.948"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.7167,30.5412"/>
+            <radius value="6.948"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.3198,41.8552"/>
+            <radius value="8.1196"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.7551,45.5256"/>
+            <radius value="3.7062"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.9001,39.8422"/>
+            <radius value="3.9443"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Area Left 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.0314,87.7482"/>
+            <radius value="12.8503"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.2702,96.6423"/>
+            <radius value="12.8503"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.408,113.245"/>
+            <radius value="12.8503"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.207,124.8974"/>
+            <radius value="12.8503"/>
+        </shape>
+        <shape type="circle">
+            <center value="19.0468,138.3962"/>
+            <radius value="8.4592"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.4184,76.854"/>
+            <radius value="9.1518"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.0996,66.2131"/>
+            <radius value="6.0981"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Area Right 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="44.511,141.6357"/>
+            <radius value="12.868"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.0036,142.9101"/>
+            <radius value="9.6635"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.2453,119.6752"/>
+            <radius value="12.868"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.175,110.8854"/>
+            <radius value="12.868"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.7126,106.3154"/>
+            <radius value="12.868"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.2214,128.9531"/>
+            <radius value="12.868"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.39,99.7443"/>
+            <radius value="6.355"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.9936,96.2441"/>
+            <radius value="6.355"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.337,91.048"/>
+            <radius value="6.9904"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.4411,86.0231"/>
+            <radius value="4.0974"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.3063,97.3125"/>
+            <radius value="1.8154"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Area Right 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="137.5534,137.3671"/>
+            <radius value="18.0441"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.124,130"/>
+            <radius value="18.0441"/>
+        </shape>
+        <shape type="circle">
+            <center value="126,117"/>
+            <radius value="18.0441"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.2861,99.1291"/>
+            <radius value="8.0263"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.6435,91.0717"/>
+            <radius value="6.137"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Area Right 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="149.6823,94.6967"/>
+            <radius value="18.0441"/>
+        </shape>
+        <shape type="circle">
+            <center value="131.337,92.6115"/>
+            <radius value="6.7578"/>
+        </shape>
+        <shape type="circle">
+            <center value="127.5812,86.2116"/>
+            <radius value="6.7578"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.486,82.1037"/>
+            <radius value="4.3623"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Drop Pod Nydus In Base"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="92.3044,67.8916"/>
+            <radius value="7.5871"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.0588,67.485"/>
+            <radius value="2.1906"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.532,75.4143"/>
+            <radius value="3.2316"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.149,78.2514"/>
+            <radius value="2.1987"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.678,70.6838"/>
+            <radius value="2.1318"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.9306,63.2387"/>
+            <radius value="1.808"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.7875,59.734"/>
+            <radius value="2.217"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.6174,63.48"/>
+            <radius value="2.7407"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.6457,73.1135"/>
+            <radius value="2.1345"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.9101,78.8366"/>
+            <radius value="5.7741"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.267,73.3613"/>
+            <radius value="3.671"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.3325,48.7416"/>
+            <radius value="7.8142"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.8364,49.156"/>
+            <radius value="1.6872"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.6738,48.9846"/>
+            <radius value="1.8645"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.481,50.8483"/>
+            <radius value="1.6611"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.8334,40.6914"/>
+            <radius value="3.1437"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Command Center Nydus"/>
+        <shape type="circle">
+            <center value="115.266,55.153"/>
+            <radius value="6"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.2844,52.7302"/>
+            <radius value="6"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.1032,45.578"/>
+            <radius value="6"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Overlord Creep Region"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="107.836,53.681"/>
+            <radius value="17.712"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.185,69.4565"/>
+            <radius value="11.3547"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.3508,72.692"/>
+            <radius value="11.3547"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.1171,74.3012"/>
+            <radius value="4.1911"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.388,80.9775"/>
+            <radius value="4.1911"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.4738,85.9277"/>
+            <radius value="5.6848"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.7646,84.4291"/>
+            <radius value="5.806"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0888,74.8933"/>
+            <radius value="3.635"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.5773,54.3046"/>
+            <radius value="13.556"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.9274,37.2336"/>
+            <radius value="9.1477"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.9824,29.766"/>
+            <radius value="8.915"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.1196,40.1533"/>
+            <radius value="8.915"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.5578,44.3828"/>
+            <radius value="8.915"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.7775,45.2216"/>
+            <radius value="8.915"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.823,64.8962"/>
+            <radius value="7.2268"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.1765,70.6748"/>
+            <radius value="7.2268"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.89,91.9926"/>
+            <radius value="5.8703"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.9472,91.8735"/>
+            <radius value="7.2268"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.7294,83.1672"/>
+            <radius value="3.5583"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.643,59.963"/>
+            <radius value="6.6711"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.1613,65.5524"/>
+            <radius value="5.1367"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Artifact Revealer"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="111.5671,78.7348"/>
+            <radius value="32"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.212,48.048"/>
+            <radius value="32"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.2094,68.0034"/>
+            <radius value="32"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.7587,48.1315"/>
+            <radius value="20.6306"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.681,52.678"/>
+            <radius value="32.6843"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.7407,114.8625"/>
+            <radius value="20.6306"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.2033,118.0812"/>
+            <radius value="17.882"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.9565,32.91"/>
+            <radius value="6.6413"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.4836,17.1267"/>
+            <radius value="8.2927"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.7712,16.658"/>
+            <radius value="7.6987"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.933,16.9501"/>
+            <radius value="5.6804"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.6184,94.5036"/>
+            <radius value="4.4946"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.553,83.2998"/>
+            <radius value="8.1877"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.8166,97.9074"/>
+            <radius value="8.3686"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.373,102.436"/>
+            <radius value="26.8146"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.6003,124.1171"/>
+            <radius value="5.7048"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.723,131.6442"/>
+            <radius value="13.197"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.618,132.8464"/>
+            <radius value="10.6433"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.5798,135.2084"/>
+            <radius value="6.0661"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.115,108.0187"/>
+            <radius value="8.4245"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.9028,121.2187"/>
+            <radius value="8.3764"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.3154,108.402"/>
+            <radius value="10.8286"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.3122,47.4575"/>
+            <radius value="5.2907"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.332,87.1081"/>
+            <radius value="11.4506"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.257,130.843"/>
+            <radius value="11.4887"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Zerg Air"/>
+        <shape type="rect">
+            <quad value="16,119.0002,18,135"/>
+        </shape>
+        <shape type="rect">
+            <quad value="33.0002,146.0002,49,148"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Artifact Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.4311,74.3681"/>
+            <radius value="3.4404"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.553,65.7336"/>
+            <radius value="3.142"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.239,67.733"/>
+            <radius value="6.4892"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.8083,60.4787"/>
+            <radius value="3.0598"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.1682,63.9213"/>
+            <radius value="2.5925"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.925,68.0388"/>
+            <radius value="3.0971"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.4934,70.0903"/>
+            <radius value="1.9743"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Briefing Group Right"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="107.765,78.6335"/>
+            <radius value="6.282"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Briefing Group Left"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="83.7116,49.297"/>
+            <radius value="6.6735"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Drop Pod Nydus Medium"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="66.2363,77.9255"/>
+            <radius value="2.3718"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.164,75.1787"/>
+            <radius value="1.9006"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.0012,85.2575"/>
+            <radius value="1.4855"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.3952,83.5068"/>
+            <radius value="1.617"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.211,81.6057"/>
+            <radius value="3.9536"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.1113,94.0046"/>
+            <radius value="1.9157"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.353,96.2231"/>
+            <radius value="4.0166"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.5825,98.2058"/>
+            <radius value="2.62"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.17,95.226"/>
+            <radius value="1.8142"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.4501,98.5954"/>
+            <radius value="2.9404"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.638,93.6267"/>
+            <radius value="3.0881"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.486,96.2094"/>
+            <radius value="2.4794"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.5952,95.4316"/>
+            <radius value="2.983"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Drop Pod Nydus Far"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="54.725,88.5407"/>
+            <radius value="2.569"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.9091,82.1394"/>
+            <radius value="2.3225"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.9211,91.3828"/>
+            <radius value="2.637"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.2045,85.9682"/>
+            <radius value="2.4414"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.8308,84.1657"/>
+            <radius value="2.373"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.3776,23.7373"/>
+            <radius value="2.286"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.8132,22.8093"/>
+            <radius value="2.093"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.756,20.272"/>
+            <radius value="1.665"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.541,18.204"/>
+            <radius value="2.6401"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.9458,22.0217"/>
+            <radius value="2.001"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.8518,44.0407"/>
+            <radius value="2.1801"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.0417,40.3767"/>
+            <radius value="2.0871"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.9428,43.7592"/>
+            <radius value="1.4277"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.381,42.0295"/>
+            <radius value="2.5825"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.8041,38.6865"/>
+            <radius value="1.6813"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.6315,103.0686"/>
+            <radius value="2.4416"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.275,105.5686"/>
+            <radius value="2.5017"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.3474,100.9665"/>
+            <radius value="2.4711"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.276,108.9157"/>
+            <radius value="2.3005"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.4797,100.5527"/>
+            <radius value="2.4958"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.8112,99.5507"/>
+            <radius value="2.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.6,100.1091"/>
+            <radius value="2.7956"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.5273,89.6765"/>
+            <radius value="2.6647"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.399,90.0573"/>
+            <radius value="2.317"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.9084,91.844"/>
+            <radius value="1.619"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.7495,92.9304"/>
+            <radius value="2.6147"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Initial Artifact Attack Gather"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="94.4567,62.3818"/>
+            <radius value="41.8205"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.339,96.9492"/>
+            <radius value="4.7646"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Victory5RandomSpawnRegion"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="63.162,118.6984"/>
+            <radius value="7.0556"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.9753,113.705"/>
+            <radius value="6.912"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.0903,123.5705"/>
+            <radius value="5.7253"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.0512,116.794"/>
+            <radius value="5.948"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.3266,105.7106"/>
+            <radius value="3.4377"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.3876,110.4521"/>
+            <radius value="3.2478"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.0476,120.2558"/>
+            <radius value="4.398"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.106,131.7775"/>
+            <radius value="3.809"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.2526,115.5725"/>
+            <radius value="4.8125"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Overlord Region"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="19.2285,93.7924,36.4355,135.259"/>
+        </shape>
+        <shape type="rect">
+            <quad value="29.2341,124.75,49.978,145.6428"/>
+        </shape>
+        <shape type="rect">
+            <quad value="45.2814,119.438,70.7053,129.9282"/>
+        </shape>
+        <shape type="rect">
+            <quad value="64.8398,108.8725,142.733,139.6384"/>
+        </shape>
+        <shape type="rect">
+            <quad value="53.0898,109.3151,67.3452,120.4633"/>
+        </shape>
+        <shape type="rect">
+            <quad value="32.7502,75.4096,52.1945,103.129"/>
+        </shape>
+        <shape type="rect">
+            <quad value="19.2497,10.3293,149.8937,75.944"/>
+        </shape>
+        <shape type="rect">
+            <quad value="50.1992,72.7868,70.999,92.3493"/>
+        </shape>
+        <shape type="rect">
+            <quad value="69.9326,70.9677,149.8273,110.8208"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Leviathan Stop"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="81.3151,84.104"/>
+            <radius value="7.571"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.4384,76.058"/>
+            <radius value="7.571"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.4804,88.1145"/>
+            <radius value="7.571"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Leviathan Floating Region"/>
+        <shape type="circle">
+            <center value="15.2197,151.0688"/>
+            <radius value="9.629"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Random Debris Falling Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="94.7807,34.9377"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.0141,22.3713"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.7707,23.7851"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.843,26.269"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.1965,40.251"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.552,47.2172"/>
+            <radius value="7.0573"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.4677,34.8085"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.3413,38.7702"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.9335,41.8444"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.7102,46.5205"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.3676,43.9787"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.5854,42.2775"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.6491,45.7043"/>
+            <radius value="4.6892"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.3942,38.046"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.6936,37.6381"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.786,48.999"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.1096,53.3737"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.0903,52.9743"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.3132,51.4714"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.2087,53.2514"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.615,59.577"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.7172,67.8757"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.3071,71.274"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.0288,75.846"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.167,78.281"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.6923,70.672"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.1494,72.1125"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.4487,75.384"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.9606,71.327"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.7885,68.7517"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.3298,64.9196"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.82,62.256"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.4655,63.1418"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.769,61.7966"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.4553,63.2294"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.5126,66.9487"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.4162,63.1276"/>
+            <radius value="2.4985"/>
+        </shape>
+        <shape type="circle">
+            <center value="127.784,59.1091"/>
+            <radius value="6.0761"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.0346,61.3842"/>
+            <radius value="6.0761"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.0734,63.2824"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.6542,73.0766"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.1933,65.1157"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.3413,70.0656"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.0654,72.5131"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.6228,76.2995"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.563,79.328"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.6828,81.7773"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.2294,83.155"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.8901,84.8857"/>
+            <radius value="3.3417"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.886,84.4147"/>
+            <radius value="3.3417"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Leviathan Spawn"/>
+        <shape type="circle">
+            <center value="21,131"/>
+            <radius value="1"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.0021,142.9892"/>
+            <radius value="1"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Drop Pod Nydus Near"/>
+        <color value="255,255,128,192"/>
+        <shape type="circle">
+            <center value="67.5368,44.3437"/>
+            <radius value="2.7666"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.2976,31.8071"/>
+            <radius value="2.2138"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.5783,34.6008"/>
+            <radius value="2.394"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.6713,29.9597"/>
+            <radius value="1.6015"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.0861,36.1965"/>
+            <radius value="2.0627"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.877,41.1796"/>
+            <radius value="2.0185"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.172,42.1723"/>
+            <radius value="1.5803"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.4138,65.2023"/>
+            <radius value="2.95"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.2048,66.505"/>
+            <radius value="2.582"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.1472,89.7802"/>
+            <radius value="2.6416"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.8732,92.2236"/>
+            <radius value="1.7487"/>
+        </shape>
+        <shape type="circle">
+            <center value="94.7214,90.8864"/>
+            <radius value="2.366"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.4655,89.2846"/>
+            <radius value="1.9497"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.696,90.785"/>
+            <radius value="2.4272"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.5688,90.2778"/>
+            <radius value="2.7666"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.6313,81.9257"/>
+            <radius value="1.5178"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.96,83.8806"/>
+            <radius value="1.8837"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.373,81.3881"/>
+            <radius value="1.5336"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Dummy Region for Blast Area"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="94,67"/>
+            <radius value="40"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Reveal"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="125.3317,54.2448"/>
+            <radius value="25.2287"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.6748,33.7172"/>
+            <radius value="25.2287"/>
+        </shape>
+        <shape type="circle">
+            <center value="127.5173,37.6181"/>
+            <radius value="20.1745"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Zerg Right Base Spawn Extra Area"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.4084,118.8361"/>
+            <radius value="15.6191"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.1103,141.979"/>
+            <radius value="22.8327"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.2602,124.9167"/>
+            <radius value="13.7814"/>
+        </shape>
+        <shape type="circle">
+            <center value="142.0241,137.8776"/>
+            <radius value="13.7814"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Zerg Left Base Spawn Extra Area"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="33.7836,22.571"/>
+            <radius value="20.7036"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.2768,39.692"/>
+            <radius value="16.8051"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.1958,12.491"/>
+            <radius value="11.9521"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.5541,9.751"/>
+            <radius value="4.364"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Zerg Middle Base Spawn Extra Area"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="49.0944,143.2546"/>
+            <radius value="23.4711"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.9443,109.535"/>
+            <radius value="23.4711"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.2775,137.979"/>
+            <radius value="23.4711"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Drop Pod Nydus In Base - Deep"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="98.6118,53.511"/>
+            <radius value="3.127"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.8598,58.0844"/>
+            <radius value="2.0815"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.2995,60.9472"/>
+            <radius value="2.07"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.949,58.2197"/>
+            <radius value="3.3264"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.914,54.2175"/>
+            <radius value="3.3264"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.5187,60.5908"/>
+            <radius value="2.8691"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.1374,62.229"/>
+            <radius value="2.474"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.2343,50.9753"/>
+            <radius value="2.95"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.3928,65.5837"/>
+            <radius value="3.4956"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Supply Depot Nydus"/>
+        <shape type="circle">
+            <center value="96.3137,34.588"/>
+            <radius value="4.5683"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.8176,59.8762"/>
+            <radius value="4.5683"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Area Zerg Behind"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="145.9082,15.028"/>
+            <radius value="10.3056"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.9536,23.2253"/>
+            <radius value="5.8718"/>
+        </shape>
+        <shape type="circle">
+            <center value="134.6274,11.339"/>
+            <radius value="5.8718"/>
+        </shape>
+    </region>
+</Regions>

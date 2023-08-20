@@ -1,0 +1,103 @@
+Button/Name/Drop Item=丢弃物品 /// Drop Item
+Button/Name/PickUpItem=拾取物品 /// Pick Up Item
+Button/Name/YamatoCannonEngine=大和炮引擎 /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=大和炮引擎 /// Yamato Cannon Engine
+DocInfo/Author=暴雪娱乐 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor02 /// TRaynor02
+DocInfo/Name=不法之徒 /// The Outlaws
+MapInfo/Player00/Name=中立 /// Neutral
+MapInfo/Player01/Name=雷诺的游骑兵 /// Raynor's Raiders
+MapInfo/Player02/Name=帝国 /// The Dominion
+MapInfo/Player03/Name=玛·萨拉移民 /// Mar Sara Colonists
+MapInfo/Player04/Name=玛·萨拉起义军 /// Mar Sara Rebels
+MapInfo/Player05/Name=帝国 /// The Dominion
+MapInfo/Player06/Name=Lvl80 ETC /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=训练步兵单位。 /// Trains infantry units.
+Param/Value/09D741B1=建造建筑 /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">瓦斯气泉</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=将地面单位移至这里营救起义军。 /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=您必须有足够的晶体矿和高能瓦斯才能训练单位或建造建筑。要采集这些资源，选中一个SCV，右键点击矿脉或精炼厂。 /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=帝国正将死水的平民强制送往白岩基地进行劳作，强迫他们进行外星神器的挖掘工作，这件神器具有极高的价值。摧毁那里的基地并取回神器。 /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">补给站</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=营救起义军 /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=使用SCV在这里建造一个精炼厂。 /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=可由任何地面单位拾取，获得100点晶体矿。 /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=营救起义军 /// Rescue the Rebels
+Param/Value/30C0C1F4=您的建筑已全部被摧毁。 /// All of your structures have been destroyed.
+Param/Value/315FAFA9=训练更多的陆战队员。 /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">兵营</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=提高补给上限。 /// Increases maximum supply.
+Param/Value/459758FC=您必须有足够的补给才能训练单位。建造更多的补给站可以增加您的补给。 /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=使用这个SCV建造一个补给站 /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=允许同时训练更多的单位。<n/>使用SCV进行建造。 /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=可由任何地面单位拾取，获得100点晶体矿。 /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=对死水基地的攻击激起了玛·萨拉的一轮大面积反抗。一小股抵抗势力正受到帝国部队的围攻。协助起义军，对抗帝国的暴行。 /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">指挥中心</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">补给站</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=将地面单位移至这里营救起义军。 /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=允许同时训练更多的单位。<n/>使用SCV进行建造。 /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=采集资源 /// Gathering Resources
+Param/Value/7EC9B6E6=可由任何地面单位拾取，获得100点高能瓦斯。 /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=不！别杀我们！ /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=训练医疗兵 /// Medics Trained
+Param/Value/8BA552E2=已营救起义军。 /// Rebels rescued.
+Param/Value/8BC6DA5C=制造更多的SCV。 /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=教程 /// Tutorials
+Param/Value/A0322401=SCV增援。 /// SCV reinforcements.
+Param/Value/A087C9B6=增援 /// Reinforcements
+Param/Value/A089141C=可由任何地面单位拾取，获得100点高能瓦斯。 /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=SCV /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">晶体矿箱</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=点击<c val="FFFF00">帮助(F12)</c>菜单中的<c val="FFFF00">教程</c>选项卡，查看已有的教学视频。 /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=您可以在兵营中训练陆战队员以及其他单位。要训练陆战队员，首先选中兵营，点击训练陆战队员按钮。 /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=正在训练单位 /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=教程 /// Tutorials
+Param/Value/B32015BB=您可以使用建筑训练单位或为您的单位进行升级。要建造一个建筑，首先选中一个SCV，点击对应的建造建筑按钮。 /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">补给站</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=可由任何地面单位拾取，获得100点晶体矿。 /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=帝国基地 /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">瓦斯储罐</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=提高补给上限。 /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=营救起义军 /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">矿脉</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=医疗兵 /// Medic
+Param/Value/D35CB257=允许同时训练更多的单位。<n/>使用SCV进行建造。 /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=摧毁帝国基地 /// Destroy the Dominion Base
+Param/Value/E0ECCB59=起义军基地遭到攻击 /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=可由任何地面单位拾取，获得100点高能瓦斯。 /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=将地面单位移至这里<n/>营救起义军。 /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=训练SCV进行采集资源和建筑建造。 /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=使用SCV采集这里的晶体矿。 /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=摧毁帝国基地 /// Destroy the Dominion Base
+Param/Value/F5878C5F=补给 /// Supply
+Param/Value/F60E71B0=发现资源储藏堆 /// Resource Pallets Found
+Param/Value/F6A2B90D=提高补给上限。 /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=RebelRescue /// RebelRescue

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CConversation id="THorner05S">
+        <Lines index="10">
+            <Id value="Line00011"/>
+            <Text value="Conversation/THorner05S/Line00011"/>
+            <FacialAnim value="Surprise"/>
+            <FacialBlend value="50"/>
+            <Sound value=""/>
+            <AnimProps value="Talk"/>
+            <AnimBlendIn value="250"/>
+            <AnimBlendOut value="250"/>
+            <Objects index="Speaker" value="CharRaynor"/>
+            <Objects index="Camera" value="Medium"/>
+            <Variations index="Speaker" value=""/>
+        </Lines>
+    </CConversation>
+</Catalog>

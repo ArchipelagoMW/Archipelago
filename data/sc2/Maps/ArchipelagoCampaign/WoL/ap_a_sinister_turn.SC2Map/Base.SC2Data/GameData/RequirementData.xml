@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirement id="LearnProtossAirArmor1">
+        <NodeArray index="Show" Link="EqCountUpgradeProtossAirArmorsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+    <CRequirement id="LearnProtossAirWeapon1">
+        <NodeArray index="Show" Link="EqCountUpgradeProtossAirWeaponsLevel1QueuedOrBetter0"/>
+    </CRequirement>
+</Catalog>

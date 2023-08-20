@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CBehaviorBuff id="Indignation">
+        <Modification>
+            <VitalMaxArray index="Life" value="1500"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorSpawn id="SpawnLarva">
+        <InfoArray index="0" Unit="Larva" MaxCount="3" Delay="0.2"/>
+    </CBehaviorSpawn>
+    <CBehaviorBuff id="Stunned">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-psistorm.dds"/>
+    </CBehaviorBuff>
+</Catalog>

@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="3">
+        <name value="REGION-BASE-Players"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="208.3676,68.451"/>
+            <radius value="20.2624"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="REGION-Landing Zone N1"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="195.65,72.2363"/>
+            <radius value="2.5"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="REGION-Landing Zone S3 "/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="186.3776,61.5842"/>
+            <radius value="2.5"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="REGION-Landing Zone S2"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="188.4526,47.8125"/>
+            <radius value="2.5"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="REGION-Landing Zone N2 "/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="204.4172,81.41"/>
+            <radius value="2.5"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="REGION-Landing Zone S1"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="198.7888,44.7702"/>
+            <radius value="2.5"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="REGION-Toss Hidden"/>
+        <shape type="rect">
+            <quad value="9.8095,81.208,21,93.2238"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="REGION-BASE-High Toss 03"/>
+        <color value="255,255,128,64"/>
+        <shape type="rect">
+            <quad value="18.6718,38.241,69.1335,80.2236"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="REGION-BASE-Dark Toss 04"/>
+        <color value="255,128,0,128"/>
+        <shape type="rect">
+            <quad value="81.7255,40.6801,116.8728,86.5378"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="REGION-Player01 Starting Units"/>
+        <shape type="circle">
+            <center value="234.7604,65.0334"/>
+            <radius value="6.8442"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="REGION - Xel&quot;naga Vault"/>
+        <shape type="circle">
+            <center value="41.9226,57.8698"/>
+            <radius value="2.4721"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="REGION-Prison 1"/>
+        <color value="255,0,0,128"/>
+        <shape type="rect">
+            <quad value="117.9848,68.2492,129.5556,78.427"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="REGION-Prison 3"/>
+        <color value="255,0,0,128"/>
+        <shape type="rect">
+            <quad value="87.7558,72.5375,100.2751,99.4033"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="REGION-Prison 2"/>
+        <color value="255,0,0,128"/>
+        <shape type="rect">
+            <quad value="136.0905,28.6787,147.7202,54.2895"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="REGION-Prison 4"/>
+        <color value="255,0,0,128"/>
+        <shape type="rect">
+            <quad value="61.5732,18.958,74.382,40.8054"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Patrol Start - East Land"/>
+        <shape type="circle">
+            <center value="131.244,56.3217"/>
+            <radius value="2.016"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="REGION-Generator Response 1"/>
+        <shape type="rect">
+            <quad value="126.085,62.9291,130.767,74.0678"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="REGION-Generator Response 2"/>
+        <shape type="rect">
+            <quad value="89.5456,52.1572,94.8017,69.825"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="REGION-Expansion"/>
+        <color value="255,0,255,0"/>
+        <shape type="rect">
+            <quad value="134.9685,52.716,167.339,92.6357"/>
+        </shape>
+        <shape type="rect">
+            <negative/>
+            <quad value="134.565,52.1958,159.755,67.1557"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="P03 Waves Safety Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="112,15.996,128,119.9958"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="REGION-Generator Response 3"/>
+        <shape type="rect">
+            <quad value="9.9323,46.088,16.2817,65.7695"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Starting Map Area"/>
+        <shape type="rect">
+            <quad value="192.4982,48.2333,236.9191,88.112"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="RANGEFINDER - Photon Cannon"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <negative/>
+            <center value="47.2158,43.5322"/>
+            <radius value="7"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.4448,43.2343"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="REGION - Yamato Teaching"/>
+        <shape type="rect">
+            <quad value="163.0424,53.8554,166.7116,79.2446"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="RANGEFINDER - Damage Field"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="138.667,63.9001"/>
+            <radius value="40"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="138.667,63.9001"/>
+            <radius value="0.5"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="REGION-Prison Revealer 1"/>
+        <color value="255,0,0,128"/>
+        <shape type="circle">
+            <center value="123.3576,72.848"/>
+            <radius value="6.5"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="REGION-Prison Revealer 2"/>
+        <color value="255,0,0,128"/>
+        <shape type="circle">
+            <center value="142.0454,35.8"/>
+            <radius value="6.5"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="REGION-Prison Revealer 4"/>
+        <color value="255,0,0,128"/>
+        <shape type="circle">
+            <center value="68.4001,28.6652"/>
+            <radius value="6.5"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="REGION-Prison Revealer 3"/>
+        <color value="255,0,0,128"/>
+        <shape type="circle">
+            <center value="93.7907,90.906"/>
+            <radius value="6.5"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="REGION - Protoss Gathering"/>
+        <shape type="rect">
+            <quad value="142.628,81.4956,154.884,87.8796"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="RANGEFINDER - Photon Cannon Copy"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <negative/>
+            <center value="46.9421,47.2421"/>
+            <radius value="7"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.1711,46.9443"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="RANGEFINDER - Photon Cannon Copy Copy"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <negative/>
+            <center value="46.9116,71.1118"/>
+            <radius value="7"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.1406,70.814"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="RANGEFINDER - Photon Cannon Copy Copy Copy"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <negative/>
+            <center value="90.0207,51.5087"/>
+            <radius value="7"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.2497,51.211"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="REGION - Rip Field Generator Revealers"/>
+        <color value="255,255,0,128"/>
+        <shape type="circle">
+            <center value="24.7875,59.037"/>
+            <radius value="2.563"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.9335,57.8308"/>
+            <radius value="4.523"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.997,30.5563"/>
+            <radius value="2.9304"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.9746,84.7224"/>
+            <radius value="2.606"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.9687,62.175"/>
+            <radius value="3.0761"/>
+        </shape>
+        <shape type="circle">
+            <center value="138.9868,67.818"/>
+            <radius value="3"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.9692,67.6665"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Revealer - Yamato"/>
+        <shape type="circle">
+            <center value="165.0283,57.073"/>
+            <radius value="2.743"/>
+        </shape>
+        <shape type="circle">
+            <center value="164.9157,66.9555"/>
+            <radius value="2.743"/>
+        </shape>
+        <shape type="circle">
+            <center value="164.9458,77.0163"/>
+            <radius value="2.743"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="REGION-Mothership Safety"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="9.8745,18.8132,81.9436,102.9562"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Rip Field Generator 2 Reveal Tripwire"/>
+        <shape type="circle">
+            <center value="107.291,53.468"/>
+            <radius value="4.7382"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.1135,55.154"/>
+            <radius value="4.1081"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.8115,59.5915"/>
+            <radius value="2.9035"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.5104,64.0578"/>
+            <radius value="2.9035"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.2761,67.9763"/>
+            <radius value="2.9035"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.7687,68.4912"/>
+            <radius value="2.9035"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="REVEALER - Ripfield Generator 2"/>
+        <shape type="circle">
+            <center value="105.8137,62.1286"/>
+            <radius value="3.8325"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="REGION - Mid Cine - Prisoners"/>
+        <shape type="circle">
+            <center value="127.5527,73.342"/>
+            <radius value="14.005"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="REGION - Prison Cine Safety"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10,23,134,93"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="REGION - Mothership Guard"/>
+        <shape type="rect">
+            <quad value="33.9753,48.1936,51.4138,66.1113"/>
+        </shape>
+    </region>
+</Regions>

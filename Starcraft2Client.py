@@ -12,6 +12,7 @@ import typing
 import queue
 import zipfile
 import io
+import random
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -30,25 +31,37 @@ from worlds._sc2common.bot.data import Race
 from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from worlds.sc2wol import SC2WoLWorld
-from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
+from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
 from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
-nest_asyncio.apply()
-max_bonus: int = 8
+loop = asyncio.get_event_loop_policy().new_event_loop()
+nest_asyncio.apply(loop)
+max_bonus: int = 13
 victory_modulo: int = 100
+
+# GitHub repo where the Map/mod data is hosted for /download_data command
+DATA_REPO_OWNER = "Ziktofel"
+DATA_REPO_NAME = "ArchipelagoPlayerCompiledMaps"
+
+
+# Data version file path.
+# This file is used to tell if the downloaded data are outdated
+# Associated with /download_data command
+def get_data_version_file():
+    return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Version.txt"
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
-        """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
+        """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
 
@@ -73,9 +86,75 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             if self.ctx.difficulty == -1:
                 self.output("Please connect to a seed before checking difficulty.")
             else:
-                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
+                current_difficulty = self.ctx.difficulty
+                if self.ctx.difficulty_override >= 0:
+                    current_difficulty = self.ctx.difficulty_override
+                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][current_difficulty])
             self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
+
+
+    def _cmd_game_speed(self, game_speed: str = "") -> bool:
+        """Overrides the current game speed for the world.
+         Takes the arguments default, slower, slow, normal, fast, faster"""
+        options = game_speed.split()
+        num_options = len(options)
+
+        if num_options > 0:
+            speed_choice = options[0].lower()
+            if speed_choice == "default":
+                self.ctx.game_speed_override = 0
+            elif speed_choice == "slower":
+                self.ctx.game_speed_override = 1
+            elif speed_choice == "slow":
+                self.ctx.game_speed_override = 2
+            elif speed_choice == "normal":
+                self.ctx.game_speed_override = 3
+            elif speed_choice == "fast":
+                self.ctx.game_speed_override = 4
+            elif speed_choice == "faster":
+                self.ctx.game_speed_override = 5
+            else:
+                self.output("Unable to parse game speed '" + options[0] + "'")
+                return False
+
+            self.output("Game speed set to " + options[0])
+            return True
+
+        else:
+            if self.ctx.game_speed == -1:
+                self.output("Please connect to a seed before checking game speed.")
+            else:
+                current_speed = self.ctx.game_speed
+                if self.ctx.game_speed_override >= 0:
+                    current_speed = self.ctx.game_speed_override
+                self.output("Current game speed: "
+                            + ["Default", "Slower", "Slow", "Normal", "Fast", "Faster"][current_speed])
+            self.output("To change the game speed, add the name of the speed after the command,"
+                        " or Default to select based on difficulty.")
+            return False
+
+    def _cmd_color(self, color: str = "") -> bool:
+        player_colors = [
+            "White", "Red", "Blue", "Teal",
+            "Purple", "Yellow", "Orange", "Green",
+            "LightPink", "Violet", "LightGrey", "DarkGreen",
+            "Brown", "LightGreen", "DarkGrey", "Pink",
+            "Rainbow", "Random", "Default"
+        ]
+        match_colors = [player_color.lower() for player_color in player_colors]
+        if color:
+            if color.lower() not in match_colors:
+                self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
+                return False
+            if color.lower() == "random":
+                color = random.choice(player_colors[:16])
+            self.ctx.player_color = match_colors.index(color.lower())
+            self.output("Color set to " + player_colors[self.ctx.player_color])
+        else:
+            self.output("Current player color: " + player_colors[self.ctx.player_color])
+            self.output("To change your colors, add the name of the color after the command.")
+            self.output("Available colors: " + ', '.join(player_colors))
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -131,20 +210,20 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
-        if os.path.exists(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt"):
-            with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "r") as f:
+        if os.path.exists(get_data_version_file()):
+            with open(get_data_version_file(), "r") as f:
                 current_ver = f.read()
         else:
             current_ver = None
 
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData',
+        tempzip, version = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME,
                                                        current_version=current_ver, force_download=True)
 
         if tempzip != '':
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
-                with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
+                with open(get_data_version_file(), "w") as f:
                     f.write(version)
             finally:
                 os.remove(tempzip)
@@ -154,27 +233,51 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
 
+class SC2JSONtoTextParser(JSONtoTextParser):
+    def __init__(self, ctx):
+        self.handlers = {
+            "ItemSend": self._handle_color,
+            "ItemCheat": self._handle_color,
+            "Hint": self._handle_color,
+        }
+        super().__init__(ctx)
+
+    def _handle_color(self, node: JSONMessagePart):
+        codes = node["color"].split(";")
+        buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
+        return buffer + self._handle_text(node) + '</c>'
+
+    def color_code(self, code: str):
+        return '<c val="' + self.color_codes[code] + '">'
+
+
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Wings of Liberty"
     items_handling = 0b111
     difficulty = -1
+    game_speed = -1
     all_in_choice = 0
     mission_order = 0
+    player_color = 2
     mission_req_table: typing.Dict[str, MissionInfo] = {}
     final_mission: int = 29
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
+    generic_upgrade_missions = 0
+    generic_upgrade_research = 0
+    generic_upgrade_items = 0
     current_tooltip = None
     last_loc_list = None
     difficulty_override = -1
+    game_speed_override = -1
     mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
     last_bot: typing.Optional[ArchipelagoBot] = None
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
-        self.raw_text_parser = RawJSONtoTextParser(self)
+        self.raw_text_parser = SC2JSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -185,6 +288,10 @@ class SC2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.difficulty = args["slot_data"]["game_difficulty"]
+            if "game_speed" in args["slot_data"]:
+                self.game_speed = args["slot_data"]["game_speed"]
+            else:
+                self.game_speed = 0
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
             # Maintaining backwards compatibility with older slot data
@@ -196,15 +303,20 @@ class SC2Context(CommonContext):
             }
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
+            self.player_color = args["slot_data"].get("player_color", 2)
+            self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
+            self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
+            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
 
             self.build_location_to_mission_mapping()
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             maps_present = is_mod_installed_correctly()
-            if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
-                with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
+            if os.path.exists(get_data_version_file()):
+                with open(get_data_version_file(), "r") as f:
                     current_ver = f.read()
-                if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
+                    sc2_logger.debug(f"Current version: {current_ver}")
+                if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
             elif maps_present:
                 sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
@@ -481,13 +593,13 @@ async def main():
 
 
 maps_table = [
-    "ap_traynor01", "ap_traynor02", "ap_traynor03",
-    "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
-    "ap_ttychus01", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
-    "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
-    "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
-    "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
-    "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+    "ap_liberation_day", "ap_the_outlaws", "ap_zero_hour",
+    "ap_evacuation", "ap_outbreak", "ap_safe_haven", "ap_havens_fall",
+    "ap_smash_and_grab", "ap_the_dig", "ap_the_moebius_factor", "ap_supernova", "ap_maw_of_the_void",
+    "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
+    "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_piercing_the_shroud",
+    "ap_whispers_of_doom", "ap_a_sinister_turn", "ap_echoes_of_the_future", "ap_in_utter_darkness",
+    "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_shatter_the_sky", "ap_all_in"
 ]
 
 wol_default_categories = [
@@ -501,25 +613,51 @@ wol_default_category_names = [
 ]
 
 
-def calculate_items(items: typing.List[NetworkItem]) -> typing.List[int]:
+def calculate_items(ctx: SC2Context) -> typing.List[int]:
+    items = ctx.items_received
     network_item: NetworkItem
     accumulators: typing.List[int] = [0 for _ in type_flaggroups]
 
     for network_item in items:
         name: str = lookup_id_to_name[network_item.item]
-        item_data: ItemData = item_table[name]
+        item_data: ItemData = get_full_item_list()[name]
 
         # exists exactly once
         if item_data.quantity == 1:
             accumulators[type_flaggroups[item_data.type]] |= 1 << item_data.number
 
         # exists multiple times
-        elif item_data.type == "Upgrade":
-            accumulators[type_flaggroups[item_data.type]] += 1 << item_data.number
+        elif item_data.type == "Upgrade" or item_data.type == "Progressive Upgrade":
+            flaggroup = type_flaggroups[item_data.type]
+
+            # Generic upgrades apply only to Weapon / Armor upgrades
+            if item_data.type != "Upgrade" or ctx.generic_upgrade_items == 0:
+                accumulators[flaggroup] += 1 << item_data.number
+            else:
+                for bundled_number in upgrade_numbers[item_data.number]:
+                    accumulators[flaggroup] += 1 << bundled_number
 
         # sum
         else:
             accumulators[type_flaggroups[item_data.type]] += item_data.number
+
+    # Upgrades from completed missions
+    if ctx.generic_upgrade_missions > 0:
+        upgrade_flaggroup = type_flaggroups["Upgrade"]
+        num_missions = ctx.generic_upgrade_missions * len(ctx.mission_req_table)
+        amounts = [
+            num_missions // 100,
+            2 * num_missions // 100,
+            3 * num_missions // 100
+        ]
+        upgrade_count = 0
+        completed = len([id for id in ctx.mission_id_to_location_ids if SC2WOL_LOC_ID_OFFSET + victory_modulo * id in ctx.checked_locations])
+        for amount in amounts:
+            if completed >= amount:
+                upgrade_count += 1
+        # Equivalent to "Progressive Upgrade" item
+        for bundled_number in upgrade_numbers[5]:
+            accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
 
     return accumulators
 
@@ -554,7 +692,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
     mission_id: int
     want_close: bool = False
     can_read_game = False
-
     last_received_update: int = 0
 
     def __init__(self, ctx: SC2Context, mission_id):
@@ -574,22 +711,38 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         game_state = 0
         if not self.setup_done:
             self.setup_done = True
-            start_items = calculate_items(self.ctx.items_received)
+            start_items = calculate_items(self.ctx)
             if self.ctx.difficulty_override >= 0:
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            if self.ctx.game_speed_override >= 0:
+                game_speed = self.ctx.game_speed_override
+            else:
+                game_speed = self.ctx.game_speed
+            await self.chat_send("?SetOptions {} {} {} {}".format(
                 difficulty,
+                self.ctx.generic_upgrade_research,
+                self.ctx.all_in_choice,
+                game_speed
+            ))
+            await self.chat_send("?GiveResources {} {} {}".format(
+                start_items[8],
+                start_items[9],
+                start_items[10]
+            ))
+            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
-                start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
-                self.ctx.all_in_choice, start_items[10]))
+                start_items[5], start_items[6], start_items[12], start_items[13], start_items[14]))
+            await self.chat_send("?GiveProtossTech {}".format(start_items[7]))
+            await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
+            await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
 
         else:
             if not self.ctx.announcements.empty():
                 message = self.ctx.announcements.get(timeout=1)
-                await self.chat_send("SendMessage " + message)
+                await self.chat_send("?SendMessage " + message)
                 self.ctx.announcements.task_done()
 
             # Archipelago reads the health
@@ -599,14 +752,15 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                     self.can_read_game = True
 
             if iteration == 160 and not game_state & 1:
-                await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
+                await self.chat_send("?SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
             if self.last_received_update < len(self.ctx.items_received):
-                current_items = calculate_items(self.ctx.items_received)
-                await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
+                current_items = calculate_items(self.ctx)
+                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                    current_items[5], current_items[6], current_items[7]))
+                    current_items[5], current_items[6], current_items[12], current_items[13], current_items[14]))
+                await self.chat_send("?GiveProtossTech {}".format(current_items[7]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -635,7 +789,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             self.boni[x] = True
 
                 else:
-                    await self.chat_send("LostConnection - Lost connection to game.")
+                    await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
 
 def request_unfinished_missions(ctx: SC2Context):
@@ -906,16 +1060,9 @@ def is_mod_installed_correctly() -> bool:
         check_game_install_path()
 
     mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
-    modfile = os.environ["SC2PATH"] / Path("Mods/Archipelago.SC2Mod")
-    wol_required_maps = [
-        "ap_thanson01.SC2Map", "ap_thanson02.SC2Map", "ap_thanson03a.SC2Map", "ap_thanson03b.SC2Map",
-        "ap_thorner01.SC2Map", "ap_thorner02.SC2Map", "ap_thorner03.SC2Map", "ap_thorner04.SC2Map", "ap_thorner05s.SC2Map",
-        "ap_traynor01.SC2Map", "ap_traynor02.SC2Map", "ap_traynor03.SC2Map",
-        "ap_ttosh01.SC2Map", "ap_ttosh02.SC2Map", "ap_ttosh03a.SC2Map", "ap_ttosh03b.SC2Map",
-        "ap_ttychus01.SC2Map", "ap_ttychus02.SC2Map", "ap_ttychus03.SC2Map", "ap_ttychus04.SC2Map", "ap_ttychus05.SC2Map",
-        "ap_tvalerian01.SC2Map", "ap_tvalerian02a.SC2Map", "ap_tvalerian02b.SC2Map", "ap_tvalerian03.SC2Map",
-        "ap_tzeratul01.SC2Map", "ap_tzeratul02.SC2Map", "ap_tzeratul03.SC2Map", "ap_tzeratul04.SC2Map"
-    ]
+    mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerWoL", "ArchipelagoTriggers"]
+    modfiles = [os.environ["SC2PATH"] / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
+    wol_required_maps = ["WoL" + os.sep + map_name + ".SC2Map" for map_name in maps_table]
     needs_files = False
 
     # Check for maps.
@@ -935,17 +1082,19 @@ def is_mod_installed_correctly() -> bool:
         sc2_logger.info(f"All maps found in {mapdir}.")
 
     # Check for mods.
-    if os.path.isfile(modfile):
-        sc2_logger.info(f"Archipelago mod found at {modfile}.")
-    else:
-        sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
-        needs_files = True
+    for modfile in modfiles:
+        if os.path.isfile(modfile) or os.path.isdir(modfile):
+            sc2_logger.info(f"Archipelago mod found at {modfile}.")
+        else:
+            sc2_logger.warning(f"Archipelago mod could not be found at {modfile}.")
+            needs_files = True
 
     # Final verdict.
     if needs_files:
         sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
         return False
     else:
+        sc2_logger.debug(f"All map/mod files are properly installed.")
         return True
 
 

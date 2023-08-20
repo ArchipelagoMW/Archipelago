@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="Char">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="5.500000"/>
+            <Color value="0.901961,0.282353,0.000000,0.165000"/>
+            <ColorFallOff value="0.105000"/>
+            <CausticsFallOff value="0.200000"/>
+            <Specularity value="200.000000"/>
+            <SpecularScaler value="1.000000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="0.150000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.012000"/>
+            <RefractionDistortion value="0.002500"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.000000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+        <ReceiveShadows value="0"/>
+    </CWater>
+</Catalog>

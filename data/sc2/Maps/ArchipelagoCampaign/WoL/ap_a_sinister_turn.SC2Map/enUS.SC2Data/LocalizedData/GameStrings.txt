@@ -1,0 +1,86 @@
+﻿ConversationState/StoryTips/SellZergSamples=Sell Zerg Bio-Samples to the Moebius Foundation
+ConversationState/StoryTips/SellZergSamples/EditorPrefix=Story -
+ConversationState/StoryTips/SellZergSamples/Info/Description=Now the Stetmann has all of the Zerg bio-samples he needs, the Moebius Foundation is willing to pay 10,000 credits for every bio-sample you find. Check the research console when you return to the Hyperion, and funds will be instantly wired to your account.
+ConversationState/StoryTips/Tychus04_MIgration/EditorPrefix=Tychus04
+DocInfo/Author=Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TZeratul02
+DocInfo/Name=A Sinister Turn
+LoadingScreen/TextBody=<n/>
+MapInfo/Player00/Name=Neutral
+MapInfo/Player01/Name=Zeratul's Enclave
+MapInfo/Player02/Name=Zhakul Guardians
+MapInfo/Player03/Name=Zhakul Guardians
+MapInfo/Player04/Name=Zhakul Guardians
+MapInfo/Player05/Name=Abandoned Structures
+MapInfo/Player06/Name=Zhakul Guardians
+MapInfo/Player07/Name=Librarian
+MapInfo/Player08/Name=Preservers
+MapInfo/Player09/Name=Hybrid
+MapInfo/Player10/Name=Hybrid
+Param/Expression/634B8128=Dark Templar Kills = ~A~
+Param/Value/0E94037E= checks left)
+Param/Value/0F7C25E0=Imprisoned Preserver
+Param/Value/11DBB57E=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures (
+Param/Value/1B84388A=Preserver Prison
+Param/Value/1BBFCC0E=/
+Param/Value/26FC9F8F=High Templar ally
+Param/Value/2704744A=Hybrid Attacks Survived
+Param/Value/34E4C5F5=All of your structures have been destroyed.
+Param/Value/3720851B=Robotics Facility
+Param/Value/3D0374EA= checks left)
+Param/Value/3F1C3961=Destroy the enemy support bases in order to provide more resources for our cause
+Param/Value/44C85259=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures (
+Param/Value/44D9EBCF=
+Param/Value/4825BABF= checks left)
+Param/Value/4A781515=/
+Param/Value/4D585342=Power-up the Abandoned Base (
+Param/Value/5315B1A8=Abandoned Structure
+Param/Value/53F6E010=Templar Archives
+Param/Value/54855580=Protoss Research Earned
+Param/Value/549B5C54=Abandoned Structure
+Param/Value/558C3EE5=<s val="ObjRewardSummary_Protoss">Power-up Abandoned Structures 
+Param/Value/560D13C5=Hybrid Wave Set to 
+Param/Value/59DEBB2A=Preserver Prison
+Param/Value/5ADEAA3E=Mission start
+Param/Value/627CD3C4=Hybrid Wave = 
+Param/Value/65D0FFDA=)
+Param/Value/661F07D9=Free the Preservers (
+Param/Value/7489F48B=
+Param/Value/74D25806=Preserver Prison
+Param/Value/78B1CE46=)
+Param/Value/79D9949C=Power-up Abandoned Structures
+Param/Value/82BCFB17=Zerg Research Earned
+Param/Value/8368C234=Reached the Preservers.
+Param/Value/8666C349=)
+Param/Value/8A16D5FC=
+Param/Value/908EFC43=Abandoned Structure
+Param/Value/94D9ED4C=/
+Param/Value/9860ACE5=Immortal ally
+Param/Value/9C3208C2=/
+Param/Value/A20EA9E8=Pylons must be warped in to provide power to the abandoned protoss base. Use the marked locations.
+Param/Value/A3B269F3=/
+Param/Value/A425FBF3=Hybrid unleashed.
+Param/Value/A7E49313=
+Param/Value/B16AD9F3=Dark Templar allies
+Param/Value/B6424D18=Power-up the Abandoned Base (
+Param/Value/BD118B79= checks left)
+Param/Value/BF6654F6=The preservers have vital information about the Overmind and the origin of the zerg. Free them from their prisons before the knowledge is lost forever.
+Param/Value/C3C15A6E=)
+Param/Value/C9C5E6D3=<s val="ObjRewardSummary_Protoss">Destroy Enemy Support Bases (
+Param/Value/CB554689=Hybrid Wave Set to 4 
+Param/Value/CC2475B5=Free the Preservers (
+Param/Value/D0E36002=checks left
+Param/Value/D46EC28D=Abandoned Structures Powered
+Param/Value/D47D2BAC=/
+Param/Value/D4BA070A=<s val="ObjRewardSummary_Protoss">Destroy Enemy Support Bases (
+Param/Value/D50305AB=Free the Preservers (
+Param/Value/DE65E9D6=)
+Param/Value/DFFB989D=Dark Shrine
+Param/Value/F2B82ED1=3
+Param/Value/F78FFBD4=Power-up the Abandoned Base
+Param/Value/F974BE83=Power-up the abandoned protoss structures by warping in pylons near them. This will reveal lost technologies.
+Param/Value/FA59974F=Hybrid
+Param/Value/FC23C1AF=Destroy the Three Preserver Prisons
+Unit/Name/ShieldBattery=PH - Psi Dominator
+Water/Name/Template 1=Template 1
