@@ -251,7 +251,7 @@ item_table = {
     # This Filler item isn't placed by the generator yet unless plando'd
     "+2 Starting Supply": ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.filler),
     # This item is used to "remove" location from the game. Never placed unless plando'd
-    "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing", 2, quantity=0, classification=ItemClassification.trap),
+    "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, quantity=0, classification=ItemClassification.trap),
 
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
