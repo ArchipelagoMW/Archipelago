@@ -176,11 +176,11 @@ end
 
 
 
---[[local function determineItem(array)
+local function determineItem(array)
     memdomain.ram()
     currentItemsObtained = u8(itemsObtained)
     
-end]]
+end
 
 local function gotSword()
     local currentSword = u8(sword)
@@ -357,7 +357,7 @@ local function gotSmallKey()
 end
 
 local function getItemsObtained()
-    return bit.lshift(u8(itemsObtainedHigh), 8) + u8(itemsObtained)
+    return bit.bor(bit.lshift(u8(itemsObtainedHigh), 8), u8(itemsObtained))
 end
 
 local function setItemsObtained(value)
