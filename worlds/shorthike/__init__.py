@@ -58,8 +58,9 @@ class ShortHikeWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
  
-        junk = 0
-        self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
+        junk = 21 - self.multiworld.filler_silver_feathers[self.player].value
+        self.multiworld.itempool += [self.create_item("13 Coins") for _ in range(junk)]
+        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.multiworld.filler_silver_feathers[self.player].value)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
