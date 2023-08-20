@@ -63,7 +63,7 @@ item_table = {
     "Progressive Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     "Progressive Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
     "Progressive Ship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
-    "Progressive Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
+    "Progressive Weapon/Armor Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, parent_item="Bunker"),
     "Neosteel Bunker (Bunker)": ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, parent_item="Bunker"),
@@ -394,7 +394,7 @@ upgrade_included_names = [
         "Progressive Starship Upgrade"
     },
     { # Bundle All
-        "Progressive Upgrade"
+        "Progressive Weapon/Armor Upgrade"
     }
 ]
 

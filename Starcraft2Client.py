@@ -655,7 +655,7 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
         for amount in amounts:
             if completed >= amount:
                 upgrade_count += 1
-        # Equivalent to "Progressive Upgrade" item
+        # Equivalent to "Progressive Weapon/Armor Upgrade" item
         for bundled_number in upgrade_numbers[5]:
             accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
 
