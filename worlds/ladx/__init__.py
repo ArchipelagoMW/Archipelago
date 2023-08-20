@@ -221,20 +221,20 @@ class LinksAwakeningWorld(World):
             # but for now we aren't gonna handle it            
 
             start_candidates = [c for c in start_candidates if c not in banned_starts]
-
-            start_candidates.sort()
-            start_entrance = random.choice(start_candidates)
-            self.world_setup.entrance_mapping[start_entrance] = "start_house"
-            start = world.overworld_entrance[start_entrance].location
-            for pool in entrance_pools.values():
-                print(pool)
-                if start_entrance in pool:
-                    pool.remove(start_entrance)
-                    pool.append("start_house")
-                    break
-            else:
-                # This entrance wasn't shuffled, just map back
-                self.world_setup.entrance_mapping["start_house"] = start_entrance
+            if start_candidates:
+                start_candidates.sort()
+                start_entrance = random.choice(start_candidates)
+                self.world_setup.entrance_mapping[start_entrance] = "start_house"
+                start = world.overworld_entrance[start_entrance].location
+                for pool in entrance_pools.values():
+                    print(pool)
+                    if start_entrance in pool:
+                        pool.remove(start_entrance)
+                        pool.append("start_house")
+                        break
+                else:
+                    # This entrance wasn't shuffled, just map back
+                    self.world_setup.entrance_mapping["start_house"] = start_entrance
 
 
         for pool in itertools.chain(entrance_pools.values(), indoor_pools.values()):
@@ -520,10 +520,6 @@ class LinksAwakeningWorld(World):
                     location.dungeon = r.dungeon_index
         if self.multiworld.tarin_gifts_your_item[self.player]:
             self.force_start_item(itempool)
-        start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
-        possible_start_items = [item for item in itempool if item.advancement and "shell" in item.name]
-
-        start_loc.place_locked_item(possible_start_items[0])
 
     def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)

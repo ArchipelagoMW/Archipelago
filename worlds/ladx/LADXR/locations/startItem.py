@@ -7,7 +7,6 @@ from ..roomEditor import RoomEditor
 
 
 class StartItem(DroppedKey):
-    OPTIONS = [SHIELD]
     MULTIWORLD = False
 
     def __init__(self):
