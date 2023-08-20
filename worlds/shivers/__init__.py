@@ -142,7 +142,7 @@ class ShiversWorld(World):
                 self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
                 self.multiworld.local_early_items[self.player]["Key for Office"] = 1
             elif lobby_access_keys == 2:
-                self.multiworld.early_items[self.player]["Key for Front Door"] = 1
+                self.multiworld.local_early_items[self.player]["Key for Front Door"] = 1
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
