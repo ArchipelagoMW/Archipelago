@@ -99,18 +99,13 @@ class PlayerColor(Choice):
 
 class ShuffleProtoss(DefaultOnToggle):
     """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off with Vanilla Shuffled, the 3 protoss missions will be in their normal position on the Prophecy chain
-       if not shuffled.
-    If turned off with reduced mission settings, the 3 protoss missions will not appear and Protoss units are removed
-        from the pool."""
+    If turned off, the 3 protoss missions will not appear and Protoss units are removed from the pool."""
     display_name = "Shuffle Protoss Missions"
 
 
 class ShuffleNoBuild(DefaultOnToggle):
     """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off with Vanilla Shuffled, one no-build mission will be placed as the first mission and the rest will be
-        placed at the end of optional routes.
-    If turned off with reduced mission settings, the 5 no-build missions will not appear."""
+    If turned off, the 5 no-build missions will not appear."""
     display_name = "Shuffle No-Build Missions"
 
 
@@ -138,8 +133,12 @@ class RequiredTactics(Choice):
 
 
 class UnitsAlwaysHaveUpgrades(DefaultOnToggle):
-    """If turned on, both upgrades will be present for each unit and structure in the seed.
-    This usually results in fewer units."""
+    """
+    If turned on, all upgrades will be present for each unit and structure in the seed.
+    This usually results in fewer units.
+
+    See also: Max Number of Upgrades
+    """
     display_name = "Units Always Have Upgrades"
 
 
@@ -210,8 +209,14 @@ class ExtendedItems(Toggle):
 
 
 class MaxNumberOfUpgrades(Range):
-    """Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited. 
-    Note that most unit have 4 or 6 upgrades."""
+    """
+    Set a maximum to the number of upgrades a unit/structure can have. -1 is used to define unlimited.
+    Note that most unit have 4 or 6 upgrades.
+
+    If used with Units Always Have Upgrades, each unit has this given amount of upgrades (if there enough upgrades exist)
+
+    See also: Units Always Have Upgrades
+    """
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
     # Do not know the maximum, but it is less than 123!
@@ -231,7 +236,7 @@ class ExcludedItems(ItemSet):
 
 class ExcludedMissions(OptionSet):
     """Guarantees that these missions will not appear in the campaign
-    Only applies on shortened mission orders.
+    Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
     valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
@@ -325,6 +330,7 @@ sc2wol_options: Dict[str, Option] = {
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
+    "max_number_of_upgrades": MaxNumberOfUpgrades,
     "generic_upgrade_missions": GenericUpgradeMissions,
     "generic_upgrade_research": GenericUpgradeResearch,
     "generic_upgrade_items": GenericUpgradeItems,
@@ -334,7 +340,6 @@ sc2wol_options: Dict[str, Option] = {
     "nco_items": NovaCovertOpsItems,
     "bw_items": BroodWarItems,
     "ext_items": ExtendedItems,
-    "max_number_of_upgrades": MaxNumberOfUpgrades,
     "mission_progress_locations": MissionProgressLocations,
     "bonus_locations": BonusLocations,
     "challenge_locations": ChallengeLocations,
