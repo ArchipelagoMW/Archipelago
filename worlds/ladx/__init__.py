@@ -519,8 +519,7 @@ class LinksAwakeningWorld(World):
                         self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
-        FORCE_START_ITEM = True # self.multiworld.players > 1
-        if FORCE_START_ITEM:
+        if self.multiworld.players > 1 and self.multiworld.tarin_gifts_your_item[self.player]:
             self.force_start_item(itempool)
 
         self.multiworld.itempool += itempool

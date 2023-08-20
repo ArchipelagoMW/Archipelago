@@ -159,6 +159,13 @@ class APTitleScreen(DefaultOnToggle):
     Enables AP specific title screen and disables the intro cutscene
     """
 
+class OwnItemOnTarin(DefaultOnToggle):
+    """
+    Forces one of your own items to be on Tarin.
+    This is to prevent being insta-bk'd at the start of the game.
+    This has no effect in single player games, and isn't always neccessary in ER.
+    """
+
 
 class DungeonItemShuffle(Choice):
     option_original_dungeon = 0
@@ -477,4 +484,5 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
+    'tarin_gifts_your_item': OwnItemOnTarin,
 }
