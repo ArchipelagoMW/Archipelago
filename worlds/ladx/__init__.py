@@ -512,6 +512,7 @@ class LinksAwakeningWorld(World):
             if r.dungeon_index:
                 self.dungeon_locations_by_dungeon[r.dungeon_index - 1] += r.locations
                 for location in r.locations:
+                    # This probably isn't needed any more, but we'll see
                     # Don't place dungeon items on pit button chest, to reduce chance of the filler blowing up
                     # TODO: no need for this if small key shuffle
                     if location.name == "Pit Button Chest (Tail Cave)" or location.item:
