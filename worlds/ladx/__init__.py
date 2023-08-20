@@ -204,7 +204,7 @@ class LinksAwakeningWorld(World):
                             indoor_pool.append(entrance_name)
 
         # Shuffle starting location
-        if start_shuffle.value:
+        if start_shuffle.value or True:
             start_candidates = []
             
             # Find all possible start locations
@@ -223,7 +223,7 @@ class LinksAwakeningWorld(World):
             start_candidates = [c for c in start_candidates if c not in banned_starts]
 
             start_candidates.sort()
-
+            start_candidates = ["armos_temple"]
             start_entrance = random.choice(start_candidates)
             self.world_setup.entrance_mapping[start_entrance] = "start_house"
             start = world.overworld_entrance[start_entrance].location
@@ -519,10 +519,12 @@ class LinksAwakeningWorld(World):
                         self.dungeon_locations_by_dungeon[r.dungeon_index - 1].remove(location)
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
-        if self.multiworld.players > 1 and self.multiworld.tarin_gifts_your_item[self.player]:
+        if self.multiworld.tarin_gifts_your_item[self.player]:
             self.force_start_item(itempool)
+        start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
+        possible_start_items = [item for item in itempool if item.advancement and "shell" in item.name]
 
-        self.multiworld.itempool += itempool
+        start_loc.place_locked_item(possible_start_items[0])
 
     def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
@@ -540,7 +542,6 @@ class LinksAwakeningWorld(World):
                 # Why isn't this needed?
                 # collection_state.update_reachable_regions(self.player)
                 return len(collection_state.reachable_regions[self.player]) > reachable_count
-            
             possible_start_items = [item for item in itempool if item.advancement]
             self.random.shuffle(possible_start_items)
 

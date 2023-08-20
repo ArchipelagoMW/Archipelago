@@ -81,6 +81,14 @@ class StartShufflePool(OptionList):
 
     Connectors aren't allowed for now, due to having to work out which connectors are legal or not.
 
+    Valid options:
+        - single
+        - dummy
+        - trade
+        - annoying
+        - water        
+        - dungeon
+
     TODO: also allow specifying a specific entrance or list of entrances
     """
     valid_keys = [
@@ -163,7 +171,7 @@ class OwnItemOnTarin(DefaultOnToggle):
     """
     Forces one of your own items to be on Tarin.
     This is to prevent being insta-bk'd at the start of the game.
-    This has no effect in single player games, and isn't always neccessary in ER.
+    This has little effect in single player games, and isn't always neccessary in ER.
     """
 
 
