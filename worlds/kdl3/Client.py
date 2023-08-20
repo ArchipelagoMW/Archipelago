@@ -200,6 +200,8 @@ class KDL3SNIClient(SNIClient):
         halken = await snes_read(ctx, WRAM_START, 6)
         if halken != b"halken":
             return
+        if not ctx.server:
+            return
         # can't check debug anymore, without going and copying the value. might be important later.
         is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)  # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
         if is_demo[0] > 0x00:
