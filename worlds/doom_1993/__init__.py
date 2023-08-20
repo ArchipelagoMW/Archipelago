@@ -216,8 +216,10 @@ class DOOM1993World(World):
         # Give Computer area maps if option selected
         if getattr(self.multiworld, "start_with_computer_area_maps")[self.player].value:
             for item_id, item_dict in Items.item_table.items():
-                if item_dict["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP:
-                    self.multiworld.push_precollected(self.create_item(item_dict["name"]))
+                item_episode = item_dict["episode"]
+                if item_episode > 0:
+                    if item_dict["doom_type"] == DOOM_TYPE_COMPUTER_AREA_MAP and self.included_episodes[item_episode - 1]:
+                        self.multiworld.push_precollected(self.create_item(item_dict["name"]))
 
         # Fill the rest starting with powerups, then fillers
         self.create_ratioed_items("Armor", itempool)
