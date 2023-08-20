@@ -417,5 +417,5 @@ type_flaggroups: typing.Dict[str, int] = {
     "Armory 3": 12,  # Unit upgrades
     "Armory 4": 13,  # Unit upgrades
     "Progressive Upgrade": 14,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
-    "Nothing": 15
+    "Nothing Group": 15
 }
