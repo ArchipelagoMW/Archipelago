@@ -424,8 +424,8 @@ Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159251 - 0x3348F (Hedges EP) - True - True
 
 Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
-158207 - 0x03713 (Shortcut Panel) - True - True
-Door - 0x0364E (Shortcut) - 0x03713
+158207 - 0x03713 (Laser Shortcut Panel) - True - True
+Door - 0x0364E (Laser Shortcut) - 0x03713
 158208 - 0x00B10 (Entry Left) - True - True
 158209 - 0x00C92 (Entry Right) - True - True
 Door - 0x0C128 (Entry Inner) - 0x00B10
