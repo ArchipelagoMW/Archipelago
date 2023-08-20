@@ -521,6 +521,8 @@ class LinksAwakeningWorld(World):
         if self.multiworld.tarin_gifts_your_item[self.player]:
             self.force_start_item(itempool)
 
+        self.multiworld.itempool += itempool
+
     def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
