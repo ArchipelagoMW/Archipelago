@@ -52,7 +52,7 @@ class WitnessWorld(World):
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.item_groups
 
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 3)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
