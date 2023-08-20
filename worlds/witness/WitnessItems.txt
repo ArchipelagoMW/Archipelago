@@ -68,6 +68,7 @@ Doors:
 1166 - Town Maze Stairs Control (Panel) - 0x28A79
 1167 - Town Maze Rooftop Bridge Control (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
+1172 - Town Cargo Box Entry (Panel) - 0x0A0C8
 1182 - Windmill Turn Control (Panel) - 0x17D02
 1184 - Theater Entry (Panel) - 0x17F89
 1185 - Theater Video Input (Panel) - 0x00815

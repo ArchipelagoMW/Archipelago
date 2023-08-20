@@ -10,6 +10,7 @@ Monastery Panels
 Town Church & RGB House Panels
 Town Maze Panels
 Town Windmill & Theater Panels
+Town Cargo Box Entry (Panel)
 Treehouse Panels
 Bunker Panels
 Swamp Panels
