@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification
 from Patch import APDeltaPatch
+from typing import List
 
 import Utils
 import os
@@ -15,7 +16,6 @@ from .Names.ItemName import ItemName
 #from .Items import ItemType
 
 CHECKSUM_BLUE = "8efe8b2aaed97149e897570cd123ff6e"
-
 
 class LocalRom:
     def __init__(self, file, name=None):
@@ -67,21 +67,21 @@ class LocalRom:
             rom.write(self.rom_data)
 
     def write_item(self, location, item):
-        loc_address = location.addresses[0]
+        #loc_address = location.addresses[0]
+        for loc_address in location.addresses:
+            addr = loc_address
+            contents = item.gstla_id
+            event_type = self.fix_event_type(location, item)
+            event_type = self.show_item_settings(item, event_type, True)
 
-        addr = loc_address
-        contents = item.gstla_id
-        event_type = self.fix_event_type(location, item)
-        event_type = self.show_item_settings(item, event_type, True)
-
-        if addr >= 0xFA0000:
-            self.rom_data[addr] = contents & 0xFF
-            self.rom_data[addr + 1] = contents >> 8
-        else:
-            self.rom_data[addr] = event_type & 0xFF
-            self.rom_data[addr + 1] = event_type >> 8
-            self.rom_data[addr + 6] = contents & 0xFF
-            self.rom_data[addr + 7] = contents >> 8
+            if addr >= 0xFA0000:
+                self.rom_data[addr] = contents & 0xFF
+                self.rom_data[addr + 1] = contents >> 8
+            else:
+                self.rom_data[addr] = event_type & 0xFF
+                self.rom_data[addr + 1] = event_type >> 8
+                self.rom_data[addr + 6] = contents & 0xFF
+                self.rom_data[addr + 7] = contents >> 8
 
     def write_djinn(self, location, djinn):
         loc_address = location.addresses[0]

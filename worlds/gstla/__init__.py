@@ -15,7 +15,15 @@ from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from .Names.RegionName import RegionName
 from .Rom import get_base_rom_path, get_base_rom_bytes, LocalRom, GSTLADeltaPatch
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess, SuffixIdentifier
 
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="GSTLAClient")
+
+
+components.append(Component("Golden Sun The Lost Age Client", "GSTLAClient", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apgstla")))
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
@@ -71,6 +79,7 @@ class GSTLAWorld(World):
             locs.append(self.multiworld.get_location(loc.name, self.player))
 
         djinnList = self.get_prefill_items()
+
         self.multiworld.random.shuffle(locs)
         self.multiworld.random.shuffle(djinnList)
 
@@ -89,10 +98,11 @@ class GSTLAWorld(World):
 
         for region in self.multiworld.get_regions(self.player):
             for location in region.locations:
-                if location.event:
+                location_data = location_name_to_id.get(location.name, None)
+
+                if location_data is None:
                     continue
 
-                location_data = location_name_to_id[location.name]
                 ap_item = location.item
 
                 item_data = item_table[ap_item.name]

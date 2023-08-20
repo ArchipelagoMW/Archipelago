@@ -324,36 +324,35 @@ def confirm_checksum():
     return CHECKSUM_BLUE == basemd5.hexdigest()
 
 
-if __name__ == "__main__":
-    Utils.init_logging("GS2Client")
+async def main():
+    multiprocessing.freeze_support()
+    parser = get_base_parser()
+    parser.add_argument("patch_file", default="", type=str, nargs="?",
+        help="Path to an APGS23 file")
+    args = parser.parse_args()
+    checksum_matches = confirm_checksum()
+    if checksum_matches:
+        if args.patch_file:
+            asyncio.create_task(patch_and_run_game(args.patch_file))
 
-    async def main():
-        multiprocessing.freeze_support()
-        parser = get_base_parser()
-        parser.add_argument("patch_file", default="", type=str, nargs="?",
-                            help="Path to an APGS23 file")
-        args = parser.parse_args()
-        checksum_matches = confirm_checksum()
-        if checksum_matches:
-            if args.patch_file:
-                asyncio.create_task(patch_and_run_game(args.patch_file))
+    ctx = GS2Context(args.connect, args.password)
+    if not checksum_matches:
+        ctx.patching_error = True
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
 
-        ctx = GS2Context(args.connect, args.password)
-        if not checksum_matches:
-            ctx.patching_error = True
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
+    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
+    await ctx.exit_event.wait()
+    ctx.server_address = None
+    await ctx.shutdown()
 
-        ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
-        await ctx.exit_event.wait()
-        ctx.server_address = None
-        await ctx.shutdown()
+    if ctx.gba_sync_task:
+        await ctx.gba_sync_task
 
-        if ctx.gba_sync_task:
-            await ctx.gba_sync_task
 
+def launch():
     import colorama
 
     colorama.init()
