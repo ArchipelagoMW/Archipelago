@@ -88,7 +88,7 @@ Disabled Locations:
 0x193AB (Monastery Inside 3)
 0x193A6 (Monastery Inside 4)
 0x17CA4 (Monastery Laser Panel)
-0x0CF2A (Monastery Shortcut Door)
+0x3873B (Monastery Laser Shortcut Door)
 0x18590 (Transparent) - True - Symmetry & Environment
 0x28AE3 (Vines) - 0x18590 - Shadows Follow & Environment
 0x28938 (Apple Tree) - 0x28AE3 - Environment
