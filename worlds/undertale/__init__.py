@@ -52,7 +52,7 @@ class UndertaleWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.id for name, data in advancement_table.items()}
 
-    data_version = 6
+    data_version = 7
 
     def _get_undertale_data(self):
         return {
@@ -63,6 +63,7 @@ class UndertaleWorld(World):
             "client_version": self.required_client_version,
             "race": self.multiworld.is_race,
             "route": self.multiworld.route_required[self.player].current_key,
+            "starting_area": self.multiworld.starting_area[self.player].current_key,
             "temy_armor_include": bool(self.multiworld.temy_include[self.player].value),
             "only_flakes": bool(self.multiworld.only_flakes[self.player].value),
             "no_equips": bool(self.multiworld.no_equips[self.player].value),
@@ -153,6 +154,10 @@ class UndertaleWorld(World):
                             if item == "Heart Locket" else item for item in itempool]
         if self.multiworld.only_flakes[self.player]:
             itempool = [item for item in itempool if item not in non_key_items]
+
+        starting_key = self.multiworld.starting_area[self.player].current_key.title() + " Key"
+        itempool.remove(starting_key)
+        self.multiworld.push_precollected(self.create_item(starting_key))
         # Choose locations to automatically exclude based on settings
         exclusion_pool = set()
         exclusion_pool.update(exclusion_table[self.multiworld.route_required[self.player].current_key])
