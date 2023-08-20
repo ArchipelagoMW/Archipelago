@@ -204,7 +204,7 @@ class LinksAwakeningWorld(World):
                             indoor_pool.append(entrance_name)
 
         # Shuffle starting location
-        if start_shuffle.value or True:
+        if start_shuffle.value:
             start_candidates = []
             
             # Find all possible start locations
@@ -223,7 +223,6 @@ class LinksAwakeningWorld(World):
             start_candidates = [c for c in start_candidates if c not in banned_starts]
 
             start_candidates.sort()
-            start_candidates = ["armos_temple"]
             start_entrance = random.choice(start_candidates)
             self.world_setup.entrance_mapping[start_entrance] = "start_house"
             start = world.overworld_entrance[start_entrance].location
