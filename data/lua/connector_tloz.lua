@@ -174,11 +174,18 @@ for key, value in pairs(itemAPids) do
     itemIDNames[value] = key
 end
 
+local function getItemsObtained()
+    return bit.lshift(u8(itemsObtainedHigh), 8) + u8(itemsObtained)
+end
 
+local function setItemsObtained(value)
+    wU8(itemsObtainedHigh, bit.rshift(value, 8))
+    wU8(itemsObtained, bit.band(value, 0xFF))
+end
 
 local function determineItem(array)
     memdomain.ram()
-    currentItemsObtained = u8(itemsObtained)
+    currentItemsObtained = getItemsObtained()
     
 end
 
@@ -354,15 +361,6 @@ end
 
 local function gotSmallKey()
     wU8(keys, math.min(u8(keys) + 1, 9))
-end
-
-local function getItemsObtained()
-    return bit.bor(bit.lshift(u8(itemsObtainedHigh), 8), u8(itemsObtained))
-end
-
-local function setItemsObtained(value)
-    wU8(itemsObtainedHigh, bit.rshift(value, 8))
-    wU8(itemsObtained, bit.band(value, 0xFF))
 end
 
 local function gotItem(item)
@@ -571,7 +569,7 @@ function receive()
 end
 
 function main()
-    if not checkBizhawkVersion() then
+    if not checkBizHawkVersion() then
         return
     end
     server, error = socket.bind('localhost', 52980)
