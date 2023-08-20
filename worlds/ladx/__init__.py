@@ -34,7 +34,7 @@ from .Options import links_awakening_options, DungeonItemShuffle, EntranceShuffl
 from .Rom import LADXDeltaPatch
 
 
-DEVELOPER_MODE = True
+DEVELOPER_MODE = False
 
 
 class LinksAwakeningSettings(settings.Group):
