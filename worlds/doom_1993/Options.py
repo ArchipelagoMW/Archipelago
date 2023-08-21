@@ -84,6 +84,12 @@ class StartWithComputerAreaMaps(Toggle):
     display_name = "Start With Computer Area Maps"
 
 
+class ResetLevelOnDeath(DefaultOnToggle):
+    """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
+    Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
+    display_message="Reset level on death"
+
+
 class Episode1(DefaultOnToggle):
     """Knee-Deep in the Dead.
     If none of the episodes are chosen, Episode 1 will be chosen by default."""
@@ -118,6 +124,7 @@ options: typing.Dict[str, AssembleOptions] = {
     "pro": Pro,
     "start_with_computer_area_maps": StartWithComputerAreaMaps,
     "death_link": DeathLink,
+    "reset_level_on_death": ResetLevelOnDeath,
     "episode1": Episode1,
     "episode2": Episode2,
     "episode3": Episode3,
