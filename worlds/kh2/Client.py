@@ -21,11 +21,8 @@ class KH2Context(CommonContext):
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
         self.locations_checked_kh2 = None
-        self.kh2LocalItems = None
-        self.ability = None
+        self.kh2_local_items = None
         self.growthlevel = None
-        self.KH2_sync_task = None
-        self.syncing = False
         self.kh2connected = False
         self.serverconneced = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
@@ -37,31 +34,22 @@ class KH2Context(CommonContext):
 
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
-        self.location_table = {}
-        self.collectible_table = {}
-        self.collectible_override_flags_address = 0
-        self.collectible_offsets = {}
         self.sending = []
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2seedsave = None
-        self.slotDataProgressionNames = {}
         self.kh2seedname = None
         self.kh2slotdata = None
         self.itemamount = {}
-        # sora equipped, valor equipped, master equipped, final equipped
-        self.keybladeAnchorList = (0x24F0, 0x32F4, 0x339C, 0x33D4)
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\KH2AP")
-        self.amountOfPieces = 0
+        self.hitlist_bounties = 0
         # hooked object
         self.kh2 = None
-        self.ItemIsSafe = False
-        self.game_connected = False
         self.finalxemnas = False
-        self.worldid = {
+        self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
             2:  TT_Checks,
-            #  3:   {},  # destiny island doesn't have checks to ima put tt checks here
+            #  3:   {},  # destiny island doesn't have checks
             4:  HB_Checks,
             5:  BC_Checks,
             6:  Oc_Checks,
@@ -69,7 +57,7 @@ class KH2Context(CommonContext):
             8:  LoD_Checks,
             9:  HundredAcreChecks,
             10: PL_Checks,
-            11: Atlantica_Checks,  # atlantica isn't a supported world. if you go in atlantica it will check dc
+            11: Atlantica_Checks,
             12: DC_Checks,
             13: TR_Checks,
             14: HT_Checks,
@@ -80,16 +68,16 @@ class KH2Context(CommonContext):
             #  255: {},  # starting screen
         }
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
-        self.sveroom = 0x2A09C00 + 0x41
+        # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
-        self.inBattle = 0x2A0EAC4 + 0x40
-        self.onDeath = 0xAB9078
+        # self.inBattle = 0x2A0EAC4 + 0x40
+        # self.onDeath = 0xAB9078
         # PC Address anchors
         self.Now = 0x0714DB8
         self.Save = 0x09A70B0
-        self.Sys3 = 0x2A59DF0
-        self.Bt10 = 0x2A74880
-        self.BtlEnd = 0x2A0D3E0
+        # self.Sys3 = 0x2A59DF0
+        # self.Bt10 = 0x2A74880
+        # self.BtlEnd = 0x2A0D3E0
         self.Slot1 = 0x2A20C98
 
         self.chest_set = set(exclusion_table["Chests"])
@@ -122,6 +110,7 @@ class KH2Context(CommonContext):
         self.boost_set = set(CheckDupingItems["Boosts"])
         self.stat_increase_set = set(CheckDupingItems["Stat Increases"])
         self.AbilityQuantityDict = {item: self.item_name_to_data[item].quantity for item in self.all_abilities}
+
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {
             "High Jump":    [0x05E, 0x061, 0x25DA],
@@ -139,12 +128,6 @@ class KH2Context(CommonContext):
 
         self.AbilityCodeList = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
-
-        self.bitmask_item_code = [
-            0x130000, 0x130001, 0x130002, 0x130003, 0x130004, 0x130005, 0x130006, 0x130007
-            , 0x130008, 0x130009, 0x13000A, 0x13000B, 0x13000C
-            , 0x13001F, 0x130020, 0x130021, 0x130022, 0x130023
-            , 0x13002A, 0x13002B, 0x13002C, 0x13002D]
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -208,7 +191,7 @@ class KH2Context(CommonContext):
                     #  Character: [back of invo, front of invo]
                     "SoraInvo":         [0x25D8, 0x2546],
                     "DonaldInvo":       [0x26F4, 0x2658],
-                    "GoofyInvo":        [0x280A, 0x276C],
+                    "GoofyInvo":        [0x280C, 0x276C],
                     "AmountInvo":       {
                         "ServerItems": {
                             "Ability":      {},
@@ -334,7 +317,7 @@ class KH2Context(CommonContext):
         if cmd in {"Connected"}:
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
-            self.kh2LocalItems = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
+            self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -369,7 +352,7 @@ class KH2Context(CommonContext):
                 new_locations = set(args["checked_locations"])
                 # TODO: make this take locations from other players on the same slot so proper coop happens
                 #  items_to_give = [self.kh2slotdata["LocalItems"][str(location_id)] for location_id in new_locations if
-                #                 location_id in self.kh2LocalItems.keys()]
+                #                 location_id in self.kh2_local_items.keys()]
                 self.checked_locations |= new_locations
 
         if cmd == "DataPackage":
@@ -401,8 +384,8 @@ class KH2Context(CommonContext):
                     "value":     currentworldint
                 }]
             }])
-            if currentworldint in self.worldid:
-                curworldid = self.worldid[currentworldint]
+            if currentworldint in self.worldid_to_locations:
+                curworldid = self.worldid_to_locations[currentworldint]
                 for location, data in curworldid.items():
                     if location in self.kh2_loc_name_to_id.keys():
                         locationId = self.kh2_loc_name_to_id[location]
@@ -500,7 +483,7 @@ class KH2Context(CommonContext):
         try:
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
-            itemcode = self.kh2_item_name_to_id[itemname]
+            # itemcode = self.kh2_item_name_to_id[itemname]
             if itemdata.ability:
                 abilityInvoType = 0
                 TwilightZone = 2
@@ -530,11 +513,13 @@ class KH2Context(CommonContext):
                                 self.kh2seedsave["GoofyInvo"][abilityInvoType])
                         self.kh2seedsave["GoofyInvo"][abilityInvoType] -= TwilightZone
 
-            elif itemcode in self.bitmask_item_code:
+            elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
+                # if memaddr is in a bitmask location in memory
                 if itemname not in self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"].append(itemname)
 
             elif itemdata.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
+                # if memaddr is in movement addresses
                 if itemname in self.kh2seedsave["AmountInvo"][ItemType]["Magic"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Magic"][itemname] += 1
                 else:
@@ -865,8 +850,8 @@ def finishedGame(ctx: KH2Context, message):
         if "hitlist" in ctx.kh2slotdata:
             for boss in ctx.kh2slotdata["hitlist"]:
                 if boss in message[0]["locations"]:
-                    ctx.amountOfPieces += 1
-        if ctx.amountOfPieces >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
+                    ctx.hitlist_bounties += 1
+        if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2seedsave["AmountInvo"]["LocalItems"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
@@ -913,7 +898,7 @@ async def kh2_watcher(ctx: KH2Context):
                     if location not in ctx.locations_checked_kh2:
                         ctx.locations_checked_kh2.add(location)
                         ctx.kh2seedsave["LocationsChecked"].append(location)
-                        if location in ctx.kh2LocalItems:
+                        if location in ctx.kh2_local_items:
                             item = ctx.kh2slotdata["LocalItems"][str(location)]
                             await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
