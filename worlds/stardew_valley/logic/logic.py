@@ -306,6 +306,7 @@ class StardewLogic:
             Forageable.hay: self.buildings.has_building(Building.silo) & self.tool.has_tool(Tool.scythe),
             Forageable.hazelnut: self.tool.can_forage(Season.fall),
             Forageable.holly: self.tool.can_forage(Season.winter),
+            Forageable.journal_scrap: self.region.can_reach_all([Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10]) & self.received(Wallet.magnifying_glass) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),
             Forageable.leek: self.tool.can_forage(Season.spring),
             Forageable.magma_cap: self.tool.can_forage(Generic.any, Region.volcano_floor_5),
             Forageable.morel: self.tool.can_forage(Season.spring, Region.secret_woods),
@@ -649,15 +650,14 @@ class StardewLogic:
     def can_complete_field_office(self) -> StardewRule:
         field_office = self.region.can_reach(Region.field_office)
         professor_snail = self.received("Open Professor Snail Cave")
-        dig_site = self.region.can_reach(Region.dig_site)
         tools = self.tool.has_tool(Tool.pickaxe) & self.tool.has_tool(Tool.hoe) & self.tool.has_tool(Tool.scythe)
-        leg_and_snake_skull = dig_site
-        ribs_and_spine = self.region.can_reach(Region.island_south)
-        skull = self.action.can_open_geode(Geode.golden_coconut)
-        tail = self.action.can_pan() & dig_site
-        frog = self.region.can_reach(Region.island_east)
-        bat = self.region.can_reach(Region.volcano_floor_5)
-        snake_vertebrae = self.region.can_reach(Region.island_west)
+        leg_and_snake_skull = self.has(Fossil.fossilized_leg) & self.has(Fossil.snake_skull)
+        ribs_and_spine = self.has(Fossil.fossilized_ribs) & self.has(Fossil.fossilized_spine)
+        skull = self.has(Fossil.fossilized_skull)
+        tail = self.has(Fossil.fossilized_tail)
+        frog = self.has(Fossil.mummified_frog)
+        bat = self.has(Fossil.mummified_bat)
+        snake_vertebrae = self.has(Fossil.snake_vertebrae)
         return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
 
     def can_complete_community_center(self) -> StardewRule:

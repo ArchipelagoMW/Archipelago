@@ -14,6 +14,7 @@ class Forageable:
     hay = "Hay"
     hazelnut = "Hazelnut"
     holly = "Holly"
+    journal_scrap = "Journal Scrap"
     leek = "Leek"
     magma_cap = "Magma Cap"
     morel = "Morel"
