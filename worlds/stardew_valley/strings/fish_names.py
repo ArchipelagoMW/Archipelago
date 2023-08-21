@@ -12,6 +12,7 @@ class Fish:
     crimsonfish = "Crimsonfish"
     dorado = "Dorado"
     eel = "Eel"
+    flounder = "Flounder"
     glacierfish = "Glacierfish"
     glacierfish_jr = "Glacierfish Jr."
     largemouth_bass = "Largemouth Bass"
@@ -20,6 +21,7 @@ class Fish:
     legend_ii = "Legend II"
     lionfish = "Lionfish"
     lobster = "Lobster"
+    midnight_carp = "Midnight Carp"
     ms_angler = "Ms. Angler"
     mussel = "Mussel"
     mussel_node = "Mussel Node"
@@ -29,8 +31,10 @@ class Fish:
     periwinkle = "Periwinkle"
     pufferfish = "Pufferfish"
     radioactive_carp = "Radioactive Carp"
+    rainbow_trout = "Rainbow Trout"
     salmon = "Salmon"
     sardine = "Sardine"
+    sea_cucumber = "Sea Cucumber"
     shrimp = "Shrimp"
     smallmouth_bass = "Smallmouth Bass"
     snail = "Snail"
@@ -62,6 +66,11 @@ class Trash:
     broken_glasses = "Broken Glasses"
     joja_cola = "Joja Cola"
     soggy_newspaper = "Soggy Newspaper"
+
+
+class WaterChest:
+    fishing_chest = "Fishing Chest"
+    treasure = "Treasure Chest"
 
 
 

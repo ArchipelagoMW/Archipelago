@@ -28,3 +28,6 @@ class FishingLogic:
     def can_fish_chests(self) -> StardewRule:
         skill_rule = self.skill.has_level(Skill.fishing, 4)
         return self.tool.has_fishing_rod(4) & skill_rule
+
+    def can_fish_at(self, region: str) -> StardewRule:
+        return self.skill.can_fish() & self.region.can_reach(region)

@@ -25,8 +25,11 @@ class ActionLogic:
             return tv_rule
         return self.received(channel) & tv_rule
 
-    def can_do_panning(self, item: str = Generic.any) -> StardewRule:
-        return self.received("Glittering Boulder Removed")
+    def can_pan(self) -> StardewRule:
+        return self.received("Glittering Boulder Removed") & self.region.can_reach(Region.mountain)
+
+    def can_pan_at(self, region: str) -> StardewRule:
+        return self.region.can_reach(region) & self.can_pan()
 
     def can_open_geode(self, geode: str) -> StardewRule:
         blacksmith_access = self.region.can_reach(Region.blacksmith)

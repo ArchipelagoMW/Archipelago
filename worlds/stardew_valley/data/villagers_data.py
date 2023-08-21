@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict
+
+from ..strings.food_names import Beverage
 from ..strings.region_names import Region
 from ..mods.mod_data import ModNames
 from ..strings.season_names import Season
@@ -183,7 +185,7 @@ mead = ("Mead",)
 pale_ale = ("Pale Ale",)
 parsnip = ("Parsnip",)
 # parsnip_soup = ("Parsnip Soup",)
-pina_colada = ("Piña Colada",)
+pina_colada = (Beverage.pina_colada,)
 pam_loves = beer + cactus_fruit + glazed_yams + mead + pale_ale + parsnip + pina_colada  # | parsnip_soup
 # fried_calamari = ("Fried Calamari",)
 pierre_loves = ()  # fried_calamari

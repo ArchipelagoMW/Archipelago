@@ -16,6 +16,12 @@ class MetalBar:
 
 
 class Mineral:
+    earth_crystal = "Earth Crystal"
+    fire_quartz = "Fire Quartz"
+    marble = "Marble"
+    prismatic_shard = "Prismatic Shard"
+    diamond = "Diamond"
+    frozen_tear = "Frozen Tear"
     aquamarine = "Aquamarine"
     topaz = "Topaz"
     jade = "Jade"
@@ -25,11 +31,19 @@ class Mineral:
 
 
 class Artifact:
-    pass # Eventually this will be the artifact names
+    dwarf_gadget = "Dwarf Gadget"
+    ancient_seed = "Ancient Seed"
 
 
 class Fossil:
     bone_fragment = "Bone Fragment"
-
-
+    fossilized_leg = "Fossilized Leg"
+    fossilized_ribs = "Fossilized Ribs"
+    fossilized_skull = "Fossilized Skull"
+    fossilized_spine = "Fossilized Spine"
+    fossilized_tail = "Fossilized Tail"
+    mummified_bat = "Mummified Bat"
+    mummified_frog = "Mummified Frog"
+    snake_skull = "Snake Skull"
+    snake_vertebrae = "Snake Vertebrae"
 

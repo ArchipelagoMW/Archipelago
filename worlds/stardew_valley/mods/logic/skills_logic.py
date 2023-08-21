@@ -103,9 +103,9 @@ class ModSkillLogic:
 
     def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
-            return self.action.can_do_panning() | self.tool.has_tool(Tool.hoe, ToolMaterial.gold)
+            return self.action.can_pan() | self.tool.has_tool(Tool.hoe, ToolMaterial.gold)
         else:
-            return self.action.can_do_panning() | self.tool.has_tool(Tool.hoe, ToolMaterial.basic)
+            return self.action.can_pan() | self.tool.has_tool(Tool.hoe, ToolMaterial.basic)
 
     def can_earn_cooking_skill_level(self, level: int) -> StardewRule:
         if level >= 6:

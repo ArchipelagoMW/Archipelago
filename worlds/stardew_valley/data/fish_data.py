@@ -135,6 +135,6 @@ snail = create_fish("Snail", 721, fresh_water, season.all_seasons, -1)
 legendary_fish = [angler, crimsonfish, glacierfish, legend, mutant_carp]
 extended_family = [ms_angler, son_of_crimsonfish, glacierfish_jr, legend_ii, radioactive_carp]
 special_fish = [*legendary_fish, blob_fish, lava_eel, octopus, scorpion_carp, ice_pip, super_cucumber, dorado]
-island_fish = [lionfish, blue_discus, stingray]
+island_fish = [lionfish, blue_discus, stingray, *extended_family]
 
 all_fish_by_name = {fish.name: fish for fish in all_fish}

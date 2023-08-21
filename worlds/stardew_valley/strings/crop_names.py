@@ -38,6 +38,7 @@ class Vegetable:
     any = "Any Vegetable"
     parsnip = veggie("Parsnip")
     garlic = veggie("Garlic")
+    bok_choy = "Bok Choy"
     wheat = "Wheat"
     potato = veggie("Potato")
     corn = veggie("Corn")

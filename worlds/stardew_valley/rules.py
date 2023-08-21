@@ -20,7 +20,7 @@ from .options import StardewOptions
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.calendar_names import Weekday
-from .strings.craftable_names import Craftable
+from worlds.stardew_valley.strings.craftable_names import Bomb
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
 from .strings.season_names import Season
@@ -341,7 +341,7 @@ def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_optio
     set_boat_repair_rules(logic, multi_world, player)
     set_island_parrot_rules(logic, multi_world, player)
     MultiWorldRules.add_rule(multi_world.get_location("Open Professor Snail Cave", player),
-                             logic.has(Craftable.cherry_bomb).simplify())
+                             logic.has(Bomb.cherry_bomb).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Complete Island Field Office", player),
                              logic.can_complete_field_office().simplify())
 

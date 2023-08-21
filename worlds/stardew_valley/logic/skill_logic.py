@@ -13,7 +13,7 @@ from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogic
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, True_, Or
-from ..strings.craftable_names import Craftable
+from worlds.stardew_valley.strings.craftable_names import Craftable, Fishing
 from ..strings.generic_names import Generic
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
@@ -155,7 +155,7 @@ class SkillLogic:
         return self.tool.has_fishing_rod(number_fishing_rod_required) & skill_rule & region_rule
 
     def can_crab_pot(self, region: str = Generic.any) -> StardewRule:
-        crab_pot_rule = self.has(Craftable.bait)
+        crab_pot_rule = self.has(Fishing.bait)
         if self.skill_option == options.SkillProgression.option_progressive:
             crab_pot_rule = crab_pot_rule & self.has(Machine.crab_pot)
         else:

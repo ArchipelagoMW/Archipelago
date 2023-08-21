@@ -604,6 +604,8 @@ class TestShipsanityEverything(SVTestBase):
                 self.remove(bin_item)
                 self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
                 self.multiworld.state.collect(bin_item, event=False)
-                self.assertTrue(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
+                shipsanity_rule = self.world.logic.region.can_reach_location(location.name)
+                can_reach_shipsanity_location = shipsanity_rule(self.multiworld.state)
+                self.assertTrue(can_reach_shipsanity_location)
                 self.remove(bin_item)
 

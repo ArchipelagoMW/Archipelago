@@ -45,7 +45,7 @@ class MuseumLogic:
         # extra_rule = True_()
         pan_rule = False_()
         if item.name == "Earth Crystal" or item.name == "Fire Quartz" or item.name == "Frozen Tear":
-            pan_rule = self.action.can_do_panning()
+            pan_rule = self.action.can_pan()
         return pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:

@@ -65,6 +65,7 @@ class Group(enum.Enum):
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
     TV_CHANNEL = enum.auto()
+    CRAFTING_RECIPE = enum.auto()
     MAGIC_SPELL = enum.auto()
 
 
@@ -191,10 +192,12 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_friendsanity_items(item_factory, world_options, items, random)
     create_festival_rewards(item_factory, world_options, items)
     create_babies(item_factory, items, random)
-    create_special_order_board_rewards(item_factory, options, items)
-    create_special_order_qi_rewards(item_factory, options, items)
-    create_walnut_purchase_rewards(item_factory, options, items)
-    create_magic_mod_spells(item_factory, options, items)
+    create_special_order_board_rewards(item_factory, world_options, items)
+    create_special_order_qi_rewards(item_factory, world_options, items)
+    create_walnut_purchase_rewards(item_factory, world_options, items)
+    create_crafting_recipes(item_factory, world_options, items)
+    create_magic_mod_spells(item_factory, world_options, items)
+    items.append(item_factory("Golden Egg"))
 
     return items
 
@@ -514,8 +517,15 @@ def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
     items.extend([item_factory(item) for item in items_by_group[Group.TV_CHANNEL]])
 
 
-def create_filler_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions) -> List[Item]:
-    if options.festival_locations == FestivalLocations.option_disabled:
+def create_crafting_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    if world_options[options.Shipsanity] == options.Shipsanity.option_everything:
+        crafting_recipes = [reward for reward in items_by_group[Group.CRAFTING_RECIPE]]
+        crafting_recipes = remove_excluded_packs(crafting_recipes, world_options)
+        items.extend([item_factory(item) for item in crafting_recipes])
+
+
+def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+    if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
         return []
 
     return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if

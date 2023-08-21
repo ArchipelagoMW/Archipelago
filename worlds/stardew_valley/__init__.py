@@ -215,7 +215,7 @@ class StardewValleyWorld(World):
                                        self.logic.can_complete_all_monster_slaying_goals().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_full_shipment:
-            self.create_event_location(location_table[Goal.option_full_shipment],
+            self.create_event_location(location_table[Goal.full_shipment],
                                        self.logic.can_ship_everything().simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_perfection:
@@ -260,6 +260,8 @@ class StardewValleyWorld(World):
         This patches the issue, by adding a dependency to the first month end on all early items, so all the locations
         that depends on it will not be considered early. This requires at least one early item to be progression, or
         it just won't work...
+
+        We do this for all early items, not just ours, to avoid them getting stuck behind late stardew months and not feeling early at all
         """
 
         early_items = []

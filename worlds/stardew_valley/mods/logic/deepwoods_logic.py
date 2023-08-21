@@ -4,7 +4,7 @@ from ...logic.has_logic import HasLogic
 from ...logic.received_logic import ReceivedLogic
 from ...logic.skill_logic import SkillLogic
 from ...logic.tool_logic import ToolLogic
-from ...strings.craftable_names import Craftable
+from ...strings.craftable_names import Bomb
 from ...strings.performance_names import Performance
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
@@ -40,7 +40,7 @@ class DeepWoodsLogic:
         tier = int(depth / 25) + 1
         rules = []
         if depth > 10:
-            rules.append(self.has(Craftable.bomb) | self.tool.has_tool(Tool.axe, ToolMaterial.iridium))
+            rules.append(self.has(Bomb.bomb) | self.tool.has_tool(Tool.axe, ToolMaterial.iridium))
         if depth > 30:
             rules.append(self.received(ModTransportation.woods_obelisk))
         if depth > 50:

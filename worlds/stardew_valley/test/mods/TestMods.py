@@ -49,10 +49,11 @@ class TestGenerateModsOptions(SVTestCase):
 
 class TestBaseItemGeneration(SVTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
-        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
-        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-        Mods.internal_name: all_mods
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+        options.Shipsanity.internal_name: options.Shipsanity.option_everything,
+        options.Mods.internal_name: mod_list
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -72,10 +73,11 @@ class TestBaseItemGeneration(SVTestBase):
 
 class TestNoGingerIslandModItemGeneration(SVTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
-        SeasonRandomization.internal_name: SeasonRandomization.option_progressive,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
-        Mods.internal_name: all_mods
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.Shipsanity.internal_name: options.Shipsanity.option_everything,
+        options.Mods.internal_name: mod_list
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
