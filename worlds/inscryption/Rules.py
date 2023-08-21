@@ -60,7 +60,7 @@ class InscryptionRules:
             "Act 3 - Boss Archivist": self.has_battery_and_quill,
             "Act 3 - Boss Unfinished": self.has_drone_and_battery,
             "Act 3 - Boss G0lly": self.has_drone_and_battery,
-            "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so multiple battles are prob necessary.
+            "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
             "Act 3 - Forest Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Crypt Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Tower Holo Pelt": self.has_drone_and_battery,
@@ -77,6 +77,7 @@ class InscryptionRules:
             "Act 3 - Luke's File Entry 3": self.has_battery_and_quill,
             "Act 3 - Luke's File Entry 4": self.has_transcendence_requirements,
             "Act 3 - Well": self.has_inspectometer_battery,
+            "Act 3 - Gems Drone": self.has_inspectometer_battery,
         }
         self.region_rules = {
             "Act 2": self.has_act2_requirements,
@@ -125,7 +126,7 @@ class InscryptionRules:
         return state.has("Inspectometer Battery", self.player)
 
     def has_drone_and_battery(self, state: CollectionState) -> bool:
-        return state.has("Gem Drone", self.player) and self.has_inspectometer_battery(state)
+        return state.has("Gems Module", self.player) and self.has_inspectometer_battery(state)
 
     def has_pelts(self, state: CollectionState, count: int) -> bool:
         return state.has("Holo Pelt", self.player, count)

@@ -209,7 +209,7 @@ location_table: List[LocDict] = [
      'region': "Act 3"},
     {'name': "Act 3 - Inspectometer Battery",
      'region': "Act 3"},
-    {'name': "Act 3 - Gem Drone",
+    {'name': "Act 3 - Gems Drone",
      'region': "Act 3"},
     {'name': "Act 3 - The Great Transcendence",
      'region': "Act 3"},

@@ -147,7 +147,7 @@ item_table: List[ItemDict] = [
     {'name': "Inspectometer Battery",
      'count': 1,
      'classification': ItemClassification.progression},
-    {'name': "Gem Drone",
+    {'name': "Gems Module",
      'count': 1,
      'classification': ItemClassification.progression},
     {'name': "Lonely Wizbot Card",
