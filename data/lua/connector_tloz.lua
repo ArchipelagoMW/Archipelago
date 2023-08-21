@@ -175,7 +175,7 @@ for key, value in pairs(itemAPids) do
 end
 
 local function getItemsObtained()
-    return bit.lshift(u8(itemsObtainedHigh), 8) + u8(itemsObtained)
+    return bit.bor(bit.lshift(u8(itemsObtainedHigh), 8), u8(itemsObtained))
 end
 
 local function setItemsObtained(value)
