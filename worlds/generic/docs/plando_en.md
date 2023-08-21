@@ -192,7 +192,7 @@ Kirby's Dream Land 3:
     # Have all bosses be Whispy Woods
     Whispy Woods: 1
     # Ensure Ripple Field's boss is Pon & Con, but let the method others
-    # are placed be random
+    # are placed with be random
     Ripple Field-Pon & Con;random: 1
 ```
 
