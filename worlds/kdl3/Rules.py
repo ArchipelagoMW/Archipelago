@@ -1,5 +1,6 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Names import LocationName, EnemyAbilities
+from .Locations import location_table
 import typing
 
 if typing.TYPE_CHECKING:
@@ -8,14 +9,14 @@ if typing.TYPE_CHECKING:
 
 
 def can_reach_level(state: "CollectionState", player: int, level: int, open_world: bool,
-                    ow_boss_req: int):
+                    ow_boss_req: int, player_levels: typing.Dict[int, typing.Dict[int, int]]):
     if level == 1:
         return True
     else:
         if open_world:
             return state.has(f"{LocationName.level_names_inverse[level - 1]} - Stage Completion", player, ow_boss_req)
         else:
-            return state.has(f"{LocationName.level_names_inverse[level - 1]} 6 - Stage Completion", player)
+            return state.can_reach(location_table[player_levels[level - 1][5]], "Location", player)
 
 
 def can_reach_rick(state: "CollectionState", player: int) -> bool:
@@ -250,12 +251,14 @@ def set_rules(world: "KDL3World") -> None:
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                     and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player]))
+                                                        world.multiworld.ow_boss_requirement[world.player],
+                                                        world.player_levels))
         set_rule(world.multiworld.get_location(purification, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
                                     and can_reach_level(state, world.player, i + 1,
                                                         world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player]))
+                                                        world.multiworld.ow_boss_requirement[world.player],
+                                                        world.player_levels))
 
     if world.multiworld.strict_bosses[world.player]:
         for level in range(2, 6):
@@ -269,7 +272,8 @@ def set_rules(world: "KDL3World") -> None:
         add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
                  lambda state, i=level: can_reach_level(state, world.player, i,
                                                         world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player]))
+                                                        world.multiworld.ow_boss_requirement[world.player],
+                                                        world.player_levels))
 
     if world.multiworld.goal_speed[world.player] == 0:
         add_rule(world.multiworld.get_entrance("To Level 6", world.player),

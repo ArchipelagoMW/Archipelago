@@ -139,7 +139,8 @@ class KDL3World(World):
                 animal_pool.append("Kine Spawn")
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items = [self.create_item(animal) for animal in animal_pool]
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), locations, items)
+            allstate = self.multiworld.get_all_state(False)
+            fill_restrictive(self.multiworld, allstate, locations, items, True, True)
         else:
             animal_friends = animal_friend_spawns.copy()
             for animal in animal_friends:
@@ -215,15 +216,14 @@ class KDL3World(World):
                          for _ in range(trap_amount)])
         itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
         self.multiworld.itempool += itempool
-
-        for level in self.player_levels:
-            for stage in range(0, 6):
-                self.multiworld.get_location(location_table[self.player_levels[level][stage]]
-                                             .replace("Complete", "Stage Completion"), self.player) \
-                    .place_locked_item(KDL3Item(
-                    f"{LocationName.level_names_inverse[level]}"
-                    f"{f' {stage + 1} ' if not self.multiworld.open_world[self.player] else ' '}- Stage Completion",
-                    ItemClassification.progression, None, self.player))
+        if self.multiworld.open_world[self.player]:
+            for level in self.player_levels:
+                for stage in range(0, 6):
+                    self.multiworld.get_location(location_table[self.player_levels[level][stage]]
+                                                 .replace("Complete", "Stage Completion"), self.player) \
+                        .place_locked_item(KDL3Item(
+                            f"{LocationName.level_names_inverse[level]} - Stage Completion",
+                            ItemClassification.progression, None, self.player))
 
     set_rules = set_rules
 

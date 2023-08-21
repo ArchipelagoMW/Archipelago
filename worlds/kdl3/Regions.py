@@ -3,15 +3,13 @@ import os
 import typing
 from pkgutil import get_data
 
-from BaseClasses import Entrance, Region
-from Fill import fill_restrictive
+from BaseClasses import Region
 from worlds.AutoWorld import World
-from .Locations import KDL3Location, location_table, level_consumables
+from .Locations import KDL3Location, location_table
 from .Names import LocationName
-from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Options import BossShuffle
 from .Room import Room
-from ..generic.Rules import add_item_rule, add_rule
+from worlds.generic.Rules import add_item_rule
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -49,7 +47,8 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
                     room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
                     room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
-        None for location in room_entry["locations"] if not any([x in location for x in ["1-Up", "Maxim"]]) or
+                            None for location in room_entry["locations"]
+                            if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.multiworld.consumables[world.player]}, KDL3Location)
         rooms[room.name] = room
         for location in room.locations:
@@ -83,8 +82,10 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
                 exits.keys(),
                 exits
             )
-            if any(["Complete" in location.name for location in room.locations]):
-                room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None}, KDL3Location)
+            if world.multiworld.open_world[world.player]:
+                if any(["Complete" in location.name for location in room.locations]):
+                    room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
+                                       KDL3Location)
 
     for level in world.player_levels:
         for stage in range(6):
@@ -92,10 +93,10 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
             level_regions[level].add_exits([first_rooms[proper_stage].name],
                                            {first_rooms[proper_stage].name:
                                             (lambda state: True) if world.multiworld.open_world[world.player] or
-                                            stage == 0 else lambda state, level=level, stage=stage: state.has(
-                                                    f"{LocationName.level_names_inverse[level]} "
-                                                    f"{f'{stage}'}"
-                                                    f" - Stage Completion", world.player)})
+                                            stage == 0 else lambda state, level=level, stage=stage: state.can_reach(
+                                                   world.multiworld.get_location(
+                                                       location_table[world.player_levels[level][stage-1]], world.player),
+                                                    world.player)})
         else:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 
@@ -193,7 +194,7 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
     return levels
 
 
-def create_levels(world: World) -> None:
+def create_levels(world: "KDL3World") -> None:
     menu = Region("Menu", world.player, world.multiworld)
     level1 = Region("Grass Land", world.player, world.multiworld)
     level2 = Region("Ripple Field", world.player, world.multiworld)
