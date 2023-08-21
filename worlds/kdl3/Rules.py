@@ -1,13 +1,11 @@
 from worlds.generic.Rules import set_rule, add_rule
-from .Locations import location_table, level_consumables
 from .Names import LocationName, EnemyAbilities
-from .Items import copy_ability_table
 import typing
-from BaseClasses import MultiWorld
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
     from BaseClasses import CollectionState
+
 
 def can_reach_level(state: "CollectionState", player: int, level: int, open_world: bool,
                     ow_boss_req: int):
@@ -89,7 +87,7 @@ ability_map = {
 }
 
 
-def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typing.Dict[str,str]):
+def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typing.Dict[str, str]):
     # check animal requirements
     if not can_reach_coo(state, player) and can_reach_kine(state, player):
         return False
@@ -106,7 +104,7 @@ def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typi
     return can_reach_parasol(state, player) and can_reach_stone(state, player)
 
 
-def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: typing.Dict[str,str]):
+def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: typing.Dict[str, str]):
     can_reach = True
     for enemy in {"Sparky", "Blocky", "Jumper Shoot", "Yuki", "Sir Kibble", "Haboki", "Boboo", "Captain Stitch"}:
         can_reach = can_reach & ability_map[copy_abilities[enemy]](state, player)
