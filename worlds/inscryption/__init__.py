@@ -2,13 +2,9 @@ from .Options import inscryption_options
 from .Items import item_table, base_id, InscryptionItem, ItemDict
 from .Locations import location_table, LocDict
 from .Regions import inscryption_regions
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
-from worlds.AutoWorld import World
-from Utils import get_options, output_path
-from typing import Dict, ClassVar, Set, List, Tuple
-from collections import Counter
+from typing import Dict, Any
 from . import Rules
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
 
@@ -84,3 +80,11 @@ class InscryptionWorld(World):
 
     def set_rules(self) -> None:
         Rules.InscryptionRules(self).set_all_rules()
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return {
+            "deathlink": self.multiworld.deathlink[self.player].value,
+            "randomize_codes": self.multiworld.randomize_codes[self.player].value,
+            "randomize_deck": self.multiworld.randomize_deck[self.player].value,
+            "optional_death_card": self.multiworld.optional_death_card[self.player].value,
+        }
