@@ -93,12 +93,7 @@ def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typi
     # check animal requirements
     if not can_reach_coo(state, player) and can_reach_kine(state, player):
         return False
-    # probably some cleaner way to handle this
-    room1 = EnemyAbilities.enemy_restrictive[1]
-    room2 = EnemyAbilities.enemy_restrictive[2]
-    room3 = EnemyAbilities.enemy_restrictive[3]
-    room4 = EnemyAbilities.enemy_restrictive[4]
-    for abilities, bukisets in [room1, room2, room3, room4]:
+    for abilities, bukisets in EnemyAbilities.enemy_restrictive[1:5]:
         iterator = iter(x for x in bukisets if copy_abilities[x] in abilities)
         target_bukiset = next(iterator, None)
         can_reach = False
