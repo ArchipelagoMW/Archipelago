@@ -43,6 +43,47 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
 
+# See argparse.BooleanOptionalAction
+class BooleanOptionalActionWithDisable(argparse.Action):
+    def __init__(self,
+                 option_strings,
+                 dest,
+                 default=None,
+                 type=None,
+                 choices=None,
+                 required=False,
+                 help=None,
+                 metavar=None):
+
+        _option_strings = []
+        for option_string in option_strings:
+            _option_strings.append(option_string)
+
+            if option_string.startswith('--'):
+                option_string = '--disable' + option_string[2:]
+                _option_strings.append(option_string)
+
+        if help is not None and default is not None:
+            help += " (default: %(default)s)"
+
+        super().__init__(
+            option_strings=_option_strings,
+            dest=dest,
+            nargs=0,
+            default=default,
+            type=type,
+            choices=choices,
+            required=required,
+            help=help,
+            metavar=metavar)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if option_string in self.option_strings:
+            setattr(namespace, self.dest, not option_string.startswith('--disable'))
+
+    def format_usage(self):
+        return ' | '.join(self.option_strings)
+
 
 def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
@@ -61,7 +102,7 @@ def get_argparser() -> argparse.ArgumentParser:
     parser.add_argument('--quickswap', help='Enable quick item swapping with L and R.', action='store_true')
     parser.add_argument('--deathlink', help='Enable DeathLink system.', action='store_true')
     parser.add_argument('--allowcollect', help='Allow collection of other player items', action='store_true')
-    parser.add_argument('--disablemusic', help='Disables game music.', action='store_true')
+    parser.add_argument('--music', default=True, help='Enables/Disables game music.', action=BooleanOptionalActionWithDisable)
     parser.add_argument('--triforcehud', default='hide_goal', const='hide_goal', nargs='?',
                         choices=['normal', 'hide_goal', 'hide_required', 'hide_both'],
                         help='''\
@@ -118,7 +159,7 @@ def get_argparser() -> argparse.ArgumentParser:
 def main():
     parser = get_argparser()
     args = parser.parse_args()
-    args.music = not args.disablemusic
+    
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
         args.loglevel]
@@ -530,9 +571,6 @@ class AttachTooltip(object):
 
 def get_rom_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
-    if not adjuster_settings:
-        adjuster_settings = Namespace()
-        adjuster_settings.baserom = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
 
     romFrame = Frame(parent)
     baseRomLabel = Label(romFrame, text='LttP Base Rom: ')
