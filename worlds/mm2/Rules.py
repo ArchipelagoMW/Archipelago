@@ -10,6 +10,10 @@ def set_rules(world: "MM2World") -> None:
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
 
+    # Always require Crash Bomber for Boobeam Trap
+    add_rule(world.multiworld.get_location(Names.wily_4, world.player),
+             lambda state: state.has(Names.crash_bomber, world.player))
+
     if not world.multiworld.yoku_jumps[world.player]:
         add_rule(world.multiworld.get_entrance("To Heat Man Stage", world.player),
                  lambda state: state.has(Names.item_2, world.player))

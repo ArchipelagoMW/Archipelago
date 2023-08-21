@@ -1,4 +1,5 @@
 import logging
+import time
 import typing
 from base64 import b64encode
 from typing import TYPE_CHECKING, Any, Dict, Tuple
@@ -25,6 +26,7 @@ MM2_E_TANKS = 0xA7
 MM2_LIVES = 0xA8
 MM2_WEAPON_ENERGY = 0x9C
 MM2_HEALTH = 0x6C0
+MM2_DEATHLINK = 0x8F
 
 MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     # Item: (byte offset, bit mask)
@@ -73,6 +75,10 @@ class MegaMan2Client(BizHawkClient):
     game = "Mega Man 2"
     system = "NES"
     item_queue: typing.List = []
+    pending_death_link: bool = False
+    sending_death_link: bool = False
+    death_link: bool = False
+    rom: typing.Optional[bytes] = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from BizHawkClient import RequestFailedError, bizhawk_read
@@ -87,16 +93,41 @@ class MegaMan2Client(BizHawkClient):
             return False  # Should verify on the next pass
 
         ctx.game = self.game
-        ctx.auth = b64encode(game_name).decode()
+        self.rom = game_name
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
         return True
 
+    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+        if self.rom:
+            ctx.auth = b64encode(self.rom).decode()
+
+    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
+        if cmd == "Bounced":
+            if "tags" in args:
+                if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+                    self.on_deathlink(ctx)
+
+    async def send_deathlink(self, ctx: BizHawkClientContext):
+        self.sending_death_link = True
+        ctx.last_death_link = time.time()
+        await ctx.send_death("Mega Man was defeated.")
+
+    def on_deathlink(self, ctx: BizHawkClientContext):
+        ctx.last_death_link = time.time()
+        self.pending_death_link = True
+
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
         from BizHawkClient import bizhawk_read, bizhawk_write
 
-        if ctx.server is not None and ctx.slot is None:
+        if ctx.server is None:
+            return
+
+        if ctx.slot is None:
             await ctx.send_connect(name=ctx.auth)
+
+        if ctx.slot_data is None:
+            return
 
         # get our relevant bytes
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
@@ -125,6 +156,22 @@ class MegaMan2Client(BizHawkClient):
                 "status": ClientStatus.CLIENT_GOAL
             }])
         writes = []
+
+        # deathlink
+        if ctx.slot_data["death_link"]:
+            if not self.death_link:
+                self.death_link = True
+                await ctx.update_death_link(self.death_link)
+        if self.pending_death_link:
+            writes.append((MM2_DEATHLINK, bytes([0x01]), "RAM"))
+            self.pending_death_link = False
+            self.sending_death_link = True
+        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+            if health[0] == 0x00 and not self.sending_death_link:
+                await self.send_deathlink(ctx)
+            elif health[0] != 0x00:
+                self.sending_death_link = False
+
         # handle receiving items
         recv_amount = items_received[0]
         if recv_amount < len(ctx.items_received):

@@ -164,6 +164,11 @@ class MM2World(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
+    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+        return {
+            "death_link": self.multiworld.death_link[self.player].value
+        }
+
     def modify_multidata(self, multidata: dict):
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()

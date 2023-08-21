@@ -47,6 +47,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, first_robot_mas
     rom.write_bytes(0x3C264, [0xA9, 0x00])  # Block auto-Wily
     rom.write_bytes(0x3C24D, [0x8B, 0x85, 0x8B])  # Write stage completion to $8B
     rom.write_bytes(0x3C254, [0x8C, 0x85, 0x8C])  # Write item checks to $8C
+    rom.write_bytes(0x3C1CC, [0xEA, 0xEA])  # Remove e-tank loss on game over
 
     # Store Wily Progress, and stage completion
     rom.write_bytes(0x37B18, [0x20, 0x2F, 0xF4,
@@ -81,15 +82,29 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, first_robot_mas
                               0xA9, 0x17,
                               0x60,
                               ])
+    # Deathlink and Soft-reset Kill
+    rom.write_bytes(0x3C11E, [0x27, 0xF5])
+    rom.write_bytes(0x38188, [0x20, 0x8F, 0xF3, 0xEA, ])
+    rom.write_bytes(0x3E5BC, [0x85, 0x8F, 0xEA, ])  # null deathlink on death
+    rom.write_bytes(0x3F39F, [0xA5, 0x23,
+                              0xC9, 0x0F,
+                              0xD0, 0x03,
+                              0x4C, 0xA8, 0xE5,
+                              0x4C, 0x1A, 0xF5,
+                              0x60, ])
+    rom.write_bytes(0x3F52A, [0xA5, 0x8F,
+                              0xC9, 0x01,
+                              0xD0, 0x03,
+                              0x4C, 0xA8, 0xE5,
+                              0xEA, 0xEA, 0xEA,
+                              0x60, ])
+    rom.write_bytes(0x3F537, [0x20, 0x51, 0xC0,
+                              0xA9, 0x00,
+                              0x8D, 0xC0, 0x06,
+                              0x60, ])
 
     if multiworld.quickswap[player]:
-        rom.write_bytes(0x38188, [0x20, 0x8F, 0xF3, 0xEA, ])
-        rom.write_bytes(0x3F39F, [0xA5, 0x23,
-                                  0xC9, 0x0F,
-                                  0xD0, 0x03,
-                                  0x4C, 0xA8, 0xE5,
-                                  0x4C, 0xAC, 0xF3,
-                                  0x60, ])
+        rom.write_bytes(0x3F533, [0x4C, 0xAC, 0xF3, ]) # add jump to check for holding select
         rom.write_bytes(0x3F3BC, [0xA5, 0x27,
                                   0x29, 0x04,
                                   0xF0, 0x09,
