@@ -14,6 +14,7 @@ import collections
 import importlib
 import logging
 
+from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
@@ -318,9 +319,38 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+def get_default_adjuster_settings(game_name: str):
+    from LttPAdjuster import GAME_ALTTP
+    adjuster_settings = Namespace()
+    if game_name == GAME_ALTTP:
+        defaults = {
+            "auto_apply": 'ask',
+            "music": True,
+            "reduceflashing": True,
+            "deathlink": False,
+            "sprite": None,
+            "oof": None,
+            "quickswap": True,
+            "menuspeed": 'normal',
+            "heartcolor": 'red',
+            "heartbeep": 'normal',
+            "ow_palettes": 'default',
+            "uw_palettes": 'default',
+            "hud_palettes": 'default',
+            "sword_palettes": 'default',
+            "shield_palettes": 'default',
+            "sprite_pool": [],
+            "allowcollect": False,
+        }
+        for key, defaultvalue in defaults.items():
+            if not hasattr(adjuster_settings, key):
+                setattr(adjuster_settings, key, defaultvalue)
 
-def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
-    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
+    return adjuster_settings
+def get_adjuster_settings(game_name: str) -> Namespace:
+    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, None)
+    if not adjuster_settings:
+        return get_default_adjuster_settings(game_name)
     return adjuster_settings
 
 

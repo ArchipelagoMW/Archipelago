@@ -560,33 +560,8 @@ def get_rom_frame(parent=None):
 
     return romFrame, romVar
 
-
 def get_rom_options_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
-    defaults = {
-        "auto_apply": 'ask',
-        "music": True,
-        "reduceflashing": True,
-        "deathlink": False,
-        "sprite": None,
-        "oof": None,
-        "quickswap": True,
-        "menuspeed": 'normal',
-        "heartcolor": 'red',
-        "heartbeep": 'normal',
-        "ow_palettes": 'default',
-        "uw_palettes": 'default',
-        "hud_palettes": 'default',
-        "sword_palettes": 'default',
-        "shield_palettes": 'default',
-        "sprite_pool": [],
-        "allowcollect": False,
-    }
-    if not adjuster_settings:
-        adjuster_settings = Namespace()
-    for key, defaultvalue in defaults.items():
-        if not hasattr(adjuster_settings, key):
-            setattr(adjuster_settings, key, defaultvalue)
 
     romOptionsFrame = LabelFrame(parent, text="Rom options")
     romOptionsFrame.columnconfigure(0, weight=1)
