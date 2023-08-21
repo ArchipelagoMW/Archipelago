@@ -66,7 +66,7 @@ class KDL3World(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
-    data_version = 0
+    data_version = 1
     web = KDL3WebWorld()
     settings: typing.ClassVar[KDL3Settings]
 
