@@ -21,11 +21,15 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
-class ReduceChecks(Toggle):
-    """When "Shuffle Doors" is off, there are far more location checks than there are items.
-    Enabling reduce checks will remove many of the locations that are associated with opening doors.
-    This option is ignored if "Shuffle Doors" is on."""
-    display_name = "Reduce Checks"
+class LocationChecks(Choice):
+    """On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for
+    achievement panels and a small handful of other panels.
+    On "reduced", many of the locations that are associated with opening doors are removed.
+    On "insanity", every individual panel in the game is a location check."""
+    display_name = "Location Checks"
+    option_normal = 0
+    option_reduced = 1
+    option_insanity = 2
 
 
 class ShuffleColors(Toggle):
@@ -102,7 +106,7 @@ class DeathLink(Toggle):
 lingo_options: Dict[str, type] = {
     "shuffle_doors": ShuffleDoors,
     "progressive_orange_tower": ProgressiveOrangeTower,
-    "reduce_checks": ReduceChecks,
+    "location_checks": LocationChecks,
     "shuffle_colors": ShuffleColors,
     "shuffle_panels": ShufflePanels,
     "shuffle_paintings": ShufflePaintings,

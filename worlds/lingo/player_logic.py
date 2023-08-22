@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, NamedTuple
 from BaseClasses import MultiWorld
 from .testing import LingoTestOptions
-from .locations import LocationData, StaticLingoLocations
+from .locations import LocationData, StaticLingoLocations, LocationClassification
 from .static_logic import RoomAndPanel, StaticLingoLogic, Door
 from .items import ItemData, StaticLingoItems
 
@@ -138,10 +138,15 @@ class LingoPlayerLogic:
             self.EVENT_LOC_TO_ITEM[self.LEVEL_2_LOCATION] = "Victory"
 
         # Instantiate all real locations.
+        location_classification = LocationClassification.normal
+        if getattr(multiworld, "location_checks")[player] == 1:
+            location_classification = LocationClassification.reduced
+        elif getattr(multiworld, "location_checks")[player] == 2:
+            location_classification = LocationClassification.insanity
+
         for location_name, location_data in StaticLingoLocations.ALL_LOCATION_TABLE.items():
             if location_name != self.VICTORY_CONDITION:
-                if getattr(multiworld, "reduce_checks")[player] and door_shuffle == 0\
-                        and not location_data.include_reduce:
+                if location_classification not in location_data.classification:
                     continue
 
                 self.add_location(location_data.room, PlayerLocation(location_name, location_data.code,
@@ -167,7 +172,8 @@ class LingoPlayerLogic:
                                 "iterations. This is very unlikely to happen on its own, and probably indicates some "
                                 "kind of logic error.")
 
-        if door_shuffle > 0 and test_options.disable_forced_good_item is False:
+        if door_shuffle > 0 and location_classification != LocationClassification.insanity\
+                and test_options.disable_forced_good_item is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but you the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded
             # right now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there

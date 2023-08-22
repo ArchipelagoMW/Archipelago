@@ -1,6 +1,13 @@
 from typing import Dict, NamedTuple, Optional, List
 from BaseClasses import Location
 from .static_logic import StaticLingoLogic, RoomAndPanel, Room
+from enum import Flag, auto
+
+
+class LocationClassification(Flag):
+    normal = auto()
+    reduced = auto()
+    insanity = auto()
 
 
 class LocationData(NamedTuple):
@@ -10,7 +17,7 @@ class LocationData(NamedTuple):
     code: Optional[int]
     room: str
     panels: List[RoomAndPanel]
-    include_reduce: bool
+    classification: LocationClassification
 
     def panel_ids(self):
         ids = set()
@@ -37,9 +44,15 @@ class StaticLingoLocations:
 
     ALL_LOCATION_TABLE: Dict[str, LocationData] = {}
 
-    def create_location(self, name: str, event: bool, room: str, panels: List[RoomAndPanel], include_reduce: bool):
-        new_id = None if event is True else self.base_id + len(self.ALL_LOCATION_TABLE)
-        new_locat = LocationData(new_id, room, panels, include_reduce)
+    def create_or_update_location(self, name: str, event: bool, room: str, panels: List[RoomAndPanel],
+                                  classification: LocationClassification):
+        if name in self.ALL_LOCATION_TABLE:
+            new_id = self.ALL_LOCATION_TABLE[name].code
+            classification |= self.ALL_LOCATION_TABLE[name].classification
+        else:
+            new_id = None if event is True else self.base_id + len(self.ALL_LOCATION_TABLE)
+
+        new_locat = LocationData(new_id, room, panels, classification)
         self.ALL_LOCATION_TABLE[name] = new_locat
 
     def __init__(self, base_id):
@@ -48,9 +61,16 @@ class StaticLingoLocations:
         for room_name, panels in StaticLingoLogic.PANELS_BY_ROOM.items():
             for panel_name, panel in panels.items():
                 locat_name = f"{room_name} - {panel_name}"
+
+                classification = LocationClassification.insanity
                 if panel.check:
-                    self.create_location(locat_name, False, room_name, [RoomAndPanel(None, panel_name)],
-                                         not panel.exclude_reduce)
+                    classification |= LocationClassification.normal
+
+                    if not panel.exclude_reduce:
+                        classification |= LocationClassification.reduced
+
+                self.create_or_update_location(locat_name, False, room_name, [RoomAndPanel(None, panel_name)],
+                                               classification)
 
         for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
@@ -58,4 +78,7 @@ class StaticLingoLocations:
                     continue
                 
                 locat_name = door.location_name
-                self.create_location(locat_name, False, room_name, door.panels, door.include_reduce)
+                classification = LocationClassification.normal
+                if door.include_reduce:
+                    classification |= LocationClassification.reduced
+                self.create_or_update_location(locat_name, False, room_name, door.panels, classification)
