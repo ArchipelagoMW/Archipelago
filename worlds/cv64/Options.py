@@ -146,10 +146,10 @@ class EmptyBreakables(Toggle):
     display_name = "Empty Breakables"
 
 
-class LizardGeneratorItems(Toggle):
+class LizardLockerItems(Toggle):
     """Adds the 6 items inside Castle Center 2F's Lizard-man generators to the pool. Picking up all of these can be a
     very time-consuming and luck-based process, so they are excluded by default."""
-    display_name = "Lizard-man Generator Items"
+    display_name = "Lizard Locker Items"
 
 
 class Shopsanity(Toggle):
@@ -359,7 +359,7 @@ cv64_options: Dict[str, Option] = {
     "hard_logic": HardLogic,
     "multi_hit_breakables": MultiHitBreakables,
     "empty_breakables": EmptyBreakables,
-    "lizard_generator_items": LizardGeneratorItems,
+    "lizard_locker_items": LizardLockerItems,
     "shopsanity": Shopsanity,
     "shop_prices": ShopPrices,
     "minimum_gold_price": MinimumGoldPrice,
@@ -384,5 +384,5 @@ cv64_options: Dict[str, Option] = {
     "map_lighting": MapLighting,
     "fall_guard": FallGuard,
     "cinematic_experience": CinematicExperience,
-    "death_link": DeathLink,
+    # "death_link": DeathLink,
 }

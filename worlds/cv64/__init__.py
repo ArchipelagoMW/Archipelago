@@ -246,8 +246,8 @@ class CV64World(World):
             if RName.room_of_clocks in self.active_stage_list:
                 add_filler_junk(2)
 
-        # Put in the lizard-man generator items if applicable
-        if self.multiworld.lizard_generator_items[self.player] and RName.castle_center in self.active_stage_list:
+        # Put in the lizard locker items if applicable
+        if self.multiworld.lizard_locker_items[self.player] and RName.castle_center in self.active_stage_list:
             item_counts["non_filler_junk_counts"][IName.powerup] += 1
             item_counts["non_filler_junk_counts"][IName.sun_card] += 1
             add_filler_junk(4)
@@ -307,6 +307,14 @@ class CV64World(World):
             while item_counts[table][item_to_subtract] == 0:
                 item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
             item_counts[table][item_to_subtract] -= 1
+
+        # Progression balance the amount of S1s needed to unlock every warp only if S1s per warp is lower than 5.
+        if self.multiworld.special1s_per_warp[self.player] < 5:
+            s1s_to_balance = self.multiworld.special1s_per_warp[self.player] * 7
+            item_counts["special_counts"][IName.special_one] -= s1s_to_balance
+            self.multiworld.itempool += \
+                [Item(IName.special_one, ItemClassification.progression, 0x04 + base_id, self.player)
+                 for i in range(s1s_to_balance)]
 
         # Set up the items correctly
         for table in item_counts:
@@ -603,13 +611,13 @@ class CV64World(World):
         for i in range(1, len(self.active_warp_list)):
             spoiler_handle.writelines(f"Warp {i}:\t{self.active_warp_list[i]}\n")
 
-    def fill_slot_data(self) -> dict:
-        slot_data = {"death_link": self.multiworld.death_link[self.player].value}
-        for option_name in cv64_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
+    # def fill_slot_data(self) -> dict:
+    #     slot_data = {"death_link": self.multiworld.death_link[self.player].value}
+    #     for option_name in cv64_options:
+    #         option = getattr(self.multiworld, option_name)[self.player]
+    #         slot_data[option_name] = option.value
 
-        return slot_data
+    #     return slot_data
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(list(filler_junk_table.keys()))

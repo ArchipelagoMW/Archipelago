@@ -262,13 +262,13 @@ carrie_only_location_table = {
     LName.uw_carrie2: LocationData(0x4A, 0x10CB13, RName.uw_main)
 }
 
-cc_lizard_generator_table = {
-    LName.ccff_lizard_coffin_nfr: LocationData(0x104, 0x8C450A, RName.cc_lower),
-    LName.ccff_lizard_coffin_nmr: LocationData(0x105, 0xBFC9C3, RName.cc_lower),
-    LName.ccff_lizard_coffin_nml: LocationData(0x106, 0xBFC9C7, RName.cc_lower),
-    LName.ccff_lizard_coffin_nfl: LocationData(0x107, 0xBFCA07, RName.cc_lower),
-    LName.ccff_lizard_coffin_fl:  LocationData(0x102, 0xBFCA03, RName.cc_lower),
-    LName.ccff_lizard_coffin_fr:  LocationData(0x103, 0x8C44F5, RName.cc_lower)
+cc_lizard_locker_table = {
+    LName.ccff_lizard_locker_nfr: LocationData(0x104, 0x8C450A, RName.cc_lower),
+    LName.ccff_lizard_locker_nmr: LocationData(0x105, 0xBFC9C3, RName.cc_lower),
+    LName.ccff_lizard_locker_nml: LocationData(0x106, 0xBFC9C7, RName.cc_lower),
+    LName.ccff_lizard_locker_nfl: LocationData(0x107, 0xBFCA07, RName.cc_lower),
+    LName.ccff_lizard_locker_fl:  LocationData(0x102, 0xBFCA03, RName.cc_lower),
+    LName.ccff_lizard_locker_fr:  LocationData(0x103, 0x8C44F5, RName.cc_lower)
 }
 
 multi_breakable_table = {
@@ -336,6 +336,7 @@ multi_breakable_table = {
     LName.toe_ledge2: LocationData(0x25D, 0x10CD5F, RName.toe_main),
     LName.toe_ledge3: LocationData(0x25E, 0x10CD61, RName.toe_main),
     LName.toe_ledge4: LocationData(0x25F, 0x10CD63, RName.toe_main),
+    LName.toe_ledge5: LocationData(0x260, 0x10CD65, RName.toe_main),
     # Tower of Science 3HBs
     LName.tosci_ibridge_b1: LocationData(0x262, 0x10CE59, RName.tosci_conveyors),
     LName.tosci_ibridge_b2: LocationData(0x263, 0x10CE5B, RName.tosci_conveyors),
@@ -360,10 +361,6 @@ multi_breakable_table = {
     LName.ct_finalroom_renon_slab6:   LocationData(0x279, 0x10CF13, RName.ct_end),
     LName.ct_finalroom_renon_slab7:   LocationData(0x27A, 0x10CF15, RName.ct_end),
     LName.ct_finalroom_renon_slab8:   LocationData(0x27B, 0x10CF17, RName.ct_end),
-}
-
-multi_sub_weapon_table = {
-    LName.toe_ledge5: LocationData(0x260, 0x10CD65, RName.toe_main),
 }
 
 sub_weapon_table = {
@@ -468,9 +465,8 @@ end_table = {
 all_locations = {
     **main_location_table,
     **carrie_only_location_table,
-    **cc_lizard_generator_table,
+    **cc_lizard_locker_table,
     **multi_breakable_table,
-    **multi_sub_weapon_table,
     **sub_weapon_table,
     **empty_breakables_table,
     **renon_shop_table
@@ -496,14 +492,11 @@ def create_locations(world, player: int, active_regions):
     if world.carrie_logic[player].value:
         location_table.update({**carrie_only_location_table})
 
-    if world.lizard_generator_items[player].value:
-        location_table.update({**cc_lizard_generator_table})
+    if world.lizard_locker_items[player].value:
+        location_table.update({**cc_lizard_locker_table})
 
     if world.multi_hit_breakables[player].value:
         location_table.update({**multi_breakable_table})
-
-    if world.sub_weapon_shuffle[player].value > 1 and world.multi_hit_breakables[player].value:
-        location_table.update({**multi_sub_weapon_table})
 
     if world.empty_breakables[player].value:
         location_table.update({**empty_breakables_table})

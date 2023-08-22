@@ -201,7 +201,8 @@ stage_info = {
                                       {IName.roast_chicken: 1,
                                        IName.roast_beef: 1}, 3,
                                       {IName.purifying: 1,
-                                       IName.cure_ampoule: 1}, 2, {IName.holy_water: 1},
+                                       IName.cure_ampoule: 1,
+                                       IName.holy_water: 1}, 2, {},
                                       {IName.cross: 1}),
 
     "Tower of Science":     CV64Stage(RName.tosci_start, 0x109D77, 0x109D79, 0x12, 0x00,

@@ -584,6 +584,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int16s(0x104AC8, [0x0000, 0x0006,
                                 0x0013, 0x0015])
 
+    # Take the contract in Waterway off of its 00400000 bitflag.
+    rom.write_byte(0x87E3DA, 0x00)
+
     # Spawn coordinates list extension
     rom.write_int32(0xD5BF4, 0x080FF103)  # J	0x803FC40C
     rom.write_int32s(0xBFC40C, Patches.spawn_coordinates_extension)
@@ -887,38 +890,56 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Disable the 3HBs checking and setting flags when breaking them and enable their individual items checking and
     # setting flags instead.
-    rom.write_int32(0xE87F8, 0x00000000)  # NOP
-    rom.write_int16(0xE836C, 0x1000)
-    rom.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
-    rom.write_int32s(0xBFCF34, Patches.three_hit_item_flags_setter)
-    # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
-    rom.write_int32(0xE7D54, 0x00000000)  # NOP
-    rom.write_int16(0xE7908, 0x1000)
-    rom.write_byte(0xE7A5C, 0x10)
-    rom.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
-    rom.write_int32s(0xBFCF7C, Patches.chandelier_item_flags_setter)
-
-    # New flag values to put in each 3HB vanilla flag's spot
-    rom.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
-    rom.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
-    rom.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
-    rom.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
-    rom.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
-    rom.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
-    rom.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
-    rom.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
-    rom.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
-    rom.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
-    rom.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard-man generator slab
-    rom.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
-    rom.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
-    rom.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
-    rom.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
-    rom.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
-    rom.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
-    rom.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
     if multiworld.multi_hit_breakables[player]:
+        rom.write_int32(0xE87F8, 0x00000000)  # NOP
+        rom.write_int16(0xE836C, 0x1000)
+        rom.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
+        rom.write_int32s(0xBFCF34, Patches.three_hit_item_flags_setter)
+        # Villa foyer chandelier-specific functions (yeah, IDK why KCEK made different functions for this one)
+        rom.write_int32(0xE7D54, 0x00000000)  # NOP
+        rom.write_int16(0xE7908, 0x1000)
+        rom.write_byte(0xE7A5C, 0x10)
+        rom.write_int32(0xE7F08, 0x0C0FF3DF)  # JAL 0x803FCF7C
+        rom.write_int32s(0xBFCF7C, Patches.chandelier_item_flags_setter)
+
+        # New flag values to put in each 3HB vanilla flag's spot
+        rom.write_int32(0x10C7C8, 0x8000FF48)  # FoS dirge maiden rock
+        rom.write_int32(0x10C7B0, 0x0200FF48)  # FoS S1 bridge rock
+        rom.write_int32(0x10C86C, 0x0010FF48)  # CW upper rampart save nub
+        rom.write_int32(0x10C878, 0x4000FF49)  # CW Dracula switch slab
+        rom.write_int32(0x10CAD8, 0x0100FF49)  # Tunnel twin arrows slab
+        rom.write_int32(0x10CAE4, 0x0004FF49)  # Tunnel lonesome bucket pit rock
+        rom.write_int32(0x10CB54, 0x4000FF4A)  # UW poison parkour ledge
+        rom.write_int32(0x10CB60, 0x0080FF4A)  # UW skeleton crusher ledge
+        rom.write_int32(0x10CBF0, 0x0008FF4A)  # CC Behemoth crate
+        rom.write_int32(0x10CC2C, 0x2000FF4B)  # CC elevator pedestal
+        rom.write_int32(0x10CC70, 0x0200FF4B)  # CC lizard locker slab
+        rom.write_int32(0x10CD88, 0x0010FF4B)  # ToE pre-midsavepoint platforms ledge
+        rom.write_int32(0x10CE6C, 0x4000FF4C)  # ToSci invisible bridge crate
+        rom.write_int32(0x10CF20, 0x0080FF4C)  # CT inverted battery slab
+        rom.write_int32(0x10CF2C, 0x0008FF4C)  # CT inverted door slab
+        rom.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
+        rom.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
+        rom.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
         rom.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+
+    # Remove the flags from the Carrie-only and lizard locker checks if they are not in. This means they can be farmed
+    # infinitely, but now they won't decrease the Countdown.
+    if not multiworld.carrie_logic[player].value:
+        rom.write_byte(0x10CB0D, 0x00)
+        rom.write_byte(0x10CB15, 0x00)
+
+    if not multiworld.lizard_locker_items[player].value:
+        rom.write_int16(0xBFC9D2, 0x0000)
+        rom.write_int16(0xBFC9D6, 0x0000)
+        rom.write_int16(0xBFC9DA, 0x0000)
+        rom.write_int16(0xBFC9DE, 0x0000)
+        rom.write_int16(0xBFC9E2, 0x0000)
+        rom.write_int16(0xBFC9E6, 0x0000)
+
+    # Take the Clock Toewr bone pillar chasm sub-weapon off its flag if sub-weapons aren't reandomized anywhere.
+    if multiworld.sub_weapon_shuffle[player].value != 2:
+        rom.write_byte(0x99BC5B, 0x00)
 
     # Once-per-frame gameplay checks
     rom.write_int32(0x6C848, 0x080FF40D)   # J 0x803FD034
