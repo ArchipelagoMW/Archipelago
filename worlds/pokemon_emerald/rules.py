@@ -403,6 +403,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         can_rock_smash
     )
     set_rule(
+        multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/SOUTH_POND", player),
+        can_surf
+    )
+    set_rule(
         multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/MIDDLE", player),
         can_rock_smash
     )
