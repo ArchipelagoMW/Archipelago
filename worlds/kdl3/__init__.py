@@ -110,6 +110,32 @@ class KDL3World(World):
                                             self.multiworld.ability_trap_weight[self.player]])[0]
 
     def pre_fill(self) -> None:
+        if self.multiworld.copy_ability_randomization[self.player]:
+            # randomize copy abilities
+            valid_abilities = list(copy_ability_access_table.keys())
+            enemies_to_set = list(self.copy_abilities.keys())
+            # now for the edge cases
+            for abilities, enemies in enemy_restrictive:
+                available_enemies = list()
+                for enemy in enemies:
+                    if enemy not in enemies_to_set:
+                        if self.copy_abilities[enemy] in abilities:
+                            break
+                    else:
+                        available_enemies.append(enemy)
+                else:
+                    chosen_enemy = self.random.choice(available_enemies)
+                    chosen_ability = self.random.choice(tuple(abilities))
+                    self.copy_abilities[chosen_enemy] = chosen_ability
+                    enemies_to_set.remove(chosen_enemy)
+            # place remaining
+            for enemy in enemies_to_set:
+                self.copy_abilities[enemy] = self.random \
+                    .choice(valid_abilities)
+
+        for enemy in enemy_mapping:
+            self.multiworld.get_location(enemy, self.player) \
+                .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
         # fill animals
         if self.multiworld.animal_randomization[self.player] != 0:
             spawns = [animal for animal in animal_friend_spawns.keys() if
@@ -146,32 +172,7 @@ class KDL3World(World):
                 self.multiworld.get_location(animal, self.player) \
                     .place_locked_item(self.create_item(animal_friends[animal]))
 
-        if self.multiworld.copy_ability_randomization[self.player]:
-            # randomize copy abilities
-            valid_abilities = list(copy_ability_access_table.keys())
-            enemies_to_set = list(self.copy_abilities.keys())
-            # now for the edge cases
-            for abilities, enemies in enemy_restrictive:
-                available_enemies = list()
-                for enemy in enemies:
-                    if enemy not in enemies_to_set:
-                        if self.copy_abilities[enemy] in abilities:
-                            break
-                    else:
-                        available_enemies.append(enemy)
-                else:
-                    chosen_enemy = self.random.choice(available_enemies)
-                    chosen_ability = self.random.choice(tuple(abilities))
-                    self.copy_abilities[chosen_enemy] = chosen_ability
-                    enemies_to_set.remove(chosen_enemy)
-            # place remaining
-            for enemy in enemies_to_set:
-                self.copy_abilities[enemy] = self.random \
-                    .choice(valid_abilities)
 
-        for enemy in enemy_mapping:
-            self.multiworld.get_location(enemy, self.player) \
-                .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
 
     def create_items(self) -> None:
         itempool = []
