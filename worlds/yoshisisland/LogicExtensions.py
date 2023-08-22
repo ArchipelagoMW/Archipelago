@@ -135,9 +135,25 @@ class YoshiLogic:
         elif self.bowser_door == 2:
             return self.bowserdoor_2(state)
         elif self.bowser_door == 3:
-            return self.bowserdoor_3(state)
+            return True
+        elif self.bowser_door == 4:
+            return True
         elif self.bowser_door == 5:
             return self.bowserdoor_1(state) and self.bowserdoor_2(state) and self.bowserdoor_3(state)
+
+    def _68CollectibleRoute(self, state: CollectionState) -> bool:
+        if self.bowser_door == 0:
+            return True
+        elif self.bowser_door == 1:
+            return self.bowserdoor_1(state)
+        elif self.bowser_door == 2:
+            return self.bowserdoor_2(state)
+        elif self.bowser_door == 3:
+            return True
+        elif self.bowser_door == 4:
+            return True
+        elif self.bowser_door == 5:
+            return self.bowserdoor_1(state)
 
     ############################################################
     def _11Coins(self, state: CollectionState) -> bool:
@@ -1434,11 +1450,11 @@ class YoshiLogic:
 
     def _48Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return (state.has('Egg Capacity Upgrade', self.player, 5))
+            return (state.has('Egg Capacity Upgrade', self.player, 3))
         elif self.game_logic == "Normal":
-            return (state.has('Egg Capacity Upgrade', self.player, 3))
+            return (state.has('Egg Capacity Upgrade', self.player, 2))
         else:
-            return (state.has('Egg Capacity Upgrade', self.player, 3))
+            return (state.has('Egg Capacity Upgrade', self.player, 1))
 
     def _48CanFightBoss(self, state: CollectionState) -> bool:
         if state.can_reach(self.boss_order[7], 'Location', self.player):
@@ -2050,19 +2066,19 @@ class YoshiLogic:
 ###########################################################################################################################
     def _68Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68CollectibleRoute(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68CollectibleRoute(state)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph'}, self.player) and self._68CollectibleRoute(state)
 
     def _68Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68CollectibleRoute(state)
         elif self.game_logic == "Normal":
-            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph', 'Egg Plant'}, self.player) and self._68CollectibleRoute(state)
         else:
-            return state.has_all({'Helicopter Morph'}, self.player) and self._68Route(state)
+            return state.has_all({'Helicopter Morph'}, self.player) and self._68CollectibleRoute(state)
 
     def _68Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
