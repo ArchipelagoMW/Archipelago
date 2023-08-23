@@ -71,6 +71,7 @@ class MMBN3Context(CommonContext):
         self.auth_name = None
         self.slot_data = dict()
         self.patching_error = False
+        self.sent_hints = []
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -175,13 +176,16 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
 
     # If trade hinting is enabled, send scout checks
     if ctx.slot_data.get("trade_quest_hinting", 0) == 2:
-        scouted_locs = [loc.id for loc in scoutable_locations
+        trade_bits = [loc.id for loc in scoutable_locations
                         if check_location_scouted(loc, payload["locations"])]
-        await ctx.send_msgs([{
-            "cmd": "LocationScouts",
-            "locations": scouted_locs,
-            "create_as_hint": 2
-        }])
+        scouted_locs = [loc for loc in trade_bits if loc not in ctx.sent_hints]
+        if len(scouted_locs) > 0:
+            ctx.sent_hints.extend(scouted_locs)
+            await ctx.send_msgs([{
+                "cmd": "LocationScouts",
+                "locations": scouted_locs,
+                "create_as_hint": 2
+            }])
 
 
 def check_location_packet(location, memory):

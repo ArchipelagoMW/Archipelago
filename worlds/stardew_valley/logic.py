@@ -7,8 +7,9 @@ from typing import Dict, Union, Optional, Iterable, Sized, List, Set
 from . import options
 from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops, CropItem
 from .data.bundle_data import BundleItem
+from .data.crops_data import crops_by_name
 from .data.fish_data import island_fish
-from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items, dwarf_scrolls
+from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, dwarf_scrolls, all_museum_minerals
 from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, FriendshipSource, QueenOfSauceSource, \
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
@@ -139,7 +140,7 @@ class StardewLogic:
         self.crop_rules.update({crop.name: self.can_grow_crop(crop) for crop in all_crops})
         self.crop_rules.update({
             Seed.coffee: (self.has_season(Season.spring) | self.has_season(
-                Season.summer)) & self.has_traveling_merchant(),
+                Season.summer)) & self.can_buy_seed(crops_by_name[Seed.coffee].seed),
             Fruit.ancient_fruit: (self.received("Ancient Seeds") | self.received("Ancient Seeds Recipe")) &
                              self.can_reach_region(Region.greenhouse) & self.has(Machine.seed_maker),
         })
@@ -474,8 +475,8 @@ class StardewLogic:
             FestivalCheck.mermaid_pearl: self.has_season(Season.winter) & self.can_reach_region(Region.beach),
             FestivalCheck.cone_hat: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(2500),
             FestivalCheck.iridium_fireplace: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(15000),
-            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
+            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_items(40),
             FestivalCheck.lupini_red_eagle: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_portrait_mermaid: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_solar_kingdom: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
@@ -1212,7 +1213,7 @@ class StardewLogic:
                                self.can_have_earned_total_money(1000000),  # 1 000 000g second point
                                self.has_total_skill_level(30),  # Total Skills: 30
                                self.has_total_skill_level(50),  # Total Skills: 50
-                               # Completing the museum not expected
+                               self.can_complete_museum(),  # Completing the museum for a point
                                # Catching every fish not expected
                                # Shipping every item not expected
                                self.can_get_married() & self.has_house(2),
@@ -1223,7 +1224,7 @@ class StardewLogic:
                                self.can_complete_community_center(),  # CC Ceremony first point
                                self.can_complete_community_center(),  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.has_rusty_key(),  # Rusty key not expected
+                               self.has_rusty_key(),  # Rusty key obtained
                                ]
         return Count(12, rules_worth_a_point)
 
@@ -1265,8 +1266,20 @@ class StardewLogic:
 
     def can_speak_dwarf(self) -> StardewRule:
         if self.options[options.Museumsanity] == options.Museumsanity.option_none:
-            return self.has([item.name for item in dwarf_scrolls])
+            return And([self.can_donate_museum_item(item) for item in dwarf_scrolls])
         return self.received("Dwarvish Translation Guide")
+
+    def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_item(item)
+
+    def can_donate_museum_items(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_items(number)
+
+    def can_donate_museum_artifacts(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_artifacts(number)
+
+    def can_donate_museum_minerals(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_minerals(number)
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.can_reach_all_regions_except_one(item.locations)
@@ -1280,9 +1293,15 @@ class StardewLogic:
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
         rules = []
-        for donation in all_museum_items:
-            if donation in all_artifact_items:
-                rules.append(self.can_find_museum_item(donation))
+        for artifact in all_museum_artifacts:
+            rules.append(self.can_find_museum_item(artifact))
+
+        return Count(number, rules)
+
+    def can_find_museum_minerals(self, number: int) -> StardewRule:
+        rules = []
+        for mineral in all_museum_minerals:
+            rules.append(self.can_find_museum_item(mineral))
 
         return Count(number, rules)
 
@@ -1294,7 +1313,7 @@ class StardewLogic:
         return Count(number, rules)
 
     def can_complete_museum(self) -> StardewRule:
-        rules = [self.can_mine_perfectly()]
+        rules = [self.can_reach_region(Region.museum), self.can_mine_perfectly()]
 
         if self.options[options.Museumsanity] != options.Museumsanity.option_none:
             rules.append(self.received("Traveling Merchant Metal Detector", 4))
