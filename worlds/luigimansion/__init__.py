@@ -137,8 +137,7 @@ def get_excluded_items(self: LuigiMansionWorld, world: MultiWorld, player: int) 
         excluded_items.add('Boo')
 
     for item in world.precollected_items[player]:
-        if item.name not in self.item_name_groups['UseItem']:
-            excluded_items.add(item.name)
+        excluded_items.add(item.name)
 
     return excluded_items
 

@@ -17,7 +17,7 @@ The Randomizer allows you to set different goals and modify the game in several 
 ## What items and locations get shuffled?
 
 Door Keys, Mario's items, and the element medallions are shuffled. These are found in the chests in various rooms in the 
-mansion, as well as a few specific objects. There are options for Boos, Portrait Ghosts, Toads, Plants, Gold Mice, Blue 
+mansion, as well as a few specific objects that normally contain those items. There are options for Boos, Portrait Ghosts, Toads, Plants, Gold Mice, Blue 
 Ghosts (Speedy Spirits), and even every interactable object in the game.
 
 ## Which items can be in another player's world?
@@ -36,22 +36,18 @@ _______.
 
 ###### Customization options:
 
-- Choose a goal for your world. Possible goals are: 1) Reach the final floor; 2) Defeat the boss on the final floor; 3)
-  Retrieve a (customizable) number of Iris treasures from the cave; 4) Retrieve the Iris treasures *and* defeat the boss
-- You can also randomize the goal; The blue-haired NPC in front of the cafe can tell you about the selected objective
-- Customize the chances of encountering blue chests, healing tiles, Iris treasures, etc.
-- Customize the default party lineup and capsule monster
-- Customize the party starting level as well as capsule monster level and form
-- Customize the initial and final floor numbers
-- Customize the boss that resides on the final floor
-- Customize the multiworld item pool. (By default, your pool is filled with random blue chest items, but you can place
-  any cave item you want instead)
-- Customize start inventory, i.e., begin every run with certain items or spells of your choice
-- Adjust how much EXP is gained from enemies
-- Randomize enemy movement patterns, enemy sprites, and which enemy types can appear at which floor numbers
-- Option to shuffle your party members and/or capsule monsters into the multiworld, meaning that someone will have to
-  find them in order to unlock them for you to use. While cave diving, you can add newly unlocked members to your party
-  by using the character items from your inventory
+- Add Plants into the pool as locations
+- Add Portrait Ghosts into the pool as locations
+- Add Speedy Spirits and Gold Mice into the pool as locations
+- Add Boos into the pool as locations and items
+- Add Toads into the pool as locations
+- Add every interactable object within the game into the pool as locations
+- Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
+- Customize the number of Mario's items needed to trigger the Fortune-teller
+- Start with the stronger Poltergust
+- Start with the Boo Radar
+- Start in the Hidden Mansion
+- Randomize the ghost types in certain rooms of the mansion
 
 ###### Quality of life:
 
