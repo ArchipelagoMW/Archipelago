@@ -328,11 +328,15 @@ def get_default_adjuster_settings(game_name: str) -> Namespace:
     return adjuster_settings
 
 
+def get_adjuster_settings_no_defaults(game_name: str) -> Namespace:
+    return persistent_load().get("adjuster", {}).get(game_name, Namespace())
+
 def get_adjuster_settings(game_name: str) -> Namespace:
-    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, None)
-    if not adjuster_settings:
-        return get_default_adjuster_settings(game_name)
-    return adjuster_settings
+    adjuster_settings = get_adjuster_settings_no_defaults(game_name)
+    default_settings = get_default_adjuster_settings(game_name)
+
+    # Fill in any arguments from the argparser that we haven't seen before
+    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
 
 
 @cache_argsless

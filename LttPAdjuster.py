@@ -25,7 +25,7 @@ ModuleUpdate.update()
 
 from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
-    get_adjuster_settings, tkinter_center_window, init_logging
+    get_adjuster_settings, get_adjuster_settings_no_defaults, tkinter_center_window, init_logging
 
 
 GAME_ALTTP = "A Link to the Past"
@@ -145,20 +145,22 @@ def get_argparser() -> argparse.ArgumentParser:
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
+    parser.add_argument('--sprite_pool', nargs='+', default=[], help='''
+                             A list of sprites to pull from.
+                        ''')
     parser.add_argument('--oof', help='''\
                              Path to a sound effect to replace Link's "oof" sound.
                              Needs to be in a .brr format and have a length of no
                              more than 2673 bytes, created from a 16-bit signed PCM
                              .wav at 12khz. https://github.com/boldowa/snesbrr
                              ''')
-    parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
     return parser
 
 
 def main():
     parser = get_argparser()
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_ALTTP))
     
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[

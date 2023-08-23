@@ -581,19 +581,13 @@ class ALTTPSNIClient(SNIClient):
 def get_alttp_settings(romfile: str):
     import LttPAdjuster
 
-    last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
-    base_settings = LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
-    allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                  "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                  "reduceflashing", "deathlink", "allowcollect", "oof"}
-
-    for option_name in allow_list:
-        # set new defaults since last_settings were created
-        if not hasattr(last_settings, option_name):
-            setattr(last_settings, option_name, getattr(base_settings, option_name))
+    last_settings = Utils.get_adjuster_settings(GAME_ALTTP, require_existing_settings=True)
 
     adjustedromfile = ''
     if last_settings:
+        allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                    "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                    "reduceflashing", "deathlink", "allowcollect", "oof"}
         choice = 'no'
         if not hasattr(last_settings, 'auto_apply') or 'ask' in last_settings.auto_apply:
             printed_options = {name: value for name, value in vars(last_settings).items() if name in allow_list}
