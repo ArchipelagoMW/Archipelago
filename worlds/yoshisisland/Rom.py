@@ -1,7 +1,6 @@
 import Utils
 import pdb
 from .Options import get_option_value
-from .LogicExtensions import YoshiLogic
 from worlds.Files import APDeltaPatch
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535

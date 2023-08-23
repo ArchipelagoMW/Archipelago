@@ -8,7 +8,6 @@ from typing import Dict, List, Set, Tuple, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
 from .Locations import get_locations
-from .LogicExtensions import YoshiLogic
 from .Options import yoshi_options, get_option_value
 from .Regions import create_regions
 from .SetupGame import setup_gamevars

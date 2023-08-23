@@ -1,6 +1,6 @@
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .LogicExtensions import YoshiLogic
+from .LevelLogic import YoshiLogic
 from .Options import get_option_value
 
 

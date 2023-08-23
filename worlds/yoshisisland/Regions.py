@@ -1,7 +1,7 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
-from .LogicExtensions import YoshiLogic
+from .LevelLogic import YoshiLogic
 from .Options import get_option_value
 from .SetupBosses import BossReqs
 
