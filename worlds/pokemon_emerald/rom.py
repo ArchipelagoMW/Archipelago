@@ -3,6 +3,7 @@ Classes and functions related to creating a ROM patch
 """
 import os
 import pkgutil
+from typing import List, Tuple
 
 import bsdiff4
 
@@ -93,15 +94,30 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     if start_inventory.pop("Rain Badge", 0) > 0:
         starting_badges |= (1 << 7)
 
-    for i, item_name in enumerate(start_inventory):
-        if i >= 20:
+    pc_slots: List[Tuple[str, int]] = []
+    while any(qty > 0 for qty in start_inventory.values()):
+        if len(pc_slots) >= 19:
             break
 
+        for i, item_name in enumerate(start_inventory.keys()):
+            if len(pc_slots) >= 19:
+                break
+
+            quantity = min(start_inventory[item_name], 999)
+            if quantity == 0:
+                continue
+
+            start_inventory[item_name] -= quantity
+
+            pc_slots.append((item_name, quantity))
+    
+    pc_slots.sort(reverse=True)
+
+    for i, slot in enumerate(pc_slots):
         address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
-        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[item_name])
-        quantity = min(start_inventory[item_name], 99)
+        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[slot[0]])
         _set_bytes_little_endian(patched_rom, address + 0, 2, item)
-        _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
+        _set_bytes_little_endian(patched_rom, address + 2, 2, slot[1])
 
     # Set species data
     _set_species_info(modified_data, patched_rom)
