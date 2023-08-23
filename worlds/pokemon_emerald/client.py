@@ -17,7 +17,7 @@ from .options import Goal
 
 GBA_SOCKET_PORT = 43053
 
-EXPECTED_SCRIPT_VERSION = 1
+EXPECTED_SCRIPT_VERSION = 2
 
 CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
 CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"

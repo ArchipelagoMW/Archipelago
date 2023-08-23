@@ -102,7 +102,7 @@ end
 function create_message ()
     local data = {}
 
-    data["script_version"] = 1
+    data["script_version"] = 2
 
     local slot_name = memory.read_bytes_as_array(slot_name_address, 64, "ROM")
     data["slot_name"] = slot_name
