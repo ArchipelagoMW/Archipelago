@@ -581,10 +581,10 @@ class ALTTPSNIClient(SNIClient):
 def get_alttp_settings(romfile: str):
     import LttPAdjuster
 
-    last_settings = Utils.get_adjuster_settings(GAME_ALTTP, require_existing_settings=True)
-
     adjustedromfile = ''
-    if last_settings:
+    if Utils.get_adjuster_settings_no_defaults(GAME_ALTTP):
+        last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
+
         allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
                     "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
                     "reduceflashing", "deathlink", "allowcollect", "oof"}
