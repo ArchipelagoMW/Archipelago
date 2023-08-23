@@ -93,6 +93,8 @@ def get_argparser() -> argparse.ArgumentParser:
                         help='Path to an ALttP Japan(1.0) rom to use as a base.')
     parser.add_argument('--loglevel', default='info', const='info', nargs='?',
                         choices=['error', 'info', 'warning', 'debug'], help='Select level of logging for output.')
+    parser.add_argument('--auto_apply', default='ask',
+                        choices=['ask', 'always', 'never'], help='Whether or not to apply settings automatically in the future.')
     parser.add_argument('--menuspeed', default='normal', const='normal', nargs='?',
                         choices=['normal', 'instant', 'double', 'triple', 'quadruple', 'half'],
                         help='''\

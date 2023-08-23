@@ -582,7 +582,7 @@ def get_alttp_settings(romfile: str):
     import LttPAdjuster
 
     adjustedromfile = ''
-    if Utils.get_adjuster_settings_no_defaults(GAME_ALTTP):
+    if vars(Utils.get_adjuster_settings_no_defaults(GAME_ALTTP)):
         last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
 
         allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
