@@ -48,9 +48,6 @@ class LingoLogic(LogicMixin):
     def lingo_can_use_mastery_location(self, multiworld: MultiWorld, player: int):
         return self.has("Mastery Achievement", player, getattr(multiworld, "mastery_achievements")[player])
 
-    def lingo_can_use_level_2_location(self, multiworld: MultiWorld, player: int):
-        return self.has("Counting Panel Solved", player, getattr(multiworld, "level_2_requirement")[player])
-
     def _lingo_can_open_door(self, start_room: str, room: str, door: str, player: int, player_logic: LingoPlayerLogic):
         """
         Determines whether a door can be opened
@@ -68,6 +65,10 @@ class LingoLogic(LogicMixin):
         Determines whether a panel can be solved
         """
         if start_room != room and not self.has(f"{room} (Reached)", player):
+            return False
+        if room == "Second Room" and panel == "ANOTHER TRY" and getattr(multiworld, "victory_condition")[player] == 2\
+                and not self.has("Counting Panel Solved", player,
+                                 getattr(multiworld, "level_2_requirement")[player] - 1):
             return False
         panel_object = StaticLingoLogic.PANELS_BY_ROOM[room][panel]
         for req_room in panel_object.required_rooms:
@@ -92,7 +93,5 @@ def make_location_lambda(location: PlayerLocation, room_name: str, multiworld: M
                          player_logic: LingoPlayerLogic):
     if location.name == player_logic.MASTERY_LOCATION:
         return lambda state: state.lingo_can_use_mastery_location(multiworld, player)
-    elif location.name == player_logic.LEVEL_2_LOCATION:
-        return lambda state: state.lingo_can_use_level_2_location(multiworld, player)
     else:
         return lambda state: state.lingo_can_use_location(location, room_name, multiworld, player, player_logic)

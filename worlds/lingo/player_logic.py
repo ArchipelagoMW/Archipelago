@@ -134,7 +134,8 @@ class LingoPlayerLogic:
             self.VICTORY_CONDITION = "Second Room - LEVEL 2"
             self.LEVEL_2_LOCATION = "Second Room - Unlock Level 2"
 
-            self.add_location("Second Room", PlayerLocation(self.LEVEL_2_LOCATION, None, []))
+            self.add_location("Second Room", PlayerLocation(self.LEVEL_2_LOCATION, None,
+                                                            [RoomAndPanel("Second Room", "LEVEL 2")]))
             self.EVENT_LOC_TO_ITEM[self.LEVEL_2_LOCATION] = "Victory"
 
         # Instantiate all real locations.
