@@ -21,6 +21,8 @@ local current_game_state = GAME_STATE_UNSAFE
 
 local received_items = {}
 
+local expected_rom_name = "pokemon emerald version / AP 1"
+
 -- TODO: Addresses may change any time the base rom is updated.
 -- Could pull addresses from extracted_data.json, but would have to rely
 -- on relative paths. Could have client send address info in payload, but
@@ -158,6 +160,31 @@ function main ()
         return
     elseif (isUntestedBizhawk) then
         print(untestedBizhawkMessage)
+    end
+
+    local rom_name_bytes = memory.read_bytes_as_array(0x108, 32, "ROM")
+    local rom_name = ""
+    
+    for i = 1, #rom_name_bytes do
+        if rom_name_bytes[i] == 0 then
+            break
+        end
+
+        rom_name = rom_name..string.char(rom_name_bytes[i])
+    end
+
+    if rom_name == "pokemon emerald version" then
+        print("ERROR: You appear to be running this with a vanilla copy of Pokemon Emerald. You need to obtain a "..
+            "patch file and create a patched ROM.")
+        return
+    elseif rom_name:sub(1, 23) == "pokemon emerald version" and rom_name ~= expected_rom_name then
+        print("ERROR: The patch file used to create this ROM is not compatible with this connector script. Verify "..
+            "that your apworld is the same version as the apworld of the generator.")
+        return
+    elseif rom_name ~= expected_rom_name then
+        print("ERROR: This script expects a patched version of Pokemon Emerald, but this ROM does not appear to be "..
+            "any version of Pokemon Emerald.")
+        return
     end
 
     local frame = 0
