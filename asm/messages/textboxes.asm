@@ -16,6 +16,7 @@ org 0x8080CD8
 
 
 .align 2
+; Initialize the former save tutorial, or end the level if nothing to show.
 ResultsScreenShowItems:
         push {lr}
 
@@ -35,6 +36,7 @@ ResultsScreenShowItems:
     .pool
 
 
+; Handle the 'sent item' message on the results screen.
 ResultsScreenMessageState:
         ldr r0, =usTrg_KeyPress1Frame
         ldrh r1, [r0]

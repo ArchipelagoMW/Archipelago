@@ -58,6 +58,8 @@ hook_branch 0x80790B6, 0x80790CC, 0x80790D8, ReadCD
 .endmacro
 
 
+; Look at each box variable and give its item if you've collected it. Your junk
+; items would've been collected in the level, so those are never given out.
 CheckLocations:
         push lr
         push r2, r4
@@ -97,9 +99,9 @@ CheckLocations:
 
 @room_entity_slot_id equ 0x18
 
-; Spawn the jewel piece or CD icon.
-; 0 = jewel pieces
-; 1 = CD
+; Spawn the jewel piece or CD icon when you've collected one of them.
+; Parameters:
+;     r0: 0 for jewel pieces, 1 for CD
 SpawnCollectionIndicator:
         push {r4, lr}
         mov r4, r0
@@ -149,6 +151,7 @@ SpawnCollectionIndicator:
     .pool
 
 
+; Copies a tile into VRAM from somewhere in ROM
 .macro set_tile, TileId, RomId
         ldr r0, =RomId
         str r0, [r1]
@@ -159,6 +162,12 @@ SpawnCollectionIndicator:
         ldr r0, [r1, #8]
 .endmacro
 
+
+; Replacement for the initialization function of the jewel piece collection
+; indicator. Unlike vanilla, this looks at what was just grabbed and causes it
+; to display only that. This is done because we want it to reflect the item, not
+; the level state. Since jewel pieces are progressive in the randomizer, it's
+; meaningless to display anything in the other three parts anyway.
 ReadJewelPieces:
         push {r7}
 
@@ -242,6 +251,9 @@ ReadJewelPieces:
     .pool
 
 
+; Replacement for the update function of the jewel piece icon. Like
+; ReadJewelPieces above, this uses the LastCollectedItemStatus rather than any
+; of the level status variables.
 UpdateJewelIcon:
         push {r4}
         mov r4, r2
@@ -295,6 +307,9 @@ JewelGraphicTable:
     .word EmptyJewel4Tile, 0x6011C00, CarryingJewel4Tile, HasJewel4Tile
 
 
+; Replacement for the initialization for the CD collection indicator. The main
+; difference from vanilla is that this uses the LastCollectedItemID and
+; LastCollectedItemStatus.
 ReadCD:
         push {r7}
 

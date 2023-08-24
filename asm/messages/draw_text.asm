@@ -18,6 +18,7 @@
 ; ----------------------
 
 
+; Create the sprite for the item received.
 PyramidScreenCreateReceivedItemOAM:
         ldr r0, =MultiworldState
         ldrb r0, [r0]
@@ -139,6 +140,7 @@ PyramidScreenCreateReceivedItemOAM:
     .pool
 
 
+; Load the background for the vanilla autosave tutorial.
 LoadMessageBG:
         ldr r0, =REG_BG3CNT
         ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(2) | bg_priority(0)
@@ -170,6 +172,7 @@ LoadMessageBG:
     .pool
 
 
+; Load the original pyramid background 3 graphics.
 LoadPyramidBG3:
         ldr r0, =REG_BG3CNT
         ldr r1, =bg_reg_32x32 | bg_sbb(0x1E) | bg_4bpp | bg_cbb(0) | bg_priority(0)
@@ -224,7 +227,7 @@ SetTreasurePalette:
 
 
 ; Create OAM data for text
-; Arguments:
+; Parameters:
 ;   r0: No gaps between objects if 0; otherwise, add spaces around the third object
 CreateTextOAM:
         push {r4-r6, lr}
@@ -306,7 +309,7 @@ CreateTextOAM:
 
 ; Copy text sprites into the sprite table. On encountering 0xFE, blank spaces
 ; will be copied into the remaining space.
-; Arguments:
+; Parameters:
 ;   r0: Pointer to 0xFE-terminated string
 ;   r1: Pointer to first letter destination
 ;   r2: Number of characters to copy.
@@ -370,7 +373,7 @@ LoadSpriteCharacter:
 
 
 ; Count up to the next 0xFE byte.
-; Arguments:
+; Parameters:
 ;  r0: Pointer to a WL4 encoded, 0xFE-terminated string
 ; Returns:
 ;  r0: The length of the string

@@ -76,7 +76,7 @@ GetItemAtLocation:
 ;   r0: Item ID
 ;   r1: Pointer to multiworld data
 ;
-; See Items.py
+; See items.py
 GiveItem:
         push {r4-r5, lr}
 

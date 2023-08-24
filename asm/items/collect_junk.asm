@@ -6,6 +6,8 @@
 .align 2
 
 
+; Give and apply queued junk items given by, for example, another player in the
+; multiworld.
 CollectJunkItems:
         push {lr}
 
@@ -78,7 +80,9 @@ CollectJunkItems:
     .pool
 
 
-; Refil Wario's health, by the amount in r0
+; Refill Wario's health by a specified amount
+; Parameters:
+;     r0: Amount of health to restore
 GiveWarioHearts:
         push lr
         push r4

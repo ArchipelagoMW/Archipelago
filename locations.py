@@ -265,10 +265,8 @@ class WL4Location(Location):
     def level_offset(self):
         return self.passage * 4 + self.level
 
-
 def get_level_locations(passage: Passage, level: int):
     return filter(lambda l: location_table[l].level_id() == (passage, level), location_table)
-
 
 def setup_locations(world: MultiWorld, player: int):
     return {name for name in location_name_to_id

@@ -41,11 +41,6 @@ hook_branch 0x802A378, 0x802A388, 0x802A3E6, LoadRandomItemAnimation  ; 0x8B Ful
 
 .align 2
 ; Check if this box has been opened before and release the item if it hasn't.
-;
-; In the past, this specifically changed the full health box because that one
-; releases its item unconditionally in vanilla. While changing all the boxes is
-; redundant for now, this opens up the possibility to apply or send native traps
-; as soon as the box opens rather than hide behind an item's appearance.
 SpawnRandomizedItemFromBox:
         push r4-r7, lr
         sub sp, sp, #4
@@ -146,7 +141,8 @@ SpawnRandomizedItemFromBox:
     .pool
 
 
-
+; Load the appropriate animation for a randomized item found in a box. The
+; item used and resulting animation chosen is based on the item's entity ID.
 LoadRandomItemAnimation:
         push r4-r6, lr
         ldr r4, =CurrentEnemyData
@@ -222,6 +218,9 @@ LoadRandomItemAnimation:
         .word APLogoAnm      ; Archipelago item
 
 
+; Collect this item. If it's your own junk item, it gets immediately given.
+; Otherwise, this marks the item as collected so that it can be properly given
+; to you or another player when you escape the level.
 CollectRandomItem:
         push r4-r6, lr
 

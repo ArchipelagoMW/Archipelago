@@ -13,6 +13,8 @@ hook 0x8081262, 0x8081284, SeisanSaveFullHealthItem
 .align 2
 
 
+; Check the appropriate bit in the level save to determine whether the full
+; health item box has been collected already.
 ItemGetFlagFullHealth:
     ; Load level state flags into r1
         add r1, r4, r6
@@ -54,7 +56,7 @@ ItemGetFlagFullHealth:
     .pool
 
 
-; Add the full health item to the save routine
+; Save the appropriate item data flag for the full health item box.
 SeisanSaveFullHealthItem:
         ldr r3, =LevelStatusTable
         ldrb r1, [r6]
