@@ -14,6 +14,7 @@ from .options import StardewValleyOptions, TrapItems, FestivalLocations, Exclude
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
+from .strings.ap_names.event_names import Event
 
 ITEM_CODE_OFFSET = 717000
 
@@ -114,8 +115,9 @@ def load_item_csv():
 
 
 events = [
-    ItemData(None, "Victory", ItemClassification.progression),
-    ItemData(None, "Month End", ItemClassification.progression),
+    ItemData(None, Event.victory, ItemClassification.progression),
+    ItemData(None, Event.month_end, ItemClassification.progression),
+    ItemData(None, Event.can_construct_buildings, ItemClassification.progression),
 ]
 
 all_items: List[ItemData] = load_item_csv() + events
@@ -168,6 +170,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items = []
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
+    items.append(item_factory("Progressive Movie Theater"))  # It is a community reward, but we need two of them
 
     create_backpack_items(item_factory, options, items)
     create_weapons(item_factory, world_options, items)

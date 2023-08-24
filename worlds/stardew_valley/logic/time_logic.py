@@ -1,5 +1,6 @@
 from .received_logic import ReceivedLogic
 from ..stardew_rule import StardewRule
+from ..strings.ap_names.event_names import Event
 
 MAX_MONTHS = 12
 
@@ -14,7 +15,7 @@ class TimeLogic:
 
     def has_lived_months(self, number: int) -> StardewRule:
         number = max(0, min(number, MAX_MONTHS))
-        return self.received("Month End", number)
+        return self.received(Event.month_end, number)
 
     def has_lived_max_months(self) -> StardewRule:
         return self.has_lived_months(MAX_MONTHS)

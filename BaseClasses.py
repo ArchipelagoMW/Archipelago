@@ -664,6 +664,7 @@ class CollectionState():
                 self.collect(item, True)
 
     def update_reachable_regions(self, player: int):
+        new_connection: bool = True
         self.stale[player] = False
         reachable_regions = self.reachable_regions[player]
         blocked_connections = self.blocked_connections[player]

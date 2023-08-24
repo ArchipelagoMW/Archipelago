@@ -46,6 +46,7 @@ from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.calendar_names import Weekday
@@ -341,6 +342,7 @@ class StardewLogic:
             Gift.bouquet: self.relationship.has_hearts(Generic.bachelor, 8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts(Generic.bachelor, 10) & self.buildings.has_house(1) & self.has(Consumable.rain_totem),
+            Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: (self.has(Fish.blobfish) & self.buildings.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months(),
             Gift.void_ghost_pendant: self.money.can_trade_at(Region.desert, Loot.void_essence, 200),
@@ -548,6 +550,8 @@ class StardewLogic:
             item_rule = True_()
         else:
             item_rule = self.received(seed.name)
+        if seed.name == Seed.coffee:
+            item_rule = item_rule & self.has_traveling_merchant(3)
         season_rule = self.season.has_any(seed.seasons)
         region_rule = self.region.can_reach_all(seed.regions)
         currency_rule = self.money.can_spend(1000)
@@ -609,6 +613,9 @@ class StardewLogic:
         return self.has(Machine.furnace) & self.has(item)
 
     def has_traveling_merchant(self, tier: int = 1):
+        if tier <= 0:
+            return True_()
+        tier = min(7, max(1, tier))
         traveling_merchant_days = [f"Traveling Merchant: {day}" for day in Weekday.all_days]
         return self.received(traveling_merchant_days, tier)
 
@@ -875,4 +882,10 @@ class StardewLogic:
                (include_qi or LocationTags.REQUIRES_QI_ORDERS not in location.tags):
                 all_items_to_ship.append(location.name[len(shipsanity_prefix):])
         return self.buildings.has_building(Building.shipping_bin) & And([self.has(item) for item in all_items_to_ship])
+
+    def has_abandoned_jojamart(self) -> StardewRule:
+        return self.received(CommunityUpgrade.movie_theater, 1)
+
+    def has_movie_theater(self) -> StardewRule:
+        return self.received(CommunityUpgrade.movie_theater, 2)
 

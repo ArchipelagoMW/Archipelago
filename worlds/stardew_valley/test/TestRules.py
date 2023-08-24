@@ -121,6 +121,7 @@ class TestBuildingLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(self.world.logic.region.can_reach_location("Big Coop Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
@@ -138,6 +139,7 @@ class TestBuildingLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
         self.multiworld.state.collect(self.world.create_item("Progressive Coop"), event=True)
@@ -156,6 +158,7 @@ class TestBuildingLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
         self.multiworld.state.collect(self.world.create_item("Month End"), event=True)
+        self.multiworld.state.collect(self.world.create_item("Can Construct Buildings"), event=True)
         self.assertFalse(self.world.logic.region.can_reach_location("Big Shed Blueprint")(self.multiworld.state),
             f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 

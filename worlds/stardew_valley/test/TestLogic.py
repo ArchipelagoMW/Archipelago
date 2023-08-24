@@ -1,7 +1,6 @@
 import unittest
 
 from . import SVTestBase, setup_solo_multiworld
-from .. import StardewValleyWorld
 from ..data.bundle_data import all_bundle_items_except_money
 from ..stardew_rule import MISSING_ITEM, False_
 

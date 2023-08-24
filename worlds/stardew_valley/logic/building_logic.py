@@ -7,6 +7,7 @@ from .region_logic import RegionLogic
 from .. import options
 from ..stardew_rule import StardewRule, True_, False_, Has
 from ..strings.artisan_good_names import ArtisanGood
+from ..strings.ap_names.event_names import Event
 from ..strings.building_names import Building
 from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
@@ -60,7 +61,7 @@ class BuildingLogic:
         self.building_rules.update(new_rules)
 
     def has_building(self, building: str) -> StardewRule:
-        carpenter_rule = self.region.can_reach(Region.carpenter)
+        carpenter_rule = self.received(Event.can_construct_buildings)
         if self.building_option == options.BuildingProgression.option_vanilla:
             return Has(building, self.building_rules) & carpenter_rule
 

@@ -37,7 +37,7 @@ vanilla_bundles = {
     "Bulletin Board/33": "Enchanter's/O 336 5/725 1 0 348 1 0 446 1 0 637 1 0/1",
     "Bulletin Board/34": "Dye/BO 25 1/420 1 0 397 1 0 421 1 0 444 1 0 62 1 0 266 1 0/6",
     "Bulletin Board/35": "Fodder/BO 104 1/262 10 0 178 10 0 613 3 0/3",
-    # "Abandoned Joja Mart/36": "The Missing//348 1 1 807 1 0 74 1 0 454 5 2 795 1 2 445 1 0/1/5"
+    "Abandoned Joja Mart/36": "The Missing//348 1 1 807 1 0 74 1 0 454 5 2 795 1 2 445 1 0/1/5"
 }
 
 
@@ -204,6 +204,7 @@ def shuffle_bundles_thematically(random: Random, bundles: Dict[str, Bundle]):
     shuffle_fish_tank_thematically(random, bundles)
     shuffle_boiler_room_thematically(random, bundles)
     shuffle_bulletin_board_thematically(random, bundles)
+    shuffle_abandoned_jojamart_thematically(random, bundles)
 
 
 def shuffle_crafts_room_bundle_thematically(random: Random, bundles: Dict[str, Bundle]):
@@ -245,6 +246,10 @@ def shuffle_bulletin_board_thematically(random: Random, bundles: Dict[str, Bundl
     bundles["Field Research Bundle"].randomize_requirements(random, field_research_items)
     bundles["Fodder Bundle"].randomize_requirements(random, fodder_items)
     bundles["Enchanter's Bundle"].randomize_requirements(random, enchanter_items)
+
+
+def shuffle_abandoned_jojamart_thematically(random: Random, bundles: Dict[str, Bundle]):
+    bundles["The Missing Bundle"].randomize_requirements(random, missing_bundle_items)
 
 
 def shuffle_vault_amongst_themselves(random: Random, bundles: Dict[str, Bundle]):

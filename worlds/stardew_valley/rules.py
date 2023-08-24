@@ -214,6 +214,13 @@ def set_entrance_rules(logic: StardewLogic, multi_world, player, world_options: 
                              logic.wallet.has_rusty_key().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.town_to_sewer, player),
                              logic.wallet.has_rusty_key().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_abandoned_jojamart, player),
+                             logic.has_abandoned_jojamart().simplify())
+    movie_theater_rule = logic.has_movie_theater().simplify()
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_movie_theater, player),
+                             movie_theater_rule)
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.purchase_movie_ticket, player),
+                             movie_theater_rule)
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.take_bus_to_desert, player),
                              logic.received("Bus Repair").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_skull_cavern, player),
