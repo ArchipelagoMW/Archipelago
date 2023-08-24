@@ -40,7 +40,7 @@ item_table: List[ItemDict] = [
     {"name": "Walkie Talkie", "id": base_id + 27, "count": 1, "classification": ItemClassification.useful},
     
     # Not in the item pool for now
-    #{"name": "Boating Manual", "id": base_id + 29, "count": 1, "classification": ItemClassification.filler},
+    #{"name": "Boating Manual", "id": base_id + ~, "count": 1, "classification": ItemClassification.filler},
 
     # Different Coin Amounts (Fillers)
     {"name": "7 Coins", "id": base_id + 28, "count": 3, "classification": ItemClassification.filler},

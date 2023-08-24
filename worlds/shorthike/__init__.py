@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from BaseClasses import Region, Location, Item, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_table, group_table
+from .Items import item_table, group_table, base_id
 from .Locations import location_table
 from .Rules import create_rules
 from .Options import short_hike_options
@@ -9,8 +9,6 @@ from .Options import short_hike_options
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
 
-base_loc_id = 81000
-base_item_id = 82000
 class ShortHikeWorld(World):
     """
     A Short Hike is a relaxing adventure set on the islands of Hawk Peak. Fly and climb using Claire's wings and Golden Feathers
@@ -40,7 +38,7 @@ class ShortHikeWorld(World):
 
     def create_item(self, name: str) -> "ShortHikeItem":
         item_id: int = self.item_name_to_id[name]
-        id = item_id - base_item_id - 1
+        id = item_id - base_id - 1
 
         return ShortHikeItem(name, item_table[id]["classification"], item_id, player=self.player)
 

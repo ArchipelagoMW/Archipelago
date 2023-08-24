@@ -6,6 +6,8 @@ from BaseClasses import CollectionState
 def create_rules(self, location_table):
     world = self.multiworld
     player = self.player
+
+    # Shovel Rules
     for loc in location_table:
         if loc["needsShovel"]:
             forbid_item(world.get_location(loc["name"], player), "Toy Shovel", player)
@@ -14,12 +16,20 @@ def create_rules(self, location_table):
                 lambda state: state.has("Shovel", self.player))
         if loc["purchase"]:
             forbid_items_for_player(world.get_location(loc["name"], player), self.item_name_groups['Coins'], player)
+    set_rule(world.get_location("Shovel Kid Trade", player),
+        lambda state: state.has("Toy Shovel", self.player))
+
+    # Fishing Rules
     set_rule(world.get_location("Catch All Fish Reward", player),
         lambda state: state.has("Fishing Journal", self.player))
     set_rule(world.get_location("Catch 3 Fish Reward", player),
         lambda state: state.has("Fishing Rod", self.player))
     set_rule(world.get_location("Catch Fish with Permit", player),
         lambda state: state.has("Fishing Rod", self.player))
+    set_rule(world.get_location("Catch All Fish Reward", player),
+        lambda state: state.has("Fishing Rod", self.player))
+
+    # Misc Rules
     set_rule(world.get_location("Return Camping Permit", player),
         lambda state: state.has("Camping Permit", self.player))
     set_rule(world.get_location("Boat Challenge Reward", player),
