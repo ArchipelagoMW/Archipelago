@@ -32,7 +32,7 @@ from .types import Box, ItemType, Passage
 #  - 3 = Single heart damage
 
 
-def ap_id_from_wl4_data(data: ItemData):
+def ap_id_from_wl4_data(data: ItemData) -> int:
     cat, itemid, _ = data
     if cat == ItemType.EVENT or itemid == None:
         return None
@@ -48,21 +48,31 @@ def ap_id_from_wl4_data(data: ItemData):
         raise ValueError(f'Unexpected WL4 item type: {data[0]}')
 
 
-def wl4_data_from_ap_id(ap_id) -> Tuple[str, ItemData]:
+def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
     val = ap_id - ap_id_offset
-    if val >> 5 == 0:
+    if val >> 6 == 0:
         passage = (val & 0x1C) >> 2
-        quad = val & 3
-        return tuple(filter(lambda d: d[0] == quad and d[1] == passage, item_table.items()))
-    elif val >> 5 == 1:
-        passage = (val & 0x1C) >> 2
-        level = val & 3
-        return tuple(filter(lambda d: d[0] == ItemType.CD and d[1] == (passage, level), item_table.items()))
+        if val >> 5 == 0:
+            quad = val & 3
+            candidates = tuple(filter(lambda d: d[1][0] == ItemType.JEWEL and
+                                                d[1][1][0] == passage and
+                                                d[1][1][1] == quad,
+                                      item_table.items()))
+        elif val >> 5 == 1:
+            level = val & 3
+            candidates = tuple(filter(lambda d: d[1][0] == ItemType.CD and
+                                                d[1][1] == (passage, level),
+                                      item_table.items()))
     elif val >> 4 == 4:
-        item = val & 0xF
-        return tuple(filter(lambda d: d[0] == ItemType.ITEM and d[1] == item, item_table.items()))
+        candidates = tuple(filter(lambda d: d[1][0] == ItemType.ITEM and
+                                            d[1][1] == val,
+                                  item_table.items()))
     else:
+        candidates = ()
+
+    if not candidates:
         raise ValueError(f'Could not find WL4 item ID: {ap_id}')
+    return candidates[0]
 
 
 class WL4Item(Item):
