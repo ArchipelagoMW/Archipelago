@@ -313,36 +313,27 @@ async def patch_and_run_game(wl4_path: Path):
 
     asyncio.create_task(run_game(patched_rom_file))
 
-if __name__ == '__main__':
-    Utils.init_logging('WL4Client')
 
-    async def main():
-        multiprocessing.freeze_support()
-        parser = get_base_parser()
-        parser.add_argument('patch_file', default='', type=Path, nargs='?',
-                            help='Path to a WL4 AP patch file')
-        args = parser.parse_args()
-        if args.patch_file:
-            asyncio.create_task(patch_and_run_game(args.patch_file))
+async def launch():
+    multiprocessing.freeze_support()
+    parser = get_base_parser()
+    parser.add_argument('patch_file', default='', type=Path, nargs='?',
+                        help='Path to a WL4 AP patch file')
+    args = parser.parse_args()
+    if args.patch_file:
+        asyncio.create_task(patch_and_run_game(args.patch_file))
 
-        ctx = WL4Context(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name='Server Loop')
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
+    ctx = WL4Context(args.connect, args.password)
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name='Server Loop')
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
 
-        ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name='GBA Sync')
-        await ctx.exit_event.wait()
-        ctx.server_address = None
+    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name='GBA Sync')
+    await ctx.exit_event.wait()
+    ctx.server_address = None
 
-        await ctx.shutdown()
+    await ctx.shutdown()
 
-        if ctx.gba_sync_task:
-            await ctx.gba_sync_task
-
-    import colorama
-
-    colorama.init()
-
-    asyncio.run(main())
-    colorama.deinit()
+    if ctx.gba_sync_task:
+        await ctx.gba_sync_task
