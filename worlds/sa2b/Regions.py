@@ -1145,6 +1145,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
         LocationName.dry_lagoon_animal_8,
         LocationName.dry_lagoon_animal_9,
         LocationName.dry_lagoon_animal_10,
+        LocationName.dry_lagoon_animal_11,
         LocationName.dry_lagoon_upgrade,
     ]
     dry_lagoon_region = create_region(multiworld, player, active_locations, LocationName.dry_lagoon_region,

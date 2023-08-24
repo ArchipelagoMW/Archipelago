@@ -1066,6 +1066,7 @@ animal_location_table = {
     LocationName.final_rush_animal_11: 0xFF0C4F,
 
     LocationName.iron_gate_animal_11: 0xFF0C50,
+    LocationName.dry_lagoon_animal_11: 0xFF0C51,
     LocationName.sand_ocean_animal_11: 0xFF0C52,
     LocationName.radical_highway_animal_11: 0xFF0C53,
     LocationName.lost_colony_animal_11: 0xFF0C55,
