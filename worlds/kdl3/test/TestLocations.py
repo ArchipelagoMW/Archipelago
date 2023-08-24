@@ -38,9 +38,9 @@ class TestLocations(KDL3TestBase):
     def run_location_test(self, location: str, itempool: typing.List[str]):
         items = itempool.copy()
         while len(itempool) > 0:
-            assert not self.can_reach_location(location)
+            self.assertFalse(self.can_reach_location(location), str(self.multiworld.seed))
             self.collect_by_name(itempool.pop())
-        assert self.can_reach_location(location)
+        self.assertTrue(self.can_reach_location(location), str(self.multiworld.seed))
         self.remove(self.get_items_by_name(items))
 
 
@@ -59,11 +59,10 @@ class TestShiro(KDL3TestBase):
     }
 
     def testShiro(self):
-        assert not self.can_reach_location("Iceberg 5 - Shiro")
+        self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))
         self.collect_by_name("Nago")
-        assert not self.can_reach_location("Iceberg 5 - Shiro")
+        self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))
         # despite Shiro only requiring Nago for logic, it cannot be in logic because our two accessible stages
         # do not actually give the player access to Nago, thus we need Kine to pass 2-5
         self.collect_by_name("Kine")
-        assert self.can_reach_location("Iceberg 5 - Shiro")
-
+        self.assertTrue(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))
