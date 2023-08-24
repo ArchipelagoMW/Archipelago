@@ -100,6 +100,9 @@ class TunicWorld(World):
             elif self.multiworld.keys_behind_bosses[self.player].value and item_name in hexagon_locations.keys():
                 self.multiworld.get_location(hexagon_locations[item_name], self.player)\
                     .place_locked_item(self.create_item(item_name))
+            elif (item_name == "Sword Upgrade" and not self.multiworld.sword_progression[self.player].value)\
+                    or (item_name in ["Stick", "Sword"] and self.multiworld.sword_progression[self.player].value):
+                continue
             else:
                 for i in range(0, item_data.quantity_in_item_pool):
                     items.append(self.create_item(item_name))
@@ -137,8 +140,6 @@ class TunicWorld(World):
 
     def fill_slot_data(self) -> Dict[str, any]:
         # Find items for generating hints in-game
-        stick = self.multiworld.find_item("Stick", self.player).item
-        swords = self.multiworld.find_item_locations("Sword", self.player, False)
         stundagger = self.multiworld.find_item("Magic Dagger", self.player).item
         techbow = self.multiworld.find_item("Magic Wand", self.player).item
         grapple = self.multiworld.find_item("Magic Orb", self.player).item
@@ -165,9 +166,6 @@ class TunicWorld(World):
             "sword_progression": self.multiworld.sword_progression[self.player].value,
             "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
             "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
-            "Stick": [stick.location.name, stick.location.player],
-            "Sword": [swords[0].item.location.name, swords[0].item.location.player, swords[1].item.location.name,
-                      swords[1].item.location.player, swords[2].item.location.name, swords[2].item.location.player],
             "Magic Dagger": [stundagger.location.name, stundagger.location.player],
             "Magic Wand": [techbow.location.name, techbow.location.player],
             "Magic Orb": [grapple.location.name, grapple.location.player],
@@ -187,6 +185,20 @@ class TunicWorld(World):
             "Hero Relic - MP": [sp_relic.location.name, sp_relic.location.player],
             "Hero Relic - SP": [mp_relic.location.name, mp_relic.location.player],
         }
+
+        if self.multiworld.sword_progression[self.player].value:
+            swords = self.multiworld.find_item_locations("Sword Upgrade", self.player, False)
+            slot_data["Sword Upgrade"] = [swords[0].item.location.name, swords[0].item.location.player,
+                                          swords[1].item.location.name, swords[1].item.location.player,
+                                          swords[2].item.location.name, swords[2].item.location.player,
+                                          swords[3].item.location.name, swords[3].item.location.player]
+        else:
+            stick = self.multiworld.find_item("Stick", self.player).item
+            swords = self.multiworld.find_item_locations("Sword", self.player, False)
+            slot_data["Stick"] = [stick.location.name, stick.location.player],
+            slot_data["Sword"] = [swords[0].item.location.name, swords[0].item.location.player,
+                                  swords[1].item.location.name, swords[1].item.location.player,
+                                  swords[2].item.location.name, swords[2].item.location.player],
 
         if not self.multiworld.hexagon_quest[self.player].value:
             hexagon_red = self.multiworld.find_item("Red Hexagon", self.player).item

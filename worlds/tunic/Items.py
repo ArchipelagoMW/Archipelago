@@ -34,6 +34,7 @@ item_table: Dict[str, TunicItemData] = {
     "Fairy": TunicItemData(ItemClassification.progression, 20),
     "Stick": TunicItemData(ItemClassification.progression, 1, "weapons"),
     "Sword": TunicItemData(ItemClassification.progression, 3, "weapons"),
+    "Sword Upgrade": TunicItemData(ItemClassification.progression, 4, "weapons"),
     "Magic Wand": TunicItemData(ItemClassification.progression, 1, "weapons"),
     "Magic Dagger": TunicItemData(ItemClassification.progression, 1),
     "Magic Orb": TunicItemData(ItemClassification.progression, 1),

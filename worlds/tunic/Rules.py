@@ -83,6 +83,10 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     holy_cross_amount = 1
     ice_rod_amount = 1
 
+    if multiworld.sword_progression[player].value:
+        stick = "Sword Upgrade"
+        sword = "Sword Upgrade"
+
     ability_shuffle = multiworld.ability_shuffling[player].value
 
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
