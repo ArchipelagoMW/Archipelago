@@ -4,8 +4,9 @@ from argparse import Namespace
 from BaseClasses import MultiWorld, PlandoOptions
 from test.TestBase import WorldTestBase
 from test.general import gen_steps
-from ... import AutoWorld
-from ...AutoWorld import call_all
+from worlds import AutoWorld
+from worlds.AutoWorld import call_all
+
 
 class KDL3TestBase(WorldTestBase):
     game = "Kirby's Dream Land 3"
