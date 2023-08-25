@@ -81,7 +81,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      rule=lambda state: state.has("Fire Element Medal", player)),
         LocationData('Breaker Room', 'Breaker Room Clear Chest', 8048,
                      rule=lambda state: state.has("Breaker Key", player)),
-        LocationData('The Well', 'The Well Key', 8349),
+        LocationData('The Well', 'The Well Key', 8049),
 
         # Ghost Affected Clear Chests. Rules applied to region entrances
         LocationData('Wardrobe', 'Wardrobe Shelf Key', 8050),
