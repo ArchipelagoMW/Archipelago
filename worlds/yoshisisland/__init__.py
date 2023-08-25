@@ -260,6 +260,65 @@ class YIWorld(World):
             excluded_items.add('Bonus 6')
 
         return excluded_items
+
+    def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, player: int, name: str) -> Item:
+        data = item_table[name]
+        if data.useful:
+            classification = ItemClassification.useful
+        elif data.progression:
+            classification = ItemClassification.progression
+        elif data.trap:
+            classification = ItemClassification.trap
+        else:
+            classification = ItemClassification.filler
+        item = Item(name, classification, data.code, player)
+
+        if not item.advancement:
+            return item
+
+        if (name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0):
+            item.classification = ItemClassification.useful
+
+        if (name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0)):
+            item.classification = ItemClassification.useful
+
+        if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1):
+            item.classification = ItemClassification.useful
+
+        if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
+            item.classification = ItemClassification.progression
+
+        if (name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0):
+            if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
+                item.classification = ItemClassification.useful
+            else:
+                item.classification = ItemClassification.progression_skip_balancing
+                self.luigi_count += 1
+
+        return item
+
+    def generate_filler(self, multiworld: MultiWorld, player: int, locked_locations: List[str],
+                                        location_cache: List[Location], pool: List[Item]):
+        if self.playergoal == 1:
+            for i in range(multiworld.luigi_pieces_in_pool[player].value):
+                item = create_item_with_correct_settings(self, multiworld, player, "Piece of Luigi")
+                pool.append(item)
+
+        for _ in range(len(multiworld.get_unfilled_locations(player)) - len(pool) - 16):
+            item = create_item_with_correct_settings(self, multiworld, player, self.get_filler_item_name())
+            pool.append(item)
+
+    def get_item_pool(self, multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
+        pool: List[Item] = []
+
+        for name, data in item_table.items():
+            if name not in excluded_items:
+                for _ in range(data.count):
+                    item = create_item_with_correct_settings(self, multiworld, player, name)
+                    pool.append(item)
+
+        return pool
+
         
 
 
@@ -276,9 +335,9 @@ class YIWorld(World):
 
         excluded_items = self.get_excluded_items(self.multiworld, self.player)
 
-        pool = get_item_pool(self, self.multiworld, self.player, excluded_items)
+        pool = self.get_item_pool(self.multiworld, self.player, excluded_items)
 
-        generate_filler(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
+        self.generate_filler(self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
 
         self.multiworld.itempool += pool
 
@@ -314,68 +373,3 @@ class YIWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
-def generate_filler(self: YIWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
-                                    location_cache: List[Location], pool: List[Item]):
-    if self.playergoal == 1:
-        for i in range(multiworld.luigi_pieces_in_pool[player].value):
-            item = create_item_with_correct_settings(self, multiworld, player, "Piece of Luigi")
-            pool.append(item)
-
-    for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 16):
-        item = create_item_with_correct_settings(self, self.multiworld, player, self.get_filler_item_name())
-        pool.append(item)
-    
-
-    
-
-
-
-
-
-def get_item_pool(self: YIWorld, multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
-    pool: List[Item] = []
-
-    for name, data in item_table.items():
-        if name not in excluded_items:
-            for _ in range(data.count):
-                item = create_item_with_correct_settings(self, multiworld, player, name)
-                pool.append(item)
-
-    return pool
-
-def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, player: int, name: str) -> Item:
-    data = item_table[name]
-    if data.useful:
-        classification = ItemClassification.useful
-    elif data.progression:
-        classification = ItemClassification.progression
-    elif data.trap:
-        classification = ItemClassification.trap
-    else:
-        classification = ItemClassification.filler
-    item = Item(name, classification, data.code, player)
-
-    if not item.advancement:
-        return item
-
-    if (name == 'Car Morph' and get_option_value(multiworld, player, "stage_logic") != 0):
-        item.classification = ItemClassification.useful
-
-    if (name == 'Secret Lens' and (get_option_value(multiworld, player, "hidden_object_visibility") >= 2 or get_option_value(multiworld, player, "stage_logic") != 0)):
-        item.classification = ItemClassification.useful
-
-    if (name in ["Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"] and get_option_value(multiworld, player, "minigame_checks") <= 1):
-        item.classification = ItemClassification.useful
-
-    if (name in ["Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'] and get_option_value(multiworld, player, "item_logic") == 1):
-        item.classification = ItemClassification.progression
-
-    if (name == 'Piece of Luigi' and get_option_value(multiworld, player, "goal") != 0):
-        if self.luigi_count >= multiworld.luigi_pieces_required[player].value:
-            item.classification = ItemClassification.useful
-        else:
-            item.classification = ItemClassification.progression_skip_balancing
-            self.luigi_count += 1
-
-    return item
