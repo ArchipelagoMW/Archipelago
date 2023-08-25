@@ -1,6 +1,0 @@
-include "TriggerLibs/natives"
-include "AP_Triggers_PlayerUpgradeLevelBiConsumer_h"
-
-void ap_triggers_PlayerUpgradeLevelBiConsumer_sig(int player, int level) {
-    
-}

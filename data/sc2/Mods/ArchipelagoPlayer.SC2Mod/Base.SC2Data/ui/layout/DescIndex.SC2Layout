@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<Desc>
-    <Include path="UI/Layout/Custom/ap_hots_unitstatus.SC2Layout"/>
-    <Include path="UI/Layout/ap_nova_unitstatus.SC2Layout"/>
-</Desc>

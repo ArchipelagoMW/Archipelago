@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Catalog>
-    <CUnit id="CheckStationVerticalOpened">
-        <FlagArray index="Invulnerable" value="1"/>
-    </CUnit>
-    <CUnit id="ArtifactPiece1">
-        <Height value="0.2"/>
-    </CUnit>
-</Catalog>
