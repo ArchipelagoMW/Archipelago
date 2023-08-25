@@ -122,7 +122,7 @@ def set_rules(world, player: int, area_connections):
     add_rule(world.get_location("MIPS 1", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS1Cost[player].value))
     add_rule(world.get_location("MIPS 2", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, world.MIPS2Cost[player].value))
 
-    if world.CompletionType[player].value == 0:
+    if world.CompletionType[player] == "Last_Bowser_Stage":
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
     elif world.CompletionType[player].value == 1:
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
