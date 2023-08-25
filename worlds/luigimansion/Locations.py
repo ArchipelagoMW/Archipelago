@@ -185,7 +185,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                          rule=lambda state: state.has("Water Element Medal", player))
         )
 
-    # Adds the myriad shackable objects as locations
+    # Adds the myriad shakable objects as locations
     if not multiworld or is_option_enabled(multiworld, player, "Interactables"):
         location_table += (
             LocationData('Foyer', 'Foyer Dresser', 8093),
@@ -727,7 +727,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                          rule=lambda state: state.has_group("Medal", player)),
             LocationData('Ballroom', 'The Floating Whirlindas, the Dancing Couple', 8658),
             LocationData('Butler\'s Room', 'Shivers, the Wandering Butler', 8659,
-                         rule=lambda state: state.has("Fire Element Medal", player)),
+                         rule=lambda state: state.has("Fire Element Medal", player)
+                                            and state.has("Boo Release", player)),
             LocationData('Fortune-Teller\'s Room', 'Madame Clairvoya, the Freaky Fortune-Teller', 8660,
                          rule=lambda state: state.has_group("Mario Item", player, multiworld.MarioItems[player])),
             LocationData('Conservatory', ' Melody Pianissima, the Beautiful Pianist', 8661),
@@ -777,7 +778,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Study', 'Study Cheese Gold Mouse', 8691),
             LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Cheese Gold Mouse', 8692),
             LocationData('Dining Room', 'Dining Room Cheese Gold Mouse', 8693),
-            LocationData('Tea Room','Tea Room Cheese Gold Mouse', 8694),
+            LocationData('Tea Room', 'Tea Room Cheese Gold Mouse', 8694),
             LocationData('Safari Room', 'Safari Room Cheese Gold Mouse', 8695),
             LocationData('1F Hallway', '1F Hallway Chance Gold Mouse', 8696),
             LocationData('Kitchen', 'Kitchen Chance Gold Mouse', 8697),
@@ -807,7 +808,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Hidden Room', 'Hidden Room Boo', 8710, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Boo', 8711,
                          rule=lambda state: state.has_group("Mario Item", player, multiworld.MarioItems[player])
-                         and state.has("Boo Radar", player)),
+                                            and state.has("Boo Radar", player)),
             LocationData('Mirror Room', 'Mirror Room Boo', 8712, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Ballroom', 'Ballroom Boo', 8713, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Storage Room', 'Storage Room Boo', 8714, rule=lambda state: state.has("Boo Radar", player)),
@@ -816,7 +817,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Kitchen', 'Kitchen Boo', 8716, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Conservatory', 'Conservatory Boo', 8717, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Rec Room', 'Rec Room Boo', 8718, rule=lambda state: state.has("Boo Radar", player)),
-            LocationData('Billiards Room', 'Billiards Room Boo', 8719, rule=lambda state: state.has("Boo Radar", player)),
+            LocationData('Billiards Room', 'Billiards Room Boo', 8719,
+                         rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Projection Room', 'Projection Room Boo', 8720,
                          rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Tea Room', 'Tea Room Boo', 8721, rule=lambda state: state.has("Boo Radar", player)),
@@ -827,7 +829,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                             and state.has("Boo Radar", player)
                          ),
             LocationData('Guest Room', 'Guest Room Boo', 8724,
-                         rule=lambda state: state.has("Water Element Medal", player) and state.has("Boo Radar", player)),
+                         rule=lambda state: state.has("Water Element Medal", player) and state.has("Boo Radar",
+                                                                                                   player)),
             LocationData('Safari Room', 'Safari Room Boo', 8725, rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Artist\'s Studio', 'Artist\'s Studio Boo', 8726,
                          rule=lambda state: state.has("Boo Radar", player)),
@@ -835,8 +838,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Ceramics Studio', 'Ceramics Studio Boo', 8728,
                          rule=lambda state: state.has("Ice Element Medal", player)
                                             and state.has("Boo Radar", player)),
-            LocationData('Telephone Room', 'Telephone Room Boo', 8729, rule=lambda state: state.has("Boo Radar", player)),
-            LocationData('Clockwork Room', 'Clockwork Room Boo', 8730, rule=lambda state: state.has("Boo Radar", player)),
+            LocationData('Telephone Room', 'Telephone Room Boo', 8729,
+                         rule=lambda state: state.has("Boo Radar", player)),
+            LocationData('Clockwork Room', 'Clockwork Room Boo', 8730,
+                         rule=lambda state: state.has("Boo Radar", player)),
             LocationData('Astral Hall', 'Astral Hall Boo', 8731,
                          rule=lambda state: state.has("Fire Element Medal", player)
                                             and state.has("Boo Radar", player)),
@@ -880,8 +885,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             LocationData('Kitchen', 'Kitchen Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Conservatory', 'Conservatory Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Rec Room', 'Rec Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
-            LocationData('Billiards Room', 'Billiards Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
-            LocationData('Projection Room', 'Projection Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
+            LocationData('Billiards Room', 'Billiards Room Boo', None, "Boo",
+                         lambda state: state.has("Boo Radar", player)),
+            LocationData('Projection Room', 'Projection Room Boo', None, "Boo",
+                         lambda state: state.has("Boo Radar", player)),
             LocationData('Tea Room', 'Tea Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Nana\'s Room', 'Nana\'s Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Sitting Room', 'Sitting Room Boo', None, "Boo",
@@ -890,26 +897,29 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                             and state.has("Boo Radar", player)),
             LocationData('Guest Room', 'Guest Room Boo', None, "Boo",
                          rule=lambda state: state.has("Water Element Medal", player)
-                         and state.has("Boo Radar", player)),
+                                            and state.has("Boo Radar", player)),
             LocationData('Safari Room', 'Safari Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
-            LocationData('Artist\'s Studio', 'Artist\'s Studio Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
+            LocationData('Artist\'s Studio', 'Artist\'s Studio Boo', None, "Boo",
+                         lambda state: state.has("Boo Radar", player)),
             LocationData('Armory', 'Armory Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Ceramics Studio', 'Ceramics Studio Boo', None, "Boo",
                          rule=lambda state: state.has("Ice Element Medal", player)
-                         and state.has("Boo Radar", player)),
-            LocationData('Telephone Room', 'Telephone Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
-            LocationData('Clockwork Room', 'Clockwork Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
+                                            and state.has("Boo Radar", player)),
+            LocationData('Telephone Room', 'Telephone Room Boo', None, "Boo",
+                         lambda state: state.has("Boo Radar", player)),
+            LocationData('Clockwork Room', 'Clockwork Room Boo', None, "Boo",
+                         lambda state: state.has("Boo Radar", player)),
             LocationData('Astral Hall', 'Astral Hall Boo', None, "Boo",
                          rule=lambda state: state.has("Fire Element Medal", player)
-                         and state.has("Boo Radar", player)),
+                                            and state.has("Boo Radar", player)),
             LocationData('Breaker Room', 'Breaker Room Boo', None, "Boo",
                          rule=lambda state: state.has("Blackout", player)
-                         and state.has("Boo Radar", player)),
+                                            and state.has("Boo Radar", player)),
             LocationData('Cellar', 'Cellar Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Pipe Room', 'Pipe Room Boo', None, "Boo", lambda state: state.has("Boo Radar", player)),
             LocationData('Cold Storage', 'Cold Storage Boo', None, "Boo",
                          lambda state: state.has("Fire Element Medal", player)
-                         and state.has("Boo Radar", player))
+                                       and state.has("Boo Radar", player))
         )
     return tuple(location_table)
 
