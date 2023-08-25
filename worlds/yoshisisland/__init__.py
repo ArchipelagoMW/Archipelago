@@ -215,6 +215,51 @@ class YIWorld(World):
 
     def generate_early(self):
         setup_gamevars(self, self.multiworld, self.player)
+
+    
+    def get_excluded_items(self, multiworld: MultiWorld, player: int) -> Set[str]:
+        excluded_items: Set[str] = set()
+
+        starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate", "World 4 Gate", "World 5 Gate", "World 6 Gate"]
+
+        excluded_items.add(starting_gate[multiworld.starting_world[player].value])
+
+        if self.multiworld.shuffle_midrings[self.player] == 0:
+            excluded_items.add('Middle Ring')
+
+        if self.multiworld.add_secretlens[self.player] == 0:
+            excluded_items.add('Secret Lens')
+
+        if self.multiworld.extras_enabled[self.player] == 0:
+            excluded_items.add('Extra Panels')
+            excluded_items.add('Extra 1')
+            excluded_items.add('Extra 2')
+            excluded_items.add('Extra 3')
+            excluded_items.add('Extra 4')
+            excluded_items.add('Extra 5')
+            excluded_items.add('Extra 6')
+
+        if self.multiworld.split_extras[self.player] == 1:
+            excluded_items.add('Extra Panels')
+        else:
+            excluded_items.add('Extra 1')
+            excluded_items.add('Extra 2')
+            excluded_items.add('Extra 3')
+            excluded_items.add('Extra 4')
+            excluded_items.add('Extra 5')
+            excluded_items.add('Extra 6')
+
+        if self.multiworld.split_bonus[self.player] == 1:
+            excluded_items.add('Bonus Panels')
+        else:
+            excluded_items.add('Bonus 1')
+            excluded_items.add('Bonus 2')
+            excluded_items.add('Bonus 3')
+            excluded_items.add('Bonus 4')
+            excluded_items.add('Bonus 5')
+            excluded_items.add('Bonus 6')
+
+        return excluded_items
         
 
 
@@ -229,7 +274,7 @@ class YIWorld(World):
             self.multiworld.get_location("Match Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
 
 
-        excluded_items = get_excluded_items(self, self.multiworld, self.player)
+        excluded_items = self.get_excluded_items(self.multiworld, self.player)
 
         pool = get_item_pool(self, self.multiworld, self.player, excluded_items)
 
@@ -269,59 +314,6 @@ class YIWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
-def get_excluded_items(self: YIWorld, multiworld: MultiWorld, player: int) -> Set[str]:
-    excluded_items: Set[str] = set()
-    
-    if self.multiworld.starting_world[self.player] == 0:
-        excluded_items.add('World 1 Gate')
-    if self.multiworld.starting_world[self.player] == 1:
-        excluded_items.add('World 2 Gate')
-    if self.multiworld.starting_world[self.player] == 2:
-        excluded_items.add('World 3 Gate')
-    if self.multiworld.starting_world[self.player] == 3:
-        excluded_items.add('World 4 Gate')
-    if self.multiworld.starting_world[self.player] == 4:
-        excluded_items.add('World 5 Gate')
-    if self.multiworld.starting_world[self.player] == 5:
-        excluded_items.add('World 6 Gate')
-
-    if self.multiworld.shuffle_midrings[self.player] == 0:
-        excluded_items.add('Middle Ring')
-
-    if self.multiworld.add_secretlens[self.player] == 0:
-        excluded_items.add('Secret Lens')
-
-    if self.multiworld.extras_enabled[self.player] == 0:
-        excluded_items.add('Extra Panels')
-        excluded_items.add('Extra 1')
-        excluded_items.add('Extra 2')
-        excluded_items.add('Extra 3')
-        excluded_items.add('Extra 4')
-        excluded_items.add('Extra 5')
-        excluded_items.add('Extra 6')
-
-    if self.multiworld.split_extras[self.player] == 1:
-        excluded_items.add('Extra Panels')
-    else:
-        excluded_items.add('Extra 1')
-        excluded_items.add('Extra 2')
-        excluded_items.add('Extra 3')
-        excluded_items.add('Extra 4')
-        excluded_items.add('Extra 5')
-        excluded_items.add('Extra 6')
-
-    if self.multiworld.split_bonus[self.player] == 1:
-        excluded_items.add('Bonus Panels')
-    else:
-        excluded_items.add('Bonus 1')
-        excluded_items.add('Bonus 2')
-        excluded_items.add('Bonus 3')
-        excluded_items.add('Bonus 4')
-        excluded_items.add('Bonus 5')
-        excluded_items.add('Bonus 6')
-
-    return excluded_items
 
 def generate_filler(self: YIWorld, multiworld: MultiWorld, player: int, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):

@@ -56,22 +56,10 @@ def setup_gamevars(world, multiworld, player: int):
 
     world.boss_order = []
 
-    if multiworld.boss_shuffle[player].value == 0:
-        world.boss_order.append("Burt The Bashful's Boss Room")
-        world.boss_order.append("Salvo The Slime's Boss Room")
-        world.boss_order.append("Bigger Boo's Boss Room")
-        world.boss_order.append("Roger The Ghost's Boss Room")
-        world.boss_order.append("Prince Froggy's Boss Room")
-        world.boss_order.append("Naval Piranha's Boss Room")
-        world.boss_order.append("Marching Milde's Boss Room")
-        world.boss_order.append("Hookbill The Koopa's Boss Room")
-        world.boss_order.append("Sluggy The Unshaven's Boss Room")
-        world.boss_order.append("Raphael The Raven's Boss Room")
-        world.boss_order.append("Tap-Tap The Red Nose's Boss Room")
-    elif multiworld.boss_shuffle[player] == 1:
+    if multiworld.boss_shuffle[player] == 1:
         for i in range(11):
             multiworld.random.shuffle(boss_list)
-            world.boss_order = boss_list
+    world.boss_order = boss_list
 
     burt_pointers = [0x3D, 0x05, 0x63, 0x00]
     slime_pointers = [0x70, 0x04, 0x78, 0x00]
