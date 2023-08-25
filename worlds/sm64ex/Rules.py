@@ -124,7 +124,7 @@ def set_rules(world, player: int, area_connections):
 
     if world.CompletionType[player] == "Last_Bowser_Stage":
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Sky", 'Region', player)
-    elif world.CompletionType[player].value == 1:
+    elif world.CompletionType[player] == "All_Bowser_Stages":
         world.completion_condition[player] = lambda state: state.can_reach("Bowser in the Dark World", 'Region', player) and \
                                                            state.can_reach("Bowser in the Fire Sea", 'Region', player) and \
                                                            state.can_reach("Bowser in the Sky", 'Region', player)
