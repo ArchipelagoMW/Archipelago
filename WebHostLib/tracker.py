@@ -1268,7 +1268,7 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Progressive Infantry Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
         "Progressive Vehicle Upgrade": 110 + SC2WOL_ITEM_ID_OFFSET,
         "Progressive Ship Upgrade": 111 + SC2WOL_ITEM_ID_OFFSET,
-        "Progressive Upgrade": 112 + SC2WOL_ITEM_ID_OFFSET
+        "Progressive Weapon/Armor Upgrade": 112 + SC2WOL_ITEM_ID_OFFSET
     }
     grouped_item_replacements = {
         "Progressive Weapon Upgrade": ["Progressive Infantry Weapon", "Progressive Vehicle Weapon", "Progressive Ship Weapon"],
@@ -1277,7 +1277,7 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Progressive Vehicle Upgrade": ["Progressive Vehicle Weapon", "Progressive Vehicle Armor"],
         "Progressive Ship Upgrade": ["Progressive Ship Weapon", "Progressive Ship Armor"]
     }
-    grouped_item_replacements["Progressive Upgrade"] = grouped_item_replacements["Progressive Weapon Upgrade"] + grouped_item_replacements["Progressive Armor Upgrade"]
+    grouped_item_replacements["Progressive Weapon/Armor Upgrade"] = grouped_item_replacements["Progressive Weapon Upgrade"] + grouped_item_replacements["Progressive Armor Upgrade"]
     replacement_item_ids = {
         "Progressive Infantry Weapon": 100 + SC2WOL_ITEM_ID_OFFSET,
         "Progressive Infantry Armor": 102 + SC2WOL_ITEM_ID_OFFSET,

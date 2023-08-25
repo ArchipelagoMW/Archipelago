@@ -1,4 +1,0 @@
-﻿Unit/EditorPrefix/AP_Core_SupplyHolder=AP -
-Unit/EditorPrefix/AP_Core_Controller=AP -
-Upgrade/EditorPrefix/AP_Core_SupplyPerStack=AP Core -
-Upgrade/EditorPrefix/AP_Core_SupplyPerStack2=AP Core -

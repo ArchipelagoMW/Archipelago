@@ -48,13 +48,14 @@ victory_modulo: int = 100
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
 DATA_REPO_NAME = "ArchipelagoPlayerCompiledMaps"
+DATA_API_VERSION = "API2"
 
 
 # Data version file path.
 # This file is used to tell if the downloaded data are outdated
 # Associated with /download_data command
-def get_data_version_file():
-    return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Version.txt"
+def get_metadata_file():
+    return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Metadata.txt"
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
@@ -210,21 +211,21 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
-        if os.path.exists(get_data_version_file()):
-            with open(get_data_version_file(), "r") as f:
-                current_ver = f.read()
+        if os.path.exists(get_metadata_file()):
+            with open(get_metadata_file(), "r") as f:
+                metadata = f.read()
         else:
-            current_ver = None
+            metadata = None
 
-        tempzip, version = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME,
-                                                       current_version=current_ver, force_download=True)
+        tempzip, metadata = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION,
+                                                       metadata=metadata, force_download=True)
 
         if tempzip != '':
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
-                sc2_logger.info(f"Download complete. Version {version} installed.")
-                with open(get_data_version_file(), "w") as f:
-                    f.write(version)
+                sc2_logger.info(f"Download complete. Package installed.")
+                with open(get_metadata_file(), "w") as f:
+                    f.write(metadata)
             finally:
                 os.remove(tempzip)
         else:
@@ -312,11 +313,11 @@ class SC2Context(CommonContext):
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             maps_present = is_mod_installed_correctly()
-            if os.path.exists(get_data_version_file()):
-                with open(get_data_version_file(), "r") as f:
+            if os.path.exists(get_metadata_file()):
+                with open(get_metadata_file(), "r") as f:
                     current_ver = f.read()
                     sc2_logger.debug(f"Current version: {current_ver}")
-                if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, current_ver):
+                if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
             elif maps_present:
                 sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
@@ -655,7 +656,7 @@ def calculate_items(ctx: SC2Context) -> typing.List[int]:
         for amount in amounts:
             if completed >= amount:
                 upgrade_count += 1
-        # Equivalent to "Progressive Upgrade" item
+        # Equivalent to "Progressive Weapon/Armor Upgrade" item
         for bundled_number in upgrade_numbers[5]:
             accumulators[upgrade_flaggroup] += upgrade_count << bundled_number
 
@@ -1134,28 +1135,28 @@ class DllDirectory:
         return False
 
 
-def download_latest_release_zip(owner: str, repo: str, current_version: str = None, force_download=False) -> (str, str):
+def download_latest_release_zip(owner: str, repo: str, api_version: str, metadata: str = None, force_download=False) -> (str, str):
     """Downloads the latest release of a GitHub repo to the current directory as a .zip file."""
     import requests
 
     headers = {"Accept": 'application/vnd.github.v3+json'}
-    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
     r1 = requests.get(url, headers=headers)
     if r1.status_code == 200:
-        latest_version = r1.json()["tag_name"]
-        sc2_logger.info(f"Latest version: {latest_version}.")
+        latest_metadata = str(r1.json())
+        # sc2_logger.info(f"Latest version: {latest_metadata}.")
     else:
         sc2_logger.warning(f"Status code: {r1.status_code}")
         sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
         sc2_logger.warning(f"text: {r1.text}")
-        return "", current_version
+        return "", metadata
 
-    if (force_download is False) and (current_version == latest_version):
+    if (force_download is False) and (metadata == latest_metadata):
         sc2_logger.info("Latest version already installed.")
-        return "", current_version
+        return "", metadata
 
-    sc2_logger.info(f"Attempting to download version {latest_version} of {repo}.")
+    sc2_logger.info(f"Attempting to download latest version of API version {api_version} of {repo}.")
     download_url = r1.json()["assets"][0]["browser_download_url"]
 
     r2 = requests.get(download_url, headers=headers)
@@ -1163,24 +1164,24 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
         with open(f"{repo}.zip", "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")
-        return f"{repo}.zip", latest_version
+        return f"{repo}.zip", latest_metadata
     else:
         sc2_logger.warning(f"Status code: {r2.status_code}")
         sc2_logger.warning("Download failed.")
         sc2_logger.warning(f"text: {r2.text}")
-        return "", current_version
+        return "", metadata
 
 
-def is_mod_update_available(owner: str, repo: str, current_version: str) -> bool:
+def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: str) -> bool:
     import requests
 
     headers = {"Accept": 'application/vnd.github.v3+json'}
-    url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases/tags/{api_version}"
 
     r1 = requests.get(url, headers=headers)
     if r1.status_code == 200:
-        latest_version = r1.json()["tag_name"]
-        if current_version != latest_version:
+        latest_metadata = str(r1.json())
+        if metadata != latest_metadata:
             return True
         else:
             return False

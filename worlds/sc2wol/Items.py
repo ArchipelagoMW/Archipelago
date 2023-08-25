@@ -63,7 +63,7 @@ item_table = {
     "Progressive Infantry Upgrade": ItemData(109 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 2, quantity=3),
     "Progressive Vehicle Upgrade": ItemData(110 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 3, quantity=3),
     "Progressive Ship Upgrade": ItemData(111 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 4, quantity=3),
-    "Progressive Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
+    "Progressive Weapon/Armor Upgrade": ItemData(112 + SC2WOL_ITEM_ID_OFFSET, "Upgrade", 5, quantity=3),
 
     "Projectile Accelerator (Bunker)": ItemData(200 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 0, parent_item="Bunker"),
     "Neosteel Bunker (Bunker)": ItemData(201 + SC2WOL_ITEM_ID_OFFSET, "Armory 1", 1, parent_item="Bunker"),
@@ -251,7 +251,7 @@ item_table = {
     # This Filler item isn't placed by the generator yet unless plando'd
     "+2 Starting Supply": ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, quantity=0, classification=ItemClassification.filler),
     # This item is used to "remove" location from the game. Never placed unless plando'd
-    "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing", 2, quantity=0, classification=ItemClassification.trap),
+    "Nothing": ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, quantity=0, classification=ItemClassification.trap),
 
     # "Keystone Piece": ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
 }
@@ -394,7 +394,7 @@ upgrade_included_names = [
         "Progressive Starship Upgrade"
     },
     { # Bundle All
-        "Progressive Upgrade"
+        "Progressive Weapon/Armor Upgrade"
     }
 ]
 
@@ -417,5 +417,5 @@ type_flaggroups: typing.Dict[str, int] = {
     "Armory 3": 12,  # Unit upgrades
     "Armory 4": 13,  # Unit upgrades
     "Progressive Upgrade": 14,  # Unit upgrades that exist multiple times (Stimpack / Super Stimpack)
-    "Nothing": 15
+    "Nothing Group": 15
 }

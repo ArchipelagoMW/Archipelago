@@ -203,10 +203,10 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
             if len(mission_names) > 1:
                 return lambda state: state.has_all({f"Beat {name}" for name in mission_names}, player) and \
-                                     state._sc2hots_cleared_missions(multiworld, player, missions_req)
+                                     state._sc2wol_cleared_missions(multiworld, player, missions_req)
             else:
                 return lambda state: state.has(f"Beat {mission_names[0]}", player) and \
-                                     state._sc2hots_cleared_missions(multiworld, player, missions_req)
+                                     state._sc2wol_cleared_missions(multiworld, player, missions_req)
 
         for i, mission in enumerate(missions):
             if mission is None:

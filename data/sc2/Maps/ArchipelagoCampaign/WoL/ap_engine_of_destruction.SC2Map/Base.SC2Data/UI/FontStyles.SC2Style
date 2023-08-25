@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<StyleFile>
-    <Style name="BottomLeft" font="UI\Fonts\bl.ttf" height="18" vjustify="Bottom" hjustify="Left" styleflags="Shadow" textcolor="255,255,255,255" highlightcolor="255,0,0,0" disabledcolor="255,0,0,0" hotkeycolor="255,0,0,0" hyperlinkcolor="255,0,0,0" glowcolor="255,0,0,0" shadowoffset="0" outlinewidth="1"/>
-</StyleFile>

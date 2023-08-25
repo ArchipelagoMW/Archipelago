@@ -1,2 +1,0 @@
-Light/Name/MarSara=Mar Sara
-Light/Name/NewFolsom=New Folsom
