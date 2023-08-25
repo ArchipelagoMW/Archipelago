@@ -173,7 +173,6 @@ class KDL3World(World):
                     .place_locked_item(self.create_item(animal_friends[animal]))
 
 
-
     def create_items(self) -> None:
         itempool = []
         itempool.extend([self.create_item(name) for name in copy_ability_table])
