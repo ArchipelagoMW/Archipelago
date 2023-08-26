@@ -144,12 +144,12 @@ level_names_inverse = {
 
 # Boss Names
 boss_names = {
-        "Whispy Woods": 0x770200,
-        "Acro": 0x770201,
-        "Pon & Con": 0x770202,
-        "Ado": 0x770203,
-        "King Dedede": 0x770204
-    }
+    "Whispy Woods": 0x770200,
+    "Acro": 0x770201,
+    "Pon & Con": 0x770202,
+    "Ado": 0x770203,
+    "King Dedede": 0x770204
+}
 
 # Goal Mapping
 goals = {

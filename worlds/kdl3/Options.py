@@ -20,7 +20,7 @@ class Goal(Choice):
     default = 0
 
     @classmethod
-    def get_option_name(cls, value) -> str:
+    def get_option_name(cls, value: int) -> str:
         if cls.auto_display_name and value == 2:
             return cls.name_lookup[value].upper()
         else:
@@ -81,9 +81,9 @@ class BossShuffle(PlandoBosses):
     Singularity: All (non-Zero) bosses will be replaced with a single boss
     Supports plando placement.
     """
-    bosses = LocationName.boss_names.keys()
+    bosses = frozenset(LocationName.boss_names.keys())
 
-    locations = LocationName.level_names.keys()
+    locations = frozenset(LocationName.level_names.keys())
 
     duplicate_bosses = True
 
@@ -355,7 +355,7 @@ class VirtualConsoleChanges(Choice):
     default = 1
 
 
-kdl3_options: typing.Dict[str, type(Option)] = {
+kdl3_options: typing.Dict[str, typing.Type[Option[typing.Any]]] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
     "goal": Goal,

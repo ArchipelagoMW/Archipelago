@@ -1,5 +1,5 @@
 import typing
-from BaseClasses import Location
+from BaseClasses import Location, Region
 from .Names import LocationName
 
 if typing.TYPE_CHECKING:
@@ -10,7 +10,7 @@ class KDL3Location(Location):
     game: str = "Kirby's Dream Land 3"
     room: typing.Optional["Room"] = None
 
-    def __init__(self, player: int, name: str, address: typing.Optional[int], parent):
+    def __init__(self, player: int, name: str, address: typing.Optional[int], parent: typing.Union[Region, None]):
         super().__init__(player, name, address, parent)
         self.event = not address
 

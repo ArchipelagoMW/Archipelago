@@ -74,7 +74,7 @@ def can_reach_cutter(state: "CollectionState", player: int) -> bool:
     return state.has("Cutter", player) and state.has("Cutter Ability", player)
 
 
-ability_map = {
+ability_map: dict[str, typing.Callable[[CollectionState, int], bool]] = {
     "No Ability": lambda state, player: True,
     "Burning Ability": can_reach_burning,
     "Stone Ability": can_reach_stone,
@@ -130,8 +130,10 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.ripple_field_toad, world.player),
              lambda state: can_reach_needle(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
-             lambda state: can_reach_pitch(state, world.player) and can_reach_kine(state, world.player)
-                           and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
+             lambda state: (can_reach_pitch(state, world.player) and
+                            can_reach_kine(state, world.player) and
+                            can_reach_burning(state, world.player) and
+                            can_reach_stone(state, world.player)))
 
     # Level 3
     add_rule(world.multiworld.get_location(LocationName.sand_canyon_5, world.player),
@@ -162,8 +164,9 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.iceberg_samus, world.player),
              lambda state: can_reach_ice(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_name, world.player),
-             lambda state: can_reach_coo(state, world.player) and can_reach_burning(state, world.player)
-                           and can_reach_chuchu(state, world.player))
+             lambda state: (can_reach_coo(state, world.player) and
+                            can_reach_burning(state, world.player) and
+                            can_reach_chuchu(state, world.player)))
     # ChuChu is guaranteed here, but we use this for consistency
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: can_reach_nago(state, world.player))
@@ -191,11 +194,13 @@ def set_rules(world: "KDL3World") -> None:
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m1, world.player),
                  lambda state: can_reach_kine(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_u1, world.player),
-                 lambda state: can_reach_kine(state, world.player)
-                               and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
+                 lambda state: (can_reach_kine(state, world.player) and
+                                can_reach_burning(state, world.player) and
+                                can_reach_stone(state, world.player)))
         add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m2, world.player),
-                 lambda state: can_reach_kine(state, world.player)
-                               and can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
+                 lambda state: (can_reach_kine(state, world.player) and
+                                can_reach_burning(state, world.player) and
+                                can_reach_stone(state, world.player)))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_u1, world.player),
                  lambda state: can_reach_clean(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
@@ -247,15 +252,15 @@ def set_rules(world: "KDL3World") -> None:
                                            LocationName.iceberg_dedede],
                                           range(1, 6)):
         set_rule(world.multiworld.get_location(boss_flag, world.player),
-                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
-                                    and can_reach_level(state, world.player, i + 1,
-                                                        world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player]))
+                 lambda state, i=i: (state.has("Heart Star", world.player, world.boss_requirements[i - 1]) and
+                                     can_reach_level(state, world.player, i + 1,
+                                                     world.multiworld.open_world[world.player],
+                                                     world.multiworld.ow_boss_requirement[world.player])))
         set_rule(world.multiworld.get_location(purification, world.player),
-                 lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[i - 1])
-                                    and can_reach_level(state, world.player, i + 1,
-                                                        world.multiworld.open_world[world.player],
-                                                        world.multiworld.ow_boss_requirement[world.player]))
+                 lambda state, i=i: (state.has("Heart Star", world.player, world.boss_requirements[i - 1]) and
+                                     can_reach_level(state, world.player, i + 1,
+                                                     world.multiworld.open_world[world.player],
+                                                     world.multiworld.ow_boss_requirement[world.player])))
 
     if world.multiworld.strict_bosses[world.player]:
         for level in range(2, 6):

@@ -3,18 +3,13 @@ import os
 import typing
 from pkgutil import get_data
 
-from BaseClasses import Entrance, Region
-from Fill import fill_restrictive
+from BaseClasses import Region
 from worlds.AutoWorld import World
-from .Locations import KDL3Location, location_table, level_consumables
+from .Locations import KDL3Location
 from .Names import LocationName
-from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Options import BossShuffle
 from .Room import Room
-from ..generic.Rules import add_item_rule, add_rule
-
-if typing.TYPE_CHECKING:
-    from . import KDL3World
+from ..generic.Rules import add_item_rule
 
 default_levels = {
     1: [0x770001, 0x770002, 0x770003, 0x770004, 0x770005, 0x770006, 0x770200],
