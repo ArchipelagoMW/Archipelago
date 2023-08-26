@@ -1,6 +1,5 @@
 import struct
 import typing
-
 from BaseClasses import Region, ItemClassification
 
 if typing.TYPE_CHECKING:
@@ -53,6 +52,7 @@ class Room(Region):
             load_len = len(self.entity_load)
             for consumable in self.consumables:
                 location = next(x for x in self.locations if x.name == consumable["name"])
+                assert location.item
                 is_progression = location.item.classification & ItemClassification.progression
                 if load_len == 8:
                     # edge case, there is exactly 1 room with 8 entities and only 1 consumable among them
