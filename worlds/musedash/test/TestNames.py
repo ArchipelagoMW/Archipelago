@@ -5,7 +5,7 @@ from ..MuseDashCollection import MuseDashCollections
 class NamesTest(unittest.TestCase):
     def test_all_names_are_ascii(self) -> None:
         bad_names = list()
-        collection = MuseDashCollections(0, 1)
+        collection = MuseDashCollections()
         for name in collection.song_items.keys():
             for c in name:
                 # This is taken directly from OoT. Represents the generally excepted characters.

@@ -18,7 +18,7 @@ class MuseDashCollections:
     FREE_ALBUMS = [
         "Default Music",
         "Budget Is Burning: Nano Core",
-        "Budget is Burning Vol.1"
+        "Budget Is Burning Vol.1"
     ]
 
     DIFF_OVERRIDES = [

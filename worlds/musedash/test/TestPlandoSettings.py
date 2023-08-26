@@ -1,7 +1,7 @@
 from . import MuseDashTestBase
 
 
-class TestIncludedSongSizeDoesntGrow(MuseDashTestBase):
+class TestPlandoSettings(MuseDashTestBase):
     options = {
         "additional_song_count": 15,
         "allow_just_as_planned_dlc_songs": True,
