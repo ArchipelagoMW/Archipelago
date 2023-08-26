@@ -168,10 +168,7 @@ class MuseDashWorld(World):
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
         song = self.md_collection.song_items.get(name)
-        if song:
-            return MuseDashSongItem(name, self.player, song)
-
-        return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
+        return MuseDashSongItem(name, self.player, song)
 
     def create_items(self) -> None:
         song_keys_in_pool = self.included_songs.copy()
