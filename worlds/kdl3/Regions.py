@@ -47,7 +47,8 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                     room_entry["animal_pointers"], room_entry["enemies"], room_entry["entity_load"],
                     room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
-        None for location in room_entry["locations"] if not any([x in location for x in ["1-Up", "Maxim"]]) or
+                            None for location in room_entry["locations"]
+                            if not any([x in location for x in ["1-Up", "Maxim"]]) or
                             world.multiworld.consumables[world.player]}, KDL3Location)
         rooms[room.name] = room
         for location in room.locations:
@@ -89,8 +90,9 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
             proper_stage = world.player_levels[level][stage]
             level_regions[level].add_exits([first_rooms[proper_stage].name],
                                            {first_rooms[proper_stage].name:
-                                            (lambda state: True) if world.multiworld.open_world[world.player] or
-                                            stage == 0 else lambda state, level=level, stage=stage: state.has(
+                                                (lambda state: True) if world.multiworld.open_world[world.player] or
+                                                                        stage == 0 else lambda state, level=level,
+                                                                                               stage=stage: state.has(
                                                     f"{LocationName.level_names_inverse[level]} "
                                                     f"{f'{stage}'}"
                                                     f" - Stage Completion", world.player)})
