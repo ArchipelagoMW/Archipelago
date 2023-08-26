@@ -3940,17 +3940,29 @@
         id: Color Arrow Room/Panel_me
         colors: gray
         tag: forbid
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
       SECRET BLUE:
         # Pretend this and the other two are white, because they are snipes.
         # TODO: Extract them and randomize them?
         id: Color Arrow Room/Panel_secret_blue
         tag: forbid
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
       SECRET YELLOW:
         id: Color Arrow Room/Panel_secret_yellow
         tag: forbid
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
       SECRET RED:
         id: Color Arrow Room/Panel_secret_red
         tag: forbid
+        required_door:
+          room: Outside The Initiated
+          door: Entrance
     doors:
       Shortcut to The Steady:
         id: Rock Room Doors/Door_hint
