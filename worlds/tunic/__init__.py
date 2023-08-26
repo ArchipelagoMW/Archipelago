@@ -131,7 +131,7 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        set_abilities(self.multiworld, self.player)
+        set_abilities(self.multiworld, self.player, self.random)
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
 
@@ -172,7 +172,7 @@ class TunicWorld(World):
 
         if self.multiworld.hexagon_quest[self.player].value:
             golden_hexagons = self.multiworld.find_item_locations("Gold Hexagon", self.player, False)
-            #self.multiworld.per_slot_randoms[self.player].shuffle(golden_hexagons)
+            self.random.shuffle(golden_hexagons)
             hexagon_gold = golden_hexagons.pop()
             hexagon_gold2 = golden_hexagons.pop()
             hexagon_gold3 = golden_hexagons.pop()
@@ -198,14 +198,10 @@ class TunicWorld(World):
                 slot_data[start_item] = removed_item
 
         for item in items:
-            if item in ["Sword", "Sword Upgrade"]:
-                data = []
-                for found_item in self.multiworld.find_item_locations(item, self.player, False):
-                    data.append(found_item.item.location.name)
-                    data.append(found_item.item.location.player)
-                slot_data[item] = data
-            else:
-                found_item = self.multiworld.find_item(item, self.player).item
-                slot_data[item] = [found_item.location, found_item.player]
+            data = []
+            for found_item in self.multiworld.find_item_locations(item, self.player, False):
+                data.append(found_item.item.location.name)
+                data.append(found_item.item.location.player)
+            slot_data[item] = data
 
         return slot_data

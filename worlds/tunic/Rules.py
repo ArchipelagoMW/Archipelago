@@ -1,3 +1,4 @@
+from random import Random
 from typing import Dict
 
 from ..generic.Rules import set_rule, forbid_item
@@ -6,11 +7,11 @@ from BaseClasses import MultiWorld
 hexagon_quest_abilities: Dict[str, int] = {}
 
 
-def set_abilities(multiworld: MultiWorld, player: int):
+def set_abilities(multiworld: MultiWorld, player: int, random: Random):
     ability_requirement = [5, 10, 15]
     abilities = ["prayer", "holy_cross", "ice_rod"]
-    multiworld.per_slot_randoms[player].shuffle(ability_requirement)
-    multiworld.per_slot_randoms[player].shuffle(abilities)
+    random.shuffle(ability_requirement)
+    random.shuffle(abilities)
     for i in range(3):
         hexagon_quest_abilities[abilities.pop()] = ability_requirement.pop()
 
