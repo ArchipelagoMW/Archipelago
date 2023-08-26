@@ -291,7 +291,7 @@ class StardewValleyWorld(World):
                 if player_options[options.TrapItems] == options.TrapItems.option_no_traps:
                     include_traps = False
                 if player_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
-                    include_traps = exclude_island = True
+                    exclude_island = True
             return include_traps, exclude_island
         else:
             return self.options[options.TrapItems] != options.TrapItems.option_no_traps, self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true

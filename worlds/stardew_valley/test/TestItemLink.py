@@ -21,7 +21,6 @@ class TestItemLinksEverythingIncluded(SVTestBase):
                 at_least_one_trap = True
             if Group.GINGER_ISLAND in item_table[filler].groups:
                 at_least_one_island = True
-        print(len(filler_generated))
         self.assertTrue(at_least_one_trap)
         self.assertTrue(at_least_one_island)
         self.assertGreaterEqual(len(filler_generated), 115)
