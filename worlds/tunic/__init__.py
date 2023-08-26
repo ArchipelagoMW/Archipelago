@@ -139,89 +139,73 @@ class TunicWorld(World):
         return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, any]:
-        # Find items for generating hints in-game
-        stundagger = self.multiworld.find_item("Magic Dagger", self.player).item
-        techbow = self.multiworld.find_item("Magic Wand", self.player).item
-        grapple = self.multiworld.find_item("Magic Orb", self.player).item
-        hyperdash = self.multiworld.find_item("Hero's Laurels", self.player).item
-        lantern = self.multiworld.find_item("Lantern", self.player).item
-        shotgun = self.multiworld.find_item("Shotgun", self.player).item
-        scavenger_mask = self.multiworld.find_item("Scavenger Mask", self.player).item
-        shield = self.multiworld.find_item("Shield", self.player).item
-        dath_stone = self.multiworld.find_item("Dath Stone", self.player).item
-        hourglass = self.multiworld.find_item("Hourglass", self.player).item
-        house_key = self.multiworld.find_item("Old House Key", self.player).item
-        vault_key = self.multiworld.find_item("Fortress Vault Key", self.player).item
-        att_relic = self.multiworld.find_item("Hero Relic - ATT", self.player).item
-        def_relic = self.multiworld.find_item("Hero Relic - DEF", self.player).item
-        potion_relic = self.multiworld.find_item("Hero Relic - POTION", self.player).item
-        hp_relic = self.multiworld.find_item("Hero Relic - HP", self.player).item
-        sp_relic = self.multiworld.find_item("Hero Relic - MP", self.player).item
-        mp_relic = self.multiworld.find_item("Hero Relic - SP", self.player).item
 
-        slot_data: Dict[str, any] = {
-            "seed": self.multiworld.per_slot_randoms[self.player].randint(0, 2147483647),
-            "start_with_sword": self.multiworld.start_with_sword[self.player].value,
-            "keys_behind_bosses": self.multiworld.keys_behind_bosses[self.player].value,
-            "sword_progression": self.multiworld.sword_progression[self.player].value,
-            "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
-            "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
-            "Magic Dagger": [stundagger.location.name, stundagger.location.player],
-            "Magic Wand": [techbow.location.name, techbow.location.player],
-            "Magic Orb": [grapple.location.name, grapple.location.player],
-            "Hero's Laurels": [hyperdash.location.name, hyperdash.location.player],
-            "Lantern": [lantern.location.name, lantern.location.player],
-            "Shotgun": [shotgun.location.name, shotgun.location.player],
-            "Scavenger Mask": [scavenger_mask.location.name, scavenger_mask.location.player],
-            "Shield": [shield.location.name, shield.location.player],
-            "Dath Stone": [dath_stone.location.name, dath_stone.location.player],
-            "Hourglass": [hourglass.location.name, hourglass.location.player],
-            "Old House Key": [house_key.location.name, house_key.location.player],
-            "Fortress Vault Key": [vault_key.location.name, vault_key.location.player],
-            "Hero Relic - ATT": [att_relic.location.name, att_relic.location.player],
-            "Hero Relic - DEF": [def_relic.location.name, def_relic.location.player],
-            "Hero Relic - POTION": [potion_relic.location.name, potion_relic.location.player],
-            "Hero Relic - HP": [hp_relic.location.name, hp_relic.location.player],
-            "Hero Relic - MP": [sp_relic.location.name, sp_relic.location.player],
-            "Hero Relic - SP": [mp_relic.location.name, mp_relic.location.player],
-        }
+        slot_data: Dict[str, any] = {}
+
+        removed_item = ["Your Pocket", self.player]
+
+        items = [
+            "Magic Dagger",
+            "Magic Wand",
+            "Magic Orb",
+            "Hero's Laurels",
+            "Lantern",
+            "Shotgun",
+            "Scavenger Mask",
+            "Shield",
+            "Dath Stone",
+            "Hourglass",
+            "Old House Key",
+            "Fortress Vault Key",
+            "Hero Relic - ATT",
+            "Hero Relic - DEF",
+            "Hero Relic - POTION",
+            "Hero Relic - HP",
+            "Hero Relic - SP",
+            "Hero Relic - MP",
+        ]
 
         if self.multiworld.sword_progression[self.player].value:
-            swords = self.multiworld.find_item_locations("Sword Upgrade", self.player, False)
-            slot_data["Sword Upgrade"] = [swords[0].item.location.name, swords[0].item.location.player,
-                                          swords[1].item.location.name, swords[1].item.location.player,
-                                          swords[2].item.location.name, swords[2].item.location.player,
-                                          swords[3].item.location.name, swords[3].item.location.player]
+            items.append("Sword Upgrade")
         else:
-            stick = self.multiworld.find_item("Stick", self.player).item
-            swords = self.multiworld.find_item_locations("Sword", self.player, False)
-            slot_data["Stick"] = [stick.location.name, stick.location.player],
-            slot_data["Sword"] = [swords[0].item.location.name, swords[0].item.location.player,
-                                  swords[1].item.location.name, swords[1].item.location.player,
-                                  swords[2].item.location.name, swords[2].item.location.player],
+            items.extend(["Stick", "Sword"])
 
-        if not self.multiworld.hexagon_quest[self.player].value:
-            hexagon_red = self.multiworld.find_item("Red Hexagon", self.player).item
-            hexagon_green = self.multiworld.find_item("Green Hexagon", self.player).item
-            hexagon_blue = self.multiworld.find_item("Blue Hexagon", self.player).item
-            prayer_page = self.multiworld.find_item("Pages 24-25 (Prayer)", self.player).item
-            holy_cross_page = self.multiworld.find_item("Pages 42-43 (Holy Cross)", self.player).item
-            ice_rod_page = self.multiworld.find_item("Pages 52-53 (Ice Rod)", self.player).item
-            slot_data["Red Hexagon"] = [hexagon_red.location.name, hexagon_red.location.player]
-            slot_data["Green Hexagon"] = [hexagon_green.location.name, hexagon_green.location.player]
-            slot_data["Blue Hexagon"] = [hexagon_blue.location.name, hexagon_blue.location.player]
-            slot_data["Pages 24-25 (Prayer)"] = [prayer_page.location.name, prayer_page.location.player]
-            slot_data["Pages 42-43 (Holy Cross)"] = [holy_cross_page.location.name, holy_cross_page.location.player]
-            slot_data["Pages 52-53 (Ice Rod)"] = [ice_rod_page.location.name, ice_rod_page.location.player]
-        else:
+        if self.multiworld.hexagon_quest[self.player].value:
             golden_hexagons = self.multiworld.find_item_locations("Gold Hexagon", self.player, False)
-            self.multiworld.per_slot_randoms[self.player].shuffle(golden_hexagons)
+            #self.multiworld.per_slot_randoms[self.player].shuffle(golden_hexagons)
             hexagon_gold = golden_hexagons.pop()
             hexagon_gold2 = golden_hexagons.pop()
             hexagon_gold3 = golden_hexagons.pop()
             slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player, hexagon_gold2.name,
                                          hexagon_gold2.player, hexagon_gold3.name, hexagon_gold3.player]
-            slot_data["Hexagon Quest Prayer"] = hexagon_quest_abilities["prayer"]
-            slot_data['Hexagon Quest Holy Cross'] = hexagon_quest_abilities["holy_cross"]
-            slot_data['Hexagon Quest Ice Rod'] = hexagon_quest_abilities["ice_rod"]
+            if self.multiworld.ability_shuffling[self.player].value:
+                slot_data["Hexagon Quest Prayer"] = hexagon_quest_abilities["prayer"]
+                slot_data["Hexagon Quest Holy Cross"] = hexagon_quest_abilities["holy_cross"]
+                slot_data["Hexagon Quest Ice Rod"] = hexagon_quest_abilities["ice_rod"]
+        else:
+            items.extend(["Red Hexagon", "Green Hexagon", "Blue Hexagon"])
+
+        if self.multiworld.ability_shuffling[self.player].value and not self.multiworld.hexagon_quest[self.player].value:
+            items.extend(["Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"])
+
+        for start_item in self.multiworld.start_inventory_from_pool[self.player]:
+            # If not all swords or sword upgrades are placed in start inventory, leave remaining ones for slot data
+            if (start_item == "Sword" and self.multiworld.start_inventory_from_pool[self.player][start_item] < 3) or \
+                    (start_item == "Sword Upgrade" and self.multiworld.start_inventory_from_pool[self.player][start_item] < 4):
+                continue
+            if start_item in items:
+                items.remove(start_item)
+                slot_data[start_item] = removed_item
+
+        for item in items:
+            if item in ["Sword", "Sword Upgrade"]:
+                data = []
+                for found_item in self.multiworld.find_item_locations(item, self.player, False):
+                    data.append(found_item.item.location.name)
+                    data.append(found_item.item.location.player)
+                slot_data[item] = data
+            else:
+                found_item = self.multiworld.find_item(item, self.player).item
+                slot_data[item] = [found_item.location, found_item.player]
+
         return slot_data
