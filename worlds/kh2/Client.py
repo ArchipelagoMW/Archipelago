@@ -1,12 +1,12 @@
-import os
-import asyncio
 import ModuleUpdate
 
 ModuleUpdate.update()
+
+import os
+import asyncio
 import json
 from pymem import pymem
-from .Locations import all_locations, exclusion_table
-from .Items import item_dictionary_table, exclusion_item_table, CheckDupingItems
+from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table
 from .WorldLocations import *
 
 from NetUtils import ClientStatus
@@ -20,7 +20,7 @@ class KH2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
-        self.locations_checked_kh2 = None
+        self.locations_checked = None
         self.kh2_local_items = None
         self.growthlevel = None
         self.kh2connected = False
@@ -182,16 +182,16 @@ class KH2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
             self.kh2seedname = args['seed_name']
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
-                self.kh2seedsave = {
+            #if not os.path.exists(self.game_communication_path):
+            #    os.makedirs(self.game_communication_path)
+            #if not os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
+            self.kh2seedsave = {
                     "itemIndex":        -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
                     "SoraInvo":         [0x25D8, 0x2546],
                     "DonaldInvo":       [0x26F4, 0x2658],
-                    "GoofyInvo":        [0x280C, 0x276C],
+                    "GoofyInvo":        [0x280C, 0x276A],
                     "AmountInvo":       {
                         "ServerItems": {
                             "Ability":      {},
@@ -244,80 +244,81 @@ class KH2Context(CommonContext):
                         "AP Boost":      0
                     }
                 }
-                with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
-                        'wt') as f:
-                    pass
-                self.locations_checked_kh2 = set()
-            elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
-                with open(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json", 'r') as f:
-                    self.kh2seedsave = json.load(f)
-                    if self.kh2seedsave is None:
-                        self.kh2seedsave = {
-                            "itemIndex":        -1,
-                            # back of soras invo is 0x25E2. Growth should be moved there
-                            #  Character: [back of invo, front of invo]
-                            "SoraInvo":         [0x25D8, 0x2546],
-                            "DonaldInvo":       [0x26F4, 0x2658],
-                            "GoofyInvo":        [0x280A, 0x276C],
-                            "AmountInvo":       {
-                                "ServerItems": {
-                                    "Ability":      {},
-                                    "Amount":       {},
-                                    "Growth":       {
-                                        "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                                        "Aerial Dodge": 0,
-                                        "Glide":        0
-                                    },
-                                    "Bitmask":      [],
-                                    "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                                    "Equipment":    [],
-                                    "Magic":        {},
-                                    "StatIncrease": {},
-                                    "Boost":        {},
-                                },
-                                "LocalItems":  {
-                                    "Ability":      {},
-                                    "Amount":       {
-                                        "Bounty": 0,
-                                    },
-                                    "Growth":       {
-                                        "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                                        "Aerial Dodge": 0, "Glide": 0
-                                    },
-                                    "Bitmask":      [],
-                                    "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                                    "Equipment":    [],
-                                    "Magic":        {},
-                                    "StatIncrease": {},
-                                    "Boost":        {},
-                                }
-                            },
-                            #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
-                            "LocationsChecked": [],
-                            "Levels":           {
-                                "SoraLevel":   0,
-                                "ValorLevel":  0,
-                                "WisdomLevel": 0,
-                                "LimitLevel":  0,
-                                "MasterLevel": 0,
-                                "FinalLevel":  0,
-                                "SummonLevel": 0,
-                            },
-                            "SoldEquipment":    [],
-                            "SoldBoosts":       {
-                                "Power Boost":   0,
-                                "Magic Boost":   0,
-                                "Defense Boost": 0,
-                                "AP Boost":      0
-                            }
-                        }
-                    self.locations_checked_kh2 = set(self.kh2seedsave["LocationsChecked"])
+                #with open(os.path.join(self.game_communication_path, f"kh2save{self.kh2seedname}{self.auth}.json"),
+                #        'wt') as f:
+                #    pass
+                #self.locations_checked = set()
+            #elif os.path.exists(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json"):
+            #    with open(self.game_communication_path + f"\kh2save{self.kh2seedname}{self.auth}.json", 'r') as f:
+            #        self.kh2seedsave = json.load(f)
+            #        if self.kh2seedsave is None:
+            #            self.kh2seedsave = {
+            #                "itemIndex":        -1,
+            #                # back of soras invo is 0x25E2. Growth should be moved there
+            #                #  Character: [back of invo, front of invo]
+            #                "SoraInvo":         [0x25D8, 0x2546],
+            #                "DonaldInvo":       [0x26F4, 0x2658],
+            #                "GoofyInvo":        [0x280A, 0x276C],
+            #                "AmountInvo":       {
+            #                    "ServerItems": {
+            #                        "Ability":      {},
+            #                        "Amount":       {},
+            #                        "Growth":       {
+            #                            "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+            #                            "Aerial Dodge": 0,
+            #                            "Glide":        0
+            #                        },
+            #                        "Bitmask":      [],
+            #                        "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+            #                        "Equipment":    [],
+            #                        "Magic":        {},
+            #                        "StatIncrease": {},
+            #                        "Boost":        {},
+            #                    },
+            #                    "LocalItems":  {
+            #                        "Ability":      {},
+            #                        "Amount":       {
+            #                            "Bounty": 0,
+            #                        },
+            #                        "Growth":       {
+            #                            "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+            #                            "Aerial Dodge": 0, "Glide": 0
+            #                        },
+            #                        "Bitmask":      [],
+            #                        "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+            #                        "Equipment":    [],
+            #                        "Magic":        {},
+            #                        "StatIncrease": {},
+            #                        "Boost":        {},
+            #                    }
+            #                },
+            #                #  1,3,255 are in this list in case the player gets locations in those "worlds" and I need to still have them checked
+            #                "LocationsChecked": [],
+            #                "Levels":           {
+            #                    "SoraLevel":   0,
+            #                    "ValorLevel":  0,
+            #                    "WisdomLevel": 0,
+            #                    "LimitLevel":  0,
+            #                    "MasterLevel": 0,
+            #                    "FinalLevel":  0,
+            #                    "SummonLevel": 0,
+            #                },
+            #                "SoldEquipment":    [],
+            #                "SoldBoosts":       {
+            #                    "Power Boost":   0,
+            #                    "Magic Boost":   0,
+            #                    "Defense Boost": 0,
+            #                    "AP Boost":      0
+            #                }
+            #            }
+                    # self.locations_checked = set(self.kh2seedsave["LocationsChecked"])
             # self.serverconneced = True
 
         if cmd in {"Connected"}:
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
             self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
+            self.locations_checked = set(args["checked_locations"])
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -350,10 +351,12 @@ class KH2Context(CommonContext):
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
-                # TODO: make this take locations from other players on the same slot so proper coop happens
-                #  items_to_give = [self.kh2slotdata["LocalItems"][str(location_id)] for location_id in new_locations if
-                #                 location_id in self.kh2_local_items.keys()]
-                self.checked_locations |= new_locations
+                # doing a list comprehension for getting the items then for loop for task might be better.
+                for location in args["checked_locations"]:
+                    if location in self.kh2_local_items:
+                        item = self.kh2slotdata["LocalItems"][str(location)]
+                        asyncio.create_task(self.give_item(item, "LocalItems"))
+                self.locations_checked |= new_locations
 
         if cmd == "DataPackage":
             self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
@@ -361,6 +364,10 @@ class KH2Context(CommonContext):
             self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
+            for location in self.checked_locations:
+                if location in self.kh2_local_items:
+                    item = self.kh2slotdata["LocalItems"][str(location)]
+                    asyncio.create_task(self.give_item(item, "LocalItems"))
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 logger.info("You are now auto-tracking")
@@ -375,8 +382,7 @@ class KH2Context(CommonContext):
 
     async def checkWorldLocations(self):
         try:
-            currentworldint = self.kh2_read_byte(0x0714DB8)
-            self.kh2slotdata["CurrentWorld"] = currentworldint
+            currentworldint = self.kh2_read_byte(self.Now)
             await self.send_msgs([{
                 "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
                 "default": 0, "want_reply": True, "operations": [{
@@ -389,7 +395,7 @@ class KH2Context(CommonContext):
                 for location, data in curworldid.items():
                     if location in self.kh2_loc_name_to_id.keys():
                         locationId = self.kh2_loc_name_to_id[location]
-                        if locationId not in self.locations_checked_kh2 \
+                        if locationId not in self.locations_checked \
                                 and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                             self.sending = self.sending + [(int(locationId))]
         except Exception as e:
@@ -403,7 +409,7 @@ class KH2Context(CommonContext):
             for location, data in SoraLevels.items():
                 currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
                 locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked_kh2 \
+                if locationId not in self.locations_checked \
                         and currentLevel >= data.bitIndex:
                     if self.kh2seedsave["Levels"]["SoraLevel"] < currentLevel:
                         self.kh2seedsave["Levels"]["SoraLevel"] = currentLevel
@@ -419,7 +425,7 @@ class KH2Context(CommonContext):
                     if location not in self.kh2_loc_name_to_id.keys():
                         return
                     locationId = self.kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked_kh2 \
+                    if locationId not in self.locations_checked \
                             and formlevel >= data.bitIndex \
                             and formDict[i][0] in self.kh2seedsave["Levels"].keys() \
                             and formlevel > self.kh2seedsave["Levels"][formDict[i][0]]:
@@ -435,13 +441,13 @@ class KH2Context(CommonContext):
         try:
             for location, data in weaponSlots.items():
                 locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked_kh2:
+                if locationId not in self.locations_checked:
                     if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
                         self.sending = self.sending + [(int(locationId))]
 
             for location, data in formSlots.items():
                 locationId = self.kh2_loc_name_to_id[location]
-                if locationId not in self.locations_checked_kh2 and self.kh2_read_byte(self.Save + 0x06B2) == 0:
+                if locationId not in self.locations_checked and self.kh2_read_byte(self.Save + 0x06B2) == 0:
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         self.sending = self.sending + [(int(locationId))]
         except Exception as e:
@@ -452,7 +458,7 @@ class KH2Context(CommonContext):
 
     async def verifyChests(self):
         try:
-            for location in self.locations_checked_kh2:
+            for location in self.locations_checked:
                 locationName = self.lookup_id_to_location[location]
                 if locationName in self.chest_set:
                     if locationName in self.location_name_to_worlddata.keys():
@@ -481,6 +487,7 @@ class KH2Context(CommonContext):
 
     async def give_item(self, item, ItemType="ServerItems"):
         try:
+            # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites 
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
             # itemcode = self.kh2_item_name_to_id[itemname]
@@ -892,15 +899,6 @@ async def kh2_watcher(ctx: KH2Context):
                 if finishedGame(ctx, message):
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.finished_game = True
-                location_ids = []
-                location_ids = [location for location in message[0]["locations"] if location not in location_ids]
-                for location in location_ids:
-                    if location not in ctx.locations_checked_kh2:
-                        ctx.locations_checked_kh2.add(location)
-                        ctx.kh2seedsave["LocationsChecked"].append(location)
-                        if location in ctx.kh2_local_items:
-                            item = ctx.kh2slotdata["LocalItems"][str(location)]
-                            await asyncio.create_task(ctx.give_item(item, "LocalItems"))
                 await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
