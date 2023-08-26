@@ -64,17 +64,19 @@
                                 </tr>
                             {%- endfor -%}
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td>Total</td>
-                                <td>All Games</td>
-                                <td>{{ completed_worlds }}/{{ players|length }} Complete</td>
-                                <td class="center-column">{{ players.values()|sum(attribute='Total') }}/{{ total_locations[team] }}</td>
-                                <td class="center-column">{{ (players.values()|sum(attribute='Total') / total_locations[team] * 100) | int }}</td>
-                                <td class="center-column last-activity"></td>
-                            </tr>
-                        </tfoot>
+                        {% if not self.custom_table_headers() | trim %}
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>Total</td>
+                                    <td>All Games</td>
+                                    <td>{{ completed_worlds }}/{{ players|length }} Complete</td>
+                                    <td class="center-column">{{ players.values()|sum(attribute='Total') }}/{{ total_locations[team] }}</td>
+                                    <td class="center-column">{{ (players.values()|sum(attribute='Total') / total_locations[team] * 100) | int }}</td>
+                                    <td class="center-column last-activity"></td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             {% endfor %}
