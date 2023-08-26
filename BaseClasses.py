@@ -40,7 +40,8 @@ class ThreadBarrierProxy:
             return getattr(self.obj, name)
         else:
             raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
-                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+                               "Please use self.random or randomize ahead of output."
+                               "Check your slot data for other errors as well, such as outputting Location objects.")
 
 
 class MultiWorld():
