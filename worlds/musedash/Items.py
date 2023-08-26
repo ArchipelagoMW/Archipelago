@@ -11,7 +11,6 @@ class SongData(NamedTuple):
     easy: Optional[int]
     hard: Optional[int]
     master: Optional[int]
-    secret: Optional[int]
 
 
 class AlbumData(NamedTuple):
