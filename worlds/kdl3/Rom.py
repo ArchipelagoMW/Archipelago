@@ -271,7 +271,7 @@ class RomData:
     def write_byte(self, offset: int, value: int):
         self.file[offset] = value
 
-    def write_bytes(self, offset: int, values: bytes) -> None:
+    def write_bytes(self, offset: int, values: typing.Sequence) -> None:
         self.file[offset:offset + len(values)] = values
 
     def write_to_file(self, file: str):
