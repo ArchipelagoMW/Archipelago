@@ -47,7 +47,7 @@ victory_modulo: int = 100
 
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
-DATA_REPO_NAME = "ArchipelagoPlayerCompiledMaps"
+DATA_REPO_NAME = "Archipelago-SC2-data"
 DATA_API_VERSION = "API2"
 
 
@@ -518,9 +518,9 @@ class SC2Context(CommonContext):
             def mission_callback(self, button):
                 if not self.launching:
                     mission_id: int = next(k for k, v in self.mission_id_to_button.items() if v == button)
-                    self.ctx.play_mission(mission_id)
-                    self.launching = mission_id
-                    Clock.schedule_once(self.finish_launching, 10)
+                    if self.ctx.play_mission(mission_id):
+                        self.launching = mission_id
+                        Clock.schedule_once(self.finish_launching, 10)
 
             def finish_launching(self, dt):
                 self.launching = False
@@ -538,7 +538,7 @@ class SC2Context(CommonContext):
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
-    def play_mission(self, mission_id: int):
+    def play_mission(self, mission_id: int) -> bool:
         if self.missions_unlocked or \
                 is_mission_available(self, mission_id):
             if self.sc2_run_task:
@@ -550,10 +550,12 @@ class SC2Context(CommonContext):
                                    "checks will not be registered to server.")
             self.sc2_run_task = asyncio.create_task(starcraft_launch(self, mission_id),
                                                     name="Starcraft 2 Launch")
+            return True
         else:
             sc2_logger.info(
                 f"{lookup_id_to_mission[mission_id]} is not currently unlocked.  "
                 f"Use /unfinished or /available to see what is available.")
+            return False
 
     def build_location_to_mission_mapping(self):
         mission_id_to_location_ids: typing.Dict[int, typing.Set[int]] = {
