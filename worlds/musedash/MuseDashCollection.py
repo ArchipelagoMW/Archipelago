@@ -18,14 +18,14 @@ class MuseDashCollections:
     FREE_ALBUMS = [
         "Default Music",
         "Budget Is Burning: Nano Core",
-        "Budget Is Burning Vol.1"
+        "Budget Is Burning Vol.1",
     ]
 
     DIFF_OVERRIDES = [
         "MuseDash ka nanika hi",
         "Rush-Hour",
         "Find this Month's Featured Playlist",
-        "PeroPero in the Universe"
+        "PeroPero in the Universe",
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -51,7 +51,7 @@ class MuseDashCollections:
     item_names_to_id = ChainMap({}, sfx_trap_items, vfx_trap_items)
     location_names_to_id = ChainMap(song_locations, album_locations)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
 
         item_id_index = self.STARTING_CODE + 50

@@ -5,7 +5,7 @@ from ..MuseDashCollection import MuseDashCollections
 class CollectionsTest(unittest.TestCase):
     REMOVED_SONGS = [
         "CHAOS Glitch",
-        "FM 17314 SUGAR RADIO"
+        "FM 17314 SUGAR RADIO",
     ]
 
     def test_all_names_are_ascii(self) -> None:

@@ -8,10 +8,10 @@ class SongData(NamedTuple):
     code: Optional[int]
     song_is_free: bool
     streamer_mode: bool
-    easy: str = Optional[int]
-    hard: int = Optional[int]
-    master: int = Optional[int]
-    secret: int = Optional[int]
+    easy: Optional[int]
+    hard: Optional[int]
+    master: Optional[int]
+    secret: Optional[int]
 
 
 class AlbumData(NamedTuple):
