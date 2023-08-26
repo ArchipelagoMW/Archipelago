@@ -24,7 +24,7 @@ class DifficultyRanges(MuseDashTestBase):
                 if (song.master is not None and inputRange[0] <= song.master <= inputRange[1]):
                     continue
 
-                assert False, f"Invalid song '{songKey}' was given for range '{inputRange[0]} to {inputRange[1]}'"
+                self.assertTrue(False, f"Invalid song '{songKey}' was given for range '{inputRange[0]} to {inputRange[1]}'")
 
         #auto ranges
         difficulty_choice.value = 0
@@ -65,5 +65,5 @@ class DifficultyRanges(MuseDashTestBase):
         for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
             song = muse_dash_world.md_collection.song_items[song_name]
 
-            assert song.easy is not None and song.hard is not None and song.master is not None, \
-                f"Song '{song_name}' difficulty not set when it should be."
+            self.assertTrue(song.easy is not None and song.hard is not None and song.master is not None,
+                f"Song '{song_name}' difficulty not set when it should be.")
