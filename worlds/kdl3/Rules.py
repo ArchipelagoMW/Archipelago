@@ -89,7 +89,7 @@ ability_map: dict[str, typing.Callable[[CollectionState, int], bool]] = {
 
 def can_assemble_rob(state: "CollectionState", player: int, copy_abilities: typing.Dict[str, str]):
     # check animal requirements
-    if not can_reach_coo(state, player) and can_reach_kine(state, player):
+    if not (can_reach_coo(state, player) and can_reach_kine(state, player)):
         return False
     for abilities, bukisets in EnemyAbilities.enemy_restrictive[1:5]:
         iterator = iter(x for x in bukisets if copy_abilities[x] in abilities)

@@ -17,16 +17,16 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14)
+        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15)
+        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect_by_name(["Burning", "Cutter", "Kine"])
         self.assertBeatable(True)
         self.remove([self.get_item_by_name("Love-Love Rod")])
         self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30)
+        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
     def testKine(self):
@@ -61,7 +61,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             required_abilities.append(tuple(potential_abilities))
         collected_abilities = list()
         for group in required_abilities:
-            self.assertFalse(len(group) == 0)
+            self.assertFalse(len(group) == 0, str(self.multiworld.seed))
             collected_abilities.append(group[0])
         self.collect_by_name([ability.replace(" Ability", "") for ability in collected_abilities])
         if "Parasol Ability" not in collected_abilities or "Stone Ability" not in collected_abilities:
@@ -70,10 +70,10 @@ class TestCopyAbilityShuffle(KDL3TestBase):
 
         if "Cutter Ability" not in collected_abilities:
             # we can't actually reach 3-6 without Cutter
-            assert not self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
+            self.assertFalse(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"), str(self.multiworld.seed))
             self.collect_by_name(["Cutter"])
 
-        assert self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B")
+        self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"), str(self.multiworld.seed))
 
 
 class TestAnimalShuffle(KDL3TestBase):
@@ -90,16 +90,16 @@ class TestAnimalShuffle(KDL3TestBase):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14)
+        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15)
+        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect_by_name(["Burning", "Cutter", "Kine"])
         self.assertBeatable(True)
         self.remove([self.get_item_by_name("Love-Love Rod")])
         self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30)
+        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
     def testKine(self):
@@ -115,9 +115,9 @@ class TestAnimalShuffle(KDL3TestBase):
         self.assertBeatable(False)
 
     def testLockedAnimals(self):
-        self.assertTrue(self, self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
-        self.assertTrue(self, self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
-        self.assertTrue(self, self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
+        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
+        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
+        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
 
 
 class TestAllShuffle(KDL3TestBase):
@@ -135,16 +135,16 @@ class TestAllShuffle(KDL3TestBase):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
-        self.assertEqual(self.count("Heart Star"), 14)
+        self.assertEqual(self.count("Heart Star"), 14, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect(heart_stars[14:15])
-        self.assertEqual(self.count("Heart Star"), 15)
+        self.assertEqual(self.count("Heart Star"), 15, str(self.multiworld.seed))
         self.assertBeatable(False)
         self.collect_by_name(["Burning", "Cutter", "Kine"])
         self.assertBeatable(True)
         self.remove([self.get_item_by_name("Love-Love Rod")])
         self.collect(heart_stars)
-        self.assertEqual(self.count("Heart Star"), 30)
+        self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
     def testKine(self):
@@ -160,6 +160,6 @@ class TestAllShuffle(KDL3TestBase):
         self.assertBeatable(False)
 
     def testLockedAnimals(self):
-        self.assertTrue(self, self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
-        self.assertTrue(self, self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
-        self.assertTrue(self, self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
+        self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
+        self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
+        self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})

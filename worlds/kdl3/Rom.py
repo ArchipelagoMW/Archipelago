@@ -377,7 +377,7 @@ class KDL3DeltaPatch(APDeltaPatch):
 
 
 def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_required: int,
-              boss_requirements: Dict[int, int], shuffled_levels: Dict[int, List[int]], bb_boss_enabled: Dict[int, int],
+              boss_requirements: Dict[int, int], shuffled_levels: Dict[int, List[int]], bb_boss_enabled: List[bool],
               copy_abilities: Dict[str, str], slot_random: Random):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
