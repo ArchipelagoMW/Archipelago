@@ -74,7 +74,7 @@ def can_reach_cutter(state: "CollectionState", player: int) -> bool:
     return state.has("Cutter", player) and state.has("Cutter Ability", player)
 
 
-ability_map: dict[str, typing.Callable[["CollectionState", int], bool]] = {
+ability_map: typing.Dict[str, typing.Callable[["CollectionState", int], bool]] = {
     "No Ability": lambda state, player: True,
     "Burning Ability": can_reach_burning,
     "Stone Ability": can_reach_stone,
