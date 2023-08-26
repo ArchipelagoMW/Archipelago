@@ -3,7 +3,7 @@ Defines progression, junk and event items for The Witness
 """
 import copy
 from dataclasses import dataclass
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Set
 
 from BaseClasses import Item, MultiWorld, ItemClassification
 from .Options import get_option_value, is_option_enabled, the_witness_options
@@ -197,39 +197,43 @@ class WitnessPlayerItems:
         """
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
-        output: List[str] = []
+        output: Set[str] = set()
         if "shuffle_symbols" not in the_witness_options.keys() \
                 or is_option_enabled(self._world, self._player_id, "shuffle_symbols"):
             if get_option_value(self._world, self._player_id, "shuffle_doors") > 0:
-                output = ["Dots", "Black/White Squares", "Symmetry"]
+                output = {"Dots", "Black/White Squares", "Symmetry"}
             else:
-                output = ["Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"]
+                output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
             if is_option_enabled(self._world, self._player_id, "shuffle_discarded_panels"):
                 if get_option_value(self._world, self._player_id, "puzzle_randomization") == 1:
-                    output.append("Arrows")
+                    output.add("Arrows")
                 else:
-                    output.append("Triangles")
+                    output.add("Triangles")
 
             # Replace progressive items with their parents.
-            output = [StaticWitnessLogic.get_parent_progressive_item(item) for item in output]
+            output = {StaticWitnessLogic.get_parent_progressive_item(item) for item in output}
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
         for plando_setting in self._world.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
-                if "item" in plando_setting and type(plando_setting["item"]) is str:
-                    output.remove(plando_setting["item"])
-                elif "items" in plando_setting:
-                    if type(plando_setting["items"]) is dict:
-                        output -= [item for item, weight in plando_setting["items"].items() if weight]
+                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
+                    if type(plando_setting[item_setting_key]) is str:
+                        output -= {plando_setting[item_setting_key]}
+                    elif type(plando_setting[item_setting_key]) is dict:
+                        output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
                     else:
                         # Assume this is some other kind of iterable.
-                        output -= plando_setting["items"]
+                        for inner_item in plando_setting[item_setting_key]:
+                            if type(inner_item) is str:
+                                output -= {inner_item}
+                            elif type(inner_item) is dict:
+                                output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(output)
+        return sorted(list(output))
 
     def get_door_ids_in_pool(self) -> List[int]:
         """

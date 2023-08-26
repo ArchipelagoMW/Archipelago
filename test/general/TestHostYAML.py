@@ -1,22 +1,27 @@
+import os
 import unittest
+from tempfile import TemporaryFile
 
+from settings import Settings
 import Utils
 
 
 class TestIDs(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        with open(Utils.local_path("host.yaml")) as f:
+        with TemporaryFile("w+", encoding="utf-8") as f:
+            Settings(None).dump(f)
+            f.seek(0, os.SEEK_SET)
             cls.yaml_options = Utils.parse_yaml(f.read())
 
-    def testUtilsHasHost(self):
+    def test_utils_in_yaml(self) -> None:
         for option_key, option_set in Utils.get_default_options().items():
             with self.subTest(option_key):
                 self.assertIn(option_key, self.yaml_options)
                 for sub_option_key in option_set:
                     self.assertIn(sub_option_key, self.yaml_options[option_key])
 
-    def testHostHasUtils(self):
+    def test_yaml_in_utils(self) -> None:
         utils_options = Utils.get_default_options()
         for option_key, option_set in self.yaml_options.items():
             with self.subTest(option_key):
