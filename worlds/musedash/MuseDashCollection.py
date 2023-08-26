@@ -53,22 +53,24 @@ class MuseDashCollections:
 
     def __init__(self):
         self.item_names_to_id[self.MUSIC_SHEET_NAME] = self.MUSIC_SHEET_CODE
-        self.item_names_to_id[self.FEVER_FILLER_NAME] = self.FEVER_FILLER_CODE
 
         item_id_index = self.STARTING_CODE + 50
         full_file = load_text_file("MuseDashData.txt")
+        seen_albums = set()
         for line in full_file.splitlines():
             line = line.strip()
             sections = line.split("|")
 
-            if sections[2] not in self.album_items:
-                self.album_items[sections[2]] = AlbumData(item_id_index)
+            album = sections[2]
+            if album not in seen_albums:
+                seen_albums.add(album)
+                self.album_items[album] = AlbumData(item_id_index)
                 item_id_index += 1
 
             # Data is in the format 'Song|UID|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
             song_name = sections[0]
             # [1] is used in the client copy to make sure item id's match.
-            song_is_free = sections[2] in self.FREE_ALBUMS
+            song_is_free = album in self.FREE_ALBUMS
             steamer_mode = sections[3] == "True"
 
             if song_name in self.DIFF_OVERRIDES:
