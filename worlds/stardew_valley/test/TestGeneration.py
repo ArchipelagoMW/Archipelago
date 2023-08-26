@@ -5,7 +5,7 @@ from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_w
     allsanity_options_without_mods, minimal_locations_maximal_items
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
-from ..items import items_by_group, Group
+from ..items import items_by_group, Group, item_table
 from ..locations import LocationTags
 from ..mods.mod_data import ModNames
 
@@ -279,10 +279,28 @@ class TestLocationAndItemCount(SVTestCase):
         min_max_options = minimal_locations_maximal_items()
         multiworld = setup_solo_multiworld(min_max_options)
         valid_locations = get_real_locations(self, multiworld)
-        self.assertGreaterEqual(len(valid_locations), len(multiworld.itempool))
+        number_locations = len(valid_locations)
+        number_items = len([item for item in multiworld.itempool
+                            if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
+        self.assertGreaterEqual(number_locations, number_items)
+        print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items}")
+
+    def test_minsanity_has_fewer_than_locations(self):
+        expected_locations = 122
+        minsanity_options = self.minsanity_options()
+        multiworld = setup_solo_multiworld(minsanity_options)
+        real_locations = get_real_locations(self, multiworld)
+        number_locations = len(real_locations)
+        self.assertLessEqual(number_locations, expected_locations)
+        print(f"Stardew Valley - Minsanity Locations: {number_locations}")
+        if number_locations != expected_locations:
+            print(f"\tNew locations detected!"
+                  f"\n\tPlease update test_minsanity_has_fewer_than_locations"
+                  f"\n\t\tExpected: {expected_locations}"
+                  f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_without_mods_has_at_least_locations(self):
-        expected_locations = 1054
+        expected_locations = 1633
         allsanity_options = allsanity_options_without_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)
@@ -296,7 +314,7 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tActual: {number_locations}")
 
     def test_allsanity_with_mods_has_at_least_locations(self):
-        expected_locations = 1306
+        expected_locations = 1885
         allsanity_options = allsanity_options_with_mods()
         multiworld = setup_solo_multiworld(allsanity_options)
         real_locations = get_real_locations(self, multiworld)

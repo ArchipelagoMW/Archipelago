@@ -231,11 +231,11 @@ def set_entrance_rules(logic: StardewLogic, multi_world, player, world_options: 
                              logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
 
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_desert_obelisk, player),
-                             logic.received(Transportation.desert_obelisk).simplify())
+                             logic.can_use_obelisk(Transportation.desert_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_island_obelisk, player),
-                             logic.received(Transportation.island_obelisk).simplify())
+                             logic.can_use_obelisk(Transportation.island_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_farm_obelisk, player),
-                             logic.received(Transportation.farm_obelisk).simplify())
+                             logic.can_use_obelisk(Transportation.farm_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.buy_from_traveling_merchant, player),
                              logic.has_traveling_merchant())
 

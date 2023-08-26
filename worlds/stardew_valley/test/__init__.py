@@ -54,23 +54,65 @@ class SVTestBase(WorldTestBase, SVTestCase):
 @cache_argsless
 def minimal_locations_maximal_items():
     min_max_options = {
+Goal.internal_name: Goal.option_bottom_of_the_mines,
+        BundleRandomization.internal_name: BundleRandomization.option_vanilla,
+        BundlePrice.internal_name: BundlePrice.option_very_cheap,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         Cropsanity.internal_name: Cropsanity.option_enabled,
         BackpackProgression.internal_name: BackpackProgression.option_vanilla,
         ToolProgression.internal_name: ToolProgression.option_vanilla,
         SkillProgression.internal_name: SkillProgression.option_vanilla,
         BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        FestivalLocations.internal_name: FestivalLocations.option_disabled,
         ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled,
         HelpWantedLocations.internal_name: 0,
         Fishsanity.internal_name: Fishsanity.option_none,
         Museumsanity.internal_name: Museumsanity.option_none,
+        Monstersanity.internal_name: Monstersanity.option_none,
+        Shipsanity.internal_name: Shipsanity.option_none,
         Friendsanity.internal_name: Friendsanity.option_none,
+        FriendsanityHeartSize.internal_name: 8,
         NumberOfMovementBuffs.internal_name: 12,
         NumberOfLuckBuffs.internal_name: 12,
+        options.ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.TrapItems.internal_name: TrapItems.option_nightmare,
+        options.Mods.internal_name: (),
     }
     return min_max_options
+
+
+@cache_argsless
+def minsanity_options():
+    minsanity = {
+        Goal.internal_name: Goal.option_bottom_of_the_mines,
+        BundleRandomization.internal_name: BundleRandomization.option_vanilla,
+        BundlePrice.internal_name: BundlePrice.option_very_cheap,
+        SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
+        Cropsanity.internal_name: Cropsanity.option_disabled,
+        BackpackProgression.internal_name: BackpackProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        SkillProgression.internal_name: SkillProgression.option_vanilla,
+        BuildingProgression.internal_name: BuildingProgression.option_vanilla,
+        FestivalLocations.internal_name: FestivalLocations.option_disabled,
+        ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
+        ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+        SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled,
+        HelpWantedLocations.internal_name: 0,
+        Fishsanity.internal_name: Fishsanity.option_none,
+        Museumsanity.internal_name: Museumsanity.option_none,
+        Monstersanity.internal_name: Monstersanity.option_none,
+        Shipsanity.internal_name: Shipsanity.option_none,
+        Friendsanity.internal_name: Friendsanity.option_none,
+        FriendsanityHeartSize.internal_name: 8,
+        NumberOfMovementBuffs.internal_name: 0,
+        NumberOfLuckBuffs.internal_name: 0,
+        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        TrapItems.internal_name: TrapItems.option_no_traps,
+        Mods.internal_name: (),
+    }
+    return minsanity
 
 
 @cache_argsless

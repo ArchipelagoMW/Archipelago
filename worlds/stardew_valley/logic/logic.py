@@ -889,3 +889,6 @@ class StardewLogic:
     def has_movie_theater(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 2)
 
+    def can_use_obelisk(self, obelisk: str) -> StardewRule:
+        return self.region.can_reach(Region.wizard_tower) & self.region.can_reach(Region.farm) & self.received(obelisk)
+
