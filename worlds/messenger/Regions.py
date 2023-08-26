@@ -74,7 +74,7 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Underworld": ["Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
     "Forlorn Temple": ["Sunny Day Mega Shard", "Down Under Mega Shard"],
     "Sunken Shrine": ["Mega Shard of the Moon", "Beginner's Mega Shard", "Mega Shard of the Stars", "Mega Shard of the Sun"],
-    "RIviere Turquoise Entrance": ["Waterfall Mega Shard"],
+    "Riviere Turquoise Entrance": ["Waterfall Mega Shard"],
     "Riviere Turquoise": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
     "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
