@@ -61,6 +61,7 @@ class InscryptionRules:
             "Act 3 - Boss Unfinished": self.has_drone_and_battery,
             "Act 3 - Boss G0lly": self.has_drone_and_battery,
             "Act 3 - Shop Holo Pelt": self.has_drone_and_battery,  # Costs money, so can need multiple battles.
+            "Act 3 - Middle Holo Pelt": self.has_inspectometer_battery,  # Can be reached without but possible soft lock
             "Act 3 - Forest Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Crypt Holo Pelt": self.has_inspectometer_battery,
             "Act 3 - Tower Holo Pelt": self.has_drone_and_battery,
