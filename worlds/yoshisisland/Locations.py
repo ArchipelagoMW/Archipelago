@@ -21,7 +21,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, 0x00, lambda state: logic._11Coins(state)),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Flowers', 0x305021, 0x00, lambda state: logic._11Flowers(state)),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Stars', 0x305022, 0x00, lambda state: logic._11Stars(state)),
-    LocationData('1-1', 'Make Eggs, Throw Eggs: Level Clear', 0x00, 0x305023, lambda state: logic._11Clear(state)),
+    LocationData('1-1', 'Make Eggs, Throw Eggs: Level Clear', 0x305023, 0x00, lambda state: logic._11Clear(state)),
 
     LocationData('1-2', 'Watch Out Below!: Red Coins', 0x305024, 0x01, lambda state: logic._12Coins(state)),
     LocationData('1-2', 'Watch Out Below!: Flowers', 0x305025, 0x01, lambda state: logic._12Flowers(state)),
