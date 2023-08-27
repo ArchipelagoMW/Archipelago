@@ -372,13 +372,20 @@ class YIWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    #def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
-     #   stage_pos_data = {}
-      #  for loc in self.multiworld.get_locations(self.player):
-       #     if loc.LevelID is not None and loc.address is not None:
-        #        num = str(self.active_stage_exits[loc.cv64_stage]["position"]).zfill(2)
-         #       path = self.active_stage_exits[loc.cv64_stage]["path"]
-          #      stage_pos_data[loc.address] = f"Stage {num}"
-           #     if path != " ":
-          #          stage_pos_data[loc.address] += path
-        #hint_data[self.player] = stage_pos_data
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+        stage_pos_data = {}
+        for loc in self.multiworld.get_locations(self.player):
+            if loc.LevelID is not None and loc.address is not None:
+                if loc.LevelID in self.world_1_stages:
+                    stage_pos_data[loc.address] = "World 1"
+                elif loc.LevelID in self.world_2_stages:
+                    stage_pos_data[loc.address] = "World 2"
+                if loc.LevelID in self.world_3_stages:
+                    stage_pos_data[loc.address] = "World 3"
+                if loc.LevelID in self.world_4_stages:
+                    stage_pos_data[loc.address] = "World 4"
+                if loc.LevelID in self.world_5_stages:
+                    stage_pos_data[loc.address] = "World 5"
+                if loc.LevelID in self.world_6_stages:
+                    stage_pos_data[loc.address] = "World 6"
+        hint_data[self.player] = stage_pos_data

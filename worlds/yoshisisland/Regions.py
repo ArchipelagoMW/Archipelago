@@ -97,16 +97,16 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
     ]
     if get_option_value(multiworld, player, "extras_enabled") == 1:
-        regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "Castles - Masterpiece Set")),
-        regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "Kamek's Revenge")),
-        regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "The Impossible? Maze")),
-        regions.insert(38, create_region(multiworld, player, locations_per_region, location_cache, "More Monkey Madness")),
-        regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "Hit That Switch!!")),
-        regions.insert(18, create_region(multiworld, player, locations_per_region, location_cache, "Poochy Ain't Stupid"))
+        regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "6-Extra")),
+        regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "5-Extra")),
+        regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "4-Extra")),
+        regions.insert(38, create_region(multiworld, player, locations_per_region, location_cache, "3-Extra")),
+        regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "2-Extra")),
+        regions.insert(18, create_region(multiworld, player, locations_per_region, location_cache, "1-Extra"))
 
     if get_option_value(multiworld, player, "minigame_checks") >= 2:
-        regions.insert(69, create_region(multiworld, player, locations_per_region, location_cache, "Slot Machine")),
-        regions.insert(59, create_region(multiworld, player, locations_per_region, location_cache, "Roulette")),
+        regions.insert(74, create_region(multiworld, player, locations_per_region, location_cache, "Slot Machine")),
+        regions.insert(63, create_region(multiworld, player, locations_per_region, location_cache, "Roulette")),
         regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "Match Cards")),
         regions.insert(41, create_region(multiworld, player, locations_per_region, location_cache, "Drawing Lots")),
         regions.insert(29, create_region(multiworld, player, locations_per_region, location_cache, "Scratch And Match")),
@@ -193,12 +193,12 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     connect(multiworld, player, names, "6-4", gamevar.boss_order[10], lambda state: logic._64Clear(state))
 
     if get_option_value(multiworld, player, "extras_enabled") == 1:
-        connect(multiworld, player, names, 'World 1', "Poochy Ain't Stupid", lambda state: state.has('Extra Panels', player) or state.has('Extra 1', player)),
-        connect(multiworld, player, names, 'World 2', "Hit That Switch!!", lambda state: state.has('Extra Panels', player) or state.has('Extra 2', player)),
-        connect(multiworld, player, names, 'World 3', "More Monkey Madness", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
-        connect(multiworld, player, names, 'World 4', "The Impossible? Maze", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
-        connect(multiworld, player, names, 'World 5', "Kamek's Revenge", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
-        connect(multiworld, player, names, 'World 6', "Castles - Masterpiece Set", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player))
+        connect(multiworld, player, names, 'World 1', "1-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 1', player)),
+        connect(multiworld, player, names, 'World 2', "2-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 2', player)),
+        connect(multiworld, player, names, 'World 3', "3-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 3', player)),
+        connect(multiworld, player, names, 'World 4', "4-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 4', player)),
+        connect(multiworld, player, names, 'World 5', "5-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 5', player)),
+        connect(multiworld, player, names, 'World 6', "6-Extra", lambda state: state.has('Extra Panels', player) or state.has('Extra 6', player))
 
     if get_option_value(multiworld, player, "minigame_checks") >= 2:
         connect(multiworld, player, names, 'World 1', "Flip Cards", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 1', player)),
@@ -211,6 +211,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
     location = YILocation(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
+    location.LevelID = location_data.LevelID
 
     if id is None:
         location.event = True
