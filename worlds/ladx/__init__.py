@@ -183,7 +183,6 @@ class LinksAwakeningWorld(World):
 
         for option_name, option in self.player_options.items():
             if isinstance(option, EntranceShuffle):
-                print(option_name, option)
                 for cat in option.entrance_type:
                     start_type_mappings[option_name] = cat
                 if option.value == EntranceShuffle.option_simple:
@@ -227,7 +226,6 @@ class LinksAwakeningWorld(World):
                 self.world_setup.entrance_mapping[start_entrance] = "start_house"
                 start = world.overworld_entrance[start_entrance].location
                 for pool in entrance_pools.values():
-                    print(pool)
                     if start_entrance in pool:
                         pool.remove(start_entrance)
                         pool.append("start_house")
@@ -355,7 +353,7 @@ class LinksAwakeningWorld(World):
             random.shuffle(indoor_pool)
             for a, b in zip(pool, indoor_pool):
                 self.world_setup.entrance_mapping[a] = b
-                print(f"{a} -> {b}")
+
         seen_keys = set()
         seen_values = set()
         for k, v in self.world_setup.entrance_mapping.items():
