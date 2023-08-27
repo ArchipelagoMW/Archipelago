@@ -11,7 +11,7 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import SlotType, NetworkSlot
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
 from . import app, cache
 from .models import GameDataPackage, Room
@@ -1447,18 +1447,19 @@ def get_multiworld_tracker(tracker: UUID):
 
     return render_template("multiTracker.html", **data)
 
+if "Factorio" in games:
+    @app.route('/tracker/<suuid:tracker>/Factorio')
+    @cache.memoize(timeout=60)  # multisave is currently created at most every minute
+    def get_Factorio_multiworld_tracker(tracker: UUID):
+        data = _get_multiworld_tracker_data(tracker)
+        if not data:
+            abort(404)
 
-@app.route('/tracker/<suuid:tracker>/Factorio')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def get_Factorio_multiworld_tracker(tracker: UUID):
-    data = _get_multiworld_tracker_data(tracker)
-    if not data:
-        abort(404)
+        data["inventory"] = _get_inventory_data(data)
+        data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
+        data["item_name_to_id"] =  games["Factorio"]["location_name_to_id"]
 
-    data["inventory"] = _get_inventory_data(data)
-    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
-
-    return render_template("multiFactorioTracker.html", **data)
+        return render_template("multiFactorioTracker.html", **data)
 
 
 @app.route('/tracker/<suuid:tracker>/A Link to the Past')
@@ -1588,5 +1589,7 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
 
 multi_trackers: typing.Dict[str, typing.Callable] = {
     "A Link to the Past": get_LttP_multiworld_tracker,
-    "Factorio": get_Factorio_multiworld_tracker,
 }
+
+if "Factorio" in games:
+    multi_trackers["Factorio"] = get_Factorio_multiworld_tracker
