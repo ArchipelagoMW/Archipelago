@@ -264,7 +264,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Flo
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Colored Squares & Eraser
 158142 - 0x03677 (Stair Control) - True - Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
-158143 - 0x3C125 (Control Room Left) - 0x0367C - Black/White Squares & Dots & Eraser
+158143 - 0x3C125 (Control Room Left) - 0x014E9 - Black/White Squares & Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Colored Squares & Dots & Eraser
 159411 - 0x0069D (Ramp EP) - 0x03676 & 0x275FF - True
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
@@ -377,7 +377,7 @@ Door - 0x0199A (Hedge Maze 4 Shortcut) - 0x019E7
 158196 - 0x01A0F (Hedge Maze 4) - True - True
 Door - 0x01A0E (Hedge Maze 4 Exit) - 0x01A0F
 
-Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - 0x01BEA:
+Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - True:
 158199 - 0x0A3B9 (Reset Pressure Plates 2) - True - True
 158200 - 0x01BE9 (Pressure Plates 2) - 0x0A3B9 - Stars & Stars + Same Colored Symbol & Black/White Squares
 Door - 0x01BEA (Pressure Plates 2 Exit) - 0x01BE9

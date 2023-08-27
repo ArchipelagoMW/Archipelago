@@ -17,7 +17,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from worlds.pokemon_rb.locations import location_data
 from worlds.pokemon_rb.rom import RedDeltaPatch, BlueDeltaPatch
 
-location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}}
+location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}, "DexSanityFlag": {}}
 location_bytes_bits = {}
 for location in location_data:
     if location.ram_address is not None:
@@ -28,6 +28,9 @@ for location in location_data:
         else:
             location_map[type(location.ram_address).__name__][location.ram_address.flag] = location.address
             location_bytes_bits[location.address] = {'byte': location.ram_address.byte, 'bit': location.ram_address.bit}
+
+location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
+                           and location.address is not None}
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -40,7 +43,7 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 DISPLAY_MSGS = True
 
-SCRIPT_VERSION = 1
+SCRIPT_VERSION = 3
 
 
 class GBCommandProcessor(ClientCommandProcessor):
@@ -70,13 +73,16 @@ class GBContext(CommonContext):
         self.set_deathlink = False
         self.client_compatibility_mode = 0
         self.items_handling = 0b001
+        self.sent_release = False
+        self.sent_collect = False
+        self.auto_hints = set()
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(GBContext, self).server_auth(password_requested)
         if not self.auth:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to Bizhawk to get Player information')
+            logger.info('Awaiting connection to EmuHawk to get Player information')
             return
 
         await self.send_connect()
@@ -124,7 +130,8 @@ def get_payload(ctx: GBContext):
             "items": [item.item for item in ctx.items_received],
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
-            "deathlink": ctx.deathlink_pending
+            "deathlink": ctx.deathlink_pending,
+            "options": ((ctx.permissions['release'] in ('goal', 'enabled')) * 2) + (ctx.permissions['collect'] in ('goal', 'enabled'))
         }
     )
     ctx.deathlink_pending = False
@@ -134,10 +141,13 @@ def get_payload(ctx: GBContext):
 async def parse_locations(data: List, ctx: GBContext):
     locations = []
     flags = {"EventFlag": data[:0x140], "Missable": data[0x140:0x140 + 0x20],
-             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E], "Rod": data[0x140 + 0x20 + 0x0E:]}
+             "Hidden": data[0x140 + 0x20: 0x140 + 0x20 + 0x0E],
+             "Rod": data[0x140 + 0x20 + 0x0E:0x140 + 0x20 + 0x0E + 0x01]}
 
-    if len(flags['Rod']) > 1:
-        return
+    if len(data) > 0x140 + 0x20 + 0x0E + 0x01:
+        flags["DexSanityFlag"] = data[0x140 + 0x20 + 0x0E + 0x01:]
+    else:
+        flags["DexSanityFlag"] = [0] * 19
 
     for flag_type, loc_map in location_map.items():
         for flag, loc_id in loc_map.items():
@@ -147,6 +157,33 @@ async def parse_locations(data: List, ctx: GBContext):
                     locations.append(loc_id)
             elif flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
                 locations.append(loc_id)
+
+    hints = []
+    if flags["EventFlag"][280] & 16:
+        hints.append("Cerulean Bicycle Shop")
+    if flags["EventFlag"][280] & 32:
+        hints.append("Route 2 Gate - Oak's Aide")
+    if flags["EventFlag"][280] & 64:
+        hints.append("Route 11 Gate 2F - Oak's Aide")
+    if flags["EventFlag"][280] & 128:
+        hints.append("Route 15 Gate 2F - Oak's Aide")
+    if flags["EventFlag"][281] & 1:
+        hints += ["Celadon Prize Corner - Item Prize 1", "Celadon Prize Corner - Item Prize 2",
+                  "Celadon Prize Corner - Item Prize 3"]
+    if (location_name_to_id["Fossil - Choice A"] in ctx.checked_locations and location_name_to_id["Fossil - Choice B"]
+            not in ctx.checked_locations):
+        hints.append("Fossil - Choice B")
+    elif (location_name_to_id["Fossil - Choice B"] in ctx.checked_locations and location_name_to_id["Fossil - Choice A"]
+            not in ctx.checked_locations):
+        hints.append("Fossil - Choice A")
+    hints = [
+        location_name_to_id[loc] for loc in hints if location_name_to_id[loc] not in ctx.auto_hints and
+        location_name_to_id[loc] in ctx.missing_locations and location_name_to_id[loc] not in ctx.locations_checked
+    ]
+    if hints:
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": hints, "create_as_hint": 2}])
+    ctx.auto_hints.update(hints)
+
     if flags["EventFlag"][280] & 1 and not ctx.finished_game:
         await ctx.send_msgs([
                     {"cmd": "StatusUpdate",
@@ -207,6 +244,16 @@ async def gb_sync_task(ctx: GBContext):
                         async_start(parse_locations(data_decoded['locations'], ctx))
                     if 'deathLink' in data_decoded and data_decoded['deathLink'] and 'DeathLink' in ctx.tags:
                         await ctx.send_death(ctx.auth + " is out of usable Pokémon! " + ctx.auth + " blacked out!")
+                    if 'options' in data_decoded:
+                        msgs = []
+                        if data_decoded['options'] & 4 and not ctx.sent_release:
+                            ctx.sent_release = True
+                            msgs.append({"cmd": "Say", "text": "!release"})
+                        if data_decoded['options'] & 8 and not ctx.sent_collect:
+                            ctx.sent_collect = True
+                            msgs.append({"cmd": "Say", "text": "!collect"})
+                        if msgs:
+                            await ctx.send_msgs(msgs)
                     if ctx.set_deathlink:
                         await ctx.update_death_link(True)
                 except asyncio.TimeoutError:

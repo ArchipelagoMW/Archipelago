@@ -1,36 +1,37 @@
-import os, importlib
-from logic.logic import Logic
-from patches.common.patches import patches, additional_PLMs
-from utils.parameters import appDir
+import importlib
+from ..logic.logic import Logic
+from ..patches.common.patches import patches, additional_PLMs
+from ..utils.parameters import appDir
+from ..utils.utils import listDir, exists
 
 class PatchAccess(object):
     def __init__(self):
         # load all ips patches
         self.patchesPath = {}
-        commonDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/common/ips/')
-        for patch in os.listdir(commonDir):
+        commonDir = "/".join((appDir, 'worlds/sm/variaRandomizer/patches/common/ips'))
+        for patch in listDir(commonDir):
             self.patchesPath[patch] = commonDir
-        logicDir = os.path.join(appDir, 'worlds/sm/variaRandomizer/patches/{}/ips/'.format(Logic.patches))
-        for patch in os.listdir(logicDir):
+        logicDir = "/".join((appDir, 'worlds/sm/variaRandomizer/patches/{}/ips'.format(Logic.patches)))
+        for patch in listDir(logicDir):
             self.patchesPath[patch] = logicDir
 
         # load dict patches
         self.dictPatches = patches
-        logicPatches = importlib.import_module("patches.{}.patches".format(Logic.patches)).patches
+        logicPatches = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).patches
         self.dictPatches.update(logicPatches)
 
         # load additional PLMs
         self.additionalPLMs = additional_PLMs
-        logicPLMs = importlib.import_module("patches.{}.patches".format(Logic.patches)).additional_PLMs
+        logicPLMs = importlib.import_module("worlds.sm.variaRandomizer.patches.{}.patches".format(Logic.patches)).additional_PLMs
         self.additionalPLMs.update(logicPLMs)
 
     def getPatchPath(self, patch):
         # is patch preloaded
         if patch in self.patchesPath:
-            return os.path.join(self.patchesPath[patch], patch)
+            return "/".join((self.patchesPath[patch], patch))
         else:
             # patchs from varia_repository used by the customizer for permalinks
-            if os.path.exists(patch):
+            if exists(patch):
                 return patch
             else:
                 raise Exception("unknown patch: {}".format(patch))

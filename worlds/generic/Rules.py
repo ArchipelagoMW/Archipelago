@@ -1,7 +1,7 @@
 import collections
 import typing
 
-from BaseClasses import LocationProgressType, MultiWorld
+from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
 
 if typing.TYPE_CHECKING:
     import BaseClasses
@@ -140,17 +140,52 @@ def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str
             location.item_rule = lambda item: rule(item) or old_rule(item)
 
 
-def item_in_locations(state: "BaseClasses.CollectionState", item: str, player: int,
-                      locations: typing.Sequence["BaseClasses.Location"]) -> bool:
-    for location in locations:
-        if item_name(state, location[0], location[1]) == (item, player):
+def item_name_in_location_names(state: "BaseClasses.CollectionState", item: str, player: int,
+                                location_name_player_pairs: typing.Sequence[typing.Tuple[str, int]]) -> bool:
+    for location in location_name_player_pairs:
+        if location_item_name(state, location[0], location[1]) == (item, player):
             return True
     return False
 
 
-def item_name(state: "BaseClasses.CollectionState", location: str, player: int) -> \
+def item_name_in_locations(item: str, player: int,
+                           locations: typing.Sequence["BaseClasses.Location"]) -> bool:
+    for location in locations:
+        if location.item and location.item.name == item and location.item.player == player:
+            return True
+    return False
+
+
+def location_item_name(state: "BaseClasses.CollectionState", location: str, player: int) -> \
         typing.Optional[typing.Tuple[str, int]]:
     location = state.multiworld.get_location(location, player)
     if location.item is None:
         return None
     return location.item.name, location.item.player
+
+
+def allow_self_locking_items(spot: typing.Union[Location, Region], *item_names: str) -> None:
+    """
+    This function sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
+
+    spot: Location or Region that the item(s) are allowed to be placed in
+    item_names: item name or names that are allowed to be placed in the Location or Region
+    """
+    player = spot.player
+
+    def add_allowed_rules(area: typing.Union[Location, Entrance], location: Location) -> None:
+        def set_always_allow(location: Location, rule: typing.Callable) -> None:
+            location.always_allow = rule
+
+        for item_name in item_names:
+            add_rule(area, lambda state, item_name=item_name:
+                     location_item_name(state, location.name, player) == (item_name, player), "or")
+        set_always_allow(location, lambda state, item:
+                         item.player == player and item.name in [item_name for item_name in item_names])
+
+    if isinstance(spot, Region):
+        for entrance in spot.entrances:
+            for location in spot.locations:
+                add_allowed_rules(entrance, location)
+    else:
+        add_allowed_rules(spot, spot)

@@ -1,7 +1,7 @@
 import collections
 import datetime
 import typing
-from typing import Counter, Optional, Dict, Any, Tuple
+from typing import Counter, Optional, Dict, Any, Tuple, List
 from uuid import UUID
 
 from flask import render_template
@@ -9,12 +9,12 @@ from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
-from NetUtils import SlotType
+from NetUtils import SlotType, NetworkSlot
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
 from . import app, cache
-from .models import Room
+from .models import GameDataPackage, Room
 
 alttp_icons = {
     "Blue Shield": r"https://www.zeldadungeon.net/wiki/images/8/85/Fighters-Shield.png",
@@ -229,14 +229,15 @@ def render_timedelta(delta: datetime.timedelta):
 
 @pass_context
 def get_location_name(context: runtime.Context, loc: int) -> str:
+    # once all rooms embed data package, the chain lookup can be dropped
     context_locations = context.get("custom_locations", {})
-    return collections.ChainMap(lookup_any_location_id_to_name, context_locations).get(loc, loc)
+    return collections.ChainMap(context_locations, lookup_any_location_id_to_name).get(loc, loc)
 
 
 @pass_context
 def get_item_name(context: runtime.Context, item: int) -> str:
     context_items = context.get("custom_items", {})
-    return collections.ChainMap(lookup_any_item_id_to_name, context_items).get(item, item)
+    return collections.ChainMap(context_items, lookup_any_item_id_to_name).get(item, item)
 
 
 app.jinja_env.filters["location_name"] = get_location_name
@@ -263,24 +264,34 @@ def get_static_room_data(room: Room):
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
-    names: Dict[int, Dict[int, str]] = multidata["names"]
-    games = {}
+    names: List[List[str]] = multidata.get("names", [])
+    games = multidata.get("games", {})
     groups = {}
     custom_locations = {}
     custom_items = {}
     if "slot_info" in multidata:
-        games = {slot: slot_info.game for slot, slot_info in multidata["slot_info"].items()}
-        groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
+        slot_info_dict: Dict[int, NetworkSlot] = multidata["slot_info"]
+        games = {slot: slot_info.game for slot, slot_info in slot_info_dict.items()}
+        groups = {slot: slot_info.group_members for slot, slot_info in slot_info_dict.items()
                   if slot_info.type == SlotType.group}
-
+        names = [[slot_info.name for slot, slot_info in sorted(slot_info_dict.items())]]
         for game in games.values():
-            if game in multidata["datapackage"]:
-                custom_locations.update(
-                    {id: name for name, id in multidata["datapackage"][game]["location_name_to_id"].items()})
-                custom_items.update(
-                    {id: name for name, id in multidata["datapackage"][game]["item_name_to_id"].items()})
-    elif "games" in multidata:
-        games = multidata["games"]
+            if game not in multidata["datapackage"]:
+                continue
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if network_data_package["games"].get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # network_data_package import could be skipped once all rooms embed data package
+                    del multidata["datapackage"][game]
+                    continue
+                else:
+                    game_data = restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
+            custom_locations.update(
+                {id_: name for name, id_ in game_data["location_name_to_id"].items()})
+            custom_items.update(
+                {id_: name for name, id_ in game_data["item_name_to_id"].items()})
+
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
@@ -291,14 +302,17 @@ def get_static_room_data(room: Room):
             seed_checks_in_area[area] += len(checks)
         seed_checks_in_area["Total"] = 249
 
-    player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
-    if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
-                                            for areaname in ordered_areas}
-                             for playernumber in range(1, len(names[0]) + 1)
-                             if playernumber not in groups}
+    player_checks_in_area = {
+        playernumber: {
+            areaname: len(multidata["checks_in_area"][playernumber][areaname]) if areaname != "Total" else
+            multidata["checks_in_area"][playernumber]["Total"]
+            for areaname in ordered_areas
+        }
+        for playernumber in multidata["checks_in_area"]
+    }
+
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
-                               for playernumber in range(1, len(names[0]) + 1)
-                               if playernumber not in groups}
+                               for playernumber in multidata["checks_in_area"]}
     saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
              multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second, \
@@ -332,7 +346,7 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
         precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
         get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
-    location_to_area = player_location_to_area[tracked_player]
+    location_to_area = player_location_to_area.get(tracked_player, {})
     inventory = collections.Counter()
     checks_done = {loc_name: 0 for loc_name in default_locations}
 
@@ -364,15 +378,18 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
                     if recipient in slots_aimed_at_player:  # a check done for the tracked player
                         attribute_item_solo(inventory, item)
                     if ms_player == tracked_player:  # a check done by the tracked player
-                        checks_done[location_to_area[location]] += 1
+                        area_name = location_to_area.get(location, None)
+                        if area_name:
+                            checks_done[area_name] += 1
                         checks_done["Total"] += 1
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
         tracker =  specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
+                                    seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
     else:
-        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done, saving_second, custom_locations, custom_items)
+        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player,
+                                          player_name, seed_checks_in_area, checks_done, saving_second,
+                                          custom_locations, custom_items)
 
     return (saving_second - datetime.datetime.now().second) % 60 or 60, tracker
 
@@ -1362,10 +1379,10 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         if player in groups:
             continue
         player_locations = locations[player]
-        checks_done[team][player]["Total"] = sum(1 for loc in locations_checked if loc in player_locations)
+        checks_done[team][player]["Total"] = len(locations_checked)
         percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
-                                                      checks_in_area[player]["Total"] * 100) \
-            if checks_in_area[player]["Total"] else 100
+                                                      len(player_locations) * 100) \
+            if player_locations else 100
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
@@ -1373,24 +1390,29 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
-            player_names[(team, player)] = name
+            player_names[team, player] = name
+            states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
-        player_names[(team, player)] = alias
-        long_player_names[(team, player)] = f"{alias} ({long_player_names[(team, player)]})"
+        player_names[team, player] = alias
+        long_player_names[(team, player)] = f"{alias} ({long_player_names[team, player]})"
 
     video = {}
     for (team, player), data in multisave.get("video", []):
-        video[(team, player)] = data
+        video[team, player] = data
 
-    return dict(player_names=player_names, room=room, checks_done=checks_done,
-                percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
-                activity_timers=activity_timers, video=video, hints=hints,
-                long_player_names=long_player_names,
-                multisave=multisave, precollected_items=precollected_items, groups=groups,
-                locations=locations, games=games)
+    return dict(
+        player_names=player_names, room=room, checks_done=checks_done,
+        percent_total_checks_done=percent_total_checks_done, checks_in_area=checks_in_area,
+        activity_timers=activity_timers, video=video, hints=hints,
+        long_player_names=long_player_names,
+        multisave=multisave, precollected_items=precollected_items, groups=groups,
+        locations=locations, games=games, states=states,
+        custom_locations=custom_locations, custom_items=custom_items,
+    )
 
 
 def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
@@ -1496,8 +1518,8 @@ def get_LttP_multiworld_tracker(tracker: UUID):
                 checks_done[team][player][player_location_to_area[player][location]] += 1
                 checks_done[team][player]["Total"] += 1
         percent_total_checks_done[team][player] = int(
-            checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if \
-        seed_checks_in_area[player]["Total"] else 100
+            checks_done[team][player]["Total"] / len(player_locations) * 100) if \
+        player_locations else 100
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:

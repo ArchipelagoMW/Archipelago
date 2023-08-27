@@ -4,7 +4,7 @@ from typing import Iterator, Set
 
 from BaseClasses import Entrance, MultiWorld
 from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
-                                  item_in_locations, item_name, set_rule)
+                                  item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
 
 from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
@@ -287,7 +287,7 @@ def global_rules(world, player):
     if not (world.smallkey_shuffle[player] and world.bigkey_shuffle[player]):
         add_rule(world.get_location('Desert Palace - Prize', player), lambda state: state.multiworld.get_region('Desert Palace Main (Outer)', player).can_reach(state))
 
-    set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Tower of Hera)', player) or item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
+    set_rule(world.get_entrance('Tower of Hera Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Tower of Hera)', player) or location_item_name(state, 'Tower of Hera - Big Key Chest', player) == ('Small Key (Tower of Hera)', player))
     set_rule(world.get_entrance('Tower of Hera Big Key Door', player), lambda state: state.has('Big Key (Tower of Hera)', player))
     set_rule(world.get_location('Tower of Hera - Big Chest', player), lambda state: state.has('Big Key (Tower of Hera)', player))
     set_rule(world.get_location('Tower of Hera - Big Key Chest', player), lambda state: has_fire_source(state, player))
@@ -297,23 +297,23 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
     set_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player))
     set_rule(world.get_location('Swamp Palace - Trench 1 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 2))
-    set_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
+    set_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player))
     set_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Swamp Palace (West)', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6)
         if state.has('Hookshot', player)
         else state._lttp_has_key('Small Key (Swamp Palace)', player, 4))
-    set_rule(world.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player) or item_name(state, 'Swamp Palace - Big Chest', player) == ('Big Key (Swamp Palace)', player))
+    set_rule(world.get_location('Swamp Palace - Big Chest', player), lambda state: state.has('Big Key (Swamp Palace)', player))
     if world.accessibility[player] != 'locations':
-        set_always_allow(world.get_location('Swamp Palace - Big Chest', player), lambda state, item: item.name == 'Big Key (Swamp Palace)' and item.player == player)
-    set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 5))
+        allow_self_locking_items(world.get_location('Swamp Palace - Big Chest', player), 'Big Key (Swamp Palace)')
+    set_rule(world.get_entrance('Swamp Palace (North)', player), lambda state: state.has('Hookshot', player))
     if not world.smallkey_shuffle[player] and world.logic[player] not in ['hybridglitches', 'nologic']:
         forbid_item(world.get_location('Swamp Palace - Entrance', player), 'Big Key (Swamp Palace)', player)
     set_rule(world.get_location('Swamp Palace - Prize', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
     set_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
 
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
-    set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
-    set_rule(world.get_location('Thieves\' Town - Big Chest', player), lambda state: (state._lttp_has_key('Small Key (Thieves Town)', player, 3) or item_name(state, 'Thieves\' Town - Big Chest', player) == ('Small Key (Thieves Town)', player)) and state.has('Hammer', player))
+    set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
+    set_rule(world.get_location('Thieves\' Town - Big Chest', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player) and state.has('Hammer', player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player and state.has('Hammer', player) and state._lttp_has_key('Small Key (Thieves Town)', player, 2))
     set_rule(world.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
@@ -325,7 +325,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Skull Woods First Section (Right) North Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
     set_rule(world.get_entrance('Skull Woods First Section West Door', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
     set_rule(world.get_entrance('Skull Woods First Section (Left) Door to Exit', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
-    set_rule(world.get_location('Skull Woods - Big Chest', player), lambda state: state.has('Big Key (Skull Woods)', player) or item_name(state, 'Skull Woods - Big Chest', player) == ('Big Key (Skull Woods)', player))
+    set_rule(world.get_location('Skull Woods - Big Chest', player), lambda state: state.has('Big Key (Skull Woods)', player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Skull Woods - Big Chest', player), lambda state, item: item.name == 'Big Key (Skull Woods)' and item.player == player)
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 4) and state.has('Fire Rod', player) and has_sword(state, player))  # sword required for curtain
@@ -346,13 +346,13 @@ def global_rules(world, player):
     # Hence if big key is available then it's 6 keys, otherwise 4 keys.
     # If key_drop is off, then we have 3 drop keys available, and can never satisfy the 6 key requirement because one key is on right side,
     # so this reduces perfectly to original logic.
-    set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or 
-        (state._lttp_has_key('Small Key (Ice Palace)', player, 4) 
-            if item_in_locations(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), 
-                ('Ice Palace - Hammer Block Key Drop', player), 
-                ('Ice Palace - Big Key Chest', player), 
-                ('Ice Palace - Map Chest', player)]) 
-            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and 
+    set_rule(world.get_entrance('Ice Palace (East)', player), lambda state: (state.has('Hookshot', player) or
+        (state._lttp_has_key('Small Key (Ice Palace)', player, 4)
+            if item_name_in_location_names(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player),
+                ('Ice Palace - Hammer Block Key Drop', player),
+                ('Ice Palace - Big Key Chest', player),
+                ('Ice Palace - Map Chest', player)])
+            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and
         (state.multiworld.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
 
@@ -362,7 +362,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
     set_rule(world.get_location('Misery Mire - Spike Chest', player), lambda state: (state.multiworld.can_take_damage[player] and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
     set_rule(world.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    # How to access crystal switch: 
+    # How to access crystal switch:
     # If have big key: then you will need 2 small keys to be able to hit switch and return to main area, as you can burn key in dark room
     # If not big key: cannot burn key in dark room, hence need only 1 key. all doors immediately available lead to a crystal switch.
     # The listed chests are those which can be reached if you can reach a crystal switch.
@@ -370,11 +370,11 @@ def global_rules(world, player):
     set_rule(world.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(world.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
-             lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4) 
-             if item_name(state, 'Misery Mire - Compass Chest', player) == ('Big Key (Misery Mire)', player) or item_name(state, 'Misery Mire - Big Key Chest', player) == ('Big Key (Misery Mire)', player) or item_name(state, 'Misery Mire - Conveyor Crystal Key Drop', player) == ('Big Key (Misery Mire)', player) 
+             lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4)
+             if location_item_name(state, 'Misery Mire - Compass Chest', player) == ('Big Key (Misery Mire)', player) or location_item_name(state, 'Misery Mire - Big Key Chest', player) == ('Big Key (Misery Mire)', player) or location_item_name(state, 'Misery Mire - Conveyor Crystal Key Drop', player) == ('Big Key (Misery Mire)', player)
              else state._lttp_has_key('Small Key (Misery Mire)', player, 5))
-    set_rule(world.get_entrance('Misery Mire (West)', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 5) 
-        if ((item_name(state, 'Misery Mire - Compass Chest', player) in [('Big Key (Misery Mire)', player)]) or (item_name(state, 'Misery Mire - Big Key Chest', player) in [('Big Key (Misery Mire)', player)])) 
+    set_rule(world.get_entrance('Misery Mire (West)', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 5)
+        if ((location_item_name(state, 'Misery Mire - Compass Chest', player) in [('Big Key (Misery Mire)', player)]) or (location_item_name(state, 'Misery Mire - Big Key Chest', player) in [('Big Key (Misery Mire)', player)]))
         else state._lttp_has_key('Small Key (Misery Mire)', player, 6))
     set_rule(world.get_location('Misery Mire - Compass Chest', player), lambda state: has_fire_source(state, player))
     set_rule(world.get_location('Misery Mire - Big Key Chest', player), lambda state: has_fire_source(state, player))
@@ -405,12 +405,12 @@ def global_rules(world, player):
     set_rule(world.get_location('Palace of Darkness - Big Chest', player), lambda state: state.has('Big Key (Palace of Darkness)', player))
 
     set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
-                item_name(state, 'Palace of Darkness - Big Key Chest', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 3)))
+            location_item_name(state, 'Palace of Darkness - Big Key Chest', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 3)))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Palace of Darkness - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
 
     set_rule(world.get_entrance('Palace of Darkness Spike Statue Room Door', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
-                item_name(state, 'Palace of Darkness - Harmless Hellway', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 4)))
+            location_item_name(state, 'Palace of Darkness - Harmless Hellway', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 4)))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Palace of Darkness - Harmless Hellway', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
 
@@ -425,7 +425,9 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(world.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
     set_rule(world.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
-                item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+                location_item_name(state, 'Ganons Tower - Map Chest', player) in [('Big Key (Ganons Tower)', player)] and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+    if world.accessibility[player] != 'locations':
+        set_always_allow(world.get_location('Ganons Tower - Map Chest', player), lambda state, item: item.name == 'Small Key (Ganons Tower)' and item.player == player and state._lttp_has_key('Small Key (Ganons Tower)', player, 3) and state.can_reach('Ganons Tower (Hookshot Room)', 'region', player))
 
     # this seemed to be causing generation failure, disable for now
     # if world.accessibility[player] != 'locations':
@@ -436,24 +438,24 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 6))
     # It is possible to need more than 7 keys ....
     set_rule(world.get_entrance('Ganons Tower (Firesnake Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
-                    item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests + back_chests, [player] * len(randomizer_room_chests + back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests + back_chests, [player] * len(randomizer_room_chests + back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
 
     # The actual requirements for these rooms to avoid key-lock
-    set_rule(world.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or 
-        ((item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_in_locations(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
+    set_rule(world.get_location('Ganons Tower - Firesnake Room', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or
+        ((item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) or item_name_in_location_names(state, 'Small Key (Ganons Tower)', player, [('Ganons Tower - Firesnake Room', player)])) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     for location in randomizer_room_chests:
         set_rule(world.get_location(location, player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
-                    item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(randomizer_room_chests, [player] * len(randomizer_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 6)))
 
     # Once again it is possible to need more than 7 keys...
     set_rule(world.get_entrance('Ganons Tower (Tile Room) Key Door', player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
-                    item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
     set_rule(world.get_entrance('Ganons Tower (Bottom) (East)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
-                    item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(back_chests, [player] * len(back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(back_chests, [player] * len(back_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5)))
     # Actual requirements
     for location in compass_room_chests:
         set_rule(world.get_location(location, player), lambda state: state.has('Fire Rod', player) and (state._lttp_has_key('Small Key (Ganons Tower)', player, 7) or (
-                    item_in_locations(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
+                    item_name_in_location_names(state, 'Big Key (Ganons Tower)', player, zip(compass_room_chests, [player] * len(compass_room_chests))) and state._lttp_has_key('Small Key (Ganons Tower)', player, 5))))
 
     set_rule(world.get_location('Ganons Tower - Big Chest', player), lambda state: state.has('Big Key (Ganons Tower)', player))
 
@@ -1011,7 +1013,7 @@ def set_trock_key_rules(world, player):
     # Now we need to set rules based on which entrances we have access to. The most important point is whether we have back access. If we have back access, we
     # might open all the locked doors in any order, so we need maximally restrictive rules.
     if can_reach_back:
-        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state._lttp_has_key('Small Key (Turtle Rock)', player, 6) or item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
+        set_rule(world.get_location('Turtle Rock - Big Key Chest', player), lambda state: (state._lttp_has_key('Small Key (Turtle Rock)', player, 6) or location_item_name(state, 'Turtle Rock - Big Key Chest', player) == ('Small Key (Turtle Rock)', player)))
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
         set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
 
@@ -1021,11 +1023,11 @@ def set_trock_key_rules(world, player):
     else:
         # Middle to front requires 3 keys if the back is locked by this door, otherwise 5
         set_rule(world.get_entrance('Turtle Rock (Chain Chomp Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 3)
-                if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations.union({('Turtle Rock - Pokey 1 Key Drop', player)}))
+                if item_name_in_location_names(state, 'Big Key (Turtle Rock)', player, front_locked_locations.union({('Turtle Rock - Pokey 1 Key Drop', player)}))
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 5))
         # Middle to front requires 4 keys if the back is locked by this door, otherwise 6
         set_rule(world.get_entrance('Turtle Rock (Pokey Room) (South)', player), lambda state: state._lttp_has_key('Small Key (Turtle Rock)', player, 4)
-                if item_in_locations(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
+                if item_name_in_location_names(state, 'Big Key (Turtle Rock)', player, front_locked_locations)
                 else state._lttp_has_key('Small Key (Turtle Rock)', player, 6))
 
         # Front to middle requires 3 keys (if the middle is accessible then these doors can be avoided, otherwise no keys can be wasted)
@@ -1038,7 +1040,7 @@ def set_trock_key_rules(world, player):
         def tr_big_key_chest_keys_needed(state):
             # This function handles the key requirements for the TR Big Chest in the situations it having the Big Key should logically require 2 keys, small key
             # should logically require no keys, and anything else should logically require 4 keys.
-            item = item_name(state, 'Turtle Rock - Big Key Chest', player)
+            item = location_item_name(state, 'Turtle Rock - Big Key Chest', player)
             if item in [('Small Key (Turtle Rock)', player)]:
                 return 0
             if item in [('Big Key (Turtle Rock)', player)]:

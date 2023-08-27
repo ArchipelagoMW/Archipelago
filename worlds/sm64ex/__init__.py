@@ -71,7 +71,7 @@ class SM64World(World):
 
         return item
 
-    def generate_basic(self):
+    def create_items(self):
         starcount = self.multiworld.AmountOfStars[self.player].value
         if (not self.multiworld.EnableCoinStars[self.player].value):
             starcount = max(35,self.multiworld.AmountOfStars[self.player].value-15)

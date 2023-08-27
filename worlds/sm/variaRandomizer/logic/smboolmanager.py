@@ -1,19 +1,21 @@
 # object to handle the smbools and optimize them
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from logic.helpers import Bosses
-from logic.logic import Logic
-from utils.doorsmanager import DoorsManager
-from utils.parameters import Knows, isKnows
+from ..logic.cache import Cache
+from ..logic.smbool import SMBool, smboolFalse
+from ..logic.helpers import Bosses
+from ..logic.logic import Logic
+from ..utils.doorsmanager import DoorsManager
+from ..utils.objectives import Objectives
+from ..utils.parameters import Knows, isKnows
 import logging
 import sys
 
 class SMBoolManager(object):
-    items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper'] + Bosses.Golden4()
+    items = ['ETank', 'Missile', 'Super', 'PowerBomb', 'Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Reserve', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack', 'Nothing', 'NoEnergy', 'MotherBrain', 'Hyper', 'Gunship'] + Bosses.Golden4() + Bosses.miniBosses()
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
-    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False, lastAP = 'Landing Site'):
+    percentItems = ['Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack']
+    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False):
         self._items = { }
         self._counts = { }
 
@@ -21,15 +23,14 @@ class SMBoolManager(object):
         self.maxDiff = maxDiff
         self.onlyBossLeft = onlyBossLeft
 
-        self.lastAP = lastAP
-
         # cache related
-        self.cacheKey = 0
-        self.computeItemsPositions()
+        #self.cacheKey = 0
+        #self.computeItemsPositions()
         Cache.reset()
         Logic.factory('vanilla')
         self.helpers = Logic.HelpersGraph(self)
         self.doorsManager = DoorsManager()
+        self.objectives = Objectives.objDict[player] if player in Objectives.objDict.keys() else Objectives(player)
         self.createFacadeFunctions()
         self.createKnowsFunctions(player)
         self.resetItems()
@@ -88,17 +89,20 @@ class SMBoolManager(object):
         return itemsDict
 
     def withItem(self, item, func):
-        self.addItem(item)
+        addAndRemoveItem = self.isCountItem(item) or not self.haveItem(item)
+        if addAndRemoveItem:
+            self.addItem(item)
         ret = func(self)
-        self.removeItem(item)
+        if addAndRemoveItem:
+            self.removeItem(item)
         return ret
 
     def resetItems(self):
         self._items = { item : smboolFalse for item in self.items }
         self._counts = { item : 0 for item in self.countItems }
 
-        self.cacheKey = 0
-        Cache.update(self.cacheKey)
+        #self.cacheKey = 0
+        #Cache.update(self.cacheKey)
 
     def addItem(self, item):
         # a new item is available
@@ -106,11 +110,11 @@ class SMBoolManager(object):
         if self.isCountItem(item):
             count = self._counts[item] + 1
             self._counts[item] = count
-            self.computeNewCacheKey(item, count)
-        else:
-            self.computeNewCacheKey(item, 1)
+            #self.computeNewCacheKey(item, count)
+        #else:
+            #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def addItems(self, items):
         if len(items) == 0:
@@ -120,11 +124,11 @@ class SMBoolManager(object):
             if self.isCountItem(item):
                 count = self._counts[item] + 1
                 self._counts[item] = count
-                self.computeNewCacheKey(item, count)
-            else:
-                self.computeNewCacheKey(item, 1)
+                #self.computeNewCacheKey(item, count)
+            #else:
+                #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def removeItem(self, item):
         # randomizer removed an item (or the item was added to test a post available)
@@ -133,12 +137,12 @@ class SMBoolManager(object):
             self._counts[item] = count
             if count == 0:
                 self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, count)
+            #self.computeNewCacheKey(item, count)
         else:
             self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, 0)
+            #self.computeNewCacheKey(item, 0)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def createFacadeFunctions(self):
         for fun in dir(self.helpers):
@@ -147,22 +151,51 @@ class SMBoolManager(object):
 
     def traverse(self, doorName):
         return self.doorsManager.traverse(self, doorName)
+    
+    def canPassG4(self):
+        return self.objectives.canClearGoals(self, 'Golden Four')
+
+    def hasItemsPercent(self, percent, totalItemsCount=None):
+        if totalItemsCount is None:
+            totalItemsCount = self.objectives.getTotalItemsCount()
+        currentItemsCount = self.getCollectedItemsCount()
+        return SMBool(100*(currentItemsCount/totalItemsCount) >= percent)
+
+    def getCollectedItemsCount(self):
+        return (len([item for item in self._items if self.haveItem(item) and item in self.percentItems])
+                + sum([self.itemCount(item) for item in self._items if self.isCountItem(item)]))
 
     def createKnowsFunctions(self, player):
         # for each knows we have a function knowsKnows (ex: knowsAlcatrazEscape()) which
         # take no parameter
         for knows in Knows.__dict__:
             if isKnows(knows):
-                if player in Knows.knowsDict and knows in Knows.knowsDict[player].__dict__:
-                    setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.knowsDict[player].__dict__[knows].bool,
-                                                                            Knows.knowsDict[player].__dict__[knows].difficulty,
-                                                                            knows=[knows]))
-                else:
-                    # if knows not in preset, use default values
-                    setattr(self, 'knows'+knows, lambda knows=knows: SMBool(Knows.__dict__[knows].bool,
-                                                                            Knows.__dict__[knows].difficulty,
-                                                                            knows=[knows]))
+                self._createKnowsFunction(knows, player)
 
+    def _setKnowsFunction(self, knows, k):
+        setattr(self, 'knows'+knows, lambda: SMBool(k.bool, k.difficulty,
+                                                    knows=[knows]))
+
+    def _createKnowsFunction(self, knows, player):
+        if player in Knows.knowsDict and knows in Knows.knowsDict[player].__dict__:
+            self._setKnowsFunction(knows, Knows.knowsDict[player].__dict__[knows])
+        else:
+            self._setKnowsFunction(knows, Knows.__dict__[knows])
+
+    def changeKnows(self, knows, newVal):
+        if isKnows(knows):
+            self._setKnowsFunction(knows, newVal)
+            #Cache.reset()
+        else:
+            raise ValueError("Invalid knows "+str(knows))
+
+    def restoreKnows(self, knows):
+        if isKnows(knows):
+            self._createKnowsFunction(knows)
+            #Cache.reset()
+        else:
+            raise ValueError("Invalid knows "+str(knows))
+        
     def isCountItem(self, item):
         return item in self.countItems
 
@@ -174,6 +207,12 @@ class SMBoolManager(object):
     def haveItem(self, item):
         #return self.state.has(item, self.player)
         return self._items[item]
+    
+    def haveItems(self, items):
+        for item in items:
+            if not self.haveItem(item):
+                return smboolFalse
+        return SMBool(True)
 
     wand = staticmethod(SMBool.wand)
     wandmax = staticmethod(SMBool.wandmax)
@@ -218,11 +257,11 @@ class SMBoolManagerPlando(SMBoolManager):
         if isCount:
             count = self._counts[item] + 1
             self._counts[item] = count
-            self.computeNewCacheKey(item, count)
-        else:
-            self.computeNewCacheKey(item, 1)
+            #self.computeNewCacheKey(item, count)
+        #else:
+            #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)
 
     def removeItem(self, item):
         # randomizer removed an item (or the item was added to test a post available)
@@ -231,14 +270,14 @@ class SMBoolManagerPlando(SMBoolManager):
             self._counts[item] = count
             if count == 0:
                 self._items[item] = smboolFalse
-            self.computeNewCacheKey(item, count)
+            #self.computeNewCacheKey(item, count)
         else:
             dup = 'dup_'+item
             if self._items.get(dup, None) is None:
                 self._items[item] = smboolFalse
-                self.computeNewCacheKey(item, 0)
+                #self.computeNewCacheKey(item, 0)
             else:
                 del self._items[dup]
-                self.computeNewCacheKey(item, 1)
+                #self.computeNewCacheKey(item, 1)
 
-        Cache.update(self.cacheKey)
+        #Cache.update(self.cacheKey)

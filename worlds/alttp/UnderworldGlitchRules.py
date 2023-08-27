@@ -1,12 +1,11 @@
-
 from BaseClasses import Entrance
-from .SubClasses import LTTPRegion
 from worlds.generic.Rules import set_rule, add_rule
 from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
 
+
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
-# Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
-def underworld_glitch_connections(world, player): 
+# Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules.
+def underworld_glitch_connections(world, player):
     specrock = world.get_region('Spectacle Rock Cave (Bottom)', player)
     mire = world.get_region('Misery Mire (West)', player)
 

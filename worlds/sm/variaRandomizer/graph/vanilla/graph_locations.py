@@ -1,8 +1,8 @@
-from logic.helpers import Bosses
-from utils.parameters import Settings
-from rom.rom_patches import RomPatches
-from logic.smbool import SMBool
-from graph.location import locationsDict
+from ...logic.helpers import Bosses
+from ...utils.parameters import Settings
+from ...rom.rom_patches import RomPatches
+from ...logic.smbool import SMBool
+from ...graph.location import locationsDict
 
 locationsDict["Energy Tank, Gauntlet"].AccessFrom = {
     'Landing Site': lambda sm: SMBool(True)
@@ -157,7 +157,7 @@ locationsDict["Energy Tank, Crocomire"].AccessFrom = {
     'Crocomire Room Top': lambda sm: SMBool(True)
 }
 locationsDict["Energy Tank, Crocomire"].Available = (
-    lambda sm: sm.wand(sm.enoughStuffCroc(),
+    lambda sm: sm.wand(sm.haveItem('Crocomire'),
                        sm.wor(sm.haveItem('Grapple'),
                               sm.haveItem('SpaceJump'),
                               sm.energyReserveCountOk(3/sm.getDmgReduction()[0])))
@@ -176,7 +176,7 @@ locationsDict["Grapple Beam"].AccessFrom = {
     'Crocomire Room Top': lambda sm: SMBool(True)
 }
 locationsDict["Grapple Beam"].Available = (
-    lambda sm: sm.wand(sm.enoughStuffCroc(),
+    lambda sm: sm.wand(sm.haveItem('Crocomire'),
                        sm.wor(sm.wand(sm.haveItem('Morph'),
                                       sm.canFly()),
                               sm.wand(sm.haveItem('SpeedBooster'),
@@ -220,11 +220,7 @@ locationsDict["Wave Beam"].Available = (
     lambda sm: sm.traverse('DoubleChamberRight')
 )
 locationsDict["Wave Beam"].PostAvailable = (
-    lambda sm: sm.wor(sm.haveItem('Morph'), # exit through lower passage under the spikes
-                      sm.wand(sm.wor(sm.haveItem('SpaceJump'), # exit through blue gate
-                                     sm.haveItem('Grapple')),
-                              sm.wor(sm.wand(sm.canBlueGateGlitch(), sm.heatProof()), # hell run + green gate glitch is too much
-                                     sm.haveItem('Wave'))))
+    lambda sm: sm.canExitWaveBeam()
 )
 locationsDict["Ridley"].AccessFrom = {
     'RidleyRoomIn': lambda sm: SMBool(True)
@@ -233,7 +229,7 @@ locationsDict["Ridley"].Available = (
     lambda sm: sm.wand(sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']), sm.enoughStuffsRidley())
 )
 locationsDict["Energy Tank, Ridley"].AccessFrom = {
-    'RidleyRoomIn': lambda sm: sm.haveItem('Ridley')
+    'RidleyRoomIn': lambda sm: sm.wand(sm.haveItem('Ridley'), sm.canHellRun(**Settings.hellRunsTable['LowerNorfair']['Main']))
 }
 locationsDict["Energy Tank, Ridley"].Available = (
     lambda sm: sm.haveItem('Morph')
@@ -354,27 +350,8 @@ locationsDict["Spring Ball"].AccessFrom = {
     'Oasis Bottom': lambda sm: sm.canTraverseSandPits()
 }
 locationsDict["Spring Ball"].Available = (
-    lambda sm: sm.wand(sm.canUsePowerBombs(), # in Shaktool room to let Shaktool access the sand blocks
-                       sm.wor(sm.wand(sm.haveItem('Ice'), # puyo clip
-                                      sm.wor(sm.wand(sm.haveItem('Gravity'),
-                                                     sm.knowsPuyoClip()),
-                                             sm.wand(sm.haveItem('Gravity'),
-                                                     sm.haveItem('XRayScope'),
-                                                     sm.knowsPuyoClipXRay()),
-                                             sm.knowsSuitlessPuyoClip())),
-                              sm.wand(sm.haveItem('Grapple'), # go through grapple block
-                                      sm.wor(sm.wand(sm.haveItem('Gravity'),
-                                                     sm.wor(sm.wor(sm.wand(sm.haveItem('HiJump'), sm.knowsAccessSpringBallWithHiJump()),
-                                                                   sm.haveItem('SpaceJump')),
-                                                            sm.knowsAccessSpringBallWithGravJump(),
-                                                            sm.wand(sm.haveItem('Bomb'),
-                                                                    sm.wor(sm.knowsAccessSpringBallWithBombJumps(),
-                                                                           sm.wand(sm.haveItem('SpringBall'),
-                                                                                   sm.knowsAccessSpringBallWithSpringBallBombJumps()))),
-                                                            sm.wand(sm.haveItem('SpringBall'), sm.knowsAccessSpringBallWithSpringBallJump()))),
-                                             sm.wand(sm.haveItem('SpaceJump'), sm.knowsAccessSpringBallWithFlatley()))),
-                              sm.wand(sm.haveItem('XRayScope'), sm.knowsAccessSpringBallWithXRayClimb()), # XRay climb
-                              sm.canCrystalFlashClip()),
+    lambda sm: sm.wand(sm.canAccessShaktoolFromPantsRoom(),
+                       sm.canUsePowerBombs(), # in Shaktool room to let Shaktool access the sand blocks
                        sm.wor(sm.haveItem('Gravity'), sm.canUseSpringBall())) # acess the item in spring ball room
 )
 locationsDict["Spring Ball"].PostAvailable = (
@@ -406,10 +383,37 @@ locationsDict["Space Jump"].PostAvailable = (
     lambda sm: Bosses.bossDead(sm, 'Draygon')
 )
 locationsDict["Mother Brain"].AccessFrom = {
-    'Golden Four': lambda sm: Bosses.allBossesDead(sm)
+    'Golden Four': lambda sm: sm.canPassG4()
 }
 locationsDict["Mother Brain"].Available = (
-    lambda sm: sm.enoughStuffTourian()
+    lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.NoTourian),
+                      sm.enoughStuffTourian())
+)
+locationsDict["Spore Spawn"].AccessFrom = {
+    'Big Pink': lambda sm: SMBool(True)
+}
+locationsDict["Spore Spawn"].Available = (
+    lambda sm: sm.wand(sm.traverse('BigPinkTopRight'),
+                       sm.enoughStuffSporeSpawn())
+)
+locationsDict["Botwoon"].AccessFrom = {
+    'Aqueduct Bottom': lambda sm: sm.canJumpUnderwater()
+}
+locationsDict["Botwoon"].Available = (
+    # includes botwoon hallway conditions
+    lambda sm: sm.canDefeatBotwoon()
+)
+locationsDict["Crocomire"].AccessFrom = {
+    'Crocomire Room Top': lambda sm: SMBool(True)
+}
+locationsDict["Crocomire"].Available = (
+    lambda sm: sm.enoughStuffCroc()
+)
+locationsDict["Golden Torizo"].AccessFrom = {
+    'Screw Attack Bottom': lambda sm: SMBool(True)
+}
+locationsDict["Golden Torizo"].Available = (
+    lambda sm: sm.enoughStuffGT()
 )
 locationsDict["Power Bomb (Crateria surface)"].AccessFrom = {
     'Landing Site': lambda sm: SMBool(True)
@@ -506,10 +510,10 @@ locationsDict["Super Missile (pink Brinstar)"].AccessFrom = {
 }
 locationsDict["Super Missile (pink Brinstar)"].Available = (
     lambda sm: sm.wor(sm.wand(sm.traverse('BigPinkTopRight'),
-                              sm.enoughStuffSporeSpawn()),
+                              sm.haveItem('SporeSpawn')),
                       # back way into spore spawn
-                                     sm.wand(sm.canOpenGreenDoors(),
-                                             sm.canPassBombPassages()))
+                      sm.wand(sm.canOpenGreenDoors(),
+                              sm.canPassBombPassages()))
 )
 locationsDict["Super Missile (pink Brinstar)"].PostAvailable = (
     lambda sm: sm.wand(sm.canOpenGreenDoors(),
@@ -665,10 +669,10 @@ locationsDict["Missile (below Ice Beam)"].Available = (
     lambda sm: SMBool(True)
 )
 locationsDict["Missile (above Crocomire)"].AccessFrom = {
-    'Crocomire Speedway Bottom': lambda sm: sm.canHellRun(**Settings.hellRunsTable['MainUpperNorfair']['Croc -> Grapple Escape Missiles'])
+    'Grapple Escape': lambda sm: SMBool(True)
 }
 locationsDict["Missile (above Crocomire)"].Available = (
-    lambda sm: sm.canGrappleEscape()
+    lambda sm: SMBool(True)
 )
 locationsDict["Missile (Hi-Jump Boots)"].AccessFrom = {
     'Business Center': lambda sm: sm.wor(RomPatches.has(sm.player, RomPatches.HiJumpAreaBlueDoor), sm.traverse('BusinessCenterBottomLeft'))
@@ -691,7 +695,7 @@ locationsDict["Power Bomb (Crocomire)"].AccessFrom = {
 }
 locationsDict["Power Bomb (Crocomire)"].Available = (
     lambda sm: sm.wand(sm.traverse('PostCrocomireUpperLeft'),
-                       sm.enoughStuffCroc(),
+                       sm.haveItem('Crocomire'),
                        sm.wor(sm.wor(sm.canFly(),
                                      sm.haveItem('Grapple'),
                                      sm.wand(sm.haveItem('SpeedBooster'),
@@ -706,13 +710,13 @@ locationsDict["Missile (below Crocomire)"].AccessFrom = {
     'Crocomire Room Top': lambda sm: SMBool(True)
 }
 locationsDict["Missile (below Crocomire)"].Available = (
-    lambda sm: sm.wand(sm.traverse('PostCrocomireShaftRight'), sm.enoughStuffCroc(), sm.haveItem('Morph'))
+    lambda sm: sm.wand(sm.traverse('PostCrocomireShaftRight'), sm.haveItem('Crocomire'), sm.haveItem('Morph'))
 )
 locationsDict["Missile (Grapple Beam)"].AccessFrom = {
     'Crocomire Room Top': lambda sm: SMBool(True)
 }
 locationsDict["Missile (Grapple Beam)"].Available = (
-    lambda sm: sm.wand(sm.enoughStuffCroc(),
+    lambda sm: sm.wand(sm.haveItem('Crocomire'),
                        sm.wor(sm.wor(sm.wand(sm.haveItem('Morph'), # from below
                                              sm.canFly()),
                                      sm.wand(sm.haveItem('SpeedBooster'),
@@ -754,6 +758,9 @@ locationsDict["Missile (Speed Booster)"].AccessFrom = {
 locationsDict["Missile (Speed Booster)"].Available = (
     lambda sm: sm.canHellRunToSpeedBooster()
 )
+locationsDict["Missile (Speed Booster)"].PostAvailable = (
+    lambda sm: sm.canHellRunBackFromSpeedBoosterMissile()
+)
 locationsDict["Missile (Wave Beam)"].AccessFrom = {
     'Bubble Mountain Top': lambda sm: sm.canAccessDoubleChamberItems()
 }
@@ -773,7 +780,7 @@ locationsDict["Super Missile (Gold Torizo)"].AccessFrom = {
     'Screw Attack Bottom': lambda sm: SMBool(True)
 }
 locationsDict["Super Missile (Gold Torizo)"].Available = (
-    lambda sm: SMBool(True)
+    lambda sm: sm.canDestroyBombWalls()
 )
 locationsDict["Super Missile (Gold Torizo)"].PostAvailable = (
     lambda sm: sm.enoughStuffGT()

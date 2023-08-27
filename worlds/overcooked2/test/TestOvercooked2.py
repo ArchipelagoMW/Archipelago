@@ -1,10 +1,12 @@
 import unittest
-
 from random import Random
 
+from worlds.AutoWorld import AutoWorldRegister
+from test.general import setup_solo_multiworld
+
 from worlds.overcooked2.Items import *
-from worlds.overcooked2.Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, level_id_to_shortname, ITEMS_TO_EXCLUDE_IF_NO_DLC
-from worlds.overcooked2.Logic import level_logic, level_shuffle_factory
+from worlds.overcooked2.Overcooked2Levels import Overcooked2Dlc, Overcooked2Level, OverworldRegion, overworld_region_by_level, level_id_to_shortname
+from worlds.overcooked2.Logic import level_logic, overworld_region_logic, level_shuffle_factory
 from worlds.overcooked2.Locations import oc2_location_name_to_id
 
 
@@ -65,26 +67,24 @@ class Overcooked2Test(unittest.TestCase):
 
     def testOvercooked2ShuffleFactory(self):
         previous_runs = set()
+
+        # Test uniqueness
         for seed in range(0, 5):
-            levels = level_shuffle_factory(Random(seed), True, False)
+            levels = level_shuffle_factory(Random(seed), True, False, True, {x for x in Overcooked2Dlc}, "test")
             self.assertEqual(len(levels), 44)
-            previous_level_id = None
-            for level_id in levels.keys():
-                if previous_level_id is not None:
-                    self.assertEqual(previous_level_id+1, level_id)
-                previous_level_id = level_id
 
-            self.assertNotIn(levels[15], previous_runs)
-            previous_runs.add(levels[15])
+            self.assertNotIn((levels[5], levels[15]), previous_runs)
+            previous_runs.add((levels[5], levels[15]))
 
-        levels = level_shuffle_factory(Random(123), False, True)
-        self.assertEqual(len(levels), 44)
+        # Test kevin = false
+        levels = level_shuffle_factory(Random(123), False, True, False, {x for x in Overcooked2Dlc}, "test")
+        self.assertEqual(len(levels), 36)
 
     def testLevelNameRepresentation(self):
         shortnames = [level.as_generic_level.shortname for level in Overcooked2Level()]
 
         for shortname in shortnames:
-            self.assertIn(shortname, level_logic.keys())
+            self.assertIn(shortname, level_logic)
 
         self.assertEqual(len(level_logic), len(level_id_to_shortname))
 
@@ -140,13 +140,9 @@ class Overcooked2Test(unittest.TestCase):
 
         self.assertLessEqual(number_of_items, len(oc2_location_name_to_id), "Too many items (before fillers placed)")
 
-    def testExclusiveItems(self):
-        for dlc in Overcooked2Dlc:
-            for item in dlc.exclusive_items():
-                self.assertIn(item, item_table.keys())
-
-        for item in ITEMS_TO_EXCLUDE_IF_NO_DLC:
-            self.assertIn(item, item_table.keys())
+    def testDlcExclusives(self):
+        for item in dlc_exclusives:
+            self.assertIn(item, item_table)
 
     def testLevelCounts(self):
         for dlc in Overcooked2Dlc:
@@ -170,3 +166,43 @@ class Overcooked2Test(unittest.TestCase):
                     count += 1
             
             self.assertEqual(count, len(level_id_range), f"Number of levels in {dlc.name} has discrepancy between level_id range and directory")
+
+    def testOverworldRegion(self):
+        # OverworldRegion
+        # overworld_region_by_level
+        # overworld_region_logic
+
+        # Test for duplicates
+        regions_list = [x for x in OverworldRegion]
+        regions_set = set(regions_list)
+        self.assertEqual(len(regions_list), len(regions_set), f"Duplicate values in OverworldRegion")
+        
+        # Test all levels represented
+        shortnames = [level.as_generic_level.shortname for level in Overcooked2Level()]
+        for shortname in shortnames:
+            if " " in shortname:
+                shortname = shortname.split(" ")[1]
+            shortname = shortname.replace("K-", "Kevin-")
+            self.assertIn(shortname, overworld_region_by_level)
+
+        for region in overworld_region_by_level.values():
+            # Test all regions valid
+            self.assertIn(region, regions_list)
+
+            # Test Region Coverage
+            self.assertIn(region, overworld_region_logic)
+
+        # Test all regions valid
+        for region in overworld_region_logic:
+            self.assertIn(region, regions_set)
+
+        self.assertIn("Overcooked! 2", AutoWorldRegister.world_types.keys())
+        world_type = AutoWorldRegister.world_types["Overcooked! 2"]
+        world = setup_solo_multiworld(world_type)
+        state = world.get_all_state(False)
+
+        # Test region logic
+        for logic in overworld_region_logic.values():
+            for allow_tricks in [False, True]:
+                result = logic(state, 1, allow_tricks, list())
+                self.assertIn(result, [False, True])
