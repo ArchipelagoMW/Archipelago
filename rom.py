@@ -9,7 +9,7 @@ import Utils
 from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
-from .data import ap_id_offset, AddressSpace, encode_str, get_symbol
+from .data import ap_id_offset, Domain, encode_str, get_symbol
 
 
 MD5_US_EU = "5fe47355a33e3fabec2a1607af88a404"
@@ -37,50 +37,43 @@ class LocalRom():
             patch_bytes = patch_file.read()
             self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
 
-    def read_bit(self, address: int, bit_number: int, space: AddressSpace = AddressSpace.SystemBus) -> bool:
-        offset = AddressSpace.ROM.value - space.value
-        address -= offset
+    def read_bit(self, address: int, bit_number: int, space: Domain = Domain.SYSTEM_BUS) -> bool:
+        address = Domain.ROM.convert_from(space, address)
         bitflag = (1 << bit_number)
         return ((self.buffer[address] & bitflag) != 0)
 
-    def read_byte(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
-        offset = AddressSpace.ROM.value - space.value
-        address -= offset
+    def read_byte(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
+        address = Domain.ROM.convert_from(space, address)
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int, space: AddressSpace = AddressSpace.SystemBus) -> bytes:
-        offset = AddressSpace.ROM.value - space.value
-        startaddress -= offset
+    def read_bytes(self, startaddress: int, length: int, space: Domain = Domain.SYSTEM_BUS) -> bytes:
+        startaddress = Domain.ROM.convert_from(space, startaddress)
         return self.buffer[startaddress:startaddress + length]
 
-    def read_halfword(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
+    def read_halfword(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
         assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
         halfword = self.read_bytes(address, 2, space)
         return int.from_bytes(halfword, 'little')
 
-    def read_word(self, address: int, space: AddressSpace = AddressSpace.SystemBus) -> int:
+    def read_word(self, address: int, space: Domain = Domain.SYSTEM_BUS) -> int:
         assert address % 4 == 0, f'Misaligned word address: {address:x}'
         word = self.read_bytes(address, 4, space)
         return int.from_bytes(word, 'little')
 
-    def write_byte(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
-        offset = AddressSpace.ROM.value - space.value
-        address -= offset
-        assert address >= 0, f'Address out of bounds: {address:x}'
+    def write_byte(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
+        address = Domain.ROM.convert_from(space, address)
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress: int, values, space: AddressSpace = AddressSpace.SystemBus):
-        offset = AddressSpace.ROM.value - space.value
-        startaddress -= offset
-        assert startaddress >= 0, f'Address out of bounds: {startaddress:x}'
+    def write_bytes(self, startaddress: int, values, space: Domain = Domain.SYSTEM_BUS):
+        startaddress = Domain.ROM.convert_from(space, startaddress)
         self.buffer[startaddress:startaddress + len(values)] = values
 
-    def write_halfword(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
+    def write_halfword(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
         assert address % 2 == 0, f'Misaligned halfword address: {address:x}'
         halfword = value.to_bytes(2, 'little')
         self.write_bytes(address, halfword, space)
 
-    def write_word(self, address: int, value: int, space: AddressSpace = AddressSpace.SystemBus):
+    def write_word(self, address: int, value: int, space: Domain = Domain.SYSTEM_BUS):
         assert address % 4 == 0, f'Misaligned word address: {address:x}'
         word = value.to_bytes(4, 'little')
         self.write_bytes(address, word, space)

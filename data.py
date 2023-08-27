@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from pathlib import Path
 from typing import Dict
@@ -6,9 +8,16 @@ from typing import Dict
 ap_id_offset = 0xEC00
 
 
-class AddressSpace(Enum):
-    SystemBus = 0x0000000
+class Domain(Enum):
+    SYSTEM_BUS = 0x0000000
     ROM = 0x8000000
+
+    def convert_from(self, source: Domain, addr: int) -> int:
+        difference = self.value - source.value
+        # Doesn't bounds check against top, but that's okay for now
+        assert addr > difference, f'{self.name} address {addr} is out of bounds for {source.name}'
+        addr -= difference
+        return addr
 
 
 def _get_symbols(symbol_file: Path) -> Dict[str, int]:
