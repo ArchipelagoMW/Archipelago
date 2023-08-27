@@ -10,6 +10,7 @@ from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location
 from .Locations import OSRSLocation, all_locations
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
+from .LogicCSVParser import load_logic_csvs, location_rows, resource_rows, region_rows, item_rows
 
 
 class OSRSWeb(WebWorld):
