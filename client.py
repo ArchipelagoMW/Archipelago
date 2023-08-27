@@ -16,6 +16,8 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from worlds import network_data_package
 from worlds.wl4.rom import get_base_rom_path
+from worlds.wl4.locations import get_level_locations, location_table
+
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -94,7 +96,7 @@ class WL4Context(CommonContext):
         self.gba_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
 
-        self.location_table = {}
+        self.location_list = []
 
         self.deathlink_enabled = False
         self.deathlink_pending = False
@@ -157,7 +159,7 @@ async def parse_payload(payload: dict, ctx: WL4Context, force: bool):
         ctx.deathlink_enabled = False
         ctx.deathlink_client_override = False
         ctx.finished_game = False
-        ctx.location_table = {}
+        ctx.location_list = []
         ctx.deathlink_pending = False
         ctx.deathlink_sent_this_death = False
         ctx.auth = payload['playerName']
@@ -179,15 +181,23 @@ async def parse_payload(payload: dict, ctx: WL4Context, force: bool):
         }])
         ctx.finished_game = True
 
-    locations = payload['locations']
+    # Parse item status bits
+    item_status = payload["itemStatus"]
+    locations = []
+    for passage in range(6):
+        for level in range(6):
+            status_bits = item_status[passage * 6 + level] >> 8
+            for location in get_level_locations(passage, level):
+                _, (_, _, bit), *_ = location_table[location]
+                if status_bits & bit:
+                    locations.append(location)
 
     # Locations handling
-    if ctx.location_table != locations:
-        ctx.location_table = locations
+    if ctx.location_list != locations:
+        ctx.location_list = locations
         await ctx.send_msgs([{
             'cmd': 'LocationChecks',
-            'locations': [wl4_loc_name_to_id[loc]
-                            for loc, b in ctx.location_table.items() if b]
+            'locations': [wl4_loc_name_to_id[loc] for loc in ctx.location_list]
         }])
 
     # Deathlink handling
@@ -222,7 +232,7 @@ async def gba_sync_task(ctx: WL4Context):
                     data_decoded = json.loads(data.decode())
                     reported_version = data_decoded.get('scriptVersion', 0)
                     if reported_version >= script_version:
-                        if ctx.game is not None and 'locations' in data_decoded:
+                        if ctx.game is not None and 'itemStatus' in data_decoded:
                             # Not just a keep alive ping, parse
                             asyncio.create_task((parse_payload(data_decoded, ctx, False)))
                         if not ctx.auth:
