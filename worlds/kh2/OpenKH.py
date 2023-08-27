@@ -53,13 +53,13 @@ def patch_kh2(self, output_directory):
     formexp = None
     formName = None
     levelsetting = list()
-    slotDataDuping = set()
-    for values in CheckDupingItems.values():
-        if isinstance(values, set):
-            slotDataDuping = slotDataDuping.union(values)
-        else:
-            for inner_values in values.values():
-                slotDataDuping = slotDataDuping.union(inner_values)
+    #slotDataDuping = set()
+    #for values in CheckDupingItems.values():
+    #    if isinstance(values, set):
+    #        slotDataDuping = slotDataDuping.union(values)
+    #    else:
+    #        for inner_values in values.values():
+    #            slotDataDuping = slotDataDuping.union(inner_values)
 
     if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
         logging.info(

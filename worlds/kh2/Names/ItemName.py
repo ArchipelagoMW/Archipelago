@@ -38,12 +38,12 @@ MasterForm = "Master Form"
 FinalForm = "Final Form"
 
 # magic and summons
-FireElement = "Fire Element"
-BlizzardElement = "Blizzard Element"
-ThunderElement = "Thunder Element"
-CureElement = "Cure Element"
-MagnetElement = "Magnet Element"
-ReflectElement = "Reflect Element"
+FireElement      = "Fire Element"
+BlizzardElement  = "Blizzard Element"
+ThunderElement   = "Thunder Element"
+CureElement      = "Cure Element"
+MagnetElement    = "Magnet Element"
+ReflectElement   = "Reflect Element"
 
 Genie = "Genie"
 PeterPan = "Peter Pan"

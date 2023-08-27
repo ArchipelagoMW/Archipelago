@@ -287,10 +287,10 @@ ActionAbility_Table = {
     ItemName.TrinityLimit:     ItemData(1, 198, 0x0C6, ability=True),
 }
 Boosts_Table = {
-    ItemName.PowerBoost:   ItemData(1, 276, 0x3666),
-    ItemName.MagicBoost:   ItemData(1, 277, 0x3667),
-    ItemName.DefenseBoost: ItemData(1, 278, 0x3668),
-    ItemName.APBoost:      ItemData(1, 279, 0x3669),
+    ItemName.PowerBoost:   ItemData(1, 253, 0x359D),  # 276, 0x3666, market place map
+    ItemName.MagicBoost:   ItemData(1, 586, 0x35E0),  # 277, 0x3667, dark rememberance map
+    ItemName.DefenseBoost: ItemData(1, 590, 0x35F8),  # 278, 0x3668, depths of remembrance
+    ItemName.APBoost:      ItemData(1, 532, 0x35FE),  # 279, 0x3669, mansion map
 }
 
 # These items cannot be in other games so these are done locally in kh2
@@ -445,7 +445,7 @@ CheckDupingItems = {
                                                                                                  ItemName.OletteMunnyPouch,
                                                                                                  ItemName.HadesCupTrophy,
                                                                                                  ItemName.UnknownDisk,
-                                                                                                 ItemName.OlympusStone, ]]
+                                                                                                 ItemName.OlympusStone, ], Boosts_Table.keys()]
         for item_name in keys
 
     },
@@ -493,9 +493,6 @@ CheckDupingItems = {
             goofy_ability for goofy_ability in GoofyAbility_Table.keys()
         }
     },
-    "Boosts":         {
-        boost for boost in Boosts_Table.keys()
-    }
 }
 progression_set = {
     # abilities
