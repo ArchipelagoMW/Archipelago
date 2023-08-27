@@ -12,7 +12,7 @@ from Patch import APDeltaPatch
 from .data import ap_id_offset, Domain, encode_str, get_symbol
 
 
-MD5_US_EU = "5fe47355a33e3fabec2a1607af88a404"
+MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
 
 
 class WL4DeltaPatch(APDeltaPatch):

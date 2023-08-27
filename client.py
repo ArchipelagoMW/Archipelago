@@ -182,7 +182,7 @@ async def parse_payload(payload: dict, ctx: WL4Context, force: bool):
         ctx.finished_game = True
 
     # Parse item status bits
-    item_status = payload["itemStatus"]
+    item_status = payload['itemStatus']
     locations = []
     for passage in range(6):
         for level in range(6):

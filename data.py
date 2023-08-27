@@ -58,14 +58,14 @@ charset = _get_charset(Path(__file__).parent / 'data/charset.tbl')
 
 
 def get_symbol(symbol: str, offset: int = 0) -> int:
-    """Convert a label name and offset to an address on GBA system bus."""
+    '''Convert a label name and offset to an address on GBA system bus.'''
 
     return symbols[symbol.lower()] + offset
 
 
 def encode_str(msg: str) -> bytes:
-    """Encode a string into Wario Land 4's text format. Unrecognized characters
-    are converted to spaces."""
+    '''Encode a string into Wario Land 4's text format. Unrecognized characters
+    are converted to spaces.'''
 
     encoded = []
     for c in msg:
