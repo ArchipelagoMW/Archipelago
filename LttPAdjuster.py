@@ -23,7 +23,8 @@ from urllib.request import urlopen
 import ModuleUpdate
 ModuleUpdate.update()
 
-from worlds.alttp.Rom import Sprite, LocalRom, apply_rom_settings, get_base_rom_bytes
+from worlds.alttp.Rom import LocalRom, apply_rom_settings, get_base_rom_bytes
+from worlds.alttp.Sprites import Sprite
 from Utils import output_path, local_path, user_path, open_file, get_cert_none_ssl_context, persistent_store, \
     get_adjuster_settings, get_adjuster_settings_no_defaults, tkinter_center_window, init_logging
 

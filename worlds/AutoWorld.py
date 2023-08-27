@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+    from flask import Flask
 
 
 class AutoWorldRegister(type):
@@ -412,6 +413,16 @@ class World(metaclass=AutoWorldRegister):
         res["checksum"] = data_package_checksum(res)
         return res
 
+    # allows modification of webhost during startup, this is run once
+    @classmethod
+    def run_webhost_setup(cls):
+        pass
+
+    # allows modification of webhost during startup,
+    # this is run whenever a Flask app is created (per-thread/per-process)
+    @classmethod
+    def run_webhost_app_setup(cls, app: "Flask"):
+        pass
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

@@ -19,8 +19,8 @@ from waitress import serve
 
 from WebHostLib.models import db
 from WebHostLib.autolauncher import autohost, autogen
-from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
+import worlds
 
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
@@ -42,6 +42,13 @@ def get_app():
 
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
+
+    for world in worlds.AutoWorldRegister.world_types.values():
+        try:
+            world.run_webhost_app_setup(app)
+        except Exception as e:
+            logging.exception(e)
+
     return app
 
 
@@ -120,12 +127,18 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
-    try:
-        update_sprites_lttp()
-    except Exception as e:
-        logging.exception(e)
-        logging.warning("Could not update LttP sprites.")
+
+    for world in worlds.AutoWorldRegister.world_types.values():
+        try:
+            world.run_webhost_setup()
+        except Exception as e:
+            logging.exception(e)
+    del world, worlds
+
     app = get_app()
+
+
+
     create_options_files()
     create_ordered_tutorials_file()
     if app.config["SELFLAUNCH"]:
