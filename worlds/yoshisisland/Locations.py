@@ -8,6 +8,7 @@ class LocationData(NamedTuple):
     region: str
     name: str
     code: Optional[int]
+    LevelID: int
     rule: Callable = lambda state: True
 
 
@@ -17,7 +18,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
 
     location_table: List[LocationData] = [
 
-    LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, lambda state: logic._11Coins(state)),
+    LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, 0x00, lambda state: logic._11Coins(state)),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Flowers', 0x305021, lambda state: logic._11Flowers(state)),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Stars', 0x305022, lambda state: logic._11Stars(state)),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Level Clear', 0x305023, lambda state: logic._11Clear(state)),
@@ -60,7 +61,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("1-8", "Salvo The Slime's Castle: Level Clear", 0x305040, lambda state: logic._18CanFightBoss(state)),
     LocationData("Salvo The Slime's Boss Room", 'Salvo The Slime Defeated', None, lambda state: logic._18Boss(state)),
 
-    LocationData("Flip Cards", 'Flip Cards', None),
+    LocationData("Flip Cards", 'Flip Cards', None, 0x09),
     ############################################################################################
     LocationData("2-1", "Visit Koopa And Para-Koopa: Red Coins", 0x305041, lambda state: logic._21Coins(state)),
     LocationData("2-1", "Visit Koopa And Para-Koopa: Flowers", 0x305042, lambda state: logic._21Flowers(state)),
@@ -148,7 +149,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("3-8", "Naval Piranha's Castle: Level Clear", 0x305080, lambda state: logic._38CanFightBoss(state)),
     LocationData("Naval Piranha's Boss Room", 'Naval Piranha Defeated', None, lambda state: logic._38Boss(state)),
 
-    LocationData("Drawing Lots", 'Drawing Lots', None),
+    LocationData("Drawing Lots", 'Drawing Lots', None, 0x00),
     ##############################################################################################
     LocationData("4-1", "GO! GO! MARIO!!: Red Coins", 0x305081, lambda state: logic._41Coins(state)),
     LocationData("4-1", "GO! GO! MARIO!!: Flowers", 0x305082, lambda state: logic._41Flowers(state)),
@@ -193,7 +194,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("4-8", "Hookbill The Koopa's Castle: Level Clear", 0x3050A0, lambda state: logic._48CanFightBoss(state)),
     LocationData("Hookbill The Koopa's Boss Room", 'Hookbill The Koopa Defeated', None, lambda state: logic._48Boss(state)),
 
-    LocationData("Match Cards", 'Match Cards', None),
+    LocationData("Match Cards", 'Match Cards', None, 0x00),
     ######################################################################################################
     LocationData("5-1", "BLIZZARD!!!: Red Coins", 0x3050A1, lambda state: logic._51Coins(state)),
     LocationData("5-1", "BLIZZARD!!!: Flowers", 0x3050A2, lambda state: logic._51Flowers(state)),
@@ -281,10 +282,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
 
     if not multiworld or get_option_value(multiworld, player, "extras_enabled") == 1:
         location_table += ( 
-            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Red Coins", 0x3050E0, lambda state: logic._1ECoins(state)),
-            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Flowers", 0x3050E1, lambda state: logic._1EFlowers(state)),
-            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Stars", 0x3050E2, lambda state: logic._1EStars(state)),
-            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Level Clear", 0x3050E3, lambda state: logic._1EClear(state)),
+            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Red Coins", 0x3050E0, 0x08, lambda state: logic._1ECoins(state)),
+            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Flowers", 0x3050E1, 0x08, lambda state: logic._1EFlowers(state)),
+            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Stars", 0x3050E2, 0x08, lambda state: logic._1EStars(state)),
+            LocationData("Poochy Ain't Stupid", "Poochy Ain't Stupid: Level Clear", 0x3050E3, 0x08, lambda state: logic._1EClear(state)),
 
             LocationData("Hit That Switch!!", "Hit That Switch!!: Red Coins", 0x3050E4, lambda state: logic._2ECoins(state)),
             LocationData("Hit That Switch!!", "Hit That Switch!!: Flowers", 0x3050E5, lambda state: logic._2EFlowers(state)),
@@ -332,12 +333,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
 
     if not multiworld or get_option_value(multiworld, player, "minigame_checks") >= 2:
         location_table += ( 
-            LocationData("Flip Cards", "Flip Cards: Victory", 0x305106),
-            LocationData("Scratch And Match", "Scratch And Match: Victory", 0x305107),
-            LocationData("Drawing Lots", "Drawing Lots: Victory", 0x305108),
-            LocationData("Match Cards", "Match Cards: Victory", 0x305109),
-            LocationData("Roulette", "Roulette: Victory", 0x30510A),
-            LocationData("Slot Machine", "Slot Machine: Victory", 0x30510B),
+            LocationData("Flip Cards", "Flip Cards: Victory", 0x305106, 0x09),
+            LocationData("Scratch And Match", "Scratch And Match: Victory", 0x305107, 0x15),
+            LocationData("Drawing Lots", "Drawing Lots: Victory", 0x305108, 0x21),
+            LocationData("Match Cards", "Match Cards: Victory", 0x305109, 0x2D),
+            LocationData("Roulette", "Roulette: Victory", 0x30510A, 0x39),
+            LocationData("Slot Machine", "Slot Machine: Victory", 0x30510B, 0x45),
         )
 
     if not multiworld or get_option_value(multiworld, player, "goal") == 1:

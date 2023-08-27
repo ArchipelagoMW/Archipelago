@@ -430,3 +430,17 @@ def setup_gamevars(world, multiworld, player: int):
     }
 
     world.castle_door = castle_door_dict[multiworld.bowser_door_mode[player].value]
+
+    world.world_1_stages = world.global_level_list[0:8]
+    world.world_2_stages = world.global_level_list[8:16]
+    world.world_3_stages = world.global_level_list[16:24]
+    world.world_4_stages = world.global_level_list[24:32]
+    world.world_5_stages = world.global_level_list[32:40]
+    world.world_6_stages = world.global_level_list[40:47]
+
+    world.world_1_stages.extend([0x08, 0x09])
+    world.world_2_stages.extend([0x14, 0x15])
+    world.world_3_stages.extend([0x20, 0x21])
+    world.world_4_stages.extend([0x2C, 0x2D])
+    world.world_5_stages.extend([0x38, 0x39])
+    world.world_6_stages.extend([0x44, 0x45])

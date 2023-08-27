@@ -5,6 +5,15 @@ from .LevelLogic import YoshiLogic
 from .Options import get_option_value
 from .SetupBosses import BossReqs
 
+class YILocation(Location):
+    game: str = "Yoshi's Island"
+    LevelID: int
+
+def __init__(self, player: int, name: str = " ", address: int = None, parent=None, LevelID: int = None):
+    super().__init__(player, name, address, parent)
+    self.LevelID = LevelID
+
+
 def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], gamevar, boss_order: list, level_location_list: list, luigi_pieces: int):
     logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces)
 
@@ -200,7 +209,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         connect(multiworld, player, names, 'World 6', "Slot Machine", lambda state: state.has('Bonus Panels', player) or state.has('Bonus 6', player)),
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
-    location = Location(player, location_data.name, location_data.code, region)
+    location = YILocation(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
 
     if id is None:

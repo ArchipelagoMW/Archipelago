@@ -36,7 +36,6 @@ class YIWorld(World):
         As Yoshi, you must run, jump, and throw eggs to escort the baby Mario across the island to defeat Bowser and reunite the two brothers with their parents."""
     game: str = "Yoshi's Island"
     option_definitions = yoshi_options
-    topology_present = False
     data_version = 0
     required_client_version = (0, 3, 5)
 
@@ -261,7 +260,7 @@ class YIWorld(World):
 
         return excluded_items
 
-    def create_item_with_correct_settings(self: YIWorld, multiworld: MultiWorld, player: int, name: str) -> Item:
+    def create_item_with_correct_settings(self, multiworld: MultiWorld, player: int, name: str) -> Item:
         data = item_table[name]
         if data.useful:
             classification = ItemClassification.useful
@@ -301,11 +300,11 @@ class YIWorld(World):
                                         location_cache: List[Location], pool: List[Item]):
         if self.playergoal == 1:
             for i in range(multiworld.luigi_pieces_in_pool[player].value):
-                item = create_item_with_correct_settings(self, multiworld, player, "Piece of Luigi")
+                item = self.create_item_with_correct_settings( multiworld, player, "Piece of Luigi")
                 pool.append(item)
 
         for _ in range(len(multiworld.get_unfilled_locations(player)) - len(pool) - 16):
-            item = create_item_with_correct_settings(self, multiworld, player, self.get_filler_item_name())
+            item = self.create_item_with_correct_settings( multiworld, player, self.get_filler_item_name())
             pool.append(item)
 
     def get_item_pool(self, multiworld: MultiWorld, player: int, excluded_items: Set[str]) -> List[Item]:
@@ -314,7 +313,7 @@ class YIWorld(World):
         for name, data in item_table.items():
             if name not in excluded_items:
                 for _ in range(data.count):
-                    item = create_item_with_correct_settings(self, multiworld, player, name)
+                    item = self.create_item_with_correct_settings(multiworld, player, name)
                     pool.append(item)
 
         return pool
@@ -323,7 +322,6 @@ class YIWorld(World):
 
 
     def create_items(self):
-        #self.topology_present = self.multiworld.level_shuffle[self.player]
         self.luigi_count = 0
         
 
@@ -373,3 +371,14 @@ class YIWorld(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    #def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+     #   stage_pos_data = {}
+      #  for loc in self.multiworld.get_locations(self.player):
+       #     if loc.LevelID is not None and loc.address is not None:
+        #        num = str(self.active_stage_exits[loc.cv64_stage]["position"]).zfill(2)
+         #       path = self.active_stage_exits[loc.cv64_stage]["path"]
+          #      stage_pos_data[loc.address] = f"Stage {num}"
+           #     if path != " ":
+          #          stage_pos_data[loc.address] += path
+        #hint_data[self.player] = stage_pos_data
