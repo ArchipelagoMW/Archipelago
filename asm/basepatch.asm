@@ -16,7 +16,7 @@ UnusedRomStart equ 0x0878F97C
 ; Allocate space at ROM end
 .org UnusedRomStart
 .region 0x0E000000-.
-    PlayerName: .fill 16, 0  ; Player's name, up to 16 characters
+    PlayerName: .fill 64, 0
     PlayerID: .halfword 0
     DeathLinkFlag: .byte 0
 .endregion

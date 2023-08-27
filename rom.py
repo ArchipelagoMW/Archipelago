@@ -179,9 +179,7 @@ def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
     fill_items(rom, world, player)
 
     # Write player name and number
-    player_name = bytes(world.player_name[player], 'utf-8')
-    if len(player_name) > 16:
-        player_name = player_name[:16]
+    player_name = world.player_name[player].encode('utf-8')
     rom.write_bytes(get_symbol('PlayerName'), player_name)
     rom.write_byte(get_symbol('PlayerID'), player)
 
