@@ -443,4 +443,4 @@ def setup_gamevars(world, multiworld, player: int):
     world.world_3_stages.extend([0x20, 0x21])
     world.world_4_stages.extend([0x2C, 0x2D])
     world.world_5_stages.extend([0x38, 0x39])
-    world.world_6_stages.extend([0x44, 0x45])
+    world.world_6_stages.extend([0x43, 0x44, 0x45])
