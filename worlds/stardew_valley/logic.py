@@ -1095,6 +1095,8 @@ class StardewLogic:
         rules = [self.can_reach_any_region(villager.locations)]
         if npc == NPC.kent:
             rules.append(self.has_year_two())
+        if npc == NPC.leo:
+            rules.append(self.received("Island West Turtle"))
 
         return And(rules)
 
