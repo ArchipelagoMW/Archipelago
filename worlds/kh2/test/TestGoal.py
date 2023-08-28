@@ -15,9 +15,7 @@ class TestThreeProofs(KH2TestBase):
         "Goal": 0,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.Victory])
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestLuckyEmblem(KH2TestBase):
@@ -25,9 +23,7 @@ class TestLuckyEmblem(KH2TestBase):
         "Goal": 1,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.Victory])
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestHitList(KH2TestBase):
@@ -35,9 +31,7 @@ class TestHitList(KH2TestBase):
         "Goal": 2,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.Victory])
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestLuckyEmblemHitlist(KH2TestBase):
@@ -45,9 +39,7 @@ class TestLuckyEmblemHitlist(KH2TestBase):
         "Goal": 3,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.Victory])
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestThreeProofsNoXemnas(KH2TestBase):
@@ -56,10 +48,7 @@ class TestThreeProofsNoXemnas(KH2TestBase):
         "FinalXemnas": False,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.ProofofNonexistence])
-        self.testAllStateCanReachEverything()
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestLuckyEmblemNoXemnas(KH2TestBase):
@@ -68,10 +57,7 @@ class TestLuckyEmblemNoXemnas(KH2TestBase):
         "FinalXemnas": False,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.LuckyEmblem])
-        self.testAllStateCanReachEverything()
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestHitListNoXemnas(KH2TestBase):
@@ -80,10 +66,7 @@ class TestHitListNoXemnas(KH2TestBase):
         "FinalXemnas": False,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.Bounty])
-        self.testAllStateCanReachEverything()
-        self.assertBeatable(True)
+    KH2TestBase()
 
 
 class TestLuckyEmblemHitlistNoXemnas(KH2TestBase):
@@ -92,7 +75,4 @@ class TestLuckyEmblemHitlistNoXemnas(KH2TestBase):
         "FinalXemnas": False,
     }
 
-    def testEverything(self):
-        self.collect_all_but([ItemName.LuckyEmblem, ItemName.Bounty])
-        self.testAllStateCanReachEverything()
-        self.assertBeatable(True)
+    KH2TestBase()

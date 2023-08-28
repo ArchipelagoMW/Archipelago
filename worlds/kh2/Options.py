@@ -1,7 +1,7 @@
 from Options import Choice, Option, Range, Toggle, OptionSet, ItemDict
 import typing
 
-from worlds.kh2 import SupportAbility_Table, ActionAbility_Table
+from worlds.kh2 import default_itempool_option
 
 
 class SoraEXP(Range):
@@ -307,11 +307,9 @@ class CorSkipToggle(Toggle):
 
 class CustomItemPoolQuantity(ItemDict):
     """Add more of an item into the itempool. Note: You cannot take out items from the pool."""
-    display_name = "Starting Items"
+    display_name = "Custom Item Pool"
     verify_item_name = True
-    default = {
-        "Reflect Element":3
-    }
+    default = default_itempool_option
 
 
 KH2_Options: typing.Dict[str, type(Option)] = {
@@ -346,5 +344,6 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Cups":                     Cups,
     "AtlanticaToggle":          AtlanticaToggle,
     "CorSkipToggle":            CorSkipToggle,
+    "CustomItemPoolQuantity":   CustomItemPoolQuantity,
 
 }

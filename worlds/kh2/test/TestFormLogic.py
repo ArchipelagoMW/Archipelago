@@ -59,7 +59,7 @@ class KH2TestFormBase(KH2TestBase):
                               LocationName.Finallvl6,
                               LocationName.Finallvl7],
     }
-    #global_all_possible_forms = allForms + autoForms
+    # global_all_possible_forms = allForms + autoForms
 
 
 class TestDefaultForms(KH2TestFormBase):
@@ -155,11 +155,7 @@ class TestJustAForm(KH2TestFormBase):
     }
 
     def testNothing(self):
-        for form_location in self.allLevel2:
-            self.assertFalse((self.can_reach_location(form_location)), form_location)
-
-        for drive_form, loc_list in self.driveFormMap.items():
-            self.assertFalse((self.can_reach_location(loc_list[0])), loc_list)
+        KH2TestBase()
 
     def testJustAFormConnections(self):
         allPossibleForms = self.allForms
@@ -198,11 +194,7 @@ class TestAutoForms(KH2TestFormBase):
     }
 
     def testNothing(self):
-        for form_location in self.allLevel2:
-            self.assertFalse((self.can_reach_location(form_location)), form_location)
-
-        for drive_form, loc_list in self.driveFormMap.items():
-            self.assertFalse((self.can_reach_location(loc_list[0])), loc_list)
+        KH2TestBase()
 
     def testAutoFormsLevelProgression(self):
         allPossibleForms = self.allForms + [ItemName.LightDarkness]

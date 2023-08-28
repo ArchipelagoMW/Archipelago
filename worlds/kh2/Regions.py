@@ -1,9 +1,9 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region
 
-from .Locations import KH2Location
-from .Names import LocationName, ItemName, RegionName
+from .Locations import KH2Location, event_location_to_item
+from . import LocationName, RegionName, Events_Table
 
 
 def create_regions(world, player: int, active_locations):
@@ -1012,6 +1012,11 @@ def create_regions(world, player: int, active_locations):
                                                  LocationName.Lvl99]
 
     world.regions += [create_region(world, player, active_locations, region, locations) for region, locations in KH2REGIONS.items()]
+    # fill the event locations with events
+    world.worlds[player].item_name_to_id.update({event_name: None for event_name in Events_Table})
+    for location, item in event_location_to_item.items():
+        world.get_location(location, player).place_locked_item(
+                world.worlds[player].create_item(item))
 
 
 def connect_regions(world: MultiWorld, player: int):
@@ -1024,7 +1029,7 @@ def connect_regions(world: MultiWorld, player: int):
                                         RegionName.Dc, RegionName.Stt,
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final, RegionName.Summon,RegionName.AtlanticaSongOne},
+                                        RegionName.Final, RegionName.Summon, RegionName.AtlanticaSongOne},
         RegionName.LoD:                {RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},

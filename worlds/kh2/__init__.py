@@ -1,9 +1,9 @@
 import logging
-from typing import List, Set
+from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
-# from .Rules import set_rules
+
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
@@ -178,6 +178,10 @@ class KH2World(World):
         self.plando_locations = dict()
         self.starting_invo_verify()
 
+        for k, v in self.multiworld.CustomItemPoolQuantity[self.player].value.items():
+            if v > self.item_quantity_dict[k] and k in default_itempool_option.keys():
+                self.item_quantity_dict[k] = v
+
         # Option to turn off Promise Charm Item
         if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
@@ -241,10 +245,6 @@ class KH2World(World):
         Creates the Regions and Connects them.
         """
         create_regions(self.multiworld, self.player, self.location_name_to_id)
-        self.item_name_to_id.update({event_name: None for event_name in Events_Table})
-        for location, item in event_location_to_item.items():
-            self.multiworld.get_location(location, self.player).place_locked_item(
-                    self.create_item(item))
         connect_regions(self.multiworld, self.player)
 
     def set_rules(self):

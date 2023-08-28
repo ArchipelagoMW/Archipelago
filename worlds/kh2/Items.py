@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import Item
-from .Names import ItemName, LocationName
+from .Names import ItemName
 
 
 class KH2Item(Item):
@@ -625,6 +625,9 @@ exclusion_item_table = {
     }
 }
 
+default_itempool_option = {
+    item_name: ItemData.quantity for dic in [Magic_Table, Progression_Table, Summon_Table, Movement_Table] for item_name, ItemData in dic.items()
+}
 item_dictionary_table = {
     **Reports_Table,
     **Progression_Table,
