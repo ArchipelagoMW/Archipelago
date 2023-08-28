@@ -1457,7 +1457,7 @@ if "Factorio" in games:
 
         data["inventory"] = _get_inventory_data(data)
         data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
-        data["item_name_to_id"] =  games["Factorio"]["location_name_to_id"]
+        data["item_name_to_id"] =  games["Factorio"]["item_name_to_id"]
 
         return render_template("multiFactorioTracker.html", **data)
 
