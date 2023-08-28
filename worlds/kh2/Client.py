@@ -260,13 +260,13 @@ class KH2Context(CommonContext):
             start_index = args["index"]
             if start_index == 0:
                 self.kh2_seed_save_cache = {
-                    "itemIndex":     -1,
+                    "itemIndex":  -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
-                    "SoraInvo":      [0x25D8, 0x2546],
-                    "DonaldInvo":    [0x26F4, 0x2658],
-                    "GoofyInvo":     [0x2808, 0x276A],
-                    "AmountInvo":    {
+                    "SoraInvo":   [0x25D8, 0x2546],
+                    "DonaldInvo": [0x26F4, 0x2658],
+                    "GoofyInvo":  [0x2808, 0x276A],
+                    "AmountInvo": {
                         "Ability":      {},
                         "Amount":       {
                             "Bounty": 0,
@@ -296,6 +296,11 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
+                if self.kh2_loc_name_to_id:
+                    for location in self.checked_locations:
+                        if location in self.kh2_local_items:
+                            item = self.kh2slotdata["LocalItems"][str(location)]
+                            asyncio.create_task(self.give_item(item, "LocalItems"))
             if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
@@ -548,40 +553,20 @@ class KH2Context(CommonContext):
 
     async def verifyItems(self):
         try:
-            # local_amount = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Amount"].keys())
-            # server_amount = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Amount"].keys())
             master_amount = set(self.kh2_seed_save_cache["AmountInvo"]["Amount"].keys())
 
-            # local_ability = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Ability"].keys())
-            # server_ability = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Ability"].keys())
             master_ability = set(self.kh2_seed_save_cache["AmountInvo"]["Ability"].keys())
 
-            # local_bitmask = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Bitmask"])
-            # server_bitmask = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Bitmask"])
             master_bitmask = set(self.kh2_seed_save_cache["AmountInvo"]["Bitmask"])
-
-            # local_keyblade = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Weapon"]["Sora"])
-            # local_staff = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Weapon"]["Donald"])
-            # local_shield = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Weapon"]["Goofy"])
-
-            # server_keyblade = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Weapon"]["Sora"])
-            # server_staff    = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Weapon"]["Donald"])
-            # server_shield   = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Weapon"]["Goofy"])
 
             master_keyblade = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"])
             master_staff = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Donald"])
             master_shield = set(self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"])
 
-            # local_equipment = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Equipment"])
-            # server_equipment = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Equipment"])
             master_equipment = set(self.kh2_seed_save_cache["AmountInvo"]["Equipment"])
 
-            # local_magic = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["Magic"].keys())
-            # server_magic = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["Magic"].keys())
             master_magic = set(self.kh2_seed_save_cache["AmountInvo"]["Magic"].keys())
 
-            # local_stat = set(self.kh2_seed_save_cache["AmountInvo"]["LocalItems"]["StatIncrease"].keys())
-            # server_stat = set(self.kh2_seed_save_cache["AmountInvo"]["ServerItems"]["StatIncrease"].keys())
             master_stat = set(self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"].keys())
 
             master_sell = master_equipment | master_staff | master_shield
@@ -708,7 +693,7 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0x741320) in {10, 8}:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0xAB8C7B) == 0:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
@@ -753,6 +738,7 @@ def finishedGame(ctx: KH2Context, message):
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+                logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.final_xemnas:
                     return True
@@ -770,6 +756,7 @@ def finishedGame(ctx: KH2Context, message):
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+                logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.final_xemnas:
                     return True
@@ -783,6 +770,7 @@ def finishedGame(ctx: KH2Context, message):
                 ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
                 ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
+                logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.final_xemnas:
                     return True

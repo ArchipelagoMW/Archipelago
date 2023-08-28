@@ -1,4 +1,4 @@
-from Options import Choice, Option, Range, Toggle, OptionSet
+from Options import Choice, Option, Range, Toggle, OptionSet, ItemDict
 import typing
 
 from worlds.kh2 import SupportAbility_Table, ActionAbility_Table
@@ -303,6 +303,15 @@ class CorSkipToggle(Toggle):
     """
     display_name = "CoR Skip Toggle."
     default = False
+
+
+class CustomItemPoolQuantity(ItemDict):
+    """Add more of an item into the itempool. Note: You cannot take out items from the pool."""
+    display_name = "Starting Items"
+    verify_item_name = True
+    default = {
+        "burner-mining-drill": 19, "stone-furnace": 19
+    }
 
 
 KH2_Options: typing.Dict[str, type(Option)] = {
