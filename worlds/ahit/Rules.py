@@ -37,8 +37,8 @@ def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
 
 def get_remaining_hat_cost(state: CollectionState, world: World, hat: HatType) -> int:
     cost: int = 0
-    for h in world.hat_craft_order:
-        cost += world.hat_yarn_costs.get(h)
+    for h in world.get_hat_craft_order():
+        cost += world.get_hat_yarn_costs().get(h)
         if h == hat:
             break
 
@@ -218,8 +218,11 @@ def set_rules(world: World):
 
         # Not all locations in Alpine can be reached from The Illness has Spread
         # as many of the ziplines are blocked off
-        if data.region == "Alpine Skyline Area" and key not in tihs_locations:
-            add_rule(location, lambda state: state.can_reach("Alpine Free Roam", "Region", p), "and")
+        if data.region == "Alpine Skyline Area":
+            if key not in tihs_locations:
+                add_rule(location, lambda state: state.can_reach("Alpine Free Roam", "Region", p), "and")
+            else:
+                add_rule(location, lambda state: can_use_hookshot(state, w))
 
         if data.region == "The Birdhouse" or data.region == "The Lava Cake" \
            or data.region == "The Windmill" or data.region == "The Twilight Bell":

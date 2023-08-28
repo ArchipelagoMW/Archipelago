@@ -16,6 +16,10 @@ from worlds.AutoWorld import World
 from .Rules import set_rules
 import typing
 
+hat_craft_order: typing.Dict[int, typing.List[HatType]] = {}
+hat_yarn_costs: typing.Dict[int, typing.Dict[HatType, int]] = {}
+chapter_timepiece_costs: typing.Dict[int, typing.Dict[ChapterIndex, int]] = {}
+
 
 class HatInTimeWorld(World):
     """
@@ -30,10 +34,6 @@ class HatInTimeWorld(World):
     location_name_to_id = get_location_names()
 
     option_definitions = ahit_options
-
-    hat_craft_order: typing.List[HatType]
-    hat_yarn_costs: typing.Dict[HatType, int]
-    chapter_timepiece_costs: typing.Dict[ChapterIndex, int]
     act_connections: typing.Dict[str, str] = {}
     nyakuza_thug_items: typing.Dict[str, int] = {}
     shop_locs: typing.List[str] = []
@@ -74,11 +74,11 @@ class HatInTimeWorld(World):
                                          self.player).progress_type = LocationProgressType.EXCLUDED
 
     def create_items(self):
-        self.hat_yarn_costs = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
-                               HatType.DWELLER: -1, HatType.TIME_STOP: -1}
+        hat_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
+                                       HatType.DWELLER: -1, HatType.TIME_STOP: -1}
 
-        self.hat_craft_order = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
-                                HatType.DWELLER, HatType.TIME_STOP]
+        hat_craft_order[self.player] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
+                                        HatType.DWELLER, HatType.TIME_STOP]
 
         self.topology_present = self.multiworld.ActRandomizer[self.player].value
 
@@ -94,7 +94,7 @@ class HatInTimeWorld(World):
         itempool += yarn_pool
 
         if self.multiworld.RandomizeHatOrder[self.player].value > 0:
-            self.multiworld.random.shuffle(self.hat_craft_order)
+            self.multiworld.random.shuffle(hat_craft_order[self.player])
 
         for name in item_table.keys():
             if name == "Yarn":
@@ -145,13 +145,13 @@ class HatInTimeWorld(World):
 
     def set_rules(self):
         self.act_connections = {}
-        self.chapter_timepiece_costs = {ChapterIndex.MAFIA: -1,
-                                        ChapterIndex.BIRDS: -1,
-                                        ChapterIndex.SUBCON: -1,
-                                        ChapterIndex.ALPINE: -1,
-                                        ChapterIndex.FINALE: -1,
-                                        ChapterIndex.CRUISE: -1,
-                                        ChapterIndex.METRO: -1}
+        chapter_timepiece_costs[self.player] = {ChapterIndex.MAFIA: -1,
+                                                ChapterIndex.BIRDS: -1,
+                                                ChapterIndex.SUBCON: -1,
+                                                ChapterIndex.ALPINE: -1,
+                                                ChapterIndex.FINALE: -1,
+                                                ChapterIndex.CRUISE: -1,
+                                                ChapterIndex.METRO: -1}
 
         if self.multiworld.ActRandomizer[self.player].value > 0:
             randomize_act_entrances(self)
@@ -162,23 +162,23 @@ class HatInTimeWorld(World):
         return create_item(self, name)
 
     def fill_slot_data(self) -> dict:
-        slot_data: dict = {"SprintYarnCost": self.hat_yarn_costs[HatType.SPRINT],
-                           "BrewingYarnCost": self.hat_yarn_costs[HatType.BREWING],
-                           "IceYarnCost": self.hat_yarn_costs[HatType.ICE],
-                           "DwellerYarnCost": self.hat_yarn_costs[HatType.DWELLER],
-                           "TimeStopYarnCost": self.hat_yarn_costs[HatType.TIME_STOP],
-                           "Chapter1Cost": self.chapter_timepiece_costs[ChapterIndex.MAFIA],
-                           "Chapter2Cost": self.chapter_timepiece_costs[ChapterIndex.BIRDS],
-                           "Chapter3Cost": self.chapter_timepiece_costs[ChapterIndex.SUBCON],
-                           "Chapter4Cost": self.chapter_timepiece_costs[ChapterIndex.ALPINE],
-                           "Chapter5Cost": self.chapter_timepiece_costs[ChapterIndex.FINALE],
-                           "Chapter6Cost": self.chapter_timepiece_costs[ChapterIndex.CRUISE],
-                           "Chapter7Cost": self.chapter_timepiece_costs[ChapterIndex.METRO],
-                           "Hat1": int(self.hat_craft_order[0]),
-                           "Hat2": int(self.hat_craft_order[1]),
-                           "Hat3": int(self.hat_craft_order[2]),
-                           "Hat4": int(self.hat_craft_order[3]),
-                           "Hat5": int(self.hat_craft_order[4]),
+        slot_data: dict = {"SprintYarnCost": hat_yarn_costs[self.player][HatType.SPRINT],
+                           "BrewingYarnCost": hat_yarn_costs[self.player][HatType.BREWING],
+                           "IceYarnCost": hat_yarn_costs[self.player][HatType.ICE],
+                           "DwellerYarnCost": hat_yarn_costs[self.player][HatType.DWELLER],
+                           "TimeStopYarnCost": hat_yarn_costs[self.player][HatType.TIME_STOP],
+                           "Chapter1Cost": chapter_timepiece_costs[self.player][ChapterIndex.MAFIA],
+                           "Chapter2Cost": chapter_timepiece_costs[self.player][ChapterIndex.BIRDS],
+                           "Chapter3Cost": chapter_timepiece_costs[self.player][ChapterIndex.SUBCON],
+                           "Chapter4Cost": chapter_timepiece_costs[self.player][ChapterIndex.ALPINE],
+                           "Chapter5Cost": chapter_timepiece_costs[self.player][ChapterIndex.FINALE],
+                           "Chapter6Cost": chapter_timepiece_costs[self.player][ChapterIndex.CRUISE],
+                           "Chapter7Cost": chapter_timepiece_costs[self.player][ChapterIndex.METRO],
+                           "Hat1": int(hat_craft_order[self.player][0]),
+                           "Hat2": int(hat_craft_order[self.player][1]),
+                           "Hat3": int(hat_craft_order[self.player][2]),
+                           "Hat4": int(hat_craft_order[self.player][3]),
+                           "Hat5": int(hat_craft_order[self.player][4]),
                            "BadgeSellerItemCount": self.badge_seller_count,
                            "SeedNumber": self.multiworld.seed}  # For shop prices
 
@@ -228,11 +228,11 @@ class HatInTimeWorld(World):
         hint_data[self.player] = new_hint_data
 
     def write_spoiler_header(self, spoiler_handle: typing.TextIO):
-        for i in self.chapter_timepiece_costs.keys():
-            spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.chapter_timepiece_costs[ChapterIndex(i)]))
+        for i in self.get_chapter_costs():
+            spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.get_chapter_costs()[ChapterIndex(i)]))
 
-        for hat in self.hat_craft_order:
-            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, self.hat_yarn_costs[hat]))
+        for hat in hat_craft_order[self.player]:
+            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, hat_yarn_costs[self.player][hat]))
 
     def calculate_yarn_costs(self):
         mw = self.multiworld
@@ -243,7 +243,7 @@ class HatInTimeWorld(World):
         max_cost: int = 0
         for i in range(5):
             cost = mw.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
-            self.hat_yarn_costs[HatType(i)] = cost
+            hat_yarn_costs[self.player][HatType(i)] = cost
             max_cost += cost
 
         available_yarn = mw.YarnAvailable[p].value
@@ -256,10 +256,10 @@ class HatInTimeWorld(World):
             mw.YarnAvailable[p].value += (max_cost + 8) - available_yarn
 
     def set_chapter_cost(self, chapter: ChapterIndex, cost: int):
-        self.chapter_timepiece_costs[chapter] = cost
+        chapter_timepiece_costs[self.player][chapter] = cost
 
     def get_chapter_cost(self, chapter: ChapterIndex) -> int:
-        return self.chapter_timepiece_costs.get(chapter)
+        return chapter_timepiece_costs[self.player].get(chapter)
 
     # Sets an act entrance in slot data by specifying the Hat_ChapterActInfo, to be used in-game
     def update_chapter_act_info(self, original_region: Region, new_region: Region):
@@ -274,3 +274,12 @@ class HatInTimeWorld(World):
                 for name in chapter_act_info.keys():
                     if chapter_act_info[name] == key:
                         return name
+
+    def get_hat_craft_order(self):
+        return hat_craft_order[self.player]
+
+    def get_hat_yarn_costs(self):
+        return hat_yarn_costs[self.player]
+
+    def get_chapter_costs(self):
+        return chapter_timepiece_costs[self.player]
