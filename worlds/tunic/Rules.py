@@ -69,7 +69,6 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     ice_dagger = "Magic Dagger"
     fire_wand = "Magic Wand"
     lantern = "Lantern"
-    stick = "Stick"
     sword = "Sword"
     fairies = "Fairy"
     coins = "Golden Coin"
@@ -85,7 +84,6 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     ice_rod_amount = 1
 
     if multiworld.sword_progression[player].value:
-        stick = "Sword Upgrade"
         sword = "Sword Upgrade"
 
     ability_shuffle = multiworld.ability_shuffling[player].value
@@ -156,14 +154,13 @@ def set_location_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Sealed Temple - Holy Cross Chest", player),
              lambda state: state.has(laurels, player) or (state.has(lantern, player) and (
-                         state.has(stick, player) or state.has(sword, player) or state.has(fire_wand,
-                                                                                           player))) and state.has(
+                         state.has_group("melee weapons", player, 1) or state.has(fire_wand, player))) and state.has(
                  holy_cross, player) if ability_shuffle else state.has(laurels, player) or (
                          state.has(lantern, player) and (
-                             state.has(stick, player) or state.has(sword, player) or state.has(fire_wand, player))))
+                             state.has_group("melee weapons", player, 1) or state.has(fire_wand, player))))
     set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
              lambda state: state.has(laurels, player) or (
-                         state.has(lantern, player) and (state.has(sword, player) or state.has(stick, player))))
+                         state.has(lantern, player) and state.has_group("melee weapons", player, 1)))
     set_rule(multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", player),
              lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
@@ -230,8 +227,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
                                                                                                               player))
     # Beneath the Vault
     set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
-             lambda state: state.has(stick, player) or state.has(sword, player) or state.has(fire_wand,
-                                                                                             player) or state.has(
+             lambda state: state.has_group("melee weapons", player, 1) or state.has(fire_wand, player) or state.has(
                  laurels, player))
 
     # Quarry
