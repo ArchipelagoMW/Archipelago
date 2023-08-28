@@ -7,7 +7,6 @@ class TunicItemData(NamedTuple):
     classification: ItemClassification
     quantity_in_item_pool: int
     item_group: str = ""
-    item_group_2: str = ""
 
 
 item_table: Dict[str, TunicItemData] = {
