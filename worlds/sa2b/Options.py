@@ -228,7 +228,7 @@ class Omosanity(Toggle):
 class Animalsanity(Toggle):
     """
     Determines whether picking up counted small animals grants checks
-    (420 Locations)
+    (421 Locations)
     """
     display_name = "Animalsanity"
 
