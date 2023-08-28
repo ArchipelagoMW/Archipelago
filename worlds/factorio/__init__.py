@@ -67,7 +67,7 @@ class FactorioWeb(WebWorld):
         import pkgutil
 
         from werkzeug.exceptions import abort
-        from flask import render_template_string
+        from flask import render_template
 
         from WebHostLib import cache
         from WebHostLib.tracker import (_get_multiworld_tracker_data, _get_inventory_data,
@@ -75,6 +75,7 @@ class FactorioWeb(WebWorld):
 
 
         multitracker_template = pkgutil.get_data(__name__, "data/web/templates/MultiTracker.html").decode()
+        multitracker_template = app.jinja_env.from_string(multitracker_template)
 
         @app.route('/tracker/<suuid:tracker>/Factorio')
         @cache.memoize(timeout=60)  # multisave is currently created up to every minute
@@ -87,7 +88,7 @@ class FactorioWeb(WebWorld):
             data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
             data["item_name_to_id"] = Factorio.item_name_to_id
 
-            return render_template_string(multitracker_template, **data)
+            return render_template(multitracker_template, **data)
 
         multi_trackers[Factorio.game] = get_Factorio_multiworld_tracker
 
