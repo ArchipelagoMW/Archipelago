@@ -61,36 +61,8 @@ class FactorioWeb(WebWorld):
         ["Berserker, Farrak Kilhn"]
     )]
 
-    @classmethod
-    def run_webhost_app_setup(cls, app):
-        from uuid import UUID
-        import pkgutil
+    multitracker_template = "data/web/templates/MultiTracker.html"
 
-        from werkzeug.exceptions import abort
-        from flask import render_template
-
-        from WebHostLib import cache
-        from WebHostLib.tracker import (_get_multiworld_tracker_data, _get_inventory_data,
-                                        get_enabled_multiworld_trackers, multi_trackers)
-
-
-        multitracker_template = pkgutil.get_data(__name__, "data/web/templates/MultiTracker.html").decode()
-        multitracker_template = app.jinja_env.from_string(multitracker_template)
-
-        @app.route('/tracker/<suuid:tracker>/Factorio')
-        @cache.memoize(timeout=60)  # multisave is currently created up to every minute
-        def get_Factorio_multiworld_tracker(tracker: UUID):
-            data = _get_multiworld_tracker_data(tracker)
-            if not data:
-                abort(404)
-
-            data["inventory"] = _get_inventory_data(data)
-            data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
-            data["item_name_to_id"] = Factorio.item_name_to_id
-
-            return render_template(multitracker_template, **data)
-
-        multi_trackers[Factorio.game] = get_Factorio_multiworld_tracker
 
 class FactorioItem(Item):
     game = "Factorio"

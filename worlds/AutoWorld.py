@@ -156,8 +156,11 @@ class WebWorld:
     """Choose a theme for you /game/* pages.
     Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    bug_report_page: Optional[str]
+    bug_report_page: Optional[str] = None
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
+
+    multitracker_template: Optional[str] = None
+    """relative path with /-seperator to a MultiTracker Template file."""
 
     # allows modification of webhost during startup, this is run once
     @classmethod
