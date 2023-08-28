@@ -7,6 +7,7 @@ class TunicItemData(NamedTuple):
     classification: ItemClassification
     quantity_in_item_pool: int
     item_group: str = ""
+    item_group_2: str = ""
 
 
 item_table: Dict[str, TunicItemData] = {
@@ -156,3 +157,13 @@ filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
 item_name_groups: Dict[str, Set[str]] = {
     group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group)
 }
+
+# extra groups for the purpose of aliasing items
+extra_groups: Dict[str, Set[str]] = {
+    "laurels": {"Hero's Laurels"},
+    "holy cross": {"Pages 42-43 (Holy Cross)"},
+    "prayer": {"Pages 24-25 (Prayer)"},
+    "ice rod": {"Pages 52-53 (Ice Rod)"}
+}
+
+item_name_groups.update(extra_groups)
