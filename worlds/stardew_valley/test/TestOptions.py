@@ -113,35 +113,6 @@ class TestSeasonRandomization(SVTestBase):
         self.assertEqual(items.count(Season.progressive), 3)
 
 
-class TestBackpackProgression(SVTestBase):
-    def test_given_vanilla_when_generate_then_no_backpack_in_pool(self):
-        world_options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla}
-        multi_world = setup_solo_multiworld(world_options)
-
-        assert "Progressive Backpack" not in {item.name for item in multi_world.get_items()}
-
-    def test_given_progressive_when_generate_then_progressive_backpack_is_in_pool_two_times(self):
-        world_options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-        items = [item.name for item in multi_world.get_items()]
-        self.assertEqual(items.count("Progressive Backpack"), 2)
-
-    def test_given_progressive_when_generate_then_backpack_upgrades_are_locations(self):
-        world_options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-
-        locations = {locations.name for locations in multi_world.get_locations(1)}
-        self.assertIn("Large Pack", locations)
-        self.assertIn("Deluxe Pack", locations)
-
-    def test_given_early_progressive_when_generate_then_progressive_backpack_is_in_early_pool(self):
-        world_options = {
-            options.BackpackProgression.internal_name: options.BackpackProgression.option_early_progressive}
-        multi_world = setup_solo_multiworld(world_options)
-
-        self.assertIn("Progressive Backpack", multi_world.early_items[1])
-
-
 class TestToolProgression(SVTestBase):
     def test_given_vanilla_when_generate_then_no_tool_in_pool(self):
         world_options = {options.ToolProgression.internal_name: options.ToolProgression.option_vanilla}

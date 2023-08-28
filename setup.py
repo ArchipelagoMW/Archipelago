@@ -76,7 +76,6 @@ non_apworlds: set = {
     "Meritous",
     "Ocarina of Time",
     "Overcooked! 2",
-    "Pokemon Red and Blue",
     "Raft",
     "Secret of Evermore",
     "Slay the Spire",
@@ -603,7 +602,7 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem"],
+            "packages": ["worlds", "kivy", "cymem", "websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],

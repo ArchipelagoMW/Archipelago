@@ -4,13 +4,14 @@ import random
 import sys
 
 from BaseClasses import MultiWorld
-from . import setup_solo_multiworld
-from .TestOptions import basic_checks, SVTestBase
-from .. import options, locations, items, Group, ItemClassification, StardewOptions
-from ..regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
-from ..items import item_table, items_by_group
-from ..locations import location_table, LocationTags
-from ..options import stardew_valley_option_classes, Mods, EntranceRandomization
+from worlds.stardew_valley.test import setup_solo_multiworld
+from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
+from worlds.stardew_valley import options, locations, items, Group, ItemClassification, StardewOptions
+from worlds.stardew_valley.mods.mod_data import ModNames
+from worlds.stardew_valley.regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
+from worlds.stardew_valley.items import item_table, items_by_group
+from worlds.stardew_valley.locations import location_table, LocationTags
+from worlds.stardew_valley.options import stardew_valley_option_classes, Mods, EntranceRandomization
 
 mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
@@ -76,21 +77,6 @@ class TestGenerateModsOptions(SVTestBase):
                         multiworld = setup_solo_multiworld({option.internal_name: option.options[value], Mods: mod})
                         basic_checks(self, multiworld)
                         check_stray_mod_items(mod, self, multiworld)
-
-
-class TestGivenModdedProgressiveBackpack(SVTestBase):
-    options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
-               options.Mods.internal_name: "Bigger Backpack"}
-
-    def test_when_generate_world_then_three_progressive_backpack_are_added(self):
-        self.assertEqual(self.multiworld.itempool.count(self.world.create_item("Progressive Backpack")), 3)
-
-    def test_when_generate_world_then_all_backpack_locations_are_added(self):
-        created_locations = {location.name for location in self.multiworld.get_locations(1)}
-        backpacks_exist = [location.name in created_locations
-                           for location in locations.locations_by_tag[LocationTags.BACKPACK]]
-        all_exist = all(backpacks_exist)
-        self.assertTrue(all_exist)
 
 
 class TestBaseItemGeneration(SVTestBase):
