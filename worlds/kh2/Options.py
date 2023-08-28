@@ -310,7 +310,7 @@ class CustomItemPoolQuantity(ItemDict):
     display_name = "Starting Items"
     verify_item_name = True
     default = {
-        "burner-mining-drill": 19, "stone-furnace": 19
+        "Reflect Element":3
     }
 
 
