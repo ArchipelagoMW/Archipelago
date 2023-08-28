@@ -213,6 +213,12 @@ class PromiseCharm(Toggle):
     default = False
 
 
+class AntiForm(Toggle):
+    """Add Anti Form to the pool"""
+    display_name = "Anti Form"
+    default = False
+
+
 class Goal(Choice):
     """Win Condition
     Three Proofs: Find the 3 Proofs to unlock the final door.
@@ -312,6 +318,12 @@ class CustomItemPoolQuantity(ItemDict):
     default = default_itempool_option
 
 
+class FillerItemsLocal(Toggle):
+    """Make all filler classified items local. Recommended when playing with games with fewer locations than kh2"""
+    display_name = "Local Filler Items"
+    default = True
+
+
 KH2_Options: typing.Dict[str, type(Option)] = {
     "LevelDepth":               LevelDepth,
     "Sora_Level_EXP":           SoraEXP,
@@ -323,6 +335,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "Summon_EXP":               SummonEXP,
     "Schmovement":              Schmovement,
     "RandomGrowth":             RandomGrowth,
+    "AntiForm":                 AntiForm,
     "Promise_Charm":            PromiseCharm,
     "Goal":                     Goal,
     "FinalXemnas":              FinalXemnas,
@@ -338,6 +351,7 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "FinalFormLogic":           FinalFormLogic,
     "AutoFormLogic":            AutoFormLogic,
     "DonaldGoofyStatsanity":    DonaldGoofyStatsanity,
+    "FillerItemsLocal":         FillerItemsLocal,
     "Visitlocking":             Visitlocking,
     "RandomVisitLockingItem":   RandomVisitLockingItem,
     "SuperBosses":              SuperBosses,

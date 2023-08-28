@@ -65,6 +65,7 @@ Forms_Table = {
     ItemName.LimitForm:  ItemData(1, 563, 0x36CA, 3),
     ItemName.MasterForm: ItemData(1, 31, 0x36C0, 6),
     ItemName.FinalForm:  ItemData(1, 29, 0x36C0, 4),
+    ItemName.AntiForm:   ItemData(1, 30, 0x36C0, 5)
 }
 Magic_Table = {
     ItemName.FireElement:     ItemData(3, 21, 0x3594),
@@ -650,7 +651,10 @@ item_dictionary_table = {
     **GoofyAbility_Table,
     **Consumable_Table
 }
-
+filler_items = [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost,
+                ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.Megalixir,
+                ItemName.Tent, ItemName.DriveRecovery, ItemName.HighDriveRecovery,
+                ]
 item_groups: typing.Dict[str, list] = {
     "Drive Form":      [item_name for item_name in Forms_Table.keys()],
     "Growth":          [item_name for item_name in Movement_Table.keys()],

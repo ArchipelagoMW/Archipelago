@@ -36,7 +36,7 @@ WisdomForm = "Wisdom Form"
 LimitForm = "Limit Form"
 MasterForm = "Master Form"
 FinalForm = "Final Form"
-
+AntiForm = "Anti Form"
 # magic and summons
 FireElement      = "Fire Element"
 BlizzardElement  = "Blizzard Element"

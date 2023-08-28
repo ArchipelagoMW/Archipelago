@@ -186,6 +186,9 @@ class KH2World(World):
         if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
 
+        if not self.multiworld.AntiForm[self.player]:
+            self.item_quantity_dict[ItemName.AntiForm] = 0
+
         self.set_excluded_locations()
 
         if self.multiworld.Goal[self.player] not in ["hitlist", "three_proofs"]:
@@ -223,6 +226,10 @@ class KH2World(World):
         if self.multiworld.WeaponSlotStartHint[self.player]:
             for location in all_weapon_slot:
                 self.multiworld.start_location_hints[self.player].value.add(location)
+
+        if self.multiworld.FillerItemsLocal[self.player]:
+            for item in filler_items:
+                self.multiworld.local_items[self.player].value.add(item)
         # By imitating remote this doesn't have to be plandoded filler anymore
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
@@ -463,7 +470,4 @@ class KH2World(World):
         """
         Returns random filler item name.
         """
-        return self.multiworld.random.choice([ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost,
-                                              ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.Megalixir,
-                                              ItemName.Tent, ItemName.DriveRecovery, ItemName.HighDriveRecovery,
-                                              ])
+        return self.multiworld.random.choice(filler_items)
