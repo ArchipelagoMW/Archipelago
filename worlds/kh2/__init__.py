@@ -179,9 +179,11 @@ class KH2World(World):
         self.starting_invo_verify()
 
         for k, v in self.multiworld.CustomItemPoolQuantity[self.player].value.items():
-            if v > self.item_quantity_dict[k] and k in default_itempool_option.keys():
+            # kh2's items cannot hold more than a byte
+            if 255 > v > self.item_quantity_dict[k] and k in default_itempool_option.keys():
                 self.item_quantity_dict[k] = v
-
+            elif 255 <= v:
+                logging.info(f"{self.player} has too many {k} in their CustomItemPool setting. Setting to default quantity")
         # Option to turn off Promise Charm Item
         if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
