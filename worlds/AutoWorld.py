@@ -159,6 +159,16 @@ class WebWorld:
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
+    # allows modification of webhost during startup, this is run once
+    @classmethod
+    def run_webhost_setup(cls):
+        pass
+
+    # allows modification of webhost during startup,
+    # this is run whenever a Flask app is created (per-thread/per-process)
+    @classmethod
+    def run_webhost_app_setup(cls, app: "Flask"):
+        pass
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -412,17 +422,6 @@ class World(metaclass=AutoWorldRegister):
         }
         res["checksum"] = data_package_checksum(res)
         return res
-
-    # allows modification of webhost during startup, this is run once
-    @classmethod
-    def run_webhost_setup(cls):
-        pass
-
-    # allows modification of webhost during startup,
-    # this is run whenever a Flask app is created (per-thread/per-process)
-    @classmethod
-    def run_webhost_app_setup(cls, app: "Flask"):
-        pass
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

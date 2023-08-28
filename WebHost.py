@@ -45,7 +45,7 @@ def get_app():
 
     for world in worlds.AutoWorldRegister.world_types.values():
         try:
-            world.run_webhost_app_setup(app)
+            world.web.run_webhost_app_setup(app)
         except Exception as e:
             logging.exception(e)
 
@@ -130,14 +130,13 @@ if __name__ == "__main__":
 
     for world in worlds.AutoWorldRegister.world_types.values():
         try:
-            world.run_webhost_setup()
+            world.web.run_webhost_setup()
         except Exception as e:
             logging.exception(e)
-    del world, worlds
 
     app = get_app()
 
-
+    del world, worlds
 
     create_options_files()
     create_ordered_tutorials_file()
