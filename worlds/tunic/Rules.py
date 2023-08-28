@@ -69,7 +69,6 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     ice_dagger = "Magic Dagger"
     fire_wand = "Magic Wand"
     lantern = "Lantern"
-    sword = "Sword"
     fairies = "Fairy"
     coins = "Golden Coin"
     prayer = "Pages 24-25 (Prayer)"
@@ -83,8 +82,6 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     holy_cross_amount = 1
     ice_rod_amount = 1
 
-    if multiworld.sword_progression[player].value:
-        sword = "Sword Upgrade"
 
     ability_shuffle = multiworld.ability_shuffling[player].value
 
@@ -147,20 +144,20 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Overworld - [Southwest] From West Garden", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Overworld - [West] Chest After Bell", player),
-             lambda state: state.has(laurels, player) or (state.has(lantern, player) and state.has(sword, player)))
+             lambda state: state.has(laurels, player) or (state.has(lantern, player) and state.has_group("melee weapons", player, 2)))
     set_rule(multiworld.get_location("Overworld - [East] Grapple Chest", player),
              lambda state: state.has(grapple, player))
     set_rule(multiworld.get_location("Special Shop - Secret Page Pickup", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Sealed Temple - Holy Cross Chest", player),
              lambda state: state.has(laurels, player) or (state.has(lantern, player) and (
-                         state.has_group("melee weapons", player, 1) or state.has(fire_wand, player))) and state.has(
+                         state.has_group("melee weapons", player, 2) or state.has(fire_wand, player))) and state.has(
                  holy_cross, player) if ability_shuffle else state.has(laurels, player) or (
                          state.has(lantern, player) and (
-                             state.has_group("melee weapons", player, 1) or state.has(fire_wand, player))))
+                             state.has_group("melee weapons", player, 2) or state.has(fire_wand, player))))
     set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
              lambda state: state.has(laurels, player) or (
-                         state.has(lantern, player) and state.has_group("melee weapons", player, 1)))
+                         state.has(lantern, player) and state.has_group("melee weapons", player, 2)))
     set_rule(multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", player),
              lambda state: state.has(fairies, player, 10))
     set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
@@ -198,7 +195,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("West Garden - [Central Lowlands] Below Left Walkway", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("West Garden - [Central Highlands] After Garden Knight", player),
-             lambda state: state.has(sword, player) or state.has(laurels, player))
+             lambda state: state.has_group("melee weapons", player, 2) or state.has(laurels, player))
 
     # Ruined Atoll
     set_rule(multiworld.get_location("Ruined Atoll - [West] Near Kevin Block", player),
@@ -220,8 +217,8 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("Fortress Leaf Piles - Secret Chest", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
-             lambda state: (state.has(sword, player) and state.has(prayer, player, prayer_amount)) if ability_shuffle else state.has(
-                 sword, player))
+             lambda state: (state.has_group("melee weapons", player, 2) and state.has(prayer, player, prayer_amount))
+                 if ability_shuffle else state.has_group("melee weapons", player, 2))
     set_rule(multiworld.get_location("Fortress Arena - Hexagon Red", player), lambda state: (
                 state.has(vault_key, player) and state.has(prayer, player, prayer_amount)) if ability_shuffle else state.has(vault_key,
                                                                                                               player))
