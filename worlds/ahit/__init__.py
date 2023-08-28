@@ -61,6 +61,7 @@ class HatInTimeWorld(World):
     def create_regions(self):
         self.nyakuza_thug_items = {}
         self.shop_locs = []
+        self.badge_seller_count = 0
         create_regions(self)
 
         # place default contract locations if contract shuffle is off so logic can still utilize them
