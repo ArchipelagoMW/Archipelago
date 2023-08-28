@@ -9,10 +9,8 @@ class LocData(NamedTuple):
     id: int
     region: str
     required_hats: Optional[List[HatType]] = [HatType.NONE]
-    required_tps: Optional[int] = 0
     hookshot: Optional[bool] = False
     dlc_flags: Optional[HatDLC] = HatDLC.none
-    paintings: Optional[int] = 0  # Progressive paintings required for Subcon painting shuffle
 
     # For UmbrellaLogic setting
     umbrella: Optional[bool] = False  # Umbrella required for this check
@@ -79,8 +77,7 @@ def get_location_names() -> Dict[str, int]:
 
 
 ahit_locations = {
-    "Spaceship - Rumbi Abuse": LocData(301000, "Spaceship", required_tps=4, dweller_bell=1),
-    # "Spaceship - Cooking Cat": LocData(301001, "Spaceship", required_tps=5),
+    "Spaceship - Rumbi Abuse": LocData(301000, "Spaceship", dweller_bell=1),
 
     # 300000 range - Mafia Town/Batle of the Birds
     "Welcome to Mafia Town - Umbrella": LocData(301002, "Welcome to Mafia Town"),
@@ -169,85 +166,66 @@ ahit_locations = {
     "Subcon Village - Graveyard Ice Cube": LocData(325077, "Subcon Forest Area"),
     "Subcon Village - House Top": LocData(325471, "Subcon Forest Area"),
     "Subcon Village - Ice Cube House": LocData(325469, "Subcon Forest Area"),
-    "Subcon Village - Snatcher Statue Chest": LocData(323730, "Subcon Forest Area", paintings=1),
+    "Subcon Village - Snatcher Statue Chest": LocData(323730, "Subcon Forest Area"),
     "Subcon Village - Stump Platform Chest": LocData(323729, "Subcon Forest Area"),
     "Subcon Forest - Giant Tree Climb": LocData(325470, "Subcon Forest Area"),
     
-    "Subcon Forest - Swamp Gravestone": LocData(326296, "Subcon Forest Area",
-                                                required_hats=[HatType.BREWING],
-                                                paintings=1),
+    "Subcon Forest - Swamp Gravestone": LocData(326296, "Subcon Forest Area", required_hats=[HatType.BREWING],),
     
-    "Subcon Forest - Swamp Near Well": LocData(324762, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Swamp Tree A": LocData(324763, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Swamp Tree B": LocData(324764, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Swamp Ice Wall": LocData(324706, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Swamp Treehouse": LocData(325468, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Swamp Tree Chest": LocData(323728, "Subcon Forest Area", paintings=1),
+    "Subcon Forest - Swamp Near Well": LocData(324762, "Subcon Forest Area"),
+    "Subcon Forest - Swamp Tree A": LocData(324763, "Subcon Forest Area"),
+    "Subcon Forest - Swamp Tree B": LocData(324764, "Subcon Forest Area"),
+    "Subcon Forest - Swamp Ice Wall": LocData(324706, "Subcon Forest Area"),
+    "Subcon Forest - Swamp Treehouse": LocData(325468, "Subcon Forest Area"),
+    "Subcon Forest - Swamp Tree Chest": LocData(323728, "Subcon Forest Area"),
     
-    "Subcon Forest - Dweller Stump": LocData(324767, "Subcon Forest Area", 
-                                             required_hats=[HatType.DWELLER],
-                                             paintings=3),
+    "Subcon Forest - Dweller Stump": LocData(324767, "Subcon Forest Area", required_hats=[HatType.DWELLER]),
     
-    "Subcon Forest - Dweller Floating Rocks": LocData(324464, "Subcon Forest Area",
-                                                      required_hats=[HatType.DWELLER],
-                                                      paintings=3),
+    "Subcon Forest - Dweller Floating Rocks": LocData(324464, "Subcon Forest Area", required_hats=[HatType.DWELLER]),
     
-    "Subcon Forest - Dweller Platforming Tree A": LocData(324709, "Subcon Forest Area", paintings=3),
+    "Subcon Forest - Dweller Platforming Tree A": LocData(324709, "Subcon Forest Area"),
     
-    "Subcon Forest - Dweller Platforming Tree B": LocData(324855, "Subcon Forest Area", 
-                                                          required_hats=[HatType.DWELLER],
-                                                          paintings=3),
+    "Subcon Forest - Dweller Platforming Tree B": LocData(324855, "Subcon Forest Area", required_hats=[HatType.DWELLER]),
     
-    "Subcon Forest - Giant Time Piece": LocData(325473, "Subcon Forest Area", paintings=1),
-    "Subcon Forest - Gallows": LocData(325472, "Subcon Forest Area", paintings=1),
+    "Subcon Forest - Giant Time Piece": LocData(325473, "Subcon Forest Area"),
+    "Subcon Forest - Gallows": LocData(325472, "Subcon Forest Area"),
     
-    "Subcon Forest - Green and Purple Dweller Rocks": LocData(325082, "Subcon Forest Area",
-                                                              required_hats=[HatType.DWELLER],
-                                                              paintings=3),
+    "Subcon Forest - Green and Purple Dweller Rocks": LocData(325082, "Subcon Forest Area"),
     
-    "Subcon Forest - Dweller Shack": LocData(324463, "Subcon Forest Area",
-                                             required_hats=[HatType.DWELLER],
-                                             paintings=1),
+    "Subcon Forest - Dweller Shack": LocData(324463, "Subcon Forest Area", required_hats=[HatType.DWELLER]),
     
     "Subcon Forest - Tall Tree Hookshot Swing": LocData(324766, "Subcon Forest Area",
-                                                        paintings=3,
                                                         required_hats=[HatType.DWELLER],
                                                         hookshot=True),
     
-    "Subcon Forest - Burning House": LocData(324710, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Burning Tree Climb": LocData(325079, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Burning Stump Chest": LocData(323731, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Burning Forest Treehouse": LocData(325467, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Spider Bone Cage A": LocData(324462, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Spider Bone Cage B": LocData(325080, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Triple Spider Bounce": LocData(324765, "Subcon Forest Area", paintings=2),
-    "Subcon Forest - Noose Treehouse": LocData(324856, "Subcon Forest Area", hookshot=True, paintings=2),
-    "Subcon Forest - Ice Cube Shack": LocData(324465, "Subcon Forest Area", paintings=1),
+    "Subcon Forest - Burning House": LocData(324710, "Subcon Forest Area"),
+    "Subcon Forest - Burning Tree Climb": LocData(325079, "Subcon Forest Area"),
+    "Subcon Forest - Burning Stump Chest": LocData(323731, "Subcon Forest Area"),
+    "Subcon Forest - Burning Forest Treehouse": LocData(325467, "Subcon Forest Area"),
+    "Subcon Forest - Spider Bone Cage A": LocData(324462, "Subcon Forest Area"),
+    "Subcon Forest - Spider Bone Cage B": LocData(325080, "Subcon Forest Area"),
+    "Subcon Forest - Triple Spider Bounce": LocData(324765, "Subcon Forest Area"),
+    "Subcon Forest - Noose Treehouse": LocData(324856, "Subcon Forest Area", hookshot=True),
+    "Subcon Forest - Ice Cube Shack": LocData(324465, "Subcon Forest Area"),
     
-    "Subcon Forest - Long Tree Climb Chest": LocData(323734, "Subcon Forest Area",
-                                                     required_hats=[HatType.DWELLER],
-                                                     paintings=2),
+    "Subcon Forest - Long Tree Climb Chest": LocData(323734, "Subcon Forest Area", required_hats=[HatType.DWELLER]),
     
     "Subcon Forest - Boss Arena Chest": LocData(323735, "Subcon Forest Area"),
-    "Subcon Forest - Manor Rooftop": LocData(325466, "Subcon Forest Area", dweller_bell=2, paintings=1),
+    "Subcon Forest - Manor Rooftop": LocData(325466, "Subcon Forest Area", dweller_bell=2),
     
-    "Subcon Forest - Infinite Yarn Bush": LocData(325478, "Subcon Forest Area", 
-                                                  required_hats=[HatType.BREWING],
-                                                  paintings=2),
+    "Subcon Forest - Infinite Yarn Bush": LocData(325478, "Subcon Forest Area", required_hats=[HatType.BREWING]),
     
-    "Subcon Forest - Magnet Badge Bush": LocData(325479, "Subcon Forest Area",
-                                                 required_hats=[HatType.BREWING],
-                                                 paintings=3),
+    "Subcon Forest - Magnet Badge Bush": LocData(325479, "Subcon Forest Area", required_hats=[HatType.BREWING]),
     
-    "Subcon Well - Hookshot Badge Chest": LocData(324114, "The Subcon Well", dweller_bell=1, paintings=1),
-    "Subcon Well - Above Chest": LocData(324612, "The Subcon Well", dweller_bell=1, paintings=1),
-    "Subcon Well - On Pipe": LocData(324311, "The Subcon Well", hookshot=True, dweller_bell=1, paintings=1),
-    "Subcon Well - Mushroom": LocData(325318, "The Subcon Well", dweller_bell=1, paintings=1),
+    "Subcon Well - Hookshot Badge Chest": LocData(324114, "The Subcon Well", dweller_bell=1),
+    "Subcon Well - Above Chest": LocData(324612, "The Subcon Well", dweller_bell=1),
+    "Subcon Well - On Pipe": LocData(324311, "The Subcon Well", hookshot=True, dweller_bell=1),
+    "Subcon Well - Mushroom": LocData(325318, "The Subcon Well", dweller_bell=1),
     
-    "Queen Vanessa's Manor - Cellar": LocData(324841, "Queen Vanessa's Manor", dweller_bell=2, paintings=1),
-    "Queen Vanessa's Manor - Bedroom Chest": LocData(323808, "Queen Vanessa's Manor", dweller_bell=2, paintings=1),
-    "Queen Vanessa's Manor - Hall Chest": LocData(323896, "Queen Vanessa's Manor", dweller_bell=2, paintings=1),
-    "Queen Vanessa's Manor - Chandelier": LocData(325546, "Queen Vanessa's Manor", dweller_bell=2, paintings=1),
+    "Queen Vanessa's Manor - Cellar": LocData(324841, "Queen Vanessa's Manor", dweller_bell=2),
+    "Queen Vanessa's Manor - Bedroom Chest": LocData(323808, "Queen Vanessa's Manor", dweller_bell=2),
+    "Queen Vanessa's Manor - Hall Chest": LocData(323896, "Queen Vanessa's Manor", dweller_bell=2),
+    "Queen Vanessa's Manor - Chandelier": LocData(325546, "Queen Vanessa's Manor", dweller_bell=2),
 
     # 330000 range - Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(334856, "Goat Village"),
@@ -350,10 +328,10 @@ act_completions = {
     "Act Completion (Time Rift - The Moon)": LocData(312785, "Time Rift - The Moon"),
     "Act Completion (Time Rift - Dead Bird Studio)": LocData(312577, "Time Rift - Dead Bird Studio"),
 
-    "Act Completion (Contractual Obligations)": LocData(312317, "Contractual Obligations", paintings=1),
-    "Act Completion (The Subcon Well)": LocData(311160, "The Subcon Well", hookshot=True, umbrella=True, paintings=1),
-    "Act Completion (Toilet of Doom)": LocData(311984, "Toilet of Doom", hookshot=True, paintings=1),
-    "Act Completion (Queen Vanessa's Manor)": LocData(312017, "Queen Vanessa's Manor", umbrella=True, paintings=1),
+    "Act Completion (Contractual Obligations)": LocData(312317, "Contractual Obligations"),
+    "Act Completion (The Subcon Well)": LocData(311160, "The Subcon Well", hookshot=True, umbrella=True),
+    "Act Completion (Toilet of Doom)": LocData(311984, "Toilet of Doom", hookshot=True),
+    "Act Completion (Queen Vanessa's Manor)": LocData(312017, "Queen Vanessa's Manor", umbrella=True),
     "Act Completion (Mail Delivery Service)": LocData(312032, "Mail Delivery Service", required_hats=[HatType.SPRINT]),
     "Act Completion (Your Contract has Expired)": LocData(311390, "Your Contract has Expired", umbrella=True),
     "Act Completion (Time Rift - Pipe)": LocData(313069, "Time Rift - Pipe", hookshot=True),
@@ -501,7 +479,7 @@ shop_locations = {
     "Badge Seller - Item 8": LocData(301010, "Badge Seller"),
     "Badge Seller - Item 9": LocData(301011, "Badge Seller"),
     "Badge Seller - Item 10": LocData(301012, "Badge Seller"),
-    "Mafia Boss Shop Item": LocData(301013, "Spaceship", required_tps=12),
+    "Mafia Boss Shop Item": LocData(301013, "Spaceship"),
 
     "Yellow Overpass Station - Yellow Ticket Booth": LocData(301014, "Yellow Overpass Station", dlc_flags=HatDLC.dlc2),
     "Green Clean Station - Green Ticket Booth": LocData(301015, "Green Clean Station", dlc_flags=HatDLC.dlc2),
