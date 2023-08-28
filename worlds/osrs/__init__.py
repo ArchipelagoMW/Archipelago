@@ -3,11 +3,9 @@ import typing
 from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
+from .Items import OSRSItem
+from .Locations import OSRSLocation
 
-from .Regions import all_regions, regions_by_name
-from .Items import OSRSItem, all_items, item_table, starting_area_dict, Location_Items, \
-    chunksanity_starting_chunks, QP_Items
-from .Locations import OSRSLocation, all_locations
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
 from .LogicCSVParser import load_logic_csvs, location_rows, resource_rows, region_rows, item_rows
@@ -32,17 +30,33 @@ class OSRSWorld(World):
     option_definitions = OSRSOptions
     topology_present = True
     web = OSRSWeb()
-
+    base_id = 0x070000
     data_version = 0
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    location_name_to_data = {loc_data.name: loc_data for loc_data in all_locations}
+
+    #location_name_to_data = {loc_data.name: loc_data for loc_data in all_locations}
+
+    region_name_to_data = {}
+    location_name_to_data = {}
+
+    location_rows_by_name = {}
+    region_rows_by_name = {}
+    resource_rows_by_name = {}
+    item_rows_by_name = {}
 
     starting_area_item = None
     allow_brutal_grinds = False
 
     def generate_early(self) -> None:
+        # Load the lgic CSVs and set up the name-indexed dictionaries
+        load_logic_csvs()
+        self.location_rows_by_name = {loc_row.name: loc_row for loc_row in location_rows}
+        self.region_rows_by_name = {reg_row.name: reg_row for reg_row in region_rows}
+        self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in resource_rows}
+        self.item_rows_by_name = {it_row.name: it_row for it_row in item_rows}
+        self.item_name_to_id = {location_rows[i].name: self.base_id + i for i in range(location_rows.count())}
         rnd = self.multiworld.per_slot_randoms[self.player]
         starting_area = self.multiworld.starting_area[self.player]
         allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
@@ -64,55 +78,61 @@ class OSRSWorld(World):
         called to place player's regions into the MultiWorld's regions list. If it's hard to separate, this can be done
         during generate_early or basic as well.
         """
-        name_to_region: typing.Dict[str, Region] = {}
-        # Gotta loop through once and make all the region objects
-        for region_info in all_regions:
-            region = Region(region_info.name, self.player, self.multiworld)
-            for location in region_info.locations:
-                loc = OSRSLocation(self.player, location, self.location_name_to_id.get(location, None), region)
-                loc_data = self.location_name_to_data.get(location)
-                if loc_data is not None:
-                    for skill, level in loc_data.skill_reqs.items():
-                        add_rule(loc, lambda state: self.can_reach_skill(state, skill, level))
-                region.locations.append(loc)
 
-            name_to_region[region_info.name] = region
-            self.multiworld.regions.append(region)
+        # First, create the "Menu" region to start
+        self.create_region("Menu")
 
-        # Now set up the entrances and exits
-        for region_info in all_regions:
-            region = name_to_region[region_info.name]
-            if region_info.name == "Menu":
-                start_region = self.starting_area_item.unlocksRegion
-                connection_region = name_to_region[start_region]
-                entrance = Entrance(self.player, start_region, region)
-                entrance.access_rule = lambda state: state.has(self.starting_area_item.itemName, self.player)
-                entrance.connect(connection_region)
-                region.exits.append(entrance)
-            else:
-                exits = region_info.build_exits_dict()
-                exit_rules: typing.Dict[str, typing.Callable[[CollectionState], bool]] = {}
+        for region_row in region_rows:
+            self.create_region(region_row.name)
 
-                for connected_region in region_info.connects_to:
-                    default_access_rule = regions_by_name[connected_region].access_rule(self.player)
-                    # If there's extra rules, combine them with the region's global access rule
-                    if connected_region in region_info.extra_conditions(self.player):
-                        special_rule = region_info.build_extra_condition(self.player, connected_region)
-                        exit_rules[connected_region] = special_rule
-                    else:
-                        # If there's no extra, the rule is whatever the target location's rule is
-                        exit_rules[connected_region] = default_access_rule
-                for resource_region in region_info.resources:
-                    # Resource nodes have no rules to access unless they're in extra conditions
-                    exit_rules[resource_region] = region_info.build_extra_condition(self.player, resource_region)
+        for resource_row in resource_rows:
+            self.create_region(resource_row.name)
 
-                region.add_exits(exits, exit_rules)
+        # Create entrances between regions
+        for region_row in region_rows:
+            region = self.region_name_to_data[region_row.name]
+            for outbound_region_name in region_row.connections:
+                if not "*" in outbound_region_name:
+                    entrance = region.create_exit(f"{region_row.name}->{outbound_region_name}")
+                    item_name = self.region_rows_by_name[outbound_region_name]
+                    entrance.access_rule = lambda state: state.has(item_name, self.player)
+                    entrance.connect(self.region_name_to_data[outbound_region_name])
+                    region.exits.append(entrance)
+                else:
+                    print(f"Special access rule needed for {outbound_region_name}")
+            for resource_region in region_row.resources:
+                if not "*" in resource_region:
+                    entrance = region.create_exit(f"{region_row.name}->{resource_region}")
+                    entrance.connect(self.region_name_to_data[resource_region])
+                    region.exits.append(entrance)
+                else:
+                    print(f"Special access rule needed for {resource_region}")
 
     def create_items(self) -> None:
-        for item in all_items:
-            if item.itemName is not self.starting_area_item.itemName:
-                for i in range(item.count):
-                    self.multiworld.itempool.append(self.create_item(item.itemName))
+        for i in range(item_rows.count()):
+            item_row = item_rows[i]
+            for c in range(item_row.count):
+                self.multiworld.itempool.append(self.create_item(i))
+
+    def create_locations(self) -> None:
+        for i in range(location_rows.count()):
+            location_row = location_rows[i]
+            region = self.region_name_to_data["Menu"]
+            if location_row.regions.count() > 0:
+                region = self.region_name_to_data[location_row.regions[0]]
+            location = OSRSLocation(self.player, location_row.name, self.base_id + i, region)
+            region.locations.append(location)
+            self.location_name_to_data[location_row.name] = location
+            for region_required_name in location_row.regions:
+                region_required = self.region_name_to_data[region_required_name]
+                add_rule(location, lambda state: state.can_reach(region_required, self.player))
+                for skill_req in location_row.skills:
+                    skill_name, skill_val = skill_req.split(" ")
+                    add_rule(location, lambda state: self.can_reach_skill(state, skill_name, int(skill_val)))
+                for item_req in location_row.items:
+                    add_rule(location, lambda state: state.has(item_req, self.player))
+                if location_row.qp != 0:
+                    add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
 
     def set_rules(self) -> None:
         """
@@ -425,9 +445,15 @@ class OSRSWorld(World):
 
         self.multiworld.completion_condition[self.player] = lambda state: (state.has("Victory", self.player))
 
-    def create_item(self, name: str) -> "Item":
-        item = item_table[name]
-        return OSRSItem(item.itemName, item.progression, item.id, self.player)
+    def create_region(self, name: str) -> "Region":
+        region = Region(name, self.player, self.multiworld)
+        self.region_name_to_data[name] = region
+        self.multiworld.regions.append(region)
+        return region
+
+    def create_item(self, index: int) -> "Item":
+        item = item_rows[index]
+        return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
     def create_event(self, event: str):
         # while we are at it, we can also add a helper to create events
@@ -529,5 +555,5 @@ class OSRSWorld(World):
                                                               self.player) and self.can_reach_skill(state,
                                                                                                     "fishing", 20)
             return can_train
-        print(f"Attempting to check for reaching level {level} in {skill} which does not have rules set")
-        return False
+        print(f"Attempting to check for reaching level {level} in {skill} which does not have rules set so it's fine")
+        return True
