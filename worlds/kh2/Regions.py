@@ -5,934 +5,935 @@ from BaseClasses import MultiWorld, Region
 from .Locations import KH2Location, event_location_to_item
 from . import LocationName, RegionName, Events_Table
 
+KH2REGIONS: typing.Dict[str, typing.List[str]] = {
+    "Menu":                           [],
+    RegionName.GoA:                   [
+        LocationName.GardenofAssemblageMap,
+        LocationName.GoALostIllusion,
+        LocationName.ProofofNonexistence,
+        # LocationName.DonaldStarting1,
+        # LocationName.DonaldStarting2,
+        # LocationName.GoofyStarting1,
+        # LocationName.GoofyStarting2
+    ],
+    RegionName.LoD:                   [
+        LocationName.BambooGroveDarkShard,
+        LocationName.BambooGroveEther,
+        LocationName.BambooGroveMythrilShard,
+        LocationName.EncampmentAreaMap,
+        LocationName.Mission3,
+        LocationName.CheckpointHiPotion,
+        LocationName.CheckpointMythrilShard,
+        LocationName.MountainTrailLightningShard,
+        LocationName.MountainTrailRecoveryRecipe,
+        LocationName.MountainTrailEther,
+        LocationName.MountainTrailMythrilShard,
+        LocationName.VillageCaveAreaMap,
+        LocationName.VillageCaveAPBoost,
+        LocationName.VillageCaveDarkShard,
+        LocationName.VillageCaveBonus,
+        LocationName.RidgeFrostShard,
+        LocationName.RidgeAPBoost,
+    ],
+    RegionName.ShanYu:                [
+        LocationName.ShanYu,
+        LocationName.ShanYuGetBonus,
+        LocationName.HiddenDragon,
+        LocationName.GoofyShanYu,
+        LocationName.ShanYuEventLocation
+    ],
+    RegionName.LoD2:                  [],
+    RegionName.AnsemRiku:             [
+        LocationName.ThroneRoomTornPages,
+        LocationName.ThroneRoomPalaceMap,
+        LocationName.ThroneRoomAPBoost,
+        LocationName.ThroneRoomQueenRecipe,
+        LocationName.ThroneRoomAPBoost2,
+        LocationName.ThroneRoomOgreShield,
+        LocationName.ThroneRoomMythrilCrystal,
+        LocationName.ThroneRoomOrichalcum,
+        LocationName.AnsemRikuEventLocation,
+    ],
+    RegionName.StormRider:            [
+        LocationName.StormRider,
+        LocationName.GoofyStormRider,
+        LocationName.StormRiderEventLocation
+    ],
+    RegionName.DataXigbar:            [
+        LocationName.XigbarDataDefenseBoost,
+        LocationName.DataXigbarEventLocation
+    ],
+    RegionName.Ag:                    [
+        LocationName.AgrabahMap,
+        LocationName.AgrabahDarkShard,
+        LocationName.AgrabahMythrilShard,
+        LocationName.AgrabahHiPotion,
+        LocationName.AgrabahAPBoost,
+        LocationName.AgrabahMythrilStone,
+        LocationName.AgrabahMythrilShard2,
+        LocationName.AgrabahSerenityShard,
+        LocationName.BazaarMythrilGem,
+        LocationName.BazaarPowerShard,
+        LocationName.BazaarHiPotion,
+        LocationName.BazaarAPBoost,
+        LocationName.BazaarMythrilShard,
+        LocationName.PalaceWallsSkillRing,
+        LocationName.PalaceWallsMythrilStone,
+        LocationName.CaveEntrancePowerStone,
+        LocationName.CaveEntranceMythrilShard,
+        LocationName.ValleyofStoneMythrilStone,
+        LocationName.ValleyofStoneAPBoost,
+        LocationName.ValleyofStoneMythrilShard,
+        LocationName.ValleyofStoneHiPotion,
+        LocationName.AbuEscort,
+        LocationName.ChasmofChallengesCaveofWondersMap,
+        LocationName.ChasmofChallengesAPBoost,
+        LocationName.TreasureRoom,
+        LocationName.TreasureRoomAPBoost,
+        LocationName.TreasureRoomSerenityGem,
+        LocationName.GoofyTreasureRoom,
+        LocationName.DonaldAbuEscort
+    ],
+    RegionName.TwinLords:             [
+        LocationName.ElementalLords,
+        LocationName.LampCharm,
+        LocationName.TwinLordsEventLocation
+    ],
+    RegionName.Ag2:                   [
+        LocationName.RuinedChamberTornPages,
+        LocationName.RuinedChamberRuinsMap,
+    ],
+    RegionName.GenieJafar:            [
+        LocationName.GenieJafar,
+        LocationName.WishingLamp,
+        LocationName.GenieJafarEventLocation,
+    ],
+    RegionName.DataLexaeus:           [
+        LocationName.LexaeusBonus,
+        LocationName.LexaeusASStrengthBeyondStrength,
+        LocationName.LexaeusDataLostIllusion,
+        LocationName.DataLexaeusEventLocation
+    ],
+    RegionName.Dc:                    [
+        LocationName.DCCourtyardMythrilShard,
+        LocationName.DCCourtyardStarRecipe,
+        LocationName.DCCourtyardAPBoost,
+        LocationName.DCCourtyardMythrilStone,
+        LocationName.DCCourtyardBlazingStone,
+        LocationName.DCCourtyardBlazingShard,
+        LocationName.DCCourtyardMythrilShard2,
+        LocationName.LibraryTornPages,
+        LocationName.DisneyCastleMap,
+        LocationName.MinnieEscort,
+        LocationName.MinnieEscortGetBonus
+    ],
+    RegionName.Tr:                    [
+        LocationName.CornerstoneHillMap,
+        LocationName.CornerstoneHillFrostShard,
+        LocationName.PierMythrilShard,
+        LocationName.PierHiPotion,
+    ],
+    RegionName.OldPete:               [
+        LocationName.WaterwayMythrilStone,
+        LocationName.WaterwayAPBoost,
+        LocationName.WaterwayFrostStone,
+        LocationName.WindowofTimeMap,
+        LocationName.BoatPete,
+        LocationName.DonaldBoatPete,
+        LocationName.DonaldBoatPeteGetBonus,
+        LocationName.OldPeteEventLocation,
+    ],
+    RegionName.FuturePete:            [
+        LocationName.FuturePete,
+        LocationName.FuturePeteGetBonus,
+        LocationName.Monochrome,
+        LocationName.WisdomForm,
+        LocationName.GoofyFuturePete,
+        LocationName.FuturePeteEventLocation
+    ],
+    RegionName.DataMarluxia:          [
+        LocationName.MarluxiaGetBonus,
+        LocationName.MarluxiaASEternalBlossom,
+        LocationName.MarluxiaDataLostIllusion,
+        LocationName.DataMarluxiaEventLocation
+    ],
+    RegionName.Terra:                 [
+        LocationName.LingeringWillBonus,
+        LocationName.LingeringWillProofofConnection,
+        LocationName.LingeringWillManifestIllusion,
+        LocationName.TerraEventLocation
+    ],
+    RegionName.Ha1:                   [
+        LocationName.PoohsHouse100AcreWoodMap,
+        LocationName.PoohsHouseAPBoost,
+        LocationName.PoohsHouseMythrilStone
+    ],
+    RegionName.Ha2:                   [
+        LocationName.PigletsHouseDefenseBoost,
+        LocationName.PigletsHouseAPBoost,
+        LocationName.PigletsHouseMythrilGem
+    ],
+    RegionName.Ha3:                   [
+        LocationName.RabbitsHouseDrawRing,
+        LocationName.RabbitsHouseMythrilCrystal,
+        LocationName.RabbitsHouseAPBoost,
+    ],
+    RegionName.Ha4:                   [
+        LocationName.KangasHouseMagicBoost,
+        LocationName.KangasHouseAPBoost,
+        LocationName.KangasHouseOrichalcum,
+    ],
+    RegionName.Ha5:                   [
+        LocationName.SpookyCaveMythrilGem,
+        LocationName.SpookyCaveAPBoost,
+        LocationName.SpookyCaveOrichalcum,
+        LocationName.SpookyCaveGuardRecipe,
+        LocationName.SpookyCaveMythrilCrystal,
+        LocationName.SpookyCaveAPBoost2,
+        LocationName.SweetMemories,
+        LocationName.SpookyCaveMap
+    ],
+    RegionName.Ha6:                   [
+        LocationName.StarryHillCosmicRing,
+        LocationName.StarryHillStyleRecipe,
+        LocationName.StarryHillCureElement,
+        LocationName.StarryHillOrichalcumPlus
+    ],
+    RegionName.Pr:                    [
+        LocationName.RampartNavalMap,
+        LocationName.RampartMythrilStone,
+        LocationName.RampartDarkShard,
+        LocationName.TownDarkStone,
+        LocationName.TownAPBoost,
+        LocationName.TownMythrilShard,
+        LocationName.TownMythrilGem,
+        LocationName.CaveMouthBrightShard,
+        LocationName.CaveMouthMythrilShard,
+        LocationName.IsladeMuertaMap,
+        LocationName.BoatFight,
+        LocationName.InterceptorBarrels,
+        LocationName.PowderStoreAPBoost1,
+        LocationName.PowderStoreAPBoost2,
+        LocationName.MoonlightNookMythrilShard,
+        LocationName.MoonlightNookSerenityGem,
+        LocationName.MoonlightNookPowerStone,
+        LocationName.DonaldBoatFight,
+        LocationName.GoofyInterceptorBarrels,
+
+    ],
+    RegionName.Barbosa:               [
+        LocationName.Barbossa,
+        LocationName.BarbossaGetBonus,
+        LocationName.FollowtheWind,
+        LocationName.GoofyBarbossa,
+        LocationName.GoofyBarbossaGetBonus,
+        LocationName.BarbosaEventLocation,
+    ],
+    RegionName.Pr2:                   [],
+    RegionName.GrimReaper1:           [
+        LocationName.GrimReaper1,
+        LocationName.InterceptorsHoldFeatherCharm,
+        LocationName.SeadriftKeepAPBoost,
+        LocationName.SeadriftKeepOrichalcum,
+        LocationName.SeadriftKeepMeteorStaff,
+        LocationName.SeadriftRowSerenityGem,
+        LocationName.SeadriftRowKingRecipe,
+        LocationName.SeadriftRowMythrilCrystal,
+        LocationName.SeadriftRowCursedMedallion,
+        LocationName.SeadriftRowShipGraveyardMap,
+        LocationName.GoofyGrimReaper1,
+        LocationName.GrimReaper1EventLocation,
+    ],
+    RegionName.GrimReaper2:           [
+        LocationName.DonaladGrimReaper2,
+        LocationName.GrimReaper2,
+        LocationName.SecretAnsemReport6,
+        LocationName.GrimReaper2EventLocation,
+    ],
+    RegionName.DataLuxord:            [
+        LocationName.LuxordDataAPBoost,
+        LocationName.DataLuxordEventLocation
+    ],
+    RegionName.Oc:                    [
+        LocationName.PassageMythrilShard,
+        LocationName.PassageMythrilStone,
+        LocationName.PassageEther,
+        LocationName.PassageAPBoost,
+        LocationName.PassageHiPotion,
+        LocationName.InnerChamberUnderworldMap,
+        LocationName.InnerChamberMythrilShard,
+    ],
+    RegionName.Cerberus:              [
+        LocationName.Cerberus,
+        LocationName.ColiseumMap,
+        LocationName.Urns,
+        LocationName.UnderworldEntrancePowerBoost,
+        LocationName.CavernsEntranceLucidShard,
+        LocationName.CavernsEntranceAPBoost,
+        LocationName.CavernsEntranceMythrilShard,
+        LocationName.TheLostRoadBrightShard,
+        LocationName.TheLostRoadEther,
+        LocationName.TheLostRoadMythrilShard,
+        LocationName.TheLostRoadMythrilStone,
+        LocationName.AtriumLucidStone,
+        LocationName.AtriumAPBoost,
+        LocationName.DemyxOC,
+        LocationName.SecretAnsemReport5,
+        LocationName.OlympusStone,
+        LocationName.TheLockCavernsMap,
+        LocationName.TheLockMythrilShard,
+        LocationName.TheLockAPBoost,
+        LocationName.CerberusEventLocation
+    ],
+    RegionName.OlympusPete:           [
+        LocationName.PeteOC,
+        LocationName.DonaldDemyxOC,
+        LocationName.GoofyPeteOC,
+        LocationName.OlympusPeteEventLocation
+    ],
+    RegionName.Hydra:                 [
+        LocationName.Hydra,
+        LocationName.HydraGetBonus,
+        LocationName.HerosCrest,
+        LocationName.HydraEventLocation
+    ],
+    RegionName.Oc2:                   [
+        LocationName.AuronsStatue,
+    ],
+    RegionName.Hades:                 [
+        LocationName.Hades,
+        LocationName.HadesGetBonus,
+        LocationName.GuardianSoul,
+        LocationName.HadesEventLocation
+    ],
+    RegionName.Oc_pain_and_panic_cup: [
+        LocationName.ProtectBeltPainandPanicCup,
+        LocationName.SerenityGemPainandPanicCup,
+        LocationName.Oc_pain_and_panic_cupEventLocation
+    ],
+    RegionName.Oc_cerberus_cup:       [
+        LocationName.RisingDragonCerberusCup,
+        LocationName.SerenityCrystalCerberusCup,
+        LocationName.Oc_cerberus_cupEventLocation
+    ],
+    RegionName.Oc2_titan_cup:         [
+        LocationName.GenjiShieldTitanCup,
+        LocationName.SkillfulRingTitanCup,
+        LocationName.Oc2_titan_cupEventLocation
+    ],
+    RegionName.Oc2_gof_cup:           [
+        LocationName.FatalCrestGoddessofFateCup,
+        LocationName.OrichalcumPlusGoddessofFateCup,
+        LocationName.Oc2_gof_cupEventLocation,
+    ],
+    RegionName.HadesCups:             [
+        LocationName.HadesCupTrophyParadoxCups,
+        LocationName.HadesCupEventLocations
+    ],
+    RegionName.DataZexion:            [
+        LocationName.ZexionBonus,
+        LocationName.ZexionASBookofShadows,
+        LocationName.ZexionDataLostIllusion,
+        LocationName.GoofyZexion,
+        LocationName.DataZexionEventLocation
+    ],
+    RegionName.Bc:                    [
+        LocationName.BCCourtyardAPBoost,
+        LocationName.BCCourtyardHiPotion,
+        LocationName.BCCourtyardMythrilShard,
+        LocationName.BellesRoomCastleMap,
+        LocationName.BellesRoomMegaRecipe,
+        LocationName.TheEastWingMythrilShard,
+        LocationName.TheEastWingTent,
+        LocationName.TheWestHallHiPotion,
+        LocationName.TheWestHallPowerShard,
+        LocationName.TheWestHallMythrilShard2,
+        LocationName.TheWestHallBrightStone,
+        LocationName.TheWestHallMythrilShard,
+    ],
+    RegionName.Thresholder:           [
+        LocationName.Thresholder,
+        LocationName.DungeonBasementMap,
+        LocationName.DungeonAPBoost,
+        LocationName.SecretPassageMythrilShard,
+        LocationName.SecretPassageHiPotion,
+        LocationName.SecretPassageLucidShard,
+        LocationName.TheWestHallAPBoostPostDungeon,
+        LocationName.TheWestWingMythrilShard,
+        LocationName.TheWestWingTent,
+        LocationName.DonaldThresholder,
+        LocationName.ThresholderEventLocation
+    ],
+    RegionName.Beast:                 [
+        LocationName.Beast,
+        LocationName.TheBeastsRoomBlazingShard,
+        LocationName.GoofyBeast,
+        LocationName.BeastEventLocation
+    ],
+    RegionName.DarkThorn:             [
+        LocationName.DarkThorn,
+        LocationName.DarkThornGetBonus,
+        LocationName.DarkThornCureElement,
+        LocationName.DarkThornEventLocation,
+    ],
+    RegionName.Bc2:                   [
+        LocationName.RumblingRose,
+        LocationName.CastleWallsMap
+    ],
+    RegionName.Xaldin:                [
+        LocationName.Xaldin,
+        LocationName.XaldinGetBonus,
+        LocationName.DonaldXaldinGetBonus,
+        LocationName.SecretAnsemReport4,
+        LocationName.XaldinEventLocation
+    ],
+    RegionName.DataXaldin:            [
+        LocationName.XaldinDataDefenseBoost,
+        LocationName.DataXaldinEventLocation
+    ],
+    RegionName.Sp:                    [
+        LocationName.PitCellAreaMap,
+        LocationName.PitCellMythrilCrystal,
+        LocationName.CanyonDarkCrystal,
+        LocationName.CanyonMythrilStone,
+        LocationName.CanyonMythrilGem,
+        LocationName.CanyonFrostCrystal,
+        LocationName.Screens,
+        LocationName.HallwayPowerCrystal,
+        LocationName.HallwayAPBoost,
+        LocationName.CommunicationsRoomIOTowerMap,
+        LocationName.CommunicationsRoomGaiaBelt,
+        LocationName.DonaldScreens,
+    ],
+    RegionName.HostileProgram:        [
+        LocationName.HostileProgram,
+        LocationName.HostileProgramGetBonus,
+        LocationName.PhotonDebugger,
+        LocationName.GoofyHostileProgram,
+        LocationName.HostileProgramEventLocation
+    ],
+    RegionName.Sp2:                   [
+        LocationName.SolarSailer,
+        LocationName.CentralComputerCoreAPBoost,
+        LocationName.CentralComputerCoreOrichalcumPlus,
+        LocationName.CentralComputerCoreCosmicArts,
+        LocationName.CentralComputerCoreMap,
+        LocationName.DonaldSolarSailer
+    ],
+    RegionName.Mcp:                   [
+        LocationName.MCP,
+        LocationName.MCPGetBonus,
+        LocationName.McpEventLocation
+    ],
+    RegionName.DataLarxene:           [
+        LocationName.LarxeneBonus,
+        LocationName.LarxeneASCloakedThunder,
+        LocationName.LarxeneDataLostIllusion,
+        LocationName.DataLarxeneEventLocation
+    ],
+    RegionName.Ht:                    [
+        LocationName.GraveyardMythrilShard,
+        LocationName.GraveyardSerenityGem,
+        LocationName.FinklesteinsLabHalloweenTownMap,
+        LocationName.TownSquareMythrilStone,
+        LocationName.TownSquareEnergyShard,
+        LocationName.HinterlandsLightningShard,
+        LocationName.HinterlandsMythrilStone,
+        LocationName.HinterlandsAPBoost,
+        LocationName.CandyCaneLaneMegaPotion,
+        LocationName.CandyCaneLaneMythrilGem,
+        LocationName.CandyCaneLaneLightningStone,
+        LocationName.CandyCaneLaneMythrilStone,
+        LocationName.SantasHouseChristmasTownMap,
+        LocationName.SantasHouseAPBoost,
+    ],
+    RegionName.PrisonKeeper:          [
+        LocationName.PrisonKeeper,
+        LocationName.DonaldPrisonKeeper,
+        LocationName.PrisonKeeperEventLocation,
+    ],
+    RegionName.OogieBoogie:           [
+        LocationName.OogieBoogie,
+        LocationName.OogieBoogieMagnetElement,
+        LocationName.GoofyOogieBoogie,
+        LocationName.OogieBoogieEventLocation
+    ],
+    RegionName.Ht2:                   [
+        LocationName.Lock,
+        LocationName.Present,
+        LocationName.DecoyPresents,
+        LocationName.GoofyLock
+    ],
+    RegionName.Experiment:            [
+        LocationName.Experiment,
+        LocationName.DecisivePumpkin,
+        LocationName.DonaldExperiment,
+        LocationName.ExperimentEventLocation,
+    ],
+    RegionName.DataVexen:             [
+        LocationName.VexenBonus,
+        LocationName.VexenASRoadtoDiscovery,
+        LocationName.VexenDataLostIllusion,
+        LocationName.DataVexenEventLocation
+    ],
+    RegionName.Hb:                    [
+        LocationName.MarketplaceMap,
+        LocationName.BoroughDriveRecovery,
+        LocationName.BoroughAPBoost,
+        LocationName.BoroughHiPotion,
+        LocationName.BoroughMythrilShard,
+        LocationName.BoroughDarkShard,
+        LocationName.MerlinsHouseMembershipCard,
+        LocationName.MerlinsHouseBlizzardElement,
+        LocationName.Bailey,
+        LocationName.BaileySecretAnsemReport7,
+        LocationName.BaseballCharm
+    ],
+    RegionName.Hb2:                   [
+        LocationName.PosternCastlePerimeterMap,
+        LocationName.PosternMythrilGem,
+        LocationName.PosternAPBoost,
+        LocationName.CorridorsMythrilStone,
+        LocationName.CorridorsMythrilCrystal,
+        LocationName.CorridorsDarkCrystal,
+        LocationName.CorridorsAPBoost,
+        LocationName.AnsemsStudyMasterForm,
+        LocationName.AnsemsStudySleepingLion,
+        LocationName.AnsemsStudySkillRecipe,
+        LocationName.AnsemsStudyUkuleleCharm,
+        LocationName.RestorationSiteMoonRecipe,
+        LocationName.RestorationSiteAPBoost,
+    ],
+    RegionName.HBDemyx:               [
+        LocationName.DonaldDemyxHBGetBonus,
+        LocationName.DemyxHB,
+        LocationName.DemyxHBGetBonus,
+        LocationName.FFFightsCureElement,
+        LocationName.CrystalFissureTornPages,
+        LocationName.CrystalFissureTheGreatMawMap,
+        LocationName.CrystalFissureEnergyCrystal,
+        LocationName.CrystalFissureAPBoost,
+        LocationName.HBDemyxEventLocation,
+    ],
+    RegionName.ThousandHeartless:     [
+        LocationName.ThousandHeartless,
+        LocationName.ThousandHeartlessSecretAnsemReport1,
+        LocationName.ThousandHeartlessIceCream,
+        LocationName.ThousandHeartlessPicture,
+        LocationName.PosternGullWing,
+        LocationName.HeartlessManufactoryCosmicChain,
+        LocationName.ThousandHeartlessEventLocation,
+    ],
+    RegionName.DataDemyx:             [
+        LocationName.DemyxDataAPBoost,
+        LocationName.DataDemyxEventLocation,
+    ],
+    RegionName.Mushroom13:            [
+        LocationName.WinnersProof,
+        LocationName.ProofofPeace,
+        LocationName.Mushroom13EventLocation,
+    ],
+    RegionName.Sephi:                 [
+        LocationName.SephirothBonus,
+        LocationName.SephirothFenrir,
+        LocationName.SephiEventLocation
+    ],
+    RegionName.CoR:                   [
+        LocationName.CoRDepthsAPBoost,
+        LocationName.CoRDepthsPowerCrystal,
+        LocationName.CoRDepthsFrostCrystal,
+        LocationName.CoRDepthsManifestIllusion,
+        LocationName.CoRDepthsAPBoost2,
+        LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
+        LocationName.CoRMineshaftLowerLevelAPBoost,
+    ],
+    RegionName.CorFirstFight:         [
+        LocationName.CoRDepthsUpperLevelRemembranceGem,
+        LocationName.CoRMiningAreaSerenityGem,
+        LocationName.CoRMiningAreaAPBoost,
+        LocationName.CoRMiningAreaSerenityCrystal,
+        LocationName.CoRMiningAreaManifestIllusion,
+        LocationName.CoRMiningAreaSerenityGem2,
+        LocationName.CoRMiningAreaDarkRemembranceMap,
+        LocationName.CorFirstFightEventLocation,
+    ],
+    RegionName.CorSecondFight:        [
+        LocationName.CoRMineshaftMidLevelPowerBoost,
+        LocationName.CoREngineChamberSerenityCrystal,
+        LocationName.CoREngineChamberRemembranceCrystal,
+        LocationName.CoREngineChamberAPBoost,
+        LocationName.CoREngineChamberManifestIllusion,
+        LocationName.CoRMineshaftUpperLevelMagicBoost,
+        LocationName.CorSecondFightEventLocation,
+    ],
+    RegionName.Transport:             [
+        LocationName.CoRMineshaftUpperLevelAPBoost,  # last chest
+        LocationName.TransporttoRemembrance,
+        LocationName.TransportEventLocation,
+    ],
+    RegionName.Pl:                    [
+        LocationName.GorgeSavannahMap,
+        LocationName.GorgeDarkGem,
+        LocationName.GorgeMythrilStone,
+        LocationName.ElephantGraveyardFrostGem,
+        LocationName.ElephantGraveyardMythrilStone,
+        LocationName.ElephantGraveyardBrightStone,
+        LocationName.ElephantGraveyardAPBoost,
+        LocationName.ElephantGraveyardMythrilShard,
+        LocationName.PrideRockMap,
+        LocationName.PrideRockMythrilStone,
+        LocationName.PrideRockSerenityCrystal,
+        LocationName.WildebeestValleyEnergyStone,
+        LocationName.WildebeestValleyAPBoost,
+        LocationName.WildebeestValleyMythrilGem,
+        LocationName.WildebeestValleyMythrilStone,
+        LocationName.WildebeestValleyLucidGem,
+        LocationName.WastelandsMythrilShard,
+        LocationName.WastelandsSerenityGem,
+        LocationName.WastelandsMythrilStone,
+        LocationName.JungleSerenityGem,
+        LocationName.JungleMythrilStone,
+        LocationName.JungleSerenityCrystal,
+        LocationName.OasisMap,
+        LocationName.OasisTornPages,
+        LocationName.OasisAPBoost,
+        LocationName.CircleofLife,
+        LocationName.Hyenas1,
+
+        LocationName.GoofyHyenas1
+    ],
+    RegionName.Scar:                  [
+        LocationName.Scar,
+        LocationName.ScarFireElement,
+        LocationName.DonaldScar,
+        LocationName.ScarEventLocation,
+    ],
+    RegionName.Pl2:                   [
+        LocationName.Hyenas2,
+        LocationName.GoofyHyenas2
+    ],
+    RegionName.GroundShaker:          [
+        LocationName.Groundshaker,
+        LocationName.GroundshakerGetBonus,
+        LocationName.GroundShakerEventLocation,
+    ],
+    RegionName.DataSaix:              [
+        LocationName.SaixDataDefenseBoost,
+        LocationName.DataSaixEventLocation
+    ],
+    RegionName.Stt:                   [
+        LocationName.TwilightTownMap,
+        LocationName.MunnyPouchOlette,
+        LocationName.StationDusks,
+        LocationName.StationofSerenityPotion,
+        LocationName.StationofCallingPotion,
+    ],
+    RegionName.TwilightThorn:         [
+        LocationName.TwilightThorn,
+        LocationName.TwilightThornEventLocation
+    ],
+    RegionName.Axel1:                 [
+        LocationName.Axel1,
+        LocationName.JunkChampionBelt,
+        LocationName.JunkMedal,
+        LocationName.TheStruggleTrophy,
+        LocationName.CentralStationPotion1,
+        LocationName.STTCentralStationHiPotion,
+        LocationName.CentralStationPotion2,
+        LocationName.SunsetTerraceAbilityRing,
+        LocationName.SunsetTerraceHiPotion,
+        LocationName.SunsetTerracePotion1,
+        LocationName.SunsetTerracePotion2,
+        LocationName.MansionFoyerHiPotion,
+        LocationName.MansionFoyerPotion1,
+        LocationName.MansionFoyerPotion2,
+        LocationName.MansionDiningRoomElvenBandanna,
+        LocationName.MansionDiningRoomPotion,
+        LocationName.NaminesSketches,
+        LocationName.MansionMap,
+        LocationName.MansionLibraryHiPotion,
+        LocationName.Axel1EventLocation
+    ],
+    RegionName.Axel2:                 [
+        LocationName.Axel2,
+        LocationName.MansionBasementCorridorHiPotion,
+        LocationName.Axel2EventLocation
+    ],
+    RegionName.DataRoxas:             [
+        LocationName.RoxasDataMagicBoost,
+        LocationName.DataRoxasEventLocation
+    ],
+    RegionName.Tt:                    [
+        LocationName.OldMansionPotion,
+        LocationName.OldMansionMythrilShard,
+        LocationName.TheWoodsPotion,
+        LocationName.TheWoodsMythrilShard,
+        LocationName.TheWoodsHiPotion,
+        LocationName.TramCommonHiPotion,
+        LocationName.TramCommonAPBoost,
+        LocationName.TramCommonTent,
+        LocationName.TramCommonMythrilShard1,
+        LocationName.TramCommonPotion1,
+        LocationName.TramCommonMythrilShard2,
+        LocationName.TramCommonPotion2,
+        LocationName.StationPlazaSecretAnsemReport2,
+        LocationName.MunnyPouchMickey,
+        LocationName.CrystalOrb,
+        LocationName.CentralStationTent,
+        LocationName.TTCentralStationHiPotion,
+        LocationName.CentralStationMythrilShard,
+        LocationName.TheTowerPotion,
+        LocationName.TheTowerHiPotion,
+        LocationName.TheTowerEther,
+        LocationName.TowerEntrywayEther,
+        LocationName.TowerEntrywayMythrilShard,
+        LocationName.SorcerersLoftTowerMap,
+        LocationName.TowerWardrobeMythrilStone,
+        LocationName.StarSeeker,
+        LocationName.ValorForm
+    ],
+    RegionName.Tt2:                   [
+        LocationName.SeifersTrophy,
+        LocationName.Oathkeeper,
+        LocationName.LimitForm
+    ],
+    RegionName.Tt3:                   [
+        LocationName.UndergroundConcourseMythrilGem,
+        LocationName.UndergroundConcourseAPBoost,
+        LocationName.UndergroundConcourseMythrilCrystal,
+        LocationName.UndergroundConcourseOrichalcum,
+        LocationName.TunnelwayOrichalcum,
+        LocationName.TunnelwayMythrilCrystal,
+        LocationName.SunsetTerraceOrichalcumPlus,
+        LocationName.SunsetTerraceMythrilShard,
+        LocationName.SunsetTerraceMythrilCrystal,
+        LocationName.SunsetTerraceAPBoost,
+        LocationName.MansionNobodies,
+        LocationName.MansionFoyerMythrilCrystal,
+        LocationName.MansionFoyerMythrilStone,
+        LocationName.MansionFoyerSerenityCrystal,
+        LocationName.MansionDiningRoomMythrilCrystal,
+        LocationName.MansionDiningRoomMythrilStone,
+        LocationName.MansionLibraryOrichalcum,
+        LocationName.BeamSecretAnsemReport10,
+        LocationName.MansionBasementCorridorUltimateRecipe,
+        LocationName.BetwixtandBetween,
+        LocationName.BetwixtandBetweenBondofFlame,
+        LocationName.DonaldMansionNobodies
+    ],
+    RegionName.DataAxel:              [
+        LocationName.AxelDataMagicBoost,
+        LocationName.DataAxelEventLocation,
+    ],
+    RegionName.Twtnw:                 [
+        LocationName.FragmentCrossingMythrilStone,
+        LocationName.FragmentCrossingMythrilCrystal,
+        LocationName.FragmentCrossingAPBoost,
+        LocationName.FragmentCrossingOrichalcum
+    ],
+    RegionName.Roxas:                 [
+        LocationName.Roxas,
+        LocationName.RoxasGetBonus,
+        LocationName.RoxasSecretAnsemReport8,
+        LocationName.TwoBecomeOne,
+        LocationName.MemorysSkyscaperMythrilCrystal,
+        LocationName.MemorysSkyscaperAPBoost,
+        LocationName.MemorysSkyscaperMythrilStone,
+        LocationName.TheBrinkofDespairDarkCityMap,
+        LocationName.TheBrinkofDespairOrichalcumPlus,
+        LocationName.NothingsCallMythrilGem,
+        LocationName.NothingsCallOrichalcum,
+        LocationName.TwilightsViewCosmicBelt,
+        LocationName.RoxasEventLocation
+    ],
+    RegionName.Xigbar:                [
+        LocationName.XigbarBonus,
+        LocationName.XigbarSecretAnsemReport3,
+        LocationName.NaughtsSkywayMythrilGem,
+        LocationName.NaughtsSkywayOrichalcum,
+        LocationName.NaughtsSkywayMythrilCrystal,
+        LocationName.Oblivion,
+        LocationName.CastleThatNeverWasMap,
+        LocationName.XigbarEventLocation,
+    ],
+    RegionName.Luxord:                [
+        LocationName.Luxord,
+        LocationName.LuxordGetBonus,
+        LocationName.LuxordSecretAnsemReport9,
+        LocationName.LuxordEventLocation,
+    ],
+    RegionName.Saix:                  [
+        LocationName.SaixBonus,
+        LocationName.SaixSecretAnsemReport12,
+        LocationName.SaixEventLocation,
+    ],
+    RegionName.Twtnw2:                [
+        LocationName.PreXemnas1SecretAnsemReport11,
+        LocationName.RuinandCreationsPassageMythrilStone,
+        LocationName.RuinandCreationsPassageAPBoost,
+        LocationName.RuinandCreationsPassageMythrilCrystal,
+        LocationName.RuinandCreationsPassageOrichalcum
+    ],
+    RegionName.Xemnas:                [
+        LocationName.Xemnas1,
+        LocationName.Xemnas1GetBonus,
+        LocationName.Xemnas1SecretAnsemReport13,
+        LocationName.XemnasEventLocation
+
+    ],
+    RegionName.ArmoredXemnas:         [
+        LocationName.ArmoredXemnasEventLocation
+    ],
+    RegionName.ArmoredXemnas2:        [
+        LocationName.ArmoredXemnas2EventLocation
+    ],
+    RegionName.FinalXemnas:           [
+        LocationName.FinalXemnas
+    ],
+    RegionName.DataXemnas:            [
+        LocationName.XemnasDataPowerBoost,
+        LocationName.DataXemnasEventLocation
+    ],
+    RegionName.AtlanticaSongOne:      [
+        LocationName.UnderseaKingdomMap
+    ],
+    RegionName.AtlanticaSongTwo:      [
+
+    ],
+    RegionName.AtlanticaSongThree:    [
+        LocationName.MysteriousAbyss
+    ],
+    RegionName.AtlanticaSongFour:     [
+        LocationName.MusicalBlizzardElement,
+        LocationName.MusicalOrichalcumPlus
+    ],
+    RegionName.Valor:                 [
+        LocationName.Valorlvl2,
+        LocationName.Valorlvl3,
+        LocationName.Valorlvl4,
+        LocationName.Valorlvl5,
+        LocationName.Valorlvl6,
+        LocationName.Valorlvl7
+    ],
+    RegionName.Wisdom:                [
+        LocationName.Wisdomlvl2,
+        LocationName.Wisdomlvl3,
+        LocationName.Wisdomlvl4,
+        LocationName.Wisdomlvl5,
+        LocationName.Wisdomlvl6,
+        LocationName.Wisdomlvl7
+    ],
+    RegionName.Limit:                 [
+        LocationName.Limitlvl2,
+        LocationName.Limitlvl3,
+        LocationName.Limitlvl4,
+        LocationName.Limitlvl5,
+        LocationName.Limitlvl6,
+        LocationName.Limitlvl7
+    ],
+    RegionName.Master:                [
+        LocationName.Masterlvl2,
+        LocationName.Masterlvl3,
+        LocationName.Masterlvl4,
+        LocationName.Masterlvl5,
+        LocationName.Masterlvl6,
+        LocationName.Masterlvl7
+    ],
+    RegionName.Final:                 [
+        LocationName.Finallvl2,
+        LocationName.Finallvl3,
+        LocationName.Finallvl4,
+        LocationName.Finallvl5,
+        LocationName.Finallvl6,
+        LocationName.Finallvl7
+    ],
+    RegionName.Summon:                [
+        LocationName.Summonlvl2,
+        LocationName.Summonlvl3,
+        LocationName.Summonlvl4,
+        LocationName.Summonlvl5,
+        LocationName.Summonlvl6,
+        LocationName.Summonlvl7,
+    ],
+    RegionName.Keyblade:              [
+        LocationName.FAKESlot,
+        LocationName.DetectionSaberSlot,
+        LocationName.EdgeofUltimaSlot,
+        LocationName.KingdomKeySlot,
+        LocationName.OathkeeperSlot,
+        LocationName.OblivionSlot,
+        LocationName.StarSeekerSlot,
+        LocationName.HiddenDragonSlot,
+        LocationName.HerosCrestSlot,
+        LocationName.MonochromeSlot,
+        LocationName.FollowtheWindSlot,
+        LocationName.CircleofLifeSlot,
+        LocationName.PhotonDebuggerSlot,
+        LocationName.GullWingSlot,
+        LocationName.RumblingRoseSlot,
+        LocationName.GuardianSoulSlot,
+        LocationName.WishingLampSlot,
+        LocationName.DecisivePumpkinSlot,
+        LocationName.SweetMemoriesSlot,
+        LocationName.MysteriousAbyssSlot,
+        LocationName.SleepingLionSlot,
+        LocationName.BondofFlameSlot,
+        LocationName.TwoBecomeOneSlot,
+        LocationName.FatalCrestSlot,
+        LocationName.FenrirSlot,
+        LocationName.UltimaWeaponSlot,
+        LocationName.WinnersProofSlot,
+        LocationName.PurebloodSlot,
+        LocationName.Centurion2,
+        LocationName.CometStaff,
+        LocationName.HammerStaff,
+        LocationName.LordsBroom,
+        LocationName.MagesStaff,
+        LocationName.MeteorStaff,
+        LocationName.NobodyLance,
+        LocationName.PreciousMushroom,
+        LocationName.PreciousMushroom2,
+        LocationName.PremiumMushroom,
+        LocationName.RisingDragon,
+        LocationName.SaveTheQueen2,
+        LocationName.ShamansRelic,
+        LocationName.VictoryBell,
+        LocationName.WisdomWand,
+
+        LocationName.AdamantShield,
+        LocationName.AkashicRecord,
+        LocationName.ChainGear,
+        LocationName.DreamCloud,
+        LocationName.FallingStar,
+        LocationName.FrozenPride2,
+        LocationName.GenjiShield,
+        LocationName.KnightDefender,
+        LocationName.KnightsShield,
+        LocationName.MajesticMushroom,
+        LocationName.MajesticMushroom2,
+        LocationName.NobodyGuard,
+        LocationName.OgreShield,
+        LocationName.SaveTheKing2,
+        LocationName.UltimateMushroom
+    ],
+    RegionName.LevelsVS1:             [],
+    RegionName.LevelsVS3:             [],
+    RegionName.LevelsVS6:             [],
+    RegionName.LevelsVS9:             [],
+    RegionName.LevelsVS12:            [],
+    RegionName.LevelsVS15:            [],
+    RegionName.LevelsVS18:            [],
+    RegionName.LevelsVS21:            [],
+    RegionName.LevelsVS24:            [],
+    RegionName.LevelsVS26:            [],
+
+}
+
 
 def create_regions(world, player: int, active_locations):
-    KH2REGIONS: typing.Dict[str, typing.List[str]] = {
-        "Menu":                           [],
-        RegionName.GoA:                   [
-            LocationName.GardenofAssemblageMap,
-            LocationName.GoALostIllusion,
-            LocationName.ProofofNonexistence,
-            # LocationName.DonaldStarting1,
-            # LocationName.DonaldStarting2,
-            # LocationName.GoofyStarting1,
-            # LocationName.GoofyStarting2
-        ],
-        RegionName.LoD:                   [
-            LocationName.BambooGroveDarkShard,
-            LocationName.BambooGroveEther,
-            LocationName.BambooGroveMythrilShard,
-            LocationName.EncampmentAreaMap,
-            LocationName.Mission3,
-            LocationName.CheckpointHiPotion,
-            LocationName.CheckpointMythrilShard,
-            LocationName.MountainTrailLightningShard,
-            LocationName.MountainTrailRecoveryRecipe,
-            LocationName.MountainTrailEther,
-            LocationName.MountainTrailMythrilShard,
-            LocationName.VillageCaveAreaMap,
-            LocationName.VillageCaveAPBoost,
-            LocationName.VillageCaveDarkShard,
-            LocationName.VillageCaveBonus,
-            LocationName.RidgeFrostShard,
-            LocationName.RidgeAPBoost,
-        ],
-        RegionName.ShanYu:                [
-            LocationName.ShanYu,
-            LocationName.ShanYuGetBonus,
-            LocationName.HiddenDragon,
-            LocationName.GoofyShanYu,
-            LocationName.ShanYuEventLocation
-        ],
-        RegionName.LoD2:                  [],
-        RegionName.AnsemRiku:             [
-            LocationName.ThroneRoomTornPages,
-            LocationName.ThroneRoomPalaceMap,
-            LocationName.ThroneRoomAPBoost,
-            LocationName.ThroneRoomQueenRecipe,
-            LocationName.ThroneRoomAPBoost2,
-            LocationName.ThroneRoomOgreShield,
-            LocationName.ThroneRoomMythrilCrystal,
-            LocationName.ThroneRoomOrichalcum,
-            LocationName.AnsemRikuEventLocation,
-        ],
-        RegionName.StormRider:            [
-            LocationName.StormRider,
-            LocationName.GoofyStormRider,
-            LocationName.StormRiderEventLocation
-        ],
-        RegionName.DataXigbar:            [
-            LocationName.XigbarDataDefenseBoost,
-            LocationName.DataXigbarEventLocation
-        ],
-        RegionName.Ag:                    [
-            LocationName.AgrabahMap,
-            LocationName.AgrabahDarkShard,
-            LocationName.AgrabahMythrilShard,
-            LocationName.AgrabahHiPotion,
-            LocationName.AgrabahAPBoost,
-            LocationName.AgrabahMythrilStone,
-            LocationName.AgrabahMythrilShard2,
-            LocationName.AgrabahSerenityShard,
-            LocationName.BazaarMythrilGem,
-            LocationName.BazaarPowerShard,
-            LocationName.BazaarHiPotion,
-            LocationName.BazaarAPBoost,
-            LocationName.BazaarMythrilShard,
-            LocationName.PalaceWallsSkillRing,
-            LocationName.PalaceWallsMythrilStone,
-            LocationName.CaveEntrancePowerStone,
-            LocationName.CaveEntranceMythrilShard,
-            LocationName.ValleyofStoneMythrilStone,
-            LocationName.ValleyofStoneAPBoost,
-            LocationName.ValleyofStoneMythrilShard,
-            LocationName.ValleyofStoneHiPotion,
-            LocationName.AbuEscort,
-            LocationName.ChasmofChallengesCaveofWondersMap,
-            LocationName.ChasmofChallengesAPBoost,
-            LocationName.TreasureRoom,
-            LocationName.TreasureRoomAPBoost,
-            LocationName.TreasureRoomSerenityGem,
-            LocationName.GoofyTreasureRoom,
-            LocationName.DonaldAbuEscort
-        ],
-        RegionName.TwinLords:             [
-            LocationName.ElementalLords,
-            LocationName.LampCharm,
-            LocationName.TwinLordsEventLocation
-        ],
-        RegionName.Ag2:                   [
-            LocationName.RuinedChamberTornPages,
-            LocationName.RuinedChamberRuinsMap,
-        ],
-        RegionName.GenieJafar:            [
-            LocationName.GenieJafar,
-            LocationName.WishingLamp,
-            LocationName.GenieJafarEventLocation,
-        ],
-        RegionName.DataLexaeus:           [
-            LocationName.LexaeusBonus,
-            LocationName.LexaeusASStrengthBeyondStrength,
-            LocationName.LexaeusDataLostIllusion,
-            LocationName.DataLexaeusEventLocation
-        ],
-        RegionName.Dc:                    [
-            LocationName.DCCourtyardMythrilShard,
-            LocationName.DCCourtyardStarRecipe,
-            LocationName.DCCourtyardAPBoost,
-            LocationName.DCCourtyardMythrilStone,
-            LocationName.DCCourtyardBlazingStone,
-            LocationName.DCCourtyardBlazingShard,
-            LocationName.DCCourtyardMythrilShard2,
-            LocationName.LibraryTornPages,
-            LocationName.DisneyCastleMap,
-            LocationName.MinnieEscort,
-            LocationName.MinnieEscortGetBonus
-        ],
-        RegionName.Tr:                    [
-            LocationName.CornerstoneHillMap,
-            LocationName.CornerstoneHillFrostShard,
-            LocationName.PierMythrilShard,
-            LocationName.PierHiPotion,
-        ],
-        RegionName.OldPete:               [
-            LocationName.WaterwayMythrilStone,
-            LocationName.WaterwayAPBoost,
-            LocationName.WaterwayFrostStone,
-            LocationName.WindowofTimeMap,
-            LocationName.BoatPete,
-            LocationName.DonaldBoatPete,
-            LocationName.DonaldBoatPeteGetBonus,
-            LocationName.OldPeteEventLocation,
-        ],
-        RegionName.FuturePete:            [
-            LocationName.FuturePete,
-            LocationName.FuturePeteGetBonus,
-            LocationName.Monochrome,
-            LocationName.WisdomForm,
-            LocationName.GoofyFuturePete,
-            LocationName.FuturePeteEventLocation
-        ],
-        RegionName.DataMarluxia:          [
-            LocationName.MarluxiaGetBonus,
-            LocationName.MarluxiaASEternalBlossom,
-            LocationName.MarluxiaDataLostIllusion,
-            LocationName.DataMarluxiaEventLocation
-        ],
-        RegionName.Terra:                 [
-            LocationName.LingeringWillBonus,
-            LocationName.LingeringWillProofofConnection,
-            LocationName.LingeringWillManifestIllusion,
-            LocationName.TerraEventLocation
-        ],
-        RegionName.Ha1:                   [
-            LocationName.PoohsHouse100AcreWoodMap,
-            LocationName.PoohsHouseAPBoost,
-            LocationName.PoohsHouseMythrilStone
-        ],
-        RegionName.Ha2:                   [
-            LocationName.PigletsHouseDefenseBoost,
-            LocationName.PigletsHouseAPBoost,
-            LocationName.PigletsHouseMythrilGem
-        ],
-        RegionName.Ha3:                   [
-            LocationName.RabbitsHouseDrawRing,
-            LocationName.RabbitsHouseMythrilCrystal,
-            LocationName.RabbitsHouseAPBoost,
-        ],
-        RegionName.Ha4:                   [
-            LocationName.KangasHouseMagicBoost,
-            LocationName.KangasHouseAPBoost,
-            LocationName.KangasHouseOrichalcum,
-        ],
-        RegionName.Ha5:                   [
-            LocationName.SpookyCaveMythrilGem,
-            LocationName.SpookyCaveAPBoost,
-            LocationName.SpookyCaveOrichalcum,
-            LocationName.SpookyCaveGuardRecipe,
-            LocationName.SpookyCaveMythrilCrystal,
-            LocationName.SpookyCaveAPBoost2,
-            LocationName.SweetMemories,
-            LocationName.SpookyCaveMap
-        ],
-        RegionName.Ha6:                   [
-            LocationName.StarryHillCosmicRing,
-            LocationName.StarryHillStyleRecipe,
-            LocationName.StarryHillCureElement,
-            LocationName.StarryHillOrichalcumPlus
-        ],
-        RegionName.Pr:                    [
-            LocationName.RampartNavalMap,
-            LocationName.RampartMythrilStone,
-            LocationName.RampartDarkShard,
-            LocationName.TownDarkStone,
-            LocationName.TownAPBoost,
-            LocationName.TownMythrilShard,
-            LocationName.TownMythrilGem,
-            LocationName.CaveMouthBrightShard,
-            LocationName.CaveMouthMythrilShard,
-            LocationName.IsladeMuertaMap,
-            LocationName.BoatFight,
-            LocationName.InterceptorBarrels,
-            LocationName.PowderStoreAPBoost1,
-            LocationName.PowderStoreAPBoost2,
-            LocationName.MoonlightNookMythrilShard,
-            LocationName.MoonlightNookSerenityGem,
-            LocationName.MoonlightNookPowerStone,
-            LocationName.DonaldBoatFight,
-            LocationName.GoofyInterceptorBarrels,
 
-        ],
-        RegionName.Barbosa:               [
-            LocationName.Barbossa,
-            LocationName.BarbossaGetBonus,
-            LocationName.FollowtheWind,
-            LocationName.GoofyBarbossa,
-            LocationName.GoofyBarbossaGetBonus,
-            LocationName.BarbosaEventLocation,
-        ],
-        RegionName.Pr2:                   [],
-        RegionName.GrimReaper1:           [
-            LocationName.GrimReaper1,
-            LocationName.InterceptorsHoldFeatherCharm,
-            LocationName.SeadriftKeepAPBoost,
-            LocationName.SeadriftKeepOrichalcum,
-            LocationName.SeadriftKeepMeteorStaff,
-            LocationName.SeadriftRowSerenityGem,
-            LocationName.SeadriftRowKingRecipe,
-            LocationName.SeadriftRowMythrilCrystal,
-            LocationName.SeadriftRowCursedMedallion,
-            LocationName.SeadriftRowShipGraveyardMap,
-            LocationName.GoofyGrimReaper1,
-            LocationName.GrimReaper1EventLocation,
-        ],
-        RegionName.GrimReaper2:           [
-            LocationName.DonaladGrimReaper2,
-            LocationName.GrimReaper2,
-            LocationName.SecretAnsemReport6,
-            LocationName.GrimReaper2EventLocation,
-        ],
-        RegionName.DataLuxord:            [
-            LocationName.LuxordDataAPBoost,
-            LocationName.DataLuxordEventLocation
-        ],
-        RegionName.Oc:                    [
-            LocationName.PassageMythrilShard,
-            LocationName.PassageMythrilStone,
-            LocationName.PassageEther,
-            LocationName.PassageAPBoost,
-            LocationName.PassageHiPotion,
-            LocationName.InnerChamberUnderworldMap,
-            LocationName.InnerChamberMythrilShard,
-        ],
-        RegionName.Cerberus:              [
-            LocationName.Cerberus,
-            LocationName.ColiseumMap,
-            LocationName.Urns,
-            LocationName.UnderworldEntrancePowerBoost,
-            LocationName.CavernsEntranceLucidShard,
-            LocationName.CavernsEntranceAPBoost,
-            LocationName.CavernsEntranceMythrilShard,
-            LocationName.TheLostRoadBrightShard,
-            LocationName.TheLostRoadEther,
-            LocationName.TheLostRoadMythrilShard,
-            LocationName.TheLostRoadMythrilStone,
-            LocationName.AtriumLucidStone,
-            LocationName.AtriumAPBoost,
-            LocationName.DemyxOC,
-            LocationName.SecretAnsemReport5,
-            LocationName.OlympusStone,
-            LocationName.TheLockCavernsMap,
-            LocationName.TheLockMythrilShard,
-            LocationName.TheLockAPBoost,
-            LocationName.CerberusEventLocation
-        ],
-        RegionName.OlympusPete:           [
-            LocationName.PeteOC,
-            LocationName.DonaldDemyxOC,
-            LocationName.GoofyPeteOC,
-            LocationName.OlympusPeteEventLocation
-        ],
-        RegionName.Hydra:                 [
-            LocationName.Hydra,
-            LocationName.HydraGetBonus,
-            LocationName.HerosCrest,
-            LocationName.HydraEventLocation
-        ],
-        RegionName.Oc2:                   [
-            LocationName.AuronsStatue,
-        ],
-        RegionName.Hades:                 [
-            LocationName.Hades,
-            LocationName.HadesGetBonus,
-            LocationName.GuardianSoul,
-            LocationName.HadesEventLocation
-        ],
-        RegionName.Oc_pain_and_panic_cup: [
-            LocationName.ProtectBeltPainandPanicCup,
-            LocationName.SerenityGemPainandPanicCup,
-            LocationName.Oc_pain_and_panic_cupEventLocation
-        ],
-        RegionName.Oc_cerberus_cup:       [
-            LocationName.RisingDragonCerberusCup,
-            LocationName.SerenityCrystalCerberusCup,
-            LocationName.Oc_cerberus_cupEventLocation
-        ],
-        RegionName.Oc2_titan_cup:         [
-            LocationName.GenjiShieldTitanCup,
-            LocationName.SkillfulRingTitanCup,
-            LocationName.Oc2_titan_cupEventLocation
-        ],
-        RegionName.Oc2_gof_cup:           [
-            LocationName.FatalCrestGoddessofFateCup,
-            LocationName.OrichalcumPlusGoddessofFateCup,
-            LocationName.Oc2_gof_cupEventLocation,
-        ],
-        RegionName.HadesCups:             [
-            LocationName.HadesCupTrophyParadoxCups,
-            LocationName.HadesCupEventLocations
-        ],
-        RegionName.DataZexion:            [
-            LocationName.ZexionBonus,
-            LocationName.ZexionASBookofShadows,
-            LocationName.ZexionDataLostIllusion,
-            LocationName.GoofyZexion,
-            LocationName.DataZexionEventLocation
-        ],
-        RegionName.Bc:                    [
-            LocationName.BCCourtyardAPBoost,
-            LocationName.BCCourtyardHiPotion,
-            LocationName.BCCourtyardMythrilShard,
-            LocationName.BellesRoomCastleMap,
-            LocationName.BellesRoomMegaRecipe,
-            LocationName.TheEastWingMythrilShard,
-            LocationName.TheEastWingTent,
-            LocationName.TheWestHallHiPotion,
-            LocationName.TheWestHallPowerShard,
-            LocationName.TheWestHallMythrilShard2,
-            LocationName.TheWestHallBrightStone,
-            LocationName.TheWestHallMythrilShard,
-        ],
-        RegionName.Thresholder:           [
-            LocationName.Thresholder,
-            LocationName.DungeonBasementMap,
-            LocationName.DungeonAPBoost,
-            LocationName.SecretPassageMythrilShard,
-            LocationName.SecretPassageHiPotion,
-            LocationName.SecretPassageLucidShard,
-            LocationName.TheWestHallAPBoostPostDungeon,
-            LocationName.TheWestWingMythrilShard,
-            LocationName.TheWestWingTent,
-            LocationName.DonaldThresholder,
-            LocationName.ThresholderEventLocation
-        ],
-        RegionName.Beast:                 [
-            LocationName.Beast,
-            LocationName.TheBeastsRoomBlazingShard,
-            LocationName.GoofyBeast,
-            LocationName.BeastEventLocation
-        ],
-        RegionName.DarkThorn:             [
-            LocationName.DarkThorn,
-            LocationName.DarkThornGetBonus,
-            LocationName.DarkThornCureElement,
-            LocationName.DarkThornEventLocation,
-        ],
-        RegionName.Bc2:                   [
-            LocationName.RumblingRose,
-            LocationName.CastleWallsMap
-        ],
-        RegionName.Xaldin:                [
-            LocationName.Xaldin,
-            LocationName.XaldinGetBonus,
-            LocationName.DonaldXaldinGetBonus,
-            LocationName.SecretAnsemReport4,
-            LocationName.XaldinEventLocation
-        ],
-        RegionName.DataXaldin:            [
-            LocationName.XaldinDataDefenseBoost,
-            LocationName.DataXaldinEventLocation
-        ],
-        RegionName.Sp:                    [
-            LocationName.PitCellAreaMap,
-            LocationName.PitCellMythrilCrystal,
-            LocationName.CanyonDarkCrystal,
-            LocationName.CanyonMythrilStone,
-            LocationName.CanyonMythrilGem,
-            LocationName.CanyonFrostCrystal,
-            LocationName.Screens,
-            LocationName.HallwayPowerCrystal,
-            LocationName.HallwayAPBoost,
-            LocationName.CommunicationsRoomIOTowerMap,
-            LocationName.CommunicationsRoomGaiaBelt,
-            LocationName.DonaldScreens,
-        ],
-        RegionName.HostileProgram:        [
-            LocationName.HostileProgram,
-            LocationName.HostileProgramGetBonus,
-            LocationName.PhotonDebugger,
-            LocationName.GoofyHostileProgram,
-            LocationName.HostileProgramEventLocation
-        ],
-        RegionName.Sp2:                   [
-            LocationName.SolarSailer,
-            LocationName.CentralComputerCoreAPBoost,
-            LocationName.CentralComputerCoreOrichalcumPlus,
-            LocationName.CentralComputerCoreCosmicArts,
-            LocationName.CentralComputerCoreMap,
-            LocationName.DonaldSolarSailer
-        ],
-        RegionName.Mcp:                   [
-            LocationName.MCP,
-            LocationName.MCPGetBonus,
-            LocationName.McpEventLocation
-        ],
-        RegionName.DataLarxene:           [
-            LocationName.LarxeneBonus,
-            LocationName.LarxeneASCloakedThunder,
-            LocationName.LarxeneDataLostIllusion,
-            LocationName.DataLarxeneEventLocation
-        ],
-        RegionName.Ht:                    [
-            LocationName.GraveyardMythrilShard,
-            LocationName.GraveyardSerenityGem,
-            LocationName.FinklesteinsLabHalloweenTownMap,
-            LocationName.TownSquareMythrilStone,
-            LocationName.TownSquareEnergyShard,
-            LocationName.HinterlandsLightningShard,
-            LocationName.HinterlandsMythrilStone,
-            LocationName.HinterlandsAPBoost,
-            LocationName.CandyCaneLaneMegaPotion,
-            LocationName.CandyCaneLaneMythrilGem,
-            LocationName.CandyCaneLaneLightningStone,
-            LocationName.CandyCaneLaneMythrilStone,
-            LocationName.SantasHouseChristmasTownMap,
-            LocationName.SantasHouseAPBoost,
-        ],
-        RegionName.PrisonKeeper:          [
-            LocationName.PrisonKeeper,
-            LocationName.DonaldPrisonKeeper,
-            LocationName.PrisonKeeperEventLocation,
-        ],
-        RegionName.OogieBoogie:           [
-            LocationName.OogieBoogie,
-            LocationName.OogieBoogieMagnetElement,
-            LocationName.GoofyOogieBoogie,
-            LocationName.OogieBoogieEventLocation
-        ],
-        RegionName.Ht2:                   [
-            LocationName.Lock,
-            LocationName.Present,
-            LocationName.DecoyPresents,
-            LocationName.GoofyLock
-        ],
-        RegionName.Experiment:            [
-            LocationName.Experiment,
-            LocationName.DecisivePumpkin,
-            LocationName.DonaldExperiment,
-            LocationName.ExperimentEventLocation,
-        ],
-        RegionName.DataVexen:             [
-            LocationName.VexenBonus,
-            LocationName.VexenASRoadtoDiscovery,
-            LocationName.VexenDataLostIllusion,
-            LocationName.DataVexenEventLocation
-        ],
-        RegionName.Hb:                    [
-            LocationName.MarketplaceMap,
-            LocationName.BoroughDriveRecovery,
-            LocationName.BoroughAPBoost,
-            LocationName.BoroughHiPotion,
-            LocationName.BoroughMythrilShard,
-            LocationName.BoroughDarkShard,
-            LocationName.MerlinsHouseMembershipCard,
-            LocationName.MerlinsHouseBlizzardElement,
-            LocationName.Bailey,
-            LocationName.BaileySecretAnsemReport7,
-            LocationName.BaseballCharm
-        ],
-        RegionName.Hb2:                   [
-            LocationName.PosternCastlePerimeterMap,
-            LocationName.PosternMythrilGem,
-            LocationName.PosternAPBoost,
-            LocationName.CorridorsMythrilStone,
-            LocationName.CorridorsMythrilCrystal,
-            LocationName.CorridorsDarkCrystal,
-            LocationName.CorridorsAPBoost,
-            LocationName.AnsemsStudyMasterForm,
-            LocationName.AnsemsStudySleepingLion,
-            LocationName.AnsemsStudySkillRecipe,
-            LocationName.AnsemsStudyUkuleleCharm,
-            LocationName.RestorationSiteMoonRecipe,
-            LocationName.RestorationSiteAPBoost,
-        ],
-        RegionName.HBDemyx:               [
-            LocationName.DonaldDemyxHBGetBonus,
-            LocationName.DemyxHB,
-            LocationName.DemyxHBGetBonus,
-            LocationName.FFFightsCureElement,
-            LocationName.CrystalFissureTornPages,
-            LocationName.CrystalFissureTheGreatMawMap,
-            LocationName.CrystalFissureEnergyCrystal,
-            LocationName.CrystalFissureAPBoost,
-            LocationName.HBDemyxEventLocation,
-        ],
-        RegionName.ThousandHeartless:     [
-            LocationName.ThousandHeartless,
-            LocationName.ThousandHeartlessSecretAnsemReport1,
-            LocationName.ThousandHeartlessIceCream,
-            LocationName.ThousandHeartlessPicture,
-            LocationName.PosternGullWing,
-            LocationName.HeartlessManufactoryCosmicChain,
-            LocationName.ThousandHeartlessEventLocation,
-        ],
-        RegionName.DataDemyx:             [
-            LocationName.DemyxDataAPBoost,
-            LocationName.DataDemyxEventLocation,
-        ],
-        RegionName.Mushroom13:            [
-            LocationName.WinnersProof,
-            LocationName.ProofofPeace,
-            LocationName.Mushroom13EventLocation,
-        ],
-        RegionName.Sephi:                 [
-            LocationName.SephirothBonus,
-            LocationName.SephirothFenrir,
-            LocationName.SephiEventLocation
-        ],
-        RegionName.CoR:                   [
-            LocationName.CoRDepthsAPBoost,
-            LocationName.CoRDepthsPowerCrystal,
-            LocationName.CoRDepthsFrostCrystal,
-            LocationName.CoRDepthsManifestIllusion,
-            LocationName.CoRDepthsAPBoost2,
-            LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
-            LocationName.CoRMineshaftLowerLevelAPBoost,
-        ],
-        RegionName.CorFirstFight:         [
-            LocationName.CoRDepthsUpperLevelRemembranceGem,
-            LocationName.CoRMiningAreaSerenityGem,
-            LocationName.CoRMiningAreaAPBoost,
-            LocationName.CoRMiningAreaSerenityCrystal,
-            LocationName.CoRMiningAreaManifestIllusion,
-            LocationName.CoRMiningAreaSerenityGem2,
-            LocationName.CoRMiningAreaDarkRemembranceMap,
-            LocationName.CorFirstFightEventLocation,
-        ],
-        RegionName.CorSecondFight:        [
-            LocationName.CoRMineshaftMidLevelPowerBoost,
-            LocationName.CoREngineChamberSerenityCrystal,
-            LocationName.CoREngineChamberRemembranceCrystal,
-            LocationName.CoREngineChamberAPBoost,
-            LocationName.CoREngineChamberManifestIllusion,
-            LocationName.CoRMineshaftUpperLevelMagicBoost,
-            LocationName.CorSecondFightEventLocation,
-        ],
-        RegionName.Transport:             [
-            LocationName.CoRMineshaftUpperLevelAPBoost,  # last chest
-            LocationName.TransporttoRemembrance,
-            LocationName.TransportEventLocation,
-        ],
-        RegionName.Pl:                    [
-            LocationName.GorgeSavannahMap,
-            LocationName.GorgeDarkGem,
-            LocationName.GorgeMythrilStone,
-            LocationName.ElephantGraveyardFrostGem,
-            LocationName.ElephantGraveyardMythrilStone,
-            LocationName.ElephantGraveyardBrightStone,
-            LocationName.ElephantGraveyardAPBoost,
-            LocationName.ElephantGraveyardMythrilShard,
-            LocationName.PrideRockMap,
-            LocationName.PrideRockMythrilStone,
-            LocationName.PrideRockSerenityCrystal,
-            LocationName.WildebeestValleyEnergyStone,
-            LocationName.WildebeestValleyAPBoost,
-            LocationName.WildebeestValleyMythrilGem,
-            LocationName.WildebeestValleyMythrilStone,
-            LocationName.WildebeestValleyLucidGem,
-            LocationName.WastelandsMythrilShard,
-            LocationName.WastelandsSerenityGem,
-            LocationName.WastelandsMythrilStone,
-            LocationName.JungleSerenityGem,
-            LocationName.JungleMythrilStone,
-            LocationName.JungleSerenityCrystal,
-            LocationName.OasisMap,
-            LocationName.OasisTornPages,
-            LocationName.OasisAPBoost,
-            LocationName.CircleofLife,
-            LocationName.Hyenas1,
-
-            LocationName.GoofyHyenas1
-        ],
-        RegionName.Scar:                  [
-            LocationName.Scar,
-            LocationName.ScarFireElement,
-            LocationName.DonaldScar,
-            LocationName.ScarEventLocation,
-        ],
-        RegionName.Pl2:                   [
-            LocationName.Hyenas2,
-            LocationName.GoofyHyenas2
-        ],
-        RegionName.GroundShaker:          [
-            LocationName.Groundshaker,
-            LocationName.GroundshakerGetBonus,
-            LocationName.GroundShakerEventLocation,
-        ],
-        RegionName.DataSaix:              [
-            LocationName.SaixDataDefenseBoost,
-            LocationName.DataSaixEventLocation
-        ],
-        RegionName.Stt:                   [
-            LocationName.TwilightTownMap,
-            LocationName.MunnyPouchOlette,
-            LocationName.StationDusks,
-            LocationName.StationofSerenityPotion,
-            LocationName.StationofCallingPotion,
-        ],
-        RegionName.TwilightThorn:         [
-            LocationName.TwilightThorn,
-            LocationName.TwilightThornEventLocation
-        ],
-        RegionName.Axel1:                 [
-            LocationName.Axel1,
-            LocationName.JunkChampionBelt,
-            LocationName.JunkMedal,
-            LocationName.TheStruggleTrophy,
-            LocationName.CentralStationPotion1,
-            LocationName.STTCentralStationHiPotion,
-            LocationName.CentralStationPotion2,
-            LocationName.SunsetTerraceAbilityRing,
-            LocationName.SunsetTerraceHiPotion,
-            LocationName.SunsetTerracePotion1,
-            LocationName.SunsetTerracePotion2,
-            LocationName.MansionFoyerHiPotion,
-            LocationName.MansionFoyerPotion1,
-            LocationName.MansionFoyerPotion2,
-            LocationName.MansionDiningRoomElvenBandanna,
-            LocationName.MansionDiningRoomPotion,
-            LocationName.NaminesSketches,
-            LocationName.MansionMap,
-            LocationName.MansionLibraryHiPotion,
-            LocationName.Axel1EventLocation
-        ],
-        RegionName.Axel2:                 [
-            LocationName.Axel2,
-            LocationName.MansionBasementCorridorHiPotion,
-            LocationName.Axel2EventLocation
-        ],
-        RegionName.DataRoxas:             [
-            LocationName.RoxasDataMagicBoost,
-            LocationName.DataRoxasEventLocation
-        ],
-        RegionName.Tt:                    [
-            LocationName.OldMansionPotion,
-            LocationName.OldMansionMythrilShard,
-            LocationName.TheWoodsPotion,
-            LocationName.TheWoodsMythrilShard,
-            LocationName.TheWoodsHiPotion,
-            LocationName.TramCommonHiPotion,
-            LocationName.TramCommonAPBoost,
-            LocationName.TramCommonTent,
-            LocationName.TramCommonMythrilShard1,
-            LocationName.TramCommonPotion1,
-            LocationName.TramCommonMythrilShard2,
-            LocationName.TramCommonPotion2,
-            LocationName.StationPlazaSecretAnsemReport2,
-            LocationName.MunnyPouchMickey,
-            LocationName.CrystalOrb,
-            LocationName.CentralStationTent,
-            LocationName.TTCentralStationHiPotion,
-            LocationName.CentralStationMythrilShard,
-            LocationName.TheTowerPotion,
-            LocationName.TheTowerHiPotion,
-            LocationName.TheTowerEther,
-            LocationName.TowerEntrywayEther,
-            LocationName.TowerEntrywayMythrilShard,
-            LocationName.SorcerersLoftTowerMap,
-            LocationName.TowerWardrobeMythrilStone,
-            LocationName.StarSeeker,
-            LocationName.ValorForm
-        ],
-        RegionName.Tt2:                   [
-            LocationName.SeifersTrophy,
-            LocationName.Oathkeeper,
-            LocationName.LimitForm
-        ],
-        RegionName.Tt3:                   [
-            LocationName.UndergroundConcourseMythrilGem,
-            LocationName.UndergroundConcourseAPBoost,
-            LocationName.UndergroundConcourseMythrilCrystal,
-            LocationName.UndergroundConcourseOrichalcum,
-            LocationName.TunnelwayOrichalcum,
-            LocationName.TunnelwayMythrilCrystal,
-            LocationName.SunsetTerraceOrichalcumPlus,
-            LocationName.SunsetTerraceMythrilShard,
-            LocationName.SunsetTerraceMythrilCrystal,
-            LocationName.SunsetTerraceAPBoost,
-            LocationName.MansionNobodies,
-            LocationName.MansionFoyerMythrilCrystal,
-            LocationName.MansionFoyerMythrilStone,
-            LocationName.MansionFoyerSerenityCrystal,
-            LocationName.MansionDiningRoomMythrilCrystal,
-            LocationName.MansionDiningRoomMythrilStone,
-            LocationName.MansionLibraryOrichalcum,
-            LocationName.BeamSecretAnsemReport10,
-            LocationName.MansionBasementCorridorUltimateRecipe,
-            LocationName.BetwixtandBetween,
-            LocationName.BetwixtandBetweenBondofFlame,
-            LocationName.DonaldMansionNobodies
-        ],
-        RegionName.DataAxel:              [
-            LocationName.AxelDataMagicBoost,
-            LocationName.DataAxelEventLocation,
-        ],
-        RegionName.Twtnw:                 [
-            LocationName.FragmentCrossingMythrilStone,
-            LocationName.FragmentCrossingMythrilCrystal,
-            LocationName.FragmentCrossingAPBoost,
-            LocationName.FragmentCrossingOrichalcum
-        ],
-        RegionName.Roxas:                 [
-            LocationName.Roxas,
-            LocationName.RoxasGetBonus,
-            LocationName.RoxasSecretAnsemReport8,
-            LocationName.TwoBecomeOne,
-            LocationName.MemorysSkyscaperMythrilCrystal,
-            LocationName.MemorysSkyscaperAPBoost,
-            LocationName.MemorysSkyscaperMythrilStone,
-            LocationName.TheBrinkofDespairDarkCityMap,
-            LocationName.TheBrinkofDespairOrichalcumPlus,
-            LocationName.NothingsCallMythrilGem,
-            LocationName.NothingsCallOrichalcum,
-            LocationName.TwilightsViewCosmicBelt,
-            LocationName.RoxasEventLocation
-        ],
-        RegionName.Xigbar:                [
-            LocationName.XigbarBonus,
-            LocationName.XigbarSecretAnsemReport3,
-            LocationName.NaughtsSkywayMythrilGem,
-            LocationName.NaughtsSkywayOrichalcum,
-            LocationName.NaughtsSkywayMythrilCrystal,
-            LocationName.Oblivion,
-            LocationName.CastleThatNeverWasMap,
-            LocationName.XigbarEventLocation,
-        ],
-        RegionName.Luxord:                [
-            LocationName.Luxord,
-            LocationName.LuxordGetBonus,
-            LocationName.LuxordSecretAnsemReport9,
-            LocationName.LuxordEventLocation,
-        ],
-        RegionName.Saix:                  [
-            LocationName.SaixBonus,
-            LocationName.SaixSecretAnsemReport12,
-            LocationName.SaixEventLocation,
-        ],
-        RegionName.Twtnw2:                [
-            LocationName.PreXemnas1SecretAnsemReport11,
-            LocationName.RuinandCreationsPassageMythrilStone,
-            LocationName.RuinandCreationsPassageAPBoost,
-            LocationName.RuinandCreationsPassageMythrilCrystal,
-            LocationName.RuinandCreationsPassageOrichalcum
-        ],
-        RegionName.Xemnas:                [
-            LocationName.Xemnas1,
-            LocationName.Xemnas1GetBonus,
-            LocationName.Xemnas1SecretAnsemReport13,
-            LocationName.XemnasEventLocation
-
-        ],
-        RegionName.ArmoredXemnas:         [
-            LocationName.ArmoredXemnasEventLocation
-        ],
-        RegionName.ArmoredXemnas2:        [
-            LocationName.ArmoredXemnas2EventLocation
-        ],
-        RegionName.FinalXemnas:           [
-            LocationName.FinalXemnas
-        ],
-        RegionName.DataXemnas:            [
-            LocationName.XemnasDataPowerBoost,
-            LocationName.DataXemnasEventLocation
-        ],
-        RegionName.AtlanticaSongOne:      [
-            LocationName.UnderseaKingdomMap
-        ],
-        RegionName.AtlanticaSongTwo:      [
-
-        ],
-        RegionName.AtlanticaSongThree:    [
-            LocationName.MysteriousAbyss
-        ],
-        RegionName.AtlanticaSongFour:     [
-            LocationName.MusicalBlizzardElement,
-            LocationName.MusicalOrichalcumPlus
-        ],
-        RegionName.Valor:                 [
-            LocationName.Valorlvl2,
-            LocationName.Valorlvl3,
-            LocationName.Valorlvl4,
-            LocationName.Valorlvl5,
-            LocationName.Valorlvl6,
-            LocationName.Valorlvl7
-        ],
-        RegionName.Wisdom:                [
-            LocationName.Wisdomlvl2,
-            LocationName.Wisdomlvl3,
-            LocationName.Wisdomlvl4,
-            LocationName.Wisdomlvl5,
-            LocationName.Wisdomlvl6,
-            LocationName.Wisdomlvl7
-        ],
-        RegionName.Limit:                 [
-            LocationName.Limitlvl2,
-            LocationName.Limitlvl3,
-            LocationName.Limitlvl4,
-            LocationName.Limitlvl5,
-            LocationName.Limitlvl6,
-            LocationName.Limitlvl7
-        ],
-        RegionName.Master:                [
-            LocationName.Masterlvl2,
-            LocationName.Masterlvl3,
-            LocationName.Masterlvl4,
-            LocationName.Masterlvl5,
-            LocationName.Masterlvl6,
-            LocationName.Masterlvl7
-        ],
-        RegionName.Final:                 [
-            LocationName.Finallvl2,
-            LocationName.Finallvl3,
-            LocationName.Finallvl4,
-            LocationName.Finallvl5,
-            LocationName.Finallvl6,
-            LocationName.Finallvl7
-        ],
-        RegionName.Summon:                [
-            LocationName.Summonlvl2,
-            LocationName.Summonlvl3,
-            LocationName.Summonlvl4,
-            LocationName.Summonlvl5,
-            LocationName.Summonlvl6,
-            LocationName.Summonlvl7,
-        ],
-        RegionName.Keyblade:              [
-            LocationName.FAKESlot,
-            LocationName.DetectionSaberSlot,
-            LocationName.EdgeofUltimaSlot,
-            LocationName.KingdomKeySlot,
-            LocationName.OathkeeperSlot,
-            LocationName.OblivionSlot,
-            LocationName.StarSeekerSlot,
-            LocationName.HiddenDragonSlot,
-            LocationName.HerosCrestSlot,
-            LocationName.MonochromeSlot,
-            LocationName.FollowtheWindSlot,
-            LocationName.CircleofLifeSlot,
-            LocationName.PhotonDebuggerSlot,
-            LocationName.GullWingSlot,
-            LocationName.RumblingRoseSlot,
-            LocationName.GuardianSoulSlot,
-            LocationName.WishingLampSlot,
-            LocationName.DecisivePumpkinSlot,
-            LocationName.SweetMemoriesSlot,
-            LocationName.MysteriousAbyssSlot,
-            LocationName.SleepingLionSlot,
-            LocationName.BondofFlameSlot,
-            LocationName.TwoBecomeOneSlot,
-            LocationName.FatalCrestSlot,
-            LocationName.FenrirSlot,
-            LocationName.UltimaWeaponSlot,
-            LocationName.WinnersProofSlot,
-            LocationName.PurebloodSlot,
-            LocationName.Centurion2,
-            LocationName.CometStaff,
-            LocationName.HammerStaff,
-            LocationName.LordsBroom,
-            LocationName.MagesStaff,
-            LocationName.MeteorStaff,
-            LocationName.NobodyLance,
-            LocationName.PreciousMushroom,
-            LocationName.PreciousMushroom2,
-            LocationName.PremiumMushroom,
-            LocationName.RisingDragon,
-            LocationName.SaveTheQueen2,
-            LocationName.ShamansRelic,
-            LocationName.VictoryBell,
-            LocationName.WisdomWand,
-
-            LocationName.AdamantShield,
-            LocationName.AkashicRecord,
-            LocationName.ChainGear,
-            LocationName.DreamCloud,
-            LocationName.FallingStar,
-            LocationName.FrozenPride2,
-            LocationName.GenjiShield,
-            LocationName.KnightDefender,
-            LocationName.KnightsShield,
-            LocationName.MajesticMushroom,
-            LocationName.MajesticMushroom2,
-            LocationName.NobodyGuard,
-            LocationName.OgreShield,
-            LocationName.SaveTheKing2,
-            LocationName.UltimateMushroom
-        ],
-        RegionName.LevelsVS1:             [],
-        RegionName.LevelsVS3:             [],
-        RegionName.LevelsVS6:             [],
-        RegionName.LevelsVS9:             [],
-        RegionName.LevelsVS12:            [],
-        RegionName.LevelsVS15:            [],
-        RegionName.LevelsVS18:            [],
-        RegionName.LevelsVS21:            [],
-        RegionName.LevelsVS24:            [],
-        RegionName.LevelsVS26:            [],
-
-    }
     # Level region depends on level depth.
     # for every 5 levels there should be +3 visit locking
-
     # level 50
     if world.LevelDepth[player] == "level_50":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
@@ -1143,13 +1144,9 @@ def connect_regions(world: MultiWorld, player: int):
 def create_region(world: MultiWorld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, world)
     if locations:
-        for location in locations:
-            loc_id = active_locations.get(location, 0)
-            if loc_id:
-                location = KH2Location(player, location, loc_id, ret)
-                ret.locations.append(location)
-            else:
-                location = KH2Location(player, location, None, ret)
-                ret.locations.append(location)
+        loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
+        ret.add_locations(loc_to_id, KH2Location)
+        loc_to_event = {loc: active_locations.get(loc, None) for loc in locations if not active_locations.get(loc, None)}
+        ret.add_locations(loc_to_event, KH2Location)
 
     return ret
