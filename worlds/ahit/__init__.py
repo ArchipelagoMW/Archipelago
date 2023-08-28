@@ -118,6 +118,9 @@ class HatInTimeWorld(World):
                and self.multiworld.ShuffleSubconPaintings[self.player].value == 0:
                 continue
 
+            if self.multiworld.StartWithCompassBadge[self.player].value > 0 and name == "Compass Badge":
+                continue
+
             if name == "Time Piece":
                 tp_count: int = 40
                 max_extra: int = 0
