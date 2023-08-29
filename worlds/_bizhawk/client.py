@@ -1,9 +1,14 @@
 from __future__ import annotations
+
 import abc
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, ClassVar
+
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 if TYPE_CHECKING:
-    from BizHawkClient import BizHawkClientContext
+    from .context import BizHawkClientContext
+else:
+    BizHawkClientContext = object
 
 
 class AutoBizHawkClientRegister(abc.ABCMeta):
@@ -62,3 +67,13 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
         """For handling packages from the server. Called from `BizHawkClientContext.on_package`."""
         pass
+
+
+def launch_client(*args) -> None:
+    from .context import launch
+    launch_subprocess(launch, name="BizHawkClient")
+
+
+if not any(component.script_name == "BizHawkClient" for component in components):
+    components.append(Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
+                                file_identifier=SuffixIdentifier()))
