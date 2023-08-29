@@ -22,14 +22,15 @@ two player multi-world, players A and B each get their own randomized version of
 game, they may find items which belong to the other player. If player A finds an item which belongs to player B, the
 item will be sent to player B's world over the internet.
 
+This creates a cooperative experience during multi-world games, requiring players to rely upon each other to complete
+their game.
+
 ### What does multi-game mean?
 
 While a multi-world game traditionally requires all players to be playing the same game, a multi-game multi-world allows
 players to randomize any of a number of supported games, and send items between them. This allows players of different
 games to interact with one another in a single multiplayer environment.
 
-This creates a cooperative experience during multi-world games, requiring players to rely upon each other to complete
-their game.
 
 ### Archipelago as a whole
 In short, Archipelago is cross-game randomizer that allows multiple people playing different games to experience a
