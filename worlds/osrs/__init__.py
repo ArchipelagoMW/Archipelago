@@ -117,11 +117,8 @@ class OSRSWorld(World):
     def create_locations(self) -> None:
         for i in range(location_rows.count()):
             location_row = location_rows[i]
-            region = self.region_name_to_data["Menu"]
-            if location_row.regions.count() > 0:
-                region = self.region_name_to_data[location_row.regions[0]]
-            location = OSRSLocation(self.player, location_row.name, self.base_id + i, region)
-            region.locations.append(location)
+
+            location = OSRSLocation(self.player, location_row.name, self.base_id + i)
             self.location_name_to_data[location_row.name] = location
             for region_required_name in location_row.regions:
                 region_required = self.region_name_to_data[region_required_name]
@@ -133,6 +130,14 @@ class OSRSWorld(World):
                     add_rule(location, lambda state: state.has(item_req, self.player))
                 if location_row.qp != 0:
                     add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
+
+    def add_location_to_region(self, location: OSRSLocation):
+        location_row = self.location_rows_by_name[location.name]
+        region = self.region_name_to_data["Menu"]
+        if location_row.regions.count() > 0:
+            region = self.region_name_to_data[location_row.regions[0]]
+        location.parent_region = region
+        region.locations.append(location)
 
     def set_rules(self) -> None:
         """
