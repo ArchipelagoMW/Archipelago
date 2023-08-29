@@ -10,7 +10,7 @@ joke_hints = [
     "You can do it!",
     "I believe in you!",
     "The person playing is cute. <3",
-    "dash dot, dash dash dash, dash, dot dot dot dot, dot dot, dash dot, dash dash dot",
+    "dash dot, dash dash dash,\ndash, dot dot dot dot, dot dot,\ndash dot, dash dash dot",
     "When you think about it, there are actually a lot of bubbles in a stream.",
     "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you",
     "Thanks to the Archipelago developers for making this possible.",
