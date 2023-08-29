@@ -1,0 +1,1441 @@
+{
+  "BADGE_1": {
+    "label": "Rustboro Gym - Stone Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_2": {
+    "label": "Dewford Gym - Knuckle Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_3": {
+    "label": "Mauville Gym - Dynamo Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_4": {
+    "label": "Lavaridge Gym - Heat Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_5": {
+    "label": "Petalburg Gym - Balance Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_6": {
+    "label": "Fortree Gym - Feather Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_7": {
+    "label": "Mossdeep Gym - Mind Badge",
+    "tags": ["Badge"]
+  },
+  "BADGE_8": {
+    "label": "Sootopolis Gym - Rain Badge",
+    "tags": ["Badge"]
+  },
+
+  "NPC_GIFT_RECEIVED_HM01": {
+    "label": "Rustboro City - HM01 from Cutter's House",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM02": {
+    "label": "Route 119 - HM02 from Rival Battle",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM03": {
+    "label": "Petalburg City - HM03 from Wally's Uncle",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM04": {
+    "label": "Rusturf Tunnel - HM04 from Tunneler",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM05": {
+    "label": "Granite Cave 1F - HM05 from Hiker",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM06": {
+    "label": "Mauville City - HM06 from Rock Smash Guy",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM07": {
+    "label": "Sootopolis City - HM07 from Wallace",
+    "tags": ["HM"]
+  },
+  "NPC_GIFT_RECEIVED_HM08": {
+    "label": "Mossdeep City - HM08 from Steven's House",
+    "tags": ["HM"]
+  },
+
+  "NPC_GIFT_RECEIVED_ACRO_BIKE": {
+    "label": "Mauville City - Acro Bike",
+    "tags": ["Bike"]
+  },
+  "NPC_GIFT_RECEIVED_MACH_BIKE": {
+    "label": "Mauville City - Mach Bike",
+    "tags": ["Bike"]
+  },
+
+  "NPC_GIFT_RECEIVED_WAILMER_PAIL": {
+    "label": "Route 104 - Wailmer Pail from Flower Shop Lady",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL": {
+    "label": "Rusturf Tunnel - Recover Devon Goods",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_LETTER": {
+    "label": "Devon Corp 3F - Letter from Mr. Stone",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_COIN_CASE": {
+    "label": "Mauville City - Coin Case from Lady in House",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_METEORITE": {
+    "label": "Mt Chimney - Meteorite from Machine",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_GO_GOGGLES": {
+    "label": "Lavaridge Town - Go Goggles from Rival",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON": {
+    "label": "Mauville City - Basement Key from Wattson",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_ITEMFINDER": {
+    "label": "Route 110 - Itemfinder from Rival",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_DEVON_SCOPE": {
+    "label": "Route 120 - Devon Scope from Steven",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_MAGMA_EMBLEM": {
+    "label": "Mt Pyre Summit - Magma Emblem from Old Lady",
+    "tags": ["KeyItem"]
+  },
+  "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY": {
+    "label": "Abandoned Ship - Captain's Office Key",
+    "tags": ["KeyItem"]
+  },
+  "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY": {
+    "label": "Abandoned Ship HF - Hidden Item in Room 1",
+    "tags": ["KeyItem"]
+  },
+  "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
+    "label": "Abandoned Ship HF - Hidden Item in Room 3",
+    "tags": ["KeyItem"]
+  },
+  "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY": {
+    "label": "Abandoned Ship HF - Hidden Item in Room 4",
+    "tags": ["KeyItem"]
+  },
+  "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY": {
+    "label": "Abandoned Ship HF - Hidden Item in Room 5",
+    "tags": ["KeyItem"]
+  },
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
+    "label": "Abandoned Ship HF - Item in Room 2",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
+    "label": "Lilycove City - Pokeblock Case from Contest Hall",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_SS_TICKET": {
+    "label": "Littleroot Town - S.S. Ticket from Norman",
+    "tags": ["Ferry"]
+  },
+
+  "NPC_GIFT_RECEIVED_OLD_ROD": {
+    "label": "Dewford Town - Old Rod from Fisherman",
+    "tags": ["Rod"]
+  },
+  "NPC_GIFT_RECEIVED_GOOD_ROD": {
+    "label": "Route 118 - Good Rod from Fisherman",
+    "tags": ["Rod"]
+  },
+  "NPC_GIFT_RECEIVED_SUPER_ROD": {
+    "label": "Mossdeep City - Super Rod from Fisherman in House",
+    "tags": ["Rod"]
+  },
+
+  "HIDDEN_ITEM_ARTISAN_CAVE_B1F_CALCIUM": {
+    "label": "Artisan Cave B1F - Hidden Item 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ARTISAN_CAVE_B1F_IRON": {
+    "label": "Artisan Cave B1F - Hidden Item 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ARTISAN_CAVE_B1F_PROTEIN": {
+    "label": "Artisan Cave B1F - Hidden Item 3",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC": {
+    "label": "Artisan Cave B1F - Hidden Item 4",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_FALLARBOR_TOWN_NUGGET": {
+    "label": "Fallarbor Town - Hidden Item in Crater",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1": {
+    "label": "Granite Cave B2F - Hidden Item After Crumbling Floor",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2": {
+    "label": "Granite Cave B2F - Hidden Item on Platform",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_JAGGED_PASS_FULL_HEAL": {
+    "label": "Jagged Pass - Hidden Item in Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_JAGGED_PASS_GREAT_BALL": {
+    "label": "Jagged Pass - Hidden Item in Corner",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_LAVARIDGE_TOWN_ICE_HEAL": {
+    "label": "Lavaridge Town - Hidden Item in Springs",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_LILYCOVE_CITY_HEART_SCALE": {
+    "label": "Lilycove City - Hidden Item on Beach West",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_LILYCOVE_CITY_POKE_BALL": {
+    "label": "Lilycove City - Hidden Item on Beach East",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_LILYCOVE_CITY_PP_UP": {
+    "label": "Lilycove City - Hidden Item on Beach North",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER": {
+    "label": "Mt Pyre Exterior - Hidden Item First Grave",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL": {
+    "label": "Mt Pyre Exterior - Hidden Item Second Grave",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY": {
+    "label": "Mt Pyre Summit - Hidden Item in Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC": {
+    "label": "Mt Pyre Summit - Hidden Item Grave",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
+    "label": "Navel Rock Top - Hidden Item Sacred Ash",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY": {
+    "label": "Petalburg City - Hidden Item Past Pond South",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_PETALBURG_WOODS_POKE_BALL": {
+    "label": "Petalburg Woods - Hidden Item After Grunt",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_PETALBURG_WOODS_POTION": {
+    "label": "Petalburg Woods - Hidden Item Southeast",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_1": {
+    "label": "Petalburg Woods - Hidden Item Past Tree North",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_PETALBURG_WOODS_TINY_MUSHROOM_2": {
+    "label": "Petalburg Woods - Hidden Item Past Tree South",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_104_ANTIDOTE": {
+    "label": "Route 104 - Hidden Item on Beach 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_104_HEART_SCALE": {
+    "label": "Route 104 - Hidden Item on Beach 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_104_POTION": {
+    "label": "Route 104 - Hidden Item on Beach 3",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_104_POKE_BALL": {
+    "label": "Route 104 - Hidden Item Behind Flower Shop 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_104_SUPER_POTION": {
+    "label": "Route 104 - Hidden Item Behind Flower Shop 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_105_BIG_PEARL": {
+    "label": "Route 105 - Hidden Item Between Trainers",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_105_HEART_SCALE": {
+    "label": "Route 105 - Hidden Item on Small Island",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_106_HEART_SCALE": {
+    "label": "Route 106 - Hidden Item on Beach 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_106_STARDUST": {
+    "label": "Route 106 - Hidden Item on Beach 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_106_POKE_BALL": {
+    "label": "Route 106 - Hidden Item on Beach 3",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_108_RARE_CANDY": {
+    "label": "Route 108 - Hidden Item on Rock",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_REVIVE": {
+    "label": "Route 109 - Hidden Item on Beach Southwest",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_ETHER": {
+    "label": "Route 109 - Hidden Item on Beach Southeast",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_2": {
+    "label": "Route 109 - Hidden Item on Beach Under Umbrella",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_GREAT_BALL": {
+    "label": "Route 109 - Hidden Item on Beach West",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_1": {
+    "label": "Route 109 - Hidden Item on Beach Behind Old Man",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_109_HEART_SCALE_3": {
+    "label": "Route 109 - Hidden Item in Front of Couple",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_110_FULL_HEAL": {
+    "label": "Route 110 - Hidden Item South of Rival",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_110_GREAT_BALL": {
+    "label": "Route 110 - Hidden Item North of Rival",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_110_REVIVE": {
+    "label": "Route 110 - Hidden Item Behind Two Trainers",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_110_POKE_BALL": {
+    "label": "Route 110 - Hidden Item South of Berries",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_111_PROTEIN": {
+    "label": "Route 111 - Hidden Item Desert Behind Tower",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_111_RARE_CANDY": {
+    "label": "Route 111 - Hidden Item Desert on Rock 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_111_STARDUST": {
+    "label": "Route 111 - Hidden Item Desert on Rock 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_113_ETHER": {
+    "label": "Route 113 - Hidden Item Mound West of Three Trainers",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_113_NUGGET": {
+    "label": "Route 113 - Hidden Item Mound Between Trainers",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_113_TM32": {
+    "label": "Route 113 - Hidden Item Mound West of Workshop",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_114_CARBOS": {
+    "label": "Route 114 - Hidden Item Rock in Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_114_REVIVE": {
+    "label": "Route 114 - Hidden Item West of Bridge",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_115_HEART_SCALE": {
+    "label": "Route 115 - Hidden Item Behind Trainer on Beach",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES": {
+    "label": "Route 116 - Hidden Item in East",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_116_SUPER_POTION": {
+    "label": "Route 116 - Hidden Item in Tree Maze",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_117_REPEL": {
+    "label": "Route 117 - Hidden Item Behind Flower Patch",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_118_HEART_SCALE": {
+    "label": "Route 118 - Hidden Item West on Rock",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_118_IRON": {
+    "label": "Route 118 - Hidden Item East on Rock",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_119_FULL_HEAL": {
+    "label": "Route 119 - Hidden Item in South Tall Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_119_CALCIUM": {
+    "label": "Route 119 - Hidden Item Across South Rail",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_119_ULTRA_BALL": {
+    "label": "Route 119 - Hidden Item in East Tall Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_119_MAX_ETHER": {
+    "label": "Route 119 - Hidden Item Next to Waterfall",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1": {
+    "label": "Route 120 - Hidden Item Behind Trees",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_120_REVIVE": {
+    "label": "Route 120 - Hidden Item in North Tall Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_120_ZINC": {
+    "label": "Route 120 - Hidden Item in Tall Grass Maze",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2": {
+    "label": "Route 120 - Hidden Item Behind Southwest Pool",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_121_HP_UP": {
+    "label": "Route 121 - Hidden Item West of Grunts",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_121_FULL_HEAL": {
+    "label": "Route 121 - Hidden Item in Maze 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE": {
+    "label": "Route 121 - Hidden Item in Maze 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_121_NUGGET": {
+    "label": "Route 121 - Hidden Item Behind Tree",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_123_PP_UP": {
+    "label": "Route 123 - Hidden Item East Behind Tree 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_123_RARE_CANDY": {
+    "label": "Route 123 - Hidden Item East Behind Tree 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_123_HYPER_POTION": {
+    "label": "Route 123 - Hidden Item on Rock Before Ledges",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL": {
+    "label": "Route 123 - Hidden Item in North Path Grass",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_123_REVIVE": {
+    "label": "Route 123 - Hidden Item Behind House",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_1": {
+    "label": "Route 128 - Hidden Item North Island",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_2": {
+    "label": "Route 128 - Hidden Item Center Island",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_ROUTE_128_HEART_SCALE_3": {
+    "label": "Route 128 - Hidden Item Southwest Island",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_ZINC": {
+    "label": "Safari Zone NE - Hidden Item North",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_SAFARI_ZONE_NORTH_EAST_RARE_CANDY": {
+    "label": "Safari Zone NE - Hidden Item East",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_FULL_RESTORE": {
+    "label": "Safari Zone SE - Hidden Item in South Grass 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_SAFARI_ZONE_SOUTH_EAST_PP_UP": {
+    "label": "Safari Zone SE - Hidden Item in South Grass 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_SS_TIDAL_LOWER_DECK_LEFTOVERS": {
+    "label": "SS Tidal - Hidden Item in Lower Deck Trash Can",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_TRICK_HOUSE_NUGGET": {
+    "label": "Trick House - Hidden Item",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD": {
+    "label": "Route 124 UW - Hidden Item in Big Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_CARBOS": {
+    "label": "Route 124 UW - Hidden Item in Tunnel Alcove",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_CALCIUM": {
+    "label": "Route 124 UW - Hidden Item in North Tunnel 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_2": {
+    "label": "Route 124 UW - Hidden Item in North Tunnel 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_PEARL": {
+    "label": "Route 124 UW - Hidden Item in Small Area North",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_BIG_PEARL": {
+    "label": "Route 124 UW - Hidden Item in Small Area Middle",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_124_HEART_SCALE_1": {
+    "label": "Route 124 UW - Hidden Item in Small Area South",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_STARDUST": {
+    "label": "Route 126 UW - Hidden Item Northeast",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_ULTRA_BALL": {
+    "label": "Route 126 UW - Hidden Item in North Alcove",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_BIG_PEARL": {
+    "label": "Route 126 UW - Hidden Item in Southeast",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_HEART_SCALE": {
+    "label": "Route 126 UW - Hidden Item in Northwest Alcove",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_BLUE_SHARD": {
+    "label": "Route 126 UW - Hidden Item in Southwest Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_IRON": {
+    "label": "Route 126 UW - Hidden Item in West Area 1",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_PEARL": {
+    "label": "Route 126 UW - Hidden Item in West Area 2",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_126_YELLOW_SHARD": {
+    "label": "Route 126 UW - Hidden Item in West Area 3",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_127_STAR_PIECE": {
+    "label": "Route 127 UW - Hidden Item in West Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_127_HEART_SCALE": {
+    "label": "Route 127 UW - Hidden Item in Center Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_127_HP_UP": {
+    "label": "Route 127 UW - Hidden Item in East Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_127_RED_SHARD": {
+    "label": "Route 127 UW - Hidden Item in Northeast Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_128_PEARL": {
+    "label": "Route 128 UW - Hidden Item in East Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_UNDERWATER_128_PROTEIN": {
+    "label": "Route 128 UW - Hidden Item in Small Area",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL": {
+    "label": "Victory Road 1F - Hidden Item on Southeast Ledge",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR": {
+    "label": "Victory Road B2F - Hidden Item Above Waterfall",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL": {
+    "label": "Victory Road B2F - Hidden Item in Northeast Corner",
+    "tags": ["HiddenItem"]
+  },
+
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
+    "label": "Abandoned Ship HF - Item in Room 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE": {
+    "label": "Abandoned Ship HF - Item in Room 3",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL": {
+    "label": "Abandoned Ship HF - Item in Room 6",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL": {
+    "label": "Abandoned Ship 1F - Item in East Side Northwest Room",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE": {
+    "label": "Abandoned Ship 1F - Item in West Side North Room",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE": {
+    "label": "Abandoned Ship B1F - Item in South Rooms",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13": {
+    "label": "Abandoned Ship B1F - Item in Storage Room",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ABANDONED_SHIP_ROOMS_2_B1F_DIVE_BALL": {
+    "label": "Abandoned Ship B1F - Item in North Rooms",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL": {
+    "label": "Aqua Hideout B1F - Item in Center Room 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_AQUA_HIDEOUT_B1F_NUGGET": {
+    "label": "Aqua Hideout B1F - Item in Center Room 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR": {
+    "label": "Aqua Hideout B1F - Item in East Room",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL": {
+    "label": "Aqua Hideout B2F - Item in Long Hallway",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ARTISAN_CAVE_1F_CARBOS": {
+    "label": "Artisan Cave 1F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ARTISAN_CAVE_B1F_HP_UP": {
+    "label": "Artisan Cave B1F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_FIERY_PATH_FIRE_STONE": {
+    "label": "Fiery Path - Item Behind Boulders 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_FIERY_PATH_TM06": {
+    "label": "Fiery Path - Item Behind Boulders 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE": {
+    "label": "Granite Cave 1F - Item Before Ladder",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_GRANITE_CAVE_B1F_POKE_BALL": {
+    "label": "Granite Cave B1F - Item in Alcove",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_GRANITE_CAVE_B2F_RARE_CANDY": {
+    "label": "Granite Cave B2F - Item After Crumbling Floor",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_GRANITE_CAVE_B2F_REPEL": {
+    "label": "Granite Cave B2F - Item After Mud Slope",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_JAGGED_PASS_BURN_HEAL": {
+    "label": "Jagged Pass - Item Below Hideout",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_LILYCOVE_CITY_MAX_REPEL": {
+    "label": "Lilycove City - Item on Peninsula",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY": {
+    "label": "Magma Hideout 1F - Item on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE": {
+    "label": "Magma Hideout 2F - Item on West Platform",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR": {
+    "label": "Magma Hideout 2F - Item on East Platform",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET": {
+    "label": "Magma Hideout 3F - Item Before Last Floor",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX": {
+    "label": "Magma Hideout 3F - Item in Drill Room",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_3F_3R_ECAPE_ROPE": {
+    "label": "Magma Hideout 3F - Item After Groudon",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE": {
+    "label": "Magma Hideout 4F - Item Before Groudon",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MAUVILLE_CITY_X_SPEED": {
+    "label": "Mauville City - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL": {
+    "label": "Meteor Falls 1F - Item Northeast",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_METEOR_FALLS_1F_1R_MOON_STONE": {
+    "label": "Meteor Falls 1F - Item West",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_METEOR_FALLS_1F_1R_PP_UP": {
+    "label": "Meteor Falls 1F - Item Below Waterfall",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_METEOR_FALLS_1F_1R_TM23": {
+    "label": "Meteor Falls 1F - Item Before Steven's Cave",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_METEOR_FALLS_B1F_2R_TM02": {
+    "label": "Meteor Falls B1F - Item in North Cave",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MOSSDEEP_CITY_NET_BALL": {
+    "label": "Mossdeep City - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_2F_ULTRA_BALL": {
+    "label": "Mt Pyre 2F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_3F_SUPER_REPEL": {
+    "label": "Mt Pyre 3F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_4F_SEA_INCENSE": {
+    "label": "Mt Pyre 4F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_5F_LAX_INCENSE": {
+    "label": "Mt Pyre 5F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_6F_TM30": {
+    "label": "Mt Pyre 6F - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_EXTERIOR_TM48": {
+    "label": "Mt Pyre Exterior - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_MT_PYRE_EXTERIOR_MAX_POTION": {
+    "label": "Mt Pyre Exterior - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_NEW_MAUVILLE_ESCAPE_ROPE": {
+    "label": "New Mauville - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_NEW_MAUVILLE_PARALYZE_HEAL": {
+    "label": "New Mauville - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_NEW_MAUVILLE_FULL_HEAL": {
+    "label": "New Mauville - Item 3",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_NEW_MAUVILLE_THUNDER_STONE": {
+    "label": "New Mauville - Item 4",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_NEW_MAUVILLE_ULTRA_BALL": {
+    "label": "New Mauville - Item 5",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_CITY_ETHER": {
+    "label": "Petalburg City - Item Past Pond South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_CITY_MAX_REVIVE": {
+    "label": "Petalburg City - Item Past Pond North",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_WOODS_ETHER": {
+    "label": "Petalburg Woods - Item Northwest",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_WOODS_PARALYZE_HEAL": {
+    "label": "Petalburg Woods - Item Southwest",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_WOODS_GREAT_BALL": {
+    "label": "Petalburg Woods - Item Past Tree Northeast",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_PETALBURG_WOODS_X_ATTACK": {
+    "label": "Petalburg Woods - Item Past Tree South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_102_POTION": {
+    "label": "Route 102 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_103_GUARD_SPEC": {
+    "label": "Route 103 - Item Near Berries",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_103_PP_UP": {
+    "label": "Route 103 - Item in Tree Maze",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_104_POKE_BALL": {
+    "label": "Route 104 - Item Near Briney on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_104_POTION": {
+    "label": "Route 104 - Item Behind Flower Shop",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_104_X_ACCURACY": {
+    "label": "Route 104 - Item Behind Tree",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_104_PP_UP": {
+    "label": "Route 104 - Item East Past Pond",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_105_IRON": {
+    "label": "Route 105 - Item on Island",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_106_PROTEIN": {
+    "label": "Route 106 - Item on West Beach",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_108_STAR_PIECE": {
+    "label": "Route 108 - Item Between Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_109_POTION": {
+    "label": "Route 109 - Item on Beach",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_109_PP_UP": {
+    "label": "Route 109 - Item on Island",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_110_DIRE_HIT": {
+    "label": "Route 110 - Item South of Rival",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_110_ELIXIR": {
+    "label": "Route 110 - Item South of Berries",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_110_RARE_CANDY": {
+    "label": "Route 110 - Item on Island",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_111_ELIXIR": {
+    "label": "Route 111 - Item Near Winstrates",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_111_HP_UP": {
+    "label": "Route 111 - Item West of Pond Near Winstrates",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_111_STARDUST": {
+    "label": "Route 111 - Item Desert Near Tower",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_111_TM37": {
+    "label": "Route 111 - Item Desert South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_112_NUGGET": {
+    "label": "Route 112 - Item on Ledges",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_113_SUPER_REPEL": {
+    "label": "Route 113 - Item Past Three Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_113_MAX_ETHER": {
+    "label": "Route 113 - Item on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_113_HYPER_POTION": {
+    "label": "Route 113 - Item Near Fallarbor South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_114_ENERGY_POWDER": {
+    "label": "Route 114 - Item Between Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_114_PROTEIN": {
+    "label": "Route 114 - Item Behind Smashable Rock",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_114_RARE_CANDY": {
+    "label": "Route 114 - Item Above Waterfall",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_SUPER_POTION": {
+    "label": "Route 115 - Item on Beach",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_PP_UP": {
+    "label": "Route 115 - Item on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_GREAT_BALL": {
+    "label": "Route 115 - Item Behind Smashable Rock",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_HEAL_POWDER": {
+    "label": "Route 115 - Item North Near Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_TM01": {
+    "label": "Route 115 - Item Near Mud Slope",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_115_IRON": {
+    "label": "Route 115 - Item Past Mud Slope",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_116_REPEL": {
+    "label": "Route 116 - Item in Grass",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_116_X_SPECIAL": {
+    "label": "Route 116 - Item Near Tunnel",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_116_POTION": {
+    "label": "Route 116 - Item in Tree Maze 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_116_ETHER": {
+    "label": "Route 116 - Item in Tree Maze 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_116_HP_UP": {
+    "label": "Route 116 - Item in East",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_117_GREAT_BALL": {
+    "label": "Route 117 - Item Behind Flower Patch",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_117_REVIVE": {
+    "label": "Route 117 - Item Behind Tree",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_118_HYPER_POTION": {
+    "label": "Route 118 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_SUPER_REPEL": {
+    "label": "Route 119 - Item in South Tall Grass 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_HYPER_POTION_1": {
+    "label": "Route 119 - Item in South Tall Grass 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_ZINC": {
+    "label": "Route 119 - Item Across River South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_HYPER_POTION_2": {
+    "label": "Route 119 - Item Near Mud Slope",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_ELIXIR_1": {
+    "label": "Route 119 - Item East of Mud Slope",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_ELIXIR_2": {
+    "label": "Route 119 - Item on River Bank",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_LEAF_STONE": {
+    "label": "Route 119 - Item Near South Waterfall",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_NUGGET": {
+    "label": "Route 119 - Item Above North Waterfall 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_119_RARE_CANDY": {
+    "label": "Route 119 - Item Above North Waterfall 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_120_NEST_BALL": {
+    "label": "Route 120 - Item Near North Pond",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_120_REVIVE": {
+    "label": "Route 120 - Item in North Puddles",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_120_NUGGET": {
+    "label": "Route 120 - Item in Tall Grass Maze",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_120_HYPER_POTION": {
+    "label": "Route 120 - Item in Tall Grass South",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_120_FULL_HEAL": {
+    "label": "Route 120 - Item Behind Southwest Pool",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_121_ZINC": {
+    "label": "Route 121 - Item Near Safari Zone",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_121_REVIVE": {
+    "label": "Route 121 - Item in Maze 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_121_CARBOS": {
+    "label": "Route 121 - Item in Maze 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_123_ULTRA_BALL": {
+    "label": "Route 123 - Item Below Ledges",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_123_ELIXIR": {
+    "label": "Route 123 - Item on Ledges 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_123_REVIVAL_HERB": {
+    "label": "Route 123 - Item on Ledges 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_123_PP_UP": {
+    "label": "Route 123 - Item on Ledges 3",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_123_CALCIUM": {
+    "label": "Route 123 - Item on Ledges 4",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_124_RED_SHARD": {
+    "label": "Route 124 - Item in Northwest Area",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_124_YELLOW_SHARD": {
+    "label": "Route 124 - Item in Northeast Area",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_124_BLUE_SHARD": {
+    "label": "Route 124 - Item in Southwest Area",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_125_BIG_PEARL": {
+    "label": "Route 125 - Item Between Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_126_GREEN_SHARD": {
+    "label": "Route 126 - Item in Separated Area",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_127_ZINC": {
+    "label": "Route 127 - Item North",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_127_CARBOS": {
+    "label": "Route 127 - Item East",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_127_RARE_CANDY": {
+    "label": "Route 127 - Item Between Trainers",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_132_PROTEIN": {
+    "label": "Route 132 - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_132_RARE_CANDY": {
+    "label": "Route 132 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_133_BIG_PEARL": {
+    "label": "Route 133 - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_133_MAX_REVIVE": {
+    "label": "Route 133 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_133_STAR_PIECE": {
+    "label": "Route 133 - Item 3",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_134_CARBOS": {
+    "label": "Route 134 - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_ROUTE_134_STAR_PIECE": {
+    "label": "Route 134 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_RUSTBORO_CITY_X_DEFEND": {
+    "label": "Rustboro City - Item Behind Fences",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_RUSTURF_TUNNEL_POKE_BALL": {
+    "label": "Rusturf Tunnel - Item West",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_RUSTURF_TUNNEL_MAX_ETHER": {
+    "label": "Rusturf Tunnel - Item East",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SAFARI_ZONE_NORTH_CALCIUM": {
+    "label": "Safari Zone N - Item in Grass",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET": {
+    "label": "Safari Zone NE - Item on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SAFARI_ZONE_NORTH_WEST_TM22": {
+    "label": "Safari Zone NW - Item Behind Pond",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL": {
+    "label": "Safari Zone SE - Item in Grass",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE": {
+    "label": "Safari Zone SW - Item Behind Pond",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SCORCHED_SLAB_TM11": {
+    "label": "Scorched Slab - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26": {
+    "label": "Seafloor Cavern Room 9 - Item Before Kyogre",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL": {
+    "label": "Shoal Cave Entrance - Item on Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE": {
+    "label": "Shoal Cave Ice Room - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SHOAL_CAVE_ICE_ROOM_TM07": {
+    "label": "Shoal Cave Ice Room - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SHOAL_CAVE_INNER_ROOM_RARE_CANDY": {
+    "label": "Shoal Cave Inner Room - Item in Center",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL": {
+    "label": "Shoal Cave Stairs Room - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL": {
+    "label": "Trick House Puzzle 1 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL": {
+    "label": "Trick House Puzzle 2 - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL": {
+    "label": "Trick House Puzzle 2 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL": {
+    "label": "Trick House Puzzle 3 - Item 1",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL": {
+    "label": "Trick House Puzzle 3 - Item 2",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL": {
+    "label": "Trick House Puzzle 4 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL": {
+    "label": "Trick House Puzzle 6 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL": {
+    "label": "Trick House Puzzle 7 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL": {
+    "label": "Trick House Puzzle 8 - Item",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR": {
+    "label": "Victory Road 1F - Item East",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_VICTORY_ROAD_1F_PP_UP": {
+    "label": "Victory Road 1F - Item on Southeast Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE": {
+    "label": "Victory Road B1F - Item Behind Boulders",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_VICTORY_ROAD_B1F_TM29": {
+    "label": "Victory Road B1F - Item on Northeast Ledge",
+    "tags": ["OverworldItem"]
+  },
+  "ITEM_VICTORY_ROAD_B2F_FULL_HEAL": {
+    "label": "Victory Road B2F - Item Above Waterfall",
+    "tags": ["OverworldItem"]
+  },
+
+  "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
+    "label": "Mauville City - TM24 from Wattson",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_6_SODA_POP": {
+    "label": "Route 109 - Seashore House Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_AMULET_COIN": {
+    "label": "Littleroot Town - Amulet Coin from Mom",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_CHARCOAL": {
+    "label": "Lavaridge Town Herb Shop - Charcoal from Man",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104": {
+    "label": "Route 104 - Gift from Woman Near Berries",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_CLEANSE_TAG": {
+    "label": "Mt Pyre 1F - Cleanse Tag from Woman in NE Corner",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_EXP_SHARE": {
+    "label": "Devon Corp 3F - Exp. Share from Mr. Stone",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_FOCUS_BAND": {
+    "label": "Shoal Cave Lower Room - Focus Band from Black Belt",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_GREAT_BALL_PETALBURG_WOODS": {
+    "label": "Petalburg Woods - Gift from Devon Employee",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_GREAT_BALL_RUSTBORO_CITY": {
+    "label": "Rustboro City - Gift from Devon Employee",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_KINGS_ROCK": {
+    "label": "Mossdeep City - King's Rock from Kid",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_MACHO_BRACE": {
+    "label": "Route 111 - Winstrate Family Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_MENTAL_HERB": {
+    "label": "Fortree City - Wingull Delivery Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_MIRACLE_SEED": {
+    "label": "Petalburg Woods - Miracle Seed from Lady",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_POTION_OLDALE": {
+    "label": "Oldale Town - Gift from Shop Tutorial",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_POWDER_JAR": {
+    "label": "Slateport City - Powder Jar from Lady in Market",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_PREMIER_BALL_RUSTBORO": {
+    "label": "Rustboro City - Gift from Boy in Apartments",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_QUICK_CLAW": {
+    "label": "Rustboro City - Quick Claw from School Teacher",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_REPEAT_BALL": {
+    "label": "Route 116 - Gift from Devon Researcher",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_SECRET_POWER": {
+    "label": "Route 111 - Secret Power from Man Near Tree",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_SILK_SCARF": {
+    "label": "Dewford Town - Silk Scarf from Man in House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_SOFT_SAND": {
+    "label": "Route 109 - Soft Sand from Tuber",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_SOOTHE_BELL": {
+    "label": "Slateport City - Soothe Bell from Woman in Fan Club",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
+    "label": "Mossdeep City - Gift from Man in Museum",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM03": {
+    "label": "Sootopolis Gym - TM03 from Juan",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM04": {
+    "label": "Mossdeep Gym - TM04 from Tate and Liza",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM05": {
+    "label": "Route 114 - TM05 from Roaring Man",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM08": {
+    "label": "Dewford Gym - TM08 from Brawly",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM09": {
+    "label": "Route 104 - TM09 from Boy",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM10": {
+    "label": "Fortree City - TM10 from Hidden Power Lady",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM19": {
+    "label": "Route 123 - TM19 from Girl near Berries",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM21": {
+    "label": "Pacifidlog Town - TM21 from Man in House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM27": {
+    "label": "Fallarbor Town - TM27 from Cozmo",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM27_2": {
+    "label": "Pacifidlog Town - TM27 from Man in House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM28": {
+    "label": "Route 114 - TM28 from Fossil Maniac",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM31": {
+    "label": "Sootopolis City - TM31 from Black Belt in House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM34": {
+    "label": "Mauville Gym - TM34 from Wattson",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM36": {
+    "label": "Dewford Town - TM36 from Sludge Bomb Man",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM39": {
+    "label": "Rustboro Gym - TM39 from Roxanne",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM40": {
+    "label": "Fortree Gym - TM40 from Winona",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM41": {
+    "label": "Slateport City - TM41 from Sailor in Battle Tent",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM42": {
+    "label": "Petalburg Gym - TM42 from Norman",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM44": {
+    "label": "Lilycove City - TM44 from Man in House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM45": {
+    "label": "Verdanturf Town - TM45 from Woman in Battle Tent",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM46": {
+    "label": "Slateport City - TM46 from Aqua Grunt in Museum",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM47": {
+    "label": "Granite Cave 1F - TM47 from Steven",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM49": {
+    "label": "SS Tidal - TM49 from Thief",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TM50": {
+    "label": "Lavaridge Gym - TM50 from Flannery",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_WHITE_HERB": {
+    "label": "Route 104 - White Herb from Lady Near Flower Shop",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_DEEP_SEA_SCALE": {
+    "label": "Slateport City - Deep Sea Scale from Capt. Stern",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH": {
+    "label": "Slateport City - Deep Sea Tooth from Capt. Stern",
+    "tags": ["NpcGift"]
+  }
+}

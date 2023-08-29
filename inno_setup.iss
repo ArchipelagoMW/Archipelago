@@ -63,6 +63,7 @@ Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full 
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
 Name: "generator/pkmn_r"; Description: "Pokemon Red ROM Setup"; Types: full hosting
 Name: "generator/pkmn_b"; Description: "Pokemon Blue ROM Setup"; Types: full hosting
+Name: "generator/pkmn_e"; Description: "Pokemon Emerald ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
 Name: "generator/mmbn3";  Description: "MegaMan Battle Network 3"; Types: full hosting; ExtraDiskSpaceRequired: 8388608; Flags: disablenouninstallwarning
 Name: "generator/ladx";   Description: "Link's Awakening DX ROM Setup"; Types: full hosting
 Name: "generator/tloz";   Description: "The Legend of Zelda ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 135168; Flags: disablenouninstallwarning
@@ -83,6 +84,7 @@ Name: "client/ff1";       Description: "Final Fantasy 1"; Types: full playing
 Name: "client/pkmn";      Description: "Pokemon Client"
 Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
+Name: "client/pkmn_e";    Description: "Pokemon Emerald Client Setup"; Types: full playing; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
 Name: "client/mmbn3";     Description: "MegaMan Battle Network 3 Client"; Types: full playing;
 Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
@@ -108,6 +110,7 @@ Source: "{code:GetOoTROMPath}"; DestDir: "{app}"; DestName: "The Legend of Zelda
 Source: "{code:GetZlROMPath}"; DestDir: "{app}"; DestName: "Zillion (UE) [!].sms"; Flags: external; Components: client/zl or generator/zl
 Source: "{code:GetRedROMPath}"; DestDir: "{app}"; DestName: "Pokemon Red (UE) [S][!].gb"; Flags: external; Components: client/pkmn/red or generator/pkmn_r
 Source: "{code:GetBlueROMPath}"; DestDir: "{app}"; DestName: "Pokemon Blue (UE) [S][!].gb"; Flags: external; Components: client/pkmn/blue or generator/pkmn_b
+Source: "{code:GetPokemonEmeraldROMPath}"; DestDir: "{app}"; DestName: "Pokemon - Emerald Version (USA, Europe).gba"; Flags: external; Components: client/pkmn_e or generator/pkmn_e
 Source: "{code:GetBN3ROMPath}"; DestDir: "{app}"; DestName: "Mega Man Battle Network 3 - Blue Version (USA).gba"; Flags: external; Components: client/mmbn3
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
@@ -131,6 +134,7 @@ Source: "{#source_path}\ArchipelagoOoTAdjuster.exe"; DestDir: "{app}"; Flags: ig
 Source: "{#source_path}\ArchipelagoZillionClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/zl
 Source: "{#source_path}\ArchipelagoFF1Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ff1
 Source: "{#source_path}\ArchipelagoPokemonClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/pkmn
+Source: "{#source_path}\ArchipelagoPokemonEmeraldClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/pkmn_e
 Source: "{#source_path}\ArchipelagoChecksFinderClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/cf
 Source: "{#source_path}\ArchipelagoStarcraft2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/sc2
 Source: "{#source_path}\ArchipelagoMMBN3Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/mmbn3
@@ -154,6 +158,7 @@ Name: "{group}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\Archipelag
 Name: "{group}\{#MyAppName} Zillion Client"; Filename: "{app}\ArchipelagoZillionClient.exe"; Components: client/zl
 Name: "{group}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Components: client/ff1
 Name: "{group}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Components: client/pkmn
+Name: "{group}\{#MyAppName} Pokemon Emerald Client"; Filename: "{app}\ArchipelagoPokemonEmeraldClient.exe"; Components: client/pkmn_e
 Name: "{group}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Components: client/cf
 Name: "{group}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Components: client/sc2
 Name: "{group}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: "{app}\ArchipelagoMMBN3Client.exe"; Components: client/mmbn3
@@ -175,6 +180,7 @@ Name: "{commondesktop}\{#MyAppName} Ocarina of Time Client"; Filename: "{app}\Ar
 Name: "{commondesktop}\{#MyAppName} Zillion Client"; Filename: "{app}\ArchipelagoZillionClient.exe"; Tasks: desktopicon; Components: client/zl
 Name: "{commondesktop}\{#MyAppName} Final Fantasy 1 Client"; Filename: "{app}\ArchipelagoFF1Client.exe"; Tasks: desktopicon; Components: client/ff1
 Name: "{commondesktop}\{#MyAppName} Pokemon Client"; Filename: "{app}\ArchipelagoPokemonClient.exe"; Tasks: desktopicon; Components: client/pkmn
+Name: "{commondesktop}\{#MyAppName} Pokemon Emerald Client"; Filename: "{app}\ArchipelagoPokemonEmeraldClient.exe"; Tasks: desktopicon; Components: client/pkmn_e
 Name: "{commondesktop}\{#MyAppName} ChecksFinder Client"; Filename: "{app}\ArchipelagoChecksFinderClient.exe"; Tasks: desktopicon; Components: client/cf
 Name: "{commondesktop}\{#MyAppName} Starcraft 2 Client"; Filename: "{app}\ArchipelagoStarcraft2Client.exe"; Tasks: desktopicon; Components: client/sc2
 Name: "{commondesktop}\{#MyAppName} MegaMan Battle Network 3 Client"; Filename: "{app}\ArchipelagoMMBN3Client.exe"; Tasks: desktopicon; Components: client/mmbn3
@@ -265,6 +271,11 @@ Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch";                     ValueData: "Ar
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/pkmn
 Root: HKCR; Subkey: "{#MyAppName}pkmnbpatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/pkmn
 
+Root: HKCR; Subkey: ".apemerald";                                 ValueData: "{#MyAppName}pkmnepatch";                               Flags: uninsdeletevalue; ValueType: string; ValueName: ""; Components: client/pkmn_e
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch";                     ValueData: "Archipelago Pokemon Emerald Patch";                    Flags: uninsdeletekey;   ValueType: string; ValueName: ""; Components: client/pkmn_e
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\DefaultIcon";         ValueData: "{app}\ArchipelagoPokemonEmeraldClient.exe,0";                                   ValueType: string; ValueName: ""; Components: client/pkmn_e
+Root: HKCR; Subkey: "{#MyAppName}pkmnepatch\shell\open\command";  ValueData: """{app}\ArchipelagoPokemonEmeraldClient.exe"" ""%1""";                          ValueType: string; ValueName: ""; Components: client/pkmn_e
+
 Root: HKCR; Subkey: ".apbn3";                                     ValueData: "{#MyAppName}bn3bpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/mmbn3
 Root: HKCR; Subkey: "{#MyAppName}bn3bpatch";                      ValueData: "Archipelago MegaMan Battle Network 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/mmbn3
 Root: HKCR; Subkey: "{#MyAppName}bn3bpatch\DefaultIcon";          ValueData: "{app}\ArchipelagoMMBN3Client.exe,0";                           ValueType: string;  ValueName: ""; Components: client/mmbn3
@@ -351,6 +362,9 @@ var RedROMFilePage:  TInputFileWizardPage;
 
 var bluerom: string;
 var BlueROMFilePage:  TInputFileWizardPage;
+
+var pkmnemeraldrom: string;
+var PokemonEmeraldROMFilePage: TInputFileWizardPage;
 
 var bn3rom: string;
 var BN3ROMFilePage: TInputFileWizardPage;
@@ -482,6 +496,7 @@ begin
       'Select ROM File',
       'Where is your ' + name + ' located?',
       'Select the file, then click Next.');
+
   Result.Add(
     'Location of ROM file:',
     'GBA ROM files|*.gba|All files|*.*',
@@ -578,6 +593,8 @@ begin
     Result := not (L2ACROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
+  else if (assigned(PokemonEmeraldROMFilePage)) and (CurPageID = PokemonEmeraldROMFilePage.ID) then
+    Result := not (PokemonEmeraldROMFilePage.Values[0] = '')
   else if (assigned(BN3ROMFilePage)) and (CurPageID = BN3ROMFilePage.ID) then
     Result := not (BN3ROMFilePage.Values[0] = '')
   else if (assigned(ZlROMFilePage)) and (CurPageID = ZlROMFilePage.ID) then
@@ -755,6 +772,22 @@ begin
   else
     Result := '';
  end;
+
+function GetPokemonEmeraldROMPath(Param: string): string;
+begin
+  if Length(pkmnemeraldrom) > 0 then
+    Result := pkmnemeraldrom
+  else if Assigned(PokemonEmeraldROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(PokemonEmeraldROMFilePage.Values[0]), '605b89b67018abcea91e693a4dd25be3')
+      if R <> 0 then
+        MsgBox('Pokemon Emerald ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := PokemonEmeraldROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+ end;
  
 function GetTLoZROMPath(Param: string): string;
 begin
@@ -856,6 +889,10 @@ begin
   if Length(bluerom) = 0 then
     BlueROMFilePage:= AddGBRomPage('Pokemon Blue (UE) [S][!].gb');
 
+  pkmnemeraldrom := CheckRom('Pokemon - Emerald Version (USA, Europe).gba', '605b89b67018abcea91e693a4dd25be3');
+  if Length(pkmnemeraldrom) = 0 then
+    PokemonEmeraldROMFilePage:= AddGBARomPage('Pokemon - Emerald Version (USA, Europe).gba');
+
   bn3rom := CheckRom('Mega Man Battle Network 3 - Blue Version (USA).gba','6fe31df0144759b34ad666badaacc442');
   if Length(bn3rom) = 0 then
     BN3ROMFilePage:= AddGBARomPage('Mega Man Battle Network 3 - Blue Version (USA).gba');
@@ -901,6 +938,8 @@ begin
     Result := not (WizardIsComponentSelected('generator/pkmn_r') or WizardIsComponentSelected('client/pkmn/red'));
   if (assigned(BlueROMFilePage)) and (PageID = BlueROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/pkmn_b') or WizardIsComponentSelected('client/pkmn/blue'));
+  if (assigned(PokemonEmeraldROMFilePage)) and (PageID = PokemonEmeraldROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('generator/pkmn_e') or WizardIsComponentSelected('client/pkmn_e'));
   if (assigned(BN3ROMFilePage)) and (PageID = BN3ROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/mmbn3') or WizardIsComponentSelected('client/mmbn3'));
   if (assigned(LADXROMFilePage)) and (PageID = LADXROMFilePage.ID) then
