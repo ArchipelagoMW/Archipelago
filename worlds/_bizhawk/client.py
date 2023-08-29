@@ -1,3 +1,8 @@
+"""
+A module containing the BizHawkClient base class and metaclass
+"""
+
+
 from __future__ import annotations
 
 import abc
