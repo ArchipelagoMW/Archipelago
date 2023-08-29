@@ -1,6 +1,7 @@
 special_chars = {
     "PKMN": 0x4A,
     "LINE": 0x4F,
+    "PARA": 0x51,
     "CONT": 0x55,
     "DONE": 0x57,
     "PROMPT": 0x58,
@@ -90,10 +91,13 @@ char_map = {
     "?": 0xE6,
     "!": 0xE7,
     ".": 0xE8,
+    "+": 0xEA,
+    "=": 0xEB,
     "♂": 0xEF,
     "¥": 0xF0,
     "$": 0xF0,
     "×": 0xF1,
+    "*": 0xF1,  # alias
     "/": 0xF3,
     ",": 0xF4,
     "♀": 0xF5,
