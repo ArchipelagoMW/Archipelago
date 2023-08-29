@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+    from flask import Flask
 
 
 class AutoWorldRegister(type):
@@ -155,9 +156,22 @@ class WebWorld:
     """Choose a theme for you /game/* pages.
     Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
-    bug_report_page: Optional[str]
+    bug_report_page: Optional[str] = None
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
+    multitracker_template: Optional[str] = None
+    """relative path with /-seperator to a MultiTracker Template file."""
+
+    # allows modification of webhost during startup, this is run once
+    @classmethod
+    def run_webhost_setup(cls):
+        pass
+
+    # allows modification of webhost during startup,
+    # this is run whenever a Flask app is created (per-thread/per-process)
+    @classmethod
+    def run_webhost_app_setup(cls, app: "Flask"):
+        pass
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -411,7 +425,6 @@ class World(metaclass=AutoWorldRegister):
         }
         res["checksum"] = data_package_checksum(res)
         return res
-
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together

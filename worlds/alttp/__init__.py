@@ -124,6 +124,14 @@ class ALTTPWeb(WebWorld):
 
     tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando, oof_sound]
 
+    @classmethod
+    def run_webhost_setup(cls):
+        rom_file = get_base_rom_path()
+        if os.path.exists(rom_file):
+            from .Sprites import update_sprites
+            update_sprites()
+        else:
+            logging.warning("Could not update LttP sprites.")
 
 class ALTTPWorld(World):
     """
@@ -807,7 +815,6 @@ class ALTTPWorld(World):
                 }
             )
         return slot_data
-        
 
 def get_same_seed(world, seed_def: tuple) -> str:
     seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})

@@ -61,6 +61,8 @@ class FactorioWeb(WebWorld):
         ["Berserker, Farrak Kilhn"]
     )]
 
+    multitracker_template = "data/web/templates/MultiTracker.html"
+
 
 class FactorioItem(Item):
     game = "Factorio"
@@ -523,7 +525,6 @@ class Factorio(World):
                             ItemClassification.trap if name.endswith("Trap") else ItemClassification.filler,
                             all_items[name], self.player)
         return item
-
 
 class FactorioLocation(Location):
     game: str = Factorio.game
