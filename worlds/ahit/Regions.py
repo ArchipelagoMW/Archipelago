@@ -422,7 +422,7 @@ def create_tasksanity_locations(world: World):
 
 def randomize_act_entrances(world: World):
     region_list: typing.List[Region] = get_act_regions(world)
-    world.multiworld.random.shuffle(region_list)
+    world.random.shuffle(region_list)
 
     separate_rifts: bool = bool(world.multiworld.ActRandomizer[world.player].value == 1)
 
@@ -543,7 +543,7 @@ def randomize_act_entrances(world: World):
 
             candidate_list.append(candidate)
 
-        candidate: Region = candidate_list[world.multiworld.random.randint(0, len(candidate_list)-1)]
+        candidate: Region = candidate_list[world.random.randint(0, len(candidate_list)-1)]
         shuffled_list.append(candidate)
 
         # Vanilla
@@ -635,8 +635,8 @@ def create_badge_seller(world: World) -> Region:
     max_items: int = 0
 
     if world.multiworld.BadgeSellerMaxItems[world.player].value > 0:
-        max_items = world.multiworld.random.randint(world.multiworld.BadgeSellerMinItems[world.player].value,
-                                                    world.multiworld.BadgeSellerMaxItems[world.player].value)
+        max_items = world.random.randint(world.multiworld.BadgeSellerMinItems[world.player].value,
+                                         world.multiworld.BadgeSellerMaxItems[world.player].value)
 
     if max_items <= 0:
         world.badge_seller_count = 0
@@ -731,7 +731,7 @@ def create_thug_shops(world: World):
             pass
 
         if count == -1:
-            count = world.multiworld.random.randint(min_items, max_items)
+            count = world.random.randint(min_items, max_items)
             world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
             if count <= 0:
                 continue
