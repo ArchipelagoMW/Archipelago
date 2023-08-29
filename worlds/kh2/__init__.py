@@ -206,7 +206,7 @@ class KH2World(World):
 
             self.hitlist_verify()
             prio_hitlist = [location for location in self.multiworld.priority_locations[self.player].value if location in self.random_super_boss_list]
-            for bounty in range(self.bounties_amount):
+            for bounty in range(self.multiworld.BountyAmount[self.player].value):
                 if prio_hitlist:
                     randomBoss = self.multiworld.per_slot_randoms[self.player].choice(prio_hitlist)
                     prio_hitlist.remove(randomBoss)
@@ -426,7 +426,7 @@ class KH2World(World):
                          f"Swapping Amount and Required")
             temp = self.multiworld.BountyRequired[self.player].value
             self.multiworld.BountyRequired[self.player].value = self.multiworld.BountyAmount[self.player].value
-            self.multiworld.BountyRequired[self.player].value = temp
+            self.multiworld.BountyAmount[self.player].value = temp
 
         if self.multiworld.BountyStartingHintToggle[self.player]:
             self.multiworld.start_hints[self.player].value.add(ItemName.Bounty)
