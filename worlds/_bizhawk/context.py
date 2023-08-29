@@ -1,3 +1,9 @@
+"""
+A module containing context and functions relevant to running the client. This module should only be imported for type
+checking or launching the client, otherwise it will probably cause circular import issues.
+"""
+
+
 import asyncio
 import traceback
 from typing import Any, Dict, Optional
@@ -6,7 +12,8 @@ from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser,
 import Patch
 import Utils
 
-from . import BizHawkContext, ConnectionStatus, RequestFailedError, connect, disconnect, get_hash, get_script_version, get_system, ping
+from . import BizHawkContext, ConnectionStatus, RequestFailedError, connect, disconnect, get_hash, get_script_version, \
+    get_system, ping
 from .client import BizHawkClient, AutoBizHawkClientRegister
 
 

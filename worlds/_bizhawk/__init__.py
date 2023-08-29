@@ -1,3 +1,10 @@
+"""
+A module for interacting with BizHawk through `connector_bizhawk_generic.lua`.
+
+Any mention of `domain` in this module refers to the names BizHawk gives to memory domains in its own lua api. They are
+naively passed to BizHawk without validation or modification.
+"""
+
 import asyncio
 import base64
 import enum
