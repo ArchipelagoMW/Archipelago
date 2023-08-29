@@ -1,14 +1,41 @@
 from __future__ import annotations
 
 import abc
+import hashlib
+import logging
+import os
+import pkgutil
 from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, ClassVar
 
+from Utils import user_path
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 if TYPE_CHECKING:
     from .context import BizHawkClientContext
 else:
     BizHawkClientContext = object
+    
+    
+try:
+    for script_name in ("connector_bizhawk_generic.lua", "base64.lua"):
+        script_path = os.path.join(user_path("data", "lua"), script_name)
+
+        if not os.path.exists(script_path):
+            with open(script_path, "wb") as script_file:
+                script_file.write(pkgutil.get_data(__name__, "data/" + script_name))
+        else:
+            with open(script_path, "rb+") as script_file:
+                expected_script = pkgutil.get_data(__name__, "data/" + script_name)
+
+                expected_hash = hashlib.md5(expected_script).digest()
+                existing_hash = hashlib.md5(script_file.read()).digest()
+
+                if existing_hash != expected_hash:
+                    script_file.seek(0)
+                    script_file.truncate()
+                    script_file.write(expected_script)
+except IOError:
+    logging.warning("Unable to copy generic bizhawk connector scripts to /data/lua in your Archipelago install.")
 
 
 class AutoBizHawkClientRegister(abc.ABCMeta):
