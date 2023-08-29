@@ -81,6 +81,11 @@ class VanillaAlpine(Choice):
     default = 0
 
 
+class NoFreeRoamFinale(Toggle):
+    """If enabled, prevent Free Roam acts from being shuffled onto chapter finales."""
+    default = 1
+
+
 class LogicDifficulty(Choice):
     """Choose the difficulty setting for logic. Note that Hard or above will force SDJ logic on."""
     display_name = "Logic Difficulty"
@@ -264,7 +269,7 @@ class ChapterCostMinDifference(Range):
 
 class LowestChapterCost(Range):
     """Value determining the lowest possible cost for a chapter.
-    Chapter costs will, progressively, be calculated based on this value (except for Chapter 5)."""
+    Chapter costs will, progressively, be calculated based on this value (except for the final chapter)."""
     display_name = "Lowest Possible Chapter Cost"
     range_start = 0
     range_end = 10
@@ -273,7 +278,7 @@ class LowestChapterCost(Range):
 
 class HighestChapterCost(Range):
     """Value determining the highest possible cost for a chapter.
-    Chapter costs will, progressively, be calculated based on this value (except for Chapter 5)."""
+    Chapter costs will, progressively, be calculated based on this value (except for the final chapter)."""
     display_name = "Highest Possible Chapter Cost"
     range_start = 15
     range_end = 45
@@ -432,6 +437,7 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "ActRandomizer":            ActRandomizer,
     "ShuffleAlpineZiplines":    ShuffleAlpineZiplines,
     "VanillaAlpine":            VanillaAlpine,
+    "NoFreeRoamFinale":         NoFreeRoamFinale,
     "LogicDifficulty":          LogicDifficulty,
     "RandomizeHatOrder":        RandomizeHatOrder,
     "UmbrellaLogic":            UmbrellaLogic,

@@ -237,6 +237,14 @@ purple_time_rifts = [
     "Time Rift - Rumbi Factory",
 ]
 
+chapter_finales = [
+    "Dead Bird Studio Basement",
+    "Your Contract has Expired",
+    "The Illness has Spread",
+    "Rock the Boat",
+    "Rush Hour",
+]
+
 # Acts blacklisted in act shuffle
 # entrance: region
 blacklisted_acts = {
@@ -472,6 +480,11 @@ def randomize_act_entrances(world: World):
             if world.multiworld.VanillaMetro[world.player].value > 0 and region.name == "Nyakuza Free Roam":
                 candidate_list.append(region)
                 break
+
+            if world.multiworld.NoFreeRoamFinale[world.player].value > 0 and "Free Roam" in candidate.name:
+                # CTR entrance isn't a finale, but has a fuck ton of unlock requirements
+                if region.name in chapter_finales or region.name == "Cheating the Race":
+                    continue
 
             if region.name == "Rush Hour":
                 if world.multiworld.EndGoal[world.player].value == 2 or \
