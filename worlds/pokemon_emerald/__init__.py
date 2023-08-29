@@ -5,6 +5,7 @@ from collections import Counter
 import copy
 import logging
 import os
+import sys
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
@@ -13,7 +14,6 @@ from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
 
-from .client import PokemonEmeraldClient
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
                    data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
@@ -29,6 +29,14 @@ from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item
                     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int
+
+
+# Check for BizHawkClient before trying to import client
+# Allows for generating without _bizhawk.apworld
+if "worlds._bizhawk" in sys.modules:
+    from .client import PokemonEmeraldClient
+else:
+    logging.warning("Did not find _bizhawk.apworld required to play Pokemon Emerald. Can still generate.")
 
 
 class PokemonEmeraldWebWorld(WebWorld):
