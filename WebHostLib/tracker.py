@@ -1366,6 +1366,10 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                     for teamnumber, team in enumerate(names)}
 
+    total_locations = {teamnumber: sum(len(locations[playernumber])
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups)
+                    for teamnumber, team in enumerate(names)}
+
     hints = {team: set() for team in range(len(names))}
     if room.multisave:
         multisave = restricted_loads(room.multisave)
@@ -1390,11 +1394,14 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    completed_worlds = 0
     states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[team, player] = name
             states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
+            if states[team, player] == 30:  # Goal Completed
+                completed_worlds += 1
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
         player_names[team, player] = alias
@@ -1410,7 +1417,8 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers=activity_timers, video=video, hints=hints,
         long_player_names=long_player_names,
         multisave=multisave, precollected_items=precollected_items, groups=groups,
-        locations=locations, games=games, states=states,
+        locations=locations, total_locations=total_locations, games=games, states=states,
+        completed_worlds=completed_worlds,
         custom_locations=custom_locations, custom_items=custom_items,
     )
 
