@@ -4,8 +4,8 @@ from typing import ClassVar
 
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components, SuffixIdentifier, launch_subprocess
 
+from .client import WL4Client
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import location_name_to_id, setup_locations
 from .logic import WL4Logic
@@ -13,15 +13,6 @@ from .options import wl4_options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 from .types import ItemType, Passage
-
-
-def launch_client(*args):
-    from .client import launch
-    launch_subprocess(launch, name='WL4Client')
-
-
-components.append(Component('Wario Land 4 Client', 'WL4Client', component_type=Type.CLIENT,
-                            func=launch_client, file_identifier=SuffixIdentifier('.apwl4'))),
 
 
 class WL4Settings(settings.Group):

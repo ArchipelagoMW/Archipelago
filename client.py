@@ -1,353 +1,200 @@
-from argparse import Namespace
-import asyncio
-import json
-import os
-import subprocess
-from typing import Any, Dict, Optional, Tuple
-import zipfile
+from __future__ import annotations
 
-from asyncio import StreamReader, StreamWriter
-from pathlib import Path
+from typing import TYPE_CHECKING, List
 
-import bsdiff4
+from NetUtils import ClientStatus
+import worlds._bizhawk as bizhawk
+from worlds._bizhawk import RequestFailedError
+from worlds._bizhawk.client import BizHawkClient
 
-from CommonClient import CommonContext, server_loop, gui_enabled, \
-    ClientCommandProcessor, logger, get_base_parser
-import Utils
-from worlds import network_data_package
+from .data import encode_str, get_symbol
+from .locations import get_level_locations, location_name_to_id, location_table
+from .types import Passage
 
-from .rom import get_base_rom_path
-from .locations import get_level_locations, location_table
+if TYPE_CHECKING:
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkContext
 
 
-SYSTEM_MESSAGE_ID = 0
+def read(address: int, length: int, *, align: int = 1):
+    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
+    return (address, length, 'System Bus')
 
-CONNECTION_TIMING_OUT_STATUS = 'Connection timing out. Please restart your emulator, then restart connector_wl4.lua'
-CONNECTION_REFUSED_STATUS = \
-    'Connection refused. Please start your emulator and make sure connector_wl4.lua is running'
-CONNECTION_RESET_STATUS = 'Connection was reset. Please restart your emulator, then restart connector_wl4.lua'
-CONNECTION_TENTATIVE_STATUS = 'Initial Connection Made'
-CONNECTION_CONNECTED_STATUS = 'Connected'
-CONNECTION_INITIAL_STATUS = 'Connection has not been initiated'
+def read8(address: int):
+    return read(address, 1)
 
-'''
-Payload: lua -> client
-{
-    playerName: string,
-    locations: dict,
-    deathlinkActive: bool,
-    isDead: bool,
-    gameComplete: bool
-}
+def read16(address: int):
+    return read(address, 2, align=2)
 
-Payload: client -> lua
-{
-    items: list,
-    playerNames: list,
-    triggerDeath: bool
-}
-
-Deathlink logic:
-"Dead" is true <-> Wario is at 0 hp.
-
-deathlink_pending: we need to kill the player
-deathlink_sent_this_death: we interacted with the multiworld on this death,
-    waiting to reset with living link
-
-'''
-
-wl4_loc_name_to_id = network_data_package['games']['Wario Land 4']['location_name_to_id']
-
-script_version: int = 0
-
-def get_item_value(ap_id):
-    return ap_id - 0xEC00
+def read32(address: int):
+    return read(address, 4, align=4)
 
 
-class WL4CommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx):
-        super().__init__(ctx)
+def write(address: int, value: bytes, *, align: int = 1):
+    assert address % align == 0, f'address: 0x{address:07x}, align: {align}'
+    return (address, value, 'System Bus')
 
-    def _cmd_gba(self):
-        '''Check GBA Connection State'''
-        if isinstance(self.ctx, WL4Context):
-            logger.info(f'GBA Status: {self.ctx.gba_status}')
+def write8(address: int, value: int):
+    return write(address, value.to_bytes(1, 'little'))
 
-    def _cmd_deathlink(self):
-        '''Toggle deathlink from client. Overrides default setting.'''
-        if isinstance(self.ctx, WL4Context):
-            self.ctx.deathlink_client_override = True
-            self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
-            Utils.async_start(
-                self.ctx.update_death_link(self.ctx.deathlink_enabled),
-                name='Update Deathlink'
-            )
+def write16(address: int, value: int):
+    return write(address, value.to_bytes(2, 'little'), align=2)
+
+def write32(address: int, value: int):
+    return write(address, value.to_bytes(4, 'little'), align=4)
 
 
-class WL4Context(CommonContext):
-    command_processor = WL4CommandProcessor
+guard8 = write8
+guard16 = write16
+
+
+async def read_single_sequence(ctx: BizHawkContext, address: int, length: int) -> bytes:
+    return (await bizhawk.read(ctx, [read(address, length)]))[0]
+
+
+class WL4Client(BizHawkClient):
     game = 'Wario Land 4'
-    items_handling = 0b101  # Serverside starting inventory, otherwise local
+    system = 'GBA'
+    local_checked_locations: List[int]
+    rom_slot_name: str
 
-    def __init__(self, server_address, password):
-        super().__init__(server_address, password)
+    def __init__(self) -> None:
+        super().__init__()
+        self.local_checked_locations = []
 
-        self.gba_streams: Tuple[StreamReader, StreamWriter] = None
-        self.gba_sync_task = None
-        self.gba_status = CONNECTION_INITIAL_STATUS
-        self.awaiting_rom = False
+    async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
+        from CommonClient import logger
 
-        self.location_list = []
-
-        self.deathlink_enabled = False
-        self.deathlink_pending = False
-        self.deathlink_sent_this_death = False
-        self.deathlink_client_override = False
-
-        self.version_warning = False
-
-    async def server_auth(self, password_requested: bool = False):
-        if password_requested and not self.password:
-            await super(WL4Context, self).server_auth(password_requested)
-
-        if not self.auth:
-            self.awaiting_rom = True
-            logger.info(
-                'No ROM detected, awaiting conection to Bizhawk to '
-                'authenticate to the multiworld server'
-            )
-            return
-
-        await self.send_connect()
-
-    def on_deathlink(self, data: Dict[str, Any]):
-        self.deathlink_pending = True
-        super().on_deathlink(data)
-
-    def run_gui(self):
-        from kvui import GameManager
-
-        class WL4Manager(GameManager):
-            logging_pairs = [
-                ('Client', 'Archipelago')
-            ]
-            base_title = 'Archipelago Wario Land 4 Client'
-
-        self.ui = WL4Manager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name='UI')
-
-
-def get_payload(ctx: WL4Context):
-    if ctx.deathlink_enabled and ctx.deathlink_pending:
-        trigger_death = True
-        ctx.deathlink_sent_this_death = True
-    else:
-        trigger_death = False
-
-    payload = json.dumps({
-        'items': [get_item_value(item.item) for item in ctx.items_received],
-        'senders': [item.player for item in ctx.items_received],
-        'playerNames': [name for (i, name) in ctx.player_names.items() if i != 0],
-        'triggerDeath': trigger_death,
-    })
-    return payload
-
-
-async def parse_payload(payload: dict, ctx: WL4Context, force: bool):
-    # Refuse to do anything if ROM is detected as changed
-    if ctx.auth and payload['playerName'] != ctx.auth:
-        logger.warning('ROM change detected. Disconnecting and reconnecting...')
-        ctx.deathlink_enabled = False
-        ctx.deathlink_client_override = False
-        ctx.finished_game = False
-        ctx.location_list = []
-        ctx.deathlink_pending = False
-        ctx.deathlink_sent_this_death = False
-        ctx.auth = payload['playerName']
-        await ctx.send_connect()
-        return
-
-    # Turn on deathlink if it is on, and if the client hasn't overriden it
-    if (payload['deathlinkActive']
-            and not ctx.deathlink_enabled
-            and not ctx.deathlink_client_override):
-        await ctx.update_death_link(True)
-        ctx.deathlink_enabled = True
-
-    # Game completion handling
-    if payload['gameComplete'] and not ctx.finished_game:
-        await ctx.send_msgs([{
-            'cmd': 'StatusUpdate',
-            'status': 30
-        }])
-        ctx.finished_game = True
-
-    # Parse item status bits
-    item_status = payload['itemStatus']
-    locations = []
-    for passage in range(6):
-        for level in range(6):
-            status_bits = item_status[passage * 6 + level] >> 8
-            for location in get_level_locations(passage, level):
-                _, (_, _, bit), *_ = location_table[location]
-                if status_bits & bit:
-                    locations.append(location)
-
-    # Locations handling
-    if ctx.location_list != locations:
-        ctx.location_list = locations
-        await ctx.send_msgs([{
-            'cmd': 'LocationChecks',
-            'locations': [wl4_loc_name_to_id[loc] for loc in ctx.location_list]
-        }])
-
-    # Deathlink handling
-    if ctx.deathlink_enabled:
-        if payload['isDead']:  # Wario is dead
-            ctx.deathlink_pending = False
-            if not ctx.deathlink_sent_this_death:
-                ctx.deathlink_sent_this_death = True
-                await ctx.send_death()
-        else:  # Wario is alive
-            ctx.deathlink_sent_this_death = False
-
-
-async def gba_sync_task(ctx: WL4Context):
-    logger.info('Starting GBA connector. Use /gba for status information.')
-    while not ctx.exit_event.is_set():
-        error_status = None
-        if ctx.gba_streams:
-            (reader, writer) = ctx.gba_streams
-            msg = get_payload(ctx).encode()
-            writer.write(msg)
-            writer.write(b'\n')
-            try:
-                await asyncio.wait_for(writer.drain(), timeout=1.5)
-                try:
-                    # Data will return a dict with up to four fields
-                    # 1. str: player name (always)
-                    # 2. int: script version (always)
-                    # 3. dict[str, byte]: value of location's memory byte
-                    # 4. bool: whether the game currently registers as complete
-                    data = await asyncio.wait_for(reader.readline(), timeout=10)
-                    data_decoded = json.loads(data.decode())
-                    reported_version = data_decoded.get('scriptVersion', 0)
-                    if reported_version >= script_version:
-                        if ctx.game is not None and 'itemStatus' in data_decoded:
-                            # Not just a keep alive ping, parse
-                            asyncio.create_task((parse_payload(data_decoded, ctx, False)))
-                        if not ctx.auth:
-                            ctx.auth = data_decoded['playerName']
-
-                            if ctx.awaiting_rom:
-                                logger.info('Awaiting data from ROM...')
-                                await ctx.server_auth(False)
-                    else:
-                        if not ctx.version_warning:
-                            logger.warning(f'Your Lua script is version {reported_version}, expected {script_version}.'
-                                           'Please update to the latest version.'
-                                           'Your connection to the Archipelago server will not be accepted.')
-                            ctx.version_warning = True
-                except asyncio.TimeoutError:
-                    logger.debug('Read Timed Out, Reconnecting')
-                    error_status = CONNECTION_TIMING_OUT_STATUS
-                    writer.close()
-                    ctx.gba_streams = None
-                except ConnectionResetError:
-                    logger.debug('Read failed due to Connection Lost, Reconnecting')
-                    error_status = CONNECTION_RESET_STATUS
-                    writer.close()
-                    ctx.gba_streams = None
-            except TimeoutError:
-                logger.debug('Connection Timed Out, Reconnecting')
-                error_status = CONNECTION_TIMING_OUT_STATUS
-                writer.close()
-                ctx.gba_streams = None
-            except ConnectionResetError:
-                logger.debug('Connection Lost, Reconnecting')
-                error_status = CONNECTION_RESET_STATUS
-                writer.close()
-                ctx.gba_streams = None
-            if ctx.gba_status == CONNECTION_TENTATIVE_STATUS:
-                if not error_status:
-                    logger.info('Successfully Connected to GBA')
-                    ctx.gba_status = CONNECTION_CONNECTED_STATUS
-                else:
-                    ctx.gba_status = f'Was tentatively connected but error occurred: {error_status}'
-            elif error_status:
-                ctx.gba_status = error_status
-                logger.info('Lost connection to GBA and attempting to reconnect. Use /gba for status updates')
-        else:
-            try:
-                logger.debug('Attempting to connect to GBA')
-                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection('localhost', 28922), timeout=10)
-                ctx.gba_status = CONNECTION_TENTATIVE_STATUS
-            except TimeoutError:
-                logger.debug('Connection Timed Out, Trying Again')
-                ctx.gba_status = CONNECTION_TIMING_OUT_STATUS
-                continue
-            except ConnectionRefusedError:
-                logger.debug('Connection Refused, Trying Again')
-                ctx.gba_status = CONNECTION_REFUSED_STATUS
-                continue
-
-
-async def run_game(romfile):
-    options = Utils.get_options().get('wl4_options', None)
-    if options is None:
-        auto_start = True
-    else:
-        auto_start = options.get('rom_start', True)
-    if auto_start:
-        import webbrowser
-        webbrowser.open(romfile)
-    elif os.path.isfile(auto_start):
-        subprocess.Popen([auto_start, romfile],
-                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
-async def patch_and_run_game(wl4_path: Path):
-    with zipfile.ZipFile(wl4_path, 'r') as patch_archive:
+        bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
-            with patch_archive.open('delta.bsdiff4', 'r') as stream:
-                patch_data = stream.read()
-        except KeyError:
-            raise FileNotFoundError('Patch file missing from archive.')
-    rom_file = get_base_rom_path()
+            game_name = (await read_single_sequence(bizhawk_ctx, 0x080000A0, 10)).decode('ascii')
+            if game_name != 'WARIOLANDE':
+                return False
 
-    with open(rom_file, 'rb') as rom:
-        rom_bytes = rom.read()
-    patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
-    patched_rom_file = wl4_path.with_suffix('.gba')
-    with open(patched_rom_file,'wb') as patched_rom:
-        patched_rom.write(patched_bytes)
+            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
+            # validating a ROM where there's no slot name to read.
+            try:
+                slot_name_bytes = await read_single_sequence(bizhawk_ctx, get_symbol('PlayerName'), 64)
+                self.rom_slot_name = bytes(filter(None, slot_name_bytes)).decode('utf-8')
+            except UnicodeDecodeError:
+                logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+                return False
+        except UnicodeDecodeError:
+            return False
+        except RequestFailedError:
+            return False  # Should verify on the next pass
 
-    asyncio.create_task(run_game(patched_rom_file))
+        client_ctx.game = self.game
+        client_ctx.items_handling = 0b101
+        client_ctx.want_slot_data = True
+        return True
 
+    async def set_auth(self, client_ctx: BizHawkClientContext) -> None:
+        client_ctx.auth = self.rom_slot_name
 
-parser = get_base_parser()
-parser.add_argument('apwl4_file', default=None, type=Path, nargs='?',
-                    help='Path to an APWL4 file')
+    async def game_watcher(self, client_ctx: BizHawkClientContext) -> None:
+        bizhawk_ctx = client_ctx.bizhawk_ctx
+        try:
+            game_mode_address = get_symbol('GlobalGameMode')
+            game_state_address = get_symbol('sGameSeq')
+            wario_stop_flag_address = get_symbol('usWarStopFlg')
+            level_status_address = get_symbol('LevelStatusTable')
+            received_item_count_address = level_status_address + 14  # Collection status for unused Entry level
+            multiworld_state_address = get_symbol('MultiworldState')
+            incoming_item_address = get_symbol('IncomingItemID')
+            item_sender_address = get_symbol('IncomingItemSender')
 
-async def run_client(args: Namespace):
-    ctx = WL4Context(args.connect, args.password)
-    ctx.server_task = asyncio.create_task(server_loop(ctx), name='Server Loop')
+            read_result = await bizhawk.read(bizhawk_ctx, [
+                read8(game_mode_address),
+                read8(game_state_address),
+                read16(wario_stop_flag_address),
+                read(level_status_address, 6 * 6 * 4),
+                read8(multiworld_state_address),
+                read16(received_item_count_address),
+            ])
+            game_mode = read_result[0][0]
+            game_state = read_result[1][0]
+            wario_stop_flag = int.from_bytes(read_result[2], 'little')
+            item_status = [int.from_bytes(read_result[3][i:i+4], 'little')
+                           for i in range(0, 36*4, 4)]
+            multiworld_state = read_result[4][0]
+            received_item_count = int.from_bytes(read_result[5], 'little')
 
-    if gui_enabled:
-        ctx.run_gui()
-    ctx.run_cli()
+            # Ensure safe state
+            gameplay_state = (game_mode, game_state)
+            safe_states = [
+                (1, 2),  # Passage select
+                (2, 2),  # Playing level
+            ]
+            if gameplay_state not in safe_states:
+                return
 
-    if args.apwl4_file is not None:
-        Utils.async_start(patch_and_run_game(args.apwl4_file))
+            locations = []
+            game_clear = False
 
-    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name='GBA Sync')
+            # Parse item status bits
+            for passage in range(6):
+                for level in range(4):
+                    status_bits = item_status[passage * 6 + level] >> 8
+                    for location in get_level_locations(passage, level):
+                        bit = location_table[location].flag()
+                        location_id = location_name_to_id[location]
+                        if status_bits & bit and location_id in client_ctx.server_locations:
+                            locations.append(location_id)
 
-    await ctx.exit_event.wait()
-    await ctx.shutdown()
+                # TODO: Boss event flags
 
+            if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
+                game_clear = True
 
-def launch():
-    import colorama
-    colorama.init()
-    asyncio.run(run_client(parser.parse_args()))
-    colorama.deinit()
+            # Send locations
+            if self.local_checked_locations != locations:
+                self.local_checked_locations = locations
+                await client_ctx.send_msgs([{
+                    'cmd': 'LocationChecks',
+                    'locations': locations
+                }])
+
+            # Send game clear
+            if game_clear and not client_ctx.finished_game:
+                await client_ctx.send_msgs([{
+                    'cmd': 'StatusUpdate',
+                    'status': ClientStatus.CLIENT_GOAL
+                }])
+
+            # TODO: Send tracker event flags
+
+            # TODO: Send deathlink
+
+            write_list = []
+            guard_list = [
+                # Ensure game state hasn't changed
+                guard8(game_mode_address, game_mode),
+                guard8(game_state_address, game_state),
+            ]
+
+            if gameplay_state == (2, 2):
+                if wario_stop_flag != 0:
+                    return
+                guard_list.append(guard16(wario_stop_flag_address, 0))
+
+            # TODO: Receive deathlink
+
+            # If the game hasn't received all items yet and the game isn't showing the player
+            # another item, then set up the next item message
+            if received_item_count < len(client_ctx.items_received) and multiworld_state == 0:
+                next_item = client_ctx.items_received[received_item_count]
+                next_item_id = next_item.item & 0xFF
+                next_item_sender = encode_str(client_ctx.player_names[next_item.player]) + b'\xFE'
+
+                write_list += [
+                    write8(incoming_item_address, next_item_id),
+                    write(item_sender_address, next_item_sender),
+                    write8(multiworld_state_address, 1),
+                ]
+                guard_list.append(guard8(multiworld_state_address, 0))
+
+            await bizhawk.guarded_write(bizhawk_ctx, write_list, guard_list)
+
+        except RequestFailedError:
+            # Exit handler and return to main loop to reconnect
+            pass
