@@ -91,7 +91,7 @@ components: List[Component] = [
                                                '.apsmw', '.apl2ac')),
     # BizHawk
     Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT,
-              file_identifier=SuffixIdentifier()),
+              file_identifier=SuffixIdentifier(".apemerald")),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),

@@ -1,30 +1,17 @@
-import asyncio
-from argparse import Namespace
-import json
-import os
-import subprocess
-from typing import Optional, Dict, Set, Tuple, Any
+from typing import TYPE_CHECKING, Optional, Dict, Set
 
-from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, gui_enabled, logger
 from NetUtils import ClientStatus
-import Patch
-from settings import get_settings
-from Utils import async_start
+import worlds._bizhawk as bizhawk
+from worlds._bizhawk.client import BizHawkClient
 
 from .data import BASE_OFFSET, data
 from .options import Goal
 
+if TYPE_CHECKING:
+    from worlds._bizhawk.context import BizHawkClientContext
+else:
+    BizHawkClientContext = object
 
-GBA_SOCKET_PORT = 43053
-
-EXPECTED_SCRIPT_VERSION = 2
-
-CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
-CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"
-CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart connector_pkmn_emerald.lua"
-CONNECTION_STATUS_TENTATIVE = "Initial connection made"
-CONNECTION_STATUS_CONNECTED = "Connected"
-CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
 IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
@@ -92,259 +79,179 @@ KEY_LOCATION_FLAGS = [
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
 
-class GBACommandProcessor(ClientCommandProcessor):
-    def _cmd_gba(self) -> None:
-        """Check GBA Connection State"""
-        if isinstance(self.ctx, GBAContext):
-            logger.info(f"GBA Status: {self.ctx.gba_status}")
-
-
-class GBAContext(CommonContext):
+class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
-    command_processor = GBACommandProcessor
-    items_handling = 0b001
-    gba_streams: Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
-    gba_status: Optional[str]
-    awaiting_rom = False
-    gba_push_pull_task: Optional[asyncio.Task]
+    system = "GBA"
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
-    goal_flag: int = IS_CHAMPION_FLAG
+    local_found_key_items: Dict[str, bool]
+    goal_flag: int
+    rom_slot_name: Optional[str]
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]):
-        super().__init__(server_address, password)
-        self.gba_streams = None
-        self.gba_status = CONNECTION_STATUS_INITIAL
-        self.gba_push_pull_task = None
+    def __init__(self) -> None:
+        super().__init__()
         self.local_checked_locations = set()
-        self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
-        self.local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
+        self.local_set_events = {}
+        self.local_found_key_items = {}
+        self.goal_flag = IS_CHAMPION_FLAG
+        self.rom_slot_name = None
 
-    async def server_auth(self, password_requested: bool = False) -> None:
-        if password_requested and not self.password:
-            await super(GBAContext, self).server_auth(password_requested)
-        if self.auth is None:
-            self.awaiting_rom = True
-            logger.info("Awaiting connection to GBA to get Player information")
-            return
-        await self.send_connect()
+    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+        from CommonClient import logger
 
-    def run_gui(self) -> None:
-        from kvui import GameManager
+        try:
+            # Check if ROM is some version of Pokemon Emerald
+            game_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 23, "ROM")]))[0]).decode("ascii")
+            if game_name != "pokemon emerald version":
+                return False
+            
+            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
+            # validating a ROM where there's no slot name to read.
+            try:
+                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(data.rom_addresses["gArchipelagoInfo"], 64, "ROM")]))[0]
+                self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
+            except UnicodeDecodeError:
+                logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+                return False
+        except UnicodeDecodeError:
+            return False
+        except bizhawk.RequestFailedError:
+            return False  # Should verify on the next pass
 
-        class GBAManager(GameManager):
-            base_title = "Archipelago Pokémon Emerald Client"
+        ctx.game = self.game
+        ctx.items_handling = 0b001
+        ctx.want_slot_data = True
+        return True
 
-        self.ui = GBAManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+        ctx.auth = self.rom_slot_name
 
-    def on_package(self, cmd: str, args: dict) -> None:
-        if cmd == "Connected":
-            slot_data = args.get("slot_data", None)
-            if slot_data is not None:
-                if slot_data["goal"] == Goal.option_champion:
-                    self.goal_flag = IS_CHAMPION_FLAG
-                elif slot_data["goal"] == Goal.option_steven:
-                    self.goal_flag = DEFEATED_STEVEN_FLAG
-                elif slot_data["goal"] == Goal.option_norman:
-                    self.goal_flag = DEFEATED_NORMAN_FLAG
+    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+        if ctx.slot_data is not None:
+            if ctx.slot_data["goal"] == Goal.option_champion:
+                self.goal_flag = IS_CHAMPION_FLAG
+            elif ctx.slot_data["goal"] == Goal.option_steven:
+                self.goal_flag = DEFEATED_STEVEN_FLAG
+            elif ctx.slot_data["goal"] == Goal.option_norman:
+                self.goal_flag = DEFEATED_NORMAN_FLAG
 
+        try:
+            # Checks that the player is in the overworld
+            overworld_guard = (data.ram_addresses["gMain"] + 4, (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"), "System Bus")
 
-def create_payload(ctx: GBAContext) -> str:
-    payload = json.dumps({
-        "items": [[item.item - BASE_OFFSET, item.flags & 1] for item in ctx.items_received]
-    })
+            # Read save block address
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [(data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus")],
+                [overworld_guard]
+            )
+            if read_result is None:  # Not in overworld
+                return
 
-    return payload
+            # Checks that the save block hasn't moved
+            save_block_address_guard = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
 
+            save_block_address = int.from_bytes(read_result[0], "little")
 
-async def handle_read_data(gba_data: Dict[str, Any], ctx: GBAContext) -> None:
-    local_checked_locations = set()
-    game_clear = False
+            # Read from save block and received item struct
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [
+                    (save_block_address + 0x1450, 0x12C, "System Bus"),                    # Flags
+                    (save_block_address + 0x3778, 2, "System Bus"),                        # Number of received items
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
+                ],
+                [overworld_guard, save_block_address_guard]
+            )
+            if read_result is None:  # Not in overworld, or save block moved
+                return
 
-    if "slot_name" in gba_data:
-        if ctx.auth is None:
-            ctx.auth = bytes([byte for byte in gba_data["slot_name"] if byte != 0]).decode("utf-8")
-            if ctx.awaiting_rom:
-                await ctx.server_auth(False)
+            flag_bytes = read_result[0]
+            num_received_items = int.from_bytes(read_result[1], "little")
+            received_item_is_empty = read_result[2][0] == 0
 
-    if "flag_bytes" in gba_data:
-        local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
-        local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
+            # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
+            # fill it with the next item
+            if num_received_items < len(ctx.items_received) and received_item_is_empty:
+                next_item = ctx.items_received[num_received_items]
+                await bizhawk.write(ctx.bizhawk_ctx, [
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [next_item.flags & 1], "System Bus"),
+                ])
 
-        # If flag is set and corresponds to a location, add to local_checked_locations
-        for byte_i, byte in enumerate(gba_data["flag_bytes"]):
-            for i in range(8):
-                if byte & (1 << i) != 0:
-                    flag_id = byte_i * 8 + i
+            game_clear = False
+            local_checked_locations = set()
+            local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
+            local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
 
-                    location_id = flag_id + BASE_OFFSET
-                    if location_id in ctx.server_locations:
-                        local_checked_locations.add(location_id)
+            # Check set flags
+            for byte_i, byte in enumerate(flag_bytes):
+                for i in range(8):
+                    if byte & (1 << i) != 0:
+                        flag_id = byte_i * 8 + i
 
-                    if flag_id == ctx.goal_flag:
-                        game_clear = True
+                        location_id = flag_id + BASE_OFFSET
+                        if location_id in ctx.server_locations:
+                            local_checked_locations.add(location_id)
 
-                    if flag_id in EVENT_FLAG_MAP:
-                        local_set_events[EVENT_FLAG_MAP[flag_id]] = True
+                        if flag_id == self.goal_flag:
+                            game_clear = True
 
-                    if flag_id in KEY_LOCATION_FLAG_MAP:
-                        local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
+                        if flag_id in EVENT_FLAG_MAP:
+                            local_set_events[EVENT_FLAG_MAP[flag_id]] = True
 
-        if local_checked_locations != ctx.local_checked_locations:
-            ctx.local_checked_locations = local_checked_locations
+                        if flag_id in KEY_LOCATION_FLAG_MAP:
+                            local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
 
-            if local_checked_locations is not None:
+            # Send locations
+            if local_checked_locations != self.local_checked_locations:
+                self.local_checked_locations = local_checked_locations
+
+                if local_checked_locations is not None:
+                    await ctx.send_msgs([{
+                        "cmd": "LocationChecks",
+                        "locations": list(local_checked_locations)
+                    }])
+
+            # Send game clear
+            if not ctx.finished_game and game_clear:
                 await ctx.send_msgs([{
-                    "cmd": "LocationChecks",
-                    "locations": list(local_checked_locations)
+                    "cmd": "StatusUpdate",
+                    "status": ClientStatus.CLIENT_GOAL
                 }])
 
-        if not ctx.finished_game and game_clear:
-            await ctx.send_msgs([{
-                "cmd": "StatusUpdate",
-                "status": ClientStatus.CLIENT_GOAL
-            }])
+            # Send tracker event flags
+            if local_set_events != self.local_set_events and ctx.slot is not None:
+                event_bitfield = 0
+                for i, flag_name in enumerate(TRACKER_EVENT_FLAGS):
+                    if local_set_events[flag_name]:
+                        event_bitfield |= 1 << i
 
-        if local_set_events != ctx.local_set_events:
-            event_bitfield = 0
-            for i, flag_name in enumerate(TRACKER_EVENT_FLAGS):
-                if local_set_events[flag_name]:
-                    event_bitfield |= 1 << i
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"pokemon_emerald_events_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "replace", "value": event_bitfield}]
+                }])
+                self.local_set_events = local_set_events
 
-            await ctx.send_msgs([{
-                "cmd": "Set",
-                "key": f"pokemon_emerald_events_{ctx.team}_{ctx.slot}",
-                "default": 0,
-                "want_reply": False,
-                "operations": [{"operation": "replace", "value": event_bitfield}]
-            }])
-            ctx.local_set_events = local_set_events
+            if local_found_key_items != self.local_found_key_items:
+                key_bitfield = 0
+                for i, location_name in enumerate(KEY_LOCATION_FLAGS):
+                    if local_found_key_items[location_name]:
+                        key_bitfield |= 1 << i
 
-        if local_found_key_items != ctx.local_found_key_items:
-            key_bitfield = 0
-            for i, location_name in enumerate(KEY_LOCATION_FLAGS):
-                if local_found_key_items[location_name]:
-                    key_bitfield |= 1 << i
-
-            await ctx.send_msgs([{
-                "cmd": "Set",
-                "key": f"pokemon_emerald_keys_{ctx.team}_{ctx.slot}",
-                "default": 0,
-                "want_reply": False,
-                "operations": [{"operation": "replace", "value": key_bitfield}]
-            }])
-            ctx.local_found_key_items = local_found_key_items
-
-
-async def gba_send_receive_task(ctx: GBAContext) -> None:
-    logger.info("Waiting to connect to GBA. Use /gba for status information")
-    while not ctx.exit_event.is_set():
-        error_status: Optional[str] = None
-
-        if ctx.gba_streams is None:
-            # Make initial connection
-            try:
-                logger.debug("Attempting to connect to GBA...")
-                ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_SOCKET_PORT), timeout=10)
-                ctx.gba_status = CONNECTION_STATUS_TENTATIVE
-            except asyncio.TimeoutError:
-                logger.debug("Connection to GBA timed out. Retrying.")
-                ctx.gba_status = CONNECTION_STATUS_TIMING_OUT
-                continue
-            except ConnectionRefusedError:
-                logger.debug("Connection to GBA refused. Retrying.")
-                ctx.gba_status = CONNECTION_STATUS_REFUSED
-                continue
-        else:
-            (reader, writer) = ctx.gba_streams
-
-            message = create_payload(ctx).encode("utf-8")
-            writer.write(message)
-            writer.write(b"\n")
-
-            # Write
-            try:
-                await asyncio.wait_for(writer.drain(), timeout=2)
-            except asyncio.TimeoutError:
-                logger.debug("Connection to GBA timed out. Reconnecting.")
-                error_status = CONNECTION_STATUS_TIMING_OUT
-                writer.close()
-                ctx.gba_streams = None
-            except ConnectionResetError:
-                logger.debug("Connection to GBA lost. Reconnecting.")
-                error_status = CONNECTION_STATUS_RESET
-                writer.close()
-                ctx.gba_streams = None
-
-            # Read
-            try:
-                data_bytes = await asyncio.wait_for(reader.readline(), timeout=5)
-                data_decoded = json.loads(data_bytes.decode("utf-8"))
-
-                if data_decoded["script_version"] != EXPECTED_SCRIPT_VERSION:
-                    logger.warning(f"Your connector script is incompatible with this client. Expected version {EXPECTED_SCRIPT_VERSION}, got {data_decoded['script_version']}.")
-                    break
-
-                async_start(handle_read_data(data_decoded, ctx))
-            except asyncio.TimeoutError:
-                logger.debug("Connection to GBA timed out during read. Reconnecting.")
-                error_status = CONNECTION_STATUS_TIMING_OUT
-                writer.close()
-                ctx.gba_streams = None
-            except ConnectionResetError:
-                logger.debug("Connection to GBA lost during read. Reconnecting.")
-                error_status = CONNECTION_STATUS_RESET
-                writer.close()
-                ctx.gba_streams = None
-
-            if error_status:
-                ctx.gba_status = error_status
-                logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
-            elif ctx.gba_status == CONNECTION_STATUS_TENTATIVE:
-                logger.info("Connected to GBA")
-                ctx.gba_status = CONNECTION_STATUS_CONNECTED
-
-
-async def run_game(rom_file_path: str) -> None:
-    auto_start = get_settings()["pokemon_emerald_settings"].get("rom_start", True)
-    if auto_start is True:
-        import webbrowser
-        webbrowser.open(rom_file_path)
-    elif os.path.isfile(auto_start):
-        subprocess.Popen([auto_start, rom_file_path],
-                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-
-async def patch_and_run_game(patch_file_path: str) -> None:
-    meta_data, output_file_path = Patch.create_rom_file(patch_file_path)
-    async_start(run_game(output_file_path))
-
-
-parser = get_base_parser()
-parser.add_argument("apemerald_file", default="", type=str, nargs="?", help="Path to an APEMERALD file")
-args = parser.parse_args()
-
-
-def launch() -> None:
-    async def main(args: Namespace) -> None:
-        ctx = GBAContext(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-
-        if args.apemerald_file:
-            logger.info("Beginning patching process...")
-            async_start(patch_and_run_game(args.apemerald_file))
-
-        ctx.gba_push_pull_task = asyncio.create_task(gba_send_receive_task(ctx), name="GBA Push/Pull")
-
-        await ctx.exit_event.wait()
-        await ctx.shutdown()
-
-    import colorama
-    colorama.init()
-    asyncio.run(main(args))
-    colorama.deinit()
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"pokemon_emerald_keys_{ctx.team}_{ctx.slot}",
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "replace", "value": key_bitfield}]
+                }])
+                self.local_found_key_items = local_found_key_items
+        except bizhawk.RequestFailedError:
+            # Exit handler and return to main loop to reconnect
+            pass
