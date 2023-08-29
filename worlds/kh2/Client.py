@@ -704,7 +704,7 @@ class KH2Context(CommonContext):
                 # if slot1 has 5 drive gauge and goa lost illusion is checked and they are not in a cutscene
                 if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
                         and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
-                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0xB627B4) == 255:
+                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10,8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             if self.generator_version.build > 1 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.2
