@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from pathlib import Path
-from typing import Dict
+from io import StringIO
+import pkgutil
+from typing import Mapping
 
 
 ap_id_offset = 0xEC00
@@ -20,9 +21,14 @@ class Domain(Enum):
         return addr
 
 
-def _get_symbols(symbol_file: Path) -> Dict[str, int]:
+def data_path(file_name: str):
+    return pkgutil.get_data(__name__, f"data/{file_name}")
+
+
+def _get_symbols() -> Mapping[str, int]:
     symbols = {}
-    with open(symbol_file, 'r') as stream:
+    symbol_data = data_path("basepatch.sym").decode("utf-8")
+    with StringIO(symbol_data) as stream:
         for line in stream:
             try:
                 addr, label, *_ = line.split()
@@ -39,9 +45,10 @@ def _get_symbols(symbol_file: Path) -> Dict[str, int]:
     return symbols
 
 
-def _get_charset(charset_file: Path) -> Dict[str, int]:
+def _get_charset() -> Mapping[str, int]:
     charset = {}
-    with open(charset_file, 'r', encoding='utf-8') as stream:
+    symbol_data = data_path("charset.tbl").decode("utf-8")
+    with StringIO(symbol_data) as stream:
         for line in stream:
             try:
                 byte, character = line.strip().split('=')
@@ -53,8 +60,8 @@ def _get_charset(charset_file: Path) -> Dict[str, int]:
     return charset
 
 
-symbols = _get_symbols(Path(__file__).parent / 'data/basepatch.sym')
-charset = _get_charset(Path(__file__).parent / 'data/charset.tbl')
+symbols = _get_symbols()
+charset = _get_charset()
 
 
 def get_symbol(symbol: str, offset: int = 0) -> int:

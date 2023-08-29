@@ -9,7 +9,7 @@ import Utils
 from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
-from .data import ap_id_offset, Domain, encode_str, get_symbol
+from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
 
 
 MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
@@ -31,11 +31,10 @@ class LocalRom():
         self.name = name
         self.hash = hash
 
-        patch_path = Path(__file__).parent / 'data' / 'basepatch.bsdiff'
-        with open(file, 'rb') as rom_file, open(patch_path, 'rb') as patch_file:
+        with open(file, "rb") as rom_file:
             rom_bytes = rom_file.read()
-            patch_bytes = patch_file.read()
-            self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
+        patch_bytes = data_path("basepatch.bsdiff")
+        self.buffer = bytearray(bsdiff4.patch(rom_bytes, patch_bytes))
 
     def read_bit(self, address: int, bit_number: int, space: Domain = Domain.SYSTEM_BUS) -> bool:
         address = Domain.ROM.convert_from(space, address)
