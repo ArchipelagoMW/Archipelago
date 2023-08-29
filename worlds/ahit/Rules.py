@@ -230,7 +230,7 @@ def set_rules(world: World):
 
         for hat in data.required_hats:
             if hat is not HatType.NONE:
-                add_rule(location, lambda state: can_use_hat(state, w, hat))
+                add_rule(location, lambda state, hat=hat: can_use_hat(state, w, hat))
 
         if data.hookshot:
             add_rule(location, lambda state: can_use_hookshot(state, w))
