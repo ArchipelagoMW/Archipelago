@@ -4,10 +4,6 @@ window.addEventListener('load', () => {
         const ajax = new XMLHttpRequest();
         ajax.onreadystatechange = () => {
             if (ajax.readyState !== 4) { return; }
-            if (ajax.status === 404) {
-                reject("Sorry, the changelog page is not available in that language yet.");
-                return;
-            }
             if (ajax.status !== 200) {
                 reject("Something went wrong while loading the changelog.");
                 return;
