@@ -1,8 +1,9 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from flask import render_template
 from pony.orm import count
 
+from Utils import __version__
 from WebHostLib import app, cache
 from .models import Room, Seed
 
@@ -12,4 +13,4 @@ from .models import Room, Seed
 def landing():
     rooms = count(room for room in Room if room.creation_time >= datetime.utcnow() - timedelta(days=7))
     seeds = count(seed for seed in Seed if seed.creation_time >= datetime.utcnow() - timedelta(days=7))
-    return render_template("landing.html", rooms=rooms, seeds=seeds)
+    return render_template("landing.html", rooms=rooms, seeds=seeds, version=__version__)
