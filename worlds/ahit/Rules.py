@@ -274,7 +274,7 @@ def set_rules(world: World):
 
         for act in acts:
             act_entrance: Entrance = mw.get_entrance(act, p)
-
+            access_rules.append(act_entrance.access_rule)
             required_region = act_entrance.connected_region
             name: str = format("%s: Connection %i" % (key, i))
             new_entrance: Entrance = connect_regions(required_region, region, name, p)
@@ -690,127 +690,127 @@ def connect_regions(start_region: Region, exit_region: Region, entrancename: str
 
 def set_painting_rules(world: World):
     add_rule(world.multiworld.get_location("Subcon Village - Snatcher Statue Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Gravestone", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Near Well", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Tree A", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Tree B", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Ice Wall", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Treehouse", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Swamp Tree Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Ice Cube Shack", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Manor Rooftop", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Well - Hookshot Badge Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Well - Above Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Well - On Pipe", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Well - Mushroom", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Queen Vanessa's Manor - Cellar", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Queen Vanessa's Manor - Bedroom Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Queen Vanessa's Manor - Hall Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Queen Vanessa's Manor - Chandelier", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Burning House", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Burning Tree Climb", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Burning Stump Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Burning Forest Treehouse", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Spider Bone Cage A", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Spider Bone Cage B", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Triple Spider Bounce", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Infinite Yarn Bush", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 2))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 2))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Stump", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Floating Rocks", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree A", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Giant Time Piece", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Gallows", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Green and Purple Dweller Rocks", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Dweller Shack", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Tall Tree Hookshot Swing", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Subcon Forest - Magnet Badge Bush", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 3))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 3))
 
     add_rule(world.multiworld.get_location("Act Completion (Contractual Obligations)", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Act Completion (The Subcon Well)", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
 
     add_rule(world.multiworld.get_location("Act Completion (Queen Vanessa's Manor)", world.player),
-             lambda state: state.has("Progressive Painting Unlock", 1))
+             lambda state: state.has("Progressive Painting Unlock", world.player, 1))
