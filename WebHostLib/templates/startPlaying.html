@@ -12,17 +12,27 @@
         <div id="start-playing" class="grass-island {% if rooms %}wider{% endif %}">
             <h1>Start Playing</h1>
             <p>
-                If you're ready to start playing but don't know where to begin, check out the
-                <a href="/tutorial">tutorials</a> page. It has all the resources you need to create a config file
-                and get started. If you already have a config file, or a zip file containing them, read on.
+                If you're ready to play but don't know where to begin,
+                check out our tutorials for setting up Archipelago on
+                <a href="/tutorial/Archipelago/setup/en">Windows</a>
+                and <a href="/tutorial/Archipelago/mac/en">Mac</a>.<br />
+                Then, choose a game from our <a href="/games">supported games</a> to set up your particular game
+                for randomization.
                 <br /><br />
 
-                To start playing a game, you'll first need to <a href="/generate">generate a randomized game</a>.
-                You'll need to upload either a config file or a zip file containing one more config files.
-                <br /><br />
 
-                If you have already generated a game and just need to host it, this site can<br />
-                <a href="uploads">host a pre-generated game</a> for you.
+                To start playing an Archipelago multi-world, you can either generate a game on the site, or provide
+                your pre-generated game to host on the site.<br />
+                <div>
+                <button onclick="window.location.href='/generate';">
+                    Generate Game on Site
+                </button>
+                <button onclick="window.location.href='/uploads';">
+                    Host Pre-Generated Game
+                </button>
+                </div>
+
+
             </p>
         </div>
     </div>
