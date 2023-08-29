@@ -1,94 +1,133 @@
-# Multiworld Glossary
+# Multi-world Glossary
 
-There are a lot of common terms used when playing in different game randomizer communities and in multiworld as well.
-This document serves as a lookup for common terms that may be used by users in the community or in various other
-documentation.
+There are many common terms used with different communities when playing in their randomizers.
+This page list and defines the terms common to Archipelago and its randomized games.
 
+# Basics
 ## Item
-Items are what get shuffled around in your world or other worlds that you then receive. This could be a sword, a stat 
+Items are what get shuffled around between world that get sent and received by players. This could be a sword, a stat 
 upgrade, a spell, or any other potential receivable for your game.
 
 ## Location
-Locations are where items are placed in your game. Whenever you interact with a location, you or another player will
-then receive an item. A location could be a chest, an enemy drop, a shop purchase, or any other interactable that can
-contain items in your game.
+Locations are where randomized items are placed in your game. Whenever you interact with a location, 
+you or another player will then receive an item that was randomized to that specific location. 
+A location could be a chest, an enemy drop, a shop purchase, or any other interactable/condition that can contain 
+items in your game.
 
 ## Check
 A check is a common term for when you "check", or pick up, a location. In terms of Archipelago this is usually used for
 when a player goes to a location and sends its item, or "checks" the location. Players will often reference their now
-randomized locations as checks.
+randomized locations as checks. Because of this, location and check are often used interchangeably.
 
+
+# Generation
 ## Slot
-A slot is the player name and number assigned during generation. The number of slots is equal to the number of players,
-or "worlds", created. Each name must be unique as these are used to identify the slot user.
+A slot is the player name, game, and number identifier given to a player when a multi-world game is generated. Because
+a slot name must uniquely identify a player/game combination, all slots must have a different name. This is true even
+if one player is playing multiple games. 
+
+Therefore, if PlayerA wants to play both **Super Mario 64** and **Ocarina of Time**,
+they may decide to use the slot names `PlayerA_Mario` and `PlayerA_Zelda` respectively.
 
 ## World
 World in terms of Archipelago can mean multiple things and is used interchangeably in many situations.
 * During gameplay, a world is a single instance of a game, occupying one player "slot". However, 
-Archipelago allows multiple players to connect to the same slot; then those players can share a world 
+Archipelago allows multiple players to connect to the same slot, allowing those players can share a world 
 and complete it cooperatively. For games with native cooperative play, you can also play together and
-share a world that way, usually with only one player connected to the multiworld.
+share a world that way, usually with only one player connected to the multi-world.
 * On the programming side, a world typically represents the package that integrates Archipelago with a
 particular game. For example this could be the entire `worlds/factorio` directory.
 
 ## RNG
-Acronym for "Random Number Generator." Archipelago uses its own custom Random object with a unique seed per generation,
-or, if running from source, a seed can be supplied and this seed will control all randomization during generation as all
-game worlds will have access to it.
+Acronym for "Random Number Generator." This can refer to any number of things that have an element of randomization to 
+it. For generation, it can refer to likelihood that an item was put in a particular location. In gameplay, it can refer
+to parts of the game that rely on random chance, such as simulated gambling, random events, or a particular game 
+sequence that can be difficult regardless of skill level.
+
+RNG is often described as either good or bad. Good RNG benefits the player, making their experience easier than it 
+otherwise would be. Bad RNG manifests in the form of a string of bad luck, where it is rather unlikely that the game
+would result in such a negative result.
 
 ## Seed
 A "seed" is a number used to initialize a pseudorandom number generator. Whenever you generate a new game on Archipelago
 this is a new "seed" as it has unique item placement, and you can create multiple "rooms" on the Archipelago site from a
-single seed. Using the same seed results in the random placement being the same.
+single seed. Using the same seed results in the random placement being the same. If running from source, a seed can be 
+supplied and this seed will control all randomization during generation as all game worlds will have access to it.
 
 ## Room
 Whenever you generate a seed on the Archipelago website you will be put on a seed page that contains all the seed info
-with a link to the spoiler if one exists and will show how many unique rooms exist per seed. Each room has its own 
+with a link to the spoiler log, if one exists, and will show how many unique rooms exist per seed. Each room has its own 
 unique identifier that is separate from the seed. The room page is where you can find information to connect to the
-multiworld and download any patches if necessary. If you have a particularly fun or interesting seed, and you want to 
-share it with somebody you can link them to this seed page, where they can generate a new room to play it! For seeds 
-generated with race mode enabled, the seed page will only show rooms created by the unique user so the seed page is 
-perfectly safe to share for racing purposes.
+multi-world and download any patches if necessary. If you have a particularly fun or interesting seed, you can share it 
+with somebody by sending the link to this seed page. From this page, they can generate a new room to play the seed! 
+For seeds generated with race mode enabled, the seed page will only show rooms created by the unique user so the 
+seed page is perfectly safe to share for racing purposes.
 
 ## Logic
-Base behavior of all seeds generated by Archipelago is they are expected to be completable based on the requirements of
-the settings. This is done by using "logic" in order to determine valid locations to place items while still being able
-to reach said location without this item. For the purposes of the randomizer a location is considered "in logic" if you 
-can reach it with your current toolset of items or skills based on settings. Some players are able to obtain locations
-"out of logic" by performing various glitches or tricks that the settings may not account for and tend to mention this
-when sending out an item they obtained this way.
+The base expectation of all seeds generated by Archipelago is they are expected to be completable based on the 
+requirements of the settings. This is done by using "logic" in order to determine valid locations to place items 
+while still being able to reach said location without this item. For the purposes of the randomizer, a location is 
+considered "in logic" if you can reach it with your current toolset of items or skills based on settings. 
+Some players are able to obtain locations "out of logic" by performing various glitches or tricks that the settings 
+may not account for and tend to mention this when sending out an item they obtained this way.
 
-## Progression
-Certain items will allow access to more locations and are considered progression items as they "progress" the seed.
+## Sphere
+Archipelago calculates the game play-through by using a "sphere" system where it has a state for each player and checks
+to see what the players are able to reach with their current items. Any location that is reachable with the current
+state of items is a "sphere." For the purposes of Archipelago it starts play-through calculation by distributing sphere 0
+items which are items that are either forced in the player's inventory by the game or placed in the `start_inventory` in
+their settings. Sphere 1 is then all accessible locations the players can reach with all the items they received from
+sphere 0, or their starting inventory. The play-through continues in this fashion calculating a number of spheres until
+all players have completed their goal.
 
-## Trash
+
+# Items
+## Progression Item
+Certain items will allow access to more locations and are considered progression items as they "progress" the seed. Most
+of the time, these progression items are needed to complete your game.
+
+## Trash Item
 A term used for "filler" items that have no bearing on the generation and are either marginally useful for the player
 or useless. These items can be very useful depending on the player but are never very important and as such are usually
 termed trash.
 
+### Trap
+A type of trash item that actively hurts a player rather than having minimal or no effect like normal trash items.
+
+
+# Gameplay
+## Go Mode
+A term used in randomizers to describe when a player has all the items necessary to complete the game. For some game, 
+these items may be known before randomization takes place, however many games also have the option to hide what is 
+needed to beat the game until it is otherwise discovered in-game. Particularly open-ended games may have multiple
+collections of Go Mode items, which means that various endings may be made available.
+
 ## Burger King / BK Mode
-A term used in multiworlds when a player is unable to continue to progress and is awaiting an item. The term came to be 
-after a player, allegedly, was unable to progress during a multiworld and went to Burger King while waiting to receive
+A term used in multi-worlds when a player is unable to continue to progress and is awaiting an item. The term came to be 
+after a player, allegedly, was unable to progress during a multi-world and went to Burger King while waiting to receive
 items from other players.
 
-* "Logical BK" is when the player is unable to progress according to the settings of their game but may still be able to do
+* "Logically BK" is when the player is unable to progress according to the settings of their game but may still be able to do
 things that would be "out of logic" by the generation.
 
-* "Hard / full BK" is when the player is completely unable to progress even with tricks they may know and are unable to
+* "Hard / Full BK" is when the player is completely unable to progress even with tricks they may know and are unable to
 continue to play, aside from doing something like killing enemies for experience or money.
 
-## Sphere
-Archipelago calculates the game playthrough by using a "sphere" system where it has a state for each player and checks
-to see what the players are able to reach with their current items. Any location that is reachable with the current
-state of items is a "sphere." For the purposes of Archipelago it starts playthrough calculation by distributing sphere 0
-items which are items that are either forced in the player's inventory by the game or placed in the `start_inventory` in
-their settings. Sphere 1 is then all accessible locations the players can reach with all the items they received from
-sphere 0, or their starting inventory. The playthrough continues in this fashion calculating a number of spheres until
-all players have completed their goal.
-
 ## Scouts / Scouting
-In some games there are locations that have visible items even if the item itself is unobtainable at the current time.
+In some games, there are locations that have visible items even if the item itself is unobtainable at the current time.
 Some games utilize a scouting feature where when the player "sees" the item it will give a free hint for the item in the
-client letting the players know what the exact item is, since if the item was for that game it would know but the item
-being foreign is a lot harder to represent visually.
+client letting the players know what the exact item is. This is because items in other games can be difficult to 
+represent visually in-game, so it may be necessary to provide the item name through hints rather than an in-game 
+representation.
+
+## Release
+Describes when a player sends out all of their items from the game they are playing. This can either be achieved by 
+completing their game and releasing items if the seed allows it, or by manually releasing the game in the event that
+a player is unable to complete their game for various reasons. This ensures that all players receive every item 
+contained within another world.
+
+## Collect
+An optional setting within Archipelago which allows players to "pull" all the items for their world from other worlds.
+Usually, this is done after releasing a game, allowing other players to avoid doing unnecessary checks by showing what
+locations are now empty. However, this setting can be enabled to the same degree of freedom as the release command.
 
