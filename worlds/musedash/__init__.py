@@ -40,14 +40,14 @@ class MuseDashWorld(World):
     game = "Muse Dash"
     option_definitions = musedash_options
     topology_present = False
-    data_version = 8
+    data_version = 9
     web = MuseDashWebWorld()
 
     # Necessary Data
-    md_collection = MuseDashCollections(2900000, 2)
+    md_collection = MuseDashCollections()
 
-    item_name_to_id = md_collection.item_names_to_id
-    location_name_to_id = md_collection.location_names_to_id
+    item_name_to_id = {name: code for name, code in md_collection.item_names_to_id.items()}
+    location_name_to_id = {name: code for name, code in md_collection.location_names_to_id.items()}
 
     # Working Data
     victory_song_name: str = ""
@@ -167,11 +167,12 @@ class MuseDashWorld(World):
         if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
-        song = self.md_collection.song_items.get(name)
-        if song:
-            return MuseDashSongItem(name, self.player, song)
+        album = self.md_collection.album_items.get(name)
+        if album:
+            return MuseDashSongItem(name, self.player, album)
 
-        return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
+        song = self.md_collection.song_items.get(name)
+        return MuseDashSongItem(name, self.player, song)
 
     def create_items(self) -> None:
         song_keys_in_pool = self.included_songs.copy()
