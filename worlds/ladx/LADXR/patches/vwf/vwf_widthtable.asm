@@ -48,8 +48,43 @@ saveLetterWidths:
 	ld [CURR_CHAR_SIZE],a
 	pop de
     ; patch
-    ld   a, $1C ;BANK(CodepointToTileMap)              ; $260B: $3E $1C
-    ld   [rSelectROMBank], a                      ; $260D: $EA $00 $21
-    ld   hl, CodepointToTileMap                   ; $2610: $21 $41 $46
+	ld   hl, CodepointToTileMapNew                   ; $2610: $21 $41 $46
+    add  hl, de                                   ; $2613: $19
+    ld   e, [hl]                                  ; $2614: $5E
+    ld   d, $00                                   ; $2615: $16 $00
+    sla  e                                        ; $2617: $CB $23
     ; patch end
 	ret
+
+CodepointToTileMapNew:
+    db  $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e
+
+    db  $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e
+;  $20        !    "    #    $    %    &    '    (    )    *    +    ,    -           
+    db  $7e, $3d, $41, $16, $8a, $8b, $44, $40, $45, $46, $8c, $8d, $3a, $3f, $39, $7e
+;  $30   0    1    2    3    4    5    6    7    8    9    :    ;    <    =    >    ?
+    db  $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $42, $43, $8e, 0  , $8f, $3c
+;  $40   @    A    B    C    D    E    F    G    H    I    J    K    L    M    N    O
+    db  0  , 0  , $01, $02, $03, $04, $05, $06, $07, $08, $09, $0a, $0b, $0c, $0d, $0e
+;  $50   P    Q    R    S    T    U    V    W    X    Y    Z   ...   \    ]    ^    _
+    db  $0f, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $6F, 0  , 0  , $40, 0
+;  $60   `    a    b    c    d    e    f    g    h    i    j    k    l    m    n    o
+    db  0  , $1a, $1b, $1c, $1d, $1e, $1f, $20, $21, $22, $23, $24, $25, $26, $27, $28
+;  $70   p    q    r    s    t    u    v    w    x    y    z    --   |    }    ~
+    db  $29, $2a, $2b, $2c, $2d, $2e, $2f, $30, $31, $32, $3e, $4e, 0  , 0  , 0  , 0
+;  $80   Á    É    Í    Ó    Ú    Ü    Ñ    --   Ç    á    é    í    ó    ú    ü    ñ
+    db  $47, $48, $49, $4a, $4b, $4c, $4d, $4e, $4f, $50, $51, $52, $53, $54, $55, $56
+;  $90   à    è    ì    ò    ù    ä    ë    ï    ö   ...   ¡    ¿    "    '    .
+    db  $57, $58, $59, $5A, $5B, $5C, $5D, $5E, $5F, $6f, $6e, $6d, $6c, $6b, $6a, 0
+;  $A0   !    ?    -  BLANK  .    ,    .2   "     
+    db  $3d, $3c, $3f, $7e, $39, $3a, $3b, $7a, $7b, 0  , 0  , 0  , 0  , 0  , 0  , 0
+;  $B0   0    1    2    3    4    5    6    7    8    9    â    ê    î    ô    û
+    db  $70, $71, $72, $73, $74, $75, $76, $77, $78, $79, $9b, $9c, $9d, $9e, $9f, $38
+;  $C0   0    1    2    3    4    5    6    7    8    9  
+    db  $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, 0  , 0  , 0  , 0  , 0  , 0
+;  $D0   A2  B2   C2   D2   E2   F2   DPAD LTTR YOSH HIBS FOOT (X)  SKUL LINK MARN TARN
+    db  $80, $81, $82, $83, $84, $85, $86, $87, $88, $89, $8a, $8b, $8c, $8d, $8e, $8f
+;  $E0  YOSH BOW  CAN  BANA STCK BEEH PINE BROM HOOK BRA  SCAL GLAS      LTTR DPAD
+    db  $88, $90, $91, $92, $93, $94, $95, $89, $96, $97, $98, $99, $9a, $87, $86, 0
+;  $F0   UP  DOWN LEFT RIGHT                                            BLANK
+    db  $34, $35, $36, $37, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e, $7e
