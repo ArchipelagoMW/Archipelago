@@ -8,7 +8,7 @@ from .Regions import create_region, create_regions, connect_regions, randomize_a
     create_events, chapter_regions, act_chapters
 
 from .Locations import HatInTimeLocation, location_table, get_total_locations, contract_locations, is_location_valid, \
-    get_location_names
+    get_location_names, get_tasksanity_start_id
 
 from .Types import HatDLC, HatType, ChapterIndex
 from .Options import ahit_options, slot_data_options, adjust_options
@@ -18,6 +18,7 @@ import typing
 
 hat_craft_order: typing.Dict[int, typing.List[HatType]] = {}
 hat_yarn_costs: typing.Dict[int, typing.Dict[HatType, int]] = {}
+slot_data_yarn_costs: typing.Dict[int, typing.Dict[HatType, int]] = {}
 chapter_timepiece_costs: typing.Dict[int, typing.Dict[ChapterIndex, int]] = {}
 
 
@@ -78,6 +79,9 @@ class HatInTimeWorld(World):
     def create_items(self):
         hat_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
                                        HatType.DWELLER: -1, HatType.TIME_STOP: -1}
+
+        slot_data_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
+                                             HatType.DWELLER: -1, HatType.TIME_STOP: -1}
 
         hat_craft_order[self.player] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
                                         HatType.DWELLER, HatType.TIME_STOP]
@@ -167,11 +171,11 @@ class HatInTimeWorld(World):
         return create_item(self, name)
 
     def fill_slot_data(self) -> dict:
-        slot_data: dict = {"SprintYarnCost": hat_yarn_costs[self.player][HatType.SPRINT],
-                           "BrewingYarnCost": hat_yarn_costs[self.player][HatType.BREWING],
-                           "IceYarnCost": hat_yarn_costs[self.player][HatType.ICE],
-                           "DwellerYarnCost": hat_yarn_costs[self.player][HatType.DWELLER],
-                           "TimeStopYarnCost": hat_yarn_costs[self.player][HatType.TIME_STOP],
+        slot_data: dict = {"SprintYarnCost": slot_data_yarn_costs[self.player][HatType.SPRINT],
+                           "BrewingYarnCost": slot_data_yarn_costs[self.player][HatType.BREWING],
+                           "IceYarnCost": slot_data_yarn_costs[self.player][HatType.ICE],
+                           "DwellerYarnCost": slot_data_yarn_costs[self.player][HatType.DWELLER],
+                           "TimeStopYarnCost": slot_data_yarn_costs[self.player][HatType.TIME_STOP],
                            "Chapter1Cost": chapter_timepiece_costs[self.player][ChapterIndex.MAFIA],
                            "Chapter2Cost": chapter_timepiece_costs[self.player][ChapterIndex.BIRDS],
                            "Chapter3Cost": chapter_timepiece_costs[self.player][ChapterIndex.SUBCON],
@@ -203,7 +207,7 @@ class HatInTimeWorld(World):
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         new_hint_data = {}
-        alpine_regions = ["The Birdhouse", "The Lava Cake", "The Windmill", "The Twilight Bell"]
+        alpine_regions = ["The Birdhouse", "The Lava Cake", "The Windmill", "The Twilight Bell", "Alpine Skyline Area"]
         metro_regions = ["Yellow Overpass Station", "Green Clean Station", "Bluefin Tunnel", "Pink Paw Station"]
 
         for key, data in location_table.items():
@@ -226,7 +230,7 @@ class HatInTimeWorld(World):
 
         if self.multiworld.EnableDLC1[self.player].value > 0 and self.multiworld.Tasksanity[self.player].value > 0:
             ship_shape_region = self.get_shuffled_region("Ship Shape")
-            id_start: int = 300204
+            id_start: int = get_tasksanity_start_id()
             for i in range(self.multiworld.TasksanityCheckCount[self.player].value):
                 new_hint_data[id_start+i] = ship_shape_region
 
@@ -248,7 +252,8 @@ class HatInTimeWorld(World):
         max_cost: int = 0
         for i in range(5):
             cost = mw.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
-            hat_yarn_costs[self.player][HatType(i)] = cost
+            hat_yarn_costs[self.player][HatType(i)] = cost + max_cost
+            slot_data_yarn_costs[self.player][HatType(i)] = cost
             max_cost += cost
 
         available_yarn = mw.YarnAvailable[p].value

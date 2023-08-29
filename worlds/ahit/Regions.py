@@ -1,6 +1,7 @@
 from worlds.AutoWorld import World
 from BaseClasses import Region, Entrance, ItemClassification, Location
-from .Locations import HatInTimeLocation, location_table, storybook_pages, event_locs, is_location_valid, shop_locations
+from .Locations import HatInTimeLocation, location_table, storybook_pages, event_locs, is_location_valid, \
+    shop_locations, get_tasksanity_start_id
 from .Items import HatInTimeItem
 from .Types import ChapterIndex
 import typing
@@ -413,11 +414,10 @@ def create_rift_connections(world: World, region: Region):
 
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
-    id_start: int = 300204
+    id_start: int = get_tasksanity_start_id()
     for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
         location = HatInTimeLocation(world.player, format("Tasksanity Check %i" % (i+1)), id_start+i, ship_shape)
         ship_shape.locations.append(location)
-        # world.location_name_to_id.setdefault(location.name, location.address)
 
 
 def randomize_act_entrances(world: World):
