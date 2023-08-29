@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import sys
 import asyncio
 import typing
 import bsdiff4
@@ -11,7 +12,7 @@ from NetUtils import NetworkItem, ClientStatus
 from worlds import undertale
 from MultiServer import mark_raw
 from CommonClient import CommonContext, server_loop, \
-    gui_enabled, ClientCommandProcessor, get_base_parser
+    gui_enabled, ClientCommandProcessor, logger, get_base_parser
 from Utils import async_start
 
 
@@ -31,6 +32,12 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
             os.makedirs(name=os.getcwd() + "\\Undertale", exist_ok=True)
             self.ctx.patch_game()
             self.output("Patched.")
+
+    def _cmd_savepath(self, directory: str):
+        """Redirect to proper save data folder. (Use before connecting!)"""
+        if isinstance(self.ctx, UndertaleContext):
+            UndertaleContext.save_game_folder = directory
+            self.output("Changed to the following directory: " + directory)
 
     @mark_raw
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
@@ -92,6 +99,7 @@ class UndertaleContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.pieces_needed = 0
+        self.finished_game = False
         self.game = "Undertale"
         self.got_deathlink = False
         self.syncing = False
@@ -99,6 +107,8 @@ class UndertaleContext(CommonContext):
         self.tem_armor = False
         self.completed_count = 0
         self.completed_routes = {"pacifist": 0, "genocide": 0, "neutral": 0}
+        # self.save_game_folder: files go in this path to pass data between us and the actual game
+        self.save_game_folder = os.path.expandvars(r"%localappdata%/UNDERTALE")
 
     def patch_game(self):
         with open(os.getcwd() + "/Undertale/data.win", "rb") as f:
@@ -227,7 +237,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
             f.close()
         filename = f"check.spot"
         with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-            for ss in ctx.checked_locations:
+            for ss in set(args["checked_locations"]):
                 f.write(str(ss-12000)+"\n")
             f.close()
     elif cmd == "LocationInfo":
@@ -353,7 +363,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         if "checked_locations" in args:
             filename = f"check.spot"
             with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
-                for ss in ctx.checked_locations:
+                for ss in set(args["checked_locations"]):
                     f.write(str(ss-12000)+"\n")
                 f.close()
 
@@ -424,10 +434,10 @@ async def game_watcher(ctx: UndertaleContext):
                             lines = f.readlines()
                         for l in lines:
                             if ctx.server_locations.__contains__(int(l)+12000):
-                                sending = sending + [int(l)+12000]
+                                sending = sending + [int(l.rstrip('\n'))+12000]
+                    finally:
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
                                                           "create_as_hint": int(2)}])
-                    finally:
                         os.remove(root+"/"+file)
                 if "check.spot" in file:
                     sending = []
@@ -435,11 +445,9 @@ async def game_watcher(ctx: UndertaleContext):
                         with open(root+"/"+file, "r") as f:
                             lines = f.readlines()
                         for l in lines:
-                            sending = sending+[(int(l))+12000]
-                        message = [{"cmd": "LocationChecks", "locations": sending}]
-                        await ctx.send_msgs(message)
+                            sending = sending+[(int(l.rstrip('\n')))+12000]
                     finally:
-                        pass
+                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sending}])
                 if "victory" in file and str(ctx.route) in file:
                     victory = True
                 if ".playerspot" in file and "Online" not in ctx.tags:

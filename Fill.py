@@ -51,7 +51,10 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         items_to_place = [items.pop()
                           for items in reachable_items.values() if items]
         for item in items_to_place:
-            item_pool.remove(item)
+            for p, pool_item in enumerate(item_pool):
+                if pool_item is item:
+                    item_pool.pop(p)
+                    break
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items)
 
@@ -152,8 +155,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if cleanup_required:
         # validate all placements and remove invalid ones
+        state = sweep_from_pool(base_state, [])
         for placement in placements:
-            state = sweep_from_pool(base_state, [])
             if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)

@@ -1,910 +1,1291 @@
-id,region,name,tags
-1,Crafts Room,Spring Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-2,Crafts Room,Summer Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-3,Crafts Room,Fall Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-4,Crafts Room,Winter Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-5,Crafts Room,Construction Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-6,Crafts Room,Exotic Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY"
-7,Pantry,Spring Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-8,Pantry,Summer Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-9,Pantry,Fall Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-10,Pantry,Quality Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-11,Pantry,Animal Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-12,Pantry,Artisan Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE"
-13,Fish Tank,River Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-14,Fish Tank,Lake Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-15,Fish Tank,Ocean Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-16,Fish Tank,Night Fishing Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-17,Fish Tank,Crab Pot Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-18,Fish Tank,Specialty Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY"
-19,Boiler Room,Blacksmith's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-20,Boiler Room,Geologist's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-21,Boiler Room,Adventurer's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-22,Bulletin Board,Chef's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-23,Bulletin Board,Dye Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-24,Bulletin Board,Field Research Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-25,Bulletin Board,Fodder Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-26,Bulletin Board,Enchanter's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY"
-27,Vault,"2,500g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
-28,Vault,"5,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
-29,Vault,"10,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
-30,Vault,"25,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE"
-31,Abandoned JojaMart,The Missing Bundle,BUNDLE
-32,Crafts Room,Complete Crafts Room,"COMMUNITY_CENTER_ROOM,MANDATORY"
-33,Pantry,Complete Pantry,"COMMUNITY_CENTER_ROOM,MANDATORY"
-34,Fish Tank,Complete Fish Tank,"COMMUNITY_CENTER_ROOM,MANDATORY"
-35,Boiler Room,Complete Boiler Room,"COMMUNITY_CENTER_ROOM,MANDATORY"
-36,Bulletin Board,Complete Bulletin Board,"COMMUNITY_CENTER_ROOM,MANDATORY"
-37,Vault,Complete Vault,"COMMUNITY_CENTER_ROOM,MANDATORY"
-101,Pierre's General Store,Large Pack,BACKPACK
-102,Pierre's General Store,Deluxe Pack,BACKPACK
-103,Clint's Blacksmith,Copper Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
-104,Clint's Blacksmith,Iron Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
-105,Clint's Blacksmith,Gold Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
-106,Clint's Blacksmith,Iridium Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE"
-107,Clint's Blacksmith,Copper Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
-108,Clint's Blacksmith,Iron Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
-109,Clint's Blacksmith,Gold Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
-110,Clint's Blacksmith,Iridium Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE"
-111,Clint's Blacksmith,Copper Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
-112,Clint's Blacksmith,Iron Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
-113,Clint's Blacksmith,Gold Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
-114,Clint's Blacksmith,Iridium Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE"
-115,Clint's Blacksmith,Copper Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
-116,Clint's Blacksmith,Iron Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
-117,Clint's Blacksmith,Gold Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
-118,Clint's Blacksmith,Iridium Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE"
-119,Clint's Blacksmith,Copper Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
-120,Clint's Blacksmith,Iron Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
-121,Clint's Blacksmith,Gold Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
-122,Clint's Blacksmith,Iridium Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
-123,Willy's Fish Shop,Purchase Training Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
-124,Stardew Valley,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
-125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
-126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
-201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE"
-202,The Mines - Floor 20,The Mines Floor 20 Treasure,"MANDATORY,THE_MINES_TREASURE"
-203,The Mines - Floor 40,The Mines Floor 40 Treasure,"MANDATORY,THE_MINES_TREASURE"
-204,The Mines - Floor 50,The Mines Floor 50 Treasure,"MANDATORY,THE_MINES_TREASURE"
-205,The Mines - Floor 60,The Mines Floor 60 Treasure,"MANDATORY,THE_MINES_TREASURE"
-206,The Mines - Floor 70,The Mines Floor 70 Treasure,"MANDATORY,THE_MINES_TREASURE"
-207,The Mines - Floor 80,The Mines Floor 80 Treasure,"MANDATORY,THE_MINES_TREASURE"
-208,The Mines - Floor 90,The Mines Floor 90 Treasure,"MANDATORY,THE_MINES_TREASURE"
-209,The Mines - Floor 100,The Mines Floor 100 Treasure,"MANDATORY,THE_MINES_TREASURE"
-210,The Mines - Floor 110,The Mines Floor 110 Treasure,"MANDATORY,THE_MINES_TREASURE"
-211,The Mines - Floor 120,The Mines Floor 120 Treasure,"MANDATORY,THE_MINES_TREASURE"
-212,Quarry Mine,Grim Reaper statue,MANDATORY
-213,The Mines,The Mines Entrance Cutscene,MANDATORY
-214,The Mines - Floor 5,Floor 5 Elevator,THE_MINES_ELEVATOR
-215,The Mines - Floor 10,Floor 10 Elevator,THE_MINES_ELEVATOR
-216,The Mines - Floor 15,Floor 15 Elevator,THE_MINES_ELEVATOR
-217,The Mines - Floor 20,Floor 20 Elevator,THE_MINES_ELEVATOR
-218,The Mines - Floor 25,Floor 25 Elevator,THE_MINES_ELEVATOR
-219,The Mines - Floor 30,Floor 30 Elevator,THE_MINES_ELEVATOR
-220,The Mines - Floor 35,Floor 35 Elevator,THE_MINES_ELEVATOR
-221,The Mines - Floor 40,Floor 40 Elevator,THE_MINES_ELEVATOR
-222,The Mines - Floor 45,Floor 45 Elevator,THE_MINES_ELEVATOR
-223,The Mines - Floor 50,Floor 50 Elevator,THE_MINES_ELEVATOR
-224,The Mines - Floor 55,Floor 55 Elevator,THE_MINES_ELEVATOR
-225,The Mines - Floor 60,Floor 60 Elevator,THE_MINES_ELEVATOR
-226,The Mines - Floor 65,Floor 65 Elevator,THE_MINES_ELEVATOR
-227,The Mines - Floor 70,Floor 70 Elevator,THE_MINES_ELEVATOR
-228,The Mines - Floor 75,Floor 75 Elevator,THE_MINES_ELEVATOR
-229,The Mines - Floor 80,Floor 80 Elevator,THE_MINES_ELEVATOR
-230,The Mines - Floor 85,Floor 85 Elevator,THE_MINES_ELEVATOR
-231,The Mines - Floor 90,Floor 90 Elevator,THE_MINES_ELEVATOR
-232,The Mines - Floor 95,Floor 95 Elevator,THE_MINES_ELEVATOR
-233,The Mines - Floor 100,Floor 100 Elevator,THE_MINES_ELEVATOR
-234,The Mines - Floor 105,Floor 105 Elevator,THE_MINES_ELEVATOR
-235,The Mines - Floor 110,Floor 110 Elevator,THE_MINES_ELEVATOR
-236,The Mines - Floor 115,Floor 115 Elevator,THE_MINES_ELEVATOR
-237,The Mines - Floor 120,Floor 120 Elevator,THE_MINES_ELEVATOR
-301,Stardew Valley,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-302,Stardew Valley,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-303,Stardew Valley,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-304,Stardew Valley,Level 4 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-305,Stardew Valley,Level 5 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-306,Stardew Valley,Level 6 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-307,Stardew Valley,Level 7 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-308,Stardew Valley,Level 8 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-309,Stardew Valley,Level 9 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-310,Stardew Valley,Level 10 Farming,"FARMING_LEVEL,SKILL_LEVEL"
-311,Stardew Valley,Level 1 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-312,Stardew Valley,Level 2 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-313,Stardew Valley,Level 3 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-314,Stardew Valley,Level 4 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-315,Stardew Valley,Level 5 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-316,Stardew Valley,Level 6 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-317,Stardew Valley,Level 7 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-318,Stardew Valley,Level 8 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-319,Stardew Valley,Level 9 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-320,Stardew Valley,Level 10 Fishing,"FISHING_LEVEL,SKILL_LEVEL"
-321,Stardew Valley,Level 1 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-322,Stardew Valley,Level 2 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-323,Stardew Valley,Level 3 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-324,Stardew Valley,Level 4 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-325,Stardew Valley,Level 5 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-326,Stardew Valley,Level 6 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-327,Stardew Valley,Level 7 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-328,Stardew Valley,Level 8 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-329,Stardew Valley,Level 9 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-330,Stardew Valley,Level 10 Foraging,"FORAGING_LEVEL,SKILL_LEVEL"
-331,Stardew Valley,Level 1 Mining,"MINING_LEVEL,SKILL_LEVEL"
-332,Stardew Valley,Level 2 Mining,"MINING_LEVEL,SKILL_LEVEL"
-333,Stardew Valley,Level 3 Mining,"MINING_LEVEL,SKILL_LEVEL"
-334,Stardew Valley,Level 4 Mining,"MINING_LEVEL,SKILL_LEVEL"
-335,Stardew Valley,Level 5 Mining,"MINING_LEVEL,SKILL_LEVEL"
-336,Stardew Valley,Level 6 Mining,"MINING_LEVEL,SKILL_LEVEL"
-337,Stardew Valley,Level 7 Mining,"MINING_LEVEL,SKILL_LEVEL"
-338,Stardew Valley,Level 8 Mining,"MINING_LEVEL,SKILL_LEVEL"
-339,Stardew Valley,Level 9 Mining,"MINING_LEVEL,SKILL_LEVEL"
-340,Stardew Valley,Level 10 Mining,"MINING_LEVEL,SKILL_LEVEL"
-341,Stardew Valley,Level 1 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-342,Stardew Valley,Level 2 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-343,Stardew Valley,Level 3 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-344,Stardew Valley,Level 4 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-345,Stardew Valley,Level 5 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-346,Stardew Valley,Level 6 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-347,Stardew Valley,Level 7 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-348,Stardew Valley,Level 8 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-349,Stardew Valley,Level 9 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-350,Stardew Valley,Level 10 Combat,"COMBAT_LEVEL,SKILL_LEVEL"
-401,Carpenter Shop,Coop Blueprint,BUILDING_BLUEPRINT
-402,Carpenter Shop,Big Coop Blueprint,BUILDING_BLUEPRINT
-403,Carpenter Shop,Deluxe Coop Blueprint,BUILDING_BLUEPRINT
-404,Carpenter Shop,Barn Blueprint,BUILDING_BLUEPRINT
-405,Carpenter Shop,Big Barn Blueprint,BUILDING_BLUEPRINT
-406,Carpenter Shop,Deluxe Barn Blueprint,BUILDING_BLUEPRINT
-407,Carpenter Shop,Well Blueprint,BUILDING_BLUEPRINT
-408,Carpenter Shop,Silo Blueprint,BUILDING_BLUEPRINT
-409,Carpenter Shop,Mill Blueprint,BUILDING_BLUEPRINT
-410,Carpenter Shop,Shed Blueprint,BUILDING_BLUEPRINT
-411,Carpenter Shop,Big Shed Blueprint,BUILDING_BLUEPRINT
-412,Carpenter Shop,Fish Pond Blueprint,BUILDING_BLUEPRINT
-413,Carpenter Shop,Stable Blueprint,BUILDING_BLUEPRINT
-414,Carpenter Shop,Slime Hutch Blueprint,BUILDING_BLUEPRINT
-415,Carpenter Shop,Shipping Bin Blueprint,BUILDING_BLUEPRINT
-416,Carpenter Shop,Kitchen Blueprint,BUILDING_BLUEPRINT
-417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT
-418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT
-501,Town,Introductions,"MANDATORY,QUEST"
-502,Town,How To Win Friends,"MANDATORY,QUEST"
-503,Farm,Getting Started,"MANDATORY,QUEST"
-504,Farm,Raising Animals,"MANDATORY,QUEST"
-505,Farm,Advancement,"MANDATORY,QUEST"
-506,Museum,Archaeology,"MANDATORY,QUEST"
-507,Wizard Tower,Meet The Wizard,"MANDATORY,QUEST"
-508,Farm,Forging Ahead,"MANDATORY,QUEST"
-509,Farm,Smelting,"MANDATORY,QUEST"
-510,The Mines - Floor 5,Initiation,"MANDATORY,QUEST"
-511,Forest,Robin's Lost Axe,"MANDATORY,QUEST"
-512,Sam's House,Jodi's Request,"MANDATORY,QUEST"
-513,Marnie's Ranch,"Mayor's ""Shorts""","MANDATORY,QUEST"
-514,Tunnel Entrance,Blackberry Basket,"MANDATORY,QUEST"
-515,Marnie's Ranch,Marnie's Request,"MANDATORY,QUEST"
-516,Town,Pam Is Thirsty,"MANDATORY,QUEST"
-517,Wizard Tower,A Dark Reagent,"MANDATORY,QUEST"
-518,Marnie's Ranch,Cow's Delight,"MANDATORY,QUEST"
-519,Skull Cavern Entrance,The Skull Key,"MANDATORY,QUEST"
-520,Town,Crop Research,"MANDATORY,QUEST"
-521,Town,Knee Therapy,"MANDATORY,QUEST"
-522,Town,Robin's Request,"MANDATORY,QUEST"
-523,Skull Cavern,Qi's Challenge,"MANDATORY,QUEST"
-524,The Desert,The Mysterious Qi,"MANDATORY,QUEST"
-525,Town,Carving Pumpkins,"MANDATORY,QUEST"
-526,Town,A Winter Mystery,"MANDATORY,QUEST"
-527,Secret Woods,Strange Note,"MANDATORY,QUEST"
-528,Skull Cavern,Cryptic Note,"MANDATORY,QUEST"
-529,Town,Fresh Fruit,"MANDATORY,QUEST"
-530,Town,Aquatic Research,"MANDATORY,QUEST"
-531,Town,A Soldier's Star,"MANDATORY,QUEST"
-532,Town,Mayor's Need,"MANDATORY,QUEST"
-533,Saloon,Wanted: Lobster,"MANDATORY,QUEST"
-534,Town,Pam Needs Juice,"MANDATORY,QUEST"
-535,Sam's House,Fish Casserole,"MANDATORY,QUEST"
-536,Beach,Catch A Squid,"MANDATORY,QUEST"
-537,Saloon,Fish Stew,"MANDATORY,QUEST"
-538,Town,Pierre's Notice,"MANDATORY,QUEST"
-539,Town,Clint's Attempt,"MANDATORY,QUEST"
-540,Town,A Favor For Clint,"MANDATORY,QUEST"
-541,Wizard Tower,Staff Of Power,"MANDATORY,QUEST"
-542,Town,Granny's Gift,"MANDATORY,QUEST"
-543,Saloon,Exotic Spirits,"MANDATORY,QUEST"
-544,Town,Catch a Lingcod,"MANDATORY,QUEST"
-601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK"
-602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK"
-603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK"
-604,JotPK World 2,JotPK: Gun 2,"ARCADE_MACHINE,JOTPK"
-605,JotPK World 2,JotPK: Gun 3,"ARCADE_MACHINE,JOTPK"
-606,JotPK World 3,JotPK: Super Gun,"ARCADE_MACHINE,JOTPK"
-607,JotPK World 1,JotPK: Ammo 1,"ARCADE_MACHINE,JOTPK"
-608,JotPK World 2,JotPK: Ammo 2,"ARCADE_MACHINE,JOTPK"
-609,JotPK World 3,JotPK: Ammo 3,"ARCADE_MACHINE,JOTPK"
-610,JotPK World 1,JotPK: Cowboy 1,"ARCADE_MACHINE,JOTPK"
-611,JotPK World 2,JotPK: Cowboy 2,"ARCADE_MACHINE,JOTPK"
-612,Junimo Kart 1,Junimo Kart: Crumble Cavern,"ARCADE_MACHINE,JUNIMO_KART"
-613,Junimo Kart 1,Junimo Kart: Slippery Slopes,"ARCADE_MACHINE,JUNIMO_KART"
-614,Junimo Kart 2,Junimo Kart: Secret Level,"ARCADE_MACHINE,JUNIMO_KART"
-615,Junimo Kart 2,Junimo Kart: The Gem Sea Giant,"ARCADE_MACHINE,JUNIMO_KART"
-616,Junimo Kart 2,Junimo Kart: Slomp's Stomp,"ARCADE_MACHINE,JUNIMO_KART"
-617,Junimo Kart 2,Junimo Kart: Ghastly Galleon,"ARCADE_MACHINE,JUNIMO_KART"
-618,Junimo Kart 3,Junimo Kart: Glowshroom Grotto,"ARCADE_MACHINE,JUNIMO_KART"
-619,Junimo Kart 3,Junimo Kart: Red Hot Rollercoaster,"ARCADE_MACHINE,JUNIMO_KART"
-620,JotPK World 3,Journey of the Prairie King Victory,"ARCADE_MACHINE_VICTORY,JUNIMO_KART"
-621,Junimo Kart 3,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART"
-701,Secret Woods,Old Master Cannoli,MANDATORY
-702,Beach,Beach Bridge Repair,MANDATORY
-703,The Desert,Galaxy Sword Shrine,MANDATORY
-801,Town,Help Wanted: Gathering 1,HELP_WANTED
-802,Town,Help Wanted: Gathering 2,HELP_WANTED
-803,Town,Help Wanted: Gathering 3,HELP_WANTED
-804,Town,Help Wanted: Gathering 4,HELP_WANTED
-805,Town,Help Wanted: Gathering 5,HELP_WANTED
-806,Town,Help Wanted: Gathering 6,HELP_WANTED
-807,Town,Help Wanted: Gathering 7,HELP_WANTED
-808,Town,Help Wanted: Gathering 8,HELP_WANTED
-811,Town,Help Wanted: Slay Monsters 1,HELP_WANTED
-812,Town,Help Wanted: Slay Monsters 2,HELP_WANTED
-813,Town,Help Wanted: Slay Monsters 3,HELP_WANTED
-814,Town,Help Wanted: Slay Monsters 4,HELP_WANTED
-815,Town,Help Wanted: Slay Monsters 5,HELP_WANTED
-816,Town,Help Wanted: Slay Monsters 6,HELP_WANTED
-817,Town,Help Wanted: Slay Monsters 7,HELP_WANTED
-818,Town,Help Wanted: Slay Monsters 8,HELP_WANTED
-821,Town,Help Wanted: Fishing 1,HELP_WANTED
-822,Town,Help Wanted: Fishing 2,HELP_WANTED
-823,Town,Help Wanted: Fishing 3,HELP_WANTED
-824,Town,Help Wanted: Fishing 4,HELP_WANTED
-825,Town,Help Wanted: Fishing 5,HELP_WANTED
-826,Town,Help Wanted: Fishing 6,HELP_WANTED
-827,Town,Help Wanted: Fishing 7,HELP_WANTED
-828,Town,Help Wanted: Fishing 8,HELP_WANTED
-841,Town,Help Wanted: Item Delivery 1,HELP_WANTED
-842,Town,Help Wanted: Item Delivery 2,HELP_WANTED
-843,Town,Help Wanted: Item Delivery 3,HELP_WANTED
-844,Town,Help Wanted: Item Delivery 4,HELP_WANTED
-845,Town,Help Wanted: Item Delivery 5,HELP_WANTED
-846,Town,Help Wanted: Item Delivery 6,HELP_WANTED
-847,Town,Help Wanted: Item Delivery 7,HELP_WANTED
-848,Town,Help Wanted: Item Delivery 8,HELP_WANTED
-849,Town,Help Wanted: Item Delivery 9,HELP_WANTED
-850,Town,Help Wanted: Item Delivery 10,HELP_WANTED
-851,Town,Help Wanted: Item Delivery 11,HELP_WANTED
-852,Town,Help Wanted: Item Delivery 12,HELP_WANTED
-853,Town,Help Wanted: Item Delivery 13,HELP_WANTED
-854,Town,Help Wanted: Item Delivery 14,HELP_WANTED
-855,Town,Help Wanted: Item Delivery 15,HELP_WANTED
-856,Town,Help Wanted: Item Delivery 16,HELP_WANTED
-857,Town,Help Wanted: Item Delivery 17,HELP_WANTED
-858,Town,Help Wanted: Item Delivery 18,HELP_WANTED
-859,Town,Help Wanted: Item Delivery 19,HELP_WANTED
-860,Town,Help Wanted: Item Delivery 20,HELP_WANTED
-861,Town,Help Wanted: Item Delivery 21,HELP_WANTED
-862,Town,Help Wanted: Item Delivery 22,HELP_WANTED
-863,Town,Help Wanted: Item Delivery 23,HELP_WANTED
-864,Town,Help Wanted: Item Delivery 24,HELP_WANTED
-865,Town,Help Wanted: Item Delivery 25,HELP_WANTED
-866,Town,Help Wanted: Item Delivery 26,HELP_WANTED
-867,Town,Help Wanted: Item Delivery 27,HELP_WANTED
-868,Town,Help Wanted: Item Delivery 28,HELP_WANTED
-869,Town,Help Wanted: Item Delivery 29,HELP_WANTED
-870,Town,Help Wanted: Item Delivery 30,HELP_WANTED
-871,Town,Help Wanted: Item Delivery 31,HELP_WANTED
-872,Town,Help Wanted: Item Delivery 32,HELP_WANTED
-901,Forest,Traveling Merchant Sunday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-902,Forest,Traveling Merchant Sunday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-903,Forest,Traveling Merchant Sunday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-911,Forest,Traveling Merchant Monday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-912,Forest,Traveling Merchant Monday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-913,Forest,Traveling Merchant Monday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-921,Forest,Traveling Merchant Tuesday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-922,Forest,Traveling Merchant Tuesday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-923,Forest,Traveling Merchant Tuesday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-931,Forest,Traveling Merchant Wednesday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-932,Forest,Traveling Merchant Wednesday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-933,Forest,Traveling Merchant Wednesday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-941,Forest,Traveling Merchant Thursday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-942,Forest,Traveling Merchant Thursday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-943,Forest,Traveling Merchant Thursday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-951,Forest,Traveling Merchant Friday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-952,Forest,Traveling Merchant Friday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-953,Forest,Traveling Merchant Friday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-961,Forest,Traveling Merchant Saturday Item 1,"MANDATORY,TRAVELING_MERCHANT"
-962,Forest,Traveling Merchant Saturday Item 2,"MANDATORY,TRAVELING_MERCHANT"
-963,Forest,Traveling Merchant Saturday Item 3,"MANDATORY,TRAVELING_MERCHANT"
-1001,Mountain,Fishsanity: Carp,FISHSANITY
-1002,Beach,Fishsanity: Herring,FISHSANITY
-1003,Forest,Fishsanity: Smallmouth Bass,FISHSANITY
-1004,Beach,Fishsanity: Anchovy,FISHSANITY
-1005,Beach,Fishsanity: Sardine,FISHSANITY
-1006,Forest,Fishsanity: Sunfish,FISHSANITY
-1007,Forest,Fishsanity: Perch,FISHSANITY
-1008,Forest,Fishsanity: Chub,FISHSANITY
-1009,Forest,Fishsanity: Bream,FISHSANITY
-1010,Beach,Fishsanity: Red Snapper,FISHSANITY
-1011,Beach,Fishsanity: Sea Cucumber,FISHSANITY
-1012,Forest,Fishsanity: Rainbow Trout,FISHSANITY
-1013,Forest,Fishsanity: Walleye,FISHSANITY
-1014,Forest,Fishsanity: Shad,FISHSANITY
-1015,Mountain,Fishsanity: Bullhead,FISHSANITY
-1016,Mountain,Fishsanity: Largemouth Bass,FISHSANITY
-1017,Forest,Fishsanity: Salmon,FISHSANITY
-1018,The Mines - Floor 20,Fishsanity: Ghostfish,FISHSANITY
-1019,Beach,Fishsanity: Tilapia,FISHSANITY
-1020,Secret Woods,Fishsanity: Woodskip,FISHSANITY
-1021,Beach,Fishsanity: Flounder,FISHSANITY
-1022,Beach,Fishsanity: Halibut,FISHSANITY
-1023,Ginger Island,Fishsanity: Lionfish,FISHSANITY
-1024,Mutant Bug Lair,Fishsanity: Slimejack,FISHSANITY
-1025,Forest,Fishsanity: Midnight Carp,FISHSANITY
-1026,Beach,Fishsanity: Red Mullet,FISHSANITY
-1027,Forest,Fishsanity: Pike,FISHSANITY
-1028,Forest,Fishsanity: Tiger Trout,FISHSANITY
-1029,Ginger Island,Fishsanity: Blue Discus,FISHSANITY
-1030,Beach,Fishsanity: Albacore,FISHSANITY
-1031,The Desert,Fishsanity: Sandfish,FISHSANITY
-1032,The Mines - Floor 20,Fishsanity: Stonefish,FISHSANITY
-1033,Beach,Fishsanity: Tuna,FISHSANITY
-1034,Beach,Fishsanity: Eel,FISHSANITY
-1035,Forest,Fishsanity: Catfish,FISHSANITY
-1036,Beach,Fishsanity: Squid,FISHSANITY
-1037,Mountain,Fishsanity: Sturgeon,FISHSANITY
-1038,Forest,Fishsanity: Dorado,FISHSANITY
-1039,Beach,Fishsanity: Pufferfish,FISHSANITY
-1040,Witch's Swamp,Fishsanity: Void Salmon,FISHSANITY
-1041,Beach,Fishsanity: Super Cucumber,FISHSANITY
-1042,Ginger Island,Fishsanity: Stingray,FISHSANITY
-1043,The Mines - Floor 60,Fishsanity: Ice Pip,FISHSANITY
-1044,Forest,Fishsanity: Lingcod,FISHSANITY
-1045,The Desert,Fishsanity: Scorpion Carp,FISHSANITY
-1046,The Mines - Floor 100,Fishsanity: Lava Eel,FISHSANITY
-1047,Beach,Fishsanity: Octopus,FISHSANITY
-1048,Beach,Fishsanity: Midnight Squid,FISHSANITY
-1049,Beach,Fishsanity: Spook Fish,FISHSANITY
-1050,Beach,Fishsanity: Blobfish,FISHSANITY
-1051,Beach,Fishsanity: Crimsonfish,FISHSANITY
-1052,Town,Fishsanity: Angler,FISHSANITY
-1053,Mountain,Fishsanity: Legend,FISHSANITY
-1054,Forest,Fishsanity: Glacierfish,FISHSANITY
-1055,Sewers,Fishsanity: Mutant Carp,FISHSANITY
-1056,Town,Fishsanity: Crayfish,FISHSANITY
-1057,Town,Fishsanity: Snail,FISHSANITY
-1058,Town,Fishsanity: Periwinkle,FISHSANITY
-1059,Beach,Fishsanity: Lobster,FISHSANITY
-1060,Beach,Fishsanity: Clam,FISHSANITY
-1061,Beach,Fishsanity: Crab,FISHSANITY
-1062,Beach,Fishsanity: Cockle,FISHSANITY
-1063,Beach,Fishsanity: Mussel,FISHSANITY
-1064,Beach,Fishsanity: Shrimp,FISHSANITY
-1065,Beach,Fishsanity: Oyster,FISHSANITY
-1100,Stardew Valley,Museumsanity: 5 Donations,MUSEUM_MILESTONES
-1101,Stardew Valley,Museumsanity: 10 Donations,MUSEUM_MILESTONES
-1102,Stardew Valley,Museumsanity: 15 Donations,MUSEUM_MILESTONES
-1103,Stardew Valley,Museumsanity: 20 Donations,MUSEUM_MILESTONES
-1104,Stardew Valley,Museumsanity: 25 Donations,MUSEUM_MILESTONES
-1105,Stardew Valley,Museumsanity: 30 Donations,MUSEUM_MILESTONES
-1106,Stardew Valley,Museumsanity: 35 Donations,MUSEUM_MILESTONES
-1107,Stardew Valley,Museumsanity: 40 Donations,MUSEUM_MILESTONES
-1108,Stardew Valley,Museumsanity: 50 Donations,MUSEUM_MILESTONES
-1109,Stardew Valley,Museumsanity: 60 Donations,MUSEUM_MILESTONES
-1110,Stardew Valley,Museumsanity: 70 Donations,MUSEUM_MILESTONES
-1111,Stardew Valley,Museumsanity: 80 Donations,MUSEUM_MILESTONES
-1112,Stardew Valley,Museumsanity: 90 Donations,MUSEUM_MILESTONES
-1113,Stardew Valley,Museumsanity: 95 Donations,MUSEUM_MILESTONES
-1114,Stardew Valley,Museumsanity: 11 Minerals,MUSEUM_MILESTONES
-1115,Stardew Valley,Museumsanity: 21 Minerals,MUSEUM_MILESTONES
-1116,Stardew Valley,Museumsanity: 31 Minerals,MUSEUM_MILESTONES
-1117,Stardew Valley,Museumsanity: 41 Minerals,MUSEUM_MILESTONES
-1118,Stardew Valley,Museumsanity: 50 Minerals,MUSEUM_MILESTONES
-1119,Stardew Valley,Museumsanity: 3 Artifacts,MUSEUM_MILESTONES
-1120,Stardew Valley,Museumsanity: 6 Artifacts,MUSEUM_MILESTONES
-1121,Stardew Valley,Museumsanity: 9 Artifacts,MUSEUM_MILESTONES
-1122,Stardew Valley,Museumsanity: 11 Artifacts,MUSEUM_MILESTONES
-1123,Stardew Valley,Museumsanity: 15 Artifacts,MUSEUM_MILESTONES
-1124,Stardew Valley,Museumsanity: 20 Artifacts,MUSEUM_MILESTONES
-1125,Stardew Valley,Museumsanity: Dwarf Scrolls,MUSEUM_MILESTONES
-1126,Stardew Valley,Museumsanity: Skeleton Front,MUSEUM_MILESTONES
-1127,Stardew Valley,Museumsanity: Skeleton Middle,MUSEUM_MILESTONES
-1128,Stardew Valley,Museumsanity: Skeleton Back,MUSEUM_MILESTONES
-1201,The Mines - Floor 20,Museumsanity: Dwarf Scroll I,MUSEUM_DONATIONS
-1202,The Mines - Floor 20,Museumsanity: Dwarf Scroll II,MUSEUM_DONATIONS
-1203,The Mines - Floor 60,Museumsanity: Dwarf Scroll III,MUSEUM_DONATIONS
-1204,The Mines - Floor 100,Museumsanity: Dwarf Scroll IV,MUSEUM_DONATIONS
-1205,Town,Museumsanity: Chipped Amphora,MUSEUM_DONATIONS
-1206,Forest,Museumsanity: Arrowhead,MUSEUM_DONATIONS
-1207,Forest,Museumsanity: Ancient Doll,MUSEUM_DONATIONS
-1208,Forest,Museumsanity: Elvish Jewelry,MUSEUM_DONATIONS
-1209,Forest,Museumsanity: Chewing Stick,MUSEUM_DONATIONS
-1210,Forest,Museumsanity: Ornamental Fan,MUSEUM_DONATIONS
-1211,Mountain,Museumsanity: Dinosaur Egg,MUSEUM_DONATIONS
-1212,Stardew Valley,Museumsanity: Rare Disc,MUSEUM_DONATIONS
-1213,Forest,Museumsanity: Ancient Sword,MUSEUM_DONATIONS
-1214,Town,Museumsanity: Rusty Spoon,MUSEUM_DONATIONS
-1215,Farm,Museumsanity: Rusty Spur,MUSEUM_DONATIONS
-1216,Mountain,Museumsanity: Rusty Cog,MUSEUM_DONATIONS
-1217,Farm,Museumsanity: Chicken Statue,MUSEUM_DONATIONS
-1218,Forest,Museumsanity: Ancient Seed,"MUSEUM_DONATIONS,MUSEUM_MILESTONES"
-1219,Forest,Museumsanity: Prehistoric Tool,MUSEUM_DONATIONS
-1220,Beach,Museumsanity: Dried Starfish,MUSEUM_DONATIONS
-1221,Beach,Museumsanity: Anchor,MUSEUM_DONATIONS
-1222,Beach,Museumsanity: Glass Shards,MUSEUM_DONATIONS
-1223,Forest,Museumsanity: Bone Flute,MUSEUM_DONATIONS
-1224,Forest,Museumsanity: Prehistoric Handaxe,MUSEUM_DONATIONS
-1225,The Mines - Floor 20,Museumsanity: Dwarvish Helm,MUSEUM_DONATIONS
-1226,The Mines - Floor 60,Museumsanity: Dwarf Gadget,MUSEUM_DONATIONS
-1227,Forest,Museumsanity: Ancient Drum,MUSEUM_DONATIONS
-1228,The Desert,Museumsanity: Golden Mask,MUSEUM_DONATIONS
-1229,The Desert,Museumsanity: Golden Relic,MUSEUM_DONATIONS
-1230,Town,Museumsanity: Strange Doll (Green),MUSEUM_DONATIONS
-1231,The Desert,Museumsanity: Strange Doll,MUSEUM_DONATIONS
-1232,Forest,Museumsanity: Prehistoric Scapula,MUSEUM_DONATIONS
-1233,Forest,Museumsanity: Prehistoric Tibia,MUSEUM_DONATIONS
-1234,Ginger Island,Museumsanity: Prehistoric Skull,MUSEUM_DONATIONS
-1235,Ginger Island,Museumsanity: Skeletal Hand,MUSEUM_DONATIONS
-1236,Ginger Island,Museumsanity: Prehistoric Rib,MUSEUM_DONATIONS
-1237,Ginger Island,Museumsanity: Prehistoric Vertebra,MUSEUM_DONATIONS
-1238,Ginger Island,Museumsanity: Skeletal Tail,MUSEUM_DONATIONS
-1239,Ginger Island,Museumsanity: Nautilus Fossil,MUSEUM_DONATIONS
-1240,Forest,Museumsanity: Amphibian Fossil,MUSEUM_DONATIONS
-1241,Forest,Museumsanity: Palm Fossil,MUSEUM_DONATIONS
-1242,Forest,Museumsanity: Trilobite,MUSEUM_DONATIONS
-1243,The Mines - Floor 20,Museumsanity: Quartz,MUSEUM_DONATIONS
-1244,The Mines - Floor 100,Museumsanity: Fire Quartz,MUSEUM_DONATIONS
-1245,The Mines - Floor 60,Museumsanity: Frozen Tear,MUSEUM_DONATIONS
-1246,The Mines - Floor 20,Museumsanity: Earth Crystal,MUSEUM_DONATIONS
-1247,The Mines - Floor 100,Museumsanity: Emerald,MUSEUM_DONATIONS
-1248,The Mines - Floor 60,Museumsanity: Aquamarine,MUSEUM_DONATIONS
-1249,The Mines - Floor 100,Museumsanity: Ruby,MUSEUM_DONATIONS
-1250,The Mines - Floor 20,Museumsanity: Amethyst,MUSEUM_DONATIONS
-1251,The Mines - Floor 20,Museumsanity: Topaz,MUSEUM_DONATIONS
-1252,The Mines - Floor 60,Museumsanity: Jade,MUSEUM_DONATIONS
-1253,The Mines - Floor 60,Museumsanity: Diamond,MUSEUM_DONATIONS
-1254,Skull Cavern Floor 100,Museumsanity: Prismatic Shard,MUSEUM_DONATIONS
-1255,Town,Museumsanity: Alamite,MUSEUM_DONATIONS
-1256,Town,Museumsanity: Bixite,MUSEUM_DONATIONS
-1257,Town,Museumsanity: Baryte,MUSEUM_DONATIONS
-1258,Town,Museumsanity: Aerinite,MUSEUM_DONATIONS
-1259,Town,Museumsanity: Calcite,MUSEUM_DONATIONS
-1260,Town,Museumsanity: Dolomite,MUSEUM_DONATIONS
-1261,Town,Museumsanity: Esperite,MUSEUM_DONATIONS
-1262,Town,Museumsanity: Fluorapatite,MUSEUM_DONATIONS
-1263,Town,Museumsanity: Geminite,MUSEUM_DONATIONS
-1264,Town,Museumsanity: Helvite,MUSEUM_DONATIONS
-1265,Town,Museumsanity: Jamborite,MUSEUM_DONATIONS
-1266,Town,Museumsanity: Jagoite,MUSEUM_DONATIONS
-1267,Town,Museumsanity: Kyanite,MUSEUM_DONATIONS
-1268,Town,Museumsanity: Lunarite,MUSEUM_DONATIONS
-1269,Town,Museumsanity: Malachite,MUSEUM_DONATIONS
-1270,Town,Museumsanity: Neptunite,MUSEUM_DONATIONS
-1271,Town,Museumsanity: Lemon Stone,MUSEUM_DONATIONS
-1272,Town,Museumsanity: Nekoite,MUSEUM_DONATIONS
-1273,Town,Museumsanity: Orpiment,MUSEUM_DONATIONS
-1274,Town,Museumsanity: Petrified Slime,MUSEUM_DONATIONS
-1275,Town,Museumsanity: Thunder Egg,MUSEUM_DONATIONS
-1276,Town,Museumsanity: Pyrite,MUSEUM_DONATIONS
-1277,Town,Museumsanity: Ocean Stone,MUSEUM_DONATIONS
-1278,Town,Museumsanity: Ghost Crystal,MUSEUM_DONATIONS
-1279,Town,Museumsanity: Tigerseye,MUSEUM_DONATIONS
-1280,Town,Museumsanity: Jasper,MUSEUM_DONATIONS
-1281,Town,Museumsanity: Opal,MUSEUM_DONATIONS
-1282,Town,Museumsanity: Fire Opal,MUSEUM_DONATIONS
-1283,Town,Museumsanity: Celestine,MUSEUM_DONATIONS
-1284,Town,Museumsanity: Marble,MUSEUM_DONATIONS
-1285,Town,Museumsanity: Sandstone,MUSEUM_DONATIONS
-1286,Town,Museumsanity: Granite,MUSEUM_DONATIONS
-1287,Town,Museumsanity: Basalt,MUSEUM_DONATIONS
-1288,Town,Museumsanity: Limestone,MUSEUM_DONATIONS
-1289,Town,Museumsanity: Soapstone,MUSEUM_DONATIONS
-1290,Town,Museumsanity: Hematite,MUSEUM_DONATIONS
-1291,Town,Museumsanity: Mudstone,MUSEUM_DONATIONS
-1292,Town,Museumsanity: Obsidian,MUSEUM_DONATIONS
-1293,Town,Museumsanity: Slate,MUSEUM_DONATIONS
-1294,Town,Museumsanity: Fairy Stone,MUSEUM_DONATIONS
-1295,Town,Museumsanity: Star Shards,MUSEUM_DONATIONS
-1301,Town,Friendsanity: Alex 1 <3,FRIENDSANITY
-1302,Town,Friendsanity: Alex 2 <3,FRIENDSANITY
-1303,Town,Friendsanity: Alex 3 <3,FRIENDSANITY
-1304,Town,Friendsanity: Alex 4 <3,FRIENDSANITY
-1305,Town,Friendsanity: Alex 5 <3,FRIENDSANITY
-1306,Town,Friendsanity: Alex 6 <3,FRIENDSANITY
-1307,Town,Friendsanity: Alex 7 <3,FRIENDSANITY
-1308,Town,Friendsanity: Alex 8 <3,FRIENDSANITY
-1309,Town,Friendsanity: Alex 9 <3,FRIENDSANITY
-1310,Town,Friendsanity: Alex 10 <3,FRIENDSANITY
-1311,Town,Friendsanity: Alex 11 <3,FRIENDSANITY
-1312,Town,Friendsanity: Alex 12 <3,FRIENDSANITY
-1313,Town,Friendsanity: Alex 13 <3,FRIENDSANITY
-1314,Town,Friendsanity: Alex 14 <3,FRIENDSANITY
-1315,Beach,Friendsanity: Elliott 1 <3,FRIENDSANITY
-1316,Beach,Friendsanity: Elliott 2 <3,FRIENDSANITY
-1317,Beach,Friendsanity: Elliott 3 <3,FRIENDSANITY
-1318,Beach,Friendsanity: Elliott 4 <3,FRIENDSANITY
-1319,Beach,Friendsanity: Elliott 5 <3,FRIENDSANITY
-1320,Beach,Friendsanity: Elliott 6 <3,FRIENDSANITY
-1321,Beach,Friendsanity: Elliott 7 <3,FRIENDSANITY
-1322,Beach,Friendsanity: Elliott 8 <3,FRIENDSANITY
-1323,Beach,Friendsanity: Elliott 9 <3,FRIENDSANITY
-1324,Beach,Friendsanity: Elliott 10 <3,FRIENDSANITY
-1325,Beach,Friendsanity: Elliott 11 <3,FRIENDSANITY
-1326,Beach,Friendsanity: Elliott 12 <3,FRIENDSANITY
-1327,Beach,Friendsanity: Elliott 13 <3,FRIENDSANITY
-1328,Beach,Friendsanity: Elliott 14 <3,FRIENDSANITY
-1329,Town,Friendsanity: Harvey 1 <3,FRIENDSANITY
-1330,Town,Friendsanity: Harvey 2 <3,FRIENDSANITY
-1331,Town,Friendsanity: Harvey 3 <3,FRIENDSANITY
-1332,Town,Friendsanity: Harvey 4 <3,FRIENDSANITY
-1333,Town,Friendsanity: Harvey 5 <3,FRIENDSANITY
-1334,Town,Friendsanity: Harvey 6 <3,FRIENDSANITY
-1335,Town,Friendsanity: Harvey 7 <3,FRIENDSANITY
-1336,Town,Friendsanity: Harvey 8 <3,FRIENDSANITY
-1337,Town,Friendsanity: Harvey 9 <3,FRIENDSANITY
-1338,Town,Friendsanity: Harvey 10 <3,FRIENDSANITY
-1339,Town,Friendsanity: Harvey 11 <3,FRIENDSANITY
-1340,Town,Friendsanity: Harvey 12 <3,FRIENDSANITY
-1341,Town,Friendsanity: Harvey 13 <3,FRIENDSANITY
-1342,Town,Friendsanity: Harvey 14 <3,FRIENDSANITY
-1343,Town,Friendsanity: Sam 1 <3,FRIENDSANITY
-1344,Town,Friendsanity: Sam 2 <3,FRIENDSANITY
-1345,Town,Friendsanity: Sam 3 <3,FRIENDSANITY
-1346,Town,Friendsanity: Sam 4 <3,FRIENDSANITY
-1347,Town,Friendsanity: Sam 5 <3,FRIENDSANITY
-1348,Town,Friendsanity: Sam 6 <3,FRIENDSANITY
-1349,Town,Friendsanity: Sam 7 <3,FRIENDSANITY
-1350,Town,Friendsanity: Sam 8 <3,FRIENDSANITY
-1351,Town,Friendsanity: Sam 9 <3,FRIENDSANITY
-1352,Town,Friendsanity: Sam 10 <3,FRIENDSANITY
-1353,Town,Friendsanity: Sam 11 <3,FRIENDSANITY
-1354,Town,Friendsanity: Sam 12 <3,FRIENDSANITY
-1355,Town,Friendsanity: Sam 13 <3,FRIENDSANITY
-1356,Town,Friendsanity: Sam 14 <3,FRIENDSANITY
-1357,Carpenter Shop,Friendsanity: Sebastian 1 <3,FRIENDSANITY
-1358,Carpenter Shop,Friendsanity: Sebastian 2 <3,FRIENDSANITY
-1359,Carpenter Shop,Friendsanity: Sebastian 3 <3,FRIENDSANITY
-1360,Carpenter Shop,Friendsanity: Sebastian 4 <3,FRIENDSANITY
-1361,Carpenter Shop,Friendsanity: Sebastian 5 <3,FRIENDSANITY
-1362,Carpenter Shop,Friendsanity: Sebastian 6 <3,FRIENDSANITY
-1363,Carpenter Shop,Friendsanity: Sebastian 7 <3,FRIENDSANITY
-1364,Carpenter Shop,Friendsanity: Sebastian 8 <3,FRIENDSANITY
-1365,Carpenter Shop,Friendsanity: Sebastian 9 <3,FRIENDSANITY
-1366,Carpenter Shop,Friendsanity: Sebastian 10 <3,FRIENDSANITY
-1367,Carpenter Shop,Friendsanity: Sebastian 11 <3,FRIENDSANITY
-1368,Carpenter Shop,Friendsanity: Sebastian 12 <3,FRIENDSANITY
-1369,Carpenter Shop,Friendsanity: Sebastian 13 <3,FRIENDSANITY
-1370,Carpenter Shop,Friendsanity: Sebastian 14 <3,FRIENDSANITY
-1371,Marnie's Ranch,Friendsanity: Shane 1 <3,FRIENDSANITY
-1372,Marnie's Ranch,Friendsanity: Shane 2 <3,FRIENDSANITY
-1373,Marnie's Ranch,Friendsanity: Shane 3 <3,FRIENDSANITY
-1374,Marnie's Ranch,Friendsanity: Shane 4 <3,FRIENDSANITY
-1375,Marnie's Ranch,Friendsanity: Shane 5 <3,FRIENDSANITY
-1376,Marnie's Ranch,Friendsanity: Shane 6 <3,FRIENDSANITY
-1377,Marnie's Ranch,Friendsanity: Shane 7 <3,FRIENDSANITY
-1378,Marnie's Ranch,Friendsanity: Shane 8 <3,FRIENDSANITY
-1379,Marnie's Ranch,Friendsanity: Shane 9 <3,FRIENDSANITY
-1380,Marnie's Ranch,Friendsanity: Shane 10 <3,FRIENDSANITY
-1381,Marnie's Ranch,Friendsanity: Shane 11 <3,FRIENDSANITY
-1382,Marnie's Ranch,Friendsanity: Shane 12 <3,FRIENDSANITY
-1383,Marnie's Ranch,Friendsanity: Shane 13 <3,FRIENDSANITY
-1384,Marnie's Ranch,Friendsanity: Shane 14 <3,FRIENDSANITY
-1385,Town,Friendsanity: Abigail 1 <3,FRIENDSANITY
-1386,Town,Friendsanity: Abigail 2 <3,FRIENDSANITY
-1387,Town,Friendsanity: Abigail 3 <3,FRIENDSANITY
-1388,Town,Friendsanity: Abigail 4 <3,FRIENDSANITY
-1389,Town,Friendsanity: Abigail 5 <3,FRIENDSANITY
-1390,Town,Friendsanity: Abigail 6 <3,FRIENDSANITY
-1391,Town,Friendsanity: Abigail 7 <3,FRIENDSANITY
-1392,Town,Friendsanity: Abigail 8 <3,FRIENDSANITY
-1393,Town,Friendsanity: Abigail 9 <3,FRIENDSANITY
-1394,Town,Friendsanity: Abigail 10 <3,FRIENDSANITY
-1395,Town,Friendsanity: Abigail 11 <3,FRIENDSANITY
-1396,Town,Friendsanity: Abigail 12 <3,FRIENDSANITY
-1397,Town,Friendsanity: Abigail 13 <3,FRIENDSANITY
-1398,Town,Friendsanity: Abigail 14 <3,FRIENDSANITY
-1399,Town,Friendsanity: Emily 1 <3,FRIENDSANITY
-1400,Town,Friendsanity: Emily 2 <3,FRIENDSANITY
-1401,Town,Friendsanity: Emily 3 <3,FRIENDSANITY
-1402,Town,Friendsanity: Emily 4 <3,FRIENDSANITY
-1403,Town,Friendsanity: Emily 5 <3,FRIENDSANITY
-1404,Town,Friendsanity: Emily 6 <3,FRIENDSANITY
-1405,Town,Friendsanity: Emily 7 <3,FRIENDSANITY
-1406,Town,Friendsanity: Emily 8 <3,FRIENDSANITY
-1407,Town,Friendsanity: Emily 9 <3,FRIENDSANITY
-1408,Town,Friendsanity: Emily 10 <3,FRIENDSANITY
-1409,Town,Friendsanity: Emily 11 <3,FRIENDSANITY
-1410,Town,Friendsanity: Emily 12 <3,FRIENDSANITY
-1411,Town,Friendsanity: Emily 13 <3,FRIENDSANITY
-1412,Town,Friendsanity: Emily 14 <3,FRIENDSANITY
-1413,Town,Friendsanity: Haley 1 <3,FRIENDSANITY
-1414,Town,Friendsanity: Haley 2 <3,FRIENDSANITY
-1415,Town,Friendsanity: Haley 3 <3,FRIENDSANITY
-1416,Town,Friendsanity: Haley 4 <3,FRIENDSANITY
-1417,Town,Friendsanity: Haley 5 <3,FRIENDSANITY
-1418,Town,Friendsanity: Haley 6 <3,FRIENDSANITY
-1419,Town,Friendsanity: Haley 7 <3,FRIENDSANITY
-1420,Town,Friendsanity: Haley 8 <3,FRIENDSANITY
-1421,Town,Friendsanity: Haley 9 <3,FRIENDSANITY
-1422,Town,Friendsanity: Haley 10 <3,FRIENDSANITY
-1423,Town,Friendsanity: Haley 11 <3,FRIENDSANITY
-1424,Town,Friendsanity: Haley 12 <3,FRIENDSANITY
-1425,Town,Friendsanity: Haley 13 <3,FRIENDSANITY
-1426,Town,Friendsanity: Haley 14 <3,FRIENDSANITY
-1427,Forest,Friendsanity: Leah 1 <3,FRIENDSANITY
-1428,Forest,Friendsanity: Leah 2 <3,FRIENDSANITY
-1429,Forest,Friendsanity: Leah 3 <3,FRIENDSANITY
-1430,Forest,Friendsanity: Leah 4 <3,FRIENDSANITY
-1431,Forest,Friendsanity: Leah 5 <3,FRIENDSANITY
-1432,Forest,Friendsanity: Leah 6 <3,FRIENDSANITY
-1433,Forest,Friendsanity: Leah 7 <3,FRIENDSANITY
-1434,Forest,Friendsanity: Leah 8 <3,FRIENDSANITY
-1435,Forest,Friendsanity: Leah 9 <3,FRIENDSANITY
-1436,Forest,Friendsanity: Leah 10 <3,FRIENDSANITY
-1437,Forest,Friendsanity: Leah 11 <3,FRIENDSANITY
-1438,Forest,Friendsanity: Leah 12 <3,FRIENDSANITY
-1439,Forest,Friendsanity: Leah 13 <3,FRIENDSANITY
-1440,Forest,Friendsanity: Leah 14 <3,FRIENDSANITY
-1441,Carpenter Shop,Friendsanity: Maru 1 <3,FRIENDSANITY
-1442,Carpenter Shop,Friendsanity: Maru 2 <3,FRIENDSANITY
-1443,Carpenter Shop,Friendsanity: Maru 3 <3,FRIENDSANITY
-1444,Carpenter Shop,Friendsanity: Maru 4 <3,FRIENDSANITY
-1445,Carpenter Shop,Friendsanity: Maru 5 <3,FRIENDSANITY
-1446,Carpenter Shop,Friendsanity: Maru 6 <3,FRIENDSANITY
-1447,Carpenter Shop,Friendsanity: Maru 7 <3,FRIENDSANITY
-1448,Carpenter Shop,Friendsanity: Maru 8 <3,FRIENDSANITY
-1449,Carpenter Shop,Friendsanity: Maru 9 <3,FRIENDSANITY
-1450,Carpenter Shop,Friendsanity: Maru 10 <3,FRIENDSANITY
-1451,Carpenter Shop,Friendsanity: Maru 11 <3,FRIENDSANITY
-1452,Carpenter Shop,Friendsanity: Maru 12 <3,FRIENDSANITY
-1453,Carpenter Shop,Friendsanity: Maru 13 <3,FRIENDSANITY
-1454,Carpenter Shop,Friendsanity: Maru 14 <3,FRIENDSANITY
-1455,Town,Friendsanity: Penny 1 <3,FRIENDSANITY
-1456,Town,Friendsanity: Penny 2 <3,FRIENDSANITY
-1457,Town,Friendsanity: Penny 3 <3,FRIENDSANITY
-1458,Town,Friendsanity: Penny 4 <3,FRIENDSANITY
-1459,Town,Friendsanity: Penny 5 <3,FRIENDSANITY
-1460,Town,Friendsanity: Penny 6 <3,FRIENDSANITY
-1461,Town,Friendsanity: Penny 7 <3,FRIENDSANITY
-1462,Town,Friendsanity: Penny 8 <3,FRIENDSANITY
-1463,Town,Friendsanity: Penny 9 <3,FRIENDSANITY
-1464,Town,Friendsanity: Penny 10 <3,FRIENDSANITY
-1465,Town,Friendsanity: Penny 11 <3,FRIENDSANITY
-1466,Town,Friendsanity: Penny 12 <3,FRIENDSANITY
-1467,Town,Friendsanity: Penny 13 <3,FRIENDSANITY
-1468,Town,Friendsanity: Penny 14 <3,FRIENDSANITY
-1469,Town,Friendsanity: Caroline 1 <3,FRIENDSANITY
-1470,Town,Friendsanity: Caroline 2 <3,FRIENDSANITY
-1471,Town,Friendsanity: Caroline 3 <3,FRIENDSANITY
-1472,Town,Friendsanity: Caroline 4 <3,FRIENDSANITY
-1473,Town,Friendsanity: Caroline 5 <3,FRIENDSANITY
-1474,Town,Friendsanity: Caroline 6 <3,FRIENDSANITY
-1475,Town,Friendsanity: Caroline 7 <3,FRIENDSANITY
-1476,Town,Friendsanity: Caroline 8 <3,FRIENDSANITY
-1477,Town,Friendsanity: Caroline 9 <3,FRIENDSANITY
-1478,Town,Friendsanity: Caroline 10 <3,FRIENDSANITY
-1480,Town,Friendsanity: Clint 1 <3,FRIENDSANITY
-1481,Town,Friendsanity: Clint 2 <3,FRIENDSANITY
-1482,Town,Friendsanity: Clint 3 <3,FRIENDSANITY
-1483,Town,Friendsanity: Clint 4 <3,FRIENDSANITY
-1484,Town,Friendsanity: Clint 5 <3,FRIENDSANITY
-1485,Town,Friendsanity: Clint 6 <3,FRIENDSANITY
-1486,Town,Friendsanity: Clint 7 <3,FRIENDSANITY
-1487,Town,Friendsanity: Clint 8 <3,FRIENDSANITY
-1488,Town,Friendsanity: Clint 9 <3,FRIENDSANITY
-1489,Town,Friendsanity: Clint 10 <3,FRIENDSANITY
-1491,Carpenter Shop,Friendsanity: Demetrius 1 <3,FRIENDSANITY
-1492,Carpenter Shop,Friendsanity: Demetrius 2 <3,FRIENDSANITY
-1493,Carpenter Shop,Friendsanity: Demetrius 3 <3,FRIENDSANITY
-1494,Carpenter Shop,Friendsanity: Demetrius 4 <3,FRIENDSANITY
-1495,Carpenter Shop,Friendsanity: Demetrius 5 <3,FRIENDSANITY
-1496,Carpenter Shop,Friendsanity: Demetrius 6 <3,FRIENDSANITY
-1497,Carpenter Shop,Friendsanity: Demetrius 7 <3,FRIENDSANITY
-1498,Carpenter Shop,Friendsanity: Demetrius 8 <3,FRIENDSANITY
-1499,Carpenter Shop,Friendsanity: Demetrius 9 <3,FRIENDSANITY
-1500,Carpenter Shop,Friendsanity: Demetrius 10 <3,FRIENDSANITY
-1502,The Mines,Friendsanity: Dwarf 1 <3,FRIENDSANITY
-1503,The Mines,Friendsanity: Dwarf 2 <3,FRIENDSANITY
-1504,The Mines,Friendsanity: Dwarf 3 <3,FRIENDSANITY
-1505,The Mines,Friendsanity: Dwarf 4 <3,FRIENDSANITY
-1506,The Mines,Friendsanity: Dwarf 5 <3,FRIENDSANITY
-1507,The Mines,Friendsanity: Dwarf 6 <3,FRIENDSANITY
-1508,The Mines,Friendsanity: Dwarf 7 <3,FRIENDSANITY
-1509,The Mines,Friendsanity: Dwarf 8 <3,FRIENDSANITY
-1510,The Mines,Friendsanity: Dwarf 9 <3,FRIENDSANITY
-1511,The Mines,Friendsanity: Dwarf 10 <3,FRIENDSANITY
-1513,Town,Friendsanity: Evelyn 1 <3,FRIENDSANITY
-1514,Town,Friendsanity: Evelyn 2 <3,FRIENDSANITY
-1515,Town,Friendsanity: Evelyn 3 <3,FRIENDSANITY
-1516,Town,Friendsanity: Evelyn 4 <3,FRIENDSANITY
-1517,Town,Friendsanity: Evelyn 5 <3,FRIENDSANITY
-1518,Town,Friendsanity: Evelyn 6 <3,FRIENDSANITY
-1519,Town,Friendsanity: Evelyn 7 <3,FRIENDSANITY
-1520,Town,Friendsanity: Evelyn 8 <3,FRIENDSANITY
-1521,Town,Friendsanity: Evelyn 9 <3,FRIENDSANITY
-1522,Town,Friendsanity: Evelyn 10 <3,FRIENDSANITY
-1524,Town,Friendsanity: George 1 <3,FRIENDSANITY
-1525,Town,Friendsanity: George 2 <3,FRIENDSANITY
-1526,Town,Friendsanity: George 3 <3,FRIENDSANITY
-1527,Town,Friendsanity: George 4 <3,FRIENDSANITY
-1528,Town,Friendsanity: George 5 <3,FRIENDSANITY
-1529,Town,Friendsanity: George 6 <3,FRIENDSANITY
-1530,Town,Friendsanity: George 7 <3,FRIENDSANITY
-1531,Town,Friendsanity: George 8 <3,FRIENDSANITY
-1532,Town,Friendsanity: George 9 <3,FRIENDSANITY
-1533,Town,Friendsanity: George 10 <3,FRIENDSANITY
-1535,Town,Friendsanity: Gus 1 <3,FRIENDSANITY
-1536,Town,Friendsanity: Gus 2 <3,FRIENDSANITY
-1537,Town,Friendsanity: Gus 3 <3,FRIENDSANITY
-1538,Town,Friendsanity: Gus 4 <3,FRIENDSANITY
-1539,Town,Friendsanity: Gus 5 <3,FRIENDSANITY
-1540,Town,Friendsanity: Gus 6 <3,FRIENDSANITY
-1541,Town,Friendsanity: Gus 7 <3,FRIENDSANITY
-1542,Town,Friendsanity: Gus 8 <3,FRIENDSANITY
-1543,Town,Friendsanity: Gus 9 <3,FRIENDSANITY
-1544,Town,Friendsanity: Gus 10 <3,FRIENDSANITY
-1546,Marnie's Ranch,Friendsanity: Jas 1 <3,FRIENDSANITY
-1547,Marnie's Ranch,Friendsanity: Jas 2 <3,FRIENDSANITY
-1548,Marnie's Ranch,Friendsanity: Jas 3 <3,FRIENDSANITY
-1549,Marnie's Ranch,Friendsanity: Jas 4 <3,FRIENDSANITY
-1550,Marnie's Ranch,Friendsanity: Jas 5 <3,FRIENDSANITY
-1551,Marnie's Ranch,Friendsanity: Jas 6 <3,FRIENDSANITY
-1552,Marnie's Ranch,Friendsanity: Jas 7 <3,FRIENDSANITY
-1553,Marnie's Ranch,Friendsanity: Jas 8 <3,FRIENDSANITY
-1554,Marnie's Ranch,Friendsanity: Jas 9 <3,FRIENDSANITY
-1555,Marnie's Ranch,Friendsanity: Jas 10 <3,FRIENDSANITY
-1557,Town,Friendsanity: Jodi 1 <3,FRIENDSANITY
-1558,Town,Friendsanity: Jodi 2 <3,FRIENDSANITY
-1559,Town,Friendsanity: Jodi 3 <3,FRIENDSANITY
-1560,Town,Friendsanity: Jodi 4 <3,FRIENDSANITY
-1561,Town,Friendsanity: Jodi 5 <3,FRIENDSANITY
-1562,Town,Friendsanity: Jodi 6 <3,FRIENDSANITY
-1563,Town,Friendsanity: Jodi 7 <3,FRIENDSANITY
-1564,Town,Friendsanity: Jodi 8 <3,FRIENDSANITY
-1565,Town,Friendsanity: Jodi 9 <3,FRIENDSANITY
-1566,Town,Friendsanity: Jodi 10 <3,FRIENDSANITY
-1568,Town,Friendsanity: Kent 1 <3,FRIENDSANITY
-1569,Town,Friendsanity: Kent 2 <3,FRIENDSANITY
-1570,Town,Friendsanity: Kent 3 <3,FRIENDSANITY
-1571,Town,Friendsanity: Kent 4 <3,FRIENDSANITY
-1572,Town,Friendsanity: Kent 5 <3,FRIENDSANITY
-1573,Town,Friendsanity: Kent 6 <3,FRIENDSANITY
-1574,Town,Friendsanity: Kent 7 <3,FRIENDSANITY
-1575,Town,Friendsanity: Kent 8 <3,FRIENDSANITY
-1576,Town,Friendsanity: Kent 9 <3,FRIENDSANITY
-1577,Town,Friendsanity: Kent 10 <3,FRIENDSANITY
-1579,Sewers,Friendsanity: Krobus 1 <3,FRIENDSANITY
-1580,Sewers,Friendsanity: Krobus 2 <3,FRIENDSANITY
-1581,Sewers,Friendsanity: Krobus 3 <3,FRIENDSANITY
-1582,Sewers,Friendsanity: Krobus 4 <3,FRIENDSANITY
-1583,Sewers,Friendsanity: Krobus 5 <3,FRIENDSANITY
-1584,Sewers,Friendsanity: Krobus 6 <3,FRIENDSANITY
-1585,Sewers,Friendsanity: Krobus 7 <3,FRIENDSANITY
-1586,Sewers,Friendsanity: Krobus 8 <3,FRIENDSANITY
-1587,Sewers,Friendsanity: Krobus 9 <3,FRIENDSANITY
-1588,Sewers,Friendsanity: Krobus 10 <3,FRIENDSANITY
-1590,Ginger Island,Friendsanity: Leo 1 <3,FRIENDSANITY
-1591,Ginger Island,Friendsanity: Leo 2 <3,FRIENDSANITY
-1592,Ginger Island,Friendsanity: Leo 3 <3,FRIENDSANITY
-1593,Ginger Island,Friendsanity: Leo 4 <3,FRIENDSANITY
-1594,Ginger Island,Friendsanity: Leo 5 <3,FRIENDSANITY
-1595,Ginger Island,Friendsanity: Leo 6 <3,FRIENDSANITY
-1596,Ginger Island,Friendsanity: Leo 7 <3,FRIENDSANITY
-1597,Ginger Island,Friendsanity: Leo 8 <3,FRIENDSANITY
-1598,Ginger Island,Friendsanity: Leo 9 <3,FRIENDSANITY
-1599,Ginger Island,Friendsanity: Leo 10 <3,FRIENDSANITY
-1601,Town,Friendsanity: Lewis 1 <3,FRIENDSANITY
-1602,Town,Friendsanity: Lewis 2 <3,FRIENDSANITY
-1603,Town,Friendsanity: Lewis 3 <3,FRIENDSANITY
-1604,Town,Friendsanity: Lewis 4 <3,FRIENDSANITY
-1605,Town,Friendsanity: Lewis 5 <3,FRIENDSANITY
-1606,Town,Friendsanity: Lewis 6 <3,FRIENDSANITY
-1607,Town,Friendsanity: Lewis 7 <3,FRIENDSANITY
-1608,Town,Friendsanity: Lewis 8 <3,FRIENDSANITY
-1609,Town,Friendsanity: Lewis 9 <3,FRIENDSANITY
-1610,Town,Friendsanity: Lewis 10 <3,FRIENDSANITY
-1612,Mountain,Friendsanity: Linus 1 <3,FRIENDSANITY
-1613,Mountain,Friendsanity: Linus 2 <3,FRIENDSANITY
-1614,Mountain,Friendsanity: Linus 3 <3,FRIENDSANITY
-1615,Mountain,Friendsanity: Linus 4 <3,FRIENDSANITY
-1616,Mountain,Friendsanity: Linus 5 <3,FRIENDSANITY
-1617,Mountain,Friendsanity: Linus 6 <3,FRIENDSANITY
-1618,Mountain,Friendsanity: Linus 7 <3,FRIENDSANITY
-1619,Mountain,Friendsanity: Linus 8 <3,FRIENDSANITY
-1620,Mountain,Friendsanity: Linus 9 <3,FRIENDSANITY
-1621,Mountain,Friendsanity: Linus 10 <3,FRIENDSANITY
-1623,Marnie's Ranch,Friendsanity: Marnie 1 <3,FRIENDSANITY
-1624,Marnie's Ranch,Friendsanity: Marnie 2 <3,FRIENDSANITY
-1625,Marnie's Ranch,Friendsanity: Marnie 3 <3,FRIENDSANITY
-1626,Marnie's Ranch,Friendsanity: Marnie 4 <3,FRIENDSANITY
-1627,Marnie's Ranch,Friendsanity: Marnie 5 <3,FRIENDSANITY
-1628,Marnie's Ranch,Friendsanity: Marnie 6 <3,FRIENDSANITY
-1629,Marnie's Ranch,Friendsanity: Marnie 7 <3,FRIENDSANITY
-1630,Marnie's Ranch,Friendsanity: Marnie 8 <3,FRIENDSANITY
-1631,Marnie's Ranch,Friendsanity: Marnie 9 <3,FRIENDSANITY
-1632,Marnie's Ranch,Friendsanity: Marnie 10 <3,FRIENDSANITY
-1634,Town,Friendsanity: Pam 1 <3,FRIENDSANITY
-1635,Town,Friendsanity: Pam 2 <3,FRIENDSANITY
-1636,Town,Friendsanity: Pam 3 <3,FRIENDSANITY
-1637,Town,Friendsanity: Pam 4 <3,FRIENDSANITY
-1638,Town,Friendsanity: Pam 5 <3,FRIENDSANITY
-1639,Town,Friendsanity: Pam 6 <3,FRIENDSANITY
-1640,Town,Friendsanity: Pam 7 <3,FRIENDSANITY
-1641,Town,Friendsanity: Pam 8 <3,FRIENDSANITY
-1642,Town,Friendsanity: Pam 9 <3,FRIENDSANITY
-1643,Town,Friendsanity: Pam 10 <3,FRIENDSANITY
-1645,Town,Friendsanity: Pierre 1 <3,FRIENDSANITY
-1646,Town,Friendsanity: Pierre 2 <3,FRIENDSANITY
-1647,Town,Friendsanity: Pierre 3 <3,FRIENDSANITY
-1648,Town,Friendsanity: Pierre 4 <3,FRIENDSANITY
-1649,Town,Friendsanity: Pierre 5 <3,FRIENDSANITY
-1650,Town,Friendsanity: Pierre 6 <3,FRIENDSANITY
-1651,Town,Friendsanity: Pierre 7 <3,FRIENDSANITY
-1652,Town,Friendsanity: Pierre 8 <3,FRIENDSANITY
-1653,Town,Friendsanity: Pierre 9 <3,FRIENDSANITY
-1654,Town,Friendsanity: Pierre 10 <3,FRIENDSANITY
-1656,Carpenter Shop,Friendsanity: Robin 1 <3,FRIENDSANITY
-1657,Carpenter Shop,Friendsanity: Robin 2 <3,FRIENDSANITY
-1658,Carpenter Shop,Friendsanity: Robin 3 <3,FRIENDSANITY
-1659,Carpenter Shop,Friendsanity: Robin 4 <3,FRIENDSANITY
-1660,Carpenter Shop,Friendsanity: Robin 5 <3,FRIENDSANITY
-1661,Carpenter Shop,Friendsanity: Robin 6 <3,FRIENDSANITY
-1662,Carpenter Shop,Friendsanity: Robin 7 <3,FRIENDSANITY
-1663,Carpenter Shop,Friendsanity: Robin 8 <3,FRIENDSANITY
-1664,Carpenter Shop,Friendsanity: Robin 9 <3,FRIENDSANITY
-1665,Carpenter Shop,Friendsanity: Robin 10 <3,FRIENDSANITY
-1667,The Desert,Friendsanity: Sandy 1 <3,FRIENDSANITY
-1668,The Desert,Friendsanity: Sandy 2 <3,FRIENDSANITY
-1669,The Desert,Friendsanity: Sandy 3 <3,FRIENDSANITY
-1670,The Desert,Friendsanity: Sandy 4 <3,FRIENDSANITY
-1671,The Desert,Friendsanity: Sandy 5 <3,FRIENDSANITY
-1672,The Desert,Friendsanity: Sandy 6 <3,FRIENDSANITY
-1673,The Desert,Friendsanity: Sandy 7 <3,FRIENDSANITY
-1674,The Desert,Friendsanity: Sandy 8 <3,FRIENDSANITY
-1675,The Desert,Friendsanity: Sandy 9 <3,FRIENDSANITY
-1676,The Desert,Friendsanity: Sandy 10 <3,FRIENDSANITY
-1678,Town,Friendsanity: Vincent 1 <3,FRIENDSANITY
-1679,Town,Friendsanity: Vincent 2 <3,FRIENDSANITY
-1680,Town,Friendsanity: Vincent 3 <3,FRIENDSANITY
-1681,Town,Friendsanity: Vincent 4 <3,FRIENDSANITY
-1682,Town,Friendsanity: Vincent 5 <3,FRIENDSANITY
-1683,Town,Friendsanity: Vincent 6 <3,FRIENDSANITY
-1684,Town,Friendsanity: Vincent 7 <3,FRIENDSANITY
-1685,Town,Friendsanity: Vincent 8 <3,FRIENDSANITY
-1686,Town,Friendsanity: Vincent 9 <3,FRIENDSANITY
-1687,Town,Friendsanity: Vincent 10 <3,FRIENDSANITY
-1689,Beach,Friendsanity: Willy 1 <3,FRIENDSANITY
-1690,Beach,Friendsanity: Willy 2 <3,FRIENDSANITY
-1691,Beach,Friendsanity: Willy 3 <3,FRIENDSANITY
-1692,Beach,Friendsanity: Willy 4 <3,FRIENDSANITY
-1693,Beach,Friendsanity: Willy 5 <3,FRIENDSANITY
-1694,Beach,Friendsanity: Willy 6 <3,FRIENDSANITY
-1695,Beach,Friendsanity: Willy 7 <3,FRIENDSANITY
-1696,Beach,Friendsanity: Willy 8 <3,FRIENDSANITY
-1697,Beach,Friendsanity: Willy 9 <3,FRIENDSANITY
-1698,Beach,Friendsanity: Willy 10 <3,FRIENDSANITY
-1700,Forest,Friendsanity: Wizard 1 <3,FRIENDSANITY
-1701,Forest,Friendsanity: Wizard 2 <3,FRIENDSANITY
-1702,Forest,Friendsanity: Wizard 3 <3,FRIENDSANITY
-1703,Forest,Friendsanity: Wizard 4 <3,FRIENDSANITY
-1704,Forest,Friendsanity: Wizard 5 <3,FRIENDSANITY
-1705,Forest,Friendsanity: Wizard 6 <3,FRIENDSANITY
-1706,Forest,Friendsanity: Wizard 7 <3,FRIENDSANITY
-1707,Forest,Friendsanity: Wizard 8 <3,FRIENDSANITY
-1708,Forest,Friendsanity: Wizard 9 <3,FRIENDSANITY
-1709,Forest,Friendsanity: Wizard 10 <3,FRIENDSANITY
-1710,Farm,Friendsanity: Pet 1 <3,FRIENDSANITY
-1711,Farm,Friendsanity: Pet 2 <3,FRIENDSANITY
-1712,Farm,Friendsanity: Pet 3 <3,FRIENDSANITY
-1713,Farm,Friendsanity: Pet 4 <3,FRIENDSANITY
-1714,Farm,Friendsanity: Pet 5 <3,FRIENDSANITY
-1715,Farm,Friendsanity: Friend 1 <3,FRIENDSANITY
-1716,Farm,Friendsanity: Friend 2 <3,FRIENDSANITY
-1717,Farm,Friendsanity: Friend 3 <3,FRIENDSANITY
-1718,Farm,Friendsanity: Friend 4 <3,FRIENDSANITY
-1719,Farm,Friendsanity: Friend 5 <3,FRIENDSANITY
-1720,Farm,Friendsanity: Friend 6 <3,FRIENDSANITY
-1721,Farm,Friendsanity: Friend 7 <3,FRIENDSANITY
-1722,Farm,Friendsanity: Friend 8 <3,FRIENDSANITY
-1723,Farm,Friendsanity: Suitor 9 <3,FRIENDSANITY
-1724,Farm,Friendsanity: Suitor 10 <3,FRIENDSANITY
-1725,Farm,Friendsanity: Spouse 11 <3,FRIENDSANITY
-1726,Farm,Friendsanity: Spouse 12 <3,FRIENDSANITY
-1727,Farm,Friendsanity: Spouse 13 <3,FRIENDSANITY
-1728,Farm,Friendsanity: Spouse 14 <3,FRIENDSANITY
+id,region,name,tags,mod_name
+1,Crafts Room,Spring Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+2,Crafts Room,Summer Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+3,Crafts Room,Fall Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+4,Crafts Room,Winter Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+5,Crafts Room,Construction Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+6,Crafts Room,Exotic Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE,MANDATORY",
+7,Pantry,Spring Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+8,Pantry,Summer Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+9,Pantry,Fall Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+10,Pantry,Quality Crops Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+11,Pantry,Animal Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+12,Pantry,Artisan Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,PANTRY_BUNDLE",
+13,Fish Tank,River Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+14,Fish Tank,Lake Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+15,Fish Tank,Ocean Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+16,Fish Tank,Night Fishing Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+17,Fish Tank,Crab Pot Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+18,Fish Tank,Specialty Fish Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE,MANDATORY",
+19,Boiler Room,Blacksmith's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+20,Boiler Room,Geologist's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+21,Boiler Room,Adventurer's Bundle,"BOILER_ROOM_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+22,Bulletin Board,Chef's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+23,Bulletin Board,Dye Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+24,Bulletin Board,Field Research Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+25,Bulletin Board,Fodder Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+26,Bulletin Board,Enchanter's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY",
+27,Vault,"2,500g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE",
+28,Vault,"5,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE",
+29,Vault,"10,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE",
+30,Vault,"25,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,MANDATORY,VAULT_BUNDLE",
+31,Abandoned JojaMart,The Missing Bundle,BUNDLE,
+32,Crafts Room,Complete Crafts Room,"COMMUNITY_CENTER_ROOM,MANDATORY",
+33,Pantry,Complete Pantry,"COMMUNITY_CENTER_ROOM,MANDATORY",
+34,Fish Tank,Complete Fish Tank,"COMMUNITY_CENTER_ROOM,MANDATORY",
+35,Boiler Room,Complete Boiler Room,"COMMUNITY_CENTER_ROOM,MANDATORY",
+36,Bulletin Board,Complete Bulletin Board,"COMMUNITY_CENTER_ROOM,MANDATORY",
+37,Vault,Complete Vault,"COMMUNITY_CENTER_ROOM,MANDATORY",
+101,Pierre's General Store,Large Pack,BACKPACK,
+102,Pierre's General Store,Deluxe Pack,BACKPACK,
+103,Clint's Blacksmith,Copper Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
+104,Clint's Blacksmith,Iron Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
+105,Clint's Blacksmith,Gold Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
+106,Clint's Blacksmith,Iridium Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
+107,Clint's Blacksmith,Copper Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE",
+108,Clint's Blacksmith,Iron Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE",
+109,Clint's Blacksmith,Gold Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE",
+110,Clint's Blacksmith,Iridium Pickaxe Upgrade,"PICKAXE_UPGRADE,TOOL_UPGRADE",
+111,Clint's Blacksmith,Copper Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE",
+112,Clint's Blacksmith,Iron Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE",
+113,Clint's Blacksmith,Gold Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE",
+114,Clint's Blacksmith,Iridium Axe Upgrade,"AXE_UPGRADE,TOOL_UPGRADE",
+115,Clint's Blacksmith,Copper Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE",
+116,Clint's Blacksmith,Iron Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE",
+117,Clint's Blacksmith,Gold Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE",
+118,Clint's Blacksmith,Iridium Watering Can Upgrade,"TOOL_UPGRADE,WATERING_CAN_UPGRADE",
+119,Clint's Blacksmith,Copper Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE",
+120,Clint's Blacksmith,Iron Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE",
+121,Clint's Blacksmith,Gold Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE",
+122,Clint's Blacksmith,Iridium Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE",
+123,Willy's Fish Shop,Purchase Training Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
+124,Beach,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
+125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
+126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
+201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE",
+202,The Mines - Floor 20,The Mines Floor 20 Treasure,"MANDATORY,THE_MINES_TREASURE",
+203,The Mines - Floor 40,The Mines Floor 40 Treasure,"MANDATORY,THE_MINES_TREASURE",
+204,The Mines - Floor 50,The Mines Floor 50 Treasure,"MANDATORY,THE_MINES_TREASURE",
+205,The Mines - Floor 60,The Mines Floor 60 Treasure,"MANDATORY,THE_MINES_TREASURE",
+206,The Mines - Floor 70,The Mines Floor 70 Treasure,"MANDATORY,THE_MINES_TREASURE",
+207,The Mines - Floor 80,The Mines Floor 80 Treasure,"MANDATORY,THE_MINES_TREASURE",
+208,The Mines - Floor 90,The Mines Floor 90 Treasure,"MANDATORY,THE_MINES_TREASURE",
+209,The Mines - Floor 100,The Mines Floor 100 Treasure,"MANDATORY,THE_MINES_TREASURE",
+210,The Mines - Floor 110,The Mines Floor 110 Treasure,"MANDATORY,THE_MINES_TREASURE",
+211,The Mines - Floor 120,The Mines Floor 120 Treasure,"MANDATORY,THE_MINES_TREASURE",
+212,Quarry Mine,Grim Reaper statue,MANDATORY,
+213,The Mines,The Mines Entrance Cutscene,MANDATORY,
+214,The Mines - Floor 5,Floor 5 Elevator,ELEVATOR,
+215,The Mines - Floor 10,Floor 10 Elevator,ELEVATOR,
+216,The Mines - Floor 15,Floor 15 Elevator,ELEVATOR,
+217,The Mines - Floor 20,Floor 20 Elevator,ELEVATOR,
+218,The Mines - Floor 25,Floor 25 Elevator,ELEVATOR,
+219,The Mines - Floor 30,Floor 30 Elevator,ELEVATOR,
+220,The Mines - Floor 35,Floor 35 Elevator,ELEVATOR,
+221,The Mines - Floor 40,Floor 40 Elevator,ELEVATOR,
+222,The Mines - Floor 45,Floor 45 Elevator,ELEVATOR,
+223,The Mines - Floor 50,Floor 50 Elevator,ELEVATOR,
+224,The Mines - Floor 55,Floor 55 Elevator,ELEVATOR,
+225,The Mines - Floor 60,Floor 60 Elevator,ELEVATOR,
+226,The Mines - Floor 65,Floor 65 Elevator,ELEVATOR,
+227,The Mines - Floor 70,Floor 70 Elevator,ELEVATOR,
+228,The Mines - Floor 75,Floor 75 Elevator,ELEVATOR,
+229,The Mines - Floor 80,Floor 80 Elevator,ELEVATOR,
+230,The Mines - Floor 85,Floor 85 Elevator,ELEVATOR,
+231,The Mines - Floor 90,Floor 90 Elevator,ELEVATOR,
+232,The Mines - Floor 95,Floor 95 Elevator,ELEVATOR,
+233,The Mines - Floor 100,Floor 100 Elevator,ELEVATOR,
+234,The Mines - Floor 105,Floor 105 Elevator,ELEVATOR,
+235,The Mines - Floor 110,Floor 110 Elevator,ELEVATOR,
+236,The Mines - Floor 115,Floor 115 Elevator,ELEVATOR,
+237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
+251,Volcano - Floor 10,Volcano Caldera Treasure,"MANDATORY,GINGER_ISLAND",
+301,Stardew Valley,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+302,Stardew Valley,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+303,Stardew Valley,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+304,Stardew Valley,Level 4 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+305,Stardew Valley,Level 5 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+306,Stardew Valley,Level 6 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+307,Stardew Valley,Level 7 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+308,Stardew Valley,Level 8 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+309,Stardew Valley,Level 9 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+310,Stardew Valley,Level 10 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+311,Stardew Valley,Level 1 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+312,Stardew Valley,Level 2 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+313,Stardew Valley,Level 3 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+314,Stardew Valley,Level 4 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+315,Stardew Valley,Level 5 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+316,Stardew Valley,Level 6 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+317,Stardew Valley,Level 7 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+318,Stardew Valley,Level 8 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+319,Stardew Valley,Level 9 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+320,Stardew Valley,Level 10 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
+321,Stardew Valley,Level 1 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+322,Stardew Valley,Level 2 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+323,Stardew Valley,Level 3 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+324,Stardew Valley,Level 4 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+325,Stardew Valley,Level 5 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+326,Stardew Valley,Level 6 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+327,Stardew Valley,Level 7 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+328,Stardew Valley,Level 8 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+329,Stardew Valley,Level 9 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+330,Stardew Valley,Level 10 Foraging,"FORAGING_LEVEL,SKILL_LEVEL",
+331,Stardew Valley,Level 1 Mining,"MINING_LEVEL,SKILL_LEVEL",
+332,Stardew Valley,Level 2 Mining,"MINING_LEVEL,SKILL_LEVEL",
+333,Stardew Valley,Level 3 Mining,"MINING_LEVEL,SKILL_LEVEL",
+334,Stardew Valley,Level 4 Mining,"MINING_LEVEL,SKILL_LEVEL",
+335,Stardew Valley,Level 5 Mining,"MINING_LEVEL,SKILL_LEVEL",
+336,Stardew Valley,Level 6 Mining,"MINING_LEVEL,SKILL_LEVEL",
+337,Stardew Valley,Level 7 Mining,"MINING_LEVEL,SKILL_LEVEL",
+338,Stardew Valley,Level 8 Mining,"MINING_LEVEL,SKILL_LEVEL",
+339,Stardew Valley,Level 9 Mining,"MINING_LEVEL,SKILL_LEVEL",
+340,Stardew Valley,Level 10 Mining,"MINING_LEVEL,SKILL_LEVEL",
+341,Stardew Valley,Level 1 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+342,Stardew Valley,Level 2 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+343,Stardew Valley,Level 3 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+344,Stardew Valley,Level 4 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+345,Stardew Valley,Level 5 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+346,Stardew Valley,Level 6 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+347,Stardew Valley,Level 7 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+348,Stardew Valley,Level 8 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+349,Stardew Valley,Level 9 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+350,Stardew Valley,Level 10 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+401,Carpenter Shop,Coop Blueprint,BUILDING_BLUEPRINT,
+402,Carpenter Shop,Big Coop Blueprint,BUILDING_BLUEPRINT,
+403,Carpenter Shop,Deluxe Coop Blueprint,BUILDING_BLUEPRINT,
+404,Carpenter Shop,Barn Blueprint,BUILDING_BLUEPRINT,
+405,Carpenter Shop,Big Barn Blueprint,BUILDING_BLUEPRINT,
+406,Carpenter Shop,Deluxe Barn Blueprint,BUILDING_BLUEPRINT,
+407,Carpenter Shop,Well Blueprint,BUILDING_BLUEPRINT,
+408,Carpenter Shop,Silo Blueprint,BUILDING_BLUEPRINT,
+409,Carpenter Shop,Mill Blueprint,BUILDING_BLUEPRINT,
+410,Carpenter Shop,Shed Blueprint,BUILDING_BLUEPRINT,
+411,Carpenter Shop,Big Shed Blueprint,BUILDING_BLUEPRINT,
+412,Carpenter Shop,Fish Pond Blueprint,BUILDING_BLUEPRINT,
+413,Carpenter Shop,Stable Blueprint,BUILDING_BLUEPRINT,
+414,Carpenter Shop,Slime Hutch Blueprint,BUILDING_BLUEPRINT,
+415,Carpenter Shop,Shipping Bin Blueprint,BUILDING_BLUEPRINT,
+416,Carpenter Shop,Kitchen Blueprint,BUILDING_BLUEPRINT,
+417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT,
+418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT,
+501,Town,Introductions,"MANDATORY,QUEST",
+502,Town,How To Win Friends,"MANDATORY,QUEST",
+503,Farm,Getting Started,"MANDATORY,QUEST",
+504,Farm,Raising Animals,"MANDATORY,QUEST",
+505,Farm,Advancement,"MANDATORY,QUEST",
+506,Museum,Archaeology,"MANDATORY,QUEST",
+507,Wizard Tower,Meet The Wizard,"MANDATORY,QUEST",
+508,Farm,Forging Ahead,"MANDATORY,QUEST",
+509,Farm,Smelting,"MANDATORY,QUEST",
+510,The Mines - Floor 5,Initiation,"MANDATORY,QUEST",
+511,Forest,Robin's Lost Axe,"MANDATORY,QUEST",
+512,Sam's House,Jodi's Request,"MANDATORY,QUEST",
+513,Marnie's Ranch,"Mayor's ""Shorts""","MANDATORY,QUEST",
+514,Tunnel Entrance,Blackberry Basket,"MANDATORY,QUEST",
+515,Marnie's Ranch,Marnie's Request,"MANDATORY,QUEST",
+516,Town,Pam Is Thirsty,"MANDATORY,QUEST",
+517,Wizard Tower,A Dark Reagent,"MANDATORY,QUEST",
+518,Marnie's Ranch,Cow's Delight,"MANDATORY,QUEST",
+519,Skull Cavern Entrance,The Skull Key,"MANDATORY,QUEST",
+520,Town,Crop Research,"MANDATORY,QUEST",
+521,Town,Knee Therapy,"MANDATORY,QUEST",
+522,Town,Robin's Request,"MANDATORY,QUEST",
+523,Skull Cavern,Qi's Challenge,"MANDATORY,QUEST",
+524,Desert,The Mysterious Qi,"MANDATORY,QUEST",
+525,Town,Carving Pumpkins,"MANDATORY,QUEST",
+526,Town,A Winter Mystery,"MANDATORY,QUEST",
+527,Secret Woods,Strange Note,"MANDATORY,QUEST",
+528,Skull Cavern,Cryptic Note,"MANDATORY,QUEST",
+529,Town,Fresh Fruit,"MANDATORY,QUEST",
+530,Town,Aquatic Research,"MANDATORY,QUEST",
+531,Town,A Soldier's Star,"MANDATORY,QUEST",
+532,Town,Mayor's Need,"MANDATORY,QUEST",
+533,Saloon,Wanted: Lobster,"MANDATORY,QUEST",
+534,Town,Pam Needs Juice,"MANDATORY,QUEST",
+535,Sam's House,Fish Casserole,"MANDATORY,QUEST",
+536,Beach,Catch A Squid,"MANDATORY,QUEST",
+537,Saloon,Fish Stew,"MANDATORY,QUEST",
+538,Town,Pierre's Notice,"MANDATORY,QUEST",
+539,Town,Clint's Attempt,"MANDATORY,QUEST",
+540,Town,A Favor For Clint,"MANDATORY,QUEST",
+541,Wizard Tower,Staff Of Power,"MANDATORY,QUEST",
+542,Town,Granny's Gift,"MANDATORY,QUEST",
+543,Saloon,Exotic Spirits,"MANDATORY,QUEST",
+544,Town,Catch a Lingcod,"MANDATORY,QUEST",
+545,Island West,The Pirate's Wife,"GINGER_ISLAND,MANDATORY,QUEST",
+546,Railroad,Dark Talisman,"MANDATORY,QUEST",
+547,Witch's Swamp,Goblin Problem,"MANDATORY,QUEST",
+548,Witch's Hut,Magic Ink,"MANDATORY,QUEST",
+601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK",
+602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK",
+603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK",
+604,JotPK World 2,JotPK: Gun 2,"ARCADE_MACHINE,JOTPK",
+605,JotPK World 2,JotPK: Gun 3,"ARCADE_MACHINE,JOTPK",
+606,JotPK World 3,JotPK: Super Gun,"ARCADE_MACHINE,JOTPK",
+607,JotPK World 1,JotPK: Ammo 1,"ARCADE_MACHINE,JOTPK",
+608,JotPK World 2,JotPK: Ammo 2,"ARCADE_MACHINE,JOTPK",
+609,JotPK World 3,JotPK: Ammo 3,"ARCADE_MACHINE,JOTPK",
+610,JotPK World 1,JotPK: Cowboy 1,"ARCADE_MACHINE,JOTPK",
+611,JotPK World 2,JotPK: Cowboy 2,"ARCADE_MACHINE,JOTPK",
+612,Junimo Kart 1,Junimo Kart: Crumble Cavern,"ARCADE_MACHINE,JUNIMO_KART",
+613,Junimo Kart 1,Junimo Kart: Slippery Slopes,"ARCADE_MACHINE,JUNIMO_KART",
+614,Junimo Kart 2,Junimo Kart: Secret Level,"ARCADE_MACHINE,JUNIMO_KART",
+615,Junimo Kart 2,Junimo Kart: The Gem Sea Giant,"ARCADE_MACHINE,JUNIMO_KART",
+616,Junimo Kart 2,Junimo Kart: Slomp's Stomp,"ARCADE_MACHINE,JUNIMO_KART",
+617,Junimo Kart 2,Junimo Kart: Ghastly Galleon,"ARCADE_MACHINE,JUNIMO_KART",
+618,Junimo Kart 3,Junimo Kart: Glowshroom Grotto,"ARCADE_MACHINE,JUNIMO_KART",
+619,Junimo Kart 3,Junimo Kart: Red Hot Rollercoaster,"ARCADE_MACHINE,JUNIMO_KART",
+620,JotPK World 3,Journey of the Prairie King Victory,"ARCADE_MACHINE_VICTORY,JOTPK",
+621,Junimo Kart 3,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART",
+701,Secret Woods,Old Master Cannoli,MANDATORY,
+702,Beach,Beach Bridge Repair,MANDATORY,
+703,Desert,Galaxy Sword Shrine,MANDATORY,
+704,Farmhouse,Have a Baby,MANDATORY,
+705,Farmhouse,Have Another Baby,MANDATORY,
+801,Town,Help Wanted: Gathering 1,HELP_WANTED,
+802,Town,Help Wanted: Gathering 2,HELP_WANTED,
+803,Town,Help Wanted: Gathering 3,HELP_WANTED,
+804,Town,Help Wanted: Gathering 4,HELP_WANTED,
+805,Town,Help Wanted: Gathering 5,HELP_WANTED,
+806,Town,Help Wanted: Gathering 6,HELP_WANTED,
+807,Town,Help Wanted: Gathering 7,HELP_WANTED,
+808,Town,Help Wanted: Gathering 8,HELP_WANTED,
+811,Town,Help Wanted: Slay Monsters 1,HELP_WANTED,
+812,Town,Help Wanted: Slay Monsters 2,HELP_WANTED,
+813,Town,Help Wanted: Slay Monsters 3,HELP_WANTED,
+814,Town,Help Wanted: Slay Monsters 4,HELP_WANTED,
+815,Town,Help Wanted: Slay Monsters 5,HELP_WANTED,
+816,Town,Help Wanted: Slay Monsters 6,HELP_WANTED,
+817,Town,Help Wanted: Slay Monsters 7,HELP_WANTED,
+818,Town,Help Wanted: Slay Monsters 8,HELP_WANTED,
+821,Town,Help Wanted: Fishing 1,HELP_WANTED,
+822,Town,Help Wanted: Fishing 2,HELP_WANTED,
+823,Town,Help Wanted: Fishing 3,HELP_WANTED,
+824,Town,Help Wanted: Fishing 4,HELP_WANTED,
+825,Town,Help Wanted: Fishing 5,HELP_WANTED,
+826,Town,Help Wanted: Fishing 6,HELP_WANTED,
+827,Town,Help Wanted: Fishing 7,HELP_WANTED,
+828,Town,Help Wanted: Fishing 8,HELP_WANTED,
+841,Town,Help Wanted: Item Delivery 1,HELP_WANTED,
+842,Town,Help Wanted: Item Delivery 2,HELP_WANTED,
+843,Town,Help Wanted: Item Delivery 3,HELP_WANTED,
+844,Town,Help Wanted: Item Delivery 4,HELP_WANTED,
+845,Town,Help Wanted: Item Delivery 5,HELP_WANTED,
+846,Town,Help Wanted: Item Delivery 6,HELP_WANTED,
+847,Town,Help Wanted: Item Delivery 7,HELP_WANTED,
+848,Town,Help Wanted: Item Delivery 8,HELP_WANTED,
+849,Town,Help Wanted: Item Delivery 9,HELP_WANTED,
+850,Town,Help Wanted: Item Delivery 10,HELP_WANTED,
+851,Town,Help Wanted: Item Delivery 11,HELP_WANTED,
+852,Town,Help Wanted: Item Delivery 12,HELP_WANTED,
+853,Town,Help Wanted: Item Delivery 13,HELP_WANTED,
+854,Town,Help Wanted: Item Delivery 14,HELP_WANTED,
+855,Town,Help Wanted: Item Delivery 15,HELP_WANTED,
+856,Town,Help Wanted: Item Delivery 16,HELP_WANTED,
+857,Town,Help Wanted: Item Delivery 17,HELP_WANTED,
+858,Town,Help Wanted: Item Delivery 18,HELP_WANTED,
+859,Town,Help Wanted: Item Delivery 19,HELP_WANTED,
+860,Town,Help Wanted: Item Delivery 20,HELP_WANTED,
+861,Town,Help Wanted: Item Delivery 21,HELP_WANTED,
+862,Town,Help Wanted: Item Delivery 22,HELP_WANTED,
+863,Town,Help Wanted: Item Delivery 23,HELP_WANTED,
+864,Town,Help Wanted: Item Delivery 24,HELP_WANTED,
+865,Town,Help Wanted: Item Delivery 25,HELP_WANTED,
+866,Town,Help Wanted: Item Delivery 26,HELP_WANTED,
+867,Town,Help Wanted: Item Delivery 27,HELP_WANTED,
+868,Town,Help Wanted: Item Delivery 28,HELP_WANTED,
+869,Town,Help Wanted: Item Delivery 29,HELP_WANTED,
+870,Town,Help Wanted: Item Delivery 30,HELP_WANTED,
+871,Town,Help Wanted: Item Delivery 31,HELP_WANTED,
+872,Town,Help Wanted: Item Delivery 32,HELP_WANTED,
+901,Forest,Traveling Merchant Sunday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+902,Forest,Traveling Merchant Sunday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+903,Forest,Traveling Merchant Sunday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+911,Forest,Traveling Merchant Monday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+912,Forest,Traveling Merchant Monday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+913,Forest,Traveling Merchant Monday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+921,Forest,Traveling Merchant Tuesday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+922,Forest,Traveling Merchant Tuesday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+923,Forest,Traveling Merchant Tuesday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+931,Forest,Traveling Merchant Wednesday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+932,Forest,Traveling Merchant Wednesday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+933,Forest,Traveling Merchant Wednesday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+941,Forest,Traveling Merchant Thursday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+942,Forest,Traveling Merchant Thursday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+943,Forest,Traveling Merchant Thursday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+951,Forest,Traveling Merchant Friday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+952,Forest,Traveling Merchant Friday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+953,Forest,Traveling Merchant Friday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+961,Forest,Traveling Merchant Saturday Item 1,"MANDATORY,TRAVELING_MERCHANT",
+962,Forest,Traveling Merchant Saturday Item 2,"MANDATORY,TRAVELING_MERCHANT",
+963,Forest,Traveling Merchant Saturday Item 3,"MANDATORY,TRAVELING_MERCHANT",
+1001,Mountain,Fishsanity: Carp,FISHSANITY,
+1002,Beach,Fishsanity: Herring,FISHSANITY,
+1003,Forest,Fishsanity: Smallmouth Bass,FISHSANITY,
+1004,Beach,Fishsanity: Anchovy,FISHSANITY,
+1005,Beach,Fishsanity: Sardine,FISHSANITY,
+1006,Forest,Fishsanity: Sunfish,FISHSANITY,
+1007,Forest,Fishsanity: Perch,FISHSANITY,
+1008,Forest,Fishsanity: Chub,FISHSANITY,
+1009,Forest,Fishsanity: Bream,FISHSANITY,
+1010,Beach,Fishsanity: Red Snapper,FISHSANITY,
+1011,Beach,Fishsanity: Sea Cucumber,FISHSANITY,
+1012,Forest,Fishsanity: Rainbow Trout,FISHSANITY,
+1013,Forest,Fishsanity: Walleye,FISHSANITY,
+1014,Forest,Fishsanity: Shad,FISHSANITY,
+1015,Mountain,Fishsanity: Bullhead,FISHSANITY,
+1016,Mountain,Fishsanity: Largemouth Bass,FISHSANITY,
+1017,Forest,Fishsanity: Salmon,FISHSANITY,
+1018,The Mines - Floor 20,Fishsanity: Ghostfish,FISHSANITY,
+1019,Beach,Fishsanity: Tilapia,FISHSANITY,
+1020,Secret Woods,Fishsanity: Woodskip,FISHSANITY,
+1021,Beach,Fishsanity: Flounder,FISHSANITY,
+1022,Beach,Fishsanity: Halibut,FISHSANITY,
+1023,Island West,Fishsanity: Lionfish,"FISHSANITY,GINGER_ISLAND",
+1024,Mutant Bug Lair,Fishsanity: Slimejack,FISHSANITY,
+1025,Forest,Fishsanity: Midnight Carp,FISHSANITY,
+1026,Beach,Fishsanity: Red Mullet,FISHSANITY,
+1027,Forest,Fishsanity: Pike,FISHSANITY,
+1028,Forest,Fishsanity: Tiger Trout,FISHSANITY,
+1029,Island West,Fishsanity: Blue Discus,"FISHSANITY,GINGER_ISLAND",
+1030,Beach,Fishsanity: Albacore,FISHSANITY,
+1031,Desert,Fishsanity: Sandfish,FISHSANITY,
+1032,The Mines - Floor 20,Fishsanity: Stonefish,FISHSANITY,
+1033,Beach,Fishsanity: Tuna,FISHSANITY,
+1034,Beach,Fishsanity: Eel,FISHSANITY,
+1035,Forest,Fishsanity: Catfish,FISHSANITY,
+1036,Beach,Fishsanity: Squid,FISHSANITY,
+1037,Mountain,Fishsanity: Sturgeon,FISHSANITY,
+1038,Forest,Fishsanity: Dorado,FISHSANITY,
+1039,Beach,Fishsanity: Pufferfish,FISHSANITY,
+1040,Witch's Swamp,Fishsanity: Void Salmon,FISHSANITY,
+1041,Beach,Fishsanity: Super Cucumber,FISHSANITY,
+1042,Pirate Cove,Fishsanity: Stingray,"FISHSANITY,GINGER_ISLAND",
+1043,The Mines - Floor 60,Fishsanity: Ice Pip,FISHSANITY,
+1044,Forest,Fishsanity: Lingcod,FISHSANITY,
+1045,Desert,Fishsanity: Scorpion Carp,FISHSANITY,
+1046,The Mines - Floor 100,Fishsanity: Lava Eel,FISHSANITY,
+1047,Beach,Fishsanity: Octopus,FISHSANITY,
+1048,Beach,Fishsanity: Midnight Squid,FISHSANITY,
+1049,Beach,Fishsanity: Spook Fish,FISHSANITY,
+1050,Beach,Fishsanity: Blobfish,FISHSANITY,
+1051,Beach,Fishsanity: Crimsonfish,FISHSANITY,
+1052,Town,Fishsanity: Angler,FISHSANITY,
+1053,Mountain,Fishsanity: Legend,FISHSANITY,
+1054,Forest,Fishsanity: Glacierfish,FISHSANITY,
+1055,Sewer,Fishsanity: Mutant Carp,FISHSANITY,
+1056,Town,Fishsanity: Crayfish,FISHSANITY,
+1057,Town,Fishsanity: Snail,FISHSANITY,
+1058,Town,Fishsanity: Periwinkle,FISHSANITY,
+1059,Beach,Fishsanity: Lobster,FISHSANITY,
+1060,Beach,Fishsanity: Clam,FISHSANITY,
+1061,Beach,Fishsanity: Crab,FISHSANITY,
+1062,Beach,Fishsanity: Cockle,FISHSANITY,
+1063,Beach,Fishsanity: Mussel,FISHSANITY,
+1064,Beach,Fishsanity: Shrimp,FISHSANITY,
+1065,Beach,Fishsanity: Oyster,FISHSANITY,
+1100,Stardew Valley,Museumsanity: 5 Donations,MUSEUM_MILESTONES,
+1101,Stardew Valley,Museumsanity: 10 Donations,MUSEUM_MILESTONES,
+1102,Stardew Valley,Museumsanity: 15 Donations,MUSEUM_MILESTONES,
+1103,Stardew Valley,Museumsanity: 20 Donations,MUSEUM_MILESTONES,
+1104,Stardew Valley,Museumsanity: 25 Donations,MUSEUM_MILESTONES,
+1105,Stardew Valley,Museumsanity: 30 Donations,MUSEUM_MILESTONES,
+1106,Stardew Valley,Museumsanity: 35 Donations,MUSEUM_MILESTONES,
+1107,Stardew Valley,Museumsanity: 40 Donations,MUSEUM_MILESTONES,
+1108,Stardew Valley,Museumsanity: 50 Donations,MUSEUM_MILESTONES,
+1109,Stardew Valley,Museumsanity: 60 Donations,MUSEUM_MILESTONES,
+1110,Stardew Valley,Museumsanity: 70 Donations,MUSEUM_MILESTONES,
+1111,Stardew Valley,Museumsanity: 80 Donations,MUSEUM_MILESTONES,
+1112,Stardew Valley,Museumsanity: 90 Donations,MUSEUM_MILESTONES,
+1113,Stardew Valley,Museumsanity: 95 Donations,MUSEUM_MILESTONES,
+1114,Stardew Valley,Museumsanity: 11 Minerals,MUSEUM_MILESTONES,
+1115,Stardew Valley,Museumsanity: 21 Minerals,MUSEUM_MILESTONES,
+1116,Stardew Valley,Museumsanity: 31 Minerals,MUSEUM_MILESTONES,
+1117,Stardew Valley,Museumsanity: 41 Minerals,MUSEUM_MILESTONES,
+1118,Stardew Valley,Museumsanity: 50 Minerals,MUSEUM_MILESTONES,
+1119,Stardew Valley,Museumsanity: 3 Artifacts,MUSEUM_MILESTONES,
+1120,Stardew Valley,Museumsanity: 6 Artifacts,MUSEUM_MILESTONES,
+1121,Stardew Valley,Museumsanity: 9 Artifacts,MUSEUM_MILESTONES,
+1122,Stardew Valley,Museumsanity: 11 Artifacts,MUSEUM_MILESTONES,
+1123,Stardew Valley,Museumsanity: 15 Artifacts,MUSEUM_MILESTONES,
+1124,Stardew Valley,Museumsanity: 20 Artifacts,MUSEUM_MILESTONES,
+1125,Stardew Valley,Museumsanity: Dwarf Scrolls,MUSEUM_MILESTONES,
+1126,Stardew Valley,Museumsanity: Skeleton Front,MUSEUM_MILESTONES,
+1127,Stardew Valley,Museumsanity: Skeleton Middle,MUSEUM_MILESTONES,
+1128,Stardew Valley,Museumsanity: Skeleton Back,MUSEUM_MILESTONES,
+1201,The Mines - Floor 20,Museumsanity: Dwarf Scroll I,MUSEUM_DONATIONS,
+1202,The Mines - Floor 20,Museumsanity: Dwarf Scroll II,MUSEUM_DONATIONS,
+1203,The Mines - Floor 60,Museumsanity: Dwarf Scroll III,MUSEUM_DONATIONS,
+1204,The Mines - Floor 100,Museumsanity: Dwarf Scroll IV,MUSEUM_DONATIONS,
+1205,Town,Museumsanity: Chipped Amphora,MUSEUM_DONATIONS,
+1206,Forest,Museumsanity: Arrowhead,MUSEUM_DONATIONS,
+1207,Forest,Museumsanity: Ancient Doll,MUSEUM_DONATIONS,
+1208,Forest,Museumsanity: Elvish Jewelry,MUSEUM_DONATIONS,
+1209,Forest,Museumsanity: Chewing Stick,MUSEUM_DONATIONS,
+1210,Forest,Museumsanity: Ornamental Fan,MUSEUM_DONATIONS,
+1211,Mountain,Museumsanity: Dinosaur Egg,MUSEUM_DONATIONS,
+1212,Stardew Valley,Museumsanity: Rare Disc,MUSEUM_DONATIONS,
+1213,Forest,Museumsanity: Ancient Sword,MUSEUM_DONATIONS,
+1214,Town,Museumsanity: Rusty Spoon,MUSEUM_DONATIONS,
+1215,Farm,Museumsanity: Rusty Spur,MUSEUM_DONATIONS,
+1216,Mountain,Museumsanity: Rusty Cog,MUSEUM_DONATIONS,
+1217,Farm,Museumsanity: Chicken Statue,MUSEUM_DONATIONS,
+1218,Forest,Museumsanity: Ancient Seed,"MUSEUM_DONATIONS,MUSEUM_MILESTONES",
+1219,Forest,Museumsanity: Prehistoric Tool,MUSEUM_DONATIONS,
+1220,Beach,Museumsanity: Dried Starfish,MUSEUM_DONATIONS,
+1221,Beach,Museumsanity: Anchor,MUSEUM_DONATIONS,
+1222,Beach,Museumsanity: Glass Shards,MUSEUM_DONATIONS,
+1223,Forest,Museumsanity: Bone Flute,MUSEUM_DONATIONS,
+1224,Forest,Museumsanity: Prehistoric Handaxe,MUSEUM_DONATIONS,
+1225,The Mines - Floor 20,Museumsanity: Dwarvish Helm,MUSEUM_DONATIONS,
+1226,The Mines - Floor 60,Museumsanity: Dwarf Gadget,MUSEUM_DONATIONS,
+1227,Forest,Museumsanity: Ancient Drum,MUSEUM_DONATIONS,
+1228,Desert,Museumsanity: Golden Mask,MUSEUM_DONATIONS,
+1229,Desert,Museumsanity: Golden Relic,MUSEUM_DONATIONS,
+1230,Town,Museumsanity: Strange Doll (Green),MUSEUM_DONATIONS,
+1231,Desert,Museumsanity: Strange Doll,MUSEUM_DONATIONS,
+1232,Forest,Museumsanity: Prehistoric Scapula,MUSEUM_DONATIONS,
+1233,Forest,Museumsanity: Prehistoric Tibia,MUSEUM_DONATIONS,
+1234,Dig Site,Museumsanity: Prehistoric Skull,MUSEUM_DONATIONS,
+1235,Dig Site,Museumsanity: Skeletal Hand,MUSEUM_DONATIONS,
+1236,Dig Site,Museumsanity: Prehistoric Rib,MUSEUM_DONATIONS,
+1237,Dig Site,Museumsanity: Prehistoric Vertebra,MUSEUM_DONATIONS,
+1238,Dig Site,Museumsanity: Skeletal Tail,MUSEUM_DONATIONS,
+1239,Dig Site,Museumsanity: Nautilus Fossil,MUSEUM_DONATIONS,
+1240,Forest,Museumsanity: Amphibian Fossil,MUSEUM_DONATIONS,
+1241,Forest,Museumsanity: Palm Fossil,MUSEUM_DONATIONS,
+1242,Forest,Museumsanity: Trilobite,MUSEUM_DONATIONS,
+1243,The Mines - Floor 20,Museumsanity: Quartz,MUSEUM_DONATIONS,
+1244,The Mines - Floor 100,Museumsanity: Fire Quartz,MUSEUM_DONATIONS,
+1245,The Mines - Floor 60,Museumsanity: Frozen Tear,MUSEUM_DONATIONS,
+1246,The Mines - Floor 20,Museumsanity: Earth Crystal,MUSEUM_DONATIONS,
+1247,The Mines - Floor 100,Museumsanity: Emerald,MUSEUM_DONATIONS,
+1248,The Mines - Floor 60,Museumsanity: Aquamarine,MUSEUM_DONATIONS,
+1249,The Mines - Floor 100,Museumsanity: Ruby,MUSEUM_DONATIONS,
+1250,The Mines - Floor 20,Museumsanity: Amethyst,MUSEUM_DONATIONS,
+1251,The Mines - Floor 20,Museumsanity: Topaz,MUSEUM_DONATIONS,
+1252,The Mines - Floor 60,Museumsanity: Jade,MUSEUM_DONATIONS,
+1253,The Mines - Floor 60,Museumsanity: Diamond,MUSEUM_DONATIONS,
+1254,Skull Cavern Floor 100,Museumsanity: Prismatic Shard,MUSEUM_DONATIONS,
+1255,Town,Museumsanity: Alamite,MUSEUM_DONATIONS,
+1256,Town,Museumsanity: Bixite,MUSEUM_DONATIONS,
+1257,Town,Museumsanity: Baryte,MUSEUM_DONATIONS,
+1258,Town,Museumsanity: Aerinite,MUSEUM_DONATIONS,
+1259,Town,Museumsanity: Calcite,MUSEUM_DONATIONS,
+1260,Town,Museumsanity: Dolomite,MUSEUM_DONATIONS,
+1261,Town,Museumsanity: Esperite,MUSEUM_DONATIONS,
+1262,Town,Museumsanity: Fluorapatite,MUSEUM_DONATIONS,
+1263,Town,Museumsanity: Geminite,MUSEUM_DONATIONS,
+1264,Town,Museumsanity: Helvite,MUSEUM_DONATIONS,
+1265,Town,Museumsanity: Jamborite,MUSEUM_DONATIONS,
+1266,Town,Museumsanity: Jagoite,MUSEUM_DONATIONS,
+1267,Town,Museumsanity: Kyanite,MUSEUM_DONATIONS,
+1268,Town,Museumsanity: Lunarite,MUSEUM_DONATIONS,
+1269,Town,Museumsanity: Malachite,MUSEUM_DONATIONS,
+1270,Town,Museumsanity: Neptunite,MUSEUM_DONATIONS,
+1271,Town,Museumsanity: Lemon Stone,MUSEUM_DONATIONS,
+1272,Town,Museumsanity: Nekoite,MUSEUM_DONATIONS,
+1273,Town,Museumsanity: Orpiment,MUSEUM_DONATIONS,
+1274,Town,Museumsanity: Petrified Slime,MUSEUM_DONATIONS,
+1275,Town,Museumsanity: Thunder Egg,MUSEUM_DONATIONS,
+1276,Town,Museumsanity: Pyrite,MUSEUM_DONATIONS,
+1277,Town,Museumsanity: Ocean Stone,MUSEUM_DONATIONS,
+1278,Town,Museumsanity: Ghost Crystal,MUSEUM_DONATIONS,
+1279,Town,Museumsanity: Tigerseye,MUSEUM_DONATIONS,
+1280,Town,Museumsanity: Jasper,MUSEUM_DONATIONS,
+1281,Town,Museumsanity: Opal,MUSEUM_DONATIONS,
+1282,Town,Museumsanity: Fire Opal,MUSEUM_DONATIONS,
+1283,Town,Museumsanity: Celestine,MUSEUM_DONATIONS,
+1284,Town,Museumsanity: Marble,MUSEUM_DONATIONS,
+1285,Town,Museumsanity: Sandstone,MUSEUM_DONATIONS,
+1286,Town,Museumsanity: Granite,MUSEUM_DONATIONS,
+1287,Town,Museumsanity: Basalt,MUSEUM_DONATIONS,
+1288,Town,Museumsanity: Limestone,MUSEUM_DONATIONS,
+1289,Town,Museumsanity: Soapstone,MUSEUM_DONATIONS,
+1290,Town,Museumsanity: Hematite,MUSEUM_DONATIONS,
+1291,Town,Museumsanity: Mudstone,MUSEUM_DONATIONS,
+1292,Town,Museumsanity: Obsidian,MUSEUM_DONATIONS,
+1293,Town,Museumsanity: Slate,MUSEUM_DONATIONS,
+1294,Town,Museumsanity: Fairy Stone,MUSEUM_DONATIONS,
+1295,Town,Museumsanity: Star Shards,MUSEUM_DONATIONS,
+1301,Town,Friendsanity: Alex 1 <3,FRIENDSANITY,
+1302,Town,Friendsanity: Alex 2 <3,FRIENDSANITY,
+1303,Town,Friendsanity: Alex 3 <3,FRIENDSANITY,
+1304,Town,Friendsanity: Alex 4 <3,FRIENDSANITY,
+1305,Town,Friendsanity: Alex 5 <3,FRIENDSANITY,
+1306,Town,Friendsanity: Alex 6 <3,FRIENDSANITY,
+1307,Town,Friendsanity: Alex 7 <3,FRIENDSANITY,
+1308,Town,Friendsanity: Alex 8 <3,FRIENDSANITY,
+1309,Town,Friendsanity: Alex 9 <3,FRIENDSANITY,
+1310,Town,Friendsanity: Alex 10 <3,FRIENDSANITY,
+1311,Town,Friendsanity: Alex 11 <3,FRIENDSANITY,
+1312,Town,Friendsanity: Alex 12 <3,FRIENDSANITY,
+1313,Town,Friendsanity: Alex 13 <3,FRIENDSANITY,
+1314,Town,Friendsanity: Alex 14 <3,FRIENDSANITY,
+1315,Beach,Friendsanity: Elliott 1 <3,FRIENDSANITY,
+1316,Beach,Friendsanity: Elliott 2 <3,FRIENDSANITY,
+1317,Beach,Friendsanity: Elliott 3 <3,FRIENDSANITY,
+1318,Beach,Friendsanity: Elliott 4 <3,FRIENDSANITY,
+1319,Beach,Friendsanity: Elliott 5 <3,FRIENDSANITY,
+1320,Beach,Friendsanity: Elliott 6 <3,FRIENDSANITY,
+1321,Beach,Friendsanity: Elliott 7 <3,FRIENDSANITY,
+1322,Beach,Friendsanity: Elliott 8 <3,FRIENDSANITY,
+1323,Beach,Friendsanity: Elliott 9 <3,FRIENDSANITY,
+1324,Beach,Friendsanity: Elliott 10 <3,FRIENDSANITY,
+1325,Beach,Friendsanity: Elliott 11 <3,FRIENDSANITY,
+1326,Beach,Friendsanity: Elliott 12 <3,FRIENDSANITY,
+1327,Beach,Friendsanity: Elliott 13 <3,FRIENDSANITY,
+1328,Beach,Friendsanity: Elliott 14 <3,FRIENDSANITY,
+1329,Town,Friendsanity: Harvey 1 <3,FRIENDSANITY,
+1330,Town,Friendsanity: Harvey 2 <3,FRIENDSANITY,
+1331,Town,Friendsanity: Harvey 3 <3,FRIENDSANITY,
+1332,Town,Friendsanity: Harvey 4 <3,FRIENDSANITY,
+1333,Town,Friendsanity: Harvey 5 <3,FRIENDSANITY,
+1334,Town,Friendsanity: Harvey 6 <3,FRIENDSANITY,
+1335,Town,Friendsanity: Harvey 7 <3,FRIENDSANITY,
+1336,Town,Friendsanity: Harvey 8 <3,FRIENDSANITY,
+1337,Town,Friendsanity: Harvey 9 <3,FRIENDSANITY,
+1338,Town,Friendsanity: Harvey 10 <3,FRIENDSANITY,
+1339,Town,Friendsanity: Harvey 11 <3,FRIENDSANITY,
+1340,Town,Friendsanity: Harvey 12 <3,FRIENDSANITY,
+1341,Town,Friendsanity: Harvey 13 <3,FRIENDSANITY,
+1342,Town,Friendsanity: Harvey 14 <3,FRIENDSANITY,
+1343,Town,Friendsanity: Sam 1 <3,FRIENDSANITY,
+1344,Town,Friendsanity: Sam 2 <3,FRIENDSANITY,
+1345,Town,Friendsanity: Sam 3 <3,FRIENDSANITY,
+1346,Town,Friendsanity: Sam 4 <3,FRIENDSANITY,
+1347,Town,Friendsanity: Sam 5 <3,FRIENDSANITY,
+1348,Town,Friendsanity: Sam 6 <3,FRIENDSANITY,
+1349,Town,Friendsanity: Sam 7 <3,FRIENDSANITY,
+1350,Town,Friendsanity: Sam 8 <3,FRIENDSANITY,
+1351,Town,Friendsanity: Sam 9 <3,FRIENDSANITY,
+1352,Town,Friendsanity: Sam 10 <3,FRIENDSANITY,
+1353,Town,Friendsanity: Sam 11 <3,FRIENDSANITY,
+1354,Town,Friendsanity: Sam 12 <3,FRIENDSANITY,
+1355,Town,Friendsanity: Sam 13 <3,FRIENDSANITY,
+1356,Town,Friendsanity: Sam 14 <3,FRIENDSANITY,
+1357,Carpenter Shop,Friendsanity: Sebastian 1 <3,FRIENDSANITY,
+1358,Carpenter Shop,Friendsanity: Sebastian 2 <3,FRIENDSANITY,
+1359,Carpenter Shop,Friendsanity: Sebastian 3 <3,FRIENDSANITY,
+1360,Carpenter Shop,Friendsanity: Sebastian 4 <3,FRIENDSANITY,
+1361,Carpenter Shop,Friendsanity: Sebastian 5 <3,FRIENDSANITY,
+1362,Carpenter Shop,Friendsanity: Sebastian 6 <3,FRIENDSANITY,
+1363,Carpenter Shop,Friendsanity: Sebastian 7 <3,FRIENDSANITY,
+1364,Carpenter Shop,Friendsanity: Sebastian 8 <3,FRIENDSANITY,
+1365,Carpenter Shop,Friendsanity: Sebastian 9 <3,FRIENDSANITY,
+1366,Carpenter Shop,Friendsanity: Sebastian 10 <3,FRIENDSANITY,
+1367,Carpenter Shop,Friendsanity: Sebastian 11 <3,FRIENDSANITY,
+1368,Carpenter Shop,Friendsanity: Sebastian 12 <3,FRIENDSANITY,
+1369,Carpenter Shop,Friendsanity: Sebastian 13 <3,FRIENDSANITY,
+1370,Carpenter Shop,Friendsanity: Sebastian 14 <3,FRIENDSANITY,
+1371,Marnie's Ranch,Friendsanity: Shane 1 <3,FRIENDSANITY,
+1372,Marnie's Ranch,Friendsanity: Shane 2 <3,FRIENDSANITY,
+1373,Marnie's Ranch,Friendsanity: Shane 3 <3,FRIENDSANITY,
+1374,Marnie's Ranch,Friendsanity: Shane 4 <3,FRIENDSANITY,
+1375,Marnie's Ranch,Friendsanity: Shane 5 <3,FRIENDSANITY,
+1376,Marnie's Ranch,Friendsanity: Shane 6 <3,FRIENDSANITY,
+1377,Marnie's Ranch,Friendsanity: Shane 7 <3,FRIENDSANITY,
+1378,Marnie's Ranch,Friendsanity: Shane 8 <3,FRIENDSANITY,
+1379,Marnie's Ranch,Friendsanity: Shane 9 <3,FRIENDSANITY,
+1380,Marnie's Ranch,Friendsanity: Shane 10 <3,FRIENDSANITY,
+1381,Marnie's Ranch,Friendsanity: Shane 11 <3,FRIENDSANITY,
+1382,Marnie's Ranch,Friendsanity: Shane 12 <3,FRIENDSANITY,
+1383,Marnie's Ranch,Friendsanity: Shane 13 <3,FRIENDSANITY,
+1384,Marnie's Ranch,Friendsanity: Shane 14 <3,FRIENDSANITY,
+1385,Town,Friendsanity: Abigail 1 <3,FRIENDSANITY,
+1386,Town,Friendsanity: Abigail 2 <3,FRIENDSANITY,
+1387,Town,Friendsanity: Abigail 3 <3,FRIENDSANITY,
+1388,Town,Friendsanity: Abigail 4 <3,FRIENDSANITY,
+1389,Town,Friendsanity: Abigail 5 <3,FRIENDSANITY,
+1390,Town,Friendsanity: Abigail 6 <3,FRIENDSANITY,
+1391,Town,Friendsanity: Abigail 7 <3,FRIENDSANITY,
+1392,Town,Friendsanity: Abigail 8 <3,FRIENDSANITY,
+1393,Town,Friendsanity: Abigail 9 <3,FRIENDSANITY,
+1394,Town,Friendsanity: Abigail 10 <3,FRIENDSANITY,
+1395,Town,Friendsanity: Abigail 11 <3,FRIENDSANITY,
+1396,Town,Friendsanity: Abigail 12 <3,FRIENDSANITY,
+1397,Town,Friendsanity: Abigail 13 <3,FRIENDSANITY,
+1398,Town,Friendsanity: Abigail 14 <3,FRIENDSANITY,
+1399,Town,Friendsanity: Emily 1 <3,FRIENDSANITY,
+1400,Town,Friendsanity: Emily 2 <3,FRIENDSANITY,
+1401,Town,Friendsanity: Emily 3 <3,FRIENDSANITY,
+1402,Town,Friendsanity: Emily 4 <3,FRIENDSANITY,
+1403,Town,Friendsanity: Emily 5 <3,FRIENDSANITY,
+1404,Town,Friendsanity: Emily 6 <3,FRIENDSANITY,
+1405,Town,Friendsanity: Emily 7 <3,FRIENDSANITY,
+1406,Town,Friendsanity: Emily 8 <3,FRIENDSANITY,
+1407,Town,Friendsanity: Emily 9 <3,FRIENDSANITY,
+1408,Town,Friendsanity: Emily 10 <3,FRIENDSANITY,
+1409,Town,Friendsanity: Emily 11 <3,FRIENDSANITY,
+1410,Town,Friendsanity: Emily 12 <3,FRIENDSANITY,
+1411,Town,Friendsanity: Emily 13 <3,FRIENDSANITY,
+1412,Town,Friendsanity: Emily 14 <3,FRIENDSANITY,
+1413,Town,Friendsanity: Haley 1 <3,FRIENDSANITY,
+1414,Town,Friendsanity: Haley 2 <3,FRIENDSANITY,
+1415,Town,Friendsanity: Haley 3 <3,FRIENDSANITY,
+1416,Town,Friendsanity: Haley 4 <3,FRIENDSANITY,
+1417,Town,Friendsanity: Haley 5 <3,FRIENDSANITY,
+1418,Town,Friendsanity: Haley 6 <3,FRIENDSANITY,
+1419,Town,Friendsanity: Haley 7 <3,FRIENDSANITY,
+1420,Town,Friendsanity: Haley 8 <3,FRIENDSANITY,
+1421,Town,Friendsanity: Haley 9 <3,FRIENDSANITY,
+1422,Town,Friendsanity: Haley 10 <3,FRIENDSANITY,
+1423,Town,Friendsanity: Haley 11 <3,FRIENDSANITY,
+1424,Town,Friendsanity: Haley 12 <3,FRIENDSANITY,
+1425,Town,Friendsanity: Haley 13 <3,FRIENDSANITY,
+1426,Town,Friendsanity: Haley 14 <3,FRIENDSANITY,
+1427,Forest,Friendsanity: Leah 1 <3,FRIENDSANITY,
+1428,Forest,Friendsanity: Leah 2 <3,FRIENDSANITY,
+1429,Forest,Friendsanity: Leah 3 <3,FRIENDSANITY,
+1430,Forest,Friendsanity: Leah 4 <3,FRIENDSANITY,
+1431,Forest,Friendsanity: Leah 5 <3,FRIENDSANITY,
+1432,Forest,Friendsanity: Leah 6 <3,FRIENDSANITY,
+1433,Forest,Friendsanity: Leah 7 <3,FRIENDSANITY,
+1434,Forest,Friendsanity: Leah 8 <3,FRIENDSANITY,
+1435,Forest,Friendsanity: Leah 9 <3,FRIENDSANITY,
+1436,Forest,Friendsanity: Leah 10 <3,FRIENDSANITY,
+1437,Forest,Friendsanity: Leah 11 <3,FRIENDSANITY,
+1438,Forest,Friendsanity: Leah 12 <3,FRIENDSANITY,
+1439,Forest,Friendsanity: Leah 13 <3,FRIENDSANITY,
+1440,Forest,Friendsanity: Leah 14 <3,FRIENDSANITY,
+1441,Carpenter Shop,Friendsanity: Maru 1 <3,FRIENDSANITY,
+1442,Carpenter Shop,Friendsanity: Maru 2 <3,FRIENDSANITY,
+1443,Carpenter Shop,Friendsanity: Maru 3 <3,FRIENDSANITY,
+1444,Carpenter Shop,Friendsanity: Maru 4 <3,FRIENDSANITY,
+1445,Carpenter Shop,Friendsanity: Maru 5 <3,FRIENDSANITY,
+1446,Carpenter Shop,Friendsanity: Maru 6 <3,FRIENDSANITY,
+1447,Carpenter Shop,Friendsanity: Maru 7 <3,FRIENDSANITY,
+1448,Carpenter Shop,Friendsanity: Maru 8 <3,FRIENDSANITY,
+1449,Carpenter Shop,Friendsanity: Maru 9 <3,FRIENDSANITY,
+1450,Carpenter Shop,Friendsanity: Maru 10 <3,FRIENDSANITY,
+1451,Carpenter Shop,Friendsanity: Maru 11 <3,FRIENDSANITY,
+1452,Carpenter Shop,Friendsanity: Maru 12 <3,FRIENDSANITY,
+1453,Carpenter Shop,Friendsanity: Maru 13 <3,FRIENDSANITY,
+1454,Carpenter Shop,Friendsanity: Maru 14 <3,FRIENDSANITY,
+1455,Town,Friendsanity: Penny 1 <3,FRIENDSANITY,
+1456,Town,Friendsanity: Penny 2 <3,FRIENDSANITY,
+1457,Town,Friendsanity: Penny 3 <3,FRIENDSANITY,
+1458,Town,Friendsanity: Penny 4 <3,FRIENDSANITY,
+1459,Town,Friendsanity: Penny 5 <3,FRIENDSANITY,
+1460,Town,Friendsanity: Penny 6 <3,FRIENDSANITY,
+1461,Town,Friendsanity: Penny 7 <3,FRIENDSANITY,
+1462,Town,Friendsanity: Penny 8 <3,FRIENDSANITY,
+1463,Town,Friendsanity: Penny 9 <3,FRIENDSANITY,
+1464,Town,Friendsanity: Penny 10 <3,FRIENDSANITY,
+1465,Town,Friendsanity: Penny 11 <3,FRIENDSANITY,
+1466,Town,Friendsanity: Penny 12 <3,FRIENDSANITY,
+1467,Town,Friendsanity: Penny 13 <3,FRIENDSANITY,
+1468,Town,Friendsanity: Penny 14 <3,FRIENDSANITY,
+1469,Town,Friendsanity: Caroline 1 <3,FRIENDSANITY,
+1470,Town,Friendsanity: Caroline 2 <3,FRIENDSANITY,
+1471,Town,Friendsanity: Caroline 3 <3,FRIENDSANITY,
+1472,Town,Friendsanity: Caroline 4 <3,FRIENDSANITY,
+1473,Town,Friendsanity: Caroline 5 <3,FRIENDSANITY,
+1474,Town,Friendsanity: Caroline 6 <3,FRIENDSANITY,
+1475,Town,Friendsanity: Caroline 7 <3,FRIENDSANITY,
+1476,Town,Friendsanity: Caroline 8 <3,FRIENDSANITY,
+1477,Town,Friendsanity: Caroline 9 <3,FRIENDSANITY,
+1478,Town,Friendsanity: Caroline 10 <3,FRIENDSANITY,
+1480,Town,Friendsanity: Clint 1 <3,FRIENDSANITY,
+1481,Town,Friendsanity: Clint 2 <3,FRIENDSANITY,
+1482,Town,Friendsanity: Clint 3 <3,FRIENDSANITY,
+1483,Town,Friendsanity: Clint 4 <3,FRIENDSANITY,
+1484,Town,Friendsanity: Clint 5 <3,FRIENDSANITY,
+1485,Town,Friendsanity: Clint 6 <3,FRIENDSANITY,
+1486,Town,Friendsanity: Clint 7 <3,FRIENDSANITY,
+1487,Town,Friendsanity: Clint 8 <3,FRIENDSANITY,
+1488,Town,Friendsanity: Clint 9 <3,FRIENDSANITY,
+1489,Town,Friendsanity: Clint 10 <3,FRIENDSANITY,
+1491,Carpenter Shop,Friendsanity: Demetrius 1 <3,FRIENDSANITY,
+1492,Carpenter Shop,Friendsanity: Demetrius 2 <3,FRIENDSANITY,
+1493,Carpenter Shop,Friendsanity: Demetrius 3 <3,FRIENDSANITY,
+1494,Carpenter Shop,Friendsanity: Demetrius 4 <3,FRIENDSANITY,
+1495,Carpenter Shop,Friendsanity: Demetrius 5 <3,FRIENDSANITY,
+1496,Carpenter Shop,Friendsanity: Demetrius 6 <3,FRIENDSANITY,
+1497,Carpenter Shop,Friendsanity: Demetrius 7 <3,FRIENDSANITY,
+1498,Carpenter Shop,Friendsanity: Demetrius 8 <3,FRIENDSANITY,
+1499,Carpenter Shop,Friendsanity: Demetrius 9 <3,FRIENDSANITY,
+1500,Carpenter Shop,Friendsanity: Demetrius 10 <3,FRIENDSANITY,
+1502,The Mines,Friendsanity: Dwarf 1 <3,FRIENDSANITY,
+1503,The Mines,Friendsanity: Dwarf 2 <3,FRIENDSANITY,
+1504,The Mines,Friendsanity: Dwarf 3 <3,FRIENDSANITY,
+1505,The Mines,Friendsanity: Dwarf 4 <3,FRIENDSANITY,
+1506,The Mines,Friendsanity: Dwarf 5 <3,FRIENDSANITY,
+1507,The Mines,Friendsanity: Dwarf 6 <3,FRIENDSANITY,
+1508,The Mines,Friendsanity: Dwarf 7 <3,FRIENDSANITY,
+1509,The Mines,Friendsanity: Dwarf 8 <3,FRIENDSANITY,
+1510,The Mines,Friendsanity: Dwarf 9 <3,FRIENDSANITY,
+1511,The Mines,Friendsanity: Dwarf 10 <3,FRIENDSANITY,
+1513,Town,Friendsanity: Evelyn 1 <3,FRIENDSANITY,
+1514,Town,Friendsanity: Evelyn 2 <3,FRIENDSANITY,
+1515,Town,Friendsanity: Evelyn 3 <3,FRIENDSANITY,
+1516,Town,Friendsanity: Evelyn 4 <3,FRIENDSANITY,
+1517,Town,Friendsanity: Evelyn 5 <3,FRIENDSANITY,
+1518,Town,Friendsanity: Evelyn 6 <3,FRIENDSANITY,
+1519,Town,Friendsanity: Evelyn 7 <3,FRIENDSANITY,
+1520,Town,Friendsanity: Evelyn 8 <3,FRIENDSANITY,
+1521,Town,Friendsanity: Evelyn 9 <3,FRIENDSANITY,
+1522,Town,Friendsanity: Evelyn 10 <3,FRIENDSANITY,
+1524,Town,Friendsanity: George 1 <3,FRIENDSANITY,
+1525,Town,Friendsanity: George 2 <3,FRIENDSANITY,
+1526,Town,Friendsanity: George 3 <3,FRIENDSANITY,
+1527,Town,Friendsanity: George 4 <3,FRIENDSANITY,
+1528,Town,Friendsanity: George 5 <3,FRIENDSANITY,
+1529,Town,Friendsanity: George 6 <3,FRIENDSANITY,
+1530,Town,Friendsanity: George 7 <3,FRIENDSANITY,
+1531,Town,Friendsanity: George 8 <3,FRIENDSANITY,
+1532,Town,Friendsanity: George 9 <3,FRIENDSANITY,
+1533,Town,Friendsanity: George 10 <3,FRIENDSANITY,
+1535,Town,Friendsanity: Gus 1 <3,FRIENDSANITY,
+1536,Town,Friendsanity: Gus 2 <3,FRIENDSANITY,
+1537,Town,Friendsanity: Gus 3 <3,FRIENDSANITY,
+1538,Town,Friendsanity: Gus 4 <3,FRIENDSANITY,
+1539,Town,Friendsanity: Gus 5 <3,FRIENDSANITY,
+1540,Town,Friendsanity: Gus 6 <3,FRIENDSANITY,
+1541,Town,Friendsanity: Gus 7 <3,FRIENDSANITY,
+1542,Town,Friendsanity: Gus 8 <3,FRIENDSANITY,
+1543,Town,Friendsanity: Gus 9 <3,FRIENDSANITY,
+1544,Town,Friendsanity: Gus 10 <3,FRIENDSANITY,
+1546,Marnie's Ranch,Friendsanity: Jas 1 <3,FRIENDSANITY,
+1547,Marnie's Ranch,Friendsanity: Jas 2 <3,FRIENDSANITY,
+1548,Marnie's Ranch,Friendsanity: Jas 3 <3,FRIENDSANITY,
+1549,Marnie's Ranch,Friendsanity: Jas 4 <3,FRIENDSANITY,
+1550,Marnie's Ranch,Friendsanity: Jas 5 <3,FRIENDSANITY,
+1551,Marnie's Ranch,Friendsanity: Jas 6 <3,FRIENDSANITY,
+1552,Marnie's Ranch,Friendsanity: Jas 7 <3,FRIENDSANITY,
+1553,Marnie's Ranch,Friendsanity: Jas 8 <3,FRIENDSANITY,
+1554,Marnie's Ranch,Friendsanity: Jas 9 <3,FRIENDSANITY,
+1555,Marnie's Ranch,Friendsanity: Jas 10 <3,FRIENDSANITY,
+1557,Town,Friendsanity: Jodi 1 <3,FRIENDSANITY,
+1558,Town,Friendsanity: Jodi 2 <3,FRIENDSANITY,
+1559,Town,Friendsanity: Jodi 3 <3,FRIENDSANITY,
+1560,Town,Friendsanity: Jodi 4 <3,FRIENDSANITY,
+1561,Town,Friendsanity: Jodi 5 <3,FRIENDSANITY,
+1562,Town,Friendsanity: Jodi 6 <3,FRIENDSANITY,
+1563,Town,Friendsanity: Jodi 7 <3,FRIENDSANITY,
+1564,Town,Friendsanity: Jodi 8 <3,FRIENDSANITY,
+1565,Town,Friendsanity: Jodi 9 <3,FRIENDSANITY,
+1566,Town,Friendsanity: Jodi 10 <3,FRIENDSANITY,
+1568,Town,Friendsanity: Kent 1 <3,FRIENDSANITY,
+1569,Town,Friendsanity: Kent 2 <3,FRIENDSANITY,
+1570,Town,Friendsanity: Kent 3 <3,FRIENDSANITY,
+1571,Town,Friendsanity: Kent 4 <3,FRIENDSANITY,
+1572,Town,Friendsanity: Kent 5 <3,FRIENDSANITY,
+1573,Town,Friendsanity: Kent 6 <3,FRIENDSANITY,
+1574,Town,Friendsanity: Kent 7 <3,FRIENDSANITY,
+1575,Town,Friendsanity: Kent 8 <3,FRIENDSANITY,
+1576,Town,Friendsanity: Kent 9 <3,FRIENDSANITY,
+1577,Town,Friendsanity: Kent 10 <3,FRIENDSANITY,
+1579,Sewer,Friendsanity: Krobus 1 <3,FRIENDSANITY,
+1580,Sewer,Friendsanity: Krobus 2 <3,FRIENDSANITY,
+1581,Sewer,Friendsanity: Krobus 3 <3,FRIENDSANITY,
+1582,Sewer,Friendsanity: Krobus 4 <3,FRIENDSANITY,
+1583,Sewer,Friendsanity: Krobus 5 <3,FRIENDSANITY,
+1584,Sewer,Friendsanity: Krobus 6 <3,FRIENDSANITY,
+1585,Sewer,Friendsanity: Krobus 7 <3,FRIENDSANITY,
+1586,Sewer,Friendsanity: Krobus 8 <3,FRIENDSANITY,
+1587,Sewer,Friendsanity: Krobus 9 <3,FRIENDSANITY,
+1588,Sewer,Friendsanity: Krobus 10 <3,FRIENDSANITY,
+1590,Leo's Hut,Friendsanity: Leo 1 <3,"FRIENDSANITY,GINGER_ISLAND",
+1591,Leo's Hut,Friendsanity: Leo 2 <3,"FRIENDSANITY,GINGER_ISLAND",
+1592,Leo's Hut,Friendsanity: Leo 3 <3,"FRIENDSANITY,GINGER_ISLAND",
+1593,Leo's Hut,Friendsanity: Leo 4 <3,"FRIENDSANITY,GINGER_ISLAND",
+1594,Leo's Hut,Friendsanity: Leo 5 <3,"FRIENDSANITY,GINGER_ISLAND",
+1595,Leo's Hut,Friendsanity: Leo 6 <3,"FRIENDSANITY,GINGER_ISLAND",
+1596,Leo's Hut,Friendsanity: Leo 7 <3,"FRIENDSANITY,GINGER_ISLAND",
+1597,Leo's Hut,Friendsanity: Leo 8 <3,"FRIENDSANITY,GINGER_ISLAND",
+1598,Leo's Hut,Friendsanity: Leo 9 <3,"FRIENDSANITY,GINGER_ISLAND",
+1599,Leo's Hut,Friendsanity: Leo 10 <3,"FRIENDSANITY,GINGER_ISLAND",
+1601,Town,Friendsanity: Lewis 1 <3,FRIENDSANITY,
+1602,Town,Friendsanity: Lewis 2 <3,FRIENDSANITY,
+1603,Town,Friendsanity: Lewis 3 <3,FRIENDSANITY,
+1604,Town,Friendsanity: Lewis 4 <3,FRIENDSANITY,
+1605,Town,Friendsanity: Lewis 5 <3,FRIENDSANITY,
+1606,Town,Friendsanity: Lewis 6 <3,FRIENDSANITY,
+1607,Town,Friendsanity: Lewis 7 <3,FRIENDSANITY,
+1608,Town,Friendsanity: Lewis 8 <3,FRIENDSANITY,
+1609,Town,Friendsanity: Lewis 9 <3,FRIENDSANITY,
+1610,Town,Friendsanity: Lewis 10 <3,FRIENDSANITY,
+1612,Mountain,Friendsanity: Linus 1 <3,FRIENDSANITY,
+1613,Mountain,Friendsanity: Linus 2 <3,FRIENDSANITY,
+1614,Mountain,Friendsanity: Linus 3 <3,FRIENDSANITY,
+1615,Mountain,Friendsanity: Linus 4 <3,FRIENDSANITY,
+1616,Mountain,Friendsanity: Linus 5 <3,FRIENDSANITY,
+1617,Mountain,Friendsanity: Linus 6 <3,FRIENDSANITY,
+1618,Mountain,Friendsanity: Linus 7 <3,FRIENDSANITY,
+1619,Mountain,Friendsanity: Linus 8 <3,FRIENDSANITY,
+1620,Mountain,Friendsanity: Linus 9 <3,FRIENDSANITY,
+1621,Mountain,Friendsanity: Linus 10 <3,FRIENDSANITY,
+1623,Marnie's Ranch,Friendsanity: Marnie 1 <3,FRIENDSANITY,
+1624,Marnie's Ranch,Friendsanity: Marnie 2 <3,FRIENDSANITY,
+1625,Marnie's Ranch,Friendsanity: Marnie 3 <3,FRIENDSANITY,
+1626,Marnie's Ranch,Friendsanity: Marnie 4 <3,FRIENDSANITY,
+1627,Marnie's Ranch,Friendsanity: Marnie 5 <3,FRIENDSANITY,
+1628,Marnie's Ranch,Friendsanity: Marnie 6 <3,FRIENDSANITY,
+1629,Marnie's Ranch,Friendsanity: Marnie 7 <3,FRIENDSANITY,
+1630,Marnie's Ranch,Friendsanity: Marnie 8 <3,FRIENDSANITY,
+1631,Marnie's Ranch,Friendsanity: Marnie 9 <3,FRIENDSANITY,
+1632,Marnie's Ranch,Friendsanity: Marnie 10 <3,FRIENDSANITY,
+1634,Town,Friendsanity: Pam 1 <3,FRIENDSANITY,
+1635,Town,Friendsanity: Pam 2 <3,FRIENDSANITY,
+1636,Town,Friendsanity: Pam 3 <3,FRIENDSANITY,
+1637,Town,Friendsanity: Pam 4 <3,FRIENDSANITY,
+1638,Town,Friendsanity: Pam 5 <3,FRIENDSANITY,
+1639,Town,Friendsanity: Pam 6 <3,FRIENDSANITY,
+1640,Town,Friendsanity: Pam 7 <3,FRIENDSANITY,
+1641,Town,Friendsanity: Pam 8 <3,FRIENDSANITY,
+1642,Town,Friendsanity: Pam 9 <3,FRIENDSANITY,
+1643,Town,Friendsanity: Pam 10 <3,FRIENDSANITY,
+1645,Town,Friendsanity: Pierre 1 <3,FRIENDSANITY,
+1646,Town,Friendsanity: Pierre 2 <3,FRIENDSANITY,
+1647,Town,Friendsanity: Pierre 3 <3,FRIENDSANITY,
+1648,Town,Friendsanity: Pierre 4 <3,FRIENDSANITY,
+1649,Town,Friendsanity: Pierre 5 <3,FRIENDSANITY,
+1650,Town,Friendsanity: Pierre 6 <3,FRIENDSANITY,
+1651,Town,Friendsanity: Pierre 7 <3,FRIENDSANITY,
+1652,Town,Friendsanity: Pierre 8 <3,FRIENDSANITY,
+1653,Town,Friendsanity: Pierre 9 <3,FRIENDSANITY,
+1654,Town,Friendsanity: Pierre 10 <3,FRIENDSANITY,
+1656,Carpenter Shop,Friendsanity: Robin 1 <3,FRIENDSANITY,
+1657,Carpenter Shop,Friendsanity: Robin 2 <3,FRIENDSANITY,
+1658,Carpenter Shop,Friendsanity: Robin 3 <3,FRIENDSANITY,
+1659,Carpenter Shop,Friendsanity: Robin 4 <3,FRIENDSANITY,
+1660,Carpenter Shop,Friendsanity: Robin 5 <3,FRIENDSANITY,
+1661,Carpenter Shop,Friendsanity: Robin 6 <3,FRIENDSANITY,
+1662,Carpenter Shop,Friendsanity: Robin 7 <3,FRIENDSANITY,
+1663,Carpenter Shop,Friendsanity: Robin 8 <3,FRIENDSANITY,
+1664,Carpenter Shop,Friendsanity: Robin 9 <3,FRIENDSANITY,
+1665,Carpenter Shop,Friendsanity: Robin 10 <3,FRIENDSANITY,
+1667,Oasis,Friendsanity: Sandy 1 <3,FRIENDSANITY,
+1668,Oasis,Friendsanity: Sandy 2 <3,FRIENDSANITY,
+1669,Oasis,Friendsanity: Sandy 3 <3,FRIENDSANITY,
+1670,Oasis,Friendsanity: Sandy 4 <3,FRIENDSANITY,
+1671,Oasis,Friendsanity: Sandy 5 <3,FRIENDSANITY,
+1672,Oasis,Friendsanity: Sandy 6 <3,FRIENDSANITY,
+1673,Oasis,Friendsanity: Sandy 7 <3,FRIENDSANITY,
+1674,Oasis,Friendsanity: Sandy 8 <3,FRIENDSANITY,
+1675,Oasis,Friendsanity: Sandy 9 <3,FRIENDSANITY,
+1676,Oasis,Friendsanity: Sandy 10 <3,FRIENDSANITY,
+1678,Town,Friendsanity: Vincent 1 <3,FRIENDSANITY,
+1679,Town,Friendsanity: Vincent 2 <3,FRIENDSANITY,
+1680,Town,Friendsanity: Vincent 3 <3,FRIENDSANITY,
+1681,Town,Friendsanity: Vincent 4 <3,FRIENDSANITY,
+1682,Town,Friendsanity: Vincent 5 <3,FRIENDSANITY,
+1683,Town,Friendsanity: Vincent 6 <3,FRIENDSANITY,
+1684,Town,Friendsanity: Vincent 7 <3,FRIENDSANITY,
+1685,Town,Friendsanity: Vincent 8 <3,FRIENDSANITY,
+1686,Town,Friendsanity: Vincent 9 <3,FRIENDSANITY,
+1687,Town,Friendsanity: Vincent 10 <3,FRIENDSANITY,
+1689,Beach,Friendsanity: Willy 1 <3,FRIENDSANITY,
+1690,Beach,Friendsanity: Willy 2 <3,FRIENDSANITY,
+1691,Beach,Friendsanity: Willy 3 <3,FRIENDSANITY,
+1692,Beach,Friendsanity: Willy 4 <3,FRIENDSANITY,
+1693,Beach,Friendsanity: Willy 5 <3,FRIENDSANITY,
+1694,Beach,Friendsanity: Willy 6 <3,FRIENDSANITY,
+1695,Beach,Friendsanity: Willy 7 <3,FRIENDSANITY,
+1696,Beach,Friendsanity: Willy 8 <3,FRIENDSANITY,
+1697,Beach,Friendsanity: Willy 9 <3,FRIENDSANITY,
+1698,Beach,Friendsanity: Willy 10 <3,FRIENDSANITY,
+1700,Forest,Friendsanity: Wizard 1 <3,FRIENDSANITY,
+1701,Forest,Friendsanity: Wizard 2 <3,FRIENDSANITY,
+1702,Forest,Friendsanity: Wizard 3 <3,FRIENDSANITY,
+1703,Forest,Friendsanity: Wizard 4 <3,FRIENDSANITY,
+1704,Forest,Friendsanity: Wizard 5 <3,FRIENDSANITY,
+1705,Forest,Friendsanity: Wizard 6 <3,FRIENDSANITY,
+1706,Forest,Friendsanity: Wizard 7 <3,FRIENDSANITY,
+1707,Forest,Friendsanity: Wizard 8 <3,FRIENDSANITY,
+1708,Forest,Friendsanity: Wizard 9 <3,FRIENDSANITY,
+1709,Forest,Friendsanity: Wizard 10 <3,FRIENDSANITY,
+1710,Farm,Friendsanity: Pet 1 <3,FRIENDSANITY,
+1711,Farm,Friendsanity: Pet 2 <3,FRIENDSANITY,
+1712,Farm,Friendsanity: Pet 3 <3,FRIENDSANITY,
+1713,Farm,Friendsanity: Pet 4 <3,FRIENDSANITY,
+1714,Farm,Friendsanity: Pet 5 <3,FRIENDSANITY,
+1715,Farm,Friendsanity: Friend 1 <3,FRIENDSANITY,
+1716,Farm,Friendsanity: Friend 2 <3,FRIENDSANITY,
+1717,Farm,Friendsanity: Friend 3 <3,FRIENDSANITY,
+1718,Farm,Friendsanity: Friend 4 <3,FRIENDSANITY,
+1719,Farm,Friendsanity: Friend 5 <3,FRIENDSANITY,
+1720,Farm,Friendsanity: Friend 6 <3,FRIENDSANITY,
+1721,Farm,Friendsanity: Friend 7 <3,FRIENDSANITY,
+1722,Farm,Friendsanity: Friend 8 <3,FRIENDSANITY,
+1723,Farm,Friendsanity: Suitor 9 <3,FRIENDSANITY,
+1724,Farm,Friendsanity: Suitor 10 <3,FRIENDSANITY,
+1725,Farm,Friendsanity: Spouse 11 <3,FRIENDSANITY,
+1726,Farm,Friendsanity: Spouse 12 <3,FRIENDSANITY,
+1727,Farm,Friendsanity: Spouse 13 <3,FRIENDSANITY,
+1728,Farm,Friendsanity: Spouse 14 <3,FRIENDSANITY,
+2001,Town,Egg Hunt Victory,FESTIVAL,
+2002,Town,Egg Festival: Strawberry Seeds,FESTIVAL,
+2003,Forest,Dance with someone,FESTIVAL,
+2004,Forest,Rarecrow #5 (Woman),FESTIVAL,
+2005,Beach,Luau Soup,FESTIVAL,
+2006,Beach,Dance of the Moonlight Jellies,FESTIVAL,
+2007,Town,Smashing Stone,FESTIVAL,
+2008,Town,Grange Display,FESTIVAL,
+2009,Town,Rarecrow #1 (Turnip Head),FESTIVAL,
+2010,Town,Fair Stardrop,FESTIVAL,
+2011,Town,Spirit's Eve Maze,FESTIVAL,
+2012,Town,Rarecrow #2 (Witch),FESTIVAL,
+2013,Forest,Win Fishing Competition,FESTIVAL,
+2014,Forest,Rarecrow #4 (Snowman),FESTIVAL,
+2015,Beach,Mermaid Pearl,FESTIVAL,
+2016,Beach,Cone Hat,FESTIVAL_HARD,
+2017,Beach,Iridium Fireplace,FESTIVAL_HARD,
+2018,Beach,Rarecrow #7 (Tanuki),FESTIVAL,
+2019,Beach,Rarecrow #8 (Tribal Mask),FESTIVAL,
+2020,Beach,Lupini: Red Eagle,FESTIVAL,
+2021,Beach,Lupini: Portrait Of A Mermaid,FESTIVAL,
+2022,Beach,Lupini: Solar Kingdom,FESTIVAL,
+2023,Beach,Lupini: Clouds,FESTIVAL_HARD,
+2024,Beach,Lupini: 1000 Years From Now,FESTIVAL_HARD,
+2025,Beach,Lupini: Three Trees,FESTIVAL_HARD,
+2026,Beach,Lupini: The Serpent,FESTIVAL_HARD,
+2027,Beach,Lupini: 'Tropical Fish #173',FESTIVAL_HARD,
+2028,Beach,Lupini: Land Of Clay,FESTIVAL_HARD,
+2029,Town,Secret Santa,FESTIVAL,
+2030,Town,The Legend of the Winter Star,FESTIVAL,
+2031,Farm,Collect All Rarecrows,FESTIVAL,
+2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
+2102,Town,Cave Patrol,SPECIAL_ORDER_BOARD,
+2103,Town,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
+2104,Town,Biome Balance,SPECIAL_ORDER_BOARD,
+2105,Town,Rock Rejuvenation,SPECIAL_ORDER_BOARD,
+2106,Town,Gifts for George,SPECIAL_ORDER_BOARD,
+2107,Town,Fragments of the past,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
+2108,Town,Gus' Famous Omelet,SPECIAL_ORDER_BOARD,
+2109,Town,Crop Order,SPECIAL_ORDER_BOARD,
+2110,Town,Community Cleanup,SPECIAL_ORDER_BOARD,
+2111,Town,The Strong Stuff,SPECIAL_ORDER_BOARD,
+2112,Town,Pierre's Prime Produce,SPECIAL_ORDER_BOARD,
+2113,Town,Robin's Project,SPECIAL_ORDER_BOARD,
+2114,Town,Robin's Resource Rush,SPECIAL_ORDER_BOARD,
+2115,Town,Juicy Bugs Wanted!,SPECIAL_ORDER_BOARD,
+2116,Town,Tropical Fish,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
+2117,Town,A Curious Substance,SPECIAL_ORDER_BOARD,
+2118,Town,Prismatic Jelly,SPECIAL_ORDER_BOARD,
+2151,Qi's Walnut Room,Qi's Crop,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2152,Qi's Walnut Room,Let's Play A Game,"GINGER_ISLAND,SPECIAL_ORDER_QI,JUNIMO_KART",
+2153,Qi's Walnut Room,Four Precious Stones,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2154,Qi's Walnut Room,Qi's Hungry Challenge,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2155,Qi's Walnut Room,Qi's Cuisine,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2156,Qi's Walnut Room,Qi's Kindness,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2157,Qi's Walnut Room,Extended Family,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2158,Qi's Walnut Room,Danger In The Deep,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2159,Qi's Walnut Room,Skull Cavern Invasion,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2160,Qi's Walnut Room,Qi's Prismatic Grange,"GINGER_ISLAND,SPECIAL_ORDER_QI",
+2201,Boat Tunnel,Repair Ticket Machine,GINGER_ISLAND,
+2202,Boat Tunnel,Repair Boat Hull,GINGER_ISLAND,
+2203,Boat Tunnel,Repair Boat Anchor,GINGER_ISLAND,
+2204,Leo's Hut,Leo's Parrot,"GINGER_ISLAND,WALNUT_PURCHASE",
+2205,Island South,Island West Turtle,"GINGER_ISLAND,WALNUT_PURCHASE",
+2206,Island West,Island Farmhouse,"GINGER_ISLAND,WALNUT_PURCHASE",
+2207,Island Farmhouse,Island Mailbox,"GINGER_ISLAND,WALNUT_PURCHASE",
+2208,Island Farmhouse,Farm Obelisk,"GINGER_ISLAND,WALNUT_PURCHASE",
+2209,Island North,Dig Site Bridge,"GINGER_ISLAND,WALNUT_PURCHASE",
+2210,Island North,Island Trader,"GINGER_ISLAND,WALNUT_PURCHASE",
+2211,Volcano Entrance,Volcano Bridge,"GINGER_ISLAND,WALNUT_PURCHASE",
+2212,Volcano - Floor 5,Volcano Exit Shortcut,"GINGER_ISLAND,WALNUT_PURCHASE",
+2213,Island South,Island Resort,"GINGER_ISLAND,WALNUT_PURCHASE",
+2214,Island West,Parrot Express,"GINGER_ISLAND,WALNUT_PURCHASE",
+2215,Dig Site,Open Professor Snail Cave,"GINGER_ISLAND",
+2216,Field Office,Complete Island Field Office,"GINGER_ISLAND",
+2301,Farm,Harvest Amaranth,"CROPSANITY",
+2302,Farm,Harvest Artichoke,"CROPSANITY",
+2303,Farm,Harvest Beet,"CROPSANITY",
+2304,Farm,Harvest Blue Jazz,"CROPSANITY",
+2305,Farm,Harvest Blueberry,"CROPSANITY",
+2306,Farm,Harvest Bok Choy,"CROPSANITY",
+2307,Farm,Harvest Cauliflower,"CROPSANITY",
+2308,Farm,Harvest Corn,"CROPSANITY",
+2309,Farm,Harvest Cranberries,"CROPSANITY",
+2310,Farm,Harvest Eggplant,"CROPSANITY",
+2311,Farm,Harvest Fairy Rose,"CROPSANITY",
+2312,Farm,Harvest Garlic,"CROPSANITY",
+2313,Farm,Harvest Grape,"CROPSANITY",
+2314,Farm,Harvest Green Bean,"CROPSANITY",
+2315,Farm,Harvest Hops,"CROPSANITY",
+2316,Farm,Harvest Hot Pepper,"CROPSANITY",
+2317,Farm,Harvest Kale,"CROPSANITY",
+2318,Farm,Harvest Melon,"CROPSANITY",
+2319,Farm,Harvest Parsnip,"CROPSANITY",
+2320,Farm,Harvest Poppy,"CROPSANITY",
+2321,Farm,Harvest Potato,"CROPSANITY",
+2322,Farm,Harvest Pumpkin,"CROPSANITY",
+2323,Farm,Harvest Radish,"CROPSANITY",
+2324,Farm,Harvest Red Cabbage,"CROPSANITY",
+2325,Farm,Harvest Rhubarb,"CROPSANITY",
+2326,Farm,Harvest Starfruit,"CROPSANITY",
+2327,Farm,Harvest Strawberry,"CROPSANITY",
+2328,Farm,Harvest Summer Spangle,"CROPSANITY",
+2329,Farm,Harvest Sunflower,"CROPSANITY",
+2330,Farm,Harvest Tomato,"CROPSANITY",
+2331,Farm,Harvest Tulip,"CROPSANITY",
+2332,Farm,Harvest Unmilled Rice,"CROPSANITY",
+2333,Farm,Harvest Wheat,"CROPSANITY",
+2334,Farm,Harvest Yam,"CROPSANITY",
+2335,Farm,Harvest Cactus Fruit,"CROPSANITY",
+2336,Farm,Harvest Pineapple,"CROPSANITY,GINGER_ISLAND",
+2337,Farm,Harvest Taro Root,"CROPSANITY,GINGER_ISLAND",
+2338,Farm,Harvest Sweet Gem Berry,"CROPSANITY",
+2339,Farm,Harvest Apple,"CROPSANITY",
+2340,Farm,Harvest Apricot,"CROPSANITY",
+2341,Farm,Harvest Cherry,"CROPSANITY",
+2342,Farm,Harvest Orange,"CROPSANITY",
+2343,Farm,Harvest Pomegranate,"CROPSANITY",
+2344,Farm,Harvest Peach,"CROPSANITY",
+2345,Farm,Harvest Banana,"CROPSANITY,GINGER_ISLAND",
+2346,Farm,Harvest Mango,"CROPSANITY,GINGER_ISLAND",
+2347,Farm,Harvest Coffee Bean,"CROPSANITY",
+5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5004,Stardew Valley,Level 4 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5005,Stardew Valley,Level 5 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5006,Stardew Valley,Level 6 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5007,Stardew Valley,Level 7 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5008,Stardew Valley,Level 8 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5009,Stardew Valley,Level 9 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5010,Stardew Valley,Level 10 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
+5011,Stardew Valley,Level 1 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5012,Stardew Valley,Level 2 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5013,Stardew Valley,Level 3 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5014,Stardew Valley,Level 4 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5015,Stardew Valley,Level 5 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5016,Stardew Valley,Level 6 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5017,Stardew Valley,Level 7 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5018,Stardew Valley,Level 8 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5019,Stardew Valley,Level 9 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5020,Stardew Valley,Level 10 Socializing,"SOCIALIZING_LEVEL,SKILL_LEVEL",Socializing Skill
+5021,Stardew Valley,Level 1 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5022,Stardew Valley,Level 2 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5023,Stardew Valley,Level 3 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5024,Stardew Valley,Level 4 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5025,Stardew Valley,Level 5 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5026,Stardew Valley,Level 6 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5027,Stardew Valley,Level 7 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5028,Stardew Valley,Level 8 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5029,Stardew Valley,Level 9 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5030,Stardew Valley,Level 10 Magic,"MAGIC_LEVEL,SKILL_LEVEL",Magic
+5031,Stardew Valley,Level 1 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5032,Stardew Valley,Level 2 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5033,Stardew Valley,Level 3 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5034,Stardew Valley,Level 4 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5035,Stardew Valley,Level 5 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5036,Stardew Valley,Level 6 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5037,Stardew Valley,Level 7 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5038,Stardew Valley,Level 8 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5039,Stardew Valley,Level 9 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5040,Stardew Valley,Level 10 Binning,"BINNING_LEVEL,SKILL_LEVEL",Binning Skill
+5041,Stardew Valley,Level 1 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5042,Stardew Valley,Level 2 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5043,Stardew Valley,Level 3 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5044,Stardew Valley,Level 4 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5045,Stardew Valley,Level 5 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5046,Stardew Valley,Level 6 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5047,Stardew Valley,Level 7 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5048,Stardew Valley,Level 8 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5049,Stardew Valley,Level 9 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5050,Stardew Valley,Level 10 Archaeology,"ARCHAEOLOGY_LEVEL,SKILL_LEVEL",Archaeology
+5051,Stardew Valley,Level 1 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5052,Stardew Valley,Level 2 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5053,Stardew Valley,Level 3 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5054,Stardew Valley,Level 4 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5055,Stardew Valley,Level 5 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5056,Stardew Valley,Level 6 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5057,Stardew Valley,Level 7 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5058,Stardew Valley,Level 8 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5059,Stardew Valley,Level 9 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5060,Stardew Valley,Level 10 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
+5501,Stardew Valley,Analyze: Clear Debris,MANDATORY,Magic
+5502,Stardew Valley,Analyze: Till,MANDATORY,Magic
+5503,Stardew Valley,Analyze: Water,MANDATORY,Magic
+5504,Stardew Valley,Analyze All Toil School Locations,MANDATORY,Magic
+5505,Stardew Valley,Analyze: Evac,MANDATORY,Magic
+5506,Stardew Valley,Analyze: Haste,MANDATORY,Magic
+5507,Stardew Valley,Analyze: Heal,MANDATORY,Magic
+5508,Stardew Valley,Analyze All Life School Locations,MANDATORY,Magic
+5509,Stardew Valley,Analyze: Descend,MANDATORY,Magic
+5510,Stardew Valley,Analyze: Fireball,MANDATORY,Magic
+5511,Stardew Valley,Analyze: Frostbite,MANDATORY,Magic
+5512,Stardew Valley,Analyze All Elemental School Locations,MANDATORY,Magic
+5513,Stardew Valley,Analyze: Lantern,MANDATORY,Magic
+5514,Stardew Valley,Analyze: Tendrils,MANDATORY,Magic
+5515,Stardew Valley,Analyze: Shockwave,MANDATORY,Magic
+5516,Stardew Valley,Analyze All Nature School Locations,MANDATORY,Magic
+5517,Stardew Valley,Analyze: Meteor,MANDATORY,Magic
+5518,Stardew Valley,Analyze: Lucksteal,MANDATORY,Magic
+5519,Stardew Valley,Analyze: Bloodmana,MANDATORY,Magic
+5520,Stardew Valley,Analyze All Eldritch School Locations,MANDATORY,Magic
+5521,Stardew Valley,Analyze Every Magic School Location,MANDATORY,Magic
+6001,Town,Friendsanity: Jasper 1 <3,FRIENDSANITY,Professor Jasper Thomas
+6002,Town,Friendsanity: Jasper 2 <3,FRIENDSANITY,Professor Jasper Thomas
+6003,Town,Friendsanity: Jasper 3 <3,FRIENDSANITY,Professor Jasper Thomas
+6004,Town,Friendsanity: Jasper 4 <3,FRIENDSANITY,Professor Jasper Thomas
+6005,Town,Friendsanity: Jasper 5 <3,FRIENDSANITY,Professor Jasper Thomas
+6006,Town,Friendsanity: Jasper 6 <3,FRIENDSANITY,Professor Jasper Thomas
+6007,Town,Friendsanity: Jasper 7 <3,FRIENDSANITY,Professor Jasper Thomas
+6008,Town,Friendsanity: Jasper 8 <3,FRIENDSANITY,Professor Jasper Thomas
+6009,Town,Friendsanity: Jasper 9 <3,FRIENDSANITY,Professor Jasper Thomas
+6010,Town,Friendsanity: Jasper 10 <3,FRIENDSANITY,Professor Jasper Thomas
+6011,Town,Friendsanity: Jasper 11 <3,FRIENDSANITY,Professor Jasper Thomas
+6012,Town,Friendsanity: Jasper 12 <3,FRIENDSANITY,Professor Jasper Thomas
+6013,Town,Friendsanity: Jasper 13 <3,FRIENDSANITY,Professor Jasper Thomas
+6014,Town,Friendsanity: Jasper 14 <3,FRIENDSANITY,Professor Jasper Thomas
+6015,Secret Woods,Friendsanity: Yoba 1 <3,FRIENDSANITY,Custom NPC - Yoba
+6016,Secret Woods,Friendsanity: Yoba 2 <3,FRIENDSANITY,Custom NPC - Yoba
+6017,Secret Woods,Friendsanity: Yoba 3 <3,FRIENDSANITY,Custom NPC - Yoba
+6018,Secret Woods,Friendsanity: Yoba 4 <3,FRIENDSANITY,Custom NPC - Yoba
+6019,Secret Woods,Friendsanity: Yoba 5 <3,FRIENDSANITY,Custom NPC - Yoba
+6020,Secret Woods,Friendsanity: Yoba 6 <3,FRIENDSANITY,Custom NPC - Yoba
+6021,Secret Woods,Friendsanity: Yoba 7 <3,FRIENDSANITY,Custom NPC - Yoba
+6022,Secret Woods,Friendsanity: Yoba 8 <3,FRIENDSANITY,Custom NPC - Yoba
+6023,Secret Woods,Friendsanity: Yoba 9 <3,FRIENDSANITY,Custom NPC - Yoba
+6024,Secret Woods,Friendsanity: Yoba 10 <3,FRIENDSANITY,Custom NPC - Yoba
+6025,Forest,Friendsanity: Mr. Ginger 1 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6026,Forest,Friendsanity: Mr. Ginger 2 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6027,Forest,Friendsanity: Mr. Ginger 3 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6028,Forest,Friendsanity: Mr. Ginger 4 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6029,Forest,Friendsanity: Mr. Ginger 5 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6030,Forest,Friendsanity: Mr. Ginger 6 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6031,Forest,Friendsanity: Mr. Ginger 7 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6032,Forest,Friendsanity: Mr. Ginger 8 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6033,Forest,Friendsanity: Mr. Ginger 9 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6034,Forest,Friendsanity: Mr. Ginger 10 <3,FRIENDSANITY,Mister Ginger (cat npc)
+6035,Town,Friendsanity: Ayeisha 1 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6036,Town,Friendsanity: Ayeisha 2 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6037,Town,Friendsanity: Ayeisha 3 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6038,Town,Friendsanity: Ayeisha 4 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6039,Town,Friendsanity: Ayeisha 5 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6040,Town,Friendsanity: Ayeisha 6 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6041,Town,Friendsanity: Ayeisha 7 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6042,Town,Friendsanity: Ayeisha 8 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6043,Town,Friendsanity: Ayeisha 9 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6044,Town,Friendsanity: Ayeisha 10 <3,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+6045,Town,Friendsanity: Shiko 1 <3,FRIENDSANITY,Shiko - New Custom NPC
+6046,Town,Friendsanity: Shiko 2 <3,FRIENDSANITY,Shiko - New Custom NPC
+6047,Town,Friendsanity: Shiko 3 <3,FRIENDSANITY,Shiko - New Custom NPC
+6048,Town,Friendsanity: Shiko 4 <3,FRIENDSANITY,Shiko - New Custom NPC
+6049,Town,Friendsanity: Shiko 5 <3,FRIENDSANITY,Shiko - New Custom NPC
+6050,Town,Friendsanity: Shiko 6 <3,FRIENDSANITY,Shiko - New Custom NPC
+6051,Town,Friendsanity: Shiko 7 <3,FRIENDSANITY,Shiko - New Custom NPC
+6052,Town,Friendsanity: Shiko 8 <3,FRIENDSANITY,Shiko - New Custom NPC
+6053,Town,Friendsanity: Shiko 9 <3,FRIENDSANITY,Shiko - New Custom NPC
+6054,Town,Friendsanity: Shiko 10 <3,FRIENDSANITY,Shiko - New Custom NPC
+6055,Town,Friendsanity: Shiko 11 <3,FRIENDSANITY,Shiko - New Custom NPC
+6056,Town,Friendsanity: Shiko 12 <3,FRIENDSANITY,Shiko - New Custom NPC
+6057,Town,Friendsanity: Shiko 13 <3,FRIENDSANITY,Shiko - New Custom NPC
+6058,Town,Friendsanity: Shiko 14 <3,FRIENDSANITY,Shiko - New Custom NPC
+6059,Forest,Friendsanity: Wellwick 1 <3,FRIENDSANITY,'Prophet' Wellwick
+6060,Forest,Friendsanity: Wellwick 2 <3,FRIENDSANITY,'Prophet' Wellwick
+6061,Forest,Friendsanity: Wellwick 3 <3,FRIENDSANITY,'Prophet' Wellwick
+6062,Forest,Friendsanity: Wellwick 4 <3,FRIENDSANITY,'Prophet' Wellwick
+6063,Forest,Friendsanity: Wellwick 5 <3,FRIENDSANITY,'Prophet' Wellwick
+6064,Forest,Friendsanity: Wellwick 6 <3,FRIENDSANITY,'Prophet' Wellwick
+6065,Forest,Friendsanity: Wellwick 7 <3,FRIENDSANITY,'Prophet' Wellwick
+6066,Forest,Friendsanity: Wellwick 8 <3,FRIENDSANITY,'Prophet' Wellwick
+6067,Forest,Friendsanity: Wellwick 9 <3,FRIENDSANITY,'Prophet' Wellwick
+6068,Forest,Friendsanity: Wellwick 10 <3,FRIENDSANITY,'Prophet' Wellwick
+6069,Forest,Friendsanity: Wellwick 11 <3,FRIENDSANITY,'Prophet' Wellwick
+6070,Forest,Friendsanity: Wellwick 12 <3,FRIENDSANITY,'Prophet' Wellwick
+6071,Forest,Friendsanity: Wellwick 13 <3,FRIENDSANITY,'Prophet' Wellwick
+6072,Forest,Friendsanity: Wellwick 14 <3,FRIENDSANITY,'Prophet' Wellwick
+6073,Forest,Friendsanity: Delores 1 <3,FRIENDSANITY,Delores - Custom NPC
+6074,Forest,Friendsanity: Delores 2 <3,FRIENDSANITY,Delores - Custom NPC
+6075,Forest,Friendsanity: Delores 3 <3,FRIENDSANITY,Delores - Custom NPC
+6076,Forest,Friendsanity: Delores 4 <3,FRIENDSANITY,Delores - Custom NPC
+6077,Forest,Friendsanity: Delores 5 <3,FRIENDSANITY,Delores - Custom NPC
+6078,Forest,Friendsanity: Delores 6 <3,FRIENDSANITY,Delores - Custom NPC
+6079,Forest,Friendsanity: Delores 7 <3,FRIENDSANITY,Delores - Custom NPC
+6080,Forest,Friendsanity: Delores 8 <3,FRIENDSANITY,Delores - Custom NPC
+6081,Forest,Friendsanity: Delores 9 <3,FRIENDSANITY,Delores - Custom NPC
+6082,Forest,Friendsanity: Delores 10 <3,FRIENDSANITY,Delores - Custom NPC
+6083,Forest,Friendsanity: Delores 11 <3,FRIENDSANITY,Delores - Custom NPC
+6084,Forest,Friendsanity: Delores 12 <3,FRIENDSANITY,Delores - Custom NPC
+6085,Forest,Friendsanity: Delores 13 <3,FRIENDSANITY,Delores - Custom NPC
+6086,Forest,Friendsanity: Delores 14 <3,FRIENDSANITY,Delores - Custom NPC
+6087,Forest,Friendsanity: Alec 1 <3,FRIENDSANITY,Alec Revisited
+6088,Forest,Friendsanity: Alec 2 <3,FRIENDSANITY,Alec Revisited
+6089,Forest,Friendsanity: Alec 3 <3,FRIENDSANITY,Alec Revisited
+6090,Forest,Friendsanity: Alec 4 <3,FRIENDSANITY,Alec Revisited
+6091,Forest,Friendsanity: Alec 5 <3,FRIENDSANITY,Alec Revisited
+6092,Forest,Friendsanity: Alec 6 <3,FRIENDSANITY,Alec Revisited
+6093,Forest,Friendsanity: Alec 7 <3,FRIENDSANITY,Alec Revisited
+6094,Forest,Friendsanity: Alec 8 <3,FRIENDSANITY,Alec Revisited
+6095,Forest,Friendsanity: Alec 9 <3,FRIENDSANITY,Alec Revisited
+6096,Forest,Friendsanity: Alec 10 <3,FRIENDSANITY,Alec Revisited
+6097,Forest,Friendsanity: Alec 11 <3,FRIENDSANITY,Alec Revisited
+6098,Forest,Friendsanity: Alec 12 <3,FRIENDSANITY,Alec Revisited
+6099,Forest,Friendsanity: Alec 13 <3,FRIENDSANITY,Alec Revisited
+6100,Forest,Friendsanity: Alec 14 <3,FRIENDSANITY,Alec Revisited
+6101,Forest,Friendsanity: Eugene 1 <3,FRIENDSANITY,Custom NPC Eugene
+6102,Forest,Friendsanity: Eugene 2 <3,FRIENDSANITY,Custom NPC Eugene
+6103,Forest,Friendsanity: Eugene 3 <3,FRIENDSANITY,Custom NPC Eugene
+6104,Forest,Friendsanity: Eugene 4 <3,FRIENDSANITY,Custom NPC Eugene
+6105,Forest,Friendsanity: Eugene 5 <3,FRIENDSANITY,Custom NPC Eugene
+6106,Forest,Friendsanity: Eugene 6 <3,FRIENDSANITY,Custom NPC Eugene
+6107,Forest,Friendsanity: Eugene 7 <3,FRIENDSANITY,Custom NPC Eugene
+6108,Forest,Friendsanity: Eugene 8 <3,FRIENDSANITY,Custom NPC Eugene
+6109,Forest,Friendsanity: Eugene 9 <3,FRIENDSANITY,Custom NPC Eugene
+6110,Forest,Friendsanity: Eugene 10 <3,FRIENDSANITY,Custom NPC Eugene
+6111,Forest,Friendsanity: Eugene 11 <3,FRIENDSANITY,Custom NPC Eugene
+6112,Forest,Friendsanity: Eugene 12 <3,FRIENDSANITY,Custom NPC Eugene
+6113,Forest,Friendsanity: Eugene 13 <3,FRIENDSANITY,Custom NPC Eugene
+6114,Forest,Friendsanity: Eugene 14 <3,FRIENDSANITY,Custom NPC Eugene
+6115,Forest,Friendsanity: Juna 1 <3,FRIENDSANITY,Juna - Roommate NPC
+6116,Forest,Friendsanity: Juna 2 <3,FRIENDSANITY,Juna - Roommate NPC
+6117,Forest,Friendsanity: Juna 3 <3,FRIENDSANITY,Juna - Roommate NPC
+6118,Forest,Friendsanity: Juna 4 <3,FRIENDSANITY,Juna - Roommate NPC
+6119,Forest,Friendsanity: Juna 5 <3,FRIENDSANITY,Juna - Roommate NPC
+6120,Forest,Friendsanity: Juna 6 <3,FRIENDSANITY,Juna - Roommate NPC
+6121,Forest,Friendsanity: Juna 7 <3,FRIENDSANITY,Juna - Roommate NPC
+6122,Forest,Friendsanity: Juna 8 <3,FRIENDSANITY,Juna - Roommate NPC
+6123,Forest,Friendsanity: Juna 9 <3,FRIENDSANITY,Juna - Roommate NPC
+6124,Forest,Friendsanity: Juna 10 <3,FRIENDSANITY,Juna - Roommate NPC
+6125,Town,Friendsanity: Riley 1 <3,FRIENDSANITY,Custom NPC - Riley
+6126,Town,Friendsanity: Riley 2 <3,FRIENDSANITY,Custom NPC - Riley
+6127,Town,Friendsanity: Riley 3 <3,FRIENDSANITY,Custom NPC - Riley
+6128,Town,Friendsanity: Riley 4 <3,FRIENDSANITY,Custom NPC - Riley
+6129,Town,Friendsanity: Riley 5 <3,FRIENDSANITY,Custom NPC - Riley
+6130,Town,Friendsanity: Riley 6 <3,FRIENDSANITY,Custom NPC - Riley
+6131,Town,Friendsanity: Riley 7 <3,FRIENDSANITY,Custom NPC - Riley
+6132,Town,Friendsanity: Riley 8 <3,FRIENDSANITY,Custom NPC - Riley
+6133,Town,Friendsanity: Riley 9 <3,FRIENDSANITY,Custom NPC - Riley
+6134,Town,Friendsanity: Riley 10 <3,FRIENDSANITY,Custom NPC - Riley
+6135,Town,Friendsanity: Riley 11 <3,FRIENDSANITY,Custom NPC - Riley
+6136,Town,Friendsanity: Riley 12 <3,FRIENDSANITY,Custom NPC - Riley
+6137,Town,Friendsanity: Riley 13 <3,FRIENDSANITY,Custom NPC - Riley
+6138,Town,Friendsanity: Riley 14 <3,FRIENDSANITY,Custom NPC - Riley
+7001,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
+7002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
+7003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
+7004,The Deep Woods Depth 50,Breaking Up Deep Woods Gingerbread House,MANDATORY,DeepWoods
+7005,The Deep Woods Depth 50,Drinking From Deep Woods Fountain,MANDATORY,DeepWoods
+7006,The Deep Woods Depth 100,Deep Woods Treasure Chest,MANDATORY,DeepWoods
+7007,The Deep Woods Depth 100,Deep Woods Trash Bin,MANDATORY,DeepWoods
+7008,The Deep Woods Depth 50,Chop Down a Deep Woods Iridium Tree,MANDATORY,DeepWoods
+7009,The Deep Woods Depth 10,The Deep Woods: Depth 10,ELEVATOR,DeepWoods
+7010,The Deep Woods Depth 20,The Deep Woods: Depth 20,ELEVATOR,DeepWoods
+7011,The Deep Woods Depth 30,The Deep Woods: Depth 30,ELEVATOR,DeepWoods
+7012,The Deep Woods Depth 40,The Deep Woods: Depth 40,ELEVATOR,DeepWoods
+7013,The Deep Woods Depth 50,The Deep Woods: Depth 50,ELEVATOR,DeepWoods
+7014,The Deep Woods Depth 60,The Deep Woods: Depth 60,ELEVATOR,DeepWoods
+7015,The Deep Woods Depth 70,The Deep Woods: Depth 70,ELEVATOR,DeepWoods
+7016,The Deep Woods Depth 80,The Deep Woods: Depth 80,ELEVATOR,DeepWoods
+7017,The Deep Woods Depth 90,The Deep Woods: Depth 90,ELEVATOR,DeepWoods
+7018,The Deep Woods Depth 100,The Deep Woods: Depth 100,ELEVATOR,DeepWoods
+7019,The Deep Woods Depth 50,Purify an Infested Lichtung,MANDATORY,DeepWoods
+7020,Skull Cavern Floor 25,Skull Cavern: Floor 25,ELEVATOR,Skull Cavern Elevator
+7021,Skull Cavern Floor 50,Skull Cavern: Floor 50,ELEVATOR,Skull Cavern Elevator
+7022,Skull Cavern Floor 75,Skull Cavern: Floor 75,ELEVATOR,Skull Cavern Elevator
+7023,Skull Cavern Floor 100,Skull Cavern: Floor 100,ELEVATOR,Skull Cavern Elevator
+7024,Skull Cavern Floor 125,Skull Cavern: Floor 125,ELEVATOR,Skull Cavern Elevator
+7025,Skull Cavern Floor 150,Skull Cavern: Floor 150,ELEVATOR,Skull Cavern Elevator
+7026,Skull Cavern Floor 175,Skull Cavern: Floor 175,ELEVATOR,Skull Cavern Elevator
+7027,Skull Cavern Floor 200,Skull Cavern: Floor 200,ELEVATOR,Skull Cavern Elevator
+7501,Town,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7502,Town,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
+7504,Forest,Juna's Drink Request,"MANDATORY,QUEST",Juna - Roommate NPC
+7505,Forest,Juna's BFF Request,"MANDATORY,QUEST",Juna - Roommate NPC
+7506,Forest,Juna's Monster Mash,SPECIAL_ORDER_BOARD,Juna - Roommate NPC
