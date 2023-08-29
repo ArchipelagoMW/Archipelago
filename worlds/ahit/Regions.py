@@ -152,7 +152,7 @@ rift_access_regions = {
     "Time Rift - Tour":           ["Time's End"],
 
     "Time Rift - Balcony":       ["Cruise Ship"],
-    "Time Rift - Deep Sea":      ["Cruise Ship"],
+    "Time Rift - Deep Sea":      ["Bon Voyage!"],
 
     "Time Rift - Rumbi Factory": ["Nyakuza Free Roam"],
 }
@@ -481,11 +481,6 @@ def randomize_act_entrances(world: World):
                 candidate_list.append(region)
                 break
 
-            if world.multiworld.NoFreeRoamFinale[world.player].value > 0 and "Free Roam" in candidate.name:
-                # CTR entrance isn't a finale, but has a fuck ton of unlock requirements
-                if region.name in chapter_finales or region.name == "Cheating the Race":
-                    continue
-
             if region.name == "Rush Hour":
                 if world.multiworld.EndGoal[world.player].value == 2 or \
                    world.multiworld.VanillaMetro[world.player].value == 2:
@@ -536,6 +531,12 @@ def randomize_act_entrances(world: World):
             # Ditto for Metro
             if region.name == "Rush Hour" and candidate.name == "Nyakuza Free Roam":
                 continue
+
+            # CTR entrance and Tour aren't a finale, but have a fuck ton of unlock requirements
+            if world.multiworld.NoFreeRoamFinale[world.player].value > 0 and "Free Roam" in candidate.name:
+                if region.name in chapter_finales or region.name == "Cheating the Race" \
+                   or world.multiworld.EndGoal[world.player].value == 1 and region.name == "Time Rift - Tour":
+                    continue
 
             if region.name in rift_access_regions and candidate.name in rift_access_regions[region.name]:
                 continue

@@ -33,8 +33,14 @@ def adjust_options(world: World):
     if world.multiworld.HighestChapterCost[world.player].value > total_tps-5:
         world.multiworld.HighestChapterCost[world.player].value = min(45, total_tps-5)
 
+    if world.multiworld.LowestChapterCost[world.player].value > total_tps-5:
+        world.multiworld.LowestChapterCost[world.player].value = min(45, total_tps-5)
+
     if world.multiworld.FinalChapterMaxCost[world.player].value > total_tps:
         world.multiworld.FinalChapterMaxCost[world.player].value = min(50, total_tps)
+
+    if world.multiworld.FinalChapterMinCost[world.player].value > total_tps:
+        world.multiworld.FinalChapterMinCost[world.player].value = min(50, total_tps-5)
 
     # Don't allow Rush Hour goal if DLC2 content is disabled
     if world.multiworld.EndGoal[world.player].value == 2 and world.multiworld.EnableDLC2[world.player].value == 0:

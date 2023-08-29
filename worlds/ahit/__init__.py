@@ -48,7 +48,8 @@ class HatInTimeWorld(World):
         start_chapter: int = self.multiworld.StartingChapter[self.player].value
 
         if start_chapter == 4 or start_chapter == 3:
-            if self.multiworld.ActRandomizer[self.player].value == 0:
+            if self.multiworld.ActRandomizer[self.player].value == 0 \
+               or self.multiworld.VanillaAlpine[self.player].value > 0:
                 if start_chapter == 4:
                     self.multiworld.push_precollected(self.create_item("Hookshot Badge"))
 

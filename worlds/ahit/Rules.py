@@ -32,17 +32,17 @@ act_connections = {
 
 
 def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
-    return get_remaining_hat_cost(state, world, hat) <= 0
+    return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
 
 
-def get_remaining_hat_cost(state: CollectionState, world: World, hat: HatType) -> int:
+def get_hat_cost(world: World, hat: HatType) -> int:
     cost: int = 0
     for h in world.get_hat_craft_order():
         cost += world.get_hat_yarn_costs().get(h)
         if h == hat:
             break
 
-    return max(cost - state.count("Yarn", world.player), 0)
+    return cost
 
 
 def can_sdj(state: CollectionState, world: World):

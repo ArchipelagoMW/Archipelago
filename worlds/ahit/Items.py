@@ -34,6 +34,9 @@ def get_total_time_pieces(world: World) -> int:
     if world.multiworld.EnableDLC1[world.player].value > 0:
         count += 6
 
+    if world.multiworld.EnableDLC2[world.player].value > 0:
+        count += 10
+
     return min(40+world.multiworld.MaxExtraTimePieces[world.player].value, count)
 
 
