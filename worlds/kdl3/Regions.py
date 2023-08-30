@@ -4,12 +4,11 @@ import typing
 from pkgutil import get_data
 
 from BaseClasses import Region
-from worlds.AutoWorld import World
-from .Locations import KDL3Location, location_table
+from worlds.generic.Rules import add_item_rule
+from .Locations import KDL3Location
 from .Names import LocationName
 from .Options import BossShuffle
 from .Room import Room
-from worlds.generic.Rules import add_item_rule
 
 if typing.TYPE_CHECKING:
     from . import KDL3World
@@ -37,7 +36,7 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
         return new_stage
 
 
-def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[int, Region]):
+def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing.Dict[int, Region]):
     level_names = {LocationName.level_names[level]: level for level in LocationName.level_names}
     room_data = json.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
     rooms: typing.Dict[str, Room] = dict()
@@ -101,7 +100,7 @@ def generate_rooms(world: World, door_shuffle: bool, level_regions: typing.Dict[
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 
 
-def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bool) -> dict:
+def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> dict:
     levels: typing.Dict[int, typing.List[typing.Optional[int]]] = {
         1: [None for _ in range(7)],
         2: [None for _ in range(7)],

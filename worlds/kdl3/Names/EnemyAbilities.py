@@ -807,7 +807,7 @@ vanilla_enemies = {'Waddle Dee': 'No Ability',
                    'Haboki': 'Clean Ability',
                    }
 
-enemy_restrictive: List[Tuple[Set, Set]] = [
+enemy_restrictive: List[Tuple[Set[str], Set[str]]] = [
     # abilities, enemies, set_all (False to set any)
     ({"Burning Ability", "Stone Ability"}, {"Rocky", "Sparky", "Babut", "Squishy", }),  # Ribbon Field 5 - 7
     # Sand Canyon 6
