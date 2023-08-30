@@ -407,7 +407,7 @@ act_completions = {
                                           hookshot=True,
                                           required_hats=[HatType.ICE, HatType.BREWING]),
 
-    "Act Completion (Rumbi Factory)": LocData(312736, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
+    "Act Completion (Time Rift - Rumbi Factory)": LocData(312736, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
 }
 
 storybook_pages = {
