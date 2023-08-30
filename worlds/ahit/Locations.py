@@ -646,6 +646,7 @@ tihs_locations = [
 ]
 
 event_locs = {
+    "HUMT Access": LocData(0, "Heating Up Mafia Town", act_complete_event=False),
     "Birdhouse Cleared": LocData(0, "The Birdhouse"),
     "Lava Cake Cleared": LocData(0, "The Lava Cake"),
     "Windmill Cleared": LocData(0, "The Windmill"),

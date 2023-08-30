@@ -32,7 +32,7 @@ act_connections = {
 
 
 def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
-    return state.has("Yarn", world.player, get_hat_cost(world, hat))
+    return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
 
 
 def get_hat_cost(world: World, hat: HatType) -> int:
@@ -387,14 +387,12 @@ def set_specific_rules(world: World):
              or state.can_reach("The Golden Vault", "Region", world.player))
 
     # For some reason, the brewing crate is removed in HUMT
-    set_rule(world.multiworld.get_location("Mafia Town - Secret Cave", world.player),
-             lambda state: state.can_reach("Heating Up Mafia Town", "Region", world.player)
-             or can_use_hat(state, world, HatType.BREWING))
+    add_rule(world.multiworld.get_location("Mafia Town - Secret Cave", world.player),
+             lambda state: state.has("HUMT Access", world.player), "or")
 
-    # Can bounce across the lava to get this without Hookshot (need to die though :world.player)
-    set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player),
-             lambda state: state.can_reach("Heating Up Mafia Town", "Region", world.player)
-             or can_use_hookshot(state, world))
+    # Can bounce across the lava to get this without Hookshot (need to die though)
+    add_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player),
+             lambda state: state.has("HUMT Access", world.player), "or")
 
     set_rule(world.multiworld.get_location("Act Completion (Cheating the Race)", world.player),
              lambda state: can_use_hat(state, world, HatType.TIME_STOP)

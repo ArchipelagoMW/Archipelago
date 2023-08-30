@@ -474,16 +474,30 @@ def randomize_act_entrances(world: World):
 
             if world.multiworld.VanillaAlpine[world.player].value > 0 and region.name == "Alpine Free Roam" \
                or world.multiworld.VanillaAlpine[world.player].value == 2 and region.name == "The Illness has Spread":
+                candidate_list.clear()
                 candidate_list.append(region)
                 break
 
+            if world.multiworld.VanillaAlpine[world.player].value > 0 and candidate.name == "Alpine Free Roam" \
+               or world.multiworld.VanillaAlpine[world.player].value == 2 and candidate.name == "The Illness has Spread":
+                continue
+
             if world.multiworld.VanillaMetro[world.player].value > 0 and region.name == "Nyakuza Free Roam":
+                candidate_list.clear()
                 candidate_list.append(region)
                 break
+
+            if world.multiworld.VanillaMetro[world.player].value > 0 and candidate.name == "Nyakuza Free Roam":
+                continue
+
+            if candidate.name == "Rush Hour" and world.multiworld.EndGoal[world.player].value == 2 or \
+               world.multiworld.VanillaMetro[world.player].value == 2:
+                continue
 
             if region.name == "Rush Hour":
                 if world.multiworld.EndGoal[world.player].value == 2 or \
                    world.multiworld.VanillaMetro[world.player].value == 2:
+                    candidate_list.clear()
                     candidate_list.append(region)
                     break
 
