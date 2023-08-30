@@ -17,6 +17,10 @@
 # Web hosting port
 #PORT: 80
 
+# Ports used for game hosting. Values can be specific ports, port ranges or both. Default is: "49152-65535"
+# Examples of valid values: "40000-41000,49152-65535"
+#GAME_PORTS: "49152-65535"
+
 # Place where uploads go.
 #UPLOAD_FOLDER: uploads
 

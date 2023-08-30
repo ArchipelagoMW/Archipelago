@@ -19,6 +19,8 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
+
+from . import app
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -84,13 +86,13 @@ class WebHostContext(Context):
             time.sleep(5)
 
     @db_session
-    def load(self, room_id: int):
+    def load(self, room_id: int, game_ports: str):
         self.room_id = room_id
         room = Room.get(id=room_id)
         if room.last_port:
             self.port = room.last_port
         else:
-            self.port = get_random_port()
+            self.port = get_random_port(game_ports)
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
@@ -133,8 +135,36 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port():
-    return random.randint(49152, 65535)
+def get_random_port(game_ports):
+    config_range_list = game_ports.split(",")
+    available_ports = []
+    for item in config_range_list:
+        if '-' in item:
+            start, end = map(int, item.split('-'))
+            available_ports.extend(range(start, end+1))
+        else:
+            available_ports.append(int(item))
+
+    port = get_port_from_list(available_ports)
+
+    return port
+
+
+def get_port_from_list(available_ports: list) -> int:
+    while available_ports:
+        port = random.choice(available_ports)
+        available_ports.remove(port)
+
+        if not is_port_in_use(port):
+            break
+    else:
+        port = 0
+    return port
+
+
+def is_port_in_use(port: int) -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
 
 
 @cache_argsless
@@ -157,7 +187,7 @@ def get_static_server_data() -> dict:
 
 def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str):
+                       host: str, game_ports: str):
     # establish DB connection for multidata and multisave
     db.bind(**ponyconfig)
     db.generate_mapping(check_tables=False)
@@ -165,7 +195,7 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     async def main():
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
-        ctx.load(room_id)
+        ctx.load(room_id, game_ports)
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
         try:
