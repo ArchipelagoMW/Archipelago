@@ -1161,7 +1161,7 @@ class StardewLogic:
                 item_rules.append(bundle_item.item.name)
                 if bundle_item.quality > highest_quality_yet:
                     highest_quality_yet = bundle_item.quality
-        return self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
+        return self.can_reach_region(Region.wizard_tower) & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
 
     def can_grow_gold_quality(self, quality: int) -> StardewRule:
         if quality <= 0:
