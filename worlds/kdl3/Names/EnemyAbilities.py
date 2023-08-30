@@ -807,16 +807,16 @@ vanilla_enemies = {'Waddle Dee': 'No Ability',
                    'Haboki': 'Clean Ability',
                    }
 
-enemy_restrictive: List[Tuple[Set[str], Set[str]]] = [
+enemy_restrictive: List[Tuple[List[str], List[str]]] = [
     # abilities, enemies, set_all (False to set any)
-    ({"Burning Ability", "Stone Ability"}, {"Rocky", "Sparky", "Babut", "Squishy", }),  # Ribbon Field 5 - 7
+    (["Burning Ability", "Stone Ability"], ["Rocky", "Sparky", "Babut", "Squishy", ]),  # Ribbon Field 5 - 7
     # Sand Canyon 6
-    ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
-    ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
-    ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
-    ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
-    ({"Stone Ability"}, {'Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
-                         'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
-    ({"Parasol Ability"}, {'Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
-                           'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+    (["Parasol Ability", "Cutter Ability"], ['Bukiset (Parasol)', 'Bukiset (Cutter)']),
+    (["Spark Ability", "Clean Ability"], ['Bukiset (Spark)', 'Bukiset (Clean)']),
+    (["Ice Ability", "Needle Ability"], ['Bukiset (Ice)', 'Bukiset (Needle)']),
+    (["Stone Ability", "Burning Ability"], ['Bukiset (Stone)', 'Bukiset (Burning)']),
+    (["Stone Ability"], ['Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
+                         'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)']),
+    (["Parasol Ability"], ['Bukiset (Burning)', 'Bukiset (Stone)', 'Bukiset (Ice)', 'Bukiset (Needle)',
+                           'Bukiset (Clean)', 'Bukiset (Spark)', 'Bukiset (Parasol)', 'Bukiset (Cutter)']),
 ]

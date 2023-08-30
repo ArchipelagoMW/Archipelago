@@ -1,5 +1,4 @@
 from typing import List, Tuple
-
 from . import KDL3TestBase
 
 
@@ -73,7 +72,8 @@ class TestCopyAbilityShuffle(KDL3TestBase):
             self.assertFalse(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"), str(self.multiworld.seed))
             self.collect_by_name(["Cutter"])
 
-        self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"), str(self.multiworld.seed))
+        self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"),
+                        ''.join(str(self.multiworld.seed)).join(collected_abilities))
 
 
 class TestAnimalShuffle(KDL3TestBase):

@@ -109,7 +109,7 @@ class KDL3World(World):
                                             self.multiworld.slow_trap_weight[self.player],
                                             self.multiworld.ability_trap_weight[self.player]])[0]
 
-    def pre_fill(self) -> None:
+    def generate_early(self) -> None:
         if self.multiworld.copy_ability_randomization[self.player]:
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
@@ -125,7 +125,7 @@ class KDL3World(World):
                         available_enemies.append(enemy)
                 else:
                     chosen_enemy = self.random.choice(available_enemies)
-                    chosen_ability = self.random.choice(tuple(abilities))
+                    chosen_ability = self.random.choice(abilities)
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
             # place remaining
@@ -133,6 +133,8 @@ class KDL3World(World):
                 self.copy_abilities[enemy] = self.random \
                     .choice(valid_abilities)
 
+
+    def pre_fill(self) -> None:
         for enemy in enemy_mapping:
             self.multiworld.get_location(enemy, self.player) \
                 .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
