@@ -18,7 +18,6 @@ import typing
 
 hat_craft_order: typing.Dict[int, typing.List[HatType]] = {}
 hat_yarn_costs: typing.Dict[int, typing.Dict[HatType, int]] = {}
-slot_data_yarn_costs: typing.Dict[int, typing.Dict[HatType, int]] = {}
 chapter_timepiece_costs: typing.Dict[int, typing.Dict[ChapterIndex, int]] = {}
 
 
@@ -79,9 +78,6 @@ class HatInTimeWorld(World):
     def create_items(self):
         hat_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
                                        HatType.DWELLER: -1, HatType.TIME_STOP: -1}
-
-        slot_data_yarn_costs[self.player] = {HatType.SPRINT: -1, HatType.BREWING: -1, HatType.ICE: -1,
-                                             HatType.DWELLER: -1, HatType.TIME_STOP: -1}
 
         hat_craft_order[self.player] = [HatType.SPRINT, HatType.BREWING, HatType.ICE,
                                         HatType.DWELLER, HatType.TIME_STOP]
@@ -171,11 +167,11 @@ class HatInTimeWorld(World):
         return create_item(self, name)
 
     def fill_slot_data(self) -> dict:
-        slot_data: dict = {"SprintYarnCost": slot_data_yarn_costs[self.player][HatType.SPRINT],
-                           "BrewingYarnCost": slot_data_yarn_costs[self.player][HatType.BREWING],
-                           "IceYarnCost": slot_data_yarn_costs[self.player][HatType.ICE],
-                           "DwellerYarnCost": slot_data_yarn_costs[self.player][HatType.DWELLER],
-                           "TimeStopYarnCost": slot_data_yarn_costs[self.player][HatType.TIME_STOP],
+        slot_data: dict = {"SprintYarnCost": hat_yarn_costs[self.player][HatType.SPRINT],
+                           "BrewingYarnCost": hat_yarn_costs[self.player][HatType.BREWING],
+                           "IceYarnCost": hat_yarn_costs[self.player][HatType.ICE],
+                           "DwellerYarnCost": hat_yarn_costs[self.player][HatType.DWELLER],
+                           "TimeStopYarnCost": hat_yarn_costs[self.player][HatType.TIME_STOP],
                            "Chapter1Cost": chapter_timepiece_costs[self.player][ChapterIndex.MAFIA],
                            "Chapter2Cost": chapter_timepiece_costs[self.player][ChapterIndex.BIRDS],
                            "Chapter3Cost": chapter_timepiece_costs[self.player][ChapterIndex.SUBCON],
@@ -241,7 +237,7 @@ class HatInTimeWorld(World):
             spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.get_chapter_costs()[ChapterIndex(i)]))
 
         for hat in hat_craft_order[self.player]:
-            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, slot_data_yarn_costs[self.player][hat]))
+            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, hat_yarn_costs[self.player][hat]))
 
     def calculate_yarn_costs(self):
         mw = self.multiworld
@@ -252,8 +248,7 @@ class HatInTimeWorld(World):
         max_cost: int = 0
         for i in range(5):
             cost = mw.random.randint(min(min_yarn_cost, max_yarn_cost), max(max_yarn_cost, min_yarn_cost))
-            hat_yarn_costs[self.player][HatType(i)] = cost + max_cost
-            slot_data_yarn_costs[self.player][HatType(i)] = cost
+            hat_yarn_costs[self.player][HatType(i)] = cost
             max_cost += cost
 
         available_yarn = mw.YarnAvailable[p].value

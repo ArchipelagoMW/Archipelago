@@ -32,7 +32,17 @@ act_connections = {
 
 
 def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
-    return state.has("Yarn", world.player, world.get_hat_yarn_costs().get(hat))
+    return state.has("Yarn", world.player, get_hat_cost(world, hat))
+
+
+def get_hat_cost(world: World, hat: HatType) -> int:
+    cost: int = 0
+    for h in world.get_hat_craft_order():
+        cost += world.get_hat_yarn_costs().get(h)
+        if h == hat:
+            break
+
+    return cost
 
 
 def can_sdj(state: CollectionState, world: World):
@@ -218,7 +228,7 @@ def set_rules(world: World):
 
         for hat in data.required_hats:
             if hat is not HatType.NONE:
-                add_rule(location, lambda state, required_hat=hat: can_use_hat(state, world, required_hat))
+                add_rule(location, lambda state, hat=hat: can_use_hat(state, world, hat))
 
         if data.hookshot:
             add_rule(location, lambda state: can_use_hookshot(state, world))
