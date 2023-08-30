@@ -241,7 +241,7 @@ class HatInTimeWorld(World):
             spoiler_handle.write("Chapter %i Cost: %i\n" % (i, self.get_chapter_costs()[ChapterIndex(i)]))
 
         for hat in hat_craft_order[self.player]:
-            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, hat_yarn_costs[self.player][hat]))
+            spoiler_handle.write("Hat Cost: %s: %i\n" % (hat, slot_data_yarn_costs[self.player][hat]))
 
     def calculate_yarn_costs(self):
         mw = self.multiworld
