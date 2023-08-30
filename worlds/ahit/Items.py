@@ -75,12 +75,12 @@ def create_junk_items(world: World, count: int) -> typing.List[Item]:
                 trap_list[name] = world.multiworld.ParadeTrapWeight[world.player].value
 
     for i in range(count):
-        if trap_chance > 0 and world.random.randint(1, 100) <= trap_chance:
+        if trap_chance > 0 and world.multiworld.random.randint(1, 100) <= trap_chance:
             junk_pool += [world.create_item(
-                world.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0])]
+                world.multiworld.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0])]
         else:
             junk_pool += [world.create_item(
-                world.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0])]
+                world.multiworld.random.choices(list(junk_list.keys()), weights=list(junk_list.values()), k=1)[0])]
 
     return junk_pool
 

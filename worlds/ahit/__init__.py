@@ -100,7 +100,7 @@ class HatInTimeWorld(World):
         itempool += yarn_pool
 
         if self.multiworld.RandomizeHatOrder[self.player].value > 0:
-            self.random.shuffle(hat_craft_order[self.player])
+            self.multiworld.random.shuffle(hat_craft_order[self.player])
 
         for name in item_table.keys():
             if name == "Yarn":

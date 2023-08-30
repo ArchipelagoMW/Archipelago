@@ -159,7 +159,7 @@ ahit_locations = {
     "Dead Bird Studio Basement - Above Conductor Sign": LocData(305057, "Dead Bird Studio Basement", hookshot=True),
     "Dead Bird Studio Basement - Logo Wall": LocData(305207, "Dead Bird Studio Basement"),
     "Dead Bird Studio Basement - Disco Room": LocData(305061, "Dead Bird Studio Basement", hookshot=True),
-    "Dead Bird Studio Basement - Small Room": LocData(304813, "Dead Bird Studio Basement", hookshot=True),
+    "Dead Bird Studio Basement - Small Room": LocData(304813, "Dead Bird Studio Basement"),
     "Dead Bird Studio Basement - Vent Pipe": LocData(305430, "Dead Bird Studio Basement"),
     "Dead Bird Studio Basement - Tightrope": LocData(305058, "Dead Bird Studio Basement", hookshot=True),
     "Dead Bird Studio Basement - Cameras": LocData(305431, "Dead Bird Studio Basement", hookshot=True),

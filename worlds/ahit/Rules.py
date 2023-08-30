@@ -111,9 +111,9 @@ def set_rules(world: World):
         chapter_list.append(ChapterIndex.METRO)
 
     chapter_list.remove(starting_chapter)
-    world.random.shuffle(chapter_list)
+    world.multiworld.random.shuffle(chapter_list)
 
-    if starting_chapter is not ChapterIndex.ALPINE and dlc1 or dlc2:
+    if starting_chapter is not ChapterIndex.ALPINE and (dlc1 or dlc2):
         index1: int = 69
         index2: int = 69
         lowest_index: int
@@ -129,7 +129,7 @@ def set_rules(world: World):
         if lowest_index == 0:
             pos = 0
         else:
-            pos = world.random.randint(0, lowest_index)
+            pos = world.multiworld.random.randint(0, lowest_index)
 
         chapter_list.insert(pos, ChapterIndex.ALPINE)
 
@@ -147,10 +147,10 @@ def set_rules(world: World):
         if min_range >= highest_cost:
             min_range = highest_cost-1
 
-        value: int = world.random.randint(min_range, min(highest_cost,
+        value: int = world.multiworld.random.randint(min_range, min(highest_cost,
                                                                     max(lowest_cost, last_cost + cost_increment)))
 
-        cost = world.random.randint(value, min(value + cost_increment, highest_cost))
+        cost = world.multiworld.random.randint(value, min(value + cost_increment, highest_cost))
         if loop_count >= 1:
             if last_cost + min_difference > cost:
                 cost = last_cost + min_difference
@@ -160,7 +160,7 @@ def set_rules(world: World):
         last_cost = cost
         loop_count += 1
 
-    world.set_chapter_cost(final_chapter, world.random.randint(
+    world.set_chapter_cost(final_chapter, world.multiworld.random.randint(
                                                         world.multiworld.FinalChapterMinCost[world.player].value,
                                                         world.multiworld.FinalChapterMaxCost[world.player].value))
 
