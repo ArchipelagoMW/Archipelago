@@ -5,7 +5,7 @@ from pkgutil import get_data
 
 from BaseClasses import Region
 from worlds.generic.Rules import add_item_rule
-from .Locations import KDL3Location
+from .Locations import KDL3Location, location_table
 from .Names import LocationName
 from .Options import BossShuffle
 from .Room import Room
