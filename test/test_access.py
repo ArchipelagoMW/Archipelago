@@ -9,7 +9,7 @@ from ..types import LocationType, Passage
 class TestAccess(WL4TestBase):
     def test_spoiled_rotten(self):
         '''Test access to Spoiled Rotten'''
-        locations = ['Entry Passage Boss']
+        locations = ['Spoiled Rotten']
         items = [['Top Right Entry Jewel Piece',
                   'Bottom Right Entry Jewel Piece',
                   'Bottom Left Entry Jewel Piece',
