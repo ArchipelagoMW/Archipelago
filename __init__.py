@@ -6,7 +6,7 @@ from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import setup_locations
+from .locations import location_name_to_id, setup_locations
 from .logic import WL4Logic
 from .options import wl4_options
 from .regions import connect_regions, create_regions
@@ -56,7 +56,7 @@ class WL4World(World):
 
     item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()
                        if data[1] is not None}
-    location_name_to_id = locations.location_name_to_id
+    location_name_to_id = location_name_to_id
 
     web = WL4Web()
 
