@@ -1,4 +1,18 @@
-from Options import Choice, Toggle
+from Options import Choice, Toggle, Range
+
+MAX_COMBAT_TASKS = 20
+MAX_PRAYER_TASKS = 3
+MAX_MAGIC_TASKS = 4
+MAX_RUNECRAFT_TASKS = 3
+MAX_CRAFTING_TASKS = 5
+MAX_MINING_TASKS = 5
+MAX_SMITHING_TASKS = 4
+MAX_FISHING_TASKS = 5
+MAX_COOKING_TASKS = 5
+MAX_FIREMAKING_TASKS = 2
+MAX_WOODCUTTING_TASKS = 3
+
+NON_QUEST_LOCATION_COUNT = 30
 
 
 class StartingArea(Choice):
@@ -32,7 +46,403 @@ class BrutalGrinds(Toggle):
     display_name = "Allow Brutal Grinds"
 
 
+class ProgressiveTasks(Toggle):
+    """
+    Whether skill tasks should always be generated in order of easiest to hardest.
+    If enabled, you would not be assigned "Mine Gold" without also being assigned
+    "Mine Silver", "Mine Coal", and "Mine Iron". Enabling this will result in a generally shorter seed, but with
+    a lower variety of tasks.
+    """
+    display_name = "Progressive Tasks"
+
+
+class MaxCombatLevel(Range):
+    """
+    The highest combat level of monster to possibly be assigned as a task.
+    If set to 0, no combat tasks will be generated.
+    """
+    range_start = 0
+    range_end = 1520
+    default = 50
+
+
+class MaxCombatTasks(Range):
+    """
+    The maximum number of Combat Tasks to possibly be assigned.
+    If set to 0, no combat tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_COMBAT_TASKS
+
+
+class CombatTaskWeight(Range):
+    """
+    How much to favor generating combat tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxPrayerLevel(Range):
+    """
+    The highest Prayer requirement of any task generated.
+    If set to 0, no Prayer tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxPrayerTasks(Range):
+    """
+    The maximum number of Prayer Tasks to possibly be assigned.
+    If set to 0, no Prayer tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_PRAYER_TASKS
+
+
+class PrayerTaskWeight(Range):
+    """
+    How much to favor generating Prayer tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxMagicLevel(Range):
+    """
+    The highest Magic requirement of any task generated.
+    If set to 0, no Magic tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxMagicTasks(Range):
+    """
+    The maximum number of Magic Tasks to possibly be assigned.
+    If set to 0, no Magic tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_MAGIC_TASKS
+
+
+class MagicTaskWeight(Range):
+    """
+    How much to favor generating Magic tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxRunecraftLevel(Range):
+    """
+    The highest Runecraft requirement of any task generated.
+    If set to 0, no Runecraft tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxRunecraftTasks(Range):
+    """
+    The maximum number of Runecraft Tasks to possibly be assigned.
+    If set to 0, no Runecraft tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_RUNECRAFT_TASKS
+
+
+class RunecraftTaskWeight(Range):
+    """
+    How much to favor generating Runecraft tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxCraftingLevel(Range):
+    """
+    The highest Crafting requirement of any task generated.
+    If set to 0, no Crafting tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxCraftingTasks(Range):
+    """
+    The maximum number of Crafting Tasks to possibly be assigned.
+    If set to 0, no Crafting tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_CRAFTING_TASKS
+
+
+class CraftingTaskWeight(Range):
+    """
+    How much to favor generating Crafting tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxMiningLevel(Range):
+    """
+    The highest Mining requirement of any task generated.
+    If set to 0, no Mining tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxMiningTasks(Range):
+    """
+    The maximum number of Mining Tasks to possibly be assigned.
+    If set to 0, no Mining tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_MINING_TASKS
+
+
+class MiningTaskWeight(Range):
+    """
+    How much to favor generating Mining tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxSmithingLevel(Range):
+    """
+    The highest Smithing requirement of any task generated.
+    If set to 0, no Smithing tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxSmithingTasks(Range):
+    """
+    The maximum number of Smithing Tasks to possibly be assigned.
+    If set to 0, no Smithing tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_SMITHING_TASKS
+
+
+class SmithingTaskWeight(Range):
+    """
+    How much to favor generating Smithing tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxFishingLevel(Range):
+    """
+    The highest Fishing requirement of any task generated.
+    If set to 0, no Fishing tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxFishingTasks(Range):
+    """
+    The maximum number of Fishing Tasks to possibly be assigned.
+    If set to 0, no Fishing tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_FISHING_TASKS
+
+
+class FishingTaskWeight(Range):
+    """
+    How much to favor generating Fishing tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxCookingLevel(Range):
+    """
+    The highest Cooking requirement of any task generated.
+    If set to 0, no Cooking tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxCookingTasks(Range):
+    """
+    The maximum number of Cooking Tasks to possibly be assigned.
+    If set to 0, no Cooking tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_COOKING_TASKS
+
+
+class CookingTaskWeight(Range):
+    """
+    How much to favor generating Cooking tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxFiremakingLevel(Range):
+    """
+    The highest Firemaking requirement of any task generated.
+    If set to 0, no Firemaking tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxFiremakingTasks(Range):
+    """
+    The maximum number of Firemaking Tasks to possibly be assigned.
+    If set to 0, no Firemaking tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_PRAYER_TASKS
+
+
+class FiremakingTaskWeight(Range):
+    """
+    How much to favor generating Firemaking tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxWoodcuttingLevel(Range):
+    """
+    The highest Woodcutting requirement of any task generated.
+    If set to 0, no Woodcutting tasks will be generated.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MaxWoodcuttingTasks(Range):
+    """
+    The maximum number of Woodcutting Tasks to possibly be assigned.
+    If set to 0, no Woodcutting tasks will be generated.
+    This only determines the maximum possible, fewer than the maximum could be assigned.
+    """
+    range_start = 0
+    range_end = MAX_WOODCUTTING_TASKS
+
+
+class WoodcuttingTaskWeight(Range):
+    """
+    How much to favor generating Woodcutting tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
+class MinimumGeneralTasks(Range):
+    """
+    How many guaranteed general progression tasks to be assigned (total level, total XP, etc.).
+    General progression tasks will be used to fill out any holes caused by having fewer possible tasks than needed, so
+    there is no maximum.
+    """
+    range_start = 0
+    range_end = NON_QUEST_LOCATION_COUNT
+
+
 OSRSOptions = {
     "starting_area": StartingArea,
-    "brutal_grinds": BrutalGrinds
+    "brutal_grinds": BrutalGrinds,
+    "progressive_tasks": ProgressiveTasks,
+    "max_combat_level": MaxCombatLevel,
+    "max_combat_tasks": MaxCombatTasks,
+    "combat_task_weight": CombatTaskWeight,
+    "max_prayer_level": MaxPrayerLevel,
+    "max_prayer_tasks": MaxPrayerTasks,
+    "prayer_task_weight": PrayerTaskWeight,
+    "max_magic_level": MaxMagicLevel,
+    "max_magic_tasks": MaxMagicTasks,
+    "magic_task_weight": MagicTaskWeight,
+    "max_runecraft_level": MaxRunecraftLevel,
+    "max_runecraft_tasks": MaxRunecraftTasks,
+    "runecraft_task_weight": RunecraftTaskWeight,
+    "max_crafting_level": MaxCraftingLevel,
+    "max_crafting_tasks": MaxCraftingTasks,
+    "crafting_task_weight": CraftingTaskWeight,
+    "max_mining_level": MaxMiningLevel,
+    "max_mining_tasks": MaxMiningTasks,
+    "mining_task_weight": MiningTaskWeight,
+    "max_smithing_level": MaxSmithingLevel,
+    "max_smithing_tasks": MaxSmithingTasks,
+    "smithing_task_weight": SmithingTaskWeight,
+    "max_fishing_level": MaxFishingLevel,
+    "max_fishing_tasks": MaxFishingTasks,
+    "fishing_task_weight": FishingTaskWeight,
+    "max_cooking_level": MaxCookingLevel,
+    "max_cooking_tasks": MaxCookingTasks,
+    "cooking_task_weight": CookingTaskWeight,
+    "max_firemaking_level": MaxFiremakingLevel,
+    "max_firemaking_tasks": MaxFiremakingTasks,
+    "firemaking_task_weight": FiremakingTaskWeight,
+    "max_woodcutting_level": MaxWoodcuttingLevel,
+    "max_woodcutting_tasks": MaxWoodcuttingTasks,
+    "woodcutting_task_weight": WoodcuttingTaskWeight,
+    "minimum_general_tasks": MinimumGeneralTasks,
 }
