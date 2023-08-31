@@ -18,6 +18,7 @@ class GameDifficulty(Choice):
     option_normal = 1
     option_hard = 2
     option_brutal = 3
+    default = 1
 
 class GameSpeed(Choice):
     """Optional setting to override difficulty-based game speed."""
