@@ -247,8 +247,8 @@ def create_elevators(item_factory: StardewItemFactory, world_options: StardewOpt
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
-def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.tool_progression == ToolProgression.option_progressive:
+def create_tools(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    if world_options[options.ToolProgression] & options.ToolProgression.option_progressive:
         for item_data in items_by_group[Group.PROGRESSIVE_TOOLS]:
             name = item_data.name
             if "Trash Can" in name:
@@ -286,7 +286,7 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
 
 def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     building_option = world_options[options.BuildingProgression]
-    if building_option == options.BuildingProgression.option_vanilla:
+    if building_option & options.BuildingProgression.option_vanilla:
         return
     items.append(item_factory("Progressive Coop"))
     items.append(item_factory("Progressive Coop"))
@@ -302,7 +302,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: 
     items.append(item_factory("Fish Pond"))
     items.append(item_factory("Stable"))
     items.append(item_factory("Slime Hutch"))
-    needs_early_bin = building_option == options.BuildingProgression.option_progressive_early_shipping_bin
+    needs_early_bin = building_option & options.BuildingProgression.option_progressive_early_shipping_bin
     has_shipsanity = world_options[options.Shipsanity] != options.Shipsanity.option_none
     need_shipping = needs_early_bin or has_shipsanity or world_is_perfection(world_options)
     items.append(item_factory("Shipping Bin", ItemClassification.progression if need_shipping else ItemClassification.useful))

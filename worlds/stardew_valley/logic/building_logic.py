@@ -62,7 +62,7 @@ class BuildingLogic:
 
     def has_building(self, building: str) -> StardewRule:
         carpenter_rule = self.received(Event.can_construct_buildings)
-        if self.building_option == options.BuildingProgression.option_vanilla:
+        if self.building_option & options.BuildingProgression.option_vanilla:
             return Has(building, self.building_rules) & carpenter_rule
 
         count = 1
@@ -83,7 +83,7 @@ class BuildingLogic:
         if upgrade_level > 3:
             return False_()
 
-        if not self.building_option == options.BuildingProgression.option_vanilla:
+        if not self.building_option & options.BuildingProgression.option_vanilla:
             return self.received(f"Progressive House", upgrade_level) & self.region.can_reach(Region.carpenter)
 
         if upgrade_level == 1:

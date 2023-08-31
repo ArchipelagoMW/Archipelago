@@ -69,7 +69,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
-        if self.tool_option == options.ToolProgression.option_progressive:
+        if self.tool_option & options.ToolProgression.option_progressive:
             rules.append(self.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
         if self.skill_option == options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier * 2))
@@ -81,7 +81,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
-        if self.tool_option == options.ToolProgression.option_progressive:
+        if self.tool_option & options.ToolProgression.option_progressive:
             rules.append(self.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
         if self.skill_option == options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier * 2))
@@ -106,7 +106,7 @@ class MineLogic:
         rules = []
         weapon_rule = self.combat.has_great_weapon()
         rules.append(weapon_rule)
-        if self.tool_option == options.ToolProgression.option_progressive:
+        if self.tool_option & options.ToolProgression.option_progressive:
             rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
         if self.skill_option == options.SkillProgression.option_progressive:
             skill_tier = min(10, max(0, tier * 2 + 6))

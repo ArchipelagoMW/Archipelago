@@ -54,13 +54,13 @@ class ToolLogic:
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
-        if self.tool_option == options.ToolProgression.option_progressive:
+        if self.tool_option & options.ToolProgression.option_progressive:
             return self.received(f"Progressive {tool}", tool_materials[material])
 
         return self.has(f"{material} Bar") & self.money.can_spend(tool_upgrade_prices[material])
 
     def has_fishing_rod(self, level: int) -> StardewRule:
-        if self.tool_option == options.ToolProgression.option_progressive:
+        if self.tool_option & options.ToolProgression.option_progressive:
             return self.received(f"Progressive {Tool.fishing_rod}", level)
 
         if level <= 1:

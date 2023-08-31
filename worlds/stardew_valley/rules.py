@@ -87,9 +87,8 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.relationship.can_reproduce(2).simplify())
 
 
-def set_tool_rules(logic: StardewLogic, multiworld, player, world_options):
-    # Those checks do not exist if ToolProgression is vanilla
-    if world_options.tool_progression == ToolProgression.option_vanilla:
+def set_tool_rules(logic: StardewLogic, multi_world, player, world_options):
+    if world_options[options.ToolProgression] & options.ToolProgression.option_vanilla:
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
@@ -107,12 +106,14 @@ def set_tool_rules(logic: StardewLogic, multiworld, player, world_options):
 
 
 def set_building_rules(logic: StardewLogic, multi_world, player, world_options):
-    if world_options[options.BuildingProgression] != options.BuildingProgression.option_vanilla:
-        for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-            if building.mod_name is not None and building.mod_name not in world_options[options.Mods]:
-                continue
-            MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
-                                     logic.buildings.building_rules[building.name.replace(" Blueprint", "")].simplify())
+    if world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla:
+        return
+
+    for building in locations.locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
+        if building.mod_name is not None and building.mod_name not in world_options[options.Mods]:
+            continue
+        MultiWorldRules.set_rule(multi_world.get_location(building.name, player),
+                                 logic.buildings.building_rules[building.name.replace(" Blueprint", "")].simplify())
 
 
 def set_bundle_rules(current_bundles, logic: StardewLogic, multi_world, player):
