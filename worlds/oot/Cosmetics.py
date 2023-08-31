@@ -769,7 +769,7 @@ patch_sets[0x1F073FD9] = {
 
 def patch_cosmetics(ootworld, rom):
     # Use the world's slot seed for cosmetics
-    random.seed(ootworld.multiworld.per_slot_randoms[ootworld.player])
+    random.seed(ootworld.multiworld.per_slot_randoms[ootworld.player].random())
 
     # try to detect the cosmetic patch data format
     versioned_patch_set = None

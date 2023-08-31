@@ -1,6 +1,6 @@
 # Locations are specific points that you would obtain an item at.
 from enum import IntEnum
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Location
 
@@ -12,7 +12,7 @@ class NoitaLocation(Location):
 class LocationData(NamedTuple):
     id: int
     flag: int = 0
-    ltype: Optional[str] = ""
+    ltype: Optional[str] = "shop"
 
 
 class LocationFlag(IntEnum):
@@ -208,7 +208,16 @@ def generate_location_entries(locname: str, locinfo: LocationData) -> Dict[str, 
     return {locname: locinfo.id}
 
 
+location_name_groups: Dict[str, Set[str]] = {"shop": set(), "orb": set(), "boss": set(), "chest": set(),
+                                             "pedestal": set()}
 location_name_to_id: Dict[str, int] = {}
+
+
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
         location_name_to_id.update(generate_location_entries(locname, locinfo))
+        if locinfo.ltype in ["chest", "pedestal"]:
+            for i in range(20):
+                location_name_groups[locinfo.ltype].add(f"{locname} {i + 1}")
+        else:
+            location_name_groups[locinfo.ltype].add(locname)

@@ -14,12 +14,23 @@ if TYPE_CHECKING:
     import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
+    from settings import Group
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
     __file__: str
     zip_path: Optional[str]
+    settings_key: str
+    __settings: Any
+
+    @property
+    def settings(cls) -> Any:  # actual type is defined in World
+        # lazy loading + caching to minimize runtime cost
+        if cls.__settings is None:
+            from settings import get_settings
+            cls.__settings = get_settings()[cls.settings_key]
+        return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -61,6 +72,11 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        if "settings_key" not in dct:
+            mod_name = new_class.__module__
+            world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
+            new_class.settings_key = world_folder_name + "_options"
+        new_class.__settings = None
         return new_class
 
 
@@ -82,7 +98,17 @@ class AutoLogicRegister(type):
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
-    return method(*args)
+    try:
+        ret = method(*args)
+    except Exception as e:
+        message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
+        if sys.version_info >= (3, 11, 0):
+            e.add_note(message)  # PEP 678
+        else:
+            logging.error(message)
+        raise e
+    else:
+        return ret
 
 
 def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
@@ -207,6 +233,11 @@ class World(metaclass=AutoWorldRegister):
     random: random.Random
     """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
+    settings_key: ClassVar[str]
+    """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
+    settings: ClassVar[Optional["Group"]]
+    """loaded settings from host.yaml"""
+
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
@@ -215,6 +246,11 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
+
+    def __getattr__(self, item: str) -> Any:
+        if item == "settings":
+            return self.__class__.settings
+        raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
@@ -273,8 +309,8 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
+        """This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot

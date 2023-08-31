@@ -833,7 +833,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
-        if args["key"] == "EnergyLink":
+        if args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
