@@ -7,7 +7,12 @@ ORDER_VANILLA = 0
 ORDER_VANILLA_SHUFFLED = 1
 
 class GameDifficulty(Choice):
-    """The difficulty of the campaign, affects enemy AI, starting units, and game speed."""
+    """
+    The difficulty of the campaign, affects enemy AI, starting units, and game speed.
+
+    For those unfamiliar with the Archipelago randomizer, the recommended settings are one difficulty level
+    lower than the vanilla game
+    """
     display_name = "Game Difficulty"
     option_casual = 0
     option_normal = 1
