@@ -17,7 +17,7 @@ from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, se
 class KH2Context(CommonContext):
     # command_processor: int = KH2CommandProcessor
     game = "Kingdom Hearts 2"
-    items_handling = 0b101  # Indicates you get items sent from other worlds.
+    items_handling = 0b111  # Indicates you get items sent from other worlds.
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
@@ -152,7 +152,7 @@ class KH2Context(CommonContext):
             "High Jump":    [0x05E, 0x061, 0x25DA],
             "Quick Run":    [0x62, 0x65, 0x25DC],
             "Dodge Roll":   [0x234, 0x237, 0x25DE],
-            "Aerial Dodge": [0x066, 0x069, 0x25E0],
+            "Aerial Dodge": [0x66, 0x069, 0x25E0],
             "Glide":        [0x6A, 0x6D, 0x25E2]
         }
 
@@ -253,7 +253,7 @@ class KH2Context(CommonContext):
         if cmd in {"Connected"}:
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
-            self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
+            #self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
             self.locations_checked = set(args["checked_locations"])
 
         if cmd in {"ReceivedItems"}:
@@ -296,11 +296,11 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-                if self.kh2_loc_name_to_id:
-                    for location in self.checked_locations:
-                        if location in self.kh2_local_items:
-                            item = self.kh2slotdata["LocalItems"][str(location)]
-                            asyncio.create_task(self.give_item(item, "LocalItems"))
+                #if self.kh2_loc_name_to_id:
+                #    for location in self.checked_locations:
+                #        if location in self.kh2_local_items:
+                #            item = self.kh2slotdata["LocalItems"][str(location)]
+                #            asyncio.create_task(self.give_item(item, "LocalItems"))
             if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
@@ -310,10 +310,10 @@ class KH2Context(CommonContext):
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 # doing a list comprehension for getting the items then for loop for task might be better.
-                for location in args["checked_locations"]:
-                    if location in self.kh2_local_items:
-                        item = self.kh2slotdata["LocalItems"][str(location)]
-                        asyncio.create_task(self.give_item(item, "LocalItems"))
+                #for location in args["checked_locations"]:
+                #    if location in self.kh2_local_items:
+                #        item = self.kh2slotdata["LocalItems"][str(location)]
+                #        asyncio.create_task(self.give_item(item, "LocalItems"))
                 self.locations_checked |= new_locations
 
         if cmd in {"DataPackage"}:
@@ -323,10 +323,10 @@ class KH2Context(CommonContext):
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            for location in self.checked_locations:
-                if location in self.kh2_local_items:
-                    item = self.kh2slotdata["LocalItems"][str(location)]
-                    asyncio.create_task(self.give_item(item, "LocalItems"))
+            #for location in self.checked_locations:
+            #    if location in self.kh2_local_items:
+            #        item = self.kh2slotdata["LocalItems"][str(location)]
+            #        asyncio.create_task(self.give_item(item, "LocalItems"))
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 logger.info("You are now auto-tracking")

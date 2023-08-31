@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Tuple
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fill_restrictive
@@ -48,6 +48,9 @@ class KH2World(World):
     goofy_weapon_abilities: List[KH2Item]
     donald_get_bonus_abilities: List[KH2Item]
     donald_weapon_abilities: List[KH2Item]
+    slot_data_goofy_weapon = dict()
+    slot_data_sora_weapon = dict()
+    slot_data_donald_weapon = dict()
     visitlocking_dict: Dict[str, int]
     plando_locations: Dict[str, str]
     lucky_emblem_amount: int
@@ -57,6 +60,8 @@ class KH2World(World):
     filler_items: List[str]
     item_quantity_dict: Dict[str, int]
     local_items: Dict[int, int]
+    sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
+                         dic.items()}
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -73,26 +78,61 @@ class KH2World(World):
 
     def fill_slot_data(self) -> dict:
         # localItems filling done here instead of OpenKH for the unit test.
-        for values in CheckDupingItems.values():
-            if isinstance(values, set):
-                self.slot_data_duping = self.slot_data_duping.union(values)
-            else:
-                for inner_values in values.values():
-                    self.slot_data_duping = self.slot_data_duping.union(inner_values)
-        self.local_items = {location.address: self.item_name_to_id[location.item.name]
-                            for location in self.multiworld.get_filled_locations(self.player)
-                            if location.item.player == self.player
-                            and location.item.name in self.slot_data_duping
-                            and location.name not in all_weapon_slot}
+        # for values in CheckDupingItems.values():
+        #    if isinstance(values, set):
+        #        self.slot_data_duping = self.slot_data_duping.union(values)
+        #    else:
+        #        for inner_values in values.values():
+        #            self.slot_data_duping = self.slot_data_duping.union(inner_values)
+        # self.local_items = {location.address: self.item_name_to_id[location.item.name]
+        #                    for location in self.multiworld.get_filled_locations(self.player)
+        #                    if location.item.player == self.player
+        #                    and location.item.name in self.slot_data_duping
+        #                    and location.name not in all_weapon_slot}
+        # legit all I have to do is check if the location is the location of a weapon slot
+        # will still need to keep track of what abilites are on the weapons to calculate the static ability order
+        # sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
+        #                     dic.items()}
+        value_counter = 0
+        for k, v in self.sora_ability_dict.items():
+            for _ in range(v):
+                value_counter += 1
+        for ability in self.slot_data_sora_weapon:
+            if ability in self.sora_ability_dict.keys():
+                if self.sora_ability_dict[ability] >= 1:
+                    self.sora_ability_dict[ability] -= 1
+        sora_back_of_invo = 0x25D8
+        # front of invo =0x2546
+        # 0x24F0+0x54 +0x2 because of no exp
+        # 0x2548= no exp
+        # 0x254A = buffer slot for new abilites
+        # 0x25D8 already accounts for growth
+        # so we got 25D8 through 254C
+        # we got 70 slots
+        sora_ability_to_slot = dict()
+        for k, v in self.sora_ability_dict.items():
+            if v >= 1:
+                item_id=self.item_name_to_id[k]
+                if item_id not in sora_ability_to_slot.keys():
+                    sora_ability_to_slot[item_id] = []
+                for _ in range(self.sora_ability_dict[k]):
+                    sora_ability_to_slot[item_id].append(sora_back_of_invo)
+                    sora_back_of_invo -= 2
+        print(sora_ability_to_slot)
+        # print(len(sora_ability_to_slot))
 
+        # sora_ability_list = [item_name for k, v in SupportAbility_Table.items()
+        #                     if k in self.slot_data_sora_weapon]
         return {
             "hitlist": [],
-            "LocalItems": self.local_items,
             "Goal": self.multiworld.Goal[self.player].value,
             "FinalXemnas": self.multiworld.FinalXemnas[self.player].value,
             "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
             "BountyRequired": self.multiworld.BountyRequired[self.player].value,
-            "PoptrackerVersionCheck": 4.2
+            "PoptrackerVersionCheck": 4.2,
+            "keyblade_abilities": self.sora_ability_dict,
+            "staff_abilities": self.slot_data_donald_weapon,
+            "shield_abilities": self.slot_data_goofy_weapon,
         }
 
     def create_item(self, name: str) -> Item:
@@ -177,6 +217,14 @@ class KH2World(World):
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
+        # 3 random support abilities because there are left over slots
+
+        for _ in range(3):
+            support_abilites = list(SupportAbility_Table.keys())
+            random_support_ability = self.random.choice(support_abilites)
+            self.item_quantity_dict[random_support_ability] += 1
+            self.sora_ability_dict[random_support_ability] += 1
+
         self.plando_locations = dict()
         self.starting_invo_verify()
 
@@ -212,12 +260,12 @@ class KH2World(World):
                             location in self.random_super_boss_list]
             for bounty in range(self.multiworld.BountyAmount[self.player].value):
                 if prio_hitlist:
-                    randomBoss = self.random.choice(prio_hitlist)
-                    prio_hitlist.remove(randomBoss)
+                    random_boss = self.random.choice(prio_hitlist)
+                    prio_hitlist.remove(random_boss)
                 else:
-                    randomBoss = self.random.choice(self.random_super_boss_list)
-                self.plando_locations[randomBoss] = ItemName.Bounty
-                self.random_super_boss_list.remove(randomBoss)
+                    random_boss = self.random.choice(self.random_super_boss_list)
+                self.plando_locations[random_boss] = ItemName.Bounty
+                self.random_super_boss_list.remove(random_boss)
                 self.total_locations -= 1
 
         self.donald_gen_early()
@@ -235,8 +283,8 @@ class KH2World(World):
                 self.multiworld.start_location_hints[self.player].value.add(location)
 
         if self.multiworld.FillerItemsLocal[self.player]:
-           for item in filler_items:
-               self.multiworld.local_items[self.player].value.add(item)
+            for item in filler_items:
+                self.multiworld.local_items[self.player].value.add(item)
         # By imitating remote this doesn't have to be plandoded filler anymore
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
@@ -292,6 +340,7 @@ class KH2World(World):
             self.donald_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
+        self.slot_data_donald_weapon = tuple([item_name.name for item_name in self.donald_weapon_abilities])
         if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             # pre plando donald get bonuses
             self.donald_get_bonus_abilities += [self.create_item(random_prog_ability)]
@@ -314,7 +363,7 @@ class KH2World(World):
             self.goofy_weapon_abilities += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
-
+        self.slot_data_goofy_weapon = tuple([item_name.name for item_name in self.goofy_weapon_abilities])
         if not self.multiworld.DonaldGoofyStatsanity[self.player]:
             # pre plando goofy get bonuses
             self.goofy_get_bonus_abilities += [self.create_item(random_prog_ability)]
@@ -337,6 +386,7 @@ class KH2World(World):
             self.keyblade_ability_pool += [self.create_item(random_ability)]
             self.item_quantity_dict[random_ability] -= 1
             self.total_locations -= 1
+        self.slot_data_sora_weapon = tuple([item_name.name for item_name in self.keyblade_ability_pool])
 
     def goofy_pre_fill(self):
         """
