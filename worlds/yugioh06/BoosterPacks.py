@@ -50,7 +50,13 @@ booster_contents = {
         "Gravekeeper's Guard",
         "A Cat of Ill Omen",
         "Jowls of Dark Demise",
-        "Non Aggression Area"
+        "Non Aggression Area",
+        "Terraforming",
+        "Des Lacooda",
+        "Swarm of Locusts",
+        "Swarm of Scarabs",
+        "Wandering Mummy",
+        "Royal Keeper"
     },
     "SPELL RULER": {
         "Ritual",
@@ -65,7 +71,10 @@ booster_contents = {
         "Giant Germ",
         "Nimble Momonga",
         "Cyber Jar",
-        "Spear Cretin"
+        "Spear Cretin",
+        "Toon Mermaid",
+        "Toon Summoned Skull",
+        "Toon World"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -106,7 +115,12 @@ booster_contents = {
         "Reinforcement of the Army",
         "Cave Dragon",
         "Troop Dragon",
-        "Stamping Destruction"
+        "Stamping Destruction",
+        "Creature Swap",
+        "Asura Priest",
+        "Fushi No Tori",
+        "Maharaghi",
+        "Susa Soldier"
     },
     "MAGICIAN'S FORCE": {
         "Huge Revolution",
@@ -143,7 +157,10 @@ booster_contents = {
         "Vampire Orchis",
         "Des Dendle",
         "Frontline Base",
-        "Formation Union"
+        "Formation Union",
+        "Pitch-Black Power Stone",
+        "Magical Marionette",
+        "Royal Magical Library"
     },
     "DARK CRISIS": {
         "Final Countdown",
@@ -203,11 +220,13 @@ booster_contents = {
         "The End of Anubis",
         "Solar Flare Dragon",
         "Level Limit - Area B",
-        "King of the Swamp"
+        "King of the Swamp",
+        "Enemy Controller"
     },
     "SOUL OF THE DUELIST": {
         "Ninja Grandmaster Sasuke",
         "Mystic Swordsman LV2",
+        "Mystic Swordsman LV4"
         "Enraged Muka Muka",
         "Mobius the Frost Monarch",
         "Horus the Black Flame Dragon LV6",
@@ -216,13 +235,17 @@ booster_contents = {
         "Armed Dragon LV5",
         "Masked Dragon",
         "Element Dragon",
-        "Horus the Black Flame Dragon LV4"
+        "Horus the Black Flame Dragon LV4",
+        "Level Up!"
     },
     "RISE OF DESTINY": {
         "Homunculus the Alchemic Being",
         "Thestalos the Firestorm Monarch",
         "Roc from the Valley of Haze",
-        "Harpie Lady 1"
+        "Harpie Lady 1",
+        "Silent Swordsman Lv3",
+        "Mystic Swordsman LV6",
+        "Ultimate Insect Lv3"
     },
     "FLAMING ETERNITY": {
         "Insect Knight",
@@ -231,7 +254,10 @@ booster_contents = {
         "Silent Swordsman Lv5",
         "The Dark - Hex-Sealed Fusion",
         "The Earth - Hex-Sealed Fusion",
-        "The Light - Hex-Sealed Fusion"
+        "The Light - Hex-Sealed Fusion",
+        "Ultimate Insect Lv5",
+        "Blast Magician",
+        "Golem Sentry"
     },
     "THE LOST MILLENIUM": {
         "Ritual",
@@ -243,7 +269,9 @@ booster_contents = {
         "Elemental Hero Burstinatrix",
         "Elemental Hero Clayman",
         "Elemental Hero Sparkman",
-        "Elemental Hero Thunder Giant"
+        "Elemental Hero Thunder Giant",
+        "Aussa the Earth Charmer",
+        "Brain Control"
     },
     "CYBERNETIC REVOLUTION": {
         "Power Bond",
@@ -300,7 +328,10 @@ booster_contents = {
         "Cyber-Tech Alligator",
         "D.D. Assailant",
         "Goblin Zombie",
-        "Elemental Hero Madballman"
+        "Elemental Hero Madballman",
+        "Mind Control",
+        "Toon Dark Magician Girl",
+        "Great Spirit"
     },
     "Special Gift Collection": {
         "Gate Guardian",
@@ -329,7 +360,8 @@ booster_contents = {
         "Mudora",
         "Protective Soul Ailin",
         "Marshmallon",
-        "Goddess with the Third Eye"
+        "Goddess with the Third Eye",
+        "Asura Priest"
     },
     "Dragon Collection": {
         "Victory D.",
@@ -365,17 +397,21 @@ booster_contents = {
         "Ninja Grandmaster Sasuke",
         "D.D. Warrior Lady",
         "Mystic Swordsman LV2",
+        "Mystic Swordsman LV4",
+        "Mystic Swordsman LV6",
         "Dark Blade",
         "Blindly Loyal Goblin",
         "Exiled Force",
         "Ultimate Baseball Kid",
         "Freed the Matchless General",
         "Holy Knight Ishzark",
+        "Silent Swordsman Lv3",
         "Silent Swordsman Lv5",
         "Warrior Lady of the Wasteland",
         "D.D. Assailant",
         "Blade Knight",
-        "Marauding Captain"
+        "Marauding Captain",
+        "Toon Goblin Attack Force"
     },
     "Fiend Collection A": {
         "Sangan",
@@ -387,7 +423,8 @@ booster_contents = {
         "Sangan",
         "Giant Germ",
         "Spear Cretin",
-        "Versago the Destroyer"
+        "Versago the Destroyer",
+        "Toon Summoned Skull"
     },
     "Fiend Collection B": {
         "Raviel, Lord of Phantasms",
@@ -458,6 +495,8 @@ booster_contents = {
         "Skilled Dark Magician",
         "Kycoo the Ghost Destroyer",
         "Toon Gemini Elf",
+        "Toon Masked Sorcerer",
+        "Toon Dark Magician Girl",
         "Familiar-Possessed - Aussa",
         "Familiar-Possessed - Eria",
         "Familiar-Possessed - Hiita",
@@ -470,7 +509,12 @@ booster_contents = {
         "Summon Priest",
         "Old Vindictive Magician",
         "Apprentice Magician",
-        "Princess Pikeru"
+        "Princess Pikeru",
+        "Blast Magician",
+        "Magical Marionette",
+        "Mythical Beast Cerberus",
+        "Royal Magical Library",
+        "Aussa the Earth Charmer"
     },
     "Zombie Collection": {
         "Regenerating Mummy",
@@ -482,7 +526,10 @@ booster_contents = {
         "Vampire Lord",
         "Goblin Zombie",
         "Decayed Commander",
-        "Zombie Tiger"
+        "Zombie Tiger",
+        "Des Lacooda",
+        "Wandering Mummy",
+        "Royal Keeper"
     },
     "Special Monsters A": {
         "X-Head Cannon",
@@ -494,6 +541,12 @@ booster_contents = {
         "Tsukuyomi",
         "Dark Blade",
         "Toon Gemini Elf",
+        "Toon Goblin Attack Force",
+        "Toon Masked Sorcerer",
+        "Toon Mermaid",
+        "Toon Dark Magician Girl",
+        "Toon Summoned Skull",
+        "Toon World",
         "Burning Beast",
         "Freezing Beast",
         "Metallizing Parasite - Lunatite",
@@ -508,15 +561,22 @@ booster_contents = {
         "Protective Soul Ailin",
         "Frontline Base",
         "Formation Union",
-        "Roll Out!"
+        "Roll Out!",
+        "Asura Priest",
+        "Fushi No Tori",
+        "Maharaghi",
+        "Susa Soldier"
     },
     "Special Monsters B": {
         "Polymerization",
         "Mystic Swordsman LV2",
+        "Mystic Swordsman LV4",
+        "Mystic Swordsman LV6",
         "Horus the Black Flame Dragon LV6",
         "Horus the Black Flame Dragon LV4",
         "Armed Dragon LV3"
         "Armed Dragon LV5",
+        "Silent Swordsman Lv3",
         "Silent Swordsman Lv5",
         "Elemental Hero Flame Wingman",
         "Elemental Hero Avian",
@@ -532,7 +592,10 @@ booster_contents = {
         "Elemental Hero Thunder Giant",
         "Elemental Hero WildEdge",
         "Elemental Hero Wildheart",
-        "Elemental Hero Bladedge"
+        "Elemental Hero Bladedge",
+        "Level Up!",
+        "Ultimate Insect Lv3",
+        "Ultimate Insect Lv5"
     },
     "Reverse Collection": {
         "Magical Merchant",
@@ -550,7 +613,8 @@ booster_contents = {
         "Morphing Jar #2",
         "Needle Worm",
         "Spear Cretin",
-        "Nobleman of Crossout"
+        "Nobleman of Crossout",
+        "Aussa the Earth Charmer"
     },
     "LP Recovery Collection": {
         "Mystik Wok",
@@ -564,7 +628,8 @@ booster_contents = {
         "Cure Mermaid",
         "Princess Pikeru",
         "Kiseitai",
-        "Elemental Hero Steam Healer"
+        "Elemental Hero Steam Healer",
+        "Fushi No Tori"
     },
     "Special Summon Collection A": {
         "Perfectly Ultimate Great Moth",
@@ -610,6 +675,7 @@ booster_contents = {
         "Inferno",
         "Silpheed",
         "Mystic Swordsman LV2",
+        "Mystic Swordsman LV4",
         "Skilled Dark Magician",
         "Horus the Black Flame Dragon LV6",
         "Armed Dragon LV3",
@@ -621,7 +687,8 @@ booster_contents = {
         "Frontline Base",
         "Formation Union",
         "Princess Pikeru",
-        "Skull Zoma"
+        "Skull Zoma",
+        "Level Up!"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
@@ -633,6 +700,7 @@ booster_contents = {
         "Familiar-Possessed - Eria",
         "Familiar-Possessed - Hiita",
         "Familiar-Possessed - Wynn",
+        "Silent Swordsman Lv3",
         "Silent Swordsman Lv5",
         "Warrior Lady of the Wasteland",
         "Dandylion",
@@ -642,7 +710,9 @@ booster_contents = {
         "Elemental Hero Bubbleman",
         "The Dark - Hex-Sealed Fusion",
         "The Earth - Hex-Sealed Fusion",
-        "The Light - Hex-Sealed Fusion"
+        "The Light - Hex-Sealed Fusion",
+        "Ultimate Insect Lv3",
+        "Ultimate Insect Lv5"
     },
     "Equipment Collection": {
         "Megamorph",
@@ -660,7 +730,8 @@ booster_contents = {
         "Ultimate Offering",
         "Gravity Bind",
         "Solemn Wishes",
-        "Embodiment of Apophis"
+        "Embodiment of Apophis",
+        "Toon World"
     },
     "Continuous Spell/Trap B": {
         "Hamon, Lord of Striking Thunder",
@@ -672,13 +743,15 @@ booster_contents = {
         "Call of the Mummy",
         "Frontline Base",
         "Level Limit - Area B",
-        "Skull Zoma"
+        "Skull Zoma",
+        "Pitch-Black Power Stone"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
         "Poison of the Old Man",
         "Scapegoat",
-        "Magical Dimension"
+        "Magical Dimension",
+        "Enemy Controller"
     },
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
@@ -711,7 +784,13 @@ booster_contents = {
         "Victory D.",
         "Dark Scorpion Combination",
         "Spirit Reaper",
-        "Elemental Hero Rampart Blaster"
+        "Elemental Hero Rampart Blaster",
+        "Toon Gemini Elf",
+        "Toon Goblin Attack Force",
+        "Toon Masked Sorcerer",
+        "Toon Mermaid",
+        "Toon Summoned Skull",
+        "Toon Dark Magician Girl"
     },
     "Monster Destroy Collection": {
         "Hamon, Lord of Striking Thunder",
@@ -719,6 +798,8 @@ booster_contents = {
         "Ninja Grandmaster Sasuke",
         "Zaborg the Thunder Monarch",
         "Mystic Swordsman LV2",
+        "Mystic Swordsman LV4",
+        "Mystic Swordsman LV6",
         "Skull Descovery Knight",
         "Inferno Hammer",
         "Ryu Kokki",
@@ -735,7 +816,10 @@ booster_contents = {
         "Tribute to The Doomed",
         "Elemental Hero Flame Wingman",
         "Elemental Hero Shining Flare Wingman",
-        "Elemental Hero Steam Healer"
+        "Elemental Hero Steam Healer",
+        "Blast Magician",
+        "Magical Marionette",
+        "Swarm of Scarabs"
     },
 }
 

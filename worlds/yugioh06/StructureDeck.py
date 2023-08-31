@@ -6,14 +6,16 @@ structure_contents = {
         "Masked Dragon",
         "Twin-Headed Behemoth",
         "Stamping Destruction",
-        "Nobleman of Crossout"
+        "Nobleman of Crossout",
+        "Creature Swap"
     },
     "zombie_madness": {
         "Pyramid Turtle",
         "Regenerating Mummy",
         "Ryu Kokki",
         "Book of Life",
-        "Call of the Mummy"
+        "Call of the Mummy",
+        "Creature Swap"
     },
     "blazing_destruction": {
         "Inferno",
@@ -44,7 +46,8 @@ structure_contents = {
         "Magician of Faith",
         "Skilled Dark Magician",
         "Tsukuyomi",
-        "Magical Dimension"
+        "Magical Dimension",
+        "Spell-Counter Cards"
     }
 }
 
