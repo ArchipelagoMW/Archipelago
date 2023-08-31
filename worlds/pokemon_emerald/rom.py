@@ -3,7 +3,7 @@ Classes and functions related to creating a ROM patch
 """
 import os
 import pkgutil
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import bsdiff4
 
@@ -11,10 +11,11 @@ from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 
-from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
+from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
 from .pokemon import get_random_species
+from .util import encode_string
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -55,7 +56,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
-    # Set item values
+    location_info: List[Tuple[int, str, str]] = []
     for location in multiworld.get_locations(player):
         # Set free fly location
         if location.address is None:
@@ -68,10 +69,57 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
                 )
             continue
 
+        # Set local item values
         if location.item and location.item.player == player:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+
+            # Creates a list of item information to store in tables later
+            # Those tables are used to display the item and player name in a text box
+            # TODO: Disable in race mode
+            location_info.append((location.address - BASE_OFFSET, multiworld.player_name[location.item.player], location.item.name))
+
+    player_name_ids: Dict[str, int] = {}
+    item_name_offsets: Dict[str, int] = {}
+    next_item_name_offset = 0
+    for i, (flag, player_name, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
+        if player_name not in player_name_ids:
+            # Only space for 50 player names
+            if len(player_name_ids) >= 50:
+                continue
+
+            player_name_ids[player_name] = len(player_name_ids)
+            for j, b in enumerate(encode_string(player_name, 17)):
+                _set_bytes_little_endian(
+                    patched_rom,
+                    data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
+                    1,
+                    b
+                )
+
+        if item_name not in item_name_offsets:
+            if len(item_name) > 35:
+                item_name = item_name[:34] + "…"
+
+            # Only 36 * 250 bytes for item names
+            if next_item_name_offset + len(item_name) + 1 > 36 * 250:
+                continue
+
+            item_name_offsets[item_name] = next_item_name_offset
+            next_item_name_offset += len(item_name) + 1
+            for j, b in enumerate(encode_string(item_name) + b"\xFF"):
+                _set_bytes_little_endian(
+                    patched_rom,
+                    data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
+                    1,
+                    b
+                )
+
+        # There should always be enough space for one entry per location
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
 
     # Set start inventory
     start_inventory = multiworld.start_inventory[player].value.copy()

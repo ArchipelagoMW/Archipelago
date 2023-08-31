@@ -21,7 +21,7 @@ local current_game_state = GAME_STATE_UNSAFE
 
 local received_items = {}
 
-local expected_rom_name = "pokemon emerald version / AP 1"
+local expected_rom_name = "pokemon emerald version / AP 2"
 
 -- TODO: Addresses may change any time the base rom is updated.
 -- Could pull addresses from extracted_data.json, but would have to rely
@@ -42,10 +42,10 @@ local save_block_ptr_address = 0x5D8C              -- gSaveBlock1Ptr
 local cb2_address = 0x22C0 + 4                     -- gMain + offset
 
 -- EWRAM Addresses
-local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
+local archipelago_received_item_address = 0x3A02C  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local slot_name_address = 0x59A03C                 -- gArchipelagoInfo
+local slot_name_address = 0x59D924                 -- gArchipelagoInfo
 
 -- Bus addresses
 local cb2_overworld_func_address = 0x808605C + 1   -- CB2_Overworld + 1
@@ -102,7 +102,7 @@ end
 function create_message ()
     local data = {}
 
-    data["script_version"] = 2
+    data["script_version"] = 3
 
     local slot_name = memory.read_bytes_as_array(slot_name_address, 64, "ROM")
     data["slot_name"] = slot_name
