@@ -32,7 +32,6 @@ def set_rules(world):
                 'WARNING! Seeds generated under this logic often require major glitches and may be impossible!')
 
         if world.players == 1:
-            world.get_region('Menu', player).can_reach_private = lambda state: True
             no_logic_rules(world, player)
             for exit in world.get_region('Menu', player).exits:
                 exit.hide_path = True
@@ -196,7 +195,6 @@ def global_rules(world, player):
         add_item_rule(world.get_location(prize_location, player),
                       lambda item: item.name in crystals_and_pendants and item.player == player)
     # determines which S&Q locations are available - hide from paths since it isn't an in-game location
-    world.get_region('Menu', player).can_reach_private = lambda state: True
     for exit in world.get_region('Menu', player).exits:
         exit.hide_path = True
 
