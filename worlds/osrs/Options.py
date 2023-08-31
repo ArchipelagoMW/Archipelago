@@ -407,6 +407,17 @@ class MinimumGeneralTasks(Range):
     range_end = NON_QUEST_LOCATION_COUNT
 
 
+class GeneralTaskWeight(Range):
+    """
+    How much to favor generating General tasks over other types of task.
+    Weights of all Task Types will be compared against each other, a task with 50 weight
+    is twice as likely to appear as one with 25.
+    """
+    range_start = 0
+    range_end = 99
+    default = 50
+
+
 OSRSOptions = {
     "starting_area": StartingArea,
     "brutal_grinds": BrutalGrinds,
@@ -445,4 +456,5 @@ OSRSOptions = {
     "max_woodcutting_tasks": MaxWoodcuttingTasks,
     "woodcutting_task_weight": WoodcuttingTaskWeight,
     "minimum_general_tasks": MinimumGeneralTasks,
+    "general_task_weight": GeneralTaskWeight,
 }

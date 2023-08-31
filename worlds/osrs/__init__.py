@@ -1,14 +1,12 @@
-import typing
-
 from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_rule
-from .Items import OSRSItem
+from .Items import OSRSItem, starting_area_dict, chunksanity_starting_chunks, QP_Items
 from .Locations import OSRSLocation
 
 from .Options import OSRSOptions, StartingArea
 from .Names import LocationNames, ItemNames, RegionNames
-from .LogicCSVParser import load_logic_csvs, location_rows, resource_rows, region_rows, item_rows
+from .LogicCSVParser import load_location_csv, load_region_csv, load_resource_csv, load_item_csv
 
 
 class OSRSWeb(WebWorld):
@@ -33,10 +31,13 @@ class OSRSWorld(World):
     base_id = 0x070000
     data_version = 0
 
-    item_name_to_id = {name: data.id for name, data in item_table.items()}
-    location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
+    location_rows = load_location_csv()
+    region_rows = load_region_csv()
+    resource_rows = load_resource_csv()
+    item_rows = load_item_csv()
 
-    #location_name_to_data = {loc_data.name: loc_data for loc_data in all_locations}
+    item_name_to_id = {item_rows[i].name: base_id + i for i in range(len(item_rows))}
+    location_name_to_id = {location_rows[i].name: base_id + i for i in range(len(location_rows))}
 
     region_name_to_data = {}
     location_name_to_data = {}
@@ -45,21 +46,22 @@ class OSRSWorld(World):
     region_rows_by_name = {}
     resource_rows_by_name = {}
     item_rows_by_name = {}
+    locations_by_category = {location_row.category: location_row for location_row in location_rows}
 
-    starting_area_item = None
+    starting_area_item = ""
     allow_brutal_grinds = False
 
+    local_item_pool = []
+
     def generate_early(self) -> None:
-        # Load the lgic CSVs and set up the name-indexed dictionaries
-        load_logic_csvs()
-        self.location_rows_by_name = {loc_row.name: loc_row for loc_row in location_rows}
-        self.region_rows_by_name = {reg_row.name: reg_row for reg_row in region_rows}
-        self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in resource_rows}
-        self.item_rows_by_name = {it_row.name: it_row for it_row in item_rows}
-        self.item_name_to_id = {location_rows[i].name: self.base_id + i for i in range(location_rows.count())}
+        self.location_rows_by_name = {loc_row.name: loc_row for loc_row in self.location_rows}
+        self.region_rows_by_name = {reg_row.name: reg_row for reg_row in self.region_rows}
+        self.resource_rows_by_name = {rec_row.name: rec_row for rec_row in self.resource_rows}
+        self.item_rows_by_name = {it_row.name: it_row for it_row in self.item_rows}
+
         rnd = self.multiworld.per_slot_randoms[self.player]
         starting_area = self.multiworld.starting_area[self.player]
-        allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
+        self.allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
 
         if starting_area.value < StartingArea.option_chunksanity:
             self.starting_area_item = starting_area_dict[starting_area.value]
@@ -71,7 +73,7 @@ class OSRSWorld(World):
             self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
 
         # Set Starting Chunk
-        self.multiworld.push_precollected(self.create_item(self.starting_area_item.itemName))
+        self.multiworld.push_precollected(self.create_item(self.starting_area_item.name))
 
     def create_regions(self) -> None:
         """
@@ -80,19 +82,23 @@ class OSRSWorld(World):
         """
 
         # First, create the "Menu" region to start
-        self.create_region("Menu")
+        menu_region = self.create_region("Menu")
 
-        for region_row in region_rows:
+        for region_row in self.region_rows:
             self.create_region(region_row.name)
 
-        for resource_row in resource_rows:
+        for resource_row in self.resource_rows:
             self.create_region(resource_row.name)
 
+        starting_entrance = menu_region.create_exit(f"Start->{self.starting_area_item}")
+        starting_entrance.connect(self.region_name_to_data[self.starting_area_item])
+        menu_region.exits.append(starting_entrance)
+
         # Create entrances between regions
-        for region_row in region_rows:
+        for region_row in self.region_rows:
             region = self.region_name_to_data[region_row.name]
             for outbound_region_name in region_row.connections:
-                if not "*" in outbound_region_name:
+                if "*" not in outbound_region_name:
                     entrance = region.create_exit(f"{region_row.name}->{outbound_region_name}")
                     item_name = self.region_rows_by_name[outbound_region_name]
                     entrance.access_rule = lambda state: state.has(item_name, self.player)
@@ -101,43 +107,132 @@ class OSRSWorld(World):
                 else:
                     print(f"Special access rule needed for {outbound_region_name}")
             for resource_region in region_row.resources:
-                if not "*" in resource_region:
+                if "*" not in resource_region:
                     entrance = region.create_exit(f"{region_row.name}->{resource_region}")
                     entrance.connect(self.region_name_to_data[resource_region])
                     region.exits.append(entrance)
                 else:
                     print(f"Special access rule needed for {resource_region}")
 
+    def roll_locations(self):
+        locations_required = len(self.local_item_pool)
+        locations_added = 0
+
+        # Quests are always added
+        for i in range(len(self.location_rows)):
+            location_row = self.location_rows[i]
+            if location_row.category == "Quest":
+                self.create_and_add_location(i)
+                locations_added += 1
+
+        # Build up the weighted Task Pool
+        rnd = self.multiworld.per_slot_randoms[self.player]
+
+        combat_weight = self.multiworld.combat_task_weight[self.player]
+        prayer_weight = self.multiworld.prayer_task_weight[self.player]
+        magic_weight = self.multiworld.magic_task_weight[self.player]
+        runecraft_weight = self.multiworld.runecraft_task_weight[self.player]
+        crafting_weight = self.multiworld.crafting_task_weight[self.player]
+        mining_weight = self.multiworld.mining_task_weight[self.player]
+        smithing_weight = self.multiworld.smithing_task_weight[self.player]
+        fishing_weight = self.multiworld.fishing_task_weight[self.player]
+        cooking_weight = self.multiworld.cooking_task_weight[self.player]
+        firemaking_weight = self.multiworld.firemaking_task_weight[self.player]
+        woodcutting_weight = self.multiworld.woodcutting_task_weight[self.player]
+        general_weight = self.multiworld.general_task_weight[self.player]
+        total_weight = combat_weight+prayer_weight+magic_weight+runecraft_weight+crafting_weight+mining_weight + \
+            smithing_weight+fishing_weight+cooking_weight+firemaking_weight+woodcutting_weight+general_weight
+
+        while locations_added < locations_required:
+            random_roll = rnd.randint(0, total_weight)
+            if random_roll < combat_weight:
+                # Add combat task
+                continue
+            random_roll -= combat_weight
+            if random_roll < prayer_weight:
+                # Add prayer task
+                continue
+            random_roll -= magic_weight
+            if random_roll < magic_weight:
+                # Add magic task
+                continue
+            random_roll -= magic_weight
+            if random_roll < runecraft_weight:
+                # Add runecraft task
+                continue
+            random_roll -= runecraft_weight
+            if random_roll < crafting_weight:
+                # Add crafting task
+                continue
+            random_roll -= crafting_weight
+            if random_roll < mining_weight:
+                # Add mining task
+                continue
+            random_roll -= mining_weight
+            if random_roll < smithing_weight:
+                # Add smithing task
+                continue
+            random_roll -= smithing_weight
+            if random_roll < fishing_weight:
+                # Add fishing task
+                continue
+            random_roll -= fishing_weight
+            if random_roll < cooking_weight:
+                # Add cooking task
+                continue
+            random_roll -= cooking_weight
+            if random_roll < firemaking_weight:
+                # Add firemaking task
+                continue
+            random_roll -= firemaking_weight
+            if random_roll < woodcutting_weight:
+                # Add woodcutting task
+                continue
+            # If it hasn't hit anything else, add a general
+
+
+    def roll_random_task_for_category(self, category) -> bool:
+        """
+        Rolls a random task from the given category and adds it to the world.
+        Returns true if there are still more options in this category after adding.
+        If the category is empty, it won't add anything but will still return false.
+        """
+
+        pass
+
     def create_items(self) -> None:
-        for i in range(item_rows.count()):
-            item_row = item_rows[i]
+        for i in range(len(self.item_rows)):
+            item_row = self.item_rows[i]
             for c in range(item_row.count):
-                self.multiworld.itempool.append(self.create_item(i))
+                item = self.create_item(i)
+                self.multiworld.itempool.append(item)
+                self.local_item_pool.append(item)
 
-    def create_locations(self) -> None:
-        for i in range(location_rows.count()):
-            location_row = location_rows[i]
+    def create_and_add_location(self, row_index) -> None:
+        location_row = self.location_rows[row_index]
 
-            location = OSRSLocation(self.player, location_row.name, self.base_id + i)
-            self.location_name_to_data[location_row.name] = location
-            for region_required_name in location_row.regions:
-                region_required = self.region_name_to_data[region_required_name]
-                add_rule(location, lambda state: state.can_reach(region_required, self.player))
-                for skill_req in location_row.skills:
-                    skill_name, skill_val = skill_req.split(" ")
-                    add_rule(location, lambda state: self.can_reach_skill(state, skill_name, int(skill_val)))
-                for item_req in location_row.items:
-                    add_rule(location, lambda state: state.has(item_req, self.player))
-                if location_row.qp != 0:
-                    add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
+        # Create Location
+        location = OSRSLocation(self.player, location_row.name, self.base_id + row_index)
+        self.location_name_to_data[location_row.name] = location
 
-    def add_location_to_region(self, location: OSRSLocation):
-        location_row = self.location_rows_by_name[location.name]
+        # Add the location to its first region, or if it doesn't belong to one, to Menu
         region = self.region_name_to_data["Menu"]
-        if location_row.regions.count() > 0:
+        if len(location_row.regions) > 0:
             region = self.region_name_to_data[location_row.regions[0]]
         location.parent_region = region
         region.locations.append(location)
+
+        # Set up requirements for region
+        for region_required_name in location_row.regions:
+            region_required = self.region_name_to_data[region_required_name]
+            add_rule(location, lambda state: state.can_reach(region_required, self.player))
+            for skill_req in location_row.skills:
+                skill_name, skill_val = skill_req.split(" ")
+                add_rule(location, lambda state: self.can_reach_skill(state, skill_name, int(skill_val)))
+            for item_req in location_row.items:
+                add_rule(location, lambda state: state.has(item_req, self.player))
+            if location_row.qp != 0:
+                add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
 
     def set_rules(self) -> None:
         """
@@ -457,7 +552,7 @@ class OSRSWorld(World):
         return region
 
     def create_item(self, index: int) -> "Item":
-        item = item_rows[index]
+        item = self.item_rows[index]
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
     def create_event(self, event: str):
