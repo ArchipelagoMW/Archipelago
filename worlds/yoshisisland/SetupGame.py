@@ -274,7 +274,7 @@ def setup_gamevars(world, multiworld, player: int):
     diff_level = diff_index[multiworld.stage_logic[player].value]
     boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
     world.world_start_lv = [0, 8, 16, 24, 32, 40]
-    if multiworld.shuffle_midrings[player].value == 1:
+    if multiworld.shuffle_midrings[player].value == 0:
         easy_start_lv.extend([0x1A, 0x24, 0x34])
         norm_start_lv.extend([0x24, 0x37, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
