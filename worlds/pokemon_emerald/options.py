@@ -539,6 +539,16 @@ class ReceiveItemMessages(Choice):
     option_none = 2
 
 
+class RemoteItems(Toggle):
+    """
+    Instead of placing your own items directly into the ROM, all items are received from the server, including items you find for yourself.
+
+    This enables co-op of a single slot and recovering more items after a lost save file (if you're so unlucky).
+    But it changes pickup behavior slightly and obviously requires connection to the server to receive any items.
+    """
+    display_name = "Remote Items"
+
+
 class EasterEgg(FreeText):
     """
     ???
@@ -598,6 +608,7 @@ option_definitions: Dict[str, Option] = {
     "fly_without_badge": FlyWithoutBadge,
     "turbo_a": TurboA,
     "receive_item_messages": ReceiveItemMessages,
+    "remote_items": RemoteItems,
 
     "easter_egg": EasterEgg
 }

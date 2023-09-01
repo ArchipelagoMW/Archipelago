@@ -56,7 +56,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
-    location_info: List[Tuple[int, str, str]] = []
+    location_info: List[Tuple[int, int, str]] = []
     for location in multiworld.get_locations(player):
         # Set free fly location
         if location.address is None:
@@ -69,57 +69,70 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
                 )
             continue
 
+        if location.item is None:
+            continue
+
         # Set local item values
-        if location.item and location.item.player == player:
+        if not multiworld.remote_items[player] and location.item.player == player:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
 
-            # Creates a list of item information to store in tables later
-            # Those tables are used to display the item and player name in a text box
-            # TODO: Disable in race mode
-            location_info.append((location.address - BASE_OFFSET, multiworld.player_name[location.item.player], location.item.name))
+            # Creates a list of item information to store in tables later. Those tables are used to display the item and
+            # player name in a text box. In the case of not enough space, the game will default to "found an ARCHIPELAGO
+            # ITEM"
+            location_info.append((location.address - BASE_OFFSET, location.item.player, location.item.name))
 
-    player_name_ids: Dict[str, int] = {}
+    player_name_ids: Dict[str, int] = {multiworld.player_name[player]: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0
-    for i, (flag, player_name, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
-        if player_name not in player_name_ids:
-            # Only space for 50 player names
-            if len(player_name_ids) >= 50:
-                continue
+    for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
+        # The player's own items are still set in the table with the value 0 to indicate the game should not show any
+        # message (the message for receiving an item will pop up when the client eventually gives it to them).
+        # In race mode, no item location data is included, and only recieved (or own) items will show any text box.
+        if item_player == player or multiworld.is_race:
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
+        else:
+            player_name = multiworld.player_name[item_player]
 
-            player_name_ids[player_name] = len(player_name_ids)
-            for j, b in enumerate(encode_string(player_name, 17)):
-                _set_bytes_little_endian(
-                    patched_rom,
-                    data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
-                    1,
-                    b
-                )
+            if player_name not in player_name_ids:
+                # Only space for 50 player names
+                if len(player_name_ids) >= 50:
+                    continue
 
-        if item_name not in item_name_offsets:
-            if len(item_name) > 35:
-                item_name = item_name[:34] + "…"
+                player_name_ids[player_name] = len(player_name_ids)
+                for j, b in enumerate(encode_string(player_name, 17)):
+                    _set_bytes_little_endian(
+                        patched_rom,
+                        data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
+                        1,
+                        b
+                    )
 
-            # Only 36 * 250 bytes for item names
-            if next_item_name_offset + len(item_name) + 1 > 36 * 250:
-                continue
+            if item_name not in item_name_offsets:
+                if len(item_name) > 35:
+                    item_name = item_name[:34] + "…"
 
-            item_name_offsets[item_name] = next_item_name_offset
-            next_item_name_offset += len(item_name) + 1
-            for j, b in enumerate(encode_string(item_name) + b"\xFF"):
-                _set_bytes_little_endian(
-                    patched_rom,
-                    data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
-                    1,
-                    b
-                )
+                # Only 36 * 250 bytes for item names
+                if next_item_name_offset + len(item_name) + 1 > 36 * 250:
+                    continue
 
-        # There should always be enough space for one entry per location
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
+                item_name_offsets[item_name] = next_item_name_offset
+                next_item_name_offset += len(item_name) + 1
+                for j, b in enumerate(encode_string(item_name) + b"\xFF"):
+                    _set_bytes_little_endian(
+                        patched_rom,
+                        data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
+                        1,
+                        b
+                    )
+
+            # There should always be enough space for one entry per location
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
 
     # Set start inventory
     start_inventory = multiworld.start_inventory[player].value.copy()

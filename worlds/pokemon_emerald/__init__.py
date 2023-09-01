@@ -24,7 +24,8 @@ from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_m
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
-                      HmCompatibility, RandomizeStaticEncounters, NormanRequirement, option_definitions)
+                      HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
+                      option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -127,6 +128,21 @@ class PokemonEmeraldWorld(World):
         return "Great Ball"
 
     def generate_early(self) -> None:
+        # In race mode we don't patch any item location information into the ROM
+        if self.multiworld.is_race and not self.multiworld.remote_items[self.player]:
+            logging.warning("Pokemon Emerald: Forcing Player %s (%s) to use remote items due to race mode.",
+                            self.player, self.multiworld.player_name[self.player])
+            self.multiworld.remote_items[self.player].value = Toggle.option_true
+
+        # With remote items turned on, players may not see any feedback that an item was picked up or given to them if
+        # they're filtering incoming items. There's no supported way for the client to tell whether an item was sent
+        # from its own world to trick the filter, so for now we just force the message filter to off.
+        if self.multiworld.remote_items[self.player]:
+            logging.warning("Pokemon Emerald: Remote items setting for Player %s (%s) requires receive_item_messages "
+                            "to be set to all. Forcibly changing their setting.", self.player,
+                            self.multiworld.player_name[self.player])
+            self.multiworld.receive_item_messages[self.player].value = ReceiveItemMessages.option_all
+
         # If badges or HMs are vanilla, Norman locks you from using Surf, which means you're not guaranteed to be
         # able to reach Fortree Gym, Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those gyms to
         # challenge Norman or it creates a circular dependency.

@@ -17,7 +17,7 @@ from .options import Goal
 
 GBA_SOCKET_PORT = 43053
 
-EXPECTED_SCRIPT_VERSION = 2
+EXPECTED_SCRIPT_VERSION = 3
 
 CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
 CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"
@@ -102,7 +102,7 @@ class GBACommandProcessor(ClientCommandProcessor):
 class GBAContext(CommonContext):
     game = "Pokemon Emerald"
     command_processor = GBACommandProcessor
-    items_handling = 0b001
+    items_handling = 0b011
     gba_streams: Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
     gba_status: Optional[str]
     awaiting_rom = False
