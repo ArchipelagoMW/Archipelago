@@ -264,6 +264,7 @@ class TrainerData:
 class PokemonEmeraldData:
     starters: Tuple[int, int, int]
     constants: Dict[str, int]
+    ram_addresses: Dict[str, int]
     rom_addresses: Dict[str, int]
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
@@ -280,6 +281,7 @@ class PokemonEmeraldData:
     def __init__(self) -> None:
         self.starters = (277, 280, 283)
         self.constants = {}
+        self.ram_addresses = {}
         self.rom_addresses = {}
         self.regions = {}
         self.locations = {}
@@ -304,6 +306,7 @@ data = PokemonEmeraldData()
 def _init() -> None:
     extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
+    data.ram_addresses = extracted_data["misc_ram_addresses"]
     data.rom_addresses = extracted_data["misc_rom_addresses"]
 
     location_attributes_json = load_json_data("locations.json")

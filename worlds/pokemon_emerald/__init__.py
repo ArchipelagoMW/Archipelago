@@ -3,19 +3,16 @@ Archipelago World definition for Pokemon Emerald Version
 """
 from collections import Counter
 import copy
-import hashlib
 import logging
 import os
-import pkgutil
+import sys
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import fill_restrictive
 from Options import Toggle
 import settings
-from Utils import user_path
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
                    data as emerald_data)
@@ -35,33 +32,12 @@ from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int
 
 
-def launch_client(*args) -> None:
-    from .client import launch
-    launch_subprocess(launch, name="PokemonEmeraldClient")
-
-
-components.append(Component("Pokemon Emerald Client", "PokemonEmeraldClient", component_type=Type.CLIENT,
-                            func=launch_client, file_identifier=SuffixIdentifier(".apemerald")))
-
-try:
-    connector_script_path = os.path.join(user_path("data", "lua"), "connector_pkmn_emerald.lua")
-
-    if not os.path.exists(connector_script_path):
-        with open(connector_script_path, "wb") as connector_script_file:
-            connector_script_file.write(pkgutil.get_data(__name__, "data/connector_pkmn_emerald.lua"))
-    else:
-        with open(connector_script_path, "rb+") as connector_script_file:
-            expected_script = pkgutil.get_data(__name__, "data/connector_pkmn_emerald.lua")
-
-            expected_hash = hashlib.md5(expected_script).digest()
-            existing_hash = hashlib.md5(connector_script_file.read()).digest()
-
-            if existing_hash != expected_hash:
-                connector_script_file.seek(0)
-                connector_script_file.truncate()
-                connector_script_file.write(expected_script)
-except IOError:
-    logging.warning("Unable to copy connector_pkmn_emerald.lua to /data/lua in your Archipelago install.")
+# Check for BizHawkClient before trying to import client
+# Allows for generating without _bizhawk.apworld
+if "worlds._bizhawk" in sys.modules:
+    from .client import PokemonEmeraldClient
+else:
+    logging.warning("Did not find _bizhawk.apworld required to play Pokemon Emerald. Can still generate.")
 
 
 class PokemonEmeraldWebWorld(WebWorld):
