@@ -448,7 +448,7 @@ def set_expert_rules(world: World):
 
     # Expert: enter and clear The Subcon Well with No Bonk Badge only
     for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
-        add_rule(loc, lambda state: can_surf(state, world) and has_paintings(state, world, 1), "or")
+        add_rule(loc, lambda state: can_surf(state, world), "or")
 
     # Expert: Cherry Hovering
     connect_regions(world.multiworld.get_region("Your Contract has Expired", world.player),
