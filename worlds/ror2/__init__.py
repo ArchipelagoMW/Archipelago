@@ -35,10 +35,14 @@ class RiskOfRainWorld(World):
     item_name_to_id = item_table
     location_name_to_id = item_pickups
 
-    data_version = 6
-    required_client_version = (0, 3, 7)
+    data_version = 7
+    required_client_version = (0, 4, 2)
     web = RiskOfWeb()
     total_revivals: int
+
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.junk_pool: Dict[str, int] = {}
 
     def generate_early(self) -> None:
         # figure out how many revivals should exist in the pool
@@ -87,6 +91,52 @@ class RiskOfRainWorld(World):
                 self.multiworld.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
 
+        # Generate item pool
+        itempool: List = []
+        # Add revive items for the player
+        itempool += ["Dio's Best Friend"] * self.total_revivals
+        itempool += ["Beads of Fealty"]
+
+        for env_name, _ in environments_pool.items():
+            itempool += [env_name]
+
+        if self.multiworld.goal[self.player] == "classic":
+            # classic mode
+            total_locations = self.multiworld.total_locations[self.player].value
+        else:
+            # explore mode
+            total_locations = len(
+                orderedstage_location.get_locations(
+                    chests=self.multiworld.chests_per_stage[self.player].value,
+                    shrines=self.multiworld.shrines_per_stage[self.player].value,
+                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
+                    scanners=self.multiworld.scanner_per_stage[self.player].value,
+                    altars=self.multiworld.altars_per_stage[self.player].value,
+                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
+                )
+            )
+        # Create junk items
+        self.junk_pool = self.create_junk_pool()
+        # Fill remaining items with randomly generated junk
+        while len(itempool) < total_locations:
+            itempool.append(self.get_filler_item_name())
+
+        # Convert itempool into real items
+        itempool = list(map(lambda name: self.create_item(name), itempool))
+        self.multiworld.itempool += itempool
+
+    def set_rules(self) -> None:
+        set_rules(self.multiworld, self.player)
+
+    def get_filler_item_name(self) -> str:
+        if not self.junk_pool:
+            self.junk_pool = self.create_junk_pool()
+        weights = [data for data in self.junk_pool.values()]
+        filler = self.multiworld.random.choices([filler for filler in self.junk_pool.keys()], weights,
+                                                k=1)[0]
+        return filler
+
+    def create_junk_pool(self) -> Dict:
         # if presets are enabled generate junk_pool from the selected preset
         pool_option = self.multiworld.item_weights[self.player].value
         junk_pool: Dict[str, int] = {}
@@ -113,48 +163,13 @@ class RiskOfRainWorld(World):
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic:
+        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void:
+        if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
 
-        # Generate item pool
-        itempool: List = []
-        # Add revive items for the player
-        itempool += ["Dio's Best Friend"] * self.total_revivals
-
-        for env_name, _ in environments_pool.items():
-            itempool += [env_name]
-
-        # precollected environments are popped from the pool so counting like this is valid
-        nonjunk_item_count = self.total_revivals + len(environments_pool)
-        if self.multiworld.goal[self.player] == "classic":
-            # classic mode
-            total_locations = self.multiworld.total_locations[self.player].value
-        else:
-            # explore mode
-            total_locations = len(
-                orderedstage_location.get_locations(
-                    chests=self.multiworld.chests_per_stage[self.player].value,
-                    shrines=self.multiworld.shrines_per_stage[self.player].value,
-                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
-                    scanners=self.multiworld.scanner_per_stage[self.player].value,
-                    altars=self.multiworld.altars_per_stage[self.player].value,
-                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
-                )
-            )
-        junk_item_count = total_locations - nonjunk_item_count
-        # Fill remaining items with randomly generated junk
-        itempool += self.multiworld.random.choices(list(junk_pool.keys()), weights=list(junk_pool.values()),
-                                                   k=junk_item_count)
-
-        # Convert itempool into real items
-        itempool = list(map(lambda name: self.create_item(name), itempool))
-        self.multiworld.itempool += itempool
-
-    def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player)
+        return junk_pool
 
     def create_regions(self) -> None:
 
@@ -205,7 +220,7 @@ class RiskOfRainWorld(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         classification = ItemClassification.filler
-        if name == "Dio's Best Friend":
+        if name in {"Dio's Best Friend", "Beads of Fealty"}:
             classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful
@@ -213,7 +228,7 @@ class RiskOfRainWorld(World):
             classification = ItemClassification.trap
 
         # Only check for an item to be a environment unlock if those are known to be in the pool.
-        # This should shave down comparions.
+        # This should shave down comparisons.
 
         elif name in environment_ALL_table.keys():
             if name in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:

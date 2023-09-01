@@ -1,7 +1,7 @@
 """
 Option definitions for Pokemon Emerald
 """
-from typing import Dict
+from typing import Dict, Type
 
 from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
 
@@ -471,9 +471,9 @@ class BetterShops(Toggle):
 class RemoveRoadblocks(OptionSet):
     """
     Removes specific NPCs that normally stand in your way until certain events are completed.
-    
+
     This can open up the world a bit and make your playthrough less linear, but careful how many you remove; it may make too much of your world accessible upon receiving Surf.
-    
+
     Possible values are:
     "Route 110 Aqua Grunts"
     "Route 112 Magma Grunts"
@@ -539,10 +539,21 @@ class ReceiveItemMessages(Choice):
     option_none = 2
 
 
+class RemoteItems(Toggle):
+    """
+    Instead of placing your own items directly into the ROM, all items are received from the server, including items you find for yourself.
+
+    This enables co-op of a single slot and recovering more items after a lost save file (if you're so unlucky).
+    But it changes pickup behavior slightly and obviously requires connection to the server to receive any items.
+    """
+    display_name = "Remote Items"
+
+
 class EasterEgg(FreeText):
     """
     ???
     """
+    default = "Example Passphrase"
 
 
 option_definitions: Dict[str, Option] = {
@@ -597,6 +608,7 @@ option_definitions: Dict[str, Option] = {
     "fly_without_badge": FlyWithoutBadge,
     "turbo_a": TurboA,
     "receive_item_messages": ReceiveItemMessages,
+    "remote_items": RemoteItems,
 
     "easter_egg": EasterEgg
 }

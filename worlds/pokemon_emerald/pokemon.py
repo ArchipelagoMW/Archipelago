@@ -54,16 +54,16 @@ _move_types = [
 ]
 
 _move_blacklist = frozenset({
-    0,   # MOVE_NONE
-    165, # Struggle
-    15,  # Cut
-    148, # Flash
-    249, # Rock Smash
-    70,  # Strength
-    57,  # Surf
-    19,  # Fly
-    291, # Dive
-    127  # Waterfall
+    0,    # MOVE_NONE
+    165,  # Struggle
+    15,   # Cut
+    148,  # Flash
+    249,  # Rock Smash
+    70,   # Strength
+    57,   # Surf
+    19,   # Fly
+    291,  # Dive
+    127   # Waterfall
 })
 
 _legendary_pokemon = frozenset({
@@ -109,7 +109,7 @@ def get_random_species(
         candidates = [species for species in candidates if species.label not in _legendary_pokemon]
 
     if nearby_bst is not None:
-        def has_nearby_bst(species: SpeciesData, max_percent_different: int):
+        def has_nearby_bst(species: SpeciesData, max_percent_different: int) -> bool:
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
 
         max_percent_different = 10
@@ -123,9 +123,9 @@ def get_random_species(
     return random.choice(candidates)
 
 
-def get_random_type(random: Random):
+def get_random_type(random: Random) -> int:
     picked_type = random.randrange(0, 18)
-    while picked_type == 9: # Don't pick the ??? type
+    while picked_type == 9:  # Don't pick the ??? type
         picked_type = random.randrange(0, 18)
 
     return picked_type

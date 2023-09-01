@@ -3,18 +3,19 @@ Classes and functions related to creating a ROM patch
 """
 import os
 import pkgutil
+from typing import Dict, List, Tuple
 
 import bsdiff4
 
 from BaseClasses import MultiWorld
-from Options import Toggle
-from Patch import APDeltaPatch
-import Utils
+from worlds.Files import APDeltaPatch
+from settings import get_settings
 
-from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
+from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
 from .pokemon import get_random_species
+from .util import encode_string
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -55,11 +56,11 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
-    # Set item values
+    location_info: List[Tuple[int, int, str]] = []
     for location in multiworld.get_locations(player):
         # Set free fly location
-        if location.is_event:
-            if multiworld.free_fly_location[player].value == Toggle.option_true and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
+        if location.address is None:
+            if multiworld.free_fly_location[player] and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
                 _set_bytes_little_endian(
                     patched_rom,
                     data.rom_addresses["gArchipelagoOptions"] + 0x16,
@@ -68,10 +69,70 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
                 )
             continue
 
-        if location.item and location.item.player == player:
+        if location.item is None:
+            continue
+
+        # Set local item values
+        if not multiworld.remote_items[player] and location.item.player == player:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
         else:
             _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+
+            # Creates a list of item information to store in tables later. Those tables are used to display the item and
+            # player name in a text box. In the case of not enough space, the game will default to "found an ARCHIPELAGO
+            # ITEM"
+            location_info.append((location.address - BASE_OFFSET, location.item.player, location.item.name))
+
+    player_name_ids: Dict[str, int] = {multiworld.player_name[player]: 0}
+    item_name_offsets: Dict[str, int] = {}
+    next_item_name_offset = 0
+    for i, (flag, item_player, item_name) in enumerate(sorted(location_info, key=lambda t: t[0])):
+        # The player's own items are still set in the table with the value 0 to indicate the game should not show any
+        # message (the message for receiving an item will pop up when the client eventually gives it to them).
+        # In race mode, no item location data is included, and only recieved (or own) items will show any text box.
+        if item_player == player or multiworld.is_race:
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
+        else:
+            player_name = multiworld.player_name[item_player]
+
+            if player_name not in player_name_ids:
+                # Only space for 50 player names
+                if len(player_name_ids) >= 50:
+                    continue
+
+                player_name_ids[player_name] = len(player_name_ids)
+                for j, b in enumerate(encode_string(player_name, 17)):
+                    _set_bytes_little_endian(
+                        patched_rom,
+                        data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
+                        1,
+                        b
+                    )
+
+            if item_name not in item_name_offsets:
+                if len(item_name) > 35:
+                    item_name = item_name[:34] + "…"
+
+                # Only 36 * 250 bytes for item names
+                if next_item_name_offset + len(item_name) + 1 > 36 * 250:
+                    continue
+
+                item_name_offsets[item_name] = next_item_name_offset
+                next_item_name_offset += len(item_name) + 1
+                for j, b in enumerate(encode_string(item_name) + b"\xFF"):
+                    _set_bytes_little_endian(
+                        patched_rom,
+                        data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
+                        1,
+                        b
+                    )
+
+            # There should always be enough space for one entry per location
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
+            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
 
     # Set start inventory
     start_inventory = multiworld.start_inventory[player].value.copy()
@@ -94,25 +155,40 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     if start_inventory.pop("Rain Badge", 0) > 0:
         starting_badges |= (1 << 7)
 
-    for i, item_name in enumerate(start_inventory):
-        if i >= 20:
+    pc_slots: List[Tuple[str, int]] = []
+    while any(qty > 0 for qty in start_inventory.values()):
+        if len(pc_slots) >= 19:
             break
 
+        for i, item_name in enumerate(start_inventory.keys()):
+            if len(pc_slots) >= 19:
+                break
+
+            quantity = min(start_inventory[item_name], 999)
+            if quantity == 0:
+                continue
+
+            start_inventory[item_name] -= quantity
+
+            pc_slots.append((item_name, quantity))
+    
+    pc_slots.sort(reverse=True)
+
+    for i, slot in enumerate(pc_slots):
         address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
-        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[item_name])
-        quantity = min(start_inventory[item_name], 99)
+        item = reverse_offset_item_value(multiworld.worlds[player].item_name_to_id[slot[0]])
         _set_bytes_little_endian(patched_rom, address + 0, 2, item)
-        _set_bytes_little_endian(patched_rom, address + 2, 2, quantity)
+        _set_bytes_little_endian(patched_rom, address + 2, 2, slot[1])
 
     # Set species data
     _set_species_info(modified_data, patched_rom)
 
     # Set encounter tables
-    if multiworld.wild_pokemon[player].value != RandomizeWildPokemon.option_vanilla:
+    if multiworld.wild_pokemon[player] != RandomizeWildPokemon.option_vanilla:
         _set_encounter_tables(modified_data, patched_rom)
 
     # Set opponent data
-    if multiworld.trainer_parties[player].value != RandomizeTrainerParties.option_vanilla:
+    if multiworld.trainer_parties[player] != RandomizeTrainerParties.option_vanilla:
         _set_opponents(modified_data, patched_rom)
 
     # Set static pokemon
@@ -158,19 +234,19 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set hold A to advance text
-    turbo_a = 1 if multiworld.turbo_a[player].value == Toggle.option_true else 0
+    turbo_a = 1 if multiworld.turbo_a[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
     # Set ferry enabled
-    enable_ferry = 1 if multiworld.enable_ferry[player].value == Toggle.option_true else 0
+    enable_ferry = 1 if multiworld.enable_ferry[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, enable_ferry)
 
     # Set blind trainers
-    blind_trainers = 1 if multiworld.blind_trainers[player].value == Toggle.option_true else 0
+    blind_trainers = 1 if multiworld.blind_trainers[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
 
     # Set fly without badge
-    fly_without_badge = 1 if multiworld.fly_without_badge[player].value == Toggle.option_true else 0
+    fly_without_badge = 1 if multiworld.fly_without_badge[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, fly_without_badge)
 
     # Set exp modifier
@@ -182,15 +258,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player], data.species).species_id)
 
     # Set guaranteed catch
-    guaranteed_catch = 1 if multiworld.guaranteed_catch[player].value == Toggle.option_true else 0
+    guaranteed_catch = 1 if multiworld.guaranteed_catch[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0A, 1, guaranteed_catch)
 
     # Set better shops
-    better_shops = 1 if multiworld.better_shops[player].value == Toggle.option_true else 0
+    better_shops = 1 if multiworld.better_shops[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0B, 1, better_shops)
 
     # Set elite four requirement
-    elite_four_requires_gyms = 1 if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_gyms else 0
+    elite_four_requires_gyms = 1 if multiworld.elite_four_requirement[player] == EliteFourRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0C, 1, elite_four_requires_gyms)
 
     # Set elite four count
@@ -198,7 +274,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
 
     # Set norman requirement
-    norman_requires_gyms = 1 if multiworld.norman_requirement[player].value == NormanRequirement.option_gyms else 0
+    norman_requires_gyms = 1 if multiworld.norman_requirement[player] == NormanRequirement.option_gyms else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
 
     # Set norman count
@@ -213,11 +289,11 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
 
     # Set reusable TMs
-    reusable_tms = 1 if multiworld.reusable_tms[player].value == Toggle.option_true else 0
+    reusable_tms = 1 if multiworld.reusable_tms[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
 
     # Set route 115 boulders
-    route_115_boulders = 1 if multiworld.extra_boulders[player].value == Toggle.option_true else 0
+    route_115_boulders = 1 if multiworld.extra_boulders[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, route_115_boulders)
 
     # Set removed blockers
@@ -233,7 +309,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
     # Set slot name
-    for i, byte in enumerate(multiworld.player_name[player].encode()):
+    for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Write Output
@@ -252,26 +328,13 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(get_base_rom_path(), "rb") as infile:
+    with open(get_settings().pokemon_emerald_settings.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes
 
 
-def get_base_rom_path() -> str:
-    options = Utils.get_options()
-    emerald_options = options.get("pokemon_emerald_options", None)
-    if emerald_options is None:
-        file_name = "Pokemon - Emerald Version (USA, Europe).gba"
-    else:
-        file_name = emerald_options["rom_file"]
-
-    if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
-    return file_name
-
-
-def _set_bytes_little_endian(byte_array, address, size, value) -> None:
+def _set_bytes_little_endian(byte_array: bytearray, address: int, size: int, value: int) -> None:
     offset = 0
     while size > 0:
         byte_array[address + offset] = value & 0xFF
@@ -320,7 +383,7 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
         pokemon_data_size: int
         if trainer.party.pokemon_data_type in {TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES, TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES}:
             pokemon_data_size = 8
-        else: # Custom Moves
+        else:  # Custom Moves
             pokemon_data_size = 16
 
         for i, pokemon in enumerate(trainer.party.pokemon):

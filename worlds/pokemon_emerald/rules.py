@@ -2,35 +2,50 @@
 Logic rule definitions for Pokemon Emerald
 """
 from BaseClasses import CollectionState, MultiWorld
-from Options import Toggle
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders
+from .options import EliteFourRequirement, NormanRequirement, Goal
 from .util import location_name_to_label
 
 
-def _can_cut(state: CollectionState, player: int):
+def _can_cut(state: CollectionState, player: int) -> bool:
     return state.has("HM01 Cut", player) and state.has("Stone Badge", player)
-def _can_surf(state: CollectionState, player: int):
+
+
+def _can_surf(state: CollectionState, player: int) -> bool:
     return state.has("HM03 Surf", player) and state.has("Balance Badge", player)
-def _can_strength(state: CollectionState, player: int):
+
+
+def _can_strength(state: CollectionState, player: int) -> bool:
     return state.has("HM04 Strength", player) and state.has("Heat Badge", player)
-def _can_flash(state: CollectionState, player: int):
+
+
+def _can_flash(state: CollectionState, player: int) -> bool:
     return state.has("HM05 Flash", player) and state.has("Knuckle Badge", player)
-def _can_rock_smash(state: CollectionState, player: int):
+
+
+def _can_rock_smash(state: CollectionState, player: int) -> bool:
     return state.has("HM06 Rock Smash", player) and state.has("Dynamo Badge", player)
-def _can_waterfall(state: CollectionState, player: int):
+
+
+def _can_waterfall(state: CollectionState, player: int) -> bool:
     return state.has("HM07 Waterfall", player) and state.has("Rain Badge", player)
-def _can_dive(state: CollectionState, player: int):
+
+
+def _can_dive(state: CollectionState, player: int) -> bool:
     return state.has("HM08 Dive", player) and state.has("Mind Badge", player)
 
-def _can_use_mach_bike(state: CollectionState, player: int):
+
+def _can_use_mach_bike(state: CollectionState, player: int) -> bool:
     return state.has("Mach Bike", player)
-def _can_use_acro_bike(state: CollectionState, player: int):
+
+
+def _can_use_acro_bike(state: CollectionState, player: int) -> bool:
     return state.has("Acro Bike", player)
 
-def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
+
+def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int) -> bool:
     num_gym_leaders_defeated = 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_ROXANNE", player) else 0
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_BRAWLY", player) else 0
@@ -42,9 +57,10 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
     return num_gym_leaders_defeated >= n
 
+
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
-def set_default_rules(multiworld: MultiWorld, player: int):
+def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
@@ -52,8 +68,16 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     can_waterfall = lambda state: _can_waterfall(state, player)
     can_dive = lambda state: _can_dive(state, player)
 
+    victory_event_name = "EVENT_DEFEAT_CHAMPION"
+    if multiworld.goal[player] == Goal.option_steven:
+        victory_event_name = "EVENT_DEFEAT_STEVEN"
+    elif multiworld.goal[player] == Goal.option_norman:
+        victory_event_name = "EVENT_DEFEAT_NORMAN"
+
+    multiworld.completion_condition[player] = lambda state: state.has(victory_event_name, player)
+
     # Sky
-    if multiworld.fly_without_badge[player] == Toggle.option_true:
+    if multiworld.fly_without_badge[player]:
         set_rule(
             multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
             lambda state: state.has("HM02 Fly", player)
@@ -116,7 +140,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_VISITED_MOSSDEEP_CITY", player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_SKY -> REGION_SOOTOPOLIS_CITY/MAIN", player),
+        multiworld.get_entrance("REGION_SKY -> REGION_SOOTOPOLIS_CITY/EAST", player),
         lambda state: state.has("EVENT_VISITED_SOOTOPOLIS_CITY", player)
     )
     set_rule(
@@ -147,7 +171,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
-    if multiworld.norman_requirement[player].value == NormanRequirement.option_badges:
+    if multiworld.norman_requirement[player] == NormanRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
             lambda state: state.has_group("Badge", player, multiworld.norman_count[player].value)
@@ -239,7 +263,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
-    if multiworld.extra_boulders[player].value == ExtraBoulders.option_true:
+    if multiworld.extra_boulders[player]:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
             can_strength
@@ -377,6 +401,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     set_rule(
         multiworld.get_entrance("REGION_ROUTE111/MIDDLE -> REGION_ROUTE111/SOUTH", player),
         can_rock_smash
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/SOUTH_POND", player),
+        can_surf
     )
     set_rule(
         multiworld.get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/MIDDLE", player),
@@ -830,8 +858,20 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Sootopolis City
     set_rule(
-        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/MAIN -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN", player),
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/WATER -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN", player),
         can_dive
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/EAST -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/WEST -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_SOOTOPOLIS_CITY/ISLAND -> REGION_SOOTOPOLIS_CITY/WATER", player),
+        can_surf
     )
     set_rule(
         multiworld.get_entrance("MAP_SOOTOPOLIS_CITY:3/MAP_CAVE_OF_ORIGIN_ENTRANCE:0", player),
@@ -1012,7 +1052,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
     set_rule(
         multiworld.get_entrance("REGION_EVER_GRANDE_CITY/SOUTH -> REGION_EVER_GRANDE_CITY/SEA", player),
-        lambda state: can_surf(state) and can_waterfall(state)
+        can_surf
     )
 
     # Victory Road
@@ -1070,7 +1110,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Pokemon League
-    if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_badges:
+    if multiworld.elite_four_requirement[player] == EliteFourRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
             lambda state: state.has_group("Badge", player, multiworld.elite_four_count[player].value)
@@ -1110,7 +1150,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     # )
 
 
-def set_overworld_item_rules(multiworld: MultiWorld, player: int):
+def set_overworld_item_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
@@ -1169,7 +1209,7 @@ def set_overworld_item_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_hidden_item_rules(multiworld: MultiWorld, player: int):
+def set_hidden_item_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
 
     # Route 120
@@ -1185,7 +1225,7 @@ def set_hidden_item_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_npc_gift_rules(multiworld: MultiWorld, player: int):
+def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
     # Littleroot Town
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
@@ -1253,7 +1293,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
+def set_enable_ferry_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
@@ -1268,7 +1308,7 @@ def set_enable_ferry_rules(multiworld: MultiWorld, player: int):
     )
 
 
-def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
+def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int) -> None:
     for location in multiworld.get_locations(player):
         if location.tags is not None and "HiddenItem" in location.tags:
             add_rule(
@@ -1277,7 +1317,7 @@ def add_hidden_item_itemfinder_rules(multiworld: MultiWorld, player: int):
             )
 
 
-def add_flash_rules(multiworld: MultiWorld, player: int):
+def add_flash_rules(multiworld: MultiWorld, player: int) -> None:
     can_flash = lambda state: _can_flash(state, player)
 
     # Granite Cave
