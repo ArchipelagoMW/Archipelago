@@ -280,7 +280,7 @@ def setup_gamevars(world, multiworld, player: int):
         hard_start_lv.extend([0x1D, 0x3C])
 
     if multiworld.level_shuffle[player].value != 1:
-        norm_start_lv.extend([0x37, 0x3C])
+        norm_start_lv.extend([0x3C])
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
         if multiworld.shuffle_midrings[player].value == 0:
             easy_start_lv.extend([0x1B])
@@ -418,8 +418,6 @@ def setup_gamevars(world, multiworld, player: int):
     world.level_gfx_table.insert(56, 0x15)
     
     
-    #Need to make this more efficient. I need to find the values to insert for worlds 5 and 6 in the morning. Probably just 9 more, probably all 15. Also, maybe double check the level GFX?
-
     castle_door_dict = {
                     0: [0xB8, 0x05, 0x77, 0x00],
                     1: [0xB8, 0x05, 0x77, 0x00],
