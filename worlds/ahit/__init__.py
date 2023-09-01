@@ -90,7 +90,7 @@ class HatInTimeWorld(World):
         yarn_pool: typing.List[Item] = create_multiple_items(self, "Yarn", self.multiworld.YarnAvailable[self.player].value)
 
         # 1/5 is progression balanced
-        for i in range(len(yarn_pool) // 5):
+        for i in range(int(len(yarn_pool) * (0.01 * self.multiworld.YarnBalancePercent[self.player].value))):
             yarn_pool[i].classification = ItemClassification.progression
 
         itempool += yarn_pool
@@ -125,17 +125,16 @@ class HatInTimeWorld(World):
             if name == "Time Piece":
                 tp_count: int = 40
                 max_extra: int = 0
-                if self.multiworld.EnableDLC1[self.player].value > 0:
+                if self.is_dlc1():
                     max_extra += 6
 
-                if self.multiworld.EnableDLC2[self.player].value > 0:
+                if self.is_dlc2():
                     max_extra += 10
 
                 tp_count += min(max_extra, self.multiworld.MaxExtraTimePieces[self.player].value)
                 tp_list: typing.List[Item] = create_multiple_items(self, name, tp_count)
 
-                # 1/5 is progression balanced
-                for i in range(len(tp_list) // 5):
+                for i in range(int(len(tp_list) * (0.01 * self.multiworld.TimePieceBalancePercent[self.player].value))):
                     tp_list[i].classification = ItemClassification.progression
 
                 itempool += tp_list
@@ -191,7 +190,7 @@ class HatInTimeWorld(World):
             for name in self.act_connections.keys():
                 slot_data[name] = self.act_connections[name]
 
-        if self.multiworld.EnableDLC2[self.player].value > 0:
+        if self.is_dlc2():
             for name in self.nyakuza_thug_items.keys():
                 slot_data[name] = self.nyakuza_thug_items[name]
 
@@ -224,7 +223,7 @@ class HatInTimeWorld(World):
 
             new_hint_data[location.address] = self.get_shuffled_region(region_name)
 
-        if self.multiworld.EnableDLC1[self.player].value > 0 and self.multiworld.Tasksanity[self.player].value > 0:
+        if self.is_dlc1() and self.multiworld.Tasksanity[self.player].value > 0:
             ship_shape_region = self.get_shuffled_region("Ship Shape")
             id_start: int = get_tasksanity_start_id()
             for i in range(self.multiworld.TasksanityCheckCount[self.player].value):
@@ -288,3 +287,12 @@ class HatInTimeWorld(World):
 
     def get_chapter_costs(self):
         return chapter_timepiece_costs[self.player]
+
+    def is_dlc1(self) -> bool:
+        return self.multiworld.EnableDLC1[self.player].value > 0
+
+    def is_dlc2(self) -> bool:
+        return self.multiworld.EnableDLC2[self.player].value > 0
+
+    def is_dw(self) -> bool:
+        return self.multiworld.EnableDeathWish[self.player].value > 0

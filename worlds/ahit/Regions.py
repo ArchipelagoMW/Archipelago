@@ -250,7 +250,6 @@ chapter_finales = [
 # entrance: region
 blacklisted_acts = {
     "Battle of the Birds - Finale A":   "Award Ceremony",
-    "Time's End - Act 1":               "The Finale",
 }
 
 
@@ -359,7 +358,7 @@ def create_regions(world: World):
     create_region_and_connect(w, "The Finale", "Time's End - Act 1", times_end)
 
     # ------------------------------------------- DLC1 ------------------------------------------------- #
-    if mw.EnableDLC1[p].value > 0:
+    if w.is_dlc1():
         arctic_cruise = create_region_and_connect(w, "The Arctic Cruise", "Telescope -> The Arctic Cruise", spaceship)
         cruise_ship = create_region(w, "Cruise Ship")
 
@@ -382,7 +381,7 @@ def create_regions(world: World):
 
         connect_regions(mw.get_region("Cruise Ship", p), badge_seller, "CS -> Badge Seller", p)
 
-    if mw.EnableDLC2[p].value > 0:
+    if w.is_dlc2():
         nyakuza_metro = create_region_and_connect(w, "Nyakuza Metro", "Telescope -> Nyakuza Metro", spaceship)
         metro_freeroam = create_region_and_connect(w, "Nyakuza Free Roam", "Nyakuza Metro - Free Roam", nyakuza_metro)
         create_region_and_connect(w, "Rush Hour", "Nyakuza Metro - Finale", nyakuza_metro)
@@ -471,36 +470,6 @@ def randomize_act_entrances(world: World):
         # Look for candidates to map this act to
         candidate_list: typing.List[Region] = []
         for candidate in region_list:
-
-            if world.multiworld.VanillaAlpine[world.player].value > 0 and region.name == "Alpine Free Roam" \
-               or world.multiworld.VanillaAlpine[world.player].value == 2 and region.name == "The Illness has Spread":
-                candidate_list.clear()
-                candidate_list.append(region)
-                break
-
-            if world.multiworld.VanillaAlpine[world.player].value > 0 and candidate.name == "Alpine Free Roam" \
-               or world.multiworld.VanillaAlpine[world.player].value == 2 and candidate.name == "The Illness has Spread":
-                continue
-
-            if world.multiworld.VanillaMetro[world.player].value > 0 and region.name == "Nyakuza Free Roam":
-                candidate_list.clear()
-                candidate_list.append(region)
-                break
-
-            if world.multiworld.VanillaMetro[world.player].value > 0 and candidate.name == "Nyakuza Free Roam":
-                continue
-
-            if candidate.name == "Rush Hour" and world.multiworld.EndGoal[world.player].value == 2 or \
-               world.multiworld.VanillaMetro[world.player].value == 2:
-                continue
-
-            if region.name == "Rush Hour":
-                if world.multiworld.EndGoal[world.player].value == 2 or \
-                   world.multiworld.VanillaMetro[world.player].value == 2:
-                    candidate_list.clear()
-                    candidate_list.append(region)
-                    break
-
             # We're mapping something to the first act, make sure it is valid
             if not has_guaranteed:
                 if candidate.name not in guaranteed_first_acts:
@@ -617,6 +586,19 @@ def get_act_regions(world: World) -> typing.List[Region]:
 def is_act_blacklisted(world: World, name: str) -> bool:
     if name == "The Finale":
         return world.multiworld.EndGoal[world.player].value == 1
+
+    if name == "Alpine Free Roam":
+        return world.multiworld.VanillaAlpine[world.player].value > 0
+
+    if name == "The Illness has Spread":
+        return world.multiworld.VanillaAlpine[world.player].value == 2
+
+    if name == "Nyakuza Free Roam":
+        return world.multiworld.VanillaMetro[world.player].value > 0
+
+    if name == "Rush Hour":
+        return world.multiworld.EndGoal[world.player].value == 2 \
+               or world.multiworld.VanillaMetro[world.player].value == 2
 
     return name in blacklisted_acts.values()
 

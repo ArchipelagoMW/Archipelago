@@ -19,11 +19,11 @@ def item_dlc_enabled(world: World, name: str) -> bool:
 
     if data.dlc_flags == HatDLC.none:
         return True
-    elif data.dlc_flags == HatDLC.dlc1 and world.multiworld.EnableDLC1[world.player].value > 0:
+    elif data.dlc_flags == HatDLC.dlc1 and world.is_dlc1():
         return True
-    elif data.dlc_flags == HatDLC.dlc2 and world.multiworld.EnableDLC2[world.player].value > 0:
+    elif data.dlc_flags == HatDLC.dlc2 and world.is_dlc2():
         return True
-    elif data.dlc_flags == HatDLC.death_wish and world.multiworld.EnableDeathWish[world.player].value > 0:
+    elif data.dlc_flags == HatDLC.death_wish and world.is_dw():
         return True
 
     return False
@@ -31,10 +31,10 @@ def item_dlc_enabled(world: World, name: str) -> bool:
 
 def get_total_time_pieces(world: World) -> int:
     count: int = 40
-    if world.multiworld.EnableDLC1[world.player].value > 0:
+    if world.is_dlc1():
         count += 6
 
-    if world.multiworld.EnableDLC2[world.player].value > 0:
+    if world.is_dlc2():
         count += 10
 
     return min(40+world.multiworld.MaxExtraTimePieces[world.player].value, count)
@@ -110,7 +110,7 @@ ahit_items = {
     "Hover Badge": ItemData(300026, ItemClassification.useful),
     "Hookshot Badge": ItemData(300027, ItemClassification.progression),
     "Item Magnet Badge": ItemData(300028, ItemClassification.useful),
-    "No Bonk Badge": ItemData(300029, ItemClassification.useful),
+    "No Bonk Badge": ItemData(300029, ItemClassification.progression),
     "Compass Badge": ItemData(300030, ItemClassification.useful),
     "Scooter Badge": ItemData(300031, ItemClassification.progression),
     "Badge Pin": ItemData(300043, ItemClassification.useful),

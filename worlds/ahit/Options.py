@@ -93,7 +93,7 @@ class NoFreeRoamFinale(Toggle):
 
 
 class LogicDifficulty(Choice):
-    """Choose the difficulty setting for logic. Note that Hard or above will force SDJ logic on."""
+    """Choose the difficulty setting for logic."""
     display_name = "Logic Difficulty"
     option_normal = 0
     option_hard = 1
@@ -101,10 +101,34 @@ class LogicDifficulty(Choice):
     default = 0
 
 
+class KnowledgeChecks(Toggle):
+    """Put tricks into logic that are not necessarily difficult,
+     but require knowledge that is not obvious or commonly known. Can include glitches such as No Bonk Surfing.
+     This option will be forced on if logic difficulty is at least hard."""
+    display_name = "Knowledge Checks"
+    default = 0
+
+
 class RandomizeHatOrder(Toggle):
     """Randomize the order that hats are stitched in."""
     display_name = "Randomize Hat Order"
     default = 1
+
+
+class YarnBalancePercent(Range):
+    """How much (in percentage) of the yarn in the pool that will be progression balanced."""
+    display_name = "Yarn Balance Percentage"
+    default = 20
+    range_start = 0
+    range_end = 100
+
+
+class TimePieceBalancePercent(Range):
+    """How much (in percentage) of time pieces in the pool that will be progression balanced."""
+    display_name = "Time Piece Balance Percentage"
+    default = 35
+    range_start = 0
+    range_end = 100
 
 
 class UmbrellaLogic(Toggle):
@@ -159,12 +183,6 @@ class StartingChapter(Choice):
     option_3 = 3
     option_4 = 4
     default = 1
-
-
-class SDJLogic(Toggle):
-    """Allow the SDJ (Sprint Double Jump) technique to be considered in logic."""
-    display_name = "SDJ Logic"
-    default = 0
 
 
 class CTRWithSprint(Toggle):
@@ -445,6 +463,9 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "VanillaAlpine":            VanillaAlpine,
     "NoFreeRoamFinale":         NoFreeRoamFinale,
     "LogicDifficulty":          LogicDifficulty,
+    "KnowledgeChecks":          KnowledgeChecks,
+    "YarnBalancePercent":       YarnBalancePercent,
+    "TimePieceBalancePercent":  TimePieceBalancePercent,
     "RandomizeHatOrder":        RandomizeHatOrder,
     "UmbrellaLogic":            UmbrellaLogic,
     "StartWithCompassBadge":    StartWithCompassBadge,
@@ -453,7 +474,6 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "ShuffleActContracts":      ShuffleActContracts,
     "ShuffleSubconPaintings":   ShuffleSubconPaintings,
     "StartingChapter":          StartingChapter,
-    "SDJLogic":                 SDJLogic,
     "CTRWithSprint":            CTRWithSprint,
 
     "EnableDLC1":               EnableDLC1,
@@ -502,13 +522,13 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "ActRandomizer": ActRandomizer,
     "ShuffleAlpineZiplines": ShuffleAlpineZiplines,
     "LogicDifficulty": LogicDifficulty,
+    "KnowledgeChecks": KnowledgeChecks,
     "RandomizeHatOrder": RandomizeHatOrder,
     "UmbrellaLogic": UmbrellaLogic,
     "CompassBadgeMode": CompassBadgeMode,
     "ShuffleStorybookPages": ShuffleStorybookPages,
     "ShuffleActContracts": ShuffleActContracts,
     "ShuffleSubconPaintings":   ShuffleSubconPaintings,
-    "SDJLogic": SDJLogic,
 
     "EnableDLC1": EnableDLC1,
     "Tasksanity": Tasksanity,
