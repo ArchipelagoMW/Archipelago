@@ -282,7 +282,7 @@ def setup_gamevars(world, multiworld, player: int):
     if multiworld.level_shuffle[player].value != 1:
         norm_start_lv.extend([0x37, 0x3C])
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
-        if multiworld.shuffle_midrings[player].value ==1:
+        if multiworld.shuffle_midrings[player].value == 0:
             easy_start_lv.extend([0x1B])
             norm_start_lv.extend([0x1B, 0x2B, 0x37])
 
