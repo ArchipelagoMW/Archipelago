@@ -55,7 +55,7 @@ class Group(enum.Enum):
     RARECROW = enum.auto()
     TRAP = enum.auto()
     MAXIMUM_ONE = enum.auto()
-    EXACTLY_TWO = enum.auto
+    EXACTLY_TWO = enum.auto()
     DEPRECATED = enum.auto()
     RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()

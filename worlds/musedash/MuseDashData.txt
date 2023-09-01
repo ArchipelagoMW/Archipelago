@@ -456,3 +456,16 @@ Amateras Rhythm|43-26|Just as Planned  Plus|True|6|8|11|
 Record one's Dream|43-27|Just as Planned  Plus|False|4|7|10|
 Lunatic|43-28|Just as Planned  Plus|True|5|8|10|
 Jiumeng|43-29|Just as Planned  Plus|True|3|6|8|
+The Day We Become Family|43-30|Just as Planned  Plus|True|3|5|8|
+Sutori ma FIRE!?!?|64-0|COSMIC RADIO PEROLIST|True|3|5|8|
+Tanuki Step|64-1|COSMIC RADIO PEROLIST|True|5|7|10|11
+Space Stationery|64-2|COSMIC RADIO PEROLIST|True|5|7|10|
+Songs Are Judged 90% by Chorus feat. Mameko|64-3|COSMIC RADIO PEROLIST|True|6|8|10|
+Kawai Splendid Space Thief|64-4|COSMIC RADIO PEROLIST|False|6|8|10|11
+Night City Runway|64-5|COSMIC RADIO PEROLIST|True|4|6|8|
+Chaos Shotgun feat. ChumuNote|64-6|COSMIC RADIO PEROLIST|True|6|8|10|
+mew mew magical summer|64-7|COSMIC RADIO PEROLIST|False|5|8|10|11
+BrainDance|65-0|Neon Abyss|True|3|6|9|
+My Focus!|65-1|Neon Abyss|True|5|7|10|
+ABABABA BURST|65-2|Neon Abyss|True|5|7|9|
+ULTRA HIGHER|65-3|Neon Abyss|True|4|7|10|

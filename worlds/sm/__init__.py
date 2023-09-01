@@ -765,7 +765,7 @@ class SMWorld(World):
         romPatcher.writeObjectives(itemLocs, romPatcher.settings["tourian"])
         romPatcher.writeItemsLocs(self.itemLocs)
 
-        # romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, itemLocs, progItemLocs)
+        romPatcher.writeSplitLocs(self.variaRando.args.majorsSplit, self.itemLocs, None) #progItemLocs)
         romPatcher.writeItemsNumber()
         if not romPatcher.settings["isPlando"]:
             romPatcher.writeSeed(romPatcher.settings["seed"]) # lol if race mode

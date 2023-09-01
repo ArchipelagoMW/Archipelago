@@ -46,7 +46,7 @@ class DarkSouls3World(World):
     option_definitions = dark_souls_options
     topology_present: bool = True
     web = DarkSouls3Web()
-    data_version = 6
+    data_version = 7
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)

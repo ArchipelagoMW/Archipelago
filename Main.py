@@ -133,12 +133,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         world.worlds[player].options.non_local_items.value -= world.worlds[player].options.local_items.value
         world.worlds[player].options.non_local_items.value -= set(world.local_early_items[player])
 
-    if world.players > 1:
-        locality_rules(world)
-    else:
-        world.worlds[1].options.non_local_items.value = set()
-        world.worlds[1].options.local_items.value = set()
-
     AutoWorld.call_all(world, "set_rules")
 
     for player in world.player_ids:
@@ -147,6 +141,13 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for location_name in world.worlds[player].options.priority_locations.value:
             world.get_location(location_name, player).progress_type = LocationProgressType.PRIORITY
 
+    # Set local and non-local item rules.
+    if world.players > 1:
+        locality_rules(world)
+    else:
+        world.worlds[1].options.non_local_items.value = set()
+        world.worlds[1].options.local_items.value = set()
+    
     AutoWorld.call_all(world, "generate_basic")
 
     # remove starting inventory from pool items.
