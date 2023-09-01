@@ -1415,9 +1415,12 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
     )
 
 
-def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
-                 for teamnumber, team_data in data["checks_done"].items()}
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) \
+        -> typing.Dict[int, typing.Dict[int, typing.Dict[int, int]]]:
+    inventory: typing.Dict[int, typing.Dict[int, typing.Dict[int, int]]] = {
+        teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+        for teamnumber, team_data in data["checks_done"].items()
+    }
 
     groups = data["groups"]
 
@@ -1434,6 +1437,17 @@ def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, 
             for recipient in recipients:
                 inventory[team][recipient][item_id] += 1
     return inventory
+
+
+def _get_named_inventory(inventory: typing.Dict[int, int], custom_items: typing.Dict[int, str] = None) \
+        -> typing.Dict[str, int]:
+    """slow"""
+    if custom_items:
+        mapping = collections.ChainMap(custom_items, lookup_any_item_id_to_name)
+    else:
+        mapping = lookup_any_item_id_to_name
+
+    return Counter({mapping.get(item_id, None): count for item_id, count in inventory.items()})
 
 
 @app.route('/tracker/<suuid:tracker>')
@@ -1456,8 +1470,10 @@ if "Factorio" in games:
             abort(404)
 
         data["inventory"] = _get_inventory_data(data)
+        data["named_inventory"] = {team_id : {
+            player_id: _get_named_inventory(inventory) for player_id, inventory in team_inventory.items()
+        } for team_id, team_inventory in data["inventory"].items()}
         data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
-        data["item_name_to_id"] =  games["Factorio"]["item_name_to_id"]
 
         return render_template("multiFactorioTracker.html", **data)
 
