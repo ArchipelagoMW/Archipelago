@@ -436,6 +436,12 @@ def randomize_act_entrances(world: World):
             region_list.remove(region)
             region_list.append(region)
 
+    # We want to do these first as well, since they can be blocked from being shuffled onto freeroam
+    for region in region_list.copy():
+        if region.name in chapter_finales or region.name == "Cheating the Race":
+            region_list.remove(region)
+            region_list.append(region)
+
     # Reverse the list, so we can do what we want to do first
     region_list.reverse()
 
