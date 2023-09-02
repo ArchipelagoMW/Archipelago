@@ -189,7 +189,8 @@ LevelScreen:
         bl ItemReceivedFeedbackSound
         get_bits r0, r4, 4, 2
         bl SetTreasurePalette
-        lsr r0, r4, #ItemBit_CD
+        lsr r0, r4, #ItemBit_CD  ; a1
+        mov r1, #1  ; a2
         bl SpawnCollectionIndicator
 
     @@CollectJunk:

@@ -100,10 +100,12 @@ CheckLocations:
 ; Spawn the jewel piece or CD icon when you've collected one of them.
 ; Parameters:
 ;     r0: 0 for jewel pieces, 1 for CD
+;     r1: 0 if taken in the level, 1 if given permanently
 SpawnCollectionIndicator:
-        push {r4, lr}
+        push {r4-r5, lr}
         mov r4, r0
         add r4, #0x41
+        lsl r5, r1, #1
 
         ldr r2, =Wario_ucReact
         ldrh r1, [r2, #14]
@@ -128,13 +130,11 @@ SpawnCollectionIndicator:
         mov r2, r4  ; a3
         call_using r3, TOptObjSet
 
-        ldr r0, =LastCollectedItemID
-        ldrb r1, [r0]
-        mov r3, 0x80
-        orr r1, r3
+        ldr r0, =LastCollectedItemStatus
+        add r1, r5, #1
         strb r1, [r0]
 
-        pop {r4, pc}
+        pop {r4-r5, pc}
     .pool
 
 
@@ -156,8 +156,6 @@ SpawnCollectionIndicator:
 ; the level state. Since jewel pieces are progressive in the randomizer, it's
 ; meaningless to display anything in the other three parts anyway.
 ReadJewelPieces:
-        push {r7}
-
     ; Clear indicator status
         ldr r1, =REG_DMA3SAD
         set_tile 0x6011C20, EmptyJewel1Tile
@@ -165,46 +163,39 @@ ReadJewelPieces:
         set_tile 0x6012000, EmptyJewel3Tile
         set_tile 0x6011C00, EmptyJewel4Tile
 
+        ldr r0, =LastCollectedItemStatus
+        ldrb r3, [r0]
+        cmp r3, #0
+        beq @@Timeout
+
     ; Load collected jewel piece
         ldr r0, =LastCollectedItemID
-        ldrb r7, [r0]
-        lsr r3, r7, #7  ; r3 = 1 if collected this frame, 0 otherwise
-        get_bits r0, r7, 4, 2  ; r0 = passage ID
-        get_bits r7, r7, 1, 0  ; r7 = quadrant
+        ldrb r3, [r0]
+        get_bits r3, r3, 1, 0  ; r3 = quadrant
 
     ; Piece 1
         cmp r3, #0
-        beq @@Piece2
-        cmp r7, #0
         bne @@Piece2
-        mov r0, #0
-        mov r1, #1
-        strb r1, [r2, #3]
-        strb r0, [r2, #4]
-        b @@Return
+        mov r1, #0
+        mov r0, #1
+        b @@StoreStatus
 
     @@Piece2:
-        cmp r3, #0
-        beq @@Piece3
-        cmp r7, #1
+        cmp r3, #1
         bne @@Piece3
         mov r1, #0
         mov r0, #2
         b @@StoreStatus
 
     @@Piece3:
-        cmp r3, #0
-        beq @@Piece4
-        cmp r7, #2
+        cmp r3, #2
         bne @@Piece4
         mov r1, #0
         mov r0, #3
         b @@StoreStatus
 
     @@Piece4:
-        cmp r3, #0
-        beq @@Timeout
-        cmp r7, #3
+        cmp r3, #3
         bne @@Timeout
         mov r1, #0
         mov r0, #4
@@ -223,16 +214,15 @@ ReadJewelPieces:
         mov r0, #6
 
     @@StoreStatus:
-        strb r0, [r2, #3]
-        strb r1, [r2, #4]
+        strb r0, [r2, #3]  ; => Scbuf_ucSeq
+        strb r1, [r2, #4]  ; => Scbuf_ucWork0
 
     @@Return:
-        ldr r0, =LastCollectedItemID
-        ldrb r3, [r0]
-        get_bits r3, r3, ItemBit_Junk, 0
-        strb r3, [r0]
+        ldr r0, =LastCollectedItemStatus
+        ldrb r1, [r0]
+        add r1, #1
+        strb r1, [r0]
 
-        pop {r7}
         ldr r0, =0x8079064
         mov pc, r0
     .pool
@@ -259,6 +249,10 @@ UpdateJewelIcon:
         add r3, r3, r0  ; r3 = entry for this jewel piece
         ldr r0, =LastCollectedItemStatus
         ldrb r0, [r0]
+        cmp r0, #4
+        bne @@GetJewel
+        sub r0, #1
+    @@GetJewel:
         lsl r0, #2
         add r2, r3, r0  ; r2 = selected graphic
 
@@ -298,19 +292,19 @@ JewelGraphicTable:
 ; difference from vanilla is that this uses the LastCollectedItemID and
 ; LastCollectedItemStatus.
 ReadCD:
-        push {r7}
-
     ; clear indicator
         ldr r1, =REG_DMA3SAD
         set_tile 0x60114C0, EmptyCDTile
 
     ; Load collected CD
         ldr r0, =LastCollectedItemID
-        ldrb r7, [r0]
-        lsr r3, r7, #7  ; r3 = 1 if collected this frame, 0 otherwise
+        ldrb r1, [r0]
 
+        ldr r0, =LastCollectedItemStatus
+        ldrb r3, [r0]
         cmp r3, #0
         beq @@Timeout
+
         mov r2, #1
         mov r0, #2
         b @@Return
@@ -321,14 +315,8 @@ ReadCD:
         mov lr, r0
 
     @@Return:
-        ldr r0, =LastCollectedItemID
-        ldrb r3, [r0]
-        get_bits r3, r3, ItemBit_Junk, 0
-        strb r3, [r0]
-
         ldr r3, =Scbuf_ucStatus
         ldrb r1, [r3]
-        pop {r7}
         mov pc, lr
 
     .pool

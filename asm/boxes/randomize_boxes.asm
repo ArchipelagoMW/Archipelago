@@ -294,14 +294,12 @@ CollectRandomItem:
     ; Jewel/CD
         ldr r0, =LastCollectedItemID
         strb r5, [r0]
-        ldr r0, =LastCollectedItemStatus
-        mov r1, #2
-        strb r1, [r0]
 
         lsr r1, r5, #ItemBit_CD
         cmp r1, #0
         bne @@CD
         mov r0, #0  ; a1
+        mov r1, #0  ; a2
         bl SpawnCollectionIndicator
         b @@JewelPiece
 
@@ -330,6 +328,7 @@ CollectRandomItem:
 
     @@CD:
         mov r0, #1  ; a1
+        mov r1, #0  ; a2
         bl SpawnCollectionIndicator
         ldr r0, =0x13C  ; a1
 
