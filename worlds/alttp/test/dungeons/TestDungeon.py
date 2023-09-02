@@ -2,19 +2,19 @@ import unittest
 from argparse import Namespace
 
 from BaseClasses import MultiWorld, CollectionState, ItemClassification
-from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
-from worlds.alttp.ItemPool import difficulties, generate_itempool
+from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory
 from worlds.alttp.Regions import create_regions
 from worlds.alttp.Shops import create_shops
-from worlds.alttp.Rules import set_rules
 from worlds import AutoWorld
 
 
 class TestDungeon(unittest.TestCase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
+        self.multiworld.set_seed(None)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
@@ -24,7 +24,7 @@ class TestDungeon(unittest.TestCase):
         self.remove_exits = []      # Block dungeon exits
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_regions(self.multiworld, 1)
-        create_dungeons(self.multiworld, 1)
+        self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
         for exitname, regionname in mandatory_connections:
             connect_simple(self.multiworld, exitname, regionname, 1)

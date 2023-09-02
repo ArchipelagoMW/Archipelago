@@ -140,10 +140,18 @@ def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str
             location.item_rule = lambda item: rule(item) or old_rule(item)
 
 
-def item_in_locations(state: "BaseClasses.CollectionState", item: str, player: int,
-                      locations: typing.Sequence["BaseClasses.Location"]) -> bool:
-    for location in locations:
+def item_name_in_location_names(state: "BaseClasses.CollectionState", item: str, player: int,
+                                location_name_player_pairs: typing.Sequence[typing.Tuple[str, int]]) -> bool:
+    for location in location_name_player_pairs:
         if location_item_name(state, location[0], location[1]) == (item, player):
+            return True
+    return False
+
+
+def item_name_in_locations(item: str, player: int,
+                           locations: typing.Sequence["BaseClasses.Location"]) -> bool:
+    for location in locations:
+        if location.item and location.item.name == item and location.item.player == player:
             return True
     return False
 

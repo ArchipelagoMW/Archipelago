@@ -15,7 +15,7 @@ Tutorial (Tutorial) - Outside Tutorial - 0x03629:
 158006 - 0x0A3B2 (Back Right) - True - True
 158007 - 0x03629 (Gate Open) - 0x002C2 & 0x0A3B5 & 0x0A3B2 - True
 158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - True
-158009 - 0x0C335 (Pillar) - True - Triangles - True
+158009 - 0x0C335 (Pillar) - True - Triangles
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
 159512 - 0x33530 (Cloud EP) - True - True
 159513 - 0x33600 (Patio Flowers EP) - 0x0C373 - True
@@ -264,7 +264,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Flo
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Colored Squares & Eraser
 158142 - 0x03677 (Stair Control) - True - Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
-158143 - 0x3C125 (Control Room Left) - 0x0367C - Black/White Squares & Dots & Eraser
+158143 - 0x3C125 (Control Room Left) - 0x014E9 - Black/White Squares & Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Colored Squares & Dots & Eraser
 159411 - 0x0069D (Ramp EP) - 0x03676 & 0x275FF - True
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
@@ -377,7 +377,7 @@ Door - 0x0199A (Hedge Maze 4 Shortcut) - 0x019E7
 158196 - 0x01A0F (Hedge Maze 4) - True - True
 Door - 0x01A0E (Hedge Maze 4 Exit) - 0x01A0F
 
-Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - 0x01BEA:
+Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - True:
 158199 - 0x0A3B9 (Reset Pressure Plates 2) - True - True
 158200 - 0x01BE9 (Pressure Plates 2) - 0x0A3B9 - Black/White Squares
 Door - 0x01BEA (Pressure Plates 2 Exit) - 0x01BE9
@@ -988,7 +988,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158473 - 0x32966 (First Floor Grounded) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
 158474 - 0x01A31 (First Floor Middle) - True - Colored Squares
 158475 - 0x00B71 (First Floor Right) - True - Colored Squares & Stars & Stars + Same Colored Symbol & Eraser
-158478 - 0x288EA (First Wooden Beam) - True - Shapers
+158478 - 0x288EA (First Wooden Beam) - True - Rotated Shapers
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Black/White Squares & Shapers

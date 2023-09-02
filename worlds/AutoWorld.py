@@ -1,20 +1,36 @@
 from __future__ import annotations
 
+import hashlib
 import logging
-import sys
 import pathlib
-from typing import Dict, FrozenSet, Set, Tuple, List, Optional, TextIO, Any, Callable, Type, Union, TYPE_CHECKING, \
-    ClassVar
+import sys
+from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+    Union
 
-from Options import AssembleOptions
 from BaseClasses import CollectionState
+from Options import AssembleOptions
 
 if TYPE_CHECKING:
+    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from . import GamesPackage
+    from settings import Group
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    __file__: str
+    zip_path: Optional[str]
+    settings_key: str
+    __settings: Any
+
+    @property
+    def settings(cls) -> Any:  # actual type is defined in World
+        # lazy loading + caching to minimize runtime cost
+        if cls.__settings is None:
+            from settings import get_settings
+            cls.__settings = get_settings()[cls.settings_key]
+        return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -32,6 +48,9 @@ class AutoWorldRegister(type):
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
         dct["location_names"] = frozenset(dct["location_name_to_id"])
+        dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
+                                       in dct.get("location_name_groups", {}).items()}
+        dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
         # move away from get_required_client_version function
@@ -53,6 +72,11 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        if "settings_key" not in dct:
+            mod_name = new_class.__module__
+            world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
+            new_class.settings_key = world_folder_name + "_options"
+        new_class.__settings = None
         return new_class
 
 
@@ -74,7 +98,17 @@ class AutoLogicRegister(type):
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
-    return method(*args)
+    try:
+        ret = method(*args)
+    except Exception as e:
+        message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
+        if sys.version_info >= (3, 11, 0):
+            e.add_note(message)  # PEP 678
+        else:
+            logging.error(message)
+        raise e
+    else:
+        return ret
 
 
 def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
@@ -91,9 +125,7 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    # TODO: investigate: Iterating through a set is not a deterministic order.
-    # If any random is used, this could make unreproducible seed.
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             stage_callable(multiworld, *args)
@@ -152,11 +184,16 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    data_version: ClassVar[int] = 1
+    data_version: ClassVar[int] = 0
     """
-    increment this every time something in your world's names/id mappings changes.
-    While this is set to 0, this world's DataPackage is considered in testing mode and will be inserted to the multidata
-    and retrieved by clients on every connection.
+    Increment this every time something in your world's names/id mappings changes.
+
+    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
+    that it should not be cached, and clients should request that world's DataPackage every connection. Not
+    recommended for production-ready worlds.
+
+    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
+    request a new DataPackage, if necessary.
     """
 
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
@@ -193,6 +230,14 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
+    random: random.Random
+    """This world's random object. Should be used for any randomization needed in world for this player slot."""
+
+    settings_key: ClassVar[str]
+    """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
+    settings: ClassVar[Optional["Group"]]
+    """loaded settings from host.yaml"""
+
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
@@ -201,6 +246,11 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
+
+    def __getattr__(self, item: str) -> Any:
+        if item == "settings":
+            return self.__class__.settings
+        raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
@@ -259,8 +309,8 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
+        """This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
@@ -343,8 +393,35 @@ class World(metaclass=AutoWorldRegister):
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
+    @classmethod
+    def get_data_package_data(cls) -> "GamesPackage":
+        sorted_item_name_groups = {
+            name: sorted(cls.item_name_groups[name]) for name in sorted(cls.item_name_groups)
+        }
+        sorted_location_name_groups = {
+            name: sorted(cls.location_name_groups[name]) for name in sorted(cls.location_name_groups)
+        }
+        res: "GamesPackage" = {
+            # sorted alphabetically
+            "item_name_groups": sorted_item_name_groups,
+            "item_name_to_id": cls.item_name_to_id,
+            "location_name_groups": sorted_location_name_groups,
+            "location_name_to_id": cls.location_name_to_id,
+            "version": cls.data_version,
+        }
+        res["checksum"] = data_package_checksum(res)
+        return res
+
 
 # any methods attached to this can be used as part of CollectionState,
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
+
+
+def data_package_checksum(data: "GamesPackage") -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()

@@ -1,6 +1,7 @@
 special_chars = {
     "PKMN": 0x4A,
     "LINE": 0x4F,
+    "PARA": 0x51,
     "CONT": 0x55,
     "DONE": 0x57,
     "PROMPT": 0x58,
@@ -90,10 +91,13 @@ char_map = {
     "?": 0xE6,
     "!": 0xE7,
     ".": 0xE8,
+    "+": 0xEA,
+    "=": 0xEB,
     "♂": 0xEF,
     "¥": 0xF0,
     "$": 0xF0,
     "×": 0xF1,
+    "*": 0xF1,  # alias
     "/": 0xF3,
     ",": 0xF4,
     "♀": 0xF5,
@@ -118,9 +122,9 @@ def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=
     special = False
     for char in text:
         if char == ">":
-            if spec_char in unsafe_chars and safety:
-                raise KeyError(f"Disallowed Pokemon text special character '<{spec_char}>'")
             try:
+                if spec_char in unsafe_chars and safety:
+                    raise KeyError(f"Disallowed Pokemon text special character '<{spec_char}>'")
                 encoded_text.append(special_chars[spec_char])
             except KeyError:
                 if force:
@@ -135,10 +139,10 @@ def encode_text(text: str, length: int=0, whitespace=False, force=False, safety=
         elif special is True:
             spec_char += char
         else:
-            if char in unsafe_chars and safety:
-                raise KeyError(f"Disallowed Pokemon text character '{char}'")
             try:
                 encoded_text.append(char_map[char])
+                if char in unsafe_chars and safety:
+                    raise KeyError(f"Disallowed Pokemon text character '{char}'")
             except KeyError:
                 if force:
                     encoded_text.append(char_map[" "])

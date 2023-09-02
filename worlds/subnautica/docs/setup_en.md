@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/)
+- Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/) | [Subnautica Epic Game Store Page](https://store.epicgames.com/p/subnautica)
 - Archipelago Mod for Subnautica
   from: [Subnautica Archipelago Mod Releases Page](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
@@ -36,7 +36,7 @@ Warning: Currently it is not checked whether a loaded savegame belongs to the mu
 
 The mod adds the following console commands:
  - `say` sends the text following it to Archipelago as a chat message.
-   - `!` is not an allowed character, use `/` in its place. For example, to use the [`!hint` command](/tutorial/Archipelago/commands/en#remote-commands), type `say /hint`.
+   - For example, to use the [`!hint` command](/tutorial/Archipelago/commands/en#remote-commands), type `say !hint`.
  - `silent` toggles Archipelago messages appearing.
  - `tracker` rotates through the possible settings for the in-game tracker that displays the closest uncollected location.
  - `deathlink` toggles death link.

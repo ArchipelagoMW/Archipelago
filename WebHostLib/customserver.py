@@ -18,8 +18,8 @@ from pony.orm import commit, db_session, select
 import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
-from .models import Room, Command, db
+from Utils import restricted_loads, cache_argsless
+from .models import Command, GameDataPackage, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
@@ -92,7 +92,21 @@ class WebHostContext(Context):
         else:
             self.port = get_random_port()
 
-        return self._load(self.decompress(room.seed.multidata), True)
+        multidata = self.decompress(room.seed.multidata)
+        game_data_packages = {}
+        for game in list(multidata.get("datapackage", {})):
+            game_data = multidata["datapackage"][game]
+            if "checksum" in game_data:
+                if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
+                    # non-custom. remove from multidata
+                    # games package could be dropped from static data once all rooms embed data package
+                    del multidata["datapackage"][game]
+                else:
+                    row = GameDataPackage.get(checksum=game_data["checksum"])
+                    if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
+                        game_data_packages[game] = Utils.restricted_loads(row.data)
+
+        return self._load(multidata, game_data_packages, True)
 
     @db_session
     def init_save(self, enabled: bool = True):
@@ -155,13 +169,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
         try:
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
             await ctx.server
         except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
             await ctx.server
         port = 0
@@ -190,6 +202,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     with Locker(room_id):
         try:
             asyncio.run(main())
+        except KeyboardInterrupt:
+            with db_session:
+                room = Room.get(id=room_id)
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
         except:
             with db_session:
                 room = Room.get(id=room_id)
