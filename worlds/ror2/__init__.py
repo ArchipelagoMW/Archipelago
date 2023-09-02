@@ -100,19 +100,19 @@ class RiskOfRainWorld(World):
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
 
-        if self.multiworld.goal[self.player] == "classic":
+        if self.options.goal == "classic":
             # classic mode
-            total_locations = self.multiworld.total_locations[self.player].value
+            total_locations = self.options.total_locations.value
         else:
             # explore mode
             total_locations = len(
                 orderedstage_location.get_locations(
-                    chests=self.multiworld.chests_per_stage[self.player].value,
-                    shrines=self.multiworld.shrines_per_stage[self.player].value,
-                    scavengers=self.multiworld.scavengers_per_stage[self.player].value,
-                    scanners=self.multiworld.scanner_per_stage[self.player].value,
-                    altars=self.multiworld.altars_per_stage[self.player].value,
-                    dlc_sotv=self.multiworld.dlc_sotv[self.player].value
+                    chests=self.options.chests_per_stage.value,
+                    shrines=self.options.shrines_per_stage.value,
+                    scavengers=self.options.scavengers_per_stage.value,
+                    scanners=self.options.scanner_per_stage.value,
+                    altars=self.options.altars_per_stage.value,
+                    dlc_sotv=self.options.dlc_sotv.value
                 )
             )
         # Create junk items
