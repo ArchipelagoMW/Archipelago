@@ -95,7 +95,7 @@ class ShiversWorld(World):
         librarylocation = self.multiworld.random.choice([loc for loc in library_region.locations if not loc.name.startswith("Accessible:")])
         
         #Roll for which escape items will be placed in the Library
-        library_random = random.randint(1, 3)
+        library_random = self.random.randint(1, 3)
         if library_random == 1: 
             librarylocation.place_locked_item(self.create_item("Crawling"))
 
@@ -117,7 +117,7 @@ class ShiversWorld(World):
         #If front door option is on, determine which set of keys will be used for lobby access and add front door key to item pool
         lobby_access_keys = 1
         if self.multiworld.front_door_usable[self.player]:
-            lobby_access_keys = random.randint(1, 2)
+            lobby_access_keys = library_random = self.random.randint(1, 2)
             keys += [self.create_item("Key for Front Door")]
         else:
             filler += [self.create_item("Easier Lyre")]
