@@ -89,7 +89,6 @@ class HatInTimeWorld(World):
         self.calculate_yarn_costs()
         yarn_pool: typing.List[Item] = create_multiple_items(self, "Yarn", self.multiworld.YarnAvailable[self.player].value)
 
-        # 1/5 is progression balanced
         for i in range(int(len(yarn_pool) * (0.01 * self.multiworld.YarnBalancePercent[self.player].value))):
             yarn_pool[i].classification = ItemClassification.progression
 

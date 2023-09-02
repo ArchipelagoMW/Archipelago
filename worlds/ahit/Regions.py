@@ -551,8 +551,6 @@ def randomize_act_entrances(world: World):
                 for e in candidate.entrances.copy():
                     e.parent_region.exits.remove(e)
                     e.connected_region.entrances.remove(e)
-                    del e.parent_region
-                    del e.connected_region
 
             entrance = world.multiworld.get_entrance(act_entrances[region.name], world.player)
             reconnect_regions(entrance, world.multiworld.get_region(act_chapters[region.name], world.player), candidate)

@@ -308,7 +308,6 @@ def set_rules(world: World):
         region: Region = entrance.connected_region
         access_rules: typing.List[typing.Callable[[CollectionState], bool]] = []
         entrance.parent_region.exits.remove(entrance)
-        del entrance.parent_region
 
         # Entrances to this act that we have to set access_rules on
         entrances: typing.List[Entrance] = []
