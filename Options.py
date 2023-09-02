@@ -899,16 +899,19 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
-class OptionsMetaProperty(type):
-    def __new__(mcs, name, bases, attrs):
-        for attr, attr_type in attrs.items():
+class OptionsMetaProperty(abc.ABCMeta):
+    def __new__(mcs,
+                name: str,
+                bases: typing.Tuple[type, ...],
+                attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
+        for attr_type in attrs.values():
             assert not isinstance(attr_type, AssembleOptions),\
                 f"Options for {name} should be type hinted on the class, not assigned"
         return super().__new__(mcs, name, bases, attrs)
 
     @property
     @functools.lru_cache(maxsize=None)
-    def type_hints(cls) -> typing.Dict[str, AssembleOptions]:
+    def type_hints(cls) -> typing.Dict[str, typing.Type[Option[typing.Any]]]:
         """Returns type hints of the class as a dictionary."""
         return typing.get_type_hints(cls)
 
@@ -1075,10 +1078,6 @@ class PerGameCommonOptions(CommonOptions):
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
-
-
-GameOptions = typing.TypeVar("GameOptions", bound=PerGameCommonOptions)
-
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
