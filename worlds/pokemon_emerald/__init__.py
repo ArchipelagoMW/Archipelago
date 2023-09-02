@@ -34,10 +34,7 @@ from .util import int_to_bool_array, bool_array_to_int
 
 # Check for BizHawkClient before trying to import client
 # Allows for generating without _bizhawk.apworld
-if "worlds._bizhawk" in sys.modules:
-    from .client import PokemonEmeraldClient
-else:
-    logging.warning("Did not find _bizhawk.apworld required to play Pokemon Emerald. Can still generate.")
+from .client import PokemonEmeraldClient
 
 
 class PokemonEmeraldWebWorld(WebWorld):

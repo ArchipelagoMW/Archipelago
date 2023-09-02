@@ -1,7 +1,7 @@
 import json
 from typing import Any, Dict, List, Optional, Iterable
 
-from .data import data
+from .data import load_json_data, data
 from .pokemon import national_id_to_species_id_map
 
 
@@ -57,10 +57,9 @@ move_names = {
 }
 
 item_names = {
-    constant_value: constant_name[5:]
-    for constant_name, constant_value
-    in data.constants.items()
-    if constant_name.startswith("ITEM_")
+    data.constants[item_constant_name]: item_constant_name[5:]
+    for item_constant_name
+    in load_json_data("items.json")
 }
 
 
@@ -221,11 +220,13 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
     iv_ability_info = int.from_bytes(decrypted_substructs[3][4:8], 'little')
     met_info = int.from_bytes(decrypted_substructs[3][2:4], 'little')
 
+    held_item = int.from_bytes(decrypted_substructs[0][2:4], 'little')
+
     return json.dumps({
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], 'little')].national_dex_number,
-        "item": item_names[int.from_bytes(decrypted_substructs[0][2:4], 'little')],
+        "item": None if held_item == 0 else item_names[held_item],
         "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
         "ability": iv_ability_info >> 31,
         "ivs": [(iv_ability_info >> (i * 5)) & 0x1F for i in range(6)],
@@ -251,7 +252,8 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
     })
 
 
-def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
+def encode_pokemon_data(json_str: str) -> bytearray:
+    pokemon_json = json.loads(json_str)
     # Default values to cover for optional or accidentally missed fields
     default_pokemon = {
         "nickname": "A",
@@ -277,7 +279,7 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
         "female": False
     }
 
-    pokemon_json = {**default_pokemon, **pokemon_json}
+    pokemon_json = {**default_pokemon, **{k: v for k, v in pokemon_json.items() if v is not None}}
     pokemon_json["trainer"] = {**default_trainer, **pokemon_json["trainer"]}
 
     # Cutting string lengths to Emerald sizes

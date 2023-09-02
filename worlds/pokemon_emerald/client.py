@@ -1,6 +1,10 @@
+import asyncio
+import copy
 import logging
 import sys
+import time
 from typing import TYPE_CHECKING, Optional, Dict, Set
+
 
 # TODO: REMOVE ASAP
 # This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
@@ -22,13 +26,15 @@ if "worlds._bizhawk" not in sys.modules:
         logging.error("Did not find _bizhawk.apworld required to play Pokemon Emerald.")
 
 
-from worlds.LauncherComponents import SuffixIdentifier, components
 from NetUtils import ClientStatus
+import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
+from worlds.LauncherComponents import SuffixIdentifier, components
 
 from .data import BASE_OFFSET, data
 from .options import Goal
+from .util import encode_pokemon_data, decode_pokemon_data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -117,6 +123,10 @@ class PokemonEmeraldClient(BizHawkClient):
     local_found_key_items: Dict[str, bool]
     goal_flag: int
     rom_slot_name: Optional[str]
+    wonder_trade_update_event: asyncio.Event
+    latest_wonder_trades: dict
+    latest_wonder_trade_reply: dict
+    wonder_trade_task: Optional[asyncio.Task]
 
     def __init__(self) -> None:
         super().__init__()
@@ -125,6 +135,9 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_found_key_items = {}
         self.goal_flag = IS_CHAMPION_FLAG
         self.rom_slot_name = None
+        self.wonder_trade_update_event = asyncio.Event()
+        self.latest_wonder_trades = {}
+        self.wonder_trade_task = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -157,6 +170,8 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+        from CommonClient import logger
+
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == Goal.option_champion:
                 self.goal_flag = IS_CHAMPION_FLAG
@@ -210,6 +225,41 @@ class PokemonEmeraldClient(BizHawkClient):
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [next_item.flags & 1], "System Bus"),
                 ])
+
+            # Wonder Trades (only when connected to the server)
+            if ctx.server is not None:
+                read_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [
+                        (save_block_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
+                        (save_block_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
+                    ],
+                    [overworld_guard, save_block_address_guard]
+                )
+
+                if read_result is not None:
+                    wonder_trade_pokemon_data = read_result[0]
+                    trade_is_sent = read_result[1][0]
+
+                    if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
+                        # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
+                        # and mark that the game is waiting on receiving a trade
+                        Utils.async_start(self.wonder_trade_send(ctx, decode_pokemon_data(wonder_trade_pokemon_data)))
+                        await bizhawk.write(ctx.bizhawk_ctx, [
+                            (save_block_address + 0x377C, bytes(0x50), "System Bus"),
+                            (save_block_address + 0x37CC, [1], "System Bus"),
+                        ])
+                    elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
+                        # Game is waiting on receiving a trade. See if there are any available trades that were not
+                        # sent by this player, and if so, try to receive one.
+                        # TODO: Should filter for trades that can't be completed (like Gen IV+ species) here and/or
+                        # throttle calls to `wonder_trade_receive`.
+                        if any(item[0] != ctx.slot for key, item in self.latest_wonder_trades.items() if key != "_lock"):
+                            received_trade = await self.wonder_trade_receive(ctx)
+                            if received_trade is not None:
+                                await bizhawk.write(ctx.bizhawk_ctx, [
+                                    (save_block_address + 0x377C, encode_pokemon_data(received_trade), "System Bus"),
+                                ])
 
             game_clear = False
             local_checked_locations = set()
@@ -285,3 +335,122 @@ class PokemonEmeraldClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
+
+    async def wonder_trade_acquire(self, ctx: BizHawkClientContext, keep_trying: bool = False) -> Optional[dict]:
+        from CommonClient import logger
+
+        first_try = True
+        while not ctx.exit_event.is_set():
+            if not first_try and not keep_trying:
+                return None
+            first_try = False
+
+            lock = int(time.time_ns() / 1000000)
+            uuid = Utils.get_unique_identifier()
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"pokemon_wonder_trades_{ctx.team}",
+                "default": {"_lock": 0},
+                "want_reply": True,
+                "operations": [{"operation": "update", "value": {"_lock": lock}}],
+                "uuid": uuid
+            }])
+
+            self.wonder_trade_update_event.clear()
+            await self.wonder_trade_update_event.wait()
+            reply = copy.deepcopy(self.latest_wonder_trade_reply)
+
+            if reply.get("uuid", None) != uuid:
+                logger.info("Reply not mine")
+                continue
+
+            if lock - reply["original_value"]["_lock"] < 5000:
+                logger.info("Lock too new")
+                await asyncio.sleep(10)
+                continue
+
+            if reply["value"]["_lock"] != lock:
+                logger.info("Lock not mine")
+                await asyncio.sleep(10)
+                continue
+
+            return reply
+
+    async def wonder_trade_send(self, ctx: BizHawkClientContext, data: str) -> None:
+        from CommonClient import logger
+
+        reply = await self.wonder_trade_acquire(ctx, True)
+
+        wonder_trade_slot = 0
+        while str(wonder_trade_slot) in reply["value"]:
+            wonder_trade_slot += 1
+
+        await ctx.send_msgs([{
+            "cmd": "Set",
+            "key": f"pokemon_wonder_trades_{ctx.team}",
+            "default": {"_lock": 0},
+            "operations": [{"operation": "update", "value": {
+                "_lock": 0,
+                str(wonder_trade_slot): (ctx.slot, data)
+            }}]
+        }])
+        logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
+
+    async def wonder_trade_receive(self, ctx: BizHawkClientContext) -> Optional[str]:
+        from CommonClient import logger
+
+        reply = await self.wonder_trade_acquire(ctx)
+
+        if reply is None:
+            return None
+
+        # TODO: Filter by whether Emerald knows the species
+        candidate_slots = [
+            int(slot)
+            for slot in reply["value"]
+            if slot != "_lock" and reply["value"][slot][0] != ctx.slot
+        ]
+
+        if len(candidate_slots) == 0:
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"pokemon_wonder_trades_{ctx.team}",
+                "default": {"_lock": 0},
+                "operations": [{"operation": "update", "value": {"_lock": 0}}]
+            }])
+            return None
+
+        wonder_trade_slot = max(candidate_slots)
+
+        await ctx.send_msgs([{
+            "cmd": "Set",
+            "key": f"pokemon_wonder_trades_{ctx.team}",
+            "default": {"_lock": 0},
+            "operations": [
+                {"operation": "update", "value": {"_lock": 0}},
+                {"operation": "pop", "value": str(wonder_trade_slot)}
+            ]
+        }])
+
+        logger.info("Wonder trade received!")
+        return reply["value"][str(wonder_trade_slot)][1]
+
+    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
+        if cmd == "Connected":
+            Utils.async_start(ctx.send_msgs([{
+                "cmd": "SetNotify",
+                "keys": [f"pokemon_wonder_trades_{ctx.team}"]
+            }, {
+                "cmd": "Get",
+                "keys": [f"pokemon_wonder_trades_{ctx.team}"]
+            }]))
+        elif cmd == "Retrieved":
+            if f"pokemon_wonder_trades_{ctx.team}" in args.get("keys", {}):
+                self.latest_wonder_trades = args["keys"].get(f"pokemon_wonder_trades_{ctx.team}", {})
+        elif cmd == "SetReply":
+            if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":
+                self.latest_wonder_trade_reply = args
+                self.latest_wonder_trades = args.get("value", {})
+
+                if not self.wonder_trade_update_event.is_set():
+                    self.wonder_trade_update_event.set()
