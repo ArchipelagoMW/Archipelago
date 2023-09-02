@@ -1,6 +1,6 @@
 import typing
 from worlds.AutoWorld import World
-from Options import Option, Range, Toggle, DeathLink, Choice
+from Options import Option, Range, Toggle, DeathLink, Choice, OptionDict
 from .Items import get_total_time_pieces
 
 
@@ -72,24 +72,20 @@ class ActRandomizer(Choice):
     default = 1
 
 
+class ActPlando(OptionDict):
+    """Plando acts onto other acts. For example, \"Train Rush\": \"Alpine Free Roam\""""
+    display_name = "Act Plando"
+
+
 class ShuffleAlpineZiplines(Toggle):
     """If enabled, Alpine's zipline paths leading to the peaks will be locked behind items."""
     display_name = "Shuffle Alpine Ziplines"
     default = 0
 
 
-class VanillaAlpine(Choice):
-    """If enabled, force Alpine (and optionally its finale) onto their vanilla locations in act shuffle."""
-    display_name = "Vanilla Alpine Skyline"
-    option_false = 0
-    option_true = 1
-    option_finale = 2
+class FinaleShuffle(Toggle):
+    """If enabled, chapter finales will only be shuffled amongst each other in act shuffle."""
     default = 0
-
-
-class NoFreeRoamFinale(Toggle):
-    """If enabled, prevent Free Roam acts from being shuffled onto chapter finales."""
-    default = 1
 
 
 class LogicDifficulty(Choice):
@@ -221,6 +217,22 @@ class TasksanityCheckCount(Range):
     default = 18
 
 
+class ExcludeTour(Toggle):
+    """Removes the Tour time rift from the game. This option is recommended if you don't want to deal with
+    important levels being shuffled onto the Tour time rift, or important items being shuffled onto Tour pages
+    when your goal is Time's End."""
+    display_name = "Exclude Tour Time Rift"
+    default = 0
+
+
+class ShipShapeCustomTaskGoal(Range):
+    """Change the amount of tasks required to complete Ship Shape. This will not affect Cruisin' for a Bruisin'."""
+    display_name = "Ship Shape Custom Task Goal"
+    range_start = 5
+    range_end = 30
+    default = 18
+
+
 class EnableDLC2(Toggle):
     """Shuffle content from Nyakuza Metro (Chapter 7) into the game.
     DO NOT ENABLE THIS OPTION IF YOU DO NOT HAVE NYAKUZA METRO DLC INSTALLED!!!"""
@@ -238,7 +250,7 @@ class MetroMinPonCost(Range):
 
 class MetroMaxPonCost(Range):
     """The most expensive an item can be in any Nyakuza Metro shop. Includes ticket booths."""
-    display_name = "Metro Shops Minimum Pon Cost"
+    display_name = "Metro Shops Maximum Pon Cost"
     range_start = 10
     range_end = 800
     default = 200
@@ -265,14 +277,6 @@ class BaseballBat(Toggle):
     DLC2 content does not have to be shuffled for this option but Nyakuza Metro still needs to be installed."""
     display_name = "Baseball Bat"
     default = 0
-
-
-class VanillaMetro(Choice):
-    """Force Nyakuza Metro (and optionally its finale) onto their vanilla locations in act shuffle."""
-    display_name = "Vanilla Metro"
-    option_false = 0
-    option_true = 1
-    option_finale = 2
 
 
 class ChapterCostIncrement(Range):
@@ -357,7 +361,7 @@ class DWExcludeAnnoyingContracts(Toggle):
 
 class DWExcludeAnnoyingBonuses(Toggle):
     """NOT IMPLEMENTED If Death Wish full completions are shuffled in, exclude particularly tedious Death Wish full completions
-    from the pool"""
+    from the pool. DANGER! DISABLE AT YOUR OWN RISK! THIS OPTION WHEN DISABLED CAN CREATE VERY DIFFICULT SEEDS!!!"""
     display_name = "Exclude Annoying Death Wish Full Completions"
     default = 1
 
@@ -459,9 +463,9 @@ ahit_options: typing.Dict[str, type(Option)] = {
 
     "EndGoal":                  EndGoal,
     "ActRandomizer":            ActRandomizer,
+    "ActPlando":                ActPlando,
     "ShuffleAlpineZiplines":    ShuffleAlpineZiplines,
-    "VanillaAlpine":            VanillaAlpine,
-    "NoFreeRoamFinale":         NoFreeRoamFinale,
+    "FinaleShuffle":            FinaleShuffle,
     "LogicDifficulty":          LogicDifficulty,
     "KnowledgeChecks":          KnowledgeChecks,
     "YarnBalancePercent":       YarnBalancePercent,
@@ -480,11 +484,12 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "Tasksanity":               Tasksanity,
     "TasksanityTaskStep":       TasksanityTaskStep,
     "TasksanityCheckCount":     TasksanityCheckCount,
+    "ExcludeTour":              ExcludeTour,
+    "ShipShapeCustomTaskGoal":  ShipShapeCustomTaskGoal,
 
     "EnableDeathWish":          EnableDeathWish,
     "EnableDLC2":               EnableDLC2,
     "BaseballBat":              BaseballBat,
-    "VanillaMetro":             VanillaMetro,
     "MetroMinPonCost":          MetroMinPonCost,
     "MetroMaxPonCost":          MetroMaxPonCost,
     "NyakuzaThugMinShopItems":  NyakuzaThugMinShopItems,
@@ -534,6 +539,8 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "Tasksanity": Tasksanity,
     "TasksanityTaskStep": TasksanityTaskStep,
     "TasksanityCheckCount": TasksanityCheckCount,
+    "ShipShapeCustomTaskGoal": ShipShapeCustomTaskGoal,
+    "ExcludeTour": ExcludeTour,
 
     "EnableDeathWish": EnableDeathWish,
 

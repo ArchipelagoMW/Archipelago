@@ -252,6 +252,16 @@ blacklisted_acts = {
     "Battle of the Birds - Finale A":   "Award Ceremony",
 }
 
+# Blacklisted act shuffle combinations to help prevent impossible layouts. Mostly for free roam acts.
+blacklisted_combos = {
+    "The Illness has Spread":           ["Alpine Free Roam"],
+    "Rush Hour":                        ["Nyakuza Free Roam"],
+    "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "Time Rift - The Moon":             ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "Time Rift - Dead Bird Studio":     ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "Time Rift - Rumbi Factory":        ["Alpine Free Roam"],
+}
+
 
 def create_regions(world: World):
     w = world
@@ -371,7 +381,9 @@ def create_regions(world: World):
         connect_regions(ac_act3, cruise_ship, "Cruise Ship Entrance RTB", p)
         create_rift_connections(w, create_region(w, "Time Rift - Balcony"))
         create_rift_connections(w, create_region(w, "Time Rift - Deep Sea"))
-        create_rift_connections(w, create_region(w, "Time Rift - Tour"))
+
+        if mw.ExcludeTour[world.player].value == 0:
+            create_rift_connections(w, create_region(w, "Time Rift - Tour"))
 
         if mw.Tasksanity[p].value > 0:
             create_tasksanity_locations(w)
@@ -419,9 +431,52 @@ def create_tasksanity_locations(world: World):
         ship_shape.locations.append(location)
 
 
+def is_valid_plando(world: World, region: str) -> bool:
+    if region in blacklisted_acts.values():
+        return False
+
+    if region not in world.multiworld.ActPlando[world.player].keys():
+        return False
+
+    act = world.multiworld.ActPlando[world.player].get(region)
+    if act in blacklisted_acts.values():
+        return False
+
+    # Don't allow plando-ing things onto the first act that aren't completable with nothing
+    is_first_act: bool = act_chapters[region] == get_first_chapter_region(world).name \
+        and region in act_entrances.keys() and ("Act 1" in act_entrances[region] or "Free Roam" in act_entrances[region])
+
+    if is_first_act:
+        if act_chapters[act] == "Subcon Forest" and world.multiworld.ShuffleSubconPaintings[world.player].value > 0:
+            return False
+
+        if world.multiworld.UmbrellaLogic[world.player].value > 0 \
+           and (act == "Heating Up Mafia Town" or act == "Queen Vanessa's Manor"):
+            return False
+
+        if act not in guaranteed_first_acts:
+            return False
+
+    # Don't allow straight up impossible mappings
+    if region == "The Illness has Spread" and act == "Alpine Free Roam":
+        return False
+
+    if region == "Rush Hour" and act == "Nyakuza Free Roam":
+        return False
+
+    if region == "Time Rift - Rumbi Factory" and act == "Nyakuza Free Roam":
+        return False
+
+    if region == "Time Rift - The Owl Express" and act == "Murder on the Owl Express":
+        return False
+
+    return any(a.name == world.multiworld.ActPlando[world.player].get(region) for a in
+               world.multiworld.get_regions(world.player))
+
+
 def randomize_act_entrances(world: World):
     region_list: typing.List[Region] = get_act_regions(world)
-    world.multiworld.random.shuffle(region_list)
+    world.random.shuffle(region_list)
 
     separate_rifts: bool = bool(world.multiworld.ActRandomizer[world.player].value == 1)
 
@@ -436,11 +491,20 @@ def randomize_act_entrances(world: World):
             region_list.remove(region)
             region_list.append(region)
 
-    # We want to do these first as well, since they can be blocked from being shuffled onto freeroam
     for region in region_list.copy():
-        if region.name in chapter_finales or region.name == "Cheating the Race":
+        if region.name in chapter_finales:
             region_list.remove(region)
             region_list.append(region)
+
+    for region in region_list.copy():
+        if region.name in world.multiworld.ActPlando[world.player].keys():
+            if is_valid_plando(world, region.name):
+                region_list.remove(region)
+                region_list.append(region)
+            else:
+                print("Disallowing act plando for",
+                      world.multiworld.player_name[world.player],
+                      "-", region.name, ":", world.multiworld.ActPlando[world.player].get(region.name))
 
     # Reverse the list, so we can do what we want to do first
     region_list.reverse()
@@ -465,6 +529,9 @@ def randomize_act_entrances(world: World):
                and "Free Roam" not in act_entrances[region.name]:
                 continue
 
+            if region.name in world.multiworld.ActPlando[world.player].keys() and is_valid_plando(world, region.name):
+                has_guaranteed = True
+
             i = 0
 
         # Already mapped to something else
@@ -481,6 +548,9 @@ def randomize_act_entrances(world: World):
                 if candidate.name not in guaranteed_first_acts:
                     continue
 
+                if candidate.name in world.multiworld.ActPlando[world.player].values():
+                    continue
+
                 # Not completable without Umbrella
                 if world.multiworld.UmbrellaLogic[world.player].value > 0 \
                    and (candidate.name == "Heating Up Mafia Town" or candidate.name == "Queen Vanessa's Manor"):
@@ -493,6 +563,12 @@ def randomize_act_entrances(world: World):
 
                 candidate_list.append(candidate)
                 has_guaranteed = True
+                break
+
+            if region.name in world.multiworld.ActPlando[world.player].keys() and is_valid_plando(world, region.name):
+                candidate_list.clear()
+                candidate_list.append(
+                   world.multiworld.get_region(world.multiworld.ActPlando[world.player].get(region.name), world.player))
                 break
 
             # Already mapped onto something else
@@ -513,18 +589,11 @@ def randomize_act_entrances(world: World):
                    or region.name not in purple_time_rifts and candidate.name in purple_time_rifts:
                     continue
 
-            # Don't map Alpine to its own finale
-            if region.name == "The Illness has Spread" and candidate.name == "Alpine Free Roam":
+            if region.name in blacklisted_combos.keys() and candidate.name in blacklisted_combos[region.name]:
                 continue
 
-            # Ditto for Metro
-            if region.name == "Rush Hour" and candidate.name == "Nyakuza Free Roam":
-                continue
-
-            # CTR entrance and Tour aren't a finale, but have a fuck ton of unlock requirements
-            if world.multiworld.NoFreeRoamFinale[world.player].value > 0 and "Free Roam" in candidate.name:
-                if region.name in chapter_finales or region.name == "Cheating the Race" \
-                   or world.multiworld.EndGoal[world.player].value == 1 and region.name == "Time Rift - Tour":
+            if world.multiworld.FinaleShuffle[world.player].value > 0 and region.name in chapter_finales:
+                if candidate.name not in chapter_finales:
                     continue
 
             if region.name in rift_access_regions and candidate.name in rift_access_regions[region.name]:
@@ -532,8 +601,18 @@ def randomize_act_entrances(world: World):
 
             candidate_list.append(candidate)
 
-        candidate: Region = candidate_list[world.multiworld.random.randint(0, len(candidate_list)-1)]
+        candidate: Region
+        if len(candidate_list) > 0:
+            candidate = candidate_list[world.multiworld.random.randint(0, len(candidate_list)-1)]
+        else:
+            # plando can still break certain rules, so acts may not always end up shuffled.
+            for c in region_list:
+                if c not in shuffled_list:
+                    candidate = c
+                    break
+
         shuffled_list.append(candidate)
+        # print(region, candidate)
 
         # Vanilla
         if candidate.name == region.name:
@@ -588,21 +667,17 @@ def get_act_regions(world: World) -> typing.List[Region]:
 
 
 def is_act_blacklisted(world: World, name: str) -> bool:
+    plando: bool = name in world.multiworld.ActPlando[world.player].keys() \
+        or name in world.multiworld.ActPlando[world.player].values()
+
     if name == "The Finale":
-        return world.multiworld.EndGoal[world.player].value == 1
-
-    if name == "Alpine Free Roam":
-        return world.multiworld.VanillaAlpine[world.player].value > 0
-
-    if name == "The Illness has Spread":
-        return world.multiworld.VanillaAlpine[world.player].value == 2
-
-    if name == "Nyakuza Free Roam":
-        return world.multiworld.VanillaMetro[world.player].value > 0
+        return not plando and world.multiworld.EndGoal[world.player].value == 1
 
     if name == "Rush Hour":
-        return world.multiworld.EndGoal[world.player].value == 2 \
-               or world.multiworld.VanillaMetro[world.player].value == 2
+        return not plando and world.multiworld.EndGoal[world.player].value == 2
+
+    if name == "Time Rift - Tour":
+        return world.multiworld.ExcludeTour[world.player].value > 0
 
     return name in blacklisted_acts.values()
 

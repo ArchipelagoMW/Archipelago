@@ -291,7 +291,7 @@ def set_rules(world: World):
         if data.hit_requirement > 0:
             if data.hit_requirement == 1:
                 add_rule(location, lambda state: can_hit(state, world))
-            else:  # Can bypass with Dweller Mask (dweller bells)
+            elif data.hit_requirement == 2:  # Can bypass with Dweller Mask (dweller bells)
                 add_rule(location, lambda state: can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER))
 
     if get_difficulty(world) >= 1:

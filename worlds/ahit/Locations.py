@@ -65,6 +65,10 @@ def is_location_valid(world: World, location: str) -> bool:
     if location in shop_locations and location not in world.shop_locs:
         return False
 
+    data = location_table.get(location) or event_locs.get(location)
+    if data.region == "Time Rift - Tour" and world.multiworld.ExcludeTour[world.player].value > 0:
+        return False
+
     return True
 
 
