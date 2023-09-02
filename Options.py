@@ -899,7 +899,7 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
-class OptionsMetaProperty(abc.ABCMeta):
+class OptionsMetaProperty(type):
     def __new__(mcs,
                 name: str,
                 bases: typing.Tuple[type, ...],
