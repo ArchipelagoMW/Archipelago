@@ -185,12 +185,21 @@ def resolve_icon(icon_name: str):
 
 exes = [
     cx_Freeze.Executable(
-        script=f'{c.script_name}.py',
+        script=f"{c.script_name}.py",
         target_name=c.frozen_name + (".exe" if is_windows else ""),
         icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
+
+if is_windows:
+    # create a duplicate Launcher for Windows, which has a working stdout/stderr, for debugging and --help
+    c = next(component for component in components if component.script_name == "Launcher")
+    exes.append(cx_Freeze.Executable(
+        script=f"{c.script_name}.py",
+        target_name=f"{c.frozen_name}(DEBUG).exe",
+        icon=resolve_icon(c.icon),
+    ))
 
 extra_data = ["LICENSE", "data", "EnemizerCLI", "SNI"]
 extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []

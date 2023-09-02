@@ -7,10 +7,7 @@ if TYPE_CHECKING:
     from . import DOOM1993World
 
 
-def set_rules(doom_1993_world: "DOOM1993World"):
-    player = doom_1993_world.player
-    world = doom_1993_world.multiworld
-
+def set_episode1_rules(player, world):
     # Hangar (E1M1)
     set_rule(world.get_entrance("Hub -> Hangar (E1M1) Main", player), lambda state:
         state.has("Hangar (E1M1)", player, 1))
@@ -135,6 +132,8 @@ def set_rules(doom_1993_world: "DOOM1993World"):
     set_rule(world.get_entrance("Military Base (E1M9) Yellow -> Military Base (E1M9) Main", player), lambda state:
         state.has("Military Base (E1M9) - Yellow keycard", player, 1))
 
+
+def set_episode2_rules(player, world):
     # Deimos Anomaly (E2M1)
     set_rule(world.get_entrance("Hub -> Deimos Anomaly (E2M1) Main", player), lambda state:
         state.has("Deimos Anomaly (E2M1)", player, 1))
@@ -263,6 +262,8 @@ def set_rules(doom_1993_world: "DOOM1993World"):
     set_rule(world.get_entrance("Fortress of Mystery (E2M9) Yellow -> Fortress of Mystery (E2M9) Main", player), lambda state:
         state.has("Fortress of Mystery (E2M9) - Yellow skull key", player, 1))
 
+
+def set_episode3_rules(player, world):
     # Hell Keep (E3M1)
     set_rule(world.get_entrance("Hub -> Hell Keep (E3M1) Main", player), lambda state:
         state.has("Hell Keep (E3M1)", player, 1))
@@ -373,17 +374,17 @@ def set_rules(doom_1993_world: "DOOM1993World"):
         state.has("Plasma gun", player, 1)) and
        (state.has("Rocket launcher", player, 1) or
         state.has("BFG9000", player, 1)))
-    set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Red", player), lambda state:
-        state.has("Warrens (E3M9) - Red skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Blue", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Main -> Warrens (E3M9) Blue trigger", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
-    set_rule(world.get_entrance("Warrens (E3M9) Red -> Warrens (E3M9) Main", player), lambda state:
-        state.has("Warrens (E3M9) - Red skull key", player, 1))
     set_rule(world.get_entrance("Warrens (E3M9) Blue -> Warrens (E3M9) Main", player), lambda state:
         state.has("Warrens (E3M9) - Blue skull key", player, 1))
+    set_rule(world.get_entrance("Warrens (E3M9) Blue -> Warrens (E3M9) Red", player), lambda state:
+        state.has("Warrens (E3M9) - Red skull key", player, 1))
 
+
+def set_episode4_rules(player, world):
     # Hell Beneath (E4M1)
     set_rule(world.get_entrance("Hub -> Hell Beneath (E4M1) Main", player), lambda state:
         state.has("Hell Beneath (E4M1)", player, 1))
@@ -519,3 +520,16 @@ def set_rules(doom_1993_world: "DOOM1993World"):
     set_rule(world.get_entrance("Fear (E4M9) Yellow -> Fear (E4M9) Main", player), lambda state:
         state.has("Fear (E4M9) - Yellow skull key", player, 1))
 
+
+def set_rules(doom_1993_world: "DOOM1993World", included_episodes):
+    player = doom_1993_world.player
+    world = doom_1993_world.multiworld
+
+    if included_episodes[0]:
+        set_episode1_rules(player, world)
+    if included_episodes[1]:
+        set_episode2_rules(player, world)
+    if included_episodes[2]:
+        set_episode3_rules(player, world)
+    if included_episodes[3]:
+        set_episode4_rules(player, world)
