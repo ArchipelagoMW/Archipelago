@@ -65,7 +65,7 @@ class ExampleWorld(World):
 ### Option Checking
 Options are parsed by `Generate.py` before the worlds are created, and then the option classes are created shortly after
 world instantiation. These are created as attributes on the MultiWorld and can be accessed with
-`self.o.my_option_name`. This is the option class, which supports direct comparison methods to
+`self.options.my_option_name`. This is an instance of the option class, which supports direct comparison methods to
 relevant objects (like comparing a Toggle class to a `bool`). If you need to access the option result directly, this is
 the option class's `value` attribute. For our example above we can do a simple check:
 ```python
