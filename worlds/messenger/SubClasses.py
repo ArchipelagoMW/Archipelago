@@ -70,8 +70,7 @@ class MessengerShopLocation(MessengerLocation):
 
     def can_afford(self, state: CollectionState) -> bool:
         world = cast("MessengerWorld", state.multiworld.worlds[self.player])
-        cost = self.cost
-        can_afford = state.has("Shards", self.player, min(cost, world.total_shards))
+        can_afford = state.has("Shards", self.player, min(self.cost, world.total_shards))
         if "Figurine" in self.name:
             can_afford = state.has("Money Wrench", self.player) and can_afford\
                 and state.can_reach("Money Wrench", "Location", self.player)
