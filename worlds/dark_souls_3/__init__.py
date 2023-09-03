@@ -89,7 +89,7 @@ class DarkSouls3World(World):
 
     def create_regions(self):
         progressive_location_table = []
-        if self.multiworld.enable_progressive_locations[self.player].value:
+        if self.multiworld.enable_progressive_locations[self.player] or self.multiworld.enable_health_upgrade_locations[self.player]:
             progressive_location_table = [] + \
                 location_tables["Progressive Items 1"] + \
                 location_tables["Progressive Items 2"] + \
@@ -98,6 +98,10 @@ class DarkSouls3World(World):
 
             if self.multiworld.enable_dlc[self.player].value:
                 progressive_location_table += location_tables["Progressive Items DLC"]
+
+        # Filter to only health items if normal progressive locations aren't randomized
+        if self.multiworld.enable_health_upgrade_locations[self.player] and not self.multiworld.enable_progressive_locations[self.player]:
+            progressive_location_table = [location for location in progressive_location_table if location.category == DS3LocationCategory.HEALTH]
 
         # Create Vanilla Regions
         regions: Dict[str, Region] = {}
