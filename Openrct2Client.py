@@ -66,6 +66,7 @@ class OpenRCT2Socket:
                 reuse_port = None
                 if sys.platform in ["linux", "linux2"]:
                     reuse_port = True
+                print("Reuse Port:",reuse_port,sys.platform)
                 self.listener = socket.create_server(("127.0.0.1",self.gameport), reuse_port=reuse_port)
             try:
                 print("connectgame got listener:", self.listener)
@@ -83,10 +84,11 @@ class OpenRCT2Socket:
                 print('error connecting to game', e)
                 raise
 
-        self.game.setblocking(0)
+        # self.game.setblocking(0)
 
     
     def recv(self):
+        # print('Attempting to Receive', self.game, self)
         try:
             sock = self.game
             data = sock.recv(16384)
@@ -97,6 +99,9 @@ class OpenRCT2Socket:
             pass
         except BlockingIOError as e:
             pass
+        except Exception as e:
+            print("Error in recv", e)
+            raise
         return None
 
     
@@ -124,7 +129,7 @@ class OpenRCT2Socket:
     async def tick(self):
         data = None
         if not self.game:
-            self.connectgame()
+            await self.connectgame()
         
         try:
             data = self.recv()
@@ -132,7 +137,7 @@ class OpenRCT2Socket:
             print('error receiving from game', e)
             self.connectgame()
         
-        if data:
+        if True:
             await self.ctx.send_death('Some death message')
 
 
