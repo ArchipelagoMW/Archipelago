@@ -84,6 +84,23 @@ When playing a Synchronous game, if a player must leave early, they can use Arch
 releases their game, all the items in their game are sent out automatically, so other players can continue to play without
 worrying about if their items are in the absent player's games.
 
+Releasing is handled on a per-seed basis, so the specifics of releasing is subject to the settings decided on by the 
+seed generating player. 
+
+### Release System
+By default, the Archipelago website only releases games automatically when the game is completed. This requires the owner
+of the room that you are playing in to manually release you by typing `/release <Slot Name>` into the console on the 
+website.
+
+You are able to change the permissions of the release command upon generating your game. This can include a manual release
+of the game whenever you please, only allowing it after you complete your game, or disabling the release command entirely.
+
+In the event that you are able to manually release the game yourself, you can simply type `!release` into your Archipelago
+client, or if your game allows it, into the in-game text chat.
+
+You can learn more about the release/collect system and other commands at our 
+[Helpful Commands Guide](/tutorial/Archipelago/commands/en).
+
 ## What are some common terms I should know?
 
 Since randomizers and multi-world randomizers have been around for a while, there are quite a few common terms
