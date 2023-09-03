@@ -34,7 +34,7 @@ from worlds.LauncherComponents import SuffixIdentifier, components
 
 from .data import BASE_OFFSET, data
 from .options import Goal
-from .util import encode_pokemon_data, decode_pokemon_data
+from .util import pokemon_data_to_json, json_to_pokemon_data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -244,7 +244,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
                         # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
                         # and mark that the game is waiting on receiving a trade
-                        Utils.async_start(self.wonder_trade_send(ctx, decode_pokemon_data(wonder_trade_pokemon_data)))
+                        Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
                         await bizhawk.write(ctx.bizhawk_ctx, [
                             (save_block_address + 0x377C, bytes(0x50), "System Bus"),
                             (save_block_address + 0x37CC, [1], "System Bus"),
@@ -258,7 +258,7 @@ class PokemonEmeraldClient(BizHawkClient):
                             received_trade = await self.wonder_trade_receive(ctx)
                             if received_trade is not None:
                                 await bizhawk.write(ctx.bizhawk_ctx, [
-                                    (save_block_address + 0x377C, encode_pokemon_data(received_trade), "System Bus"),
+                                    (save_block_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
                                 ])
 
             game_clear = False

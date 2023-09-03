@@ -201,14 +201,14 @@ _substruct_order_maps = [
 def _encrypt_or_decrypt_substruct(substruct_data: Iterable[int], key: int):
     modified_data = bytearray()
     for i in range(int(len(substruct_data) / 4)):
-        modified_data.extend((int.from_bytes(substruct_data[i * 4 : (i + 1) * 4], 'little') ^ key).to_bytes(4, "little"))
+        modified_data.extend((int.from_bytes(substruct_data[i * 4 : (i + 1) * 4], "little") ^ key).to_bytes(4, "little"))
 
     return modified_data
 
 
-def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
-    personality = int.from_bytes(pokemon_data[0:4], 'little')
-    tid = int.from_bytes(pokemon_data[4:8], 'little')
+def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
+    personality = int.from_bytes(pokemon_data[0:4], "little")
+    tid = int.from_bytes(pokemon_data[4:8], "little")
 
     substruct_order = _substruct_order_maps[personality % 24]
     substructs = []
@@ -217,17 +217,16 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
 
     decrypted_substructs = [_encrypt_or_decrypt_substruct(substruct, personality ^ tid) for substruct in substructs]
 
-    iv_ability_info = int.from_bytes(decrypted_substructs[3][4:8], 'little')
-    met_info = int.from_bytes(decrypted_substructs[3][2:4], 'little')
+    iv_ability_info = int.from_bytes(decrypted_substructs[3][4:8], "little")
+    met_info = int.from_bytes(decrypted_substructs[3][2:4], "little")
 
-    held_item = int.from_bytes(decrypted_substructs[0][2:4], 'little')
+    held_item = int.from_bytes(decrypted_substructs[0][2:4], "little")
 
-    return json.dumps({
+    json_object = {
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
-        "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], 'little')].national_dex_number,
-        "item": None if held_item == 0 else item_names[held_item],
-        "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
+        "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], "little")].national_dex_number,
+        "experience": int.from_bytes(decrypted_substructs[0][4:8], "little"),
         "ability": iv_ability_info >> 31,
         "ivs": [(iv_ability_info >> (i * 5)) & 0x1F for i in range(6)],
         "evs": list(decrypted_substructs[2][0:6]),
@@ -239,7 +238,7 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
         "ball": (met_info & 0b0111100000000000) >> 11,
         "moves": [
             [
-                move_names[int.from_bytes(decrypted_substructs[1][i * 2 : (i + 1) * 2], 'little')],
+                move_names[int.from_bytes(decrypted_substructs[1][i * 2 : (i + 1) * 2], "little")],
                 decrypted_substructs[1][8 + i],
                 (decrypted_substructs[0][8] & (0b00000011 << (i * 2))) >> (i * 2)
             ] for i in range(4)
@@ -249,17 +248,23 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
             "id": tid,
             "female": (met_info & 0b1000000000000000) != 0,
         }
-    })
+    }
+
+    if held_item != 0:
+        json_object["item"] = item_names[held_item]
 
 
-def encode_pokemon_data(json_str: str) -> bytearray:
-    pokemon_json = json.loads(json_str)
+    return json.dumps(json_object)
+
+
+def json_to_pokemon_data(json_str: str) -> bytearray:
+    pokemon_json: Dict[str, Any] = json.loads(json_str)
+
     # Default values to cover for optional or accidentally missed fields
     default_pokemon = {
         "nickname": "A",
         "personality": 0,
         "species": 1,
-        "item": "NUGGET",
         "experience": 0,
         "ability": 0,
         "ivs": [0, 0, 0, 0, 0, 0],
@@ -279,7 +284,7 @@ def encode_pokemon_data(json_str: str) -> bytearray:
         "female": False
     }
 
-    pokemon_json = {**default_pokemon, **{k: v for k, v in pokemon_json.items() if v is not None}}
+    pokemon_json = {**default_pokemon, **{k: v for k, v in pokemon_json.items()}}
     pokemon_json["trainer"] = {**default_trainer, **pokemon_json["trainer"]}
 
     # Cutting string lengths to Emerald sizes
@@ -289,14 +294,13 @@ def encode_pokemon_data(json_str: str) -> bytearray:
     # Handle data from incompatible games
     if pokemon_json["species"] > 387:
         pokemon_json["species"] = 201 # Unown
-    if ("ITEM_" + pokemon_json["item"]) not in data.constants:
+    if "item" in pokemon_json and ("ITEM_" + pokemon_json["item"]) not in data.constants:
         pokemon_json["item"] = "NUGGET"
     if pokemon_json["ball"] > 12:
         pokemon_json["ball"] = 4 # Pokeball
     if pokemon_json["game"] > 5 and pokemon_json["game"] != 15:
-        pokemon_json["game"] = 3 # Emerald
+        pokemon_json["game"] = 0 # Unknown
         pokemon_json["location_met"] = 0 # Littleroot
-
 
     substructs = [bytearray([0 for _ in range(12)]) for _ in range(4)]
 

@@ -15,7 +15,7 @@
       "maximum": 4294967295
     },
     "species": {
-      "description": "The national dex id of the pokemon species",
+      "description": "The national dex number of the pokemon species",
       "type": "integer",
       "minimum": 0
     },
@@ -29,7 +29,7 @@
       "minimum": 0
     },
     "ability": {
-      "description": "The value of the ability byte",
+      "description": "The value of the ability bit (hidden abilities should be a separate bit)",
       "type": "integer",
       "minimum": 0,
       "maximum": 1
@@ -57,7 +57,7 @@
       "maxItems": 6
     },
     "conditions": {
-      "description": "The 6 condition or contest stats of the pokemon",
+      "description": "The 6 condition (contest) stats of the pokemon",
       "type": "array",
       "items": {
         "type": "number",
@@ -75,7 +75,7 @@
     "game": {
       "description": "The id of the game the pokemon originated in",
       "type": "integer",
-      "minimum": 1
+      "minimum": 0
     },
     "location_met": {
       "description": "The location id for where the pokemon was met",
