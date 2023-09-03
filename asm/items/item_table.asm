@@ -8,7 +8,7 @@
 
 
 ItemBit_CD equ 5
-ItemBit_Junk equ 6
+ItemBit_Junk equ 7
 
 .expfunc ItemID_Jewel(passage, quadrant), (passage << 2) | quadrant
 .expfunc ItemID_CD(passage, level), ItemBit_CD | (passage << 2) | level

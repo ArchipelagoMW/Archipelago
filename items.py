@@ -14,7 +14,7 @@ from .types import Box, ItemFlag, ItemType, Passage
 # Jewel pieces:     | 0   0   0 |  passage  | qdrnt |
 # CD:               | 0   0   1 |  passage  | level |
 #
-# Junk items:       | 0   1   0   0 |     type      |
+# Junk items:       | 1   0   0   0 |     type      |
 # AP item:          | 1   1   1   1   0   0   0   0 |
 #
 # For jewel pieces:
@@ -156,10 +156,10 @@ item_table = {
     'The Errand CD':                    ItemData(ItemType.CD,    (Passage.SAPPHIRE, 1),             IC.filler),
     'You and Your Shoes CD':            ItemData(ItemType.CD,    (Passage.SAPPHIRE, 2),             IC.filler),
     'Mr. Ether & Planaria CD':          ItemData(ItemType.CD,    (Passage.SAPPHIRE, 3),             IC.filler),
-    'Full Health Item':                 ItemData(ItemType.ITEM,  0x40,                              IC.useful),
-    'Wario Form Trap':                  ItemData(ItemType.ITEM,  0x41,                              IC.trap),
-    'Heart':                            ItemData(ItemType.ITEM,  0x42,                              IC.filler),
-    'Lightning Trap':                   ItemData(ItemType.ITEM,  0x43,                              IC.trap),
+    'Full Health Item':                 ItemData(ItemType.ITEM,  0x80,                              IC.useful),
+    'Wario Form Trap':                  ItemData(ItemType.ITEM,  0x81,                              IC.trap),
+    'Heart':                            ItemData(ItemType.ITEM,  0x82,                              IC.filler),
+    'Lightning Trap':                   ItemData(ItemType.ITEM,  0x83,                              IC.trap),
     'Entry Passage Clear':              ItemData(ItemType.EVENT, None,                              IC.progression),
     'Emerald Passage Clear':            ItemData(ItemType.EVENT, None,                              IC.progression),
     'Ruby Passage Clear':               ItemData(ItemType.EVENT, None,                              IC.progression),
