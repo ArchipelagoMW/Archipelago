@@ -81,7 +81,7 @@ class ItemNames:
     Karamja = "Area: Karamja"
     Crandor = "Area: Crandor"
     Corsair_Cove = "Area: Corsair Cove"
-    Wilderness = "Area: The Wilderness"
+    Wilderness = "Area: Wilderness"
     Progressive_Armor = "Progressive Armor"
     Progressive_Weapons = "Progressive Weapons"
     Progressive_Tools = "Progressive Tools"

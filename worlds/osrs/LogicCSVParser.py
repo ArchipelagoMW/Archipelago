@@ -3,6 +3,11 @@ import typing
 
 from BaseClasses import ItemClassification
 
+location_rows = []
+region_rows = []
+resource_rows = []
+item_rows = []
+
 
 class ResourceRow(typing.NamedTuple):
     name: str
@@ -15,11 +20,16 @@ class RegionRow(typing.NamedTuple):
     resources: typing.List[str]
 
 
+class SkillRequirement(typing.NamedTuple):
+    skill: str
+    level: int
+
+
 class LocationRow(typing.NamedTuple):
     name: str
     category: str
     regions: typing.List[str]
-    skills: typing.List[str]
+    skills: typing.List[SkillRequirement]
     items: typing.List[str]
     qp: int
 
@@ -31,18 +41,27 @@ class ItemRow(typing.NamedTuple):
 
 
 def load_location_csv() -> typing.List[LocationRow]:
-    location_rows = []
-    with open("LogicCSV/OSRS AP Tasks - Locations.csv", newline='') as locations_csv:
+    if len(location_rows) > 0:
+        return location_rows
+    with open("./worlds/osrs/LogicCSV/OSRS AP Tasks - Locations.csv", newline='') as locations_csv:
         locations_reader = csv.reader(locations_csv, delimiter=',', quotechar='"')
         for row in locations_reader:
+            skill_strings = row[3].split(", ")
+            skill_reqs = []
+            if len(skill_strings) > 0:
+                split_skills = [skill.split(" ") for skill in skill_strings if skill != ""]
+                if len(split_skills) > 0:
+                    skill_reqs = [SkillRequirement(split[0], int(split[1])) for split in split_skills]
             location_rows.append(
-                LocationRow(row[0], row[1], row[2].split(", "), row[3].split(", "), row[4].split(", "), int(row[5])))
+                LocationRow(row[0], row[1], row[2].split(", "), skill_reqs, row[4].split(", "),
+                            int(row[5]) if row[5] != "" else 0))
         return location_rows
 
 
 def load_region_csv() -> typing.List[RegionRow]:
-    region_rows = []
-    with open("LogicCSV/OSRS AP Tasks - Regions.csv", newline='') as regions_csv:
+    if len(region_rows) > 0:
+        return region_rows
+    with open("./worlds/osrs/LogicCSV/OSRS AP Tasks - Regions.csv", newline='') as regions_csv:
         regions_reader = csv.reader(regions_csv, delimiter=',', quotechar='"')
         for row in regions_reader:
             region_rows.append(RegionRow(row[0], row[1], row[2].split(", "), row[3].split(", ")))
@@ -50,8 +69,9 @@ def load_region_csv() -> typing.List[RegionRow]:
 
 
 def load_resource_csv() -> typing.List[ResourceRow]:
-    resource_rows = []
-    with open("LogicCSV/OSRS AP Tasks - Resources.csv", newline='') as resources_csv:
+    if len(resource_rows) > 0:
+        return resource_rows
+    with open("./worlds/osrs/LogicCSV/OSRS AP Tasks - Resources.csv", newline='') as resources_csv:
         resources_reader = csv.reader(resources_csv, delimiter=',', quotechar='"')
         for row in resources_reader:
             resource_rows.append(ResourceRow(row[0]))
@@ -59,8 +79,9 @@ def load_resource_csv() -> typing.List[ResourceRow]:
 
 
 def load_item_csv() -> typing.List[ItemRow]:
-    item_rows = []
-    with open("LogicCSV/OSRS AP Tasks - Items.csv", newline='') as items_csv:
+    if len(item_rows) > 0:
+        return item_rows
+    with open("./worlds/osrs/LogicCSV/OSRS AP Tasks - Items.csv", newline='') as items_csv:
         items_reader = csv.reader(items_csv, delimiter=',', quotechar='"')
         for row in items_reader:
             progression = ItemClassification.filler

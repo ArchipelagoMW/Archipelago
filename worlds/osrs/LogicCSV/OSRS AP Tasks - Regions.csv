@@ -1,7 +1,7 @@
 Lumbridge,Area: Lumbridge,"Lumbridge Farms East, Lumbridge Farms West, Al Kharid, Lumbridge Swamp, HAM Hideout, South of Varrock, Barbarian Village","Mind Runes, Spinning Wheel, Furnace, Chisel, Bronze Anvil, Fly Fishing Spot, Bowl, Cake Tin, Oak Tree, Willow Tree, Canoe Tree, Goblin, Imps"
 Lumbridge Swamp,Area: Lumbridge Swamp,"Lumbridge, HAM Hideout","Bronze Ores, Coal Ore, Shrimp Spot, Meat, Goblin, Imps"
 HAM Hideout,Area: HAM Hideout,"Lumbridge Farms West, Lumbridge, Lumbridge Swamp, Draynor Village",Goblin
-Lumbridge Farms West,Area: Lumbridge Farms,"South of Varrock, Lumbridge","Sheep, Meat, heat, Windmill, Egg, Milk, Willow Tree, Imps"
+Lumbridge Farms West,Area: Lumbridge Farms,"South of Varrock, Lumbridge","Sheep, Meat, Wheat, Windmill, Egg, Milk, Willow Tree, Imps"
 Lumbridge Farms East,Area: Lumbridge Farms,"Sourhog's Lair, HAM Hideout, Draynor Village","Meat, Egg, Milk, Willow Tree, Goblin, Imps"
 Sourhog's Lair,Area: South of Varrock,"Lumbridge Farms East, Draynor Manor Outskirts",
 South of Varrock,Area: South of Varrock,"West Varrock, Central Varrock, East Varrock, Lumbridge Farms East, Lumbridge, Barbarian Village, Edgeville","Sheep, Bronze Ores, Iron Ore, Silver Ore, Redberry Bush, Meat, Wheat, Oak Tree, Willow Tree, Canoe Tree, Guard, Imps, Clay Ore"
@@ -23,7 +23,7 @@ Camdozaal,Area: Ice Mountain,Ice Mountain,Clay Ore
 Monastery,Area: Monastery,"Wilderness, Dwarven Mountain Pass, Dwarven Mines, Ice Mountain",Sheep
 Falador,Area: Falador,"Dwarven Mountain Pass, Falador Farms, Dwarven Mines","Furnace, Chisel, Bowl, Cake Tin, Oak Tree, Guard, Imps"
 Falador Farms,Area: Falador Farms,"Falador, Falador East Outskirts, Draynor Village, Port Sarim, Rimmington, Crafting Guild Outskirts","Spinning Wheel, Meat, Egg, Milk, Oak Tree, Imps"
-Port Sarim,Area: Port Sarim,"Falador Farms, Mudskipper Point, Rimmington, Karamja Docks, Crandor","ind Runes, Shrimp Spot, Meat, Cheese, Tomato, Oak Tree, Willow Tree, Goblin"
+Port Sarim,Area: Port Sarim,"Falador Farms, Mudskipper Point, Rimmington, Karamja Docks, Crandor","Mind Runes, Shrimp Spot, Meat, Cheese, Tomato, Oak Tree, Willow Tree, Goblin"
 Karamja Docks,Area: Mudskipper Point,"Port Sarim, Karamja",
 Mudskipper Point,Area: Mudskipper Point,"Rimmington, Port Sarim","Anvil, Ice Giant, Nature Runes, Law Runes"
 Karamja,Area: Karamja,"Karamja Docks, Crandor","Gold Ore, Lobster Spot, Bowl, Cake Tin, Deadly Red Spider, Imps"
