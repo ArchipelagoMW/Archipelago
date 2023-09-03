@@ -54,37 +54,47 @@ class OpenRCT2Socket:
             await asyncio.sleep(0.01)
 
 
-    async def connectgame(self):
+    def disconnectgame(self):
         if self.game:
             self.game.shutdown(socket.SHUT_RDWR)
             self.game.close()
         self.game = None
-        while True:
-            await asyncio.sleep(1)
+    
+    async def connectgame(self):
+        #self.disconnectgame()
+        #while True:
+        if not self.game:
+            await asyncio.sleep(0.5)
             if not self.listener:
                 print('listening on port', self.gameport)
                 reuse_port = None
                 if sys.platform in ["linux", "linux2"]:
                     reuse_port = True
-                print("Reuse Port:",reuse_port,sys.platform)
+                #print("Reuse Port:",reuse_port,sys.platform)
                 self.listener = socket.create_server(("127.0.0.1",self.gameport), reuse_port=reuse_port)
-            try:
                 print("connectgame got listener:", self.listener)
-                #self.listener.settimeout(5)
-                (self.game, addr) = self.listener.accept()
-                print("Connected to game at", self.game, addr)
-                break
+            try:
+                #self.listener.settimeout(0.01)
+                self.listener.setblocking(0)
+                (newgame, addr) = self.listener.accept()
+                if newgame:
+                    # maybe we should do a recv before disconnecting?
+                    self.disconnectgame()
+                    self.game = newgame
+                    print("Connected to game at", self.game, addr)
+                    self.game.setblocking(0)
+                    #break
             except socket.timeout as e:
-                print('error connecting to game', e)
+                #print('error connecting to game', e)
+                pass
             except BlockingIOError as e:
-                print('error connecting to game', e)
+                #print('error connecting to game', e)
+                pass
             except Exception as e:
                 self.listener.close()
                 print(traceback.format_exc())
                 print('error connecting to game', e)
                 raise
-
-        # self.game.setblocking(0)
 
     
     def recv(self):
@@ -94,6 +104,7 @@ class OpenRCT2Socket:
             data = sock.recv(16384)
             if data:
                 print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
+                self.disconnectgame()
             return data
         except socket.timeout as e:
             pass
@@ -116,29 +127,28 @@ class OpenRCT2Socket:
         except BlockingIOError as e:
             print(e)
 
-    async def sendobj(self, obj):
+    def sendobj(self, obj):
+        asyncio.run(self.connectgame())
         data = json.dumps(obj)
         data = data.encode()
         try:
             self._send(data)
         except Exception as e:
             print('error sending to game', e)
-            self.connectgame()
+            self.disconnectgame()
+            asyncio.run(self.connectgame())
             self._send(data)
 
     async def tick(self):
-        data = None
-        if not self.game:
-            await self.connectgame()
-        
+        await self.connectgame()
         try:
             data = self.recv()
+            if data:
+                await self.ctx.send_death('Some death message')
         except Exception as e:
             print('error receiving from game', e)
-            self.connectgame()
+            #self.connectgame()
         
-        if True:
-            await self.ctx.send_death('Some death message')
 
 
 
