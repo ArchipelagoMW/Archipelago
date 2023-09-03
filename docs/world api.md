@@ -395,6 +395,7 @@ class MyGameWorld(World):
     game = "My Game"  # name of the game/world
     options_dataclass = MyGameOptions  # options the player can set
     options: MyGameOptions  # typing hints for option results
+    settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
     # ID of first item and location, could be hard-coded but code may be easier
@@ -682,7 +683,7 @@ def generate_output(self, output_directory: str):
         "seed": self.multiworld.seed_name,  # to verify the server's multiworld
         "slot": self.multiworld.player_name[self.player],  # to connect to server
         "items": {location.name: location.item.name
-        if location.item.player == self.player else "Remote"
+                  if location.item.player == self.player else "Remote"
                   for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
