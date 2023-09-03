@@ -36,7 +36,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_savepath(self, directory: str):
         """Redirect to proper save data folder. (Use before connecting!)"""
         if isinstance(self.ctx, UndertaleContext):
-            UndertaleContext.save_game_folder = directory
+            self.ctx.save_game_folder = directory
             self.output("Changed to the following directory: " + directory)
 
     @mark_raw
