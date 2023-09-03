@@ -202,11 +202,15 @@ class MultiWorld():
         self.player_types[new_id] = NetUtils.SlotType.group
         self._region_cache[new_id] = {}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
+        # TODO - remove this loop once all worlds use options dataclasses
         for option_key, option in world_type.options_dataclass.type_hints.items():
             getattr(self, option_key)[new_id] = option(option.default)
 
         self.worlds[new_id] = world_type(self, new_id)
         self.worlds[new_id].collect_item = classmethod(AutoWorld.World.collect_item).__get__(self.worlds[new_id])
+        self.worlds[new_id].options = world_type.options_dataclass(**{
+            option_key: option(option.default) for option_key, option in world_type.options_dataclass.type_hints.items()
+        })
         self.player_name[new_id] = name
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
