@@ -1,6 +1,4 @@
-from typing import Any
-
-from .Options import *
+from typing import Any, Dict
 
 rl_option_presets: Dict[str, Dict[str, Any]] = {
     "All Random": {
