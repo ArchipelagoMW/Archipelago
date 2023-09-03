@@ -6,7 +6,7 @@ import os
 import asyncio
 import json
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table
+from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table
 from .Names import ItemName
 from .WorldLocations import *
 
@@ -21,6 +21,10 @@ class KH2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
+        self.goofy_ability_to_slot = dict()
+        self.donald_ability_to_slot = dict()
+        self.all_weapon_location_id = None
+        self.sora_ability_to_slot = dict()
         self.kh2_seed_save = None
         self.kh2_local_items = None
         self.growthlevel = None
@@ -32,7 +36,8 @@ class KH2Context(CommonContext):
         self.kh2_item_name_to_id = None
         self.lookup_id_to_item = None
         self.lookup_id_to_location = None
-
+        self.sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
+                                  dic.items()}
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
         self.sending = []
@@ -73,6 +78,11 @@ class KH2Context(CommonContext):
                     ItemName.ItemSlotUp:      0,
                 },
             },
+        }
+        self.front_of_inventory = {
+            "Sora":   0x2546,
+            "Donald": 0x2658,
+            "Goofy":  0x276A,
         }
         self.kh2seedname = None
         self.kh2slotdata = None
@@ -253,19 +263,22 @@ class KH2Context(CommonContext):
         if cmd in {"Connected"}:
             asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
             self.kh2slotdata = args['slot_data']
-            #self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
+            # self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
             self.locations_checked = set(args["checked_locations"])
 
         if cmd in {"ReceivedItems"}:
+            # 0x2546
+            # 0x2658
+            # 0x276A
             start_index = args["index"]
             if start_index == 0:
                 self.kh2_seed_save_cache = {
                     "itemIndex":  -1,
                     # back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
-                    "SoraInvo":   [0x25D8, 0x2546],
-                    "DonaldInvo": [0x26F4, 0x2658],
-                    "GoofyInvo":  [0x2808, 0x276A],
+                    "SoraInvo":   [0x25D8],
+                    "DonaldInvo": [0x26F4],
+                    "GoofyInvo":  [0x2808],
                     "AmountInvo": {
                         "Ability":      {},
                         "Amount":       {
@@ -296,24 +309,14 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-                #if self.kh2_loc_name_to_id:
-                #    for location in self.checked_locations:
-                #        if location in self.kh2_local_items:
-                #            item = self.kh2slotdata["LocalItems"][str(location)]
-                #            asyncio.create_task(self.give_item(item, "LocalItems"))
             if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
-                    asyncio.create_task(self.give_item(item.item))
+                    asyncio.create_task(self.give_item(item.item, item.location))
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
-                # doing a list comprehension for getting the items then for loop for task might be better.
-                #for location in args["checked_locations"]:
-                #    if location in self.kh2_local_items:
-                #        item = self.kh2slotdata["LocalItems"][str(location)]
-                #        asyncio.create_task(self.give_item(item, "LocalItems"))
                 self.locations_checked |= new_locations
 
         if cmd in {"DataPackage"}:
@@ -323,10 +326,41 @@ class KH2Context(CommonContext):
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            #for location in self.checked_locations:
-            #    if location in self.kh2_local_items:
-            #        item = self.kh2slotdata["LocalItems"][str(location)]
-            #        asyncio.create_task(self.give_item(item, "LocalItems"))
+            if "keyblade_abilities" in self.kh2slotdata.keys():
+                sora_ability_dict = self.kh2slotdata["keyblade_abilities"]
+                # sora ability to slot
+                # itemid:[slots that are available for that item]
+                for k, v in sora_ability_dict.items():
+                    if v >= 1:
+                        if k not in self.sora_ability_to_slot.keys():
+                            self.sora_ability_to_slot[k] = []
+                        for _ in range(sora_ability_dict[k]):
+                            self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
+                            self.kh2_seed_save_cache["SoraInvo"][0] -= 2
+                donald_ability_dict = self.kh2slotdata["staff_abilities"]
+                for k, v in donald_ability_dict.items():
+                    if v >= 1:
+                        if k not in self.donald_ability_to_slot.keys():
+                            self.donald_ability_to_slot[k] = []
+                        for _ in range(donald_ability_dict[k]):
+                            self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
+                            self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
+                goofy_ability_dict = self.kh2slotdata["shield_abilities"]
+                for k, v in goofy_ability_dict.items():
+                    if v >= 1:
+                        if k not in self.goofy_ability_to_slot.keys():
+                            self.goofy_ability_to_slot[k] = []
+                        for _ in range(goofy_ability_dict[k]):
+                            self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
+                            self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+
+            all_weapon_location_id = []
+            all_weapon_slots = [weapon_slot for weapon_slot in exclusion_table["WeaponSlots"].keys()]
+            for weapon_location in all_weapon_slots:
+                all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
+            for location_name in [LocationName.KingdomKeySlot, LocationName.KnightsShield, LocationName.MagesStaff]:
+                all_weapon_location_id.append(self.kh2_loc_name_to_id[location_name])
+            self.all_weapon_location_id = set(all_weapon_location_id)
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 logger.info("You are now auto-tracking")
@@ -335,7 +369,7 @@ class KH2Context(CommonContext):
             except Exception as e:
                 if self.kh2connected:
                     self.kh2connected = False
-                logger.info("line 400")
+                logger.info("Game is not open.")
             self.serverconneced = True
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
@@ -444,22 +478,24 @@ class KH2Context(CommonContext):
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
 
-    async def give_item(self, item, AbilityOrder="BackOf"):
+    async def give_item(self, item, location):
         try:
             # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites 
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
             # itemcode = self.kh2_item_name_to_id[itemname]
             if itemdata.ability:
+                if location in self.all_weapon_location_id:
+                    return
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
                     self.kh2_seed_save_cache["AmountInvo"]["Growth"][itemname] += 1
                     return
-                if AbilityOrder == "FrontOf":
-                    back_or_front = 1
-                    twilight_zone = -2
-                else:
-                    back_or_front = 0
-                    twilight_zone = 2
+                # if AbilityOrder == "FrontOf":
+                #    back_or_front = 1
+                #    twilight_zone = -2
+                # else:
+                #    back_or_front = 0
+                #    twilight_zone = 2
 
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
@@ -467,18 +503,21 @@ class KH2Context(CommonContext):
 
                 if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
-                    if itemname in self.sora_ability_set:
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(
-                                self.kh2_seed_save_cache["SoraInvo"][back_or_front])
-                        self.kh2_seed_save_cache["SoraInvo"][back_or_front] -= twilight_zone
-                    elif itemname in self.donald_ability_set:
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(
-                                self.kh2_seed_save_cache["DonaldInvo"][back_or_front])
-                        self.kh2_seed_save_cache["DonaldInvo"][back_or_front] -= twilight_zone
-                    else:
-                        self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(
-                                self.kh2_seed_save_cache["GoofyInvo"][back_or_front])
-                        self.kh2_seed_save_cache["GoofyInvo"][back_or_front] -= twilight_zone
+                    if itemname in self.sora_ability_set and itemname in self.sora_ability_to_slot.keys():
+                        if len(self.sora_ability_to_slot[itemname]) > 0:
+                            ability_slot = self.sora_ability_to_slot[itemname][0]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.sora_ability_to_slot[itemname].remove(ability_slot)
+                    elif itemname in self.donald_ability_set and itemname in self.donald_ability_to_slot.keys():
+                        if len(self.donald_ability_to_slot[itemname]) > 0:
+                            ability_slot = self.donald_ability_to_slot[itemname][0]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.donald_ability_to_slot[itemname].remove(ability_slot)
+                    elif itemname in self.goofy_ability_set and itemname in self.goofy_ability_to_slot.keys():
+                        if len(self.goofy_ability_to_slot[itemname]) > 0:
+                            ability_slot = self.goofy_ability_to_slot[itemname][0]
+                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
+                            self.goofy_ability_to_slot[itemname].remove(ability_slot)
 
             elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
                 # if memaddr is in a bitmask location in memory
@@ -630,10 +669,9 @@ class KH2Context(CommonContext):
                             self.kh2_write_short(self.Save + slot, item_data.memaddr)
             # removes the duped ability if client gave faster than the game.
 
-            for charInvo in {"SoraInvo", "DonaldInvo", "GoofyInvo"}:
-                if self.kh2_read_short(self.Save + self.kh2_seed_save_cache[charInvo][1]) != 0 and \
-                        self.kh2_seed_save_cache[charInvo][1] + 2 < self.kh2_seed_save_cache[charInvo][0]:
-                    self.kh2_write_short(self.Save + self.kh2_seed_save_cache[charInvo][1], 0)
+            for charInvo in {"Sora", "Donald", "Goofy"}:
+                if self.kh2_read_short(self.Save + self.front_of_inventory[charInvo]) != 0:
+                    self.kh2_write_short(self.Save + self.front_of_inventory[charInvo], 0)
 
             # remove the dummy level 1 growths if they are in these invo slots.
             for inventorySlot in {0x25CE, 0x25D0, 0x25D2, 0x25D4, 0x25D6, 0x25D8}:
@@ -693,7 +731,7 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0xAB8C7B) == 0:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0x741320) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
@@ -704,7 +742,7 @@ class KH2Context(CommonContext):
                 # if slot1 has 5 drive gauge and goa lost illusion is checked and they are not in a cutscene
                 if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
                         and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
-                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10,8}:
+                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             if self.generator_version.build > 1 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.2

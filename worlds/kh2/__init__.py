@@ -16,12 +16,12 @@ from .Rules import *
 
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["JaredWeakStrike"]
+            "Multiworld Setup Guide",
+            "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["JaredWeakStrike"]
     )]
 
 
@@ -69,6 +69,8 @@ class KH2World(World):
         # random_super_boss_list:List[str)
         # growth_list:List[str)
         # total_location:int
+        self.goofy_ability_dict = None
+        self.donald_ability_dict = None
         self.slot_data_duping = set()
         self.random_super_boss_list = list()
         self.growth_list = list()
@@ -77,62 +79,31 @@ class KH2World(World):
             self.growth_list.extend(Movement_Table.keys())
 
     def fill_slot_data(self) -> dict:
-        # localItems filling done here instead of OpenKH for the unit test.
-        # for values in CheckDupingItems.values():
-        #    if isinstance(values, set):
-        #        self.slot_data_duping = self.slot_data_duping.union(values)
-        #    else:
-        #        for inner_values in values.values():
-        #            self.slot_data_duping = self.slot_data_duping.union(inner_values)
-        # self.local_items = {location.address: self.item_name_to_id[location.item.name]
-        #                    for location in self.multiworld.get_filled_locations(self.player)
-        #                    if location.item.player == self.player
-        #                    and location.item.name in self.slot_data_duping
-        #                    and location.name not in all_weapon_slot}
-        # legit all I have to do is check if the location is the location of a weapon slot
-        # will still need to keep track of what abilites are on the weapons to calculate the static ability order
-        # sora_ability_dict = {k: v.quantity for dic in [SupportAbility_Table, ActionAbility_Table] for k, v in
-        #                     dic.items()}
-        value_counter = 0
-        for k, v in self.sora_ability_dict.items():
-            for _ in range(v):
-                value_counter += 1
         for ability in self.slot_data_sora_weapon:
             if ability in self.sora_ability_dict.keys():
                 if self.sora_ability_dict[ability] >= 1:
                     self.sora_ability_dict[ability] -= 1
-        sora_back_of_invo = 0x25D8
-        # front of invo =0x2546
-        # 0x24F0+0x54 +0x2 because of no exp
-        # 0x2548= no exp
-        # 0x254A = buffer slot for new abilites
-        # 0x25D8 already accounts for growth
-        # so we got 25D8 through 254C
-        # we got 70 slots
-        sora_ability_to_slot = dict()
-        for k, v in self.sora_ability_dict.items():
-            if v >= 1:
-                item_id=self.item_name_to_id[k]
-                if item_id not in sora_ability_to_slot.keys():
-                    sora_ability_to_slot[item_id] = []
-                for _ in range(self.sora_ability_dict[k]):
-                    sora_ability_to_slot[item_id].append(sora_back_of_invo)
-                    sora_back_of_invo -= 2
-        print(sora_ability_to_slot)
-        # print(len(sora_ability_to_slot))
+        self.donald_ability_dict = {k: v.quantity for k, v in DonaldAbility_Table.items()}
+        for ability in self.slot_data_donald_weapon:
+            if ability in self.donald_ability_dict.keys():
+                if self.donald_ability_dict[ability] >= 1:
+                    self.donald_ability_dict[ability] -= 1
+        self.goofy_ability_dict = {k: v.quantity for k, v in GoofyAbility_Table.items()}
+        for ability in self.slot_data_goofy_weapon:
+            if ability in self.goofy_ability_dict.keys():
+                if self.goofy_ability_dict[ability] >= 1:
+                    self.goofy_ability_dict[ability] -= 1
 
-        # sora_ability_list = [item_name for k, v in SupportAbility_Table.items()
-        #                     if k in self.slot_data_sora_weapon]
         return {
-            "hitlist": [],
-            "Goal": self.multiworld.Goal[self.player].value,
-            "FinalXemnas": self.multiworld.FinalXemnas[self.player].value,
-            "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
-            "BountyRequired": self.multiworld.BountyRequired[self.player].value,
+            "hitlist":                [],
+            "Goal":                   self.multiworld.Goal[self.player].value,
+            "FinalXemnas":            self.multiworld.FinalXemnas[self.player].value,
+            "LuckyEmblemsRequired":   self.multiworld.LuckyEmblemsRequired[self.player].value,
+            "BountyRequired":         self.multiworld.BountyRequired[self.player].value,
             "PoptrackerVersionCheck": 4.2,
-            "keyblade_abilities": self.sora_ability_dict,
-            "staff_abilities": self.slot_data_donald_weapon,
-            "shield_abilities": self.slot_data_goofy_weapon,
+            "keyblade_abilities":     self.sora_ability_dict,
+            "staff_abilities":        self.donald_ability_dict,
+            "shield_abilities":       self.goofy_ability_dict,
         }
 
     def create_item(self, name: str) -> Item:
@@ -202,9 +173,7 @@ class KH2World(World):
         itempool = [self.create_item(item) for item, data in self.item_quantity_dict.items() for _ in range(data)]
 
         # Creating filler for unfilled locations
-        print(self.player)
-        itempool += [self.create_filler()
-                     for _ in range(self.total_locations - len(itempool))]
+        itempool += [self.create_filler() for _ in range(self.total_locations - len(itempool))]
 
         self.multiworld.itempool += itempool
 
@@ -220,8 +189,8 @@ class KH2World(World):
         # 3 random support abilities because there are left over slots
 
         for _ in range(3):
-            support_abilites = list(SupportAbility_Table.keys())
-            random_support_ability = self.random.choice(support_abilites)
+            support_abilities = list(SupportAbility_Table.keys())
+            random_support_ability = self.random.choice(support_abilities)
             self.item_quantity_dict[random_support_ability] += 1
             self.sora_ability_dict[random_support_ability] += 1
 
@@ -234,7 +203,7 @@ class KH2World(World):
                 self.item_quantity_dict[k] = v
             elif 255 <= v:
                 logging.info(
-                    f"{self.player} has too many {k} in their CustomItemPool setting. Setting to default quantity")
+                        f"{self.player} has too many {k} in their CustomItemPool setting. Setting to default quantity")
         # Option to turn off Promise Charm Item
         if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
@@ -300,7 +269,7 @@ class KH2World(World):
         # self.item_name_to_id.update({event_name: None for event_name in Events_Table})
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
-                self.create_item(item))
+                    self.create_item(item))
 
     def create_regions(self):
         """
@@ -449,8 +418,8 @@ class KH2World(World):
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:
                     logging.info(
-                        f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
-                        f"Changing the amount to the max amount")
+                            f"{self.multiworld.get_file_safe_player_name(self.player)} cannot have more than {item_dictionary_table[item].quantity} of {item}"
+                            f"Changing the amount to the max amount")
                     value = item_dictionary_table[item].quantity
                 self.item_quantity_dict[item] -= value
 
@@ -460,9 +429,9 @@ class KH2World(World):
         """
         if self.lucky_emblem_amount < self.lucky_emblem_required:
             logging.info(
-                f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
-                f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
-                f" Setting amount to {self.multiworld.LuckyEmblemsRequired[self.player].value}")
+                    f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
+                    f"{self.multiworld.LuckyEmblemsRequired[self.player].value} for player {self.multiworld.get_file_safe_player_name(self.player)}."
+                    f" Setting amount to {self.multiworld.LuckyEmblemsRequired[self.player].value}")
             luckyemblemamount = max(self.lucky_emblem_amount, self.lucky_emblem_required)
             self.multiworld.LuckyEmblemsAmount[self.player].value = luckyemblemamount
 
@@ -481,8 +450,8 @@ class KH2World(World):
         #  Testing if the player has the right amount of Bounties for Completion.
         if len(self.random_super_boss_list) < self.bounties_amount:
             logging.info(
-                f"{self.multiworld.get_file_safe_player_name(self.player)} has more bounties than bosses."
-                f" Setting total bounties to {len(self.random_super_boss_list)}")
+                    f"{self.multiworld.get_file_safe_player_name(self.player)} has more bounties than bosses."
+                    f" Setting total bounties to {len(self.random_super_boss_list)}")
             self.bounties_amount = len(self.random_super_boss_list)
             self.multiworld.BountyAmount[self.player].value = self.bounties_amount
 
@@ -494,8 +463,8 @@ class KH2World(World):
 
         if self.bounties_amount < self.bounties_required:
             logging.info(
-                f"Bounties Amount is less than required for player {self.multiworld.get_file_safe_player_name(self.player)}."
-                f"Swapping Amount and Required")
+                    f"Bounties Amount is less than required for player {self.multiworld.get_file_safe_player_name(self.player)}."
+                    f"Swapping Amount and Required")
             temp = self.multiworld.BountyRequired[self.player].value
             self.multiworld.BountyRequired[self.player].value = self.multiworld.BountyAmount[self.player].value
             self.multiworld.BountyAmount[self.player].value = temp
