@@ -22,6 +22,7 @@ from .rules import set_rules
 from .level_scaling import level_scaling
 from . import logic
 from . import poke_data
+from . import client
 
 
 class PokemonSettings(settings.Group):
