@@ -158,7 +158,7 @@ class WebWorld:
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
-    settings_presets: Dict[str, Dict[str, Any]] = {}
+    options_presets: Dict[str, Dict[str, Any]] = {}
     """A dictionary containing a collection of developer-defined game option presets."""
 
 

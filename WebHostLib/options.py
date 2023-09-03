@@ -121,7 +121,7 @@ def create():
 
         player_settings["gameOptions"] = game_options
 
-        player_settings["presetOptions"] = world.web.settings_presets
+        player_settings["presetOptions"] = world.web.options_presets
 
         os.makedirs(os.path.join(target_folder, 'player-settings'), exist_ok=True)
 

@@ -23,7 +23,7 @@ class RLWeb(WebWorld):
     )]
     bug_report_page = "https://github.com/ThePhar/RogueLegacyRandomizer/issues/new?assignees=&labels=bug&template=" \
                       "report-an-issue---.md&title=%5BIssue%5D"
-    settings_presets = rl_option_presets
+    options_presets = rl_option_presets
 
 
 class RLWorld(World):
