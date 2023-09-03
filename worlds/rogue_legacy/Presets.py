@@ -32,7 +32,7 @@ rl_option_presets: Dict[str, Dict[str, Any]] = {
         "equip_pool":               "random",
         "crit_chance_pool":         "random",
         "crit_damage_pool":         "random",
-        "allow_default_names":      "random",
+        "allow_default_names":      True,
         "death_link":               "random",
     },
     "Limited Resources": {
