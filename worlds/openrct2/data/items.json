@@ -91,13 +91,15 @@
     "Single Rail Roller Coaster",
     "Alpine Roller Coaster",
     "Classic Wooden Roller Coaster",
+    "scenery",
 	"Easier Guest Generation",
 	"Easier Park Rating",
 	"Allow High Construction",
 	"Allow Landscape Changes",
 	"Allow Marketing Campaigns",
 	"Allow Tree Removal",
-	"Bathroom Trap"
+	"Bathroom Trap",
+    "Furry Convention Trap"
 	],
 	"useful_items": [
 		"Toilets",
@@ -114,6 +116,7 @@
 		"Allow Tree Removal"
 	],
 	"trap_items": [
-		"Bathroom Trap"
+		"Bathroom Trap",
+        "Furry Convention Trap"
 	]
 }
