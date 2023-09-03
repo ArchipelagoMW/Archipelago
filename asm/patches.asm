@@ -43,6 +43,12 @@
     strb r0, [r1, #1]
 
 
+; Start with access to the four main passages.
+; SelectDMapInit()
+.org 0x807B110
+    b 0x0807b204
+
+
 ; Skip cutscenes
 ; --------------
 

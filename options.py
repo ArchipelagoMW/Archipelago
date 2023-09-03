@@ -15,14 +15,6 @@ class Difficulty(Choice):
     default = 0
 
 
-class EarlyEntryJewels(DefaultOnToggle):
-    '''
-    Force the Entry Passage Jewel Pieces to appear early in the seed as a local item.
-    Recommended to prevent early BK
-    '''
-    display_name = 'Early Entry Passage Jewels'
-
-
 class RequiredJewels(Range):
     '''
     Number of jewels required to fight the bosses.
@@ -51,7 +43,6 @@ class MusicShuffle(Choice):
 
 wl4_options: Dict[str, Type[Option]] = {
     'difficulty': Difficulty,
-    'early_entry_jewels': EarlyEntryJewels,
     'required_jewels': RequiredJewels,
     'death_link': DeathLink,
     #'music_shuffle': MusicShuffle,

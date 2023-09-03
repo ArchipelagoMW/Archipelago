@@ -100,8 +100,7 @@ def connect_regions(world, player):
     connect(world, player, names, 'Hall of Hieroglyphs', 'Entry Passage Boss',
             lambda state: state.wl4_has_full_jewels(player, Passage.ENTRY, 1))
 
-    connect(world, player, names, 'Menu', 'Emerald Passage',
-            lambda state: state.has('Entry Passage Clear', player))
+    connect(world, player, names, 'Menu', 'Emerald Passage')
     connect(world, player, names, 'Emerald Passage', 'Palm Tree Paradise')
     connect(world, player, names, 'Palm Tree Paradise', 'Wildflower Fields')
     connect(world, player, names, 'Wildflower Fields', 'Mystic Lake')
@@ -109,8 +108,7 @@ def connect_regions(world, player):
     connect(world, player, names, 'Monsoon Jungle', 'Emerald Passage Boss',
         lambda state: state.wl4_has_full_jewels(player, Passage.EMERALD, 4))
 
-    connect(world, player, names, 'Menu', 'Ruby Passage',
-            lambda state: state.has('Entry Passage Clear', player))
+    connect(world, player, names, 'Menu', 'Ruby Passage')
     connect(world, player, names, 'Ruby Passage', 'The Curious Factory')
     connect(world, player, names, 'The Curious Factory', 'The Toxic Landfill')
     connect(world, player, names, 'The Toxic Landfill', '40 Below Fridge')
@@ -118,8 +116,7 @@ def connect_regions(world, player):
     connect(world, player, names, 'Pinball Zone', 'Ruby Passage Boss',
         lambda state: state.wl4_has_full_jewels(player, Passage.RUBY, 4))
 
-    connect(world, player, names, 'Menu', 'Topaz Passage',
-            lambda state: state.has('Entry Passage Clear', player))
+    connect(world, player, names, 'Menu', 'Topaz Passage')
     connect(world, player, names, 'Topaz Passage', 'Toy Block Tower')
     connect(world, player, names, 'Toy Block Tower', 'The Big Board')
     connect(world, player, names, 'The Big Board', 'Doodle Woods')
@@ -127,8 +124,7 @@ def connect_regions(world, player):
     connect(world, player, names, 'Domino Row', 'Topaz Passage Boss',
         lambda state: state.wl4_has_full_jewels(player, Passage.TOPAZ, 4))
 
-    connect(world, player, names, 'Menu', 'Sapphire Passage',
-            lambda state: state.has('Entry Passage Clear', player))
+    connect(world, player, names, 'Menu', 'Sapphire Passage')
     connect(world, player, names, 'Sapphire Passage', 'Crescent Moon Village')
     connect(world, player, names, 'Crescent Moon Village', 'Arabian Night')
     connect(world, player, names, 'Arabian Night', 'Fiery Cavern')

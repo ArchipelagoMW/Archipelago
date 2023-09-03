@@ -70,11 +70,6 @@ class WL4World(World):
 
     web = WL4Web()
 
-    def generate_early(self):
-        if self.multiworld.early_entry_jewels[self.player]:
-            for item in filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY):
-                self.multiworld.local_early_items[self.player][item] = 1
-
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
