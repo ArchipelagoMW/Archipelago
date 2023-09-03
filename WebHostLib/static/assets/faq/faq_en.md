@@ -75,13 +75,13 @@ with the intent of completing them in one sitting. Asynchronous games, on the ot
 online at the same time, and can be completed over the course of multiple days.
 
 ### Asynchronous
-If you are playing an Asynchronous game, then a player can safely disconnect without losing any progress any of the 
+If you are playing an Asynchronous game, then a player can safely disconnect without losing any progress with any of the 
 games. All items sent out through the multi-world persist independently of a player being connected to the 
 Archipelago servers.
 
 ### Synchronous
 When playing a Synchronous game, if a player must leave early, they can use Archipelago's release system. When a player 
-releases their game, all the items their game are sent out automatically, so other players can continue to play without
+releases their game, all the items in their game are sent out automatically, so other players can continue to play without
 worrying about if their items are in the absent player's games.
 
 ## What are some common terms I should know?

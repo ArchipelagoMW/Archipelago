@@ -1,7 +1,7 @@
 # Multi-world Glossary
 
 There are many common terms used with different communities when playing in their randomizers.
-This page list and defines the terms common to Archipelago and its randomized games.
+This page lists and defines the terms common to Archipelago and its randomized games.
 
 # Basics
 ## Item
@@ -32,7 +32,7 @@ they may decide to use the slot names `PlayerA_Mario` and `PlayerA_Zelda` respec
 ## World
 World in terms of Archipelago can mean multiple things and is used interchangeably in many situations.
 * During gameplay, a world is a single instance of a game, occupying one player "slot". However, 
-Archipelago allows multiple players to connect to the same slot, allowing those players can share a world 
+Archipelago allows multiple players to connect to the same slot, allowing those players to share a world 
 and complete it cooperatively. For games with native cooperative play, you can also play together and
 share a world that way, usually with only one player connected to the multi-world.
 * On the programming side, a world typically represents the package that integrates Archipelago with a
@@ -40,7 +40,7 @@ particular game. For example this could be the entire `worlds/factorio` director
 
 ## RNG
 Acronym for "Random Number Generator." This can refer to any number of things that have an element of randomization to 
-it. For generation, it can refer to likelihood that an item was put in a particular location. In gameplay, it can refer
+it. For generation, it can refer to the likelihood that an item was put in a particular location. In gameplay, it can refer
 to parts of the game that rely on random chance, such as simulated gambling, random events, or a particular game 
 sequence that can be difficult regardless of skill level.
 
@@ -91,13 +91,13 @@ A term used for "filler" items that have no bearing on the generation and are ei
 or useless. These items can be very useful depending on the player but are never very important and as such are usually
 termed trash.
 
-### Trap
+## Trap Item
 A type of trash item that actively hurts a player rather than having minimal or no effect like normal trash items.
 
 
 # Gameplay
 ## Go Mode
-A term used in randomizers to describe when a player has all the items necessary to complete the game. For some game, 
+A term used in randomizers to describe when a player has all the items necessary to complete the game. For some games, 
 these items may be known before randomization takes place, however many games also have the option to hide what is 
 needed to beat the game until it is otherwise discovered in-game. Particularly open-ended games may have multiple
 collections of Go Mode items, which means that various endings may be made available.
