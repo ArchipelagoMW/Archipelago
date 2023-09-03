@@ -111,6 +111,11 @@ class WL4World(World):
         for name in filter_item_names(type=ItemType.CD):
             itempool.append(self.create_item(name))
 
+        for name in filter_item_names(type=ItemType.ABILITY):
+            itempool.append(self.create_item(name))
+            if name.startswith('Progressive'):
+                itempool.append(self.create_item(name))
+
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 

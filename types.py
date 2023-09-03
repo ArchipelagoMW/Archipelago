@@ -6,6 +6,7 @@ class ItemType(IntEnum):
     CD = 1
     ITEM = 2
     EVENT = 3
+    ABILITY = 4
 
 
 class Box(IntEnum):
