@@ -765,8 +765,8 @@ bonk_addresses = [0x4CF6C, 0x4CFBA, 0x4CFE0, 0x4CFFB, 0x4D018, 0x4D01B, 0x4D028,
 def get_nonnative_item_sprite(code: int, advancement: bool) -> int:
     if 84173 >= code >= 84007:  # LttP item in SMZ3
         return code - 84000
-    # Set all non-native sprites to a yellow Power Star for non-advancement
-    # items and a blue Power Star for advancement items as per 13 to 2 vote at
+    # Set all non-native sprites to a gold Power Star for advancement
+    # items and a silver Power Star for non-advancement items as per 13 to 2 vote at
     # https://discord.com/channels/731205301247803413/827141303330406408/852102450822905886
     if advancement:
         return 0x69  # Gold Power Star
