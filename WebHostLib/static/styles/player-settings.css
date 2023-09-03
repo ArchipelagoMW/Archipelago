@@ -90,6 +90,23 @@ html{
     flex-direction: row;
 }
 
+#player-settings #meta-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#player-settings #meta-options label {
+    display: inline-block;
+    min-width: 180px;
+}
+
+#player-settings #meta-options input,
+#player-settings #meta-options select {
+    box-sizing: border-box;
+    min-width: 200px;
+}
+
 #player-settings .left, #player-settings .right{
     flex-grow: 1;
 }

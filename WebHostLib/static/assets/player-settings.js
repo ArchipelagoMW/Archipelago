@@ -36,6 +36,17 @@ window.addEventListener('load', () => {
     const nameInput = document.getElementById('player-name');
     nameInput.addEventListener('keyup', (event) => updateBaseSetting(event));
     nameInput.value = playerSettings.name;
+
+    // Presets
+    const presetSelect = document.getElementById("game-options-preset");
+    presetSelect.addEventListener("change", (event) => setPresets(results, event.target.value));
+    for (const preset in results["presetOptions"]) {
+      const presetOption = document.createElement("option");
+      presetOption.innerText = preset;
+      presetSelect.appendChild(presetOption);
+    }
+    presetSelect.value = localStorage.getItem(`${gameName}-preset`);
+    results["presetOptions"]["__default"] = {};
   }).catch((e) => {
     console.error(e);
     const url = new URL(window.location.href);
@@ -45,7 +56,8 @@ window.addEventListener('load', () => {
 
 const resetSettings = () => {
   localStorage.removeItem(gameName);
-  localStorage.removeItem(`${gameName}-hash`)
+  localStorage.removeItem(`${gameName}-hash`);
+  localStorage.removeItem(`${gameName}-preset`);
   window.location.reload();
 };
 
@@ -76,6 +88,10 @@ const createDefaultSettings = (settingData) => {
       newSettings[gameName][gameOption] = settingData.gameOptions[gameOption].defaultValue;
     }
     localStorage.setItem(gameName, JSON.stringify(newSettings));
+  }
+
+  if (!localStorage.getItem(`${gameName}-preset`)) {
+    localStorage.setItem(`${gameName}-preset`, "__default");
   }
 };
 
@@ -162,6 +178,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
         element.classList.add('range-container');
 
         let range = document.createElement('input');
+        range.setAttribute('id', setting);
         range.setAttribute('type', 'range');
         range.setAttribute('data-key', setting);
         range.setAttribute('min', settings[setting].min);
@@ -294,6 +311,75 @@ const buildOptionsTable = (settings, romOpts = false) => {
   return table;
 };
 
+const setPresets = (settingsData, presetName) => {
+  const defaults = settingsData["gameOptions"];
+  const preset = settingsData["presetOptions"][presetName];
+
+  localStorage.setItem(`${gameName}-preset`, presetName);
+
+  if (!preset) {
+    console.error(`No presets defined for preset name: "${presetName}"`);
+    return;
+  }
+
+  for (const setting in defaults) {
+    let presetValue = preset[setting];
+    if (presetValue === undefined) {
+      // Using the default value if not set in presets.
+      presetValue = defaults[setting]["defaultValue"];
+    }
+
+    switch (defaults[setting].type) {
+      case "range":
+      case "select": {
+        const optionElement = document.querySelector(`#${setting}[data-key="${setting}"]`);
+        const randomElement = document.querySelector(`.randomize-button[data-key="${setting}"]`);
+
+        if (presetValue === "random") {
+          randomElement.classList.add("active");
+          optionElement.disabled = true;
+          updateGameSetting(randomElement, false);
+        } else {
+          optionElement.value = presetValue;
+          randomElement.classList.remove("active");
+          optionElement.disabled = undefined;
+          updateGameSetting(optionElement, false);
+        }
+
+        break;
+      }
+
+      case "special_range": {
+        const selectElement = document.querySelector(`select[data-key="${setting}"]`);
+        const rangeElement = document.querySelector(`input[data-key="${setting}"]`);
+        const randomElement = document.querySelector(`.randomize-button[data-key="${setting}"]`);
+
+        if (presetValue === "random") {
+          randomElement.classList.add("active");
+          selectElement.disabled = true;
+          rangeElement.disabled = true;
+          updateGameSetting(randomElement, false);
+        } else {
+          rangeElement.value = presetValue;
+          selectElement.value = Object.values(defaults[setting]["value_names"]).includes(parseInt(presetValue)) ?
+              parseInt(presetValue) : "custom";
+          document.getElementById(`${setting}-value`).innerText = presetValue;
+
+          randomElement.classList.remove("active");
+          selectElement.disabled = undefined;
+          rangeElement.disabled = undefined;
+          updateGameSetting(rangeElement, false);
+        }
+        break;
+      }
+
+      default:
+        console.warn(`Ignoring preset value for unknown setting type: ${defaults[setting].type} with name ${setting}`);
+        break;
+    }
+  }
+};
+
 const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
   const active = event.target.classList.contains('active');
   const randomButton = event.target;
@@ -322,8 +408,14 @@ const updateBaseSetting = (event) => {
   localStorage.setItem(gameName, JSON.stringify(options));
 };
 
-const updateGameSetting = (settingElement) => {
+const updateGameSetting = (settingElement, toggleCustomPreset = true) => {
   const options = JSON.parse(localStorage.getItem(gameName));
+
+  if (toggleCustomPreset) {
+    localStorage.setItem(`${gameName}-preset`, "__custom");
+    const presetElement = document.getElementById("game-options-preset");
+    presetElement.value = "__custom";
+  }
 
   if (settingElement.classList.contains('randomize-button')) {
     // If the event passed in is the randomize button, then we know what we must do.
@@ -338,7 +430,21 @@ const updateGameSetting = (settingElement) => {
 
 const exportSettings = () => {
   const settings = JSON.parse(localStorage.getItem(gameName));
-  if (!settings.name || settings.name.toLowerCase() === 'player' || settings.name.trim().length === 0) {
+  const preset = localStorage.getItem(`${gameName}-preset`);
+  switch (preset) {
+    case "__default":
+      settings["description"] = `Generated by https://archipelago.gg with the default preset.`;
+      break;
+
+    case "__custom":
+      settings["description"] = `Generated by https://archipelago.gg.`;
+      break;
+
+    default:
+      settings["description"] = `Generated by https://archipelago.gg with the ${preset} preset.`;
+  }
+
+  if (!settings.name || settings.name.trim().length === 0) {
     return showUserMessage('You must enter a player name!');
   }
   const yamlText = jsyaml.safeDump(settings, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);
