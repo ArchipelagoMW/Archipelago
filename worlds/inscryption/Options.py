@@ -17,9 +17,42 @@ class RandomizeCodes(Toggle):
     display_name = "Randomize Codes"
 
 
-class RandomizeDeck(Toggle):
-    """Randomize every card of the deck at the start of every encounter"""
-    display_name = "Randomize deck"
+class RandomizeDeck(Choice):
+    """Randomize cards in your deck for all 3 acts.
+    Disable: Disable the feature.
+    Randomize Type: Randomize card with the same type of card(A rare card will randomize to another rare card).
+    Randomize All: Randomize card to any possible card."""
+    auto_display_name = True
+    display_name = "Randomize Deck"
+    option_disable = 0
+    option_randomize_type = 1
+    option_randomize_all = 2
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_disable: "Disable",
+            self.option_randomize_type: "Randomize Type",
+            self.option_randomize_all: "Randomize All",
+        }[self.value]
+
+
+class RandomizeAbilities(Choice):
+    """Randomize abilities in all 3 acts.
+    Disable: Disable the feature.
+    Randomize Modded: Randomize added ability only.
+    Randomize All: Randomize all abilities."""
+    auto_display_name = True
+    display_name = "Randomize Abilities"
+    option_disable = 0
+    option_randomize_modded = 1
+    option_randomize_all = 2
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_disable: "Disable",
+            self.option_randomize_modded: "Randomize Modded",
+            self.option_randomize_all: "Randomize All",
+        }[self.value]
 
 
 class OptionalDeathCard(Choice):
@@ -46,5 +79,6 @@ inscryption_options: typing.Dict[str, type(Option)] = {
     "trap": Trap,
     "randomize_codes": RandomizeCodes,
     "randomize_deck": RandomizeDeck,
+    "randomize_abilities": RandomizeAbilities,
     "optional_death_card": OptionalDeathCard,
 }
