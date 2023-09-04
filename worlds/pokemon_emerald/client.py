@@ -77,7 +77,7 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA",                # Rayquaza departs for Sootopolis
     "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",                # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
-    # TODO: Add Harbor Mail event here
+    "FLAG_PURCHASED_HARBOR_MAIL",
 ]
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
