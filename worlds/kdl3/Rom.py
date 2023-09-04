@@ -954,6 +954,22 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
                               0x6B,  # RTL
                               ])
 
+    # Gifting check
+    rom.write_bytes(0x3A510, [
+        0xC9, 0x08,  # CMP #$08
+        0xB0, 0xFF,  # BCS $C3A513  - this intentionally crashes the game if hit
+        0xDA,  # PHX
+        0xAE, 0x1A, 0x90,  # LDX $901A
+        0xF0, 0x0F,  # BEQ $C3A529
+        0xFA,  # PLX
+        0x8D, 0x86, 0x80,  # STA $8086
+        0xA9, 0x26,  # LDA #$26
+        0x8D, 0x62, 0x7F,  # STA $7F62
+        0x5C, 0x40, 0xBC, 0xCA,  # JML $CABC40
+        0xFA,  # PLX
+        0x5C, 0x18, 0xBC, 0xCA,  # JML $CABC40
+    ])
+
     # display received items in pause menu
     rom.write_bytes(0x8406, [0x50, 0xA5, 0x07])
     rom.write_bytes(0x3A550, [0x22, 0x9F, 0xD2, 0x00,  # JSL $00D29F

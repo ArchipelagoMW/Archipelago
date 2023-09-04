@@ -355,6 +355,15 @@ class VirtualConsoleChanges(Choice):
     default = 1
 
 
+class Gifting(Toggle):
+    """
+    When enabled, the goal game item will be sent to other compatible games as a gift,
+    and you can receive gifts from other players. This can be enabled during gameplay
+    using the client.
+    """
+    display_name = "Gifting"
+
+
 kdl3_options: typing.Dict[str, typing.Type[Option[typing.Any]]] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
@@ -384,4 +393,5 @@ kdl3_options: typing.Dict[str, typing.Type[Option[typing.Any]]] = {
     "gooey_flavor": GooeyFlavor,
     "music_shuffle": MusicShuffle,
     "virtual_console": VirtualConsoleChanges,
+    "gifting": Gifting
 }

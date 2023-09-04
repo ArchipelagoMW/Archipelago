@@ -112,7 +112,7 @@ kdl3_gifting_options = {
     "DesiredTraits": [
         "Consumable", "Food", "Drink", "Candy", "Tomato",
         "Invincible", "Life", "Heal", "Health", "Trap",
-        "Goo", "Gel", "Slow", "Eject"
+        "Goo", "Gel", "Slow", "Slowness", "Eject", "Removal"
     ]
 }
 
@@ -512,9 +512,77 @@ class KDL3SNIClient(SNIClient):
 
     async def pop_gift(self, ctx):
         if ctx.stored_data[self.giftbox_key]:
+            from SNIClient import snes_read, snes_buffered_write
             key, gift = ctx.stored_data[self.giftbox_key].popitem()
-            print(gift)
             await pop_object(ctx, self.giftbox_key, key)
+            # first, special cases
+            traits = [trait["Trait"] for trait in gift["Traits"]]
+            if "Candy" in traits or "Invincible" in traits:
+                # apply invincibility candy
+                snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x84, 0x03]))
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x2B]))
+            elif "Tomato" in traits:
+                # apply maxim tomato
+                gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x2B]))
+                if gooey_hp[0] > 0x00:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x08, 0x00]))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08, 0x00]))
+                else:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A, 0x00]))
+            elif "Life" in traits:
+                # Apply 1-Up
+                life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 2)
+                life_bytes = pack("H", unpack("H", life_count)[0] + 1)
+                snes_buffered_write(ctx, KDL3_LIFE_COUNT, life_bytes)
+                snes_buffered_write(ctx, KDL3_LIFE_VISUAL, life_bytes)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x33]))
+            elif "Trap" in traits:
+                # find the best trap to apply
+                if "Goo" in traits or "Gel" in traits:
+                    check_gooey_r = await snes_read(ctx, KDL3_GOOEY_TRAP, 2)
+                    check_gooey = struct.unpack("H", check_gooey_r)
+                    if check_gooey[0] == 0:
+                        snes_buffered_write(ctx, KDL3_GOOEY_TRAP, bytes([0x01, 0x00]))
+                    else:
+                        await update_object(ctx, key, {key: gift})  # We can't apply this yet
+                elif "Slow" in traits or "Slowness" in traits:
+                    check_slow_r = await snes_read(ctx, KDL3_SLOWNESS_TRAP, 2)
+                    check_slow = struct.unpack("H", check_slow_r)
+                    if check_slow[0] == 0:
+                        snes_buffered_write(ctx, KDL3_SLOWNESS_TRAP, bytes([0x84, 0x03]))
+                        snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0xA7]))
+                    else:
+                        await update_object(ctx, key, {key: gift})  # We can't apply this yet
+                elif "Eject" in traits or "Removal" in traits:
+                    check_ability_r = await snes_read(ctx, KDL3_ABILITY_TRAP, 2)
+                    check_ability = struct.unpack("H", check_ability_r)
+                    if check_ability[0] == 0:
+                        snes_buffered_write(ctx, KDL3_ABILITY_TRAP, bytes([0x01, 0x00]))
+                    else:
+                        await update_object(ctx, key, {key: gift})  # We can't apply this yet
+                else:
+                    # just deal damage to Kirby
+                    kirby_hp = struct.unpack("H", await snes_read(ctx, KDL3_KIRBY_HP, 2))[0]
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, struct.pack("H", max(kirby_hp - 2, 0)))
+            else:
+                # check if it's tasty
+                if any(x in traits for x in ["Consumable", "Food", "Drink", "Heal", "Health"]):
+                    # it's tasty!, use quality to decide how much to heal
+                    quality = max((trait["Quality"] for trait in gift["Traits"]
+                                   if trait["Trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"]))
+                    quality = min(10, quality * 2)
+                else:
+                    # it's not really edible, but he'll eat it anyways
+                    quality = self.client_random.choices(range(0, 2), {0: 75, 1: 25})[0]
+                kirby_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
+                gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
+                snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
+                if gooey_hp[0] > 0x00:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, struct.pack("H", min(kirby_hp[0] + quality // 2, 8)))
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, struct.pack("H", min(gooey_hp[0] + quality // 2, 8)))
+                else:
+                    snes_buffered_write(ctx, KDL3_KIRBY_HP, struct.pack("H", min(kirby_hp[0] + quality, 10)))
 
     async def pick_gift_recipient(self, ctx, gift):
         if gift != 4:
@@ -534,7 +602,7 @@ class KDL3SNIClient(SNIClient):
         Uuid = uuid.uuid4().hex
         item = {
             **gift_base,
-            "uuid": Uuid,
+            "ID": Uuid,
             "Sender": ctx.player_names[ctx.slot],
             "Receiver": ctx.player_names[most_applicable_slot],
             "SenderTeam": ctx.team,
