@@ -21,7 +21,7 @@ Dye Hard;                           Achievement;                                
 Lucky Break;                        Achievement;
 Star Power;                         Achievement;
 You Can Do It!;                     Achievement;
-Wulfrum Armor;                      Calamity | ArmorMinions(1);
+Wulfrum Armor;                      Calamity | Armor Minions(1);
 
 // Surface exploration
 Aglet;
@@ -86,7 +86,7 @@ Evil Sword;                         ;                                           
 
 // Underground Ice
 Ice Skates;
-Flinx Fur Coat;                     ArmorMinions(1);
+Flinx Fur Coat;                     Armor Minions(1);
 
 // Underground Desert
 Golfer;                             Npc;
@@ -126,7 +126,7 @@ Desert Scourge;                     Calamity | Location | Item;
 Pearl Shard;                        Calamity;                                   #Desert Scourge;
 Sea Remains;                        Calamity;                                   Pearl Shard;
 Reefclaw Hamaxe;                    Calamity | Hammer(60);                      Sea Remains;
-Victide Armor;                      Calamity | ArmorMinions(1);                 Sea Remains;
+Victide Armor;                      Calamity | Armor Minions(1);                Sea Remains;
 Sandstorm;                          ;                                           ~@calamity | Desert Scourge;
 Voltaic Jelly;                      Calamity | Minions(1);                      Desert Scourge; // Jelly-Charged Battery doesn't stack. This is the case for all Calamity minion accessory upgrades.
 
@@ -156,7 +156,7 @@ Crabulon;                           Calamity | Location | Item;
 Evil Boss;                          Location | Item;
 Evil Boss Part;                     ;                                           #Evil Boss;
 Evil Pickaxe;                       Pickaxe(65);                                Evil Boss Part;
-Obsidian Armor;                     ArmorMinions(1);                            Obsidian & Evil Boss Part;
+Obsidian Armor;                     Armor Minions(1);                           Obsidian & Evil Boss Part;
 Tavernkeep;                         Npc;                                        Evil Boss;
 Old One's Army Tier 1;              Location | Item;                            Tavernkeep;
 Meteorite;                          ;                                           Evil Boss;
@@ -189,7 +189,7 @@ Where's My Honey?;                  Achievement;
 Queen Bee;                          Location | Item;
 Bee Keeper;                         ;                                           #Queen Bee;
 Bee Wax;                            ;                                           #Queen Bee;
-Bee Armor;                          ArmorMinions(2);                            Bee Wax;
+Bee Armor;                          Armor Minions(2);                           Bee Wax;
 Not the Bees!;                      Achievement;                                #Queen Bee & Bee Armor;
 Witch Doctor;                       Npc;                                        Queen Bee;
 Pygmy Necklace;                     Minions(1);                                 Witch Doctor;
@@ -201,7 +201,7 @@ Aerialite Ore;                      Calamity;                                   
 Aerialite Bar;                      Calamity;                                   Aerialite Ore;
 Aerial Hamaxe;                      Calamity | Hammer(70);                      Aerialite Bar;
 Skyfringe Pickaxe;                  Calamity | Pickaxe(75);                     Aerialite Bar;
-Aerospec Armor;                     Calamity | ArmorMinions(1);                 Aerialite Bar;
+Aerospec Armor;                     Calamity | Armor Minions(1);                Aerialite Bar;
 
 // Skeletron
 Skeletron;                          Location | Item;
@@ -224,7 +224,7 @@ The Slime God;                      Calamity | Location | Item;                 
 Purified Gel;                       Calamity;                                   #The Slime God;
 Static Refiner;                     Calamity;                                   Purified Gel & Solidifier;
 Gelpick;                            Calamity | Pickaxe(100);                    Static Refiner & Purified Gel & Blighted Gel;
-Statigel Armor;                     Calamity | ArmorMinions(1);                 Static Refiner & Purified Gel & Blighted Gel;
+Statigel Armor;                     Calamity | Armor Minions(1);                Static Refiner & Purified Gel & Blighted Gel;
 Night's Edge;                       ;                                           Evil Sword & Muramasa & Blade of Grass & Fiery Greatsword & (~@calamity | Purified Gel);
 
 // Wall of Flesh
@@ -233,7 +233,7 @@ Pwnhammer;                          Hammer(80);                                 
 Wizard;                             Npc;                                        Wall of Flesh;
 Tax Collector;                      Npc;                                        Purification Powder & Wall of Flesh;
 Spider Fangs;                       ;                                           Wall of Flesh;
-Spider Armor;                       ArmorMinions(3);                            Spider Fangs;
+Spider Armor;                       Armor Minions(3);                           Spider Fangs;
 Cross Necklace;                     ;                                           Wall of Flesh;
 Altar;                              ;                                           Wall of Flesh & @hammer(80);
 Begone, Evil!;                      Achievement;                                Altar;
@@ -285,7 +285,7 @@ Adamantite Ore;                     ;                                           
 Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
 Adamantite Bar;                     ;                                           Hardmode Forge & Adamantite Ore;
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
-Forbidden Armor;                    ArmorMinions(2);                            Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
+Forbidden Armor;                    Armor Minions(2);                           Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
 Aquatic Scourge;                    Calamity | Location | Item;
 Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
 Nuclear Rod;                        Calamity | Minions(1);                      #Cragmaw Mire;
@@ -322,7 +322,7 @@ Cryonic Ore;                        Calamity;                                   
 Cryonic Bar;                        Calamity;                                   (Hardmode Forge & Cryonic Ore) | Fleshy Geode | Necromantic Geode;
 Abyssal Warhammer;                  Calamity | Hammer(88);                      Hardmode Anvil & Cryonic Bar;
 Shardlight Pickaxe;                 Calamity | Pickaxe(180);                    Hardmode Anvil & Cryonic Bar;
-Daedalus Armor;                     Calamity | ArmorMinions(2);                 Hardmode Anvil & Cryonic Bar & Essence of Eleum;
+Daedalus Armor;                     Calamity | Armor Minions(2);                Hardmode Anvil & Cryonic Bar & Essence of Eleum;
 
 // Skeletron Prime
 Soul of Fright;                     ;                                           #Skeletron Prime;
@@ -330,7 +330,7 @@ Inferna Cutter;                     Calamity;                                   
 Buckets of Bolts;                   Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
 Mecha Mayhem;                       Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
 Hallowed Bar;                       ;                                           (#The Twins | #The Destroyer | #Skeletron Prime) & (~@calamity | @mech_boss(3)); // Can't count on Hallowed Ore, since the player may be in prehardmode (TODO Check this)
-Hallowed Armor;                     ArmorMinions(3);                            Hardmode Anvil & Hallowed Bar;
+Hallowed Armor;                     Armor Minions(3);                           Hardmode Anvil & Hallowed Bar;
 Excalibur;                          ;                                           Hardmode Anvil & Hallowed Bar;
 Pickaxe Axe;                        Pickaxe(200);                               Hardmode Anvil & Hallowed Bar & Soul of Fright & Soul of Might & Soul of Sight;
 Drax Attax;                         Achievement;                                Pickaxe Axe;
@@ -349,13 +349,13 @@ Plantera;                           Location | Item | Goal;                     
 # plantera
 Ashes of Calamity;                  Calamity;                                   #Calamitas Clone;
 Depth Cells;                        Calamity;                                   Calamitas Clone;
-Fathom Swarmer Armor;               Calamity | ArmorMinions(2);                 Hardmode Anvil & Sea Remains & Depth Cells;
+Fathom Swarmer Armor;               Calamity | Armor Minions(2);                Hardmode Anvil & Sea Remains & Depth Cells;
 
 // Plantera
 The Axe;                            Hammer(100);                                #Plantera;
 Seedler;                            ;                                           #Plantera;
 Living Shard;                       Calamity;                                   #Plantera;
-Tiki Armor;                         ArmorMinions(4);                            Witch Doctor & Wall of Flesh & Plantera;
+Tiki Armor;                         Armor Minions(4);                           Witch Doctor & Wall of Flesh & Plantera;
 Hercules Beetle;                    ;                                           Witch Doctor & Wall of Flesh & Plantera;
 You and What Army?;                 Achievement;                                @minions(8);
 Cyborg;                             Npc;                                        Plantera;
@@ -413,7 +413,7 @@ Lihzahrd Brick;                     ;                                           
 Scoria Ore;                         Calamity;                                   Golem | @pickaxe(210);
 Scoria Bar;                         Calamity;                                   Hardmode Forge & Scoria Ore;
 Seismic Hampick;                    Calamity | Pickaxe(210) | Hammer(95);       Hardmode Anvil & Scoria Bar;
-Hydrothermic Armor;                 Calamity | ArmorMinions(2);                 Hardmode Anvil & Scoria Bar & Core of Havoc;
+Hydrothermic Armor;                 Calamity | Armor Minions(2);                Hardmode Anvil & Scoria Bar & Core of Havoc;
 Life Alloy;                         Calamity;                                   (Hardmode Anvil & Cryonic Bar & Perennial Bar & Scoria Bar) | Necromantic Geode;
 Advanced Display;                   Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Life Alloy & Long Ranged Sensor Array;
 Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Golem;
@@ -427,14 +427,14 @@ Plague Cell Canister;               Calamity;                                   
 Alchemical Flask;                   Calamity;                                   Hardmode Anvil & Bee Wax & Plague Cell Canister;
 The Plaguebringer Goliath;          Calamity | Location | Item;                 Hardmode Anvil & Plague Cell Canister;
 Infected Armor Plating;             Calamity;                                   #The Plaguebringer Goliath;
-Plaguebringer Armor;                Calamity | ArmorMinions(3);                 Hardmode Anvil & Bee Armor & Alchemical Flask & Plague Cell Canister & Infected Armor Plating;
+Plaguebringer Armor;                Calamity | Armor Minions(3);                Hardmode Anvil & Bee Armor & Alchemical Flask & Plague Cell Canister & Infected Armor Plating;
 
 // Duke Fishron
 Duke Fishron;                       Location | Item;                            Bug Net & Wall of Flesh;
 
 // Pumpkin Moon
 Pumpkin Moon;                       ;                                           Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar);
-Spooky Armor;                       ArmorMinions(4);                            Pumpkin Moon;
+Spooky Armor;                       Armor Minions(4);                           Pumpkin Moon;
 Mourning Wood;                      Location | Item;                            Pumpkin Moon;
 Necromantic Scroll;                 Minions(1);                                 #Mourning Wood;
 Papyrus Scarab;                     Minions(1);                                 Tinkerer's Workshop & Hercules Beetle & Necromantic Scroll;
@@ -481,7 +481,7 @@ Astral Ore;                         Calamity;                                   
 Astral Bar;                         Calamity;                                   Ancient Manipulator & Stardust & Astral Ore;
 Astral Hamaxe;                      Calamity | Hammer(100);                     Ancient Manipulator & Astral Bar;
 Astral Pickaxe;                     Calamity | Pickaxe(220);                    Ancient Manipulator & Astral Bar;
-Astral Armor;                       Calamity | ArmorMinions(3);                 Ancient Manipulator & Astral Bar & Meteorite Bar;
+Astral Armor;                       Calamity | Armor Minions(3);                Ancient Manipulator & Astral Bar & Meteorite Bar;
 
 // Moon Lord
 Moon Lord;                          Location | Item | Goal;                     #Lunar Events;
@@ -492,7 +492,7 @@ Luminite Bar;                       ;                                           
 Luminite Hamaxe;                    Hammer(100);                                Ancient Manipulator & Fragment & Luminite Bar;
 Luminite Pickaxe;                   Pickaxe(225);                               Ancient Manipulator & Fragment & Luminite Bar;
 Genesis Pickaxe;                    Calamity | Pickaxe(225);                    Ancient Manipulator & Meld Construct & Luminite Bar;
-Stardust Armor;                     ArmorMinions(5);                            Ancient Manipulator & Fragment & Luminite Bar;
+Stardust Armor;                     Armor Minions(5);                           Ancient Manipulator & Fragment & Luminite Bar;
 Terrarian;                          ;                                           #Moon Lord;
 Sick Throw;                         Achievement;                                Terrarian;
 Meowmere;                           ;                                           #Moon Lord;
@@ -521,7 +521,7 @@ Uelibloom Bar;                      Calamity;                                   
 Grax;                               Calamity | Hammer(110);                     Ancient Manipulator & Inferna Cutter & Luminite Hamaxe & Uelibloom Bar;
 Blossom Pickaxe;                    Calamity | Pickaxe(250);                    Ancient Manipulator & Uelibloom Bar;
 Voltage Regulation System;          Calamity;                                   Ancient Manipulator & Mysterious Circuitry & Dubious Plating & Uelibloom Bar & Luminite Bar & Advanced Display;
-Tarragon Armor;                     Calamity | ArmorMinions(3);                 Ancient Manipulator & Uelibloom Bar & Divine Geode;
+Tarragon Armor;                     Calamity | Armor Minions(3);                Ancient Manipulator & Uelibloom Bar & Divine Geode;
 Necromantic Geode;                  Calamity;                                   #Ravager & Providence, the Profaned Goddess;
 Bloodstone;                         Calamity;                                   Providence, the Profaned Goddess;
 Bloodstone Core;                    Calamity;                                   Hardmode Forge & Bloodstone & Phantoplasm;
@@ -537,9 +537,9 @@ Twisting Nether;                    Calamity;                                   
 // Polterghast
 Polterghast;                        Calamity | Location | Item;                 Dungeon & ((Ancient Manipulator & Phantoplasm) | Moon Lord);
 Ruinous Soul;                       Calamity;                                   #Polterghast;
-Bloodflare Armor;                   Calamity | ArmorMinions(3);                 Ancient Manipulator & Bloodstone Core & Ruinous Soul;
+Bloodflare Armor;                   Calamity | Armor Minions(3);                Ancient Manipulator & Bloodstone Core & Ruinous Soul;
 Reaper Tooth;                       Calamity;                                   Polterghast;
-Omega Blue Armor;                   Calamity | ArmorMinions(2);                 Ancient Manipulator & Reaper Tooth & Depth Cells & Ruinous Soul;
+Omega Blue Armor;                   Calamity | Armor Minions(2);                Ancient Manipulator & Reaper Tooth & Depth Cells & Ruinous Soul;
 
 // The Old Duke
 Mauler;                             Calamity | Location | Item;                 Acid Rain Tier 3;
@@ -557,8 +557,8 @@ Endothermic Energy;                 Calamity;                                   
 Darksun Fragment;                   Calamity;                                   Solar Eclipse & The Devourer of Gods;
 Dark Sun Ring;                      Calamity;                                   Cosmic Anvil & Uelibloom Bar & Darksun Fragment;
 Ascendant Spirit Essence;           Calamity;                                   Ancient Manipulator & Phantoplasm & Nightmare Fuel & Endothermic Energy & Darksun Fragment;
-Fearmonger Armor;                   Calamity | ArmorMinions(2);                 Cosmic Anvil & Spooky Armor & Cosmilite Bar & Soul of Fright & Ascendant Spirit Essence;
-Silva Armor;                        Calamity | ArmorMinions(5);                 Cosmic Anvil & Effulgent Feather & Ascendant Spirit Essence;
+Fearmonger Armor;                   Calamity | Armor Minions(2);                Cosmic Anvil & Spooky Armor & Cosmilite Bar & Soul of Fright & Ascendant Spirit Essence;
+Silva Armor;                        Calamity | Armor Minions(5);                Cosmic Anvil & Effulgent Feather & Ascendant Spirit Essence;
 
 // Yharon, Dragon of Rebirth
 Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          Ancient Manipulator & Effulgent Feather & Life Alloy;
@@ -566,7 +566,7 @@ Yharon, Dragon of Rebirth;          Calamity | Location | Item | Goal;          
 Yharon Soul Fragment;               Calamity;                                   #Yharon, Dragon of Rebirth;
 Auric Ore;                          Calamity;                                   Yharon, Dragon of Rebirth & @pickaxe(250);
 Auric Bar;                          Calamity;                                   Cosmic Anvil & Auric Ore & Yharon Soul Fragment;
-Auric Tesla Armor;                  Calamity | ArmorMinions(6);                 Cosmic Anvil & Silva Armor & Bloodflare Armor & Tarragon Armor & Auric Bar;
+Auric Tesla Armor;                  Calamity | Armor Minions(6);                Cosmic Anvil & Silva Armor & Bloodflare Armor & Tarragon Armor & Auric Bar;
 Zenith;                             Location | Item(Has Zenith) | Goal;         Hardmode Anvil & Terra Blade & Meowmere & Star Wrath & Influx Waver & The Horseman's Blade & Seedler & Starfury & Bee Keeper & Enchanted Sword & Copper Shortsword & (~@calamity | Auric Bar);
 # zenith
 
@@ -583,7 +583,7 @@ Ashes of Annihilation;              Calamity;                                   
 Shadowspec Bar;                     Calamity;                                   Draedon's Forge & Auric Bar & Exo Prism & Ashes of Annihilation;
 Crystyl Crusher;                    Calamity | Pickaxe(1000);                   Draedon's Forge & Luminite Pickaxe & Blossom Pickaxe & Shadowspec Bar;
 Angelic Alliance;                   Calamity | Minions(2);                      Draedon's Forge & Hallowed Armor & Paladin's Shield & True Excalibur & Cross Necklace & Shadowspec Bar;
-Demonshade Armor;                   Calamity | ArmorMinions(10);                Draedon's Forge & Shadowspec Bar;
+Demonshade Armor;                   Calamity | Armor Minions(10);               Draedon's Forge & Shadowspec Bar;
 
 // Adult Eidolon Wyrm
 Adult Eidolon Wyrm;                 Calamity | Location | Item | Goal;          Rod of Discord | Normality Relocator;
@@ -591,3 +591,4 @@ Adult Eidolon Wyrm;                 Calamity | Location | Item | Goal;          
 
 // Boss Rush
 Boss Rush;                          Calamity | Location; // >:D
+# boss_rush

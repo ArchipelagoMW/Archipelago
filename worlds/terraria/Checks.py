@@ -559,7 +559,7 @@ def read_data() -> (
                 final_bosses.append(flags["Item"] or f"Post-{name}")
                 final_boss_loc.append(name)
 
-            if (minions := flags.get("ArmorMinions")) is not None:
+            if (minions := flags.get("Armor Minions")) is not None:
                 armor_minions[name] = minions
 
             if (minions := flags.get("Minions")) is not None:
@@ -601,8 +601,9 @@ def read_data() -> (
             or "Pickaxe" in flags
             or "Hammer" in flags
             or "Mech Boss" in flags
+            or "Final Boss" in flags
             or "Minions" in flags
-            or "ArmorMinions" in flags
+            or "Armor Minions" in flags
         ):
             progression.add(loc_to_item[name])
             prog = True
