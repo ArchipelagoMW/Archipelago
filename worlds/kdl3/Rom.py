@@ -1246,6 +1246,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData, heart_stars_req
     rom.write_byte(0x3D014, multiworld.stage_shuffle[player])
     rom.write_byte(0x3D016, multiworld.ow_boss_requirement[player])
     rom.write_byte(0x3D018, multiworld.consumables[player])
+    rom.write_byte(0x3D01A, multiworld.gifting[player])
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
