@@ -36,7 +36,7 @@ class YIWorld(World):
         As Yoshi, you must run, jump, and throw eggs to escort the baby Mario across the island to defeat Bowser and reunite the two brothers with their parents."""
     game: str = "Yoshi's Island"
     option_definitions = yoshi_options
-    data_version = 0
+    data_version = 1
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
