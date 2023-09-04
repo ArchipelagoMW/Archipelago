@@ -5220,7 +5220,7 @@
             panel: THING
     paintings:
       - id: boxes_painting2
-        orientation: north
+        orientation: south
         exit_only: True
         required_when_no_doors: True
   The Artistic (Apple):
@@ -5313,7 +5313,7 @@
             panel: ROOT
     paintings:
       - id: cherry_painting3
-        orientation: south
+        orientation: north
         exit_only: True
         required_when_no_doors: True
   The Artistic (Hint Room):
