@@ -308,6 +308,9 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     removed_roadblocks |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in list_of_removed_roadblocks else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
+    match_trainer_levels = 1 if multiworld.match_trainer_levels[player] else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x17, 1, match_trainer_levels)
+
     # Set slot name
     for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
