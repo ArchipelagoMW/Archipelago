@@ -5219,7 +5219,7 @@
           - room: The Artistic (Apple)
             panel: THING
     paintings:
-      - id: cherry_painting3
+      - id: boxes_painting2
         orientation: north
         exit_only: True
         required_when_no_doors: True
@@ -5312,7 +5312,7 @@
           - room: The Artistic (Smiley)
             panel: ROOT
     paintings:
-      - id: boxes_painting2
+      - id: cherry_painting3
         orientation: south
         exit_only: True
         required_when_no_doors: True
