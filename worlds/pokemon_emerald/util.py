@@ -111,8 +111,8 @@ def get_easter_egg(easter_egg: str) -> Tuple[int, int]:
         value = (result2 + 64) & 0xFF
         if value > 0 and value < 355:
             return (2, value)
-    elif result1 == 0x22BBE024:
-        value = (result2 + 229) & 0xFF
+    elif result1 == 0x506D2690:
+        value = (result2 + 169) & 0xFF
         if value > 0 and value < 78:
             return (3, value)
     elif result1 == 0xA7850E45 and (result1 ^ result2) & 0xFF == 96:
