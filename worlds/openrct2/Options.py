@@ -156,7 +156,7 @@ class Include_Park_Value_Objective(OpenRCT2OnToggle):
     display_name = "Include Park Value Objective"
 
 class Park_Value_Objective(Range):
-    """If enabled, choose what park value is required to win the scenario."""
+    """If enabled, choose what park value (In USD) is required to win the scenario."""
     display_name = "Park Value Objective"
     range_start = 1
     range_end = 1000000
@@ -206,9 +206,33 @@ class Park_Rating_Objective(Range):
     default = 800
 
 class Pay_Off_Loan(OpenRCT2OnToggle):
-    """Require Loan to be paid off before scenario completion is awarded"""
+    """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
 
+class Monopoly_Mode(OpenRCT2OnToggle):
+    """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
+    display_name = "Monopoly Mode"
+
+class Furry_Convention_Traps(Range):
+    """When found, instantly hosts a furry convention in your park!"""
+    display_name = "Furry Convention Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
+
+class Bathroom_Traps(Range):
+    """When found, instantly maxes out the bathroom stat of every guest!"""
+    display_name = "Bathroom Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
+
+class Spam_Traps(Range):
+    """When found, spams ads all over the screen!"""
+    display_name = "Spam Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
 
 
 openRCT2_options = {
@@ -218,6 +242,11 @@ openRCT2_options = {
 
     # deathlink
     "deathlink": DeathLink,
+
+    # traps
+    "furry_convention_traps": Furry_Convention_Traps,
+    "bathroom_traps": Bathroom_Traps,
+    "spam_traps": Spam_Traps,
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     "randomization_range": Randomization_Range,
@@ -236,7 +265,8 @@ openRCT2_options = {
     "roller_coaster_nausea": Roller_Coaster_Nausea,
     "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
-    "pay_off_loan": Pay_Off_Loan
+    "pay_off_loan": Pay_Off_Loan,
+    "monopoly_mode": Monopoly_Mode
 }
 
 OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})
