@@ -128,6 +128,7 @@ class WitnessWorld(World):
                     item_pool.pop(inventory_item_name)
                 else:
                     item_pool[inventory_item_name] -= 1
+            self.multiworld.push_precollected(self.create_item(inventory_item_name))
 
         if len(item_pool) > pool_size:
             error_string = "The Witness world has too few locations ({num_loc}) to place its necessary items " \
@@ -192,7 +193,7 @@ class WitnessWorld(World):
         credits_hint = (
             "This Randomizer is brought to you by",
             "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett.", -1
+            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1
         )
 
         audio_logs = get_audio_logs().copy()
@@ -233,6 +234,11 @@ class WitnessWorld(World):
         return slot_data
 
     def create_item(self, item_name: str) -> Item:
+        # If the player's plando options are malformed, the item_name parameter could be a dictionary containing the
+        #   name of the item, rather than the item itself. This is a workaround to prevent a crash.
+        if type(item_name) is dict:
+            item_name = list(item_name.keys())[0]
+
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
         item_data: ItemData
         if hasattr(self, 'items') and self.items and item_name in self.items.item_data:

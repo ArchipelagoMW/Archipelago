@@ -2,7 +2,7 @@ import os
 import hashlib
 import Utils
 import bsdiff4
-from copy import deepcopy
+import pkgutil
 from worlds.Files import APDeltaPatch
 from .text import encode_text
 from .items import item_table
@@ -11,7 +11,6 @@ from .rock_tunnel import randomize_rock_tunnel
 from .rom_addresses import rom_addresses
 from .regions import PokemonRBWarp, map_ids
 from . import poke_data
-
 
 def write_quizzes(self, data, random):
 
@@ -198,8 +197,8 @@ def generate_output(self, output_directory: str):
     game_version = self.multiworld.game_version[self.player].current_key
     data = bytes(get_base_rom_bytes(game_version))
 
-    with open(os.path.join(os.path.dirname(__file__), f'basepatch_{game_version}.bsdiff4'), 'rb') as stream:
-        base_patch = bytes(stream.read())
+    base_patch = pkgutil.get_data(__name__, f'basepatch_{game_version}.bsdiff4')
+
     data = bytearray(bsdiff4.patch(data, base_patch))
 
     basemd5 = hashlib.md5()
@@ -354,9 +353,9 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player] == "open_viridian_city":
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    data[rom_addresses['Option_Route3_Guard_A']] = self.multiworld.route_3_condition[self.player].value
+    data[rom_addresses['Option_Route3_Guard_B']] = self.multiworld.route_3_condition[self.player].value
     if self.multiworld.route_3_condition[self.player] == "open":
-        data[rom_addresses['Option_Route3_Guard_B']] = 0x11
+        data[rom_addresses['Option_Route3_Guard_A']] = 0x11
     if not self.multiworld.robbed_house_officer[self.player]:
         data[rom_addresses['Option_Trashed_House_Guard_A']] = 0x15
         data[rom_addresses['Option_Trashed_House_Guard_B']] = 0x11

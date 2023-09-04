@@ -1,10 +1,11 @@
-from typing import TYPE_CHECKING, Optional
+from functools import cached_property
+from typing import Optional, TYPE_CHECKING, cast
 
-from BaseClasses import Region, Location, Item, ItemClassification, CollectionState
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from .Constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .Options import Goal
-from .Regions import REGIONS, SEALS, MEGA_SHARDS
-from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
+from .Regions import MEGA_SHARDS, REGIONS, SEALS
+from .Shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -29,7 +30,8 @@ class MessengerRegion(Region):
             locations += [seal_loc for seal_loc in SEALS[self.name]]
         if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
             locations += [shard for shard in MEGA_SHARDS[self.name]]
-        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None for loc in locations}
+        loc_dict = {loc: world.location_name_to_id[loc] if loc in world.location_name_to_id else None
+                    for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
         world.multiworld.regions.append(self)
 
@@ -44,19 +46,35 @@ class MessengerLocation(Location):
 
 
 class MessengerShopLocation(MessengerLocation):
+    @cached_property
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         world: MessengerWorld = self.parent_region.multiworld.worlds[self.player]
-        return world.shop_prices.get(name, world.figurine_prices.get(name))
+        # short circuit figurines which all require demon's bane be purchased, but nothing else
+        if "Figurine" in name:
+            return world.figurine_prices[name] +\
+                cast(MessengerShopLocation, world.multiworld.get_location("The Shop - Demon's Bane", self.player)).cost
+        shop_data = SHOP_ITEMS[name]
+        if shop_data.prerequisite:
+            prereq_cost = 0
+            if isinstance(shop_data.prerequisite, set):
+                for prereq in shop_data.prerequisite:
+                    prereq_cost +=\
+                        cast(MessengerShopLocation,
+                             world.multiworld.get_location(prereq, self.player)).cost
+            else:
+                prereq_cost +=\
+                    cast(MessengerShopLocation,
+                         world.multiworld.get_location(shop_data.prerequisite, self.player)).cost
+            return world.shop_prices[name] + prereq_cost
+        return world.shop_prices[name]
 
     def can_afford(self, state: CollectionState) -> bool:
         world: MessengerWorld = state.multiworld.worlds[self.player]
-        cost = self.cost() * 2
-        if cost >= 1000:
-            cost *= 2
+        cost = self.cost
         can_afford = state.has("Shards", self.player, min(cost, world.total_shards))
         if "Figurine" in self.name:
-            return state.has("Money Wrench", self.player) and can_afford\
+            can_afford = state.has("Money Wrench", self.player) and can_afford\
                 and state.can_reach("Money Wrench", "Location", self.player)
         return can_afford
 
@@ -75,4 +93,3 @@ class MessengerItem(Item):
         else:
             item_class = ItemClassification.filler
         super().__init__(name, item_class, item_id, player)
-

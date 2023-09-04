@@ -91,6 +91,9 @@ _legendary_pokemon = frozenset({
 })
 
 
+national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}
+
+
 def get_random_species(
         random: Random,
         candidates: List[Optional[SpeciesData]],
@@ -106,7 +109,7 @@ def get_random_species(
         candidates = [species for species in candidates if species.label not in _legendary_pokemon]
 
     if nearby_bst is not None:
-        def has_nearby_bst(species: SpeciesData, max_percent_different: int):
+        def has_nearby_bst(species: SpeciesData, max_percent_different: int) -> bool:
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
 
         max_percent_different = 10
@@ -120,7 +123,7 @@ def get_random_species(
     return random.choice(candidates)
 
 
-def get_random_type(random: Random):
+def get_random_type(random: Random) -> int:
     picked_type = random.randrange(0, 18)
     while picked_type == 9:  # Don't pick the ??? type
         picked_type = random.randrange(0, 18)

@@ -21,6 +21,7 @@ __all__ = [
 ]
 
 no_gui = False
+skip_autosave = False
 _world_settings_name_cache: Dict[str, str] = {}  # TODO: cache on disk and update when worlds change
 _world_settings_name_cache_updated = False
 _lock = Lock()
@@ -767,11 +768,17 @@ class Settings(Group):
             self._filename = location
 
         def autosave() -> None:
-            if self._filename and self.changed:
+            if __debug__:
+                import __main__
+                main_file = getattr(__main__, "__file__", "")
+                assert "pytest" not in main_file and "unittest" not in main_file, \
+                       f"Auto-saving {self._filename} during unittests"
+            if self._filename and self.changed and not skip_autosave:
                 self.save()
 
-        import atexit
-        atexit.register(autosave)
+        if not skip_autosave:
+            import atexit
+            atexit.register(autosave)
 
     def save(self, location: Optional[str] = None) -> None:  # as above
         location = location or self._filename

@@ -449,6 +449,17 @@ class BlindTrainers(Toggle):
     display_name = "Blind Trainers"
 
 
+class MatchTrainerLevels(Toggle):
+    """
+    When you start a battle with a trainer, your party's levels will be automatically set to match that trainer.
+
+    The experience you receive will match your party's average actual level, and will only be awarded when you win the battle.
+
+    This is a pseudo-replacement for a level cap and makes every trainer battle a fair fight while still allowing you to level up.
+    """
+    display_name = "Match Trainer Levels"
+
+
 class DoubleBattleChance(Range):
     """
     The percent chance that a trainer with more than 1 pokemon will be converted into a double battle.
@@ -539,10 +550,21 @@ class ReceiveItemMessages(Choice):
     option_none = 2
 
 
+class RemoteItems(Toggle):
+    """
+    Instead of placing your own items directly into the ROM, all items are received from the server, including items you find for yourself.
+
+    This enables co-op of a single slot and recovering more items after a lost save file (if you're so unlucky).
+    But it changes pickup behavior slightly and obviously requires connection to the server to receive any items.
+    """
+    display_name = "Remote Items"
+
+
 class EasterEgg(FreeText):
     """
     ???
     """
+    default = "Example Passphrase"
 
 
 option_definitions: Dict[str, Option] = {
@@ -589,6 +611,7 @@ option_definitions: Dict[str, Option] = {
     "guaranteed_catch": GuaranteedCatch,
     "exp_modifier": ExpModifier,
     "blind_trainers": BlindTrainers,
+    "match_trainer_levels": MatchTrainerLevels,
     "double_battle_chance": DoubleBattleChance,
     "better_shops": BetterShops,
     "remove_roadblocks": RemoveRoadblocks,
@@ -597,6 +620,7 @@ option_definitions: Dict[str, Option] = {
     "fly_without_badge": FlyWithoutBadge,
     "turbo_a": TurboA,
     "receive_item_messages": ReceiveItemMessages,
+    "remote_items": RemoteItems,
 
     "easter_egg": EasterEgg
 }
