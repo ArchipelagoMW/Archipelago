@@ -5,7 +5,7 @@
 def setup_gamevars(world, multiworld, player: int):
     world.playergoal = multiworld.goal[player].value
     if multiworld.luigi_pieces_in_pool[player].value < multiworld.luigi_pieces_required[player].value:
-        multiworld.luigi_pieces_in_pool[world.player].value = multiworld.random.randint(multiworld.luigi_pieces_required[world.player].value, 100)
+        multiworld.luigi_pieces_in_pool[world.player].value = world.random.randint(multiworld.luigi_pieces_required[world.player].value, 100)
     world.luigi_pieces = multiworld.luigi_pieces_required[player].value
 
     if multiworld.starting_lives[player] > 255:
@@ -18,21 +18,21 @@ def setup_gamevars(world, multiworld, player: int):
     world.level_colors = []
     world.color_order = []
     for i in range(72):
-            world.level_colors.append(multiworld.random.randint(0,7))
+            world.level_colors.append(world.random.randint(0,7))
     if multiworld.yoshi_colors[player].value == 3:
         singularity_color = multiworld.yoshi_singularity_color[player].value
         for i in range(len(world.level_colors)):
                     world.level_colors[i] = singularity_color
     elif multiworld.yoshi_colors[player].value == 1:
-        world.leader_color = multiworld.random.randint(0,7)
+        world.leader_color = world.random.randint(0,7)
         for i in range(7):
-            world.color_order.append(multiworld.random.randint(0,7))
+            world.color_order.append(world.random.randint(0,7))
 
     bonus_valid = [0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]
 
     world.world_bonus = []
     for i in range(12):
-        world.world_bonus.append(multiworld.random.choice(bonus_valid))
+        world.world_bonus.append(world.random.choice(bonus_valid))
 
     safe_baby_sounds = [0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
     0x21, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40,
@@ -41,7 +41,7 @@ def setup_gamevars(world, multiworld, player: int):
     0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2]
 
     if multiworld.baby_mario_sound[player] == 2:
-        world.baby_mario_sfx = multiworld.random.choice(safe_baby_sounds)
+        world.baby_mario_sfx = world.random.choice(safe_baby_sounds)
     elif multiworld.baby_mario_sound == 1:
         world.baby_mario_sfx = 0x42
     else:
@@ -58,7 +58,7 @@ def setup_gamevars(world, multiworld, player: int):
 
     if multiworld.boss_shuffle[player] == 1:
         for i in range(11):
-            multiworld.random.shuffle(boss_list)
+            world.random.shuffle(boss_list)
     world.boss_order = boss_list
 
     burt_pointers = [0x3D, 0x05, 0x63, 0x00]
@@ -291,7 +291,7 @@ def setup_gamevars(world, multiworld, player: int):
     starting_level_entrance = world.world_start_lv[multiworld.starting_world[player].value]
     if multiworld.level_shuffle[player].value != 0:
         world.global_level_list.remove(starting_level)
-        multiworld.random.shuffle(world.global_level_list)
+        world.random.shuffle(world.global_level_list)
         if multiworld.level_shuffle[player].value == 1:
             for i in range(11):
                 world.global_level_list = [item for item in world.global_level_list if item not in boss_lv]
