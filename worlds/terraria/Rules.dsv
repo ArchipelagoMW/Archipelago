@@ -298,7 +298,7 @@ Skeletron Prime;                    Location | Item | Mech Boss;                
 # mechanical_bosses
 
 // The Twins
-Soul of Sight;                      ;                                           The Twins;
+Soul of Sight;                      ;                                           #The Twins;
 Steampunker;                        Npc;                                        @mech_boss(1);
 Hammush;                            ;                                           Truffle & @mech_boss(1);
 Rainbow Rod;                        ;                                           Hardmode Anvil & Crystal Shard & Unicorn Horn & Pixie Dust & Soul of Light & Soul of Sight;
