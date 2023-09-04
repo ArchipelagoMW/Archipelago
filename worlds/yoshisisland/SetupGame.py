@@ -286,7 +286,8 @@ def setup_gamevars(world, multiworld, player: int):
             easy_start_lv.extend([0x1B])
             norm_start_lv.extend([0x1B, 0x2B, 0x37])
 
-    starting_level = multiworld.random.choice(diff_level)
+    starting_level = world.random.choice(diff_level)
+
     starting_level_entrance = world.world_start_lv[multiworld.starting_world[player].value]
     if multiworld.level_shuffle[player].value != 0:
         world.global_level_list.remove(starting_level)
