@@ -240,11 +240,11 @@ def connectStartingRegion(multiworld: MultiWorld, player: int):
 
     load_file = Entrance(player, 'Overworld', menu)
     load_file.connect(world_main)
-    menu.exits.append(load_file)
+    menu.connect(world_main, "Start Game")
 
     starting_world = Entrance(player, 'Overworld', world_main)
     starting_world.connect(starting_region)
-    world_main.exits.append(starting_world)
+    world_main.connect(starting_region, "Overworld")
 
 def connect(multiworld: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
     sourceRegion = multiworld.get_region(source, player)
