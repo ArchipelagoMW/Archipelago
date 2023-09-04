@@ -11,9 +11,9 @@
 
 ## Installing AP Doom
 1. Download [APDOOM.zip](https://github.com/Daivuk/apdoom/releases) and extract it.
-2. Copy DOOM.WAD from your steam install into the extracted folder.
+2. Copy DOOM.WAD from your steam installation into the extracted folder.
    You can find the folder in steam by finding the game in your library,
-   right clicking it and choosing *Manage→Browse Local Files*.
+   right-clicking it and choosing `Manage → Browse Local Files`.
 
 ## Joining a MultiWorld Game
 
