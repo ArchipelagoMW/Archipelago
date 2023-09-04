@@ -295,7 +295,8 @@ def setup_gamevars(world, multiworld, player: int):
         if multiworld.level_shuffle[player].value == 1:
             for i in range(11):
                 world.global_level_list = [item for item in world.global_level_list if item not in boss_lv]
-            multiworld.random.shuffle(boss_lv)
+            world.random.shuffle(boss_lv)
+
             world.global_level_list.insert(3 - world_1_offsets[multiworld.starting_world[player].value], boss_lv[0]) #1 if starting world is 1, 0 otherwise
             world.global_level_list.insert(7 - world_1_offsets[multiworld.starting_world[player].value], boss_lv[1])
             world.global_level_list.insert(11 - world_2_offsets[multiworld.starting_world[player].value], boss_lv[2])
