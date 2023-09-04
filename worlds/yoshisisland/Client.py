@@ -100,7 +100,7 @@ class YISNIClient(SNIClient):
         elif item_received[0] > 0x00:
             return
             
-        from Rom import item_values
+        from .Rom import item_values
         rom = await snes_read(ctx, YOSHISISLAND_ROMHASH_START, ROMHASH_SIZE)
         if rom != ctx.rom:
             ctx.rom = None

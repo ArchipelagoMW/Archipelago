@@ -164,9 +164,6 @@ class YIWorld(World):
             
         item = Item(name, classification, data.code, self.player)
 
-        if not item.advancement:
-            return item
-
         return item
 
     def create_regions(self):
@@ -176,10 +173,10 @@ class YIWorld(World):
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.multiworld.trap_percent[self.player].value
 
-        if self.multiworld.random.random() < (trap_chance / 100) and self.multiworld.traps_enabled[self.player].value == 1:
-            return self.multiworld.random.choice(trap_items)
+        if self.random.random() < (trap_chance / 100) and self.multiworld.traps_enabled[self.player].value == 1:
+            return self.random.choice(trap_items)
         else:
-            return self.multiworld.random.choice(filler_items)
+            return self.random.choice(filler_items)
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)

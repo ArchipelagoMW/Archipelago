@@ -236,18 +236,7 @@ def connectStartingRegion(multiworld: MultiWorld, player: int):
     menu = multiworld.get_region('Menu', player)
     world_main = multiworld.get_region('Overworld', player)
 
-    if get_option_value(multiworld, player, "starting_world") == 0:
-        starting_region = multiworld.get_region('World 1', player)
-    elif get_option_value(multiworld, player, "starting_world") == 1:
-        starting_region = multiworld.get_region('World 2', player)
-    elif get_option_value(multiworld, player, "starting_world") == 2:
-        starting_region = multiworld.get_region('World 3', player)
-    elif get_option_value(multiworld, player, "starting_world") == 3:
-        starting_region = multiworld.get_region('World 4', player)
-    elif get_option_value(multiworld, player, "starting_world") == 4:
-        starting_region = multiworld.get_region('World 5', player)
-    elif get_option_value(multiworld, player, "starting_world") == 5:
-        starting_region = multiworld.get_region('World 6', player)
+    starting_region = multiworld.get_region(f'World {multiworld.starting_world[player].value + 1}', player)
 
     load_file = Entrance(player, 'Overworld', menu)
     load_file.connect(world_main)

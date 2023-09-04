@@ -9,6 +9,7 @@
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
+        NOTE: RetroArch and FXPakPro are not currently supported.
 - Your legally obtained Yoshi's Island ROM file, probably named `Super Mario World 2 - Yoshi's Island (U).sfc`
 
 ## Optional Software
