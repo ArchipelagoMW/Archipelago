@@ -18,7 +18,7 @@ Falador East Outskirts,Area: Falador,"Dwarven Mountain Pass, Draynor Manor Outsk
 Dwarven Mountain Pass,Area: Dwarven Mines,"Goblin Village, Monastery, Barbarian Village, Falador East Outskirts, Falador","Anvil*, Wheat"
 Dwarven Mines,Area: Dwarven Mines,"Monastery, Ice Mountain, Falador","Chisel, Bronze Ores, Iron Ore, Coal Ore, Gold Ore, Anvil, Pie Dish, Clay Ore"
 Goblin Village,Area: Ice Mountain,"Wilderness, Dwarven Mountain Pass",Meat
-Ice Mountain,Area: Ice Mountain,"Wilderness, Monastery, Dwarven Mines, Camdozaal",
+Ice Mountain,Area: Ice Mountain,"Wilderness, Monastery, Dwarven Mines, Camdozaal*",
 Camdozaal,Area: Ice Mountain,Ice Mountain,Clay Ore
 Monastery,Area: Monastery,"Wilderness, Dwarven Mountain Pass, Dwarven Mines, Ice Mountain",Sheep
 Falador,Area: Falador,"Dwarven Mountain Pass, Falador Farms, Dwarven Mines","Furnace, Chisel, Bowl, Cake Tin, Oak Tree, Guard, Imps"

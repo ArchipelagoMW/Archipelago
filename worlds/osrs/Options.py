@@ -74,6 +74,7 @@ class MaxCombatTasks(Range):
     """
     range_start = 0
     range_end = MAX_COMBAT_TASKS
+    default = MAX_COMBAT_TASKS
 
 
 class CombatTaskWeight(Range):
@@ -105,6 +106,7 @@ class MaxPrayerTasks(Range):
     """
     range_start = 0
     range_end = MAX_PRAYER_TASKS
+    default = MAX_PRAYER_TASKS
 
 
 class PrayerTaskWeight(Range):
@@ -136,6 +138,7 @@ class MaxMagicTasks(Range):
     """
     range_start = 0
     range_end = MAX_MAGIC_TASKS
+    default = MAX_MAGIC_TASKS
 
 
 class MagicTaskWeight(Range):
@@ -167,6 +170,7 @@ class MaxRunecraftTasks(Range):
     """
     range_start = 0
     range_end = MAX_RUNECRAFT_TASKS
+    default = MAX_RUNECRAFT_TASKS
 
 
 class RunecraftTaskWeight(Range):
@@ -198,6 +202,7 @@ class MaxCraftingTasks(Range):
     """
     range_start = 0
     range_end = MAX_CRAFTING_TASKS
+    default = MAX_CRAFTING_TASKS
 
 
 class CraftingTaskWeight(Range):
@@ -229,6 +234,7 @@ class MaxMiningTasks(Range):
     """
     range_start = 0
     range_end = MAX_MINING_TASKS
+    default = MAX_MINING_TASKS
 
 
 class MiningTaskWeight(Range):
@@ -260,6 +266,7 @@ class MaxSmithingTasks(Range):
     """
     range_start = 0
     range_end = MAX_SMITHING_TASKS
+    default = MAX_SMITHING_TASKS
 
 
 class SmithingTaskWeight(Range):
@@ -291,6 +298,7 @@ class MaxFishingTasks(Range):
     """
     range_start = 0
     range_end = MAX_FISHING_TASKS
+    default = MAX_FISHING_TASKS
 
 
 class FishingTaskWeight(Range):
@@ -322,6 +330,7 @@ class MaxCookingTasks(Range):
     """
     range_start = 0
     range_end = MAX_COOKING_TASKS
+    default = MAX_COOKING_TASKS
 
 
 class CookingTaskWeight(Range):
@@ -352,7 +361,8 @@ class MaxFiremakingTasks(Range):
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
     range_start = 0
-    range_end = MAX_PRAYER_TASKS
+    range_end = MAX_FIREMAKING_TASKS
+    default = MAX_FIREMAKING_TASKS
 
 
 class FiremakingTaskWeight(Range):
@@ -384,6 +394,7 @@ class MaxWoodcuttingTasks(Range):
     """
     range_start = 0
     range_end = MAX_WOODCUTTING_TASKS
+    default = MAX_WOODCUTTING_TASKS
 
 
 class WoodcuttingTaskWeight(Range):
@@ -405,6 +416,7 @@ class MinimumGeneralTasks(Range):
     """
     range_start = 0
     range_end = NON_QUEST_LOCATION_COUNT
+    default = 10
 
 
 class GeneralTaskWeight(Range):

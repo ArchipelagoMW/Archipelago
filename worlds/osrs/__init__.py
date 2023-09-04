@@ -58,8 +58,9 @@ class OSRSWorld(World):
     def generate_early(self) -> None:
         self.location_categories = {location_row.category for location_row in load_location_csv()}
         self.locations_by_category = {category:
-            [location_row for location_row in self.location_rows if location_row.category == category]
-            for category in self.location_categories}
+                                          [location_row for location_row in self.location_rows if
+                                           location_row.category == category]
+                                      for category in self.location_categories}
 
         self.location_rows_by_name = {loc_row.name: loc_row for loc_row in self.location_rows}
         self.region_rows_by_name = {reg_row.name: reg_row for reg_row in self.region_rows}
@@ -80,7 +81,8 @@ class OSRSWorld(World):
             self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
 
         # Set Starting Chunk
-        starting_index = [i for i in range(0, len(self.item_rows)) if self.item_rows[i].name == self.starting_area_item][0]
+        starting_index = \
+            [i for i in range(0, len(self.item_rows)) if self.item_rows[i].name == self.starting_area_item][0]
         self.multiworld.push_precollected(self.create_item(starting_index))
 
     def create_regions(self) -> None:
@@ -103,27 +105,56 @@ class OSRSWorld(World):
         starting_area_region = self.starting_area_item[len("Area: "):]
         starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
         starting_entrance.connect(self.region_name_to_data[starting_area_region])
-        menu_region.exits.append(starting_entrance)
 
         # Create entrances between regions
         for region_row in self.region_rows:
             region = self.region_name_to_data[region_row.name]
             for outbound_region_name in region_row.connections:
+                entrance = region.create_exit(f"{region_row.name}->{outbound_region_name}")
                 if "*" not in outbound_region_name:
-                    entrance = region.create_exit(f"{region_row.name}->{outbound_region_name}")
-                    item_name = self.region_rows_by_name[outbound_region_name]
-                    entrance.access_rule = lambda state: state.has(item_name, self.player)
+                    item_name = self.region_rows_by_name[outbound_region_name].itemReq
+                    if "*" not in item_name:
+                        entrance.access_rule = lambda state: state.has(item_name, self.player)
+                    else:
+                        self.generate_special_rules_for(entrance, region_row, outbound_region_name)
                     entrance.connect(self.region_name_to_data[outbound_region_name])
-                    region.exits.append(entrance)
                 else:
-                    print(f"Special access rule needed for {outbound_region_name}")
+                    self.generate_special_rules_for(entrance, region_row, outbound_region_name)
             for resource_region in region_row.resources:
-                if resource_region != "" and "*" not in resource_region:
+                if resource_region != "":
                     entrance = region.create_exit(f"{region_row.name}->{resource_region}")
-                    entrance.connect(self.region_name_to_data[resource_region])
-                    region.exits.append(entrance)
-                else:
-                    print(f"Special access rule needed for {resource_region}")
+                    if "*" not in resource_region:
+                        entrance.connect(self.region_name_to_data[resource_region])
+                    else:
+                        self.generate_special_rules_for(entrance, region_row, resource_region)
+
+    def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
+        if outbound_region_name == "Cook's Guild":
+            entrance.access_rule = lambda state: self.can_reach_skill(state, "cooking", 32)
+            return
+        if outbound_region_name == "Crafting Guild":
+            entrance.access_rule = lambda state: self.can_reach_skill(state, "crafting", 40)
+            return
+        if outbound_region_name == "Crandor":
+            entrance.access_rule = lambda state: \
+                self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player).can_reach(state)
+            return
+        if outbound_region_name == "Corsair Cove":
+            # Need to be able to start Corsair Curse in addition to having the item
+            item_name = self.region_rows_by_name[outbound_region_name].itemReq
+            entrance.access_rule = lambda state: state.has(item_name, self.player) and \
+                                                 state.can_reach(RegionNames.Falador_Farm, self.player)
+            return
+        if outbound_region_name == "Camdozaal*":
+            entrance.access_rule = lambda state: \
+                self.multiworld.get_location(LocationNames.Q_Below_Ice_Mountain, self.player).can_reach(state)
+            return
+        if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
+            entrance.access_rule = lambda state: \
+                self.multiworld.get_location(LocationNames.Q_Dorics_Quest, self.player).can_reach(state)
+            return
+
+        print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
 
     def roll_locations(self):
         locations_required = len(self.local_item_pool)
@@ -132,7 +163,7 @@ class OSRSWorld(World):
         # Quests are always added
         for i in range(len(self.location_rows)):
             location_row = self.location_rows[i]
-            if location_row.category == "Quest":
+            if location_row.category in ["Quest", "Points", "Goal"]:
                 self.create_and_add_location(i)
                 locations_added += 1
 
@@ -143,77 +174,87 @@ class OSRSWorld(World):
         general_tasks = [task for task in self.locations_by_category["General"]]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(general_tasks)
-        for i in range(0, self.multiworld.minimum_general_tasks):
+        for i in range(0, self.multiworld.minimum_general_tasks[self.player]):
             task = general_tasks.pop()
             self.add_location(task)
             locations_added += 1
 
-        general_weight = self.multiworld.general_task_weight[self.player] if len(general_tasks > 0) else 0
+        general_weight = self.multiworld.general_task_weight[self.player] if len(general_tasks) > 0 else 0
         combat_tasks = [task for task in self.locations_by_category["Combat"]
-                        if task.Skills[0].level <= self.max_combat_level]
+                        if task.skills[0].level <= int(self.multiworld.max_combat_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(combat_tasks)
-        combat_tasks = combat_tasks[0:self.max_combat_tasks]
+        combat_tasks = combat_tasks[0:self.multiworld.max_combat_tasks[self.player]]
         combat_weight = self.multiworld.combat_task_weight[self.player] if len(combat_tasks) > 0 else 0
+
         prayer_tasks = [task for task in self.locations_by_category["Prayer"]
-                        if task.Skills[0].level <= self.max_prayer_level]
+                        if task.skills[0].level <= int(self.multiworld.max_prayer_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(prayer_tasks)
-        prayer_tasks = prayer_tasks[0:self.max_prayer_tasks]
+        prayer_tasks = prayer_tasks[0:self.multiworld.max_prayer_tasks[self.player]]
         prayer_weight = self.multiworld.prayer_task_weight[self.player] if len(prayer_tasks) > 0 else 0
+
         magic_tasks = [task for task in self.locations_by_category["Magic"]
-                       if task.Skills[0].level <= self.max_magic_level]
+                       if task.skills[0].level <= int(self.multiworld.max_magic_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(magic_tasks)
-        magic_tasks = magic_tasks[0:self.max_magic_tasks]
+        magic_tasks = magic_tasks[0:self.multiworld.max_magic_tasks[self.player]]
         magic_weight = self.multiworld.magic_task_weight[self.player] if len(magic_tasks) > 0 else 0
+
         runecraft_tasks = [task for task in self.locations_by_category["Runecraft"]
-                           if task.Skills[0].level <= self.max_runecraft_level]
+                           if task.skills[0].level <= int(self.multiworld.max_runecraft_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(runecraft_tasks)
-        runecraft_tasks = runecraft_tasks[0:self.max_runecraft_tasks]
+        runecraft_tasks = runecraft_tasks[0:self.multiworld.max_runecraft_tasks[self.player]]
         runecraft_weight = self.multiworld.runecraft_task_weight[self.player] if len(runecraft_tasks) > 0 else 0
+
         crafting_tasks = [task for task in self.locations_by_category["Crafting"]
-                          if task.Skills[0].level <= self.max_crafting_level]
+                          if task.skills[0].level <= int(self.multiworld.max_crafting_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(crafting_tasks)
-        crafting_tasks = crafting_tasks[0:self.max_crafting_tasks]
+        crafting_tasks = crafting_tasks[0:self.multiworld.max_crafting_tasks[self.player]]
         crafting_weight = self.multiworld.crafting_task_weight[self.player] if len(crafting_tasks) > 0 else 0
+
         mining_tasks = [task for task in self.locations_by_category["Mining"]
-                        if task.Skills[0].level <= self.max_mining_level]
+                        if task.skills[0].level <= int(self.multiworld.max_mining_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(mining_tasks)
-        mining_tasks = mining_tasks[0:self.max_mining_tasks]
+        mining_tasks = mining_tasks[0:self.multiworld.max_mining_tasks[self.player]]
         mining_weight = self.multiworld.mining_task_weight[self.player] if len(mining_tasks) > 0 else 0
+
         smithing_tasks = [task for task in self.locations_by_category["Smithing"]
-                          if task.Skills[0].level <= self.max_smithing_level]
+                          if task.skills[0].level <= int(self.multiworld.max_smithing_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(smithing_tasks)
-        smithing_tasks = smithing_tasks[0:self.max_smithing_tasks]
+        smithing_tasks = smithing_tasks[0:self.multiworld.max_smithing_tasks[self.player]]
         smithing_weight = self.multiworld.smithing_task_weight[self.player] if len(smithing_tasks) > 0 else 0
+
         fishing_tasks = [task for task in self.locations_by_category["Fishing"]
-                         if task.Skills[0].level <= self.max_fishing_level]
+                         if task.skills[0].level <= int(self.multiworld.max_fishing_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(fishing_tasks)
-        fishing_tasks = fishing_tasks[0:self.max_fishing_tasks]
+        fishing_tasks = fishing_tasks[0:self.multiworld.max_fishing_tasks[self.player]]
         fishing_weight = self.multiworld.fishing_task_weight[self.player] if len(fishing_tasks) > 0 else 0
+
         cooking_tasks = [task for task in self.locations_by_category["Cooking"]
-                         if task.Skills[0].level <= self.max_cooking_level]
+                         if task.skills[0].level <= int(self.multiworld.max_cooking_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(cooking_tasks)
-        cooking_tasks = cooking_tasks[0:self.max_cooking_tasks]
+        cooking_tasks = cooking_tasks[0:self.multiworld.max_cooking_tasks[self.player]]
         cooking_weight = self.multiworld.cooking_task_weight[self.player] if len(cooking_tasks) > 0 else 0
+
         firemaking_tasks = [task for task in self.locations_by_category["Firemaking"]
-                            if task.Skills[0].level <= self.max_firemaking_level]
+                            if task.skills[0].level <= int(self.multiworld.max_firemaking_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(firemaking_tasks)
-        firemaking_tasks = firemaking_tasks[0:self.max_firemaking_tasks]
+        firemaking_tasks = firemaking_tasks[0:self.multiworld.max_firemaking_tasks[self.player]]
         firemaking_weight = self.multiworld.firemaking_task_weight[self.player] if len(firemaking_tasks) > 0 else 0
+
         woodcutting_tasks = [task for task in self.locations_by_category["Woodcutting"]
-                             if task.Skills[0].level <= self.max_woodcutting_level]
+                             if task.skills[0].level <= int(self.multiworld.max_woodcutting_level[self.player])]
         if not self.multiworld.progressive_tasks[self.player]:
             rnd.shuffle(woodcutting_tasks)
-        woodcutting_tasks = woodcutting_tasks[0:self.max_woodcutting_tasks]
+        woodcutting_tasks = woodcutting_tasks[0:self.multiworld.max_woodcutting_tasks[self.player]]
         woodcutting_weight = self.multiworld.woodcutting_task_weight[self.player] if len(woodcutting_tasks) > 0 else 0
 
         total_weight = combat_weight + prayer_weight + magic_weight + runecraft_weight + \
@@ -367,6 +408,8 @@ class OSRSWorld(World):
         """
         called to set access and item rules on locations and entrances.
         """
+        self.roll_locations()
+
         # Place QP events
         self.multiworld.get_location(LocationNames.QP_Cooks_Assistant, self.player) \
             .place_locked_item(self.create_event(ItemNames.QP_Cooks_Assistant))
@@ -410,118 +453,6 @@ class OSRSWorld(World):
             .place_locked_item(self.create_event(ItemNames.QP_X_Marks_the_Spot))
         self.multiworld.get_location(LocationNames.QP_Below_Ice_Mountain, self.player) \
             .place_locked_item(self.create_event(ItemNames.QP_Below_Ice_Mountain))
-
-        # Quest locations
-        add_rule(self.multiworld.get_location(LocationNames.Q_Cooks_Assistant, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge, None, self.player) and
-                # Eggs
-                state.can_reach(RegionNames.Egg, None, self.player) and
-                state.can_reach(RegionNames.Wheat, None, self.player) and
-                state.can_reach(RegionNames.Windmill, None, self.player) and
-                state.can_reach(RegionNames.Milk, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Demon_Slayer, self.player), lambda state: (
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Varrock_Palace, None, self.player) and
-                state.can_reach(RegionNames.Wizards_Tower, None, self.player) and
-                state.can_reach(RegionNames.South_Of_Varrock, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Restless_Ghost, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge, None, self.player) and
-                state.can_reach(RegionNames.Lumbridge_Swamp, None, self.player) and
-                state.can_reach(RegionNames.Wizards_Tower, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Romeo_Juliet, self.player), lambda state: (
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Varrock_Palace, None, self.player) and
-                state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                state.can_reach(RegionNames.West_Varrock, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Sheep_Shearer, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) and
-                state.can_reach(RegionNames.Spinning_Wheel, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Shield_of_Arrav, self.player), lambda state: (
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Varrock_Palace, None, self.player) and
-                state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                state.can_reach(RegionNames.West_Varrock, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Vampyre_Slayer, self.player), lambda state: (
-                state.can_reach(RegionNames.Draynor_Village, None, self.player) and
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Draynor_Manor, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Imp_Catcher, self.player), lambda state: (
-                state.can_reach(RegionNames.Wizards_Tower, None, self.player) and
-                state.can_reach(RegionNames.Imp, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Prince_Ali_Rescue, self.player), lambda state: (
-                state.can_reach(RegionNames.Al_Kharid, None, self.player) and
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Bronze_Ores, None, self.player) and
-                state.can_reach(RegionNames.Clay_Rock, None, self.player) and
-                state.can_reach(RegionNames.Sheep, None, self.player) and
-                state.can_reach(RegionNames.Spinning_Wheel, None, self.player) and
-                state.can_reach(RegionNames.Draynor_Village, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Black_Knights_Fortress, self.player), lambda state: (
-                (state.can_reach(RegionNames.Edgeville, None, self.player) or
-                 state.can_reach(RegionNames.Falador_Farm, None, self.player)) and
-                state.has(ItemNames.Progressive_Armor, self.player) and
-                state.can_reach(RegionNames.Falador, None, self.player) and
-                state.can_reach(RegionNames.Monastery, None, self.player) and
-                state.can_reach(RegionNames.Ice_Mountain, None, self.player) and
-                self.quest_points(state) >= 12
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Witchs_Potion, self.player), lambda state: (
-                state.can_reach(RegionNames.Rimmington, None, self.player) and
-                state.can_reach(RegionNames.Port_Sarim, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Knights_Sword, self.player), lambda state: (
-                state.can_reach(RegionNames.Falador, None, self.player) and
-                state.can_reach(RegionNames.Varrock_Palace, None, self.player) and
-                state.can_reach(RegionNames.Mudskipper_Point, None, self.player) and
-                state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                (state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) or state.can_reach(
-                    RegionNames.West_Varrock, None, self.player))
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Goblin_Diplomacy, self.player), lambda state: (
-                state.can_reach(RegionNames.Ice_Mountain, None, self.player) and
-                state.can_reach(RegionNames.Draynor_Village, None, self.player) and
-                state.can_reach(RegionNames.Falador, None, self.player) and
-                state.can_reach(RegionNames.South_Of_Varrock, None, self.player) and
-                (state.can_reach(RegionNames.Lumbridge_Farms_West, None, self.player) or state.can_reach(
-                    RegionNames.Rimmington, None, self.player))
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Pirates_Treasure, self.player), lambda state: (
-                state.can_reach(RegionNames.Port_Sarim, None, self.player) and
-                state.can_reach(RegionNames.Karamja, None, self.player) and
-                state.can_reach(RegionNames.Falador, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Rune_Mysteries, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge, None, self.player) and
-                state.can_reach(RegionNames.Wizards_Tower, None, self.player) and
-                state.can_reach(RegionNames.Central_Varrock, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Corsair_Curse, self.player), lambda state: (
-                state.can_reach(RegionNames.Falador_Farm, None, self.player) and
-                state.can_reach(RegionNames.Corsair_Cove, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_X_Marks_the_Spot, self.player), lambda state: (
-                state.can_reach(RegionNames.Lumbridge, None, self.player) and
-                state.can_reach(RegionNames.Draynor_Village, None, self.player) and
-                state.can_reach(RegionNames.Port_Sarim, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Q_Below_Ice_Mountain, self.player), lambda state: (
-                state.can_reach(RegionNames.Dwarven_Mines, None, self.player) and
-                state.can_reach(RegionNames.Ice_Mountain, None, self.player) and
-                state.can_reach(RegionNames.Barbarian_Village, None, self.player) and
-                state.can_reach(RegionNames.Falador, None, self.player) and
-                state.can_reach(RegionNames.Central_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Edgeville, None, self.player) and
-                self.quest_points(state) >= 16
-        ))
 
         # QP Locations
         add_rule(self.multiworld.get_location(LocationNames.QP_Cooks_Assistant, self.player), lambda state: (
@@ -586,82 +517,6 @@ class OSRSWorld(World):
         ))
         add_rule(self.multiworld.get_location(LocationNames.QP_Below_Ice_Mountain, self.player), lambda state: (
             self.multiworld.get_location(LocationNames.Q_Below_Ice_Mountain, self.player).can_reach(state)
-        ))
-
-        # Other locations
-        add_rule(self.multiworld.get_location(LocationNames.Guppy, self.player), lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Cavefish, self.player), lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Tetra, self.player), lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Barronite_Deposit, self.player), lambda state: (
-            state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Catch_Lobster, self.player), lambda state: (
-                state.can_reach(RegionNames.Port_Sarim, None, self.player) and
-                state.can_reach(RegionNames.Lobster, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Smelt_Silver, self.player), lambda state: (
-                self.multiworld.get_location(LocationNames.Mine_Silver, self.player).can_reach(state) and
-                state.can_reach(RegionNames.Furnace, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Smelt_Steel, self.player), lambda state: (
-                self.multiworld.get_location(LocationNames.Mine_Coal, self.player).can_reach(state) and
-                state.can_reach(RegionNames.Iron_Rock, None, self.player) and
-                state.can_reach(RegionNames.Furnace, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Smelt_Gold, self.player), lambda state: (
-                self.multiworld.get_location(LocationNames.Mine_Gold, self.player).can_reach(state) and
-                state.can_reach(RegionNames.Furnace, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Bake_Apple_Pie, self.player), lambda state: (
-                state.can_reach(RegionNames.Wheat, None, self.player) and
-                state.can_reach(RegionNames.Windmill, None, self.player) and
-                state.can_reach(RegionNames.West_Varrock, None, self.player) and
-                state.can_reach(RegionNames.Imp, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Bake_Cake, self.player), lambda state: (
-                state.can_reach(RegionNames.Wheat, None, self.player) and
-                state.can_reach(RegionNames.Egg, None, self.player) and
-                state.can_reach(RegionNames.Milk, None, self.player) and
-                state.can_reach(RegionNames.Windmill, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Bake_Meat_Pizza, self.player), lambda state: (
-                state.can_reach(RegionNames.Wheat, None, self.player) and
-                state.can_reach(RegionNames.Windmill, None, self.player)
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.K_Lesser_Demon, self.player), lambda state: (
-                state.can_reach(RegionNames.Wilderness, None, self.player) or
-                state.can_reach(RegionNames.Crandor, None, self.player) or
-                state.can_reach(RegionNames.Wizards_Tower, None, self.player) or
-                state.can_reach(RegionNames.Karamja, None, self.player)
-        ))
-
-        # Put some of the later grinds behind some QP so it's not all front-loaded
-        add_rule(self.multiworld.get_location(LocationNames.Total_Level_150, self.player), lambda state: (
-                self.quest_points(state) >= 3
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Total_Level_200, self.player), lambda state: (
-                self.quest_points(state) >= 5
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Combat_Level_15, self.player), lambda state: (
-                self.quest_points(state) >= 3
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Combat_Level_25, self.player), lambda state: (
-                self.quest_points(state) >= 8
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Total_XP_25000, self.player), lambda state: (
-                self.quest_points(state) >= 3
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Total_XP_50000, self.player), lambda state: (
-                self.quest_points(state) >= 5
-        ))
-        add_rule(self.multiworld.get_location(LocationNames.Total_XP_100000, self.player), lambda state: (
-                self.quest_points(state) >= 12
         ))
 
         # place "Victory" at "Dragon Slayer" and set collection as win condition
