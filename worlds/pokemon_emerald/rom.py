@@ -232,6 +232,8 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x16 */ u8 freeFlyLocation;
+    #     /* 0x17 */ bool8 matchTrainerLevels;
+    #     /* 0x18 */ u8 activeEasterEgg;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -310,8 +312,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     removed_roadblocks |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in list_of_removed_roadblocks else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
+    # Set match trainer levels
     match_trainer_levels = 1 if multiworld.match_trainer_levels[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x17, 1, match_trainer_levels)
+
+    # Set easter egg data
+    _set_bytes_little_endian(patched_rom, options_address + 0x18, 1, easter_egg[0])
+
+    if easter_egg[0] == 2:
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
 
     # Set slot name
     for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
