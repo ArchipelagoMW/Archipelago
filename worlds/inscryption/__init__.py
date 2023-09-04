@@ -86,5 +86,6 @@ class InscryptionWorld(World):
             "deathlink": self.multiworld.deathlink[self.player].value,
             "randomize_codes": self.multiworld.randomize_codes[self.player].value,
             "randomize_deck": self.multiworld.randomize_deck[self.player].value,
+            "randomize_abilities": self.multiworld.randomize_abilities[self.player].value,
             "optional_death_card": self.multiworld.optional_death_card[self.player].value,
         }

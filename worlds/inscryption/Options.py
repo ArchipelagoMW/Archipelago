@@ -45,15 +45,15 @@ class RandomizeAbilities(Choice):
     display_name = "Randomize Abilities"
     option_disable = 0
     option_randomize_modded = 1
-    option_randomize_all = 2
+    """option_randomize_all = 2"""
 
+    """self.option_randomize_all: "Randomize All", 
+    TODO add this when feature to randomize all ability is complete"""
     def get_event_name(self) -> str:
         return {
             self.option_disable: "Disable",
             self.option_randomize_modded: "Randomize Modded",
-            self.option_randomize_all: "Randomize All",
         }[self.value]
-
 
 class OptionalDeathCard(Choice):
     """Add a Moment after death where you can decide to create a death card or not.
