@@ -904,6 +904,7 @@ all_weapon_slot = {
     LocationName.UltimaWeaponSlot,
     LocationName.WinnersProofSlot,
     LocationName.PurebloodSlot,
+
     LocationName.Centurion2,
     LocationName.CometStaff,
     LocationName.HammerStaff,

@@ -266,10 +266,11 @@ class KH2World(World):
         self.donald_pre_fill()
         self.goofy_pre_fill()
         self.keyblade_pre_fill()
-        # self.item_name_to_id.update({event_name: None for event_name in Events_Table})
+
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
+
 
     def create_regions(self):
         """

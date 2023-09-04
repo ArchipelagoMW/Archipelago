@@ -2,10 +2,10 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .logic import *
-from .Items import exclusion_item_table, visit_locking_dict
+from .Items import exclusion_item_table, visit_locking_dict, item_dictionary_table, DonaldAbility_Table, GoofyAbility_Table
 from .Locations import STT_Checks, exclusion_table, popups_set
 from .Names import LocationName, ItemName, RegionName
-from worlds.generic.Rules import add_rule, forbid_items
+from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
 
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
@@ -245,6 +245,41 @@ class KH2Rules:
         # Santa's house also breaks with stat ups
         for location in {LocationName.SantasHouseChristmasTownMap, LocationName.SantasHouseAPBoost}:
             forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
+
+        for goofy_slot in [LocationName.AdamantShield,
+                           LocationName.AkashicRecord,
+                           LocationName.ChainGear,
+                           LocationName.DreamCloud,
+                           LocationName.FallingStar,
+                           LocationName.FrozenPride2,
+                           LocationName.GenjiShield,
+                           LocationName.KnightDefender,
+                           LocationName.KnightsShield,
+                           LocationName.MajesticMushroom,
+                           LocationName.MajesticMushroom2,
+                           LocationName.NobodyGuard,
+                           LocationName.OgreShield,
+                           LocationName.SaveTheKing2,
+                           LocationName.UltimateMushroom]:
+            add_item_rule(world.get_location(goofy_slot, self.player),
+                    lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
+        for donald_slot in [LocationName.Centurion2,
+                            LocationName.CometStaff,
+                            LocationName.HammerStaff,
+                            LocationName.LordsBroom,
+                            LocationName.MagesStaff,
+                            LocationName.MeteorStaff,
+                            LocationName.NobodyLance,
+                            LocationName.PreciousMushroom,
+                            LocationName.PreciousMushroom2,
+                            LocationName.PremiumMushroom,
+                            LocationName.RisingDragon,
+                            LocationName.SaveTheQueen2,
+                            LocationName.ShamansRelic,
+                            LocationName.VictoryBell,
+                            LocationName.WisdomWand, ]:
+            add_item_rule(world.get_location(donald_slot, self.player),
+                    lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
 
     def set_kh2_goal(self):
         if self.world.multiworld.Goal[self.player] == "three_proofs":

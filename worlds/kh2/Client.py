@@ -6,7 +6,7 @@ import os
 import asyncio
 import json
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table
+from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table, all_weapon_slot
 from .Names import ItemName
 from .WorldLocations import *
 
@@ -355,11 +355,8 @@ class KH2Context(CommonContext):
                             self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
 
             all_weapon_location_id = []
-            all_weapon_slots = [weapon_slot for weapon_slot in exclusion_table["WeaponSlots"].keys()]
-            for weapon_location in all_weapon_slots:
+            for weapon_location in all_weapon_slot:
                 all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
-            for location_name in [LocationName.KingdomKeySlot, LocationName.KnightsShield, LocationName.MagesStaff]:
-                all_weapon_location_id.append(self.kh2_loc_name_to_id[location_name])
             self.all_weapon_location_id = set(all_weapon_location_id)
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
