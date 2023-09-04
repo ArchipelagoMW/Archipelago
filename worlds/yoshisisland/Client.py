@@ -107,7 +107,8 @@ class YISNIClient(SNIClient):
             return
 
         new_checks = []
-        from worlds.yoshisisland.Rom import location_table, item_values
+        from .Rom import location_table, item_values
+
         location_ram_data = await snes_read(ctx, WRAM_START + 0x1440, 0x80)
         for loc_id, loc_data in location_table.items():
             if loc_id not in ctx.locations_checked:
