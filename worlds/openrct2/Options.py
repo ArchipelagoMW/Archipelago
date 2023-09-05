@@ -214,21 +214,21 @@ class Monopoly_Mode(OpenRCT2OnToggle):
     display_name = "Monopoly Mode"
 
 class Furry_Convention_Traps(Range):
-    """When found, instantly hosts a furry convention in your park!"""
+    """When found, instantly hosts a furry convention in your park! Adding traps will increase the total number of items in the world."""
     display_name = "Furry Convention Trap"
     range_start = 0
     range_end = 20
     default = 5
 
 class Bathroom_Traps(Range):
-    """When found, instantly maxes out the bathroom stat of every guest!"""
+    """When found, instantly maxes out the bathroom stat of every guest! Adding traps will increase the total number of items in the world."""
     display_name = "Bathroom Trap"
     range_start = 0
     range_end = 20
     default = 5
 
 class Spam_Traps(Range):
-    """When found, spams ads all over the screen!"""
+    """When found, spams ads all over the screen! Adding traps will increase the total number of items in the world."""
     display_name = "Spam Trap"
     range_start = 0
     range_end = 20
