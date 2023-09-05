@@ -6,7 +6,7 @@ The [player settings page for this game](../player-settings) contains all the op
 
 ## What does randomization do to this game?
 
-Certain interactable objects within levels will be unable to be used until a corresponding item is found. If the item is not in the player's posession, the object will flash and will not function. Objects include:
+Certain interactable objects within levels will be unable to be used until the corresponding item is found. If the item is not in the player's posession, the object will flash and will not function. Objects include:
 - Spring Ball
 - Large Spring Ball 
 - ! Switch

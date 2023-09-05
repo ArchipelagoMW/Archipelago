@@ -13,8 +13,18 @@ from .Regions import create_regions
 from .SetupGame import setup_gamevars
 from worlds.AutoWorld import World, WebWorld
 from .Client import YISNIClient
-from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch
+from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch, USHASH
 import Patch
+import settings
+
+class YISettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the Yoshi's Island 1.0 US rom"""
+        description = "Yoshi's Island ROM File"
+        copy_to = ".sfc"
+        md5s = [USHASH]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 class YIWeb(WebWorld):
     theme = "ocean"
