@@ -112,6 +112,8 @@ class RelationshipLogic:
         rules = [self.region.can_reach_any(villager.locations)]
         if npc == NPC.kent:
             rules.append(self.time.has_year_two())
+        elif npc == NPC.leo:
+            rules.append(self.received("Island West Turtle"))
 
         return And(rules)
 

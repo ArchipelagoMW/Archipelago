@@ -629,7 +629,7 @@ class StardewLogic:
                 item_rules.append(bundle_item.item.name)
                 if bundle_item.quality > highest_quality_yet:
                     highest_quality_yet = bundle_item.quality
-        return self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
+        return self.region.can_reach(Region.wizard_tower) & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
 
     def can_grow_gold_quality(self, quality: int) -> StardewRule:
         if quality <= 0:
@@ -868,20 +868,6 @@ class StardewLogic:
         for rarecrow_number in range(1, 9):
             rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
         return And(rules)
-
-    def can_ship(self, item: str) -> StardewRule:
-        return self.buildings.has_building(Building.shipping_bin) & self.has(item)
-
-    def can_ship_everything(self) -> StardewRule:
-        shipsanity_prefix = "Shipsanity: "
-        all_items_to_ship = []
-        include_island = self.options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-        include_qi = self.options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi
-        for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
-            if (include_island or LocationTags.GINGER_ISLAND not in location.tags) and \
-               (include_qi or LocationTags.REQUIRES_QI_ORDERS not in location.tags):
-                all_items_to_ship.append(location.name[len(shipsanity_prefix):])
-        return self.buildings.has_building(Building.shipping_bin) & And([self.has(item) for item in all_items_to_ship])
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)
