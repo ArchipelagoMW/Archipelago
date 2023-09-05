@@ -81,9 +81,7 @@ class OSRSWorld(World):
             self.starting_area_item = chunksanity_starting_chunks[chunksanity_random]
 
         # Set Starting Chunk
-        starting_index = \
-            [i for i in range(0, len(self.item_rows)) if self.item_rows[i].name == self.starting_area_item][0]
-        self.multiworld.push_precollected(self.create_item(starting_index))
+        self.multiworld.push_precollected(self.create_item(self.starting_area_item))
 
     def create_regions(self) -> None:
         """
@@ -159,12 +157,14 @@ class OSRSWorld(World):
     def roll_locations(self):
         locations_required = len(self.local_item_pool)
         locations_added = 0
+        rolled_locations_added = 0
 
         # Quests are always added
         for i in range(len(self.location_rows)):
             location_row = self.location_rows[i]
             if location_row.category in ["Quest", "Points", "Goal"]:
                 self.create_and_add_location(i)
+                print(f"Adding task {location_row.name}")
                 locations_added += 1
 
         # Build up the weighted Task Pool
@@ -177,6 +177,7 @@ class OSRSWorld(World):
         for i in range(0, self.multiworld.minimum_general_tasks[self.player]):
             task = general_tasks.pop()
             self.add_location(task)
+            print(f"Adding task {task.name}")
             locations_added += 1
 
         general_weight = self.multiworld.general_task_weight[self.player] if len(general_tasks) > 0 else 0
@@ -257,113 +258,50 @@ class OSRSWorld(World):
         woodcutting_tasks = woodcutting_tasks[0:self.multiworld.max_woodcutting_tasks[self.player]]
         woodcutting_weight = self.multiworld.woodcutting_task_weight[self.player] if len(woodcutting_tasks) > 0 else 0
 
-        total_weight = combat_weight + prayer_weight + magic_weight + runecraft_weight + \
-                       crafting_weight + mining_weight + smithing_weight + fishing_weight + \
-                       cooking_weight + firemaking_weight + woodcutting_weight + general_weight
+        all_tasks = [
+            combat_tasks,
+            prayer_tasks,
+            magic_tasks,
+            runecraft_tasks,
+            crafting_tasks,
+            mining_tasks,
+            smithing_tasks,
+            fishing_tasks,
+            cooking_tasks,
+            firemaking_tasks,
+            woodcutting_tasks,
+            general_tasks
+        ]
+        all_weights = [
+            combat_weight,
+            prayer_weight,
+            magic_weight,
+            runecraft_weight,
+            crafting_weight,
+            mining_weight,
+            smithing_weight,
+            fishing_weight,
+            cooking_weight,
+            firemaking_weight,
+            woodcutting_weight,
+            general_weight
+        ]
 
         while locations_added < locations_required:
-            random_roll = rnd.randint(0, total_weight)
-            if random_roll < combat_weight:
-                task = combat_tasks.pop()
-                self.add_location(task)
-                if len(combat_tasks) == 0:
-                    total_weight -= combat_weight
-                    combat_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= combat_weight
-            if random_roll < prayer_weight:
-                task = prayer_tasks.pop()
-                self.add_location(task)
-                if len(prayer_tasks) == 0:
-                    total_weight -= prayer_weight
-                    prayer_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= magic_weight
-            if random_roll < magic_weight:
-                task = magic_tasks.pop()
-                self.add_location(task)
-                if len(magic_tasks) == 0:
-                    total_weight -= magic_weight
-                    magic_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= magic_weight
-            if random_roll < runecraft_weight:
-                task = runecraft_tasks.pop()
-                self.add_location(task)
-                if len(runecraft_tasks) == 0:
-                    total_weight -= runecraft_weight
-                    runecraft_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= runecraft_weight
-            if random_roll < crafting_weight:
-                task = crafting_tasks.pop()
-                self.add_location(task)
-                if len(crafting_tasks) == 0:
-                    total_weight -= crafting_weight
-                    crafting_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= crafting_weight
-            if random_roll < mining_weight:
-                task = mining_tasks.pop()
-                self.add_location(task)
-                if len(mining_tasks) == 0:
-                    total_weight -= mining_weight
-                    mining_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= mining_weight
-            if random_roll < smithing_weight:
-                task = smithing_tasks.pop()
-                self.add_location(task)
-                if len(smithing_tasks) == 0:
-                    total_weight -= smithing_weight
-                    smithing_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= smithing_weight
-            if random_roll < fishing_weight:
-                task = fishing_tasks.pop()
-                self.add_location(task)
-                if len(fishing_tasks) == 0:
-                    total_weight -= fishing_weight
-                    fishing_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= fishing_weight
-            if random_roll < cooking_weight:
-                task = cooking_tasks.pop()
-                self.add_location(task)
-                if len(cooking_tasks) == 0:
-                    total_weight -= cooking_weight
-                    cooking_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= cooking_weight
-            if random_roll < firemaking_weight:
-                task = firemaking_tasks.pop()
-                self.add_location(task)
-                if len(firemaking_tasks) == 0:
-                    total_weight -= firemaking_weight
-                    firemaking_weight = 0
-                locations_added += 1
-                continue
-            random_roll -= firemaking_weight
-            if random_roll < woodcutting_weight:
-                task = woodcutting_tasks.pop()
-                self.add_location(task)
-                if len(woodcutting_tasks) == 0:
-                    total_weight -= woodcutting_weight
-                    woodcutting_weight = 0
-                locations_added += 1
-                continue
-            # If it hasn't hit anything else, add a general
-            assert len(general_tasks) > 0, "There are not enough available tasks to fill the remaining pool for OSRS"
-            task = general_tasks.pop()
+            if all_tasks:
+                chosen_task = rnd.choices(all_tasks, all_weights)[0]
+                task = chosen_task.pop()
+                print(f"Adding task {task.name}")
+                if (len(chosen_task) == 0):
+                    index = all_tasks.index(chosen_task)
+                    del all_tasks[index]
+                    del all_weights[index]
+
+            else:
+                # assert len(general_tasks) > 0, "There are not enough avaialbe tasks to vfill the remaining pool for OSRS"
+                # task = general_tasks.pop()
+                pass
+
             self.add_location(task)
             locations_added += 1
 
@@ -372,12 +310,12 @@ class OSRSWorld(World):
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
-        for i in range(len(self.item_rows)):
-            item_row = self.item_rows[i]
-            for c in range(item_row.count):
-                item = self.create_item(i)
-                self.multiworld.itempool.append(item)
-                self.local_item_pool.append(item)
+        for item_row in self.item_rows:
+            if item_row.name is not self.starting_area_item:
+                for c in range(item_row.count):
+                    item = self.create_item(item_row.name)
+                    self.multiworld.itempool.append(item)
+                    self.local_item_pool.append(item)
 
     def create_and_add_location(self, row_index) -> None:
         location_row = self.location_rows[row_index]
@@ -535,8 +473,9 @@ class OSRSWorld(World):
         self.multiworld.regions.append(region)
         return region
 
-    def create_item(self, index: int) -> "Item":
-        item = self.item_rows[index]
+    def create_item(self, item_name: str) -> "Item":
+        item = [item for item in self.item_rows if item.name == item_name][0]
+        index = self.item_rows.index(item)
         return OSRSItem(item.name, item.progression, self.base_id + index, self.player)
 
     def create_event(self, event: str):
