@@ -6,6 +6,7 @@ from Options import Option, DefaultOnToggle, Toggle, StartInventoryPool, Choice
 class SwordProgression(DefaultOnToggle):
     """Option to play with sword progression. Sword Progression adds four possible upgrades to find that will
     level up your sword in the order of Stick -> Sword -> Lvl 3 Sword -> Lvl 4 Sword."""
+    display_name = "Sword Progression"
 
 
 class StartWithSword(Toggle):

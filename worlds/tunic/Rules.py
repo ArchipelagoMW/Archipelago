@@ -177,7 +177,7 @@ def set_location_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand,
                                                                                            player) and state.has(
-            ice_rod, ice_rod_amount, player)) if ability_shuffle else (
+            ice_rod, player, ice_rod_amount)) if ability_shuffle else (
                 state.has(grapple, player) and state.has(ice_dagger, player) and state.has(fire_wand, player)))
 
     # West Garden
