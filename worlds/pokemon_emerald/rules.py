@@ -1122,32 +1122,22 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         )
 
     # Battle Frontier
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_LILYCOVE_CITY_HARBOR/MAIN", player),
-    #     lambda state: state.has("S.S. Ticket", player) and
-    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or multiworld.enable_ferry[player].value == Toggle.option_true)
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SLATEPORT_CITY_HARBOR/MAIN", player),
-    #     lambda state: state.has("S.S. Ticket", player) and
-    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or multiworld.enable_ferry[player].value == Toggle.option_true)
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER", player),
-    #     can_surf
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
-    #     lambda state: state.has("Wailmer Pail", player) and can_surf(state)
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN", player),
-    #     lambda state: state.has("ITEM_WAILMER_PAIL", player)
-    # )
-    # set_rule(
-    #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
-    #     can_waterfall
-    # )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER", player),
+        can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
+        lambda state: state.has("Wailmer Pail", player) and can_surf(state)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN", player),
+        lambda state: state.has("Wailmer Pail", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL", player),
+        can_waterfall
+    )
 
 
 def set_overworld_item_rules(multiworld: MultiWorld, player: int) -> None:
@@ -1305,6 +1295,10 @@ def set_enable_ferry_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
         lambda state: state.has("S.S. Ticket", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player)  # TODO: Double check this for warp rando; otherwise impossible to approach from this side without ticket anyway
     )
 
 
