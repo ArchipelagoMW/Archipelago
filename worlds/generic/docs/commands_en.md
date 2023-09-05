@@ -98,7 +98,7 @@ The following commands are available in these clients: TextClient, SNIClient, Fa
 - `/items` Lists all the item names for the current game.
 - `/locations` Lists all the location names for the current game.
 - `/ready` Sends ready status to the server.
-- Typing anything that doesn't start with `!` or `/` will broadcast a message to all players.
+- Typing anything that doesn't start with `/` will broadcast a message to all players.
 
 ## FF1Client Only
 
