@@ -14,6 +14,7 @@ from .season_logic import SeasonLogic
 from .shipping_logic import ShippingLogic
 from .skill_logic import SkillLogic
 from .time_logic import TimeLogic
+from .tool_logic import ToolLogic
 from ..stardew_rule import StardewRule, Has
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.transport_names import Transportation
@@ -29,6 +30,7 @@ from ..strings.monster_drop_names import Loot
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
+from ..strings.tool_names import Tool
 from ..strings.villager_names import NPC
 
 
@@ -44,6 +46,7 @@ class SpecialOrderLogic:
     arcade: ArcadeLogic
     artisan: ArtisanLogic
     relationship: RelationshipLogic
+    tool: ToolLogic
     skill: SkillLogic
     mine: MineLogic
     cooking: CookingLogic
@@ -51,8 +54,8 @@ class SpecialOrderLogic:
     special_order_rules: Dict[str, StardewRule]
 
     def __init__(self, player: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
-                 shipping: ShippingLogic, arcade: ArcadeLogic, artisan: ArtisanLogic, relationship: RelationshipLogic, skill: SkillLogic, mine: MineLogic,
-                 cooking: CookingLogic, ability: AbilityLogic):
+                 shipping: ShippingLogic, arcade: ArcadeLogic, artisan: ArtisanLogic, relationship: RelationshipLogic, tool: ToolLogic, skill: SkillLogic,
+                 mine: MineLogic, cooking: CookingLogic, ability: AbilityLogic):
         self.player = player
         self.received = received
         self.has = has
@@ -64,6 +67,7 @@ class SpecialOrderLogic:
         self.arcade = arcade
         self.artisan = artisan
         self.relationship = relationship
+        self.tool = tool
         self.skill = skill
         self.mine = mine
         self.cooking = cooking
@@ -75,26 +79,26 @@ class SpecialOrderLogic:
             SpecialOrder.island_ingredients: self.relationship.can_meet(NPC.caroline) & self.has_island_transport() & self.ability.can_farm_perfectly() &
                                              self.shipping.can_ship(Vegetable.taro_root) & self.shipping.can_ship(Fruit.pineapple) & self.shipping.can_ship(Forageable.ginger),
             SpecialOrder.cave_patrol: self.relationship.can_meet(NPC.clint) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(120),
-            SpecialOrder.aquatic_overpopulation: self.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
-            SpecialOrder.biome_balance: self.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
+            SpecialOrder.aquatic_overpopulation: self.relationship.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
+            SpecialOrder.biome_balance: self.relationship.can_meet(NPC.demetrius) & self.ability.can_fish_perfectly(),
             SpecialOrder.rock_rejuivenation: self.relationship.has_hearts(NPC.emily, 4) & self.has(Mineral.ruby) & self.has(Mineral.topaz) &
                                              self.has(Mineral.emerald) & self.has(Mineral.jade) & self.has(Mineral.amethyst) &
                                              self.has(ArtisanGood.cloth) & self.region.can_reach(Region.haley_house),
-            SpecialOrder.gifts_for_george: self.can_reach_region(Region.alex_house) & self.season.has(Season.spring) & self.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.museum) & self.region.can_reach(Region.dig_site) & self.has_tool(Tool.pickaxe),
-            SpecialOrder.gus_famous_omelet: self.can_reach_region(Region.saloon) & self.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.ability.can_farm_perfectly() & self.can_ship(),
-            SpecialOrder.community_cleanup: self.can_reach_region(Region.railroad) & self.skill.can_crab_pot(),
-            SpecialOrder.the_strong_stuff: self.can_reach_region(Region.trailer) & self.artisan.can_keg(Vegetable.potato),
-            SpecialOrder.pierres_prime_produce: self.can_reach_region(Region.pierre_store) & self.ability.can_farm_perfectly(),
-            SpecialOrder.robins_project: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) &
+            SpecialOrder.gifts_for_george: self.region.can_reach(Region.alex_house) & self.season.has(Season.spring) & self.has(Forageable.leek),
+            SpecialOrder.fragments_of_the_past: self.region.can_reach(Region.museum) & self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
+            SpecialOrder.gus_famous_omelet: self.region.can_reach(Region.saloon) & self.has(AnimalProduct.any_egg),
+            SpecialOrder.crop_order: self.ability.can_farm_perfectly() & self.shipping.can_ship(),
+            SpecialOrder.community_cleanup: self.region.can_reach(Region.railroad) & self.skill.can_crab_pot(),
+            SpecialOrder.the_strong_stuff: self.region.can_reach(Region.trailer) & self.artisan.can_keg(Vegetable.potato),
+            SpecialOrder.pierres_prime_produce: self.region.can_reach(Region.pierre_store) & self.ability.can_farm_perfectly(),
+            SpecialOrder.robins_project: self.relationship.can_meet(NPC.robin) & self.region.can_reach(Region.carpenter) &
                                          self.ability.can_chop_perfectly() & self.has(Material.hardwood),
-            SpecialOrder.robins_resource_rush: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) & self.ability.can_chop_perfectly() & self.has(Fertilizer.tree) & self.ability.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted_yum: self.can_reach_region(Region.beach) & self.has(Loot.bug_meat),
-            SpecialOrder.tropical_fish: self.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
+            SpecialOrder.robins_resource_rush: self.relationship.can_meet(NPC.robin) & self.region.can_reach(Region.carpenter) & self.ability.can_chop_perfectly() & self.has(Fertilizer.tree) & self.ability.can_mine_perfectly(),
+            SpecialOrder.juicy_bugs_wanted_yum: self.region.can_reach(Region.beach) & self.has(Loot.bug_meat),
+            SpecialOrder.tropical_fish: self.relationship.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
                                         self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
-            SpecialOrder.a_curious_substance: self.can_reach_region(Region.wizard_tower) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(80),
-            SpecialOrder.prismatic_jelly: self.can_reach_region(Region.wizard_tower) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(40),
+            SpecialOrder.a_curious_substance: self.region.can_reach(Region.wizard_tower) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(80),
+            SpecialOrder.prismatic_jelly: self.region.can_reach(Region.wizard_tower) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(40),
             SpecialOrder.qis_crop: self.ability.can_farm_perfectly() & self.region.can_reach(Region.greenhouse) &
                                    self.region.can_reach(Region.island_west) & self.skill.has_total_level(50) &
                                    self.has(Machine.seed_maker) & self.shipping.can_ship(),

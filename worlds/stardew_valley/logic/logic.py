@@ -23,6 +23,7 @@ from .has_logic import HasLogic
 from .region_logic import RegionLogic
 from .relationship_logic import RelationshipLogic
 from .season_logic import SeasonLogic
+from .shipping_logic import ShippingLogic
 from .skill_logic import SkillLogic
 from .special_order_logic import SpecialOrderLogic
 from .time_logic import TimeLogic
@@ -31,7 +32,6 @@ from .wallet_logic import WalletLogic
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
 from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
-from ..locations import LocationTags, locations_by_tag
 from ..mods.logic.mod_logic import ModLogic
 from .. import options
 from ..data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
@@ -119,6 +119,7 @@ class StardewLogic:
         heart_size_option = self.options[options.FriendsanityHeartSize]
         mods_option = self.options[options.Mods]
         self.buildings = BuildingLogic(self.player, self.options[options.BuildingProgression], self.received, self.has, self.region, self.money, mods_option)
+        self.shipping = ShippingLogic(self.player, self.options[options.ExcludeGingerIsland], self.options[options.SpecialOrderLocations], self.has, self.buildings)
         self.relationship = RelationshipLogic(self.player, friendsanity_option, heart_size_option,
                                               self.received, self.has, self.region, self.time, self.season, self.gifts, self.buildings, mods_option)
         self.museum = MuseumLogic(self.player, self.options[options.Museumsanity], self.received, self.has, self.region, self.action)
@@ -135,8 +136,8 @@ class StardewLogic:
         self.crafting = CraftingLogic(self.player, self.received, self.has, self.region, self.time, self.money, self.relationship, self.skill)
         self.ability = AbilityLogic(self.player, self.options[options.NumberOfMovementBuffs], self.options[options.NumberOfLuckBuffs], self.received,
                                     self.region, self.tool, self.skill, self.mine)
-        self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.arcade, self.artisan,
-                                               self.relationship, self.skill, self.mine, self.cooking, self.ability)
+        self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
+                                               self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
 
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
                             self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability)
