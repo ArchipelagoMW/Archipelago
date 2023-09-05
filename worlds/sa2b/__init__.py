@@ -187,9 +187,9 @@ class SA2BWorld(World):
 
             for animal_name in chao_animal_event_location_table.keys():
                 animal_region = self.multiworld.get_region(animal_name, self.player)
-                animal_event_location = SA2BLocation(self.player, animal_name, 0x00, animal_region)
+                animal_event_location = SA2BLocation(self.player, animal_name, None, animal_region)
                 animal_region.locations.append(animal_event_location)
-                animal_event_item = SA2BItem(animal_name, ItemClassification.progression, 0x00, self.player)
+                animal_event_item = SA2BItem(animal_name, ItemClassification.progression, None, self.player)
                 self.multiworld.get_location(animal_name, self.player).place_locked_item(animal_event_item)
 
         itempool: typing.List[SA2BItem] = []
