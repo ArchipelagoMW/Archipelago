@@ -714,7 +714,7 @@ def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
             continue
         item_to_ship = location.name[len(shipsanity_prefix):]
         MultiWorldRules.set_rule(multi_world.get_location(location.name, player),
-                                 logic.can_ship(item_to_ship))
+                                 logic.shipping.can_ship(item_to_ship))
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multi_world: MultiWorld, player: int):
