@@ -30,9 +30,28 @@ class OpenRCT2World(World):
     item_name_to_id = {name: id for id, name in enumerate(openRCT2_items, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(openRCT2_locations, base_id)}
 
+    print("Here's the location_name_to_id dictionary:")
+    print(location_name_to_id)
+
     def create_items(self) -> None:
+        # for item in item_table:
+        #     count = 0
+        #     while count != item_frequency[item]:
+        #         item_name_to_id.append(self.create_item(item))
+        #         count += 1
+
+
+        print("The item tabel is this long:")
+        print(len(item_table))
+        print(item_frequency)
         for item in item_table:
-            self.multiworld.itempool.append(self.create_item(item))
+            count = 0
+            while count != item_frequency[item]:
+                self.multiworld.itempool.append(self.create_item(item))
+                count += 1
+
+        print("Here's the multiworld item pool:")
+        print(self.multiworld.itempool)
 
     def create_regions(self) -> None:
         # Add regions to the multiworld. "Menu" is the required starting point.
@@ -50,12 +69,15 @@ class OpenRCT2World(World):
         self.multiworld.regions.append(s)
         
         t = Region("No Prereqs", self.player, self.multiworld)
-        # Add unlocks that are just prices. This will always include location 0, which only has a price
+        # Add unlocks that are just prices traced back to location 0. Anything with a ride requirement or after an item with a ride requirement won't appear here
         NoPrereqs = []
-        for index, item in enumerate(item_table):
+        for index, item in enumerate(openRCT2_items):
         #if self.Options["difficulty"] == 0:
             NoPrereqs.append(OpenRCT2Location(self.player,"OpenRCT2_" + str(index),self.location_name_to_id["OpenRCT2_" + str(index)],t))
         
+        print("Here's the NoPrereqs list:")
+        print(NoPrereqs)
+
         t.locations = NoPrereqs
         self.multiworld.regions.append(t)
 

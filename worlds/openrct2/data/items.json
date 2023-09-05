@@ -99,7 +99,8 @@
 	"Allow Marketing Campaigns",
 	"Allow Tree Removal",
 	"Bathroom Trap",
-    "Furry Convention Trap"
+    "Furry Convention Trap",
+    "Spam Trap"
 	],
 	"useful_items": [
 		"Toilets",
@@ -117,6 +118,7 @@
 	],
 	"trap_items": [
 		"Bathroom Trap",
-        "Furry Convention Trap"
+        "Furry Convention Trap",
+        "Spam Trap"
 	]
 }
