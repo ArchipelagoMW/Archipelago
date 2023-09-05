@@ -47,9 +47,8 @@ can be configured to allow/require manual usage of this command.
 ### Cheats
 - `!getitem <item>` Cheats an item, if it is enabled in the server.
 
-### Broken/Deprecated/WIP
-- `!status` Returns information about your team. <br /> (Currently all players as teams are unimplemented. Instead,
-this shows the connection status and check completion numbers for all players in the current room.)
+### Game status
+- `!status` Returns information about the connection status and check completion numbers for all players in the current room. <br /> (Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink)
 
 
 ## Host only (on Archipelago.gg or in your server console)
