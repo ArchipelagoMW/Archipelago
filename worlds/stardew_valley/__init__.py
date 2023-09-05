@@ -222,7 +222,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options[options.Goal] == options.Goal.option_full_shipment:
             self.create_event_location(location_table[Goal.full_shipment],
-                                       self.logic.can_ship_everything().simplify(),
+                                       self.logic.shipping.can_ship_everything().simplify(),
                                        Event.victory)
         elif self.options[options.Goal] == options.Goal.option_perfection:
             self.create_event_location(location_table[Goal.perfection],
