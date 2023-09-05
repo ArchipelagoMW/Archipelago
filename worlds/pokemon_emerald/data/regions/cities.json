@@ -1766,7 +1766,10 @@
     "parent_map": "MAP_SS_TIDAL_CORRIDOR",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_SLATEPORT_CITY_HARBOR/MAIN",
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_SS_TIDAL_CORRIDOR:0/MAP_SS_TIDAL_ROOMS:0",
       "MAP_SS_TIDAL_CORRIDOR:4/MAP_SS_TIDAL_ROOMS:8",
@@ -1785,10 +1788,7 @@
       "NPC_GIFT_RECEIVED_TM49"
     ],
     "events": [],
-    "exits": [
-      "REGION_SLATEPORT_CITY_HARBOR/MAIN",
-      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
-    ],
+    "exits": [],
     "warps": [
       "MAP_SS_TIDAL_ROOMS:0,1/MAP_SS_TIDAL_CORRIDOR:0",
       "MAP_SS_TIDAL_ROOMS:8/MAP_SS_TIDAL_CORRIDOR:4",
