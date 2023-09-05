@@ -1,5 +1,6 @@
 import typing
 import math
+import logging
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
@@ -684,11 +685,11 @@ class SA2BWorld(World):
         exit_choice = self.random.choice(valid_kindergarten_exits)
         exit_room = exit_to_room_map[exit_choice]
         all_exits_copy.remove(exit_choice)
+        multi_rooms_copy.remove(exit_room)
 
         destination = 0x06
         single_rooms_copy.remove(destination)
         all_destinations_copy.remove(destination)
-        accessible_rooms.append(destination)
 
         er_layout[exit_choice] = destination
 
@@ -698,13 +699,13 @@ class SA2BWorld(World):
 
         all_exits_copy.remove(reverse_exit)
         all_destinations_copy.remove(exit_room)
-        room_to_exits_map[exit_room].remove(exit_choice)
 
         # Connect multi-exit rooms
         loop_guard = 0
         while len(multi_rooms_copy) > 0:
             loop_guard += 1
-            if loop_guard > 200:
+            if loop_guard > 2000:
+                logging.warning(f"Failed to generate Chao Entrance Randomization for player: {self.multiworld.player_name[self.player]}")
                 return {}
 
             exit_room = self.random.choice(accessible_rooms)
@@ -732,7 +733,8 @@ class SA2BWorld(World):
         loop_guard = 0
         while len(single_rooms_copy) > 0:
             loop_guard += 1
-            if loop_guard > 200:
+            if loop_guard > 2000:
+                logging.warning(f"Failed to generate Chao Entrance Randomization for player: {self.multiworld.player_name[self.player]}")
                 return {}
 
             exit_room = self.random.choice(accessible_rooms)
@@ -745,7 +747,6 @@ class SA2BWorld(World):
             destination = self.random.choice(single_rooms_copy)
             single_rooms_copy.remove(destination)
             all_destinations_copy.remove(destination)
-            accessible_rooms.append(destination)
 
             er_layout[exit_choice] = destination
 
@@ -761,9 +762,10 @@ class SA2BWorld(World):
         while len(all_exits_copy) > 0:
             loop_guard += 1
             if loop_guard > 2000:
+                logging.warning(f"Failed to generate Chao Entrance Randomization for player: {self.multiworld.player_name[self.player]}")
                 return {}
 
-            exit_room = self.random.choice(accessible_rooms)
+            exit_room = self.random.choice(all_destinations_copy)
             possible_exits = [exit for exit in room_to_exits_map[exit_room] if exit in all_exits_copy]
             if len(possible_exits) == 0:
                 continue
