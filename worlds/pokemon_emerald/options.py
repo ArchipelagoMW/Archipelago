@@ -575,9 +575,11 @@ class RemoteItems(Toggle):
 
 class EasterEgg(FreeText):
     """
-    ???
+    Enter certain phrases and something special might happen.
+
+    All secret phrases are something that could be a trendy phrase in Dewford Town. They are case insensitive.
     """
-    default = "Example Passphrase"
+    default = "EMERALD SECRET"
 
 
 option_definitions: Dict[str, Option] = {
