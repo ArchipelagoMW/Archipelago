@@ -110,7 +110,9 @@ class TerrariaWorld(World):
         item_count = 0
         items = []
         for rule, flags, _, _ in rules[:goal]:
-            if not self.calamity and "Calamity" in flags:
+            if (not self.calamity and "Calamity" in flags) or (
+                rule == "Zenith" and self.multiworld.goal[self.player].value != 11
+            ):
                 continue
             if "Item" in flags:
                 # Item
