@@ -555,3 +555,8 @@ class WitnessPlayerLocations:
         }
 
         self.CHECK_LOCATION_TABLE = {**self.EVENT_LOCATION_TABLE, **check_dict}
+
+    def add_location_late(self, entity_name: str):
+        entity_hex = StaticWitnessLogic.ENTITIES_BY_NAME[entity_name]["checkHex"]
+        self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
+        self.CHECK_PANELHEX_TO_ID[entity_hex] = StaticWitnessLocations.get_id(entity_hex)

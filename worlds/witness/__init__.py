@@ -107,6 +107,39 @@ class WitnessWorld(World):
     def create_regions(self):
         self.regio.create_regions(self.multiworld, self.player, self.player_logic)
 
+        # Set rules early so extra locations can be created based on the results of exploring collection states
+
+        set_rules(self.multiworld, self.player, self.player_logic, self.locat)
+
+        # There are some really restrictive settings in The Witness.
+        # They are rarely played, but when they are, we add some extra sphere 1 locations.
+        # This is done both to prevent generation failures, but also to make the early game less linear.
+
+        sphere_1_size = sum(1 for loc in self.multiworld.get_reachable_locations(player=self.player) if loc.address)
+
+        # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
+
+        needed_size = 3
+        needed_size += get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1
+        needed_size += is_option_enabled(self.multiworld, self.player, "shuffle_symbols")
+        needed_size += get_option_value(self.multiworld, self.player, "shuffle_doors") != 0
+
+        # Then, add checks in order until the required amount of sphere 1 checks is met.
+
+        extra_checks = [
+            ("First Hallway", "First Hallway Straight"),
+            ("First Hallway Room", "First Hallway Bend"),
+            ("Desert Outside", "Desert Surface 4"),
+        ]
+
+        for i in range(sphere_1_size, needed_size):
+            if not extra_checks:
+                break
+
+            region, loc = extra_checks.pop(0)
+            self.locat.add_location_late(loc)
+            self.multiworld.get_region(region, self.player).add_locations({loc: self.location_name_to_id[loc]})
+
     def create_items(self):
 
         # Determine pool size. Note that the dog location is included in the location list, so this needs to be -1.
@@ -183,9 +216,6 @@ class WitnessWorld(World):
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(0, quantity)]
             if self.items.item_data[item_name].local_only:
                 self.multiworld.local_items[self.player].value.add(item_name)
-
-    def set_rules(self):
-        set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
     def fill_slot_data(self) -> dict:
         hint_amount = get_option_value(self.multiworld, self.player, "hint_amount")
