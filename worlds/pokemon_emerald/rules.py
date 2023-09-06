@@ -168,7 +168,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         can_surf
     )
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM_SURF"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
     if multiworld.norman_requirement[player] == NormanRequirement.option_badges:
@@ -234,7 +234,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         can_rock_smash
     )
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM04"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM_STRENGTH"), player),
         can_rock_smash
     )
     set_rule(
@@ -784,7 +784,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
     )
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM08"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM_DIVE"), player),
         lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
     )
 
@@ -882,7 +882,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
     )
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM07"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM_WATERFALL"), player),
         lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
     )
 
@@ -1180,7 +1180,7 @@ def set_overworld_item_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Safari Zone
     set_rule(
-        multiworld.get_location(location_name_to_label("ITEM_SAFARI_ZONE_NORTH_WEST_TM22"), player),
+        multiworld.get_location(location_name_to_label("ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM"), player),
         can_surf
     )
     set_rule(
@@ -1224,7 +1224,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Petalburg City
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_TM36"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
 
@@ -1262,7 +1262,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Mauville City
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_GOT_TM24_FROM_WATTSON"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player) and state.has("EVENT_TURN_OFF_GENERATOR", player)
     )
     set_rule(
@@ -1272,7 +1272,7 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Fallarbor Town
     set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_TM27"), player),
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_TM_RETURN"), player),
         lambda state: state.has("EVENT_RECOVER_METEORITE", player) and state.has("Meteorite", player)
     )
 

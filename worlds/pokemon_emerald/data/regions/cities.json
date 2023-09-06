@@ -223,7 +223,7 @@
   "REGION_PETALBURG_CITY_WALLYS_HOUSE/MAIN": {
     "parent_map": "MAP_PETALBURG_CITY_WALLYS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_HM03"
+      "NPC_GIFT_RECEIVED_HM_SURF"
     ],
     "events": [],
     "exits": [],
@@ -321,7 +321,7 @@
   "REGION_PETALBURG_CITY_GYM/ROOM_9": {
     "parent_map": "MAP_PETALBURG_CITY_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM42",
+      "NPC_GIFT_RECEIVED_TM_FACADE",
       "BADGE_5"
     ],
     "events": [
@@ -394,7 +394,7 @@
   "REGION_RUSTBORO_CITY_GYM/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM39",
+      "NPC_GIFT_RECEIVED_TM_ROCK_TOMB",
       "BADGE_1"
     ],
     "events": [
@@ -558,7 +558,7 @@
   "REGION_RUSTBORO_CITY_CUTTERS_HOUSE/MAIN": {
     "parent_map": "MAP_RUSTBORO_CITY_CUTTERS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_HM01"
+      "NPC_GIFT_RECEIVED_HM_CUT"
     ],
     "events": [],
     "exits": [],
@@ -592,7 +592,7 @@
   "REGION_DEWFORD_TOWN_HALL/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_HALL",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM36"
+      "NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB"
     ],
     "events": [],
     "exits": [],
@@ -622,7 +622,7 @@
   "REGION_DEWFORD_TOWN_GYM/MAIN": {
     "parent_map": "MAP_DEWFORD_TOWN_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM08",
+      "NPC_GIFT_RECEIVED_TM_BULK_UP",
       "BADGE_2"
     ],
     "events": [
@@ -735,7 +735,7 @@
   "REGION_SLATEPORT_CITY_BATTLE_TENT_LOBBY/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_BATTLE_TENT_LOBBY",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM41"
+      "NPC_GIFT_RECEIVED_TM_TORMENT"
     ],
     "events": [],
     "exits": [],
@@ -757,7 +757,7 @@
   "REGION_SLATEPORT_CITY_OCEANIC_MUSEUM_1F/MAIN": {
     "parent_map": "MAP_SLATEPORT_CITY_OCEANIC_MUSEUM_1F",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM46"
+      "NPC_GIFT_RECEIVED_TM_THIEF"
     ],
     "events": [],
     "exits": [],
@@ -816,7 +816,7 @@
     "locations": [
       "ITEM_MAUVILLE_CITY_X_SPEED",
       "NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON",
-      "NPC_GIFT_GOT_TM24_FROM_WATTSON"
+      "NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON"
     ],
     "events": [
       "EVENT_VISITED_MAUVILLE_CITY"
@@ -840,7 +840,7 @@
   "REGION_MAUVILLE_CITY_GYM/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM34",
+      "NPC_GIFT_RECEIVED_TM_SHOCK_WAVE",
       "BADGE_3"
     ],
     "events": [
@@ -894,7 +894,7 @@
   "REGION_MAUVILLE_CITY_HOUSE1/MAIN": {
     "parent_map": "MAP_MAUVILLE_CITY_HOUSE1",
     "locations": [
-      "NPC_GIFT_RECEIVED_HM06"
+      "NPC_GIFT_RECEIVED_HM_ROCK_SMASH"
     ],
     "events": [],
     "exits": [],
@@ -945,7 +945,7 @@
   "REGION_VERDANTURF_TOWN_BATTLE_TENT_LOBBY/MAIN": {
     "parent_map": "MAP_VERDANTURF_TOWN_BATTLE_TENT_LOBBY",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM45"
+      "NPC_GIFT_RECEIVED_TM_ATTRACT"
     ],
     "events": [],
     "exits": [],
@@ -1069,7 +1069,7 @@
   "REGION_FALLARBOR_TOWN_COZMOS_HOUSE/MAIN": {
     "parent_map": "MAP_FALLARBOR_TOWN_COZMOS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM27"
+      "NPC_GIFT_RECEIVED_TM_RETURN"
     ],
     "events": [],
     "exits": [],
@@ -1205,7 +1205,7 @@
   "REGION_LAVARIDGE_TOWN_GYM_1F/FLANNERY": {
     "parent_map": "MAP_LAVARIDGE_TOWN_GYM_1F",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM50",
+      "NPC_GIFT_RECEIVED_TM_OVERHEAT",
       "BADGE_4"
     ],
     "events": [
@@ -1419,7 +1419,7 @@
   "REGION_FORTREE_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_FORTREE_CITY_HOUSE2",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM10"
+      "NPC_GIFT_RECEIVED_TM_HIDDEN_POWER"
     ],
     "events": [],
     "exits": [],
@@ -1461,7 +1461,7 @@
   "REGION_FORTREE_CITY_GYM/MAIN": {
     "parent_map": "MAP_FORTREE_CITY_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM40",
+      "NPC_GIFT_RECEIVED_TM_AERIAL_ACE",
       "BADGE_6"
     ],
     "events": [
@@ -1725,7 +1725,7 @@
   "REGION_LILYCOVE_CITY_HOUSE2/MAIN": {
     "parent_map": "MAP_LILYCOVE_CITY_HOUSE2",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM44"
+      "NPC_GIFT_RECEIVED_TM_REST"
     ],
     "events": [],
     "exits": [],
@@ -1786,7 +1786,7 @@
   "REGION_SS_TIDAL_ROOMS/MAIN": {
     "parent_map": "MAP_SS_TIDAL_ROOMS",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM49"
+      "NPC_GIFT_RECEIVED_TM_SNATCH"
     ],
     "events": [],
     "exits": [],
@@ -1895,7 +1895,7 @@
   "REGION_MOSSDEEP_CITY_GYM/ROOM_6": {
     "parent_map": "MAP_MOSSDEEP_CITY_GYM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM04",
+      "NPC_GIFT_RECEIVED_TM_CALM_MIND",
       "BADGE_7"
     ],
     "events": [
@@ -1981,7 +1981,7 @@
   "REGION_MOSSDEEP_CITY_STEVENS_HOUSE/MAIN": {
     "parent_map": "MAP_MOSSDEEP_CITY_STEVENS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_HM08"
+      "NPC_GIFT_RECEIVED_HM_DIVE"
     ],
     "events": [
       "EVENT_STEVEN_GIVES_DIVE"
@@ -2092,7 +2092,7 @@
   "REGION_SOOTOPOLIS_CITY/ISLAND": {
     "parent_map": "MAP_SOOTOPOLIS_CITY",
     "locations": [
-      "NPC_GIFT_RECEIVED_HM07"
+      "NPC_GIFT_RECEIVED_HM_WATERFALL"
     ],
     "events": [],
     "exits": [
@@ -2178,7 +2178,7 @@
   "REGION_SOOTOPOLIS_CITY_GYM_1F/TOP": {
     "parent_map": "MAP_SOOTOPOLIS_CITY_GYM_1F",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM03",
+      "NPC_GIFT_RECEIVED_TM_WATER_PULSE",
       "BADGE_8"
     ],
     "events": [
@@ -2256,7 +2256,7 @@
   "REGION_SOOTOPOLIS_CITY_HOUSE1/MAIN": {
     "parent_map": "MAP_SOOTOPOLIS_CITY_HOUSE1",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM31"
+      "NPC_GIFT_RECEIVED_TM_BRICK_BREAK"
     ],
     "events": [],
     "exits": [],
@@ -2369,8 +2369,8 @@
   "REGION_PACIFIDLOG_TOWN_HOUSE2/MAIN": {
     "parent_map": "MAP_PACIFIDLOG_TOWN_HOUSE2",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM27_2",
-      "NPC_GIFT_RECEIVED_TM21"
+      "NPC_GIFT_RECEIVED_TM_RETURN_2",
+      "NPC_GIFT_RECEIVED_TM_FRUSTRATION"
     ],
     "events": [],
     "exits": [],

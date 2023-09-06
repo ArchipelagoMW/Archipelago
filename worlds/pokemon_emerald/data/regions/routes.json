@@ -94,7 +94,7 @@
       "ITEM_ROUTE_104_X_ACCURACY",
       "HIDDEN_ITEM_ROUTE_104_SUPER_POTION",
       "HIDDEN_ITEM_ROUTE_104_POKE_BALL",
-      "NPC_GIFT_RECEIVED_TM09",
+      "NPC_GIFT_RECEIVED_TM_BULLET_SEED",
       "NPC_GIFT_RECEIVED_WHITE_HERB",
       "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104"
     ],
@@ -458,7 +458,7 @@
   "REGION_ROUTE111/DESERT": {
     "parent_map": "MAP_ROUTE111",
     "locations": [
-      "ITEM_ROUTE_111_TM37",
+      "ITEM_ROUTE_111_TM_SANDSTORM",
       "ITEM_ROUTE_111_STARDUST",
       "HIDDEN_ITEM_ROUTE_111_STARDUST",
       "HIDDEN_ITEM_ROUTE_111_PROTEIN",
@@ -639,7 +639,7 @@
       "ITEM_ROUTE_113_SUPER_REPEL",
       "ITEM_ROUTE_113_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_113_ETHER",
-      "HIDDEN_ITEM_ROUTE_113_TM32",
+      "HIDDEN_ITEM_ROUTE_113_TM_DOUBLE_TEAM",
       "HIDDEN_ITEM_ROUTE_113_NUGGET"
     ],
     "events": [],
@@ -667,7 +667,7 @@
       "ITEM_ROUTE_114_ENERGY_POWDER",
       "HIDDEN_ITEM_ROUTE_114_REVIVE",
       "HIDDEN_ITEM_ROUTE_114_CARBOS",
-      "NPC_GIFT_RECEIVED_TM05"
+      "NPC_GIFT_RECEIVED_TM_ROAR"
     ],
     "events": [],
     "exits": [
@@ -694,7 +694,7 @@
   "REGION_ROUTE114_FOSSIL_MANIACS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM28"
+      "NPC_GIFT_RECEIVED_TM_DIG"
     ],
     "events": [],
     "exits": [],
@@ -785,7 +785,7 @@
     "parent_map": "MAP_ROUTE115",
     "locations": [
       "ITEM_ROUTE_115_HEAL_POWDER",
-      "ITEM_ROUTE_115_TM01"
+      "ITEM_ROUTE_115_TM_FOCUS_PUNCH"
     ],
     "events": [],
     "exits": [
@@ -1002,7 +1002,7 @@
     "parent_map": "MAP_ROUTE119",
     "locations": [
       "ITEM_ROUTE_119_ELIXIR_2",
-      "NPC_GIFT_RECEIVED_HM02"
+      "NPC_GIFT_RECEIVED_HM_FLY"
     ],
     "events": [],
     "exits": [
@@ -1167,7 +1167,7 @@
   "REGION_SAFARI_ZONE_NORTHWEST/MAIN": {
     "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
     "locations": [
-      "ITEM_SAFARI_ZONE_NORTH_WEST_TM22"
+      "ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM"
     ],
     "events": [],
     "exits": [
@@ -1283,7 +1283,7 @@
       "ITEM_ROUTE_123_REVIVAL_HERB",
       "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
       "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
-      "NPC_GIFT_RECEIVED_TM19"
+      "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN"
     ],
     "events": [],
     "exits": [

@@ -32,35 +32,35 @@
     "tags": ["Badge"]
   },
 
-  "NPC_GIFT_RECEIVED_HM01": {
+  "NPC_GIFT_RECEIVED_HM_CUT": {
     "label": "Rustboro City - HM01 from Cutter's House",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM02": {
+  "NPC_GIFT_RECEIVED_HM_FLY": {
     "label": "Route 119 - HM02 from Rival Battle",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM03": {
+  "NPC_GIFT_RECEIVED_HM_SURF": {
     "label": "Petalburg City - HM03 from Wally's Uncle",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM04": {
+  "NPC_GIFT_RECEIVED_HM_STRENGTH": {
     "label": "Rusturf Tunnel - HM04 from Tunneler",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM05": {
+  "NPC_GIFT_RECEIVED_HM_FLASH": {
     "label": "Granite Cave 1F - HM05 from Hiker",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM06": {
+  "NPC_GIFT_RECEIVED_HM_ROCK_SMASH": {
     "label": "Mauville City - HM06 from Rock Smash Guy",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM07": {
+  "NPC_GIFT_RECEIVED_HM_WATERFALL": {
     "label": "Sootopolis City - HM07 from Wallace",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM08": {
+  "NPC_GIFT_RECEIVED_HM_DIVE": {
     "label": "Mossdeep City - HM08 from Steven's House",
     "tags": ["HM"]
   },
@@ -134,7 +134,7 @@
     "label": "Abandoned Ship HF - Hidden Item in Room 5",
     "tags": ["KeyItem"]
   },
-  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER": {
     "label": "Abandoned Ship HF - Item in Room 2",
     "tags": ["KeyItem"]
   },
@@ -356,7 +356,7 @@
     "label": "Route 113 - Hidden Item Mound Between Trainers",
     "tags": ["HiddenItem"]
   },
-  "HIDDEN_ITEM_ROUTE_113_TM32": {
+  "HIDDEN_ITEM_ROUTE_113_TM_DOUBLE_TEAM": {
     "label": "Route 113 - Hidden Item Mound West of Workshop",
     "tags": ["HiddenItem"]
   },
@@ -593,7 +593,7 @@
     "tags": ["HiddenItem"]
   },
 
-  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM_RAIN_DANCE": {
     "label": "Abandoned Ship HF - Item in Room 1",
     "tags": ["OverworldItem"]
   },
@@ -617,7 +617,7 @@
     "label": "Abandoned Ship B1F - Item in South Rooms",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13": {
+  "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM_ICE_BEAM": {
     "label": "Abandoned Ship B1F - Item in Storage Room",
     "tags": ["OverworldItem"]
   },
@@ -653,7 +653,7 @@
     "label": "Fiery Path - Item Behind Boulders 1",
     "tags": ["OverworldItem"]
   },
-  "ITEM_FIERY_PATH_TM06": {
+  "ITEM_FIERY_PATH_TM_TOXIC": {
     "label": "Fiery Path - Item Behind Boulders 2",
     "tags": ["OverworldItem"]
   },
@@ -725,11 +725,11 @@
     "label": "Meteor Falls 1F - Item Below Waterfall",
     "tags": ["OverworldItem"]
   },
-  "ITEM_METEOR_FALLS_1F_1R_TM23": {
+  "ITEM_METEOR_FALLS_1F_1R_TM_IRON_TAIL": {
     "label": "Meteor Falls 1F - Item Before Steven's Cave",
     "tags": ["OverworldItem"]
   },
-  "ITEM_METEOR_FALLS_B1F_2R_TM02": {
+  "ITEM_METEOR_FALLS_B1F_2R_TM_DRAGON_CLAW": {
     "label": "Meteor Falls B1F - Item in North Cave",
     "tags": ["OverworldItem"]
   },
@@ -753,11 +753,11 @@
     "label": "Mt Pyre 5F - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_MT_PYRE_6F_TM30": {
+  "ITEM_MT_PYRE_6F_TM_SHADOW_BALL": {
     "label": "Mt Pyre 6F - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_MT_PYRE_EXTERIOR_TM48": {
+  "ITEM_MT_PYRE_EXTERIOR_TM_SKILL_SWAP": {
     "label": "Mt Pyre Exterior - Item 1",
     "tags": ["OverworldItem"]
   },
@@ -881,7 +881,7 @@
     "label": "Route 111 - Item Desert Near Tower",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ROUTE_111_TM37": {
+  "ITEM_ROUTE_111_TM_SANDSTORM": {
     "label": "Route 111 - Item Desert South",
     "tags": ["OverworldItem"]
   },
@@ -929,7 +929,7 @@
     "label": "Route 115 - Item North Near Trainers",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ROUTE_115_TM01": {
+  "ITEM_ROUTE_115_TM_FOCUS_PUNCH": {
     "label": "Route 115 - Item Near Mud Slope",
     "tags": ["OverworldItem"]
   },
@@ -1137,7 +1137,7 @@
     "label": "Safari Zone NE - Item on Ledge",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SAFARI_ZONE_NORTH_WEST_TM22": {
+  "ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM": {
     "label": "Safari Zone NW - Item Behind Pond",
     "tags": ["OverworldItem"]
   },
@@ -1149,11 +1149,11 @@
     "label": "Safari Zone SW - Item Behind Pond",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SCORCHED_SLAB_TM11": {
+  "ITEM_SCORCHED_SLAB_TM_SUNNY_DAY": {
     "label": "Scorched Slab - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26": {
+  "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE": {
     "label": "Seafloor Cavern Room 9 - Item Before Kyogre",
     "tags": ["OverworldItem"]
   },
@@ -1165,7 +1165,7 @@
     "label": "Shoal Cave Ice Room - Item 1",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SHOAL_CAVE_ICE_ROOM_TM07": {
+  "ITEM_SHOAL_CAVE_ICE_ROOM_TM_HAIL": {
     "label": "Shoal Cave Ice Room - Item 2",
     "tags": ["OverworldItem"]
   },
@@ -1225,7 +1225,7 @@
     "label": "Victory Road B1F - Item Behind Boulders",
     "tags": ["OverworldItem"]
   },
-  "ITEM_VICTORY_ROAD_B1F_TM29": {
+  "ITEM_VICTORY_ROAD_B1F_TM_PSYCHIC": {
     "label": "Victory Road B1F - Item on Northeast Ledge",
     "tags": ["OverworldItem"]
   },
@@ -1234,7 +1234,7 @@
     "tags": ["OverworldItem"]
   },
 
-  "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
+  "NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON": {
     "label": "Mauville City - TM24 from Wattson",
     "tags": ["NpcGift"]
   },
@@ -1330,99 +1330,99 @@
     "label": "Mossdeep City - Gift from Man in Museum",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM03": {
+  "NPC_GIFT_RECEIVED_TM_WATER_PULSE": {
     "label": "Sootopolis Gym - TM03 from Juan",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM04": {
+  "NPC_GIFT_RECEIVED_TM_CALM_MIND": {
     "label": "Mossdeep Gym - TM04 from Tate and Liza",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM05": {
+  "NPC_GIFT_RECEIVED_TM_ROAR": {
     "label": "Route 114 - TM05 from Roaring Man",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM08": {
+  "NPC_GIFT_RECEIVED_TM_BULK_UP": {
     "label": "Dewford Gym - TM08 from Brawly",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM09": {
+  "NPC_GIFT_RECEIVED_TM_BULLET_SEED": {
     "label": "Route 104 - TM09 from Boy",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM10": {
+  "NPC_GIFT_RECEIVED_TM_HIDDEN_POWER": {
     "label": "Fortree City - TM10 from Hidden Power Lady",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM19": {
+  "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN": {
     "label": "Route 123 - TM19 from Girl near Berries",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM21": {
+  "NPC_GIFT_RECEIVED_TM_FRUSTRATION": {
     "label": "Pacifidlog Town - TM21 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM27": {
+  "NPC_GIFT_RECEIVED_TM_RETURN": {
     "label": "Fallarbor Town - TM27 from Cozmo",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM27_2": {
+  "NPC_GIFT_RECEIVED_TM_RETURN_2": {
     "label": "Pacifidlog Town - TM27 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM28": {
+  "NPC_GIFT_RECEIVED_TM_DIG": {
     "label": "Route 114 - TM28 from Fossil Maniac",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM31": {
+  "NPC_GIFT_RECEIVED_TM_BRICK_BREAK": {
     "label": "Sootopolis City - TM31 from Black Belt in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM34": {
+  "NPC_GIFT_RECEIVED_TM_SHOCK_WAVE": {
     "label": "Mauville Gym - TM34 from Wattson",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM36": {
+  "NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB": {
     "label": "Dewford Town - TM36 from Sludge Bomb Man",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM39": {
+  "NPC_GIFT_RECEIVED_TM_ROCK_TOMB": {
     "label": "Rustboro Gym - TM39 from Roxanne",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM40": {
+  "NPC_GIFT_RECEIVED_TM_AERIAL_ACE": {
     "label": "Fortree Gym - TM40 from Winona",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM41": {
+  "NPC_GIFT_RECEIVED_TM_TORMENT": {
     "label": "Slateport City - TM41 from Sailor in Battle Tent",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM42": {
+  "NPC_GIFT_RECEIVED_TM_FACADE": {
     "label": "Petalburg Gym - TM42 from Norman",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM44": {
+  "NPC_GIFT_RECEIVED_TM_REST": {
     "label": "Lilycove City - TM44 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM45": {
+  "NPC_GIFT_RECEIVED_TM_ATTRACT": {
     "label": "Verdanturf Town - TM45 from Woman in Battle Tent",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM46": {
+  "NPC_GIFT_RECEIVED_TM_THIEF": {
     "label": "Slateport City - TM46 from Aqua Grunt in Museum",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM47": {
+  "NPC_GIFT_RECEIVED_TM_STEEL_WING": {
     "label": "Granite Cave 1F - TM47 from Steven",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM49": {
+  "NPC_GIFT_RECEIVED_TM_SNATCH": {
     "label": "SS Tidal - TM49 from Thief",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM50": {
+  "NPC_GIFT_RECEIVED_TM_OVERHEAT": {
     "label": "Lavaridge Gym - TM50 from Flannery",
     "tags": ["NpcGift"]
   },

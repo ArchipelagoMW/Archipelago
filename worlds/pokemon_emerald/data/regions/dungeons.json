@@ -53,7 +53,7 @@
     "parent_map": "MAP_RUSTURF_TUNNEL",
     "locations": [
       "ITEM_RUSTURF_TUNNEL_MAX_ETHER",
-      "NPC_GIFT_RECEIVED_HM04"
+      "NPC_GIFT_RECEIVED_HM_STRENGTH"
     ],
     "events": [],
     "exits": [
@@ -68,7 +68,7 @@
     "parent_map": "MAP_GRANITE_CAVE_1F",
     "locations": [
       "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE",
-      "NPC_GIFT_RECEIVED_HM05"
+      "NPC_GIFT_RECEIVED_HM_FLASH"
     ],
     "events": [],
     "exits": [],
@@ -186,7 +186,7 @@
   "REGION_GRANITE_CAVE_STEVENS_ROOM/LETTER_DELIVERED": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM47"
+      "NPC_GIFT_RECEIVED_TM_STEEL_WING"
     ],
     "events": [
       "EVENT_DELIVER_LETTER"
@@ -278,7 +278,7 @@
   "REGION_FIERY_PATH/BEHIND_BOULDER": {
     "parent_map": "MAP_FIERY_PATH",
     "locations": [
-      "ITEM_FIERY_PATH_TM06",
+      "ITEM_FIERY_PATH_TM_TOXIC",
       "ITEM_FIERY_PATH_FIRE_STONE"
     ],
     "events": [],
@@ -532,7 +532,7 @@
   "REGION_METEOR_FALLS_1F_1R/TOP": {
     "parent_map": "MAP_METEOR_FALLS_1F_1R",
     "locations": [
-      "ITEM_METEOR_FALLS_1F_1R_TM23"
+      "ITEM_METEOR_FALLS_1F_1R_TM_IRON_TAIL"
     ],
     "events": [],
     "exits": [],
@@ -652,7 +652,7 @@
   "REGION_METEOR_FALLS_B1F_2R/WATER": {
     "parent_map": "MAP_METEOR_FALLS_B1F_2R",
     "locations": [
-      "ITEM_METEOR_FALLS_B1F_2R_TM02"
+      "ITEM_METEOR_FALLS_B1F_2R_TM_DRAGON_CLAW"
     ],
     "events": [],
     "exits": [
@@ -844,7 +844,7 @@
   "REGION_ABANDONED_SHIP_ROOM_B1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOM_B1F",
     "locations": [
-      "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13"
+      "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM_ICE_BEAM"
     ],
     "events": [],
     "exits": [],
@@ -903,7 +903,7 @@
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
     "locations": [
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18",
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM_RAIN_DANCE",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY"
     ],
     "events": [],
@@ -915,7 +915,7 @@
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_CENTER": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
     "locations": [
-      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER"
+      "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER"
     ],
     "events": [],
     "exits": [],
@@ -987,7 +987,7 @@
   "REGION_SCORCHED_SLAB/MAIN": {
     "parent_map": "MAP_SCORCHED_SLAB",
     "locations": [
-      "ITEM_SCORCHED_SLAB_TM11"
+      "ITEM_SCORCHED_SLAB_TM_SUNNY_DAY"
     ],
     "events": [],
     "exits": [],
@@ -1085,7 +1085,7 @@
   "REGION_MT_PYRE_6F/MAIN": {
     "parent_map": "MAP_MT_PYRE_6F",
     "locations": [
-      "ITEM_MT_PYRE_6F_TM30"
+      "ITEM_MT_PYRE_6F_TM_SHADOW_BALL"
     ],
     "events": [],
     "exits": [],
@@ -1098,7 +1098,7 @@
     "parent_map": "MAP_MT_PYRE_EXTERIOR",
     "locations": [
       "ITEM_MT_PYRE_EXTERIOR_MAX_POTION",
-      "ITEM_MT_PYRE_EXTERIOR_TM48",
+      "ITEM_MT_PYRE_EXTERIOR_TM_SKILL_SWAP",
       "HIDDEN_ITEM_MT_PYRE_EXTERIOR_ULTRA_BALL",
       "HIDDEN_ITEM_MT_PYRE_EXTERIOR_MAX_ETHER"
     ],
@@ -1587,7 +1587,7 @@
   "REGION_SHOAL_CAVE_LOW_TIDE_ICE_ROOM/MAIN": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM",
     "locations": [
-      "ITEM_SHOAL_CAVE_ICE_ROOM_TM07",
+      "ITEM_SHOAL_CAVE_ICE_ROOM_TM_HAIL",
       "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE"
     ],
     "events": [],
@@ -1843,7 +1843,7 @@
   "REGION_SEAFLOOR_CAVERN_ROOM9/MAIN": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM9",
     "locations": [
-      "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26"
+      "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE"
     ],
     "events": [
       "EVENT_RELEASE_KYOGRE"
@@ -2077,7 +2077,7 @@
   "REGION_VICTORY_ROAD_B1F/NORTH_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
     "locations": [
-      "ITEM_VICTORY_ROAD_B1F_TM29"
+      "ITEM_VICTORY_ROAD_B1F_TM_PSYCHIC"
     ],
     "events": [],
     "exits": [],
