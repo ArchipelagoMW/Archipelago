@@ -188,7 +188,7 @@ main_location_table = {
     LName.ccll_cwhall_butlerflames_past: LocationData(0x78, 0x10CCA7, RName.cc_upper),
     LName.ccll_cwhall_flamethrower:      LocationData(0x73, 0x8DF580, RName.cc_upper, "inv"),
     LName.ccll_cwhall_cwflames:          LocationData(0x77, 0x10CCAF, RName.cc_upper),
-    LName.ccll_heinrich:                 LocationData(0x69, 0xBFC1C7, RName.cc_upper, "npc"),
+    LName.ccll_heinrich:                 LocationData(0x69, 0xBFC1CF, RName.cc_upper, "npc"),
     LName.ccia_nitro_crates:             LocationData(0x66, 0x90FCE9, RName.cc_upper, "inv"),
     LName.ccia_nitro_shelf_h:            LocationData(0x55, 0xBFCC03, RName.cc_upper),
     LName.ccia_stairs_knight:            LocationData(0x61, 0x90FE5C, RName.cc_upper, "inv"),

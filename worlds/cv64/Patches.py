@@ -151,7 +151,7 @@ remote_item_giver = [
     0x256B0002,  # ADDIU T3, T3, 0x0002
     0x2409000F,  # ADDIU T1, R0, 0x000F
     0xA1690001,  # SB	 T1, 0x0001 (T3)
-    0x0804EDCE,  # J	 0x8013B738
+    0x080FF8DE,  # J	 0x803FE374
     0xA1600000,  # SB	 R0, 0x0000 (T3)
     0x91640000,  # LBU	 A0, 0x0000 (T3)
     0x14800002,  # BNEZ	 A0, [forward 0x02]
@@ -264,13 +264,15 @@ npc_item_hack = [
     0x3C098039,  # LUI   T1, 0x8039
     0x001F5602,  # SRL   T2, RA, 24
     0x240B0080,  # ADDIU T3, R0, 0x0080
-    0x114B0016,  # BEQ   T2, T3, [forward 0x16]
-    0xAFBF0014,  # SW    RA, 0x0014 (SP)
+    0x114B001D,  # BEQ   T2, T3, [forward 0x1D]
     0x240A001A,  # ADDIU T2, R0, 0x001A
-    0x15440003,  # BNE   T2, A0, [forward 0x03]
+    0x27BD0020,  # ADDIU SP, SP, 0x20
+    0x15440004,  # BNE   T2, A0, [forward 0x04]
     0x240B0029,  # ADDIU T3, R0, 0x0029
+    0x34195300,  # ORI   T9, R0, 0x5300
     0x10000003,  # B             [forward 0x03]
     0x240C0002,  # ADDIU T4, R0, 0x0002
+    0x34199900,  # ORI   T9, R0, 0x5300
     0x240B0002,  # ADDIU T3, R0, 0x0002
     0x240C000E,  # ADDIU T4, R0, 0x000E
     0x012C7021,  # ADDU  T6, T1, T4
@@ -285,9 +287,15 @@ npc_item_hack = [
     0x13000002,  # BEQZ  T8,     [forward 0x02]
     0x254AFFFF,  # ADDIU T2, T2, 0xFFFF
     0xA1CA9CA4,  # SB    T2, 0x9CA4 (T6)
-    0x0804F0BF,  # J     0x8013C2FC
     0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
-    0x0804EFFD   # J     0x8013BFF4
+    0x3C0400BB,  # LUI   A0, 0x00BB
+    0x00992025,  # OR    A0, A0, T9
+    0x3C058019,  # LUI   A1, 0x8019
+    0x24A5BF98,  # ADDIU A1, A1, 0xBF98
+    0x08005DFB,  # J     0x800177EC
+    0x24060100,  # ADDIU A2, R0, 0x0100
+    0x0804EFFD,  # J     0x8013BFF4
+    0xAFBF0014   # SW    RA, 0x0014 (SP)
 ]
 
 overlay_modifiers = [
@@ -1611,7 +1619,7 @@ subweapon_surface_checker = [
     0x956C00DD,  # LHU   T4, 0x00DD (T3)
     0xA1600000,  # SB    R0, 0x0000 (T3)
     0x258C0001,  # ADDIU T4, T4, 0x0001
-    0x0804EDCE,  # J     0x8013B738
+    0x080FF8D0,  # J     0x803FE340
     0xA56C00DD,  # SH    T4, 0x00DD (T3)
     0x00000000,  # NOP
     0x03E00008   # JR    RA
@@ -2436,4 +2444,102 @@ coffin_cutscene_skipper = [
     0x240B0004,  # ADDIU T3, R0, 0x0004
     0xA0AB0009,  # SB    T3, 0x0009 (A1)
     0x03E00008   # JR    RA
+]
+
+multiworld_item_name_loader = [
+    # When picking up an item from another world, this will load from ROM the custom message for that item explaining
+    # in the item textbox what the item is and who it's for. The flag index it calculates determines from what part of
+    # the ROM to load the item name from. If the item being picked up is a white jewel or a contract, it will always
+    # load from a part of the ROM that has nothing in it to ensure their set "flag" values don't yield unintended names.
+    0x3C088040,  # LUI   T0, 0x8040
+    0xAD03E238,  # SW    V1, 0xE238 (T0)
+    0x92080039,  # LBU   T0, 0x0039 (S0)
+    0x11000003,  # BEQZ  T0,     [forward 0x03]
+    0x24090012,  # ADDIU T1, R0, 0x0012
+    0x15090003,  # BNE   T0, T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x1000000F,  # B             [forward 0x0F]
+    0x24080000,  # ADDIU T0, R0, 0x0000
+    0x920C0055,  # LBU   T4, 0x0055 (S0)
+    0x8E090058,  # LW    T1, 0x0058 (S0)
+    0x298A0011,  # SLTI  T2, T4, 0x0011
+    0x51400001,  # BEQZL T2,     [forward 0x01]
+    0x258CFFED,  # ADDIU T4, T4, 0xFFED
+    0x240A0000,  # ADDIU T2, R0, 0x0000
+    0x00094840,  # SLL   T1, T1, 1
+    0x5520FFFE,  # BNEZL T1,     [backward 0x02]
+    0x254A0001,  # ADDIU T2, T2, 0x0001
+    0x240B0020,  # ADDIU T3, R0, 0x0020
+    0x018B0019,  # MULTU T4, T3
+    0x00004812,  # MFLO  T1
+    0x012A4021,  # ADDU  T0, T1, T2
+    0x00084200,  # SLL   T0, T0, 8
+    0x3C0400BB,  # LUI   A0, 0x00BB
+    0x24843000,  # ADDIU A0, A0, 0x3000
+    0x00882020,  # ADD   A0, A0, T0
+    0x3C058018,  # LUI   A1, 0x8018
+    0x34A5BF98,  # ORI   A1, A1, 0xBF98
+    0x0C005DFB,  # JAL   0x800177EC
+    0x24060100,  # ADDIU A2, R0, 0x0100
+    0x3C088040,  # LUI   T0, 0x8040
+    0x8D03E238,  # LW    V1, 0xE238 (T0)
+    0x3C1F8012,  # LUI   RA, 0x8012
+    0x27FF5BA4,  # ADDIU RA, RA, 0x5BA4
+    0x0804EF54,  # J     0x8013BD50
+    0x94640002,  # LHU   A0, 0x0002 (V1)
+    0x00000000,  # NOP
+    # Changes the Y screen position of the textbox depending on how many line breaks there are.
+    0x3C088019,  # LUI   T0, 0x8019
+    0x9108C097,  # LBU   T0, 0xC097 (T0)
+    0x11000005,  # BEQZ  T0,     [forward 0x05]
+    0x2508FFFF,  # ADDIU T0, T0, 0xFFFF
+    0x11000003,  # BEQZ  T0,     [forward 0x03]
+    0x00000000,  # NOP
+    0x1000FFFC,  # B             [backward 0x04]
+    0x24C6FFF1,  # ADDIU A2, A2, 0xFFF1
+    0x0804B33F,  # J     0x8012CCFC
+    # Changes the length and number of lines on the textbox if there's a multiworld message in the buffer.
+    0x3C088019,  # LUI   T0, 0x8019
+    0x9108C097,  # LBU   T0, 0xC097 (T0)
+    0x11000003,  # BEQZ  T0, [forward 0x03]
+    0x00000000,  # NOP
+    0x00082821,  # ADDU  A1, R0, T0
+    0x240600B6,  # ADDIU A2, R0, 0x00B6
+    0x0804B345,  # J     0x8012CD14
+    0x00000000,  # NOP
+    # Redirects the text to the multiworld message buffer if a message exists in it.
+    0x3C088019,  # LUI   T0, 0x8019
+    0x9108C097,  # LBU   T0, 0xC097 (T0)
+    0x11000004,  # BEQZ  T0,     [forward 0x04]
+    0x00000000,  # NOP
+    0x3C048018,  # LUI   A0, 0x8018
+    0x3484BF98,  # ORI   A0, A0, 0xBF98
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x0804B39F,  # J     0x8012CE7C
+    # Copy the "item from player" text when being given an item through the multiworld via the game's copy function.
+    0x00000000,  # NOP
+    0x00000000,  # NOP
+    0x00000000,  # NOP
+    0x3C088040,  # LUI   T0, 0x8040
+    0xAD1FE33C,  # SW    RA, 0xE33C (T0)
+    0xA104E338,  # SB    A0, 0xE338 (T0)
+    0x3C048019,  # LUI   A0, 0x8019
+    0x2484C0A8,  # ADDIU A0, A0, 0xC0A8
+    0x3C058019,  # LUI   A1, 0x8019
+    0x24A5BF98,  # ADDIU A1, A1, 0xBF98
+    0x0C000234,  # JAL   0x800008D0
+    0x24060100,  # ADDIU A2, R0, 0x0100
+    0x3C088040,  # LUI   T0, 0x8040
+    0x8D1FE33C,  # LW    RA, 0xE33C (T0)
+    0x0804EDCE,  # J     0x8013B738
+    0x9104E338,  # LBU   A0, 0xE338 (T0)
+    # Neuters the multiworld item text buffer if giving a non-multiworld item through the in-game remote item rewarder
+    # byte before then jumping to item_prepareTextbox.
+    0x24080011,  # ADDIU T0, R0, 0x0011
+    0x10880004,  # BEQ   A0, T0, [forward 0x04]
+    0x24080012,  # ADDIU T0, R0, 0x0012
+    0x10880002,  # BEQ   A0, T0, [forward 0x02]
+    0x3C088019,  # LUI   T0, 0x8019
+    0xA100C097,  # SB    R0, 0xC097 (T0)
+    0x0804EDCE   # J     0x8013B738
 ]

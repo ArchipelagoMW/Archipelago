@@ -13,7 +13,7 @@ from .Options import cv64_options
 from .Stages import CV64Stage, stage_info, shuffle_stages, vanilla_stage_order, vanilla_stage_exits
 from .Names import IName, LName, RName
 from ..AutoWorld import WebWorld, World
-from .Rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch, rom_sub_weapon_offsets, \
+from .Rom import LocalRom, patch_rom, get_base_rom_path, get_item_text_color, CV64DeltaPatch, rom_sub_weapon_offsets, \
     rom_looping_music_fade_ins, rom_axe_cross_lower_values
 from .Client import Castlevania64Client
 
@@ -78,14 +78,14 @@ class CV64World(World):
         if self.multiworld.special1s_per_warp[self.player].value * 7 > \
                 self.multiworld.total_special1s[self.player].value:
             self.multiworld.total_special1s[self.player].value = \
-                self.multiworld.random.randint(self.multiworld.special1s_per_warp[self.player].value * 7, 70)
+                self.random.randint(self.multiworld.special1s_per_warp[self.player].value * 7, 70)
 
         # If there are more S2s needed to unlock Dracula's chamber than there are S2s in total, force the total S2
         # count to be higher than the former by a random amount.
         if self.multiworld.special2s_required[self.player].value > \
                 self.multiworld.total_special2s[self.player].value:
             self.multiworld.total_special2s[self.player].value = \
-                self.multiworld.random.randint(self.multiworld.special2s_required[self.player].value, 70)
+                self.random.randint(self.multiworld.special2s_required[self.player].value, 70)
 
         self.active_stage_list = vanilla_stage_order.copy()
         self.active_stage_exits = {name: vanilla_stage_exits[name].copy() for name in vanilla_stage_exits}
@@ -130,7 +130,7 @@ class CV64World(World):
         # include the starting stage.
         possible_warps = self.active_stage_list.copy()
         del (possible_warps[0])
-        self.active_warp_list = self.multiworld.random.sample(possible_warps, 7)
+        self.active_warp_list = self.random.sample(possible_warps, 7)
 
         if self.multiworld.warp_order[self.player].value == 0:
             # Arrange the warps to be in the seed's stage order
@@ -282,7 +282,7 @@ class CV64World(World):
                 spare_keys = 0
                 if item_counts["key_counts"][key] > 0:
                     for i in range(item_counts["key_counts"][key]):
-                        spare_keys += self.multiworld.random.randint(0, 1)
+                        spare_keys += self.random.randint(0, 1)
                 item_counts["key_counts"][key] += spare_keys
                 extras_count += spare_keys
 
@@ -303,9 +303,9 @@ class CV64World(World):
                 table = "non_filler_junk_counts"
                 total_non_filler_junk -= 1
 
-            item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
+            item_to_subtract = self.random.choice(list(item_counts[table].keys()))
             while item_counts[table][item_to_subtract] == 0:
-                item_to_subtract = self.multiworld.random.choice(list(item_counts[table].keys()))
+                item_to_subtract = self.random.choice(list(item_counts[table].keys()))
             item_counts[table][item_to_subtract] -= 1
 
         # Progression balance the amount of S1s needed to unlock every warp only if S1s per warp is lower than 5.
@@ -350,7 +350,7 @@ class CV64World(World):
                 self.total_available_bosses -= 1
             if self.required_s2s > self.total_available_bosses:
                 self.multiworld.bosses_required[self.player].value = \
-                    self.multiworld.random.randint(1, self.total_available_bosses)
+                    self.random.randint(1, self.total_available_bosses)
                 self.required_s2s = self.multiworld.bosses_required[self.player].value
         elif self.multiworld.draculas_condition[self.player].value == 3:
             self.required_s2s = self.multiworld.special2s_required[self.player].value
@@ -451,7 +451,7 @@ class CV64World(World):
 
                 shop_price_list = [self.random.randint(min_price * 100, max_price * 100) for i in range(7)]
 
-            world = self.multiworld
+            multiworld = self.multiworld
             player = self.player
 
             rom = LocalRom(get_base_rom_path())
@@ -575,20 +575,17 @@ class CV64World(World):
 
             slot_name = self.multiworld.player_name[self.player].encode("utf-8")
 
+            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
+
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
                       self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
-                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, slot_name)
+                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, slot_name,
+                      active_locations)
 
-            outfilepname = f'_P{player}'
-            outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \
-                if world.player_name[player] != 'Player%d' % player else ''
-
-            rompath = os.path.join(output_directory, f'AP_{world.seed_name}{outfilepname}.z64')
             rom.write_to_file(rompath)
-            self.rom_name = rom.name
 
             patch = CV64DeltaPatch(os.path.splitext(rompath)[0] + CV64DeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+                                   player_name=multiworld.player_name[player], patched_path=rompath)
             patch.write()
         except:
             print("D'oh, something went wrong in CV64's generate_output!")
@@ -620,17 +617,7 @@ class CV64World(World):
     #     return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(list(filler_junk_table.keys()))
-    
-    def modify_multidata(self, multidata: dict) -> None:
-        import base64
-        # wait for self.rom_name to be available.
-        self.rom_name_available_event.wait()
-        rom_name = getattr(self, "rom_name", None)
-        # we skip in case of error, so that the original error in the output thread is the one that gets raised
-        if rom_name:
-            new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        return self.random.choice(list(filler_junk_table.keys()))
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         # Attach each location's stage's position to its hint information if Stage Shuffle is on.
