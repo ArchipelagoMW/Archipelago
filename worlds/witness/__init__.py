@@ -129,7 +129,7 @@ class WitnessWorld(World):
         extra_checks = [
             ("First Hallway", "First Hallway Straight"),
             ("First Hallway Room", "First Hallway Bend"),
-            ("Desert Outside", "Desert Surface 4"),
+            ("Desert Outside", "Desert Surface 3"),
         ]
 
         for i in range(sphere_1_size, needed_size):
