@@ -1,6 +1,7 @@
 """
 Classes and functions related to creating a ROM patch
 """
+import copy
 import os
 import pkgutil
 from typing import Dict, List, Tuple
@@ -16,6 +17,48 @@ from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
 from .pokemon import get_random_species
 from .util import encode_string, get_easter_egg
+
+
+_LOOPING_MUSIC = [
+    "MUS_GSC_ROUTE38", "MUS_GSC_PEWTER", "MUS_ROUTE101", "MUS_ROUTE110", "MUS_ROUTE120", "MUS_ROUTE122",
+    "MUS_PETALBURG", "MUS_OLDALE", "MUS_GYM", "MUS_SURF", "MUS_PETALBURG_WOODS", "MUS_LEVEL_UP", "MUS_LILYCOVE_MUSEUM",
+    "MUS_OCEANIC_MUSEUM", "MUS_ENCOUNTER_GIRL", "MUS_ENCOUNTER_MALE", "MUS_ABANDONED_SHIP", "MUS_FORTREE",
+    "MUS_BIRCH_LAB", "MUS_B_TOWER_RS", "MUS_ENCOUNTER_SWIMMER", "MUS_CAVE_OF_ORIGIN", "MUS_ENCOUNTER_RICH",
+    "MUS_VERDANTURF", "MUS_RUSTBORO", "MUS_POKE_CENTER", "MUS_CAUGHT", "MUS_VICTORY_GYM_LEADER", "MUS_VICTORY_LEAGUE",
+    "MUS_VICTORY_WILD", "MUS_C_VS_LEGEND_BEAST", "MUS_ROUTE104", "MUS_ROUTE119", "MUS_CYCLING", "MUS_POKE_MART",
+    "MUS_LITTLEROOT", "MUS_MT_CHIMNEY", "MUS_ENCOUNTER_FEMALE", "MUS_LILYCOVE", "MUS_DESERT", "MUS_HELP",
+    "MUS_UNDERWATER", "MUS_VICTORY_TRAINER", "MUS_ENCOUNTER_MAY", "MUS_ENCOUNTER_INTENSE", "MUS_ENCOUNTER_COOL",
+    "MUS_ROUTE113", "MUS_ENCOUNTER_AQUA", "MUS_FOLLOW_ME", "MUS_ENCOUNTER_BRENDAN", "MUS_EVER_GRANDE",
+    "MUS_ENCOUNTER_SUSPICIOUS", "MUS_VICTORY_AQUA_MAGMA", "MUS_GAME_CORNER", "MUS_DEWFORD", "MUS_SAFARI_ZONE",
+    "MUS_VICTORY_ROAD", "MUS_AQUA_MAGMA_HIDEOUT", "MUS_SAILING", "MUS_MT_PYRE", "MUS_SLATEPORT", "MUS_MT_PYRE_EXTERIOR",
+    "MUS_SCHOOL", "MUS_HALL_OF_FAME", "MUS_FALLARBOR", "MUS_SEALED_CHAMBER", "MUS_CONTEST_WINNER", "MUS_CONTEST",
+    "MUS_ENCOUNTER_MAGMA", "MUS_ABNORMAL_WEATHER", "MUS_WEATHER_GROUDON", "MUS_SOOTOPOLIS", "MUS_HALL_OF_FAME_ROOM",
+    "MUS_TRICK_HOUSE", "MUS_ENCOUNTER_TWINS", "MUS_ENCOUNTER_ELITE_FOUR", "MUS_ENCOUNTER_HIKER", "MUS_CONTEST_LOBBY",
+    "MUS_ENCOUNTER_INTERVIEWER", "MUS_ENCOUNTER_CHAMPION", "MUS_END", "MUS_B_FRONTIER", "MUS_B_ARENA", "MUS_B_PYRAMID",
+    "MUS_B_PYRAMID_TOP", "MUS_B_PALACE", "MUS_B_TOWER", "MUS_B_DOME", "MUS_B_PIKE", "MUS_B_FACTORY", "MUS_VS_RAYQUAZA",
+    "MUS_VS_FRONTIER_BRAIN", "MUS_VS_MEW", "MUS_B_DOME_LOBBY", "MUS_VS_WILD", "MUS_VS_AQUA_MAGMA", "MUS_VS_TRAINER",
+    "MUS_VS_GYM_LEADER", "MUS_VS_CHAMPION", "MUS_VS_REGI", "MUS_VS_KYOGRE_GROUDON", "MUS_VS_RIVAL", "MUS_VS_ELITE_FOUR",
+    "MUS_VS_AQUA_MAGMA_LEADER", "MUS_RG_FOLLOW_ME", "MUS_RG_GAME_CORNER", "MUS_RG_ROCKET_HIDEOUT", "MUS_RG_GYM",
+    "MUS_RG_CINNABAR", "MUS_RG_LAVENDER", "MUS_RG_CYCLING", "MUS_RG_ENCOUNTER_ROCKET", "MUS_RG_ENCOUNTER_GIRL",
+    "MUS_RG_ENCOUNTER_BOY", "MUS_RG_HALL_OF_FAME", "MUS_RG_VIRIDIAN_FOREST", "MUS_RG_MT_MOON", "MUS_RG_POKE_MANSION",
+    "MUS_RG_ROUTE1", "MUS_RG_ROUTE24", "MUS_RG_ROUTE3", "MUS_RG_ROUTE11", "MUS_RG_VICTORY_ROAD", "MUS_RG_VS_GYM_LEADER",
+    "MUS_RG_VS_TRAINER", "MUS_RG_VS_WILD", "MUS_RG_VS_CHAMPION", "MUS_RG_PALLET", "MUS_RG_OAK_LAB", "MUS_RG_OAK",
+    "MUS_RG_POKE_CENTER", "MUS_RG_SS_ANNE", "MUS_RG_SURF", "MUS_RG_POKE_TOWER", "MUS_RG_SILPH", "MUS_RG_FUCHSIA",
+    "MUS_RG_CELADON", "MUS_RG_VICTORY_TRAINER", "MUS_RG_VICTORY_WILD", "MUS_RG_VICTORY_GYM_LEADER", "MUS_RG_VERMILLION",
+    "MUS_RG_PEWTER", "MUS_RG_ENCOUNTER_RIVAL", "MUS_RG_RIVAL_EXIT", "MUS_RG_CAUGHT", "MUS_RG_POKE_JUMP",
+    "MUS_RG_UNION_ROOM", "MUS_RG_NET_CENTER", "MUS_RG_MYSTERY_GIFT", "MUS_RG_BERRY_PICK", "MUS_RG_SEVII_CAVE",
+    "MUS_RG_TEACHY_TV_SHOW", "MUS_RG_SEVII_ROUTE", "MUS_RG_SEVII_DUNGEON", "MUS_RG_SEVII_123", "MUS_RG_SEVII_45",
+    "MUS_RG_SEVII_67", "MUS_RG_VS_DEOXYS", "MUS_RG_VS_MEWTWO", "MUS_RG_VS_LEGEND", "MUS_RG_ENCOUNTER_GYM_LEADER",
+    "MUS_RG_ENCOUNTER_DEOXYS", "MUS_RG_TRAINER_TOWER", "MUS_RG_SLOW_PALLET", "MUS_RG_TEACHY_TV_MENU"
+]
+
+_FANFARES = [
+    "MUS_OBTAIN_BADGE", "MUS_OBTAIN_ITEM", "MUS_EVOLVED", "MUS_OBTAIN_TMHM", "MUS_OBTAIN_BERRY", "MUS_HEAL",
+    "MUS_MOVE_DELETED", "MUS_TOO_BAD", "MUS_OBTAIN_B_POINTS", "MUS_REGISTER_MATCH_CALL", "MUS_OBTAIN_SYMBOL",
+    "MUS_RG_JIGGLYPUFF", "MUS_RG_HEAL", "MUS_RG_DEX_RATING", "MUS_RG_OBTAIN_KEY_ITEM", "MUS_RG_CAUGHT_INTRO",
+    "MUS_RG_PHOTO", "MUS_RG_POKE_FLUTE"
+]
+
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -332,6 +375,30 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Set slot name
     for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
+
+    # Randomize music
+    if multiworld.music[player]:
+        randomized_looping_music = copy.copy(_LOOPING_MUSIC)
+        multiworld.worlds[player].random.shuffle(randomized_looping_music)
+        for original_music, randomized_music in zip(_LOOPING_MUSIC, randomized_looping_music):
+            _set_bytes_little_endian(
+                patched_rom,
+                data.rom_addresses["gRandomizedSoundTable"] + (data.constants[original_music] * 2),
+                2,
+                data.constants[randomized_music]
+            )
+
+    # Randomize fanfares
+    if multiworld.fanfares[player]:
+        randomized_fanfares = copy.copy(_FANFARES)
+        multiworld.worlds[player].random.shuffle(randomized_fanfares)
+        for original_fanfare, randomized_fanfare in zip(_FANFARES, randomized_fanfares):
+            _set_bytes_little_endian(
+                patched_rom,
+                data.rom_addresses["gRandomizedSoundTable"] + (data.constants[original_fanfare] * 2),
+                2,
+                data.constants[randomized_fanfare]
+            )
 
     # Write Output
     outfile_player_name = f"_P{player}"

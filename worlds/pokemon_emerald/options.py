@@ -573,6 +573,20 @@ class RemoteItems(Toggle):
     display_name = "Remote Items"
 
 
+class RandomizeMusic(Toggle):
+    """
+    Shuffles music played in any situation where it loops. Includes many FRLG tracks.
+    """
+    display_name = "Randomize Music"
+
+
+class RandomizeFanfares(Toggle):
+    """
+    Shuffles fanfares for item pickups, healing at the pokecenter, etc...
+    """
+    display_name = "Randomize Fanfares"
+
+
 class EasterEgg(FreeText):
     """
     Enter certain phrases and something special might happen.
@@ -637,6 +651,9 @@ option_definitions: Dict[str, Option] = {
     "turbo_a": TurboA,
     "receive_item_messages": ReceiveItemMessages,
     "remote_items": RemoteItems,
+
+    "music": RandomizeMusic,
+    "fanfares": RandomizeFanfares,
 
     "easter_egg": EasterEgg
 }
