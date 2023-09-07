@@ -111,6 +111,15 @@ class WitnessWorld(World):
 
         set_rules(self.multiworld, self.player, self.player_logic, self.locat)
 
+        # Add event items and tie them to event locations (e.g. laser activations).
+
+        for event_location in self.locat.EVENT_LOCATION_TABLE:
+            item_obj = self.create_item(
+                self.player_logic.EVENT_ITEM_PAIRS[event_location]
+            )
+            location_obj = self.multiworld.get_location(event_location, self.player)
+            location_obj.place_locked_item(item_obj)
+
         # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
@@ -182,14 +191,6 @@ class WitnessWorld(World):
         # Add junk items.
         if remaining_item_slots > 0:
             item_pool.update(self.items.get_filler_items(remaining_item_slots))
-
-        # Add event items and tie them to event locations (e.g. laser activations).
-        for event_location in self.locat.EVENT_LOCATION_TABLE:
-            item_obj = self.create_item(
-                self.player_logic.EVENT_ITEM_PAIRS[event_location]
-            )
-            location_obj = self.multiworld.get_location(event_location, self.player)
-            location_obj.place_locked_item(item_obj)
 
         # BAD DOG GET BACK HERE WITH THAT PUZZLE SKIP YOU'RE POLLUTING THE ITEM POOL
         self.multiworld.get_location("Town Pet the Dog", self.player)\
