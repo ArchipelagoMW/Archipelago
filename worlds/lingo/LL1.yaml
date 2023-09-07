@@ -4003,11 +4003,11 @@
         required_panel:
           - panel: PART
           - panel: HEART
-          - room: The Bearer (East)
+          - room: Cross Tower (East)
             panel: WINTER
           - room: The Bearer (East)
             panel: PEACE
-          - room: The Bearer (North)
+          - room: Cross Tower (North)
             panel: NORTH
           - room: The Bearer (North)
             panel: SILENT (1)
@@ -4017,13 +4017,13 @@
             panel: SPACE
           - room: The Bearer (North)
             panel: WARTS
-          - room: The Bearer (South)
+          - room: Cross Tower (South)
             panel: FIRE
           - room: The Bearer (South)
             panel: TENT
           - room: The Bearer (South)
             panel: BOWL
-          - room: The Bearer (West)
+          - room: Cross Tower (West)
             panel: DIAMONDS
           - room: The Bearer (West)
             panel: SNOW
@@ -4077,17 +4077,11 @@
           - HEART
   The Bearer (East):
     entrances:
-      The Bearer:
-        room: The Bearer
-        door: East Entrance
+      Cross Tower (East): True
       Bearer Side Area:
         door: Side Area Access
       Roof: True
     panels:
-      WINTER:
-        id: Cross Room/Panel_winter_winter
-        colors: blue
-        tag: forbid
       SIX:
         id: Backside Room/Panel_six_six_5
         tag: midwhite
@@ -4116,15 +4110,9 @@
             panel: SPACE
   The Bearer (North):
     entrances:
-      The Bearer (East):
-        room: The Bearer (East)
-        door: North Entrance
+      Cross Tower (East): True
       Roof: True
     panels:
-      NORTH:
-        id: Cross Room/Panel_north_north
-        colors: blue
-        tag: forbid
       SILENT (1):
         id: Cross Room/Panel_silent_list
         colors:
@@ -4166,17 +4154,11 @@
             panel: POTS
   The Bearer (South):
     entrances:
-      The Bearer (North):
-        room: The Bearer (North)
-        door: South Entrance
+      Cross Tower (North): True
       Bearer Side Area:
         door: Side Area Shortcut
       Roof: True
     panels:
-      FIRE:
-        id: Cross Room/Panel_fire_fire
-        colors: blue
-        tag: forbid
       SIX:
         id: Backside Room/Panel_six_six_6
         tag: midwhite
@@ -4208,16 +4190,11 @@
             panel: SILENT (1)
   The Bearer (West):
     entrances:
+      Cross Tower (West): True
       Bearer Side Area:
-        - room: Bearer Side Area
-          door: West Entrance
-        - door: Side Area Shortcut
+        door: Side Area Shortcut
       Roof: True
     panels:
-      DIAMONDS:
-        id: Cross Room/Panel_diamonds_diamonds
-        colors: blue
-        tag: forbid
       SNOW:
         id: Cross Room/Panel_smile_lime
         colors:
@@ -4237,13 +4214,13 @@
       Side Area Shortcut:
         event: True
         panels:
-          - room: The Bearer (East)
+          - room: Cross Tower (East)
             panel: WINTER
-          - room: The Bearer (North)
+          - room: Cross Tower (North)
             panel: NORTH
-          - room: The Bearer (South)
+          - room: Cross Tower (South)
             panel: FIRE
-          - room: The Bearer (West)
+          - room: Cross Tower (West)
             panel: DIAMONDS
   Bearer Side Area:
     entrances:
@@ -4281,6 +4258,61 @@
         panels:
           - room: The Bearer (South)
             panel: BOWL
+  Cross Tower (East):
+    entrances:
+      The Bearer:
+        room: The Bearer
+        door: East Entrance
+      Roof: True
+    panels:
+      WINTER:
+        id: Cross Room/Panel_winter_winter
+        colors: blue
+        tag: forbid
+        required_panel:
+          room: The Bearer (North)
+          panel: SPACE
+  Cross Tower (North):
+    entrances:
+      The Bearer (East):
+        room: The Bearer (East)
+        door: North Entrance
+      Roof: True
+    panels:
+      NORTH:
+        id: Cross Room/Panel_north_north
+        colors: blue
+        tag: forbid
+        required_panel:
+          room: The Bearer (West)
+          panel: SMILE
+  Cross Tower (South):
+    entrances: # No roof access
+      The Bearer (North):
+        room: The Bearer (North)
+        door: South Entrance
+    panels:
+      FIRE:
+        id: Cross Room/Panel_fire_fire
+        colors: blue
+        tag: forbid
+        required_panel:
+          room: The Bearer (North)
+          panel: SILENT (1)
+  Cross Tower (West):
+    entrances:
+      Bearer Side Area:
+        room: Bearer Side Area
+        door: West Entrance
+      Roof: True
+    panels:
+      DIAMONDS:
+        id: Cross Room/Panel_diamonds_diamonds
+        colors: blue
+        tag: forbid
+        required_panel:
+          room: The Bearer (North)
+          panel: WARTS
   The Steady (Rose):
     entrances:
       Outside The Bold:
