@@ -256,8 +256,9 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     for i, byte in enumerate(national_id_to_species_id_map[pokemon_json["species"]].to_bytes(2, "little")):
         substructs[0][0 + i] = byte
 
-    for i, byte in enumerate(data.constants["ITEM_" + pokemon_json["item"]].to_bytes(2, "little")):
-        substructs[0][2 + i] = byte
+    if "item" in pokemon_json:
+        for i, byte in enumerate(data.constants["ITEM_" + pokemon_json["item"]].to_bytes(2, "little")):
+            substructs[0][2 + i] = byte
 
     for i, byte in enumerate((pokemon_json["experience"]).to_bytes(4, "little")):
         substructs[0][4 + i] = byte

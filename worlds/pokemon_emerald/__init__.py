@@ -5,7 +5,6 @@ from collections import Counter
 import copy
 import logging
 import os
-import sys
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial

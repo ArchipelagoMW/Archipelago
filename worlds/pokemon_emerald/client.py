@@ -339,12 +339,7 @@ class PokemonEmeraldClient(BizHawkClient):
     async def wonder_trade_acquire(self, ctx: BizHawkClientContext, keep_trying: bool = False) -> Optional[dict]:
         from CommonClient import logger
 
-        first_try = True
         while not ctx.exit_event.is_set():
-            if not first_try and not keep_trying:
-                return None
-            first_try = False
-
             lock = int(time.time_ns() / 1000000)
             uuid = Utils.get_unique_identifier()
             await ctx.send_msgs([{
@@ -361,16 +356,19 @@ class PokemonEmeraldClient(BizHawkClient):
             reply = copy.deepcopy(self.latest_wonder_trade_reply)
 
             if reply.get("uuid", None) != uuid:
-                logger.info("Reply not mine")
+                if not keep_trying:
+                    return None
                 continue
 
             if lock - reply["original_value"]["_lock"] < 5000:
-                logger.info("Lock too new")
+                if not keep_trying:
+                    return None
                 await asyncio.sleep(10)
                 continue
 
             if reply["value"]["_lock"] != lock:
-                logger.info("Lock not mine")
+                if not keep_trying:
+                    return None
                 await asyncio.sleep(10)
                 continue
 
