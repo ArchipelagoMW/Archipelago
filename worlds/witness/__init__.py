@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 from typing import Dict, Optional
 
-from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial
+from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
@@ -113,6 +113,8 @@ class WitnessWorld(World):
 
         # Add event items and tie them to event locations (e.g. laser activations).
 
+        event_locations = []
+
         for event_location in self.locat.EVENT_LOCATION_TABLE:
             item_obj = self.create_item(
                 self.player_logic.EVENT_ITEM_PAIRS[event_location]
@@ -120,11 +122,17 @@ class WitnessWorld(World):
             location_obj = self.multiworld.get_location(event_location, self.player)
             location_obj.place_locked_item(item_obj)
 
+            event_locations.append(location_obj)
+
         # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
+        #
 
-        sphere_1_size = sum(1 for loc in self.multiworld.get_reachable_locations(player=self.player) if loc.address)
+        state = CollectionState(self.multiworld)
+        state.sweep_for_events(locations=event_locations)
+
+        num_early_locs = sum(1 for loc in self.multiworld.get_reachable_locations(state, self.player) if loc.address)
 
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
@@ -141,13 +149,15 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 3"),
         ]
 
-        for i in range(sphere_1_size, needed_size):
+        for i in range(num_early_locs, needed_size):
             if not extra_checks:
                 break
 
             region, loc = extra_checks.pop(0)
             self.locat.add_location_late(loc)
             self.multiworld.get_region(region, self.player).add_locations({loc: self.location_name_to_id[loc]})
+
+            warning(f"""Location "{loc}" had to be added due to insufficient sphere 1 size.""")
 
     def create_items(self):
 
