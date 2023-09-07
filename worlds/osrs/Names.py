@@ -20,7 +20,7 @@ class RegionNames:
     Ice_Mountain = "Ice Mountain"
     Dwarven_Mines = "Dwarven Mines"
     Falador = "Falador"
-    Falador_Farm = "Falador Farm"
+    Falador_Farm = "Falador Farms"
     Crafting_Guild = "Crafting Guild"
     Rimmington = "Rimmington"
     Port_Sarim = "Port Sarim"
