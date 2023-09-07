@@ -1,6 +1,7 @@
 import os
 import random
 import typing
+import base64
 # import math
 import threading
 
@@ -608,13 +609,17 @@ class CV64World(World):
         for i in range(1, len(self.active_warp_list)):
             spoiler_handle.writelines(f"Warp {i}:\t{self.active_warp_list[i]}\n")
 
-    # def fill_slot_data(self) -> dict:
-    #     slot_data = {"death_link": self.multiworld.death_link[self.player].value}
-    #     for option_name in cv64_options:
-    #         option = getattr(self.multiworld, option_name)[self.player]
-    #         slot_data[option_name] = option.value
+    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+        return {"death_link": self.multiworld.death_link[self.player].value}
 
-    #     return slot_data
+    def modify_multidata(self, multidata: dict):
+        # wait for self.rom_name to be available.
+        self.rom_name_available_event.wait()
+        rom_name = getattr(self, "rom_name", None)
+        # we skip in case of error, so that the original error in the output thread is the one that gets raised
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(filler_junk_table.keys()))

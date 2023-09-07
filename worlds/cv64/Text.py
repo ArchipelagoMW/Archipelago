@@ -51,7 +51,7 @@ def cv64_text_truncate(cv64text: str, textbox_len_limit: int) -> str:
     return cv64text
 
 
-def cv64_text_wrap(cv64text: str, textbox_len_limit: int) -> tuple[str, int]:
+def cv64_text_wrap(cv64text: str, textbox_len_limit: int) -> tuple:
     """Rebuilds a string with some of its spaces replaced with newlines to ensure the text wraps properly in an in-game
     textbox of a given length."""
     words = cv64text.split(" ")

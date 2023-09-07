@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList, DeathLink
+from Options import Option, Choice, DefaultOnToggle, Range, Toggle, OptionList
 from .Names import RName
 from .Stages import vanilla_stage_order
 
@@ -342,6 +342,19 @@ class CinematicExperience(Toggle):
     display_name = "Cinematic Experience"
 
 
+class DeathLink(Choice):
+    """When you die, everyone dies. Of course the reverse is true too.
+    explosive: Makes received DeathLinks kill you via the Magical Nitro explosion rather than the normal death
+    animation."""
+    display_name = "DeathLink"
+    option_off = 0
+    alias_no = 0
+    alias_true = 1
+    alias_yes = 1
+    option_on = 1
+    option_explosive = 2
+
+
 cv64_options: Dict[str, Option] = {
     "character_stages": CharacterStages,
     "stage_shuffle": StageShuffle,
@@ -384,5 +397,5 @@ cv64_options: Dict[str, Option] = {
     "map_lighting": MapLighting,
     "fall_guard": FallGuard,
     "cinematic_experience": CinematicExperience,
-    # "death_link": DeathLink,
+    "death_link": DeathLink,
 }

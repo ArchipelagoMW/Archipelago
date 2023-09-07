@@ -130,9 +130,9 @@ remote_item_giver = [
     0x3C0B8039,  # LUI	 T3, 0x8039
     0x916A9BE0,  # LBU	 T2, 0x9BE0 (T3)
     0x012A4821,  # ADDU  T1, T1, T2
-    0x11200006,  # BEQZ	 T1, [forward 0x06]
+    0x11200006,  # BEQZ	 T1,     [forward 0x06]
     0x00000000,  # NOP
-    0x11400002,  # BEQZ  T2, [forward 0x02]
+    0x11400002,  # BEQZ  T2,     [forward 0x02]
     0x254AFFFF,  # ADDIU T2, T2, 0xFFFF
     0xA16A9BE0,  # SB	 T2, 0x9BE0 (T3)
     0x03E00008,  # JR    RA
@@ -147,16 +147,16 @@ remote_item_giver = [
     0x91640000,  # LBU	 A0, 0x0000 (T3)
     0x14800003,  # BNEZ	 A0, [forward 0x03]
     0x00000000,  # NOP
-    0x10000005,  # B	 [forward 0x05]
+    0x10000005,  # B	         [forward 0x05]
     0x256B0002,  # ADDIU T3, T3, 0x0002
     0x2409000F,  # ADDIU T1, R0, 0x000F
     0xA1690001,  # SB	 T1, 0x0001 (T3)
     0x080FF8DE,  # J	 0x803FE374
     0xA1600000,  # SB	 R0, 0x0000 (T3)
     0x91640000,  # LBU	 A0, 0x0000 (T3)
-    0x14800002,  # BNEZ	 A0, [forward 0x02]
+    0x14800002,  # BNEZ	 A0,     [forward 0x02]
     0x00000000,  # NOP
-    0x10000003,  # B     [forward 0x03]
+    0x10000003,  # B             [forward 0x03]
     0x2409000F,  # ADDIU T1, R0, 0x000F
     0x080FF864,  # J	 0x803FE190
     0xA169FFFF,  # SB	 T1, 0xFFFF (T3)
@@ -164,17 +164,53 @@ remote_item_giver = [
     0x3C0B8039,  # LUI   T3, 0x8039
     0x256B9BE1,  # ADDIU T3, T3, 0x9BE1
     0x95640001,  # LHU   A0, 0x0001 (T3)
-    0x14800002,  # BNEZ  A0, [forward 0x02]
+    0x14800002,  # BNEZ  A0,     [forward 0x02]
     0x916900A7,  # LBU   T1, 0x00A7 (T3)
     0x03E00008,  # JR    RA
     0x312A0080,  # ANDI  T2, T1, 0x0080
-    0x11400002,  # BEQZ  T2, [forward 0x02]
+    0x11400002,  # BEQZ  T2,     [forward 0x02]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     0x35290080,  # ORI   T1, T1, 0x0080
     0xA16900A7,  # SB    T1, 0x00A7 (T3)
     0x2484FFFF,  # ADDIU A0, A0, 0xFFFF
+    0x24080001,  # ADDIU T0, R0, 0x0001
     0x03E00008,  # JR    RA
+    0xA168FFFD,  # SB    T0, 0xFFFD (T3)
+]
+
+deathlink_nitro_edition = [
+    # Alternative to the end of the above DeathLink-specific checks that kills the player with the Nitro explosion
+    # instead of the normal death.
+    0x91690043,  # LBU   T1, 0x0043 (T3)
+    0x03E00008,  # JR    RA
+    0x3C088034,  # LUI   T0, 0x8034
+    0x91082BFE,  # LBU   T0, 0x2BFE (T0)
+    0x11000002,  # BEQZ  T0,     [forward 0x02]
+    0x00000000,  # NOP
+    0x03E00008,  # JR    RA
+    0x35290080,  # ORI   T1, T1, 0x0080
+    0xA1690043,  # SB    T1, 0x0043 (T3)
+    0x2484FFFF,  # ADDIU A0, A0, 0xFFFF
+    0x24080001,  # ADDIU T0, R0, 0x0001
+    0x03E00008,  # JR    RA
+    0xA168FFFD,  # SB    T0, 0xFFFD (T3)
+]
+
+nitro_fall_killer = [
+    # Custom code to force the instant fall death if at a high enough falling speed after getting killed by the Nitro
+    # explosion, since the game doesn't run the checks for the fall death after getting hit by said explosion and could
+    # result in a softlock when getting blown into an abyss.
+    0x92480046,  # LBU   T0, 0x0046 (S2)
+    0x2409000C,  # ADDIU T1, R0, 0x000C
+    0x15090006,  # BNE   T0, T1, [forward 0x06]
+    0x3C098035,  # LUI   T1, 0x8035
+    0x91290810,  # LBU   T1, 0x0810 (T1)
+    0x240A00C1,  # ADDIU T2, R0, 0x00C1
+    0x152A0002,  # BNE   T1, T2, [forward 0x02]
+    0x240B0001,  # ADDIU T3, R0, 0x0001
+    0xA24B0046,  # SB    T3, 0x0046 (S2)
+    0x03E00008   # JR    RA
 ]
 
 deathlink_counter_decrementer = [
@@ -190,8 +226,12 @@ deathlink_counter_decrementer = [
     0x240900FF,  # ADDIU T1, R0, 0x00FF
     0xA1099BE0,  # SB    T1, 0x9BE0 (T0)
     0xA1009BDF,  # SB	 R0, 0x9BDF (T0)
+    0xA1009BE1,  # SB	 R0, 0x9BE1 (T0)
+    0x91099BDE,  # LBU   T1, 0x9BDE (T0)
+    0x55200001,  # BNEZL T1, [forward 0x01]
+    0x24090000,  # ADDIU T1, R0, 0x0000
     0x03E00008,  # JR    RA
-    0xA1009BE1   # SB	 R0, 0x9BE1 (T0)
+    0xA1099BDE   # SB    T1, 0x9BDE (T0)
 ]
 
 death_flag_unsetter = [
@@ -1173,7 +1213,7 @@ savepoint_cursor_updater = [
     0x914B17CF,  # LBU    T3, 0x17CF (T2)
     0xA10B9EE3,  # SB     T3, 0x9EE3 (T0)
     0xA1009BC0,  # SB     R0, 0x9BC0 (T0)
-    0x080FF052   # J   0x803FC148
+    0x080FF8F0   # J 0x803FE3C0
 ]
 
 stage_start_cursor_updater = [

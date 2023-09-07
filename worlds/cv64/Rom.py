@@ -635,9 +635,16 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32s(0xBFC000, Patches.remote_item_giver)
     rom.write_int32s(0xBFE190, Patches.subweapon_surface_checker)
 
+    # Make received DeathLinks blow you to smithereens instead of kill you normally.
+    if multiworld.death_link[player].value == 2:
+        rom.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
+        rom.write_int32s(0xBFC0D0, Patches.deathlink_nitro_edition)
+
     # DeathLink counter decrementer code
-    rom.write_int32(0x1C340, 0x080FF052)  # J 0x803FC148
-    rom.write_int32s(0xBFC148, Patches.deathlink_counter_decrementer)
+    rom.write_int32(0x1C340, 0x080FF8F0)  # J 0x803FE3C0
+    rom.write_int32s(0xBFE3C0, Patches.deathlink_counter_decrementer)
+    rom.write_int32(0x25B6C, 0x0080FF052)  # J 0x803FC148
+    rom.write_int32s(0xBFC148, Patches.nitro_fall_killer)
 
     # Death flag un-setter on "Beginning of stage" state overwrite code
     rom.write_int32(0x1C2B0, 0x080FF047)  # J 0x803FC11C
