@@ -103,29 +103,31 @@ class OSRSWorld(World):
         # I figured tacking "Area: " at the beginning would make it _easier_ to tell apart. Turns out it made it worse
         starting_area_region = self.starting_area_item[len("Area: "):]
         starting_entrance = menu_region.create_exit(f"Start->{starting_area_region}")
+        starting_entrance.access_rule = lambda state: state.has(self.starting_area_item, self.player)
         starting_entrance.connect(self.region_name_to_data[starting_area_region])
 
         # Create entrances between regions
         for region_row in self.region_rows:
             region = self.region_name_to_data[region_row.name]
             for outbound_region_name in region_row.connections:
-                entrance = region.create_exit(f"{region_row.name}->{outbound_region_name}")
+                entrance = region.create_exit(f"{region_row.name}->{outbound_region_name.replace('*', '')}")
                 if "*" not in outbound_region_name:
                     item_name = self.region_rows_by_name[outbound_region_name].itemReq
                     if "*" not in item_name:
                         entrance.access_rule = lambda state: state.has(item_name, self.player)
                     else:
                         self.generate_special_rules_for(entrance, region_row, outbound_region_name)
-                    entrance.connect(self.region_name_to_data[outbound_region_name])
                 else:
                     self.generate_special_rules_for(entrance, region_row, outbound_region_name)
+                entrance.connect(self.region_name_to_data[outbound_region_name.replace('*','')])
             for resource_region in region_row.resources:
                 if resource_region != "":
-                    entrance = region.create_exit(f"{region_row.name}->{resource_region}")
+                    entrance = region.create_exit(f"{region_row.name}->{resource_region.replace('*', '')}")
                     if "*" not in resource_region:
                         entrance.connect(self.region_name_to_data[resource_region])
                     else:
                         self.generate_special_rules_for(entrance, region_row, resource_region)
+                        entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
 
         self.roll_locations()
 
@@ -136,15 +138,11 @@ class OSRSWorld(World):
         if outbound_region_name == "Crafting Guild":
             entrance.access_rule = lambda state: self.can_reach_skill(state, "crafting", 40)
             return
-        if outbound_region_name == "Crandor":
-            entrance.access_rule = lambda state: \
-                self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player).can_reach(state)
-            return
         if outbound_region_name == "Corsair Cove":
             # Need to be able to start Corsair Curse in addition to having the item
             item_name = self.region_rows_by_name[outbound_region_name].itemReq
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
-                                                 state.can_reach(RegionNames.Falador_Farm, self.player)
+                                                 state.can_reach(RegionNames.Falador_Farm, None, self.player)
             return
         if outbound_region_name == "Camdozaal*":
             entrance.access_rule = lambda state: \
@@ -169,7 +167,8 @@ class OSRSWorld(World):
             location_row = self.location_rows[i]
             if location_row.category in ["Quest", "Points", "Goal"]:
                 self.create_and_add_location(i)
-                locations_added += 1
+                if location_row.category == "Quest":
+                    locations_added += 1
 
         # Build up the weighted Task Pool
         rnd = self.multiworld.per_slot_randoms[self.player]
@@ -323,7 +322,10 @@ class OSRSWorld(World):
         print(f"Adding task {location_row.name}")
 
         # Create Location
-        location = OSRSLocation(self.player, location_row.name, self.base_id + row_index)
+        id = self.base_id + row_index
+        if location_row.category == "Points" or location_row.category == "Goal":
+            id = None
+        location = OSRSLocation(self.player, location_row.name, id)
         self.location_name_to_data[location_row.name] = location
 
         # Add the location to its first region, or if it doesn't belong to one, to Menu
@@ -332,17 +334,6 @@ class OSRSWorld(World):
             region = self.region_name_to_data[location_row.regions[0]]
         location.parent_region = region
         region.locations.append(location)
-
-        # Set up requirements for region
-        for region_required_name in location_row.regions:
-            region_required = self.region_name_to_data[region_required_name]
-            add_rule(location, lambda state: state.can_reach(region_required, self.player))
-            for skill_req in location_row.skills:
-                add_rule(location, lambda state: self.can_reach_skill(state, skill_req.skill, skill_req.level))
-            for item_req in location_row.items:
-                add_rule(location, lambda state: state.has(item_req, self.player))
-            if location_row.qp != 0:
-                add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
 
     def set_rules(self) -> None:
         """
@@ -461,10 +452,18 @@ class OSRSWorld(World):
         self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player) \
             .place_locked_item(self.create_event("Victory"))
 
-        add_rule(self.multiworld.get_location(LocationNames.Q_Dragon_Slayer, self.player), lambda state: (
-                self.quest_points(state) >= 32 and state.can_reach(RegionNames.Crandor, None, self.player)
-        ))
-
+        for location_name, location in self.location_name_to_data.items():
+            location_row = self.location_rows_by_name[location_name]
+            # Set up requirements for region
+            for region_required_name in location_row.regions:
+                region_required = self.region_name_to_data[region_required_name]
+                add_rule(location, lambda state: state.can_reach(region_required, None, self.player))
+            for skill_req in location_row.skills:
+                add_rule(location, lambda state: self.can_reach_skill(state, skill_req.skill, skill_req.level))
+            for item_req in location_row.items:
+                add_rule(location, lambda state: state.has(item_req, self.player))
+            if location_row.qp != 0:
+                add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
         self.multiworld.completion_condition[self.player] = lambda state: (state.has("Victory", self.player))
 
     def create_region(self, name: str) -> "Region":
@@ -505,7 +504,7 @@ class OSRSWorld(World):
             return can_train
         if skill == "mining":
             can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) or state.can_reach(
-                RegionNames.Clay_Rock)
+                RegionNames.Clay_Rock, None, self.player)
             if not self.allow_brutal_grinds:
                 # Iron is the best way to train all the way to 99, so having access to iron is all you need
                 if level >= 15:
@@ -578,5 +577,6 @@ class OSRSWorld(World):
                                                               self.player) and self.can_reach_skill(state,
                                                                                                     "fishing", 20)
             return can_train
-        print(f"Attempting to check for reaching level {level} in {skill} which does not have rules set so it's fine")
+        # If it's not listed here, it can be trained just fine without needing locations
+        # print(f"Attempting to check for reaching level {level} in {skill} which does not have rules set so it's fine")
         return True

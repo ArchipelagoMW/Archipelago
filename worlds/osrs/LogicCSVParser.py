@@ -54,8 +54,9 @@ def load_location_csv() -> typing.List[LocationRow]:
                     skill_reqs = [SkillRequirement(split[0], int(split[1])) for split in split_skills]
 
             region_strings = row[2].split(", ") if len(row[2]) > 0 else []
+            item_strings = row[4].split(", ") if len(row[4]) > 0 else []
             location_rows.append(
-                LocationRow(row[0], row[1], region_strings, skill_reqs, row[4].split(", "),
+                LocationRow(row[0], row[1], region_strings, skill_reqs, item_strings,
                             int(row[5]) if row[5] != "" else 0))
         return location_rows
 
