@@ -243,15 +243,15 @@ class BuildingProgression(Choice):
     internal_name = "building_progression"
     display_name = "Building Progression"
     default = 2
-    option_vanilla = 0b00001  # 1
-    option_progressive = 0b00010  # 2
-    option_progressive_early_shipping_bin = 0b00110  # 6
-    option_vanilla_cheap = 0b01001  # 9
-    option_vanilla_very_cheap = 0b10001  # 17
-    option_progressive_cheap = 0b01010  # 10
-    option_progressive_very_cheap = 0b10010  # 18
-    option_progressive_early_shipping_bin_cheap = 0b01110  # 14
-    option_progressive_early_shipping_bin_very_cheap = 0b10110  # 22
+    option_vanilla = 0b0000  # 0
+    option_vanilla_cheap = 0b0100  # 4
+    option_vanilla_very_cheap = 0b1000  # 8
+    option_progressive = 0b0001  # 1
+    option_progressive_cheap = 0b0101  # 5
+    option_progressive_very_cheap = 0b1001  # 9
+    option_progressive_early_shipping_bin = 0b0011  # 3
+    option_progressive_early_shipping_bin_cheap = 0b0111  # 7
+    option_progressive_early_shipping_bin_very_cheap = 0b1011  # 11
 
 
 class FestivalLocations(Choice):
