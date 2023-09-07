@@ -1,9 +1,9 @@
+from argparse import Namespace
 import asyncio
 import json
 import os
-import multiprocessing
 import subprocess
-import typing
+from typing import Any, Dict, Optional, Tuple
 import zipfile
 
 from asyncio import StreamReader, StreamWriter
@@ -15,8 +15,9 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from worlds import network_data_package
-from worlds.wl4.rom import get_base_rom_path
-from worlds.wl4.locations import get_level_locations, location_table
+
+from .rom import get_base_rom_path
+from .locations import get_level_locations, location_table
 
 
 SYSTEM_MESSAGE_ID = 0
@@ -91,7 +92,7 @@ class WL4Context(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
 
-        self.gba_streams: typing.Tuple[StreamReader, StreamWriter] = None
+        self.gba_streams: Tuple[StreamReader, StreamWriter] = None
         self.gba_sync_task = None
         self.gba_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
@@ -119,7 +120,7 @@ class WL4Context(CommonContext):
 
         await self.send_connect()
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]):
+    def on_deathlink(self, data: Dict[str, Any]):
         self.deathlink_pending = True
         super().on_deathlink(data)
 
@@ -324,26 +325,29 @@ async def patch_and_run_game(wl4_path: Path):
     asyncio.create_task(run_game(patched_rom_file))
 
 
-async def launch():
-    multiprocessing.freeze_support()
-    parser = get_base_parser()
-    parser.add_argument('patch_file', default='', type=Path, nargs='?',
-                        help='Path to a WL4 AP patch file')
-    args = parser.parse_args()
-    if args.patch_file:
-        asyncio.create_task(patch_and_run_game(args.patch_file))
+parser = get_base_parser()
+parser.add_argument('apwl4_file', default=None, type=Path, nargs='?',
+                    help='Path to an APWL4 file')
 
+async def run_client(args: Namespace):
     ctx = WL4Context(args.connect, args.password)
     ctx.server_task = asyncio.create_task(server_loop(ctx), name='Server Loop')
+
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
 
-    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name='GBA Sync')
-    await ctx.exit_event.wait()
-    ctx.server_address = None
+    if args.apwl4_file is not None:
+        Utils.async_start(patch_and_run_game(args.apwl4_file))
 
+    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name='GBA Sync')
+
+    await ctx.exit_event.wait()
     await ctx.shutdown()
 
-    if ctx.gba_sync_task:
-        await ctx.gba_sync_task
+
+def launch():
+    import colorama
+    colorama.init()
+    asyncio.run(run_client(parser.parse_args()))
+    colorama.deinit()
