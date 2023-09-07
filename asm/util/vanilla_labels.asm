@@ -55,6 +55,7 @@
 .definelabel EntityAI_Q_K5_Hip_COM_takarabako, 0x80292BC
 .definelabel EntityAI_INITIAL_takara_kakera, 0x802932C
 .definelabel GmapSceneCreate, 0x806C794
+.definelabel AutoSave_EXRead_Work, 0x8073A18
 .definelabel TOptObjSet, 0x80766E8
 .definelabel WarioCoinSet, 0x80768B8
 .definelabel TKakeraComp_SE_Set, 0x8078D60

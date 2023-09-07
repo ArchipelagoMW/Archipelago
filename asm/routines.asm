@@ -1,6 +1,13 @@
 .gba
 
 
+; Override the end of EXimage_Clear_Work_2Mode() to instead jump to our function
+.org 0x8074068
+        ldr r0, =CreateStartingInventory | 1
+        bx r0
+    .pool
+
+; HardwareInitialization()
 hook 0x8000728, 0x8000738, PreGamePrep
 
 ; GameSelect() case 2
@@ -17,6 +24,32 @@ hook 0x801BB7A, 0x801BB90, LoadTextSprites
 
 .autoregion
 .align 2
+
+
+; Create starting inventory by updating the item status after loading the empty save.
+CreateStartingInventory:
+        call_using r0, AutoSave_EXRead_Work
+
+        ldr r0, =LevelStatusTable
+        ldr r1, =StartingInventoryLevelStatus
+        mov r2, #36
+
+    @@NextLevel:
+        ldrb r3, [r1]
+        strb r3, [r0]
+
+        add r0, #4
+        add r1, #1
+        sub r2, #1
+        cmp r2, #0
+        beq @@Junk
+        b @@NextLevel
+
+    @@Junk:
+        ; TODO
+
+        pop {pc}  ; Return address from EXimage_Clear_Work_2Mode()
+    .pool
 
 
 ; Initialize randomizer variables

@@ -32,6 +32,11 @@ ItemExtDataTable:
     HealthExtDataTable: .fill @levels * 4, 0
 
 
+; Starting inventory.
+.align 4
+StartingInventoryLevelStatus: .fill 36, 0
+StartingInventoryJunkCounts: .fill 4, 0
+
 .align 2
 ; Retrieve the item and multiworld pointer at the location specified in r0 in this level.
 ; Return the encoded ID in r0 and the multiworld pointer in r1
