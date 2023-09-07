@@ -114,12 +114,12 @@ class OSRSWorld(World):
                 if "*" not in outbound_region_name:
                     item_name = self.region_rows_by_name[outbound_region_name].itemReq
                     if "*" not in item_name:
-                        entrance.access_rule = lambda state: state.has(item_name, self.player)
+                        entrance.access_rule = lambda state, item_name=item_name: state.has(item_name, self.player)
                     else:
                         self.generate_special_rules_for(entrance, region_row, outbound_region_name)
                 else:
                     self.generate_special_rules_for(entrance, region_row, outbound_region_name)
-                entrance.connect(self.region_name_to_data[outbound_region_name.replace('*','')])
+                entrance.connect(self.region_name_to_data[outbound_region_name.replace('*', '')])
             for resource_region in region_row.resources:
                 if resource_region != "":
                     entrance = region.create_exit(f"{region_row.name}->{resource_region.replace('*', '')}")
@@ -133,24 +133,28 @@ class OSRSWorld(World):
 
     def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
         if outbound_region_name == "Cook's Guild":
-            entrance.access_rule = lambda state: self.can_reach_skill(state, "cooking", 32)
+            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
+            entrance.access_rule = lambda state: state.has(item_name, self.player) and\
+                self.can_reach_skill(state, "cooking", 32)
             return
         if outbound_region_name == "Crafting Guild":
-            entrance.access_rule = lambda state: self.can_reach_skill(state, "crafting", 40)
+            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
+            entrance.access_rule = lambda state:  state.has(item_name, self.player) and\
+                self.can_reach_skill(state, "crafting", 40)
             return
         if outbound_region_name == "Corsair Cove":
+            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
             # Need to be able to start Corsair Curse in addition to having the item
-            item_name = self.region_rows_by_name[outbound_region_name].itemReq
             entrance.access_rule = lambda state: state.has(item_name, self.player) and \
                                                  state.can_reach(RegionNames.Falador_Farm, None, self.player)
             return
         if outbound_region_name == "Camdozaal*":
-            entrance.access_rule = lambda state: \
+            item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
+            entrance.access_rule = lambda state:  state.has(item_name, self.player) and\
                 self.multiworld.get_location(LocationNames.Q_Below_Ice_Mountain, self.player).can_reach(state)
             return
         if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
-            entrance.access_rule = lambda state: \
-                self.multiworld.get_location(LocationNames.Q_Dorics_Quest, self.player).can_reach(state)
+            entrance.access_rule = lambda state: self.multiworld.get_location(LocationNames.Q_Dorics_Quest, self.player).can_reach(state)
             return
 
         print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
@@ -457,11 +461,11 @@ class OSRSWorld(World):
             # Set up requirements for region
             for region_required_name in location_row.regions:
                 region_required = self.region_name_to_data[region_required_name]
-                add_rule(location, lambda state: state.can_reach(region_required, None, self.player))
+                add_rule(location, lambda state, region_required=region_required: state.can_reach(region_required, None, self.player))
             for skill_req in location_row.skills:
-                add_rule(location, lambda state: self.can_reach_skill(state, skill_req.skill, skill_req.level))
+                add_rule(location, lambda state, skill_req=skill_req: self.can_reach_skill(state, skill_req.skill, skill_req.level))
             for item_req in location_row.items:
-                add_rule(location, lambda state: state.has(item_req, self.player))
+                add_rule(location, lambda state, item_req=item_req: state.has(item_req, self.player))
             if location_row.qp != 0:
                 add_rule(location, lambda state: self.quest_points(state) > location_row.qp)
         self.multiworld.completion_condition[self.player] = lambda state: (state.has("Victory", self.player))
