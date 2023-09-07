@@ -64,6 +64,8 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = None
 
+        self.items_placed_early = []
+
     def _get_slot_data(self):
         return {
             'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
@@ -124,10 +126,29 @@ class WitnessWorld(World):
 
             event_locations.append(location_obj)
 
+        # Place other locked items
+        self.multiworld.get_location("Town Pet the Dog", self.player)\
+            .place_locked_item(self.create_item("Puzzle Skip"))
+
+        self.items_placed_early.append("Puzzle Skip")
+
+        # Pick an early item to place on the tutorial gate.
+        early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
+        if early_items:
+            random_early_item = self.multiworld.random.choice(early_items)
+            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
+                # In Expert, only tag the item as early, rather than forcing it onto the gate.
+                self.multiworld.local_early_items[self.player][random_early_item] = 1
+            else:
+                # Force the item onto the tutorial gate check and remove it from our random pool.
+                self.multiworld.get_location("Tutorial Gate Open", self.player)\
+                    .place_locked_item(self.create_item(random_early_item))
+                self.items_placed_early.append(random_early_item)
+
         # There are some really restrictive settings in The Witness.
         # They are rarely played, but when they are, we add some extra sphere 1 locations.
         # This is done both to prevent generation failures, but also to make the early game less linear.
-        #
+        # Only sweeps for events because having this behavior be random based on Tutorial Gate would be strange.
 
         state = CollectionState(self.multiworld)
         state.sweep_for_events(locations=event_locations)
@@ -160,12 +181,23 @@ class WitnessWorld(World):
             warning(f"""Location "{loc}" had to be added due to insufficient sphere 1 size.""")
 
     def create_items(self):
-
-        # Determine pool size. Note that the dog location is included in the location list, so this needs to be -1.
-        pool_size: int = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE) - 1
+        # Determine pool size.
+        pool_size: int = len(self.locat.CHECK_LOCATION_TABLE) - len(self.locat.EVENT_LOCATION_TABLE)
 
         # Fill mandatory items and remove precollected and/or starting items from the pool.
         item_pool: Dict[str, int] = self.items.get_mandatory_items()
+
+        # Remove one copy of each item that was placed early
+        for already_placed in self.items_placed_early:
+            pool_size -= 1
+
+            if already_placed not in item_pool:
+                continue
+
+            if item_pool[already_placed] == 1:
+                item_pool.pop(already_placed)
+            else:
+                item_pool[already_placed] -= 1
 
         for precollected_item_name in [item.name for item in self.multiworld.precollected_items[self.player]]:
             if precollected_item_name in item_pool:
@@ -191,6 +223,7 @@ class WitnessWorld(World):
 
         # Add puzzle skips.
         num_puzzle_skips = get_option_value(self.multiworld, self.player, "puzzle_skip_amount")
+
         if num_puzzle_skips > remaining_item_slots:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world has insufficient locations"
                     f" to place all requested puzzle skips.")
@@ -201,26 +234,6 @@ class WitnessWorld(World):
         # Add junk items.
         if remaining_item_slots > 0:
             item_pool.update(self.items.get_filler_items(remaining_item_slots))
-
-        # BAD DOG GET BACK HERE WITH THAT PUZZLE SKIP YOU'RE POLLUTING THE ITEM POOL
-        self.multiworld.get_location("Town Pet the Dog", self.player)\
-            .place_locked_item(self.create_item("Puzzle Skip"))
-
-        # Pick an early item to place on the tutorial gate.
-        early_items = [item for item in self.items.get_early_items() if item in item_pool]
-        if early_items:
-            random_early_item = self.multiworld.random.choice(early_items)
-            if get_option_value(self.multiworld, self.player, "puzzle_randomization") == 1:
-                # In Expert, only tag the item as early, rather than forcing it onto the gate.
-                self.multiworld.local_early_items[self.player][random_early_item] = 1
-            else:
-                # Force the item onto the tutorial gate check and remove it from our random pool.
-                self.multiworld.get_location("Tutorial Gate Open", self.player)\
-                    .place_locked_item(self.create_item(random_early_item))
-                if item_pool[random_early_item] == 1:
-                    item_pool.pop(random_early_item)
-                else:
-                    item_pool[random_early_item] -= 1
 
         # Generate the actual items.
         for item_name, quantity in sorted(item_pool.items()):
