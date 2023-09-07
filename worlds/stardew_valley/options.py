@@ -193,17 +193,17 @@ class ToolProgression(Choice):
     """Shuffle the tool upgrades?
     Vanilla: Clint will upgrade your tools with metal bars.
     Progressive: You will randomly find Progressive Tool upgrades.
-    Cheap: Tool Upgrades will cost half as much
+    Cheap: Tool Upgrades will cost 2/5th as much
     Very Cheap: Tool Upgrades will cost 1/5th as much"""
     internal_name = "tool_progression"
     display_name = "Tool Progression"
-    default = 2
-    option_vanilla = 0b0001  # 1
-    option_progressive = 0b0010  # 2
-    option_vanilla_cheap = 0b0101  # 5
-    option_vanilla_very_cheap = 0b1001  # 9
-    option_progressive_cheap = 0b0110  # 6
-    option_progressive_very_cheap = 0b1010  # 10
+    default = 1
+    option_vanilla = 0b000  # 0
+    option_progressive = 0b001  # 1
+    option_vanilla_cheap = 0b010  # 2
+    option_vanilla_very_cheap = 0b100  # 4
+    option_progressive_cheap = 0b011  # 3
+    option_progressive_very_cheap = 0b101  # 5
 
 
 class ElevatorProgression(Choice):
@@ -237,7 +237,7 @@ class BuildingProgression(Choice):
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
     Progressive early shipping bin: Same as Progressive, but the shipping bin will be placed early in the multiworld.
-    Cheap: Buildings will cost as much
+    Cheap: Buildings will cost half as much
     Very Cheap: Buildings will cost 1/5th as much
     """
     internal_name = "building_progression"
