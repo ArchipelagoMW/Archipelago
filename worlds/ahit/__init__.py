@@ -48,6 +48,7 @@ class HatInTimeWorld(World):
     act_connections: Dict[str, str] = {}
     shop_locs: List[str] = []
     item_name_groups = relic_groups
+    web = AWebInTime()
 
     def generate_early(self):
         adjust_options(self)
