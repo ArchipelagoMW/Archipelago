@@ -337,21 +337,190 @@
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE"
+    ],
     "warps": [
       "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0,1/MAP_ROUTE110:1",
       "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2/MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0"
     ]
   },
-  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/MAIN": {
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
     "locations": [],
     "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS"
+    ],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1",
+      "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_1"
+    ],
     "exits": [],
     "warps": [
-      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2",
       "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:2/MAP_ROUTE110_TRICK_HOUSE_END:0"
     ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_2"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_3"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4",
+      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_4"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_5"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6",
+      "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_6"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7",
+      "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_7"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "locations": [
+      "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",
+      "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_ROUTE110_TRICK_HOUSE_END/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_END",

@@ -383,6 +383,48 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
             lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
         )
 
+    # Trick House
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS", player),
+        can_cut
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE", player),
+        lambda state: state.has("Dynamo Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_1", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE", player),
+        lambda state: state.has("Heat Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_2", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS", player),
+        can_rock_smash
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE", player),
+        lambda state: state.has("Balance Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_3", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS", player),
+        can_strength
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE", player),
+        lambda state: state.has("Feather Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_4", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE", player),
+        lambda state: state.has("Mind Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_5", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE", player),
+        lambda state: state.has("Rain Badge", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_6", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("EVENT_COMPLETE_TRICK_HOUSE_7", player)
+    )
+
     # Mauville City
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_GOT_BASEMENT_KEY_FROM_WATTSON"), player),

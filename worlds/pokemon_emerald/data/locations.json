@@ -1437,5 +1437,33 @@
   "NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH": {
     "label": "Slateport City - Deep Sea Tooth from Capt. Stern",
     "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1": {
+    "label": "Route 110 - Trick House Reward 1",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2": {
+    "label": "Route 110 - Trick House Reward 2",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3": {
+    "label": "Route 110 - Trick House Reward 3",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4": {
+    "label": "Route 110 - Trick House Reward 4",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5": {
+    "label": "Route 110 - Trick House Reward 5",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6": {
+    "label": "Route 110 - Trick House Reward 6",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7": {
+    "label": "Route 110 - Trick House Reward 7",
+    "tags": ["NpcGift"]
   }
 }
