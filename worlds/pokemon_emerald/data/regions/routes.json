@@ -646,7 +646,8 @@
   "REGION_ROUTE111/NORTH": {
     "parent_map": "MAP_ROUTE111",
     "locations": [
-      "NPC_GIFT_RECEIVED_SECRET_POWER"
+      "NPC_GIFT_RECEIVED_SECRET_POWER",
+      "NPC_GIFT_ROUTE_111_RECEIVED_BERRY"
     ],
     "events": [],
     "exits": [
@@ -836,7 +837,8 @@
       "ITEM_ROUTE_114_ENERGY_POWDER",
       "HIDDEN_ITEM_ROUTE_114_REVIVE",
       "HIDDEN_ITEM_ROUTE_114_CARBOS",
-      "NPC_GIFT_RECEIVED_TM_ROAR"
+      "NPC_GIFT_RECEIVED_TM_ROAR",
+      "NPC_GIFT_ROUTE_114_RECEIVED_BERRY"
     ],
     "events": [],
     "exits": [
@@ -1269,7 +1271,8 @@
       "ITEM_ROUTE_120_REVIVE",
       "ITEM_ROUTE_120_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
-      "HIDDEN_ITEM_ROUTE_120_ZINC"
+      "HIDDEN_ITEM_ROUTE_120_ZINC",
+      "NPC_GIFT_ROUTE_120_RECEIVED_BERRY"
     ],
     "events": [],
     "exits": [
@@ -1476,7 +1479,11 @@
   },
   "REGION_ROUTE123_BERRY_MASTERS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE123_BERRY_MASTERS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_1",
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_2",
+      "NPC_GIFT_BERRY_MASTERS_WIFE"
+    ],
     "events": [],
     "exits": [],
     "warps": [

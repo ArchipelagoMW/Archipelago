@@ -83,7 +83,9 @@
   },
   "REGION_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB/MAIN": {
     "parent_map": "MAP_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_FIRST_POKEBALLS"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -2051,6 +2053,7 @@
       "REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN",
       "REGION_SOOTOPOLIS_CITY/EAST",
       "REGION_SOOTOPOLIS_CITY/WEST",
+      "REGION_SOOTOPOLIS_CITY/WEST_GRASS",
       "REGION_SOOTOPOLIS_CITY/ISLAND"
     ],
     "warps": []
@@ -2088,6 +2091,16 @@
       "MAP_SOOTOPOLIS_CITY:8/MAP_SOOTOPOLIS_CITY_HOUSE5:0",
       "MAP_SOOTOPOLIS_CITY:10/MAP_SOOTOPOLIS_CITY_HOUSE7:0"
     ]
+  },
+  "REGION_SOOTOPOLIS_CITY/WEST_GRASS": {
+    "parent_map": "MAP_SOOTOPOLIS_CITY",
+    "locations": [
+      "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_1",
+      "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_2"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_SOOTOPOLIS_CITY/ISLAND": {
     "parent_map": "MAP_SOOTOPOLIS_CITY",

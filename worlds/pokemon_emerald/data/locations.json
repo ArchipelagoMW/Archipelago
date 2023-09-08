@@ -1465,5 +1465,41 @@
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7": {
     "label": "Route 110 - Trick House Reward 7",
     "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_FIRST_POKEBALLS": {
+    "label": "Littleroot Town - Pokeballs from Rival",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_1": {
+    "label": "Sootopolis City - Berry from Girl on Grass 1",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_2": {
+    "label": "Sootopolis City - Berry from Girl on Grass 2",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_111_RECEIVED_BERRY": {
+    "label": "Route 111 - Berry from Girl Near Berry Trees",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_114_RECEIVED_BERRY": {
+    "label": "Route 114 - Berry from Man Near House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_120_RECEIVED_BERRY": {
+    "label": "Route 120 - Berry from Lady Near Berry Trees",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_1": {
+    "label": "Route 123 - Berry from Berry Master 1",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_2": {
+    "label": "Route 123 - Berry from Berry Master 2",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTERS_WIFE": {
+    "label": "Route 123 - Berry from Berry Master's Wife",
+    "tags": ["NpcGift"]
   }
 }
