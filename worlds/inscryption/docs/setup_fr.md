@@ -1,4 +1,4 @@
-# Inscryption Randomizer Setup Guide
+# Guide d'Installation de Inscryption Randomizer
 
 ## Logiciel Exigé
 
