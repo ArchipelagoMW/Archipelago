@@ -55,6 +55,7 @@ class RandomizeAbilities(Choice):
             self.option_randomize_modded: "Randomize Modded",
         }[self.value]
 
+
 class OptionalDeathCard(Choice):
     """Add a Moment after death where you can decide to create a death card or not.
     Disable: Disable the feature.
