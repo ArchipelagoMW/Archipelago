@@ -54,8 +54,7 @@ class TunicWorld(World):
     location_base_id = 509342400
 
     for item_name, item_data in item_table.items():
-        item_name_to_id[item_name] = item_base_id
-        item_base_id += 1
+        item_name_to_id[item_name] = item_base_id + item_data.item_id_offset
 
     for location_name, location_data in location_table.items():
         location_name_to_id[location_name] = location_base_id
@@ -107,7 +106,6 @@ class TunicWorld(World):
                 for i in range(0, item_data.quantity_in_item_pool):
                     items.append(self.create_item(item_name))
 
-        self.multiworld.random.shuffle(items)
         self.multiworld.itempool += items
 
     def create_regions(self):
