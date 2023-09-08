@@ -317,6 +317,13 @@ class CV64World(World):
                 [Item(IName.special_one, ItemClassification.progression, 0x04 + base_id, self.player)
                  for i in range(s1s_to_balance)]
 
+        # Replace all but 2 PowerUps with junk if Permanent PowerUps is on and mark those two PowerUps as Useful.
+        if self.multiworld.permanent_powerups[self.player]:
+            add_filler_junk(item_counts["non_filler_junk_counts"][IName.powerup] - 2)
+            item_counts["non_filler_junk_counts"][IName.powerup] = 0
+            self.multiworld.itempool += [Item(IName.powerup, ItemClassification.useful, 0x0C + base_id, self.player)
+                                         for i in range(2)]
+
         # Set up the items correctly
         for table in item_counts:
             for item in item_counts[table]:

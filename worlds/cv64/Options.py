@@ -267,6 +267,12 @@ class DropPreviousSubWeapon(Toggle):
     display_name = "Drop Previous Sub-weapon"
 
 
+class PermanentPowerUps(Toggle):
+    """Makes PowerUps stay permanently after receiving them. To compensate, only two will be in the pool overall, and
+    they will not drop from any enemy or projectile."""
+    display_name = "Permanent PowerUps"
+
+
 class DisableTimeRestrictions(Toggle):
     """Disables the time restriction on every event and door that requires the current time to be something specific
      (sun/moon doors, meeting Rosa, and the Villa fountain). The Villa coffin is not affected by this."""
@@ -387,6 +393,7 @@ cv64_options: Dict[str, Option] = {
     "loading_zone_heals": LoadingZoneHeals,
     "invisible_items": InvisibleItems,
     "drop_previous_sub_weapon": DropPreviousSubWeapon,
+    "permanent_powerups": PermanentPowerUps,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_gondolas": SkipGondolas,
     "skip_brick_platforms": SkipBrickPlatforms,

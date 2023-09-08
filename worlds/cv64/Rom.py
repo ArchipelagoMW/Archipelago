@@ -861,6 +861,25 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_byte(0xAA34B, 0x0C)
         rom.write_int32(0xAA4C4, 0x24090001)  # ADDIU T1, R0, 0x0001
 
+    # Permanent PowerUp stuff
+    if multiworld.permanent_powerups[player]:
+        # Make receiving PowerUps increase the unused menu PowerUp counter instead of the one outside the save struct
+        rom.write_int32(0xBF2EE, 0x806B619B)   # LB	T3, 0x619B (V1)
+        rom.write_int32(0xBFC5BE, 0xA06C619B)  # SB	T4, 0x619B (V1)
+        # Make Reinhardt's whip check the menu PowerUp counter
+        rom.write_int32(0x69FA08, 0x80CC619B)  # LB	T4, 0x619B (A2)
+        rom.write_int32(0x69FBFC, 0x80C3619B)  # LB	V1, 0x619B (A2)
+        rom.write_int32(0x69FFE0, 0x818C9C53)  # LB	T4, 0x9C53 (T4)
+        # Make Carrie's orb check the menu PowerUp counter
+        rom.write_int32(0x6AC86C, 0x8105619B)  # LB	A1, 0x619B (T0)
+        rom.write_int32(0x6AC950, 0x8105619B)  # LB	A1, 0x619B (T0)
+        rom.write_int32(0x6AC99C, 0x810E619B)  # LB	T6, 0x619B (T0)
+        rom.write_int32(0x5AFA0, 0x80639C53)   # LB	V1, 0x9C53 (V1)
+        rom.write_int32(0x5B0A0, 0x81089C53)   # LB	T0, 0x9C53 (T0)
+        rom.write_byte(0x391C7, 0x00)  # Prevent PowerUps from dropping from enemies
+        rom.write_byte(0xAEC451, 0x2E)  # Make Fake Dracula's fireballs drop l jewels instead of PowerUps
+        rom.write_byte(0xAAC531, 0x2E)  # Make Real Dracula's fireballs drop l jewels instead of PowerUps
+
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
         rom.write_int32(0x14588, 0x08060D60)  # J 0x80183580
