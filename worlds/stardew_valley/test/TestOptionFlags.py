@@ -13,13 +13,6 @@ class TestBitFlagsVanilla(SVTestBase):
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
 
-    def test_options_are_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertTrue(tool_progressive)
-        self.assertTrue(building_progressive)
-
     def test_tools_and_buildings_not_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]
         self.assertNotIn("Progressive Coop", item_names)
@@ -36,13 +29,6 @@ class TestBitFlagsVanillaCheap(SVTestBase):
         building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
-
-    def test_options_are_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertTrue(tool_progressive)
-        self.assertTrue(building_progressive)
 
     def test_tools_and_buildings_not_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]
@@ -61,13 +47,6 @@ class TestBitFlagsVanillaVeryCheap(SVTestBase):
         self.assertFalse(tool_progressive)
         self.assertFalse(building_progressive)
 
-    def test_options_are_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertTrue(tool_progressive)
-        self.assertTrue(building_progressive)
-
     def test_tools_and_buildings_not_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]
         self.assertNotIn("Progressive Coop", item_names)
@@ -84,13 +63,6 @@ class TestBitFlagsProgressive(SVTestBase):
         building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
-
-    def test_options_are_not_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertFalse(tool_progressive)
-        self.assertFalse(building_progressive)
 
     def test_tools_and_buildings_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]
@@ -109,13 +81,6 @@ class TestBitFlagsProgressiveCheap(SVTestBase):
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
 
-    def test_options_are_not_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertFalse(tool_progressive)
-        self.assertFalse(building_progressive)
-
     def test_tools_and_buildings_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]
         self.assertIn("Progressive Coop", item_names)
@@ -132,13 +97,6 @@ class TestBitFlagsProgressiveVeryCheap(SVTestBase):
         building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive
         self.assertTrue(tool_progressive)
         self.assertTrue(building_progressive)
-
-    def test_options_are_not_detected_as_vanilla(self):
-        world_options = self.multiworld.worlds[self.player].options
-        tool_progressive = world_options[options.ToolProgression] & options.ToolProgression.option_vanilla
-        building_progressive = world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla
-        self.assertFalse(tool_progressive)
-        self.assertFalse(building_progressive)
 
     def test_tools_and_buildings_in_pool(self):
         item_names = [item.name for item in self.multiworld.itempool]

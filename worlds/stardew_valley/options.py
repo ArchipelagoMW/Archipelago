@@ -242,7 +242,7 @@ class BuildingProgression(Choice):
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
-    default = 2
+    default = 3
     option_vanilla = 0b0000  # 0
     option_vanilla_cheap = 0b0100  # 4
     option_vanilla_very_cheap = 0b1000  # 8

@@ -286,7 +286,7 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
 
 def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     building_option = world_options[options.BuildingProgression]
-    if building_option & options.BuildingProgression.option_vanilla:
+    if not building_option & options.BuildingProgression.option_progressive:
         return
     items.append(item_factory("Progressive Coop"))
     items.append(item_factory("Progressive Coop"))

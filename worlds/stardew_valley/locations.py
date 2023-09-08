@@ -353,7 +353,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_mandatory_locations(randomized_locations, options)
     extend_backpack_locations(randomized_locations, options)
 
-    if not world_options[options.ToolProgression] & options.ToolProgression.option_vanilla:
+    if world_options[options.ToolProgression] & options.ToolProgression.option_progressive:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
     extend_elevator_locations(randomized_locations, options)
@@ -363,7 +363,7 @@ def create_locations(location_collector: StardewLocationCollector,
             if location.mod_name is None or location.mod_name in options.mods:
                 randomized_locations.append(location_table[location.name])
 
-    if not world_options[options.BuildingProgression] & options.BuildingProgression.option_vanilla:
+    if world_options[options.BuildingProgression] & options.BuildingProgression.option_progressive:
         for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
             if location.mod_name is None or location.mod_name in options.mods:
                 randomized_locations.append(location_table[location.name])
