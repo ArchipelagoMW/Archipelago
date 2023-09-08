@@ -148,7 +148,7 @@ class InscryptionRules:
         return self.has_pelts(state, 5) and self.has_drone_and_battery(state)
 
     def has_mycologists_boss_requirements(self, state: CollectionState) -> bool:
-        return state.has("Mycologists Holo Key", self.player) and self.has_inspectometer_battery(state)
+        return state.has("Mycologists Holo Key", self.player) and self.has_transcendence_requirements(state)
 
     def has_bone_lord_room_requirements(self, state: CollectionState) -> bool:
         return state.has("Bone Lord Holo Key", self.player) and self.has_inspectometer_battery(state)
