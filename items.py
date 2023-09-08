@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, NamedTuple, Tuple
+from typing import Any, Iterable, NamedTuple, Optional, Tuple
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 
 from .data import ap_id_offset
-from .types import Box, ItemType, Passage
+from .types import Box, ItemFlag, ItemType, Passage
 
 
 # Items are encoded as 8-bit numbers as follows:
@@ -78,6 +78,9 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
 class WL4Item(Item):
     game: str = 'Wario Land 4'
     type: ItemType
+    passage: Optional[Passage]
+    level: Optional[int]
+    flag: Optional[ItemFlag]
 
     def __init__(self, name, player, data, force_non_progression):
         type, id, prog = data
@@ -85,10 +88,15 @@ class WL4Item(Item):
             prog = IC.filler
         super(WL4Item, self).__init__(name, prog, ap_id_from_wl4_data(data), player)
         self.type = type
-        if type in (ItemType.JEWEL, ItemType.CD):
+        if type == ItemType.JEWEL:
+            self.passage = id[0]
+            self.level = None
+            self.flag = 1 << id[1]
+        elif type == ItemType.CD:
             self.passage, self.level = id
+            self.flag = ItemFlag.CD
         else:
-            self.passage = self.level = None
+            self.passage = self.level = self.flag = None
 
 
 class ItemData(NamedTuple):

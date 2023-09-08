@@ -87,7 +87,7 @@ class WL4CommandProcessor(ClientCommandProcessor):
 class WL4Context(CommonContext):
     command_processor = WL4CommandProcessor
     game = 'Wario Land 4'
-    items_handling = 0b101  # Serverside starting inventory, otherwise local
+    items_handling = 0b001  # All local
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)

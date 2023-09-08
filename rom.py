@@ -10,6 +10,8 @@ from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
 from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
+from .items import WL4Item
+from .types import ItemType
 
 
 MD5_US_EU = '5fe47355a33e3fabec2a1607af88a404'
@@ -128,8 +130,37 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         else:
             multiworld_items[ext_data_location] = None
 
+    # Fill starting inventory
+    for item in world.precollected_items[player]:
+        give_item(rom, item)
+
     strings = create_strings(rom, multiworld_items)
     write_multiworld_table(rom, multiworld_items, strings)
+
+
+def give_item(rom: LocalRom, item: WL4Item):
+    if item.type == ItemType.JEWEL:
+        table_address = get_symbol('StartingInventoryLevelStatus')
+        for level in range(4):
+            index = 6 * item.passage + level
+            address = table_address + index
+            status = rom.read_byte(address)
+            if not status & item.flag:
+                status |= item.flag
+                rom.write_byte(address, status)
+                break
+    elif item.type == ItemType.CD:
+        index = 6 * item.passage + item.level
+        address = get_symbol('StartingInventoryLevelStatus', index)
+        status = rom.read_byte(address)
+        status |= 1 << 4
+        rom.write_byte(address, status)
+    elif item.type == ItemType.ITEM:
+        junk_type = item.code - (ap_id_offset + 0x40)
+        address = get_symbol('StartingInventoryJunkCounts', junk_type)
+        count = rom.read_byte(address)
+        count += 1
+        rom.write_byte(address, count)
 
 
 def create_strings(rom: LocalRom,
