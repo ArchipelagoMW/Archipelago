@@ -6,12 +6,13 @@ from .Options import TasksanityCheckCount
 
 
 class LocData(NamedTuple):
-    id: int
-    region: str
+    id: Optional[int] = 0
+    region: Optional[str] = ""
     required_hats: Optional[List[HatType]] = [HatType.NONE]
     hookshot: Optional[bool] = False
     dlc_flags: Optional[HatDLC] = HatDLC.none
     paintings: Optional[int] = 0  # Paintings required for Subcon painting shuffle
+    misc_required: Optional[List[str]] = []
 
     # For UmbrellaLogic setting
     umbrella: Optional[bool] = False  # Umbrella required for this check
@@ -29,12 +30,28 @@ class HatInTimeLocation(Location):
 def get_total_locations(world: World) -> int:
     total: int = 0
 
-    for (name) in location_table.keys():
-        if is_location_valid(world, name):
-            total += 1
+    if not world.is_dw_only():
+        for (name) in location_table.keys():
+            if is_location_valid(world, name):
+                total += 1
 
-    if world.is_dlc1() and world.multiworld.Tasksanity[world.player].value > 0:
-        total += world.multiworld.TasksanityCheckCount[world.player].value
+        if world.is_dlc1() and world.multiworld.Tasksanity[world.player].value > 0:
+            total += world.multiworld.TasksanityCheckCount[world.player].value
+
+    if world.is_dw():
+        if world.multiworld.DWShuffle[world.player].value > 0:
+            total += len(world.get_dw_shuffle())
+            if world.multiworld.DWEnableBonus[world.player].value > 0:
+                total += len(world.get_dw_shuffle())
+        else:
+            total += 37
+            if world.is_dlc2():
+                total += 1
+
+            if world.multiworld.DWEnableBonus[world.player].value > 0:
+                total += 37
+                if world.is_dlc2():
+                    total += 1
 
     return total
 
@@ -58,15 +75,20 @@ def is_location_valid(world: World, location: str) -> bool:
     if not location_dlc_enabled(world, location):
         return False
 
-    if location in storybook_pages.keys() \
-       and world.multiworld.ShuffleStorybookPages[world.player].value == 0:
+    if world.multiworld.ShuffleStorybookPages[world.player].value == 0 \
+       and location in storybook_pages.keys():
         return False
 
-    if location in shop_locations and location not in world.shop_locs:
+    if location not in world.shop_locs and location in shop_locations:
         return False
 
     data = location_table.get(location) or event_locs.get(location)
-    if data.region == "Time Rift - Tour" and world.multiworld.ExcludeTour[world.player].value > 0:
+    if world.multiworld.ExcludeTour[world.player].value > 0 and data.region == "Time Rift - Tour":
+        return False
+
+    # No need for all those event items if we're not doing candles
+    if data.dlc_flags is HatDLC.death_wish and world.multiworld.DWExcludeCandles[world.player].value > 0 \
+       and location in event_locs.keys():
         return False
 
     return True
@@ -76,7 +98,11 @@ def get_location_names() -> Dict[str, int]:
     names = {name: data.id for name, data in location_table.items()}
     id_start: int = get_tasksanity_start_id()
     for i in range(TasksanityCheckCount.range_end):
-        names.setdefault(format("Tasksanity Check %i") % (i+1), id_start+i)
+        names.setdefault(f"Tasksanity Check {i+1}", id_start+i)
+
+    for (key, loc_id) in death_wishes.items():
+        names.setdefault(f"{key} - Main Objective", loc_id)
+        names.setdefault(f"{key} - All Clear", loc_id+1)
 
     return names
 
@@ -169,7 +195,7 @@ ahit_locations = {
     "Dead Bird Studio Basement - Cameras": LocData(305431, "Dead Bird Studio Basement", hookshot=True),
     "Dead Bird Studio Basement - Locked Room": LocData(305819, "Dead Bird Studio Basement", hookshot=True),
 
-    # 320000 range - Subcon Forest
+    # Subcon Forest
     "Contractual Obligations - Cherry Bomb Bone Cage": LocData(324761, "Contractual Obligations"),
     "Subcon Village - Tree Top Ice Cube": LocData(325078, "Subcon Forest Area"),
     "Subcon Village - Graveyard Ice Cube": LocData(325077, "Subcon Forest Area"),
@@ -178,7 +204,8 @@ ahit_locations = {
     "Subcon Village - Snatcher Statue Chest": LocData(323730, "Subcon Forest Area", paintings=1),
     "Subcon Village - Stump Platform Chest": LocData(323729, "Subcon Forest Area"),
     "Subcon Forest - Giant Tree Climb": LocData(325470, "Subcon Forest Area"),
-    
+
+    "Subcon Forest - Ice Cube Shack": LocData(324465, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Gravestone": LocData(326296, "Subcon Forest Area",
                                                 required_hats=[HatType.BREWING], paintings=1),
     
@@ -189,30 +216,6 @@ ahit_locations = {
     "Subcon Forest - Swamp Treehouse": LocData(325468, "Subcon Forest Area", paintings=1),
     "Subcon Forest - Swamp Tree Chest": LocData(323728, "Subcon Forest Area", paintings=1),
     
-    "Subcon Forest - Dweller Stump": LocData(324767, "Subcon Forest Area",
-                                             required_hats=[HatType.DWELLER], paintings=3),
-    
-    "Subcon Forest - Dweller Floating Rocks": LocData(324464, "Subcon Forest Area",
-                                                      required_hats=[HatType.DWELLER], paintings=3),
-    
-    "Subcon Forest - Dweller Platforming Tree A": LocData(324709, "Subcon Forest Area", paintings=3),
-    
-    "Subcon Forest - Dweller Platforming Tree B": LocData(324855, "Subcon Forest Area",
-                                                          required_hats=[HatType.DWELLER], paintings=3),
-    
-    "Subcon Forest - Giant Time Piece": LocData(325473, "Subcon Forest Area", paintings=3),
-    "Subcon Forest - Gallows": LocData(325472, "Subcon Forest Area", paintings=3),
-    
-    "Subcon Forest - Green and Purple Dweller Rocks": LocData(325082, "Subcon Forest Area", paintings=3),
-    
-    "Subcon Forest - Dweller Shack": LocData(324463, "Subcon Forest Area",
-                                             required_hats=[HatType.DWELLER], paintings=3),
-    
-    "Subcon Forest - Tall Tree Hookshot Swing": LocData(324766, "Subcon Forest Area",
-                                                        required_hats=[HatType.DWELLER],
-                                                        hookshot=True,
-                                                        paintings=3),
-    
     "Subcon Forest - Burning House": LocData(324710, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Burning Tree Climb": LocData(325079, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Burning Stump Chest": LocData(323731, "Subcon Forest Area", paintings=2),
@@ -221,7 +224,6 @@ ahit_locations = {
     "Subcon Forest - Spider Bone Cage B": LocData(325080, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Triple Spider Bounce": LocData(324765, "Subcon Forest Area", paintings=2),
     "Subcon Forest - Noose Treehouse": LocData(324856, "Subcon Forest Area", hookshot=True, paintings=2),
-    "Subcon Forest - Ice Cube Shack": LocData(324465, "Subcon Forest Area", paintings=1),
     
     "Subcon Forest - Long Tree Climb Chest": LocData(323734, "Subcon Forest Area",
                                                      required_hats=[HatType.DWELLER], paintings=2),
@@ -234,6 +236,30 @@ ahit_locations = {
     
     "Subcon Forest - Magnet Badge Bush": LocData(325479, "Subcon Forest Area",
                                                  required_hats=[HatType.BREWING], paintings=3),
+
+    "Subcon Forest - Dweller Stump": LocData(324767, "Subcon Forest Area",
+                                             required_hats=[HatType.DWELLER], paintings=3),
+
+    "Subcon Forest - Dweller Floating Rocks": LocData(324464, "Subcon Forest Area",
+                                                      required_hats=[HatType.DWELLER], paintings=3),
+
+    "Subcon Forest - Dweller Platforming Tree A": LocData(324709, "Subcon Forest Area", paintings=3),
+
+    "Subcon Forest - Dweller Platforming Tree B": LocData(324855, "Subcon Forest Area",
+                                                          required_hats=[HatType.DWELLER], paintings=3),
+
+    "Subcon Forest - Giant Time Piece": LocData(325473, "Subcon Forest Area", paintings=3),
+    "Subcon Forest - Gallows": LocData(325472, "Subcon Forest Area", paintings=3),
+
+    "Subcon Forest - Green and Purple Dweller Rocks": LocData(325082, "Subcon Forest Area", paintings=3),
+
+    "Subcon Forest - Dweller Shack": LocData(324463, "Subcon Forest Area",
+                                             required_hats=[HatType.DWELLER], paintings=3),
+
+    "Subcon Forest - Tall Tree Hookshot Swing": LocData(324766, "Subcon Forest Area",
+                                                        required_hats=[HatType.DWELLER],
+                                                        hookshot=True,
+                                                        paintings=3),
     
     "Subcon Well - Hookshot Badge Chest": LocData(324114, "The Subcon Well", hit_requirement=1, paintings=1),
     "Subcon Well - Above Chest": LocData(324612, "The Subcon Well", hit_requirement=1, paintings=1),
@@ -245,7 +271,7 @@ ahit_locations = {
     "Queen Vanessa's Manor - Hall Chest": LocData(323896, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
     "Queen Vanessa's Manor - Chandelier": LocData(325546, "Queen Vanessa's Manor", hit_requirement=2, paintings=1),
 
-    # 330000 range - Alpine Skyline
+    # Alpine Skyline
     "Alpine Skyline - Goat Village: Below Hookpoint": LocData(334856, "Goat Village"),
     "Alpine Skyline - Goat Village: Hidden Branch": LocData(334855, "Goat Village"),
     "Alpine Skyline - Goat Refinery": LocData(333635, "Alpine Skyline Area"),
@@ -320,7 +346,6 @@ ahit_locations = {
 }
 
 act_completions = {
-    # 310000 range - Act Completions
     "Act Completion (Time Rift - Gallery)": LocData(312758, "Time Rift - Gallery"),
     "Act Completion (Time Rift - The Lab)": LocData(312838, "Time Rift - The Lab"),
 
@@ -479,13 +504,6 @@ storybook_pages = {
     "Rumbi Factory - Page: Last Area": LocData(345883, "Time Rift - Rumbi Factory", dlc_flags=HatDLC.dlc2),
 }
 
-contract_locations = {
-    "Snatcher's Contract - The Subcon Well": LocData(300200, "Contractual Obligations"),
-    "Snatcher's Contract - Toilet of Doom": LocData(300201, "Subcon Forest Area"),
-    "Snatcher's Contract - Queen Vanessa's Manor": LocData(300202, "Subcon Forest Area"),
-    "Snatcher's Contract - Mail Delivery Service": LocData(300203, "Subcon Forest Area"),
-}
-
 shop_locations = {
     "Badge Seller - Item 1": LocData(301003, "Badge Seller"),
     "Badge Seller - Item 2": LocData(301004, "Badge Seller"),
@@ -623,6 +641,13 @@ shop_locations = {
 
 }
 
+contract_locations = {
+    "Snatcher's Contract - The Subcon Well": LocData(300200, "Contractual Obligations"),
+    "Snatcher's Contract - Toilet of Doom": LocData(300201, "Subcon Forest Area"),
+    "Snatcher's Contract - Queen Vanessa's Manor": LocData(300202, "Subcon Forest Area"),
+    "Snatcher's Contract - Mail Delivery Service": LocData(300203, "Subcon Forest Area"),
+}
+
 # Don't put any of the locations from peaks here, the rules for their entrances are set already
 zipline_unlocks = {
     "Alpine Skyline - Bird Pass Fork":                          "Zipline Unlock - The Birdhouse Path",
@@ -652,7 +677,9 @@ tihs_locations = [
 
 event_locs = {
     "HUMT Access": LocData(0, "Heating Up Mafia Town", act_complete_event=False),
-    "Subcon Forest Access": LocData(0, "Subcon Forest Area", act_complete_event=False),
+    "TOD Access": LocData(0, "Toilet of Doom", act_complete_event=False),
+    "YCHE Access": LocData(0, "Your Contract has Expired", act_complete_event=False),
+
     "Birdhouse Cleared": LocData(0, "The Birdhouse"),
     "Lava Cake Cleared": LocData(0, "The Lava Cake"),
     "Windmill Cleared": LocData(0, "The Windmill"),
@@ -670,6 +697,39 @@ event_locs = {
     "Green Clean Manhole Cleared": LocData(0, "Green Clean Manhole", dlc_flags=HatDLC.dlc2),
     "Pink Paw Manhole Cleared": LocData(0, "Pink Paw Manhole", dlc_flags=HatDLC.dlc2),
     "Rush Hour Cleared": LocData(0, "Rush Hour", dlc_flags=HatDLC.dlc2),
+
+
+    # -------------- Death Wish Candle Related --------------- #
+
+
+    # Snatcher Coins
+    "MT Access": LocData(0, "Mafia Town Area", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "DWTM Access": LocData(0, "Down with the Mafia!", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "CTR Access": LocData(0, "Cheating the Race", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "TGV Access": LocData(0, "The Golden Vault", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+
+    "DBS Access": LocData(0, "Dead Bird Studio - Elevator Area", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "PP Access": LocData(0, "Picture Perfect", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+
+    "SF Access": LocData(0, "Subcon Forest Area", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+
+    "LC Access": LocData(0, "The Lava Cake", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "WM Access": LocData(0, "The Windmill", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+
+    # Camera Tourist
+    "Mafia Boss": LocData(0, "Down with the Mafia!", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "Conductor": LocData(0, "Dead Bird Studio Basement", dlc_flags=HatDLC.death_wish),
+    "Snatcher": LocData(0, "Your Contract has Expired", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+    "Evil Flower": LocData(0, "The Illness has Spread", act_complete_event=False, dlc_flags=HatDLC.death_wish),
+
+    # Zero Jumps
+    "Welcome to Mafia Town Cleared": LocData(0, "Welcome to Mafia Town", dlc_flags=HatDLC.death_wish),
+    "Picture Perfect Cleared": LocData(0, "Picture Perfect", dlc_flags=HatDLC.death_wish),
+    "Contractual Obligations Cleared": LocData(0, "Contractual Obligations", dlc_flags=HatDLC.death_wish),
+    "Your Contract has Expired Cleared": LocData(0, "Your Contract has Expired", dlc_flags=HatDLC.death_wish),
+    "Mail Delivery Service Cleared": LocData(0, "Mail Delivery Service", dlc_flags=HatDLC.death_wish),
+    "Cheating the Race Cleared": LocData(0, "Cheating the Race", dlc_flags=HatDLC.death_wish),
+    "Train Rush Cleared": LocData(0, "Train Rush", dlc_flags=HatDLC.death_wish),
 }
 
 location_table = {
@@ -678,4 +738,53 @@ location_table = {
     **storybook_pages,
     **contract_locations,
     **shop_locations,
+}
+
+# DO NOT ALTER THE ORDER OF THIS LIST
+# This file is in here instead of DeathWishLocations.py to prevent circular import problems
+death_wishes = {
+    "Beat the Heat": 350000,
+    "Snatcher's Hit List": 350002,
+    "So You're Back From Outer Space": 350004,
+    "Collect-a-thon": 350006,
+    "Rift Collapse: Mafia of Cooks": 350008,
+    "She Speedran from Outer Space": 350010,
+    "Mafia's Jumps": 350012,
+    "Vault Codes in the Wind": 350014,
+    "Encore! Encore!": 350016,
+    "Snatcher Coins in Mafia Town": 350018,
+
+    "Security Breach": 350020,
+    "The Great Big Hootenanny": 350022,
+    "Rift Collapse: Dead Bird Studio": 350024,
+    "10 Seconds until Self-Destruct": 350026,
+    "Killing Two Birds": 350028,
+    "Snatcher Coins in Battle of the Birds": 350030,
+    "Zero Jumps": 350032,
+
+    "Speedrun Well": 350034,
+    "Rift Collapse: Sleepy Subcon": 350036,
+    "Boss Rush": 350038,
+    "Quality Time with Snatcher": 350040,
+    "Breaching the Contract": 350042,
+    "Snatcher Coins in Subcon Forest": 350044,
+
+    "Bird Sanctuary": 350046,
+    "Rift Collapse: Alpine Skyline": 350048,
+    "Wound-Up Windmill": 350050,
+    "The Illness has Speedrun": 350052,
+    "Snatcher Coins in Alpine Skyline": 350054,
+    "Camera Tourist": 350056,
+
+    "The Mustache Gauntlet": 350058,
+    "No More Bad Guys": 350060,
+
+    "Seal the Deal": 350062,
+    "Rift Collapse: Deep Sea": 350064,
+    "Cruisin' for a Bruisin'": 350066,
+
+    "Community Rift: Rhythm Jump Studio": 350068,
+    "Community Rift: Twilight Travels": 350070,
+    "Community Rift: The Mountain Rift": 350072,
+    "Snatcher Coins in Nyakuza Metro": 350074,
 }

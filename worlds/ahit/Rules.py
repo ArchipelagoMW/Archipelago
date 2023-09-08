@@ -37,8 +37,9 @@ def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
 
 def get_hat_cost(world: World, hat: HatType) -> int:
     cost: int = 0
+    costs = world.get_hat_yarn_costs()
     for h in world.get_hat_craft_order():
-        cost += world.get_hat_yarn_costs().get(h)
+        cost += costs[h]
         if h == hat:
             break
 
@@ -120,7 +121,7 @@ def can_clear_act(state: CollectionState, world: World, act_entrance: str) -> bo
     if "Free Roam" in entrance.connected_region.name:
         return True
 
-    name: str = format("Act Completion (%s)" % entrance.connected_region.name)
+    name: str = f"Act Completion ({entrance.connected_region.name})"
     return world.multiworld.get_location(name, world.player).access_rule(state)
 
 
@@ -153,6 +154,9 @@ def set_rules(world: World):
     if world.multiworld.EndGoal[world.player].value == 2:
         final_chapter = ChapterIndex.METRO
         chapter_list.append(ChapterIndex.FINALE)
+    elif world.multiworld.EndGoal[world.player].value == 3:
+        final_chapter = None
+        chapter_list.append(ChapterIndex.FINALE)
 
     if world.is_dlc1():
         chapter_list.append(ChapterIndex.CRUISE)
@@ -161,7 +165,7 @@ def set_rules(world: World):
         chapter_list.append(ChapterIndex.METRO)
 
     chapter_list.remove(starting_chapter)
-    world.multiworld.random.shuffle(chapter_list)
+    world.random.shuffle(chapter_list)
 
     if starting_chapter is not ChapterIndex.ALPINE and (world.is_dlc1() or world.is_dlc2()):
         index1: int = 69
@@ -180,7 +184,7 @@ def set_rules(world: World):
         if lowest_index == 0:
             pos = 0
         else:
-            pos = world.multiworld.random.randint(0, lowest_index)
+            pos = world.random.randint(0, lowest_index)
 
         chapter_list.insert(pos, ChapterIndex.ALPINE)
 
@@ -190,7 +194,7 @@ def set_rules(world: World):
         if index >= len(chapter_list):
             chapter_list.append(ChapterIndex.METRO)
         else:
-            chapter_list.insert(world.multiworld.random.randint(index+1, len(chapter_list)), ChapterIndex.METRO)
+            chapter_list.insert(world.random.randint(index+1, len(chapter_list)), ChapterIndex.METRO)
 
     lowest_cost: int = world.multiworld.LowestChapterCost[world.player].value
     highest_cost: int = world.multiworld.HighestChapterCost[world.player].value
@@ -206,10 +210,9 @@ def set_rules(world: World):
         if min_range >= highest_cost:
             min_range = highest_cost-1
 
-        value: int = world.multiworld.random.randint(min_range, min(highest_cost,
-                                                                    max(lowest_cost, last_cost + cost_increment)))
+        value: int = world.random.randint(min_range, min(highest_cost, max(lowest_cost, last_cost + cost_increment)))
 
-        cost = world.multiworld.random.randint(value, min(value + cost_increment, highest_cost))
+        cost = world.random.randint(value, min(value + cost_increment, highest_cost))
         if loop_count >= 1:
             if last_cost + min_difference > cost:
                 cost = last_cost + min_difference
@@ -219,9 +222,10 @@ def set_rules(world: World):
         last_cost = cost
         loop_count += 1
 
-    world.set_chapter_cost(final_chapter, world.multiworld.random.randint(
-                                                        world.multiworld.FinalChapterMinCost[world.player].value,
-                                                        world.multiworld.FinalChapterMaxCost[world.player].value))
+    if final_chapter is not None:
+        world.set_chapter_cost(final_chapter, world.random.randint(
+                                                            world.multiworld.FinalChapterMinCost[world.player].value,
+                                                            world.multiworld.FinalChapterMaxCost[world.player].value))
 
     add_rule(world.multiworld.get_entrance("Telescope -> Mafia Town", world.player),
              lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.MAFIA)))
@@ -277,7 +281,7 @@ def set_rules(world: World):
 
         for hat in data.required_hats:
             if hat is not HatType.NONE:
-                add_rule(location, lambda state, hat=hat: can_use_hat(state, world, hat))
+                add_rule(location, lambda state, h=hat: can_use_hat(state, world, h))
 
         if data.hookshot:
             add_rule(location, lambda state: can_use_hookshot(state, world))
@@ -293,6 +297,9 @@ def set_rules(world: World):
                 add_rule(location, lambda state: can_hit(state, world))
             elif data.hit_requirement == 2:  # Can bypass with Dweller Mask (dweller bells)
                 add_rule(location, lambda state: can_hit(state, world) or can_use_hat(state, world, HatType.DWELLER))
+
+        for misc in data.misc_required:
+            add_rule(location, lambda state, item=misc: state.has(item, world.player))
 
     if get_difficulty(world) >= 1:
         world.multiworld.KnowledgeChecks[world.player].value = 1
@@ -316,14 +323,14 @@ def set_rules(world: World):
             act_entrance: Entrance = world.multiworld.get_entrance(act, world.player)
             access_rules.append(act_entrance.access_rule)
             required_region = act_entrance.connected_region
-            name: str = format("%s: Connection %i" % (key, i))
+            name: str = f"{key}: Connection {i}"
             new_entrance: Entrance = connect_regions(required_region, region, name, world.player)
             entrances.append(new_entrance)
 
             # Copy access rules from act completions
             if "Free Roam" not in required_region.name:
                 rule: typing.Callable[[CollectionState], bool]
-                name = format("Act Completion (%s)" % required_region.name)
+                name = f"Act Completion ({required_region.name})"
                 rule = world.multiworld.get_location(name, world.player).access_rule
                 access_rules.append(rule)
 
@@ -558,9 +565,9 @@ def set_mafia_town_rules(world: World):
 
 def set_subcon_rules(world: World):
     set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: state.can_reach("Toilet of Doom", "Region", world.player)
+             lambda state: state.has("TOD Access", world.player) and can_use_hookshot(state, world)
              and (not painting_logic(world) or has_paintings(state, world, 1))
-             or state.can_reach("Your Contract has Expired", "Region", world.player))
+             or state.has("YCHE Access", world.player))
 
     if world.multiworld.UmbrellaLogic[world.player].value > 0:
         add_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
@@ -583,6 +590,9 @@ def set_subcon_rules(world: World):
              lambda state: state.has("Snatcher's Contract - Mail Delivery Service", world.player))
 
     if painting_logic(world):
+        add_rule(world.multiworld.get_location("Act Completion (Contractual Obligations)", world.player),
+                 lambda state: state.has("Progressive Painting Unlock", world.player))
+
         for key in contract_locations:
             if key == "Snatcher's Contract - The Subcon Well":
                 continue
@@ -679,7 +689,7 @@ def reg_act_connection(world: World, region: typing.Union[str, Region], unlocked
 
 
 # See randomize_act_entrances in Regions.py
-# Called BEFORE set_rules!
+# Called before set_rules
 def set_rift_rules(world: World, regions: typing.Dict[str, Region]):
 
     # This is accessing the regions in place of these time rifts, so we can set the rules on all the entrances.

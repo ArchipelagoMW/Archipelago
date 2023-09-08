@@ -254,12 +254,16 @@ blacklisted_acts = {
 
 # Blacklisted act shuffle combinations to help prevent impossible layouts. Mostly for free roam acts.
 blacklisted_combos = {
-    "The Illness has Spread":           ["Alpine Free Roam"],
-    "Rush Hour":                        ["Nyakuza Free Roam"],
-    "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "The Illness has Spread":           ["Nyakuza Free Roam", "Alpine Free Roam"],
+    "Rush Hour":                        ["Nyakuza Free Roam", "Alpine Free Roam"],
+    "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam", "Bon Voyage!"],
     "Time Rift - The Moon":             ["Alpine Free Roam", "Nyakuza Free Roam"],
     "Time Rift - Dead Bird Studio":     ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "Time Rift - Curly Tail Trail":     ["Nyakuza Free Roam"],
+    "Time Rift - The Twilight Bell":    ["Nyakuza Free Roam"],
+    "Time Rift - Alpine Skyline":       ["Nyakuza Free Roam"],
     "Time Rift - Rumbi Factory":        ["Alpine Free Roam"],
+    "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam"],
 }
 
 
@@ -271,6 +275,11 @@ def create_regions(world: World):
     # ------------------------------------------- HUB -------------------------------------------------- #
     menu = create_region(w, "Menu")
     spaceship = create_region_and_connect(w, "Spaceship", "Save File -> Spaceship", menu)
+
+    # we only need the menu and the spaceship regions
+    if world.is_dw_only():
+        return
+
     create_rift_connections(w, create_region(w, "Time Rift - Gallery"))
     create_rift_connections(w, create_region(w, "Time Rift - The Lab"))
 
@@ -418,8 +427,8 @@ def create_rift_connections(world: World, region: Region):
     i = 1
     for name in rift_access_regions[region.name]:
         act_region = world.multiworld.get_region(name, world.player)
-        entrance_name = "{name} Portal - Entrance {num}"
-        connect_regions(act_region, region, entrance_name.format(name=region.name, num=i), world.player)
+        entrance_name = f"{region.name} Portal - Entrance {i}"
+        connect_regions(act_region, region, entrance_name, world.player)
         i += 1
 
 
@@ -427,7 +436,7 @@ def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
     id_start: int = get_tasksanity_start_id()
     for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
-        location = HatInTimeLocation(world.player, format("Tasksanity Check %i" % (i+1)), id_start+i, ship_shape)
+        location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
 
 
@@ -603,7 +612,7 @@ def randomize_act_entrances(world: World):
 
         candidate: Region
         if len(candidate_list) > 0:
-            candidate = candidate_list[world.multiworld.random.randint(0, len(candidate_list)-1)]
+            candidate = candidate_list[world.random.randint(0, len(candidate_list)-1)]
         else:
             # plando can still break certain rules, so acts may not always end up shuffled.
             for c in region_list:
@@ -619,7 +628,7 @@ def randomize_act_entrances(world: World):
             if region.name in rift_access_regions.keys():
                 rift_dict.setdefault(region.name, candidate)
 
-            world.update_chapter_act_info(region, candidate)
+            update_chapter_act_info(world, region, candidate)
             continue
 
         if region.name in rift_access_regions.keys():
@@ -634,14 +643,14 @@ def randomize_act_entrances(world: World):
             entrance = world.multiworld.get_entrance(act_entrances[region.name], world.player)
             reconnect_regions(entrance, world.multiworld.get_region(act_chapters[region.name], world.player), candidate)
 
-        world.update_chapter_act_info(region, candidate)
+        update_chapter_act_info(world, region, candidate)
 
     for name in blacklisted_acts.values():
         if not is_act_blacklisted(world, name):
             continue
 
         region: Region = world.multiworld.get_region(name, world.player)
-        world.update_chapter_act_info(region, region)
+        update_chapter_act_info(world, region, region)
 
     set_rift_rules(world, rift_dict)
 
@@ -650,7 +659,7 @@ def connect_time_rift(world: World, time_rift: Region, exit_region: Region):
     count: int = len(rift_access_regions[time_rift.name])
     i: int = 1
     while i <= count:
-        name = format("%s Portal - Entrance %i" % (time_rift.name, i))
+        name = f"{time_rift.name} Portal - Entrance {i}"
         entrance: Entrance = world.multiworld.get_entrance(name, world.player)
         reconnect_regions(entrance, entrance.parent_region, exit_region)
         i += 1
@@ -686,6 +695,9 @@ def create_region(world: World, name: str) -> Region:
     reg = Region(name, world.player, world.multiworld)
 
     for (key, data) in location_table.items():
+        if world.is_dw_only():
+            break
+
         if data.nyakuza_thug != "":
             continue
 
@@ -710,11 +722,11 @@ def create_badge_seller(world: World) -> Region:
     max_items: int = 0
 
     if world.multiworld.BadgeSellerMaxItems[world.player].value > 0:
-        max_items = world.multiworld.random.randint(world.multiworld.BadgeSellerMinItems[world.player].value,
+        max_items = world.random.randint(world.multiworld.BadgeSellerMinItems[world.player].value,
                                          world.multiworld.BadgeSellerMaxItems[world.player].value)
 
     if max_items <= 0:
-        world.badge_seller_count = 0
+        world.set_badge_seller_count(0)
         return badge_seller
 
     for (key, data) in shop_locations.items():
@@ -729,14 +741,15 @@ def create_badge_seller(world: World) -> Region:
         if count >= max_items:
             break
 
-    world.badge_seller_count = max_items
+    world.set_badge_seller_count(max_items)
     return badge_seller
 
 
-def connect_regions(start_region: Region, exit_region: Region, entrancename: str, player: int):
+def connect_regions(start_region: Region, exit_region: Region, entrancename: str, player: int) -> Entrance:
     entrance = Entrance(player, entrancename, start_region)
     start_region.exits.append(entrance)
     entrance.connect(exit_region)
+    return entrance
 
 
 # Takes an entrance, removes its old connections, and reconnects it between the two regions specified.
@@ -785,12 +798,29 @@ def get_act_original_chapter(world: World, act_name: str) -> Region:
     return world.multiworld.get_region(act_chapters[act_name], world.player)
 
 
+# Sets an act entrance in slot data by specifying the Hat_ChapterActInfo, to be used in-game
+def update_chapter_act_info(world: World, original_region: Region, new_region: Region):
+    original_act_info = chapter_act_info[original_region.name]
+    new_act_info = chapter_act_info[new_region.name]
+    world.act_connections[original_act_info] = new_act_info
+
+
+def get_shuffled_region(self, region: str) -> str:
+    ci: str = chapter_act_info[region]
+    for key, val in self.act_connections.items():
+        if val == ci:
+            for name in chapter_act_info.keys():
+                if chapter_act_info[name] == key:
+                    return name
+
+
 def create_thug_shops(world: World):
     min_items: int = world.multiworld.NyakuzaThugMinShopItems[world.player].value
     max_items: int = world.multiworld.NyakuzaThugMaxShopItems[world.player].value
     count: int = -1
     step: int = 0
     old_name: str = ""
+    thug_items = world.get_nyakuza_thug_items()
 
     for key, data in shop_locations.items():
         if data.nyakuza_thug == "":
@@ -800,14 +830,14 @@ def create_thug_shops(world: World):
             continue
 
         try:
-            if world.nyakuza_thug_items[data.nyakuza_thug] <= 0:
+            if thug_items[data.nyakuza_thug] <= 0:
                 continue
         except KeyError:
             pass
 
         if count == -1:
-            count = world.multiworld.random.randint(min_items, max_items)
-            world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
+            count = world.random.randint(min_items, max_items)
+            thug_items.setdefault(data.nyakuza_thug, count)
             if count <= 0:
                 continue
 
@@ -823,6 +853,8 @@ def create_thug_shops(world: World):
                 step = 0
                 count = -1
 
+    world.set_nyakuza_thug_items(thug_items)
+
 
 def create_events(world: World) -> int:
     count: int = 0
@@ -832,9 +864,10 @@ def create_events(world: World) -> int:
             continue
 
         event: Location = create_event(name, world.multiworld.get_region(data.region, world.player), world)
+        event.show_in_spoiler = False
 
         if data.act_complete_event:
-            act_completion: str = format("Act Completion (%s)" % data.region)
+            act_completion: str = f"Act Completion ({data.region})"
             event.access_rule = world.multiworld.get_location(act_completion, world.player).access_rule
 
         count += 1
