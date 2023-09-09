@@ -61,16 +61,7 @@ class LandstalkerWorld(World):
         slot_data = {option_name: self.get_setting(option_name).value for option_name in ls_options}
         slot_data["seed"] = self.random.randint(0, 4294967295)
         slot_data["dark_region"] = self.dark_dungeon_id
-
-        slot_data["locations"] = {}
-        for location in self.multiworld.get_locations(self.player):
-            slot_data['locations'][location.name] = {
-                "item": location.item.name,
-                "player": self.multiworld.get_player_name(location.item.player)
-            }
-            if location.price > 0:
-                slot_data['locations'][location.name]['price'] = location.price
-
+        slot_data["location_prices"] = {location.name: location.price for location in self.multiworld.get_locations(self.player) if location.price}
         slot_data["hints"] = self.hints
         slot_data["teleport_tree_pairs"] = [[pair[0]['name'], pair[1]['name']] for pair in self.teleport_tree_pairs]
 

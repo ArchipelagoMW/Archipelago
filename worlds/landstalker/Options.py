@@ -195,7 +195,7 @@ class HintCount(Range):
     """
     display_name = "Hint count"
     range_start = 0
-    range_end = 40
+    range_end = 25
     default = 12
 
 
