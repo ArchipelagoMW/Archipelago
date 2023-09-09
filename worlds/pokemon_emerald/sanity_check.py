@@ -5,22 +5,10 @@ duplicate claims and give warnings for unused and unignored locations or warps.
 import logging
 from typing import List
 
-from .data import data
+from .data import load_json_data, data
 
 
 _ignorable_locations = {
-    # Trick House
-    "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",
-    "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL",
-    "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL",
-
     # Event islands
     "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
 }
@@ -234,6 +222,7 @@ _ignorable_warps = {
 
 
 def validate_regions() -> bool:
+    extracted_data_json = load_json_data("extracted_data.json")
     error_messages: List[str] = []
     warn_messages: List[str] = []
     failed = False
@@ -270,7 +259,7 @@ def validate_regions() -> bool:
             error(f"Pokemon Emerald: Location [{location_name}] was claimed by multiple regions")
         claimed_locations_set.add(location_name)
 
-    for location_name in data.locations:
+    for location_name in extracted_data_json["locations"]:
         if location_name not in claimed_locations and location_name not in _ignorable_locations:
             warn(f"Pokemon Emerald: Location [{location_name}] was not claimed by any region")
 

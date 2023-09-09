@@ -51,11 +51,11 @@ class TestFreeFly(PokemonEmeraldTestBase):
 
     def testSootopolisGiftInaccessibleWithNoSurf(self) -> None:
         self.collect_by_name(["HM02 Fly", "Feather Badge"])
-        self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
+        self.assertFalse(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM_BRICK_BREAK")))
 
     def testSootopolisGiftAccessibleWithSurf(self) -> None:
         self.collect_by_name(["HM03 Surf", "Balance Badge", "HM02 Fly", "Feather Badge"])
-        self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM31")))
+        self.assertTrue(self.can_reach_location(location_name_to_label("NPC_GIFT_RECEIVED_TM_BRICK_BREAK")))
 
 
 class TestFerry(PokemonEmeraldTestBase):

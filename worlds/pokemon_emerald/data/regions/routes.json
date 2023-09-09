@@ -12,7 +12,9 @@
   "REGION_ROUTE102/MAIN": {
     "parent_map": "MAP_ROUTE102",
     "locations": [
-      "ITEM_ROUTE_102_POTION"
+      "ITEM_ROUTE_102_POTION",
+      "BERRY_TREE_01",
+      "BERRY_TREE_02"
     ],
     "events": [],
     "exits": [
@@ -43,25 +45,41 @@
   },
   "REGION_ROUTE103/EAST": {
     "parent_map": "MAP_ROUTE103",
-    "locations": [
-      "ITEM_ROUTE_103_GUARD_SPEC",
-      "ITEM_ROUTE_103_PP_UP"
-    ],
+    "locations": [],
     "events": [],
     "exits": [
       "REGION_ROUTE103/WATER",
+      "REGION_ROUTE103/EAST_TREE_MAZE",
       "REGION_ROUTE110/MAIN"
     ],
     "warps": [
       "MAP_ROUTE103:0/MAP_ALTERING_CAVE:0"
     ]
   },
+  "REGION_ROUTE103/EAST_TREE_MAZE": {
+    "parent_map": "MAP_ROUTE103",
+    "locations": [
+      "ITEM_ROUTE_103_GUARD_SPEC",
+      "ITEM_ROUTE_103_PP_UP",
+      "BERRY_TREE_05",
+      "BERRY_TREE_06",
+      "BERRY_TREE_07"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE103/EAST"
+    ],
+    "warps": []
+  },
   "REGION_ROUTE104/SOUTH": {
     "parent_map": "MAP_ROUTE104",
     "locations": [
       "HIDDEN_ITEM_ROUTE_104_POTION",
       "HIDDEN_ITEM_ROUTE_104_HEART_SCALE",
-      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE"
+      "HIDDEN_ITEM_ROUTE_104_ANTIDOTE",
+      "BERRY_TREE_11",
+      "BERRY_TREE_12",
+      "BERRY_TREE_13"
     ],
     "events": [],
     "exits": [
@@ -94,9 +112,16 @@
       "ITEM_ROUTE_104_X_ACCURACY",
       "HIDDEN_ITEM_ROUTE_104_SUPER_POTION",
       "HIDDEN_ITEM_ROUTE_104_POKE_BALL",
-      "NPC_GIFT_RECEIVED_TM09",
+      "NPC_GIFT_RECEIVED_TM_BULLET_SEED",
       "NPC_GIFT_RECEIVED_WHITE_HERB",
-      "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104"
+      "NPC_GIFT_RECEIVED_CHESTO_BERRY_ROUTE_104",
+      "BERRY_TREE_03",
+      "BERRY_TREE_04",
+      "BERRY_TREE_08",
+      "BERRY_TREE_09",
+      "BERRY_TREE_10",
+      "BERRY_TREE_75",
+      "BERRY_TREE_76"
     ],
     "events": [],
     "exits": [
@@ -121,7 +146,8 @@
   "REGION_ROUTE104_PRETTY_PETAL_FLOWER_SHOP/MAIN": {
     "parent_map": "MAP_ROUTE104_PRETTY_PETAL_FLOWER_SHOP",
     "locations": [
-      "NPC_GIFT_RECEIVED_WAILMER_PAIL"
+      "NPC_GIFT_RECEIVED_WAILMER_PAIL",
+      "NPC_GIFT_FLOWER_SHOP_RECEIVED_BERRY"
     ],
     "events": [
       "EVENT_MEET_FLOWER_SHOP_OWNER"
@@ -274,7 +300,10 @@
       "HIDDEN_ITEM_ROUTE_110_GREAT_BALL",
       "HIDDEN_ITEM_ROUTE_110_POKE_BALL",
       "HIDDEN_ITEM_ROUTE_110_FULL_HEAL",
-      "NPC_GIFT_RECEIVED_ITEMFINDER"
+      "NPC_GIFT_RECEIVED_ITEMFINDER",
+      "BERRY_TREE_16",
+      "BERRY_TREE_17",
+      "BERRY_TREE_18"
     ],
     "events": [],
     "exits": [
@@ -337,21 +366,190 @@
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE",
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE"
+    ],
     "warps": [
       "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:0,1/MAP_ROUTE110:1",
       "MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2/MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0"
     ]
   },
-  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/MAIN": {
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
     "locations": [],
     "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS"
+    ],
+    "warps": [
+      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2"
+    ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1",
+      "ITEM_TRICK_HOUSE_PUZZLE_1_ORANGE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_1"
+    ],
     "exits": [],
     "warps": [
-      "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2",
       "MAP_ROUTE110_TRICK_HOUSE_PUZZLE1:2/MAP_ROUTE110_TRICK_HOUSE_END:0"
     ]
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_HARBOR_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_2_WAVE_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_2"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE3",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_SHADOW_MAIL",
+      "ITEM_TRICK_HOUSE_PUZZLE_3_WOOD_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_3"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE4",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4",
+      "ITEM_TRICK_HOUSE_PUZZLE_4_MECH_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_4"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE5",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_5"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE6/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE6",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6",
+      "ITEM_TRICK_HOUSE_PUZZLE_6_GLITTER_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_6"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE7/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE7",
+    "locations": [
+      "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7",
+      "ITEM_TRICK_HOUSE_PUZZLE_7_TROPIC_MAIL"
+    ],
+    "events": [
+      "EVENT_COMPLETE_TRICK_HOUSE_7"
+    ],
+    "exits": [],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/ENTRANCE": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE110_TRICK_HOUSE_PUZZLE8/REWARDS": {
+    "parent_map": "MAP_ROUTE110_TRICK_HOUSE_PUZZLE8",
+    "locations": [
+      "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",
+      "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_ROUTE110_TRICK_HOUSE_END/MAIN": {
     "parent_map": "MAP_ROUTE110_TRICK_HOUSE_END",
@@ -458,7 +656,7 @@
   "REGION_ROUTE111/DESERT": {
     "parent_map": "MAP_ROUTE111",
     "locations": [
-      "ITEM_ROUTE_111_TM37",
+      "ITEM_ROUTE_111_TM_SANDSTORM",
       "ITEM_ROUTE_111_STARDUST",
       "HIDDEN_ITEM_ROUTE_111_STARDUST",
       "HIDDEN_ITEM_ROUTE_111_PROTEIN",
@@ -477,7 +675,12 @@
   "REGION_ROUTE111/NORTH": {
     "parent_map": "MAP_ROUTE111",
     "locations": [
-      "NPC_GIFT_RECEIVED_SECRET_POWER"
+      "NPC_GIFT_RECEIVED_SECRET_POWER",
+      "NPC_GIFT_ROUTE_111_RECEIVED_BERRY",
+      "BERRY_TREE_19",
+      "BERRY_TREE_20",
+      "BERRY_TREE_80",
+      "BERRY_TREE_81"
     ],
     "events": [],
     "exits": [
@@ -548,7 +751,12 @@
   },
   "REGION_ROUTE112/NORTH": {
     "parent_map": "MAP_ROUTE112",
-    "locations": [],
+    "locations": [
+      "BERRY_TREE_21",
+      "BERRY_TREE_22",
+      "BERRY_TREE_23",
+      "BERRY_TREE_24"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE111/NORTH"
@@ -639,7 +847,7 @@
       "ITEM_ROUTE_113_SUPER_REPEL",
       "ITEM_ROUTE_113_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_113_ETHER",
-      "HIDDEN_ITEM_ROUTE_113_TM32",
+      "HIDDEN_ITEM_ROUTE_113_TM_DOUBLE_TEAM",
       "HIDDEN_ITEM_ROUTE_113_NUGGET"
     ],
     "events": [],
@@ -667,11 +875,13 @@
       "ITEM_ROUTE_114_ENERGY_POWDER",
       "HIDDEN_ITEM_ROUTE_114_REVIVE",
       "HIDDEN_ITEM_ROUTE_114_CARBOS",
-      "NPC_GIFT_RECEIVED_TM05"
+      "NPC_GIFT_RECEIVED_TM_ROAR",
+      "NPC_GIFT_ROUTE_114_RECEIVED_BERRY"
     ],
     "events": [],
     "exits": [
       "REGION_ROUTE114/ABOVE_WATERFALL",
+      "REGION_ROUTE114/ABOVE_EAST_LEDGE",
       "REGION_FALLARBOR_TOWN/MAIN"
     ],
     "warps": [
@@ -679,6 +889,17 @@
       "MAP_ROUTE114:1/MAP_ROUTE114_FOSSIL_MANIACS_HOUSE:0",
       "MAP_ROUTE114:2/MAP_ROUTE114_LANETTES_HOUSE:0"
     ]
+  },
+  "REGION_ROUTE114/ABOVE_EAST_LEDGE": {
+    "parent_map": "MAP_ROUTE114",
+    "locations": [
+      "BERRY_TREE_68",
+      "BERRY_TREE_77",
+      "BERRY_TREE_78"
+    ],
+    "events": [],
+    "exits": [],
+    "warps": []
   },
   "REGION_ROUTE114/ABOVE_WATERFALL": {
     "parent_map": "MAP_ROUTE114",
@@ -694,7 +915,7 @@
   "REGION_ROUTE114_FOSSIL_MANIACS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE114_FOSSIL_MANIACS_HOUSE",
     "locations": [
-      "NPC_GIFT_RECEIVED_TM28"
+      "NPC_GIFT_RECEIVED_TM_DIG"
     ],
     "events": [],
     "exits": [],
@@ -773,7 +994,9 @@
   "REGION_ROUTE115/SOUTH_BEHIND_ROCK": {
     "parent_map": "MAP_ROUTE115",
     "locations": [
-      "ITEM_ROUTE_115_GREAT_BALL"
+      "ITEM_ROUTE_115_GREAT_BALL",
+      "BERRY_TREE_55",
+      "BERRY_TREE_56"
     ],
     "events": [],
     "exits": [
@@ -785,7 +1008,10 @@
     "parent_map": "MAP_ROUTE115",
     "locations": [
       "ITEM_ROUTE_115_HEAL_POWDER",
-      "ITEM_ROUTE_115_TM01"
+      "ITEM_ROUTE_115_TM_FOCUS_PUNCH",
+      "BERRY_TREE_69",
+      "BERRY_TREE_70",
+      "BERRY_TREE_71"
     ],
     "events": [],
     "exits": [
@@ -838,7 +1064,11 @@
     "locations": [
       "ITEM_ROUTE_116_ETHER",
       "ITEM_ROUTE_116_POTION",
-      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION"
+      "HIDDEN_ITEM_ROUTE_116_SUPER_POTION",
+      "BERRY_TREE_25",
+      "BERRY_TREE_26",
+      "BERRY_TREE_66",
+      "BERRY_TREE_67"
     ],
     "events": [],
     "exits": [
@@ -872,7 +1102,10 @@
     "locations": [
       "ITEM_ROUTE_117_GREAT_BALL",
       "ITEM_ROUTE_117_REVIVE",
-      "HIDDEN_ITEM_ROUTE_117_REPEL"
+      "HIDDEN_ITEM_ROUTE_117_REPEL",
+      "BERRY_TREE_27",
+      "BERRY_TREE_28",
+      "BERRY_TREE_29"
     ],
     "events": [],
     "exits": [
@@ -919,7 +1152,10 @@
     "locations": [
       "ITEM_ROUTE_118_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_118_IRON",
-      "NPC_GIFT_RECEIVED_GOOD_ROD"
+      "NPC_GIFT_RECEIVED_GOOD_ROD",
+      "BERRY_TREE_31",
+      "BERRY_TREE_32",
+      "BERRY_TREE_33"
     ],
     "events": [],
     "exits": [
@@ -934,7 +1170,9 @@
     "locations": [
       "ITEM_ROUTE_119_SUPER_REPEL",
       "ITEM_ROUTE_119_HYPER_POTION_1",
-      "HIDDEN_ITEM_ROUTE_119_FULL_HEAL"
+      "HIDDEN_ITEM_ROUTE_119_FULL_HEAL",
+      "BERRY_TREE_85",
+      "BERRY_TREE_86"
     ],
     "events": [],
     "exits": [
@@ -1002,7 +1240,10 @@
     "parent_map": "MAP_ROUTE119",
     "locations": [
       "ITEM_ROUTE_119_ELIXIR_2",
-      "NPC_GIFT_RECEIVED_HM02"
+      "NPC_GIFT_RECEIVED_HM_FLY",
+      "BERRY_TREE_34",
+      "BERRY_TREE_35",
+      "BERRY_TREE_36"
     ],
     "events": [],
     "exits": [
@@ -1014,7 +1255,10 @@
   },
   "REGION_ROUTE119/ABOVE_WATERFALL": {
     "parent_map": "MAP_ROUTE119",
-    "locations": [],
+    "locations": [
+      "BERRY_TREE_83",
+      "BERRY_TREE_84"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE119/MIDDLE_RIVER",
@@ -1100,21 +1344,47 @@
       "ITEM_ROUTE_120_REVIVE",
       "ITEM_ROUTE_120_HYPER_POTION",
       "HIDDEN_ITEM_ROUTE_120_RARE_CANDY_2",
-      "HIDDEN_ITEM_ROUTE_120_ZINC"
+      "HIDDEN_ITEM_ROUTE_120_ZINC",
+      "NPC_GIFT_ROUTE_120_RECEIVED_BERRY",
+      "BERRY_TREE_40",
+      "BERRY_TREE_41",
+      "BERRY_TREE_42",
+      "BERRY_TREE_43",
+      "BERRY_TREE_44",
+      "BERRY_TREE_45",
+      "BERRY_TREE_46"
     ],
     "events": [],
     "exits": [
       "REGION_ROUTE120/NORTH",
+      "REGION_ROUTE120/SOUTH_ALCOVE",
       "REGION_ROUTE121/WEST"
     ],
     "warps": [
       "MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0"
     ]
   },
+  "REGION_ROUTE120/SOUTH_ALCOVE": {
+    "parent_map": "MAP_ROUTE120",
+    "locations": [
+      "BERRY_TREE_37",
+      "BERRY_TREE_38",
+      "BERRY_TREE_39"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE120/SOUTH"
+    ],
+    "warps": []
+  },
   "REGION_ROUTE121/WEST": {
     "parent_map": "MAP_ROUTE121",
     "locations": [
-      "HIDDEN_ITEM_ROUTE_121_HP_UP"
+      "HIDDEN_ITEM_ROUTE_121_HP_UP",
+      "BERRY_TREE_47",
+      "BERRY_TREE_48",
+      "BERRY_TREE_49",
+      "BERRY_TREE_50"
     ],
     "events": [],
     "exits": [
@@ -1131,7 +1401,11 @@
       "ITEM_ROUTE_121_ZINC",
       "HIDDEN_ITEM_ROUTE_121_NUGGET",
       "HIDDEN_ITEM_ROUTE_121_FULL_HEAL",
-      "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE"
+      "HIDDEN_ITEM_ROUTE_121_MAX_REVIVE",
+      "BERRY_TREE_51",
+      "BERRY_TREE_52",
+      "BERRY_TREE_53",
+      "BERRY_TREE_54"
     ],
     "events": [],
     "exits": [
@@ -1167,7 +1441,7 @@
   "REGION_SAFARI_ZONE_NORTHWEST/MAIN": {
     "parent_map": "MAP_SAFARI_ZONE_NORTHWEST",
     "locations": [
-      "ITEM_SAFARI_ZONE_NORTH_WEST_TM22"
+      "ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM"
     ],
     "events": [],
     "exits": [
@@ -1264,7 +1538,19 @@
     "parent_map": "MAP_ROUTE123",
     "locations": [
       "ITEM_ROUTE_123_ULTRA_BALL",
-      "HIDDEN_ITEM_ROUTE_123_REVIVE"
+      "HIDDEN_ITEM_ROUTE_123_REVIVE",
+      "BERRY_TREE_14",
+      "BERRY_TREE_15",
+      "BERRY_TREE_30",
+      "BERRY_TREE_58",
+      "BERRY_TREE_59",
+      "BERRY_TREE_60",
+      "BERRY_TREE_61",
+      "BERRY_TREE_65",
+      "BERRY_TREE_72",
+      "BERRY_TREE_73",
+      "BERRY_TREE_74",
+      "BERRY_TREE_79"
     ],
     "events": [],
     "exits": [
@@ -1283,7 +1569,13 @@
       "ITEM_ROUTE_123_REVIVAL_HERB",
       "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
       "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
-      "NPC_GIFT_RECEIVED_TM19"
+      "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN",
+      "BERRY_TREE_57",
+      "BERRY_TREE_62",
+      "BERRY_TREE_63",
+      "BERRY_TREE_64",
+      "BERRY_TREE_87",
+      "BERRY_TREE_88"
     ],
     "events": [],
     "exits": [
@@ -1307,7 +1599,11 @@
   },
   "REGION_ROUTE123_BERRY_MASTERS_HOUSE/MAIN": {
     "parent_map": "MAP_ROUTE123_BERRY_MASTERS_HOUSE",
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_1",
+      "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_2",
+      "NPC_GIFT_BERRY_MASTERS_WIFE"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1783,9 +2079,19 @@
     "locations": [],
     "events": [],
     "exits": [
+      "REGION_ROUTE130/MIRAGE_ISLAND",
       "REGION_ROUTE129/MAIN",
       "REGION_ROUTE131/MAIN"
     ],
+    "warps": []
+  },
+  "REGION_ROUTE130/MIRAGE_ISLAND": {
+    "parent_map": "MAP_ROUTE130",
+    "locations": [
+      "BERRY_TREE_82"
+    ],
+    "events": [],
+    "exits": [],
     "warps": []
   },
   "REGION_ROUTE131/MAIN": {

@@ -33,7 +33,7 @@ from worlds._bizhawk.client import BizHawkClient
 from worlds.LauncherComponents import SuffixIdentifier, components
 
 from .data import BASE_OFFSET, data
-from .options import Goal
+from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
 if TYPE_CHECKING:
@@ -82,14 +82,14 @@ TRACKER_EVENT_FLAGS = [
 EVENT_FLAG_MAP = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
 
 KEY_LOCATION_FLAGS = [
-    "NPC_GIFT_RECEIVED_HM01",
-    "NPC_GIFT_RECEIVED_HM02",
-    "NPC_GIFT_RECEIVED_HM03",
-    "NPC_GIFT_RECEIVED_HM04",
-    "NPC_GIFT_RECEIVED_HM05",
-    "NPC_GIFT_RECEIVED_HM06",
-    "NPC_GIFT_RECEIVED_HM07",
-    "NPC_GIFT_RECEIVED_HM08",
+    "NPC_GIFT_RECEIVED_HM_CUT",
+    "NPC_GIFT_RECEIVED_HM_FLY",
+    "NPC_GIFT_RECEIVED_HM_SURF",
+    "NPC_GIFT_RECEIVED_HM_STRENGTH",
+    "NPC_GIFT_RECEIVED_HM_FLASH",
+    "NPC_GIFT_RECEIVED_HM_ROCK_SMASH",
+    "NPC_GIFT_RECEIVED_HM_WATERFALL",
+    "NPC_GIFT_RECEIVED_HM_DIVE",
     "NPC_GIFT_RECEIVED_ACRO_BIKE",
     "NPC_GIFT_RECEIVED_WAILMER_PAIL",
     "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL",
@@ -106,7 +106,7 @@ KEY_LOCATION_FLAGS = [
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY",
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY",
     "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY",
-    "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER",
+    "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER",
     "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY",
     "NPC_GIFT_RECEIVED_OLD_ROD",
     "NPC_GIFT_RECEIVED_GOOD_ROD",
@@ -170,8 +170,6 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        from CommonClient import logger
-
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == Goal.option_champion:
                 self.goal_flag = IS_CHAMPION_FLAG
@@ -179,6 +177,14 @@ class PokemonEmeraldClient(BizHawkClient):
                 self.goal_flag = DEFEATED_STEVEN_FLAG
             elif ctx.slot_data["goal"] == Goal.option_norman:
                 self.goal_flag = DEFEATED_NORMAN_FLAG
+
+            if ctx.slot_data["remote_items"] == RemoteItems.option_true and not ctx.items_handling & 0b010:
+                ctx.items_handling = 0b011
+                Utils.async_start(ctx.send_msgs([{
+                    "cmd": "ConnectUpdate",
+                    "items_handling": ctx.items_handling
+                }]))
+
 
         try:
             # Checks that the player is in the overworld
@@ -339,12 +345,7 @@ class PokemonEmeraldClient(BizHawkClient):
     async def wonder_trade_acquire(self, ctx: BizHawkClientContext, keep_trying: bool = False) -> Optional[dict]:
         from CommonClient import logger
 
-        first_try = True
         while not ctx.exit_event.is_set():
-            if not first_try and not keep_trying:
-                return None
-            first_try = False
-
             lock = int(time.time_ns() / 1000000)
             uuid = Utils.get_unique_identifier()
             await ctx.send_msgs([{
@@ -361,16 +362,19 @@ class PokemonEmeraldClient(BizHawkClient):
             reply = copy.deepcopy(self.latest_wonder_trade_reply)
 
             if reply.get("uuid", None) != uuid:
-                logger.info("Reply not mine")
+                if not keep_trying:
+                    return None
                 continue
 
             if lock - reply["original_value"]["_lock"] < 5000:
-                logger.info("Lock too new")
+                if not keep_trying:
+                    return None
                 await asyncio.sleep(10)
                 continue
 
             if reply["value"]["_lock"] != lock:
-                logger.info("Lock not mine")
+                if not keep_trying:
+                    return None
                 await asyncio.sleep(10)
                 continue
 

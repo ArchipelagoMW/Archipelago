@@ -5,7 +5,6 @@ from collections import Counter
 import copy
 import logging
 import os
-import sys
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
@@ -150,6 +149,8 @@ class PokemonEmeraldWorld(World):
             tags.add("HiddenItem")
         if self.multiworld.npc_gifts[self.player]:
             tags.add("NpcGift")
+        if self.multiworld.berry_trees[self.player]:
+            tags.add("BerryTree")
         if self.multiworld.enable_ferry[self.player]:
             tags.add("Ferry")
 
@@ -799,6 +800,7 @@ class PokemonEmeraldWorld(World):
             "overworld_items",
             "hidden_items",
             "npc_gifts",
+            "berry_trees",
             "require_itemfinder",
             "require_flash",
             "enable_ferry",
@@ -809,6 +811,7 @@ class PokemonEmeraldWorld(World):
             "extra_boulders",
             "free_fly_location",
             "fly_without_badge",
+            "remote_items",
         ]
 
         for option_name in sent_options:
