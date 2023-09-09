@@ -79,6 +79,10 @@ def is_location_valid(world: World, location: str) -> bool:
        and location in storybook_pages.keys():
         return False
 
+    if world.multiworld.ShuffleActContracts[world.player].value == 0 \
+       and location in contract_locations.keys():
+        return False
+
     if location not in world.shop_locs and location in shop_locations:
         return False
 

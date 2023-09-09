@@ -601,6 +601,12 @@ def randomize_act_entrances(world: World):
             if region.name in blacklisted_combos.keys() and candidate.name in blacklisted_combos[region.name]:
                 continue
 
+            # Prevent Contractual Obligations from being inaccessible if contracts are not shuffled
+            if world.multiworld.ShuffleActContracts[world.player].value == 0:
+                if (region.name == "Your Contract has Expired" or region.name == "The Subcon Well") \
+                   and candidate.name == "Contractual Obligations":
+                    continue
+
             if world.multiworld.FinaleShuffle[world.player].value > 0 and region.name in chapter_finales:
                 if candidate.name not in chapter_finales:
                     continue

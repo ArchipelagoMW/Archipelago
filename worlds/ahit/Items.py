@@ -90,8 +90,7 @@ def create_itempool(world: World) -> List[Item]:
 
         itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
 
-    total_locations: int = get_total_locations(world)
-    itempool += create_junk_items(world, total_locations - len(itempool))
+    itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
     return itempool
 
 

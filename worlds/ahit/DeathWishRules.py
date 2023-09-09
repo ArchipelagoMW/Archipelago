@@ -377,8 +377,8 @@ def create_enemy_events(world: World):
             if (area == "Bon Voyage!" or area == "Time Rift - Deep Sea") and not world.is_dlc1():
                 continue
 
-            if area == "Time Rift - Tour" and not world.is_dlc1() \
-               or world.multiworld.ExcludeTour[world.player].value > 0:
+            if area == "Time Rift - Tour" and (not world.is_dlc1()
+               or world.multiworld.ExcludeTour[world.player].value > 0):
                 continue
 
             if area == "Bluefin Tunnel" and not world.is_dlc2():
