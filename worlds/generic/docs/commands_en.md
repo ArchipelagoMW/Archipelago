@@ -87,7 +87,7 @@ can be configured to allow/require manual usage of this command.
 This a list of client commands which may be available to you through your Archipelago client. You can
 execute these commands in your client window.
 
-The following commands are available in these clients: TextClient, SNIClient, FactorioClient, FF1Client.
+The following commands are available in the clients that use the CommonClient, for example: TextClient, SNIClient, etc.
 
 - `/connect <address:port>` Connect to the multi-world server at the given address.
 - `/disconnect` Disconnects you from your current session.
