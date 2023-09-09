@@ -218,7 +218,7 @@ class HatInTimeWorld(World):
         return slot_data
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        if self.is_dw_only():
+        if self.is_dw_only() or self.multiworld.ActRandomizer[self.player].value == 0:
             return
 
         new_hint_data = {}
