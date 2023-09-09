@@ -19,6 +19,7 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
+from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -198,7 +199,6 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
         await ctx.shutdown_task
         logging.info("Shutting down")
 
-    from .autolauncher import Locker
     with Locker(room_id):
         try:
             asyncio.run(main())
