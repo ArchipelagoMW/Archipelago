@@ -19,6 +19,7 @@
 
 # Ports used for game hosting. Values can be specific ports, port ranges or both. Default is: "49152-65535"
 # Examples of valid values: "40000-41000,49152-65535"
+# If ports within the range(s) are already in use, the WebHost will fallback to the default "49152-65535" range.
 #GAME_PORTS: "49152-65535"
 
 # Place where uploads go.
