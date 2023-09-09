@@ -811,6 +811,7 @@ class PokemonEmeraldWorld(World):
             "extra_boulders",
             "free_fly_location",
             "fly_without_badge",
+            "remote_items",
         ]
 
         for option_name in sent_options:

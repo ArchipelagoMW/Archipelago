@@ -33,7 +33,7 @@ from worlds._bizhawk.client import BizHawkClient
 from worlds.LauncherComponents import SuffixIdentifier, components
 
 from .data import BASE_OFFSET, BERRY_TREE_OFFSET, data
-from .options import Goal
+from .options import Goal, RemoteItems
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
 if TYPE_CHECKING:
@@ -170,8 +170,6 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        from CommonClient import logger
-
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == Goal.option_champion:
                 self.goal_flag = IS_CHAMPION_FLAG
@@ -179,6 +177,14 @@ class PokemonEmeraldClient(BizHawkClient):
                 self.goal_flag = DEFEATED_STEVEN_FLAG
             elif ctx.slot_data["goal"] == Goal.option_norman:
                 self.goal_flag = DEFEATED_NORMAN_FLAG
+
+            if ctx.slot_data["remote_items"] == RemoteItems.option_true and not ctx.items_handling & 0b010:
+                ctx.items_handling = 0b011
+                Utils.async_start(ctx.send_msgs([{
+                    "cmd": "ConnectUpdate",
+                    "items_handling": ctx.items_handling
+                }]))
+
 
         try:
             # Checks that the player is in the overworld
