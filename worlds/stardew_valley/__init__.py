@@ -224,6 +224,10 @@ class StardewValleyWorld(World):
             self.create_event_location(location_table[Goal.full_shipment],
                                        self.logic.shipping.can_ship_everything().simplify(),
                                        Event.victory)
+        elif self.options[options.Goal] == options.Goal.option_gourmet_chef:
+            self.create_event_location(location_table[Goal.gourmet_chef],
+                                       self.logic.cooking.can_cook_everything().simplify(),
+                                       Event.victory)
         elif self.options[options.Goal] == options.Goal.option_perfection:
             self.create_event_location(location_table[Goal.perfection],
                                        self.logic.has_everything(self.all_progression_items).simplify(),
@@ -339,7 +343,7 @@ class StardewValleyWorld(World):
             "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": modified_bundles,
-            "client_version": "4.0.0",
+            "client_version": "5.0.0",
         })
 
         return slot_data

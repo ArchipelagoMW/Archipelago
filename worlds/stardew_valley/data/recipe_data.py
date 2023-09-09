@@ -164,3 +164,5 @@ triple_shot_espresso = shop_recipe(Beverage.triple_shot_espresso, Region.saloon,
 tropical_curry = shop_recipe(Meal.tropical_curry, Region.island_resort, 2000, {Forageable.coconut: 1, Fruit.pineapple: 1, Fruit.hot_pepper: 1})
 trout_soup = queen_of_sauce_recipe(Meal.trout_soup, 1, Season.fall, 14, {Fish.rainbow_trout: 1, WaterItem.green_algae: 1})
 vegetable_medley = friendship_recipe(Meal.vegetable_medley, NPC.caroline, 7, {Vegetable.tomato: 1, Vegetable.beet: 1})
+
+all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}

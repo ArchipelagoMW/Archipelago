@@ -17,6 +17,7 @@ class Goal(Choice):
     Greatest Walnut Hunter: Find all 130 Golden Walnuts
     Protector of the Valley: Complete all the monster slayer goals. Pairs well with Monstersanity
     Full Shipment: Ship every item in the collection tab. Pairs well with Shipsanity
+    Gourmet Chef: Cook every recipe. Pairs well with Chefsanity and Cooksanity
     Perfection: Attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
@@ -32,6 +33,7 @@ class Goal(Choice):
     option_greatest_walnut_hunter = 7
     option_protector_of_the_valley = 8
     option_full_shipment = 9
+    option_gourmet_chef = 10
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =
@@ -410,6 +412,20 @@ class Shipsanity(Choice):
     # option_quality_everything = 10
 
 
+class Cooksanity(Choice):
+    """Locations for cooking food?
+    None: There are no checks for cooking
+    Queen of Sauce: Every Queen of Sauce Recipe can be cooked for a check
+    All: Every cooking recipe can be cooked for a check
+    """
+    internal_name = "cooksanity"
+    display_name = "Cooksanity"
+    default = 0
+    option_none = 0
+    option_queen_of_sauce = 1
+    option_all = 2
+
+
 class Friendsanity(Choice):
     """Shuffle Friendships?
     None: Friendship hearts are earned normally
@@ -623,6 +639,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     museumsanity: Museumsanity
     Monstersanity,
     Shipsanity,
+    Cooksanity,
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
     movement_buff_number: NumberOfMovementBuffs

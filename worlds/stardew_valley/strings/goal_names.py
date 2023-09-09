@@ -9,4 +9,5 @@ class Goal:
     greatest_walnut_hunter = "Greatest Walnut Hunter"
     protector_of_the_valley = "Protector of the Valley"
     full_shipment = "Full Shipment"
+    gourmet_chef = "Gourmet Chef"
     perfection = "Perfection"

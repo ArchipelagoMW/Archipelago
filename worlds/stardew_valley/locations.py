@@ -72,6 +72,8 @@ class LocationTags(enum.Enum):
     SHIPSANITY_CROP = enum.auto()
     SHIPSANITY_FISH = enum.auto()
     SHIPSANITY_FULL_SHIPMENT = enum.auto()
+    COOKSANITY = enum.auto()
+    COOKSANITY_QOS = enum.auto()
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
@@ -122,12 +124,13 @@ events_locations = [
     LocationData(None, Region.community_center, Goal.community_center),
     LocationData(None, Region.mines_floor_120, Goal.bottom_of_the_mines),
     LocationData(None, Region.skull_cavern_100, Goal.cryptic_note),
-    LocationData(None, Region.farm, Goal.master_angler),
+    LocationData(None, Region.beach, Goal.master_angler),
     LocationData(None, Region.museum, Goal.complete_museum),
     LocationData(None, Region.farm_house, Goal.full_house),
     LocationData(None, Region.island_west, Goal.greatest_walnut_hunter),
     LocationData(None, Region.adventurer_guild, Goal.protector_of_the_valley),
-    LocationData(None, Region.farm, Goal.full_shipment),
+    LocationData(None, Region.shipping, Goal.full_shipment),
+    LocationData(None, Region.kitchen, Goal.gourmet_chef),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]
 
@@ -345,6 +348,19 @@ def extend_shipsanity_locations(randomized_locations: List[LocationData], world_
     randomized_locations.extend(filtered_shipsanity_locations)
 
 
+def extend_cooksanity_locations(randomized_locations: List[LocationData], world_options):
+    cooksanity = world_options[options.Cooksanity]
+    if cooksanity == options.Cooksanity.option_none:
+        return
+    if cooksanity == options.Cooksanity.option_queen_of_sauce:
+        cooksanity_locations = {location for location in locations_by_tag[LocationTags.COOKSANITY_QOS]}
+    else:
+        cooksanity_locations = {location for location in locations_by_tag[LocationTags.COOKSANITY]}
+
+    filtered_cooksanity_locations = filter_disabled_locations(world_options, list(cooksanity_locations))
+    randomized_locations.extend(filtered_cooksanity_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      random: Random):
@@ -386,6 +402,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_monstersanity_locations(randomized_locations, world_options)
     extend_shipsanity_locations(randomized_locations, world_options)
+    extend_cooksanity_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
