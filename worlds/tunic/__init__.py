@@ -71,9 +71,21 @@ class TunicWorld(World):
             "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue"
         }
 
+        fool_tiers = [
+            [],
+            ["Money x1", "Money x10", "Money x15", "Money x16"],
+            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
+            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"]
+        ]
+
         items = []
         for item_name in item_table:
             item_data = item_table[item_name]
+
+            if item_name in fool_tiers[self.multiworld.fool_traps[self.player].value]:
+                for i in range(item_data.quantity_in_item_pool):
+                    items.append(self.create_item("Fool Trap"))
+                continue
 
             if item_name == "Gold Hexagon":
                 # if hexagon quest is on, add the gold hexagons in
@@ -88,8 +100,11 @@ class TunicWorld(World):
 
                     for i in range(0, gold_hexes):
                         items.append(self.create_item(item_name))
-                    # adding a money x1 to even out the pool with this option
-                    items.append(self.create_item("Money x1"))
+                    # adding a money x1 or fool trap to even out the pool with this option
+                    if self.multiworld.fool_traps[self.player].value == 0:
+                        items.append(self.create_item("Money x1"))
+                    else:
+                        items.append(self.create_item("Fool Trap"))
                 else:
                     # if not doing hexagon quest, just skip the gold hexagons
                     continue

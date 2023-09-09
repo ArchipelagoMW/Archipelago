@@ -33,11 +33,23 @@ class HexagonQuest(Toggle):
     display_name = "Hexagon Quest"
 
 
+class FoolTraps(Choice):
+    """Replaces low-to-medium value money rewards in the item pool with fool traps, which cause random negative
+    effects to the player."""
+    display_name = "Fool Traps"
+    option_off = 0
+    option_normal = 1
+    option_double = 2
+    option_onslaught = 3
+    default = 1
+
+
 tunic_options: typing.Dict[str, type(Option)] = {
     "sword_progression": SwordProgression,
     "start_with_sword": StartWithSword,
     "keys_behind_bosses": KeysBehindBosses,
     "ability_shuffling": AbilityShuffling,
     "hexagon_quest": HexagonQuest,
+    "fool_traps": FoolTraps,
     "start_inventory_from_pool": StartInventoryPool
 }
