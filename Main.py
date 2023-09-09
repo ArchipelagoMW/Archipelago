@@ -392,7 +392,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     f.write(bytes([3]))  # version of format
                     f.write(multidata)
 
-            multidata_task = pool.submit(write_multidata)
+            output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not world.can_beat_game():
                     raise Exception("Game appears as unbeatable. Aborting.")
@@ -400,7 +400,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
             # retrieve exceptions via .result() if they occurred.
-            multidata_task.result()
             for i, future in enumerate(concurrent.futures.as_completed(output_file_futures), start=1):
                 if i % 10 == 0 or i == len(output_file_futures):
                     logger.info(f'Generating output files ({i}/{len(output_file_futures)}).')
