@@ -5,7 +5,8 @@ html{
 }
 
 #player-settings{
-    max-width: 1000px;
+    box-sizing: border-box;
+    max-width: 1024px;
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(0, 0, 0, 0.15);
@@ -163,6 +164,11 @@ html{
     background-color: #ffef00; /* Same as .interactive in globalStyles.css */
 }
 
+#player-settings table .randomize-button[data-tooltip]::after {
+    left: unset;
+    right: 0;
+}
+
 #player-settings table label{
     display: block;
     min-width: 200px;
@@ -177,18 +183,31 @@ html{
     vertical-align: top;
 }
 
-@media all and (max-width: 1000px), all and (orientation: portrait){
+@media all and (max-width: 1024px) {
+    #player-settings {
+        border-radius: 0;
+    }
+
     #player-settings #game-options{
         justify-content: flex-start;
         flex-wrap: wrap;
     }
 
-    #player-settings .left, #player-settings .right{
-        flex-grow: unset;
+    #player-settings .left,
+    #player-settings .right {
+        margin: 0;
+    }
+
+    #game-options table {
+        margin-bottom: 0;
     }
 
     #game-options table label{
         display: block;
         min-width: 200px;
+    }
+
+    #game-options table tr td {
+        width: 50%;
     }
 }
