@@ -96,6 +96,13 @@ class RandomizeNpcGifts(Toggle):
     display_name = "Randomize NPC Gifts"
 
 
+class RandomizeBerryTrees(Toggle):
+    """
+    Adds berry trees to the pool as Sitrus berries
+    """
+    display_name = "Randomize Berry Trees"
+
+
 class ItemPoolType(Choice):
     """
     Determines which non-progression items get put into the item pool
@@ -606,6 +613,7 @@ option_definitions: Dict[str, Option] = {
     "overworld_items": RandomizeOverworldItems,
     "hidden_items": RandomizeHiddenItems,
     "npc_gifts": RandomizeNpcGifts,
+    "berry_trees": RandomizeBerryTrees,
 
     "item_pool_type": ItemPoolType,
 

@@ -157,6 +157,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE103/WEST -> REGION_ROUTE103/WATER", player),
         can_surf
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE103/EAST -> REGION_ROUTE103/EAST_TREE_MAZE", player),
+        can_cut
+    )
 
     # Petalburg City
     set_rule(
@@ -484,6 +488,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         lambda state: can_surf(state) and can_waterfall(state)
     )
     set_rule(
+        multiworld.get_entrance("REGION_ROUTE114/MAIN -> REGION_ROUTE114/ABOVE_EAST_LEDGE", player),
+        can_surf
+    )
+    set_rule(
         multiworld.get_entrance("MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
@@ -667,6 +675,14 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("REGION_ROUTE120/NORTH_POND -> REGION_ROUTE120/NORTH", player),
         lambda state: state.has("Devon Scope", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/SOUTH_ALCOVE", player),
+        can_cut
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE120/SOUTH_ALCOVE -> REGION_ROUTE120/SOUTH", player),
+        can_cut
     )
 
     # Route 121
@@ -1187,16 +1203,6 @@ def set_overworld_item_rules(multiworld: MultiWorld, player: int) -> None:
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
     can_rock_smash = lambda state: _can_rock_smash(state, player)
-
-    # Route 103
-    set_rule(
-        multiworld.get_location(location_name_to_label("ITEM_ROUTE_103_PP_UP"), player),
-        can_cut
-    )
-    set_rule(
-        multiworld.get_location(location_name_to_label("ITEM_ROUTE_103_GUARD_SPEC"), player),
-        can_cut
-    )
 
     # Route 104
     set_rule(

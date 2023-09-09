@@ -32,7 +32,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from worlds.LauncherComponents import SuffixIdentifier, components
 
-from .data import BASE_OFFSET, data
+from .data import BASE_OFFSET, BERRY_TREE_OFFSET, data
 from .options import Goal
 from .util import pokemon_data_to_json, json_to_pokemon_data
 
@@ -284,6 +284,21 @@ class PokemonEmeraldClient(BizHawkClient):
 
                         if flag_id in KEY_LOCATION_FLAG_MAP:
                             local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
+
+            if ctx.slot_data is not None and ctx.slot_data["berry_trees"] != 0:
+                read_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx,
+                    [(save_block_address + 0x187C, 0x400, "System Bus")],
+                    [overworld_guard, save_block_address_guard]
+                )
+
+                if read_result is not None:
+                    for i in range(data.constants["BERRY_TREES_COUNT"]):
+                        if read_result[0][i * 8] == 0:  # Berry picked
+                            location_id = i + BASE_OFFSET + BERRY_TREE_OFFSET
+
+                            if location_id in ctx.server_locations:
+                                local_checked_locations.add(location_id)
 
             # Send locations
             if local_checked_locations != self.local_checked_locations:

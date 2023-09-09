@@ -149,6 +149,8 @@ class PokemonEmeraldWorld(World):
             tags.add("HiddenItem")
         if self.multiworld.npc_gifts[self.player]:
             tags.add("NpcGift")
+        if self.multiworld.berry_trees[self.player]:
+            tags.add("BerryTree")
         if self.multiworld.enable_ferry[self.player]:
             tags.add("Ferry")
 
@@ -798,6 +800,7 @@ class PokemonEmeraldWorld(World):
             "overworld_items",
             "hidden_items",
             "npc_gifts",
+            "berry_trees",
             "require_itemfinder",
             "require_flash",
             "enable_ferry",

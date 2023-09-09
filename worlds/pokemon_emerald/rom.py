@@ -277,8 +277,9 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     #     /* 0x16 */ u8 freeFlyLocation;
     #     /* 0x17 */ bool8 matchTrainerLevels;
     #     /* 0x18 */ u8 activeEasterEgg;
-    #     /* 0x19 */ u8 matchTrainerLevelsMultiplierNumerator;
-    #     /* 0x1B */ u8 matchTrainerLevelsMultiplierDenominator;
+    #     /* 0x19 */ u16 matchTrainerLevelsMultiplierNumerator;
+    #     /* 0x1B */ u16 matchTrainerLevelsMultiplierDenominator;
+    #     /* 0x1D */ u8 berryTreesRandomized;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -364,13 +365,17 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Set easter egg data
     _set_bytes_little_endian(patched_rom, options_address + 0x18, 1, easter_egg[0])
 
+    if easter_egg[0] == 2:
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
+
     # Set match trainer levels multiplier
     match_trainer_levels_multiplier = min(max(multiworld.match_trainer_levels_multiplier[player].value, 0), 2**16 - 1)
     _set_bytes_little_endian(patched_rom, options_address + 0x19, 2, match_trainer_levels_multiplier)
     _set_bytes_little_endian(patched_rom, options_address + 0x1B, 2, 100)
 
-    if easter_egg[0] == 2:
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
+    # Mark berry trees as randomized
+    berry_trees = 1 if multiworld.berry_trees[player] else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, berry_trees)
 
     # Set slot name
     for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):

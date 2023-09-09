@@ -1501,5 +1501,358 @@
   "NPC_GIFT_BERRY_MASTERS_WIFE": {
     "label": "Route 123 - Berry from Berry Master's Wife",
     "tags": ["NpcGift"]
+  },
+
+  "BERRY_TREE_01": {
+    "label": "Route 102 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_02": {
+    "label": "Route 102 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_03": {
+    "label": "Route 104 - Berry Tree Flower Shop 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_04": {
+    "label": "Route 104 - Berry Tree Flower Shop 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_05": {
+    "label": "Route 103 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_06": {
+    "label": "Route 103 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_07": {
+    "label": "Route 103 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_08": {
+    "label": "Route 104 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_09": {
+    "label": "Route 104 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_10": {
+    "label": "Route 104 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_11": {
+    "label": "Route 104 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_12": {
+    "label": "Route 104 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_13": {
+    "label": "Route 104 - Berry Tree South 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_14": {
+    "label": "Route 123 - Berry Tree Berry Master 6",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_15": {
+    "label": "Route 123 - Berry Tree Berry Master 7",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_16": {
+    "label": "Route 110 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_17": {
+    "label": "Route 110 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_18": {
+    "label": "Route 110 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_19": {
+    "label": "Route 111 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_20": {
+    "label": "Route 111 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_21": {
+    "label": "Route 112 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_22": {
+    "label": "Route 112 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_23": {
+    "label": "Route 112 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_24": {
+    "label": "Route 112 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_25": {
+    "label": "Route 116 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_26": {
+    "label": "Route 116 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_27": {
+    "label": "Route 117 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_28": {
+    "label": "Route 117 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_29": {
+    "label": "Route 117 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_30": {
+    "label": "Route 123 - Berry Tree Berry Master 8",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_31": {
+    "label": "Route 118 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_32": {
+    "label": "Route 118 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_33": {
+    "label": "Route 118 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_34": {
+    "label": "Route 119 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_35": {
+    "label": "Route 119 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_36": {
+    "label": "Route 119 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_37": {
+    "label": "Route 120 - Berry Tree in Side Area 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_38": {
+    "label": "Route 120 - Berry Tree in Side Area 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_39": {
+    "label": "Route 120 - Berry Tree in Side Area 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_40": {
+    "label": "Route 120 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_41": {
+    "label": "Route 120 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_42": {
+    "label": "Route 120 - Berry Tree South 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_43": {
+    "label": "Route 120 - Berry Tree Pond 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_44": {
+    "label": "Route 120 - Berry Tree Pond 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_45": {
+    "label": "Route 120 - Berry Tree Pond 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_46": {
+    "label": "Route 120 - Berry Tree Pond 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_47": {
+    "label": "Route 121 - Berry Tree West 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_48": {
+    "label": "Route 121 - Berry Tree West 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_49": {
+    "label": "Route 121 - Berry Tree West 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_50": {
+    "label": "Route 121 - Berry Tree West 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_51": {
+    "label": "Route 121 - Berry Tree East 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_52": {
+    "label": "Route 121 - Berry Tree East 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_53": {
+    "label": "Route 121 - Berry Tree East 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_54": {
+    "label": "Route 121 - Berry Tree East 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_55": {
+    "label": "Route 115 - Berry Tree Behind Smashable Rock 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_56": {
+    "label": "Route 115 - Berry Tree Behind Smashable Rock 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_58": {
+    "label": "Route 123 - Berry Tree Berry Master 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_59": {
+    "label": "Route 123 - Berry Tree Berry Master 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_60": {
+    "label": "Route 123 - Berry Tree Berry Master 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_61": {
+    "label": "Route 123 - Berry Tree Berry Master 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_62": {
+    "label": "Route 123 - Berry Tree East 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_63": {
+    "label": "Route 123 - Berry Tree East 5",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_64": {
+    "label": "Route 123 - Berry Tree East 6",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_65": {
+    "label": "Route 123 - Berry Master Berry Tree 9",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_66": {
+    "label": "Route 116 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_67": {
+    "label": "Route 116 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_68": {
+    "label": "Route 114 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_69": {
+    "label": "Route 115 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_70": {
+    "label": "Route 115 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_71": {
+    "label": "Route 115 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_72": {
+    "label": "Route 123 - Berry Tree Berry Master 10",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_73": {
+    "label": "Route 123 - Berry Tree Berry Master 11",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_74": {
+    "label": "Route 123 - Berry Tree Berry Master 12",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_75": {
+    "label": "Route 104 - Berry Tree Flower Shop 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_76": {
+    "label": "Route 104 - Berry Tree Flower Shop 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_77": {
+    "label": "Route 114 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_78": {
+    "label": "Route 114 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_79": {
+    "label": "Route 123 - Berry Tree Berry Master 5",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_80": {
+    "label": "Route 111 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_81": {
+    "label": "Route 111 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_82": {
+    "label": "Route 130 - Berry Tree on Mirage Island",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_83": {
+    "label": "Route 119 - Berry Tree Above Waterfall 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_84": {
+    "label": "Route 119 - Berry Tree Above Waterfall 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_85": {
+    "label": "Route 119 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_86": {
+    "label": "Route 119 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_87": {
+    "label": "Route 123 - Berry Tree East 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_88": {
+    "label": "Route 123 - Berry Tree East 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_89": {
+    "label": "Route 123 - Berry Tree East 3",
+    "tags": ["BerryTree"]
   }
 }
