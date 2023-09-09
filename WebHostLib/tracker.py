@@ -1447,7 +1447,7 @@ def _get_named_inventory(inventory: typing.Dict[int, int], custom_items: typing.
     else:
         mapping = lookup_any_item_id_to_name
 
-    return Counter({mapping.get(item_id, None): count for item_id, count in inventory.items()})
+    return collections.Counter({mapping.get(item_id, None): count for item_id, count in inventory.items()})
 
 
 @app.route('/tracker/<suuid:tracker>')
@@ -1471,7 +1471,8 @@ if "Factorio" in games:
 
         data["inventory"] = _get_inventory_data(data)
         data["named_inventory"] = {team_id : {
-            player_id: _get_named_inventory(inventory) for player_id, inventory in team_inventory.items()
+            player_id: _get_named_inventory(inventory, data["custom_items"])
+            for player_id, inventory in team_inventory.items()
         } for team_id, team_inventory in data["inventory"].items()}
         data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
 
