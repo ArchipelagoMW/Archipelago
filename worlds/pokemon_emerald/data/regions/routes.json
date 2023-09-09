@@ -1569,12 +1569,12 @@
       "HIDDEN_ITEM_ROUTE_123_SUPER_REPEL",
       "HIDDEN_ITEM_ROUTE_123_HYPER_POTION",
       "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN",
+      "BERRY_TREE_57",
       "BERRY_TREE_62",
       "BERRY_TREE_63",
       "BERRY_TREE_64",
       "BERRY_TREE_87",
-      "BERRY_TREE_88",
-      "BERRY_TREE_89"
+      "BERRY_TREE_88"
     ],
     "events": [],
     "exits": [

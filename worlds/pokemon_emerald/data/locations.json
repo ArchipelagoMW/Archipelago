@@ -1727,6 +1727,10 @@
     "label": "Route 115 - Berry Tree Behind Smashable Rock 2",
     "tags": ["BerryTree"]
   },
+  "BERRY_TREE_57": {
+    "label": "Route 123 - Berry Tree East 3",
+    "tags": ["BerryTree"]
+  },
   "BERRY_TREE_58": {
     "label": "Route 123 - Berry Tree Berry Master 1",
     "tags": ["BerryTree"]
@@ -1849,10 +1853,6 @@
   },
   "BERRY_TREE_88": {
     "label": "Route 123 - Berry Tree East 2",
-    "tags": ["BerryTree"]
-  },
-  "BERRY_TREE_89": {
-    "label": "Route 123 - Berry Tree East 3",
     "tags": ["BerryTree"]
   }
 }

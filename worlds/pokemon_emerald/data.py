@@ -15,7 +15,6 @@ from BaseClasses import ItemClassification
 
 
 BASE_OFFSET = 3860000
-BERRY_TREE_OFFSET = 10000
 
 
 class Warp:
@@ -346,7 +345,7 @@ def _init() -> None:
                 region_name,
                 location_json["default_item"],
                 location_json["rom_address"],
-                location_json["flag"] + BERRY_TREE_OFFSET if location_name.startswith("BERRY_TREE") else location_json["flag"],
+                location_json["flag"],
                 frozenset(location_attributes_json[location_name]["tags"])
             )
             new_region.locations.append(location_name)
