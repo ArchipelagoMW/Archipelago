@@ -284,7 +284,10 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
 
             if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mnt_lasers > chal_lasers and doors)):
-                adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+                if doors:
+                    adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+                else:
+                    adjustment_linesets_in_order.append(get_bottom_floor_discard_nondoors_exclusion_list())
 
         # Exclude Discards / Vaults
 
