@@ -16,7 +16,9 @@ highly recommended to use utility mods and features to speed up gameplay, such a
 - Ore Excavator
 - Magic Storage
 - Alchemist NPC Lite
+    - (May be used to break progression)
 - Reduced Grinding
+- Upgraded Research
 
 ## Configuring your YAML File
 
