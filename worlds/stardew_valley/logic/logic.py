@@ -370,7 +370,6 @@ class StardewLogic:
             Machine.lightning_rod: self.skill.has_level(Skill.foraging, 6) & self.has(MetalBar.iron) & self.has(MetalBar.quartz) & self.has(Loot.bat_wing),
             Machine.loom: self.skill.has_farming_level(7) & self.has(Material.wood) & self.has(Material.fiber) & self.has(ArtisanGood.pine_tar),
             Machine.mayonnaise_machine: self.skill.has_farming_level(2) & self.has(Material.wood) & self.has(Material.stone) & self.has("Earth Crystal") & self.has(MetalBar.copper),
-            Machine.oil_maker: self.skill.has_farming_level(8) & self.has(Loot.slime) & self.has(Material.hardwood) & self.has(MetalBar.gold),
             Machine.ostrich_incubator: self.received("Ostrich Incubator Recipe") & self.has(Fossil.bone_fragment) & self.has(Material.hardwood) & self.has(Material.cinder_shard),
             Machine.preserves_jar: self.skill.has_farming_level(4) & self.has(Material.wood) & self.has(Material.stone) & self.has(Material.coal),
             Machine.recycling_machine: self.skill.has_level(Skill.fishing, 4) & self.has(Material.wood) & self.has(Material.stone) & self.has(MetalBar.iron),

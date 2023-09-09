@@ -74,6 +74,7 @@ class MineLogic:
         if self.skill_option == options.SkillProgression.option_progressive:
             combat_tier = min(10, max(0, tier * 2))
             rules.append(self.skill.has_level(Skill.combat, combat_tier))
+            rules.append(self.skill.has_level(Skill.mining, combat_tier))
         return And(rules)
 
     def can_progress_easily_in_the_mines_from_floor(self, floor: int) -> StardewRule:

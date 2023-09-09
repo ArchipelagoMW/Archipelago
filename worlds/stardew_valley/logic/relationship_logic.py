@@ -44,6 +44,12 @@ class RelationshipLogic:
         self.buildings = buildings
         self.mods_option = mods_option
 
+    def can_date(self, npc: str) -> StardewRule:
+        return self.has_hearts(npc, 8) & self.has(Gift.bouquet)
+
+    def can_marry(self, npc: str) -> StardewRule:
+        return self.has_hearts(npc, 10) & self.has(Gift.mermaid_pendant)
+
     def can_get_married(self) -> StardewRule:
         return self.has_hearts(Generic.bachelor, 10) & self.has(Gift.mermaid_pendant)
 
@@ -145,6 +151,11 @@ class RelationshipLogic:
             rule_if_birthday = self.season.has(villager.birthday) & self.time.has_lived_months(hearts // 2)
             rule_if_not_birthday = self.time.has_lived_months(hearts)
             earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
+            if villager.bachelor:
+                if hearts >= 8:
+                    earn_rule = earn_rule & self.can_date(npc)
+                if hearts >= 10:
+                    earn_rule = earn_rule & self.can_marry(npc)
         else:
             earn_rule = self.time.has_lived_months(min(hearts // 2, 8))
 
