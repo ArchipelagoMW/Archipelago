@@ -6,6 +6,7 @@ from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
 from .data.monster_data import all_monsters_by_category, all_monsters_by_name
+from .data.recipe_data import all_cooking_recipes_by_name
 from .logic.logic import StardewLogic
 from .logic.tool_logic import tool_upgrade_prices
 from .stardew_rule import And
@@ -26,6 +27,7 @@ from .strings.metal_names import MetalBar
 from .strings.season_names import Season
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
+from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
 
@@ -60,6 +62,8 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_festival_rules(all_location_names, logic, multi_world, player)
     set_monstersanity_rules(all_location_names, logic, multi_world, player, world_options)
     set_shipsanity_rules(all_location_names, logic, multi_world, player, world_options)
+    set_cooksanity_rules(all_location_names, logic, multi_world, player, world_options)
+    set_chefsanity_rules(all_location_names, logic, multi_world, player, world_options)
     set_isolated_locations_rules(logic, multi_world, player)
     set_traveling_merchant_rules(logic, multi_world, player)
     set_arcade_machine_rules(logic, multi_world, player, world_options)
@@ -252,7 +256,9 @@ def set_entrance_rules(logic: StardewLogic, multi_world, player, world_options: 
     set_bedroom_entrance_rules(logic, multi_world, player, world_options)
     set_festival_entrance_rules(logic, multiworld, player)
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.farmhouse_cooking, player), logic.cooking.can_cook_in_kitchen().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.shipping, player), logic.shipping.can_use_shipping_bin().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.watch_queen_of_sauce, player), logic.action.can_watch(Channel.queen_of_sauce).simplify())
 
 
 def set_farm_buildings_entrance_rules(logic, multi_world, player):
@@ -696,7 +702,7 @@ def set_monstersanity_category_rules(all_location_names: List[str], logic: Stard
 
 def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options):
     shipsanity_option = world_options[options.Shipsanity]
-    if shipsanity_option == options.Monstersanity.option_none:
+    if shipsanity_option == options.Shipsanity.option_none:
         return
 
     shipsanity_prefix = "Shipsanity: "
@@ -704,8 +710,37 @@ def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
         if location.name not in all_location_names:
             continue
         item_to_ship = location.name[len(shipsanity_prefix):]
-        MultiWorldRules.set_rule(multi_world.get_location(location.name, player),
-                                 logic.shipping.can_ship(item_to_ship))
+        MultiWorldRules.set_rule(multi_world.get_location(location.name, player), logic.shipping.can_ship(item_to_ship))
+
+
+def set_cooksanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options):
+    cooksanity_option = world_options[options.Cooksanity]
+    if cooksanity_option == options.Cooksanity.option_none:
+        return
+
+    cooksanity_prefix = "Cook "
+    for location in locations.locations_by_tag[LocationTags.COOKSANITY]:
+        if location.name not in all_location_names:
+            continue
+        recipe_name = location.name[len(cooksanity_prefix):]
+        recipe = all_cooking_recipes_by_name[recipe_name]
+        cook_rule = logic.cooking.can_cook(recipe)
+        MultiWorldRules.set_rule(multi_world.get_location(location.name, player), cook_rule)
+
+
+def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options):
+    chefsanity_option = world_options[options.Chefsanity]
+    if chefsanity_option == options.Chefsanity.option_vanilla:
+        return
+
+    chefsanity_prefix = "Learn Recipe "
+    for location in locations.locations_by_tag[LocationTags.CHEFSANITY]:
+        if location.name not in all_location_names:
+            continue
+        recipe_name = location.name[len(chefsanity_prefix):]
+        recipe = all_cooking_recipes_by_name[recipe_name]
+        learn_rule = logic.cooking.can_learn_recipe(recipe.source)
+        MultiWorldRules.set_rule(multi_world.get_location(location.name, player), learn_rule)
 
 
 def set_traveling_merchant_day_rules(logic: StardewLogic, multi_world: MultiWorld, player: int):

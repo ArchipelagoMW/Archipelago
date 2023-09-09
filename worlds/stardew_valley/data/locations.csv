@@ -1702,85 +1702,166 @@ id,region,name,tags,mod_name
 3125,Adventurer's Guild,Monster Eradication: Royal Serpent,"GINGER_ISLAND,REQUIRES_QI_ORDERS,MONSTERSANITY,MONSTERSANITY_MONSTER",
 3126,Adventurer's Guild,Monster Eradication: Magma Sprite,"GINGER_ISLAND,MONSTERSANITY,MONSTERSANITY_MONSTER",
 3127,Adventurer's Guild,Monster Eradication: Magma Sparker,"GINGER_ISLAND,MONSTERSANITY,MONSTERSANITY_MONSTER",
-3201,Kitchen,Cook Algae Soup,"COOKSANITY"
-3202,Kitchen,Cook Artichoke Dip,"COOKSANITY,COOKSANITY_QOS"
-3203,Kitchen,Cook Autumn's Bounty,"COOKSANITY"
-3204,Kitchen,Cook Baked Fish,"COOKSANITY,COOKSANITY_QOS"
-3205,Kitchen,Cook Banana Pudding,"COOKSANITY,GINGER_ISLAND"
-3206,Kitchen,Cook Bean Hotpot,"COOKSANITY"
-3207,Kitchen,Cook Blackberry Cobbler,"COOKSANITY,COOKSANITY_QOS"
-3208,Kitchen,Cook Blueberry Tart,"COOKSANITY"
-3209,Kitchen,Cook Bread,"COOKSANITY,COOKSANITY_QOS"
-3210,Kitchen,Cook Bruschetta,"COOKSANITY,COOKSANITY_QOS"
-3211,Kitchen,Cook Carp Surprise,"COOKSANITY,COOKSANITY_QOS"
-3212,Kitchen,Cook Cheese Cauliflower,"COOKSANITY"
-3213,Kitchen,Cook Chocolate Cake,"COOKSANITY,COOKSANITY_QOS"
-3214,Kitchen,Cook Chowder,"COOKSANITY"
-3215,Kitchen,Cook Coleslaw,"COOKSANITY,COOKSANITY_QOS"
-3216,Kitchen,Cook Complete Breakfast,"COOKSANITY,COOKSANITY_QOS"
-3217,Kitchen,Cook Cookie,"COOKSANITY"
-3218,Kitchen,Cook Crab Cakes,"COOKSANITY,COOKSANITY_QOS"
-3219,Kitchen,Cook Cranberry Candy,"COOKSANITY,COOKSANITY_QOS"
-3220,Kitchen,Cook Cranberry Sauce,"COOKSANITY"
-3221,Kitchen,Cook Crispy Bass,"COOKSANITY"
-3222,Kitchen,Cook Dish O' The Sea,"COOKSANITY"
-3223,Kitchen,Cook Eggplant Parmesan,"COOKSANITY"
-3224,Kitchen,Cook Escargot,"COOKSANITY"
-3225,Kitchen,Cook Farmer's Lunch,"COOKSANITY"
-3226,Kitchen,Cook Fiddlehead Risotto,"COOKSANITY,COOKSANITY_QOS"
-3227,Kitchen,Cook Fish Stew,"COOKSANITY"
-3228,Kitchen,Cook Fish Taco,"COOKSANITY"
-3229,Kitchen,Cook Fried Calamari,"COOKSANITY"
-3230,Kitchen,Cook Fried Eel,"COOKSANITY"
-3231,Kitchen,Cook Fried Egg,"COOKSANITY"
-3232,Kitchen,Cook Fried Mushroom,"COOKSANITY"
-3233,Kitchen,Cook Fruit Salad,"COOKSANITY,COOKSANITY_QOS"
-3234,Kitchen,Cook Ginger Ale,"COOKSANITY,GINGER_ISLAND"
-3235,Kitchen,Cook Glazed Yams,"COOKSANITY,COOKSANITY_QOS"
-3236,Kitchen,Cook Hashbrowns,"COOKSANITY,COOKSANITY_QOS"
-3237,Kitchen,Cook Ice Cream,"COOKSANITY"
-3238,Kitchen,Cook Lobster Bisque,"COOKSANITY,COOKSANITY_QOS"
-3239,Kitchen,Cook Lucky Lunch,"COOKSANITY,COOKSANITY_QOS"
-3240,Kitchen,Cook Maki Roll,"COOKSANITY,COOKSANITY_QOS"
-3241,Kitchen,Cook Mango Sticky Rice,"COOKSANITY,GINGER_ISLAND"
-3242,Kitchen,Cook Maple Bar,"COOKSANITY,COOKSANITY_QOS"
-3243,Kitchen,Cook Miner's Treat,"COOKSANITY"
-3244,Kitchen,Cook Omelet,"COOKSANITY,COOKSANITY_QOS"
-3245,Kitchen,Cook Pale Broth,"COOKSANITY"
-3246,Kitchen,Cook Pancakes,"COOKSANITY,COOKSANITY_QOS"
-3247,Kitchen,Cook Parsnip Soup,"COOKSANITY"
-3248,Kitchen,Cook Pepper Poppers,"COOKSANITY"
-3249,Kitchen,Cook Pink Cake,"COOKSANITY,COOKSANITY_QOS"
-3250,Kitchen,Cook Pizza,"COOKSANITY,COOKSANITY_QOS"
-3251,Kitchen,Cook Plum Pudding,"COOKSANITY,COOKSANITY_QOS"
-3252,Kitchen,Cook Poi,"COOKSANITY,GINGER_ISLAND"
-3253,Kitchen,Cook Poppyseed Muffin,"COOKSANITY,COOKSANITY_QOS"
-3254,Kitchen,Cook Pumpkin Pie,"COOKSANITY,COOKSANITY_QOS"
-3255,Kitchen,Cook Pumpkin Soup,"COOKSANITY"
-3256,Kitchen,Cook Radish Salad,"COOKSANITY,COOKSANITY_QOS"
-3257,Kitchen,Cook Red Plate,"COOKSANITY"
-3258,Kitchen,Cook Rhubarb Pie,"COOKSANITY"
-3259,Kitchen,Cook Rice Pudding,"COOKSANITY"
-3260,Kitchen,Cook Roasted Hazelnuts,"COOKSANITY,COOKSANITY_QOS"
-3261,Kitchen,Cook Roots Platter,"COOKSANITY"
-3262,Kitchen,Cook Salad,"COOKSANITY"
-3263,Kitchen,Cook Salmon Dinner,"COOKSANITY"
-3264,Kitchen,Cook Sashimi,"COOKSANITY"
-3265,Kitchen,Cook Seafoam Pudding,"COOKSANITY"
-3266,Kitchen,Cook Shrimp Cocktail,"COOKSANITY,COOKSANITY_QOS"
-3267,Kitchen,Cook Spaghetti,"COOKSANITY"
-3268,Kitchen,Cook Spicy Eel,"COOKSANITY"
-3269,Kitchen,Cook Squid Ink Ravioli,"COOKSANITY"
-3270,Kitchen,Cook Stir Fry,"COOKSANITY,COOKSANITY_QOS"
-3271,Kitchen,Cook Stuffing,"COOKSANITY"
-3272,Kitchen,Cook Super Meal,"COOKSANITY"
-3273,Kitchen,Cook Survival Burger,"COOKSANITY"
-3274,Kitchen,Cook Tom Kha Soup,"COOKSANITY"
-3275,Kitchen,Cook Tortilla,"COOKSANITY,COOKSANITY_QOS"
-3276,Kitchen,Cook Triple Shot Espresso,"COOKSANITY"
-3277,Kitchen,Cook Tropical Curry,"COOKSANITY,GINGER_ISLAND"
-3278,Kitchen,Cook Trout Soup,"COOKSANITY,COOKSANITY_QOS"
-3279,Kitchen,Cook Vegetable Medley,"COOKSANITY"
+3201,Kitchen,Cook Algae Soup,"COOKSANITY",
+3202,Kitchen,Cook Artichoke Dip,"COOKSANITY,COOKSANITY_QOS",
+3203,Kitchen,Cook Autumn's Bounty,"COOKSANITY",
+3204,Kitchen,Cook Baked Fish,"COOKSANITY,COOKSANITY_QOS",
+3205,Kitchen,Cook Banana Pudding,"COOKSANITY,GINGER_ISLAND",
+3206,Kitchen,Cook Bean Hotpot,"COOKSANITY",
+3207,Kitchen,Cook Blackberry Cobbler,"COOKSANITY,COOKSANITY_QOS",
+3208,Kitchen,Cook Blueberry Tart,"COOKSANITY",
+3209,Kitchen,Cook Bread,"COOKSANITY,COOKSANITY_QOS",
+3210,Kitchen,Cook Bruschetta,"COOKSANITY,COOKSANITY_QOS",
+3211,Kitchen,Cook Carp Surprise,"COOKSANITY,COOKSANITY_QOS",
+3212,Kitchen,Cook Cheese Cauliflower,"COOKSANITY",
+3213,Kitchen,Cook Chocolate Cake,"COOKSANITY,COOKSANITY_QOS",
+3214,Kitchen,Cook Chowder,"COOKSANITY",
+3215,Kitchen,Cook Coleslaw,"COOKSANITY,COOKSANITY_QOS",
+3216,Kitchen,Cook Complete Breakfast,"COOKSANITY,COOKSANITY_QOS",
+3217,Kitchen,Cook Cookie,"COOKSANITY",
+3218,Kitchen,Cook Crab Cakes,"COOKSANITY,COOKSANITY_QOS",
+3219,Kitchen,Cook Cranberry Candy,"COOKSANITY,COOKSANITY_QOS",
+3220,Kitchen,Cook Cranberry Sauce,"COOKSANITY",
+3221,Kitchen,Cook Crispy Bass,"COOKSANITY",
+3222,Kitchen,Cook Dish O' The Sea,"COOKSANITY",
+3223,Kitchen,Cook Eggplant Parmesan,"COOKSANITY",
+3224,Kitchen,Cook Escargot,"COOKSANITY",
+3225,Kitchen,Cook Farmer's Lunch,"COOKSANITY",
+3226,Kitchen,Cook Fiddlehead Risotto,"COOKSANITY,COOKSANITY_QOS",
+3227,Kitchen,Cook Fish Stew,"COOKSANITY",
+3228,Kitchen,Cook Fish Taco,"COOKSANITY",
+3229,Kitchen,Cook Fried Calamari,"COOKSANITY",
+3230,Kitchen,Cook Fried Eel,"COOKSANITY",
+3231,Kitchen,Cook Fried Egg,"COOKSANITY",
+3232,Kitchen,Cook Fried Mushroom,"COOKSANITY",
+3233,Kitchen,Cook Fruit Salad,"COOKSANITY,COOKSANITY_QOS",
+3234,Kitchen,Cook Ginger Ale,"COOKSANITY,GINGER_ISLAND",
+3235,Kitchen,Cook Glazed Yams,"COOKSANITY,COOKSANITY_QOS",
+3236,Kitchen,Cook Hashbrowns,"COOKSANITY,COOKSANITY_QOS",
+3237,Kitchen,Cook Ice Cream,"COOKSANITY",
+3238,Kitchen,Cook Lobster Bisque,"COOKSANITY,COOKSANITY_QOS",
+3239,Kitchen,Cook Lucky Lunch,"COOKSANITY,COOKSANITY_QOS",
+3240,Kitchen,Cook Maki Roll,"COOKSANITY,COOKSANITY_QOS",
+3241,Kitchen,Cook Mango Sticky Rice,"COOKSANITY,GINGER_ISLAND",
+3242,Kitchen,Cook Maple Bar,"COOKSANITY,COOKSANITY_QOS",
+3243,Kitchen,Cook Miner's Treat,"COOKSANITY",
+3244,Kitchen,Cook Omelet,"COOKSANITY,COOKSANITY_QOS",
+3245,Kitchen,Cook Pale Broth,"COOKSANITY",
+3246,Kitchen,Cook Pancakes,"COOKSANITY,COOKSANITY_QOS",
+3247,Kitchen,Cook Parsnip Soup,"COOKSANITY",
+3248,Kitchen,Cook Pepper Poppers,"COOKSANITY",
+3249,Kitchen,Cook Pink Cake,"COOKSANITY,COOKSANITY_QOS",
+3250,Kitchen,Cook Pizza,"COOKSANITY,COOKSANITY_QOS",
+3251,Kitchen,Cook Plum Pudding,"COOKSANITY,COOKSANITY_QOS",
+3252,Kitchen,Cook Poi,"COOKSANITY,GINGER_ISLAND",
+3253,Kitchen,Cook Poppyseed Muffin,"COOKSANITY,COOKSANITY_QOS",
+3254,Kitchen,Cook Pumpkin Pie,"COOKSANITY,COOKSANITY_QOS",
+3255,Kitchen,Cook Pumpkin Soup,"COOKSANITY",
+3256,Kitchen,Cook Radish Salad,"COOKSANITY,COOKSANITY_QOS",
+3257,Kitchen,Cook Red Plate,"COOKSANITY",
+3258,Kitchen,Cook Rhubarb Pie,"COOKSANITY",
+3259,Kitchen,Cook Rice Pudding,"COOKSANITY",
+3260,Kitchen,Cook Roasted Hazelnuts,"COOKSANITY,COOKSANITY_QOS",
+3261,Kitchen,Cook Roots Platter,"COOKSANITY",
+3262,Kitchen,Cook Salad,"COOKSANITY",
+3263,Kitchen,Cook Salmon Dinner,"COOKSANITY",
+3264,Kitchen,Cook Sashimi,"COOKSANITY",
+3265,Kitchen,Cook Seafoam Pudding,"COOKSANITY",
+3266,Kitchen,Cook Shrimp Cocktail,"COOKSANITY,COOKSANITY_QOS",
+3267,Kitchen,Cook Spaghetti,"COOKSANITY",
+3268,Kitchen,Cook Spicy Eel,"COOKSANITY",
+3269,Kitchen,Cook Squid Ink Ravioli,"COOKSANITY",
+3270,Kitchen,Cook Stir Fry,"COOKSANITY,COOKSANITY_QOS",
+3271,Kitchen,Cook Strange Bun,"COOKSANITY",
+3272,Kitchen,Cook Stuffing,"COOKSANITY",
+3273,Kitchen,Cook Super Meal,"COOKSANITY",
+3274,Kitchen,Cook Survival Burger,"COOKSANITY",
+3275,Kitchen,Cook Tom Kha Soup,"COOKSANITY",
+3276,Kitchen,Cook Tortilla,"COOKSANITY,COOKSANITY_QOS",
+3277,Kitchen,Cook Triple Shot Espresso,"COOKSANITY",
+3278,Kitchen,Cook Tropical Curry,"COOKSANITY,GINGER_ISLAND",
+3279,Kitchen,Cook Trout Soup,"COOKSANITY,COOKSANITY_QOS",
+3280,Kitchen,Cook Vegetable Medley,"COOKSANITY",
+3301,Farm,Learn Recipe Algae Soup,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3302,The Queen of Sauce,Learn Recipe Artichoke Dip,"CHEFSANITY,CHEFSANITY_QOS",
+3303,Farm,Learn Recipe Autumn's Bounty,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3304,The Queen of Sauce,Learn Recipe Baked Fish,"CHEFSANITY,CHEFSANITY_QOS",
+3305,Farm,Learn Recipe Banana Pudding,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+3306,Farm,Learn Recipe Bean Hotpot,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3307,The Queen of Sauce,Learn Recipe Blackberry Cobbler,"CHEFSANITY,CHEFSANITY_QOS",
+3308,Farm,Learn Recipe Blueberry Tart,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3309,The Queen of Sauce,Learn Recipe Bread,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_FRIENDSHIP,CHEFSANITY_PURCHASE",
+3310,The Queen of Sauce,Learn Recipe Bruschetta,"CHEFSANITY,CHEFSANITY_QOS",
+3311,The Queen of Sauce,Learn Recipe Carp Surprise,"CHEFSANITY,CHEFSANITY_QOS",
+3312,Farm,Learn Recipe Cheese Cauliflower,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3313,The Queen of Sauce,Learn Recipe Chocolate Cake,"CHEFSANITY,CHEFSANITY_QOS",
+3314,Farm,Learn Recipe Chowder,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3315,The Queen of Sauce,Learn Recipe Coleslaw,"CHEFSANITY,CHEFSANITY_QOS",
+3316,The Queen of Sauce,Learn Recipe Complete Breakfast,"CHEFSANITY,CHEFSANITY_QOS",
+3317,Farm,Learn Recipe Cookie,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3318,The Queen of Sauce,Learn Recipe Crab Cakes,"CHEFSANITY,CHEFSANITY_QOS",
+3319,The Queen of Sauce,Learn Recipe Cranberry Candy,"CHEFSANITY,CHEFSANITY_QOS",
+3320,Farm,Learn Recipe Cranberry Sauce,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3321,Farm,Learn Recipe Crispy Bass,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3322,Farm,Learn Recipe Dish O' The Sea,"CHEFSANITY,CHEFSANITY_SKILL",
+3323,Farm,Learn Recipe Eggplant Parmesan,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3324,Farm,Learn Recipe Escargot,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3325,Farm,Learn Recipe Farmer's Lunch,"CHEFSANITY,CHEFSANITY_SKILL",
+3326,The Queen of Sauce,Learn Recipe Fiddlehead Risotto,"CHEFSANITY,CHEFSANITY_QOS",
+3327,Farm,Learn Recipe Fish Stew,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3328,Farm,Learn Recipe Fish Taco,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3329,Farm,Learn Recipe Fried Calamari,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3330,Farm,Learn Recipe Fried Eel,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3331,Farm,Learn Recipe Fried Egg,"CHEFSANITY_STARTER",
+3332,Farm,Learn Recipe Fried Mushroom,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3333,The Queen of Sauce,Learn Recipe Fruit Salad,"CHEFSANITY,CHEFSANITY_QOS",
+3334,Farm,Learn Recipe Ginger Ale,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+3335,The Queen of Sauce,Learn Recipe Glazed Yams,"CHEFSANITY,CHEFSANITY_QOS",
+3336,The Queen of Sauce,Learn Recipe Hashbrowns,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3337,Farm,Learn Recipe Ice Cream,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3338,The Queen of Sauce,Learn Recipe Lobster Bisque,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_FRIENDSHIP",
+3339,The Queen of Sauce,Learn Recipe Lucky Lunch,"CHEFSANITY,CHEFSANITY_QOS",
+3340,The Queen of Sauce,Learn Recipe Maki Roll,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3341,Farm,Learn Recipe Mango Sticky Rice,"CHEFSANITY,CHEFSANITY_FRIENDSHIP,GINGER_ISLAND",
+3342,The Queen of Sauce,Learn Recipe Maple Bar,"CHEFSANITY,CHEFSANITY_QOS",
+3343,Farm,Learn Recipe Miner's Treat,"CHEFSANITY,CHEFSANITY_SKILL",
+3344,The Queen of Sauce,Learn Recipe Omelet,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3345,Farm,Learn Recipe Pale Broth,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3346,The Queen of Sauce,Learn Recipe Pancakes,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3347,Farm,Learn Recipe Parsnip Soup,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3348,Farm,Learn Recipe Pepper Poppers,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3349,The Queen of Sauce,Learn Recipe Pink Cake,"CHEFSANITY,CHEFSANITY_QOS",
+3350,The Queen of Sauce,Learn Recipe Pizza,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3351,The Queen of Sauce,Learn Recipe Plum Pudding,"CHEFSANITY,CHEFSANITY_QOS",
+3352,Farm,Learn Recipe Poi,"CHEFSANITY,CHEFSANITY_FRIENDSHIP,GINGER_ISLAND",
+3353,The Queen of Sauce,Learn Recipe Poppyseed Muffin,"CHEFSANITY,CHEFSANITY_QOS",
+3354,The Queen of Sauce,Learn Recipe Pumpkin Pie,"CHEFSANITY,CHEFSANITY_QOS",
+3355,Farm,Learn Recipe Pumpkin Soup,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3356,The Queen of Sauce,Learn Recipe Radish Salad,"CHEFSANITY,CHEFSANITY_QOS",
+3357,Farm,Learn Recipe Red Plate,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3358,Farm,Learn Recipe Rhubarb Pie,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3359,Farm,Learn Recipe Rice Pudding,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3360,The Queen of Sauce,Learn Recipe Roasted Hazelnuts,"CHEFSANITY,CHEFSANITY_QOS",
+3361,Farm,Learn Recipe Roots Platter,"CHEFSANITY,CHEFSANITY_SKILL",
+3362,Farm,Learn Recipe Salad,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3363,Farm,Learn Recipe Salmon Dinner,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3364,Farm,Learn Recipe Sashimi,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3365,Farm,Learn Recipe Seafoam Pudding,"CHEFSANITY,CHEFSANITY_SKILL",
+3366,The Queen of Sauce,Learn Recipe Shrimp Cocktail,"CHEFSANITY,CHEFSANITY_QOS",
+3367,Farm,Learn Recipe Spaghetti,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3368,Farm,Learn Recipe Spicy Eel,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3369,Farm,Learn Recipe Squid Ink Ravioli,"CHEFSANITY,CHEFSANITY_SKILL",
+3370,The Queen of Sauce,Learn Recipe Stir Fry,"CHEFSANITY,CHEFSANITY_QOS",
+3371,Farm,Learn Recipe Strange Bun,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3372,Farm,Learn Recipe Stuffing,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3373,Farm,Learn Recipe Super Meal,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3374,Farm,Learn Recipe Survival Burger,"CHEFSANITY,CHEFSANITY_SKILL",
+3375,Farm,Learn Recipe Tom Kha Soup,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3376,The Queen of Sauce,Learn Recipe Tortilla,"CHEFSANITY,CHEFSANITY_QOS,CHEFSANITY_PURCHASE",
+3377,Farm,Learn Recipe Triple Shot Espresso,"CHEFSANITY,CHEFSANITY_PURCHASE",
+3378,Farm,Learn Recipe Tropical Curry,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
+3379,The Queen of Sauce,Learn Recipe Trout Soup,"CHEFSANITY,CHEFSANITY_QOS",
+3380,Farm,Learn Recipe Vegetable Medley,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill

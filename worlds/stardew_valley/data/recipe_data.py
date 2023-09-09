@@ -153,6 +153,7 @@ spicy_eel = friendship_recipe(Meal.spicy_eel, NPC.george, 7, {Fish.eel: 1, Fruit
 squid_ink_ravioli = skill_recipe(Meal.squid_ink_ravioli, Skill.combat, 9, {AnimalProduct.squid_ink: 1, Ingredient.wheat_flour: 1, Vegetable.tomato: 1})
 stir_fry_ingredients = {Forageable.cave_carrot: 1, Forageable.common_mushroom: 1, Vegetable.kale: 1, Ingredient.sugar: 1}
 stir_fry_qos = queen_of_sauce_recipe(Meal.stir_fry, 1, Season.spring, 7, stir_fry_ingredients)
+strange_bun = friendship_recipe(Meal.strange_bun, NPC.shane, 7, {Ingredient.wheat_flour: 1, Fish.periwinkle: 1, ArtisanGood.void_mayonnaise: 1})
 stuffing = friendship_recipe(Meal.stuffing, NPC.pam, 7, {Meal.bread: 1, Fruit.cranberries: 1, Forageable.hazelnut: 1})
 super_meal = friendship_recipe(Meal.super_meal, NPC.kent, 7, {Vegetable.bok_choy: 1, Fruit.cranberries: 1, Vegetable.artichoke: 1})
 survival_burger = skill_recipe(Meal.survival_burger, Skill.foraging, 2, {Meal.bread: 1, Forageable.cave_carrot: 1, Vegetable.eggplant: 1})

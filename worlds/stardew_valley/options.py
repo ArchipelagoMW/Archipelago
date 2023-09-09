@@ -426,6 +426,27 @@ class Cooksanity(Choice):
     option_all = 2
 
 
+class Chefsanity(Choice):
+    """Locations for leaning cooking recipes?
+    Vanilla: All cooking recipes are learned normally
+    Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
+    Purchases: Every purchasable recipe is a check
+    Friendship: Recipes obtained from friendship are checks
+    Skills: Recipes obtained from skills are checks
+    All: Learning every cooking recipe is a check
+    """
+    internal_name = "chefsanity"
+    display_name = "Chefsanity"
+    default = 0
+    option_vanilla = 0b000  # 0
+    option_queen_of_sauce = 0b0001  # 1
+    option_purchases = 0b0010  # 2
+    option_qos_and_purchases = 0b0011  # 3
+    option_friendship = 0b0100  # 4
+    option_skills = 0b1000  # 8
+    option_all = 0b1111  # 15
+
+
 class Friendsanity(Choice):
     """Shuffle Friendships?
     None: Friendship hearts are earned normally
@@ -640,6 +661,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     Monstersanity,
     Shipsanity,
     Cooksanity,
+    Chefsanity,
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
     movement_buff_number: NumberOfMovementBuffs

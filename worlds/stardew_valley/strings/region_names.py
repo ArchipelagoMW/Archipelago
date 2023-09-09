@@ -150,6 +150,7 @@ class Region:
     dangerous_mines_100 = "Dangerous Mines - Floor 100"
     kitchen = "Kitchen"
     shipping = "Shipping"
+    queen_of_sauce = "The Queen of Sauce"
     blacksmith_copper = "Blacksmith Copper Upgrades"
     blacksmith_iron = "Blacksmith Iron Upgrades"
     blacksmith_gold = "Blacksmith Gold Upgrades"

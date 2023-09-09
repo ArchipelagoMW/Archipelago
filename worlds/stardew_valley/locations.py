@@ -74,6 +74,12 @@ class LocationTags(enum.Enum):
     SHIPSANITY_FULL_SHIPMENT = enum.auto()
     COOKSANITY = enum.auto()
     COOKSANITY_QOS = enum.auto()
+    CHEFSANITY = enum.auto()
+    CHEFSANITY_QOS = enum.auto()
+    CHEFSANITY_PURCHASE = enum.auto()
+    CHEFSANITY_FRIENDSHIP = enum.auto()
+    CHEFSANITY_SKILL = enum.auto()
+    CHEFSANITY_STARTER = enum.auto()
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
@@ -361,6 +367,26 @@ def extend_cooksanity_locations(randomized_locations: List[LocationData], world_
     randomized_locations.extend(filtered_cooksanity_locations)
 
 
+def extend_chefsanity_locations(randomized_locations: List[LocationData], world_options):
+    chefsanity = world_options[options.Chefsanity]
+    if chefsanity == options.Chefsanity.option_vanilla:
+        return
+
+    chefsanity_locations_by_name = {}  # Dictionary to not make duplicates
+
+    if chefsanity & options.Chefsanity.option_queen_of_sauce:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_QOS]})
+    if chefsanity & options.Chefsanity.option_purchases:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_PURCHASE]})
+    if chefsanity & options.Chefsanity.option_friendship:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_FRIENDSHIP]})
+    if chefsanity & options.Chefsanity.option_skills:
+        chefsanity_locations_by_name.update({location.name: location for location in locations_by_tag[LocationTags.CHEFSANITY_SKILL]})
+
+    filtered_chefsanity_locations = filter_disabled_locations(world_options, list(chefsanity_locations_by_name.values()))
+    randomized_locations.extend(filtered_chefsanity_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      random: Random):
@@ -403,6 +429,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_monstersanity_locations(randomized_locations, world_options)
     extend_shipsanity_locations(randomized_locations, world_options)
     extend_cooksanity_locations(randomized_locations, world_options)
+    extend_chefsanity_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

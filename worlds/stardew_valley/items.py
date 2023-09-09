@@ -67,6 +67,12 @@ class Group(enum.Enum):
     WALNUT_PURCHASE = enum.auto()
     TV_CHANNEL = enum.auto()
     CRAFTING_RECIPE = enum.auto()
+    CHEFSANITY = enum.auto()
+    CHEFSANITY_STARTER = enum.auto()
+    CHEFSANITY_QOS = enum.auto()
+    CHEFSANITY_PURCHASE = enum.auto()
+    CHEFSANITY_FRIENDSHIP = enum.auto()
+    CHEFSANITY_SKILL = enum.auto()
     MAGIC_SPELL = enum.auto()
 
 
@@ -199,6 +205,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_special_order_qi_rewards(item_factory, world_options, items)
     create_walnut_purchase_rewards(item_factory, world_options, items)
     create_crafting_recipes(item_factory, world_options, items)
+    create_cooking_recipes(item_factory, world_options, items)
     create_magic_mod_spells(item_factory, world_options, items)
     items.append(item_factory("Golden Egg"))
 
@@ -523,8 +530,28 @@ def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
 def create_crafting_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.Shipsanity] == options.Shipsanity.option_everything:
         crafting_recipes = [reward for reward in items_by_group[Group.CRAFTING_RECIPE]]
-        crafting_recipes = remove_excluded_packs(crafting_recipes, world_options)
+        crafting_recipes = remove_excluded_items(crafting_recipes, world_options)
         items.extend([item_factory(item) for item in crafting_recipes])
+
+
+def create_cooking_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    chefsanity = world_options[options.Chefsanity]
+    if chefsanity == options.Chefsanity.option_vanilla:
+        return
+
+    chefsanity_recipes_by_name = {recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_STARTER]}  # Dictionary to not make duplicates
+
+    if chefsanity & options.Chefsanity.option_queen_of_sauce:
+        chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_QOS]})
+    if chefsanity & options.Chefsanity.option_purchases:
+        chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_PURCHASE]})
+    if chefsanity & options.Chefsanity.option_friendship:
+        chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_FRIENDSHIP]})
+    if chefsanity & options.Chefsanity.option_skills:
+        chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_SKILL]})
+
+    filtered_chefsanity_recipes = remove_excluded_items(list(chefsanity_recipes_by_name.values()), world_options)
+    items.extend([item_factory(item) for item in filtered_chefsanity_recipes])
 
 
 def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
@@ -571,7 +598,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
 
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     all_filler_packs = get_all_filler_items(include_traps, exclude_ginger_island)
-    priority_filler_items = remove_excluded_packs(priority_filler_items, exclude_ginger_island)
+    priority_filler_items = remove_excluded_items(priority_filler_items, exclude_ginger_island)
 
     number_priority_items = len(priority_filler_items)
     required_resource_pack = number_locations - len(items_already_added)
@@ -609,7 +636,7 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     return items
 
 
-def remove_excluded_packs(packs, exclude_ginger_island: bool):
+def remove_excluded_items(packs, exclude_ginger_island: bool):
     included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
     if exclude_ginger_island:
         included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]

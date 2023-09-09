@@ -186,6 +186,7 @@ class Entrance:
     farmhouse_cooking = "Farmhouse Cooking"
     island_cooking = "Island Cooking"
     shipping = "Use Shipping Bin"
+    watch_queen_of_sauce = "Watch Queen of Sauce"
     blacksmith_copper = "Upgrade Copper Tools"
     blacksmith_iron = "Upgrade Iron Tools"
     blacksmith_gold = "Upgrade Gold Tools"
