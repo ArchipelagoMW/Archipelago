@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import json
+import traceback
 import typing
 import builtins
 import os
@@ -16,7 +18,7 @@ import logging
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
+from typing import BinaryIO, Callable, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
 
 try:
@@ -755,3 +757,17 @@ def freeze_support() -> None:
     import multiprocessing
     _extend_freeze_support()
     multiprocessing.freeze_support()
+
+
+class NonSilentThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
+    """ ThreadPoolExecutor doesn't let us see exceptions, so this lets us see them """
+    def submit(self, fn: Callable[..., Any], *args: Any, **kwargs: Any) -> "concurrent.futures.Future[Any]":
+        def function_wrapper(fn: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
+            try:
+                return fn(*args, **kwargs)
+            except BaseException as e:
+                logging.getLogger().error(traceback.format_exc())
+                raise e
+
+        # Submits the wrapped function instead of `fn`
+        return super().submit(function_wrapper, fn, *args, **kwargs)

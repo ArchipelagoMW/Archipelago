@@ -14,7 +14,7 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType, M
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
 from settings import get_settings
-from Utils import __version__, output_path, version_tuple
+from Utils import NonSilentThreadPoolExecutor, __version__, output_path, version_tuple
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
@@ -293,7 +293,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     output = tempfile.TemporaryDirectory()
     with output as temp_dir:
-        with concurrent.futures.ThreadPoolExecutor(world.players + 2) as pool:
+        with NonSilentThreadPoolExecutor(world.players + 2) as pool:
             check_accessibility_task = pool.submit(world.fulfills_accessibility)
 
             output_file_futures = [pool.submit(AutoWorld.call_stage, world, "generate_output", temp_dir)]
