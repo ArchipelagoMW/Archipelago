@@ -20,7 +20,7 @@ if not os.path.exists(configpath):  # fall back to config.yaml in home
 
 
 def get_app():
-    from WebHostLib import register, app as raw_app
+    from WebHostLib import register, cache, app as raw_app
     from WebHostLib.models import db
 
     register()
@@ -34,6 +34,7 @@ def get_app():
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
         logging.info(f"HOST_ADDRESS was set to {app.config['HOST_ADDRESS']}")
 
+    cache.init_app(app)
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     return app
