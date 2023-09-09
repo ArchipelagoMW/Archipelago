@@ -152,14 +152,14 @@ class TunicWorld(World):
         return self.multiworld.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, any]:
-
         slot_data: Dict[str, any] = {
             "seed": self.random.randint(0, 2147483647),
             "start_with_sword": self.multiworld.start_with_sword[self.player].value,
             "keys_behind_bosses": self.multiworld.keys_behind_bosses[self.player].value,
             "sword_progression": self.multiworld.sword_progression[self.player].value,
             "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
-            "hexagon_quest": self.multiworld.hexagon_quest[self.player].value
+            "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
+            "fool_traps": self.multiworld.fool_traps[self.player].value
         }
 
         removed_item = ["Your Pocket", self.player]
