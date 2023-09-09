@@ -1,8 +1,7 @@
 from typing import List
 
 from BaseClasses import ItemClassification, MultiWorld, Item
-from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_with_mods, \
-    allsanity_options_without_mods, minimal_locations_maximal_items
+from . import setup_solo_multiworld, SVTestBase, get_minsanity_options
 from .. import locations, items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import items_by_group, Group, item_table
@@ -254,15 +253,18 @@ class TestProgressiveElevator(SVTestBase):
         elevators = [self.get_item_by_name("Progressive Mine Elevator")] * 21
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
+        mining_levels = [self.get_item_by_name("Mining Level")] * 4
         guild = self.get_item_by_name("Adventurer's Guild")
-        return [*combat_levels, *elevators, guild, *pickaxes, *swords]
+        return [*combat_levels, *mining_levels, *elevators, guild, *pickaxes, *swords]
 
     def generate_items_for_extra_mine_levels(self, weapon_name: str) -> List[Item]:
         last_pickaxe = self.get_item_by_name("Progressive Pickaxe")
         last_weapon = self.multiworld.create_item(weapon_name, self.player)
         second_last_combat_level = self.get_item_by_name("Combat Level")
         last_combat_level = self.get_item_by_name("Combat Level")
-        return [last_pickaxe, last_weapon, second_last_combat_level, last_combat_level]
+        second_last_mining_level = self.get_item_by_name("Mining Level")
+        last_mining_level = self.get_item_by_name("Mining Level")
+        return [last_pickaxe, last_weapon, second_last_combat_level, last_combat_level, second_last_mining_level, last_mining_level]
 
 
 class TestLocationGeneration(SVTestBase):
@@ -287,7 +289,7 @@ class TestLocationAndItemCount(SVTestCase):
 
     def test_minsanity_has_fewer_than_locations(self):
         expected_locations = 122
-        minsanity_options = self.minsanity_options()
+        minsanity_options = get_minsanity_options()
         multiworld = setup_solo_multiworld(minsanity_options)
         real_locations = get_real_locations(self, multiworld)
         number_locations = len(real_locations)

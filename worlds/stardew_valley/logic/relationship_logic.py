@@ -152,9 +152,9 @@ class RelationshipLogic:
             rule_if_not_birthday = self.time.has_lived_months(hearts)
             earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
             if villager.bachelor:
-                if hearts >= 8:
+                if hearts > 8:
                     earn_rule = earn_rule & self.can_date(npc)
-                if hearts >= 10:
+                if hearts > 10:
                     earn_rule = earn_rule & self.can_marry(npc)
         else:
             earn_rule = self.time.has_lived_months(min(hearts // 2, 8))

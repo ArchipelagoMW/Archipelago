@@ -15,6 +15,37 @@ from ..options import Cropsanity, SkillProgression, SpecialOrderLocations, Frien
     BundleRandomization, BundlePrice, FestivalLocations, FriendsanityHeartSize, ExcludeGingerIsland, TrapItems, Goal, Mods
 
 
+def get_minsanity_options():
+    minsanity = {
+        options.Goal.internal_name: options.Goal.option_bottom_of_the_mines,
+        options.BundleRandomization.internal_name: options.BundleRandomization.option_vanilla,
+        options.BundlePrice.internal_name: options.BundlePrice.option_very_cheap,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_disabled,
+        options.Cropsanity.internal_name: options.Cropsanity.option_disabled,
+        options.BackpackProgression.internal_name: options.BackpackProgression.option_vanilla,
+        options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
+        options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
+        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
+        options.HelpWantedLocations.internal_name: 0,
+        options.Fishsanity.internal_name: options.Fishsanity.option_none,
+        options.Museumsanity.internal_name: options.Museumsanity.option_none,
+        options.Monstersanity.internal_name: options.Monstersanity.option_none,
+        options.Shipsanity.internal_name: options.Shipsanity.option_none,
+        options.Friendsanity.internal_name: options.Friendsanity.option_none,
+        options.FriendsanityHeartSize.internal_name: 8,
+        options.NumberOfMovementBuffs.internal_name: 0,
+        options.NumberOfLuckBuffs.internal_name: 0,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.TrapItems.internal_name: options.TrapItems.option_no_traps,
+        options.Mods.internal_name: (),
+    }
+    return minsanity
+
+
 class SVTestCase(unittest.TestCase):
     player: ClassVar[int] = 1
     """Set to False to not skip some 'extra' tests"""
@@ -23,6 +54,8 @@ class SVTestCase(unittest.TestCase):
     skip_long_tests: bool = True
     """Set to False to run tests that take long"""
     skip_performance_tests: bool = True
+
+    options = get_minsanity_options()
 
     def setUp(self) -> None:
         super().setUp()
@@ -54,7 +87,7 @@ class SVTestBase(WorldTestBase, SVTestCase):
 @cache_argsless
 def minimal_locations_maximal_items():
     min_max_options = {
-Goal.internal_name: Goal.option_bottom_of_the_mines,
+        Goal.internal_name: Goal.option_bottom_of_the_mines,
         BundleRandomization.internal_name: BundleRandomization.option_vanilla,
         BundlePrice.internal_name: BundlePrice.option_very_cheap,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
@@ -141,6 +174,7 @@ def allsanity_options_without_mods():
         Fishsanity.internal_name: Fishsanity.option_all,
         Museumsanity.internal_name: Museumsanity.option_all,
         Monstersanity.internal_name: Monstersanity.option_progressive_goals,
+        Shipsanity.internal_name: ,
         Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
         FriendsanityHeartSize.internal_name: 1,
         NumberOfMovementBuffs.internal_name: 12,
