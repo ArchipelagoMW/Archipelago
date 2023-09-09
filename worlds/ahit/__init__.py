@@ -6,7 +6,7 @@ from .Rules import set_rules
 from .Options import ahit_options, slot_data_options, adjust_options
 from .Types import HatType, ChapterIndex
 from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
-from .DeathWishRules import set_dw_rules
+from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld
 from typing import List, Dict, TextIO
 
@@ -17,6 +17,7 @@ excluded_dws: Dict[int, List[str]] = {}
 excluded_bonuses: Dict[int, List[str]] = {}
 dw_shuffle: Dict[int, List[str]] = {}
 nyakuza_thug_items: Dict[int, Dict[str, int]] = {}
+badge_seller_count: Dict[int, int] = {}
 badge_seller_count: Dict[int, int] = {}
 
 
@@ -89,6 +90,10 @@ class HatInTimeWorld(World):
             return
 
         create_events(self)
+        if self.is_dw():
+            if "Snatcher's Hit List" not in self.get_excluded_dws() \
+               or "Camera Tourist" not in self.get_excluded_dws():
+                create_enemy_events(self)
 
         # place default contract locations if contract shuffle is off so logic can still utilize them
         if self.multiworld.ShuffleActContracts[self.player].value == 0:

@@ -1,6 +1,7 @@
 from .Locations import HatInTimeLocation, death_wishes
+from .Items import HatInTimeItem
 from .Regions import connect_regions, create_region
-from BaseClasses import Region, LocationProgressType
+from BaseClasses import Region, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
 from worlds.AutoWorld import World
 from typing import List
@@ -202,6 +203,17 @@ def create_dw_regions(world: World):
             loc_id = death_wishes[name]
             main_objective = HatInTimeLocation(world.player, f"{name} - Main Objective", loc_id, dw)
             full_clear = HatInTimeLocation(world.player, f"{name} - All Clear", loc_id + 1, dw)
+            main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {name}", None, dw)
+            bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {name}", None, dw)
+            main_stamp.show_in_spoiler = False
+            bonus_stamps.show_in_spoiler = False
+            dw.locations.append(main_stamp)
+            dw.locations.append(bonus_stamps)
+
+            main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {name}",
+                                                       ItemClassification.progression, None, world.player))
+            bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {name}",
+                                                         ItemClassification.progression, None, world.player))
 
             if name in world.get_excluded_bonuses():
                 main_objective.progress_type = LocationProgressType.EXCLUDED
@@ -229,6 +241,17 @@ def create_dw_regions(world: World):
 
             main_objective = HatInTimeLocation(world.player, f"{key} - Main Objective", loc_id, dw)
             full_clear = HatInTimeLocation(world.player, f"{key} - All Clear", loc_id+1, dw)
+            main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {key}", None, dw)
+            bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {key}", None, dw)
+            main_stamp.show_in_spoiler = False
+            bonus_stamps.show_in_spoiler = False
+            dw.locations.append(main_stamp)
+            dw.locations.append(bonus_stamps)
+
+            main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {key}",
+                                                       ItemClassification.progression, None, world.player))
+            bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {key}",
+                                                         ItemClassification.progression, None, world.player))
 
             if key in world.get_excluded_bonuses():
                 main_objective.progress_type = LocationProgressType.EXCLUDED

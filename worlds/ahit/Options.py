@@ -63,7 +63,6 @@ def adjust_options(world: World):
         world.multiworld.LogicDifficulty[world.player].value = 0
         world.multiworld.KnowledgeChecks[world.player].value = 0
         world.multiworld.DWTimePieceRequirement[world.player].value = 0
-        world.multiworld.progression_balancing[world.player].value = 0
 
 
 def get_total_time_pieces(world: World) -> int:
@@ -308,7 +307,7 @@ class MinExtraYarn(Range):
     For example, if this option's value is 10, and the total yarn needed to craft all hats is 40,
     there must be at least 50 yarn in the pool."""
     display_name = "Max Extra Yarn"
-    range_start = 0
+    range_start = 5
     range_end = 15
     default = 10
 

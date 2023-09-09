@@ -254,16 +254,18 @@ blacklisted_acts = {
 
 # Blacklisted act shuffle combinations to help prevent impossible layouts. Mostly for free roam acts.
 blacklisted_combos = {
-    "The Illness has Spread":           ["Nyakuza Free Roam", "Alpine Free Roam"],
-    "Rush Hour":                        ["Nyakuza Free Roam", "Alpine Free Roam"],
-    "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam", "Bon Voyage!"],
-    "Time Rift - The Moon":             ["Alpine Free Roam", "Nyakuza Free Roam"],
-    "Time Rift - Dead Bird Studio":     ["Alpine Free Roam", "Nyakuza Free Roam"],
-    "Time Rift - Curly Tail Trail":     ["Nyakuza Free Roam"],
-    "Time Rift - The Twilight Bell":    ["Nyakuza Free Roam"],
-    "Time Rift - Alpine Skyline":       ["Nyakuza Free Roam"],
-    "Time Rift - Rumbi Factory":        ["Alpine Free Roam"],
-    "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam"],
+    "The Illness has Spread":           ["Nyakuza Free Roam", "Alpine Free Roam", "Contractual Obligations"],
+    "Rush Hour":                        ["Nyakuza Free Roam", "Alpine Free Roam", "Contractual Obligations"],
+    "Time Rift - The Owl Express":      ["Alpine Free Roam", "Nyakuza Free Roam", "Bon Voyage!",
+                                         "Contractual Obligations"],
+
+    "Time Rift - The Moon":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations"],
+    "Time Rift - Dead Bird Studio":     ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations"],
+    "Time Rift - Curly Tail Trail":     ["Nyakuza Free Roam", "Contractual Obligations"],
+    "Time Rift - The Twilight Bell":    ["Nyakuza Free Roam", "Contractual Obligations"],
+    "Time Rift - Alpine Skyline":       ["Nyakuza Free Roam", "Contractual Obligations"],
+    "Time Rift - Rumbi Factory":        ["Alpine Free Roam", "Contractual Obligations"],
+    "Time Rift - Deep Sea":             ["Alpine Free Roam", "Nyakuza Free Roam", "Contractual Obligations"],
 }
 
 

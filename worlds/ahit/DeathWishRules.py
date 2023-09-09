@@ -83,7 +83,7 @@ dw_stamp_costs = {
 def set_dw_rules(world: World):
     if "Snatcher's Hit List" not in world.get_excluded_dws() \
        or "Camera Tourist" not in world.get_excluded_dws():
-        create_enemy_events(world)
+        set_enemy_rules(world)
 
     dw_list: List[str] = []
     if world.multiworld.DWShuffle[world.player].value > 0:
@@ -100,6 +100,8 @@ def set_dw_rules(world: World):
         temp_list: List[Location] = []
         main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
         full_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
+        main_stamp = world.multiworld.get_location(f"Main Stamp - {name}", world.player)
+        bonus_stamps = world.multiworld.get_location(f"Bonus Stamps - {name}", world.player)
         temp_list.append(main_objective)
         temp_list.append(full_clear)
 
@@ -113,19 +115,6 @@ def set_dw_rules(world: World):
             full_clear.address = None
             full_clear.place_locked_item(HatInTimeItem("Nothing", ItemClassification.filler, None, world.player))
             full_clear.show_in_spoiler = False
-
-        # Stamps are event locations
-        main_stamp = HatInTimeLocation(world.player, f"Main Stamp - {name}", None, dw)
-        bonus_stamps = HatInTimeLocation(world.player, f"Bonus Stamps - {name}", None, dw)
-        main_stamp.show_in_spoiler = False
-        bonus_stamps.show_in_spoiler = False
-        dw.locations.append(main_stamp)
-        dw.locations.append(bonus_stamps)
-
-        main_stamp.place_locked_item(HatInTimeItem(f"1 Stamp - {name}",
-                                                   ItemClassification.progression, None, world.player))
-        bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {name}",
-                                                     ItemClassification.progression, None, world.player))
 
         # No need for rules if excluded - stamps will be auto-granted
         if world.is_dw_excluded(name):
@@ -393,6 +382,31 @@ def create_enemy_events(world: World):
             event.place_locked_item(HatInTimeItem(enemy, ItemClassification.progression, None, world.player))
             region.locations.append(event)
             event.show_in_spoiler = False
+
+
+def set_enemy_rules(world: World):
+    no_tourist = "Camera Tourist" in world.get_excluded_dws() or "Camera Tourist" in world.get_excluded_bonuses()
+
+    for enemy, regions in hit_list.items():
+        if no_tourist and enemy in bosses:
+            continue
+
+        for area in regions:
+            if (area == "Bon Voyage!" or area == "Time Rift - Deep Sea") and not world.is_dlc1():
+                continue
+
+            if area == "Time Rift - Tour" and (not world.is_dlc1()
+                                               or world.multiworld.ExcludeTour[world.player].value > 0):
+                continue
+
+            if area == "Bluefin Tunnel" and not world.is_dlc2():
+                continue
+
+            if world.multiworld.DWShuffle[world.player].value > 0 and area in death_wishes \
+               and area not in world.get_dw_shuffle():
+                continue
+
+            event = world.multiworld.get_location(f"{enemy} - {area}", world.player)
 
             if enemy == "Toxic Flower":
                 add_rule(event, lambda state: can_use_hookshot(state, world))
