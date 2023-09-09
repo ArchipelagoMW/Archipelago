@@ -67,6 +67,7 @@ class BizHawkClientContext(CommonContext):
 
 async def _game_watcher(ctx: BizHawkClientContext):
     showed_connecting_message = False
+    showed_connected_message = False
     showed_no_handler_message = False
 
     while not ctx.exit_event.is_set():
@@ -79,6 +80,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
         try:
             if ctx.bizhawk_ctx.connection_status == ConnectionStatus.NOT_CONNECTED:
+                showed_connected_message = False
+
                 if not showed_connecting_message:
                     logger.info("Waiting to connect to BizHawk...")
                     showed_connecting_message = True
@@ -99,17 +102,21 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
             await ping(ctx.bizhawk_ctx)
 
+            if not showed_connected_message:
+                showed_connected_message = True
+                logger.info("Connected to BizHawk")
+
+            rom_hash = await get_hash(ctx.bizhawk_ctx)
+            if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
+                if ctx.server is not None:
+                    logger.info(f"ROM changed. Disconnecting from server.")
+                    await ctx.disconnect(True)
+
+                ctx.auth = None
+                ctx.username = None
+            ctx.rom_hash = rom_hash
+
             if ctx.client_handler is None:
-                rom_hash = await get_hash(ctx.bizhawk_ctx)
-                if ctx.rom_hash is not None and ctx.rom_hash != rom_hash:
-                    if ctx.server is not None:
-                        logger.info(f"ROM changed. Disconnecting from server.")
-                        await ctx.disconnect(True)
-
-                    ctx.auth = None
-                    ctx.username = None
-                ctx.rom_hash = rom_hash
-
                 system = await get_system(ctx.bizhawk_ctx)
                 ctx.client_handler = await AutoBizHawkClientRegister.get_handler(ctx, system)
 
@@ -122,7 +129,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
                     showed_no_handler_message = False
                     logger.info(f"Running handler for {ctx.client_handler.game}")
 
-        except RequestFailedError:
+        except RequestFailedError as exc:
+            logger.info(f"Lost connection to BizHawk: {exc.args[0]}")
             continue
 
         # Get slot name and send `Connect`
