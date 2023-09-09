@@ -333,9 +333,41 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+            {
+                'name':   'msg/us/sys.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/sys.bar'
+                    },
+                    {
+                        'name': 'msg/gr/sys.bar'
+                    },
+                    {
+                        'name': 'msg/it/sys.bar'
+                    },
+                    {
+                        'name': 'msg/sp/sys.bar'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'sys',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'sys.yml',
+                                'language': 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
         'title':  'Randomizer Seed'
     }
+    
     goal_to_text = {
         0: "Three Proofs",
         1: "Lucky Emblem",
@@ -369,6 +401,12 @@ def patch_kh2(self, output_directory):
             'en': hitlist_text[self.multiworld.Goal[self.player].value]
         }
     ]
+    self.level_depth_text = [
+        {
+            'id': 0x3BF1,
+            'en': f"Your Level Depth is {self.multiworld.LevelDepth[self.player].current_option_name}"
+        }
+    ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     openkhmod = {
@@ -378,7 +416,8 @@ def patch_kh2(self, output_directory):
         "ItemList.yml": yaml.dump(self.formattedItem, line_break="\n"),
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
-        "po.yml":       yaml.dump(self.pooh_text, line_break="\n")
+        "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
+        "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
