@@ -146,6 +146,15 @@ def get_random_port(game_ports):
             available_ports.append(int(item))
 
     port = get_port_from_list(available_ports)
+    if port == 0:
+        logging.info("Unable to find port. Expanding search to the default ports. (49152-65535)")
+        checked_ports = []
+        while len(set(checked_ports)) < (65535-49152)+1:
+            port = random.randint(49152, 65535)
+            if not is_port_in_use(port):
+                break
+            else:
+                checked_ports.append(port)
 
     return port
 
