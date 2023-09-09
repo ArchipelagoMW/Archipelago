@@ -636,7 +636,8 @@ def set_alps_rules(world: World):
                  and state.has("Zipline Unlock - The Windmill Path", world.player))
 
         for (loc, zipline) in zipline_unlocks.items():
-            add_rule(world.multiworld.get_location(loc, world.player), lambda state: state.has(zipline, world.player))
+            add_rule(world.multiworld.get_location(loc, world.player),
+                     lambda state, z=zipline: state.has(z, world.player))
 
 
 def set_dlc1_rules(world: World):
