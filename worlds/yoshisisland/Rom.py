@@ -1,7 +1,9 @@
 import Utils
 import pdb
+import struct
 from .Options import get_option_value
 from worlds.Files import APDeltaPatch
+from struct import unpack, pack
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535
 
@@ -676,7 +678,7 @@ def CodeHandler(rom):
     rom.write_bytes(0x0113D6, bytearray([0x5C, 0x65, 0xFC, 0x00])), #Check MidRing
     
     rom.write_bytes(0x02C4C6, bytearray([0x5C, 0x77, 0xFC, 0x00])), #Check Bucket w/ Item
-    rom.write_bytes(0x02C8BD, bytearray([0x5C, 0x8A, 0xFC, 0x00])), #Check Bucket
+    rom.write_bytes(0x02C8BD, bytearray([0x5C, 0x8A, 0xFC, 0x00])), #Check Bucket, ridable
     rom.write_bytes(0x02C4D5, bytearray([0x5C, 0x9D, 0xFC, 0x00])), #Flash Bucket
 
     rom.write_bytes(0x064920, bytearray([0x5C, 0xBC, 0xFC, 0x00])), #Flash Tulip
@@ -729,9 +731,9 @@ def CodeHandler(rom):
     rom.write_bytes(0x00D277, bytearray([0x5C, 0x04, 0xF9, 0x0B])), #Wipe high score line
     rom.write_bytes(0x00C104, bytearray([0x5C, 0x18, 0xF9, 0x0B])), #Replace the pause menu with AP menu when SELECT is pressed
     rom.write_bytes(0x00C137, bytearray([0x5C, 0x31, 0xF9, 0x0B])), #Prevent accidentally quitting out of a stage while opening the AP menu
-    rom.write_bytes(0x00CE48, bytearray([0x5C, 0x42, 0xF9, 0x0B])), #When closing the AP menu, reset the AP flag so the normal menu can be opened.
+    rom.write_bytes(0x00CE48, bytearray([0x5C, 0x42, 0xF9, 0x0B])), #When closing the AP menu, reset the AP menu flag so the normal menu can be opened.
 
-    rom.write_bytes(0x0BA5B6, bytearray([0x5C, 0x4E, 0xF9, 0x0B])), #Unlock 6-8 if the current number of defeated bosses is higher than the number of bosses required.
+    rom.write_bytes(0x0BA5B6, bytearray([0x5C, 0x4E, 0xF9, 0x0B])), #Unlock 6-8 if the current number of defeated bosses is higher than the number of bosses required. If 6-8 is marked 'cleared', skip boss checks
     rom.write_bytes(0x01209E, bytearray([0x5C, 0x92, 0xF9, 0x0B])), #Write a flag to check bosses if setting up the final boss door
     rom.write_bytes(0x0123AA, bytearray([0x5C, 0xA3, 0xF9, 0x0B])), #If the boss check flag is set, read the number of bosses before opening door
 
@@ -1019,8 +1021,7 @@ def patch_rom(world, rom, player: int, multiworld):
     rom.write_bytes(0x11544B, bytearray(world.global_level_list))
     rom.write_bytes(0x11547A, bytearray([0x43])),
 
-    rom.write_bytes(0x06FC89, ([world.lives_low]))
-    rom.write_bytes(0x06FC8A, ([world.lives_high]))
+    rom.write_bytes(0x06FC89, world.starting_lives)
     rom.write_bytes(0x03464F, ([world.baby_mario_sfx]))
     rom.write_bytes(0x06FC83, ([multiworld.starting_world[player].value]))
     rom.write_bytes(0x06FC84, ([multiworld.hidden_object_visibility[player].value]))
@@ -1161,11 +1162,11 @@ def patch_rom(world, rom, player: int, multiworld):
 
     if get_option_value(multiworld, player, "goal") == 1:
         rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85])), #Luigi piece clear text
-        rom.write_bytes(0x06FC86, bytearray([0xFF]))
+        rom.write_bytes(0x06FC86, bytearray([0xFF])) #Boss clear goal = 255, renders bowser inaccessible
     
     from Main import __version__
     rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:15]
-    rom.name.extend([0] * (21 - len(rom.name)))
+    rom.name.extend([0] * (15 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)
 
 class YIDeltaPatch(APDeltaPatch):

@@ -21,7 +21,7 @@ class YISettings(settings.Group):
     class RomFile(settings.SNESRomPath):
         """File name of the Yoshi's Island 1.0 US rom"""
         description = "Yoshi's Island ROM File"
-        copy_to = ".sfc"
+        copy_to = "Super Mario World 2 - Yoshi's Island (U).sfc"
         md5s = [USHASH]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
@@ -54,6 +54,7 @@ class YIWorld(World):
     item_name_groups = get_item_names_per_category()
 
     web = YIWeb()
+    settings: typing.ClassVar[YISettings]
 
     locked_locations: List[str]
     location_cache: List[Location]

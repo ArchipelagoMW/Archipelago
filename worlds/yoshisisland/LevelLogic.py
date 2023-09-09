@@ -754,19 +754,19 @@ class YoshiLogic:
 ##################################################################################################
     def _28Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
         elif self.game_logic == "Normal":
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player)
         else:
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player)
 
     def _28Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_any({'Arrow Wheel', 'Train Morph', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
+            return state.has_all({'Arrow Wheel', 'Train Morph', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
         elif self.game_logic == "Normal":
-            return state.has_any({'Arrow Wheel', 'Key', 'Train Morph'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key', 'Train Morph'}, self.player)
         else:
-            return state.has_any({'Arrow Wheel', 'Key', 'Train Morph'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key', 'Train Morph'}, self.player)
 
     def _28Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -778,11 +778,11 @@ class YoshiLogic:
 
     def _28Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player) and (state.has('Egg Capacity Upgrade', self.player, 1))
         elif self.game_logic == "Normal":
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player)
         else:
-            return state.has_any({'Arrow Wheel', 'Key'}, self.player)
+            return state.has_all({'Arrow Wheel', 'Key'}, self.player)
 
     def _28Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

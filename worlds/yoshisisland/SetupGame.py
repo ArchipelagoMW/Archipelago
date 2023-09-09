@@ -1,5 +1,5 @@
-
-
+import struct
+from struct import unpack, pack
 
 
 def setup_gamevars(world, multiworld, player: int):
@@ -8,12 +8,7 @@ def setup_gamevars(world, multiworld, player: int):
         multiworld.luigi_pieces_in_pool[world.player].value = world.random.randint(multiworld.luigi_pieces_required[world.player].value, 100)
     world.luigi_pieces = multiworld.luigi_pieces_required[player].value
 
-    if multiworld.starting_lives[player] > 255:
-        world.lives_high = multiworld.starting_lives[player].value >> 8
-        world.lives_low = (multiworld.starting_lives[player].value - world.lives_high) - ((255 * world.lives_high))
-    else:
-        world.lives_high = 0x00
-        world.lives_low = multiworld.starting_lives[player].value
+    world.starting_lives = struct.pack("H", multiworld.starting_lives[player])
 
     world.level_colors = []
     world.color_order = []
@@ -122,17 +117,13 @@ def setup_gamevars(world, multiworld, player: int):
     world.boss_ap_loc = [boss_check_list[roomnum] for roomnum in world.boss_order]
 
 
-    for i in range(4):
-        world.boss_burt_data = (pointer_dict[world.boss_room_id[0]])
+    world.boss_burt_data = (pointer_dict[world.boss_room_id[0]])
 
-    for i in range(4):
-        world.boss_slime_data = (pointer_dict[world.boss_room_id[1]])
+    world.boss_slime_data = (pointer_dict[world.boss_room_id[1]])
 
-    for i in range(4):
-        world.boss_boo_data = (pointer_dict[world.boss_room_id[2]])
+    world.boss_boo_data = (pointer_dict[world.boss_room_id[2]])
 
-    for i in range(4):
-        world.boss_pot_data = (pointer_dict[world.boss_room_id[3]])
+    world.boss_pot_data = (pointer_dict[world.boss_room_id[3]])
 
     for i in range(4):
         world.boss_frog_data = (pointer_dict[world.boss_room_id[4]])
@@ -140,8 +131,7 @@ def setup_gamevars(world, multiworld, player: int):
     for i in range(4):
         world.boss_plant_data = (pointer_dict[world.boss_room_id[5]])
 
-    for i in range(4):
-        world.boss_milde_data = (pointer_dict[world.boss_room_id[6]])
+    world.boss_milde_data = (pointer_dict[world.boss_room_id[6]])
 
     for i in range(4):
         world.boss_koop_data = (pointer_dict[world.boss_room_id[7]])
@@ -149,11 +139,9 @@ def setup_gamevars(world, multiworld, player: int):
     for i in range(4):
         world.boss_slug_data = (pointer_dict[world.boss_room_id[8]])
 
-    for i in range(4):
-        world.boss_raph_data = (pointer_dict[world.boss_room_id[9]])
+    world.boss_raph_data = (pointer_dict[world.boss_room_id[9]])
 
-    for i in range(4):
-        world.boss_tap_data = (pointer_dict[world.boss_room_id[10]])
+    world.boss_tap_data = (pointer_dict[world.boss_room_id[10]])
 
     
     world.global_level_list = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
