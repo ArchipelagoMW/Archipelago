@@ -1430,6 +1430,10 @@
     "label": "Route 104 - White Herb from Lady Near Flower Shop",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_FLOWER_SHOP_RECEIVED_BERRY": {
+    "label": "Route 104 - Berry from Girl in Flower Shop",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_DEEP_SEA_SCALE": {
     "label": "Slateport City - Deep Sea Scale from Capt. Stern",
     "tags": ["NpcGift"]
