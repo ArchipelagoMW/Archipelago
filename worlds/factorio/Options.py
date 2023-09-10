@@ -148,13 +148,17 @@ class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree.
     None: No indication what a research unlocks
     Advancement: Indicators which researches unlock items that are considered logical advancements
+    Recipient: Labels with recipients of unlocked items; researches are not prefilled into the !hint command.
+    Recipient Advancement: Labels witch recipients of unlocked items, indicates which are considered logical advancements
     Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
     """
     display_name = "Technology Tree Information"
     option_none = 0
     option_advancement = 1
-    option_full = 2
-    default = 2
+    option_recipient = 2
+    option_recipient_advancement = 3
+    option_full = 4
+    default = 4
 
 
 class RecipeTime(Choice):
