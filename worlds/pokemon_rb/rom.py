@@ -353,9 +353,9 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player] == "open_viridian_city":
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
-    data[rom_addresses['Option_Route3_Guard_A']] = self.multiworld.route_3_condition[self.player].value
+    data[rom_addresses['Option_Route3_Guard_B']] = self.multiworld.route_3_condition[self.player].value
     if self.multiworld.route_3_condition[self.player] == "open":
-        data[rom_addresses['Option_Route3_Guard_B']] = 0x11
+        data[rom_addresses['Option_Route3_Guard_A']] = 0x11
     if not self.multiworld.robbed_house_officer[self.player]:
         data[rom_addresses['Option_Trashed_House_Guard_A']] = 0x15
         data[rom_addresses['Option_Trashed_House_Guard_B']] = 0x11

@@ -487,8 +487,10 @@ class MultiWorld():
     def get_unfilled_locations_for_players(self, location_names: List[str], players: Iterable[int]):
         for player in players:
             if not location_names:
-                location_names = [location.name for location in self.get_unfilled_locations(player)]
-            for location_name in location_names:
+                valid_locations = [location.name for location in self.get_unfilled_locations(player)]
+            else:
+                valid_locations = location_names
+            for location_name in valid_locations:
                 location = self._location_cache.get((location_name, player), None)
                 if location is not None and location.item is None:
                     yield location
@@ -850,14 +852,6 @@ class Region:
         if state.stale[self.player]:
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
-
-    def can_reach_private(self, state: CollectionState) -> bool:
-        for entrance in self.entrances:
-            if entrance.can_reach(state):
-                if not self in state.path:
-                    state.path[self] = (self.name, state.path.get(entrance, None))
-                return True
-        return False
 
     @property
     def hint_text(self) -> str:
