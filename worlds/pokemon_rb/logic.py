@@ -53,7 +53,7 @@ def has_key_items(state, count, player):
                                         "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
                                         "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
                                         "Card Key 11F", "Exp. All", "Fire Stone", "Thunder Stone", "Water Stone",
-                                        "Leaf Stone"] if state.has(item, player)])
+                                        "Leaf Stone", "Moon Stone"] if state.has(item, player)])
                  + min(state.count("Progressive Card Key", player), 10))
     return key_items >= count
 
