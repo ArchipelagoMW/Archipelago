@@ -3,22 +3,22 @@
 ## Required Software
 
 Download and install [Terraria](https://store.steampowered.com/app/105600/Terraria/)
-and [TModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Steam
+and [tModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Steam
 
 ## Installing the Archipelago Mod
 
 1. Subscribe to [the mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2922217554) on Steam
-2. Open TModLoader
+2. Open tModLoader
 3. Go to `Workshop > Manage Mods` and enable the Archipelago mod
-   - If TModLoader states that you need version 1.4.3, follow the following steps
-     1. Close TModLoader
-     2. Right-Click TModLoader in Steam and select `Properties`
+   - If tModLoader states that you need version 1.4.3, follow the following steps
+     1. Close tModLoader
+     2. Right-Click tModLoader in Steam and select `Properties`
      3. Navigate to `Betas -> Beta Participation`
      4. Select `1.4.3-legacy - Legacy - Stable tModLoader for Terraria 1.4.3`
-     5. Update TModLoader through Steam
-     6. Open TModLoader and navigate back to the **Manage Mods** menu
-4. TModLoader will say that it needs to refresh; exit this menu, and it will do this automatically
-5. Once TModLoader finishes loading, the Archipelago mod is finished installing and you can now 
+     5. Update tModLoader through Steam
+     6. Open tModLoader and navigate back to the **Manage Mods** menu
+4. tModLoader will say that it needs to refresh; exit this menu, and it will do this automatically
+5. Once tModLoader finishes loading, the Archipelago mod is finished installing and you can now 
 [connect to an Archipelago game](#joining-an-archipelago-game-in-terraria).
 
 This mod may not work with mods that significantly alter progression or vanilla features. It is
@@ -28,7 +28,7 @@ highly recommended to use utility mods and features to speed up gameplay, such a
 - Ore Excavator
 - Magic Storage
 - Alchemist NPC Lite
-    - (Possibly breaks progression)
+    - (Can be used to break progression)
 - Reduced Grinding
 - Upgraded Research
 
@@ -46,7 +46,7 @@ on the Archipelago website to generate a YAML using a graphical interface.
 
 ## Joining an Archipelago Game in Terraria
 
-1. Launch TModLoader
+1. Launch tModLoader
 2. In `Workshop > Manage Mods`, edit Archipelago Randomizer's settings
     - `Name` should be the player name you set when creating your YAML file.
     - `Port` should be the port number associated with the Archipelago server. It will be a 4 or 5-digit number.
