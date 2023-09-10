@@ -176,7 +176,7 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
             await ctx.server
-        except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
+        except OSError:  # likely port in use
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
             await ctx.server
@@ -205,12 +205,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     with Locker(room_id):
         try:
             asyncio.run(main())
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             with db_session:
                 room = Room.get(id=room_id)
                 # ensure the Room does not spin up again on its own, minute of safety buffer
                 room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-        except:
+        except Exception:
             with db_session:
                 room = Room.get(id=room_id)
                 room.last_port = -1
