@@ -164,11 +164,14 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     db.generate_mapping(check_tables=False)
 
     async def main():
+        import gc
+
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
+        gc.collect()  # free intermediate objects used during setup
         try:
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
