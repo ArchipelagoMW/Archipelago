@@ -1,8 +1,14 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Pokemon",
   "type": "object",
+  "required": ["version", "nickname", "personality", "species", "experience", "ivs", "evs", "moves", "trainer"],
   "properties": {
+    "version": {
+      "description": "The version of this schema that the data is formatted to match",
+      "type": "string",
+      "const": "1.0.0"
+    },
     "nickname": {
       "description": "The pokemon's nickname",
       "type": "string",
@@ -141,6 +147,5 @@
       },
       "required": ["name", "id"]
     }
-  },
-  "required": ["nickname", "personality", "species", "experience", "ivs", "evs", "moves", "trainer"]
+  }
 }

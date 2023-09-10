@@ -171,6 +171,7 @@ def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
     held_item = int.from_bytes(decrypted_substructs[0][2:4], "little")
 
     json_object = {
+        "version": "1.0.0",
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], "little")].national_dex_number,
@@ -242,11 +243,11 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     # Handle data from incompatible games
     if pokemon_json["species"] > 387:
         pokemon_json["species"] = 201 # Unown
-    if "item" in pokemon_json and ("ITEM_" + pokemon_json["item"]) not in data.constants:
-        pokemon_json["item"] = "NUGGET"
     if pokemon_json["ball"] > 12:
         pokemon_json["ball"] = 4 # Pokeball
-    if pokemon_json["game"] > 5 and pokemon_json["game"] != 15:
+    if "item" in pokemon_json and ("ITEM_" + pokemon_json["item"]) not in data.constants:
+        pokemon_json["item"] = "NUGGET"
+    if "game" not in pokemon_json or (pokemon_json["game"] > 5 and pokemon_json["game"] != 15):
         pokemon_json["game"] = 0 # Unknown
         pokemon_json["location_met"] = 0 # Littleroot
 
@@ -271,7 +272,7 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     # Substruct type 1
     for i, move_info in enumerate(pokemon_json["moves"]):
         move_name = "MOVE_" + move_info[0]
-        if move_name not in data.constants:
+        if move_name not in data.constants:  # TODO: Consider renamed moves like Faint Attack
             move_name = "MOVE_NONE"
 
         for j, byte in enumerate(data.constants[move_name].to_bytes(2, "little")):
