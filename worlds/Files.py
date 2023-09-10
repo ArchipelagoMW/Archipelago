@@ -187,13 +187,13 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
                                     compress_type=zipfile.ZIP_STORED if file.endswith(".bsdiff4") else None)
 
     def get_file(self, file: str) -> bytes:
-        """ Retrieves a file from the patch package."""
+        """ Retrieves a file from the patch container."""
         if file not in self.files:
             self.read()
         return self.files[file]
 
     def write_file(self, file_name: str, file: bytes) -> None:
-        """ Writes a file to the patch package, to be retrieved upon patching. """
+        """ Writes a file to the patch container, to be retrieved upon patching. """
         self.files[file_name] = file
 
     def patch(self, target: str) -> None:
@@ -254,6 +254,10 @@ class APTokenMixin:
               ]]] = []
 
     def get_token_binary(self) -> bytes:
+        """
+        Returns the token binary created from stored tokens.
+        :return: A bytes object representing the token data.
+        """
         data = bytearray()
         data.extend(struct.pack("I", len(self.tokens)))
         for token_type, offset, args in self.tokens:
@@ -272,10 +276,19 @@ class APTokenMixin:
         return data
 
     def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]):
+        """
+        Stores a token to be used by patching.
+        """
         self.tokens.append((token_type, offset, data))
 
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
+    """Class that defines patch extension functions for a given game.
+    Patch extension functions must have the following two arguments:
+    caller: APPatchExtension (used to retrieve files from the patch container)
+    rom: bytes (the data to patch)
+    Patch extension functions must return the changed bytes.
+    """
     game: str
     required_extensions: List[str] = list()
 
