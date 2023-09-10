@@ -20,7 +20,7 @@ Many baseline changes are made to the game, including:
 * PC item storage increased to 64 slots (up from 50).
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
-* You can select "Pallet Warp" below the "Continue" option to warp to Pallet Towna s you load your save.
+* You can select "Pallet Warp" below the "Continue" option to warp to Pallet Town as you load your save.
 * Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
 * The S.S. Anne will never depart.
 * Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
