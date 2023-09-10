@@ -30,6 +30,8 @@ def set_rules(world, player: int, area_connections):
         fix_reg(entrance_ids, 20, 5, swaplist, world)
         # Guarantee BITFS is not mapped to DDD
         fix_reg(entrance_ids, 22, 8, swaplist, world)
+        if entrance_ids.index(22) == 5: # If BITFS is mapped to HMC...
+            fix_reg(entrance_ids, 20, 8, swaplist, world) # ... then dont allow COTMC to be mapped to DDD
     temp_assign = dict(zip(entrance_ids,destination_regions)) # Used for Rules only
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code

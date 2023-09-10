@@ -309,8 +309,8 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet."""
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
+        """This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead."""
         pass
 
     def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
