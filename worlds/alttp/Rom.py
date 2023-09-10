@@ -430,7 +430,7 @@ def patch_enemizer(world, rom: LocalRom, enemizercli, output_directory):
 
     # Moblins attached to "key drop" locations crash the game when dropping their item when Key Drop Shuffle is on.
     # Replace them with a Slime enemy if they are placed.
-    if world.key_drop_shuffle[player]:
+    if multiworld.key_drop_shuffle[player]:
         key_drop_enemies = {
             0x4DA20, 0x4DA5C, 0x4DB7F, 0x4DD73, 0x4DDC3, 0x4DE07, 0x4E201,
             0x4E20A, 0x4E326, 0x4E4F7, 0x4E686, 0x4E70C, 0x4E7C8, 0x4E7FA

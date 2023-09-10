@@ -253,7 +253,7 @@ def global_rules(world, player):
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
     set_rule(world.get_location('Eastern Palace - Big Key Chest', player),
              lambda state: state._lttp_has_key('Small Key (Eastern Palace)', player, 2) or
-             ((item_name(state, 'Eastern Palace - Big Key Chest', player) == ('Big Key (Eastern Palace)', player)
+             ((location_item_name(state, 'Eastern Palace - Big Key Chest', player) == ('Big Key (Eastern Palace)', player)
               and state.has('Small Key (Eastern Palace)', player))))
     set_rule(world.get_location('Eastern Palace - Dark Eyegore Key Drop', player),
              lambda state: state.has('Big Key (Eastern Palace)', player))
@@ -310,8 +310,8 @@ def global_rules(world, player):
     set_rule(world.get_location('Swamp Palace - Boss', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 6))
 
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
-    set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
-    set_rule(world.get_location('Thieves\' Town - Big Chest', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player) and state.has('Hammer', player))
+    set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))  # could remove if Blind is not placed here?
+    set_rule(world.get_location('Thieves\' Town - Big Chest', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and state.has('Hammer', player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player and state.has('Hammer', player) and state._lttp_has_key('Small Key (Thieves Town)', player, 2))
     set_rule(world.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
@@ -888,7 +888,7 @@ def add_conditional_lamps(world, player):
 
 def open_rules(world, player):
     def basement_key_rule(state):
-        if item_name(state, 'Sewers - Key Rat Key Drop', player) == ("Small Key (Hyrule Castle)", player):
+        if location_item_name(state, 'Sewers - Key Rat Key Drop', player) == ("Small Key (Hyrule Castle)", player):
             return state._lttp_has_key("Small Key (Hyrule Castle)", player, 2)
         else:
             return state._lttp_has_key("Small Key (Hyrule Castle)", player, 3)

@@ -372,18 +372,18 @@ def generate_itempool(world):
     if treasure_hunt_icon is not None:
         multiworld.treasure_hunt_icon[player] = treasure_hunt_icon
 
-    dungeon_items = [item for item in get_dungeon_item_pool_player(world, player)
+    dungeon_items = [item for item in get_dungeon_item_pool_player(world)
                      if item.name not in multiworld.worlds[player].dungeon_local_item_names]
 
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
         drop_item = ItemFactory(key_data[3], player)
-        if world.goal[player] == 'icerodhunt' or not world.key_drop_shuffle[player]:
+        if multiworld.goal[player] == 'icerodhunt' or not multiworld.key_drop_shuffle[player]:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
             else:
                 dungeon = (drop_item.name.split("(")[1].split(")")[0], player)
-                if world.mode[player] == 'inverted':
+                if multiworld.mode[player] == 'inverted':
                     if dungeon[0] == "Agahnims Tower":
                         dungeon = ("Inverted Agahnims Tower", player)
                     if dungeon[0] == "Ganons Tower":
@@ -392,26 +392,22 @@ def generate_itempool(world):
                     world.dungeons[dungeon].small_keys.remove(drop_item)
                 elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
                     world.dungeons[dungeon].big_key = None
-        if not world.key_drop_shuffle[player]:
+        if not multiworld.key_drop_shuffle[player]:
             # key drop item was removed from the pool because key drop shuffle is off
             # and it will now place the removed key into its original location
-            loc = world.get_location(key_loc, player)
+            loc = multiworld.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
             loc.address = None
-        elif world.goal[player] == 'icerodhunt':
+        elif multiworld.goal[player] == 'icerodhunt':
             # key drop item removed because of icerodhunt
-            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
-            world.push_precollected(drop_item)
-        elif "Small" in key_data[3] and world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.push_precollected(drop_item)
+        elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            world.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
-    dungeon_item_replacements = difficulties[multiworld.difficulty[player]].extras[0] \
-                                + difficulties[multiworld.difficulty[player]].extras[1] \
-                                + difficulties[multiworld.difficulty[player]].extras[2] \
-                                + difficulties[multiworld.difficulty[player]].extras[3] \
-                                + difficulties[multiworld.difficulty[player]].extras[4]
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+    dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
-    if world.goal[player] == 'icerodhunt':
+    if multiworld.goal[player] == 'icerodhunt':
         for item in dungeon_items:
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
             multiworld.push_precollected(item)
@@ -422,7 +418,7 @@ def generate_itempool(world):
                     or (multiworld.bigkey_shuffle[player] == bigkey_shuffle.option_start_with and item.type == 'BigKey')
                     or (multiworld.compass_shuffle[player] == compass_shuffle.option_start_with and item.type == 'Compass')
                     or (multiworld.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
-                dungeon_items.remove(item)
+                dungeon_items.pop(x)
                 multiworld.push_precollected(item)
                 multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
         multiworld.itempool.extend([item for item in dungeon_items])
