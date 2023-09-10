@@ -146,8 +146,8 @@ class TechTreeLayout(Choice):
 
 class TechTreeInformation(Choice):
     """How much information should be displayed in the tech tree.
-    None: No indication what a research unlocks
-    Advancement: Indicators which researches unlock items that are considered logical advancements
+    None: No indication of what a research unlocks.
+    Advancement: Indicates if a research unlocks an item that is considered logical advancement, but not who it is for.
     Full: Labels with exact names and recipients of unlocked items; all researches are prefilled into the !hint command.
     """
     display_name = "Technology Tree Information"
