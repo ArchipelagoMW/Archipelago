@@ -449,7 +449,8 @@ class KH2World(World):
         for location in self.multiworld.exclude_locations[self.player].value:
             if location in self.random_super_boss_list:
                 self.random_super_boss_list.remove(location)
-
+        if not self.multiworld.SummonLevelLocationToggle[self.player]:
+            self.random_super_boss_list.remove(LocationName.Summonlvl7)
         #  Testing if the player has the right amount of Bounties for Completion.
         if len(self.random_super_boss_list) < self.bounties_amount:
             logging.info(
