@@ -502,6 +502,15 @@ class DarkSouls3World(World):
 
         slot_data = {
             "options": {
+                "enable_weapon_locations": self.multiworld.enable_weapon_locations[self.player].value,
+                "enable_shield_locations": self.multiworld.enable_shield_locations[self.player].value,
+                "enable_armor_locations": self.multiworld.enable_armor_locations[self.player].value,
+                "enable_ring_locations": self.multiworld.enable_ring_locations[self.player].value,
+                "enable_spell_locations": self.multiworld.enable_spell_locations[self.player].value,
+                "enable_key_locations": self.multiworld.enable_key_locations[self.player].value,
+                "enable_boss_locations": self.multiworld.enable_boss_locations[self.player].value,
+                "enable_npc_locations": self.multiworld.enable_npc_locations[self.player].value,
+                "enable_misc_locations": self.multiworld.enable_misc_locations[self.player].value,
                 "auto_equip": self.multiworld.auto_equip[self.player].value,
                 "lock_equip": self.multiworld.lock_equip[self.player].value,
                 "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,
