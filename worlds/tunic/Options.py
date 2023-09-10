@@ -4,32 +4,32 @@ from Options import Option, DefaultOnToggle, Toggle, StartInventoryPool, Choice
 
 
 class SwordProgression(DefaultOnToggle):
-    """Option to play with sword progression. Sword Progression adds four possible upgrades to find that will
-    level up your sword in the order of Stick -> Sword -> Lvl 3 Sword -> Lvl 4 Sword."""
+    """Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new
+    swords with increased range and attack power."""
     display_name = "Sword Progression"
 
 
 class StartWithSword(Toggle):
-    """Option to start with a sword in the player's inventory."""
+    """Start with a sword in the player's inventory. Does not count towards Sword Progression."""
     display_name = "Start With Sword"
 
 
 class KeysBehindBosses(Toggle):
-    """Option to choose if the three hexagon keys are placed randomly or behind their respective boss fight"""
+    """Places the three hexagon keys behind their respective boss fight in your world."""
     display_name = "Keys Behind Bosses"
 
 
 class AbilityShuffling(Toggle):
-    """Choose whether to lock the usage of Prayer, Holy Cross*, and Ice Rod until the relevant poge of the manual is found.
-        In Hexagon Quest, abilities are randomly unlocked at 5, 10, and 15 Gold Hexagons.
-        *Certain Holy Cross usages are still allowed, such as free bombs, the seeking spell and other player-facing codes.
+    """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant poge of the manual is found.
+        If playing with Hexagon Quest, abilities are instead randomly unlocked after obtaining 5, 10, and 15 Gold Hexagons.
+        *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell and other player-facing codes.
     """
     display_name = "Ability Shuffling"
 
 
 class HexagonQuest(Toggle):
-    """Choose whether to play the Hexagon Quest game mode. This mode shuffles 30 Golden Hexagons into the item pool and
-    allows the game to be ended after collecting 20 of them."""
+    """An alternate goal that shuffles 30 Golden Hexagons into the item pool and allows the game to be ended after
+    collecting 20 of them."""
     display_name = "Hexagon Quest"
 
 
