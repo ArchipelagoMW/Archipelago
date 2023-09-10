@@ -16,7 +16,7 @@ It's also possible to randomize the upgrade level of weapons and shields as well
 one). Additionally, there are settings that can make the randomized experience more convenient or more interesting, such as
 removing weapon requirements or auto-equipping whatever equipment you most recently received.
 
-The goal is to find the four "Cinders of a Lord" items randomized in the multiworld and defeat the Soul of Cinder.
+The goal is to find the four "Cinders of a Lord" items randomized into the multiworld and defeat the Soul of Cinder.
 
 ## What Dark Souls III items can appear in other players' worlds?
 
