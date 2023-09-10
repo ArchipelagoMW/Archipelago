@@ -32,14 +32,14 @@ Generate a game by going to the site and performing the following steps:
    prefer, or it is your first time we suggest starting with the 'Shard Hunt' preset (which requires you to collect a
    number of shards to go to the end dungeon) or the 'Beginner' preset if you prefer to kill the original fiends.
 2. Go to the `Goal` tab and ensure `Archipelago` is enabled. Set your player name to any name that represents you.
-3. Upload you `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
+3. Upload your `Final Fantasy(USA).nes` (and click `Remember ROM` for the future!)
 4. Press the `NEW` button beside `Seed` a few times
 5. Click `GENERATE ROM`
 
-It should download two files. One is the `*.nes` file which your emulator will run and the other is the yaml file
+It should download two files. One is the `*.nes` file which your emulator will run, and the other is the yaml file
 required by Archipelago.gg
 
-At this point you are ready to join the multiworld. If you are uncertain on how to generate, host or join a multiworld
+At this point, you are ready to join the multiworld. If you are uncertain on how to generate, host, or join a multiworld,
 please refer to the [game agnostic setup guide](/tutorial/Archipelago/setup/en).
 
 ## Running the Client Program and Connecting to the Server
@@ -67,7 +67,7 @@ Once the Archipelago server has been hosted:
 
 ## Play the game
 
-When the client shows both NES and server are connected you are good to go. You can check the connection status of the
+When the client shows both NES and server are connected, you are good to go. You can check the connection status of the
 NES at any time by running `/nes`
 
 ### Other Client Commands

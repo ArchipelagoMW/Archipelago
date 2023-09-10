@@ -7,7 +7,7 @@ config file.
 
 ## What does randomization do to this game?
 
-A vast number of optional objectives in stardew valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
+A vast number of objectives in Stardew Valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
 
 For these objectives, if they have a vanilla reward, this reward will instead be an item in the multiworld. For the remaining number of such objectives, there are a number of "Resource Pack" items, which are simply an item or a stack of items that may be useful to the player.
 
@@ -28,24 +28,24 @@ The player can choose from a number of goals, using their YAML settings.
 
 Location checks in Stardew Valley always include:
 - [Community Center Bundles](https://stardewvalleywiki.com/Bundles)
-- [Mineshaft chest rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
+- [Mineshaft Chest Rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
 - [Story Quests](https://stardewvalleywiki.com/Quests#List_of_Story_Quests)
-- [Traveling Merchant items](https://stardewvalleywiki.com/Traveling_Cart)
+- [Traveling Merchant Items](https://stardewvalleywiki.com/Traveling_Cart)
 - Isolated objectives such as the [beach bridge](https://stardewvalleywiki.com/The_Beach#Tide_Pools), [Old Master Cannoli](https://stardewvalleywiki.com/Secret_Woods#Old_Master_Cannoli), [Grim Reaper Statue](https://stardewvalleywiki.com/Golden_Scythe), etc
 
 There also are a number of location checks that are optional, and individual players choose to include them or not in their shuffling:
 - Tools and Fishing Rod Upgrades
 - Carpenter Buildings
 - Backpack Upgrades
-- Mine elevator levels
+- Mine Elevator Levels
 - Skill Levels
 - Arcade Machines
-- Help Wanted quests
+- Help Wanted Quests
 - Participating in Festivals
 - Special Orders from the town board, or from Mr Qi
-- Cropsanity: Growing and harvesting individual crop types
+- Cropsanity: Growing and Harvesting individual crop types
 - Fishsanity: Catching individual fish
-- Museumsanity: Donating individual items to the museum, or reaching the museum milestones for donations
+- Museumsanity: Donating individual items, or reaching milestones for museum donations
 - Friendsanity: Reaching specific friendship levels with NPCs
 
 ## Which items can be in another player's world?
