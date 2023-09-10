@@ -1154,7 +1154,7 @@ const validateSettings = () => {
       if (
         Object.keys(settings[game][setting]).length === 1 &&
         !Array.isArray(settings[game][setting]) &&
-        setting !== "start_inventory"
+        setting !== 'start_inventory'
       ) {
         settings[game][setting] = Object.keys(settings[game][setting])[0];
       }
@@ -1170,10 +1170,10 @@ const validateSettings = () => {
 
       // Remove empty start inventory
       else if (
-        setting === "start_inventory" &&
-        Object.keys(settings[game]["start_inventory"]).length === 0
+        setting === 'start_inventory' &&
+        Object.keys(settings[game]['start_inventory']).length === 0
       ) {
-        delete settings[game]["start_inventory"];
+        delete settings[game]['start_inventory'];
       }
     });
   });
