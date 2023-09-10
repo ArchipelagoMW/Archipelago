@@ -17,8 +17,8 @@ and [TModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Stea
      4. Select `1.4.3-legacy - Legacy - Stable tModLoader for Terraria 1.4.3`
      5. Update TModLoader through Steam
      6. Open TModLoader and navigate back to the **Manage Mods** menu
-4. TModLoader will say that is needs to refresh; exit of this menu, and it will do this automatically
-5. Once TModLoader finishes loading, the Archipelago mod is finished installing you can now 
+4. TModLoader will say that it needs to refresh; exit this menu, and it will do this automatically
+5. Once TModLoader finishes loading, the Archipelago mod is finished installing and you can now 
 [connect to an Archipelago game](#joining-an-archipelago-game-in-terraria).
 
 This mod may not work with mods that significantly alter progression or vanilla features. It is
