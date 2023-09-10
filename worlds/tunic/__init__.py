@@ -144,7 +144,7 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        set_abilities(self.multiworld, self.player, self.random)
+        set_abilities(self.multiworld)
         set_region_rules(self.multiworld, self.player)
         set_location_rules(self.multiworld, self.player)
 

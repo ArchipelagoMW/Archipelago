@@ -162,6 +162,9 @@ item_name_groups: Dict[str, Set[str]] = {
 # extra groups for the purpose of aliasing items
 extra_groups: Dict[str, Set[str]] = {
     "laurels": {"Hero's Laurels"},
+    "orb": {"Magic Orb"},
+    "dagger": {"Magic Dagger"},
+    "magic rod": {"Magic Wand"},
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
     "ice rod": {"Pages 52-53 (Ice Rod)"},
