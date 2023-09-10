@@ -367,7 +367,7 @@ def patch_kh2(self, output_directory):
         ],
         'title':  'Randomizer Seed'
     }
-    
+
     goal_to_text = {
         0: "Three Proofs",
         1: "Lucky Emblem",

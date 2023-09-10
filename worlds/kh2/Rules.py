@@ -468,7 +468,10 @@ class KH2FormRules(KH2Rules):
         for region in self.world.multiworld.get_regions(self.player):
             if region.name in drive_form_set:
                 for loc in region.locations:
-                    if loc.name in self.form_rules:
+                    if region.name == RegionName.Summon:
+                        if self.world.multiworld.SummonLevelLocationToggle[self.player]:
+                            loc.access_rule = self.form_rules[loc.name]
+                    else:
                         loc.access_rule = self.form_rules[loc.name]
 
 

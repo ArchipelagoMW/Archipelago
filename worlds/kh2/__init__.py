@@ -257,6 +257,9 @@ class KH2World(World):
         # By imitating remote this doesn't have to be plandoded filler anymore
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
+        if not self.multiworld.SummonLevelLocationToggle[self.player]:
+            self.total_locations -= 6
+
         self.total_locations -= self.level_subtraction()
 
     def pre_fill(self):
@@ -270,7 +273,6 @@ class KH2World(World):
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
-
 
     def create_regions(self):
         """
