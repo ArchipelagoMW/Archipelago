@@ -11,7 +11,7 @@ from werkzeug.exceptions import abort
 from MultiServer import Context, get_saving_second
 from NetUtils import SlotType, NetworkSlot
 from Utils import restricted_loads
-from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
+from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
 from . import app, cache
 from .models import GameDataPackage, Room
@@ -1366,6 +1366,10 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
                                 for playernumber in range(1, len(team) + 1) if playernumber not in groups}
                     for teamnumber, team in enumerate(names)}
 
+    total_locations = {teamnumber: sum(len(locations[playernumber])
+                                for playernumber in range(1, len(team) + 1) if playernumber not in groups)
+                    for teamnumber, team in enumerate(names)}
+
     hints = {team: set() for team in range(len(names))}
     if room.multisave:
         multisave = restricted_loads(room.multisave)
@@ -1390,11 +1394,14 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
 
     player_names = {}
+    completed_worlds = 0
     states: typing.Dict[typing.Tuple[int, int], int] = {}
     for team, names in enumerate(names):
         for player, name in enumerate(names, 1):
             player_names[team, player] = name
             states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
+            if states[team, player] == 30:  # Goal Completed
+                completed_worlds += 1
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
         player_names[team, player] = alias
@@ -1410,14 +1417,18 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         activity_timers=activity_timers, video=video, hints=hints,
         long_player_names=long_player_names,
         multisave=multisave, precollected_items=precollected_items, groups=groups,
-        locations=locations, games=games, states=states,
+        locations=locations, total_locations=total_locations, games=games, states=states,
+        completed_worlds=completed_worlds,
         custom_locations=custom_locations, custom_items=custom_items,
     )
 
 
-def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, typing.Dict[int, int]]:
-    inventory = {teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
-                 for teamnumber, team_data in data["checks_done"].items()}
+def _get_inventory_data(data: typing.Dict[str, typing.Any]) \
+        -> typing.Dict[int, typing.Dict[int, typing.Dict[int, int]]]:
+    inventory: typing.Dict[int, typing.Dict[int, typing.Dict[int, int]]] = {
+        teamnumber: {playernumber: collections.Counter() for playernumber in team_data}
+        for teamnumber, team_data in data["checks_done"].items()
+    }
 
     groups = data["groups"]
 
@@ -1436,6 +1447,17 @@ def _get_inventory_data(data: typing.Dict[str, typing.Any]) -> typing.Dict[int, 
     return inventory
 
 
+def _get_named_inventory(inventory: typing.Dict[int, int], custom_items: typing.Dict[int, str] = None) \
+        -> typing.Dict[str, int]:
+    """slow"""
+    if custom_items:
+        mapping = collections.ChainMap(custom_items, lookup_any_item_id_to_name)
+    else:
+        mapping = lookup_any_item_id_to_name
+
+    return collections.Counter({mapping.get(item_id, None): count for item_id, count in inventory.items()})
+
+
 @app.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)  # multisave is currently created at most every minute
 def get_multiworld_tracker(tracker: UUID):
@@ -1447,18 +1469,22 @@ def get_multiworld_tracker(tracker: UUID):
 
     return render_template("multiTracker.html", **data)
 
+if "Factorio" in games:
+    @app.route('/tracker/<suuid:tracker>/Factorio')
+    @cache.memoize(timeout=60)  # multisave is currently created at most every minute
+    def get_Factorio_multiworld_tracker(tracker: UUID):
+        data = _get_multiworld_tracker_data(tracker)
+        if not data:
+            abort(404)
 
-@app.route('/tracker/<suuid:tracker>/Factorio')
-@cache.memoize(timeout=60)  # multisave is currently created at most every minute
-def get_Factorio_multiworld_tracker(tracker: UUID):
-    data = _get_multiworld_tracker_data(tracker)
-    if not data:
-        abort(404)
+        data["inventory"] = _get_inventory_data(data)
+        data["named_inventory"] = {team_id : {
+            player_id: _get_named_inventory(inventory, data["custom_items"])
+            for player_id, inventory in team_inventory.items()
+        } for team_id, team_inventory in data["inventory"].items()}
+        data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
 
-    data["inventory"] = _get_inventory_data(data)
-    data["enabled_multiworld_trackers"] = get_enabled_multiworld_trackers(data["room"], "Factorio")
-
-    return render_template("multiFactorioTracker.html", **data)
+        return render_template("multiFactorioTracker.html", **data)
 
 
 @app.route('/tracker/<suuid:tracker>/A Link to the Past')
@@ -1588,5 +1614,7 @@ game_specific_trackers: typing.Dict[str, typing.Callable] = {
 
 multi_trackers: typing.Dict[str, typing.Callable] = {
     "A Link to the Past": get_LttP_multiworld_tracker,
-    "Factorio": get_Factorio_multiworld_tracker,
 }
+
+if "Factorio" in games:
+    multi_trackers["Factorio"] = get_Factorio_multiworld_tracker
