@@ -839,7 +839,7 @@ def make_custom_item_pool(world, player):
         pool.extend(['Moon Pearl'] * customitemarray[28])
 
     if world.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
-        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in Retro Mode
+        itemtotal = itemtotal - 28  # Corrects for small keys not being in item pool in universal Mode
         if world.key_drop_shuffle[player]:
             itemtotal = itemtotal - (len(key_drop_data) - 1)
     if itemtotal < total_items_to_place:
