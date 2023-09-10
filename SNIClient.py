@@ -68,12 +68,11 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         options = snes_options.split()
         num_options = len(options)
 
-        if num_options > 0:
-            snes_device_number = int(options[0])
-
         if num_options > 1:
             snes_address = options[0]
             snes_device_number = int(options[1])
+        elif num_options > 0:
+            snes_device_number = int(options[0])
 
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_connect_task:
