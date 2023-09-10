@@ -2451,6 +2451,8 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("PotSS: 4th meeting with Redento", player),
         lambda state: redento(state, blasphemousworld, player, 4))
+    set_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
+        lambda state: can_beat_boss(state, "Patio", logic, player))
     # No doors
 
 
