@@ -8,7 +8,7 @@ from Fill import fill_restrictive
 
 from .Bosses import BossFactory, Boss
 from .Items import ItemFactory
-from .Regions import lookup_boss_drops
+from .Regions import lookup_boss_drops, key_drop_data
 from .Options import smallkey_shuffle
 
 if typing.TYPE_CHECKING:
@@ -255,18 +255,16 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 if all_state_base.has("Triforce", player):
                     all_state_base.remove(multiworld.worlds[player].create_item("Triforce"))
 
-            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
-                # all_state_base.remove(item)
-            # for (player, key_drop_shuffle) in enumerate(world.key_drop_shuffle.values(), start=1):
-            #     if not key_drop_shuffle and player not in world.groups:
-            #         for key_loc in key_drop_data:
-            #             key_data = key_drop_data[key_loc]
-            #             all_state_base.remove(ItemFactory(key_data[3], player))
-            #             loc = world.get_location(key_loc, player)
-            #
-            #             if loc in all_state_base.events:
-            #                 all_state_base.events.remove(loc)
-            # fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True)
+            for (player, key_drop_shuffle) in enumerate(multiworld.key_drop_shuffle.values(), start=1):
+                if not key_drop_shuffle and player not in multiworld.groups:
+                    for key_loc in key_drop_data:
+                        key_data = key_drop_data[key_loc]
+                        all_state_base.remove(ItemFactory(key_data[3], player))
+                        loc = multiworld.get_location(key_loc, player)
+
+                        if loc in all_state_base.events:
+                            all_state_base.events.remove(loc)
+            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True)
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],
