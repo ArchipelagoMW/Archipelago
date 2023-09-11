@@ -24,8 +24,8 @@ def check():
         if 'file' not in request.files:
             flash('No file part')
         else:
-            file = request.files['file']
-            options = get_yaml_data(file)
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
             if isinstance(options, str):
                 flash(options)
             else:
@@ -39,30 +39,33 @@ def mysterycheck():
     return redirect(url_for("check"), 301)
 
 
-def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
+def get_yaml_data(files) -> Union[Dict[str, str], str, Markup]:
     options = {}
-    # if user does not select file, browser also
-    # submit an empty part without filename
-    if file.filename == '':
-        return 'No selected file'
-    elif file and allowed_file(file.filename):
-        if file.filename.endswith(".zip"):
+    for file in files:
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            return 'No selected file'
+        elif file.filename in options:
+            return f'Conflicting files named {file.filename} submitted'
+        elif file and allowed_file(file.filename):
+            if file.filename.endswith(".zip"):
 
-            with zipfile.ZipFile(file, 'r') as zfile:
-                infolist = zfile.infolist()
+                with zipfile.ZipFile(file, 'r') as zfile:
+                    infolist = zfile.infolist()
 
-                if any(file.filename.endswith(".archipelago") for file in infolist):
-                    return Markup("Error: Your .zip file contains an .archipelago file. "
-                                  'Did you mean to <a href="/uploads">host a game</a>?')
+                    if any(file.filename.endswith(".archipelago") for file in infolist):
+                        return Markup("Error: Your .zip file contains an .archipelago file. "
+                                    'Did you mean to <a href="/uploads">host a game</a>?')
 
-                for file in infolist:
-                    if file.filename.endswith(banned_zip_contents):
-                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
-                               "Your file was deleted."
-                    elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
-                        options[file.filename] = zfile.open(file, "r").read()
-        else:
-            options = {file.filename: file.read()}
+                    for file in infolist:
+                        if file.filename.endswith(banned_zip_contents):
+                            return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
+                                "Your file was deleted."
+                        elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
+                            options[file.filename] = zfile.open(file, "r").read()
+            else:
+                options[file.filename] = file.read()
     if not options:
         return "Did not find a .yaml file to process."
     return options
