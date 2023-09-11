@@ -312,7 +312,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Thieves Town Big Key Door', player), lambda state: state.has('Big Key (Thieves Town)', player))
     set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player))
     set_rule(world.get_location('Thieves\' Town - Big Chest', player),
-             lambda state: (state._lttp_has_key('Small Key (Thieves Town)', player)) and state.has('Hammer', player))
+             lambda state: (state._lttp_has_key('Small Key (Thieves Town)', player, 3)) and state.has('Hammer', player))
     if world.accessibility[player] != 'locations':
         allow_self_locking_items(world.get_location('Thieves\' Town - Big Chest', player), 'Small Key (Thieves Town)')
 
