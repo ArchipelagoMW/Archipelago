@@ -410,19 +410,13 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
 
 
 def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
-    if option_key in game_weights:
-        try:
-            if not option.supports_weighting:
-                player_option = option.from_any(game_weights[option_key])
-            else:
-                player_option = option.from_any(get_choice(option_key, game_weights))
-            setattr(ret, option_key, player_option)
-        except Exception as e:
-            raise Exception(f"Error generating option {option_key} in {ret.game}") from e
-        else:
-            player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
+    try:
+        player_option = option.get_choice(option_key, game_weights)
+        setattr(ret, option_key, player_option)
+    except Exception as e:
+        raise Exception(f"Error generating option {option_key} in {ret.game}") from e
     else:
-        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
+        player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
@@ -467,7 +461,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.common_options.items():
-        setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
+        setattr(ret, option_key, option.get_choice(option_key, weights))
 
     for option_key, option in world_type.option_definitions.items():
         handle_option(ret, game_weights, option_key, option, plando_options)

@@ -134,6 +134,21 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
         else:
             return cls.name_lookup[value]
 
+    @classmethod
+    def get_choice(cls, key: str, weights: typing.Dict[typing.Any]) -> Option[T]:
+        if key not in weights or not weights[key]:
+            return cls.from_any(cls.default)
+        option_weights = weights[key]
+        if not cls.supports_weighting:  # TODO remove this attribute ~0.4.5
+            return cls.from_any(option_weights)
+        if type(option_weights) is list:
+            return cls.from_any(random.choices(option_weights)[0])
+        if type(option_weights) is not dict:
+            return cls.from_any(option_weights)
+        if any(option_weights.values()):
+            return cls.from_any(random.choices(list(option_weights), weights=list(map(int, option_weights.values())))[0])
+        raise RuntimeError(f"All options specified in \"{key}\" are weighted as zero.")
+
     def __int__(self) -> T:
         return self.value
 
@@ -789,6 +804,12 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
+    @classmethod
+    def get_choice(cls, key: str, weights: typing.Dict[typing.Any]) -> Option[T]:
+        if key in weights:
+            return cls.from_any(weights[key])
+        return cls.from_any(cls.default)
+
     def __getitem__(self, item: str) -> typing.Any:
         return self.value.__getitem__(item)
 
@@ -834,6 +855,12 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     def get_option_name(self, value):
         return ", ".join(map(str, value))
 
+    @classmethod
+    def get_choice(cls, key: str, weights: typing.Dict[typing.Any]) -> Option[T]:
+        if key in weights:
+            return cls.from_any(weights[key])
+        return cls.from_any(cls.default)
+
     def __contains__(self, item):
         return item in self.value
 
@@ -859,6 +886,12 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     def get_option_name(self, value):
         return ", ".join(sorted(value))
+
+    @classmethod
+    def get_choice(cls, key: str, weights: typing.Dict[typing.Any]) -> Option[T]:
+        if key in weights:
+            return cls.from_any(weights[key])
+        return cls.from_any(cls.default)
 
     def __contains__(self, item):
         return item in self.value
