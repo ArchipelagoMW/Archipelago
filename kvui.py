@@ -412,8 +412,6 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.content.children[0], 'fix_heights'):
-            self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -534,12 +532,6 @@ class UILog(RecycleView):
     def clean_old(self):
         if len(self.data) > self.messages:
             self.data.pop(0)
-
-    def fix_heights(self):
-        """Workaround fix for divergent texture and layout heights"""
-        for element in self.children[0].children:
-            if element.height != element.texture_size[1]:
-                element.height = element.texture_size[1]
 
 
 class E(ExceptionHandler):
