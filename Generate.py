@@ -478,20 +478,18 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
-    if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
-        # bad hardcoded behavior to make this work for now
-        ret.plando_connections = []
-        if PlandoOptions.connections in plando_options:
-            options = game_weights.get("plando_connections", [])
-            for placement in options:
-                if roll_percentage(get_choice("percentage", placement, 100)):
-                    ret.plando_connections.append(PlandoConnection(
-                        get_choice("entrance", placement),
-                        get_choice("exit", placement),
-                        get_choice("direction", placement)
-                    ))
-    elif ret.game == "A Link to the Past":
+    if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
+    elif PlandoOptions.connections in plando_options:
+        ret.plando_connections = []
+        options = game_weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement)
+                ))
 
     return ret
 
