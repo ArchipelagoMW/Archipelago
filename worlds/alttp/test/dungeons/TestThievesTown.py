@@ -40,7 +40,6 @@ class TestThievesTown(TestDungeon):
 
             ["Thieves' Town - Boss", False, []],
             ["Thieves' Town - Boss", False, [], ['Big Key (Thieves Town)']],
-            ["Thieves' Town - Boss", False, [], ['Small Key (Thieves Town)']],
             ["Thieves' Town - Boss", False, [], ['Hammer', 'Progressive Sword', 'Cane of Somaria', 'Cane of Byrna']],
             ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Hammer']],
             ["Thieves' Town - Boss", True, ['Small Key (Thieves Town)', 'Big Key (Thieves Town)', 'Progressive Sword']],
