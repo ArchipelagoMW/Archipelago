@@ -138,7 +138,7 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
-            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("false")
+            self.multiworld.dexsanity[self.player].value = 0
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
