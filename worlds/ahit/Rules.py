@@ -115,7 +115,7 @@ def get_relic_count(state: CollectionState, world: World, relic: str) -> int:
 # Only use for rifts
 def can_clear_act(state: CollectionState, world: World, act_entrance: str) -> bool:
     entrance: Entrance = world.multiworld.get_entrance(act_entrance, world.player)
-    if not state.can_reach(entrance.connected_region, player=world.player):
+    if not state.can_reach(entrance.connected_region, "Region", world.player):
         return False
 
     if "Free Roam" in entrance.connected_region.name:
