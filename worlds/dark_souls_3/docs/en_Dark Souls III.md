@@ -7,20 +7,22 @@ config file.
 
 ## What does randomization do to this game?
 
-In Dark Souls III, all unique items you can earn from a static corpse, a chest or the death of a Boss/NPC are
-randomized.
-An option is available from the settings page to also randomize the upgrade materials, the Estus shards and the
-consumables.
-Another option is available to randomize the level of the generated weapons(from +0 to +10/+5)
+Items that can be picked up from static corpses, taken from chests, or earned from defeating enemies or NPCs can be
+randomized. Common pickups like titanite shards or firebombs can be randomized as "progressive" items. That is, the
+location "Titanite Shard #5" is the fifth titanite shard you pick up, no matter where it was from. This is also what
+happens when you randomize Estus Shards and Undead Bone Shards.
 
-To beat the game you need to collect the 4 "Cinders of a Lord" randomized in the multiworld
-and kill the final boss "Soul of Cinder"
+It's also possible to randomize the upgrade level of weapons and shields as well as their infusions (if they can have
+one). Additionally, there are settings that can make the randomized experience more convenient or more interesting, such as
+removing weapon requirements or auto-equipping whatever equipment you most recently received.
+
+The goal is to find the four "Cinders of a Lord" items randomized into the multiworld and defeat the Soul of Cinder.
 
 ## What Dark Souls III items can appear in other players' worlds?
 
-Every unique item from Dark Souls III can appear in other player's worlds, such as a piece of armor, an upgraded weapon,
-or a key item.
+Practically anything can be found in other worlds including pieces of armor, upgraded weapons, key items, consumables,
+spells, upgrade materials, etc...
 
 ## What does another world's item look like in Dark Souls III?
 
-In Dark Souls III, items which need to be sent to other worlds appear as a Prism Stone.
+In Dark Souls III, items which are sent to other worlds appear as Prism Stones.
