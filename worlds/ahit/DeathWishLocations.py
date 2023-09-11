@@ -215,7 +215,7 @@ def create_dw_regions(world: World):
             bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {name}",
                                                          ItemClassification.progression, None, world.player))
 
-            if name in world.get_excluded_bonuses():
+            if name in world.get_excluded_dws():
                 main_objective.progress_type = LocationProgressType.EXCLUDED
                 full_clear.progress_type = LocationProgressType.EXCLUDED
             elif world.is_bonus_excluded(name):
@@ -253,7 +253,7 @@ def create_dw_regions(world: World):
             bonus_stamps.place_locked_item(HatInTimeItem(f"2 Stamps - {key}",
                                                          ItemClassification.progression, None, world.player))
 
-            if key in world.get_excluded_bonuses():
+            if key in world.get_excluded_dws():
                 main_objective.progress_type = LocationProgressType.EXCLUDED
                 full_clear.progress_type = LocationProgressType.EXCLUDED
             elif world.is_bonus_excluded(key):

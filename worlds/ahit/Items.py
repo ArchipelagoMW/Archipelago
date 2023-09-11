@@ -37,22 +37,19 @@ def create_itempool(world: World) -> List[Item]:
             continue
 
         item_type: ItemClassification = item_table.get(name).classification
-        if get_difficulty(world) >= 1 or is_player_knowledgeable(world) \
-                and (name == "Scooter Badge" or name == "No Bonk Badge"):
-            item_type = ItemClassification.progression
-
-        # some death wish bonuses require one hit hero + hookshot
-        if world.is_dw() and name == "Badge Pin":
-            item_type = ItemClassification.progression
 
         if world.is_dw_only():
             if item_type is ItemClassification.progression \
-                    or item_type is ItemClassification.progression_skip_balancing:
+               or item_type is ItemClassification.progression_skip_balancing:
                 continue
 
-            # progression balance anything useful, since we have basically no progression in this mode
-            if item_type is ItemClassification.useful:
-                item_type = ItemClassification.progression
+        if get_difficulty(world) >= 1 or is_player_knowledgeable(world) \
+           and (name == "Scooter Badge" or name == "No Bonk Badge") and not world.is_dw_only():
+            item_type = ItemClassification.progression
+
+        # some death wish bonuses require one hit hero + hookshot
+        if world.is_dw() and name == "Badge Pin" and not world.is_dw_only():
+            item_type = ItemClassification.progression
 
         if item_type is ItemClassification.filler or item_type is ItemClassification.trap:
             continue
@@ -64,7 +61,7 @@ def create_itempool(world: World) -> List[Item]:
             continue
 
         if name == "Progressive Painting Unlock" \
-                and world.multiworld.ShuffleSubconPaintings[world.player].value == 0:
+           and world.multiworld.ShuffleSubconPaintings[world.player].value == 0:
             continue
 
         if world.multiworld.StartWithCompassBadge[world.player].value > 0 and name == "Compass Badge":
