@@ -237,23 +237,25 @@ Quarry (Quarry) - Quarry Stoneworks Ground Floor - 0x02010:
 158122 - 0x01E59 (Stoneworks Entry Right Panel) - True - Dots
 Door - 0x02010 (Stoneworks Entry) - 0x01E59 & 0x01E5A
 
-Quarry Stoneworks Ground Floor (Quarry Stoneworks) - Quarry - 0x275FF - Quarry Stoneworks Middle Floor - 0x03678 - Outside Quarry - 0x17CE8:
+Quarry Stoneworks Ground Floor (Quarry Stoneworks) - Quarry - 0x275FF - Quarry Stoneworks Middle Floor - 0x03678 - Outside Quarry - 0x17CE8 - Quarry Stoneworks Lift - TrueOneWay:
 158123 - 0x275ED (Side Exit Panel) - True - True
 Door - 0x275FF (Side Exit) - 0x275ED
 158124 - 0x03678 (Lower Ramp Control) - True - Dots & Eraser
 158145 - 0x17CAC (Roof Exit Panel) - True - True
 Door - 0x17CE8 (Roof Exit) - 0x17CAC
 
-Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Ground Floor - 0x03675 - Quarry Stoneworks Upper Floor - 0x03679:
+Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Lift - TrueOneWay:
 158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Dots & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Dots & Eraser
 158128 - 0x014D9 (Lower Row 4) - 0x0148A - Dots & Eraser
 158129 - 0x014E7 (Lower Row 5) - 0x014D9 - Dots & Eraser
 158130 - 0x014E8 (Lower Row 6) - 0x014E7 - Dots & Eraser
+
+Quarry Stoneworks Lift (Quarry Stoneworks) - Quarry Stoneworks Middle Floor - 0x03679 - Quarry Stoneworks Ground Floor - 0x03679 - Quarry Stoneworks Upper Floor - 0x03679:
 158131 - 0x03679 (Lower Lift Control) - 0x014E8 - Dots & Eraser
 
-Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Floor - 0x03676 & 0x03679 - Quarry Stoneworks Ground Floor - 0x0368A:
+Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Lift - 0x03675 - Quarry Stoneworks Ground Floor - 0x0368A:
 158132 - 0x03676 (Upper Ramp Control) - True - Dots & Eraser
 158133 - 0x03675 (Upper Lift Control) - True - Dots & Eraser
 158134 - 0x00557 (Upper Row 1) - True - Colored Squares & Eraser
@@ -1098,32 +1100,38 @@ Obelisks (EPs) - Entry - True:
 159702 - 0xFFE02 (Desert Obelisk Side 3) - 0x3351D - True
 159703 - 0xFFE03 (Desert Obelisk Side 4) - 0x0053C & 0x00771 & 0x335C8 & 0x335C9 & 0x337F8 & 0x037BB & 0x220E4 & 0x220E5 - True
 159704 - 0xFFE04 (Desert Obelisk Side 5) - 0x334B9 & 0x334BC & 0x22106 & 0x0A14C & 0x0A14D - True
+159709 - 0x00359 (Desert Obelisk) - True - True
 159710 - 0xFFE10 (Monastery Obelisk Side 1) - 0x03ABC & 0x03ABE & 0x03AC0 & 0x03AC4 - True
 159711 - 0xFFE11 (Monastery Obelisk Side 2) - 0x03AC5 - True
 159712 - 0xFFE12 (Monastery Obelisk Side 3) - 0x03BE2 & 0x03BE3 & 0x0A409 - True
 159713 - 0xFFE13 (Monastery Obelisk Side 4) - 0x006E5 & 0x006E6 & 0x006E7 & 0x034A7 & 0x034AD & 0x034AF & 0x03DAB & 0x03DAC & 0x03DAD - True
 159714 - 0xFFE14 (Monastery Obelisk Side 5) - 0x03E01 - True
 159715 - 0xFFE15 (Monastery Obelisk Side 6) - 0x289F4 & 0x289F5 - True
+159719 - 0x00263 (Monastery Obelisk) - True - True
 159720 - 0xFFE20 (Treehouse Obelisk Side 1) - 0x0053D & 0x0053E & 0x00769 - True
 159721 - 0xFFE21 (Treehouse Obelisk Side 2) - 0x33721 & 0x220A7 & 0x220BD - True
 159722 - 0xFFE22 (Treehouse Obelisk Side 3) - 0x03B22 & 0x03B23 & 0x03B24 & 0x03B25 & 0x03A79 & 0x28ABD & 0x28ABE - True
 159723 - 0xFFE23 (Treehouse Obelisk Side 4) - 0x3388F & 0x28B29 & 0x28B2A - True
 159724 - 0xFFE24 (Treehouse Obelisk Side 5) - 0x018B6 & 0x033BE & 0x033BF & 0x033DD & 0x033E5 - True
 159725 - 0xFFE25 (Treehouse Obelisk Side 6) - 0x28AE9 & 0x3348F - True
+159729 - 0x00097 (Treehouse Obelisk) - True - True
 159730 - 0xFFE30 (River Obelisk Side 1) - 0x001A3 & 0x335AE - True
 159731 - 0xFFE31 (River Obelisk Side 2) - 0x000D3 & 0x035F5 & 0x09D5D & 0x09D5E & 0x09D63 - True
 159732 - 0xFFE32 (River Obelisk Side 3) - 0x3370E & 0x035DE & 0x03601 & 0x03603 & 0x03D0D & 0x3369A & 0x336C8 & 0x33505 - True
 159733 - 0xFFE33 (River Obelisk Side 4) - 0x03A9E & 0x016B2 & 0x3365F & 0x03731 & 0x036CE & 0x03C07 & 0x03A93 - True
 159734 - 0xFFE34 (River Obelisk Side 5) - 0x03AA6 & 0x3397C & 0x0105D & 0x0A304 - True
 159735 - 0xFFE35 (River Obelisk Side 6) - 0x035CB & 0x035CF - True
+159739 - 0x00367 (River Obelisk) - True - True
 159740 - 0xFFE40 (Quarry Obelisk Side 1) - 0x28A7B & 0x005F6 & 0x00859 & 0x17CB9 & 0x28A4A - True
 159741 - 0xFFE41 (Quarry Obelisk Side 2) - 0x334B6 & 0x00614 & 0x0069D & 0x28A4C - True
 159742 - 0xFFE42 (Quarry Obelisk Side 3) - 0x289CF & 0x289D1 - True
 159743 - 0xFFE43 (Quarry Obelisk Side 4) - 0x33692 - True
 159744 - 0xFFE44 (Quarry Obelisk Side 5) - 0x03E77 & 0x03E7C - True
+159749 - 0x22073 (Quarry Obelisk) - True - True
 159750 - 0xFFE50 (Town Obelisk Side 1) - 0x035C7 - True
 159751 - 0xFFE51 (Town Obelisk Side 2) - 0x01848 & 0x03D06 & 0x33530 & 0x33600 & 0x28A2F & 0x28A37 & 0x334A3 & 0x3352F - True
 159752 - 0xFFE52 (Town Obelisk Side 3) - 0x33857 & 0x33879 & 0x03C19 - True
 159753 - 0xFFE53 (Town Obelisk Side 4) - 0x28B30 & 0x035C9 - True
 159754 - 0xFFE54 (Town Obelisk Side 5) - 0x03335 & 0x03412 & 0x038A6 & 0x038AA & 0x03E3F & 0x03E40 & 0x28B8E - True
 159755 - 0xFFE55 (Town Obelisk Side 6) - 0x28B91 & 0x03BCE & 0x03BCF & 0x03BD1 & 0x339B6 & 0x33A20 & 0x33A29 & 0x33A2A & 0x33B06 - True
+159759 - 0x0A16C (Town Obelisk) - True - True
