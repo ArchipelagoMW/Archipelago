@@ -100,7 +100,7 @@ class KH2World(World):
             "FinalXemnas":            self.multiworld.FinalXemnas[self.player].value,
             "LuckyEmblemsRequired":   self.multiworld.LuckyEmblemsRequired[self.player].value,
             "BountyRequired":         self.multiworld.BountyRequired[self.player].value,
-            "PoptrackerVersionCheck": 4.2,
+            "PoptrackerVersionCheck": 4.3,
             "keyblade_abilities":     self.sora_ability_dict,
             "staff_abilities":        self.donald_ability_dict,
             "shield_abilities":       self.goofy_ability_dict,
