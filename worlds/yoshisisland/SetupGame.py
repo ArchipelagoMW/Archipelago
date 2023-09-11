@@ -125,19 +125,15 @@ def setup_gamevars(world, multiworld, player: int):
 
     world.boss_pot_data = (pointer_dict[world.boss_room_id[3]])
 
-    for i in range(4):
-        world.boss_frog_data = (pointer_dict[world.boss_room_id[4]])
+    world.boss_frog_data = (pointer_dict[world.boss_room_id[4]])
 
-    for i in range(4):
-        world.boss_plant_data = (pointer_dict[world.boss_room_id[5]])
+    world.boss_plant_data = (pointer_dict[world.boss_room_id[5]])
 
     world.boss_milde_data = (pointer_dict[world.boss_room_id[6]])
 
-    for i in range(4):
-        world.boss_koop_data = (pointer_dict[world.boss_room_id[7]])
+    world.boss_koop_data = (pointer_dict[world.boss_room_id[7]])
 
-    for i in range(4):
-        world.boss_slug_data = (pointer_dict[world.boss_room_id[8]])
+    world.boss_slug_data = (pointer_dict[world.boss_room_id[8]])
 
     world.boss_raph_data = (pointer_dict[world.boss_room_id[9]])
 
@@ -264,11 +260,10 @@ def setup_gamevars(world, multiworld, player: int):
     world.world_start_lv = [0, 8, 16, 24, 32, 40]
     if multiworld.shuffle_midrings[player].value == 0:
         easy_start_lv.extend([0x1A, 0x24, 0x34])
-        norm_start_lv.extend([0x24, 0x37, 0x3C])
+        norm_start_lv.extend([0x24, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
 
     if multiworld.level_shuffle[player].value != 1:
-        norm_start_lv.extend([0x3C])
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
         if multiworld.shuffle_midrings[player].value == 0:
             easy_start_lv.extend([0x1B])

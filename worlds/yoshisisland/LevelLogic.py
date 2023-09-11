@@ -176,7 +176,7 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Tulip', 'Beanstalk', 'Dashed Stairs'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Tulip'}, self.player)
+            return state.has_any({'Tulip', 'Dashed Stairs'}, self.player)
         else:
             return True
 
@@ -222,7 +222,7 @@ class YoshiLogic:
 ###############################
     def _13Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return True
+            return state.has_all({'Chomp Rock'}, self.player)
         elif self.game_logic == "Normal":
             return True
         else:
@@ -230,7 +230,7 @@ class YoshiLogic:
 
     def _13Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return True
+            return state.has_all({'Chomp Rock'}, self.player)
         elif self.game_logic == "Normal":
             return True
         else:
@@ -490,7 +490,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Poochy', 'Large Spring Ball', 'Spring Ball'}, self.player)
         else:
-            return state.has_all({'Poochy', 'Large Spring Ball'}, self.player)
+            return state.has_all({'Large Spring Ball'}, self.player) and (state.has('Poochy', self.player) or self.melon_item(state))
 
     def _21Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -530,7 +530,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball', 'Mole Tank Morph'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball', 'Mole Tank Morph'}, self.player)
+            return state.has_all({'Mole Tank Morph'}, self.player) and (state.has_any({'Ice Melon', 'Large Spring Ball'}, self.player) or self.melon_item(state))
 
     def _22Flowers(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -538,7 +538,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Super Star', 'Large Spring Ball', 'Beanstalk', 'Spring Ball'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball'}, self.player)
+            return (state.has_any({'Ice Melon', 'Large Spring Ball'}, self.player) or self.melon_item(state))
 
     def _22Stars(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -554,7 +554,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Beanstalk', 'Super Star', 'Large Spring Ball'}, self.player)
         else:
-            return state.has_all({'Large Spring Ball'}, self.player)
+            return (state.has_any({'Ice Melon', 'Large Spring Ball'}, self.player) or self.melon_item(state))
 #################################################################################
     def _23Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -714,7 +714,7 @@ class YoshiLogic:
 #########################################################################################
     def _27Coins(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_any({'Dashed Platform', 'Giant Eggs'}, self.player) and state.has('Large Spring Ball', self.player)
+            return (state.has_any({'Dashed Platform', 'Giant Eggs'}, self.player) or self.combat_item(state)) and state.has('Large Spring Ball', self.player)
         elif self.game_logic == "Normal":
             return True
         else:
