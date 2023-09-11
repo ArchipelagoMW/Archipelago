@@ -29,9 +29,17 @@ class OpenRCT2World(World):
     topology_present = True  # show path to required location checks in spoiler
     item_name_to_id = {name: id for id, name in enumerate(openRCT2_items, base_id)}
     location_name_to_id = {name: id for id, name in enumerate(openRCT2_locations, base_id)}
-
+    
     print("Here's the location_name_to_id dictionary:")
     print(location_name_to_id)
+
+    print("Monopoly Mode is enabled?")
+    # print(self.multiworld.monopoly_mode[self.player])
+    # if self.multiworld.monopoly_mode[self.player]:
+    #     item_frequency["Land Discount"] = 20
+    #     item_frequency["Construction Rights Discount"] = 20
+
+    create_locations()
 
     def create_items(self) -> None:
         # for item in item_table:
