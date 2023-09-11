@@ -93,6 +93,7 @@ Disabled Locations:
 0x28AE3 (Vines) - 0x18590 - Shadows Follow & Environment
 0x28938 (Apple Tree) - 0x28AE3 - Environment
 0x079DF (Triple Exit) - 0x28938 - Shadows Avoid & Environment & Reflection
+0x00815 (Theater Video Input)
 0x03553 (Theater Tutorial Video)
 0x03552 (Theater Desert Video)
 0x0354E (Theater Jungle Video)
