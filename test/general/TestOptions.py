@@ -29,10 +29,10 @@ class TestOptions(unittest.TestCase):
                 },
         }
 
-        world_type = AutoWorldRegister.world_types["A Link to the Past"]
+        world_type = AutoWorldRegister.world_types["A Link to the Past"]  # what else
         for option_key, option in ChainMap(Options.common_options, Options.per_game_common_options,
                                            world_type.option_definitions).items():
-            result = option.get_choice(option_key, weights)
+            result = option.get_choice(weights[option_key]) if option_key in weights else option.from_any(option.default)
             if option_key == "progression_balancing":
                 self.assertIn(result.value, {0, 50, 99})
             else:

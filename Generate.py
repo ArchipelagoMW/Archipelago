@@ -410,13 +410,16 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
 
 
 def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
-    try:
-        player_option = option.get_choice(option_key, game_weights)
-        setattr(ret, option_key, player_option)
-    except Exception as e:
-        raise Exception(f"Error generating option {option_key} in {ret.game}") from e
+    if option_key in game_weights:
+        try:
+            player_option = option.get_choice(game_weights[option_key])
+            setattr(ret, option_key, player_option)
+        except Exception as e:
+            raise Exception(f"Error generating option {option_key} in {ret.game}") from e
+        else:
+            player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
     else:
-        player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
+        setattr(ret, option_key, option.from_any(option.default))  # call the from_any here to support default "random"
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
@@ -461,7 +464,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     ret.name = get_choice('name', weights)
     for option_key, option in Options.common_options.items():
-        setattr(ret, option_key, option.get_choice(option_key, weights))
+        setattr(ret, option_key,
+                option.get_choice(weights[option_key]) if option_key in weights else option.from_any(option.default))
 
     for option_key, option in world_type.option_definitions.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
@@ -486,6 +490,16 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                     ))
     elif ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
+    elif PlandoOptions.connections in plando_options:
+        ret.plando_connections = []
+        options = game_weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement)
+                ))
 
     return ret
 
