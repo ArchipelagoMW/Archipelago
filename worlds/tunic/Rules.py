@@ -1,4 +1,3 @@
-from random import Random
 from typing import Dict
 
 from ..generic.Rules import set_rule, forbid_item
@@ -7,11 +6,11 @@ from BaseClasses import MultiWorld
 hexagon_quest_abilities: Dict[str, int] = {}
 
 
-def set_abilities(multiworld: MultiWorld, player: int, random: Random):
+def set_abilities(multiworld: MultiWorld):
     ability_requirement = [5, 10, 15]
     abilities = ["prayer", "holy_cross", "ice_rod"]
-    random.shuffle(ability_requirement)
-    random.shuffle(abilities)
+    multiworld.random.shuffle(ability_requirement)
+    multiworld.random.shuffle(abilities)
     for i in range(3):
         hexagon_quest_abilities[abilities.pop()] = ability_requirement.pop()
 
@@ -46,7 +45,7 @@ def set_region_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player) and state.has(prayer, player, prayer_amount)
         multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: state.has_any({grapple, laurels}, player) and state.has(prayer, player, prayer_amount)
         multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = lambda state: state.has(gold_hexagon, player, 20) if multiworld.hexagon_quest[player].value \
-            else state.has(prayer, player, prayer_amount) and state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)
+            else state.has_all({prayer, red_hexagon, green_hexagon, blue_hexagon}, player)
     else:
         multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = lambda state: state.has(lantern, player)
         multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = lambda state: state.has(grapple, player)
@@ -154,8 +153,8 @@ def set_location_rules(multiworld: MultiWorld, player: int):
              lambda state: state.has(laurels, player) or (state.has(lantern, player) and (
                      state.has_group("melee weapons", player, 2) or state.has(fire_wand, player))) and state.has(
                  holy_cross, player, holy_cross_amount) if ability_shuffle else state.has(laurels, player) or (
-                     state.has(lantern, player) and (
-                     state.has_group("melee weapons", player, 2) or state.has(fire_wand, player))))
+                     state.has(lantern, player) and (state.has_group("melee weapons", player, 2)
+                                                     or state.has(fire_wand, player))))
     set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
              lambda state: state.has(laurels, player) or (
                      state.has(lantern, player) and state.has_group("melee weapons", player, 2)))
