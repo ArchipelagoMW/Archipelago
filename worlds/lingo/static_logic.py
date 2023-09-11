@@ -91,6 +91,49 @@ class StaticLingoLogic:
     REQUIRED_PAINTING_ROOMS: List[str] = []
     REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
+    SPECIAL_ITEM_IDS: Dict[str, int] = {}
+    PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
+    DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
+    DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+    DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
+    PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+
+    def get_special_item_id(self, name: str):
+        if name not in self.SPECIAL_ITEM_IDS:
+            raise Exception(f'Item ID for special item {name} not found in ids.yaml.')
+
+        return self.SPECIAL_ITEM_IDS[name]
+
+    def get_panel_location_id(self, room: str, name: str):
+        if room not in self.PANEL_LOCATION_IDS or name not in self.PANEL_LOCATION_IDS[room]:
+            raise Exception(f'Location ID for panel {room} - {name} not found in ids.yaml.')
+
+        return self.PANEL_LOCATION_IDS[room][name]
+
+    def get_door_location_id(self, room: str, name: str):
+        if room not in self.DOOR_LOCATION_IDS or name not in self.DOOR_LOCATION_IDS[room]:
+            raise Exception(f'Location ID for door {room} - {name} not found in ids.yaml.')
+
+        return self.DOOR_LOCATION_IDS[room][name]
+
+    def get_door_item_id(self, room: str, name: str):
+        if room not in self.DOOR_ITEM_IDS or name not in self.DOOR_ITEM_IDS[room]:
+            raise Exception(f'Item ID for door {room} - {name} not found in ids.yaml.')
+
+        return self.DOOR_ITEM_IDS[room][name]
+
+    def get_door_group_item_id(self, name: str):
+        if name not in self.DOOR_GROUP_ITEM_IDS:
+            raise Exception(f'Item ID for door group {name} not found in ids.yaml.')
+
+        return self.DOOR_GROUP_ITEM_IDS[name]
+
+    def get_progressive_item_id(self, name: str):
+        if name not in self.PROGRESSIVE_ITEM_IDS:
+            raise Exception(f'Item ID for progressive item {name} not found in ids.yaml.')
+
+        return self.PROGRESSIVE_ITEM_IDS[name]
+
     def process_entrance(self, source_room, doors, room_obj):
         if doors is True:
             room_obj.entrances.append(RoomEntrance(source_room, None, False))
@@ -400,6 +443,40 @@ class StaticLingoLogic:
             from importlib.resources import files
         except ImportError:
             from importlib_resources import files
+
+        with files("worlds.lingo").joinpath("ids.yaml").open() as file:
+            config = yaml.load(file, Loader=yaml.Loader)
+
+            if "special_items" in config:
+                for item_name, item_id in config["special_items"].items():
+                    self.SPECIAL_ITEM_IDS[item_name] = item_id
+
+            if "panels" in config:
+                for room_name in config["panels"].keys():
+                    self.PANEL_LOCATION_IDS[room_name] = {}
+
+                    for panel_name, location_id in config["panels"][room_name].items():
+                        self.PANEL_LOCATION_IDS[room_name][panel_name] = location_id
+
+            if "doors" in config:
+                for room_name in config["doors"].keys():
+                    self.DOOR_LOCATION_IDS[room_name] = {}
+                    self.DOOR_ITEM_IDS[room_name] = {}
+
+                    for door_name, door_data in config["doors"][room_name].items():
+                        if "location" in door_data:
+                            self.DOOR_LOCATION_IDS[room_name][door_name] = door_data["location"]
+
+                        if "item" in door_data:
+                            self.DOOR_ITEM_IDS[room_name][door_name] = door_data["item"]
+
+            if "door_groups" in config:
+                for item_name, item_id in config["door_groups"].items():
+                    self.DOOR_GROUP_ITEM_IDS[item_name] = item_id
+
+            if "progression" in config:
+                for item_name, item_id in config["progression"].items():
+                    self.PROGRESSIVE_ITEM_IDS[item_name] = item_id
 
         with files("worlds.lingo").joinpath("LL1.yaml").open() as file:
             config = yaml.load(file, Loader=yaml.Loader)

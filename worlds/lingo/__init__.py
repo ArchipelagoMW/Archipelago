@@ -41,8 +41,8 @@ class LingoWorld(World):
     data_version = 1
 
     static_logic = StaticLingoLogic()
-    static_items = StaticLingoItems(base_id)
-    static_locat = StaticLingoLocations(base_id)
+    static_items = StaticLingoItems(static_logic)
+    static_locat = StaticLingoLocations(static_logic)
     option_definitions = lingo_options
 
     item_name_to_id = {
@@ -50,7 +50,6 @@ class LingoWorld(World):
     }
     location_name_to_id = {
         name: data.code for name, data in static_locat.ALL_LOCATION_TABLE.items()
-        if data.code is not None
     }
 
     # This is just used for unit testing. It should remain at the default values for actual play.

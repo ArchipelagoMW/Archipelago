@@ -7,10 +7,9 @@ class ItemData(NamedTuple):
     """
     ItemData for an item in Lingo
     """
-    code: Optional[int]
+    code: int
     classification: ItemClassification
     mode: Optional[str]
-    event: bool
     door_ids: List[str]
     painting_ids: List[str]
 
@@ -45,25 +44,20 @@ class StaticLingoItems:
     Defines the items that can be included in a Lingo world
     """
 
-    base_id: int = 0
-
     ALL_ITEM_TABLE: Dict[str, ItemData] = {}
 
-    def create_item(self, name: str, event: bool, classification: ItemClassification, mode: Optional[str] = None,
+    def create_item(self, code: int, name: str, classification: ItemClassification, mode: Optional[str] = None,
                     door_ids: Optional[List[str]] = None, painting_ids: Optional[List[str]] = None):
-        new_id = None if event else self.base_id + len(self.ALL_ITEM_TABLE)
-        new_item = ItemData(new_id, classification, mode, event, [] if door_ids is None else door_ids,
+        new_item = ItemData(code, classification, mode, [] if door_ids is None else door_ids,
                             [] if painting_ids is None else painting_ids)
         self.ALL_ITEM_TABLE[name] = new_item
 
-    def __init__(self, base_id: int):
-        self.base_id = base_id
-
+    def __init__(self, static_logic: StaticLingoLogic):
         for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
-            self.create_item(color, False, ItemClassification.progression, "colors")
+            self.create_item(static_logic.get_special_item_id(color), color, ItemClassification.progression, "colors")
 
         door_groups: Dict[str, List[str]] = {}
-        for room_name, doors in StaticLingoLogic.DOORS_BY_ROOM.items():
+        for room_name, doors in static_logic.DOORS_BY_ROOM.items():
             for door_name, door in doors.items():
                 if door.skip_item is True or door.event is True:
                     continue
@@ -74,25 +68,32 @@ class StaticLingoItems:
                     door_mode = "complex door"
                     door_groups.setdefault(door.group, []).extend(door.door_ids)
 
-                if room_name in StaticLingoLogic.PROGRESSION_BY_ROOM\
-                        and door_name in StaticLingoLogic.PROGRESSION_BY_ROOM[room_name]:
+                if room_name in static_logic.PROGRESSION_BY_ROOM\
+                        and door_name in static_logic.PROGRESSION_BY_ROOM[room_name]:
                     if room_name == "Orange Tower":
                         door_mode = "orange tower"
                     else:
                         door_mode = "special"
 
-                self.create_item(door.item_name, False,
+                self.create_item(static_logic.get_door_item_id(room_name, door_name), door.item_name,
                                  ItemClassification.filler if door.junk_item else ItemClassification.progression,
                                  door_mode, door.door_ids, door.painting_ids)
 
         for group, group_door_ids in door_groups.items():
-            self.create_item(group, False, ItemClassification.progression, "door group", group_door_ids, [])
+            self.create_item(static_logic.get_door_group_item_id(group), group, ItemClassification.progression,
+                             "door group", group_door_ids, [])
 
-        self.create_item("Nothing", False, ItemClassification.filler, "special")
-        self.create_item("Slowness Trap", False, ItemClassification.trap, "special")
-        self.create_item("Iceland Trap", False, ItemClassification.trap, "special")
-        self.create_item("Atbash Trap", False, ItemClassification.trap, "special")
-        self.create_item("Puzzle Skip", False, ItemClassification.useful, "special")
+        special_items: Dict[str, ItemClassification] = {
+            "Nothing": ItemClassification.filler,
+            "Slowness Trap": ItemClassification.trap,
+            "Iceland Trap": ItemClassification.trap,
+            "Atbash Trap": ItemClassification.trap,
+            "Puzzle Skip": ItemClassification.useful,
+        }
+
+        for item_name, classification in special_items.items():
+            self.create_item(static_logic.get_special_item_id(item_name), item_name, classification, "special")
 
         for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
-            self.create_item(item_name, False, ItemClassification.progression, "special")
+            self.create_item(static_logic.get_progressive_item_id(item_name), item_name, ItemClassification.progression,
+                             "special")
