@@ -28,5 +28,8 @@ Every item has a chance to appear in another player's world.
 There are 302 checks located across the world of TUNIC.
 
 ## What do items from other worlds look like in TUNIC?
-Chests containing items belonging to other players will appear as regular chests. Freestanding item locations that
-hold items for other players will appear as golden ? blocks.
+Items belonging to other TUNIC players will either appear as that item directly (if in a freestanding location) or in a
+chest with the original chest texture for that item.
+
+Items belonging to non-TUNIC players will either appear as a question-mark block (if in a freestanding location) or in a chest with
+a question mark symbol on it. Additionally, non-TUNIC items are color-coded by classification, with green for filler, blue for useful, and gold for progression.
