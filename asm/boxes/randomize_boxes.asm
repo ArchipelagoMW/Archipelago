@@ -336,4 +336,28 @@ CollectRandomItem:
     .pool
 
 
+; Spawn the jewel piece or CD icon when you've collected one of them.
+; Parameters:
+;     r0: 0 for jewel pieces, 1 for CD
+IndicateCollectedBoxItem:
+        push {lr}
+
+        ldr r3, =CurrentEnemyData
+        ldr r1, =EntityLeftOverStateList
+        ldr r2, =CurrentRoomId
+        ldrb r2, [r2]
+        lsl r2, r2, #6
+        ldrb r3, [r3, @room_entity_slot_id]
+        add r2, r2, r3
+        add r2, r2, r1
+        mov r1, #0x21
+        strb r1, [r2]
+
+        ; r0 contains argument passed through
+        bl SpawnCollectionIndicator
+
+        pop {pc}
+    .pool
+
+
 .endautoregion

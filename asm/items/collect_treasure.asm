@@ -97,8 +97,6 @@ CheckLocations:
     .pool
 
 
-@room_entity_slot_id equ 0x18
-
 ; Spawn the jewel piece or CD icon when you've collected one of them.
 ; Parameters:
 ;     r0: 0 for jewel pieces, 1 for CD
@@ -106,17 +104,6 @@ SpawnCollectionIndicator:
         push {r4, lr}
         mov r4, r0
         add r4, #0x41
-
-        ldr r3, =CurrentEnemyData
-        ldr r1, =EntityLeftOverStateList
-        ldr r0, =CurrentRoomId
-        ldrb r0, [r0]
-        lsl r0, r0, #6
-        ldrb r3, [r3, @room_entity_slot_id]
-        add r0, r0, r3
-        add r0, r0, r1
-        mov r1, #0x21
-        strb r1, [r0]
 
         ldr r2, =Wario_ucReact
         ldrh r1, [r2, #14]
@@ -147,7 +134,7 @@ SpawnCollectionIndicator:
         orr r1, r3
         strb r1, [r0]
 
-        pop {r4, lr}
+        pop {r4, pc}
     .pool
 
 
