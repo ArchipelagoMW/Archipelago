@@ -17,6 +17,7 @@ dw_requirements = {
     "Vault Codes in the Wind": LocData(required_hats=[HatType.SPRINT]),
 
     "Security Breach": LocData(hit_requirement=1),
+    "10 Seconds until Self-Destruct": LocData(hookshot=True),
     "Community Rift: Rhythm Jump Studio": LocData(required_hats=[HatType.ICE]),
 
     "Speedrun Well": LocData(hookshot=True, hit_requirement=1, required_hats=[HatType.SPRINT]),
