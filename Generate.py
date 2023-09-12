@@ -490,16 +490,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                     ))
     elif ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
-    elif PlandoOptions.connections in plando_options:
-        ret.plando_connections = []
-        options = game_weights.get("plando_connections", [])
-        for placement in options:
-            if roll_percentage(get_choice("percentage", placement, 100)):
-                ret.plando_connections.append(PlandoConnection(
-                    get_choice("entrance", placement),
-                    get_choice("exit", placement),
-                    get_choice("direction", placement)
-                ))
 
     return ret
 
