@@ -251,7 +251,6 @@ def set_rules(world):
     add_rule(world.get_entrance("TD08 Draw", player),
              lambda state: state.has_any(["Self-Destruct Button", "Dark Snake Syndrome"], player) and
                            state.yugioh06_difficulty(player, 3))
-    # TODO: Add more ways
     add_rule(world.get_entrance("TD09 Hand Destruction", player),
              lambda state: state.has_all(["Cyber Jar",
                                           "Morphing Jar",

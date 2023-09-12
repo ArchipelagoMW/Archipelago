@@ -49,7 +49,8 @@ class Yugioh06Web(WebWorld):
 
 class Yugioh06World(World):
     """
-
+    Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006 is the definitive Yu-Gi-Oh
+    simulator on the GBA. Featuring over 2000 cards and over 90 Challenges.
     """
     game = "Yu-Gi-Oh! 2006"
     data_version = 1
