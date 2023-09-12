@@ -7,7 +7,8 @@ structure_contents = {
         "Twin-Headed Behemoth",
         "Stamping Destruction",
         "Nobleman of Crossout",
-        "Creature Swap"
+        "Creature Swap",
+        "Reload"
     },
     "zombie_madness": {
         "Pyramid Turtle",
@@ -15,7 +16,8 @@ structure_contents = {
         "Ryu Kokki",
         "Book of Life",
         "Call of the Mummy",
-        "Creature Swap"
+        "Creature Swap",
+        "Reload"
     },
     "blazing_destruction": {
         "Inferno",
@@ -29,7 +31,8 @@ structure_contents = {
     "fury_from_the_deep": {
         "Mother Grizzly",
         "Water Beaters",
-        "Gravity Bind"
+        "Gravity Bind",
+        "Reload"
     },
     "warriors_triumph": {
         "Gearfried the Iron Knight",
@@ -37,7 +40,8 @@ structure_contents = {
         "Marauding Captain",
         "Exiled Force",
         "Reinforcement of the Army",
-        "Warrior Beaters"
+        "Warrior Beaters",
+        "Reload"
     },
     "spellcasters_judgement": {
         "Dark Magician",

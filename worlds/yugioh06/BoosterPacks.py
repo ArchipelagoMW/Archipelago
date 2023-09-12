@@ -1,8 +1,9 @@
 booster_contents = {
     "LEGEND OF B.E.W.D.": {
         "Exodia",
-        "Dark Magician"
-        "Polymerization"
+        "Dark Magician",
+        "Polymerization",
+        "Skull Servant"
     },
     "METAL RAIDERS": {
         "Petit Moth",
@@ -20,7 +21,12 @@ booster_contents = {
         "Summoned Skull",
         "Sangan",
         "7 Colored Fish",
-        "Tribute to The Doomed"
+        "Tribute to The Doomed",
+        "Horn of Heaven",
+        "Magic Jammer",
+        "Seven Tools of the Bandit",
+        "Solemn Judgment",
+        "Dream Clown"
     },
     "PHARAOH'S SERVANT": {
         "Beast of Talwar",
@@ -32,7 +38,8 @@ booster_contents = {
         "Kiseitai",
         "Morphing Jar #2",
         "The Shallow Grave",
-        "Nobleman of Crossout"
+        "Nobleman of Crossout",
+        "Magic Drain"
     },
     "PHARAONIC GUARDIAN": {
         "Don Zaloog",
@@ -56,7 +63,9 @@ booster_contents = {
         "Swarm of Locusts",
         "Swarm of Scarabs",
         "Wandering Mummy",
-        "Royal Keeper"
+        "Royal Keeper",
+        "Book of Moon",
+        "Book of Taiyou"
     },
     "SPELL RULER": {
         "Ritual",
@@ -74,7 +83,9 @@ booster_contents = {
         "Spear Cretin",
         "Toon Mermaid",
         "Toon Summoned Skull",
-        "Toon World"
+        "Toon World",
+        "Rush Recklessly",
+        "The Reliable Guardian"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -97,7 +108,8 @@ booster_contents = {
         "Dancing Fairy",
         "Cure Mermaid",
         "The Last Warrior from Another Planet",
-        "United We Stand"
+        "United We Stand",
+        "Earthbound Spirit"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
@@ -120,7 +132,8 @@ booster_contents = {
         "Asura Priest",
         "Fushi No Tori",
         "Maharaghi",
-        "Susa Soldier"
+        "Susa Soldier",
+        "Emergency Provisions"
     },
     "MAGICIAN'S FORCE": {
         "Huge Revolution",
@@ -134,7 +147,7 @@ booster_contents = {
         "XZ-Tank Cannon",
         "YZ-Tank Dragon",
         "XYZ-Dragon Cannon",
-        "Dark Scorpion - Cliff the Trap Remover",
+        "Cliff the Trap Remover",
         "Wave-Motion Cannon",
         "Ritual",
         "Magical Merchant",
@@ -160,7 +173,9 @@ booster_contents = {
         "Formation Union",
         "Pitch-Black Power Stone",
         "Magical Marionette",
-        "Royal Magical Library"
+        "Royal Magical Library",
+        "Spell Shield Type-8",
+        "Tribute Doll"
     },
     "DARK CRISIS": {
         "Final Countdown",
@@ -184,7 +199,9 @@ booster_contents = {
         "Mudora",
         "Cestus of Dagla",
         "Vampire Lord",
-        "Metallizing Parasite - Lunatite"
+        "Metallizing Parasite - Lunatite",
+        "D. D. Trainer",
+        "Spell Reproduction"
     },
     "INVASION OF CHAOS": {
         "Ojama Delta Hurricane",
@@ -208,7 +225,10 @@ booster_contents = {
         "Giga Gagagigo",
         "Terrorking Salmon",
         "Blazing Inpachi",
-        "Stealth Bird"
+        "Stealth Bird",
+        "Reload",
+        "Cursed Seal of the Forbidden Spell",
+        "Stray Lambs"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
@@ -221,7 +241,8 @@ booster_contents = {
         "Solar Flare Dragon",
         "Level Limit - Area B",
         "King of the Swamp",
-        "Enemy Controller"
+        "Enemy Controller",
+        "Enchanting Fitting Room"
     },
     "SOUL OF THE DUELIST": {
         "Ninja Grandmaster Sasuke",
@@ -236,7 +257,8 @@ booster_contents = {
         "Masked Dragon",
         "Element Dragon",
         "Horus the Black Flame Dragon LV4",
-        "Level Up!"
+        "Level Up!",
+        "Howling Insect"
     },
     "RISE OF DESTINY": {
         "Homunculus the Alchemic Being",
@@ -245,7 +267,9 @@ booster_contents = {
         "Harpie Lady 1",
         "Silent Swordsman Lv3",
         "Mystic Swordsman LV6",
-        "Ultimate Insect Lv3"
+        "Ultimate Insect Lv3",
+        "Divine Wrath",
+        "Serial Spell"
     },
     "FLAMING ETERNITY": {
         "Insect Knight",
@@ -257,7 +281,9 @@ booster_contents = {
         "The Light - Hex-Sealed Fusion",
         "Ultimate Insect Lv5",
         "Blast Magician",
-        "Golem Sentry"
+        "Golem Sentry",
+        "Rescue Cat",
+        "Blade Rabbit"
     },
     "THE LOST MILLENIUM": {
         "Ritual",
@@ -281,7 +307,8 @@ booster_contents = {
         "Indomitable Fighter Lei Lei",
         "Protective Soul Ailin",
         "Miracle Fusion",
-        "Elemental Hero Bubbleman"
+        "Elemental Hero Bubbleman",
+        "Jerry Beans Man"
     },
     "ELEMENTAL ENERGY": {
         "V-Tiger Jet",
@@ -311,7 +338,8 @@ booster_contents = {
         "Treeborn Frog",
         "Saber Beetle",
         "Tenkabito Shien",
-        "Princess Pikeru"
+        "Princess Pikeru",
+        "Gokipon"
     },
     "GAME GIFT COLLECTION": {
         "Ritual",
@@ -331,7 +359,11 @@ booster_contents = {
         "Elemental Hero Madballman",
         "Mind Control",
         "Toon Dark Magician Girl",
-        "Great Spirit"
+        "Great Spirit",
+        "Graceful Dice",
+        "Negate Attack",
+        "Foolish Burial",
+        "Card Destruction"
     },
     "Special Gift Collection": {
         "Gate Guardian",
@@ -386,14 +418,15 @@ booster_contents = {
         "Gearfried the Iron Knight",
         "Dimensional Warrior",
         "Command Knight",
-        "The Last Warrior from Another Planet"
+        "The Last Warrior from Another Planet",
+        "Dream Clown"
     },
     "Warrior Collection B": {
         "Don Zaloog",
         "Dark Scorpion - Chick the Yellow",
         "Dark Scorpion - Meanae the Thorn",
         "Dark Scorpion - Gorg the Strong",
-        "Dark Scorpion - Cliff the Trap Remover",
+        "Cliff the Trap Remover",
         "Ninja Grandmaster Sasuke",
         "D.D. Warrior Lady",
         "Mystic Swordsman LV2",
@@ -447,7 +480,9 @@ booster_contents = {
         "Giant Orc",
         "Second Goblin",
         "Kiseitai",
-        "Jowls of Dark Demise"
+        "Jowls of Dark Demise",
+        "D. D. Trainer",
+        "Earthbound Spirit"
     },
     "Machine Collection A": {
         "Cyber-Stein",
@@ -517,6 +552,7 @@ booster_contents = {
         "Aussa the Earth Charmer"
     },
     "Zombie Collection": {
+        "Skull Servant",
         "Regenerating Mummy",
         "Ryu Kokki",
         "Spirit Reaper",
@@ -629,7 +665,8 @@ booster_contents = {
         "Princess Pikeru",
         "Kiseitai",
         "Elemental Hero Steam Healer",
-        "Fushi No Tori"
+        "Fushi No Tori",
+        "Emergency Provisions"
     },
     "Special Summon Collection A": {
         "Perfectly Ultimate Great Moth",
@@ -663,7 +700,8 @@ booster_contents = {
         "Embodiment of Apophis",
         "Cyber Jar",
         "Morphing Jar #2",
-        "Spear Cretin"
+        "Spear Cretin",
+        "Dark Magic Curtain"
     },
     "Special Summon Collection B": {
         "Monster Gate",
@@ -688,7 +726,12 @@ booster_contents = {
         "Formation Union",
         "Princess Pikeru",
         "Skull Zoma",
-        "Level Up!"
+        "Metal Reflect Slime"
+        "Level Up!",
+        "Howling Insect",
+        "Tribute Doll",
+        "Enchanting Fitting Room",
+        "Stray Lambs"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
@@ -712,7 +755,8 @@ booster_contents = {
         "The Earth - Hex-Sealed Fusion",
         "The Light - Hex-Sealed Fusion",
         "Ultimate Insect Lv3",
-        "Ultimate Insect Lv5"
+        "Ultimate Insect Lv5",
+        "Rescue Cat"
     },
     "Equipment Collection": {
         "Megamorph",
@@ -744,14 +788,33 @@ booster_contents = {
         "Frontline Base",
         "Level Limit - Area B",
         "Skull Zoma",
-        "Pitch-Black Power Stone"
+        "Pitch-Black Power Stone",
+        "Metal Reflect Slime"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
         "Poison of the Old Man",
         "Scapegoat",
         "Magical Dimension",
-        "Enemy Controller"
+        "Enemy Controller",
+        "Collapse",
+        "Emergency Provisions",
+        "Graceful Dice",
+        "Offerings to the Doomed",
+        "Reload",
+        "Rush Recklessly",
+        "The Reliable Guardian",
+        "Cursed Seal of the Forbidden Spell",
+        "Divine Wrath",
+        "Horn of Heaven",
+        "Magic Drain",
+        "Magic Jammer",
+        "Negate Attack",
+        "Seven Tools of the Bandit",
+        "Solemn Judgment",
+        "Spell Shield Type-8",
+        "Book of Moon",
+        "Serial Spell"
     },
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
@@ -819,7 +882,10 @@ booster_contents = {
         "Elemental Hero Steam Healer",
         "Blast Magician",
         "Magical Marionette",
-        "Swarm of Scarabs"
+        "Swarm of Scarabs",
+        "Offerings to the Doomed",
+        "Divine Wrath",
+        "Dream Clown"
     },
 }
 

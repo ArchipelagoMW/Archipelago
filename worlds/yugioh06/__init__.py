@@ -20,7 +20,6 @@ from .StructureDeck import get_deck_content_locations
 
 from ..LauncherComponents import Component, components, Type, SuffixIdentifier
 from .RomValues import structure_deck_selection, banlist_ids
-from Utils import visualize_regions
 
 def launch_client():
     import multiprocessing
@@ -280,7 +279,6 @@ class Yugioh06World(World):
         return rom_data
 
     def generate_output(self, output_directory: str):
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False, show_entrance_names=True, show_other_regions=False)
         patched_rom = self.apply_randomizer()
         outfilebase = 'AP_' + self.multiworld.seed_name
         outfilepname = f'_P{self.player}'

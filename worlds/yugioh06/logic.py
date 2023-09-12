@@ -42,7 +42,8 @@ class YuGiOh06Logic(LogicMixin):
 
     def yugioh06_has_dark_scorpion_combination(self, player):
         return self.has_all(["Dark Scorpion Combination", "Don Zaloog", "Dark Scorpion - Chick the Yellow",
-                             "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Cliff the Trap Remover"], player)
+                             "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Gorg the Strong",
+                             "Cliff the Trap Remover"], player)
 
     def yugioh06_can_exodia_win(self, player):
         # TODO: more ways to win with Exodia
