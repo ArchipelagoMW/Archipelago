@@ -4,7 +4,7 @@
 * Download and unzip the Scarab+ Mod Manager from the [Scarab+ website](https://themulhima.github.io/Scarab/).
 * A legal copy of Hollow Knight.
 
-## Installing the Archipelago Mod using Scarab
+## Installing the Archipelago Mod using Scarab+
 1. Launch Scarab+ and ensure it locates your Hollow Knight installation directory.
 2. Click the "Install" button near the "Archipelago" mod entry.
    * If desired, also install "Archipelago Map Mod" to use as an in-game tracker.
