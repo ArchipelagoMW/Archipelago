@@ -135,23 +135,19 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             CurWorld += 1
         else: CurLev += 1
 
-    connect(multiworld, player, names, "1-4", gamevar.boss_order[0], lambda state: logic._14Clear(state)),
-    connect(multiworld, player, names, "1-8", gamevar.boss_order[1], lambda state: logic._18Clear(state)),
-
-    connect(multiworld, player, names, "2-4", gamevar.boss_order[2], lambda state: logic._24Clear(state)),
-    connect(multiworld, player, names, "2-8", gamevar.boss_order[3], lambda state: logic._28Clear(state)),
-
-    connect(multiworld, player, names, "3-4", gamevar.boss_order[4], lambda state: logic._34Clear(state)),
-    connect(multiworld, player, names, "3-8", gamevar.boss_order[5], lambda state: logic._38Clear(state)),
-
-    connect(multiworld, player, names, "4-4", gamevar.boss_order[6], lambda state: logic._44Clear(state)),
-    connect(multiworld, player, names, "4-8", gamevar.boss_order[7], lambda state: logic._48Clear(state)),
-
-    connect(multiworld, player, names, "5-4", gamevar.boss_order[8], lambda state: logic._54Clear(state)),
-    connect(multiworld, player, names, "5-8", gamevar.boss_order[9], lambda state: logic._58Clear(state)),
-    connect(multiworld, player, names, 'World 6', "6-8", lambda state: bosses.castle_access(state)),
-    connect(multiworld, player, names, "6-8", "Bowser's Room", lambda state: bosses.castle_clear(state)),
-    connect(multiworld, player, names, "6-4", gamevar.boss_order[10], lambda state: logic._64Clear(state))
+    multiworld.get_region('1-4', player).add_exits([gamevar.boss_order[0]],{gamevar.boss_order[0]: lambda state: logic._14Clear(state)})
+    multiworld.get_region('1-8', player).add_exits([gamevar.boss_order[1]],{gamevar.boss_order[1]: lambda state: logic._18Clear(state)})
+    multiworld.get_region('2-4', player).add_exits([gamevar.boss_order[2]],{gamevar.boss_order[2]: lambda state: logic._24Clear(state)})
+    multiworld.get_region('2-8', player).add_exits([gamevar.boss_order[3]],{gamevar.boss_order[3]: lambda state: logic._28Clear(state)})
+    multiworld.get_region('3-4', player).add_exits([gamevar.boss_order[4]],{gamevar.boss_order[4]: lambda state: logic._34Clear(state)})
+    multiworld.get_region('3-8', player).add_exits([gamevar.boss_order[5]],{gamevar.boss_order[5]: lambda state: logic._38Clear(state)})
+    multiworld.get_region('4-4', player).add_exits([gamevar.boss_order[6]],{gamevar.boss_order[6]: lambda state: logic._44Clear(state)})
+    multiworld.get_region('4-8', player).add_exits([gamevar.boss_order[7]],{gamevar.boss_order[7]: lambda state: logic._48Clear(state)})
+    multiworld.get_region('5-4', player).add_exits([gamevar.boss_order[8]],{gamevar.boss_order[8]: lambda state: logic._54Clear(state)})
+    multiworld.get_region('5-8', player).add_exits([gamevar.boss_order[9]],{gamevar.boss_order[9]: lambda state: logic._58Clear(state)})
+    multiworld.get_region('World 6', player).add_exits(["6-8"],{"6-8": lambda state: bosses.castle_access(state)})
+    multiworld.get_region('6-4', player).add_exits([gamevar.boss_order[10]],{gamevar.boss_order[10]: lambda state: logic._64Clear(state)})
+    multiworld.get_region('6-8', player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
 
     if get_option_value(multiworld, player, "extras_enabled") == 1:
         for i in range(6):
@@ -204,25 +200,6 @@ def connectStartingRegion(multiworld: MultiWorld, player: int):
     starting_world = Entrance(player, 'Overworld', world_main)
     starting_world.connect(starting_region)
     world_main.connect(starting_region, "Overworld")
-
-def connect(multiworld: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str, rule: Optional[Callable] = None):
-    sourceRegion = multiworld.get_region(source, player)
-    targetRegion = multiworld.get_region(target, player)
-
-    if target not in used_names:
-        used_names[target] = 1
-        name = target
-    else:
-        used_names[target] += 1
-        name = target + (' ' * used_names[target])
-
-    connection = Entrance(player, name, sourceRegion)
-
-    if rule:
-        connection.access_rule = rule
-        
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
 
 
 def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
