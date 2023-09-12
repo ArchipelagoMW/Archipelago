@@ -1,3 +1,16 @@
+# This utility goes through the provided Lingo config and assigns item and
+# location IDs to entities that require them (such as doors and panels). These
+# IDs are output in a separate yaml file. If the output file already exists,
+# then it will be updated with any newly assigned IDs rather than overwritten.
+# In this event, all new IDs will be greater than any already existing IDs,
+# even if there are gaps in the ID space; this is to prevent collision when IDs
+# are retired.
+#
+# This utility should be run whenever logically new items or locations are
+# required. If an item or location is created that is logically equivalent to
+# one that used to exist, this utility should not be used, and instead the ID
+# file should be manually edited so that the old ID can be reused.
+
 require 'set'
 require 'yaml'
 
