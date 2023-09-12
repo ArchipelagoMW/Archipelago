@@ -84,8 +84,6 @@ Disabled Locations:
 0x0070F (Second Row 2)
 0x0087D (Second Row 3)
 0x002C7 (Second Row 4)
-0x15ADD (River Outside Vault)
-0x03702 (River Vault Box)
 0x17CAA (Monastery Shortcut Panel)
 0x0C2A4 (Bunker Entry)
 0x17C79 (Tinted Glass Door)
