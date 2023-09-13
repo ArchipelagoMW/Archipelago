@@ -267,6 +267,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
+
     if multiworld.extra_boulders[player]:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
@@ -275,6 +276,17 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE", player),
             can_strength
+        )
+
+    if multiworld.extra_bumpy_slope[player]:
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
+            lambda state: _can_use_acro_bike(state, player)
+        )
+    else:
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
+            lambda state: False
         )
 
     # Route 105

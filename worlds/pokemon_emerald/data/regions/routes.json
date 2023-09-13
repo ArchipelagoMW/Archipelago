@@ -960,6 +960,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE115/SEA",
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE",
       "REGION_RUSTBORO_CITY/MAIN"
     ],
     "warps": []

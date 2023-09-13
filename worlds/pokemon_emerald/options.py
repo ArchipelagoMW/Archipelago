@@ -529,9 +529,17 @@ class RemoveRoadblocks(OptionSet):
 class ExtraBoulders(Toggle):
     """
     Places strength boulders on Route 115 which block access to Meteor Falls from the beach.
-    This aims to take some power away from Surf as a tool for access.
+    This aims to take some power away from Surf by restricting how much it allows you to access.
     """
     display_name = "Extra Boulders"
+
+
+class ExtraBumpySlope(Toggle):
+    """
+    Adds a bumpy slope to Route 115 which allows access to Meteor Falls if you have the Acro Bike.
+    This aims to take some power away from Surf by adding a new way to exit the Rustboro area.
+    """
+    display_name = "Extra Bumpy Slope"
 
 
 class FreeFlyLocation(Toggle):
@@ -654,6 +662,7 @@ option_definitions: Dict[str, Option] = {
     "better_shops": BetterShops,
     "remove_roadblocks": RemoveRoadblocks,
     "extra_boulders": ExtraBoulders,
+    "extra_bumpy_slope": ExtraBumpySlope,
     "free_fly_location": FreeFlyLocation,
     "fly_without_badge": FlyWithoutBadge,
     "turbo_a": TurboA,

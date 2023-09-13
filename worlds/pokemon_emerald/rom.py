@@ -385,6 +385,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     berry_trees = 1 if multiworld.berry_trees[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, berry_trees)
 
+    # Swap route 115 layout if bumpy slope enabled
+    if multiworld.extra_bumpy_slope[player]:
+        _set_bytes_little_endian(
+            patched_rom,
+            [map_data for map_data in modified_data.maps if map_data.name == "MAP_ROUTE115"][0].header_address + 0x12,
+            2,
+            442  # Id of alternate Route 115 map layout; don't want to add >400 new constants for one value
+        )
+
     # Set slot name
     for i, byte in enumerate(multiworld.player_name[player].encode("utf-8")):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
