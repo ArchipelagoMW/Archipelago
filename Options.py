@@ -162,7 +162,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
 class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
-    default = ""
+    default: typing.ClassVar[typing.Union[str, typing.Literal["random"]]] = ""
 
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
@@ -186,7 +186,7 @@ class FreeText(Option[str]):
 
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
-    default = 0
+    default: typing.ClassVar[typing.Union[int, typing.Literal["random"]]] = 0
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -779,7 +779,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.Dict[str, typing.Any] = {}
+    default: typing.ClassVar[typing.Dict[str, typing.Any]] = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -820,7 +820,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.List[typing.Any] = []
+    default: typing.ClassVar[typing.List[typing.Any]] = []
     supports_weighting = False
 
     def __init__(self, value: typing.List[typing.Any]):
@@ -845,8 +845,8 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
         return item in self.value
 
 
-class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
+class OptionSet(Option[typing.AbstractSet[str]], VerifyKeys):
+    default: typing.ClassVar[typing.AbstractSet[str]] = frozenset()
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
