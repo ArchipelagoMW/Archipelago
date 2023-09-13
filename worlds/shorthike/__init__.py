@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from BaseClasses import Region, Location, Item, ItemClassification
+from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
@@ -8,6 +8,14 @@ from .Options import short_hike_options
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the A Short Hike randomizer connected to an Archipelago Multiworld",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Chandler"]
+    )]
 
 class ShortHikeWorld(World):
     """

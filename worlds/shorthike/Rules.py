@@ -1,6 +1,4 @@
-from typing import Dict, List, Set
-from worlds.generic.Rules import forbid_item, forbid_items_for_player, set_rule, add_rule
-from BaseClasses import CollectionState
+from worlds.generic.Rules import forbid_item, forbid_items_for_player, set_rule
 
 
 def create_rules(self, location_table):
