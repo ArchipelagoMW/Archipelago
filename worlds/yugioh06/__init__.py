@@ -17,20 +17,8 @@ from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
-
-from ..LauncherComponents import Component, components, Type, SuffixIdentifier
 from .RomValues import structure_deck_selection, banlist_ids
-
-def launch_client():
-    import multiprocessing
-    from .Client import launch
-    process = multiprocessing.Process(target=launch)
-    process.start()
-
-
-components.append(Component("Yu-Gi-Oh! 06 Client", "Yugioh06Client", func=launch_client, component_type=Type.CLIENT,
-                            file_identifier=SuffixIdentifier('.apygo06')))
-
+from .Client_bh import YuGiOh2006Client
 
 class Yugioh06Web(WebWorld):
     theme = "stone"
