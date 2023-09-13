@@ -19,7 +19,7 @@ Find your TUNIC game installation directory:
 - **Steam**: Right click TUNIC in your Steam Library, then *Manage → Browse local files*<br>
 - **PC Game Pass**: In the Xbox PC app, go to the TUNIC game page from your library, click the [...] button next to "Play", then 
 *Manage → Files → Browse...*<br>
-**Other platforms**: Follow a similar pattern of steps as above to locate your specific game directory.
+- **Other platforms**: Follow a similar pattern of steps as above to locate your specific game directory.
 
 ### Install BepInEx
 

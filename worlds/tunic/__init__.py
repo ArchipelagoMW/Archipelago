@@ -6,7 +6,7 @@ from .Locations import location_table, location_name_groups
 from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
 from .Regions import tunic_regions
 from .Options import tunic_options
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 
 
 class TunicWeb(WebWorld):
@@ -42,8 +42,6 @@ class TunicWorld(World):
     web = TunicWeb()
 
     data_version = 1
-    tunic_items = item_table
-    tunic_locations = location_table
     option_definitions = tunic_options
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
@@ -64,23 +62,22 @@ class TunicWorld(World):
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
-    def create_items(self):
+    def create_items(self) -> None:
         hexagon_locations: Dict[str, str] = {
             "Red Hexagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
             "Green Hexagon": "Librarian - Hexagon Green",
-            "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue"
+            "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue",
         }
 
-        fool_tiers = [
+        fool_tiers: List[List[str]] = [
             [],
             ["Money x1", "Money x10", "Money x15", "Money x16"],
             ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
-            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"]
+            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
         ]
 
         items = []
-        for item_name in item_table:
-            item_data = item_table[item_name]
+        for item_name, item_data in item_table.items():
 
             if item_name in fool_tiers[self.multiworld.fool_traps[self.player].value]:
                 for i in range(item_data.quantity_in_item_pool):
@@ -123,8 +120,8 @@ class TunicWorld(World):
 
         self.multiworld.itempool += items
 
-    def create_regions(self):
-        for region_name in tunic_regions.keys():
+    def create_regions(self) -> None:
+        for region_name in tunic_regions:
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
@@ -159,7 +156,7 @@ class TunicWorld(World):
             "sword_progression": self.multiworld.sword_progression[self.player].value,
             "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
             "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
-            "fool_traps": self.multiworld.fool_traps[self.player].value
+            "fool_traps": self.multiworld.fool_traps[self.player].value,
         }
 
         removed_item = ["Your Pocket", self.player]

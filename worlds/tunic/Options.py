@@ -51,5 +51,5 @@ tunic_options: typing.Dict[str, type(Option)] = {
     "ability_shuffling": AbilityShuffling,
     "hexagon_quest": HexagonQuest,
     "fool_traps": FoolTraps,
-    "start_inventory_from_pool": StartInventoryPool
+    "start_inventory_from_pool": StartInventoryPool,
 }

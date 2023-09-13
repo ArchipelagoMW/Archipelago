@@ -168,7 +168,7 @@ extra_groups: Dict[str, Set[str]] = {
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
     "ice rod": {"Pages 52-53 (Ice Rod)"},
-    "melee weapons": {"Stick", "Sword", "Sword Upgrade"}
+    "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
 }
 
 item_name_groups.update(extra_groups)
