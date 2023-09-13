@@ -117,9 +117,17 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
         # Set local item values
         if not multiworld.remote_items[player] and location.item.player == player:
-            _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
+            if type(location.item_address) is int:
+                _set_bytes_little_endian(patched_rom, location.item_address, 2, reverse_offset_item_value(location.item.code))
+            elif type(location.item_address) is list:
+                for address in location.item_address:
+                    _set_bytes_little_endian(patched_rom, address, 2, reverse_offset_item_value(location.item.code))
         else:
-            _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+            if type(location.item_address) is int:
+                _set_bytes_little_endian(patched_rom, location.item_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+            elif type(location.item_address) is list:
+                for address in location.item_address:
+                    _set_bytes_little_endian(patched_rom, address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
 
             # Creates a list of item information to store in tables later. Those tables are used to display the item and
             # player name in a text box. In the case of not enough space, the game will default to "found an ARCHIPELAGO
@@ -451,34 +459,34 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
         for table in tables:
             if table is not None:
                 for i, species_id in enumerate(table.slots):
-                    address = table.rom_address + 2 + (4 * i)
+                    address = table.address + 2 + (4 * i)
                     _set_bytes_little_endian(rom, address, 2, species_id)
 
 
 def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for species in modified_data.species:
         if species is not None:
-            _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
-            _set_bytes_little_endian(rom, species.rom_address + 7, 1, species.types[1])
-            _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
-            _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
-            _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])
+            _set_bytes_little_endian(rom, species.address + 6, 1, species.types[0])
+            _set_bytes_little_endian(rom, species.address + 7, 1, species.types[1])
+            _set_bytes_little_endian(rom, species.address + 8, 1, species.catch_rate)
+            _set_bytes_little_endian(rom, species.address + 22, 1, species.abilities[0])
+            _set_bytes_little_endian(rom, species.address + 23, 1, species.abilities[1])
 
             if easter_egg[0] == 3:
-                _set_bytes_little_endian(rom, species.rom_address + 22, 1, easter_egg[1])
-                _set_bytes_little_endian(rom, species.rom_address + 23, 1, easter_egg[1])
+                _set_bytes_little_endian(rom, species.address + 22, 1, easter_egg[1])
+                _set_bytes_little_endian(rom, species.address + 23, 1, easter_egg[1])
 
             for i, learnset_move in enumerate(species.learnset):
                 level_move = learnset_move.level << 9 | learnset_move.move_id
                 if easter_egg[0] == 2:
                     level_move = learnset_move.level << 9 | easter_egg[1]
 
-                _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
+                _set_bytes_little_endian(rom, species.learnset_address + (i * 2), 2, level_move)
 
 
 def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for trainer in modified_data.trainers:
-        party_address = trainer.party.rom_address
+        party_address = trainer.party.address
 
         pokemon_data_size: int
         if trainer.party.pokemon_data_type in {TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES, TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES}:
@@ -519,7 +527,7 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray, easter_egg
 
 def _set_static_encounters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     for encounter in modified_data.static_encounters:
-        _set_bytes_little_endian(rom, encounter.rom_address, 2, encounter.species_id)
+        _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
 
 
 def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
@@ -563,13 +571,13 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
     }
 
     for trainer_data in data.trainers:
-        if trainer_data.battle_script_rom_address != 0 and len(trainer_data.party.pokemon) > 1:
+        if trainer_data.script_address != 0 and len(trainer_data.party.pokemon) > 1:
             if multiworld.per_slot_randoms[player].random() < probability:
                 # Set the trainer to be a double battle
-                _set_bytes_little_endian(rom, trainer_data.rom_address + 0x18, 1, 1)
+                _set_bytes_little_endian(rom, trainer_data.address + 0x18, 1, 1)
 
                 # Swap the battle type in the script for the purpose of loading the right text
                 # and setting data to the right places
-                original_battle_type = rom[trainer_data.battle_script_rom_address + 1]
+                original_battle_type = rom[trainer_data.script_address + 1]
                 if original_battle_type in battle_type_map:
-                    _set_bytes_little_endian(rom, trainer_data.battle_script_rom_address + 1, 1, battle_type_map[original_battle_type])
+                    _set_bytes_little_endian(rom, trainer_data.script_address + 1, 1, battle_type_map[original_battle_type])

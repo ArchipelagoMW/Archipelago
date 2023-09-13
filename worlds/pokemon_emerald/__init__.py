@@ -568,7 +568,7 @@ class PokemonEmeraldWorld(World):
                         for species_id in table.slots:
                             new_slots.append(species_old_to_new_map[species_id])
 
-                        new_encounters[i] = EncounterTableData(new_slots, table.rom_address)
+                        new_encounters[i] = EncounterTableData(new_slots, table.address)
 
                 map_data.land_encounters = new_encounters[0]
                 map_data.water_encounters = new_encounters[1]
@@ -583,7 +583,7 @@ class PokemonEmeraldWorld(World):
                 for i, encounter in enumerate(emerald_data.static_encounters):
                     self.modified_data.static_encounters.append(StaticEncounterData(
                         shuffled_species[i],
-                        encounter.rom_address
+                        encounter.address
                     ))
             else:
                 should_match_bst = self.multiworld.static_encounters[self.player] in {
@@ -602,7 +602,7 @@ class PokemonEmeraldWorld(World):
 
                     self.modified_data.static_encounters.append(StaticEncounterData(
                         get_random_species(self.random, self.modified_data.species, target_bst, target_type).species_id,
-                        encounter.rom_address
+                        encounter.address
                     ))
 
         def randomize_opponent_parties() -> None:

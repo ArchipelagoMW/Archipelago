@@ -95,7 +95,7 @@ class LocationData(NamedTuple):
     label: str
     parent_region: str
     default_item: int
-    rom_address: int
+    address: Union[int, List[int]]
     flag: int
     tags: FrozenSet[str]
 
@@ -182,7 +182,7 @@ class EvolutionData(NamedTuple):
 
 class StaticEncounterData(NamedTuple):
     species_id: int
-    rom_address: int
+    address: int
 
 
 @dataclass
@@ -200,8 +200,8 @@ class SpeciesData:
     friendship: int
     learnset: List[LearnsetMove]
     tm_hm_compatibility: int
-    learnset_rom_address: int
-    rom_address: int
+    learnset_address: int
+    address: int
 
 
 class AbilityData(NamedTuple):
@@ -211,7 +211,7 @@ class AbilityData(NamedTuple):
 
 class EncounterTableData(NamedTuple):
     slots: List[int]
-    rom_address: int
+    address: int
 
 
 @dataclass
@@ -251,15 +251,15 @@ class TrainerPokemonData:
 class TrainerPartyData:
     pokemon: List[TrainerPokemonData]
     pokemon_data_type: TrainerPokemonDataTypeEnum
-    rom_address: int
+    address: int
 
 
 @dataclass
 class TrainerData:
     trainer_id: int
     party: TrainerPartyData
-    rom_address: int
-    battle_script_rom_address: int
+    address: int
+    script_address: int
 
 
 class PokemonEmeraldData:
@@ -344,7 +344,7 @@ def _init() -> None:
                 location_attributes_json[location_name]["label"],
                 region_name,
                 location_json["default_item"],
-                location_json["rom_address"],
+                location_json["address"],
                 location_json["flag"],
                 frozenset(location_attributes_json[location_name]["tags"])
             )
@@ -824,8 +824,8 @@ def _init() -> None:
             species_data["friendship"],
             learnset,
             int(species_data["tmhm_learnset"], 16),
-            species_data["learnset"]["rom_address"],
-            species_data["rom_address"]
+            species_data["learnset"]["address"],
+            species_data["address"]
         ))
 
     data.species = [None for i in range(max_species_id + 1)]
@@ -842,7 +842,7 @@ def _init() -> None:
     for static_encounter_json in extracted_data["static_encounters"]:
         data.static_encounters.append(StaticEncounterData(
             static_encounter_json["species"],
-            static_encounter_json["rom_address"]
+            static_encounter_json["address"]
         ))
 
     # TM moves
@@ -935,20 +935,20 @@ def _init() -> None:
         water_encounters = None
         fishing_encounters = None
 
-        if map_json["land_encounters"] is not None:
+        if "land_encounters" in map_json:
             land_encounters = EncounterTableData(
-                map_json["land_encounters"]["encounter_slots"],
-                map_json["land_encounters"]["rom_address"]
+                map_json["land_encounters"]["slots"],
+                map_json["land_encounters"]["address"]
             )
-        if map_json["water_encounters"] is not None:
+        if "water_encounters" in map_json:
             water_encounters = EncounterTableData(
-                map_json["water_encounters"]["encounter_slots"],
-                map_json["water_encounters"]["rom_address"]
+                map_json["water_encounters"]["slots"],
+                map_json["water_encounters"]["address"]
             )
-        if map_json["fishing_encounters"] is not None:
+        if "fishing_encounters" in map_json:
             fishing_encounters = EncounterTableData(
-                map_json["fishing_encounters"]["encounter_slots"],
-                map_json["fishing_encounters"]["rom_address"]
+                map_json["fishing_encounters"]["slots"],
+                map_json["fishing_encounters"]["address"]
             )
 
         data.maps.append(MapData(
@@ -970,20 +970,20 @@ def _init() -> None:
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
         party_json = trainer_json["party"]
-        pokemon_data_type = _str_to_pokemon_data_type(trainer_json["pokemon_data_type"])
+        pokemon_data_type = _str_to_pokemon_data_type(trainer_json["data_type"])
         data.trainers.append(TrainerData(
             i,
             TrainerPartyData(
                 [TrainerPokemonData(
                     p["species"],
                     p["level"],
-                    (p["moves"][0], p["moves"][1], p["moves"][2], p["moves"][3])
+                    (p["moves"][0], p["moves"][1], p["moves"][2], p["moves"][3]) if "moves" in p else None
                 ) for p in party_json],
                 pokemon_data_type,
-                trainer_json["party_rom_address"]
+                trainer_json["party_address"]
             ),
-            trainer_json["rom_address"],
-            trainer_json["battle_script_rom_address"]
+            trainer_json["address"],
+            trainer_json["script_address"]
         ))
 
 

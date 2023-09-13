@@ -11,7 +11,7 @@ from .items import offset_item_value
 
 class PokemonEmeraldLocation(Location):
     game: str = "Pokemon Emerald"
-    rom_address: Optional[int]
+    item_address: Optional[int]
     default_item_code: Optional[int]
     tags: FrozenSet[str]
 
@@ -21,12 +21,12 @@ class PokemonEmeraldLocation(Location):
             name: str,
             flag: Optional[int],
             parent: Optional[Region] = None,
-            rom_address: Optional[int] = None,
+            item_address: Optional[int] = None,
             default_item_value: Optional[int] = None,
             tags: FrozenSet[str] = frozenset()) -> None:
         super().__init__(player, name, None if flag is None else offset_flag(flag), parent)
         self.default_item_code = None if default_item_value is None else offset_item_value(default_item_value)
-        self.rom_address = rom_address
+        self.item_address = item_address
         self.tags = tags
 
 
@@ -66,7 +66,7 @@ def create_locations_with_tags(multiworld: MultiWorld, player: int, tags: Iterab
                 location_data.label,
                 location_data.flag,
                 region,
-                location_data.rom_address,
+                location_data.address,
                 location_data.default_item,
                 location_data.tags
             )
