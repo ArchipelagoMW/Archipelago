@@ -4,13 +4,10 @@
 * Download and unzip the Scarab+ Mod Manager from the [Scarab+ website](https://themulhima.github.io/Scarab/).
 * A legal copy of Hollow Knight.
 
-## Optional Software
-* Archipelago Map Mod from Scarab+
-  * Ensure that both RandoMapMod and MapChanger are uninstalled or disabled as they are incompatible with Archipelago Map Mod.
-
-## Installing the Archipelago Mod using Scarab
+## Installing the Archipelago Mod using Scarab+
 1. Launch Scarab+ and ensure it locates your Hollow Knight installation directory.
 2. Click the "Install" button near the "Archipelago" mod entry.
+   * If desired, also install "Archipelago Map Mod" to use as an in-game tracker.
 3. Launch the game, you're all set!
 
 ### What to do if Scarab+ fails to find your XBox Game Pass installation directory
