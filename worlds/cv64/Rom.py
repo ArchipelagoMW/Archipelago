@@ -11,7 +11,6 @@ from .Names import RName
 from .Locations import base_id
 from .Stages import stage_info
 from .Text import cv64_string_to_bytes, cv64_text_truncate, cv64_text_wrap
-from .LZKN64 import compress_buffer
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
