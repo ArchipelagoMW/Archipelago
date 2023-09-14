@@ -320,7 +320,7 @@ class YIWorld(World):
 
         for name, data in item_table.items():
             if name not in excluded_items:
-                for _ in range(data.count):
+                for _ in range(data.amount):
                     item = self.create_item_with_correct_settings(multiworld, player, name)
                     pool.append(item)
 

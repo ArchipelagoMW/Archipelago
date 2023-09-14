@@ -3,7 +3,7 @@ from typing import Dict, Set, Tuple, NamedTuple
 class ItemData(NamedTuple):
     category: str
     code: int
-    count: int = 1
+    amount: int = 1
     progression: bool = False
     progression_skip_balancing: bool = False
     useful: bool = False
