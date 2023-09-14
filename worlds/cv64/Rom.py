@@ -11,6 +11,7 @@ from .Names import RName
 from .Locations import base_id
 from .Stages import stage_info
 from .Text import cv64_string_to_bytes, cv64_text_truncate, cv64_text_wrap
+from .LZKN64 import compress_buffer
 
 USHASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
 BSUSHASH = '0bbaa6de2b9cbb822f8b4d85c1d5497b'
@@ -324,7 +325,7 @@ class LocalRom(object):
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, active_stage_list, active_stage_exits,
               active_warp_list, required_s2s, music_list, countdown_list, shop_name_list, shop_desc_list,
-              shop_price_list, slot_name, active_locations):
+              shop_price_list, shop_colors_list, slot_name, active_locations):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -1001,7 +1002,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Everything related to shopsanity
     if multiworld.shopsanity[player]:
-        rom.write_bytes(0x103868, cv64_string_to_bytes("Not obtained.", False))
+        rom.write_bytes(0x103868, cv64_string_to_bytes("Not obtained. ", False))
         rom.write_int32s(0xBFD8D0, Patches.shopsanity_stuff)
         rom.write_int32(0xBD828, 0x0C0FF643)     # JAL	0x803FD90C
         rom.write_int32(0xBD5B8, 0x0C0FF651)     # JAL	0x803FD944
@@ -1013,22 +1014,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         shopsanity_name_text = []
         shopsanity_desc_text = []
         for i in range(len(shop_name_list)):
-            shopsanity_name_text += [0xA0, i]
-            if shop_desc_list[i][0] == "prog":
-                shop_name_color = [0xA2, 0x0C]
-            elif shop_desc_list[i][0] == "useful":
-                shop_name_color = [0xA2, 0x0A]
-            elif shop_desc_list[i][0] == "trap":
-                shop_name_color = [0xA2, 0x02]
-            else:
-                shop_name_color = [0xA2, 0x00]
-            shopsanity_name_text += shop_name_color + cv64_string_to_bytes(cv64_text_truncate(shop_name_list[i], 80),
-                                                                           False)
+            shopsanity_name_text += [0xA0, i] + shop_colors_list[i] + cv64_string_to_bytes(cv64_text_truncate(
+                shop_name_list[i], 80), False)
 
             shopsanity_desc_text += [0xA0, i]
             if shop_desc_list[i][1] is not None:
-                player_name = "For " + shop_desc_list[i][1] + ".\n"
-                shopsanity_desc_text += cv64_string_to_bytes(player_name, False, False)
+                shopsanity_desc_text += cv64_string_to_bytes("For " + shop_desc_list[i][1] + ".\n", False, False)
             shopsanity_desc_text += cv64_string_to_bytes(renon_item_dialogue[shop_desc_list[i][0]], False)
         rom.write_bytes(0x1AD00, shopsanity_name_text)
         rom.write_bytes(0x1A800, shopsanity_desc_text)
@@ -1052,7 +1043,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         # Jump prevention
         if multiworld.panther_dash[player].value == 2:
             rom.write_int32(0xBFDE2C, 0x080FF7BB)     # J     0x803FDEEC
-            rom.write_int32(0xBFD044, 0x080FF7B4)     # J     0x803FDED0
+            rom.write_int32(0xBFD044, 0x080FF7B1)     # J     0x803FDEC4
             rom.write_int32s(0x69B630, [0x0C0FF7C6,   # JAL   0x803FDF18
                                         0x8CCD0000])  # LW    T5, 0x0000 (A2)
             rom.write_int32s(0x6A8EC0, [0x0C0FF7C6,   # JAL   0x803FDF18
@@ -1062,7 +1053,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
                                         0x8C4E0000])  # LW    T6, 0x0000 (V0)
             rom.write_int32s(0x6A6718, [0x0C0FF7C6,   # JAL   0x803FDF18
                                         0x8C4E0000])  # LW    T6, 0x0000 (V0)
-            rom.write_int32s(0xBFDED0, Patches.panther_jump_preventer)
+            rom.write_int32s(0xBFDEC4, Patches.panther_jump_preventer)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():
@@ -1075,6 +1066,21 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         else:
             rom.write_int32(offset, item_id)
 
+    # Insert the file containing the Archipelago item icons.
+    with open("./worlds/cv64/ap_icons.bin", "rb") as stream:
+        rom.write_bytes(0xBB2D88, list(stream.read()))
+    # Update the items' Nisitenma-Ichigo table entry to point to the new file's start and end addresses in the ROM.
+    rom.write_int32s(0x95F04, [0x80BB2D88, 0x00BB6EEC])
+    # Update the items' decompressed file size tables with the new file's decompressed file size.
+    rom.write_int16(0x95706, 0x7BF0)
+    rom.write_int16(0x104CCE, 0x7BF0)
+    # Update the Wooden Stake and Roses' item appearance settings table to point to the Archipelago item graphics.
+    rom.write_int16(0xEE5BA, 0x7B38)
+    rom.write_int16(0xEE5CA, 0x7280)
+    # Change the items' sizes. The progression one will be larger than the non-progression one.
+    rom.write_int32(0xEE5BC, 0x3FF00000)
+    rom.write_int32(0xEE5CC, 0x3FA00000)
+
     # Write the slot name
     rom.write_bytes(0xBFBFE0, slot_name)
 
@@ -1082,15 +1088,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     for loc in active_locations:
         if loc.address is not None and loc.cv64_loc_type != "shop" and loc.item.player != player:
             if len(loc.item.name) > 67:
-                name_to_inject = loc.item.name[0x00:0x68]
+                item_name = loc.item.name[0x00:0x68]
             else:
-                name_to_inject = loc.item.name
-
-            inject_id = loc.address - base_id
-            inject_offset = 256 * inject_id
-            inject_address = 0xBB3000 + inject_offset
-            multiworld_pickup_name = name_to_inject + "\nfor " + multiworld.get_player_name(loc.item.player)
-            wrapped_name, num_lines = cv64_text_wrap(multiworld_pickup_name, 96)
+                item_name = loc.item.name
+            inject_address = 0xBB7164 + (256 * (loc.address - base_id))
+            wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + multiworld.get_player_name(
+                loc.item.player), 96)
             rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytes(wrapped_name, False))
             rom.write_byte(inject_address + 255, num_lines)
 
@@ -1141,12 +1144,12 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def get_item_text_color(loc) -> list:
+def get_item_text_color(loc, trap_color: bool = True) -> list:
     if loc.item.advancement:
         return [0xA2, 0x0C]
     elif loc.item.classification == ItemClassification.useful:
         return [0xA2, 0x0A]
-    elif loc.item.classification == ItemClassification.trap:
+    elif loc.item.classification == ItemClassification.trap and trap_color:
         return [0xA2, 0x0B]
     else:
         return [0xA2, 0x02]

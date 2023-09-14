@@ -2341,8 +2341,11 @@ panther_jump_preventer = [
     # sequence breaks that would otherwise be impossible without it. Such sequence breaks are never considered in logic
     # either way.
 
-    # Decreases a "can running jump" value by 1 per frame unless it's at 0. When the player lets go of C-right, their
-    # running speed should have returned to a normal amount by the time it hits 0.
+    # Decreases a "can running jump" value by 1 per frame unless it's at 0, or while in the sliding state. When the
+    # player lets go of C-right, their running speed should have returned to a normal amount by the time it hits 0.
+    0x90C8002F,  # LBU   T0, 0x002F (A2)
+    0x24090008,  # ADDIU T1, R0, 0x0008
+    0x11090005,  # BEQ   T0, T1, [forward 0x05]
     0x3C088039,  # LUI   T0, 0x8039
     0x91099BC1,  # LBU   T1, 0x9BC1 (T0)
     0x11200002,  # BEQZ  T1,     [forward 0x02]
@@ -2515,7 +2518,7 @@ multiworld_item_name_loader = [
     0x012A4021,  # ADDU  T0, T1, T2
     0x00084200,  # SLL   T0, T0, 8
     0x3C0400BB,  # LUI   A0, 0x00BB
-    0x24843000,  # ADDIU A0, A0, 0x3000
+    0x24847164,  # ADDIU A0, A0, 0x7164
     0x00882020,  # ADD   A0, A0, T0
     0x3C058018,  # LUI   A1, 0x8018
     0x34A5BF98,  # ORI   A1, A1, 0xBF98

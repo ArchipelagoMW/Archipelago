@@ -468,6 +468,7 @@ class CV64World(World):
             countdown_list = [0 for i in range(15)]
             shop_name_list = []
             shop_desc_list = []
+            shop_colors_list = []
 
             inv_setting = self.multiworld.invisible_items[self.player].value
 
@@ -507,7 +508,7 @@ class CV64World(World):
                     offsets_to_ids[rom_axe_cross_lower_values[loc.address - base_id][0]] = \
                         rom_axe_cross_lower_values[loc.address - base_id][1]
 
-                # Figure out the list of shop names and descriptions here.
+                # Figure out the list of shop names, descriptions, and text colors here.
                 if loc.parent_region.name == RName.renon:
 
                     shop_name = loc.item.name
@@ -529,6 +530,8 @@ class CV64World(World):
                             shop_desc_list.append(["trap", self.multiworld.get_player_name(loc.item.player)])
                         else:
                             shop_desc_list.append(["common", self.multiworld.get_player_name(loc.item.player)])
+
+                    shop_colors_list.append(get_item_text_color(loc, False))
 
                 # Figure out the Countdown numbers here.
                 if loc.cv64_stage is not None:
@@ -587,8 +590,8 @@ class CV64World(World):
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.total_available_bosses,
                       self.active_stage_list, self.active_stage_exits, self.active_warp_list, self.required_s2s,
-                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, slot_name,
-                      active_locations)
+                      music_list, countdown_list, shop_name_list, shop_desc_list, shop_price_list, shop_colors_list,
+                      slot_name, active_locations)
 
             rom.write_to_file(rompath)
 
