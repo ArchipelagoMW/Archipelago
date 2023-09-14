@@ -1,19 +1,17 @@
-from typing import Dict
+from typing import Dict, Any
 
 from worlds.generic.Rules import set_rule, forbid_item
 from BaseClasses import MultiWorld
 
-hexagon_quest_abilities: Dict[str, int] = {}
 
-
-def set_abilities(multiworld: MultiWorld) -> None:
+def set_abilities(multiworld: MultiWorld) -> Dict[str, int]:
     ability_requirement = [5, 10, 15]
     abilities = ["prayer", "holy_cross", "ice_rod"]
     multiworld.random.shuffle(abilities)
-    hexagon_quest_abilities = dict(zip(abilities, ability_requirement))
+    return dict(zip(abilities, ability_requirement))
 
 
-def set_region_rules(multiworld: MultiWorld, player: int) -> None:
+def set_region_rules(multiworld: MultiWorld, player: int, hexagon_quest_abilities: Dict[str, int]) -> None:
     laurels = "Hero's Laurels"
     grapple = "Magic Orb"
     lantern = "Lantern"
@@ -62,7 +60,7 @@ def set_region_rules(multiworld: MultiWorld, player: int) -> None:
     multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = lambda state: state.has(mask, player)
 
 
-def set_location_rules(multiworld: MultiWorld, player: int) -> None:
+def set_location_rules(multiworld: MultiWorld, player: int, hexagon_quest_abilities: Dict[str, int]) -> None:
     laurels = "Hero's Laurels"
     grapple = "Magic Orb"
     ice_dagger = "Magic Dagger"

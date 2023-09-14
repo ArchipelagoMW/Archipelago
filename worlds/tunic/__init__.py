@@ -1,9 +1,9 @@
-from typing import Dict
+from typing import Dict, List, Any
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import filler_items, item_table, item_name_groups
-from .Locations import location_table, location_name_groups
-from .Rules import set_location_rules, set_region_rules, hexagon_quest_abilities, set_abilities
+from .Items import filler_items, item_name_to_id, item_table, item_name_groups
+from .Locations import location_table, location_name_groups, location_name_to_id
+from .Rules import set_location_rules, set_region_rules, set_abilities
 from .Regions import tunic_regions
 from .Options import tunic_options
 from worlds.AutoWorld import WebWorld, World
@@ -46,17 +46,11 @@ class TunicWorld(World):
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
 
-    item_name_to_id = {}
-    location_name_to_id = {}
-    item_base_id = 509342400
-    location_base_id = 509342400
+    item_name_to_id = item_name_to_id
+    location_name_to_id = location_name_to_id
 
-    for item_name, item_data in item_table.items():
-        item_name_to_id[item_name] = item_base_id + item_data.item_id_offset
-
-    for location_name, location_data in location_table.items():
-        location_name_to_id[location_name] = location_base_id
-        location_base_id += 1
+    ability_unlocks: Dict[str, int] = {}
+    slot_data_items: Dict[str, Any] = {}
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -141,15 +135,15 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        set_abilities(self.multiworld)
-        set_region_rules(self.multiworld, self.player)
-        set_location_rules(self.multiworld, self.player)
+        self.ability_unlocks = set_abilities(self.multiworld)
+        set_region_rules(self.multiworld, self.player, self.ability_unlocks)
+        set_location_rules(self.multiworld, self.player, self.ability_unlocks)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(filler_items)
 
-    def fill_slot_data(self) -> Dict[str, any]:
-        slot_data: Dict[str, any] = {
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
             "start_with_sword": self.multiworld.start_with_sword[self.player].value,
             "keys_behind_bosses": self.multiworld.keys_behind_bosses[self.player].value,
@@ -158,8 +152,6 @@ class TunicWorld(World):
             "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
             "fool_traps": self.multiworld.fool_traps[self.player].value,
         }
-
-        removed_item = ["Your Pocket", self.player]
 
         items = [
             "Magic Dagger",
@@ -196,9 +188,9 @@ class TunicWorld(World):
             slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player, hexagon_gold2.name,
                                          hexagon_gold2.player, hexagon_gold3.name, hexagon_gold3.player]
             if self.multiworld.ability_shuffling[self.player].value:
-                slot_data["Hexagon Quest Prayer"] = hexagon_quest_abilities["prayer"]
-                slot_data["Hexagon Quest Holy Cross"] = hexagon_quest_abilities["holy_cross"]
-                slot_data["Hexagon Quest Ice Rod"] = hexagon_quest_abilities["ice_rod"]
+                slot_data["Hexagon Quest Prayer"] = self.ability_unlocks["prayer"]
+                slot_data["Hexagon Quest Holy Cross"] = self.ability_unlocks["holy_cross"]
+                slot_data["Hexagon Quest Ice Rod"] = self.ability_unlocks["ice_rod"]
         else:
             items.extend(["Red Hexagon", "Green Hexagon", "Blue Hexagon"])
 
@@ -212,7 +204,7 @@ class TunicWorld(World):
                 continue
             if start_item in items:
                 items.remove(start_item)
-                slot_data[start_item] = removed_item
+                slot_data[start_item] = ["Your Pocket", self.player]
 
         for item in items:
             data = []

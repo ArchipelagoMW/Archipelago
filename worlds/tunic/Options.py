@@ -1,6 +1,6 @@
 import typing
 
-from Options import Option, DefaultOnToggle, Toggle, StartInventoryPool, Choice
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, AssembleOptions
 
 
 class SwordProgression(DefaultOnToggle):
@@ -44,7 +44,7 @@ class FoolTraps(Choice):
     default = 1
 
 
-tunic_options: typing.Dict[str, type(Option)] = {
+tunic_options: typing.Dict[str, AssembleOptions] = {
     "sword_progression": SwordProgression,
     "start_with_sword": StartWithSword,
     "keys_behind_bosses": KeysBehindBosses,

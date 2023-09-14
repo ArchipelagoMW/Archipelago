@@ -10,6 +10,8 @@ class TunicItemData(NamedTuple):
     item_group: str = ""
 
 
+item_base_id = 509342400
+
 item_table: Dict[str, TunicItemData] = {
     "Firecracker x2": TunicItemData(ItemClassification.filler, 3, 0, "bombs"),
     "Firecracker x3": TunicItemData(ItemClassification.filler, 3, 1, "bombs"),
@@ -143,17 +145,13 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 54-55": TunicItemData(ItemClassification.progression_skip_balancing, 1, 129, "pages"),
 }
 
-
-def item_is_filler(item_name: str) -> bool:
-    return item_table[item_name].classification == ItemClassification.filler
-
+item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
 def get_item_group(item_name: str) -> str:
     return item_table[item_name].item_group
 
 
-filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))
-
+filler_items: List[str] = [name for name, data in item_table.items() if data.classification == ItemClassification.filler]
 
 item_name_groups: Dict[str, Set[str]] = {
     group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group)
