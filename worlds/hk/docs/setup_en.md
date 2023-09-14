@@ -8,7 +8,7 @@
 1. Launch Scarab+ and ensure it locates your Hollow Knight installation directory.
 2. Click the "Install" button near the "Archipelago" mod entry.
    * If desired, also install "Archipelago Map Mod" to use as an in-game tracker.
-4. Launch the game, you're all set!
+3. Launch the game, you're all set!
 
 ### What to do if Scarab+ fails to find your XBox Game Pass installation directory
 1. Enter the XBox app and move your mouse over "Hollow Knight" on the left sidebar. 
