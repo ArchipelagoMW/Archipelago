@@ -413,6 +413,13 @@ class ReusableTms(Toggle):
     display_name = "Reusable TMs"
 
 
+class MoveTutorMoves(Toggle):
+    """
+    Randomizes the moves taught by move tutors
+    """
+    display_name = "Move Tutor Moves"
+
+
 class MinCatchRate(Range):
     """
     Sets the minimum catch rate a pokemon can have. Any pokemon with a catch rate below this floor will have it raised to this value.
@@ -652,6 +659,7 @@ option_definitions: Dict[str, Option] = {
 
     "tm_moves": TmMoves,
     "reusable_tms": ReusableTms,
+    "move_tutor_moves": MoveTutorMoves,
     "min_catch_rate": MinCatchRate,
     "guaranteed_catch": GuaranteedCatch,
     "exp_modifier": ExpModifier,

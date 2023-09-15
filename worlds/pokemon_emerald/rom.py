@@ -15,7 +15,7 @@ from settings import get_settings
 from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
-from .pokemon import get_random_species
+from .pokemon import get_random_species, get_random_move
 from .util import encode_string, get_easter_egg
 
 
@@ -241,7 +241,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_encounter_tables(modified_data, patched_rom)
 
     # Set opponent data
-    if multiworld.trainer_parties[player] != RandomizeTrainerParties.option_vanilla:
+    if multiworld.trainer_parties[player] != RandomizeTrainerParties.option_vanilla or easter_egg[0] == 2:
         _set_opponents(modified_data, patched_rom, easter_egg)
 
     # Set static pokemon
@@ -252,6 +252,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
     # Set TM moves
     _set_tm_moves(modified_data, patched_rom, easter_egg)
+
+    # Randomize move tutor moves
+    if multiworld.move_tutor_moves[player] or easter_egg[0] == 2:
+        _randomize_move_tutor_moves(multiworld, player, patched_rom, easter_egg)
 
     # Set TM/HM compatibility
     _set_tmhm_compatibility(modified_data, patched_rom)
@@ -375,6 +379,14 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
     if easter_egg[0] == 2:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_CUT"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLY"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_SURF"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_STRENGTH"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLASH"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_ROCK_SMASH"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_WATERFALL"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
 
     # Set match trainer levels multiplier
     match_trainer_levels_multiplier = min(max(multiworld.match_trainer_levels_multiplier[player].value, 0), 2**16 - 1)
@@ -590,3 +602,23 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                 original_battle_type = rom[trainer_data.script_address + 1]
                 if original_battle_type in battle_type_map:
                     _set_bytes_little_endian(rom, trainer_data.script_address + 1, 1, battle_type_map[original_battle_type])
+
+
+def _randomize_move_tutor_moves(multiworld: MultiWorld, player: int, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
+    for i in range(30):
+        if easter_egg[0] == 2:
+            _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
+        else:
+            _set_bytes_little_endian(
+                rom,
+                data.rom_addresses["gTutorMoves"] + (i * 2),
+                2,
+                get_random_move(multiworld.worlds[player].random, {data.constants["MOVE_CUT"],
+                                                                   data.constants["MOVE_FLY"],
+                                                                   data.constants["MOVE_SURF"],
+                                                                   data.constants["MOVE_STRENGTH"],
+                                                                   data.constants["MOVE_FLASH"],
+                                                                   data.constants["MOVE_ROCK_SMASH"],
+                                                                   data.constants["MOVE_WATERFALL"],
+                                                                   data.constants["MOVE_DIVE"]})
+            )
