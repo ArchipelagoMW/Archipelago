@@ -9,7 +9,7 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     padding: 3px 3px 10px;
-    width: 500px;
+    width: 710px;
     background-color: #525494;
 }
 
@@ -34,10 +34,12 @@
     max-height: 40px;
     border: 1px solid #000000;
     filter: grayscale(100%) contrast(75%) brightness(20%);
+    background-color: black;
 }
 
 #inventory-table img.acquired{
     filter: none;
+    background-color: black;
 }
 
 #inventory-table div.counted-item {
@@ -52,7 +54,7 @@
 }
 
 #location-table{
-    width: 500px;
+    width: 710px;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
     border-bottom: 2px solid #000000;

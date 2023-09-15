@@ -1,10 +1,14 @@
 from typing import List, Set, Dict, Tuple, Optional, Callable
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
-from .Options import get_option_value
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations, MissionPools
+from .Options import get_option_value, MissionOrder
+from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations, \
+    MissionPools, vanilla_shuffle_order
 from .PoolFilter import filter_missions
 
+PROPHECY_CHAIN_MISSION_COUNT = 4
+
+VANILLA_SHUFFLED_FIRST_PROPHECY_MISSION = 21
 
 def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location])\
         -> Tuple[Dict[str, MissionInfo], int, str]:
@@ -19,7 +23,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
     names: Dict[str, int] = {}
 
-    if mission_order_type == 0:
+    if mission_order_type == MissionOrder.option_vanilla:
 
         # Generating all regions and locations
         for region_name in vanilla_mission_req_table.keys():
@@ -108,12 +112,17 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         removals = len(mission_order) - mission_pool_size
         # Removing entire Prophecy chain on vanilla shuffled when not shuffling protoss
         if remove_prophecy:
-            removals -= 4
+            removals -= PROPHECY_CHAIN_MISSION_COUNT
 
         # Initial fill out of mission list and marking all-in mission
         for mission in mission_order:
             # Removing extra missions if mission pool is too small
-            if 0 < mission.removal_priority <= removals or mission.category == 'Prophecy' and remove_prophecy:
+            # Also handle lower removal priority than Prophecy
+            if 0 < mission.removal_priority <= removals or mission.category == 'Prophecy' and remove_prophecy \
+                    or (remove_prophecy and mission_order_type == MissionOrder.option_vanilla_shuffled
+                        and mission.removal_priority > vanilla_shuffle_order[
+                            VANILLA_SHUFFLED_FIRST_PROPHECY_MISSION].removal_priority
+                        and 0 < mission.removal_priority <= removals + PROPHECY_CHAIN_MISSION_COUNT):
                 missions.append(None)
             elif mission.type == MissionPools.FINAL:
                 missions.append(final_mission)
@@ -191,22 +200,38 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         # TODO: Handle 'and' connections
         mission_req_table = {}
 
+        def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
+            if len(mission_names) > 1:
+                return lambda state: state.has_all({f"Beat {name}" for name in mission_names}, player) and \
+                                     state._sc2wol_cleared_missions(multiworld, player, missions_req)
+            else:
+                return lambda state: state.has(f"Beat {mission_names[0]}", player) and \
+                                     state._sc2wol_cleared_missions(multiworld, player, missions_req)
+
         for i, mission in enumerate(missions):
             if mission is None:
                 continue
             connections = []
+            all_connections = []
+            for connection in mission_order[i].connect_to:
+                if connection == -1:
+                    continue
+                while missions[connection] is None:
+                    connection -= 1
+                all_connections.append(missions[connection])
             for connection in mission_order[i].connect_to:
                 required_mission = missions[connection]
                 if connection == -1:
                     connect(multiworld, player, names, "Menu", mission)
-                elif required_mission is None:
-                    continue
                 else:
+                    if required_mission is None and not mission_order[i].completion_critical:  # Drop non-critical null slots
+                        continue
+                    while required_mission is None:  # Substituting null slot with prior slot
+                        connection -= 1
+                        required_mission = missions[connection]
+                    required_missions = [required_mission] if mission_order[i].or_requirements else all_connections
                     connect(multiworld, player, names, required_mission, mission,
-                            (lambda name, missions_req: (lambda state: state.has(f"Beat {name}", player) and
-                                                                       state._sc2wol_cleared_missions(multiworld, player,
-                                                                                                      missions_req)))
-                            (missions[connection], mission_order[i].number))
+                            build_connection_rule(required_missions, mission_order[i].number))
                     connections.append(slot_map[connection])
 
             mission_req_table.update({mission: MissionInfo(

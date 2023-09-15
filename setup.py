@@ -80,7 +80,6 @@ non_apworlds: set = {
     "Raft",
     "Secret of Evermore",
     "Slay the Spire",
-    "Starcraft 2 Wings of Liberty",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
@@ -91,6 +90,7 @@ non_apworlds: set = {
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
+    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")

@@ -49,8 +49,8 @@ vanilla_shuffle_order = [
     FillMission(MissionPools.EASY, [2], "Artifact", completion_critical=True),
     FillMission(MissionPools.MEDIUM, [7], "Artifact", number=8, completion_critical=True),
     FillMission(MissionPools.HARD, [8], "Artifact", number=11, completion_critical=True),
-    FillMission(MissionPools.HARD, [9], "Artifact", number=14, completion_critical=True),
-    FillMission(MissionPools.HARD, [10], "Artifact", completion_critical=True),
+    FillMission(MissionPools.HARD, [9], "Artifact", number=14, completion_critical=True, removal_priority=11),
+    FillMission(MissionPools.HARD, [10], "Artifact", completion_critical=True, removal_priority=10),
     FillMission(MissionPools.MEDIUM, [2], "Covert", number=4),
     FillMission(MissionPools.MEDIUM, [12], "Covert"),
     FillMission(MissionPools.HARD, [13], "Covert", number=8, removal_priority=3),
@@ -58,7 +58,7 @@ vanilla_shuffle_order = [
     FillMission(MissionPools.MEDIUM, [2], "Rebellion", number=6),
     FillMission(MissionPools.HARD, [16], "Rebellion"),
     FillMission(MissionPools.HARD, [17], "Rebellion"),
-    FillMission(MissionPools.HARD, [18], "Rebellion"),
+    FillMission(MissionPools.HARD, [18], "Rebellion", removal_priority=12),
     FillMission(MissionPools.HARD, [19], "Rebellion", removal_priority=5),
     FillMission(MissionPools.MEDIUM, [8], "Prophecy", removal_priority=9),
     FillMission(MissionPools.HARD, [21], "Prophecy", removal_priority=8),
@@ -98,6 +98,13 @@ gauntlet_order = [
     FillMission(MissionPools.FINAL, [5], "Final", completion_critical=True)
 ]
 
+mini_gauntlet_order = [
+    FillMission(MissionPools.STARTER, [-1], "I", completion_critical=True),
+    FillMission(MissionPools.EASY, [0], "II", completion_critical=True),
+    FillMission(MissionPools.MEDIUM, [1], "III", completion_critical=True),
+    FillMission(MissionPools.FINAL, [2], "Final", completion_critical=True)
+]
+
 grid_order = [
     FillMission(MissionPools.STARTER, [-1], "_1"),
     FillMission(MissionPools.EASY, [0], "_1"),
@@ -129,6 +136,13 @@ mini_grid_order = [
     FillMission(MissionPools.FINAL, [5, 7], "_3", or_requirements=True)
 ]
 
+tiny_grid_order = [
+    FillMission(MissionPools.STARTER, [-1], "_1"),
+    FillMission(MissionPools.MEDIUM, [0], "_1"),
+    FillMission(MissionPools.EASY, [0], "_2"),
+    FillMission(MissionPools.FINAL, [1, 2], "_2", or_requirements=True),
+]
+
 blitz_order = [
     FillMission(MissionPools.STARTER, [-1], "I"),
     FillMission(MissionPools.EASY, [-1], "I"),
@@ -144,7 +158,17 @@ blitz_order = [
     FillMission(MissionPools.FINAL, [0, 1], "Final", number=5, or_requirements=True)
 ]
 
-mission_orders = [vanilla_shuffle_order, vanilla_shuffle_order, mini_campaign_order, grid_order, mini_grid_order, blitz_order, gauntlet_order]
+mission_orders = [
+    vanilla_shuffle_order,
+    vanilla_shuffle_order,
+    mini_campaign_order,
+    grid_order,
+    mini_grid_order,
+    blitz_order,
+    gauntlet_order,
+    mini_gauntlet_order,
+    tiny_grid_order
+]
 
 
 vanilla_mission_req_table = {
@@ -190,7 +214,7 @@ starting_mission_locations = {
     "Whispers of Doom": "Whispers of Doom: Victory",
     "Belly of the Beast": "Belly of the Beast: Victory",
     "Zero Hour": "Zero Hour: First Group Rescued",
-    "Evacuation": "Evacuation: First Chysalis",
+    "Evacuation": "Evacuation: Reach Hanson",
     "Devil's Playground": "Devil's Playground: Tosh's Miners",
     "Smash and Grab": "Smash and Grab: First Relic",
     "The Great Train Robbery": "The Great Train Robbery: North Defiler"
