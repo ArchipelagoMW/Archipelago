@@ -67,6 +67,7 @@ local itemsObtained         = 0x0677
 local takeAnyCavesChecked   = 0x0678
 local localTriforce         = 0x0679
 local bonusItemsObtained    = 0x067A
+local itemsObtainedHigh     = 0x067B
 
 itemAPids = {
     ["Boomerang"] = 7100,
@@ -173,11 +174,18 @@ for key, value in pairs(itemAPids) do
     itemIDNames[value] = key
 end
 
+local function getItemsObtained()
+    return bit.bor(bit.lshift(u8(itemsObtainedHigh), 8), u8(itemsObtained))
+end
 
+local function setItemsObtained(value)
+    wU8(itemsObtainedHigh, bit.rshift(value, 8))
+    wU8(itemsObtained, bit.band(value, 0xFF))
+end
 
 local function determineItem(array)
     memdomain.ram()
-    currentItemsObtained = u8(itemsObtained)
+    currentItemsObtained = getItemsObtained()
     
 end
 
@@ -364,8 +372,8 @@ local function gotItem(item)
     wU8(0x505, itemCode)
     wU8(0x506, 128)
     wU8(0x602, 4)
-    numberObtained = u8(itemsObtained) + 1
-    wU8(itemsObtained, numberObtained)
+    numberObtained = getItemsObtained() + 1
+    setItemsObtained(numberObtained)
     if itemName == "Boomerang" then gotBoomerang() end
     if itemName == "Bow" then gotBow() end
     if itemName == "Magical Boomerang" then gotMagicalBoomerang() end
@@ -476,7 +484,7 @@ function processBlock(block)
                 if i > u8(bonusItemsObtained) then
                     if u8(0x505) == 0 then
                         gotItem(item)
-                        wU8(itemsObtained, u8(itemsObtained) - 1)
+                        setItemsObtained(getItemsObtained() - 1)
                         wU8(bonusItemsObtained, u8(bonusItemsObtained) + 1)
                     end
                 end
@@ -494,7 +502,7 @@ function processBlock(block)
             for i, item in ipairs(itemsBlock) do
                 memDomain.ram()
                 if u8(0x505) == 0 then
-                    if i > u8(itemsObtained) then
+                    if i > getItemsObtained() then
                         gotItem(item)
                     end
                 end
@@ -546,7 +554,7 @@ function receive()
     retTable["gameMode"] = gameMode
     retTable["overworldHC"] = getHCLocation()
     retTable["overworldPB"] = getPBLocation()
-    retTable["itemsObtained"] = u8(itemsObtained)
+    retTable["itemsObtained"] = getItemsObtained()
     msg = json.encode(retTable).."\n"
     local ret, error = zeldaSocket:send(msg)
     if ret == nil then
