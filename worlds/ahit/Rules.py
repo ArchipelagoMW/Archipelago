@@ -1,8 +1,8 @@
 from worlds.AutoWorld import World, CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Locations import location_table, tihs_locations, zipline_unlocks, is_location_valid, contract_locations, \
-    shop_locations
-from .Types import HatType, ChapterIndex
+    shop_locations, event_locs
+from .Types import HatType, ChapterIndex, hat_type_to_item
 from BaseClasses import Location, Entrance, Region
 import typing
 
@@ -32,6 +32,9 @@ act_connections = {
 
 
 def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
+    if world.multiworld.HatItems[world.player].value > 0:
+        return state.has(hat_type_to_item[hat], world.player)
+
     return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
 
 
@@ -257,8 +260,9 @@ def set_rules(world: World):
     if world.multiworld.ActRandomizer[world.player].value == 0:
         set_default_rift_rules(world)
 
+    table = location_table | event_locs
     location: Location
-    for (key, data) in location_table.items():
+    for (key, data) in table.items():
         if not is_location_valid(world, key):
             continue
 
@@ -339,6 +343,8 @@ def set_rules(world: World):
         for e in entrances:
             for rules in access_rules:
                 add_rule(e, rules)
+
+    set_event_rules(world)
 
     for entrance in world.multiworld.get_region("Alpine Free Roam", world.player).entrances:
         add_rule(entrance, lambda state: can_use_hookshot(state, world))
@@ -849,6 +855,17 @@ def set_default_rift_rules(world: World):
     if world.is_dlc2():
         for entrance in world.multiworld.get_region("Time Rift - Rumbi Factory", world.player).entrances:
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Necklace"))
+
+
+def set_event_rules(world: World):
+    for (name, data) in event_locs.items():
+        if not is_location_valid(world, name):
+            continue
+
+        event: Location = world.multiworld.get_location(name, world.player)
+
+        if data.act_complete_event:
+            add_rule(event, world.multiworld.get_location(f"Act Completion ({data.region})", world.player).access_rule)
 
 
 def connect_regions(start_region: Region, exit_region: Region, entrancename: str, player: int) -> Entrance:

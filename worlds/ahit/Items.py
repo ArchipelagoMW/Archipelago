@@ -1,6 +1,6 @@
 from BaseClasses import Item, ItemClassification
 from worlds.AutoWorld import World
-from .Types import HatDLC, HatType
+from .Types import HatDLC, HatType, hat_type_to_item
 from .Locations import get_total_locations
 from .Rules import get_difficulty, is_player_knowledgeable
 from typing import Optional, NamedTuple, List, Dict
@@ -18,7 +18,7 @@ class HatInTimeItem(Item):
 
 def create_itempool(world: World) -> List[Item]:
     itempool: List[Item] = []
-    if not world.is_dw_only():
+    if not world.is_dw_only() and world.multiworld.HatItems[world.player].value == 0:
         calculate_yarn_costs(world)
         yarn_pool: List[Item] = create_multiple_items(world, "Yarn",
                                                       world.multiworld.YarnAvailable[world.player].value,
@@ -34,6 +34,9 @@ def create_itempool(world: World) -> List[Item]:
             continue
 
         if not item_dlc_enabled(world, name):
+            continue
+
+        if world.multiworld.HatItems[world.player].value == 0 and name in hat_type_to_item.values():
             continue
 
         item_type: ItemClassification = item_table.get(name).classification
@@ -181,7 +184,13 @@ def create_junk_items(world: World, count: int) -> List[Item]:
 ahit_items = {
     "Yarn": ItemData(300001, ItemClassification.progression_skip_balancing),
     "Time Piece": ItemData(300002, ItemClassification.progression_skip_balancing),
-    "Progressive Painting Unlock": ItemData(300003, ItemClassification.progression),
+
+    # for HatItems option
+    "Sprint Hat": ItemData(300049, ItemClassification.progression),
+    "Brewing Hat": ItemData(300050, ItemClassification.progression),
+    "Ice Hat": ItemData(300051, ItemClassification.progression),
+    "Dweller Mask": ItemData(300052, ItemClassification.progression),
+    "Time Stop Hat": ItemData(300053, ItemClassification.progression),
 
     # Relics
     "Relic (Burger Patty)": ItemData(300006, ItemClassification.progression),
@@ -210,8 +219,9 @@ ahit_items = {
     "Camera Badge": ItemData(300042, ItemClassification.progression, HatDLC.death_wish),
 
     # Other
-    "Umbrella": ItemData(300033, ItemClassification.progression),
     "Badge Pin": ItemData(300043, ItemClassification.useful),
+    "Umbrella": ItemData(300033, ItemClassification.progression),
+    "Progressive Painting Unlock": ItemData(300003, ItemClassification.progression),
 
     # Garbage items
     "25 Pons": ItemData(300034, ItemClassification.filler),

@@ -312,6 +312,12 @@ class MinExtraYarn(Range):
     default = 10
 
 
+class HatItems(Toggle):
+    """Removes all yarn from the pool and turns the hats into individual items instead."""
+    display_name = "Hat Items"
+    default = 0
+
+
 class MinPonCost(Range):
     """The minimum amount of Pons that any shop item can cost."""
     display_name = "Minimum Shop Pon Cost"
@@ -648,6 +654,7 @@ ahit_options: typing.Dict[str, type(Option)] = {
     "YarnCostMax":              YarnCostMax,
     "YarnAvailable":            YarnAvailable,
     "MinExtraYarn":             MinExtraYarn,
+    "HatItems":                 HatItems,
 
     "MinPonCost":               MinPonCost,
     "MaxPonCost":               MaxPonCost,
@@ -675,6 +682,7 @@ slot_data_options: typing.Dict[str, type(Option)] = {
     "ShuffleStorybookPages":        ShuffleStorybookPages,
     "ShuffleActContracts":          ShuffleActContracts,
     "ShuffleSubconPaintings":       ShuffleSubconPaintings,
+    "HatItems":                     HatItems,
 
     "EnableDLC1":               EnableDLC1,
     "Tasksanity":               Tasksanity,

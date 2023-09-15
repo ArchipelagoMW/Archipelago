@@ -26,3 +26,12 @@ class ChapterIndex(IntEnum):
     FINALE = 5
     CRUISE = 6
     METRO = 7
+
+
+hat_type_to_item = {
+    HatType.SPRINT:     "Sprint Hat",
+    HatType.BREWING:    "Brewing Hat",
+    HatType.ICE:        "Ice Hat",
+    HatType.DWELLER:    "Dweller Mask",
+    HatType.TIME_STOP:  "Time Stop Hat",
+}

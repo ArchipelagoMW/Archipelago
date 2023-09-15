@@ -433,6 +433,11 @@ def create_rift_connections(world: World, region: Region):
         connect_regions(act_region, region, entrance_name, world.player)
         i += 1
 
+    # fix for some weird keyerror from tests
+    if region.name == "Time Rift - Rumbi Factory":
+        for entrance in region.entrances:
+            world.multiworld.get_entrance(entrance.name, world.player)
+
 
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
@@ -873,11 +878,6 @@ def create_events(world: World) -> int:
 
         event: Location = create_event(name, world.multiworld.get_region(data.region, world.player), world)
         event.show_in_spoiler = False
-
-        if data.act_complete_event:
-            act_completion: str = f"Act Completion ({data.region})"
-            event.access_rule = world.multiworld.get_location(act_completion, world.player).access_rule
-
         count += 1
 
     return count
