@@ -37,7 +37,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_CHECKS or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
+        if panel_hex in self.COMPLETELY_DISABLED_ENTITIES or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
             return frozenset()
 
         check_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
@@ -72,7 +72,7 @@ class WitnessPlayerLogic:
 
         these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
 
-        disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_CHECKS
+        disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if StaticWitnessLogic.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
 
         these_panels = frozenset({panels - disabled_eps
@@ -89,7 +89,7 @@ class WitnessPlayerLogic:
             for option_panel in option:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_panel)
 
-                if option_panel in self.COMPLETELY_DISABLED_CHECKS:
+                if option_panel in self.COMPLETELY_DISABLED_ENTITIES:
                     new_items = frozenset()
                 elif option_panel in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_panel])})
@@ -214,7 +214,7 @@ class WitnessPlayerLogic:
         if adj_type == "Disabled Locations":
             panel_hex = line[:7]
 
-            self.COMPLETELY_DISABLED_CHECKS.add(panel_hex)
+            self.COMPLETELY_DISABLED_ENTITIES.add(panel_hex)
 
             return
 
@@ -402,7 +402,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_CHECKS:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -463,7 +463,7 @@ class WitnessPlayerLogic:
                             continue
 
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["region"]["name"] != region_name:
-                            if not panel in self.COMPLETELY_DISABLED_CHECKS:
+                            if not panel in self.COMPLETELY_DISABLED_ENTITIES:
                                 self.EVENT_PANELS_FROM_REGIONS.add(panel)
 
         self.EVENT_PANELS.update(self.EVENT_PANELS_FROM_PANELS)
@@ -514,7 +514,7 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
         self.ALWAYS_EVENT_HEX_CODES = set()
-        self.COMPLETELY_DISABLED_CHECKS = set()
+        self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
@@ -560,8 +560,9 @@ class WitnessPlayerLogic:
             "0x28ACC": "Town Tower 2nd Door Opens",
             "0x28AD9": "Town Tower 3rd Door Opens",
             "0x28B39": "Town Tower 4th Door Opens",
-            "0x03675": "Quarry Stoneworks Ramp Activation From Above",
-            "0x03679": "Quarry Stoneworks Lift Lowering While Standing On It",
+            "0x014E8": "Quarry Stoneworks Lift Control Powers On",
+            "0x03675": "Quarry Stoneworks Ramp Moving",
+            "0x03679": "Quarry Stoneworks Lift Moving",
             "0x2FAF6": "Tutorial Gate Secret Solution Knowledge",
             "0x079DF": "Town Tall Hexagonal Turns On",
             "0x17DA2": "Right Orange Bridge Fully Extended",

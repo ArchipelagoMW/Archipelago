@@ -74,7 +74,7 @@ class WitnessWorld(World):
             'item_id_to_door_hexes': StaticWitnessItems.get_item_to_door_mappings(),
             'door_hexes_in_the_pool': self.items.get_door_ids_in_pool(),
             'symbols_not_in_the_game': self.items.get_symbol_ids_not_in_pool(),
-            'disabled_panels': list(self.player_logic.COMPLETELY_DISABLED_CHECKS),
+            'disabled_entities': [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             'log_ids_to_hints': self.log_ids_to_hints,
             'progressive_item_lists': self.items.get_progressive_item_ids_in_pool(),
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
