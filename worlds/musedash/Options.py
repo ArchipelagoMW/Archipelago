@@ -3,8 +3,8 @@ from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet
 
 
 class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether 'Just as Planned DLC' songs, and all the DLCs along with it, will be included in the randomizer."""
-    display_name = "Allow Just As Planned DLC Songs"
+    """Whether [Just As Planned]/[Muse Plus] DLC Songs, and all the DLCs along with it, will be included in the randomizer."""
+    display_name = "Allow [Just As Planned]/[Muse Plus] DLC Songs"
 
 
 class StreamerModeEnabled(Toggle):
