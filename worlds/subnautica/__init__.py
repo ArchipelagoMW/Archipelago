@@ -116,15 +116,16 @@ class SubnauticaWorld(World):
             # list of high-count important fragments as priority filler
                 [
                     "Cyclops Engine Fragment",
-                    "Modification Station Fragment",
-                    "Mobile Vehicle Bay Fragment",
-                    "Seamoth Fragment",
                     "Cyclops Hull Fragment",
                     "Cyclops Bridge Fragment",
+                    "Seamoth Fragment",
                     "Prawn Suit Fragment",
+                    "Mobile Vehicle Bay Fragment",
+                    "Modification Station Fragment",
                     "Moonpool Fragment",
+                    "Laser Cutter Fragment",
                  ],
-                k=min(extras, 8)):
+                k=min(extras, 9)):
             item = self.create_item(item_name)
             pool.append(item)
             extras -= 1
