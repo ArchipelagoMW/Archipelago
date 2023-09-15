@@ -133,6 +133,9 @@ def get_always_hint_items(multiworld: MultiWorld, player: int):
     if wincon == 0:
         always.append("Mountain Bottom Floor Final Room Entry (Door)")
 
+    if wincon == 1:
+        always += ["Challenge Entry (Panel)", "Caves Panels"]
+
     return always
 
 
@@ -150,13 +153,29 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
     priority = {
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
-        "Negative Shapers",
-        "Sound Dots",
-        "Colored Dots",
         "Stars + Same Colored Symbol",
         "Swamp Entry (Panel)",
         "Swamp Laser Shortcut (Door)",
     }
+
+    if is_option_enabled(multiworld, player, "symbol_shuffle"):
+        symbols = [
+            "Progressive Dots",
+            "Progressive Stars",
+            "Shapers",
+            "Rotated Shapers",
+            "Negative Shapers",
+            "Arrows",
+            "Triangles",
+            "Eraser",
+            "Black/White Squares",
+            "Colored Squares",
+            "Colored Dots",
+            "Sound Dots",
+            "Symmetry"
+        ]
+
+        priority.update(multiworld.per_slot_randoms[player].sample(symbols, 5))
 
     if is_option_enabled(multiworld, player, "shuffle_lasers"):
         lasers = [
@@ -277,11 +296,18 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         hint_pair = make_hint_from_location(multiworld, player, location)
         priority_hint_pairs[hint_pair[0]] = (hint_pair[1], False, hint_pair[2])
 
+    already_hinted_locations = set()
+
     for loc, item in always_hint_pairs.items():
+        if loc in already_hinted_locations:
+            continue
+
         if item[1]:
             hints.append((f"{item[0]} can be found at {loc}.", item[2]))
         else:
             hints.append((f"{loc} contains {item[0]}.", item[2]))
+
+        already_hinted_locations.add(loc)
 
     multiworld.per_slot_randoms[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
 
@@ -301,10 +327,15 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
         loc = next_priority_hint[0]
         item = next_priority_hint[1]
 
+        if loc in already_hinted_locations:
+            continue
+
         if item[1]:
             hints.append((f"{item[0]} can be found at {loc}.", item[2]))
         else:
             hints.append((f"{loc} contains {item[0]}.", item[2]))
+
+        already_hinted_locations.add(loc)
 
     next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
 
@@ -315,10 +346,22 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
                 continue
 
             hint = make_hint_from_item(multiworld, player, prog_items_in_this_world.pop())
+
+            if hint[0] in already_hinted_locations:
+                continue
+
             hints.append((f"{hint[1]} can be found at {hint[0]}.", hint[2]))
+
+            already_hinted_locations.add(hint[0])
         else:
             hint = make_hint_from_location(multiworld, player, locations_in_this_world.pop())
+
+            if hint[0] in already_hinted_locations:
+                continue
+
             hints.append((f"{hint[0]} contains {hint[1]}.", hint[2]))
+
+            already_hinted_locations.add(hint[0])
 
         next_random_hint_is_item = not next_random_hint_is_item
 
