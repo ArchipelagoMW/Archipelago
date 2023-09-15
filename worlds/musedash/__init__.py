@@ -40,7 +40,7 @@ class MuseDashWorld(World):
     game = "Muse Dash"
     option_definitions = musedash_options
     topology_present = False
-    data_version = 9
+    data_version = 10
     web = MuseDashWebWorld()
 
     # Necessary Data
