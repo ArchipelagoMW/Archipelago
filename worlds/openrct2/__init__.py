@@ -111,17 +111,19 @@ class OpenRCT2World(World):
 
         item = 15
         current_level = 4
-        while (item + 7) <= len(logic_table): 
+        while (item + 7) < len(logic_table): 
             level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
             level.locations = locations_to_region(item, item + 7,level)
             self.multiworld.regions.append(level)
             item += 8
             current_level += 1
-
-        if (len(logic_table)) % 8 != 0:
+        print(len(logic_table))
+        if ((len(logic_table)) % 8)  != 0:
             level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
             level.locations = locations_to_region(item, (len(logic_table) - 1),level)
             self.multiworld.regions.append(level)
+        else:
+            current_level -= 1
 
         # for region_number, item in enumerate(logic_table):
         #     region = Region("OpenRCT2_Region_" + str(region_number), self.player, self.multiworld)
@@ -138,18 +140,10 @@ class OpenRCT2World(World):
 
         
 
-        print("Here's the region list!")
-        print(self.multiworld.regions)
+        
                 
     
     def create_items(self) -> None:
-        # for item in item_table:
-        #     count = 0
-        #     while count != item_frequency[item]:
-        #         item_name_to_id.append(self.create_item(item))
-        #         count += 1
-
-
         print("The item tabel is this long:")
         print(len(self.item_table))
         print(self.item_frequency)
