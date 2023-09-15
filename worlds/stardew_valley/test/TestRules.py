@@ -2,10 +2,12 @@ from collections import Counter
 
 from . import SVTestBase
 from .. import options
+from ..locations import locations_by_tag, LocationTags, location_table
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.crop_names import Vegetable
+from ..strings.entrance_names import Entrance
 from ..strings.food_names import Meal
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
@@ -369,3 +371,136 @@ class TestRecipeLogic(SVTestBase):
     #     self.assertTrue(logic.has(Machine.cheese_press)(self.multiworld.state))
     #     self.assertTrue(logic.has(ArtisanGood.cheese)(self.multiworld.state))
     #     self.assertTrue(logic.has(Meal.pizza)(self.multiworld.state))
+
+
+class TestDonationLogicAll(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_all
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_DONATIONS]:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+class TestDonationLogicRandomized(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_randomized
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+        donation_locations = [location for location in self.multiworld.get_locations() if not location.event and LocationTags.MUSEUM_DONATIONS in location_table[location.name].tags]
+
+        for donation in donation_locations:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in donation_locations:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+class TestDonationLogicMilestones(SVTestBase):
+    options = {
+        options.Museumsanity.internal_name: options.Museumsanity.option_milestones
+    }
+
+    def test_cannot_make_any_donation_without_museum_access(self):
+        guild_item = "Adventurer's Guild"
+        swap_museum_and_guild(self.multiworld, self.player)
+        collect_all_except(self.multiworld, guild_item)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
+            self.assertFalse(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item(guild_item), event=True)
+
+        for donation in locations_by_tag[LocationTags.MUSEUM_MILESTONES]:
+            self.assertTrue(self.world.logic.can_reach_location(donation.name)(self.multiworld.state))
+
+
+def swap_museum_and_guild(multiworld, player):
+    museum_region = multiworld.get_region(Region.museum, player)
+    guild_region = multiworld.get_region(Region.adventurer_guild, player)
+    museum_entrance = multiworld.get_entrance(Entrance.town_to_museum, player)
+    guild_entrance = multiworld.get_entrance(Entrance.mountain_to_adventurer_guild, player)
+    museum_entrance.connect(guild_region)
+    guild_entrance.connect(museum_region)
+
+
+def collect_all_except(multiworld, item_to_not_collect: str):
+    for item in multiworld.get_items():
+        if item.name != item_to_not_collect:
+            multiworld.state.collect(item)
+
+
+class TestFriendsanityDatingRules(SVTestBase):
+    options = {
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_randomized_not_winter,
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 3
+    }
+
+    def test_earning_dating_heart_requires_dating(self):
+        month_name = "Month End"
+        for i in range(12):
+            month_item = self.world.create_item(month_name)
+            self.multiworld.state.collect(month_item, event=True)
+        self.multiworld.state.collect(self.world.create_item("Beach Bridge"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Galaxy Hammer"), event=False)
+        for i in range(3):
+            self.multiworld.state.collect(self.world.create_item("Progressive Pickaxe"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Progressive Axe"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Progressive Barn"), event=False)
+        for i in range(10):
+            self.multiworld.state.collect(self.world.create_item("Foraging Level"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Farming Level"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Mining Level"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Combat Level"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Progressive Mine Elevator"), event=False)
+            self.multiworld.state.collect(self.world.create_item("Progressive Mine Elevator"), event=False)
+
+        npc = "Abigail"
+        heart_name = f"{npc} <3"
+        step = 3
+
+        self.assert_can_reach_heart_up_to(npc, 3, step)
+        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
+        self.assert_can_reach_heart_up_to(npc, 6, step)
+        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
+        self.assert_can_reach_heart_up_to(npc, 8, step)
+        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
+        self.assert_can_reach_heart_up_to(npc, 10, step)
+        self.multiworld.state.collect(self.world.create_item(heart_name), event=False)
+        self.assert_can_reach_heart_up_to(npc, 14, step)
+
+    def assert_can_reach_heart_up_to(self, npc: str, max_reachable: int, step: int):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for i in range(1, max_reachable + 1):
+            if i % step != 0 and i != 14:
+                continue
+            location = f"{prefix}{npc} {i}{suffix}"
+            can_reach = self.world.logic.can_reach_location(location)(self.multiworld.state)
+            self.assertTrue(can_reach, f"Should be able to earn relationship up to {i} hearts")
+        for i in range(max_reachable + 1, 14 + 1):
+            if i % step != 0 and i != 14:
+                continue
+            location = f"{prefix}{npc} {i}{suffix}"
+            can_reach = self.world.logic.can_reach_location(location)(self.multiworld.state)
+            self.assertFalse(can_reach, f"Should not be able to earn relationship up to {i} hearts")
+
