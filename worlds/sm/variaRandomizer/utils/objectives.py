@@ -518,9 +518,10 @@ class Objectives(object):
                 return sm.hasItemsPercent(pct, totalItemsCount)
             return f
 
-        for pct in [25,50,75,100]:
-            goal = 'collect %d%% items' % pct
-            self.goals[goal].clearFunc = getPctFunc(pct, totalItemsCount)
+        # AP: now based on location checks instead of local item (see setPercentFuncs)
+        # for pct in [25,50,75,100]:
+        #     goal = 'collect %d%% items' % pct
+        #     self.goals[goal].clearFunc = getPctFunc(pct, totalItemsCount)
         if allUpgradeTypes is not None:
             self.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
 
@@ -529,6 +530,11 @@ class Objectives(object):
         for area, func in funcsByArea.items():
             if area in goalsByArea:
                 goalsByArea[area].clearFunc = func
+
+    def setPercentFuncs(self, funcsByPercent):
+        for pct, func in funcsByPercent.items():
+            goal = 'collect %d%% items' % pct
+            self.goals[goal].clearFunc = func
 
     def setSolverMode(self, solver):
         self.setScavengerHuntFunc(solver.scavengerHuntComplete)

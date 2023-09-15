@@ -164,6 +164,7 @@ class GraphBuilder(object):
                     availLocsByArea[itemLoc.Location.GraphArea].append(itemLoc.Location.Name)
             self.log.debug("escapeTrigger. availLocsByArea="+str(availLocsByArea))
             sm.objectives.setAreaFuncs({area:lambda sm,ap:SMBool(len(container.getLocs(lambda loc: loc.Name in availLocsByArea[area]))==0) for area in availLocsByArea})
+            sm.objectives.setPercentFuncs({percent:lambda sm,ap:SMBool(len(container.getUsedLocs(lambda loc: True)) >= percent) for percent in [25, 50, 75, 100]})
         self.log.debug("escapeTrigger. collect locs until G4 access")
         # collect all item/locations up until we can pass G4 (the escape triggers)
         itemLocs = allItemLocs[:]
