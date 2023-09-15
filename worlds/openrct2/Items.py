@@ -32,6 +32,7 @@ def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathro
         openRCT2_items.append("Bathroom Trap")
         count +=1
 
+    openRCT2_items.append("Beauty Contest")
     
     item_table = {name: [base_id + count, True] for count, name in enumerate(openRCT2_items)}
     item_frequency = {}
