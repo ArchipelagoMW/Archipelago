@@ -118,7 +118,7 @@ class Group:
                 cls._type_cache = typing.get_type_hints(cls, globalns=mod_dict, localns=cls.__dict__)
         return cls._type_cache
 
-    def get(self, key: str, default: Any) -> Any:
+    def get(self, key: str, default: Any = None) -> Any:
         if key in self:
             return self[key]
         return default
