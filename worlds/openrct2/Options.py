@@ -385,7 +385,7 @@ class Randomization_Range(Choice):
     default = Randomization_Range.medium.value
 
 class Scenario_Length(Choice):
-    """Choose how long this game will last. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
+    """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
     """
     auto_display_name = True
     display_name = "Scenario Length"
