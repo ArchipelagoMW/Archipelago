@@ -138,6 +138,8 @@ class RaftWorld(World):
         return RaftItem(rpName, ItemClassification.filler, self.item_name_to_id[rpName], player=self.player)
     
     def collect_item(self, state, item, remove=False):
+        if item.advancement is False:
+            return None
         if item.name in progressive_item_list:
             prog_table = progressive_item_list[item.name]
             if remove:
