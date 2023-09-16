@@ -50,8 +50,10 @@ def open_host_yaml():
 def open_patch():
     suffixes = []
     for c in components:
-        suffixes += c.file_identifier.suffixes if c.type == Type.CLIENT and \
-                                                  isinstance(c.file_identifier, SuffixIdentifier) else []
+        if c.type == Type.CLIENT and \
+                isinstance(c.file_identifier, SuffixIdentifier) and \
+                (c.script_name is None or isfile(get_exe(c)[-1])):
+            suffixes += c.file_identifier.suffixes
     try:
         filename = open_filename("Select patch", (("Patches", suffixes),))
     except Exception as e:
