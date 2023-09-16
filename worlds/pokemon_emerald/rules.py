@@ -1254,14 +1254,14 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH"), player),
         lambda state: state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
-            and state.has("Scanner", player)
-            and state.has("Mind Badge", player)
+                      and state.has("Scanner", player)
+                      and state.has("Mind Badge", player)
     )
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_DEEP_SEA_SCALE"), player),
         lambda state: state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
-            and state.has("Scanner", player)
-            and state.has("Mind Badge", player)
+                      and state.has("Scanner", player)
+                      and state.has("Mind Badge", player)
     )
 
     # Route 116

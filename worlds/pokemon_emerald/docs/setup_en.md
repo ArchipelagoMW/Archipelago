@@ -4,7 +4,7 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 (Make sure to select `Pokemon Emerald Client` during installation)
-- A Pokémon Emerald ROM file (USA/Europe). The Archipelago community cannot provide this.
+- An English Pokémon Emerald ROM. The Archipelago community cannot provide this.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.8 or later
 
 ### Configuring BizHawk
@@ -13,7 +13,7 @@ Once you have installed BizHawk, open `EmuHawk.exe` and change the following set
 
 - If you're using BizHawk 2.8, go to `Config > Customize`. Switch to the Advanced tab, then switch the Lua Core from
 `NLua+KopiLua` to `Lua+LuaInterface`. Then restart EmuHawk. This is required for the Lua script to function correctly.
-(if you're using BizHawk 2.9, you can skip this step.)
+(If you're using BizHawk 2.9, you can skip this step.)
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
 EmuHawk is running in the background.
 - Open a `.gba` file in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click

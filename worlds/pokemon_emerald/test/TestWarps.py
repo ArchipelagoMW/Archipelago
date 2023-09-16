@@ -1,6 +1,7 @@
 from test.TestBase import TestBase
 from ..data import Warp
 
+
 class TestWarps(TestBase):
     def test_warps_connect_ltr(self) -> None:
         # 2-way

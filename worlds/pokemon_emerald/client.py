@@ -283,7 +283,8 @@ async def gba_send_receive_task(ctx: GBAContext) -> None:
                 data_decoded = json.loads(data_bytes.decode("utf-8"))
 
                 if data_decoded["script_version"] != EXPECTED_SCRIPT_VERSION:
-                    logger.warning(f"Your connector script is incompatible with this client. Expected version {EXPECTED_SCRIPT_VERSION}, got {data_decoded['script_version']}.")
+                    logger.warning(f"Your connector script is incompatible with this client. Expected version "
+                                   "{EXPECTED_SCRIPT_VERSION}, got {data_decoded['script_version']}.")
                     break
 
                 async_start(handle_read_data(data_decoded, ctx))

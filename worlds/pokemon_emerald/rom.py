@@ -69,9 +69,19 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             continue
 
         if location.item and location.item.player == player:
-            _set_bytes_little_endian(patched_rom, location.rom_address, 2, reverse_offset_item_value(location.item.code))
+            _set_bytes_little_endian(
+                patched_rom,
+                location.rom_address,
+                2,
+                reverse_offset_item_value(location.item.code)
+            )
         else:
-            _set_bytes_little_endian(patched_rom, location.rom_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+            _set_bytes_little_endian(
+                patched_rom,
+                location.rom_address,
+                2,
+                data.constants["ITEM_ARCHIPELAGO_PROGRESSION"]
+            )
 
     # Set start inventory
     start_inventory = multiworld.start_inventory[player].value.copy()
@@ -110,7 +120,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             start_inventory[item_name] -= quantity
 
             pc_slots.append((item_name, quantity))
-    
+
     pc_slots.sort(reverse=True)
 
     for i, slot in enumerate(pc_slots):
@@ -194,7 +204,12 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player], data.species).species_id)
+    _set_bytes_little_endian(
+        patched_rom,
+        options_address + 0x08,
+        2,
+        get_random_species(multiworld.per_slot_randoms[player], data.species).species_id
+    )
 
     # Set guaranteed catch
     guaranteed_catch = 1 if multiworld.guaranteed_catch[player] else 0
@@ -397,4 +412,9 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                 # and setting data to the right places
                 original_battle_type = rom[trainer_data.battle_script_rom_address + 1]
                 if original_battle_type in battle_type_map:
-                    _set_bytes_little_endian(rom, trainer_data.battle_script_rom_address + 1, 1, battle_type_map[original_battle_type])
+                    _set_bytes_little_endian(
+                        rom,
+                        trainer_data.battle_script_rom_address + 1,
+                        1,
+                        battle_type_map[original_battle_type]
+                    )

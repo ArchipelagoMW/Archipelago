@@ -153,7 +153,7 @@ class TestNormanRequirement4(PokemonEmeraldTestBase):
         self.assertFalse(self.can_reach_location(location_name_to_label("BADGE_5")))
 
     def testAccessibleWithReachableGyms(self) -> None:
-        self.collect_by_name(["HM03 Surf", "Balance Badge"]) # Reaches Roxanne, Brawley, Wattson, and Flannery
+        self.collect_by_name(["HM03 Surf", "Balance Badge"])  # Reaches Roxanne, Brawley, Wattson, and Flannery
         self.assertTrue(self.can_reach_location(location_name_to_label("BADGE_5")))
 
 
