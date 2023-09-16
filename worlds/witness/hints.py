@@ -131,7 +131,7 @@ def get_always_hint_items(multiworld: MultiWorld, player: int):
             always.append("Triangles")
 
     if wincon == 0:
-        always.append("Mountain Bottom Floor Final Room Entry (Door)")
+        always += ["Mountain Bottom Floor Final Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
     if wincon == 1:
         always += ["Challenge Entry (Panel)", "Caves Panels"]
