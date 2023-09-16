@@ -77,6 +77,7 @@ class DarkSouls3Location(Location):
             "Progressive Items 3",
             "Progressive Items 4",
             "Progressive Items DLC",
+            "Progressive Items Health",
         ]
 
         output = {}
@@ -581,11 +582,7 @@ location_tables = {
         [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
         [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(28)] +
         [DS3LocationData(f"Titanite Slab #{i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
-        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
-
-        # Healing
-        [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(11)] +
-        [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
+        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)],
 
     "Progressive Items 2": [] +
         # Items
@@ -683,7 +680,12 @@ location_tables = {
         [DS3LocationData(f"Dark Gem ${i + 1}",                           "Dark Gem",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Blood Gem ${i + 1}",                          "Blood Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
         [DS3LocationData(f"Blessed Gem ${i + 1}",                        "Blessed Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
-        [DS3LocationData(f"Hollow Gem ${i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)]
+        [DS3LocationData(f"Hollow Gem ${i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)],
+
+    "Progressive Items Health": [] +
+        # Healing
+        [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(11)] +
+        [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
 }
 
 location_dictionary: Dict[str, DS3LocationData] = {}
