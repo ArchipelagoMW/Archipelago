@@ -1,8 +1,8 @@
 from typing import Dict, List, Any
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import filler_items, item_name_to_id, item_table, item_name_groups
-from .Locations import location_table, location_name_groups, location_name_to_id
+from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_items
+from .Locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .Rules import set_location_rules, set_region_rules, set_abilities
 from .Regions import tunic_regions
 from .Options import tunic_options
@@ -50,67 +50,49 @@ class TunicWorld(World):
     location_name_to_id = location_name_to_id
 
     ability_unlocks: Dict[str, int] = {}
-    slot_data_items: Dict[str, Any] = {}
+    slot_data_items: List[TunicItem] = []
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-        hexagon_locations: Dict[str, str] = {
-            "Red Hexagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
-            "Green Hexagon": "Librarian - Hexagon Green",
-            "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue",
-        }
 
-        fool_tiers: List[List[str]] = [
-            [],
-            ["Money x1", "Money x10", "Money x15", "Money x16"],
-            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
-            ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
-        ]
+        items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
-        items = []
-        for item_name, item_data in item_table.items():
+        for money_fool in fool_tiers[self.multiworld.fool_traps[self.player].value]:
+            items_to_create["Fool Trap"] += items_to_create[money_fool]
+            items_to_create.pop(money_fool)
 
-            if item_name in fool_tiers[self.multiworld.fool_traps[self.player].value]:
-                for i in range(item_data.quantity_in_item_pool):
-                    items.append(self.create_item("Fool Trap"))
-                continue
+        if self.multiworld.hexagon_quest[self.player].value:
+            if self.multiworld.keys_behind_bosses[self.player].value:
+                for location in hexagon_locations.values():
+                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item("Gold Hexagon"))
+                items_to_create["Gold Hexagon"] -= 3
+            # Fill extra empty spot with money
+            items_to_create["Money x100"] += 1
+            items_to_create = dict(filter(lambda item: "Pages" not in item[0] and item[0] not in hexagon_locations,
+                                          items_to_create.items()))
+        else:
+            if self.multiworld.keys_behind_bosses[self.player].value:
+                for hexagon, location in hexagon_locations.items():
+                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(hexagon))
+            items_to_create["Gold Hexagon"] = 0
 
-            if item_name == "Gold Hexagon":
-                # if hexagon quest is on, add the gold hexagons in
-                if self.multiworld.hexagon_quest[self.player].value:
-                    # if keys are behind bosses, place 3 manually
-                    gold_hexes = item_data.quantity_in_item_pool
-                    if self.multiworld.keys_behind_bosses[self.player].value:
-                        for location in hexagon_locations.values():
-                            self.multiworld.get_location(location, self.player)\
-                                .place_locked_item(self.create_item("Gold Hexagon"))
-                        gold_hexes -= 3
+        if self.multiworld.sword_progression[self.player].value:
+            [items_to_create.pop(item) for item in ["Stick", "Sword"]]
+        else:
+            items_to_create.pop("Sword Upgrade")
 
-                    for i in range(0, gold_hexes):
-                        items.append(self.create_item(item_name))
-                    # adding a money x1 or fool trap to even out the pool with this option
-                    if self.multiworld.fool_traps[self.player].value == 0:
-                        items.append(self.create_item("Money x1"))
-                    else:
-                        items.append(self.create_item("Fool Trap"))
-                else:
-                    # if not doing hexagon quest, just skip the gold hexagons
-                    continue
-            elif self.multiworld.hexagon_quest[self.player].value and \
-                    ("Pages" in item_name or item_name in hexagon_locations.keys()):
-                continue
-            elif self.multiworld.keys_behind_bosses[self.player].value and item_name in hexagon_locations.keys():
-                self.multiworld.get_location(hexagon_locations[item_name], self.player)\
-                    .place_locked_item(self.create_item(item_name))
-            elif (item_name == "Sword Upgrade" and not self.multiworld.sword_progression[self.player].value)\
-                    or (item_name in ["Stick", "Sword"] and self.multiworld.sword_progression[self.player].value):
-                continue
-            else:
-                for i in range(0, item_data.quantity_in_item_pool):
-                    items.append(self.create_item(item_name))
+        items: List[TunicItem] = []
+        self.slot_data_items = []
+
+        for item, quantity in items_to_create.items():
+            for i in range(0, quantity):
+                tunic_item: TunicItem = self.create_item(item)
+                if item in slot_data_items and tunic_item.player == self.player:
+                    self.slot_data_items.append(tunic_item)
+                items.append(tunic_item)
 
         self.multiworld.itempool += items
 
@@ -153,64 +135,20 @@ class TunicWorld(World):
             "fool_traps": self.multiworld.fool_traps[self.player].value,
         }
 
-        items = [
-            "Magic Dagger",
-            "Magic Wand",
-            "Magic Orb",
-            "Hero's Laurels",
-            "Lantern",
-            "Shotgun",
-            "Scavenger Mask",
-            "Shield",
-            "Dath Stone",
-            "Hourglass",
-            "Old House Key",
-            "Fortress Vault Key",
-            "Hero Relic - ATT",
-            "Hero Relic - DEF",
-            "Hero Relic - POTION",
-            "Hero Relic - HP",
-            "Hero Relic - SP",
-            "Hero Relic - MP",
-        ]
-
-        if self.multiworld.sword_progression[self.player].value:
-            items.append("Sword Upgrade")
-        else:
-            items.extend(["Stick", "Sword"])
-
-        if self.multiworld.hexagon_quest[self.player].value:
-            golden_hexagons = self.multiworld.find_item_locations("Gold Hexagon", self.player, False)
-            self.random.shuffle(golden_hexagons)
-            hexagon_gold = golden_hexagons.pop()
-            hexagon_gold2 = golden_hexagons.pop()
-            hexagon_gold3 = golden_hexagons.pop()
-            slot_data["Gold Hexagon"] = [hexagon_gold.name, hexagon_gold.player, hexagon_gold2.name,
-                                         hexagon_gold2.player, hexagon_gold3.name, hexagon_gold3.player]
-            if self.multiworld.ability_shuffling[self.player].value:
-                slot_data["Hexagon Quest Prayer"] = self.ability_unlocks["prayer"]
-                slot_data["Hexagon Quest Holy Cross"] = self.ability_unlocks["holy_cross"]
-                slot_data["Hexagon Quest Ice Rod"] = self.ability_unlocks["ice_rod"]
-        else:
-            items.extend(["Red Hexagon", "Green Hexagon", "Blue Hexagon"])
-
-        if self.multiworld.ability_shuffling[self.player].value and not self.multiworld.hexagon_quest[self.player].value:
-            items.extend(["Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"])
+        for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
+            if tunic_item.name not in slot_data.keys():
+                slot_data[tunic_item.name] = []
+            slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
 
         for start_item in self.multiworld.start_inventory_from_pool[self.player]:
-            # If not all swords or sword upgrades are placed in start inventory, leave remaining ones for slot data
-            if (start_item == "Sword" and self.multiworld.start_inventory_from_pool[self.player][start_item] < 3) or \
-                    (start_item == "Sword Upgrade" and self.multiworld.start_inventory_from_pool[self.player][start_item] < 4):
-                continue
-            if start_item in items:
-                items.remove(start_item)
-                slot_data[start_item] = ["Your Pocket", self.player]
+            if start_item in slot_data_items:
+                if start_item not in slot_data:
+                    slot_data[start_item] = []
+                for i in range(0, self.multiworld.start_inventory_from_pool[self.player][start_item]):
+                    slot_data[start_item].extend(["Your Pocket", self.player])
 
-        for item in items:
-            data = []
-            for found_item in self.multiworld.find_item_locations(item, self.player, False):
-                data.append(found_item.item.location.name)
-                data.append(found_item.item.location.player)
-            slot_data[item] = data
+        # only send 3 gold hexagon clues in slot data
+        if "Gold Hexagon" in slot_data and len(slot_data["Gold Hexagon"]) >= 6:
+            slot_data["Gold Hexagon"] = slot_data["Gold Hexagon"][0:6]
 
         return slot_data

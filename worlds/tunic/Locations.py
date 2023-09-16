@@ -314,6 +314,11 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Effigy Relic": TunicLocationData("West Garden"),
 }
 
+hexagon_locations: Dict[str, str] = {
+    "Red Hexagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
+    "Green Hexagon": "Librarian - Hexagon Green",
+    "Blue Hexagon": "Rooted Ziggurat Lower - Hexagon Blue",
+}
 
 location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
 

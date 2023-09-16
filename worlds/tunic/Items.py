@@ -1,3 +1,4 @@
+from enum import Enum
 from itertools import groupby
 from typing import Dict, List, Set, NamedTuple
 from BaseClasses import ItemClassification
@@ -145,13 +146,52 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 54-55": TunicItemData(ItemClassification.progression_skip_balancing, 1, 129, "pages"),
 }
 
+fool_tiers: List[List[str]] = [
+    [],
+    ["Money x1", "Money x10", "Money x15", "Money x16"],
+    ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20"],
+    ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
+]
+
+slot_data_items = [
+    "Stick",
+    "Sword",
+    "Sword Upgrade",
+    "Magic Dagger",
+    "Magic Wand",
+    "Magic Orb",
+    "Hero's Laurels",
+    "Lantern",
+    "Shotgun",
+    "Scavenger Mask",
+    "Shield",
+    "Dath Stone",
+    "Hourglass",
+    "Old House Key",
+    "Fortress Vault Key",
+    "Hero Relic - ATT",
+    "Hero Relic - DEF",
+    "Hero Relic - POTION",
+    "Hero Relic - HP",
+    "Hero Relic - SP",
+    "Hero Relic - MP",
+    "Pages 24-25 (Prayer)",
+    "Pages 42-43 (Holy Cross)",
+    "Pages 52-53 (Ice Rod)",
+    "Red Hexagon",
+    "Green Hexagon",
+    "Blue Hexagon",
+    "Gold Hexagon"
+]
+
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
+
+filler_items: List[str] = [name for name, data in item_table.items() if data.classification == ItemClassification.filler]
+
 
 def get_item_group(item_name: str) -> str:
     return item_table[item_name].item_group
 
-
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == ItemClassification.filler]
 
 item_name_groups: Dict[str, Set[str]] = {
     group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group)
