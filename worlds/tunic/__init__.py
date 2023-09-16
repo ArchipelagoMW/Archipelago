@@ -3,10 +3,11 @@ from typing import Dict, List, Any
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_items
 from .Locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
-from .Rules import set_location_rules, set_region_rules, set_abilities
+from .Rules import set_location_rules, set_region_rules, set_ability_unlocks, gold_hexagon
 from .Regions import tunic_regions
 from .Options import tunic_options
 from worlds.AutoWorld import WebWorld, World
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class TunicWeb(WebWorld):
@@ -57,32 +58,44 @@ class TunicWorld(World):
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
         for money_fool in fool_tiers[self.multiworld.fool_traps[self.player].value]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
-            items_to_create.pop(money_fool)
+            items_to_create[money_fool] = 0
 
         if self.multiworld.hexagon_quest[self.player].value:
+
+            # calculate number of hexagons in item pool
+            items_to_create[gold_hexagon] = int((Decimal(100 + self.multiworld.extra_hexagon_percentage[self.player].value) / 100 * self.multiworld.hexagon_goal[self.player].value).to_integral_value(rounding=ROUND_HALF_UP))
+
             if self.multiworld.keys_behind_bosses[self.player].value:
                 for location in hexagon_locations.values():
-                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item("Gold Hexagon"))
-                items_to_create["Gold Hexagon"] -= 3
-            # Fill extra empty spot with money
-            items_to_create["Money x100"] += 1
-            items_to_create = dict(filter(lambda item: "Pages" not in item[0] and item[0] not in hexagon_locations,
-                                          items_to_create.items()))
+                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(gold_hexagon))
+                items_to_create[gold_hexagon] -= 3
+
+            # Replace pages and normal hexagons with filler
+            for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
+                items_to_create[self.get_filler_item_name()] += items_to_create[replaced_item]
+                items_to_create[replaced_item] = 0
+
+            # Remove filler to make room for extra hexagons
+            for i in range(0, items_to_create[gold_hexagon]):
+                fill = self.get_filler_item_name()
+                while items_to_create[fill] == 0:
+                    fill = self.get_filler_item_name()
+                items_to_create[fill] -= 1
         else:
             if self.multiworld.keys_behind_bosses[self.player].value:
                 for hexagon, location in hexagon_locations.items():
                     self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(hexagon))
-            items_to_create["Gold Hexagon"] = 0
+                    items_to_create[hexagon] = 0
 
         if self.multiworld.sword_progression[self.player].value:
-            [items_to_create.pop(item) for item in ["Stick", "Sword"]]
+            items_to_create["Stick"] = 0
+            items_to_create["Sword"] = 0
         else:
-            items_to_create.pop("Sword Upgrade")
+            items_to_create["Sword Upgrade"] = 0
 
         items: List[TunicItem] = []
         self.slot_data_items = []
@@ -101,7 +114,7 @@ class TunicWorld(World):
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        for region_name in tunic_regions.keys():
+        for region_name in tunic_regions:
             region = self.multiworld.get_region(region_name, self.player)
             region.add_exits(tunic_regions[region_name])
 
@@ -117,12 +130,12 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        self.ability_unlocks = set_abilities(self.multiworld)
+        self.ability_unlocks = set_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value)
         set_region_rules(self.multiworld, self.player, self.ability_unlocks)
         set_location_rules(self.multiworld, self.player, self.ability_unlocks)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(filler_items)
+        return self.random.choice(filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
@@ -133,6 +146,10 @@ class TunicWorld(World):
             "ability_shuffling": self.multiworld.ability_shuffling[self.player].value,
             "hexagon_quest": self.multiworld.hexagon_quest[self.player].value,
             "fool_traps": self.multiworld.fool_traps[self.player].value,
+            "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
+            "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
+            "Hexagon Quest Ice Rod": self.ability_unlocks["Pages 52-53 (Ice Rod)"],
+            "Hexagon Quest Goal": self.multiworld.hexagon_goal[self.player].value
         }
 
         for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
@@ -148,7 +165,7 @@ class TunicWorld(World):
                     slot_data[start_item].extend(["Your Pocket", self.player])
 
         # only send 3 gold hexagon clues in slot data
-        if "Gold Hexagon" in slot_data and len(slot_data["Gold Hexagon"]) >= 6:
-            slot_data["Gold Hexagon"] = slot_data["Gold Hexagon"][0:6]
+        if gold_hexagon in slot_data and len(slot_data[gold_hexagon]) >= 6:
+            slot_data[gold_hexagon] = slot_data[gold_hexagon][0:6]
 
         return slot_data

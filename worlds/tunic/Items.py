@@ -55,10 +55,10 @@ item_table: Dict[str, TunicItemData] = {
     "Potion Flask": TunicItemData(ItemClassification.useful, 5, 38, "potions"),
     "Golden Coin": TunicItemData(ItemClassification.progression, 17, 39),
     "Card Slot": TunicItemData(ItemClassification.useful, 4, 40),
-    "Red Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 41, "hexagons"),
-    "Green Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 42, "hexagons"),
-    "Blue Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 43, "hexagons"),
-    "Gold Hexagon": TunicItemData(ItemClassification.progression_skip_balancing, 30, 44, "hexagons"),
+    "Red Questagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 41, "hexagons"),
+    "Green Questagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 42, "hexagons"),
+    "Blue Questagon": TunicItemData(ItemClassification.progression_skip_balancing, 1, 43, "hexagons"),
+    "Gold Questagon": TunicItemData(ItemClassification.progression_skip_balancing, 0, 44, "hexagons"),
     "ATT Offering": TunicItemData(ItemClassification.useful, 4, 45, "offerings"),
     "DEF Offering": TunicItemData(ItemClassification.useful, 4, 46, "offerings"),
     "Potion Offering": TunicItemData(ItemClassification.useful, 3, 47, "offerings"),
@@ -112,7 +112,7 @@ item_table: Dict[str, TunicItemData] = {
     "Money x48": TunicItemData(ItemClassification.filler, 1, 95, "money"),
     "Money x50": TunicItemData(ItemClassification.filler, 7, 96, "money"),
     "Money x64": TunicItemData(ItemClassification.filler, 1, 97, "money"),
-    "Money x100": TunicItemData(ItemClassification.useful, 5, 98, "money"),
+    "Money x100": TunicItemData(ItemClassification.filler, 5, 98, "money"),
     "Money x128": TunicItemData(ItemClassification.useful, 3, 99, "money"),
     "Money x200": TunicItemData(ItemClassification.useful, 1, 100, "money"),
     "Money x255": TunicItemData(ItemClassification.useful, 1, 101, "money"),
@@ -178,10 +178,10 @@ slot_data_items = [
     "Pages 24-25 (Prayer)",
     "Pages 42-43 (Holy Cross)",
     "Pages 52-53 (Ice Rod)",
-    "Red Hexagon",
-    "Green Hexagon",
-    "Blue Hexagon",
-    "Gold Hexagon"
+    "Red Questagon",
+    "Green Questagon",
+    "Blue Questagon",
+    "Gold Questagon"
 ]
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}

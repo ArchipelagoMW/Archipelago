@@ -18,8 +18,8 @@ Enemy randomization is also available and can be turned on in the client mod.
 The standard goal is the same as the vanilla game, which is to find the three hexagon keys, at which point you may either Take Your
 Rightful Place or seek another path and Share Your Wisdom.
 
-Alternatively, Hexagon Quest is a mode that shuffles 30 Golden Hexagons into the item pool, with the goal 
-being to find 20 of them and then Share Your Wisdom.
+Alternatively, Hexagon Quest is a mode that shuffles a certain number of Gold "Questagons" into the item pool, with the goal 
+being to find the required amount of them and then Share Your Wisdom.
 
 ## What items from TUNIC can appear in another player's world?
 Every item has a chance to appear in another player's world.

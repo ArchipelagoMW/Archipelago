@@ -1,6 +1,6 @@
 import typing
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, AssembleOptions
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, AssembleOptions, Range
 
 
 class SwordProgression(DefaultOnToggle):
@@ -21,16 +21,32 @@ class KeysBehindBosses(Toggle):
 
 class AbilityShuffling(Toggle):
     """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant pages of the manual have been found.
-        If playing with Hexagon Quest, abilities are instead randomly unlocked after obtaining 5, 10, and 15 Golden Hexagons.
+        If playing with Hexagon Quest, abilities are instead randomly unlocked after obtaining 5, 10, and 15 Gold Hexagons.
         *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     display_name = "Ability Shuffling"
 
 
 class HexagonQuest(Toggle):
-    """An alternate goal that shuffles 30 Golden Hexagons into the item pool and allows the game to be completed after
-    collecting 20 of them."""
+    """An alternate goal that shuffles Gold Hexagon items into the item pool and allows the game to be completed after
+    collecting the required number of them."""
     display_name = "Hexagon Quest"
+
+
+class HexagonGoal(Range):
+    """How many Gold Hexagons are required to complete the game on Hexagon Quest."""
+    display_name = "Gold Hexagons Required"
+    range_start = 15
+    range_end = 50
+    default = 20
+
+
+class ExtraHexagonPercentage(Range):
+    """How many extra Gold Hexagons are shuffled into the item pool, taken as a percentage of the goal amount."""
+    display_name = "Percentage of Extra Gold Hexagons"
+    range_start = 0
+    range_end = 100
+    default = 50
 
 
 class FoolTraps(Choice):
@@ -50,6 +66,8 @@ tunic_options: typing.Dict[str, AssembleOptions] = {
     "keys_behind_bosses": KeysBehindBosses,
     "ability_shuffling": AbilityShuffling,
     "hexagon_quest": HexagonQuest,
+    "hexagon_goal": HexagonGoal,
+    "extra_hexagon_percentage": ExtraHexagonPercentage,
     "fool_traps": FoolTraps,
     "start_inventory_from_pool": StartInventoryPool,
 }
