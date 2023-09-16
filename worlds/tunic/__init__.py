@@ -155,6 +155,8 @@ class TunicWorld(World):
         for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
             if tunic_item.name not in slot_data.keys():
                 slot_data[tunic_item.name] = []
+            if tunic_item.name == gold_hexagon and len(slot_data[gold_hexagon]) >= 6:
+                continue
             slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
 
         for start_item in self.multiworld.start_inventory_from_pool[self.player]:
@@ -163,9 +165,5 @@ class TunicWorld(World):
                     slot_data[start_item] = []
                 for i in range(0, self.multiworld.start_inventory_from_pool[self.player][start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
-
-        # only send 3 gold hexagon clues in slot data
-        if gold_hexagon in slot_data and len(slot_data[gold_hexagon]) >= 6:
-            slot_data[gold_hexagon] = slot_data[gold_hexagon][0:6]
 
         return slot_data

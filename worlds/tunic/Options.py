@@ -28,13 +28,13 @@ class AbilityShuffling(Toggle):
 
 
 class HexagonQuest(Toggle):
-    """An alternate goal that shuffles Gold Hexagon items into the item pool and allows the game to be completed after
+    """An alternate goal that shuffles Gold "Questagon" items into the item pool and allows the game to be completed after
     collecting the required number of them."""
     display_name = "Hexagon Quest"
 
 
 class HexagonGoal(Range):
-    """How many Gold Hexagons are required to complete the game on Hexagon Quest."""
+    """How many Gold Questagons are required to complete the game on Hexagon Quest."""
     display_name = "Gold Hexagons Required"
     range_start = 15
     range_end = 50
@@ -42,7 +42,7 @@ class HexagonGoal(Range):
 
 
 class ExtraHexagonPercentage(Range):
-    """How many extra Gold Hexagons are shuffled into the item pool, taken as a percentage of the goal amount."""
+    """How many extra Gold Questagons are shuffled into the item pool, taken as a percentage of the goal amount."""
     display_name = "Percentage of Extra Gold Hexagons"
     range_start = 0
     range_end = 100
