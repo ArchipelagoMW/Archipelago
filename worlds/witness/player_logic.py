@@ -55,6 +55,8 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
 
+        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
@@ -65,12 +67,15 @@ class WitnessPlayerLogic:
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
+            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved...
             if panel_hex != "0x28A0D":
                 return frozenset(all_options)
-            else:  # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved
-                these_items = all_options
+            # ...except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
+            # In the future, it would be wise to make a distinction between "power dependencies" and other dependencies.
+            if any("0x28998" in option for option in these_panels):
+                return frozenset(all_options)
 
-        these_panels = self.DEPENDENT_REQUIREMENTS_BY_HEX[panel_hex]["panels"]
+            these_items = all_options
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if StaticWitnessLogic.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
