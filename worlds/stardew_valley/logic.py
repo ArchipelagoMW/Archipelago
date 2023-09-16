@@ -1043,11 +1043,12 @@ class StardewLogic:
     def has_relationship(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
-        if self.options[options.Friendsanity] == options.Friendsanity.option_none:
+        friendsanity = self.options[options.Friendsanity]
+        if friendsanity == options.Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
             if npc == NPC.pet:
-                if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
+                if friendsanity == options.Friendsanity.option_bachelors:
                     return self.can_befriend_pet(hearts)
                 return self.received_hearts(NPC.pet, hearts)
             if npc == Generic.any or npc == Generic.bachelor:
@@ -1077,12 +1078,12 @@ class StardewLogic:
         if not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
-        if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors and not villager.bachelor:
+        if friendsanity == options.Friendsanity.option_bachelors and not villager.bachelor:
             return self.can_earn_relationship(npc, hearts)
-        if self.options[options.Friendsanity] == options.Friendsanity.option_starting_npcs and not villager.available:
+        if friendsanity == options.Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        if self.options[
-            options.Friendsanity] != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
+        is_capped_at_8 = villager.bachelor and friendsanity != options.Friendsanity.option_all_with_marriage
+        if is_capped_at_8 and hearts > 8:
             return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager, hearts)
 
@@ -1136,10 +1137,21 @@ class StardewLogic:
             rule_if_birthday = self.has_season(villager.birthday) & self.has_any_universal_love() & self.has_lived_months(hearts // 2)
             rule_if_not_birthday = self.has_lived_months(hearts)
             earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
+            if villager.bachelor:
+                if hearts > 8:
+                    earn_rule = earn_rule & self.can_date(npc)
+                if hearts > 10:
+                    earn_rule = earn_rule & self.can_marry(npc)
         else:
             earn_rule = self.has_lived_months(min(hearts // 2, 8))
 
         return previous_heart_rule & earn_rule
+
+    def can_date(self, npc: str) -> StardewRule:
+        return self.has_relationship(npc, 8) & self.has(Gift.bouquet)
+
+    def can_marry(self, npc: str) -> StardewRule:
+        return self.has_relationship(npc, 10) & self.has(Gift.mermaid_pendant)
 
     def can_befriend_pet(self, hearts: int):
         if hearts <= 0:
