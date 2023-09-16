@@ -153,7 +153,6 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
     priority = {
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
-        "Stars + Same Colored Symbol",
         "Swamp Entry (Panel)",
         "Swamp Laser Shortcut (Door)",
     }
@@ -221,8 +220,11 @@ def get_priority_hint_locations(multiworld: MultiWorld, player: int):
 
 
 def make_hint_from_item(multiworld: MultiWorld, player: int, item: str):
-    location_obj = multiworld.find_item(item, player).item.location
+    locations = multiworld.find_item_locations(item, player)
+
+    location_obj = multiworld.per_slot_randoms[player].choice(locations)
     location_name = location_obj.name
+
     if location_obj.player != player:
         location_name += " (" + multiworld.get_player_name(location_obj.player) + ")"
 
