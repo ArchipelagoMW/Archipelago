@@ -138,6 +138,14 @@ class Scenario(IntEnum):
     build_your_own_six_flags_magic_mountain = 132
     build_your_own_six_flags_park = 133
     build_your_own_six_flags_over_texas = 134
+    random_RCT1 = 135
+    random_loopy_landscapes = 136
+    random_corkscrew_follies = 137
+    random_RCT2 = 138
+    random_wacky_worlds = 139
+    random_time_twister = 140
+    random_RCT1_expansions = 141
+    random_RCT2_expansions = 142
 
 class LocationBalancingMode(IntEnum):
     disabled = 0
@@ -209,6 +217,14 @@ class Scenario(Choice):
     """
     auto_display_name = True
     display_name = "Scenario"
+    option_random_RCT1 = Scenario.random_RCT1.value
+    option_random_loopy_landscapes = Scenario.random_loopy_landscapes.value
+    option_random_corkscrew_follies = Scenario.random_corkscrew_follies.value
+    option_random_RCT2 = Scenario.random_RCT2.value
+    option_random_wacky_worlds = Scenario.random_wacky_worlds.value
+    option_random_time_twister = Scenario.random_time_twister.value
+    option_random_RCT1_expansions = Scenario.random_RCT1_expansions.value
+    option_random_RCT2_expansions = Scenario.random_RCT2_expansions.value
     option_forest_frontiers = Scenario.forest_frontiers.value
     option_dynamite_dunes = Scenario.dynamite_dunes.value
     option_leafy_lake = Scenario.leafy_lake.value
@@ -511,6 +527,13 @@ class Spam_Traps(Range):
     range_end = 20
     default = 5
 
+class Filler(Range):
+    """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses"""
+    display_name = "Filler"
+    range_start = 1
+    range_end = 50
+    default = 20
+
 
 openRCT2_options = {
     # generator options
@@ -544,7 +567,8 @@ openRCT2_options = {
     "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
-    "monopoly_mode": Monopoly_Mode
+    "monopoly_mode": Monopoly_Mode,
+    "filler": Filler
 }
 
 OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})

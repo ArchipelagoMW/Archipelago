@@ -92,6 +92,10 @@
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
         "scenery",
+        "Rainstorm",
+        "Thunderstorm",
+        "Snowstorm",
+        "Blizzard",
         "$10,000",
         "$5,000",
         "$2,500",
@@ -129,6 +133,10 @@
         "Construction Rights Discount"
     ],
     "filler_items": [
+        "Rainstorm",
+        "Thunderstorm",
+        "Snowstorm",
+        "Blizzard",
         "$10,000",
         "$5,000",
         "$2,500",
