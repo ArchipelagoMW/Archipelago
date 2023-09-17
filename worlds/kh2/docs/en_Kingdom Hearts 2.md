@@ -65,7 +65,7 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 
 <h2 style="text-transform:none";>What are Lucky Emblems?</h2>
 Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
-Think of these "McGuffins" as you need X amount of Proof of Nonexistences to open the final door .
+You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
 
 <h2 style="text-transform:none";>What is Hitlist/Bounties?:</h2>
 The hitlist goal sets items named "bounty" on selected later fights, and you need to collect the amount you chose in your yaml to win. <br>
