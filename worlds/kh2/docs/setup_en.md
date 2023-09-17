@@ -72,9 +72,9 @@ Have any questions on what's in logic? This spreadsheet has the answer [Requirem
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
 - Why is my HP/MP continuously increasing without stopping?
-    - You do not have `JaredWeakStrike/APCompanion` setup correctly. Make Sure it is above the GOA in the mod manager.
+    - You do not have `JaredWeakStrike/APCompanion` setup correctly. Make sure it is above the `GoA ROM Mod` in the mod manager.
 - Why is my HP/MP continuously increasing without stopping when I have the APCompanion Mod?
-    - You have a leftover GOA Script in your `Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\KH2`.
+    - You have a leftover GOA lua script in your `Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\KH2`.
 - Why am I missing worlds/portals in the GoA?
     - You are missing the required visit-locking item to access the world/portal.
 - Why did I not load into the correct visit
