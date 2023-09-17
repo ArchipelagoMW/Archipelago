@@ -63,7 +63,7 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
 
-<h2 style="text-transform:none";>What are Lucky Emblems?:</h2>
+<h2 style="text-transform:none";>What are Lucky Emblems?</h2>
 Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem". <br>
 Think of these "McGuffins" as you need X amount of Proof of Nonexistences to open the final door .
 
