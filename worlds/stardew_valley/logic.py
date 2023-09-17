@@ -1166,14 +1166,15 @@ class StardewLogic:
     def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
         highest_quality_yet = 0
+        can_speak_junimo = self.can_reach_region(Region.wizard_tower)
         for bundle_item in bundle_requirements:
             if bundle_item.item.item_id == -1:
-                return self.can_spend_money(bundle_item.amount)
+                return can_speak_junimo & self.can_spend_money(bundle_item.amount)
             else:
                 item_rules.append(bundle_item.item.name)
                 if bundle_item.quality > highest_quality_yet:
                     highest_quality_yet = bundle_item.quality
-        return self.can_reach_region(Region.wizard_tower) & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
+        return can_speak_junimo & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
 
     def can_grow_gold_quality(self, quality: int) -> StardewRule:
         if quality <= 0:
