@@ -478,6 +478,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
+    if PlandoOptions.texts in plando_options:
+        ret.plando_texts = game_weights.get("plando_texts", [])
     if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
         # bad hardcoded behavior to make this work for now
         ret.plando_connections = []

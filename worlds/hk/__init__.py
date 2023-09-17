@@ -164,6 +164,7 @@ class HKWorld(World):
         self.ranges = {}
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
+        self.plando_texts = []
 
     def generate_early(self):
         world = self.multiworld
@@ -471,6 +472,12 @@ class HKWorld(World):
 
         slot_data["notch_costs"] = self.charm_costs
 
+        #Text replacements
+        try:
+            slot_data["plando_texts"] = self.plando_texts
+        except:
+            pass
+
         return slot_data
 
     def create_item(self, name: str) -> HKItem:
@@ -585,6 +592,12 @@ class HKWorld(World):
                                    exclusions)
             self.cached_filler_items[self.player] = fillers
         return self.multiworld.random.choice(self.cached_filler_items[self.player])
+    
+    def generate_basic(self):
+        world = self.multiworld
+        for entry in world.plando_texts.values():
+            for plando in entry:
+                self.plando_texts.append([plando["at"], plando["text"]])
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None) -> Region:
