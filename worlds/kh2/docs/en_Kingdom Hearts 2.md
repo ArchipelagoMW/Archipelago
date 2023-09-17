@@ -70,6 +70,7 @@ You can think of these as requiring X number of Proofs of Nonexistence to open t
 <h2 style="text-transform:none";>What is Hitlist/Bounties?:</h2>
 The hitlist goal sets items named "bounty" on selected later fights, and you need to collect the amount you chose in your yaml to win. <br>
 The list of possible locations that can contain a bounty:
+
 - Each of the 13 Data Fights
 - Max level (7) for each Drive Form
 - Sephiroth
