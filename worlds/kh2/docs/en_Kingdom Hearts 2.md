@@ -64,7 +64,7 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
 
 <h2 style="text-transform:none";>What are Lucky Emblems?</h2>
-Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem". <br>
+Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
 Think of these "McGuffins" as you need X amount of Proof of Nonexistences to open the final door .
 
 <h2 style="text-transform:none";>What is Hitlist/Bounties?:</h2>
