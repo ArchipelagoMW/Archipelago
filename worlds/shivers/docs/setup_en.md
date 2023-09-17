@@ -4,7 +4,7 @@
 ## Required Software
 
 - [Shivers (GOG version)](https://www.gog.com/en/game/shivers) or original disc
-- [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0
+- [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0 or later
 - [Shivers Randomizer](https://www.speedrun.com/shivers/resources)
 
 ## Setup ScummVM for Shivers
@@ -57,3 +57,4 @@ validator page: [YAML Validation page](/mysterycheck)
 - Every puzzle
 - Every puzzle hint/solution
 - Every document that is considered a Flashback
+- Optionally information plaques.
