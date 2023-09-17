@@ -47,12 +47,14 @@ def ap_id_from_wl4_data(data: ItemData) -> int:
         return None
     if cat == ItemType.JEWEL:
         passage, quad = itemid
-        return ap_id_offset | (passage << 2) | quad
+        return ap_id_offset + (passage << 2) | quad
     elif cat == ItemType.CD:
         passage, level = itemid
-        return ap_id_offset | (1 << 5) | (passage << 2) | level
+        return ap_id_offset + (1 << 5) | (passage << 2) | level
+    elif cat == ItemType.ABILITY:
+        return ap_id_offset + (1 << 6) | itemid
     elif cat == ItemType.ITEM:
-        return ap_id_offset | (1 << 6) | itemid
+        return ap_id_offset + (1 << 7) | itemid
     else:
         raise ValueError(f'Unexpected WL4 item type: {data[0]}')
 
