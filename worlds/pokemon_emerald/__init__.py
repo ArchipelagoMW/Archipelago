@@ -26,7 +26,7 @@ from .pokemon import get_random_species, get_random_move, get_random_damaging_mo
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
-                    set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
+                    add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
@@ -151,8 +151,6 @@ class PokemonEmeraldWorld(World):
             tags.add("NpcGift")
         if self.multiworld.berry_trees[self.player]:
             tags.add("BerryTree")
-        if self.multiworld.enable_ferry[self.player]:
-            tags.add("Ferry")
 
         create_regions(self.multiworld, self.player)
         create_locations_with_tags(self.multiworld, self.player, tags)
@@ -193,20 +191,6 @@ class PokemonEmeraldWorld(World):
 
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
-
-        if self.multiworld.enable_ferry[self.player]:
-            try:
-                for ticket in ["Eon Ticket", "Old Sea Map", "Aurora Ticket", "Mystic Ticket"]:
-                    replaceable_item_index = next(
-                        i
-                        for i, item in enumerate(default_itempool)
-                        if item.classification == ItemClassification.filler
-                    )
-
-                    default_itempool[replaceable_item_index] = self.create_item(ticket)
-            except StopIteration:
-                raise FillError(f"Player {self.player} ({self.multiworld.player_name[self.player]}) did not include "
-                                "enough locations for ferry tickets to be added")
 
         if self.multiworld.item_pool_type[self.player] == ItemPoolType.option_shuffled:
             self.multiworld.itempool += default_itempool
@@ -276,9 +260,6 @@ class PokemonEmeraldWorld(World):
 
         if self.multiworld.npc_gifts[self.player]:
             set_npc_gift_rules(self.multiworld, self.player)
-
-        if self.multiworld.enable_ferry[self.player]:
-            set_enable_ferry_rules(self.multiworld, self.player)
 
         if self.multiworld.require_itemfinder[self.player]:
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)
@@ -825,7 +806,6 @@ class PokemonEmeraldWorld(World):
             "berry_trees",
             "require_itemfinder",
             "require_flash",
-            "enable_ferry",
             "elite_four_requirement",
             "elite_four_count",
             "norman_requirement",

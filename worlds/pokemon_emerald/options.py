@@ -133,13 +133,6 @@ class DarkCavesRequireFlash(DefaultOnToggle):
     display_name = "Require Flash"
 
 
-class EnableFerry(Toggle):
-    """
-    The ferry between Slateport, Lilycove, and the Battle Frontier can be used if you have the S.S. Ticket
-    """
-    display_name = "Enable Ferry"
-
-
 class EliteFourRequirement(Choice):
     """
     Sets the requirements to challenge the elite four
@@ -634,7 +627,6 @@ option_definitions: Dict[str, Option] = {
 
     "require_itemfinder": HiddenItemsRequireItemfinder,
     "require_flash": DarkCavesRequireFlash,
-    "enable_ferry": EnableFerry,
     "elite_four_requirement": EliteFourRequirement,
     "elite_four_count": EliteFourCount,
     "norman_requirement": NormanRequirement,

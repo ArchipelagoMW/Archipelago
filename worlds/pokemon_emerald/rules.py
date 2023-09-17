@@ -369,7 +369,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
     set_rule(
         multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+        lambda state: state.has("S.S. Ticket", player)
     )
 
     # Route 110
@@ -745,8 +745,25 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+        lambda state: state.has("S.S. Ticket", player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player) and state.has("Eon Ticket", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_FARAWAY_ISLAND_ENTRANCE/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player) and state.has("Old Sea Map", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_BIRTH_ISLAND_HARBOR/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player) and state.has("Aurora Ticket", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_NAVEL_ROCK_HARBOR/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player) and state.has("Mystic Ticket", player)
+    )
+
     if "Lilycove City Wailmer" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN", player),
@@ -1193,6 +1210,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Battle Frontier
     set_rule(
+        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
+        lambda state: state.has("S.S. Ticket", player)
+    )
+    set_rule(
         multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER", player),
         can_surf
     )
@@ -1281,6 +1302,26 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_AMULET_COIN"), player),
         lambda state: state.has("EVENT_TALK_TO_MR_STONE", player) and state.has("Balance Badge", player)
     )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_AURORA_TICKET"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_EON_TICKET"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_MYSTIC_TICKET"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
+        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_OLD_SEA_MAP"), player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
 
     # Petalburg City
     set_rule(
@@ -1340,41 +1381,6 @@ def set_npc_gift_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_MENTAL_HERB"), player),
         lambda state: state.has("EVENT_WINGULL_QUEST_2", player)
-    )
-
-
-def set_enable_ferry_rules(multiworld: MultiWorld, player: int) -> None:
-    set_rule(
-        multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_SS_TICKET"), player),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_SLATEPORT_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Eon Ticket", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_FARAWAY_ISLAND_ENTRANCE/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Old Sea Map", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_BIRTH_ISLAND_HARBOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Aurora Ticket", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_NAVEL_ROCK_HARBOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Mystic Ticket", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player)
     )
 
 

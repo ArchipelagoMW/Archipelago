@@ -310,8 +310,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
     # Set ferry enabled
-    enable_ferry = 1 if multiworld.enable_ferry[player] else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, enable_ferry)
+    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, 1)
 
     # Set blind trainers
     blind_trainers = 1 if multiworld.blind_trainers[player] else 0

@@ -60,8 +60,7 @@ class TestFreeFly(PokemonEmeraldTestBase):
 
 class TestFerry(PokemonEmeraldTestBase):
     options = {
-        "npc_gifts": Toggle.option_true,
-        "enable_ferry": Toggle.option_true
+        "npc_gifts": Toggle.option_true
     }
 
     def testInaccessibleWithNoItems(self) -> None:

@@ -142,14 +142,25 @@
     "label": "Lilycove City - Pokeblock Case from Contest Hall",
     "tags": ["KeyItem"]
   },
-
   "NPC_GIFT_RECEIVED_SS_TICKET": {
     "label": "Littleroot Town - S.S. Ticket from Norman",
-    "tags": ["Ferry"]
+    "tags": ["KeyItem"]
   },
-  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
-    "label": "Navel Rock Top - Hidden Item Sacred Ash",
-    "tags": ["Ferry"]
+  "NPC_GIFT_RECEIVED_AURORA_TICKET": {
+    "label": "Littleroot Town - Aurora Ticket from Norman",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_EON_TICKET": {
+    "label": "Littleroot Town - Eon Ticket from Norman",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_MYSTIC_TICKET": {
+    "label": "Littleroot Town - Mystic Ticket from Norman",
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_OLD_SEA_MAP": {
+    "label": "Littleroot Town - Old Sea Map from Norman",
+    "tags": ["KeyItem"]
   },
 
   "NPC_GIFT_RECEIVED_OLD_ROD": {
@@ -591,6 +602,10 @@
   },
   "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL": {
     "label": "Victory Road B2F - Hidden Item in Northeast Corner",
+    "tags": ["HiddenItem"]
+  },
+  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
+    "label": "Navel Rock Top - Hidden Item Sacred Ash",
     "tags": ["HiddenItem"]
   },
 
