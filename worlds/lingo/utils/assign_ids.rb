@@ -165,7 +165,7 @@ config.each do |room_name, room_data|
 
   if room_data.include? "progression"
     room_data["progression"].each do |progression_name, pdata|
-      unless old_generated.include? "progression" and old_generated["progression"].include? room_name and old_generated["progression"][room_name].include? progression_name then
+      unless old_generated.include? "progression" and old_generated["progression"].include? progression_name then
         old_generated["progression"] ||= {}
         old_generated["progression"][progression_name] = next_item_id
 
