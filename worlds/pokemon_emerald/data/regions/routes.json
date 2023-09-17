@@ -168,18 +168,30 @@
     "exits": [
       "REGION_ROUTE104/SOUTH",
       "REGION_ROUTE106/SEA",
-      "REGION_UNDERWATER_ROUTE105/MAIN"
+      "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2"
     ],
     "warps": [
       "MAP_ROUTE105:0/MAP_ISLAND_CAVE:0"
     ]
   },
-  "REGION_UNDERWATER_ROUTE105/MAIN": {
+  "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1": {
     "parent_map": "MAP_UNDERWATER_ROUTE105",
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_ROUTE105/MAIN"
+      "REGION_ROUTE105/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE105",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE105/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
     ],
     "warps": []
   },
@@ -882,7 +894,8 @@
     "exits": [
       "REGION_ROUTE114/ABOVE_WATERFALL",
       "REGION_ROUTE114/ABOVE_EAST_LEDGE",
-      "REGION_FALLARBOR_TOWN/MAIN"
+      "REGION_FALLARBOR_TOWN/MAIN",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": [
       "MAP_ROUTE114:0/MAP_METEOR_FALLS_1F_1R:0",
@@ -908,7 +921,8 @@
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE114/MAIN"
+      "REGION_ROUTE114/MAIN",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
@@ -1017,7 +1031,8 @@
     "events": [],
     "exits": [
       "REGION_ROUTE115/NORTH_ABOVE_SLOPE",
-      "REGION_ROUTE115/SEA"
+      "REGION_ROUTE115/SEA",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
@@ -1028,7 +1043,8 @@
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE115/NORTH_BELOW_SLOPE"
+      "REGION_ROUTE115/NORTH_BELOW_SLOPE",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
@@ -1053,7 +1069,8 @@
     "events": [],
     "exits": [
       "REGION_ROUTE116/WEST_ABOVE_LEDGE",
-      "REGION_RUSTBORO_CITY/MAIN"
+      "REGION_RUSTBORO_CITY/MAIN",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": [
       "MAP_ROUTE116:0/MAP_RUSTURF_TUNNEL:0",
@@ -1084,7 +1101,9 @@
       "HIDDEN_ITEM_ROUTE_116_BLACK_GLASSES"
     ],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
+    ],
     "warps": [
       "MAP_ROUTE116:2/MAP_RUSTURF_TUNNEL:2"
     ]
@@ -1134,7 +1153,8 @@
     "events": [],
     "exits": [
       "REGION_MAUVILLE_CITY/MAIN",
-      "REGION_ROUTE118/WATER"
+      "REGION_ROUTE118/WATER",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
@@ -1162,7 +1182,8 @@
     "exits": [
       "REGION_ROUTE118/WATER",
       "REGION_ROUTE119/LOWER",
-      "REGION_ROUTE123/WEST"
+      "REGION_ROUTE123/WEST",
+      "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
@@ -1801,7 +1822,8 @@
     "exits": [
       "REGION_ROUTE125/SHOAL_CAVE_ENTRANCE",
       "REGION_MOSSDEEP_CITY/MAIN",
-      "REGION_UNDERWATER_ROUTE125/MAIN"
+      "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2"
     ],
     "warps": []
   },
@@ -1816,12 +1838,23 @@
       "MAP_ROUTE125:0/MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM:0"
     ]
   },
-  "REGION_UNDERWATER_ROUTE125/MAIN": {
+  "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1": {
     "parent_map": "MAP_UNDERWATER_ROUTE125",
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_ROUTE125/SEA"
+      "REGION_ROUTE125/SEA",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE125",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE125/SEA",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
     ],
     "warps": []
   },
@@ -1933,7 +1966,9 @@
       "REGION_UNDERWATER_ROUTE127/TUNNEL",
       "REGION_UNDERWATER_ROUTE127/AREA_1",
       "REGION_UNDERWATER_ROUTE127/AREA_2",
-      "REGION_UNDERWATER_ROUTE127/AREA_3"
+      "REGION_UNDERWATER_ROUTE127/AREA_3",
+      "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2"
     ],
     "warps": []
   },
@@ -2003,6 +2038,26 @@
     ],
     "warps": []
   },
+  "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE127",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE127/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
   "REGION_ROUTE128/MAIN": {
     "parent_map": "MAP_ROUTE128",
     "locations": [
@@ -2062,16 +2117,28 @@
     "exits": [
       "REGION_ROUTE130/MAIN",
       "REGION_ROUTE128/MAIN",
-      "REGION_UNDERWATER_ROUTE129/MAIN"
+      "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1",
+      "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2"
     ],
     "warps": []
   },
-  "REGION_UNDERWATER_ROUTE129/MAIN": {
+  "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1": {
     "parent_map": "MAP_UNDERWATER_ROUTE129",
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_ROUTE129/MAIN"
+      "REGION_ROUTE129/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2": {
+    "parent_map": "MAP_UNDERWATER_ROUTE129",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE129/MAIN",
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
     ],
     "warps": []
   },

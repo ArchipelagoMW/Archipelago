@@ -93,23 +93,43 @@ location_visited_event_to_id_map = {
     "EVENT_VISITED_SOUTHERN_ISLAND": 17
 }
 
+cave_event_to_id_map = {
+    "TERRA_CAVE_ROUTE_114_1": 1,
+    "TERRA_CAVE_ROUTE_114_2": 2,
+    "TERRA_CAVE_ROUTE_115_1": 3,
+    "TERRA_CAVE_ROUTE_115_2": 4,
+    "TERRA_CAVE_ROUTE_116_1": 5,
+    "TERRA_CAVE_ROUTE_116_2": 6,
+    "TERRA_CAVE_ROUTE_118_1": 7,
+    "TERRA_CAVE_ROUTE_118_2": 8,
+    "MARINE_CAVE_ROUTE_105_1": 9,
+    "MARINE_CAVE_ROUTE_105_2": 10,
+    "MARINE_CAVE_ROUTE_125_1": 11,
+    "MARINE_CAVE_ROUTE_125_2": 12,
+    "MARINE_CAVE_ROUTE_127_1": 13,
+    "MARINE_CAVE_ROUTE_127_2": 14,
+    "MARINE_CAVE_ROUTE_129_1": 15,
+    "MARINE_CAVE_ROUTE_129_2": 16
+}
+
 
 def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, player: int, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
+    # Set free fly location
+    if multiworld.free_fly_location[player]:
+        _set_bytes_little_endian(
+            patched_rom,
+            data.rom_addresses["gArchipelagoOptions"] + 0x16,
+            1,
+            multiworld.worlds[player].free_fly_location_id
+        )
+
     location_info: List[Tuple[int, int, str]] = []
     for location in multiworld.get_locations(player):
-        # Set free fly location
         if location.address is None:
-            if multiworld.free_fly_location[player] and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
-                _set_bytes_little_endian(
-                    patched_rom,
-                    data.rom_addresses["gArchipelagoOptions"] + 0x16,
-                    1,
-                    multiworld.worlds[player].free_fly_location_id
-                )
             continue
 
         if location.item is None:
@@ -277,7 +297,8 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # struct ArchipelagoOptions
     # {
     #     /* 0x00 */ bool8 advanceTextWithHoldA;
-    #     /* 0x01 */ bool8 isFerryEnabled;
+    #     /* 0x01 */ u8 terraCaveLocationId:4;
+    #                u8 marineCaveLocationId:4;
     #     /* 0x02 */ bool8 areTrainersBlind;
     #     /* 0x03 */ bool8 canFlyWithoutBadge;
     #     /* 0x04 */ u16 expMultiplierNumerator;
@@ -309,8 +330,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     turbo_a = 1 if multiworld.turbo_a[player] else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
 
-    # Set ferry enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, 1)
+    # Set terra/marine cave locations
+    terra_cave_id = cave_event_to_id_map[multiworld.get_location("TERRA_CAVE_LOCATION", player).item.name]
+    marine_cave_id = cave_event_to_id_map[multiworld.get_location("MARINE_CAVE_LOCATION", player).item.name]
+    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, marine_cave_id & (terra_cave_id << 4))
 
     # Set blind trainers
     blind_trainers = 1 if multiworld.blind_trainers[player] else 0

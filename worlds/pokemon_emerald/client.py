@@ -45,7 +45,7 @@ else:
 # Add .apemerald suffix to bizhawk client
 for component in components:
     if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier((*component.file_identifier.suffixes, ".apemerald"))
+        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apemerald"))
         break
 
 

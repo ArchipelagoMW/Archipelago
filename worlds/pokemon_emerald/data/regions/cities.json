@@ -28,7 +28,9 @@
     "locations": [],
     "events": [
       "EVENT_VISITED_LITTLEROOT_TOWN",
-      "FREE_FLY_LOCATION"
+      "FREE_FLY_LOCATION",
+      "TERRA_CAVE_LOCATION",
+      "MARINE_CAVE_LOCATION"
     ],
     "exits": [
       "REGION_ROUTE101/MAIN",

@@ -8,7 +8,7 @@ import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
-from Fill import FillError, fill_restrictive
+from Fill import fill_restrictive
 from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
@@ -292,6 +292,37 @@ class PokemonEmeraldWorld(World):
         free_fly_location_location = self.multiworld.get_location("FREE_FLY_LOCATION", self.player)
         free_fly_location_location.item = None
         free_fly_location_location.place_locked_item(self.create_event(fly_location_name))
+
+        # Set Marine Cave and Terra Cave entrances
+        terra_cave_location_name = self.random.choice([
+            "TERRA_CAVE_ROUTE_114_1",
+            "TERRA_CAVE_ROUTE_114_2",
+            "TERRA_CAVE_ROUTE_115_1",
+            "TERRA_CAVE_ROUTE_115_2",
+            "TERRA_CAVE_ROUTE_116_1",
+            "TERRA_CAVE_ROUTE_116_2",
+            "TERRA_CAVE_ROUTE_118_1",
+            "TERRA_CAVE_ROUTE_118_2"
+        ])
+
+        terra_cave_location_location = self.multiworld.get_location("TERRA_CAVE_LOCATION", self.player)
+        terra_cave_location_location.item = None
+        terra_cave_location_location.place_locked_item(self.create_event(terra_cave_location_name))
+        
+        marine_cave_location_name = self.random.choice([
+            "MARINE_CAVE_ROUTE_105_1",
+            "MARINE_CAVE_ROUTE_105_2",
+            "MARINE_CAVE_ROUTE_125_1",
+            "MARINE_CAVE_ROUTE_125_2",
+            "MARINE_CAVE_ROUTE_127_1",
+            "MARINE_CAVE_ROUTE_127_2",
+            "MARINE_CAVE_ROUTE_129_1",
+            "MARINE_CAVE_ROUTE_129_2"
+        ])
+
+        marine_cave_location_location = self.multiworld.get_location("MARINE_CAVE_LOCATION", self.player)
+        marine_cave_location_location.item = None
+        marine_cave_location_location.place_locked_item(self.create_event(marine_cave_location_name))
 
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.

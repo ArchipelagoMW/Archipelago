@@ -227,6 +227,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE116/WEST -> REGION_ROUTE116/WEST_ABOVE_LEDGE", player),
         can_cut
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_116_1", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE116/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_116_2", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
 
     # Rusturf Tunnel
     set_rule(
@@ -267,6 +277,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_115_1", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE115/NORTH_ABOVE_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_115_2", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
 
     if multiworld.extra_boulders[player]:
         set_rule(
@@ -291,8 +311,14 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
 
     # Route 105
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE105/MAIN -> REGION_UNDERWATER_ROUTE105/MAIN", player),
-        can_dive
+        multiworld.get_entrance("REGION_ROUTE105/MAIN -> REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_105_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE105/MAIN -> REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_105_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
 
     # Route 106
@@ -507,6 +533,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE114/ABOVE_WATERFALL -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_114_1", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE114/MAIN -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_114_2", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
 
     # Meteor Falls
     set_rule(
@@ -624,6 +660,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WATER", player),
         can_surf
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE118/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_118_1", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE118/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player) and state.has("TERRA_CAVE_ROUTE_118_2", player) and \
+                      state.has("EVENT_DEFEAT_SHELLY", player)
     )
 
     # Route 119
@@ -875,6 +921,18 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         lambda state: state.has("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION", player)
     )
 
+    # Route 125
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE125/SEA -> REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_125_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE125/SEA -> REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_125_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+
     # Shoal Cave
     set_rule(
         multiworld.get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/SOUTH -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER", player),
@@ -998,6 +1056,16 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE127/ENCLOSED_AREA -> REGION_UNDERWATER_ROUTE127/TUNNEL", player),
         can_dive
     )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_127_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_127_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
 
     # Route 128
     set_rule(
@@ -1095,6 +1163,18 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
             multiworld.get_entrance("MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0", player),
             lambda state: state.has("EVENT_STEVEN_GIVES_DIVE", player)
         )
+
+    # Route 129
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE129/MAIN -> REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_129_1", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
+    set_rule(
+        multiworld.get_entrance("REGION_ROUTE129/MAIN -> REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2", player),
+        lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
+                      state.has("MARINE_CAVE_ROUTE_129_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
+    )
 
     # Pacifidlog Town
     set_rule(

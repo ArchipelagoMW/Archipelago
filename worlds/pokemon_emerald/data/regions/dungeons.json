@@ -490,14 +490,24 @@
     "exits": [],
     "warps": []
   },
-  "REGION_DESERT_RUINS/MAIN": {
+  "REGION_DESERT_RUINS/FRONT": {
     "parent_map": "MAP_DESERT_RUINS",
     "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_DESERT_RUINS:0/MAP_ROUTE111:1",
-      "MAP_DESERT_RUINS:1/MAP_DESERT_RUINS:2",
+      "MAP_DESERT_RUINS:1/MAP_DESERT_RUINS:2"
+    ]
+  },
+  "REGION_DESERT_RUINS/BACK": {
+    "parent_map": "MAP_DESERT_RUINS",
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_REGIROCK"
+    ],
+    "exits": [],
+    "warps": [
       "MAP_DESERT_RUINS:2/MAP_DESERT_RUINS:1"
     ]
   },
@@ -680,14 +690,24 @@
       "MAP_ALTERING_CAVE:0/MAP_ROUTE103:0"
     ]
   },
-  "REGION_ISLAND_CAVE/MAIN": {
+  "REGION_ISLAND_CAVE/FRONT": {
     "parent_map": "MAP_ISLAND_CAVE",
     "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_ISLAND_CAVE:0/MAP_ROUTE105:0",
-      "MAP_ISLAND_CAVE:1/MAP_ISLAND_CAVE:2",
+      "MAP_ISLAND_CAVE:1/MAP_ISLAND_CAVE:2"
+    ]
+  },
+  "REGION_ISLAND_CAVE/BACK": {
+    "parent_map": "MAP_ISLAND_CAVE",
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_REGICE"
+    ],
+    "exits": [],
+    "warps": [
       "MAP_ISLAND_CAVE:2/MAP_ISLAND_CAVE:1"
     ]
   },
@@ -995,14 +1015,24 @@
       "MAP_SCORCHED_SLAB:0/MAP_ROUTE120:1"
     ]
   },
-  "REGION_ANCIENT_TOMB/MAIN": {
+  "REGION_ANCIENT_TOMB/FRONT": {
     "parent_map": "MAP_ANCIENT_TOMB",
     "locations": [],
     "events": [],
     "exits": [],
     "warps": [
       "MAP_ANCIENT_TOMB:0/MAP_ROUTE120:0",
-      "MAP_ANCIENT_TOMB:1/MAP_ANCIENT_TOMB:2",
+      "MAP_ANCIENT_TOMB:1/MAP_ANCIENT_TOMB:2"
+    ]
+  },
+  "REGION_ANCIENT_TOMB/BACK": {
+    "parent_map": "MAP_ANCIENT_TOMB",
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_REGISTEEL"
+    ],
+    "exits": [],
+    "warps": [
       "MAP_ANCIENT_TOMB:2/MAP_ANCIENT_TOMB:1"
     ]
   },
@@ -2002,7 +2032,8 @@
     "parent_map": "MAP_SKY_PILLAR_TOP",
     "locations": [],
     "events": [
-      "EVENT_WAKE_RAYQUAZA"
+      "EVENT_WAKE_RAYQUAZA",
+      "EVENT_ENCOUNTER_RAYQUAZA"
     ],
     "exits": [],
     "warps": [
@@ -2227,5 +2258,56 @@
       "REGION_VICTORY_ROAD_B2F/UPPER"
     ],
     "warps": []
+  },
+  "REGION_TERRA_CAVE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_TERRA_CAVE_ENTRANCE",
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_ENTRANCE:1/MAP_TERRA_CAVE_END:0"
+    ]
+  },
+  "REGION_TERRA_CAVE_END/MAIN": {
+    "parent_map": "MAP_TERRA_CAVE_END",
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_GROUDON"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_TERRA_CAVE_END:0/MAP_TERRA_CAVE_ENTRANCE:1"
+    ]
+  },
+  "REGION_UNDERWATER_MARINE_CAVE/MAIN": {
+    "parent_map": "MAP_UNDERWATER_MARINE_CAVE",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_MARINE_CAVE_ENTRANCE/MAIN"
+    ],
+    "warps": []
+  },
+  "REGION_MARINE_CAVE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_MARINE_CAVE_ENTRANCE",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_UNDERWATER_MARINE_CAVE/MAIN"
+    ],
+    "warps": [
+      "MAP_MARINE_CAVE_ENTRANCE:0/MAP_MARINE_CAVE_END:0"
+    ]
+  },
+  "REGION_MARINE_CAVE_END/MAIN": {
+    "parent_map": "MAP_MARINE_CAVE_END",
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_KYOGRE"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_MARINE_CAVE_END:0/MAP_MARINE_CAVE_ENTRANCE:0"
+    ]
   }
 }

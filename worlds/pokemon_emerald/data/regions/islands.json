@@ -13,7 +13,9 @@
   "REGION_SOUTHERN_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_SOUTHERN_ISLAND_INTERIOR",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_LATIAS"
+    ],
     "exits": [],
     "warps": [
       "MAP_SOUTHERN_ISLAND_INTERIOR:0,1/MAP_SOUTHERN_ISLAND_EXTERIOR:0,1"
@@ -33,7 +35,9 @@
   "REGION_FARAWAY_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_FARAWAY_ISLAND_INTERIOR",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_MEW"
+    ],
     "exits": [],
     "warps": [
       "MAP_FARAWAY_ISLAND_INTERIOR:0,1/MAP_FARAWAY_ISLAND_ENTRANCE:0,1"
@@ -53,7 +57,9 @@
   "REGION_BIRTH_ISLAND_EXTERIOR/MAIN": {
     "parent_map": "MAP_BIRTH_ISLAND_EXTERIOR",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_DEOXYS"
+    ],
     "exits": [],
     "warps": [
       "MAP_BIRTH_ISLAND_EXTERIOR:0/MAP_BIRTH_ISLAND_HARBOR:0"
@@ -224,7 +230,9 @@
   "REGION_NAVEL_ROCK_BOTTOM/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_BOTTOM",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_LUGIA"
+    ],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_BOTTOM:0/MAP_NAVEL_ROCK_DOWN11:0"
@@ -275,7 +283,9 @@
     "locations": [
       "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
     ],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_HO_OH"
+    ],
     "exits": [],
     "warps": [
       "MAP_NAVEL_ROCK_TOP:0/MAP_NAVEL_ROCK_UP4:1"
