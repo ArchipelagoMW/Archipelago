@@ -1,9 +1,9 @@
 from typing import Dict, List, Any
 
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
-from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_items
+from .Items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .Locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
-from .Rules import set_location_rules, set_region_rules, set_ability_unlocks, gold_hexagon
+from .Rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .Regions import tunic_regions
 from .Options import tunic_options
 from worlds.AutoWorld import WebWorld, World
@@ -50,8 +50,8 @@ class TunicWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
-    ability_unlocks: Dict[str, int] = {}
-    slot_data_items: List[TunicItem] = []
+    ability_unlocks: Dict[str, int]
+    slot_data_items: List[TunicItem]
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -103,7 +103,7 @@ class TunicWorld(World):
         for item, quantity in items_to_create.items():
             for i in range(0, quantity):
                 tunic_item: TunicItem = self.create_item(item)
-                if item in slot_data_items and tunic_item.player == self.player:
+                if item in slot_data_item_names:
                     self.slot_data_items.append(tunic_item)
                 items.append(tunic_item)
 
@@ -130,7 +130,7 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        self.ability_unlocks = set_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value)
+        self.ability_unlocks = randomize_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value)
         set_region_rules(self.multiworld, self.player, self.ability_unlocks)
         set_location_rules(self.multiworld, self.player, self.ability_unlocks)
 
@@ -149,18 +149,18 @@ class TunicWorld(World):
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Ice Rod": self.ability_unlocks["Pages 52-53 (Ice Rod)"],
-            "Hexagon Quest Goal": self.multiworld.hexagon_goal[self.player].value
+            "Hexagon Quest Goal": self.multiworld.hexagon_goal[self.player].value,
         }
 
         for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
-            if tunic_item.name not in slot_data.keys():
+            if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
             if tunic_item.name == gold_hexagon and len(slot_data[gold_hexagon]) >= 6:
                 continue
             slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
 
         for start_item in self.multiworld.start_inventory_from_pool[self.player]:
-            if start_item in slot_data_items:
+            if start_item in slot_data_item_names:
                 if start_item not in slot_data:
                     slot_data[start_item] = []
                 for i in range(0, self.multiworld.start_inventory_from_pool[self.player][start_item]):

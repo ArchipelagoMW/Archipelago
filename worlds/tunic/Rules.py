@@ -24,7 +24,7 @@ blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
 
-def set_ability_unlocks(random: Random, hexagon_quest: int) -> Dict[str, int]:
+def randomize_ability_unlocks(random: Random, hexagon_quest: int) -> Dict[str, int]:
     ability_requirement = [5, 10, 15] if hexagon_quest == 1 else [1, 1, 1]
     abilities = [prayer, holy_cross, ice_rod]
     random.shuffle(abilities)
@@ -117,8 +117,8 @@ def set_location_rules(multiworld: MultiWorld, player: int, ability_unlocks: Dic
     set_rule(multiworld.get_location("Special Shop - Secret Page Pickup", player),
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Sealed Temple - Holy Cross Chest", player),
-             lambda state: state.has(laurels, player) or (state.has(lantern, player) and (
-                     state.has_group("melee weapons", player, 2) or state.has(fire_wand, player)))
+             lambda state: (state.has(laurels, player) or (state.has(lantern, player) and (
+                     state.has_group("melee weapons", player, 2) or state.has(fire_wand, player))))
                      and has_ability(state, player, holy_cross, multiworld, ability_unlocks))
     set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
              lambda state: state.has(laurels, player) or (

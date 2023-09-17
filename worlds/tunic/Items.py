@@ -1,4 +1,3 @@
-from enum import Enum
 from itertools import groupby
 from typing import Dict, List, Set, NamedTuple
 from BaseClasses import ItemClassification
@@ -44,7 +43,7 @@ item_table: Dict[str, TunicItemData] = {
     "Magic Orb": TunicItemData(ItemClassification.progression, 1, 27),
     "Hero's Laurels": TunicItemData(ItemClassification.progression, 1, 28),
     "Lantern": TunicItemData(ItemClassification.progression, 1, 29),
-    "Shotgun": TunicItemData(ItemClassification.useful, 1, 30, "weapons"),
+    "Gun": TunicItemData(ItemClassification.useful, 1, 30, "weapons"),
     "Shield": TunicItemData(ItemClassification.useful, 1, 31),
     "Dath Stone": TunicItemData(ItemClassification.useful, 1, 32),
     "Hourglass": TunicItemData(ItemClassification.useful, 1, 33),
@@ -116,34 +115,34 @@ item_table: Dict[str, TunicItemData] = {
     "Money x128": TunicItemData(ItemClassification.useful, 3, 99, "money"),
     "Money x200": TunicItemData(ItemClassification.useful, 1, 100, "money"),
     "Money x255": TunicItemData(ItemClassification.useful, 1, 101, "money"),
-    "Pages 0-1": TunicItemData(ItemClassification.progression_skip_balancing, 1, 102, "pages"),
-    "Pages 2-3": TunicItemData(ItemClassification.progression_skip_balancing, 1, 103, "pages"),
-    "Pages 4-5": TunicItemData(ItemClassification.progression_skip_balancing, 1, 104, "pages"),
-    "Pages 6-7": TunicItemData(ItemClassification.progression_skip_balancing, 1, 105, "pages"),
-    "Pages 8-9": TunicItemData(ItemClassification.progression_skip_balancing, 1, 106, "pages"),
-    "Pages 10-11": TunicItemData(ItemClassification.progression_skip_balancing, 1, 107, "pages"),
-    "Pages 12-13": TunicItemData(ItemClassification.progression_skip_balancing, 1, 108, "pages"),
-    "Pages 14-15": TunicItemData(ItemClassification.progression_skip_balancing, 1, 109, "pages"),
-    "Pages 16-17": TunicItemData(ItemClassification.progression_skip_balancing, 1, 110, "pages"),
-    "Pages 18-19": TunicItemData(ItemClassification.progression_skip_balancing, 1, 111, "pages"),
-    "Pages 20-21": TunicItemData(ItemClassification.progression_skip_balancing, 1, 112, "pages"),
-    "Pages 22-23": TunicItemData(ItemClassification.progression_skip_balancing, 1, 113, "pages"),
+    "Pages 0-1": TunicItemData(ItemClassification.useful, 1, 102, "pages"),
+    "Pages 2-3": TunicItemData(ItemClassification.useful, 1, 103, "pages"),
+    "Pages 4-5": TunicItemData(ItemClassification.useful, 1, 104, "pages"),
+    "Pages 6-7": TunicItemData(ItemClassification.useful, 1, 105, "pages"),
+    "Pages 8-9": TunicItemData(ItemClassification.useful, 1, 106, "pages"),
+    "Pages 10-11": TunicItemData(ItemClassification.useful, 1, 107, "pages"),
+    "Pages 12-13": TunicItemData(ItemClassification.useful, 1, 108, "pages"),
+    "Pages 14-15": TunicItemData(ItemClassification.useful, 1, 109, "pages"),
+    "Pages 16-17": TunicItemData(ItemClassification.useful, 1, 110, "pages"),
+    "Pages 18-19": TunicItemData(ItemClassification.useful, 1, 111, "pages"),
+    "Pages 20-21": TunicItemData(ItemClassification.useful, 1, 112, "pages"),
+    "Pages 22-23": TunicItemData(ItemClassification.useful, 1, 113, "pages"),
     "Pages 24-25 (Prayer)": TunicItemData(ItemClassification.progression, 1, 114, "pages"),
-    "Pages 26-27": TunicItemData(ItemClassification.progression_skip_balancing, 1, 115, "pages"),
-    "Pages 28-29": TunicItemData(ItemClassification.progression_skip_balancing, 1, 116, "pages"),
-    "Pages 30-31": TunicItemData(ItemClassification.progression_skip_balancing, 1, 117, "pages"),
-    "Pages 32-33": TunicItemData(ItemClassification.progression_skip_balancing, 1, 118, "pages"),
-    "Pages 34-35": TunicItemData(ItemClassification.progression_skip_balancing, 1, 119, "pages"),
-    "Pages 36-37": TunicItemData(ItemClassification.progression_skip_balancing, 1, 120, "pages"),
-    "Pages 38-39": TunicItemData(ItemClassification.progression_skip_balancing, 1, 121, "pages"),
-    "Pages 40-41": TunicItemData(ItemClassification.progression_skip_balancing, 1, 122, "pages"),
+    "Pages 26-27": TunicItemData(ItemClassification.useful, 1, 115, "pages"),
+    "Pages 28-29": TunicItemData(ItemClassification.useful, 1, 116, "pages"),
+    "Pages 30-31": TunicItemData(ItemClassification.useful, 1, 117, "pages"),
+    "Pages 32-33": TunicItemData(ItemClassification.useful, 1, 118, "pages"),
+    "Pages 34-35": TunicItemData(ItemClassification.useful, 1, 119, "pages"),
+    "Pages 36-37": TunicItemData(ItemClassification.useful, 1, 120, "pages"),
+    "Pages 38-39": TunicItemData(ItemClassification.useful, 1, 121, "pages"),
+    "Pages 40-41": TunicItemData(ItemClassification.useful, 1, 122, "pages"),
     "Pages 42-43 (Holy Cross)": TunicItemData(ItemClassification.progression, 1, 123, "pages"),
-    "Pages 44-45": TunicItemData(ItemClassification.progression_skip_balancing, 1, 124, "pages"),
-    "Pages 46-47": TunicItemData(ItemClassification.progression_skip_balancing, 1, 125, "pages"),
-    "Pages 48-49": TunicItemData(ItemClassification.progression_skip_balancing, 1, 126, "pages"),
-    "Pages 50-51": TunicItemData(ItemClassification.progression_skip_balancing, 1, 127, "pages"),
+    "Pages 44-45": TunicItemData(ItemClassification.useful, 1, 124, "pages"),
+    "Pages 46-47": TunicItemData(ItemClassification.useful, 1, 125, "pages"),
+    "Pages 48-49": TunicItemData(ItemClassification.useful, 1, 126, "pages"),
+    "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "pages"),
     "Pages 52-53 (Ice Rod)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
-    "Pages 54-55": TunicItemData(ItemClassification.progression_skip_balancing, 1, 129, "pages"),
+    "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
 }
 
 fool_tiers: List[List[str]] = [
@@ -153,7 +152,7 @@ fool_tiers: List[List[str]] = [
     ["Money x1", "Money x10", "Money x15", "Money x16", "Money x20", "Money x25", "Money x30"],
 ]
 
-slot_data_items = [
+slot_data_item_names = [
     "Stick",
     "Sword",
     "Sword Upgrade",
@@ -162,7 +161,7 @@ slot_data_items = [
     "Magic Orb",
     "Hero's Laurels",
     "Lantern",
-    "Shotgun",
+    "Gun",
     "Scavenger Mask",
     "Shield",
     "Dath Stone",
@@ -181,7 +180,7 @@ slot_data_items = [
     "Red Questagon",
     "Green Questagon",
     "Blue Questagon",
-    "Gold Questagon"
+    "Gold Questagon",
 ]
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
@@ -194,7 +193,7 @@ def get_item_group(item_name: str) -> str:
 
 
 item_name_groups: Dict[str, Set[str]] = {
-    group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group)
+    group: set(item_names) for group, item_names in groupby(sorted(item_table, key=get_item_group), get_item_group) if group != ""
 }
 
 # extra groups for the purpose of aliasing items
