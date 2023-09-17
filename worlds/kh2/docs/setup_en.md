@@ -78,7 +78,7 @@ Have any questions on what's in logic? This spreadsheet has the answer [Requirem
 - Why am I missing worlds/portals in the GoA?
     - You are missing the required visit-locking item to access the world/portal.
 - Why did I not load in to the correct visit
-    - You need to trigger a cutscene or visit The World That Never Was for it to update you have recevied the item.
+    - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
     - Currently `only` the most up to date version on the Epic Game Store is supported: version `1.0.0.8_WW`.
 - Why am I getting wallpapered while going into a world for the first time?
