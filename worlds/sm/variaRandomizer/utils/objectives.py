@@ -512,17 +512,17 @@ class Objectives(object):
         self.goals["finish scavenger hunt"].clearFunc = scavClearFunc
 
     def setItemPercentFuncs(self, totalItemsCount=None, allUpgradeTypes=None, container=None):
-        def getPctFunc(pct, totalItemsCount, container):
+        def getPctFunc(total_needed, container):
             def f(sm, ap):
-                nonlocal pct, totalItemsCount, container
+                nonlocal total_needed, container
                 locs_checked = len(container.getUsedLocs(lambda loc: True))
-                return SMBool(locs_checked * 100 / totalItemsCount >= pct)
+                return SMBool(locs_checked >= total_needed)
             return f
 
         # AP: now based on location checks instead of local item
         for pct in [25,50,75,100]:
              goal = 'collect %d%% items' % pct
-             self.goals[goal].clearFunc = getPctFunc(pct, totalItemsCount, container)
+             self.goals[goal].clearFunc = getPctFunc(totalItemsCount * pct / 100, container)
         if allUpgradeTypes is not None:
             self.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
 
