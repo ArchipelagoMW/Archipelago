@@ -532,11 +532,6 @@ class Objectives(object):
             if area in goalsByArea:
                 goalsByArea[area].clearFunc = func
 
-    def setPercentFuncs(self, funcsByPercent):
-        for pct, func in funcsByPercent.items():
-            goal = 'collect %d%% items' % pct
-            self.goals[goal].clearFunc = func
-
     def setSolverMode(self, solver):
         self.setScavengerHuntFunc(solver.scavengerHuntComplete)
         # in rando we know the number of items after randomizing, so set the functions only for the solver
