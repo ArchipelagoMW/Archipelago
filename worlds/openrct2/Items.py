@@ -10,7 +10,7 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, filler):
+def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, park_rules, filler):
     openRCT2_items = ForestFrontiers
     
     if monopoly_mode:
@@ -32,6 +32,10 @@ def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathro
     while count < bathroom_traps:
         openRCT2_items.append("Bathroom Trap")
         count +=1
+
+    if park_rules:
+        for rule in item_info["park_rules"]:
+            openRCT2_items.append(rule)
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
     count = 0

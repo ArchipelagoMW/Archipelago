@@ -33,17 +33,6 @@ class OpenRCT2World(World):
     item_table = {}
     item_frequency = {}
     
-    # print("Here's the item_name_to_id dictionary:")
-    # print(item_name_to_id)
-
-    # print("Here's the location_name_to_id dictionary:")
-    # print(location_name_to_id)
-
-    # print("Monopoly Mode is enabled?")
-    # print(self.multiworld.monopoly_mode[self.player])
-    # if self.multiworld.monopoly_mode[self.player]:
-    #     item_frequency["Land Discount"] = 20
-    #     item_frequency["Construction Rights Discount"] = 20
 
 
     #Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next section. We'll generate the 
@@ -56,8 +45,9 @@ class OpenRCT2World(World):
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
         bathroom_traps = self.multiworld.bathroom_traps[self.player].value
+        rules = self.multiworld.include_park_rules[self.player].value
         filler = self.multiworld.filler[self.player].value
-        items = set_openRCT2_items(monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,filler)
+        items = set_openRCT2_items(monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,rules,filler)
 
         self.item_table = items[0]
         self.item_frequency = items[1]
@@ -78,6 +68,8 @@ class OpenRCT2World(World):
         print("Here's the logic table:")
         random.shuffle(logic_table)
         print(logic_table)
+
+
 
         def locations_to_region(location, ending_location, region):
             locations = []
@@ -138,11 +130,7 @@ class OpenRCT2World(World):
             region = self.multiworld.get_region("OpenRCT2_Level_" + str(count), self.player)
             region.connect(self.multiworld.get_region("OpenRCT2_Level_" + str(count + 1) ,self.player))
             count += 1
-
-        
-
-        
-                
+                    
     
     def create_items(self) -> None:
         print("The item tabel is this long:")

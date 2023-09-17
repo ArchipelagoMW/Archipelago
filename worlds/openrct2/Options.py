@@ -390,7 +390,7 @@ class Difficulty(Choice):
     default = Difficulty.medium.value
 
 class Randomization_Range(Choice):
-    """Choose a difficulty for the randomization. This will affect things such as ride multipliers and interest rates for loans.
+    """Choose the spread for randomized values.
     """
     auto_display_name = True
     display_name = "Randomization Range"
