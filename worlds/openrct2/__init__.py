@@ -56,7 +56,8 @@ class OpenRCT2World(World):
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
         bathroom_traps = self.multiworld.bathroom_traps[self.player].value
-        items = set_openRCT2_items(monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps)
+        filler = self.multiworld.filler[self.player].value
+        items = set_openRCT2_items(monopoly_mode,furry_convention_traps,spam_traps,bathroom_traps,filler)
 
         self.item_table = items[0]
         self.item_frequency = items[1]

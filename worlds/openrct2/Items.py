@@ -1,5 +1,6 @@
 from BaseClasses import Item
 from typing import NamedTuple, Dict
+import random
 from .Constants import *
 from .Options import *
 
@@ -9,7 +10,7 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps):
+def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps, filler):
     openRCT2_items = ForestFrontiers
     
     if monopoly_mode:
@@ -32,7 +33,17 @@ def set_openRCT2_items(monopoly_mode, furry_convention_traps, spam_traps, bathro
         openRCT2_items.append("Bathroom Trap")
         count +=1
 
-    
+    filler_count = len(openRCT2_items) * (filler * .01) - 1
+    count = 0
+    while count < filler_count:
+        rarity = random.random()
+        if rarity < .6:
+            openRCT2_items.append(random.choice(item_info["filler_common"]))
+        elif rarity < .9:
+            openRCT2_items.append(random.choice(item_info["filler_uncommon"]))
+        else:
+            openRCT2_items.append(random.choice(item_info["filler_rare"]))
+        count += 1
 
     openRCT2_items.append("Beauty Contest")
     
