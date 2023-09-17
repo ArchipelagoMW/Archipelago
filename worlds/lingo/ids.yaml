@@ -23,1429 +23,1429 @@ panels:
     WRITE: 444404
     SAME: 444405
   Hidden Room:
-    DEAD END: 444408
-    OPEN: 444409
-    LIES: 444410
+    DEAD END: 444406
+    OPEN: 444407
+    LIES: 444408
   The Seeker:
-    Achievement: 444412
-    BEAR: 444413
-    MINE: 444414
-    MINE (2): 444415
-    BOW: 444416
-    DOES: 444417
-    MOBILE: 444418
-    MOBILE (2): 444419
-    DESERT: 444420
-    DESSERT: 444421
-    SOW: 444422
-    SEW: 444423
-    TO: 444424
-    TOO: 444425
-    WRITE: 444426
-    EWE: 444427
-    KNOT: 444428
-    NAUGHT: 444429
-    BEAR (2): 444430
+    Achievement: 444409
+    BEAR: 444410
+    MINE: 444411
+    MINE (2): 444412
+    BOW: 444413
+    DOES: 444414
+    MOBILE: 444415
+    MOBILE (2): 444416
+    DESERT: 444417
+    DESSERT: 444418
+    SOW: 444419
+    SEW: 444420
+    TO: 444421
+    TOO: 444422
+    WRITE: 444423
+    EWE: 444424
+    KNOT: 444425
+    NAUGHT: 444426
+    BEAR (2): 444427
   Second Room:
-    HI: 444431
-    LOW: 444432
-    ANOTHER TRY: 444433
-    LEVEL 2: 444434
+    HI: 444428
+    LOW: 444429
+    ANOTHER TRY: 444430
+    LEVEL 2: 444431
   Hub Room:
-    ORDER: 444436
-    SLAUGHTER: 444437
-    NEAR: 444438
-    FAR: 444439
-    TRACE: 444440
-    RAT: 444441
-    OPEN: 444442
-    FOUR: 444443
-    LOST: 444444
-    FORWARD: 444445
-    BETWEEN: 444446
-    BACKWARD: 444447
+    ORDER: 444432
+    SLAUGHTER: 444433
+    NEAR: 444434
+    FAR: 444435
+    TRACE: 444436
+    RAT: 444437
+    OPEN: 444438
+    FOUR: 444439
+    LOST: 444440
+    FORWARD: 444441
+    BETWEEN: 444442
+    BACKWARD: 444443
   Dead End Area:
-    FOUR: 444454
-    EIGHT: 444455
+    FOUR: 444444
+    EIGHT: 444445
   Pilgrim Antechamber:
-    HOT CRUST: 444456
-    PILGRIMAGE: 444457
-    MASTERY: 444458
+    HOT CRUST: 444446
+    PILGRIMAGE: 444447
+    MASTERY: 444448
   Pilgrim Room:
-    THIS: 444460
-    TIME ROOM: 444461
-    SCIENCE ROOM: 444462
-    SHINY ROCK ROOM: 444463
-    ANGRY POWER: 444464
-    MICRO LEGION: 444465
-    LOSERS RELAX: 444466
-    '906234': 444467
-    MOOR EMORDNILAP: 444468
-    HALL ROOMMATE: 444469
-    ALL GREY: 444470
-    PLUNDER ISLAND: 444471
-    FLOSS PATHS: 444472
+    THIS: 444449
+    TIME ROOM: 444450
+    SCIENCE ROOM: 444451
+    SHINY ROCK ROOM: 444452
+    ANGRY POWER: 444453
+    MICRO LEGION: 444454
+    LOSERS RELAX: 444455
+    '906234': 444456
+    MOOR EMORDNILAP: 444457
+    HALL ROOMMATE: 444458
+    ALL GREY: 444459
+    PLUNDER ISLAND: 444460
+    FLOSS PATHS: 444461
   Crossroads:
-    DECAY: 444474
-    NOPE: 444475
-    EIGHT: 444476
-    WE ROT: 444477
-    WORDS: 444478
-    SWORD: 444479
-    TURN: 444480
-    BEND HI: 444481
-    THE EYES: 444482
-    CORNER: 444483
-    HOLLOW: 444484
-    SWAP: 444485
-    GEL: 444486
-    THOUGH: 444487
-    CROSSROADS: 444488
+    DECAY: 444462
+    NOPE: 444463
+    EIGHT: 444464
+    WE ROT: 444465
+    WORDS: 444466
+    SWORD: 444467
+    TURN: 444468
+    BEND HI: 444469
+    THE EYES: 444470
+    CORNER: 444471
+    HOLLOW: 444472
+    SWAP: 444473
+    GEL: 444474
+    THOUGH: 444475
+    CROSSROADS: 444476
   Lost Area:
-    LOST (1): 444495
-    LOST (2): 444496
+    LOST (1): 444477
+    LOST (2): 444478
   Amen Name Area:
-    AMEN: 444498
-    NAME: 444499
-    NINE: 444500
+    AMEN: 444479
+    NAME: 444480
+    NINE: 444481
   Suits Area:
-    SPADES: 444502
-    CLUBS: 444503
-    HEARTS: 444504
+    SPADES: 444482
+    CLUBS: 444483
+    HEARTS: 444484
   The Tenacious:
-    LEVEL (Black): 444505
-    RACECAR (Black): 444506
-    SOLOS (Black): 444507
-    LEVEL (White): 444508
-    RACECAR (White): 444509
-    SOLOS (White): 444510
-    Achievement: 444511
+    LEVEL (Black): 444485
+    RACECAR (Black): 444486
+    SOLOS (Black): 444487
+    LEVEL (White): 444488
+    RACECAR (White): 444489
+    SOLOS (White): 444490
+    Achievement: 444491
   Warts Straw Area:
-    WARTS: 444514
-    STRAW: 444515
+    WARTS: 444492
+    STRAW: 444493
   Leaf Feel Area:
-    LEAF: 444517
-    FEEL: 444518
+    LEAF: 444494
+    FEEL: 444495
   Outside The Agreeable:
-    MASSACRED: 444520
-    BLACK: 444521
-    CLOSE: 444522
-    LEFT: 444523
-    LEFT (2): 444524
-    RIGHT: 444525
-    PURPLE: 444526
-    FIVE (1): 444527
-    FIVE (2): 444528
-    OUT: 444529
-    HIDE: 444530
-    DAZE: 444531
-    WALL: 444532
-    KEEP: 444533
-    BAILEY: 444534
-    TOWER: 444535
-    NORTH: 444536
-    DIAMONDS: 444537
-    FIRE: 444538
-    WINTER: 444539
+    MASSACRED: 444496
+    BLACK: 444497
+    CLOSE: 444498
+    LEFT: 444499
+    LEFT (2): 444500
+    RIGHT: 444501
+    PURPLE: 444502
+    FIVE (1): 444503
+    FIVE (2): 444504
+    OUT: 444505
+    HIDE: 444506
+    DAZE: 444507
+    WALL: 444508
+    KEEP: 444509
+    BAILEY: 444510
+    TOWER: 444511
+    NORTH: 444512
+    DIAMONDS: 444513
+    FIRE: 444514
+    WINTER: 444515
   Dread Hallway:
-    DREAD: 444545
+    DREAD: 444516
   The Agreeable:
-    Achievement: 444547
-    BYE: 444548
-    RETOOL: 444549
-    DRAWER: 444550
-    READ: 444551
-    DIFFERENT: 444552
-    LOW: 444553
-    ALIVE: 444554
-    THAT: 444555
-    STRESSED: 444556
-    STAR: 444557
-    TAME: 444558
-    CAT: 444559
+    Achievement: 444517
+    BYE: 444518
+    RETOOL: 444519
+    DRAWER: 444520
+    READ: 444521
+    DIFFERENT: 444522
+    LOW: 444523
+    ALIVE: 444524
+    THAT: 444525
+    STRESSED: 444526
+    STAR: 444527
+    TAME: 444528
+    CAT: 444529
   Hedge Maze:
-    DOWN: 444561
-    HIDE (1): 444562
-    HIDE (2): 444563
-    HIDE (3): 444564
-    MASTERY (1): 444565
-    MASTERY (2): 444566
-    PATH (1): 444567
-    PATH (2): 444568
-    PATH (3): 444569
-    PATH (4): 444570
-    PATH (5): 444571
-    PATH (6): 444572
-    PATH (7): 444573
-    PATH (8): 444574
-    REFLOW: 444575
-    LEAP: 444576
+    DOWN: 444530
+    HIDE (1): 444531
+    HIDE (2): 444532
+    HIDE (3): 444533
+    MASTERY (1): 444534
+    MASTERY (2): 444535
+    PATH (1): 444536
+    PATH (2): 444537
+    PATH (3): 444538
+    PATH (4): 444539
+    PATH (5): 444540
+    PATH (6): 444541
+    PATH (7): 444542
+    PATH (8): 444543
+    REFLOW: 444544
+    LEAP: 444545
   The Perceptive:
-    Achievement: 444579
-    GAZE: 444580
+    Achievement: 444546
+    GAZE: 444547
   The Fearless (First Floor):
-    NAPS: 444581
-    TEAM: 444582
-    TEEM: 444583
-    IMPATIENT: 444584
-    EAT: 444585
+    NAPS: 444548
+    TEAM: 444549
+    TEEM: 444550
+    IMPATIENT: 444551
+    EAT: 444552
   The Fearless (Second Floor):
-    NONE: 444587
-    SUM: 444588
-    FUNNY: 444589
-    MIGHT: 444590
-    SAFE: 444591
-    SAME: 444592
-    CAME: 444593
+    NONE: 444553
+    SUM: 444554
+    FUNNY: 444555
+    MIGHT: 444556
+    SAFE: 444557
+    SAME: 444558
+    CAME: 444559
   The Fearless:
-    Achievement: 444595
-    EASY: 444596
-    SOMETIMES: 444597
-    DARK: 444598
-    EVEN: 444599
+    Achievement: 444560
+    EASY: 444561
+    SOMETIMES: 444562
+    DARK: 444563
+    EVEN: 444564
   The Observant:
-    Achievement: 444600
-    BACK: 444601
-    SIDE: 444602
-    BACKSIDE: 444603
-    STAIRS: 444604
-    WAYS: 444605
-    'ON': 444606
-    UP: 444607
-    SWIMS: 444608
-    UPSTAIRS: 444609
-    TOIL: 444610
-    STOP: 444611
-    TOP: 444612
-    HI: 444613
-    HI (2): 444614
-    '31': 444615
-    '52': 444616
-    OIL: 444617
-    BACKSIDE (GREEN): 444618
-    SIDEWAYS: 444619
+    Achievement: 444565
+    BACK: 444566
+    SIDE: 444567
+    BACKSIDE: 444568
+    STAIRS: 444569
+    WAYS: 444570
+    'ON': 444571
+    UP: 444572
+    SWIMS: 444573
+    UPSTAIRS: 444574
+    TOIL: 444575
+    STOP: 444576
+    TOP: 444577
+    HI: 444578
+    HI (2): 444579
+    '31': 444580
+    '52': 444581
+    OIL: 444582
+    BACKSIDE (GREEN): 444583
+    SIDEWAYS: 444584
   The Incomparable:
-    Achievement: 444622
-    A (One): 444623
-    A (Two): 444624
-    A (Three): 444625
-    A (Four): 444626
-    A (Five): 444627
-    A (Six): 444628
-    I (One): 444629
-    I (Two): 444630
-    I (Three): 444631
-    I (Four): 444632
-    I (Five): 444633
-    I (Six): 444634
-    I (Seven): 444635
+    Achievement: 444585
+    A (One): 444586
+    A (Two): 444587
+    A (Three): 444588
+    A (Four): 444589
+    A (Five): 444590
+    A (Six): 444591
+    I (One): 444592
+    I (Two): 444593
+    I (Three): 444594
+    I (Four): 444595
+    I (Five): 444596
+    I (Six): 444597
+    I (Seven): 444598
   Eight Room:
-    Eight Back: 444637
-    Eight Front: 444638
-    Nine: 444639
+    Eight Back: 444599
+    Eight Front: 444600
+    Nine: 444601
   Orange Tower First Floor:
-    SECRET: 444640
-    DADS + ALE: 444641
-    SALT: 444642
+    SECRET: 444602
+    DADS + ALE: 444603
+    SALT: 444604
   Orange Tower Third Floor:
-    RED: 444645
-    DEER + WREN: 444646
+    RED: 444605
+    DEER + WREN: 444606
   Orange Tower Fourth Floor:
-    RUNT: 444648
-    RUNT (2): 444649
-    LEARNS + UNSEW: 444650
-    HOT CRUSTS: 444651
-    IRK HORN: 444652
+    RUNT: 444607
+    RUNT (2): 444608
+    LEARNS + UNSEW: 444609
+    HOT CRUSTS: 444610
+    IRK HORN: 444611
   Hot Crusts Area:
-    EIGHT: 444654
+    EIGHT: 444612
   Orange Tower Fifth Floor:
-    SIZE (Small): 444655
-    SIZE (Big): 444656
-    DRAWL + RUNS: 444657
-    NINE: 444658
-    SUMMER: 444659
-    AUTUMN: 444660
-    SPRING: 444661
+    SIZE (Small): 444613
+    SIZE (Big): 444614
+    DRAWL + RUNS: 444615
+    NINE: 444616
+    SUMMER: 444617
+    AUTUMN: 444618
+    SPRING: 444619
   Orange Tower Seventh Floor:
-    THE END: 444663
-    THE MASTER: 444664
-    MASTERY: 444665
+    THE END: 444620
+    THE MASTER: 444621
+    MASTERY: 444622
   Roof:
-    MASTERY (1): 444667
-    MASTERY (2): 444668
-    MASTERY (3): 444669
-    MASTERY (4): 444670
-    MASTERY (5): 444671
-    MASTERY (6): 444672
-    STAIRCASE: 444673
+    MASTERY (1): 444623
+    MASTERY (2): 444624
+    MASTERY (3): 444625
+    MASTERY (4): 444626
+    MASTERY (5): 444627
+    MASTERY (6): 444628
+    STAIRCASE: 444629
   Orange Tower Basement:
-    MASTERY: 444674
-    THE LIBRARY: 444675
+    MASTERY: 444630
+    THE LIBRARY: 444631
   Courtyard:
-    I: 444676
-    GREEN: 444677
-    PINECONE: 444678
-    ACORN: 444679
+    I: 444632
+    GREEN: 444633
+    PINECONE: 444634
+    ACORN: 444635
   Yellow Backside Area:
-    BACKSIDE: 444680
-    NINE: 444681
+    BACKSIDE: 444636
+    NINE: 444637
   First Second Third Fourth:
-    FIRST: 444682
-    SECOND: 444683
-    THIRD: 444684
-    FOURTH: 444685
+    FIRST: 444638
+    SECOND: 444639
+    THIRD: 444640
+    FOURTH: 444641
   The Colorful (White):
-    BEGIN: 444687
+    BEGIN: 444642
   The Colorful (Black):
-    FOUND: 444689
+    FOUND: 444643
   The Colorful (Red):
-    LOAF: 444691
+    LOAF: 444644
   The Colorful (Yellow):
-    CREAM: 444693
+    CREAM: 444645
   The Colorful (Blue):
-    SUN: 444695
+    SUN: 444646
   The Colorful (Purple):
-    SPOON: 444697
+    SPOON: 444647
   The Colorful (Orange):
-    LETTERS: 444699
+    LETTERS: 444648
   The Colorful (Green):
-    WALLS: 444701
+    WALLS: 444649
   The Colorful (Brown):
-    IRON: 444703
+    IRON: 444650
   The Colorful (Gray):
-    OBSTACLE: 444705
+    OBSTACLE: 444651
   The Colorful:
-    Achievement: 444707
+    Achievement: 444652
   Welcome Back Area:
-    WELCOME BACK: 444708
-    SECRET: 444709
-    CLOCKWISE: 444710
+    WELCOME BACK: 444653
+    SECRET: 444654
+    CLOCKWISE: 444655
   Owl Hallway:
-    STRAYS: 444712
-    READS + RUST: 444713
+    STRAYS: 444656
+    READS + RUST: 444657
   Outside The Initiated:
-    SEVEN (1): 444715
-    SEVEN (2): 444716
-    EIGHT: 444717
-    NINE: 444718
-    BLUE: 444719
-    ORANGE: 444720
-    UNCOVER: 444721
-    OXEN: 444722
-    BACKSIDE: 444723
-    The Optimistic: 444724
-    PAST: 444725
-    FUTURE: 444726
-    FUTURE (2): 444727
-    PAST (2): 444728
-    PRESENT: 444729
-    SMILE: 444730
-    ANGERED: 444731
-    VOTE: 444732
+    SEVEN (1): 444658
+    SEVEN (2): 444659
+    EIGHT: 444660
+    NINE: 444661
+    BLUE: 444662
+    ORANGE: 444663
+    UNCOVER: 444664
+    OXEN: 444665
+    BACKSIDE: 444666
+    The Optimistic: 444667
+    PAST: 444668
+    FUTURE: 444669
+    FUTURE (2): 444670
+    PAST (2): 444671
+    PRESENT: 444672
+    SMILE: 444673
+    ANGERED: 444674
+    VOTE: 444675
   The Initiated:
-    Achievement: 444738
-    DAUGHTER: 444739
-    START: 444740
-    STARE: 444741
-    HYPE: 444742
-    ABYSS: 444743
-    SWEAT: 444744
-    BEAT: 444745
-    ALUMNI: 444746
-    PATS: 444747
-    KNIGHT: 444748
-    BYTE: 444749
-    MAIM: 444750
-    MORGUE: 444751
-    CHAIR: 444752
-    HUMAN: 444753
-    BED: 444754
+    Achievement: 444676
+    DAUGHTER: 444677
+    START: 444678
+    STARE: 444679
+    HYPE: 444680
+    ABYSS: 444681
+    SWEAT: 444682
+    BEAT: 444683
+    ALUMNI: 444684
+    PATS: 444685
+    KNIGHT: 444686
+    BYTE: 444687
+    MAIM: 444688
+    MORGUE: 444689
+    CHAIR: 444690
+    HUMAN: 444691
+    BED: 444692
   The Traveled:
-    Achievement: 444755
-    CLOSE: 444756
-    COMPOSE: 444757
-    RECORD: 444758
-    CATEGORY: 444759
-    HELLO: 444760
-    DUPLICATE: 444761
-    IDENTICAL: 444762
-    DISTANT: 444763
-    HAY: 444764
-    GIGGLE: 444765
-    CHUCKLE: 444766
-    SNITCH: 444767
-    CONCEALED: 444768
-    PLUNGE: 444769
-    AUTUMN: 444770
-    ROAD: 444771
-    FOUR: 444772
+    Achievement: 444693
+    CLOSE: 444694
+    COMPOSE: 444695
+    RECORD: 444696
+    CATEGORY: 444697
+    HELLO: 444698
+    DUPLICATE: 444699
+    IDENTICAL: 444700
+    DISTANT: 444701
+    HAY: 444702
+    GIGGLE: 444703
+    CHUCKLE: 444704
+    SNITCH: 444705
+    CONCEALED: 444706
+    PLUNGE: 444707
+    AUTUMN: 444708
+    ROAD: 444709
+    FOUR: 444710
   Outside The Bold:
-    UNOPEN: 444774
-    BEGIN: 444775
-    SIX: 444776
-    NINE: 444777
-    LEFT: 444778
-    RIGHT: 444779
-    RISE (Horizon): 444780
-    RISE (Sunrise): 444781
-    ZEN: 444782
-    SON: 444783
-    STARGAZER: 444784
-    MOUTH: 444785
-    YEAST: 444786
-    WET: 444787
+    UNOPEN: 444711
+    BEGIN: 444712
+    SIX: 444713
+    NINE: 444714
+    LEFT: 444715
+    RIGHT: 444716
+    RISE (Horizon): 444717
+    RISE (Sunrise): 444718
+    ZEN: 444719
+    SON: 444720
+    STARGAZER: 444721
+    MOUTH: 444722
+    YEAST: 444723
+    WET: 444724
   The Bold:
-    Achievement: 444790
-    FOOT: 444791
-    NEEDLE: 444792
-    FACE: 444793
-    SIGN: 444794
-    HEARTBREAK: 444795
-    UNDEAD: 444796
-    DEADLINE: 444797
-    SUSHI: 444798
-    THISTLE: 444799
-    LANDMASS: 444800
-    MASSACRED: 444801
-    AIRPLANE: 444802
-    NIGHTMARE: 444803
-    MOUTH: 444804
-    SAW: 444805
-    HAND: 444806
+    Achievement: 444725
+    FOOT: 444726
+    NEEDLE: 444727
+    FACE: 444728
+    SIGN: 444729
+    HEARTBREAK: 444730
+    UNDEAD: 444731
+    DEADLINE: 444732
+    SUSHI: 444733
+    THISTLE: 444734
+    LANDMASS: 444735
+    MASSACRED: 444736
+    AIRPLANE: 444737
+    NIGHTMARE: 444738
+    MOUTH: 444739
+    SAW: 444740
+    HAND: 444741
   Outside The Undeterred:
-    HOLLOW: 444807
-    ART + ART: 444808
-    PEN: 444809
-    HUSTLING: 444810
-    SUNLIGHT: 444811
-    LIGHT: 444812
-    BRIGHT: 444813
-    SUNNY: 444814
-    RAINY: 444815
-    ZERO: 444816
-    ONE: 444817
-    TWO (1): 444818
-    TWO (2): 444819
-    THREE (1): 444820
-    THREE (2): 444821
-    THREE (3): 444822
-    FOUR: 444823
+    HOLLOW: 444742
+    ART + ART: 444743
+    PEN: 444744
+    HUSTLING: 444745
+    SUNLIGHT: 444746
+    LIGHT: 444747
+    BRIGHT: 444748
+    SUNNY: 444749
+    RAINY: 444750
+    ZERO: 444751
+    ONE: 444752
+    TWO (1): 444753
+    TWO (2): 444754
+    THREE (1): 444755
+    THREE (2): 444756
+    THREE (3): 444757
+    FOUR: 444758
   The Undeterred:
-    Achievement: 444830
-    BONE: 444831
-    EYE: 444832
-    MOUTH: 444833
-    IRIS: 444834
-    EYE (2): 444835
-    ICE: 444836
-    HEIGHT: 444837
-    EYE (3): 444838
-    NOT: 444839
-    JUST: 444840
-    READ: 444841
-    FATHER: 444842
-    FEATHER: 444843
-    CONTINENT: 444844
-    OCEAN: 444845
-    WALL: 444846
+    Achievement: 444759
+    BONE: 444760
+    EYE: 444761
+    MOUTH: 444762
+    IRIS: 444763
+    EYE (2): 444764
+    ICE: 444765
+    HEIGHT: 444766
+    EYE (3): 444767
+    NOT: 444768
+    JUST: 444769
+    READ: 444770
+    FATHER: 444771
+    FEATHER: 444772
+    CONTINENT: 444773
+    OCEAN: 444774
+    WALL: 444775
   Number Hunt:
-    FIVE: 444847
-    SIX: 444848
-    SEVEN: 444849
-    EIGHT: 444850
-    NINE: 444851
+    FIVE: 444776
+    SIX: 444777
+    SEVEN: 444778
+    EIGHT: 444779
+    NINE: 444780
   Directional Gallery:
-    PEPPER: 444857
-    TURN: 444858
-    LEARN: 444859
-    FIVE (1): 444860
-    FIVE (2): 444861
-    SIX (1): 444862
-    SIX (2): 444863
-    SEVEN: 444864
-    EIGHT: 444865
-    NINE: 444866
-    BACKSIDE: 444867
-    '834283054': 444868
-    PARANOID: 444869
-    YELLOW: 444870
-    WADED + WEE: 444871
-    THE EYES: 444872
-    LEFT: 444873
-    RIGHT: 444874
-    MIDDLE: 444875
-    WARD: 444876
-    HIND: 444877
-    RIG: 444878
-    WINDWARD: 444879
-    LIGHT: 444880
-    REWIND: 444881
+    PEPPER: 444781
+    TURN: 444782
+    LEARN: 444783
+    FIVE (1): 444784
+    FIVE (2): 444785
+    SIX (1): 444786
+    SIX (2): 444787
+    SEVEN: 444788
+    EIGHT: 444789
+    NINE: 444790
+    BACKSIDE: 444791
+    '834283054': 444792
+    PARANOID: 444793
+    YELLOW: 444794
+    WADED + WEE: 444795
+    THE EYES: 444796
+    LEFT: 444797
+    RIGHT: 444798
+    MIDDLE: 444799
+    WARD: 444800
+    HIND: 444801
+    RIG: 444802
+    WINDWARD: 444803
+    LIGHT: 444804
+    REWIND: 444805
   Champion's Rest:
-    EXIT: 444883
-    HUES: 444884
-    RED: 444885
-    BLUE: 444886
-    YELLOW: 444887
-    GREEN: 444888
-    PURPLE: 444889
-    ORANGE: 444890
-    YOU: 444891
-    ME: 444892
-    SECRET BLUE: 444893
-    SECRET YELLOW: 444894
-    SECRET RED: 444895
+    EXIT: 444806
+    HUES: 444807
+    RED: 444808
+    BLUE: 444809
+    YELLOW: 444810
+    GREEN: 444811
+    PURPLE: 444812
+    ORANGE: 444813
+    YOU: 444814
+    ME: 444815
+    SECRET BLUE: 444816
+    SECRET YELLOW: 444817
+    SECRET RED: 444818
   The Bearer:
-    Achievement: 444897
-    MIDDLE: 444898
-    FARTHER: 444899
-    BACKSIDE: 444900
-    PART: 444901
-    HEART: 444902
+    Achievement: 444819
+    MIDDLE: 444820
+    FARTHER: 444821
+    BACKSIDE: 444822
+    PART: 444823
+    HEART: 444824
   The Bearer (East):
-    SIX: 444905
-    PEACE: 444906
+    SIX: 444825
+    PEACE: 444826
   The Bearer (North):
-    SILENT (1): 444907
-    SILENT (2): 444908
-    SPACE: 444909
-    WARTS: 444910
+    SILENT (1): 444827
+    SILENT (2): 444828
+    SPACE: 444829
+    WARTS: 444830
   The Bearer (South):
-    SIX: 444911
-    TENT: 444912
-    BOWL: 444913
+    SIX: 444831
+    TENT: 444832
+    BOWL: 444833
   The Bearer (West):
-    SNOW: 444914
-    SMILE: 444915
+    SNOW: 444834
+    SMILE: 444835
   Bearer Side Area:
-    SHORTCUT: 444916
-    POTS: 444917
+    SHORTCUT: 444836
+    POTS: 444837
   Cross Tower (East):
-    WINTER: 444919
+    WINTER: 444838
   Cross Tower (North):
-    NORTH: 444920
+    NORTH: 444839
   Cross Tower (South):
-    FIRE: 444921
+    FIRE: 444840
   Cross Tower (West):
-    DIAMONDS: 444922
+    DIAMONDS: 444841
   The Steady (Rose):
-    SOAR: 444923
+    SOAR: 444842
   The Steady (Ruby):
-    BURY: 444924
+    BURY: 444843
   The Steady (Carnation):
-    INCARNATION: 444925
+    INCARNATION: 444844
   The Steady (Sunflower):
-    SUN: 444926
+    SUN: 444845
   The Steady (Plum):
-    LUMP: 444927
+    LUMP: 444846
   The Steady (Lime):
-    LIMELIGHT: 444928
+    LIMELIGHT: 444847
   The Steady (Lemon):
-    MELON: 444929
+    MELON: 444848
   The Steady (Topaz):
-    TOP: 444930
-    MASTERY: 444931
+    TOP: 444849
+    MASTERY: 444850
   The Steady (Orange):
-    BLUE: 444932
+    BLUE: 444851
   The Steady (Sapphire):
-    SAP: 444933
+    SAP: 444852
   The Steady (Blueberry):
-    BLUE: 444934
+    BLUE: 444853
   The Steady (Amber):
-    ANTECHAMBER: 444935
+    ANTECHAMBER: 444854
   The Steady (Emerald):
-    HERALD: 444936
+    HERALD: 444855
   The Steady (Amethyst):
-    PACIFIST: 444937
+    PACIFIST: 444856
   The Steady (Lilac):
-    LIE LACK: 444938
+    LIE LACK: 444857
   The Steady (Cherry):
-    HAIRY: 444939
+    HAIRY: 444858
   The Steady:
-    Achievement: 444940
+    Achievement: 444859
   Knight Night (Outer Ring):
-    NIGHT: 444941
-    KNIGHT: 444942
-    BEE: 444943
-    NEW: 444944
-    FORE: 444945
-    TRUSTED (1): 444946
-    TRUSTED (2): 444947
-    ENCRUSTED: 444948
-    ADJUST (1): 444949
-    ADJUST (2): 444950
-    RIGHT: 444951
-    TRUST: 444952
+    NIGHT: 444860
+    KNIGHT: 444861
+    BEE: 444862
+    NEW: 444863
+    FORE: 444864
+    TRUSTED (1): 444865
+    TRUSTED (2): 444866
+    ENCRUSTED: 444867
+    ADJUST (1): 444868
+    ADJUST (2): 444869
+    RIGHT: 444870
+    TRUST: 444871
   Knight Night (Right Upper Segment):
-    RUST (1): 444953
-    RUST (2): 444954
+    RUST (1): 444872
+    RUST (2): 444873
   Knight Night (Right Lower Segment):
-    ADJUST: 444955
-    BEFORE: 444956
-    BE: 444957
-    LEFT: 444958
-    TRUST: 444959
+    ADJUST: 444874
+    BEFORE: 444875
+    BE: 444876
+    LEFT: 444877
+    TRUST: 444878
   Knight Night (Final):
-    TRUSTED: 444960
+    TRUSTED: 444879
   Knight Night Exit:
-    SEVEN (1): 444962
-    SEVEN (2): 444963
-    SEVEN (3): 444964
-    DEAD END: 444965
-    WARNER: 444966
+    SEVEN (1): 444880
+    SEVEN (2): 444881
+    SEVEN (3): 444882
+    DEAD END: 444883
+    WARNER: 444884
   The Artistic (Smiley):
-    Achievement: 444967
-    FINE: 444968
-    BLADE: 444969
-    RED: 444970
-    BEARD: 444971
-    ICE: 444972
-    ROOT: 444973
+    Achievement: 444885
+    FINE: 444886
+    BLADE: 444887
+    RED: 444888
+    BEARD: 444889
+    ICE: 444890
+    ROOT: 444891
   The Artistic (Panda):
-    EYE (Top): 444975
-    EYE (Bottom): 444976
-    LADYLIKE: 444977
-    WATER: 444978
-    OURS: 444979
-    DAYS: 444980
-    NIGHTTIME: 444981
-    NIGHT: 444982
+    EYE (Top): 444892
+    EYE (Bottom): 444893
+    LADYLIKE: 444894
+    WATER: 444895
+    OURS: 444896
+    DAYS: 444897
+    NIGHTTIME: 444898
+    NIGHT: 444899
   The Artistic (Lattice):
-    POSH: 444984
-    MALL: 444985
-    DEICIDE: 444986
-    WAVER: 444987
-    REPAID: 444988
-    BABY: 444989
-    LOBE: 444990
-    BOWELS: 444991
+    POSH: 444900
+    MALL: 444901
+    DEICIDE: 444902
+    WAVER: 444903
+    REPAID: 444904
+    BABY: 444905
+    LOBE: 444906
+    BOWELS: 444907
   The Artistic (Apple):
-    SPRIG: 444993
-    RELEASES: 444994
-    MUCH: 444995
-    FISH: 444996
-    MASK: 444997
-    HILL: 444998
-    TINE: 444999
-    THING: 445000
+    SPRIG: 444908
+    RELEASES: 444909
+    MUCH: 444910
+    FISH: 444911
+    MASK: 444912
+    HILL: 444913
+    TINE: 444914
+    THING: 444915
   The Artistic (Hint Room):
-    ARTICLE: 445002
-    TAR: 445003
-    I: 445004
-    KIT: 445005
+    ARTICLE: 444916
+    TAR: 444917
+    I: 444918
+    KIT: 444919
   The Discerning:
-    Achievement: 445006
-    HITS: 445007
-    WARRED: 445008
-    REDRAW: 445009
-    ADDER: 445010
-    LAUGHTERS: 445011
-    STONE: 445012
-    ONSET: 445013
-    RAT: 445014
-    DUSTY: 445015
-    ARTS: 445016
-    TSAR: 445017
-    STATE: 445018
-    REACT: 445019
-    DEAR: 445020
-    DARE: 445021
-    SEAM: 445022
+    Achievement: 444920
+    HITS: 444921
+    WARRED: 444922
+    REDRAW: 444923
+    ADDER: 444924
+    LAUGHTERS: 444925
+    STONE: 444926
+    ONSET: 444927
+    RAT: 444928
+    DUSTY: 444929
+    ARTS: 444930
+    TSAR: 444931
+    STATE: 444932
+    REACT: 444933
+    DEAR: 444934
+    DARE: 444935
+    SEAM: 444936
   The Eyes They See:
-    NEAR: 445023
-    EIGHT: 445024
+    NEAR: 444937
+    EIGHT: 444938
   Far Window:
-    FAR: 445026
+    FAR: 444939
   Outside The Wondrous:
-    SHRINK: 445027
+    SHRINK: 444940
   The Wondrous (Bookcase):
-    CASE: 445029
+    CASE: 444941
   The Wondrous (Chandelier):
-    CANDLE HEIR: 445030
+    CANDLE HEIR: 444942
   The Wondrous (Window):
-    GLASS: 445031
+    GLASS: 444943
   The Wondrous (Table):
-    WOOD: 445032
-    BROOK NOD: 445033
+    WOOD: 444944
+    BROOK NOD: 444945
   The Wondrous:
-    FIREPLACE: 445034
-    Achievement: 445035
+    FIREPLACE: 444946
+    Achievement: 444947
   Arrow Garden:
-    MASTERY: 445037
-    SHARP: 445038
+    MASTERY: 444948
+    SHARP: 444949
   Hallway Room (2):
-    WISE: 445039
-    CLOCK: 445040
-    ER: 445041
-    COUNT: 445042
+    WISE: 444950
+    CLOCK: 444951
+    ER: 444952
+    COUNT: 444953
   Hallway Room (3):
-    TRANCE: 445044
-    FORM: 445045
-    A: 445046
-    SHUN: 445047
+    TRANCE: 444954
+    FORM: 444955
+    A: 444956
+    SHUN: 444957
   Hallway Room (4):
-    WHEEL: 445049
+    WHEEL: 444958
   Elements Area:
-    A: 445051
-    NINE: 445052
-    UNDISTRACTED: 445053
-    MASTERY: 445054
-    EARTH: 445055
-    WATER: 445056
-    AIR: 445057
+    A: 444959
+    NINE: 444960
+    UNDISTRACTED: 444961
+    MASTERY: 444962
+    EARTH: 444963
+    WATER: 444964
+    AIR: 444965
   Outside The Wanderer:
-    WANDERLUST: 445058
+    WANDERLUST: 444966
   The Wanderer:
-    Achievement: 445060
-    '7890': 445061
-    '6524': 445062
-    '951': 445063
-    '4524': 445064
-    LEARN: 445065
-    DUST: 445066
-    STAR: 445067
-    WANDER: 445068
+    Achievement: 444967
+    '7890': 444968
+    '6524': 444969
+    '951': 444970
+    '4524': 444971
+    LEARN: 444972
+    DUST: 444973
+    STAR: 444974
+    WANDER: 444975
   Art Gallery:
-    EIGHT: 445069
-    EON: 445070
-    TRUSTWORTHY: 445071
-    FREE: 445072
-    OUR: 445073
-    ONE ROAD MANY TURNS: 445074
+    EIGHT: 444976
+    EON: 444977
+    TRUSTWORTHY: 444978
+    FREE: 444979
+    OUR: 444980
+    ONE ROAD MANY TURNS: 444981
   Art Gallery (Second Floor):
-    HOUSE: 445077
-    PATH: 445078
-    PARK: 445079
-    CARRIAGE: 445080
+    HOUSE: 444982
+    PATH: 444983
+    PARK: 444984
+    CARRIAGE: 444985
   Art Gallery (Third Floor):
-    AN: 445082
-    MAY: 445083
-    ANY: 445084
-    MAN: 445085
+    AN: 444986
+    MAY: 444987
+    ANY: 444988
+    MAN: 444989
   Art Gallery (Fourth Floor):
-    URNS: 445087
-    LEARNS: 445088
-    RUNTS: 445089
-    SEND - USE: 445090
-    TRUST: 445091
-    '062459': 445092
+    URNS: 444990
+    LEARNS: 444991
+    RUNTS: 444992
+    SEND - USE: 444993
+    TRUST: 444994
+    '062459': 444995
   Rhyme Room (Smiley):
-    LOANS: 445094
-    SKELETON: 445095
-    REPENTANCE: 445096
-    WORD: 445097
-    SCHEME: 445098
-    FANTASY: 445099
-    HISTORY: 445100
-    SECRET: 445101
+    LOANS: 444996
+    SKELETON: 444997
+    REPENTANCE: 444998
+    WORD: 444999
+    SCHEME: 445000
+    FANTASY: 445001
+    HISTORY: 445002
+    SECRET: 445003
   Rhyme Room (Cross):
-    NINE: 445103
-    FERN: 445104
-    STAY: 445105
-    FRIEND: 445106
-    RISE: 445107
-    PLUMP: 445108
-    BOUNCE: 445109
-    SCRAWL: 445110
-    PLUNGE: 445111
-    LEAP: 445112
+    NINE: 445004
+    FERN: 445005
+    STAY: 445006
+    FRIEND: 445007
+    RISE: 445008
+    PLUMP: 445009
+    BOUNCE: 445010
+    SCRAWL: 445011
+    PLUNGE: 445012
+    LEAP: 445013
   Rhyme Room (Circle):
-    BIRD: 445114
-    LETTER: 445115
-    FORBIDDEN: 445116
-    CONCEALED: 445117
-    VIOLENT: 445118
-    MUTE: 445119
+    BIRD: 445014
+    LETTER: 445015
+    FORBIDDEN: 445016
+    CONCEALED: 445017
+    VIOLENT: 445018
+    MUTE: 445019
   Rhyme Room (Looped Square):
-    WALKED: 445121
-    OBSTRUCTED: 445122
-    SKIES: 445123
-    SWELL: 445124
-    PENNED: 445125
-    CLIMB: 445126
-    TROUBLE: 445127
-    DUPLICATE: 445128
+    WALKED: 445020
+    OBSTRUCTED: 445021
+    SKIES: 445022
+    SWELL: 445023
+    PENNED: 445024
+    CLIMB: 445025
+    TROUBLE: 445026
+    DUPLICATE: 445027
   Rhyme Room (Target):
-    WILD: 445132
-    KID: 445133
-    PISTOL: 445134
-    QUARTZ: 445135
-    INNOVATIVE (Top): 445136
-    INNOVATIVE (Bottom): 445137
+    WILD: 445028
+    KID: 445029
+    PISTOL: 445030
+    QUARTZ: 445031
+    INNOVATIVE (Top): 445032
+    INNOVATIVE (Bottom): 445033
   Room Room:
-    DOOR (1): 445139
-    DOOR (2): 445140
-    WINDOW: 445141
-    STAIRS: 445142
-    PAINTING: 445143
-    FLOOR (1): 445144
-    FLOOR (2): 445145
-    FLOOR (3): 445146
-    FLOOR (4): 445147
-    FLOOR (5): 445148
-    FLOOR (7): 445149
-    FLOOR (8): 445150
-    FLOOR (9): 445151
-    FLOOR (10): 445152
-    CEILING (1): 445153
-    CEILING (2): 445154
-    CEILING (3): 445155
-    CEILING (4): 445156
-    CEILING (5): 445157
-    WALL (1): 445158
-    WALL (2): 445159
-    WALL (3): 445160
-    WALL (4): 445161
-    WALL (5): 445162
-    WALL (6): 445163
-    WALL (7): 445164
-    WALL (8): 445165
-    WALL (9): 445166
-    WALL (10): 445167
-    WALL (11): 445168
-    WALL (12): 445169
-    WALL (13): 445170
-    WALL (14): 445171
-    WALL (15): 445172
-    WALL (16): 445173
-    WALL (17): 445174
-    WALL (18): 445175
-    WALL (19): 445176
-    WALL (20): 445177
-    WALL (21): 445178
-    BROOMED: 445179
-    LAYS: 445180
-    BASE: 445181
-    MASTERY: 445182
+    DOOR (1): 445034
+    DOOR (2): 445035
+    WINDOW: 445036
+    STAIRS: 445037
+    PAINTING: 445038
+    FLOOR (1): 445039
+    FLOOR (2): 445040
+    FLOOR (3): 445041
+    FLOOR (4): 445042
+    FLOOR (5): 445043
+    FLOOR (7): 445044
+    FLOOR (8): 445045
+    FLOOR (9): 445046
+    FLOOR (10): 445047
+    CEILING (1): 445048
+    CEILING (2): 445049
+    CEILING (3): 445050
+    CEILING (4): 445051
+    CEILING (5): 445052
+    WALL (1): 445053
+    WALL (2): 445054
+    WALL (3): 445055
+    WALL (4): 445056
+    WALL (5): 445057
+    WALL (6): 445058
+    WALL (7): 445059
+    WALL (8): 445060
+    WALL (9): 445061
+    WALL (10): 445062
+    WALL (11): 445063
+    WALL (12): 445064
+    WALL (13): 445065
+    WALL (14): 445066
+    WALL (15): 445067
+    WALL (16): 445068
+    WALL (17): 445069
+    WALL (18): 445070
+    WALL (19): 445071
+    WALL (20): 445072
+    WALL (21): 445073
+    BROOMED: 445074
+    LAYS: 445075
+    BASE: 445076
+    MASTERY: 445077
   Cellar:
-    FLOWER: 445184
-    EYE: 445185
-    SNOWMAN: 445186
-    OWL: 445187
-    PANDA: 445188
-    STAIRS: 445189
+    FLOWER: 445078
+    EYE: 445079
+    SNOWMAN: 445080
+    OWL: 445081
+    PANDA: 445082
+    STAIRS: 445083
   Outside The Wise:
-    KITTEN: 445190
-    CAT: 445191
+    KITTEN: 445084
+    CAT: 445085
   The Wise:
-    Achievement: 445193
-    PUPPY: 445194
-    ADULT: 445195
-    BREAD: 445196
-    DINOSAUR: 445197
-    OAK: 445198
-    CORPSE: 445199
-    BEFORE: 445200
-    YOUR: 445201
-    BETWIXT: 445202
-    NIGH: 445203
-    CONNEXION: 445204
-    THOU: 445205
+    Achievement: 445086
+    PUPPY: 445087
+    ADULT: 445088
+    BREAD: 445089
+    DINOSAUR: 445090
+    OAK: 445091
+    CORPSE: 445092
+    BEFORE: 445093
+    YOUR: 445094
+    BETWIXT: 445095
+    NIGH: 445096
+    CONNEXION: 445097
+    THOU: 445098
   The Red:
-    Achievement: 445206
-    PANDEMIC (1): 445207
-    TRINITY: 445208
-    CHEMISTRY: 445209
-    FLUMMOXED: 445210
-    PANDEMIC (2): 445211
-    COUNTERCLOCKWISE: 445212
-    FEARLESS: 445213
-    DEFORESTATION: 445214
-    CRAFTSMANSHIP: 445215
-    CAMEL: 445216
-    LION: 445217
-    TIGER: 445218
-    SHIP (1): 445219
-    SHIP (2): 445220
-    GIRAFFE: 445221
+    Achievement: 445099
+    PANDEMIC (1): 445100
+    TRINITY: 445101
+    CHEMISTRY: 445102
+    FLUMMOXED: 445103
+    PANDEMIC (2): 445104
+    COUNTERCLOCKWISE: 445105
+    FEARLESS: 445106
+    DEFORESTATION: 445107
+    CRAFTSMANSHIP: 445108
+    CAMEL: 445109
+    LION: 445110
+    TIGER: 445111
+    SHIP (1): 445112
+    SHIP (2): 445113
+    GIRAFFE: 445114
   The Ecstatic:
-    Achievement: 445222
-    VINES: 445223
-    LEAVES: 445224
-    EGGS: 445225
-    VEGETABLES: 445226
-    ARGENT: 445227
-    CHASER: 445228
-    REGALLY: 445229
-    REPENTS: 445230
-    PRAISED: 445231
-    ADMIRER: 445232
-    DISOWNED: 445233
-    GENERALS: 445234
-    RESIGNED: 445235
-    EMIGRANTS: 445236
+    Achievement: 445115
+    VINES: 445116
+    LEAVES: 445117
+    EGGS: 445118
+    VEGETABLES: 445119
+    ARGENT: 445120
+    CHASER: 445121
+    REGALLY: 445122
+    REPENTS: 445123
+    PRAISED: 445124
+    ADMIRER: 445125
+    DISOWNED: 445126
+    GENERALS: 445127
+    RESIGNED: 445128
+    EMIGRANTS: 445129
   Outside The Scientific:
-    OPEN: 445237
-    CLOSE: 445238
-    AHEAD: 445239
+    OPEN: 445130
+    CLOSE: 445131
+    AHEAD: 445132
   The Scientific:
-    Achievement: 445241
-    HYDROGEN (1): 445242
-    OXYGEN: 445243
-    HYDROGEN (2): 445244
-    SUGAR (1): 445245
-    SUGAR (2): 445246
-    SUGAR (3): 445247
-    CHLORINE: 445248
-    SODIUM: 445249
-    FOREST: 445250
-    POUND: 445251
-    ICE: 445252
-    FISSION: 445253
-    FUSION: 445254
-    MISS: 445255
-    TREE (1): 445256
-    BIOGRAPHY: 445257
-    CACTUS: 445258
-    VERTEBRATE: 445259
-    ROSE: 445260
-    TREE (2): 445261
-    FRUIT: 445262
-    MAMMAL: 445263
-    BIRD: 445264
-    FISH: 445265
-    GRAVELY: 445266
-    BREVITY: 445267
-    PART: 445268
-    MATTER: 445269
-    ELECTRIC: 445270
-    ATOM (1): 445271
-    NEUTRAL: 445272
-    ATOM (2): 445273
-    PROPEL: 445274
-    ATOM (3): 445275
-    ORDER: 445276
-    OPTICS: 445277
-    GRAPHITE: 445278
-    HOT RYE: 445279
-    SIT SHY HOPE: 445280
-    ME NEXT PIER: 445281
-    RUT LESS: 445282
-    SON COUNCIL: 445283
+    Achievement: 445133
+    HYDROGEN (1): 445134
+    OXYGEN: 445135
+    HYDROGEN (2): 445136
+    SUGAR (1): 445137
+    SUGAR (2): 445138
+    SUGAR (3): 445139
+    CHLORINE: 445140
+    SODIUM: 445141
+    FOREST: 445142
+    POUND: 445143
+    ICE: 445144
+    FISSION: 445145
+    FUSION: 445146
+    MISS: 445147
+    TREE (1): 445148
+    BIOGRAPHY: 445149
+    CACTUS: 445150
+    VERTEBRATE: 445151
+    ROSE: 445152
+    TREE (2): 445153
+    FRUIT: 445154
+    MAMMAL: 445155
+    BIRD: 445156
+    FISH: 445157
+    GRAVELY: 445158
+    BREVITY: 445159
+    PART: 445160
+    MATTER: 445161
+    ELECTRIC: 445162
+    ATOM (1): 445163
+    NEUTRAL: 445164
+    ATOM (2): 445165
+    PROPEL: 445166
+    ATOM (3): 445167
+    ORDER: 445168
+    OPTICS: 445169
+    GRAPHITE: 445170
+    HOT RYE: 445171
+    SIT SHY HOPE: 445172
+    ME NEXT PIER: 445173
+    RUT LESS: 445174
+    SON COUNCIL: 445175
   Challenge Room:
-    WELCOME: 445287
-    CHALLENGE: 445288
-    Achievement: 445289
-    OPEN: 445290
-    SINGED: 445291
-    NEVER TRUSTED: 445292
-    CORNER: 445293
-    STRAWBERRIES: 445294
-    GRUB: 445295
-    BREAD: 445296
-    COLOR: 445297
-    WRITER: 445298
-    '02759': 445299
-    REAL EYES: 445300
-    LOBS: 445301
-    PEST ALLY: 445302
-    GENIAL HALO: 445303
-    DUCK LOGO: 445304
-    AVIAN GREEN: 445305
-    FEVER TEAR: 445306
-    FACTS: 445307
-    FACTS (1): 445308
-    FACTS (3): 445309
-    FACTS (4): 445310
-    FACTS (5): 445311
-    FACTS (6): 445312
-    LAPEL SHEEP: 445313
+    WELCOME: 445176
+    CHALLENGE: 445177
+    Achievement: 445178
+    OPEN: 445179
+    SINGED: 445180
+    NEVER TRUSTED: 445181
+    CORNER: 445182
+    STRAWBERRIES: 445183
+    GRUB: 445184
+    BREAD: 445185
+    COLOR: 445186
+    WRITER: 445187
+    '02759': 445188
+    REAL EYES: 445189
+    LOBS: 445190
+    PEST ALLY: 445191
+    GENIAL HALO: 445192
+    DUCK LOGO: 445193
+    AVIAN GREEN: 445194
+    FEVER TEAR: 445195
+    FACTS: 445196
+    FACTS (1): 445197
+    FACTS (3): 445198
+    FACTS (4): 445199
+    FACTS (5): 445200
+    FACTS (6): 445201
+    LAPEL SHEEP: 445202
 doors:
   Starting Room:
     Main Door:
       item: 444414
-      location: 444406
+      location: 444400
     Back Right Door:
-      item: 444415
-      location: 444407
-    Rhyme Room Entrance:
       item: 444416
+      location: 444401
+    Rhyme Room Entrance:
+      item: 444417
   Hidden Room:
     Dead End Door:
-      item: 444417
-    Knight Night Entrance:
-      item: 444418
-    Seeker Entrance:
       item: 444419
-      location: 444411
+    Knight Night Entrance:
+      item: 444421
+    Seeker Entrance:
+      item: 444422
+      location: 444407
     Rhyme Room Entrance:
-      item: 444420
+      item: 444423
   Second Room:
     Exit Door:
-      item: 444421
-      location: 444435
+      item: 444424
+      location: 445203
   Hub Room:
     Crossroads Entrance:
-      item: 444422
-      location: 444448
-    Tenacious Entrance:
-      item: 444423
-      location: 444449
-    Symmetry Door:
-      item: 444424
-      location: 444450
-    Shortcut to Hedge Maze:
       item: 444425
-      location: 444451
-    Near RAT Door:
+      location: 444432
+    Tenacious Entrance:
       item: 444426
-    Traveled Entrance:
-      item: 444427
-      location: 444452
-    Lost Door:
+      location: 444433
+    Symmetry Door:
       item: 444428
-      location: 444453
+      location: 445204
+    Shortcut to Hedge Maze:
+      item: 444430
+      location: 444436
+    Near RAT Door:
+      item: 444432
+    Traveled Entrance:
+      item: 444433
+      location: 444438
+    Lost Door:
+      item: 444435
+      location: 444440
   Pilgrim Antechamber:
     Sun Painting:
-      item: 444429
-      location: 444459
+      item: 444436
+      location: 445205
   Pilgrim Room:
     Shortcut to The Seeker:
-      item: 444430
-      location: 444473
+      item: 444437
+      location: 444449
   Crossroads:
     Tenacious Entrance:
-      item: 444431
-      location: 444489
-    Discerning Entrance:
-      item: 444432
-      location: 444490
-    Tower Entrance:
-      item: 444433
-      location: 444491
-    Tower Back Entrance:
-      item: 444434
-      location: 444492
-    Words Sword Door:
-      item: 444435
-      location: 444493
-    Eye Wall:
-      item: 444436
-      location: 444494
-    Hollow Hallway:
-      item: 444437
-    Roof Access:
       item: 444438
+      location: 444462
+    Discerning Entrance:
+      item: 444439
+      location: 444463
+    Tower Entrance:
+      item: 444440
+      location: 444465
+    Tower Back Entrance:
+      item: 444442
+      location: 445206
+    Words Sword Door:
+      item: 444443
+      location: 445207
+    Eye Wall:
+      item: 444445
+      location: 444469
+    Hollow Hallway:
+      item: 444446
+    Roof Access:
+      item: 444447
   Lost Area:
     Exit:
-      item: 444439
-      location: 444497
+      item: 444448
+      location: 445208
   Amen Name Area:
     Exit:
-      item: 444440
-      location: 444501
+      item: 444449
+      location: 445209
   The Tenacious:
     Shortcut to Hub Room:
-      item: 444441
-      location: 444512
+      item: 444450
+      location: 445210
     White Palindromes:
-      location: 444513
+      location: 445211
   Warts Straw Area:
     Door:
-      item: 444442
-      location: 444516
+      item: 444451
+      location: 445212
   Leaf Feel Area:
     Door:
-      item: 444443
-      location: 444519
+      item: 444452
+      location: 445213
   Outside The Agreeable:
     Tenacious Entrance:
-      item: 444444
-      location: 444540
+      item: 444453
+      location: 444496
     Black Door:
-      item: 444445
-      location: 444541
+      item: 444454
+      location: 444497
     Agreeable Entrance:
-      item: 444446
-      location: 444542
+      item: 444455
+      location: 444498
     Painting Shortcut:
-      item: 444447
-      location: 444543
+      item: 444456
+      location: 444501
     Purple Barrier:
-      item: 444448
+      item: 444457
     Hallway Door:
-      item: 444449
-      location: 444544
+      item: 444459
+      location: 445214
   Dread Hallway:
     Tenacious Entrance:
-      item: 444451
-      location: 444546
+      item: 444462
+      location: 444516
   The Agreeable:
     Shortcut to Hedge Maze:
-      item: 444452
-      location: 444560
+      item: 444463
+      location: 444518
   Hedge Maze:
     Perceptive Entrance:
-      item: 444453
-      location: 444577
+      item: 444464
+      location: 444530
     Painting Shortcut:
-      item: 444454
+      item: 444465
     Observant Entrance:
-      item: 444455
+      item: 444466
     Hide and Seek:
-      location: 444578
+      location: 445215
   The Fearless (First Floor):
     Second Floor:
-      item: 444456
-      location: 444586
+      item: 444468
+      location: 445216
   The Fearless (Second Floor):
     Third Floor:
-      item: 444458
-      location: 444594
+      item: 444471
+      location: 445217
   The Observant:
     Backside Door:
-      item: 444459
-      location: 444620
+      item: 444472
+      location: 445218
     Stairs:
-      item: 444460
-      location: 444621
+      item: 444474
+      location: 444569
   The Incomparable:
     Eight Painting:
-      item: 444461
-      location: 444636
+      item: 444475
+      location: 445219
   Orange Tower:
     Second Floor:
-      item: 444462
+      item: 444476
     Third Floor:
-      item: 444463
+      item: 444477
     Fourth Floor:
-      item: 444464
+      item: 444478
     Fifth Floor:
-      item: 444465
+      item: 444479
     Sixth Floor:
-      item: 444466
+      item: 444480
     Seventh Floor:
-      item: 444467
+      item: 444481
   Orange Tower First Floor:
     Shortcut to Hub Room:
-      item: 444469
-      location: 444643
+      item: 444483
+      location: 444602
     Salt Pepper Door:
-      item: 444470
-      location: 444644
+      item: 444485
+      location: 445220
   Orange Tower Third Floor:
     Red Barrier:
-      item: 444471
+      item: 444486
     Rhyme Room Entrance:
-      item: 444472
+      item: 444487
     Orange Barrier:
-      item: 444473
-      location: 444647
+      item: 444488
+      location: 445221
   Orange Tower Fourth Floor:
     Hot Crusts Door:
-      item: 444474
-      location: 444653
+      item: 444490
+      location: 444610
   Orange Tower Fifth Floor:
     Welcome Back:
-      item: 444475
-      location: 444662
+      item: 444491
+      location: 445222
   Orange Tower Seventh Floor:
     Mastery:
-      item: 444476
+      item: 444493
     Mastery Panels:
-      location: 444666
+      location: 445223
   Courtyard:
     Painting Shortcut:
-      item: 444477
+      item: 444494
     Green Barrier:
-      item: 444478
+      item: 444495
   First Second Third Fourth:
     Backside Door:
-      item: 444479
-      location: 444686
+      item: 444496
+      location: 445224
   The Colorful (White):
     Progress Door:
-      item: 444480
-      location: 444688
+      item: 444497
+      location: 445225
   The Colorful (Black):
     Progress Door:
-      item: 444481
-      location: 444690
+      item: 444499
+      location: 445226
   The Colorful (Red):
     Progress Door:
-      item: 444482
-      location: 444692
+      item: 444500
+      location: 445227
   The Colorful (Yellow):
     Progress Door:
-      item: 444483
-      location: 444694
+      item: 444501
+      location: 445228
   The Colorful (Blue):
     Progress Door:
-      item: 444484
-      location: 444696
+      item: 444502
+      location: 445229
   The Colorful (Purple):
     Progress Door:
-      item: 444485
-      location: 444698
+      item: 444503
+      location: 445230
   The Colorful (Orange):
     Progress Door:
-      item: 444486
-      location: 444700
+      item: 444504
+      location: 445231
   The Colorful (Green):
     Progress Door:
-      item: 444487
-      location: 444702
+      item: 444505
+      location: 445232
   The Colorful (Brown):
     Progress Door:
-      item: 444488
-      location: 444704
+      item: 444506
+      location: 445233
   The Colorful (Gray):
     Progress Door:
-      item: 444489
-      location: 444706
+      item: 444507
+      location: 445234
   Welcome Back Area:
     Shortcut to Starting Room:
-      item: 444490
-      location: 444711
+      item: 444508
+      location: 444653
   Owl Hallway:
     Shortcut to Hedge Maze:
-      item: 444491
-      location: 444714
+      item: 444509
+      location: 444656
   Outside The Initiated:
     Shortcut to Hub Room:
-      item: 444492
-      location: 444733
+      item: 444510
+      location: 444664
     Blue Barrier:
-      item: 444493
+      item: 444511
     Orange Barrier:
-      item: 444494
+      item: 444512
     Initiated Entrance:
-      item: 444495
-      location: 444734
+      item: 444513
+      location: 444665
     Green Barrier:
-      item: 444496
-      location: 444735
+      item: 444514
+      location: 445235
     Purple Barrier:
-      item: 444497
-      location: 444736
+      item: 444515
+      location: 445236
     Entrance:
-      item: 444498
-      location: 444737
+      item: 444516
+      location: 445237
   The Traveled:
     Color Hallways Entrance:
-      item: 444499
-      location: 444773
+      item: 444517
+      location: 444698
   Outside The Bold:
     Bold Entrance:
-      item: 444500
-      location: 444788
+      item: 444518
+      location: 444711
     Painting Shortcut:
-      item: 444501
+      item: 444519
     Steady Entrance:
-      item: 444502
-      location: 444789
+      item: 444520
+      location: 444712
   Outside The Undeterred:
     Undeterred Entrance:
-      item: 444503
-      location: 444824
+      item: 444521
+      location: 444744
     Painting Shortcut:
-      item: 444504
+      item: 444522
     Green Painting:
-      item: 444505
+      item: 444523
     Twos:
-      item: 444506
-      location: 444825
+      item: 444524
+      location: 444752
     Threes:
-      item: 444507
-      location: 444826
+      item: 444525
+      location: 445238
     Number Hunt:
-      item: 444508
-      location: 444827
+      item: 444526
+      location: 445239
     Fours:
-      item: 444509
+      item: 444527
     Fives:
-      item: 444510
-      location: 444828
+      item: 444528
+      location: 445240
     Challenge Entrance:
-      item: 444511
-      location: 444829
+      item: 444529
+      location: 444751
   Number Hunt:
     Door to Directional Gallery:
-      item: 444512
+      item: 444530
     Sixes:
-      item: 444513
-      location: 444852
+      item: 444532
+      location: 445241
     Sevens:
-      item: 444514
-      location: 444853
+      item: 444533
+      location: 445242
     Eights:
-      item: 444515
-      location: 444854
+      item: 444534
+      location: 445243
     Nines:
-      item: 444516
-      location: 444855
+      item: 444535
+      location: 445244
     Zero Door:
-      item: 444517
-      location: 444856
+      item: 444536
+      location: 445245
   Directional Gallery:
     Shortcut to The Undeterred:
-      item: 444518
-      location: 444882
+      item: 444537
+      location: 445246
     Yellow Barrier:
-      item: 444519
+      item: 444538
   Champion's Rest:
     Shortcut to The Steady:
-      item: 444520
-      location: 444896
+      item: 444539
+      location: 444806
   The Bearer:
     Shortcut to The Bold:
-      item: 444521
-      location: 444903
+      item: 444540
+      location: 444820
     Backside Door:
-      item: 444522
-      location: 444904
+      item: 444541
+      location: 444821
   Bearer Side Area:
     Shortcut to Tower:
-      item: 444523
-      location: 444918
+      item: 444542
+      location: 445247
   Knight Night (Final):
     Exit:
-      item: 444524
-      location: 444961
+      item: 444543
+      location: 445248
   The Artistic (Smiley):
     Door to Panda:
-      item: 444525
-      location: 444974
+      item: 444544
+      location: 445249
   The Artistic (Panda):
     Door to Lattice:
-      item: 444526
-      location: 444983
+      item: 444546
+      location: 445250
   The Artistic (Lattice):
     Door to Apple:
-      item: 444527
-      location: 444992
+      item: 444547
+      location: 445251
   The Artistic (Apple):
     Door to Smiley:
-      item: 444528
-      location: 445001
+      item: 444548
+      location: 445252
   The Eyes They See:
     Exit:
-      item: 444529
-      location: 445025
+      item: 444549
+      location: 444937
   Outside The Wondrous:
     Wondrous Entrance:
-      item: 444530
-      location: 445028
+      item: 444550
+      location: 444940
   The Wondrous (Doorknob):
     Painting Shortcut:
-      item: 444531
+      item: 444551
   The Wondrous:
     Exit:
-      item: 444532
-      location: 445036
+      item: 444552
+      location: 444947
   Hallway Room (2):
     Exit:
-      item: 444533
-      location: 445043
+      item: 444553
+      location: 445253
   Hallway Room (3):
     Exit:
-      item: 444534
-      location: 445048
+      item: 444554
+      location: 445254
   Hallway Room (4):
     Exit:
-      item: 444535
-      location: 445050
+      item: 444555
+      location: 445255
   Outside The Wanderer:
     Wanderer Entrance:
-      item: 444536
-      location: 445059
+      item: 444556
+      location: 444966
     Tower Entrance:
-      item: 444537
+      item: 444557
   Art Gallery:
     Second Floor:
-      item: 444538
+      item: 444558
     First Floor Puzzles:
-      location: 445075
+      location: 445256
     Third Floor:
-      item: 444539
+      item: 444559
     Fourth Floor:
-      item: 444540
+      item: 444560
     Fifth Floor:
-      item: 444541
+      item: 444561
     Exit:
-      item: 444542
-      location: 445076
+      item: 444562
+      location: 444981
   Art Gallery (Second Floor):
     Puzzles:
-      location: 445081
+      location: 445257
   Art Gallery (Third Floor):
     Puzzles:
-      location: 445086
+      location: 445258
   Art Gallery (Fourth Floor):
     Puzzles:
-      location: 445093
+      location: 445259
   Rhyme Room (Smiley):
     Door to Target:
-      item: 444544
+      item: 444564
     Door to Target (Location):
-      location: 445102
+      location: 445260
   Rhyme Room (Cross):
     Exit:
-      item: 444545
-      location: 445113
+      item: 444565
+      location: 445261
   Rhyme Room (Circle):
     Door to Smiley:
-      item: 444546
-      location: 445120
+      item: 444566
+      location: 445262
   Rhyme Room (Looped Square):
     Door to Circle:
-      item: 444547
-      location: 445129
+      item: 444567
+      location: 445263
     Door to Cross:
-      item: 444548
-      location: 445130
+      item: 444568
+      location: 445264
     Door to Target:
-      item: 444549
-      location: 445131
+      item: 444569
+      location: 445265
   Rhyme Room (Target):
     Door to Cross:
-      item: 444550
-      location: 445138
+      item: 444570
+      location: 445266
   Room Room:
     Shortcut to Fifth Floor:
-      item: 444551
-      location: 445183
+      item: 444571
+      location: 445076
   Outside The Wise:
     Wise Entrance:
-      item: 444552
-      location: 445192
+      item: 444572
+      location: 445267
   Outside The Scientific:
     Scientific Entrance:
-      item: 444553
-      location: 445240
+      item: 444573
+      location: 445130
   The Scientific:
     Chemistry Puzzles:
-      location: 445284
+      location: 445268
     Biology Puzzles:
-      location: 445285
+      location: 445269
     Physics Puzzles:
-      location: 445286
+      location: 445270
   Challenge Room:
     Welcome Door:
-      item: 444554
-      location: 445314
-progression:
-  Progressive Hallway Room: 444566
-  Progressive Fearless: 444569
-  Progressive Orange Tower: 444571
-  Progressive Art Gallery: 444578
+      item: 444574
+      location: 445176
 door_groups:
-  Entry Doors: 444555
-  Rhyme Room Doors: 444556
-  Dead End Area Access: 444557
-  Entrances to The Tenacious: 444558
-  Symmetry Doors: 444559
-  Hedge Maze Doors: 444560
-  Entrance to The Traveled: 444561
-  Crossroads - Tower Entrances: 444562
-  Crossroads Doors: 444563
-  Color Hunt Barriers: 444564
-  Hallway Room Doors: 444565
-  Observant Doors: 444567
-  Fearless Doors: 444568
-  Backside Doors: 444570
-  Orange Tower First Floor - Shortcuts: 444572
-  Champion's Rest - Color Barriers: 444573
-  Welcome Back Doors: 444574
-  Colorful Doors: 444575
-  Directional Gallery Doors: 444576
-  Artistic Doors: 444577
+  Entry Doors: 444415
+  Rhyme Room Doors: 444418
+  Dead End Area Access: 444420
+  Entrances to The Tenacious: 444427
+  Symmetry Doors: 444429
+  Hedge Maze Doors: 444431
+  Entrance to The Traveled: 444434
+  Crossroads - Tower Entrances: 444441
+  Crossroads Doors: 444444
+  Color Hunt Barriers: 444458
+  Hallway Room Doors: 444460
+  Observant Doors: 444467
+  Fearless Doors: 444469
+  Backside Doors: 444473
+  Orange Tower First Floor - Shortcuts: 444484
+  Champion's Rest - Color Barriers: 444489
+  Welcome Back Doors: 444492
+  Colorful Doors: 444498
+  Directional Gallery Doors: 444531
+  Artistic Doors: 444545
+progression:
+  Progressive Hallway Room: 444461
+  Progressive Fearless: 444470
+  Progressive Orange Tower: 444482
+  Progressive Art Gallery: 444563

@@ -20,6 +20,8 @@ outputpath = ARGV[1]
 next_item_id = 444400
 next_location_id = 444400
 
+location_id_by_name = {}
+
 old_generated = YAML.load_file(outputpath)
 File.write(outputpath + ".old", old_generated.to_yaml)
 
@@ -43,6 +45,8 @@ if old_generated.include? "panels" then
       if id >= next_location_id then
         next_location_id = id + 1
       end
+      location_name = "#{room} - #{name}"
+      location_id_by_name[location_name] = id
     end
   end
 end
@@ -88,11 +92,16 @@ config.each do |room_name, room_data|
         old_generated["panels"][room_name] ||= {}
         old_generated["panels"][room_name][panel_name] = next_location_id
 
+        location_name = "#{room_name} - #{panel_name}"
+        location_id_by_name[location_name] = next_location_id
+
         next_location_id += 1
       end
     end
   end
+end
 
+config.each do |room_name, room_data|
   if room_data.include? "doors"
     room_data["doors"].each do |door_name, door|
       if door.include? "event" and door["event"] then
@@ -122,7 +131,27 @@ config.each do |room_name, room_data|
       end
 
       unless door.include? "skip_location" and door["skip_location"] then
-        unless old_generated.include? "doors" and old_generated["doors"].include? room_name and old_generated["doors"][room_name].include? door_name and old_generated["doors"][room_name][door_name].include? "location" then
+        location_name = ""
+        if door.include? "location_name" then
+          location_name = door["location_name"]
+        elsif door.include? "panels" then
+          location_name = door["panels"].map do |panel|
+            if panel.kind_of? Hash then
+              panel
+            else
+              {"room" => room_name, "panel" => panel}
+            end
+          end.sort_by {|panel| panel["room"]}.chunk {|panel| panel["room"]}.map do |room_panels|
+            room_panels[0] + " - " + room_panels[1].map{|panel| panel["panel"]}.join(", ")
+          end.join(" and ")
+        end
+
+        if location_id_by_name.has_key? location_name then
+          old_generated["doors"] ||= {}
+          old_generated["doors"][room_name] ||= {}
+          old_generated["doors"][room_name][door_name] ||= {}
+          old_generated["doors"][room_name][door_name]["location"] = location_id_by_name[location_name]
+        elsif not (old_generated.include? "doors" and old_generated["doors"].include? room_name and old_generated["doors"][room_name].include? door_name and old_generated["doors"][room_name][door_name].include? "location") then
           old_generated["doors"] ||= {}
           old_generated["doors"][room_name] ||= {}
           old_generated["doors"][room_name][door_name] ||= {}
