@@ -62,13 +62,13 @@ all_regions = [
                lambda player: lambda state: state.has(ItemNames.Lumbridge, player),
                [
                    RegionNames.Lumbridge_Swamp,
-                   RegionNames.Lumbridge_Farms,
+                   RegionNames.Lumbridge_Farms_East,
+                   RegionNames.Lumbridge_Farms_West,
                    RegionNames.HAM_Hideout,
                    RegionNames.Al_Kharid,
                    # Canoe
                    RegionNames.South_Of_Varrock,
                    RegionNames.Barbarian_Village,
-                   RegionNames.Edgeville
                ],
                [
                    RegionNames.Spinning_Wheel,
@@ -104,13 +104,25 @@ all_regions = [
                    LocationNames.QP_Misthalin_Mystery,
                ],
                ),
-    RegionInfo(RegionNames.Lumbridge_Farms,
+    RegionInfo(RegionNames.Lumbridge_Farms_East,
+               lambda player: lambda state: state.has(ItemNames.Lumbridge_Farms, player),
+               [
+                   RegionNames.Lumbridge,
+                   RegionNames.South_Of_Varrock
+               ],
+               [
+                   RegionNames.Egg,
+                   RegionNames.Milk,
+                   RegionNames.Imp
+               ],
+               [],
+               ),
+    RegionInfo(RegionNames.Lumbridge_Farms_West,
                lambda player: lambda state: state.has(ItemNames.Lumbridge_Farms, player),
                [
                    RegionNames.Lumbridge,
                    RegionNames.HAM_Hideout,
-                   RegionNames.Draynor_Village,
-                   RegionNames.South_Of_Varrock
+                   RegionNames.Draynor_Village
                ],
                [
                    RegionNames.Egg,
@@ -131,7 +143,7 @@ all_regions = [
                [
                    RegionNames.Lumbridge,
                    RegionNames.Lumbridge_Swamp,
-                   RegionNames.Lumbridge_Farms,
+                   RegionNames.Lumbridge_Farms_West,
                    RegionNames.Draynor_Village
                ],
                [],
@@ -140,7 +152,7 @@ all_regions = [
     RegionInfo(RegionNames.Draynor_Village,
                lambda player: lambda state: state.has(ItemNames.Draynor_Village, player),
                [
-                   RegionNames.Lumbridge_Farms,
+                   RegionNames.Lumbridge_Farms_West,
                    RegionNames.HAM_Hideout,
                    RegionNames.Wizards_Tower,
                    RegionNames.Draynor_Manor,
@@ -313,7 +325,9 @@ all_regions = [
                    RegionNames.Wilderness,
                    RegionNames.West_Varrock,
                    RegionNames.Monastery,
-                   RegionNames.Barbarian_Village
+                   RegionNames.Barbarian_Village,
+                   #Canoe
+                   RegionNames.South_Of_Varrock
                ],
                [
                    RegionNames.Imp,

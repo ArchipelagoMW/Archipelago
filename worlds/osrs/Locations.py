@@ -11,7 +11,6 @@ class OSRSLocation(Location):
 class LocationData(typing.NamedTuple):
     id: int
     name: str
-    qp: int = 0
     skill_reqs: typing.Dict[str,int] = {}
 
 
