@@ -30,6 +30,7 @@ class OpenRCT2World(World):
     topology_present = True  # show path to required location checks in spoiler
     item_name_to_id = {name: id for id, name in enumerate(item_info["all_items"], base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_info["all_locations"], base_id)}
+    starting_ride = None
     item_table = {}
     item_frequency = {}
     
@@ -56,6 +57,24 @@ class OpenRCT2World(World):
         print("\n\n")
         print(self.item_frequency)
 
+        logic_table = []
+        for item in self.item_table:
+            count = 0
+            while count != self.item_frequency[item]:
+                logic_table.append(item)
+                count += 1
+
+        found_starter = False
+        while found_starter == False:
+            canidate = random.choice(logic_table)
+            if canidate in item_info["rides"]:
+                if canidate not in item_info["non_starters"]:
+                    self.starting_ride = canidate
+                    found_starter = True
+
+        print("Here's the starting ride!")
+        print(self.starting_ride)
+
          
 
     def create_regions(self) -> None:
@@ -65,9 +84,9 @@ class OpenRCT2World(World):
             while count != self.item_frequency[item]:
                 logic_table.append(item)
                 count += 1
-        print("Here's the logic table:")
-        random.shuffle(logic_table)
-        print(logic_table)
+        # print("Here's the logic table:")
+        # random.shuffle(logic_table)
+        # print(logic_table)
 
 
 
@@ -130,7 +149,7 @@ class OpenRCT2World(World):
             region = self.multiworld.get_region("OpenRCT2_Level_" + str(count), self.player)
             region.connect(self.multiworld.get_region("OpenRCT2_Level_" + str(count + 1) ,self.player))
             count += 1
-                    
+
     
     def create_items(self) -> None:
         print("The item tabel is this long:")
@@ -145,6 +164,17 @@ class OpenRCT2World(World):
         print("Here's the multiworld item pool:")
         print(len(self.multiworld.itempool))
         print(self.multiworld.itempool)
+
+    def set_rules(self) -> None:
+        logic_table = []
+        for item in self.item_table:
+            count = 0
+            while count != self.item_frequency[item]:
+                logic_table.append(item)
+                count += 1
+        print("Here's the logic table:")
+        random.shuffle(logic_table)
+        print(logic_table)
 
 
     
