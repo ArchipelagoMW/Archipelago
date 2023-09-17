@@ -77,7 +77,7 @@ Have any questions on what's in logic? This spreadsheet has the answer [Requirem
     - You have a leftover GOA Script in your `Documents\KINGDOM HEARTS HD 1.5+2.5 ReMIX\scripts\KH2`.
 - Why am I missing worlds/portals in the GoA?
     - You are missing the required visit-locking item to access the world/portal.
-- Why did I not load in to the correct visit
+- Why did I not load into the correct visit
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
     - Currently `only` the most up to date version on the Epic Game Store is supported: version `1.0.0.8_WW`.
