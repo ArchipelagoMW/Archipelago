@@ -521,8 +521,8 @@ class Objectives(object):
 
         # AP: now based on location checks instead of local item
         for pct in [25,50,75,100]:
-             goal = 'collect %d%% items' % pct
-             self.goals[goal].clearFunc = getPctFunc(totalItemsCount * pct / 100, container)
+            goal = 'collect %d%% items' % pct
+            self.goals[goal].clearFunc = getPctFunc(totalItemsCount * pct / 100, container)
         if allUpgradeTypes is not None:
             self.goals["collect all upgrades"].clearFunc = lambda sm, ap: sm.haveItems(allUpgradeTypes)
 
