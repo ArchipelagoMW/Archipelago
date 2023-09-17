@@ -8,7 +8,7 @@ import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
-from Fill import fill_restrictive
+from Fill import FillError, fill_restrictive
 from Options import Toggle
 import settings
 from worlds.AutoWorld import WebWorld, World
@@ -194,11 +194,25 @@ class PokemonEmeraldWorld(World):
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
+        if self.multiworld.enable_ferry[self.player]:
+            try:
+                for ticket in ["Eon Ticket", "Old Sea Map", "Aurora Ticket", "Mystic Ticket"]:
+                    replaceable_item_index = next(
+                        i
+                        for i, item in enumerate(default_itempool)
+                        if item.classification == ItemClassification.filler
+                    )
+
+                    default_itempool[replaceable_item_index] = self.create_item(ticket)
+            except StopIteration:
+                raise FillError(f"Player {self.player} ({self.multiworld.player_name[self.player]}) did not include "
+                                "enough locations for ferry tickets to be added")
+
         if self.multiworld.item_pool_type[self.player] == ItemPoolType.option_shuffled:
             self.multiworld.itempool += default_itempool
 
         elif self.multiworld.item_pool_type[self.player] in {ItemPoolType.option_diverse, ItemPoolType.option_diverse_balanced}:
-            item_categories = ["Ball", "Heal", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc"]
+            item_categories = ["Ball", "Heal", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc", "Berry"]
 
             # Count occurrences of types of vanilla items in pool
             item_category_counter = Counter()

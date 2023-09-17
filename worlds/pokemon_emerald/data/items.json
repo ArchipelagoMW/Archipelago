@@ -214,15 +214,24 @@
   },
   "ITEM_EON_TICKET": {
     "label": "Eon Ticket",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": ["Unique"]
   },
   "ITEM_OLD_SEA_MAP": {
     "label": "Old Sea Map",
-    "classification": "FILLER",
+    "classification": "PROGRESSION",
     "tags": ["Unique"]
   },
-
+  "ITEM_MYSTIC_TICKET": {
+    "label": "Mystic Ticket",
+    "classification": "PROGRESSION",
+    "tags": ["Unique"]
+  },
+  "ITEM_AURORA_TICKET": {
+    "label": "Aurora Ticket",
+    "classification": "PROGRESSION",
+    "tags": ["Unique"]
+  },
 
   "ITEM_OLD_ROD": {
     "label": "Old Rod",

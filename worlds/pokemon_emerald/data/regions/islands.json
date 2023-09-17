@@ -3,7 +3,9 @@
     "parent_map": "MAP_SOUTHERN_ISLAND_EXTERIOR",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_SOUTHERN_ISLAND_EXTERIOR:0,1/MAP_SOUTHERN_ISLAND_INTERIOR:0,1"
     ]
@@ -21,7 +23,9 @@
     "parent_map": "MAP_FARAWAY_ISLAND_ENTRANCE",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_FARAWAY_ISLAND_ENTRANCE:0,1/MAP_FARAWAY_ISLAND_INTERIOR:0,1"
     ]
@@ -39,7 +43,9 @@
     "parent_map": "MAP_BIRTH_ISLAND_HARBOR",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_BIRTH_ISLAND_HARBOR:0/MAP_BIRTH_ISLAND_EXTERIOR:0"
     ]
@@ -57,7 +63,9 @@
     "parent_map": "MAP_NAVEL_ROCK_HARBOR",
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
     "warps": [
       "MAP_NAVEL_ROCK_HARBOR:0/MAP_NAVEL_ROCK_EXTERIOR:0"
     ]

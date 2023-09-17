@@ -142,8 +142,13 @@
     "label": "Lilycove City - Pokeblock Case from Contest Hall",
     "tags": ["KeyItem"]
   },
+
   "NPC_GIFT_RECEIVED_SS_TICKET": {
     "label": "Littleroot Town - S.S. Ticket from Norman",
+    "tags": ["Ferry"]
+  },
+  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
+    "label": "Navel Rock Top - Hidden Item Sacred Ash",
     "tags": ["Ferry"]
   },
 
@@ -226,10 +231,6 @@
   },
   "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC": {
     "label": "Mt Pyre Summit - Hidden Item Grave",
-    "tags": ["HiddenItem"]
-  },
-  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
-    "label": "Navel Rock Top - Hidden Item Sacred Ash",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY": {
