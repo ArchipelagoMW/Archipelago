@@ -138,7 +138,7 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
-            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("false")
+            self.multiworld.dexsanity[self.player].value = 0
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
@@ -717,6 +717,15 @@ class PokemonRedBlueWorld(World):
             "death_link": self.multiworld.death_link[self.player].value,
             "prizesanity": self.multiworld.prizesanity[self.player].value,
             "key_items_only": self.multiworld.key_items_only[self.player].value,
+            "poke_doll_skip": self.multiworld.poke_doll_skip[self.player].value,
+            "bicycle_gate_skips": self.multiworld.bicycle_gate_skips[self.player].value,
+            "stonesanity": self.multiworld.stonesanity[self.player].value,
+            "door_shuffle": self.multiworld.door_shuffle[self.player].value,
+            "warp_tile_shuffle": self.multiworld.warp_tile_shuffle[self.player].value,
+            "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
+            "split_card_key": self.multiworld.split_card_key[self.player].value,
+            "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
+
         }
 
 

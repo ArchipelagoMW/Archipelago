@@ -116,7 +116,11 @@ def get_random_species(
         bst_filtered_candidates = [species for species in candidates if has_nearby_bst(species, max_percent_different)]
         while len(bst_filtered_candidates) == 0:
             max_percent_different += 10
-            bst_filtered_candidates = [species for species in candidates if has_nearby_bst(species, max_percent_different)]
+            bst_filtered_candidates = [
+                species
+                for species in candidates
+                if has_nearby_bst(species, max_percent_different)
+            ]
 
         candidates = bst_filtered_candidates
 

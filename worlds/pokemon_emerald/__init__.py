@@ -225,7 +225,10 @@ class PokemonEmeraldWorld(World):
 
             # Ignore vanilla occurrences and pick completely randomly
             if self.multiworld.item_pool_type[self.player] == ItemPoolType.option_diverse:
-                item_category_weights = [len(category_list) for category_list in fill_item_candidates_by_category.values()]
+                item_category_weights = [
+                    len(category_list)
+                    for category_list in fill_item_candidates_by_category.values()
+                ]
 
             # TMs should not have duplicates until every TM has been used already
             all_tm_choices = fill_item_candidates_by_category["TM"].copy()
@@ -464,7 +467,7 @@ class PokemonEmeraldWorld(World):
                         evolution = evolutions.pop()
                         evolution.types = (type_map[evolution.types[0]], type_map[evolution.types[1]])
                         already_modified.add(evolution.species_id)
-                        evolutions += [self.modified_data.species[evolution.species_id] for evolution in evolution.evolutions]
+                        evolutions += [self.modified_data.species[evo.species_id] for evo in evolution.evolutions]
 
         def randomize_learnsets() -> None:
             type_bias = self.multiworld.move_match_type_bias[self.player].value
@@ -481,7 +484,8 @@ class PokemonEmeraldWorld(World):
                 # Replace filler MOVE_NONEs at start of list
                 while old_learnset[i].move_id == 0:
                     if self.multiworld.level_up_moves[self.player] == LevelUpMoves.option_start_with_four_moves:
-                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias, normal_bias, species.types)
+                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias,
+                                                   normal_bias, species.types)
                     else:
                         new_move = 0
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
@@ -492,7 +496,8 @@ class PokemonEmeraldWorld(World):
                     if i == 3:
                         new_move = get_random_damaging_move(self.random, {move.move_id for move in new_learnset})
                     else:
-                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias, normal_bias, species.types)
+                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias,
+                                                   normal_bias, species.types)
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
                     i += 1
 
@@ -678,9 +683,12 @@ class PokemonEmeraldWorld(World):
             )
 
             new_starters = (
-                get_random_species(self.random, self.modified_data.species, starter_bsts[0], starter_types[0], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species, starter_bsts[1], starter_types[1], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species, starter_bsts[2], starter_types[2], allow_legendaries)
+                get_random_species(self.random, self.modified_data.species,
+                                   starter_bsts[0], starter_types[0], allow_legendaries),
+                get_random_species(self.random, self.modified_data.species,
+                                   starter_bsts[1], starter_types[1], allow_legendaries),
+                get_random_species(self.random, self.modified_data.species,
+                                   starter_bsts[2], starter_types[2], allow_legendaries)
             )
 
             easter_egg_type, easter_egg_value = get_easter_egg(self.multiworld.easter_egg[self.player].value)

@@ -118,13 +118,23 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         # Set local item values
         if not multiworld.remote_items[player] and location.item.player == player:
             if type(location.item_address) is int:
-                _set_bytes_little_endian(patched_rom, location.item_address, 2, reverse_offset_item_value(location.item.code))
+                _set_bytes_little_endian(
+                    patched_rom,
+                    location.item_address,
+                    2,
+                    reverse_offset_item_value(location.item.code)
+                )
             elif type(location.item_address) is list:
                 for address in location.item_address:
                     _set_bytes_little_endian(patched_rom, address, 2, reverse_offset_item_value(location.item.code))
         else:
             if type(location.item_address) is int:
-                _set_bytes_little_endian(patched_rom, location.item_address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+                _set_bytes_little_endian(
+                    patched_rom,
+                    location.item_address,
+                    2,
+                    data.constants["ITEM_ARCHIPELAGO_PROGRESSION"]
+                )
             elif type(location.item_address) is list:
                 for address in location.item_address:
                     _set_bytes_little_endian(patched_rom, address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
@@ -224,7 +234,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
             start_inventory[item_name] -= quantity
 
             pc_slots.append((item_name, quantity))
-    
+
     pc_slots.sort(reverse=True)
 
     for i, slot in enumerate(pc_slots):
@@ -317,7 +327,12 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
     # Set Birch pokemon
-    _set_bytes_little_endian(patched_rom, options_address + 0x08, 2, get_random_species(multiworld.per_slot_randoms[player], data.species).species_id)
+    _set_bytes_little_endian(
+        patched_rom,
+        options_address + 0x08,
+        2,
+        get_random_species(multiworld.per_slot_randoms[player], data.species).species_id
+    )
 
     # Set guaranteed catch
     guaranteed_catch = 1 if multiworld.guaranteed_catch[player] else 0
@@ -601,7 +616,12 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                 # and setting data to the right places
                 original_battle_type = rom[trainer_data.script_address + 1]
                 if original_battle_type in battle_type_map:
-                    _set_bytes_little_endian(rom, trainer_data.script_address + 1, 1, battle_type_map[original_battle_type])
+                    _set_bytes_little_endian(
+                        rom,
+                        trainer_data.script_address + 1,
+                        1,
+                        battle_type_map[original_battle_type]
+                    )
 
 
 def _randomize_move_tutor_moves(multiworld: MultiWorld, player: int, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
