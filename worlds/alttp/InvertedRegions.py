@@ -176,8 +176,9 @@ def create_inverted_regions(world, player):
                                'Throne Room']),
         create_dungeon_region(world, player, 'Sewer Drop', 'a drop\'s exit', None, ['Sewer Drop']),  # This exists only to be referenced for access checks
         create_dungeon_region(world, player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Sewers - Key Rat Key Drop'], ['Sewers Door']),
-        create_dungeon_region(world, player, 'Sewers', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
-                                         'Sewers - Secret Room - Right'], ['Sanctuary Push Door', 'Sewers Back Door']),
+        create_dungeon_region(world, player, 'Sewers', 'a drop\'s exit', None, ['Sanctuary Push Door', 'Sewers Back Door', 'Sewers Secret Room']),
+        create_dungeon_region(world, player, 'Sewers Secret Room', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
+                                         'Sewers - Secret Room - Right']),
         create_dungeon_region(world, player, 'Sanctuary', 'a drop\'s exit', ['Sanctuary'], ['Sanctuary Exit']),
         create_dungeon_region(world, player, 'Inverted Agahnims Tower', 'Castle Tower', ['Castle Tower - Room 03', 'Castle Tower - Dark Maze',  'Castle Tower - Dark Archer Key Drop', 'Castle Tower - Circle of Pots Key Drop'], ['Agahnim 1', 'Inverted Agahnims Tower Exit']),
         create_dungeon_region(world, player, 'Agahnim 1', 'Castle Tower', ['Agahnim 1'], None),

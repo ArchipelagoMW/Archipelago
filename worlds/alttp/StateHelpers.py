@@ -83,6 +83,31 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
     return basemagic >= smallmagic
 
 
+def can_deal_class_1_damage(state: CollectionState, player: int) -> bool:
+    return (state.has("Fighter Sword", player) or state.has("Cane of Somaria", player) or
+            state.has("Cane of Byrna", player) or can_deal_class_3_damage(state, player))
+
+
+def can_deal_class_3_damage(state: CollectionState, player: int) -> bool:
+    return state.has("Hammer", player) or state.has("Master Sword", player) or can_deal_class_4_damage(state, player)
+
+
+def can_deal_class_4_damage(state: CollectionState, player: int) -> bool:
+    return state.has("Tempered Sword", player) or state.has("Golden Sword", player)
+
+
+def can_use_bombs(state: CollectionState, player: int) -> bool:
+    return True
+
+
+def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
+    return can_use_bombs(state, player) or state.has("Pegasus Boots", player)
+
+
+def can_deal_damage(state: CollectionState, player: int) -> bool:
+    return can_kill_most_things(state, player) or can_use_bombs(state, player)
+
+
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
     return (has_melee_weapon(state, player)
             or state.has('Cane of Somaria', player)

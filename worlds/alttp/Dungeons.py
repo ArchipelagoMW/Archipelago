@@ -80,7 +80,8 @@ def create_dungeons(world: "ALTTPWorld"):
         dungeon.regions = regions
         return dungeon
 
-    ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers (Dark)', 'Sanctuary'],
+    ES = make_dungeon('Hyrule Castle', None, ['Hyrule Castle', 'Sewers', 'Sewer Drop', 'Sewers Secret Room',
+                                              'Sewers (Dark)', 'Sanctuary'],
                       ItemFactory('Big Key (Hyrule Castle)', player),
                       ItemFactory(['Small Key (Hyrule Castle)'] * 4, player),
                       [ItemFactory('Map (Hyrule Castle)', player)])
