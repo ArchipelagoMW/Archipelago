@@ -17,7 +17,7 @@ class Meal:
     chowder = "Chowder"
     coleslaw = "Coleslaw"
     complete_breakfast = "Complete Breakfast"
-    cookie = "Cookie"
+    cookie = "Cookies"
     crab_cakes = "Crab Cakes"
     cranberry_candy = "Cranberry Candy"
     cranberry_sauce = "Cranberry Sauce"
