@@ -539,6 +539,7 @@ openRCT2_options = {
     # generator options
     "location_balancing": LocationBalancing,
     "difficulty": Difficulty,
+    "scenario_length": Scenario_Length,
     "scenario": Scenario,
 
     # deathlink
@@ -551,7 +552,6 @@ openRCT2_options = {
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     "randomization_range": Randomization_Range,
-    "scenario_length": Scenario_Length,
     "stat_rerolls": Stat_ReRolls,
     "include_park_rules": Include_Park_Rules,
     "randomize_park_values": Randomize_Park_Values,

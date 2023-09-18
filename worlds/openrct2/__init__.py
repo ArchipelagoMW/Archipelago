@@ -1,4 +1,5 @@
 from typing import NamedTuple, Union
+from enum import IntEnum
 import logging
 import json
 import random
@@ -8,6 +9,7 @@ from .Items import *
 from .Locations import *
 
 from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
+from worlds.generic.Rules import add_rule, set_rule, forbid_item
 
 from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
@@ -33,6 +35,7 @@ class OpenRCT2World(World):
     starting_ride = None
     item_table = {}
     item_frequency = {}
+    location_prices = {}
     
 
 
@@ -70,6 +73,7 @@ class OpenRCT2World(World):
             if canidate in item_info["rides"]:
                 if canidate not in item_info["non_starters"]:
                     self.starting_ride = canidate
+                    self.item_frequency[canidate] -= 1
                     found_starter = True
 
         print("Here's the starting ride!")
@@ -84,6 +88,7 @@ class OpenRCT2World(World):
             while count != self.item_frequency[item]:
                 logic_table.append(item)
                 count += 1
+        logic_length = (len(logic_table))
         # print("Here's the logic table:")
         # random.shuffle(logic_table)
         # print(logic_table)
@@ -123,24 +128,22 @@ class OpenRCT2World(World):
 
         item = 15
         current_level = 4
-        while (item + 7) < len(logic_table): 
+        while (item + 7) < logic_length: 
             level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
             level.locations = locations_to_region(item, item + 7,level)
             self.multiworld.regions.append(level)
             item += 8
             current_level += 1
-        print(len(logic_table))
-        if ((len(logic_table)) % 8)  != 0:
+        if ((logic_length) % 8)  != 0:
             level = Region("OpenRCT2_Level_" + str(current_level), self.player, self.multiworld)
-            level.locations = locations_to_region(item, (len(logic_table) - 1),level)
+            level.locations = locations_to_region(item, (logic_length - 1),level)
             self.multiworld.regions.append(level)
         else:
             current_level -= 1
 
-        # for region_number, item in enumerate(logic_table):
-        #     region = Region("OpenRCT2_Region_" + str(region_number), self.player, self.multiworld)
-        #     region.locations = [OpenRCT2Location(self.player,"OpenRCT2_" + str(region_number),self.location_name_to_id["OpenRCT2_" + str(region_number)],region)]
-        #     self.multiworld.regions.append(region)
+        victory = Region("Victory", self.player, self.multiworld)
+        victory.locations = [OpenRCT2Location(self.player,"Victory",None,victory)]
+        self.multiworld.regions.append(victory)
 
         r.connect(s)
         s.connect(self.multiworld.get_region("OpenRCT2_Level_0",self.player))
@@ -149,8 +152,10 @@ class OpenRCT2World(World):
             region = self.multiworld.get_region("OpenRCT2_Level_" + str(count), self.player)
             region.connect(self.multiworld.get_region("OpenRCT2_Level_" + str(count + 1) ,self.player))
             count += 1
+        final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
+        final_region.connect(victory)
 
-    
+
     def create_items(self) -> None:
         print("The item tabel is this long:")
         print(len(self.item_table))
@@ -161,11 +166,24 @@ class OpenRCT2World(World):
                 self.multiworld.itempool.append(self.create_item(item))
                 count += 1
 
+        #Adds the starting ride to precollected items
+        # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
+
+        self.multiworld.push_precollected(self.create_item(self.starting_ride))
+
         print("Here's the multiworld item pool:")
         print(len(self.multiworld.itempool))
         print(self.multiworld.itempool)
 
+    def generate_basic(self) -> None:
+        # place "Victory" at the end of the unlock tree and set collection as win condition
+        self.multiworld.get_location("Victory", self.player).place_locked_item(OpenRCT2Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+
     def set_rules(self) -> None:
+        print("Here's the precollected Items")
+        print(self.multiworld.precollected_items[self.player])
         logic_table = []
         for item in self.item_table:
             count = 0
@@ -175,6 +193,53 @@ class OpenRCT2World(World):
         print("Here's the logic table:")
         random.shuffle(logic_table)
         print(logic_table)
+
+        difficulty = self.multiworld.difficulty[self.player].value
+        length = self.multiworld.scenario_length[self.player].value
+        length_modifier = 0
+        difficulty_modifier = 0
+        difficulty_minimum = 0
+        difficulty_maximum = 0
+
+        if difficulty == 0: #very_easy
+            difficulty_modifier = 0
+        if difficulty == 1: #easy
+            difficulty_modifier = .3
+            difficulty_maximum = 5
+        if difficulty == 2: #medium
+            difficulty_modifier = .5
+            difficulty_maximum = 6
+        if difficulty == 3: #hard
+            difficulty_modifier = .75
+            difficulty_minimum = 5
+            difficulty_maximum = 7
+        if difficulty == 4: #extreme
+            difficulty_modifier = .9
+            difficulty_minimum = 6
+            difficulty_maximum = 9
+
+        if length == 0: #speedrun
+            length_modifier = .2
+        if length == 1: #normal
+            length_modifier = .4
+        if length == 2: #lengthy
+            length_modifier = .6
+        if length == 3: #marathon
+            length_modifier = .9
+            
+
+        possible_prereqs = [self.starting_ride]
+        for number, item in enumerate(logic_table):
+            if number != 0: #We'll never have a prereq on the first item
+                if random.random() < length_modifier: #Determines if we have a prereq
+                    if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
+                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player),
+                         lambda state: state.has(random.choice(possible_prereqs), self.player))
+            if item in item_info["rides"]:
+                possible_prereqs.append(item)
+
+            # add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player),
+            #  lambda state: state.has(self.starting_ride, self.player))
 
 
     
