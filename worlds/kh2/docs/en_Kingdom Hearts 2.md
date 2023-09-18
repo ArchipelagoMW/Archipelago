@@ -67,7 +67,7 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
 You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
 
-<h2 style="text-transform:none";>What is Hitlist/Bounties?:</h2>
+<h2 style="text-transform:none";>What is Hitlist/Bounties?</h2>
 The Hitlist goal adds "bounty" items to select late-game fights and locations, and you need to collect X amount of them to win.<br>
 The list of possible locations that can contain a bounty:
 
