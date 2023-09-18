@@ -10,7 +10,7 @@ def is_not_bunny(state: CollectionState, region: LTTPRegion, player: int) -> boo
 
 
 def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bool:
-    return is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
+    return can_use_bombs(state, player) and is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
 
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
@@ -106,6 +106,10 @@ def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
 
 def can_deal_damage(state: CollectionState, player: int) -> bool:
     return can_kill_most_things(state, player) or can_use_bombs(state, player)
+
+
+def can_crystal_switch_from_distance(state: CollectionState, player: int) -> bool:
+    return can_use_bombs(state, player) or state.has_any(["Master Sword",])
 
 
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
