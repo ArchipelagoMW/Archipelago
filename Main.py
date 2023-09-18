@@ -61,7 +61,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     world.sprite_pool = args.sprite_pool.copy()
     world.dark_room_logic = args.dark_room_logic.copy()
     world.plando_items = args.plando_items.copy()
-    logger.info(args.plando_texts)
     world.plando_texts = args.plando_texts.copy()
     world.plando_connections = args.plando_connections.copy()
     world.required_medallions = args.required_medallions.copy()
