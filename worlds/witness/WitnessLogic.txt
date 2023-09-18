@@ -223,7 +223,7 @@ Door - 0x09D6F (Entry 1) - 0x09E57
 159420 - 0x289CF (Rock Line EP) - True - True
 159421 - 0x289D1 (Rock Line Reflection EP) - True - True
 
-Quarry Elevator (Quarry):
+Quarry Elevator (Quarry) - Outside Quarry - 0x17CC4 - Quarry - 0x17CC4:
 158120 - 0x17CC4 (Elevator Control) - 0x0367C - Dots & Eraser
 159403 - 0x17CB9 (Railroad EP) - 0x17CC4 - True
 
@@ -730,7 +730,7 @@ Door - 0x18482 (Blue Water Pump) - 0x00E3A
 159332 - 0x3365F (Boat EP) - 0x09DB8 - True
 159333 - 0x03731 (Long Bridge Side EP) - 0x17E2B - True
 
-Swamp Long Bridge (Swamp):
+Swamp Long Bridge (Swamp) - Swamp Near Boat - 0x17E2B - Outside Swamp - 0x17E2B:
 158339 - 0x17E2B (Long Bridge Control) - True - Rotated Shapers & Shapers
 
 Swamp Purple Area (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Purple Underwater - 0x0A1D6:

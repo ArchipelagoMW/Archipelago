@@ -1,16 +1,9 @@
 New Connections:
-Quarry Elevator - Outside Quarry - 0x17CC4
-Quarry Elevator - Quarry - 0x17CC4
 Quarry - Quarry Elevator - TrueOneWay
 Outside Quarry - Quarry Elevator - TrueOneWay
-
 Outside Bunker - Bunker Elevator - TrueOneWay
-
-Swamp Long Bridge - Outside Swamp - 0x17E2B
-Swamp Long Bridge - Swamp Near Boat - 0x17E2B
 Outside Swamp - Swamp Long Bridge - TrueOneWay
 Swamp Near Boat - Swamp Long Bridge - TrueOneWay
-
 Town Red Rooftop - Town Maze Rooftop - TrueOneWay
 
 
