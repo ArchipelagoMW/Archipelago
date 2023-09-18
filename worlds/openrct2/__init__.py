@@ -36,6 +36,13 @@ class OpenRCT2World(World):
     item_table = {}
     item_frequency = {}
     location_prices = {}
+    item_name_groups = {
+        "roller_coasters": item_info["roller_coasters"],
+        "transport_rides": item_info["transport_rides"],
+        "gentle_rides": item_info["gentle_rides"],
+        "thrill_rides": item_info["thrill_rides"],
+        "water_rides": item_info["water_rides"]
+    }
     
 
 
@@ -238,6 +245,17 @@ class OpenRCT2World(World):
                         chosen_prereq = random.choice(possible_prereqs)
                         add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
                          lambda state: state.has(chosen_prereq, self.player))
+                    else: #Prereq is not a specific ride
+                        category = "ride"
+                        category_selected = False
+                        while category_selected == False:
+                            category = random.choice(item_info["ride_types"])
+                            for ride in possible_prereqs:
+                                if ride in item_info[category]:
+                                    category_selected = True
+                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
+                         lambda state: state.has_group(category, self.player))
+
             if item in item_info["rides"]:
                 queued_prereqs.append(item)
             if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
@@ -298,5 +316,10 @@ class OpenRCT2World(World):
         #         region.connect(self.multiworld.get_region("OpenRCT2_Region_" + str(region_number + 8), self.player))
 
 
-    def create_item(self, name:str) -> OpenRCT2Item:
-        return OpenRCT2Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+    def create_item(self, item:str) -> OpenRCT2Item:
+        classification = ItemClassification.useful
+        if item in item_info["rides"] or item in item_info["progression_rules"]:
+            classification = ItemClassification.progression
+        if item in item_info["filler_items"]:
+            classification = ItemClassification.filler
+        return OpenRCT2Item(item, classification, self.item_name_to_id[item], self.player)

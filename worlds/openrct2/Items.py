@@ -1,5 +1,5 @@
 from BaseClasses import Item
-from typing import NamedTuple, Dict
+import typing
 import random
 from .Constants import *
 from .Options import *

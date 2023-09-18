@@ -115,12 +115,6 @@
         "Furry Convention Trap",
         "Spam Trap"
 	],
-	"useful_items": [
-		"Toilets",
-		"Merry Go Round",
-		"Food Stall",
-		"Drink Stall"
-	],
 	"park_rules": [
 		"Easier Guest Generation",
 		"Easier Park Rating",
@@ -129,6 +123,11 @@
 		"Allow Marketing Campaigns",
 		"Allow Tree Removal"
 	],
+    "progression_rules": [
+        "Allow High Construction",
+        "Allow Landscape Changes",
+        "ALlow Tree Removal"
+    ],
     "discounts": [
         "Land Discount",
         "Construction Rights Discount"
@@ -358,5 +357,12 @@
         "Ferris Wheel",
         "Haunted House",
         "Magic Carpet"
+    ],
+    "ride_types": [
+        "roller_coasters",
+        "transport_rides",
+        "gentle_rides",
+        "thrill_rides",
+        "water_rides"
     ]
 }
