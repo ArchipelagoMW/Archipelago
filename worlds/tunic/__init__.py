@@ -58,47 +58,54 @@ class TunicWorld(World):
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
+        keys_beind_bosses = self.multiworld.keys_behind_bosses[self.player].value
+        hexagon_quest = self.multiworld.hexagon_quest[self.player].value
+        sword_progression = self.multiworld.sword_progression[self.player].value
+
+        items: List[TunicItem] = []
+        self.slot_data_items = []
+
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
         for money_fool in fool_tiers[self.multiworld.fool_traps[self.player].value]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
 
-        if self.multiworld.hexagon_quest[self.player].value:
+        if sword_progression:
+            items_to_create["Stick"] = 0
+            items_to_create["Sword"] = 0
+        else:
+            items_to_create["Sword Upgrade"] = 0
 
-            # calculate number of hexagons in item pool
-            items_to_create[gold_hexagon] = int((Decimal(100 + self.multiworld.extra_hexagon_percentage[self.player].value) / 100 * self.multiworld.hexagon_goal[self.player].value).to_integral_value(rounding=ROUND_HALF_UP))
+        if keys_beind_bosses:
+            for rgb_hexagon, location in hexagon_locations.items():
+                hex_item = self.create_item(gold_hexagon if hexagon_quest else rgb_hexagon)
+                self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
+                self.slot_data_items.append(hex_item)
+                items_to_create[rgb_hexagon] = 0
+            items_to_create[gold_hexagon] -= 3
 
-            if self.multiworld.keys_behind_bosses[self.player].value:
-                for location in hexagon_locations.values():
-                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(gold_hexagon))
-                items_to_create[gold_hexagon] -= 3
+        if hexagon_quest:
+            # Calculate number of hexagons in item pool
+            hexagon_goal = self.multiworld.hexagon_goal[self.player].value
+            extra_hexagons = self.multiworld.extra_hexagon_percentage[self.player].value
+            items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
 
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
                 items_to_create[self.get_filler_item_name()] += items_to_create[replaced_item]
                 items_to_create[replaced_item] = 0
 
+            # Filler items that are still in the item pool to swap out
+            available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
+                                           item_table[filler].classification == ItemClassification.filler]
+
             # Remove filler to make room for extra hexagons
             for i in range(0, items_to_create[gold_hexagon]):
-                fill = self.get_filler_item_name()
-                while items_to_create[fill] == 0:
-                    fill = self.get_filler_item_name()
+                fill = self.random.choice(available_filler)
                 items_to_create[fill] -= 1
-        else:
-            if self.multiworld.keys_behind_bosses[self.player].value:
-                for hexagon, location in hexagon_locations.items():
-                    self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(hexagon))
-                    items_to_create[hexagon] = 0
-
-        if self.multiworld.sword_progression[self.player].value:
-            items_to_create["Stick"] = 0
-            items_to_create["Sword"] = 0
-        else:
-            items_to_create["Sword Upgrade"] = 0
-
-        items: List[TunicItem] = []
-        self.slot_data_items = []
+                if items_to_create[fill] == 0:
+                    available_filler.remove(fill)
 
         for item, quantity in items_to_create.items():
             for i in range(0, quantity):
