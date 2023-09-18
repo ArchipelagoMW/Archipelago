@@ -229,14 +229,22 @@ class OpenRCT2World(World):
             
 
         possible_prereqs = [self.starting_ride]
+        queued_prereqs = [] #Once we're finished with the given region, we'll add the queued prereqs to the possibles list
+        prereq_counter = 0
         for number, item in enumerate(logic_table):
             if number != 0: #We'll never have a prereq on the first item
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
-                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player),
-                         lambda state: state.has(random.choice(possible_prereqs), self.player))
+                        chosen_prereq = random.choice(possible_prereqs)
+                        add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
+                         lambda state: state.has(chosen_prereq, self.player))
             if item in item_info["rides"]:
-                possible_prereqs.append(item)
+                queued_prereqs.append(item)
+            if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
+                for prereq in queued_prereqs:
+                    possible_prereqs.append(prereq)
+                queued_prereqs.clear()
+            prereq_counter += 1
 
             # add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player),
             #  lambda state: state.has(self.starting_ride, self.player))
