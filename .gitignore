@@ -56,6 +56,7 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
+/unused YAMLS/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

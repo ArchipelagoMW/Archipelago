@@ -597,7 +597,7 @@ class HKWorld(World):
         world = self.multiworld
         for entry in world.plando_texts.values():
             for plando in entry:
-                self.plando_texts.append([plando["at"], plando["text"]])
+                self.plando_texts.append([plando["key"], plando["sheet"], plando["text"]])
 
 
 def create_region(world: MultiWorld, player: int, name: str, location_names=None) -> Region:
