@@ -26,7 +26,7 @@ class Goal(Choice):
     option_yharon_dragon_of_rebirth = 10
     option_zenith = 11
     option_calamity_final_bosses = 12
-    option_adult_eidolon_wyrm = 13
+    option_primordial_wyrm = 13
     option_boss_rush = 14
     default = 0
 
