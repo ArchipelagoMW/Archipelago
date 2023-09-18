@@ -57,6 +57,21 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int) -> bool
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
     return num_gym_leaders_defeated >= n
 
+def _encountered_n_legendaries(state: CollectionState, player: int, n: int) -> bool:
+    num_encounters = 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_GROUDON", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_KYOGRE", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_RAYQUAZA", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIAS", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGIROCK", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGICE", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGISTEEL", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_MEW", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_DEOXYS", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_HO_OH", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LUGIA", player) else 0
+    return num_encounters >= n
+
 
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
@@ -64,17 +79,43 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     can_cut = lambda state: _can_cut(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
+    can_flash = lambda state: _can_flash(state, player)
     can_rock_smash = lambda state: _can_rock_smash(state, player)
     can_waterfall = lambda state: _can_waterfall(state, player)
     can_dive = lambda state: _can_dive(state, player)
 
-    victory_event_name = "EVENT_DEFEAT_CHAMPION"
-    if multiworld.goal[player] == Goal.option_steven:
-        victory_event_name = "EVENT_DEFEAT_STEVEN"
+    if multiworld.goal[player] == Goal.option_champion:
+        multiworld.completion_condition[player] = lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    elif multiworld.goal[player] == Goal.option_steven:
+        multiworld.completion_condition[player] = lambda state: state.has("EVENT_DEFEAT_STEVEN", player)
     elif multiworld.goal[player] == Goal.option_norman:
-        victory_event_name = "EVENT_DEFEAT_NORMAN"
+        multiworld.completion_condition[player] = lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
+    elif multiworld.goal[player] == Goal.option_legendary_hunt:
+        multiworld.completion_condition[player] = lambda state: _encountered_n_legendaries(state, player, multiworld.legendary_hunt_count[player])
 
-    multiworld.completion_condition[player] = lambda state: state.has(victory_event_name, player)
+    if multiworld.legendary_hunt_catch[player]:
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_GROUDON", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_KYOGRE", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_RAYQUAZA", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_LATIAS", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_REGIROCK", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_REGICE", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_REGISTEEL", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_MEW", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_DEOXYS", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_HO_OH", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
+        set_rule(multiworld.get_location("EVENT_ENCOUNTER_LUGIA", player),
+                 lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
 
     # Sky
     if multiworld.fly_without_badge[player]:
@@ -320,6 +361,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         lambda state: can_dive(state) and state.has("EVENT_DEFEAT_CHAMPION", player) and \
                       state.has("MARINE_CAVE_ROUTE_105_2", player) and state.has("EVENT_DEFEAT_SHELLY", player)
     )
+    set_rule(
+        multiworld.get_entrance("MAP_ROUTE105:0/MAP_ISLAND_CAVE:0", player),
+        lambda state: state.has("EVENT_UNDO_REGI_SEAL", player)
+    )
 
     # Route 106
     set_rule(
@@ -497,6 +542,14 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("MAP_ROUTE111:4/MAP_TRAINER_HILL_ENTRANCE:0", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ROUTE111:1/MAP_DESERT_RUINS:0", player),
+        lambda state: state.has("EVENT_UNDO_REGI_SEAL", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_DESERT_RUINS:0/MAP_ROUTE111:1", player),
+        can_rock_smash
     )
 
     # Route 112
@@ -741,6 +794,14 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("REGION_ROUTE120/SOUTH_ALCOVE -> REGION_ROUTE120/SOUTH", player),
         can_cut
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0", player),
+        lambda state: state.has("EVENT_UNDO_REGI_SEAL", player)
+    )
+    set_rule(
+        multiworld.get_entrance("MAP_ANCIENT_TOMB:1/MAP_ANCIENT_TOMB:2", player),
+        can_flash
     )
 
     # Route 121

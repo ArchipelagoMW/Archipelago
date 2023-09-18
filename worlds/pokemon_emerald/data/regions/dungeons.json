@@ -2045,7 +2045,8 @@
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN"
+      "REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN",
+      "REGION_ROUTE134/MAIN"
     ],
     "warps": [
       "MAP_UNDERWATER_SEALED_CHAMBER:0/MAP_UNDERWATER_ROUTE134:0"
@@ -2056,7 +2057,17 @@
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_UNDERWATER_SEALED_CHAMBER/MAIN"
+      "REGION_UNDERWATER_SEALED_CHAMBER/MAIN",
+      "REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL"
+    ],
+    "warps": []
+  },
+  "REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL": {
+    "parent_map": "MAP_SEALED_CHAMBER_OUTER_ROOM",
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN"
     ],
     "warps": [
       "MAP_SEALED_CHAMBER_OUTER_ROOM:0/MAP_SEALED_CHAMBER_INNER_ROOM:0"
@@ -2065,7 +2076,9 @@
   "REGION_SEALED_CHAMBER_INNER_ROOM/MAIN": {
     "parent_map": "MAP_SEALED_CHAMBER_INNER_ROOM",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_UNDO_REGI_SEAL"
+    ],
     "exits": [],
     "warps": [
       "MAP_SEALED_CHAMBER_INNER_ROOM:0/MAP_SEALED_CHAMBER_OUTER_ROOM:0"

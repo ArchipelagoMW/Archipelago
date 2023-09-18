@@ -15,12 +15,14 @@ class Goal(Choice):
     Champion: Become the champion and enter the hall of fame
     Steven: Defeat Steven in Meteor Falls
     Norman: Defeat Norman in Petalburg Gym
+    Legendary Hunt: Defeat or catch legendary pokemon (or whatever was randomized into their encounters)
     """
     display_name = "Goal"
     default = 0
     option_champion = 0
     option_steven = 1
     option_norman = 2
+    option_legendary_hunt = 3
 
 
 class RandomizeBadges(Choice):
@@ -177,6 +179,23 @@ class NormanCount(Range):
     range_start = 0
     range_end = 7
     default = 4
+
+
+class LegendaryHuntCatch(Toggle):
+    """
+    Sets whether legendaries need to be caught to satisfy the Legendary Hunt win condition. Defeated legendaries can be respawned by defeating the Elite 4.
+    """
+    display_name = "Legendary Hunt Requires Catching"
+
+
+class LegendaryHuntCount(Range):
+    """
+    Sets the number of legendaries that must be caught/defeated for the Legendary Hunt goal
+    """
+    display_name = "Legendary Hunt Count"
+    range_start = 1
+    range_end = 11
+    default = 3
 
 
 class RandomizeWildPokemon(Choice):
@@ -631,6 +650,8 @@ option_definitions: Dict[str, Option] = {
     "elite_four_count": EliteFourCount,
     "norman_requirement": NormanRequirement,
     "norman_count": NormanCount,
+    "legendary_hunt_catch": LegendaryHuntCatch,
+    "legendary_hunt_count": LegendaryHuntCount,
 
     "wild_pokemon": RandomizeWildPokemon,
     "allow_wild_legendaries": AllowWildLegendaries,
