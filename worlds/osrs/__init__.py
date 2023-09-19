@@ -132,7 +132,7 @@ class OSRSWorld(World):
         self.roll_locations()
 
     def generate_special_rules_for(self, entrance, region_row, outbound_region_name):
-        print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
+        # print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
         if outbound_region_name == "Cook's Guild":
             item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
             entrance.access_rule = lambda state: state.has(item_name, self.player) and\
@@ -152,10 +152,10 @@ class OSRSWorld(World):
         if outbound_region_name == "Camdozaal*":
             item_name = self.region_rows_by_name[outbound_region_name.replace('*', '')].itemReq
             entrance.access_rule = lambda state:  state.has(item_name, self.player) and\
-                self.multiworld.get_location(LocationNames.Q_Below_Ice_Mountain, self.player).can_reach(state)
+                state.has(ItemNames.QP_Below_Ice_Mountain, self.player)
             return
         if region_row.name == "Dwarven Mountain Pass" and outbound_region_name == "Anvil*":
-            entrance.access_rule = lambda state: self.multiworld.get_location(LocationNames.Q_Dorics_Quest, self.player).can_reach(state)
+            entrance.access_rule = lambda state: state.has(ItemNames.QP_Dorics_Quest, self.player)
             return
 
         print(f"Special rules required to access region {outbound_region_name} from {region_row.name}")
@@ -165,7 +165,7 @@ class OSRSWorld(World):
         for item_row in self.item_rows:
             locations_required += item_row.count
 
-        locations_added = 0
+        locations_added = 1 # At this point we've already added the starting area, so we start at 1 instead of 0
 
         # Quests are always added
         for i in range(len(self.location_rows)):
@@ -317,14 +317,14 @@ class OSRSWorld(World):
 
     def create_items(self) -> None:
         for item_row in self.item_rows:
-            if item_row.name is not self.starting_area_item:
+            if item_row.name != self.starting_area_item:
                 for c in range(item_row.count):
                     item = self.create_item(item_row.name)
                     self.multiworld.itempool.append(item)
 
     def create_and_add_location(self, row_index) -> None:
         location_row = self.location_rows[row_index]
-        print(f"Adding task {location_row.name}")
+        # print(f"Adding task {location_row.name}")
 
         # Create Location
         id = self.base_id + row_index
@@ -498,7 +498,7 @@ class OSRSWorld(World):
     """
 
     def can_reach_skill(self, state, skill, level):
-        if skill == "fishing":
+        if skill == "Fishing":
             can_train = state.can_reach(RegionNames.Shrimp, None, self.player)
             if not self.allow_brutal_grinds:
                 fishing_shop = state.can_reach(RegionNames.Port_Sarim, None, self.player)
@@ -507,7 +507,7 @@ class OSRSWorld(World):
                 if level >= 20:
                     can_train = can_train and state.can_reach(RegionNames.Fly_Fish, None, self.player)
             return can_train
-        if skill == "mining":
+        if skill == "Mining":
             can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) or state.can_reach(
                 RegionNames.Clay_Rock, None, self.player)
             if not self.allow_brutal_grinds:
@@ -515,7 +515,7 @@ class OSRSWorld(World):
                 if level >= 15:
                     can_train = can_train and state.can_reach(RegionNames.Iron_Rock, None, self.player)
             return can_train
-        if skill == "woodcutting":
+        if skill == "Woodcutting":
             # Trees are literally everywhere and you start with an axe
             if self.allow_brutal_grinds:
                 return True
@@ -526,7 +526,7 @@ class OSRSWorld(World):
                 if level >= 30:
                     can_train = can_train and state.can_reach(RegionNames.Willow_Tree, None, self.player)
                 return can_train
-        if skill == "smithing":
+        if skill == "Smithing":
             can_train = state.can_reach(RegionNames.Bronze_Ores, None, self.player) and state.can_reach(
                 RegionNames.Furnace, None, self.player)
             if not self.allow_brutal_grinds:
@@ -543,7 +543,7 @@ class OSRSWorld(World):
                     # We already know we can reach anvils and iron rocks from before. Just add coal for steel
                     can_train = can_train and state.can_reach(RegionNames.Coal_Rock, None, self.player)
             return can_train
-        if skill == "crafting":
+        if skill == "Crafting":
             # There are many ways to start training
             can_spin = state.can_reach(RegionNames.Sheep, None, self.player) and state.can_reach(
                 RegionNames.Spinning_Wheel, None, self.player)
@@ -569,7 +569,7 @@ class OSRSWorld(World):
                 if level > 16:
                     can_train = can_tan or can_gold or can_silver
             return can_train
-        if skill == "cooking":
+        if skill == "Cooking":
             # Meat and Chicken can be found with milk and eggs.
             can_bread = state.can_reach(RegionNames.Wheat, None, self.player) and state.can_reach(
                 RegionNames.Windmill, None, self.player)
@@ -582,6 +582,10 @@ class OSRSWorld(World):
                                                               self.player) and self.can_reach_skill(state,
                                                                                                     "fishing", 20)
             return can_train
+        if skill == "Runecraft":
+            return state.has(ItemNames.QP_Rune_Mysteries, self.player)
+        if skill == "Magic":
+            return state.can_reach(RegionNames.Mind_Runes, None, self.player)
         # If it's not listed here, it can be trained just fine without needing locations
         # print(f"Attempting to check for reaching level {level} in {skill} which does not have rules set so it's fine")
         return True

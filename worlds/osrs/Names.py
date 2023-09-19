@@ -37,7 +37,7 @@ class RegionNames:
     Windmill = "Windmill"
     Spinning_Wheel = "Spinning Wheel"
     Imp = "Imp"
-    Bronze_Ores = "Tin and Copper"
+    Bronze_Ores = "Bronze Ores"
     Clay_Rock = "Clay Ore"
     Coal_Rock = "Coal Ore"
     Iron_Rock = "Iron Ore"
@@ -50,6 +50,7 @@ class RegionNames:
     Shrimp = "Shrimp Spot"
     Fly_Fish = "Fly Fishing Spot"
     Lobster = "Lobster Spot"
+    Mind_Runes = "Mind Runes"
 
 
 class ItemNames:
