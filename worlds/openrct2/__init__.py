@@ -35,7 +35,7 @@ class OpenRCT2World(World):
     starting_ride = None
     item_table = {}
     item_frequency = {}
-    location_prices = {}
+    location_prices = []#This list is passed to OpenRCT2 to create the unlock shop
     item_name_groups = {
         "roller_coasters": item_info["roller_coasters"],
         "transport_rides": item_info["transport_rides"],
@@ -207,6 +207,9 @@ class OpenRCT2World(World):
         difficulty_modifier = 0
         difficulty_minimum = 0
         difficulty_maximum = 0
+        minimum_price = 500
+        maximum_price = 500
+
 
         if difficulty == 0: #very_easy
             difficulty_modifier = 0
@@ -227,24 +230,46 @@ class OpenRCT2World(World):
 
         if length == 0: #speedrun
             length_modifier = .2
+            maximum_price = 25000
         if length == 1: #normal
             length_modifier = .4
+            maximum_price = 50000
         if length == 2: #lengthy
             length_modifier = .6
+            maximum_price = 75000
         if length == 3: #marathon
             length_modifier = .9
+            maximum_price = 100000
             
 
         possible_prereqs = [self.starting_ride]
         queued_prereqs = [] #Once we're finished with the given region, we'll add the queued prereqs to the possibles list
         prereq_counter = 0
         for number, item in enumerate(logic_table):
+            unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
+            if random.random() < 0.95 or number == 0: #95 perecnt of locations will have a cash price
+                unlock["Price"] = int(((maximum_price - minimum_price) * (number / len(logic_table))) + minimum_price)
+                # print(unlock["Price"])
+            else:# Everything else will cost lives. The Elder Gods will be pleased
+                unlock["Lives"] = random.randint(50,1000)
+                print(unlock["Lives"])
             if number != 0: #We'll never have a prereq on the first item
                 if random.random() < length_modifier: #Determines if we have a prereq
                     if random.random() < difficulty_modifier: #Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
                         add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
                          lambda state: state.has(chosen_prereq, self.player))
+                        if chosen_prereq in item_info["roller_coasters"]:
+                            excitement = 0
+                            intensity = 0
+                            nausea = 0
+                            #3 coin flips to determine what, if any, stat prereqs will be used
+                            if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            unlock["RidePrereq"] = [random.randint(1,5),chosen_prereq,excitement,intensity,nausea,0]
+                        else:
+                            unlock["RidePrereq"] = [random.randint(1,7),chosen_prereq,0,0,0,0]
                     else: #Prereq is not a specific ride
                         category = "ride"
                         category_selected = False
@@ -255,7 +280,20 @@ class OpenRCT2World(World):
                                     category_selected = True
                         add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
                          lambda state: state.has_group(category, self.player))
-
+                        if category == "roller_coasters":
+                            excitement = 0
+                            intensity = 0
+                            nausea = 0
+                            #3 coin flips to determine what, if any, stat prereqs will be used
+                            if random.random() < .5: excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5: nausea = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            unlock["RidePrereq"] = [random.randint(1,7),category,excitement,intensity,nausea,0]
+                        else:
+                            unlock["RidePrereq"] = [random.randint(1,10),category,0,0,0,0]
+            #Add the shop item to the shop prices
+            self.location_prices.append(unlock)
+            #Handle unlocked rides
             if item in item_info["rides"]:
                 queued_prereqs.append(item)
             if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
@@ -263,57 +301,9 @@ class OpenRCT2World(World):
                     possible_prereqs.append(prereq)
                 queued_prereqs.clear()
             prereq_counter += 1
+        print("OpenRCT2 will make the shop will the following:")
+        print(self.location_prices)
 
-            # add_rule(self.multiworld.get_location("OpenRCT2_" + str(number), self.player),
-            #  lambda state: state.has(self.starting_ride, self.player))
-
-
-    
-        ##All this is on the chopping block
-        # t = Region("No Prereqs", self.player, self.multiworld)
-        # # Add unlocks that are just prices traced back to location 0. Anything with a ride requirement or after an item with a ride requirement won't appear here
-        # NoPrereqs = []
-        # for index, item in enumerate(openRCT2_items):
-        # #if self.Options["difficulty"] == 0:
-        #     NoPrereqs.append(OpenRCT2Location(self.player,"OpenRCT2_" + str(index),self.location_name_to_id["OpenRCT2_" + str(index)],t))
-        
-        # print("Region.locations: " + str(region))
-        # print(region.locations[0].address)
-
-        # t.locations = NoPrereqs
-        # self.multiworld.regions.append(t)
-
-        # If entrances are not randomized, they should be connected here, otherwise
-        # they can also be connected at a later stage.
-        # self.multiworld.get_entrance("New Game", self.player).connect(self.multiworld.get_region("Unlock Shop", self.player))
-        # self.multiworld.get_entrance("No Prereqs", self.player).connect(self.multiworld.get_region("No Prereqs", self.player))
-        #self.multiworld.get_entrance("Category ", self.player).connect(self.multiworld.get_region("No Prereqs", self.player))
-
-        # for region_number, item in enumerate(logic_table):
-        #     region = self.multiworld.get_region("OpenRCT2_Region_" + str(region_number), self.player)
-        #     if region_number == 0:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_1", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_2", self.player))
-        #     elif region_number == 1:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_3", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_4", self.player))
-        #     elif region_number == 2:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_5", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_6", self.player))
-        #     elif region_number == 3:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_7", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_8", self.player))
-        #     elif region_number == 4:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_9", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_10", self.player))
-        #     elif region_number == 5:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_11", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_12", self.player))
-        #     elif region_number == 6:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_13", self.player))
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_14", self.player))
-        #     elif region_number < len(logic_table) - 8:
-        #         region.connect(self.multiworld.get_region("OpenRCT2_Region_" + str(region_number + 8), self.player))
 
 
     def create_item(self, item:str) -> OpenRCT2Item:
