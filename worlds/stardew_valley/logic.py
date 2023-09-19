@@ -9,7 +9,7 @@ from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
 from .data.bundle_data import BundleItem
 from .data.crops_data import crops_by_name
 from .data.fish_data import island_fish
-from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items, dwarf_scrolls
+from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, dwarf_scrolls, all_museum_minerals
 from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, FriendshipSource, QueenOfSauceSource, \
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
@@ -475,8 +475,8 @@ class StardewLogic:
             FestivalCheck.mermaid_pearl: self.has_season(Season.winter) & self.can_reach_region(Region.beach),
             FestivalCheck.cone_hat: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(2500),
             FestivalCheck.iridium_fireplace: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(15000),
-            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
+            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_donate_museum_items(40),
             FestivalCheck.lupini_red_eagle: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_portrait_mermaid: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
             FestivalCheck.lupini_solar_kingdom: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
@@ -492,35 +492,39 @@ class StardewLogic:
         })
 
         self.special_order_rules.update({
-            SpecialOrder.island_ingredients: self.has_island_transport() & self.can_farm_perfectly() &
-                                  self.has(Vegetable.taro_root) & self.has(Fruit.pineapple) & self.has(Forageable.ginger),
-            SpecialOrder.cave_patrol: self.can_mine_perfectly() & self.can_mine_to_floor(120),
-            SpecialOrder.aquatic_overpopulation: self.can_fish_perfectly(),
-            SpecialOrder.biome_balance: self.can_fish_perfectly(),
-            SpecialOrder.rock_rejuivenation: self.has(Mineral.ruby) & self.has(Mineral.topaz) & self.has(Mineral.emerald) &
-                                 self.has(Mineral.jade) & self.has(Mineral.amethyst) & self.has_relationship(NPC.emily, 4) &
-                                 self.has(ArtisanGood.cloth) & self.can_reach_region(Region.haley_house),
-            SpecialOrder.gifts_for_george: self.has_season(Season.spring) & self.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.dig_site),
-            SpecialOrder.gus_famous_omelet: self.has(AnimalProduct.any_egg),
-            SpecialOrder.crop_order: self.can_farm_perfectly(),
-            SpecialOrder.community_cleanup: self.can_crab_pot(),
-            SpecialOrder.the_strong_stuff: self.can_keg(Vegetable.potato),
-            SpecialOrder.pierres_prime_produce: self.can_farm_perfectly(),
-            SpecialOrder.robins_project: self.can_chop_perfectly() & self.has(Material.hardwood),
-            SpecialOrder.robins_resource_rush: self.can_chop_perfectly() & self.has(Fertilizer.tree) & self.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted_yum: self.has(Loot.bug_meat),
-            SpecialOrder.tropical_fish: self.has_island_transport() & self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
-            SpecialOrder.a_curious_substance: self.can_mine_perfectly() & self.can_mine_to_floor(80),
-            SpecialOrder.prismatic_jelly: self.can_mine_perfectly() & self.can_mine_to_floor(40),
+            SpecialOrder.island_ingredients: self.can_meet(NPC.caroline) & self.has_island_transport() & self.can_farm_perfectly() &
+                                             self.can_ship(Vegetable.taro_root) & self.can_ship(Fruit.pineapple) & self.can_ship(Forageable.ginger),
+            SpecialOrder.cave_patrol: self.can_meet(NPC.clint) & self.can_mine_perfectly() & self.can_mine_to_floor(120),
+            SpecialOrder.aquatic_overpopulation: self.can_meet(NPC.demetrius) & self.can_fish_perfectly(),
+            SpecialOrder.biome_balance: self.can_meet(NPC.demetrius) & self.can_fish_perfectly(),
+            SpecialOrder.rock_rejuivenation: self.has_relationship(NPC.emily, 4) & self.has(Mineral.ruby) & self.has(Mineral.topaz) &
+                                             self.has(Mineral.emerald) & self.has(Mineral.jade) & self.has(Mineral.amethyst) &
+                                             self.has(ArtisanGood.cloth) & self.can_reach_region(Region.haley_house),
+            SpecialOrder.gifts_for_george: self.can_reach_region(Region.alex_house) & self.has_season(Season.spring) & self.has(Forageable.leek),
+            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.museum) & self.can_reach_region(Region.dig_site) & self.has_tool(Tool.pickaxe),
+            SpecialOrder.gus_famous_omelet: self.can_reach_region(Region.saloon) & self.has(AnimalProduct.any_egg),
+            SpecialOrder.crop_order: self.can_farm_perfectly() & self.can_ship(),
+            SpecialOrder.community_cleanup: self.can_reach_region(Region.railroad) & self.can_crab_pot(),
+            SpecialOrder.the_strong_stuff: self.can_reach_region(Region.trailer) & self.can_keg(Vegetable.potato),
+            SpecialOrder.pierres_prime_produce: self.can_reach_region(Region.pierre_store) & self.can_farm_perfectly(),
+            SpecialOrder.robins_project: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) & self.can_chop_perfectly() &
+                                         self.has(Material.hardwood),
+            SpecialOrder.robins_resource_rush: self.can_meet(NPC.robin) & self.can_reach_region(Region.carpenter) & self.can_chop_perfectly() &
+                                               self.has(Fertilizer.tree) & self.can_mine_perfectly(),
+            SpecialOrder.juicy_bugs_wanted_yum: self.can_reach_region(Region.beach) & self.has(Loot.bug_meat),
+            SpecialOrder.tropical_fish: self.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
+                                        self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
+            SpecialOrder.a_curious_substance: self.can_reach_region(Region.wizard_tower) & self.can_mine_perfectly() & self.can_mine_to_floor(80),
+            SpecialOrder.prismatic_jelly: self.can_reach_region(Region.wizard_tower) & self.can_mine_perfectly() & self.can_mine_to_floor(40),
             SpecialOrder.qis_crop: self.can_farm_perfectly() & self.can_reach_region(Region.greenhouse) &
                          self.can_reach_region(Region.island_west) & self.has_total_skill_level(50) &
-                         self.has(Machine.seed_maker),
+                         self.has(Machine.seed_maker) & self.has_building(Building.shipping_bin),
             SpecialOrder.lets_play_a_game: self.has_junimo_kart_max_level(),
             SpecialOrder.four_precious_stones: self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Shard") &
                                     self.can_mine_perfectly_in_the_skull_cavern(),
             SpecialOrder.qis_hungry_challenge: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            SpecialOrder.qis_cuisine: self.can_cook() & (self.can_spend_money_at(Region.saloon, 205000) | self.can_spend_money_at(Region.pierre_store, 170000)),
+            SpecialOrder.qis_cuisine: self.can_cook() & (self.can_spend_money_at(Region.saloon, 205000) | self.can_spend_money_at(Region.pierre_store, 170000)) &
+                                      self.can_ship(),
             SpecialOrder.qis_kindness: self.can_give_loved_gifts_to_everyone(),
             SpecialOrder.extended_family: self.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &
                                self.has(Fish.crimsonfish) & self.has(Fish.mutant_carp) & self.has(Fish.legend),
@@ -1039,11 +1043,12 @@ class StardewLogic:
     def has_relationship(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
             return True_()
-        if self.options[options.Friendsanity] == options.Friendsanity.option_none:
+        friendsanity = self.options[options.Friendsanity]
+        if friendsanity == options.Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
             if npc == NPC.pet:
-                if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
+                if friendsanity == options.Friendsanity.option_bachelors:
                     return self.can_befriend_pet(hearts)
                 return self.received_hearts(NPC.pet, hearts)
             if npc == Generic.any or npc == Generic.bachelor:
@@ -1073,12 +1078,12 @@ class StardewLogic:
         if not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
-        if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors and not villager.bachelor:
+        if friendsanity == options.Friendsanity.option_bachelors and not villager.bachelor:
             return self.can_earn_relationship(npc, hearts)
-        if self.options[options.Friendsanity] == options.Friendsanity.option_starting_npcs and not villager.available:
+        if friendsanity == options.Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        if self.options[
-            options.Friendsanity] != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
+        is_capped_at_8 = villager.bachelor and friendsanity != options.Friendsanity.option_all_with_marriage
+        if is_capped_at_8 and hearts > 8:
             return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager, hearts)
 
@@ -1095,6 +1100,8 @@ class StardewLogic:
         rules = [self.can_reach_any_region(villager.locations)]
         if npc == NPC.kent:
             rules.append(self.has_year_two())
+        elif npc == NPC.leo:
+            rules.append(self.received("Island West Turtle"))
 
         return And(rules)
 
@@ -1130,10 +1137,21 @@ class StardewLogic:
             rule_if_birthday = self.has_season(villager.birthday) & self.has_any_universal_love() & self.has_lived_months(hearts // 2)
             rule_if_not_birthday = self.has_lived_months(hearts)
             earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
+            if villager.bachelor:
+                if hearts > 8:
+                    earn_rule = earn_rule & self.can_date(npc)
+                if hearts > 10:
+                    earn_rule = earn_rule & self.can_marry(npc)
         else:
             earn_rule = self.has_lived_months(min(hearts // 2, 8))
 
         return previous_heart_rule & earn_rule
+
+    def can_date(self, npc: str) -> StardewRule:
+        return self.has_relationship(npc, 8) & self.has(Gift.bouquet)
+
+    def can_marry(self, npc: str) -> StardewRule:
+        return self.has_relationship(npc, 10) & self.has(Gift.mermaid_pendant)
 
     def can_befriend_pet(self, hearts: int):
         if hearts <= 0:
@@ -1148,14 +1166,15 @@ class StardewLogic:
     def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
         highest_quality_yet = 0
+        can_speak_junimo = self.can_reach_region(Region.wizard_tower)
         for bundle_item in bundle_requirements:
             if bundle_item.item.item_id == -1:
-                return self.can_spend_money(bundle_item.amount)
+                return can_speak_junimo & self.can_spend_money(bundle_item.amount)
             else:
                 item_rules.append(bundle_item.item.name)
                 if bundle_item.quality > highest_quality_yet:
                     highest_quality_yet = bundle_item.quality
-        return self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
+        return can_speak_junimo & self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
 
     def can_grow_gold_quality(self, quality: int) -> StardewRule:
         if quality <= 0:
@@ -1213,7 +1232,7 @@ class StardewLogic:
                                self.can_have_earned_total_money(1000000),  # 1 000 000g second point
                                self.has_total_skill_level(30),  # Total Skills: 30
                                self.has_total_skill_level(50),  # Total Skills: 50
-                               # Completing the museum not expected
+                               self.can_complete_museum(),  # Completing the museum for a point
                                # Catching every fish not expected
                                # Shipping every item not expected
                                self.can_get_married() & self.has_house(2),
@@ -1224,7 +1243,7 @@ class StardewLogic:
                                self.can_complete_community_center(),  # CC Ceremony first point
                                self.can_complete_community_center(),  # CC Ceremony second point
                                self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.has_rusty_key(),  # Rusty key not expected
+                               self.has_rusty_key(),  # Rusty key obtained
                                ]
         return Count(12, rules_worth_a_point)
 
@@ -1266,8 +1285,20 @@ class StardewLogic:
 
     def can_speak_dwarf(self) -> StardewRule:
         if self.options[options.Museumsanity] == options.Museumsanity.option_none:
-            return self.has([item.name for item in dwarf_scrolls])
+            return And([self.can_donate_museum_item(item) for item in dwarf_scrolls])
         return self.received("Dwarvish Translation Guide")
+
+    def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_item(item)
+
+    def can_donate_museum_items(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_items(number)
+
+    def can_donate_museum_artifacts(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_artifacts(number)
+
+    def can_donate_museum_minerals(self, number: int) -> StardewRule:
+        return self.can_reach_region(Region.museum) & self.can_find_museum_minerals(number)
 
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         region_rule = self.can_reach_all_regions_except_one(item.locations)
@@ -1281,9 +1312,15 @@ class StardewLogic:
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
         rules = []
-        for donation in all_museum_items:
-            if donation in all_artifact_items:
-                rules.append(self.can_find_museum_item(donation))
+        for artifact in all_museum_artifacts:
+            rules.append(self.can_find_museum_item(artifact))
+
+        return Count(number, rules)
+
+    def can_find_museum_minerals(self, number: int) -> StardewRule:
+        rules = []
+        for mineral in all_museum_minerals:
+            rules.append(self.can_find_museum_item(mineral))
 
         return Count(number, rules)
 
@@ -1295,7 +1332,7 @@ class StardewLogic:
         return Count(number, rules)
 
     def can_complete_museum(self) -> StardewRule:
-        rules = [self.can_mine_perfectly()]
+        rules = [self.can_reach_region(Region.museum), self.can_mine_perfectly()]
 
         if self.options[options.Museumsanity] != options.Museumsanity.option_none:
             rules.append(self.received("Traveling Merchant Metal Detector", 4))
@@ -1584,4 +1621,10 @@ class StardewLogic:
         for rarecrow_number in range(1, 9):
             rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
         return And(rules)
+
+    def can_ship(self, item: str = "") -> StardewRule:
+        shipping_bin_rule = self.has_building(Building.shipping_bin)
+        if item == "":
+            return shipping_bin_rule
+        return shipping_bin_rule & self.has(item)
 
