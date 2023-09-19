@@ -424,6 +424,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_ROCK_SMASH"] * 12) + 4, 1, 1)
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_WATERFALL"] * 12) + 4, 1, 1)
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
 
     # Set match trainer levels multiplier
     match_trainer_levels_multiplier = min(max(multiworld.match_trainer_levels_multiplier[player].value, 0), 2**16 - 1)
@@ -648,6 +649,9 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
 
 def _randomize_move_tutor_moves(multiworld: MultiWorld, player: int, rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for i in range(30):
+        if i == 24:
+            continue  # Don't overwrite the Dig tutor
+
         if easter_egg[0] == 2:
             _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
         else:

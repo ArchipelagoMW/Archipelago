@@ -1792,7 +1792,9 @@
     "locations": [
       "NPC_GIFT_RECEIVED_TM_HIDDEN_POWER"
     ],
-    "events": [],
+    "events": [
+      "EVENT_MOVE_TUTOR_DIG"
+    ],
     "exits": [],
     "warps": [
       "MAP_FORTREE_CITY_HOUSE2:0,1/MAP_FORTREE_CITY:4"
