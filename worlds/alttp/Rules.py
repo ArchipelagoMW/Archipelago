@@ -239,15 +239,15 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Agahnim 1', player),
              lambda state: has_sword(state, player) and state._lttp_has_key('Small Key (Agahnims Tower)', player, 4))
 
-    set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: can_kill_most_things(state, player, 4))
+    set_rule(world.get_location('Castle Tower - Room 03', player), lambda state: can_kill_most_things(state, player, 8))
     set_rule(world.get_location('Castle Tower - Dark Maze', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
+             lambda state: can_kill_most_things(state, player, 8) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player))
     set_rule(world.get_location('Castle Tower - Dark Archer Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
+             lambda state: can_kill_most_things(state, player, 8) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player, 2))
     set_rule(world.get_location('Castle Tower - Circle of Pots Key Drop', player),
-             lambda state: can_kill_most_things(state, player, 4) and state._lttp_has_key('Small Key (Agahnims Tower)',
+             lambda state: can_kill_most_things(state, player, 8) and state._lttp_has_key('Small Key (Agahnims Tower)',
                                                                                    player, 3))
     set_always_allow(world.get_location('Eastern Palace - Big Key Chest', player),
                      lambda state, item: item.name == 'Big Key (Eastern Palace)' and item.player == player)
