@@ -89,6 +89,10 @@ class PokemonEmeraldWorld(World):
     free_fly_location_id: int = 0
     modified_data: PokemonEmeraldData
 
+    def __init__(self, multiworld, player):
+        super(PokemonEmeraldWorld, self).__init__(multiworld, player)
+        self.modified_data = copy.deepcopy(emerald_data)
+
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         if not os.path.exists(cls.settings.rom_file):
@@ -268,7 +272,77 @@ class PokemonEmeraldWorld(World):
             add_flash_rules(self.multiworld, self.player)
 
     def generate_basic(self) -> None:
-        locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
+        # Randomize wild encounters
+        if self.multiworld.wild_pokemon[self.player] != RandomizeWildPokemon.option_vanilla:
+            should_match_bst = self.multiworld.wild_pokemon[self.player] in {
+                RandomizeWildPokemon.option_match_base_stats,
+                RandomizeWildPokemon.option_match_base_stats_and_type
+            }
+            should_match_type = self.multiworld.wild_pokemon[self.player] in {
+                RandomizeWildPokemon.option_match_type,
+                RandomizeWildPokemon.option_match_base_stats_and_type
+            }
+            should_allow_legendaries = self.multiworld.allow_wild_legendaries[self.player].value == Toggle.option_true
+
+            placed_wailmer = False
+            placed_relicanth = False
+
+            for map_data in self.modified_data.maps.values():
+                new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
+                old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
+
+                for i, table in enumerate(old_encounters):
+                    if table is not None:
+                        species_old_to_new_map: Dict[int, int] = {}
+                        for species_id in table.slots:
+                            if species_id not in species_old_to_new_map:
+                                original_species = emerald_data.species[species_id]
+                                target_bst = sum(original_species.base_stats) if should_match_bst else None
+                                target_type = self.random.choice(original_species.types) if should_match_type else None
+
+                                species_old_to_new_map[species_id] = get_random_species(
+                                    self.random,
+                                    self.modified_data.species,
+                                    target_bst,
+                                    target_type,
+                                    should_allow_legendaries
+                                ).species_id
+
+                        new_slots: List[int] = []
+                        for species_id in table.slots:
+                            new_slots.append(species_old_to_new_map[species_id])
+
+                        new_encounters[i] = EncounterTableData(new_slots, table.address)
+
+                        for j, new_species_id in enumerate(species_old_to_new_map.values()):
+                            slot_type = ["LAND", "WATER", "FISHING"][i]
+                            try:
+                                slot_location = self.multiworld.get_location(f"{map_data.name}_{slot_type}_ENCOUNTERS_{j + 1}", self.player)
+                                slot_location.item.name = f"CATCH_SPECIES_{new_species_id}"
+
+                                if new_species_id == 313:
+                                    placed_wailmer = True
+                                elif new_species_id == 381:
+                                    placed_relicanth = True
+                            except KeyError:
+                                pass
+
+                map_data.land_encounters = new_encounters[0]
+                map_data.water_encounters = new_encounters[1]
+                map_data.fishing_encounters = new_encounters[2]
+
+            # If we somehow didn't place any Wailmer or Relicanth, force them into some easy to access places.
+            # These species are required for access to the Sealed Chamber
+            if not placed_wailmer:
+                self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
+                    [313] * 12,
+                    self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters.address
+                )
+            if not placed_relicanth:
+                self.modified_data.maps["MAP_PETALBURG_CITY"].water_encounters = EncounterTableData(
+                    [381] * 5,
+                    self.modified_data.maps["MAP_PETALBURG_CITY"].water_encounters.address
+                )
 
         # Set our free fly location
         # If not enabled, set it to Littleroot Town by default
@@ -327,7 +401,7 @@ class PokemonEmeraldWorld(World):
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
         def convert_unrandomized_items_to_events(tag: str) -> None:
-            for location in locations:
+            for location in self.multiworld.get_locations(self.player):
                 if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
                     location.address = None
@@ -563,48 +637,6 @@ class PokemonEmeraldWorld(World):
                 new_moves.add(new_move)
                 self.modified_data.tmhm_moves[i] = new_move
 
-        def randomize_wild_encounters() -> None:
-            should_match_bst = self.multiworld.wild_pokemon[self.player] in {
-                RandomizeWildPokemon.option_match_base_stats,
-                RandomizeWildPokemon.option_match_base_stats_and_type
-            }
-            should_match_type = self.multiworld.wild_pokemon[self.player] in {
-                RandomizeWildPokemon.option_match_type,
-                RandomizeWildPokemon.option_match_base_stats_and_type
-            }
-            should_allow_legendaries = self.multiworld.allow_wild_legendaries[self.player].value == Toggle.option_true
-
-            for map_data in self.modified_data.maps:
-                new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
-                old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
-
-                for i, table in enumerate(old_encounters):
-                    if table is not None:
-                        species_old_to_new_map: Dict[int, int] = {}
-                        for species_id in table.slots:
-                            if species_id not in species_old_to_new_map:
-                                original_species = emerald_data.species[species_id]
-                                target_bst = sum(original_species.base_stats) if should_match_bst else None
-                                target_type = self.random.choice(original_species.types) if should_match_type else None
-
-                                species_old_to_new_map[species_id] = get_random_species(
-                                    self.random,
-                                    self.modified_data.species,
-                                    target_bst,
-                                    target_type,
-                                    should_allow_legendaries
-                                ).species_id
-
-                        new_slots: List[int] = []
-                        for species_id in table.slots:
-                            new_slots.append(species_old_to_new_map[species_id])
-
-                        new_encounters[i] = EncounterTableData(new_slots, table.address)
-
-                map_data.land_encounters = new_encounters[0]
-                map_data.water_encounters = new_encounters[1]
-                map_data.fishing_encounters = new_encounters[2]
-
         def randomize_static_encounters() -> None:
             if self.multiworld.static_encounters[self.player] == RandomizeStaticEncounters.option_shuffle:
                 shuffled_species = [encounter.species_id for encounter in emerald_data.static_encounters]
@@ -781,8 +813,6 @@ class PokemonEmeraldWorld(World):
                     trainer_data = self.modified_data.trainers[emerald_data.constants[trainer_name]]
                     trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter.species_id
 
-        self.modified_data = copy.deepcopy(emerald_data)
-
         # Randomize species data
         if self.multiworld.abilities[self.player] != RandomizeAbilities.option_vanilla:
             randomize_abilities()
@@ -802,10 +832,6 @@ class PokemonEmeraldWorld(World):
 
         if self.multiworld.tm_moves[self.player]:
             randomize_tm_moves()
-
-        # Randomize wild encounters
-        if self.multiworld.wild_pokemon[self.player] != RandomizeWildPokemon.option_vanilla:
-            randomize_wild_encounters()
 
         # Randomize static encounters
         if self.multiworld.static_encounters[self.player] != RandomizeStaticEncounters.option_vanilla:
@@ -870,7 +896,7 @@ class PokemonEmeraldWorld(World):
     def create_event(self, name: str) -> PokemonEmeraldItem:
         return PokemonEmeraldItem(
             name,
-            ItemClassification.progression,
+            ItemClassification.progression_skip_balancing,
             None,
             self.player
         )

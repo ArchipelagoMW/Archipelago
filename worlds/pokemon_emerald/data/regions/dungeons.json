@@ -2426,7 +2426,7 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM9/MAIN": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM9",
-    "has_grass": true,
+    "has_grass": false,
     "has_water": false,
     "has_fishing": false,
     "locations": [

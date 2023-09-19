@@ -100,6 +100,20 @@ class LocationData(NamedTuple):
     tags: FrozenSet[str]
 
 
+class EncounterTableData(NamedTuple):
+    slots: List[int]
+    address: int
+
+
+@dataclass
+class MapData:
+    name: str
+    header_address: int
+    land_encounters: Optional[EncounterTableData]
+    water_encounters: Optional[EncounterTableData]
+    fishing_encounters: Optional[EncounterTableData]
+
+
 class EventData(NamedTuple):
     name: str
     parent_region: str
@@ -107,13 +121,21 @@ class EventData(NamedTuple):
 
 class RegionData:
     name: str
+    parent_map: MapData
+    has_grass: bool
+    has_water: bool
+    has_fishing: bool
     exits: List[str]
     warps: List[str]
     locations: List[str]
     events: List[EventData]
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, parent_map: MapData, has_grass: bool, has_water: bool, has_fishing: bool):
         self.name = name
+        self.parent_map = parent_map
+        self.has_grass = has_grass
+        self.has_water = has_water
+        self.has_fishing = has_fishing
         self.exits = []
         self.warps = []
         self.locations = []
@@ -209,20 +231,6 @@ class AbilityData(NamedTuple):
     label: str
 
 
-class EncounterTableData(NamedTuple):
-    slots: List[int]
-    address: int
-
-
-@dataclass
-class MapData:
-    name: str
-    header_address: int
-    land_encounters: Optional[EncounterTableData]
-    water_encounters: Optional[EncounterTableData]
-    fishing_encounters: Optional[EncounterTableData]
-
-
 class TrainerPokemonDataTypeEnum(IntEnum):
     NO_ITEM_DEFAULT_MOVES = 0
     ITEM_DEFAULT_MOVES = 1
@@ -275,7 +283,7 @@ class PokemonEmeraldData:
     static_encounters: List[StaticEncounterData]
     tmhm_moves: List[int]
     abilities: List[AbilityData]
-    maps: List[MapData]
+    maps: Dict[str, MapData]
     warps: Dict[str, Warp]
     warp_map: Dict[str, Optional[str]]
     trainers: List[TrainerData]
@@ -292,7 +300,7 @@ class PokemonEmeraldData:
         self.static_encounters = []
         self.tmhm_moves = []
         self.abilities = []
-        self.maps = []
+        self.maps = {}
         self.warps = {}
         self.warp_map = {}
         self.trainers = []
@@ -313,6 +321,36 @@ def _init() -> None:
 
     location_attributes_json = load_json_data("locations.json")
 
+    # Create map data
+    for map_name, map_json in extracted_data["maps"].items():
+        land_encounters = None
+        water_encounters = None
+        fishing_encounters = None
+
+        if "land_encounters" in map_json:
+            land_encounters = EncounterTableData(
+                map_json["land_encounters"]["slots"],
+                map_json["land_encounters"]["address"]
+            )
+        if "water_encounters" in map_json:
+            water_encounters = EncounterTableData(
+                map_json["water_encounters"]["slots"],
+                map_json["water_encounters"]["address"]
+            )
+        if "fishing_encounters" in map_json:
+            fishing_encounters = EncounterTableData(
+                map_json["fishing_encounters"]["slots"],
+                map_json["fishing_encounters"]["address"]
+            )
+
+        data.maps[map_name] = MapData(
+            map_name,
+            map_json["header_address"],
+            land_encounters,
+            water_encounters,
+            fishing_encounters
+        )
+
     # Load/merge region json files
     region_json_list = []
     for file in pkg_resources.resource_listdir(__name__, "data/regions"):
@@ -332,7 +370,13 @@ def _init() -> None:
 
     data.regions = {}
     for region_name, region_json in regions_json.items():
-        new_region = RegionData(region_name)
+        new_region = RegionData(
+            region_name,
+            data.maps[region_json["parent_map"]],
+            region_json["has_grass"],
+            region_json["has_water"],
+            region_json["has_fishing"]
+        )
 
         # Locations
         for location_name in region_json["locations"]:
@@ -929,38 +973,6 @@ def _init() -> None:
         ("ABILITY_CACOPHONY", "Cacophony"),
         ("ABILITY_AIR_LOCK", "Air Lock")
     ]]
-
-    # Create map data
-    for map_name, map_json in extracted_data["maps"].items():
-        land_encounters = None
-        water_encounters = None
-        fishing_encounters = None
-
-        if "land_encounters" in map_json:
-            land_encounters = EncounterTableData(
-                map_json["land_encounters"]["slots"],
-                map_json["land_encounters"]["address"]
-            )
-        if "water_encounters" in map_json:
-            water_encounters = EncounterTableData(
-                map_json["water_encounters"]["slots"],
-                map_json["water_encounters"]["address"]
-            )
-        if "fishing_encounters" in map_json:
-            fishing_encounters = EncounterTableData(
-                map_json["fishing_encounters"]["slots"],
-                map_json["fishing_encounters"]["address"]
-            )
-
-        data.maps.append(MapData(
-            map_name,
-            map_json["header_address"],
-            land_encounters,
-            water_encounters,
-            fishing_encounters
-        ))
-
-    data.maps.sort(key=lambda map: map.name)
 
     # Create warp map
     for warp, destination in extracted_data["warps"].items():

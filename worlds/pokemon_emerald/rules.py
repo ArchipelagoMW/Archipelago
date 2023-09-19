@@ -1332,6 +1332,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         multiworld.get_entrance("REGION_ROUTE134/MAIN -> REGION_UNDERWATER_ROUTE134/MAIN", player),
         can_dive
     )
+    set_rule(
+        multiworld.get_location("EVENT_UNDO_REGI_SEAL", player),
+        lambda state: state.has("CATCH_SPECIES_313", player) and state.has("CATCH_SPECIES_381", player)
+    )
 
     # Ever Grande City
     set_rule(

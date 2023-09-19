@@ -438,7 +438,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     if multiworld.extra_bumpy_slope[player]:
         _set_bytes_little_endian(
             patched_rom,
-            [map_data for map_data in modified_data.maps if map_data.name == "MAP_ROUTE115"][0].header_address + 0x12,
+            modified_data.maps["MAP_ROUTE115"].header_address + 0x12,
             2,
             442  # Id of alternate Route 115 map layout; don't want to add >400 new constants for one value
         )
@@ -512,7 +512,7 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
     }
     """
 
-    for map_data in modified_data.maps:
+    for map_data in modified_data.maps.values():
         tables = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
         for table in tables:
             if table is not None:
