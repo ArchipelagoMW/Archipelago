@@ -57,6 +57,7 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int) -> bool
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
     return num_gym_leaders_defeated >= n
 
+
 def _encountered_n_legendaries(state: CollectionState, player: int, n: int) -> bool:
     num_encounters = 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_GROUDON", player) else 0
