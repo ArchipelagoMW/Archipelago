@@ -12,6 +12,25 @@ class Trap(Toggle):
     display_name = "Trap"
 
 
+class Goal(Choice):
+    """Defines the goal to accomplish in order to complete the randomizer.
+    All Acts + Epilogue (In Order): Complete each act and the epilogue in order. You can also return to previous acts.
+    All Acts (Any Order): Complete each act in any order. They are all available from the start.
+    Act 1: Complete Act 1 by finding the New Game button. Great for a smaller scale randomizer."""
+    auto_display_name = True
+    display_name = "Goal"
+    option_all_in_order = 0
+    option_all_any_order = 1
+    option_first_act = 2
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_all_in_order: "All Acts + Epilogue (In Order)",
+            self.option_all_any_order: "All Acts (Any Order)",
+            self.option_first_act: "Act 1",
+        }[self.value]
+
+
 class RandomizeCodes(Toggle):
     """Randomize All codes in the game(Clock, safe, etc.)"""
     display_name = "Randomize Codes"
@@ -57,7 +76,7 @@ class RandomizeAbilities(Choice):
 
 
 class OptionalDeathCard(Choice):
-    """Add a Moment after death where you can decide to create a death card or not.
+    """Add a moment after death in act 1 where you can decide to create a death card or not.
     Disable: Disable the feature.
     Always on: The feature is always on.
     DeathLink Only: The feature only happens during a DeathLink death."""
@@ -78,6 +97,7 @@ class OptionalDeathCard(Choice):
 inscryption_options: typing.Dict[str, type(Option)] = {
     "deathlink": DeathLink,
     "trap": Trap,
+    "goal": Goal,
     "randomize_codes": RandomizeCodes,
     "randomize_deck": RandomizeDeck,
     "randomize_abilities": RandomizeAbilities,

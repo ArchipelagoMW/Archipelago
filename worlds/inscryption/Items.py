@@ -17,7 +17,7 @@ class ItemDict(TypedDict):
     classification: ItemClassification
 
 
-item_table: List[ItemDict] = [
+act1_items: List[ItemDict] = [
     {'name': "Stinkbug Card",
      'count': 1,
      'classification': ItemClassification.useful},
@@ -65,13 +65,11 @@ item_table: List[ItemDict] = [
      'classification': ItemClassification.useful},
     {'name': "Angler Hook",
      'count': 1,
-     'classification': ItemClassification.useful},
-    {'name': "Currency",
-     'count': 1,
-     'classification': ItemClassification.filler},
-    {'name': "Card Pack",
-     'count': 1,
-     'classification': ItemClassification.filler},
+     'classification': ItemClassification.useful}
+]
+
+
+act2_items: List[ItemDict] = [
     {'name': "Camera Replica",
      'count': 1,
      'classification': ItemClassification.progression},
@@ -134,7 +132,11 @@ item_table: List[ItemDict] = [
      'classification': ItemClassification.useful},
     {'name': "Dock's Clover Plant",
      'count': 1,
-     'classification': ItemClassification.useful},
+     'classification': ItemClassification.useful}
+]
+
+
+act3_items: List[ItemDict] = [
     {'name': "Extra Battery",
      'count': 1,
      'classification': ItemClassification.useful},
@@ -162,4 +164,13 @@ item_table: List[ItemDict] = [
     {'name': "Quill",
      'count': 1,
      'classification': ItemClassification.progression},
+]
+
+filler_items: List[ItemDict] = [
+    {'name': "Currency",
+     'count': 1,
+     'classification': ItemClassification.filler},
+    {'name': "Card Pack",
+     'count': 1,
+     'classification': ItemClassification.filler}
 ]

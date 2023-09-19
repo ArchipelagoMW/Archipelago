@@ -168,15 +168,19 @@ class InscryptionRules:
 
     def has_epilogue_requirements(self, state: CollectionState) -> bool:
         # TODO Add the missing checks
-        return self.has_act3_requirements(state) and self.has_drone_and_battery(state)
+        return self.has_act3_requirements(state) and self.has_transcendence_requirements(state)
 
     def set_all_rules(self) -> None:
         multiworld = self.world.multiworld
-        multiworld.completion_condition[self.player] = self.has_epilogue_requirements
+        if multiworld.goal[self.player].value <= 1:
+            multiworld.completion_condition[self.player] = self.has_epilogue_requirements
+        else:
+            multiworld.completion_condition[self.player] = self.has_act2_requirements
         for region in multiworld.get_regions(self.player):
-            if region.name in self.region_rules:
-                for entrance in region.entrances:
-                    entrance.access_rule = self.region_rules[region.name]
+            if multiworld.goal[self.player].value == 0:
+                if region.name in self.region_rules:
+                    for entrance in region.entrances:
+                        entrance.access_rule = self.region_rules[region.name]
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
