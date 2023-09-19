@@ -1,14 +1,44 @@
+import logging
+import sys
 from typing import TYPE_CHECKING, Optional, Dict, Set
 from .Locations import base_id
 from .Text import cv64_text_wrap, cv64_string_to_bytes
 
+# TODO: REMOVE ASAP
+# This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
+if "worlds._bizhawk" not in sys.modules:
+    import importlib
+    import os
+    import zipimport
+
+    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
+    if os.path.isfile(bh_apworld_path):
+        importer = zipimport.zipimporter(bh_apworld_path)
+        spec = importer.find_spec(os.path.basename(bh_apworld_path).rsplit(".", 1)[0])
+        mod = importlib.util.module_from_spec(spec)
+        mod.__package__ = f"worlds.{mod.__package__}"
+        mod.__name__ = f"worlds.{mod.__name__}"
+        sys.modules[mod.__name__] = mod
+        importer.exec_module(mod)
+    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
+        logging.error("Did not find _bizhawk.apworld required to play Castlevania 64.")
+
 from NetUtils import ClientStatus
-from worlds.AutoBizHawkClient import BizHawkClient
+import worlds._bizhawk as bizhawk
+from worlds._bizhawk.client import BizHawkClient
+from worlds.LauncherComponents import SuffixIdentifier, components
 
 if TYPE_CHECKING:
-    from BizHawkClient import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext
 else:
     BizHawkClientContext = object
+
+
+# Add .apcv64 suffix to bizhawk client
+for component in components:
+    if component.script_name == "BizHawkClient":
+        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apcv64"))
+        break
 
 
 class Castlevania64Client(BizHawkClient):
@@ -26,26 +56,25 @@ class Castlevania64Client(BizHawkClient):
         self.rom_slot_name = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
-        from BizHawkClient import RequestFailedError, bizhawk_read
         from CommonClient import logger
 
         try:
             # Check if ROM is some version of Castlevania 64
-            game_name = ((await bizhawk_read(ctx, [(0x20, 0x14, "ROM")]))[0]).decode("ascii")
+            game_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x20, 0x14, "ROM")]))[0]).decode("ascii")
             if game_name != "CASTLEVANIA         ":
                 return False
             
             # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
             # validating a ROM where there's no slot name to read.
             try:
-                slot_name_bytes = (await bizhawk_read(ctx, [(0xBFBFE0, 0x10, "ROM")]))[0]
+                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(0xBFBFE0, 0x10, "ROM")]))[0]
                 self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
             except UnicodeDecodeError:
                 logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
                 return False
         except UnicodeDecodeError:
             return False
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             return False  # Should verify on the next pass
 
         ctx.game = self.game
@@ -63,13 +92,12 @@ class Castlevania64Client(BizHawkClient):
                     self.received_deathlinks += 1
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        from BizHawkClient import RequestFailedError, bizhawk_write, bizhawk_guarded_write, bizhawk_read
 
         try:
-            read_state = await bizhawk_read(ctx, [(0x342084, 4, "RDRAM"),
-                                                  (0x389BDE, 6, "RDRAM"),
-                                                  (0x389BE4, 224, "RDRAM"),
-                                                  (0x389EFB, 1, "RDRAM")])
+            read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x342084, 4, "RDRAM"),
+                                                              (0x389BDE, 6, "RDRAM"),
+                                                              (0x389BE4, 224, "RDRAM"),
+                                                              (0x389EFB, 1, "RDRAM")])
 
             game_state = int.from_bytes(read_state[0], "big")
             save_struct = read_state[2]
@@ -103,7 +131,8 @@ class Castlevania64Client(BizHawkClient):
             if self.received_deathlinks and not self.self_induced_death:
                 written_deathlinks += self.received_deathlinks
                 self.received_deathlinks = 0
-                await bizhawk_write(ctx, [(0x389BE2, [written_deathlinks >> 8, written_deathlinks], "RDRAM")])
+                await bizhawk.write(ctx.bizhawk_ctx,
+                                    [(0x389BE2, [written_deathlinks >> 8, written_deathlinks], "RDRAM")])
             else:
                 # If the game hasn't received all items yet, the received item struct doesn't contain an item, the
                 # current number of received items still matches what we read before, and there are no open text boxes,
@@ -121,15 +150,14 @@ class Castlevania64Client(BizHawkClient):
                         text_color = [0xA2, 0x02]
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names[next_item.item]}\n"
                                                               f"from {ctx.player_names[next_item.player]}", 96)
-                    await bizhawk_guarded_write(ctx, [(0x389BE1, (next_item.item - base_id).to_bytes(1, "big"),
-                                                       "RDRAM"),
-                                                      (0x18C0A8, text_color +
-                                                       cv64_string_to_bytes(received_text, False), "RDRAM"),
-                                                      (0x18C1A7, [num_lines], "RDRAM")],
-
-                                                     [(0x389BE1, [0x00], "RDRAM"),   # Remote item reward buffer
-                                                      (0x389CBE, save_struct[0xDA:0xDC], "RDRAM"),  # Received items
-                                                      (0x342891, [0x02], "RDRAM")])   # Textbox state
+                    await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                                [(0x389BE1, (next_item.item - base_id).to_bytes(1, "big"), "RDRAM"),
+                                                 (0x18C0A8, text_color + cv64_string_to_bytes(received_text, False),
+                                                  "RDRAM"),
+                                                 (0x18C1A7, [num_lines], "RDRAM")],
+                                                [(0x389BE1, [0x00], "RDRAM"),   # Remote item reward buffer
+                                                 (0x389CBE, save_struct[0xDA:0xDC], "RDRAM"),  # Received items
+                                                 (0x342891, [0x02], "RDRAM")])   # Textbox state
 
             flag_bytes = bytearray(save_struct[0x00:0x44]) + bytearray(save_struct[0x90:0x9F])
             locs_to_send = set()
@@ -162,6 +190,6 @@ class Castlevania64Client(BizHawkClient):
                     "status": ClientStatus.CLIENT_GOAL
                 }])
 
-        except RequestFailedError:
+        except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
             pass

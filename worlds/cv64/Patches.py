@@ -12,7 +12,7 @@ normal_door_code = [
     0x8C849BE4,  # LW    A0, 0x9BE4 (A0)
     0x8C6A0008,  # LW    T2, 0x0008 (V1)
     0x008A5824,  # AND   T3, A0, T2
-    0x11600003,  # BEQZ  T3, [forward 0x03]
+    0x11600003,  # BEQZ  T3,     [forward 0x03]
     0x00000000,  # NOP
     0x24020003,  # ADDIU V0, R0, 0x0003
     0x27FF006C,  # ADDIU RA, RA, 0x006C
@@ -31,7 +31,7 @@ ct_door_code = [
     0x01465021,  # ADDU  T2, T2, A2
     0x814A9C60,  # LB    T2, 0x9C60 (T2)
     0x00495824,  # AND   T3, V0, T1
-    0x55600001,  # BNEZL T3, [forward 0x01]
+    0x55600001,  # BNEZL T3,     [forward 0x01]
     0x27FF0010,  # ADDIU RA, RA, 0x0010
     0x03E00008   # JR    RA
 ]
@@ -41,7 +41,7 @@ stage_select_overwrite = [
     # to see how many destinations can be selected on it with the current count.
     0x8FA60018,  # LW	 A2, 0x0018 (SP)
     0xA0606437,  # SB	 R0, 0x6437 (V1)
-    0x10000029,  # B	 [forward 0x29]
+    0x10000029,  # B	         [forward 0x29]
     0x00000000,  # NOP
     0x3C0A8039,  # LUI	 T2, 0x8039
     0x254A9C4B,  # ADDIU T2, T2, 0x9C4B
@@ -94,7 +94,7 @@ custom_code_loader = [
     0xAD282438,  # SW    T0, 0x2438 (T1)
     0x3C088040,  # LUI   T0, 0x8040
     0x9108C000,  # ADDIU T0, 0xC000 (T0)
-    0x15000007,  # BNEZ  T0, [forward 0x07]
+    0x15000007,  # BNEZ  T0,     [forward 0x07]
     0x3C0400C0,  # LUI   A0, 0x00C0
     0x2484C000,  # ADDIU A0, A0, 0xC000
     0x3C058040,  # LUI   A1, 0x8040
@@ -228,10 +228,15 @@ deathlink_counter_decrementer = [
     0xA1009BDF,  # SB	 R0, 0x9BDF (T0)
     0xA1009BE1,  # SB	 R0, 0x9BE1 (T0)
     0x91099BDE,  # LBU   T1, 0x9BDE (T0)
-    0x55200001,  # BNEZL T1, [forward 0x01]
+    0x55200001,  # BNEZL T1,     [forward 0x01]
     0x24090000,  # ADDIU T1, R0, 0x0000
+    0xA1099BDE,  # SB    T1, 0x9BDE (T0)
+    0x91099C24,  # LBU   T1, 0x9C24 (T0)
+    0x312A0080,  # ANDI  T2, T1, 0x0080
+    0x55400001,  # BNEZL T2,     [forward 0x01]
+    0x3129007F,  # ANDI  T1, T1, 0x007F
     0x03E00008,  # JR    RA
-    0xA1099BDE   # SB    T1, 0x9BDE (T0)
+    0xA1099C24   # SB    T1, 0x9C24 (T0)
 ]
 
 death_flag_unsetter = [
@@ -244,7 +249,7 @@ death_flag_unsetter = [
     0x01094023,  # SUBU  T0, T0, T1
     0x908A9C3F,  # LBU   T2, 0x9C3F (A0)
     0x24090064,  # ADDIU T1, R0, 0x0064
-    0x51400001,  # BEQZL T2, [forward 0x01]
+    0x51400001,  # BEQZL T2,     [forward 0x01]
     0xA0899C3F,  # SB    T1, 0x9C3F (A0)
     0x08006DAE,  # J     0x8001B6B8
     0xA0889C88   # SB    T0, 0x9C88 (A0)
@@ -294,7 +299,7 @@ give_subweapon_stopper = [
 give_powerup_stopper = [
     # Extension to "give PowerUp" function to not increase the player's PowerUp count beyond 2
     0x240D0002,  # ADDIU T5, R0, 0x0002
-    0x556D0001,  # BNEL  T3, T5, [forward 1]
+    0x556D0001,  # BNEL  T3, T5, [forward 0x01]
     0xA46C6234,  # SH    T4, 0x6234 (V1)
     0x0804F0BF   # J     0x8013C2FC
 ]
@@ -434,18 +439,18 @@ double_component_checker = [
     # "no need to set 2" outcome to see if the other can be set.
 
     # Mandragora checker
-    0x10400007,  # BEQZ  V0, [forward 0x07]
+    0x10400007,  # BEQZ  V0,     [forward 0x07]
     0x3C0A8039,  # LUI   T2, 0x8039
     0x31098000,  # ANDI  T1, T0, 0x8000
-    0x15200008,  # BNEZ  T1, [forward 0x08]
+    0x15200008,  # BNEZ  T1,     [forward 0x08]
     0x91499C5D,  # LBU   T1, 0x9C5D (T2)
     0x11200006,  # BEQZ  T1, 0x80183938
     0x00000000,  # NOP
     0x10000007,  # B     [forward 0x07]
     0x31E90100,  # ANDI  T1, T7, 0x0100
-    0x15200002,  # BNEZ  T1, [forward 0x02]
+    0x15200002,  # BNEZ  T1,     [forward 0x02]
     0x91499C5D,  # LBU   T1, 0x9C5D (T2)
-    0x15200003,  # BNEZ  T1, [forward 0x03]
+    0x15200003,  # BNEZ  T1,     [forward 0x03]
     0x3C198000,  # LUI   T9, 0x8000
     0x27391590,  # ADDIU T9, T9, 0x1590
     0x03200008,  # JR    T9
@@ -456,21 +461,21 @@ double_component_checker = [
     0x03200008,  # JR    T9
     0x00000000,  # NOP
     # Nitro checker
-    0x10400007,  # BEQZ  V0, [forward 0x07]
+    0x10400007,  # BEQZ  V0,     [forward 0x07]
     0x3C0A8039,  # LUI   T2, 0x8039
     0x31694000,  # ANDI  T1, T3, 0x4000
-    0x15200008,  # BNEZ  T1, [forward 0x08]
+    0x15200008,  # BNEZ  T1,     [forward 0x08]
     0x91499C5C,  # LBU   T1, 0x9C5C
-    0x11200006,  # BEQZ  T1, [forward 0x06]
+    0x11200006,  # BEQZ  T1,     [forward 0x06]
     0x00000000,  # NOP
     0x1000FFF4,  # B     [backward 0x0B]
     0x914F9C18,  # LBU   T7, 0x9C18 (T2)
     0x31E90002,  # ANDI  T1, T7, 0x0002
-    0x1520FFEC,  # BNEZ  T1, [backward 0x13]
+    0x1520FFEC,  # BNEZ  T1,     [backward 0x13]
     0x91499C5C,  # LBU   T1, 0x9C5C (T2)
-    0x1520FFEF,  # BNEZ  T1, [backward 0x15]
+    0x1520FFEF,  # BNEZ  T1,     [backward 0x15]
     0x00000000,  # NOP
-    0x1000FFE8,  # B     [backward 0x17]
+    0x1000FFE8,  # B             [backward 0x17]
     0x00000000,  # NOP
 ]
 
@@ -478,11 +483,11 @@ downstairs_seal_checker = [
     # This will run specifically for the downstairs crack to see if the seal has been removed before then deciding to
     # let the player set the bomb components or not. An anti-dick measure, since there is a limited number of each
     # component per world.
-    0x14400004,  # BNEZ  V0, [forward 0x04]
+    0x14400004,  # BNEZ  V0,     [forward 0x04]
     0x3C0A8039,  # LUI   T2, 0x8039
     0x914A9C18,  # LBU   T2, 0x9C18 (T2)
     0x314A0001,  # ANDI  T2, T2, 0x0001
-    0x11400003,  # BEQZ  T2, [forward 0x03]
+    0x11400003,  # BEQZ  T2,     [forward 0x03]
     0x3C198000,  # LUI   T9, 0x8000
     0x27391448,  # ADDIU T9, T9, 0x1448
     0x03200008,  # JR    T9
@@ -864,9 +869,9 @@ coffin_time_checker = [
     # When entering the Villa coffin, this will check to see whether it's day or night and send you to either the Tunnel
     # or Underground Waterway level slot accordingly regardless of which character you are
     0x28490006,  # SLTI  T1, V0, 0x0006
-    0x15200005,  # BNEZ  T1, [forward 0x05]
+    0x15200005,  # BNEZ  T1,     [forward 0x05]
     0x28490012,  # SLTI  T1, V0, 0x0012
-    0x11200003,  # BEQZ  T1, [forward 0x03]
+    0x11200003,  # BEQZ  T1,     [forward 0x03]
     0x00000000,  # NOP
     0x08055AEB,  # J     0x80156BAC
     0x00000000,  # NOP
@@ -881,7 +886,7 @@ werebull_flag_unsetter = [
     0x15CF0006,  # BNE   T6, T7, [forward 0x06]
     0x00187402,  # SRL   T6, T8, 16
     0x31CE2000,  # ANDI  T6, T6, 0x2000
-    0x15C00003,  # BNEZ  T6, [forward 0x03]
+    0x15C00003,  # BNEZ  T6,     [forward 0x03]
     0x3C0E0020,  # LUI   T6, 0x0020
     0x014E5025,  # OR    T2, T2, T6
     0xAC4A613C,  # SW    T2, 0x613C (V0)
@@ -895,12 +900,12 @@ werebull_flag_unsetter_special2_electric_boogaloo = [
     0x15CF0008,  # BNE   T6, T7, [forward 0x06]
     0x00187402,  # SRL   T6, T8, 16
     0x31CE2000,  # ANDI  T6, T6, 0x2000
-    0x15C00005,  # BNEZ  T6, [forward 0x05]
+    0x15C00005,  # BNEZ  T6,     [forward 0x05]
     0x3C0E0020,  # LUI   T6, 0x0020
     0x014EC024,  # AND   T8, T2, T6
     0x014E5025,  # OR    T2, T2, T6
     0xAC4A613C,  # SW    T2, 0x613C (V0)
-    0x17000003,  # BNEZ  T8, [forward 0x03]
+    0x17000003,  # BNEZ  T8,     [forward 0x03]
     0x3C188039,  # LUI   T8, 0x8039
     0x240E0005,  # ADDIU T6, R0, 0x0005
     0xA30E9BDF,  # SB    T6, 0x9BDF (T8)
@@ -918,7 +923,7 @@ werebull_flag_pickup_setter = [
     0x15040005,  # BNE   T0, A0, [forward 0x05]
     0x9449612C,  # LHU   T1, 0x612C (V0)
     0x31290020,  # ANDI  T1, T1, 0x0020
-    0x11200002,  # BEQZ  T1, [forward 0x02]
+    0x11200002,  # BEQZ  T1,     [forward 0x02]
     0x3C0A0400,  # LUI   T2, 0x0400
     0x014D6825,  # OR    T5, T2, T5
     0xAC4D612C,  # SW    T5, 0x612C (V0)
@@ -964,7 +969,7 @@ boss_goal_checker = [
     0x316D0BA0,  # ANDI  T5, T3, 0x0BA0
     0x914B9BFB,  # LBU   T3, 0x9BFB (T2)
     0x000B6182,  # SRL   T4, T3, 6
-    0x11800010,  # BEQZ  T4, [forward 0x10]
+    0x11800010,  # BEQZ  T4,     [forward 0x10]
     0x240C00C0,  # ADDIU T4, R0, 0x00C0
     0x01AC6821,  # ADDU  T5, T5, T4
     0x914B9BFD,  # LBU   T3, 0x9BFD (T2)
@@ -978,7 +983,7 @@ boss_goal_checker = [
     0x01AC6821,  # ADDU  T5, T5, T4
     0x914B9C1B,  # LBU   T3, 0x9C1B (T2)
     0x000B6102,  # SRL   T4, T3, 4
-    0x11800005,  # BEQZ  T4, [forward 0x05]
+    0x11800005,  # BEQZ  T4,     [forward 0x05]
     0x240C0050,  # ADDIU T4, R0, 0x0050
     0x01AC6821,  # ADDU  T5, T5, T4
     0x240E0CF0,  # ADDIU T6, R0, 0x0CF0
@@ -1003,39 +1008,39 @@ warp_menu_rewrite = [
     # Start Warp
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
-    0x1000001F,  # B     [forward 0x1F]
+    0x1000001F,  # B         [forward 0x1F]
     0x3C0F8000,  # LUI   T7, 0x8000
     # Warp 1
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
-    0x1000001B,  # B     [forward 0x1B]
+    0x1000001B,  # B         [forward 0x1B]
     0x3C0F8040,  # LUI   T7, 0x8040
     # Warp 2
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
-    0x10000017,  # B     [forward 0x17]
+    0x10000017,  # B         [forward 0x17]
     0x3C0F8080,  # LUI   T7, 0x8080
     # Warp 3
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
-    0x10000013,  # B     [forward 0x13]
+    0x10000013,  # B         [forward 0x13]
     0x3C0F0080,  # LUI   T7, 0x0080
     # Warp 4
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
     0x3C0F0080,  # LUI   T7, 0x0080
-    0x1000000E,  # B     [forward 0x0E]
+    0x1000000E,  # B         [forward 0x0E]
     0x25EF8000,  # ADDIU T7, T7, 0x8000
     # Warp 5
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
-    0x1000000A,  # B     [forward 0x0A]
+    0x1000000A,  # B         [forward 0x0A]
     0x340F8000,  # ORI   T7, R0, 0x8000
     # Warp 6
     0x3C0E0000,  # LUI   T6, 0x0000
     0x25CE0000,  # ADDIU T6, T6, 0x0000
     0x3C0F8000,  # LUI   T7, 0x8000
-    0x10000005,  # B     [forward 0x05]
+    0x10000005,  # B         [forward 0x05]
     0x35EF8000,  # ORI   T7, T7, 0x8000
     # Warp 7
     0x3C0E0000,  # LUI   T6, 0x0000
@@ -1090,7 +1095,7 @@ warp_pointer_table = [
 spawn_coordinates_extension = [
     # Checks if the 0x10 bit is set in the spawn ID and references the below list of custom spawn coordinates if it is.
     0x316A0010,  # ANDI  T2, T3, 0x0010
-    0x11400003,  # BEQZ  T2, [forward 0x03]
+    0x11400003,  # BEQZ  T2,     [forward 0x03]
     0x8CD90008,  # LW    T9, 0x0008 (A2)
     0x3C198040,  # LUI   T9, 0x8040
     0x2739C2CC,  # ADDIU T9, T9, 0xC2CC
@@ -1264,7 +1269,7 @@ music_modifier = [
     0xAFBF001C,  # SW    RA, 0x001C (SP)
     0x0C004A6B,  # JAL   0x800129AC
     0x44800000,  # MTC1  R0, F0
-    0x10400003,  # BEQZ  V0, [forward 0x03]
+    0x10400003,  # BEQZ  V0,     [forward 0x03]
     0x3C088040,  # LUI   T0, 0x8040
     0x01044821,  # ADDU  T1, T0, A0
     0x9124CD20,  # LBU   A0, 0xCD20 (T1)
@@ -1298,7 +1303,7 @@ item_customizer = [
     0x018E001B,  # DIVU  T4, T6
     0x00006010,  # MFHI  T4
     0x000D5C02,  # SRL   T3, T5, 16
-    0x51800001,  # BEQZL T4, [forward 0x01]
+    0x51800001,  # BEQZL T4,     [forward 0x01]
     0x000B5C00,  # SLL   T3, T3, 16
     0x00006012,  # MFLO  T4
     0xA0CC0055,  # SB    T4, 0x0055 (A2)
@@ -1356,12 +1361,12 @@ three_hit_item_flags_setter = [
     0x00084C02,  # SRL   T1, T0, 16
     0x3108FFFF,  # ANDI  T0, T0, 0xFFFF
     0x00094842,  # SRL   T1, T1, 1
-    0x15200003,  # BNEZ  T1, [forward 0x03]
+    0x15200003,  # BNEZ  T1,     [forward 0x03]
     0x00000000,  # NOP
     0x34098000,  # ORI   T1, R0, 0x8000
     0x25080001,  # ADDIU T0, T0, 0x0001
     0x0154582A,  # SLT   T3, T2, S4
-    0x1560FFF9,  # BNEZ  T3, [backward 0x07]
+    0x1560FFF9,  # BNEZ  T3,     [backward 0x07]
     0x254A0001,  # ADDIU T2, T2, 0x0001
     0x00094C00,  # SLL   T1, T1, 16
     0x01094025,  # OR    T0, T0, T1
@@ -1377,12 +1382,12 @@ chandelier_item_flags_setter = [
     0x00084C02,  # SRL   T1, T0, 16
     0x3108FFFF,  # ANDI  T0, T0, 0xFFFF
     0x00094842,  # SRL   T1, T1, 1
-    0x15200003,  # BNEZ  T1, [forward 0x03]
+    0x15200003,  # BNEZ  T1,     [forward 0x03]
     0x00000000,  # NOP
     0x34098000,  # ORI   T1, R0, 0x8000
     0x25080001,  # ADDIU T0, T0, 0x0001
     0x0155582A,  # SLT   T3, T2, S5
-    0x1560FFF9,  # BNEZ  T3, [backward 0x07]
+    0x1560FFF9,  # BNEZ  T3,     [backward 0x07]
     0x254A0001,  # ADDIU T2, T2, 0x0001
     0x00094C00,  # SLL   T1, T1, 16
     0x01094025,  # OR    T0, T0, T1
@@ -1397,7 +1402,7 @@ prev_subweapon_spawn_checker = [
     0x322F3031,  # Previous sub-weapon bytes
     0x10A00009,  # BEQZ  A1,     [forward 0x09]
     0x00000000,  # NOP
-    0x10AD0007,  # BEQ   A1, T5, [forward 0x07
+    0x10AD0007,  # BEQ   A1, T5, [forward 0x07]
     0x3C088040,  # LUI   T0, 0x8040
     0x01054021,  # ADDU  T0, T0, A1
     0x0C0FF418,  # JAL   0x803FD060
@@ -2501,10 +2506,11 @@ multiworld_item_name_loader = [
     0x24090012,  # ADDIU T1, R0, 0x0012
     0x15090003,  # BNE   T0, T1, [forward 0x03]
     0x00000000,  # NOP
-    0x1000000F,  # B             [forward 0x0F]
+    0x10000010,  # B             [forward 0x10]
     0x24080000,  # ADDIU T0, R0, 0x0000
     0x920C0055,  # LBU   T4, 0x0055 (S0)
     0x8E090058,  # LW    T1, 0x0058 (S0)
+    0x1120000C,  # BEQZ  T1,     [forward 0x0C]
     0x298A0011,  # SLTI  T2, T4, 0x0011
     0x51400001,  # BEQZL T2,     [forward 0x01]
     0x258CFFED,  # ADDIU T4, T4, 0xFFED
@@ -2530,7 +2536,6 @@ multiworld_item_name_loader = [
     0x27FF5BA4,  # ADDIU RA, RA, 0x5BA4
     0x0804EF54,  # J     0x8013BD50
     0x94640002,  # LHU   A0, 0x0002 (V1)
-    0x00000000,  # NOP
     # Changes the Y screen position of the textbox depending on how many line breaks there are.
     0x3C088019,  # LUI   T0, 0x8019
     0x9108C097,  # LBU   T0, 0xC097 (T0)

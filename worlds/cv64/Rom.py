@@ -5,6 +5,7 @@ from BaseClasses import ItemClassification
 
 import hashlib
 import os
+import pkgutil
 
 from . import Patches
 from .Names import RName
@@ -1066,8 +1067,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
             rom.write_int32(offset, item_id)
 
     # Insert the file containing the Archipelago item icons.
-    with open("./worlds/cv64/ap_icons.bin", "rb") as stream:
-        rom.write_bytes(0xBB2D88, list(stream.read()))
+    rom.write_bytes(0xBB2D88, list(pkgutil.get_data(__name__, "custom_model/ap_icons.bin")))
     # Update the items' Nisitenma-Ichigo table entry to point to the new file's start and end addresses in the ROM.
     rom.write_int32s(0x95F04, [0x80BB2D88, 0x00BB6EEC])
     # Update the items' decompressed file size tables with the new file's decompressed file size.
