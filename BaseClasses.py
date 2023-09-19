@@ -853,14 +853,6 @@ class Region:
             state.update_reachable_regions(self.player)
         return self in state.reachable_regions[self.player]
 
-    def can_reach_private(self, state: CollectionState) -> bool:
-        for entrance in self.entrances:
-            if entrance.can_reach(state):
-                if not self in state.path:
-                    state.path[self] = (self.name, state.path.get(entrance, None))
-                return True
-        return False
-
     @property
     def hint_text(self) -> str:
         return self._hint_text if self._hint_text else self.name
