@@ -182,11 +182,6 @@ class OpenRCT2World(World):
         print(len(self.multiworld.itempool))
         print(self.multiworld.itempool)
 
-    def generate_basic(self) -> None:
-        # place "Victory" at the end of the unlock tree and set collection as win condition
-        self.multiworld.get_location("Victory", self.player).place_locked_item(OpenRCT2Item("Victory", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
 
     def set_rules(self) -> None:
         print("Here's the precollected Items")
@@ -304,7 +299,18 @@ class OpenRCT2World(World):
         print("OpenRCT2 will make the shop will the following:")
         print(self.location_prices)
 
+    def generate_basic(self) -> None:
+        # place "Victory" at the end of the unlock tree and set collection as win condition
+        self.multiworld.get_location("Victory", self.player).place_locked_item(OpenRCT2Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
+    def fill_slot_data(self) -> None:
+        return {
+            "difficulty": self.multiworld.difficulty[self.player].value,
+            "scenario_length": self.multiworld.scenario_length[self.player].value,
+            "scenario": self.multiworld.scenario[self.player].value,
+            "death_link": self.multiworld.deathlink[self.player].value
+        }
 
     def create_item(self, item:str) -> OpenRCT2Item:
         classification = ItemClassification.useful

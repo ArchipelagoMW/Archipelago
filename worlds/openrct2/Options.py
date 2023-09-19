@@ -541,6 +541,7 @@ openRCT2_options = {
     "difficulty": Difficulty,
     "scenario_length": Scenario_Length,
     "scenario": Scenario,
+    "filler": Filler,
 
     # deathlink
     "deathlink": DeathLink,
@@ -567,8 +568,7 @@ openRCT2_options = {
     "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
-    "monopoly_mode": Monopoly_Mode,
-    "filler": Filler
+    "monopoly_mode": Monopoly_Mode
 }
 
 OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})
