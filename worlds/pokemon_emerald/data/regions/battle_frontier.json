@@ -1,6 +1,9 @@
 {
   "REGION_BATTLE_FRONTIER_RECEPTION_GATE/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_RECEPTION_GATE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -11,6 +14,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_WEST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -22,6 +28,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_WEST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -41,6 +50,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_WEST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -51,6 +63,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_WEST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -62,6 +77,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -86,6 +104,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_EAST/CAVE_ENTRANCE": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -97,6 +118,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -107,6 +131,9 @@
   },
   "REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER": {
     "parent_map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -117,6 +144,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_FACTORY_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -126,6 +156,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_PIKE_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PIKE_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -135,6 +168,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_ARENA_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_ARENA_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -144,6 +180,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -153,6 +192,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_DOME_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -162,6 +204,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -171,6 +216,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -181,6 +229,9 @@
   },
   "REGION_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -190,6 +241,9 @@
   },
   "REGION_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -199,6 +253,9 @@
   },
   "REGION_BATTLE_FRONTIER_RANKING_HALL/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_RANKING_HALL",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -208,6 +265,9 @@
   },
   "REGION_BATTLE_FRONTIER_POKEMON_CENTER_1F/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -218,6 +278,9 @@
   },
   "REGION_BATTLE_FRONTIER_POKEMON_CENTER_2F/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_POKEMON_CENTER_2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -227,6 +290,9 @@
   },
   "REGION_BATTLE_FRONTIER_MART/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_MART",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -236,6 +302,9 @@
   },
   "REGION_BATTLE_FRONTIER_SCOTTS_HOUSE/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_SCOTTS_HOUSE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -245,6 +314,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE1/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -254,6 +326,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE2/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -263,6 +338,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE3/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE3",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -272,6 +350,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE4/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE4",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -281,6 +362,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE5/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE5",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -290,6 +374,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE6/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE6",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -299,6 +386,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE7/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE7",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -308,6 +398,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE8/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE8",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -317,6 +410,9 @@
   },
   "REGION_BATTLE_FRONTIER_LOUNGE9/MAIN": {
     "parent_map": "MAP_BATTLE_FRONTIER_LOUNGE9",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -327,6 +423,9 @@
 
   "REGION_ARTISAN_CAVE_1F/MAIN": {
     "parent_map": "MAP_ARTISAN_CAVE_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ARTISAN_CAVE_1F_CARBOS"
     ],
@@ -339,6 +438,9 @@
   },
   "REGION_ARTISAN_CAVE_B1F/MAIN": {
     "parent_map": "MAP_ARTISAN_CAVE_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ARTISAN_CAVE_B1F_HP_UP",
       "HIDDEN_ITEM_ARTISAN_CAVE_B1F_ZINC",

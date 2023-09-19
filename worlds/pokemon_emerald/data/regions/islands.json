@@ -1,6 +1,9 @@
 {
   "REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN": {
     "parent_map": "MAP_SOUTHERN_ISLAND_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -12,6 +15,9 @@
   },
   "REGION_SOUTHERN_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_SOUTHERN_ISLAND_INTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_LATIAS"
@@ -23,6 +29,9 @@
   },
   "REGION_FARAWAY_ISLAND_ENTRANCE/MAIN": {
     "parent_map": "MAP_FARAWAY_ISLAND_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -34,6 +43,9 @@
   },
   "REGION_FARAWAY_ISLAND_INTERIOR/MAIN": {
     "parent_map": "MAP_FARAWAY_ISLAND_INTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_MEW"
@@ -45,6 +57,9 @@
   },
   "REGION_BIRTH_ISLAND_HARBOR/MAIN": {
     "parent_map": "MAP_BIRTH_ISLAND_HARBOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -56,6 +71,9 @@
   },
   "REGION_BIRTH_ISLAND_EXTERIOR/MAIN": {
     "parent_map": "MAP_BIRTH_ISLAND_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_DEOXYS"
@@ -67,6 +85,9 @@
   },
   "REGION_NAVEL_ROCK_HARBOR/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_HARBOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -78,6 +99,9 @@
   },
   "REGION_NAVEL_ROCK_EXTERIOR/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -88,6 +112,9 @@
   },
   "REGION_NAVEL_ROCK_ENTRANCE/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -98,6 +125,9 @@
   },
   "REGION_NAVEL_ROCK_B1F/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -108,6 +138,9 @@
   },
   "REGION_NAVEL_ROCK_FORK/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_FORK",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -119,6 +152,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN01/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN01",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -129,6 +165,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN02/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN02",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -139,6 +178,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN03/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN03",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -149,6 +191,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN04/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN04",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -159,6 +204,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN05/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN05",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -169,6 +217,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN06/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN06",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -179,6 +230,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN07/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN07",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -189,6 +243,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN08/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN08",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -199,6 +256,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN09/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN09",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -209,6 +269,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN10/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN10",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -219,6 +282,9 @@
   },
   "REGION_NAVEL_ROCK_DOWN11/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_DOWN11",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -229,6 +295,9 @@
   },
   "REGION_NAVEL_ROCK_BOTTOM/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_BOTTOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_LUGIA"
@@ -240,6 +309,9 @@
   },
   "REGION_NAVEL_ROCK_UP1/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_UP1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -250,6 +322,9 @@
   },
   "REGION_NAVEL_ROCK_UP2/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_UP2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -260,6 +335,9 @@
   },
   "REGION_NAVEL_ROCK_UP3/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_UP3",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -270,6 +348,9 @@
   },
   "REGION_NAVEL_ROCK_UP4/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_UP4",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -280,6 +361,9 @@
   },
   "REGION_NAVEL_ROCK_TOP/MAIN": {
     "parent_map": "MAP_NAVEL_ROCK_TOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
     ],

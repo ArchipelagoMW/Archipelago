@@ -1,6 +1,9 @@
 {
   "REGION_PETALBURG_WOODS/WEST_PATH": {
     "parent_map": "MAP_PETALBURG_WOODS",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_PETALBURG_WOODS_ETHER",
       "ITEM_PETALBURG_WOODS_PARALYZE_HEAL",
@@ -20,6 +23,9 @@
   },
   "REGION_PETALBURG_WOODS/EAST_PATH": {
     "parent_map": "MAP_PETALBURG_WOODS",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_PETALBURG_WOODS_GREAT_BALL",
       "ITEM_PETALBURG_WOODS_X_ATTACK",
@@ -35,6 +41,9 @@
   },
   "REGION_RUSTURF_TUNNEL/WEST": {
     "parent_map": "MAP_RUSTURF_TUNNEL",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_RUSTURF_TUNNEL_POKE_BALL",
       "NPC_GIFT_RECEIVED_DEVON_GOODS_RUSTURF_TUNNEL"
@@ -51,6 +60,9 @@
   },
   "REGION_RUSTURF_TUNNEL/EAST": {
     "parent_map": "MAP_RUSTURF_TUNNEL",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_RUSTURF_TUNNEL_MAX_ETHER",
       "NPC_GIFT_RECEIVED_HM_STRENGTH"
@@ -66,6 +78,9 @@
   },
   "REGION_GRANITE_CAVE_1F/LOWER": {
     "parent_map": "MAP_GRANITE_CAVE_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_GRANITE_CAVE_1F_ESCAPE_ROPE",
       "NPC_GIFT_RECEIVED_HM_FLASH"
@@ -79,6 +94,9 @@
   },
   "REGION_GRANITE_CAVE_1F/UPPER": {
     "parent_map": "MAP_GRANITE_CAVE_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -91,6 +109,9 @@
   },
   "REGION_GRANITE_CAVE_B1F/LOWER": {
     "parent_map": "MAP_GRANITE_CAVE_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_GRANITE_CAVE_B1F_POKE_BALL"
     ],
@@ -105,6 +126,9 @@
   },
   "REGION_GRANITE_CAVE_B1F/LOWER_PLATFORM": {
     "parent_map": "MAP_GRANITE_CAVE_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -115,6 +139,9 @@
   },
   "REGION_GRANITE_CAVE_B1F/UPPER": {
     "parent_map": "MAP_GRANITE_CAVE_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -128,6 +155,9 @@
   },
   "REGION_GRANITE_CAVE_B2F/NORTH_LOWER_LANDING": {
     "parent_map": "MAP_GRANITE_CAVE_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_GRANITE_CAVE_B2F_REPEL"
     ],
@@ -139,6 +169,9 @@
   },
   "REGION_GRANITE_CAVE_B2F/NORTH_UPPER_LANDING": {
     "parent_map": "MAP_GRANITE_CAVE_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -150,6 +183,9 @@
   },
   "REGION_GRANITE_CAVE_B2F/NORTH_EAST_ROOM": {
     "parent_map": "MAP_GRANITE_CAVE_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_GRANITE_CAVE_B2F_RARE_CANDY",
       "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_1"
@@ -162,6 +198,9 @@
   },
   "REGION_GRANITE_CAVE_B2F/LOWER": {
     "parent_map": "MAP_GRANITE_CAVE_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "HIDDEN_ITEM_GRANITE_CAVE_B2F_EVERSTONE_2"
     ],
@@ -174,6 +213,9 @@
   },
   "REGION_GRANITE_CAVE_STEVENS_ROOM/MAIN": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -185,6 +227,9 @@
   },
   "REGION_GRANITE_CAVE_STEVENS_ROOM/LETTER_DELIVERED": {
     "parent_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_STEEL_WING"
     ],
@@ -196,6 +241,9 @@
   },
   "REGION_TRAINER_HILL_ENTRANCE/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -206,6 +254,9 @@
   },
   "REGION_TRAINER_HILL_1F/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -216,6 +267,9 @@
   },
   "REGION_TRAINER_HILL_2F/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -226,6 +280,9 @@
   },
   "REGION_TRAINER_HILL_3F/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_3F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -236,6 +293,9 @@
   },
   "REGION_TRAINER_HILL_4F/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_4F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -246,6 +306,9 @@
   },
   "REGION_TRAINER_HILL_ROOF/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_ROOF",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -256,6 +319,9 @@
   },
   "REGION_TRAINER_HILL_ELEVATOR/MAIN": {
     "parent_map": "MAP_TRAINER_HILL_ELEVATOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -265,6 +331,9 @@
   },
   "REGION_FIERY_PATH/MAIN": {
     "parent_map": "MAP_FIERY_PATH",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -277,6 +346,9 @@
   },
   "REGION_FIERY_PATH/BEHIND_BOULDER": {
     "parent_map": "MAP_FIERY_PATH",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_FIERY_PATH_TM_TOXIC",
       "ITEM_FIERY_PATH_FIRE_STONE"
@@ -289,6 +361,9 @@
   },
   "REGION_MAGMA_HIDEOUT_1F/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -300,6 +375,9 @@
   },
   "REGION_MAGMA_HIDEOUT_1F/CENTER_EXIT": {
     "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -311,6 +389,9 @@
   },
   "REGION_MAGMA_HIDEOUT_1F/LEDGE": {
     "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_1F_RARE_CANDY"
     ],
@@ -322,6 +403,9 @@
   },
   "REGION_MAGMA_HIDEOUT_1F/ENTRANCE": {
     "parent_map": "MAP_MAGMA_HIDEOUT_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -333,6 +417,9 @@
   },
   "REGION_MAGMA_HIDEOUT_2F_1R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -344,6 +431,9 @@
   },
   "REGION_MAGMA_HIDEOUT_2F_2R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_2F_2R_MAX_ELIXIR",
       "ITEM_MAGMA_HIDEOUT_2F_2R_FULL_RESTORE"
@@ -357,6 +447,9 @@
   },
   "REGION_MAGMA_HIDEOUT_2F_3R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_2F_3R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -367,6 +460,9 @@
   },
   "REGION_MAGMA_HIDEOUT_3F_1R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_3F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_1R_NUGGET"
     ],
@@ -380,6 +476,9 @@
   },
   "REGION_MAGMA_HIDEOUT_3F_2R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_3F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_2R_PP_MAX"
     ],
@@ -391,6 +490,9 @@
   },
   "REGION_MAGMA_HIDEOUT_3F_3R/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_3F_3R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_3F_3R_ECAPE_ROPE"
     ],
@@ -403,6 +505,9 @@
   },
   "REGION_MAGMA_HIDEOUT_4F/MAIN": {
     "parent_map": "MAP_MAGMA_HIDEOUT_4F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MAGMA_HIDEOUT_4F_MAX_REVIVE"
     ],
@@ -417,6 +522,9 @@
   },
   "REGION_MIRAGE_TOWER_1F/MAIN": {
     "parent_map": "MAP_MIRAGE_TOWER_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -427,6 +535,9 @@
   },
   "REGION_MIRAGE_TOWER_2F/TOP": {
     "parent_map": "MAP_MIRAGE_TOWER_2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -439,6 +550,9 @@
   },
   "REGION_MIRAGE_TOWER_2F/BOTTOM": {
     "parent_map": "MAP_MIRAGE_TOWER_2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -451,6 +565,9 @@
   },
   "REGION_MIRAGE_TOWER_3F/TOP": {
     "parent_map": "MAP_MIRAGE_TOWER_3F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -462,6 +579,9 @@
   },
   "REGION_MIRAGE_TOWER_3F/BOTTOM": {
     "parent_map": "MAP_MIRAGE_TOWER_3F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -474,6 +594,9 @@
   },
   "REGION_MIRAGE_TOWER_4F/MAIN": {
     "parent_map": "MAP_MIRAGE_TOWER_4F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -485,6 +608,9 @@
   },
   "REGION_MIRAGE_TOWER_4F/FOSSIL_PLATFORM": {
     "parent_map": "MAP_MIRAGE_TOWER_4F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -492,6 +618,9 @@
   },
   "REGION_DESERT_RUINS/FRONT": {
     "parent_map": "MAP_DESERT_RUINS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -502,6 +631,9 @@
   },
   "REGION_DESERT_RUINS/BACK": {
     "parent_map": "MAP_DESERT_RUINS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_REGIROCK"
@@ -513,6 +645,9 @@
   },
   "REGION_METEOR_FALLS_1F_1R/MAIN": {
     "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [
       "ITEM_METEOR_FALLS_1F_1R_MOON_STONE",
       "ITEM_METEOR_FALLS_1F_1R_FULL_HEAL"
@@ -521,19 +656,48 @@
       "EVENT_MAGMA_STEALS_METEORITE"
     ],
     "exits": [
-      "REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL"
+      "REGION_METEOR_FALLS_1F_1R/WATER"
     ],
     "warps": [
       "MAP_METEOR_FALLS_1F_1R:0/MAP_ROUTE114:0",
       "MAP_METEOR_FALLS_1F_1R:1/MAP_ROUTE115:0"
     ]
   },
-  "REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL": {
+  "REGION_METEOR_FALLS_1F_1R/WATER": {
     "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_METEOR_FALLS_1F_1R/MAIN"
+      "REGION_METEOR_FALLS_1F_1R/MAIN",
+      "REGION_METEOR_FALLS_1F_1R/WATER_ABOVE_WATERFALL"
+    ],
+    "warps": []
+  },
+  "REGION_METEOR_FALLS_1F_1R/WATER_ABOVE_WATERFALL": {
+    "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_METEOR_FALLS_1F_1R/WATER",
+      "REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL"
+    ],
+    "warps": []
+  },
+  "REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL": {
+    "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_METEOR_FALLS_1F_1R/WATER_ABOVE_WATERFALL"
     ],
     "warps": [
       "MAP_METEOR_FALLS_1F_1R:2/MAP_METEOR_FALLS_1F_2R:0"
@@ -541,6 +705,9 @@
   },
   "REGION_METEOR_FALLS_1F_1R/TOP": {
     "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_METEOR_FALLS_1F_1R_TM_IRON_TAIL"
     ],
@@ -553,6 +720,9 @@
   },
   "REGION_METEOR_FALLS_1F_1R/BOTTOM": {
     "parent_map": "MAP_METEOR_FALLS_1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_METEOR_FALLS_1F_1R_PP_UP"
     ],
@@ -564,6 +734,9 @@
   },
   "REGION_METEOR_FALLS_1F_2R/TOP": {
     "parent_map": "MAP_METEOR_FALLS_1F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -576,25 +749,58 @@
   },
   "REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT": {
     "parent_map": "MAP_METEOR_FALLS_1F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT_WATER"
+    ],
     "warps": [
       "MAP_METEOR_FALLS_1F_2R:2/MAP_METEOR_FALLS_B1F_1R:1"
     ]
   },
-  "REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT": {
+  "REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT_WATER": {
     "parent_map": "MAP_METEOR_FALLS_1F_2R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [],
+    "warps": []
+  },
+  "REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT": {
+    "parent_map": "MAP_METEOR_FALLS_1F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT_WATER"
+    ],
     "warps": [
       "MAP_METEOR_FALLS_1F_2R:0/MAP_METEOR_FALLS_1F_1R:2",
       "MAP_METEOR_FALLS_1F_2R:3/MAP_METEOR_FALLS_B1F_1R:2"
     ]
   },
+  "REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT_WATER": {
+    "parent_map": "MAP_METEOR_FALLS_1F_2R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": []
+  },
   "REGION_METEOR_FALLS_B1F_1R/UPPER": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -606,6 +812,9 @@
   },
   "REGION_METEOR_FALLS_B1F_1R/HIGHEST_LADDER": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -617,6 +826,9 @@
   },
   "REGION_METEOR_FALLS_B1F_1R/NORTH_SHORE": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -628,6 +840,9 @@
   },
   "REGION_METEOR_FALLS_B1F_1R/SOUTH_SHORE": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -639,6 +854,9 @@
   },
   "REGION_METEOR_FALLS_B1F_1R/WATER": {
     "parent_map": "MAP_METEOR_FALLS_B1F_1R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -650,6 +868,9 @@
   },
   "REGION_METEOR_FALLS_B1F_2R/ENTRANCE": {
     "parent_map": "MAP_METEOR_FALLS_B1F_2R",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -661,6 +882,9 @@
   },
   "REGION_METEOR_FALLS_B1F_2R/WATER": {
     "parent_map": "MAP_METEOR_FALLS_B1F_2R",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [
       "ITEM_METEOR_FALLS_B1F_2R_TM_DRAGON_CLAW"
     ],
@@ -672,6 +896,9 @@
   },
   "REGION_METEOR_FALLS_STEVENS_CAVE/MAIN": {
     "parent_map": "MAP_METEOR_FALLS_STEVENS_CAVE",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_DEFEAT_STEVEN"
@@ -681,17 +908,11 @@
       "MAP_METEOR_FALLS_STEVENS_CAVE:0/MAP_METEOR_FALLS_1F_1R:5"
     ]
   },
-  "REGION_ALTERING_CAVE/MAIN": {
-    "parent_map": "MAP_ALTERING_CAVE",
-    "locations": [],
-    "events": [],
-    "exits": [],
-    "warps": [
-      "MAP_ALTERING_CAVE:0/MAP_ROUTE103:0"
-    ]
-  },
   "REGION_ISLAND_CAVE/FRONT": {
     "parent_map": "MAP_ISLAND_CAVE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -702,6 +923,9 @@
   },
   "REGION_ISLAND_CAVE/BACK": {
     "parent_map": "MAP_ISLAND_CAVE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_REGICE"
@@ -713,6 +937,9 @@
   },
   "REGION_ABANDONED_SHIP_DECK/ENTRANCE": {
     "parent_map": "MAP_ABANDONED_SHIP_DECK",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -723,6 +950,9 @@
   },
   "REGION_ABANDONED_SHIP_DECK/UPPER": {
     "parent_map": "MAP_ABANDONED_SHIP_DECK",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -733,6 +963,9 @@
   },
   "REGION_ABANDONED_SHIP_CAPTAINS_OFFICE/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_CAPTAINS_OFFICE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_CAPTAINS_OFFICE_STORAGE_KEY"
     ],
@@ -744,6 +977,9 @@
   },
   "REGION_ABANDONED_SHIP_CORRIDORS_1F/WEST": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -756,6 +992,9 @@
   },
   "REGION_ABANDONED_SHIP_CORRIDORS_1F/EAST": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -770,6 +1009,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS_1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -781,6 +1023,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS_1F/NORTH_WEST": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_1F_HARBOR_MAIL"
     ],
@@ -792,6 +1037,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS2_1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS2_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_2_1F_REVIVE"
     ],
@@ -804,6 +1052,9 @@
   },
   "REGION_ABANDONED_SHIP_CORRIDORS_B1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_CORRIDORS_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -820,6 +1071,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS_B1F/LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_B1F_ESCAPE_ROPE"
     ],
@@ -831,6 +1085,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS_B1F/CENTER": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -842,6 +1099,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS_B1F/RIGHT": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -851,6 +1111,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOMS2_B1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOMS2_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_2_B1F_DIVE_BALL"
     ],
@@ -863,6 +1126,9 @@
   },
   "REGION_ABANDONED_SHIP_ROOM_B1F/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_ROOM_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM_ICE_BEAM"
     ],
@@ -874,6 +1140,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -890,6 +1159,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/TOP_LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY"
     ],
@@ -901,6 +1173,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/TOP_CENTER_DOORWAY": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -910,6 +1185,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/TOP_RIGHT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_6_LUXURY_BALL",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY"
@@ -922,6 +1200,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_LEFT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM_RAIN_DANCE",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY"
@@ -934,6 +1215,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_CENTER": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER"
     ],
@@ -945,6 +1229,9 @@
   },
   "REGION_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS/BOTTOM_RIGHT": {
     "parent_map": "MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_3_WATER_STONE",
       "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY"
@@ -957,6 +1244,9 @@
   },
   "REGION_ABANDONED_SHIP_UNDERWATER1/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -968,6 +1258,9 @@
   },
   "REGION_ABANDONED_SHIP_UNDERWATER2/MAIN": {
     "parent_map": "MAP_ABANDONED_SHIP_UNDERWATER2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -979,6 +1272,9 @@
   },
   "REGION_NEW_MAUVILLE_ENTRANCE/MAIN": {
     "parent_map": "MAP_NEW_MAUVILLE_ENTRANCE",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -989,6 +1285,9 @@
   },
   "REGION_NEW_MAUVILLE_INSIDE/MAIN": {
     "parent_map": "MAP_NEW_MAUVILLE_INSIDE",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_NEW_MAUVILLE_ULTRA_BALL",
       "ITEM_NEW_MAUVILLE_ESCAPE_ROPE",
@@ -1006,6 +1305,9 @@
   },
   "REGION_SCORCHED_SLAB/MAIN": {
     "parent_map": "MAP_SCORCHED_SLAB",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SCORCHED_SLAB_TM_SUNNY_DAY"
     ],
@@ -1017,6 +1319,9 @@
   },
   "REGION_ANCIENT_TOMB/FRONT": {
     "parent_map": "MAP_ANCIENT_TOMB",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1027,6 +1332,9 @@
   },
   "REGION_ANCIENT_TOMB/BACK": {
     "parent_map": "MAP_ANCIENT_TOMB",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_REGISTEEL"
@@ -1038,6 +1346,9 @@
   },
   "REGION_MT_PYRE_1F/MAIN": {
     "parent_map": "MAP_MT_PYRE_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_CLEANSE_TAG"
     ],
@@ -1052,6 +1363,9 @@
   },
   "REGION_MT_PYRE_2F/MAIN": {
     "parent_map": "MAP_MT_PYRE_2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_2F_ULTRA_BALL"
     ],
@@ -1067,6 +1381,9 @@
   },
   "REGION_MT_PYRE_3F/MAIN": {
     "parent_map": "MAP_MT_PYRE_3F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_3F_SUPER_REPEL"
     ],
@@ -1083,6 +1400,9 @@
   },
   "REGION_MT_PYRE_4F/MAIN": {
     "parent_map": "MAP_MT_PYRE_4F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_4F_SEA_INCENSE"
     ],
@@ -1099,6 +1419,9 @@
   },
   "REGION_MT_PYRE_5F/MAIN": {
     "parent_map": "MAP_MT_PYRE_5F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_5F_LAX_INCENSE"
     ],
@@ -1114,6 +1437,9 @@
   },
   "REGION_MT_PYRE_6F/MAIN": {
     "parent_map": "MAP_MT_PYRE_6F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_6F_TM_SHADOW_BALL"
     ],
@@ -1126,6 +1452,9 @@
   },
   "REGION_MT_PYRE_EXTERIOR/MAIN": {
     "parent_map": "MAP_MT_PYRE_EXTERIOR",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_MT_PYRE_EXTERIOR_MAX_POTION",
       "ITEM_MT_PYRE_EXTERIOR_TM_SKILL_SWAP",
@@ -1141,6 +1470,9 @@
   },
   "REGION_MT_PYRE_SUMMIT/MAIN": {
     "parent_map": "MAP_MT_PYRE_SUMMIT",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC",
       "HIDDEN_ITEM_MT_PYRE_SUMMIT_RARE_CANDY",
@@ -1154,6 +1486,9 @@
   },
   "REGION_AQUA_HIDEOUT_1F/MAIN": {
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1165,6 +1500,9 @@
   },
   "REGION_AQUA_HIDEOUT_1F/WATER": {
     "parent_map": "MAP_AQUA_HIDEOUT_1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1176,6 +1514,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_BOTTOM": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1187,6 +1528,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1197,6 +1541,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_CENTER": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1207,6 +1554,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_TOP_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1218,6 +1568,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_CENTER_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_AQUA_HIDEOUT_B1F_MAX_ELIXIR"
     ],
@@ -1229,6 +1582,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/WEST_CENTER": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_AQUA_HIDEOUT_B1F_NUGGET",
       "ITEM_AQUA_HIDEOUT_B1F_MASTER_BALL"
@@ -1241,6 +1597,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_TOP": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1253,6 +1612,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1264,6 +1626,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_CENTER": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1276,6 +1641,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_1_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1287,6 +1655,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1298,6 +1669,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_CENTER": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1310,6 +1684,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_ROW_2_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1321,6 +1698,9 @@
   },
   "REGION_AQUA_HIDEOUT_B1F/EAST_BOTTOM": {
     "parent_map": "MAP_AQUA_HIDEOUT_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1332,6 +1712,9 @@
   },
   "REGION_AQUA_HIDEOUT_B2F/TOP_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1342,6 +1725,9 @@
   },
   "REGION_AQUA_HIDEOUT_B2F/TOP_CENTER": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1352,6 +1738,9 @@
   },
   "REGION_AQUA_HIDEOUT_B2F/TOP_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1363,6 +1752,9 @@
   },
   "REGION_AQUA_HIDEOUT_B2F/BOTTOM_LEFT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_AQUA_HIDEOUT_B2F_NEST_BALL"
     ],
@@ -1374,6 +1766,9 @@
   },
   "REGION_AQUA_HIDEOUT_B2F/BOTTOM_RIGHT": {
     "parent_map": "MAP_AQUA_HIDEOUT_B2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_CLEAR_AQUA_HIDEOUT"
@@ -1386,6 +1781,9 @@
   },
   "REGION_SHOAL_CAVE_ENTRANCE_ROOM/SOUTH": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1398,6 +1796,9 @@
   },
   "REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_WEST_CORNER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1409,6 +1810,9 @@
   },
   "REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_EAST_CORNER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SHOAL_CAVE_ENTRANCE_BIG_PEARL"
     ],
@@ -1422,6 +1826,9 @@
   },
   "REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -1432,6 +1839,9 @@
   },
   "REGION_SHOAL_CAVE_ENTRANCE_ROOM/LOW_TIDE_LOWER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1443,6 +1853,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_CORNER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1454,6 +1867,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1466,6 +1882,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/LOW_TIDE_EAST_MIDDLE_GROUND": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1476,6 +1895,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_WEST_CORNER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1487,6 +1909,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/BRIDGES": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1497,6 +1922,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/RARE_CANDY_PLATFORM": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SHOAL_CAVE_INNER_ROOM_RARE_CANDY"
     ],
@@ -1508,6 +1936,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_WATER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -1518,6 +1949,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/EAST_WATER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -1527,6 +1961,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/NORTH_WEST_WATER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -1537,6 +1974,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/LOW_TIDE_SOUTH_EAST_LOWER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1549,6 +1989,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/LOW_TIDE_EAST_LOWER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1560,6 +2003,9 @@
   },
   "REGION_SHOAL_CAVE_INNER_ROOM/LOW_TIDE_NORTH_WEST_LOWER": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1569,6 +2015,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM/MAIN": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SHOAL_CAVE_STAIRS_ROOM_ICE_HEAL"
     ],
@@ -1581,6 +2030,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/NORTH_WEST": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_FOCUS_BAND"
     ],
@@ -1596,6 +2048,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/SOUTH": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1605,6 +2060,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/EAST": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1616,6 +2074,9 @@
   },
   "REGION_SHOAL_CAVE_LOW_TIDE_ICE_ROOM/MAIN": {
     "parent_map": "MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SHOAL_CAVE_ICE_ROOM_TM_HAIL",
       "ITEM_SHOAL_CAVE_ICE_ROOM_NEVER_MELT_ICE"
@@ -1628,29 +2089,52 @@
   },
   "REGION_UNDERWATER_SEAFLOOR_CAVERN/MAIN": {
     "parent_map": "MAP_UNDERWATER_SEAFLOOR_CAVERN",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEAFLOOR_CAVERN_ENTRANCE/MAIN"
+      "REGION_SEAFLOOR_CAVERN_ENTRANCE/WATER"
     ],
     "warps": [
       "MAP_UNDERWATER_SEAFLOOR_CAVERN:0/MAP_UNDERWATER_ROUTE128:0"
     ]
   },
-  "REGION_SEAFLOOR_CAVERN_ENTRANCE/MAIN": {
+  "REGION_SEAFLOOR_CAVERN_ENTRANCE/WATER": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ENTRANCE",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_UNDERWATER_SEAFLOOR_CAVERN/MAIN"
+      "REGION_UNDERWATER_SEAFLOOR_CAVERN/MAIN",
+      "REGION_SEAFLOOR_CAVERN_ENTRANCE/MAIN"
     ],
     "warps": [
-      "MAP_SEAFLOOR_CAVERN_ENTRANCE:0/MAP_UNDERWATER_ROUTE128:0!",
+      "MAP_SEAFLOOR_CAVERN_ENTRANCE:0/MAP_UNDERWATER_ROUTE128:0!"
+    ]
+  },
+  "REGION_SEAFLOOR_CAVERN_ENTRANCE/MAIN": {
+    "parent_map": "MAP_SEAFLOOR_CAVERN_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SEAFLOOR_CAVERN_ENTRANCE/WATER"
+    ],
+    "warps": [
       "MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0"
     ]
   },
   "REGION_SEAFLOOR_CAVERN_ROOM1/NORTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM1",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1663,6 +2147,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM1",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1674,6 +2161,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM2",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1686,6 +2176,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM2",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1699,6 +2192,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM2",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1710,6 +2206,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_EAST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM2",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1719,6 +2218,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM3/MAIN": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM3",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1730,6 +2232,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM4/NORTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM4",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1741,6 +2246,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM4/EAST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM4",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1753,6 +2261,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM4/SOUTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM4",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1762,6 +2273,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM5",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1774,6 +2288,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM5/EAST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM5",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1785,6 +2302,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM5/SOUTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM5",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1796,31 +2316,41 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM6",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEAFLOOR_CAVERN_ROOM6/CAVE_ON_WATER"
+      "REGION_SEAFLOOR_CAVERN_ROOM6/WATER"
     ],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM6:1/MAP_SEAFLOOR_CAVERN_ROOM3:2"
     ]
   },
-  "REGION_SEAFLOOR_CAVERN_ROOM6/CAVE_ON_WATER": {
+  "REGION_SEAFLOOR_CAVERN_ROOM6/WATER": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM6",
+    "has_grass": true,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
-    "exits": [],
+    "exits": [
+      "REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST"
+    ],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM6:2/MAP_SEAFLOOR_CAVERN_ENTRANCE:1!"
     ]
   },
   "REGION_SEAFLOOR_CAVERN_ROOM6/SOUTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM6",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST",
-      "REGION_SEAFLOOR_CAVERN_ROOM6/CAVE_ON_WATER"
+      "REGION_SEAFLOOR_CAVERN_ROOM6/WATER"
     ],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM6:0/MAP_SEAFLOOR_CAVERN_ROOM2:2"
@@ -1828,21 +2358,39 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM7/NORTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM7",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH"
+      "REGION_SEAFLOOR_CAVERN_ROOM7/WATER"
     ],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM7:1/MAP_SEAFLOOR_CAVERN_ROOM3:1"
     ]
   },
-  "REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH": {
+  "REGION_SEAFLOOR_CAVERN_ROOM7/WATER": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM7",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
-      "REGION_SEAFLOOR_CAVERN_ROOM7/NORTH"
+      "REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH"
+    ],
+    "warps": []
+  },
+  "REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH": {
+    "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM7",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_SEAFLOOR_CAVERN_ROOM7/WATER"
     ],
     "warps": [
       "MAP_SEAFLOOR_CAVERN_ROOM7:0/MAP_SEAFLOOR_CAVERN_ROOM2:3"
@@ -1850,6 +2398,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM8/NORTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM8",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1861,6 +2412,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM8",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1872,6 +2426,9 @@
   },
   "REGION_SEAFLOOR_CAVERN_ROOM9/MAIN": {
     "parent_map": "MAP_SEAFLOOR_CAVERN_ROOM9",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE"
     ],
@@ -1885,6 +2442,9 @@
   },
   "REGION_CAVE_OF_ORIGIN_ENTRANCE/MAIN": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_ENTRANCE",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1895,6 +2455,9 @@
   },
   "REGION_CAVE_OF_ORIGIN_1F/MAIN": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1905,6 +2468,9 @@
   },
   "REGION_CAVE_OF_ORIGIN_B1F/MAIN": {
     "parent_map": "MAP_CAVE_OF_ORIGIN_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_WALLACE_GOES_TO_SKY_PILLAR"
@@ -1916,6 +2482,9 @@
   },
   "REGION_SKY_PILLAR_ENTRANCE/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1926,6 +2495,9 @@
   },
   "REGION_SKY_PILLAR_OUTSIDE/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_OUTSIDE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1936,6 +2508,9 @@
   },
   "REGION_SKY_PILLAR_1F/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1946,6 +2521,9 @@
   },
   "REGION_SKY_PILLAR_2F/LEFT": {
     "parent_map": "MAP_SKY_PILLAR_2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1958,6 +2536,9 @@
   },
   "REGION_SKY_PILLAR_2F/RIGHT": {
     "parent_map": "MAP_SKY_PILLAR_2F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -1970,6 +2551,9 @@
   },
   "REGION_SKY_PILLAR_3F/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_3F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1980,6 +2564,9 @@
   },
   "REGION_SKY_PILLAR_3F/TOP_CENTER": {
     "parent_map": "MAP_SKY_PILLAR_3F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -1989,6 +2576,9 @@
   },
   "REGION_SKY_PILLAR_4F/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_4F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2001,6 +2591,9 @@
   },
   "REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER": {
     "parent_map": "MAP_SKY_PILLAR_4F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2010,6 +2603,9 @@
   },
   "REGION_SKY_PILLAR_4F/TOP_LEFT": {
     "parent_map": "MAP_SKY_PILLAR_4F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -2020,6 +2616,9 @@
   },
   "REGION_SKY_PILLAR_5F/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_5F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -2030,6 +2629,9 @@
   },
   "REGION_SKY_PILLAR_TOP/MAIN": {
     "parent_map": "MAP_SKY_PILLAR_TOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_WAKE_RAYQUAZA",
@@ -2042,6 +2644,9 @@
   },
   "REGION_UNDERWATER_SEALED_CHAMBER/MAIN": {
     "parent_map": "MAP_UNDERWATER_SEALED_CHAMBER",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2054,6 +2659,9 @@
   },
   "REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN": {
     "parent_map": "MAP_SEALED_CHAMBER_OUTER_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2064,6 +2672,9 @@
   },
   "REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL": {
     "parent_map": "MAP_SEALED_CHAMBER_OUTER_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2075,6 +2686,9 @@
   },
   "REGION_SEALED_CHAMBER_INNER_ROOM/MAIN": {
     "parent_map": "MAP_SEALED_CHAMBER_INNER_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_UNDO_REGI_SEAL"
@@ -2086,6 +2700,9 @@
   },
   "REGION_VICTORY_ROAD_1F/NORTH_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -2096,6 +2713,9 @@
   },
   "REGION_VICTORY_ROAD_1F/SOUTH_WEST": {
     "parent_map": "MAP_VICTORY_ROAD_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_VICTORY_ROAD_1F_MAX_ELIXIR"
     ],
@@ -2108,6 +2728,9 @@
   },
   "REGION_VICTORY_ROAD_1F/SOUTH_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_VICTORY_ROAD_1F_PP_UP",
       "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL"
@@ -2120,6 +2743,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/NORTH_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_VICTORY_ROAD_B1F_TM_PSYCHIC"
     ],
@@ -2131,6 +2757,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/SOUTH_WEST_MAIN": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2143,6 +2772,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2154,6 +2786,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/MAIN_UPPER": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2165,6 +2800,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [
       "ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"
     ],
@@ -2178,6 +2816,9 @@
   },
   "REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST": {
     "parent_map": "MAP_VICTORY_ROAD_B1F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2190,6 +2831,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/LOWER_WEST": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -2201,6 +2845,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/LOWER_WEST_ISLAND": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -2212,6 +2859,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/LOWER_EAST": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -2223,6 +2873,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -2234,6 +2887,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [],
     "events": [],
     "exits": [
@@ -2245,6 +2901,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/UPPER": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": true,
+    "has_water": false,
+    "has_fishing": true,
     "locations": [
       "HIDDEN_ITEM_VICTORY_ROAD_B2F_MAX_REPEL"
     ],
@@ -2260,6 +2919,9 @@
   },
   "REGION_VICTORY_ROAD_B2F/UPPER_WATER": {
     "parent_map": "MAP_VICTORY_ROAD_B2F",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
     "locations": [
       "ITEM_VICTORY_ROAD_B2F_FULL_HEAL",
       "HIDDEN_ITEM_VICTORY_ROAD_B2F_ELIXIR"
@@ -2274,6 +2936,9 @@
   },
   "REGION_TERRA_CAVE_ENTRANCE/MAIN": {
     "parent_map": "MAP_TERRA_CAVE_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [],
@@ -2283,6 +2948,9 @@
   },
   "REGION_TERRA_CAVE_END/MAIN": {
     "parent_map": "MAP_TERRA_CAVE_END",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_GROUDON"
@@ -2294,6 +2962,9 @@
   },
   "REGION_UNDERWATER_MARINE_CAVE/MAIN": {
     "parent_map": "MAP_UNDERWATER_MARINE_CAVE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2303,6 +2974,9 @@
   },
   "REGION_MARINE_CAVE_ENTRANCE/MAIN": {
     "parent_map": "MAP_MARINE_CAVE_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [],
     "exits": [
@@ -2314,6 +2988,9 @@
   },
   "REGION_MARINE_CAVE_END/MAIN": {
     "parent_map": "MAP_MARINE_CAVE_END",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
     "locations": [],
     "events": [
       "EVENT_ENCOUNTER_KYOGRE"
