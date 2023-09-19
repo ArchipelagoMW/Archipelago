@@ -150,7 +150,6 @@ class GraphBuilder(object):
         # update item% objectives
         accessibleItems = [il.Item for il in allItemLocs if ilCheck(il)]
         majorUpgrades = [item.Type for item in accessibleItems if item.BeamBits != 0 or item.ItemBits != 0]
-        sm.objectives.setItemPercentFuncs(len(accessibleItems), majorUpgrades)
         if split == "Scavenger":
             # update escape access for scav with last scav loc
             lastScavItemLoc = progItemLocs[-1]
@@ -163,6 +162,7 @@ class GraphBuilder(object):
                 if ilCheck(itemLoc) and (split.startswith("Full") or itemLoc.Location.isClass(split)):
                     availLocsByArea[itemLoc.Location.GraphArea].append(itemLoc.Location.Name)
             self.log.debug("escapeTrigger. availLocsByArea="+str(availLocsByArea))
+            sm.objectives.setItemPercentFuncs(len(accessibleItems), majorUpgrades, container)
             sm.objectives.setAreaFuncs({area:lambda sm,ap:SMBool(len(container.getLocs(lambda loc: loc.Name in availLocsByArea[area]))==0) for area in availLocsByArea})
         self.log.debug("escapeTrigger. collect locs until G4 access")
         # collect all item/locations up until we can pass G4 (the escape triggers)
