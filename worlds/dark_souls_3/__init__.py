@@ -86,7 +86,7 @@ class DarkSouls3World(World):
         if self.multiworld.enable_progressive_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
         if self.multiworld.early_banner[self.player] == Toggle.option_true:
-            self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
+            self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
 
 
     def create_regions(self):
