@@ -488,7 +488,7 @@ Door - 0x1845B (Windmill Entry) - 0x17F5F
 159541 - 0x03412 (Tower Underside Fourth EP) - True - True
 159542 - 0x038A6 (Tower Underside First EP) - True - True
 159543 - 0x038AA (Tower Underside Second EP) - True - True
-159545 - 0x03E40 (RGB House Green EP) - 0x334D8 & 0x03C0C & 0x03C08 - True
+159545 - 0x03E40 (RGB House Green EP) - 0x334D8 - True
 159546 - 0x28B8E (Maze Bridge Underside EP) - 0x2896A - True
 159552 - 0x03BCF (Black Line Redirect EP) - True - True
 159800 - 0xFFF80 (Pet the Dog) - True - True
