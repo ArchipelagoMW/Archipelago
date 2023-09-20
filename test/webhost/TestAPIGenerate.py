@@ -5,7 +5,8 @@ import json
 class TestDocs(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        from WebHost import get_app, raw_app
+        from WebHostLib import app as raw_app
+        from WebHost import get_app
         raw_app.config["PONY"] = {
             "provider": "sqlite",
             "filename": ":memory:",
