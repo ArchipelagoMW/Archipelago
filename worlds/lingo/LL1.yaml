@@ -5354,22 +5354,22 @@
         room: The Artistic (Lattice)
         door: Door to Apple
     panels:
-      ARTICLE:
+      THEME:
         id: Ceiling Room/Panel_answer_1
         colors: red
-        tag: botred
-      TAR:
+        tag: midred
+      PAINTS:
         id: Ceiling Room/Panel_answer_2
-        colors: black
-        tag: topblack
+        colors: yellow
+        tag: botyellow
       I:
         id: Ceiling Room/Panel_answer_3
         colors: blue
         tag: midblue
       KIT:
         id: Ceiling Room/Panel_answer_4
-        colors: yellow
-        tag: topyellow
+        colors: black
+        tag: topblack
   The Discerning:
     entrances:
       Crossroads:
