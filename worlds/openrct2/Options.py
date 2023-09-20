@@ -433,9 +433,9 @@ class Randomize_Park_Values(OpenRCT2OnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
 
-class Include_Guest_Objective(OpenRCT2OnToggle):
-    """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
-    display_name = "Include Guest Objective"
+# class Include_Guest_Objective(OpenRCT2OnToggle):
+#     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
+#     display_name = "Include Guest Objective"
 
 class Guest_Objective(Range):
     """If enabled, choose how many guests are required to win the scenario"""
@@ -444,9 +444,9 @@ class Guest_Objective(Range):
     range_end = 7500
     default = 3000
 
-class Include_Park_Value_Objective(OpenRCT2OnToggle):
-    """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
-    display_name = "Include Park Value Objective"
+# class Include_Park_Value_Objective(OpenRCT2OnToggle):
+#     """Include an objective to achive a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
+#     display_name = "Include Park Value Objective"
 
 class Park_Value_Objective(Range):
     """If enabled, choose what park value (In USD) is required to win the scenario."""
@@ -455,9 +455,9 @@ class Park_Value_Objective(Range):
     range_end = 1000000
     default = 300000
 
-class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
-    """Include an objective to build a certain number of Roller Coasters with optional Paramaters. Multiple objectives can be enabled!"""
-    display_name = "Include Roller Coaster Objective"
+# class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
+#     """Include an objective to build a certain number of Roller Coasters with optional Paramaters. Multiple objectives can be enabled!"""
+#     display_name = "Include Roller Coaster Objective"
 
 class Roller_Coaster_Objective(Range):
     """If enabled, choose how many coasters, and what prerequisites they need to beat the scenario."""
@@ -487,9 +487,9 @@ class Roller_Coaster_Nausea(Range):
     range_end = 10
     default = 5
 
-class Include_Park_Rating_Objective(OpenRCT2OnToggle):
-    """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""
-    display_name = "Include Park Rating Objective"
+# class Include_Park_Rating_Objective(OpenRCT2OnToggle):
+#     """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""
+#     display_name = "Include Park Rating Objective"
 
 class Park_Rating_Objective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
@@ -556,16 +556,16 @@ openRCT2_options = {
     "stat_rerolls": Stat_ReRolls,
     "include_park_rules": Include_Park_Rules,
     "randomize_park_values": Randomize_Park_Values,
-    "include_guest_objective": Include_Guest_Objective,
-    "gust_objective": Guest_Objective,
-    "include_park_value_objective": Include_Park_Value_Objective,
+    # "include_guest_objective": Include_Guest_Objective,
+    "guest_objective": Guest_Objective,
+    # "include_park_value_objective": Include_Park_Value_Objective,
     "park_value_objective": Park_Value_Objective,
-    "include_roller_coaster_objective": Include_Roller_Coaster_Objective,
+    # "include_roller_coaster_objective": Include_Roller_Coaster_Objective,
     "roller_coaster_objective": Roller_Coaster_Objective,
     "roller_coaster_excitement": Roller_Coaster_Excitement,
     "roller_coaster_intensity": Roller_Coaster_Intensity,
     "roller_coaster_nausea": Roller_Coaster_Nausea,
-    "include_park_rating_objective": Include_Park_Rating_Objective,
+    # "include_park_rating_objective": Include_Park_Rating_Objective,
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
     "monopoly_mode": Monopoly_Mode

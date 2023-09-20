@@ -305,11 +305,26 @@ class OpenRCT2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def fill_slot_data(self) -> None:
+        #archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false], RideIncome: [0, false], ShopIncome: [8000, false], ParkRating: [700, false], LoanPaidOff: [true, false], Monopoly: [true, false]};
+        guests = self.multiworld.guest_objective[self.player].value
+        park_value = self.multiworld.park_value_objective[self.player].value
+        roller_coasters = self.multiworld.roller_coaster_objective[self.player].value
+        excitement = self.multiworld.roller_coaster_excitement[self.player].value
+        intensity = self.multiworld.roller_coaster_intensity[self.player].value
+        nausea = self.multiworld.roller_coaster_nausea[self.player].value
+        park_rating = self.multiworld.park_rating_objective[self.player].value
+        pay_off_loan = self.multiworld.pay_off_loan[self.player].value
+        monopoly = self.multiworld.monopoly_mode[self.player].value
+        objectives = {"Guests": [guests, False], "ParkValue":[park_value, False], "RollerCoasters": [roller_coasters,excitement,intensity,nausea,0,False], "RideIncome": [0,False], "ShopIncome": [0,False], "ParkRating": [park_rating, False], "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False]}
+        print(objectives)
         return {
             "difficulty": self.multiworld.difficulty[self.player].value,
             "scenario_length": self.multiworld.scenario_length[self.player].value,
             "scenario": self.multiworld.scenario[self.player].value,
-            "death_link": self.multiworld.deathlink[self.player].value
+            "death_link": self.multiworld.deathlink[self.player].value,
+            "randomization_range": self.multiworld.randomization_range[self.player].value,
+            "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
+            "randomize_park_values": self.multiworld.randomize_park_values[self.player].value
         }
 
     def create_item(self, item:str) -> OpenRCT2Item:
