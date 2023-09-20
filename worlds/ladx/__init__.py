@@ -12,6 +12,7 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 
 from .Common import *
+from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items,
                     links_awakening_items_by_name, ItemName)
@@ -378,59 +379,25 @@ class LinksAwakeningWorld(World):
     # Tries to associate an icon from another game with an icon we have
     def guess_icon_for_other_world(self, other):
         if not self.name_cache:
-            forbidden = [
-                "TRADING",
-                "ITEM",
-                "BAD",
-                "SINGLE",
-                "UPGRADE",
-                "BLUE",
-                "RED",
-                "NOTHING",
-                "MESSAGE",
-            ]
             for item in ladxr_item_to_la_item_name.keys():
                 self.name_cache[item] = item
                 splits = item.split("_")
                 self.name_cache["".join(splits)] = item
                 if 'RUPEES' in splits:
                     self.name_cache["".join(reversed(splits))] = item
-                    
+
                 for word in item.split("_"):
-                    if word not in forbidden and not word.isnumeric():
+                    if word not in ItemIconGuessing.FORBIDDEN and not word.isnumeric():
                         self.name_cache[word] = item
-            others = {
-                'KEY': 'KEY',
-                'COMPASS': 'COMPASS',
-                'BIGKEY': 'NIGHTMARE_KEY',
-                'MAP': 'MAP',
-                'FLUTE': 'OCARINA',
-                'SONG': 'OCARINA',
-                'MUSHROOM': 'TOADSTOOL',
-                'GLOVE': 'POWER_BRACELET',
-                'BOOT': 'PEGASUS_BOOTS',
-                'SHOE': 'PEGASUS_BOOTS',
-                'SHOES': 'PEGASUS_BOOTS',
-                'SANCTUARYHEARTCONTAINER': 'HEART_CONTAINER',
-                'BOSSHEARTCONTAINER': 'HEART_CONTAINER',
-                'HEARTCONTAINER': 'HEART_CONTAINER',
-                'ENERGYTANK': 'HEART_CONTAINER',
-                'MISSILE': 'SINGLE_ARROW',
-                'BOMBS': 'BOMB',
-                'BLUEBOOMERANG': 'BOOMERANG',
-                'MAGICMIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
-                'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
-                'MESSAGE': 'TRADING_ITEM_LETTER',
-                # TODO: Also use AP item name
-            }
-            for name in others.values():
+            for name in ItemIconGuessing.SYNONYMS.values():
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
-            self.name_cache.update(others)
-            
-        
+            self.name_cache.update(ItemIconGuessing.SYNONYMS)
+
         uppered = other.upper()
         if "BIG KEY" in uppered:
+            return 'NIGHTMARE_KEY'
+        if "BOSS KEY" in uppered:
             return 'NIGHTMARE_KEY'
         possibles = other.upper().split(" ")
         rejoined = "".join(possibles)
