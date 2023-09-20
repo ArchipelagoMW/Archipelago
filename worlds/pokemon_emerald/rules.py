@@ -1341,7 +1341,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
     set_rule(
         multiworld.get_location("EVENT_UNDO_REGI_SEAL", player),
-        lambda state: state.has("CATCH_SPECIES_313", player) and state.has("CATCH_SPECIES_381", player)
+        lambda state: state.has("CATCH_SPECIES_WAILMER", player) and state.has("CATCH_SPECIES_RELICANTH", player)
     )
     set_rule(
         multiworld.get_entrance("REGION_SEALED_CHAMBER_OUTER_ROOM/MAIN -> REGION_SEALED_CHAMBER_OUTER_ROOM/CRUMBLED_WALL", player),

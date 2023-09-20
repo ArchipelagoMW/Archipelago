@@ -222,6 +222,11 @@ _ignorable_warps = {
 
 
 def validate_regions() -> bool:
+    """
+    Verifies that Emerald's data doesn't have duplicate or missing
+    regions/warps/locations. Meant to catch problems during development like
+    forgetting to add a new location or incorrectly splitting a region.
+    """
     extracted_data_json = load_json_data("extracted_data.json")
     error_messages: List[str] = []
     warn_messages: List[str] = []

@@ -74,7 +74,7 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
 
                             # Fill the location with an event for catching that species
                             encounter_location.place_locked_item(PokemonEmeraldItem(
-                                f"CATCH_SPECIES_{species_id}",
+                                f"CATCH_{data.species[species_id].name}",
                                 ItemClassification.progression_skip_balancing,
                                 None,
                                 player

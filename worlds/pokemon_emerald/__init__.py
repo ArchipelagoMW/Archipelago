@@ -31,8 +31,7 @@ from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
 
-# Check for BizHawkClient before trying to import client
-# Allows for generating without _bizhawk.apworld
+# Import required to register with BizHawkClient
 from .client import PokemonEmeraldClient
 
 
@@ -84,13 +83,16 @@ class PokemonEmeraldWorld(World):
     data_version = 1
     required_client_version = (0, 4, 2)
 
-    badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
-    hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
-    free_fly_location_id: int = 0
+    badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
+    hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
+    free_fly_location_id: int
     modified_data: PokemonEmeraldData
 
     def __init__(self, multiworld, player):
         super(PokemonEmeraldWorld, self).__init__(multiworld, player)
+        self.badge_shuffle_info = None
+        self.hm_shuffle_info = None
+        self.free_fly_location_id = 0
         self.modified_data = copy.deepcopy(emerald_data)
 
     @classmethod
@@ -110,24 +112,31 @@ class PokemonEmeraldWorld(World):
                             self.player, self.multiworld.player_name[self.player])
             self.multiworld.remote_items[self.player].value = Toggle.option_true
 
-        # With remote items turned on, players may not see any feedback that an item was picked up or given to them if
-        # they're filtering incoming items. There's no supported way for the client to tell whether an item was sent
-        # from its own world to trick the filter, so for now we just force the message filter to off.
+        # With remote items turned on, players may not see any feedback
+        # that an item was picked up or given to them if they're filtering
+        # incoming items. There's no supported way for the client to tell
+        # whether an item was sent from its own world to trick the filter,
+        # so for now we just force the message filter to off.
         if self.multiworld.remote_items[self.player]:
             logging.warning("Pokemon Emerald: Remote items setting for Player %s (%s) requires receive_item_messages "
                             "to be set to all. Forcibly changing their setting.", self.player,
                             self.multiworld.player_name[self.player])
             self.multiworld.receive_item_messages[self.player].value = ReceiveItemMessages.option_all
 
-        # If badges or HMs are vanilla, Norman locks you from using Surf, which means you're not guaranteed to be
-        # able to reach Fortree Gym, Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those gyms to
-        # challenge Norman or it creates a circular dependency.
-        # This is never a problem for completely random badges/hms because the algo will not place Surf/Balance Badge
-        # on Norman on its own. It's never a problem for shuffled badges/hms because there is no scenario where Cut or
-        # the Stone Badge can be a lynchpin for access to any gyms, so they can always be put on Norman in a worst case
-        # scenario.
-        # This will also be a problem in warp rando if direct access to Norman's room requires Surf or if access
-        # any gym leader in general requires Surf. We will probably have to force this to 0 in that case.
+        # If badges or HMs are vanilla, Norman locks you from using Surf,
+        # which means you're not guaranteed to be able to reach Fortree Gym,
+        # Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those
+        # gyms to challenge Norman or it creates a circular dependency.
+        #
+        # This is never a problem for completely random badges/hms because the
+        # algo will not place Surf/Balance Badge on Norman on its own. It's
+        # never a problem for shuffled badges/hms because there is no scenario
+        # where Cut or the Stone Badge can be a lynchpin for access to any gyms,
+        # so they can always be put on Norman in a worst case scenario.
+        #
+        # This will also be a problem in warp rando if direct access to Norman's
+        # room requires Surf or if access any gym leader in general requires
+        # Surf. We will probably have to force this to 0 in that case.
         max_norman_count = 7
 
         if self.multiworld.badges[self.player] == RandomizeBadges.option_vanilla:
@@ -146,7 +155,7 @@ class PokemonEmeraldWorld(World):
             self.multiworld.norman_count[self.player].value = max_norman_count
 
     def create_regions(self) -> None:
-        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
+        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}  # Tags with progression items always included
         if self.multiworld.overworld_items[self.player]:
             tags.add("OverworldItem")
         if self.multiworld.hidden_items[self.player]:
@@ -166,8 +175,9 @@ class PokemonEmeraldWorld(World):
             if location.address is not None
         ]
 
-        # Filter progression items which shouldn't be shuffled into the itempool. Their locations
-        # still exist, but event items will be placed and locked at their vanilla locations instead.
+        # Filter progression items which shouldn't be shuffled into the itempool.
+        # Their locations will still exist, but event items will be placed and
+        # locked at their vanilla locations instead.
         filter_tags = set()
 
         if not self.multiworld.key_items[self.player]:
@@ -182,6 +192,9 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.hms[self.player] in {RandomizeHms.option_vanilla, RandomizeHms.option_shuffle}:
             filter_tags.add("HM")
 
+        # If Badges and HMs are set to the `shuffle` option, don't add them to
+        # the normal item pool, but do create their items and save them and
+        # their locations for use in `pre_fill` later.
         if self.multiworld.badges[self.player] == RandomizeBadges.option_shuffle:
             self.badge_shuffle_info = [
                 (location, self.create_item_by_code(location.default_item_code))
@@ -193,12 +206,16 @@ class PokemonEmeraldWorld(World):
                 for location in [l for l in item_locations if "HM" in l.tags]
             ]
 
+        # Filter down locations to actual items that will be filled and create
+        # the itempool.
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
+        # Take the itempool as is
         if self.multiworld.item_pool_type[self.player] == ItemPoolType.option_shuffled:
             self.multiworld.itempool += default_itempool
 
+        # Recreate the itempool from random items
         elif self.multiworld.item_pool_type[self.player] in {ItemPoolType.option_diverse, ItemPoolType.option_diverse_balanced}:
             item_categories = ["Ball", "Heal", "Vitamin", "EvoStone", "Money", "TM", "Held", "Misc", "Berry"]
 
@@ -256,6 +273,7 @@ class PokemonEmeraldWorld(World):
     def set_rules(self) -> None:
         set_default_rules(self.multiworld, self.player)
 
+        # Set rules for locations which only exist with certain settings
         if self.multiworld.overworld_items[self.player]:
             set_overworld_item_rules(self.multiworld, self.player)
 
@@ -265,6 +283,7 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.npc_gifts[self.player]:
             set_npc_gift_rules(self.multiworld, self.player)
 
+        # Modify some rules based on settings
         if self.multiworld.require_itemfinder[self.player]:
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
@@ -273,6 +292,7 @@ class PokemonEmeraldWorld(World):
 
     def generate_basic(self) -> None:
         # Randomize wild encounters
+        # Must be done here for Wailmer/Relicanth, and eventually for dexsanity
         if self.multiworld.wild_pokemon[self.player] != RandomizeWildPokemon.option_vanilla:
             should_match_bst = self.multiworld.wild_pokemon[self.player] in {
                 RandomizeWildPokemon.option_match_base_stats,
@@ -287,12 +307,16 @@ class PokemonEmeraldWorld(World):
             placed_wailmer = False
             placed_relicanth = False
 
+            # Loop over map data to modify their encounter slots
             for map_data in self.modified_data.maps.values():
                 new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
                 old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
 
                 for i, table in enumerate(old_encounters):
                     if table is not None:
+                        # Create a map from the original species to new species
+                        # instead of just randomizing every slot.
+                        # Force area 1-to-1 mapping, in other words.
                         species_old_to_new_map: Dict[int, int] = {}
                         for species_id in table.slots:
                             if species_id not in species_old_to_new_map:
@@ -308,31 +332,52 @@ class PokemonEmeraldWorld(World):
                                     should_allow_legendaries
                                 ).species_id
 
+                        # Actually create the new list of slots and encounter table
                         new_slots: List[int] = []
                         for species_id in table.slots:
                             new_slots.append(species_old_to_new_map[species_id])
 
                         new_encounters[i] = EncounterTableData(new_slots, table.address)
 
-                        for j, new_species_id in enumerate(species_old_to_new_map.values()):
-                            slot_type = ["LAND", "WATER", "FISHING"][i]
-                            try:
-                                slot_location = self.multiworld.get_location(f"{map_data.name}_{slot_type}_ENCOUNTERS_{j + 1}", self.player)
-                                slot_location.item.name = f"CATCH_SPECIES_{new_species_id}"
+                        # Rename event items for the new wild pokemon species
+                        slot_category: Tuple[str, List[Tuple[Optional[str], range]]] = [
+                            ("LAND", [(None, range(0, 12))]),
+                            ("WATER", [(None, range(0, 5))]),
+                            ("FISHING", [("OLD_ROD", range(0, 2)), ("GOOD_ROD", range(2, 5)), ("SUPER_ROD", range(5, 10))])
+                        ][i]
+                        for j, new_species_id in enumerate(new_slots):
+                            # Get the subcategory for rods
+                            subcategory = next(sc for sc in slot_category[1] if j in sc[1])
+                            subcategory_species = []
+                            for k in subcategory[1]:
+                                if new_slots[k] not in subcategory_species:
+                                    subcategory_species.append(new_slots[k])
 
+                            # Create the name of the location that corresponds to this encounter slot
+                            # Fishing locations include the rod name
+                            subcategory_str = "" if subcategory[0] is None else "_" + subcategory[0]
+                            encounter_location_index = subcategory_species.index(new_species_id) + 1
+                            encounter_location_name = f"{map_data.name}_{slot_category[0]}_ENCOUNTERS{subcategory_str}_{encounter_location_index}"
+                            try:
+                                # Get the corresponding location and change the event name to reflect the new species
+                                slot_location = self.multiworld.get_location(encounter_location_name, self.player)
+                                slot_location.item.name = f"CATCH_{emerald_data.species[new_species_id].name}"
+
+                                # Mark Wailmer and Relicanth as placed somewhere in logic
                                 if new_species_id == 313:
                                     placed_wailmer = True
                                 elif new_species_id == 381:
                                     placed_relicanth = True
                             except KeyError:
-                                pass
+                                pass  # Map probably isn't included; should be careful here about bad encounter location names
 
                 map_data.land_encounters = new_encounters[0]
                 map_data.water_encounters = new_encounters[1]
                 map_data.fishing_encounters = new_encounters[2]
 
-            # If we somehow didn't place any Wailmer or Relicanth, force them into some easy to access places.
-            # These species are required for access to the Sealed Chamber
+            # If we somehow didn't place any Wailmer or Relicanth, force them
+            # into some easy to access places. These species are required for
+            # access to the Sealed Chamber
             if not placed_wailmer:
                 self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
                     [313] * 12,
@@ -418,12 +463,18 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("KeyItem")
 
     def pre_fill(self) -> None:
-        # Items which are shuffled between their own locations
+        # Badges and HMs that are set to shuffle need to be placed at
+        # their own subset of locations
         if self.multiworld.badges[self.player] == RandomizeBadges.option_shuffle:
             badge_locations = [location for location, _ in self.badge_shuffle_info]
             badge_items = [item for _, item in self.badge_shuffle_info]
 
             collection_state = self.multiworld.get_all_state(False)
+
+            # If HM shuffle is on, HMs are not placed and not in the pool, so
+            # `get_all_state` did not contain them. Collect them manually for
+            # this fill. We know that they will be included in all state after
+            # this stage.
             if self.hm_shuffle_info is not None:
                 for _, item in self.hm_shuffle_info:
                     collection_state.collect(item)
@@ -433,6 +484,7 @@ class PokemonEmeraldWorld(World):
 
             fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items, True, True)
 
+        # Badges are guaranteed to be either placed or in the multiworld's itempool now
         if self.multiworld.hms[self.player] == RandomizeHms.option_shuffle:
             hm_locations = [location for location, _ in self.hm_shuffle_info]
             hm_items = [item for _, item in self.hm_shuffle_info]
@@ -449,7 +501,7 @@ class PokemonEmeraldWorld(World):
             # Creating list of potential abilities
             ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in emerald_data.abilities}
 
-            ability_blacklist_labels = {"cacophony"}
+            ability_blacklist_labels = {"cacophony"}  # Cacophony is defined and has a description, but no effect
             option_ability_blacklist = self.multiworld.ability_blacklist[self.player].value
             if option_ability_blacklist is not None:
                 ability_blacklist_labels |= {ability_label.lower() for ability_label in option_ability_blacklist}
@@ -463,6 +515,7 @@ class PokemonEmeraldWorld(World):
                 # Loops through species and only tries to modify abilities if the pokemon has no pre-evolution
                 # or if the pre-evolution has already been modified. Then tries to modify all species that evolve
                 # from this one which have the same abilities.
+                #
                 # The outer while loop only runs three times for vanilla ordering: Once for a first pass, once for
                 # Hitmonlee/Hitmonchan, and once to verify that there's nothing left to do.
                 while True:
@@ -478,11 +531,14 @@ class PokemonEmeraldWorld(World):
                         had_clean_pass = False
 
                         old_abilities = species.abilities
+                        # 0 is the value for "no ability"; species with only 1 ability have the other set to 0
                         new_abilities = (
                             0 if old_abilities[0] == 0 else self.random.choice(ability_whitelist),
                             0 if old_abilities[1] == 0 else self.random.choice(ability_whitelist)
                         )
 
+                        # Recursively modify the abilities of anything that evolves from this pokemon
+                        # until the evolution doesn't have a matching set of abilities
                         evolutions = [species]
                         while len(evolutions) > 0:
                             evolution = evolutions.pop()
@@ -503,6 +559,7 @@ class PokemonEmeraldWorld(World):
                         continue
 
                     old_abilities = species.abilities
+                    # 0 is the value for "no ability"; species with only 1 ability have the other set to 0
                     new_abilities = (
                         0 if old_abilities[0] == 0 else self.random.choice(ability_whitelist),
                         0 if old_abilities[1] == 0 else self.random.choice(ability_whitelist)
@@ -516,7 +573,7 @@ class PokemonEmeraldWorld(World):
                 self.random.shuffle(type_map)
 
                 # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
-                # So ??? will always map to itself, and there are no pokemon which have the ??? type
+                # which forces ??? to always map to itself. There are no pokemon which have the ??? type
                 mystery_type_index = type_map.index(9)
                 type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
@@ -558,7 +615,7 @@ class PokemonEmeraldWorld(World):
                     self.random.shuffle(type_map)
 
                     # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
-                    # So ??? will always map to itself, and there are no pokemon which have the ??? type
+                    # which forces ??? to always map to itself. There are no pokemon which have the ??? type
                     mystery_type_index = type_map.index(9)
                     type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
@@ -580,8 +637,10 @@ class PokemonEmeraldWorld(World):
                 old_learnset = species.learnset
                 new_learnset: List[LearnsetMove] = []
 
+                # All species have 4 moves at level 0. Up to 3 of them are blank spaces reserved for the
+                # start with four moves option. This either replaces those moves or leaves it blank
+                # and moves the cursor.
                 i = 0
-                # Replace filler MOVE_NONEs at start of list
                 while old_learnset[i].move_id == 0:
                     if self.multiworld.level_up_moves[self.player] == LevelUpMoves.option_start_with_four_moves:
                         new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias,
@@ -591,8 +650,9 @@ class PokemonEmeraldWorld(World):
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
                     i += 1
 
+                # All moves from here onward are actual moves.
                 while i < len(old_learnset):
-                    # Guarantees the starter has a good damaging move
+                    # Guarantees the starter has a good damaging move; i will always be <=3 when entering this loop
                     if i == 3:
                         new_move = get_random_damaging_move(self.random, {move.move_id for move in new_learnset})
                     else:
@@ -604,6 +664,7 @@ class PokemonEmeraldWorld(World):
                 species.learnset = new_learnset
 
         def randomize_tm_hm_compatibility() -> None:
+            # TM and HM compatibility is stored as a 64-bit bitfield
             tm_compatibility = self.multiworld.tm_compatibility[self.player].value
             hm_compatibility = self.multiworld.hm_compatibility[self.player].value
 
@@ -639,6 +700,7 @@ class PokemonEmeraldWorld(World):
 
         def randomize_static_encounters() -> None:
             if self.multiworld.static_encounters[self.player] == RandomizeStaticEncounters.option_shuffle:
+                # Just take the existing species and shuffle them
                 shuffled_species = [encounter.species_id for encounter in emerald_data.static_encounters]
                 self.random.shuffle(shuffled_species)
 
@@ -694,18 +756,21 @@ class PokemonEmeraldWorld(World):
                         allow_legendaries
                     )
 
-                    # Could cache this per species
+                    # TMs and HMs compatible with the species. Could cache this per species
                     tm_hm_movepool = list({
                         self.modified_data.tmhm_moves[i]
                         for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
                         if is_compatible
                     })
+
+                    # Moves the pokemon could have learned by now
                     level_up_movepool = list({
                         move.move_id
                         for move in new_species.learnset
                         if move.level <= pokemon.level
                     })
 
+                    # 25% chance to pick a move from TMs or HMs
                     new_moves = (
                         self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
                         self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
@@ -764,6 +829,7 @@ class PokemonEmeraldWorld(World):
             )
 
             # Putting the unchosen starter onto the rival's team
+            # (trainer name, index of starter in team, whether the starter is evolved)
             rival_teams = [
                 [
                     ("TRAINER_BRENDAN_ROUTE_103_TREECKO", 0, False),
