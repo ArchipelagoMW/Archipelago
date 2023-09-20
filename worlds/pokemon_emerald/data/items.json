@@ -235,17 +235,17 @@
 
   "ITEM_OLD_ROD": {
     "label": "Old Rod",
-    "classification": "USEFUL",
+    "classification": "PROGRESSION",
     "tags": ["Rod", "Unique"]
   },
   "ITEM_GOOD_ROD": {
     "label": "Good Rod",
-    "classification": "USEFUL",
+    "classification": "PROGRESSION",
     "tags": ["Rod", "Unique"]
   },
   "ITEM_SUPER_ROD": {
     "label": "Super Rod",
-    "classification": "USEFUL",
+    "classification": "PROGRESSION",
     "tags": ["Rod", "Unique"]
   },
 

@@ -1,53 +1,13 @@
 """
 Functions related to AP regions for Pokemon Emerald (see ./data/regions for region definitions)
 """
-from typing import Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
-from BaseClasses import ItemClassification, Region, MultiWorld
+from BaseClasses import CollectionState, ItemClassification, Region, Location, MultiWorld
 
 from .data import data
 from .items import PokemonEmeraldItem
 from .locations import PokemonEmeraldLocation
-
-
-def _connect_to_map_encounters(multiworld: MultiWorld, player: int, region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
-        """
-        Connects the provided region to the corresponding wild encounters for the given parent map.
-
-        Each in-game map may have a non-physical Region for encountering wild pokemon in each of the three categories
-        land, water, and fishing. Region data defines whether a given region includes places where those encounters can
-        be accessed (i.e. whether the region has tall grass, a river bank, is on water, etc...).
-
-        These regions are created dynamically so as not to bother with unused maps.
-        """
-        for i, slot_type in enumerate(["LAND", "WATER", "FISHING"]):
-            if include_slots[i]:
-                region_name = f"{map_name}_{slot_type}_ENCOUNTERS"
-
-                try:
-                    encounter_region = multiworld.get_region(region_name, player)
-                except KeyError:
-                    encounter_region = Region(region_name, player, multiworld)
-
-                    unique_species = []
-                    for species_id in getattr(data.maps[map_name], f"{slot_type.lower()}_encounters").slots:
-                        if not species_id in unique_species:
-                            unique_species.append(species_id)
-
-                    for i, species_id in enumerate(unique_species):
-                        encounter_location = PokemonEmeraldLocation(player, f"{region_name}_{i + 1}", None, encounter_region)
-                        encounter_location.show_in_spoiler = False
-                        encounter_location.place_locked_item(PokemonEmeraldItem(
-                            f"CATCH_SPECIES_{species_id}",
-                            ItemClassification.progression_skip_balancing,
-                            None,
-                            player
-                        ))
-                        encounter_region.locations.append(encounter_location)
-
-                    multiworld.regions.append(encounter_region)
-
-                region.connect(encounter_region, f"{region.name} -> {region_name}")
 
 
 def create_regions(multiworld: MultiWorld, player: int) -> None:
@@ -55,6 +15,78 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     Iterates through regions created from JSON to create regions and adds them to the multiworld.
     Also creates and places events and connects regions via warps and the exits defined in the JSON.
     """
+    # Used in connect_to_map_encounters. Splits encounter categories into "subcategories" and gives them names
+    # and rules so the rods can only access their specific slots.
+    encounter_categories: Dict[str, List[Tuple[Optional[str], range, Optional[Callable[[CollectionState], bool]]]]] = {
+        "LAND": [(None, range(0, 12), None)],
+        "WATER": [(None, range(0, 5), None)],
+        "FISHING": [
+            ("OLD_ROD", range(0, 2), lambda state: state.has("Old Rod", player)),
+            ("GOOD_ROD", range(2, 5), lambda state: state.has("Good Rod", player)),
+            ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", player))
+        ]
+    }
+
+    def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):
+        """
+        Connects the provided region to the corresponding wild encounters for the given parent map.
+
+        Each in-game map may have a non-physical Region for encountering wild pokemon in each of the three categories
+        land, water, and fishing. Region data defines whether a given region includes places where those encounters can
+        be accessed (i.e. whether the region has tall grass, a river bank, is on water, etc...).
+
+        These regions are created lazily and dynamically so as not to bother with unused maps.
+        """
+        # For each of land, water, and fishing, connect the region if indicated by include_slots
+        for i, encounter_category in enumerate(encounter_categories.items()):
+            if include_slots[i]:
+                region_name = f"{map_name}_{encounter_category[0]}_ENCOUNTERS"
+
+                # If the region hasn't been created yet, create it now
+                try:
+                    encounter_region = multiworld.get_region(region_name, player)
+                except KeyError:
+                    encounter_region = Region(region_name, player, multiworld)
+                    encounter_slots = getattr(data.maps[map_name], f"{encounter_category[0].lower()}_encounters").slots
+
+                    # Subcategory is for splitting fishing rods; land and water only have one subcategory
+                    for subcategory in encounter_category[1]:
+                        # Want to create locations per species, not per slot
+                        # encounter_categories includes info on which slots belong to which subcategory
+                        unique_species = []
+                        for j, species_id in enumerate(encounter_slots):
+                            if j in subcategory[1] and not species_id in unique_species:
+                                unique_species.append(species_id)
+
+                        # Create a location for the species
+                        for j, species_id in enumerate(unique_species):
+                            encounter_location = PokemonEmeraldLocation(
+                                player,
+                                f"{region_name}{'_' + subcategory[0] if subcategory[0] is not None else ''}_{j + 1}",
+                                None,
+                                encounter_region
+                            )
+                            encounter_location.show_in_spoiler = False
+
+                            # Add access rule
+                            if subcategory[2] is not None:
+                                encounter_location.access_rule = subcategory[2]
+
+                            # Fill the location with an event for catching that species
+                            encounter_location.place_locked_item(PokemonEmeraldItem(
+                                f"CATCH_SPECIES_{species_id}",
+                                ItemClassification.progression_skip_balancing,
+                                None,
+                                player
+                            ))
+                            encounter_region.locations.append(encounter_location)
+
+                    # Add the new encounter region to the multiworld
+                    multiworld.regions.append(encounter_region)
+
+                # Encounter region exists, just connect to it
+                region.connect(encounter_region, f"{region.name} -> {region_name}")
+
     connections = []
     for region_name, region_data in data.regions.items():
         new_region = Region(region_name, player, multiworld)
@@ -75,8 +107,8 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
 
         multiworld.regions.append(new_region)
 
-        _connect_to_map_encounters(multiworld, player, new_region, region_data.parent_map.name,
-                                   (region_data.has_grass, region_data.has_water, region_data.has_fishing))
+        connect_to_map_encounters(new_region, region_data.parent_map.name,
+                                  (region_data.has_grass, region_data.has_water, region_data.has_fishing))
 
     for name, source, dest in connections:
         multiworld.get_region(source, player).connect(multiworld.get_region(dest, player), name)
