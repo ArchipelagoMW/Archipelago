@@ -840,12 +840,12 @@ def distribute_planned(world: MultiWorld) -> None:
 
             if "early_locations" in locations:
                 locations.remove("early_locations")
-                for player in worlds:
-                    locations += early_locations[player]
+                for target_player in worlds:
+                    locations += early_locations[target_player]
             if "non_early_locations" in locations:
                 locations.remove("non_early_locations")
-                for player in worlds:
-                    locations += non_early_locations[player]
+                for target_player in worlds:
+                    locations += non_early_locations[target_player]
 
             block['locations'] = locations
 

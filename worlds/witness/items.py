@@ -152,7 +152,7 @@ class WitnessPlayerItems:
         """
         Returns the list of items that must be in the pool for the game to successfully generate.
         """
-        return self._mandatory_items
+        return self._mandatory_items.copy()
 
     def get_filler_items(self, quantity: int) -> Dict[str, int]:
         """
