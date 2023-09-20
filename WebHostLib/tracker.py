@@ -9,7 +9,7 @@ from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
-from NetUtils import SlotType, NetworkSlot
+from NetUtils import ClientStatus, SlotType, NetworkSlot
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
@@ -1548,7 +1548,7 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         for player, name in enumerate(names, 1):
             player_names[team, player] = name
             states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
-            if states[team, player] == 30:  # Goal Completed
+            if states[team, player] == ClientStatus.CLIENT_GOAL and player not in groups:
                 completed_worlds += 1
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
@@ -1683,7 +1683,7 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(team, player, item_id)
         for location in locations_checked:
-            if location not in player_locations or location not in player_location_to_area[player]:
+            if location not in player_locations or location not in player_location_to_area.get(player, {}):
                 continue
             item, recipient, flags = player_locations[location]
             recipients = groups.get(recipient, [recipient])
