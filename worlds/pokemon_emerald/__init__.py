@@ -379,15 +379,24 @@ class PokemonEmeraldWorld(World):
             # into some easy to access places. These species are required for
             # access to the Sealed Chamber
             if not placed_wailmer:
+                print("-----------------------------------------------")
                 self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
                     [313] * 12,
                     self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters.address
                 )
+                self.multiworld.get_location(
+                    "MAP_RUSTURF_TUNNEL_LAND_ENCOUNTERS_1",
+                    self.player
+                ).item.name = "CATCH_SPECIES_WAILMER"
             if not placed_relicanth:
                 self.modified_data.maps["MAP_PETALBURG_CITY"].water_encounters = EncounterTableData(
                     [381] * 5,
                     self.modified_data.maps["MAP_PETALBURG_CITY"].water_encounters.address
                 )
+                self.multiworld.get_location(
+                    "MAP_PETALBURG_CITY_WATER_ENCOUNTERS_1",
+                    self.player
+                ).item.name = "CATCH_SPECIES_RELICANTH"
 
         # Set our free fly location
         # If not enabled, set it to Littleroot Town by default
