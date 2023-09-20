@@ -767,6 +767,9 @@ def distribute_planned(world: MultiWorld) -> None:
                 block['force'] = 'silent'
             if 'from_pool' not in block:
                 block['from_pool'] = True
+            elif not isinstance(block['from_pool'], bool):
+                from_pool_type = type(block['from_pool'])
+                raise Exception(f'Plando "from_pool" has to be boolean, not {from_pool_type} for player {player}.')
             if 'world' not in block:
                 target_world = False
             else:
