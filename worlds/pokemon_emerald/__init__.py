@@ -933,6 +933,8 @@ class PokemonEmeraldWorld(World):
             "elite_four_count",
             "norman_requirement",
             "norman_count",
+            "legendary_hunt_catch",
+            "legendary_hunt_count",
             "extra_boulders",
             "free_fly_location",
             "fly_without_badge",

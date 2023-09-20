@@ -27,6 +27,7 @@ if "worlds._bizhawk" not in sys.modules:
 
 
 from NetUtils import ClientStatus
+from Options import Toggle
 import Utils
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -114,6 +115,13 @@ KEY_LOCATION_FLAGS = [
 ]
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
+LEGENDARY_NAMES = ["GROUDON", "KYOGRE", "RAYQUAZA", "LATIAS", "LATIOS",
+                   "REGIROCK", "REGICE", "REGISTEEL", "MEW", "DEOXYS",
+                   "HO_OH", "LUGIA"]
+
+DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES}
+CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES}
+
 
 class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
@@ -121,7 +129,7 @@ class PokemonEmeraldClient(BizHawkClient):
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
-    goal_flag: int
+    goal_flag: Optional[int]
     rom_slot_name: Optional[str]
     wonder_trade_update_event: asyncio.Event
     latest_wonder_trades: dict
@@ -133,7 +141,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_checked_locations = set()
         self.local_set_events = {}
         self.local_found_key_items = {}
-        self.goal_flag = IS_CHAMPION_FLAG
+        self.goal_flag = None
         self.rom_slot_name = None
         self.wonder_trade_update_event = asyncio.Event()
         self.latest_wonder_trades = {}
@@ -177,6 +185,8 @@ class PokemonEmeraldClient(BizHawkClient):
                 self.goal_flag = DEFEATED_STEVEN_FLAG
             elif ctx.slot_data["goal"] == Goal.option_norman:
                 self.goal_flag = DEFEATED_NORMAN_FLAG
+            elif ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+                self.goal_flag = None
 
             if ctx.slot_data["remote_items"] == RemoteItems.option_true and not ctx.items_handling & 0b010:
                 ctx.items_handling = 0b011
@@ -184,7 +194,6 @@ class PokemonEmeraldClient(BizHawkClient):
                     "cmd": "ConnectUpdate",
                     "items_handling": ctx.items_handling
                 }]))
-
 
         try:
             # Checks that the player is in the overworld
@@ -271,6 +280,8 @@ class PokemonEmeraldClient(BizHawkClient):
             local_checked_locations = set()
             local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
             local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
+            defeated_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES}
+            caught_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES}
 
             # Check set flags
             for byte_i, byte in enumerate(flag_bytes):
@@ -285,11 +296,32 @@ class PokemonEmeraldClient(BizHawkClient):
                         if flag_id == self.goal_flag:
                             game_clear = True
 
+                        if flag_id in DEFEATED_LEGENDARY_FLAG_MAP:
+                            defeated_legendaries[DEFEATED_LEGENDARY_FLAG_MAP[flag_id]] = True
+
+                        if flag_id in CAUGHT_LEGENDARY_FLAG_MAP:
+                            caught_legendaries[CAUGHT_LEGENDARY_FLAG_MAP[flag_id]] = True
+
                         if flag_id in EVENT_FLAG_MAP:
                             local_set_events[EVENT_FLAG_MAP[flag_id]] = True
 
                         if flag_id in KEY_LOCATION_FLAG_MAP:
                             local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
+
+            if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+                # If legendary hunt doesn't require catching, add defeated legendaries to caught_legendaries
+                if ctx.slot_data["legendary_hunt_catch"] == Toggle.option_false:
+                    for legendary, is_defeated in defeated_legendaries:
+                        if is_defeated:
+                            caught_legendaries[legendary] = True
+
+                num_caught = 0
+                for legendary, is_caught in caught_legendaries:
+                    if is_caught:
+                        num_caught += 1
+
+                if num_caught >= ctx.slot_data["legendary_hunt_count"]:
+                    game_clear = True
 
             # Send locations
             if local_checked_locations != self.local_checked_locations:
