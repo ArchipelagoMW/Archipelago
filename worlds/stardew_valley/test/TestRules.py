@@ -353,52 +353,84 @@ class TestMonstersanitySplitRules(SVTestBase):
             self.assertFalse(self.world.logic.region.can_reach_location(location)(self.multiworld.state))
 
 
-class TestRecipeLogic(SVTestBase):
+class TestRecipeLearnLogic(SVTestBase):
     options = {
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
-        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
+        options.Cooksanity.internal_name: options.Cooksanity.option_all,
+        options.Chefsanity.internal_name: options.Chefsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
 
-    # I wanted to make a test for different ways to obtain a pizza, but I'm stuck not knowing how to block the immediate purchase from Gus
-    # def test_pizza(self):
-    #     world = self.world
-    #     logic = world.logic
-    #     multiworld = self.multiworld
-    #
-    #     self.assertTrue(logic.has(Ingredient.wheat_flour)(multiworld.state))
-    #     self.assertTrue(logic.can_spend_money_at(Region.saloon, 150)(multiworld.state))
-    #     self.assertFalse(logic.has(Meal.pizza)(multiworld.state))
-    #
-    #     self.assertFalse(logic.can_cook()(multiworld.state))
-    #     self.collect(world.create_item("Progressive House"))
-    #     self.assertTrue(logic.can_cook()(multiworld.state))
-    #     self.assertFalse(logic.has(Meal.pizza)(multiworld.state))
-    #
-    #     self.assertFalse(logic.has(Seed.tomato)(multiworld.state))
-    #     self.collect(world.create_item(Seed.tomato))
-    #     self.assertTrue(logic.has(Seed.tomato)(multiworld.state))
-    #     self.assertFalse(logic.has(Meal.pizza)(multiworld.state))
-    #
-    #     self.assertFalse(logic.has(Vegetable.tomato)(multiworld.state))
-    #     self.collect(world.create_item(Season.summer))
-    #     self.assertTrue(logic.has(Vegetable.tomato)(multiworld.state))
-    #     self.assertFalse(logic.has(Meal.pizza)(multiworld.state))
-    #
-    #     self.assertFalse(logic.has(Animal.cow)(multiworld.state))
-    #     self.assertFalse(logic.has(AnimalProduct.cow_milk)(multiworld.state))
-    #     self.collect(world.create_item("Progressive Barn"))
-    #     self.assertTrue(logic.has(Animal.cow)(multiworld.state))
-    #     self.assertTrue(logic.has(AnimalProduct.cow_milk)(multiworld.state))
-    #     self.assertFalse(logic.has(Meal.pizza)(multiworld.state))
-    #
-    #     self.assertFalse(logic.has(Machine.cheese_press)(self.multiworld.state))
-    #     self.assertFalse(logic.has(ArtisanGood.cheese)(self.multiworld.state))
-    #     self.collect(world.create_item(item) for item in ["Farming Level"] * 6)
-    #     self.collect(world.create_item(item) for item in ["Progressive Axe"] * 2)
-    #     self.assertTrue(logic.has(Machine.cheese_press)(self.multiworld.state))
-    #     self.assertTrue(logic.has(ArtisanGood.cheese)(self.multiworld.state))
-    #     self.assertTrue(logic.has(Meal.pizza)(self.multiworld.state))
+    def test_can_learn_qos_recipe(self):
+        location = "Cook Radish Salad"
+        rule = self.world.logic.region.can_reach_location(location)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Radish Seeds"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Spring"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
+        self.collect([self.world.create_item("Month End")] * 10)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("The Queen of Sauce"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+
+class TestRecipeReceiveLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Cooksanity.internal_name: options.Cooksanity.option_all,
+        options.Chefsanity.internal_name: options.Chefsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+    }
+
+    def test_can_learn_qos_recipe(self):
+        location = "Cook Radish Salad"
+        rule = self.world.logic.region.can_reach_location(location)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Progressive House"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Radish Seeds"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Summer"), event=False)
+        self.collect([self.world.create_item("Month End")] * 10)
+        self.assertFalse(rule(self.multiworld.state))
+
+        spring = self.world.create_item("Spring")
+        qos = self.world.create_item("The Queen of Sauce")
+        self.multiworld.state.collect(spring, event=False)
+        self.multiworld.state.collect(qos, event=False)
+        self.assertFalse(rule(self.multiworld.state))
+        self.multiworld.state.remove(spring)
+        self.multiworld.state.remove(qos)
+
+        self.multiworld.state.collect(self.world.create_item("Radish Salad Recipe"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+    def test_get_chefsanity_check_recipe(self):
+        location = "Learn Recipe Radish Salad"
+        rule = self.world.logic.region.can_reach_location(location)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Spring"), event=False)
+        self.collect([self.world.create_item("Month End")] * 10)
+        self.assertFalse(rule(self.multiworld.state))
+
+        seeds = self.world.create_item("Radish Seeds")
+        summer = self.world.create_item("Summer")
+        house = self.world.create_item("Progressive House")
+        self.multiworld.state.collect(seeds, event=False)
+        self.multiworld.state.collect(summer, event=False)
+        self.multiworld.state.collect(house, event=False)
+        self.assertFalse(rule(self.multiworld.state))
+        self.multiworld.state.remove(seeds)
+        self.multiworld.state.remove(summer)
+        self.multiworld.state.remove(house)
+
+        self.multiworld.state.collect(self.world.create_item("The Queen of Sauce"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
 
 
 class TestDonationLogicAll(SVTestBase):

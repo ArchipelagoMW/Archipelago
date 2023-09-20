@@ -730,7 +730,7 @@ def set_cooksanity_rules(all_location_names: List[str], logic: StardewLogic, mul
 
 def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options):
     chefsanity_option = world_options[options.Chefsanity]
-    if chefsanity_option == options.Chefsanity.option_vanilla:
+    if chefsanity_option == options.Chefsanity.option_none:
         return
 
     chefsanity_prefix = "Learn Recipe "

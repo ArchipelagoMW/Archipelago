@@ -21,6 +21,7 @@ from ..strings.tv_channel_names import Channel
 
 class CookingLogic:
     player: int
+    chefsanity_option: int
     exclude_ginger_island: int
     received: ReceivedLogic
     has: HasLogic
@@ -33,9 +34,10 @@ class CookingLogic:
     relationship: RelationshipLogic
     skill: SkillLogic
 
-    def __init__(self, player: int, exclude_ginger_island: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
+    def __init__(self, player: int, chefsanity_option: int, exclude_ginger_island: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic, season: SeasonLogic, time: TimeLogic, money: MoneyLogic,
                  action: ActionLogic, buildings: BuildingLogic, relationship: RelationshipLogic, skill: SkillLogic):
         self.player = player
+        self.chefsanity_option = chefsanity_option
         self.exclude_ginger_island = exclude_ginger_island
         self.received = received
         self.has = has
@@ -56,17 +58,34 @@ class CookingLogic:
         if recipe is None:
             return cook_rule
 
-        learn_rule = self.can_learn_recipe(recipe.source)
+        recipe_rule = self.knows_recipe(recipe.source, recipe.meal)
         ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
         number_ingredients = sum(recipe.ingredients[ingredient] for ingredient in recipe.ingredients)
         time_rule = self.time.has_lived_months(number_ingredients)
-        return cook_rule & learn_rule & ingredients_rule & time_rule
+        return cook_rule & recipe_rule & ingredients_rule & time_rule
+
+    def knows_recipe(self, source: RecipeSource, meal_name: str) -> StardewRule:
+        if self.chefsanity_option == options.Chefsanity.option_none:
+            return self.can_learn_recipe(source)
+        if isinstance(source, StarterSource):
+            return self.received_recipe(meal_name)
+        if isinstance(source, ShopTradeSource) and self.chefsanity_option & options.Chefsanity.option_purchases:
+            return self.received_recipe(meal_name)
+        if isinstance(source, ShopSource) and self.chefsanity_option & options.Chefsanity.option_purchases:
+            return self.received_recipe(meal_name)
+        if isinstance(source, SkillSource) and self.chefsanity_option & options.Chefsanity.option_skills:
+            return self.received_recipe(meal_name)
+        if isinstance(source, CutsceneSource) and self.chefsanity_option & options.Chefsanity.option_friendship:
+            return self.received_recipe(meal_name)
+        if isinstance(source, FriendshipSource) and self.chefsanity_option & options.Chefsanity.option_friendship:
+            return self.received_recipe(meal_name)
+        if isinstance(source, QueenOfSauceSource) and self.chefsanity_option & options.Chefsanity.option_queen_of_sauce:
+            return self.received_recipe(meal_name)
+        return self.can_learn_recipe(source)
 
     def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
         if isinstance(source, StarterSource):
             return True_()
-        if isinstance(source, ArchipelagoSource):
-            return self.received(source.ap_item, len(source.ap_item))
         if isinstance(source, ShopTradeSource):
             return self.money.can_trade_at(source.region, source.currency, source.price)
         if isinstance(source, ShopSource):
@@ -80,8 +99,10 @@ class CookingLogic:
         if isinstance(source, QueenOfSauceSource):
             year_rule = self.time.has_year_two() if source.year == 2 else self.time.has_year_three()
             return self.action.can_watch(Channel.queen_of_sauce) & self.season.has(source.season) & year_rule
-
         return False_()
+
+    def received_recipe(self, meal_name: str):
+        return self.received(f"{meal_name} Recipe")
 
     def can_cook_everything(self) -> StardewRule:
         cooksanity_prefix = "Cook "

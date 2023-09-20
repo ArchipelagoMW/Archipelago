@@ -438,7 +438,7 @@ class Chefsanity(Choice):
     internal_name = "chefsanity"
     display_name = "Chefsanity"
     default = 0
-    option_vanilla = 0b0000  # 0
+    option_none = 0b0000  # 0
     option_queen_of_sauce = 0b0001  # 1
     option_purchases = 0b0010  # 2
     option_qos_and_purchases = 0b0011  # 3

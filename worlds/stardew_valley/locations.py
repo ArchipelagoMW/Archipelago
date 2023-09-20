@@ -369,7 +369,7 @@ def extend_cooksanity_locations(randomized_locations: List[LocationData], world_
 
 def extend_chefsanity_locations(randomized_locations: List[LocationData], world_options):
     chefsanity = world_options[options.Chefsanity]
-    if chefsanity == options.Chefsanity.option_vanilla:
+    if chefsanity == options.Chefsanity.option_none:
         return
 
     chefsanity_locations_by_name = {}  # Dictionary to not make duplicates

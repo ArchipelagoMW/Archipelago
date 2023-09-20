@@ -536,7 +536,7 @@ def create_crafting_recipes(item_factory: StardewItemFactory, world_options: Sta
 
 def create_cooking_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     chefsanity = world_options[options.Chefsanity]
-    if chefsanity == options.Chefsanity.option_vanilla:
+    if chefsanity == options.Chefsanity.option_none:
         return
 
     chefsanity_recipes_by_name = {recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_STARTER]}  # Dictionary to not make duplicates
