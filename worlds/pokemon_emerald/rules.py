@@ -64,6 +64,7 @@ def _encountered_n_legendaries(state: CollectionState, player: int, n: int) -> b
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_KYOGRE", player) else 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_RAYQUAZA", player) else 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIAS", player) else 0
+    num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIOS", player) else 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGIROCK", player) else 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGICE", player) else 0
     num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGISTEEL", player) else 0
@@ -102,6 +103,7 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
         set_rule(multiworld.get_location("EVENT_ENCOUNTER_RAYQUAZA", player),
                  lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
         set_rule(multiworld.get_location("EVENT_ENCOUNTER_LATIAS", player),
+        # Latios already only requires defeating the champion and access to Route 117
                  lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
         set_rule(multiworld.get_location("EVENT_ENCOUNTER_REGIROCK", player),
                  lambda state: state.has("EVENT_DEFEAT_CHAMPION", player))
@@ -537,6 +539,10 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     set_rule(
         multiworld.get_entrance("REGION_ROUTE117/MAIN -> REGION_ROUTE117/PONDS", player),
         can_surf
+    )
+    set_rule(
+        multiworld.get_location("EVENT_ENCOUNTER_LATIOS", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
 
     # Route 111

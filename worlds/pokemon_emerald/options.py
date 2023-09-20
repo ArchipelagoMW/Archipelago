@@ -194,7 +194,7 @@ class LegendaryHuntCount(Range):
     """
     display_name = "Legendary Hunt Count"
     range_start = 1
-    range_end = 11
+    range_end = 12
     default = 3
 
 

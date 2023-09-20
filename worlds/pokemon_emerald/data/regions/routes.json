@@ -1464,7 +1464,9 @@
       "BERRY_TREE_28",
       "BERRY_TREE_29"
     ],
-    "events": [],
+    "events": [
+      "EVENT_ENCOUNTER_LATIOS"
+    ],
     "exits": [
       "REGION_VERDANTURF_TOWN/MAIN",
       "REGION_MAUVILLE_CITY/MAIN",
