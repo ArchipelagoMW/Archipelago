@@ -19,6 +19,7 @@ import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
 from Utils import restricted_loads, cache_argsless
+from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -163,16 +164,19 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     db.generate_mapping(check_tables=False)
 
     async def main():
+        import gc
+
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
+        gc.collect()  # free intermediate objects used during setup
         try:
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
             await ctx.server
-        except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
+        except OSError:  # likely port in use
             ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
             await ctx.server
@@ -198,16 +202,15 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
         await ctx.shutdown_task
         logging.info("Shutting down")
 
-    from .autolauncher import Locker
     with Locker(room_id):
         try:
             asyncio.run(main())
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             with db_session:
                 room = Room.get(id=room_id)
                 # ensure the Room does not spin up again on its own, minute of safety buffer
                 room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-        except:
+        except Exception:
             with db_session:
                 room = Room.get(id=room_id)
                 room.last_port = -1
