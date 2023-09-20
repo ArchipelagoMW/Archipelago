@@ -102,7 +102,8 @@ class RelationshipLogic:
             return self.can_earn_relationship(npc, hearts)
         if self.friendsanity_option == options.Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        if self.friendsanity_option != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
+        is_capped_at_8 = villager.bachelor and self.friendsanity_option != options.Friendsanity.option_all_with_marriage
+        if is_capped_at_8 and hearts > 8:
             return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager, hearts)
 
