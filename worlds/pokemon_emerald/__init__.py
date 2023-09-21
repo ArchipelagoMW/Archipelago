@@ -21,7 +21,7 @@ from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
-                      option_definitions)
+                      Goal, option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -304,6 +304,14 @@ class PokemonEmeraldWorld(World):
             }
             should_allow_legendaries = self.multiworld.allow_wild_legendaries[self.player].value == Toggle.option_true
 
+            # If doing legendary hunt, blacklist Latios from wild encounters so
+            # it can be tracked as the roamer. Otherwise it may be impossible
+            # to tell whether a highlighted route is the roamer or a wild
+            # encounter.
+            wild_encounter_blacklist: Set[int] = set()
+            if self.multiworld.goal[self.player] == Goal.option_legendary_hunt:
+                wild_encounter_blacklist.add(emerald_data.constants["SPECIES_LATIOS"])
+
             placed_wailord = False
             placed_relicanth = False
 
@@ -329,7 +337,8 @@ class PokemonEmeraldWorld(World):
                                     self.modified_data.species,
                                     target_bst,
                                     target_type,
-                                    should_allow_legendaries
+                                    should_allow_legendaries,
+                                    wild_encounter_blacklist
                                 ).species_id
 
                         # Actually create the new list of slots and encounter table
@@ -379,7 +388,6 @@ class PokemonEmeraldWorld(World):
             # into some easy to access places. These species are required for
             # access to the Sealed Chamber
             if not placed_wailord:
-                print("-----------------------------------------------")
                 self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
                     [313] * 12,
                     self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters.address
@@ -814,14 +822,13 @@ class PokemonEmeraldWorld(World):
                 self.random.choice(emerald_data.species[emerald_data.starters[2]].types) if match_type else None
             )
 
-            new_starters = (
-                get_random_species(self.random, self.modified_data.species,
-                                   starter_bsts[0], starter_types[0], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species,
-                                   starter_bsts[1], starter_types[1], allow_legendaries),
-                get_random_species(self.random, self.modified_data.species,
-                                   starter_bsts[2], starter_types[2], allow_legendaries)
-            )
+            starter_1 = get_random_species(self.random, self.modified_data.species, starter_bsts[0], starter_types[0],
+                                           allow_legendaries)
+            starter_2 = get_random_species(self.random, self.modified_data.species, starter_bsts[1], starter_types[1],
+                                           allow_legendaries, {starter_1.species_id})
+            starter_3 = get_random_species(self.random, self.modified_data.species, starter_bsts[2], starter_types[2],
+                                           allow_legendaries, {starter_1.species_id, starter_2.species_id})
+            new_starters = (starter_1, starter_2, starter_3)
 
             easter_egg_type, easter_egg_value = get_easter_egg(self.multiworld.easter_egg[self.player].value)
             if easter_egg_type == 1:

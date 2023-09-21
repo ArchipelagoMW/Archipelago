@@ -99,8 +99,13 @@ def get_random_species(
         candidates: List[Optional[SpeciesData]],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
-        allow_legendaries: bool = True) -> SpeciesData:
-    candidates: List[SpeciesData] = [species for species in candidates if species is not None]
+        allow_legendaries: bool = True,
+        blacklist: Set[int] = set()) -> SpeciesData:
+    candidates: List[SpeciesData] = [
+        species
+        for species in candidates
+        if species is not None and species.species_id not in blacklist
+    ]
 
     if species_type is not None:
         candidates = [species for species in candidates if species_type in species.types]
