@@ -383,9 +383,9 @@ class LinksAwakeningWorld(World):
                 self.name_cache[item] = item
                 splits = item.split("_")
                 self.name_cache["".join(splits)] = item
-                if 'RUPEES' in splits:
-                    self.name_cache["".join(reversed(splits))] = item
-
+                for word in ['RUPEE', 'RUPEES']:
+                    if word in splits:
+                        self.name_cache["".join(reversed(splits))] = item
                 for word in item.split("_"):
                     if word not in ItemIconGuessing.FORBIDDEN and not word.isnumeric():
                         self.name_cache[word] = item
