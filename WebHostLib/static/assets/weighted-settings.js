@@ -160,6 +160,7 @@ const buildUI = (settingData) => {
       weightedSettingsDiv.classList.add('invisible');
       itemPoolDiv.classList.add('invisible');
       hintsDiv.classList.add('invisible');
+      locationsDiv.classList.add('invisible');
       expandButton.classList.remove('invisible');
     });
 
@@ -168,6 +169,7 @@ const buildUI = (settingData) => {
       weightedSettingsDiv.classList.remove('invisible');
       itemPoolDiv.classList.remove('invisible');
       hintsDiv.classList.remove('invisible');
+      locationsDiv.classList.remove('invisible');
       expandButton.classList.add('invisible');
     });
   });
