@@ -335,7 +335,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Set terra/marine cave locations
     terra_cave_id = cave_event_to_id_map[multiworld.get_location("TERRA_CAVE_LOCATION", player).item.name]
     marine_cave_id = cave_event_to_id_map[multiworld.get_location("MARINE_CAVE_LOCATION", player).item.name]
-    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, marine_cave_id & (terra_cave_id << 4))
+    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, terra_cave_id | (marine_cave_id << 4))
 
     # Set blind trainers
     blind_trainers = 1 if multiworld.blind_trainers[player] else 0
