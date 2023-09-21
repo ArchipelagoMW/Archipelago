@@ -21,28 +21,3 @@ class ModNames:
     ayeisha = "Ayeisha - The Postal Worker (Custom NPC)"
     riley = "Custom NPC - Riley"
     skull_cavern_elevator = "Skull Cavern Elevator"
-
-
-mod_versions = {
-    ModNames.deepwoods: "3.0.0-beta",
-    ModNames.tractor: "4.16.4",
-    ModNames.big_backpack: "6.0.0",
-    ModNames.luck_skill: "1.2.4",
-    ModNames.magic: "0.8.2",
-    ModNames.socializing_skill: "1.1.5",
-    ModNames.archaeology: "1.5.0",
-    ModNames.cooking_skill: "1.4.5",
-    ModNames.binning_skill: "1.2.7",
-    ModNames.juna: "2.1.3",
-    ModNames.jasper: "1.7.6",
-    ModNames.alec: "2.1.0",
-    ModNames.yoba: "1.0.0",
-    ModNames.eugene: "1.3.1",
-    ModNames.wellwick: "1.0.0",
-    ModNames.ginger: "1.5.9",
-    ModNames.shiko: "1.1.0",
-    ModNames.delores: "1.1.2",
-    ModNames.ayeisha: "0.5.0-alpha",
-    ModNames.riley: "1.2.2",
-    ModNames.skull_cavern_elevator: "1.5.0",
-}

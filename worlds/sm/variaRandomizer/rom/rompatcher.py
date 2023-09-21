@@ -25,7 +25,9 @@ class RomPatcher:
             # faster MB cutscene transitions
             'Mother_Brain_Cutscene_Edits',
             # "Balanced" suit mode
-            'Removes_Gravity_Suit_heat_protection'
+            'Removes_Gravity_Suit_heat_protection',
+            # new PLMs for indicating the color of the door on the other side
+            'door_indicators_plms.ips'
         ],
         # VARIA tweaks
         'VariaTweaks' : ['WS_Etank', 'LN_Chozo_SpaceJump_Check_Disable', 'ln_chozo_platform.ips', 'bomb_torizo.ips'],

@@ -51,7 +51,10 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
         items_to_place = [items.pop()
                           for items in reachable_items.values() if items]
         for item in items_to_place:
-            item_pool.remove(item)
+            for p, pool_item in enumerate(item_pool):
+                if pool_item is item:
+                    item_pool.pop(p)
+                    break
         maximum_exploration_state = sweep_from_pool(
             base_state, item_pool + unplaced_items)
 
@@ -152,8 +155,8 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
 
     if cleanup_required:
         # validate all placements and remove invalid ones
+        state = sweep_from_pool(base_state, [])
         for placement in placements:
-            state = sweep_from_pool(base_state, [])
             if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
@@ -837,12 +840,12 @@ def distribute_planned(world: MultiWorld) -> None:
 
             if "early_locations" in locations:
                 locations.remove("early_locations")
-                for player in worlds:
-                    locations += early_locations[player]
+                for target_player in worlds:
+                    locations += early_locations[target_player]
             if "non_early_locations" in locations:
                 locations.remove("non_early_locations")
-                for player in worlds:
-                    locations += non_early_locations[player]
+                for target_player in worlds:
+                    locations += non_early_locations[target_player]
 
             block['locations'] = locations
 

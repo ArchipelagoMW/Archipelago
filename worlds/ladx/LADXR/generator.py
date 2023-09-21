@@ -247,8 +247,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     # USEFUL_HINT = 1.0
     # TODO: filter events, filter unshuffled keys
     all_items = multiworld.get_items()
-    our_items = [item for item in all_items if item.player == player_id and item.code is not None and item.location.show_in_spoiler]
+    our_items = [item for item in all_items if item.player == player_id and item.location and item.code is not None and item.location.show_in_spoiler]
     our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
+
     def gen_hint():
         chance = rnd.uniform(0, 1)
         if chance < JUNK_HINT:
@@ -267,9 +268,14 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             location_name = location.ladxr_item.metadata.name
         else:
             location_name = location.name
+
         hint = f"{name} {location.item} is at {location_name}"
         if location.player != player_id:
             hint += f" in {multiworld.player_name[location.player]}'s world"
+
+        # Cap hint size at 85
+        # Realistically we could go bigger but let's be safe instead
+        hint = hint[:85]
 
         return hint
 
