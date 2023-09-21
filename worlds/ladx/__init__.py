@@ -393,12 +393,17 @@ class LinksAwakeningWorld(World):
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
             self.name_cache.update(ItemIconGuessing.SYNONYMS)
+            pluralizations = {}
+            for k in self.name_cache.keys():
+                ks = k + 'S'
+                if ks not in self.name_cache:
+                    pluralizations[ks] = self.name_cache[k]
+            self.name_cache.update(pluralizations)
 
         uppered = other.upper()
-        if "BIG KEY" in uppered:
-            return 'NIGHTMARE_KEY'
-        if "BOSS KEY" in uppered:
-            return 'NIGHTMARE_KEY'
+        for phrase in ['BIG KEY', 'BOSS KEY']:
+            if phrase in uppered:
+                return 'NIGHTMARE_KEY'
         possibles = other.upper().split(" ")
         rejoined = "".join(possibles)
         if rejoined in self.name_cache:
