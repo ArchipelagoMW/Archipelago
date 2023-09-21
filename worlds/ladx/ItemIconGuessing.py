@@ -123,9 +123,7 @@ SYNONYMS = {
   'FUNGUS': 'TOADSTOOL',
   'MUSHROOM': 'TOADSTOOL',
   'SHROOM': 'TOADSTOOL',
-  'KEY': 'KEY',
-  'MAP': 'MAP',
-  'COMPASS': 'COMPASS',
+  'KEY': 'KEY', # Without this, keys show up as nightmare keys
   'FOSSIL': 'STONE_BEAK',
   'RELIC': 'STONE_BEAK',
   'BOLERO': 'SONG1',
