@@ -311,12 +311,12 @@ class PokemonEmeraldClient(BizHawkClient):
             if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
                 # If legendary hunt doesn't require catching, add defeated legendaries to caught_legendaries
                 if ctx.slot_data["legendary_hunt_catch"] == Toggle.option_false:
-                    for legendary, is_defeated in defeated_legendaries:
+                    for legendary, is_defeated in defeated_legendaries.items():
                         if is_defeated:
                             caught_legendaries[legendary] = True
 
                 num_caught = 0
-                for legendary, is_caught in caught_legendaries:
+                for legendary, is_caught in caught_legendaries.items():
                     if is_caught:
                         num_caught += 1
 
