@@ -292,7 +292,7 @@ class PokemonEmeraldWorld(World):
 
     def generate_basic(self) -> None:
         # Randomize wild encounters
-        # Must be done here for Wailmer/Relicanth, and eventually for dexsanity
+        # Must be done here for Wailord/Relicanth, and eventually for dexsanity
         if self.multiworld.wild_pokemon[self.player] != RandomizeWildPokemon.option_vanilla:
             should_match_bst = self.multiworld.wild_pokemon[self.player] in {
                 RandomizeWildPokemon.option_match_base_stats,
@@ -304,7 +304,7 @@ class PokemonEmeraldWorld(World):
             }
             should_allow_legendaries = self.multiworld.allow_wild_legendaries[self.player].value == Toggle.option_true
 
-            placed_wailmer = False
+            placed_wailord = False
             placed_relicanth = False
 
             # Loop over map data to modify their encounter slots
@@ -363,9 +363,9 @@ class PokemonEmeraldWorld(World):
                                 slot_location = self.multiworld.get_location(encounter_location_name, self.player)
                                 slot_location.item.name = f"CATCH_{emerald_data.species[new_species_id].name}"
 
-                                # Mark Wailmer and Relicanth as placed somewhere in logic
+                                # Mark Wailord and Relicanth as placed somewhere in logic
                                 if new_species_id == 313:
-                                    placed_wailmer = True
+                                    placed_wailord = True
                                 elif new_species_id == 381:
                                     placed_relicanth = True
                             except KeyError:
@@ -375,10 +375,10 @@ class PokemonEmeraldWorld(World):
                 map_data.water_encounters = new_encounters[1]
                 map_data.fishing_encounters = new_encounters[2]
 
-            # If we somehow didn't place any Wailmer or Relicanth, force them
+            # If we somehow didn't place any Wailord or Relicanth, force them
             # into some easy to access places. These species are required for
             # access to the Sealed Chamber
-            if not placed_wailmer:
+            if not placed_wailord:
                 print("-----------------------------------------------")
                 self.modified_data.maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
                     [313] * 12,
@@ -387,7 +387,7 @@ class PokemonEmeraldWorld(World):
                 self.multiworld.get_location(
                     "MAP_RUSTURF_TUNNEL_LAND_ENCOUNTERS_1",
                     self.player
-                ).item.name = "CATCH_SPECIES_WAILMER"
+                ).item.name = "CATCH_SPECIES_WAILORD"
             if not placed_relicanth:
                 self.modified_data.maps["MAP_PETALBURG_CITY"].water_encounters = EncounterTableData(
                     [381] * 5,
