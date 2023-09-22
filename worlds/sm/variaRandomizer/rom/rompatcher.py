@@ -238,10 +238,12 @@ class RomPatcher:
                 plms.append('WS_Save_Blinking_Door')
             if self.settings["boss"] == True:
                 stdPatches.append("Phantoon_Eye_Door")
-            if (self.settings["area"] == True
-                or self.settings["doorsColorsRando"] == True
-                or not GraphUtils.isStandardStart(self.settings["startLocation"])):
-                stdPatches.append("Enable_Backup_Saves")
+            # rolling saves is not required anymore since the addition of fast_save_reload
+            # also, both arent completely compatible as-is
+            #if (self.settings["area"] == True
+            #    or self.settings["doorsColorsRando"] == True
+            #    or not GraphUtils.isStandardStart(self.settings["startLocation"])):
+            #   stdPatches.append("Enable_Backup_Saves")
             if 'varia_hud.ips' in self.settings["optionalPatches"]:
                 # varia hud can make demos glitch out
                 self.applyIPSPatch("no_demo.ips")
