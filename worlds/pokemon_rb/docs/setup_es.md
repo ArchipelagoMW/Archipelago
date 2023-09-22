@@ -70,8 +70,8 @@ Y los siguientes caracteres especiales (cada uno ocupa un caracter):
 * `<'m>`
 * `<PK>`
 * `<MN>`
-* `<MALE>` alias for `♂`
-* `<FEMALE>` alias for `♀`
+* `<MALE>` alias para `♂`
+* `<FEMALE>` alias para `♀`
 
 ## Unirse a un juego MultiWorld
 
