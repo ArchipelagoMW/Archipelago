@@ -9,8 +9,7 @@ from .data import load_json_data, data
 
 
 _ignorable_locations = {
-    # Event islands
-    "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
+    "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",  # Is permanently mssiable and has special behavior that sets the flag early
 }
 
 _ignorable_warps = {

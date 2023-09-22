@@ -748,7 +748,6 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [
-      "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",
       "ITEM_TRICK_HOUSE_PUZZLE_8_BEAD_MAIL"
     ],
     "events": [],
