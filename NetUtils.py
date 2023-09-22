@@ -411,7 +411,7 @@ else:
         from _speedups import LocationStore
         import _speedups
         import os.path
-        if os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
+        if os.path.isfile("_speedups.pyx") and os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
             warnings.warn(f"{_speedups.__file__} outdated! "
                           f"Please rebuild with `cythonize -b -i _speedups.pyx` or delete it!")
     except ImportError:
