@@ -21,7 +21,7 @@ from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
-                      Goal, option_definitions)
+                      Goal, DarkCavesRequireFlash, option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -299,8 +299,7 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.require_itemfinder[self.player]:
             add_hidden_item_itemfinder_rules(self.multiworld, self.player)
 
-        if self.multiworld.require_flash[self.player]:
-            add_flash_rules(self.multiworld, self.player)
+        add_flash_rules(self.multiworld, self.player)
 
     def generate_basic(self) -> None:
         # Randomize wild encounters

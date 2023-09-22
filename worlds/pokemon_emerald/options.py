@@ -128,11 +128,16 @@ class HiddenItemsRequireItemfinder(DefaultOnToggle):
     display_name = "Require Itemfinder"
 
 
-class DarkCavesRequireFlash(DefaultOnToggle):
+class DarkCavesRequireFlash(Choice):
     """
-    The lower floors of Granite Cave and Victory Road logically require use of HM05 Flash
+    Determines whether HM05 Flash is logically required to navigate a dark cave
     """
     display_name = "Require Flash"
+    default = 3
+    option_neither = 0
+    option_only_granite_cave = 1
+    option_only_victory_road = 2
+    option_both = 3
 
 
 class EliteFourRequirement(Choice):

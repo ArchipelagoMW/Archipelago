@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, MultiWorld
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement, Goal
+from .options import EliteFourRequirement, NormanRequirement, Goal, DarkCavesRequireFlash
 from .util import location_name_to_label
 
 
@@ -1592,57 +1592,59 @@ def add_flash_rules(multiworld: MultiWorld, player: int) -> None:
     can_flash = lambda state: _can_flash(state, player)
 
     # Granite Cave
-    add_rule(
-        multiworld.get_entrance("MAP_GRANITE_CAVE_1F:2/MAP_GRANITE_CAVE_B1F:1", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_GRANITE_CAVE_B1F:3/MAP_GRANITE_CAVE_B2F:1", player),
-        can_flash
-    )
+    if multiworld.require_flash[player] in [DarkCavesRequireFlash.option_only_granite_cave, DarkCavesRequireFlash.option_both]:
+        add_rule(
+            multiworld.get_entrance("MAP_GRANITE_CAVE_1F:2/MAP_GRANITE_CAVE_B1F:1", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_GRANITE_CAVE_B1F:3/MAP_GRANITE_CAVE_B2F:1", player),
+            can_flash
+        )
 
     # Victory Road
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_1F:2/MAP_VICTORY_ROAD_B1F:5", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_1F:4/MAP_VICTORY_ROAD_B1F:4", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_1F:3/MAP_VICTORY_ROAD_B1F:2", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:3/MAP_VICTORY_ROAD_B2F:1", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:1/MAP_VICTORY_ROAD_B2F:2", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:6/MAP_VICTORY_ROAD_B2F:3", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:3/MAP_VICTORY_ROAD_B1F:6", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:2/MAP_VICTORY_ROAD_B1F:1", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0", player),
-        can_flash
-    )
-    add_rule(
-        multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:1/MAP_VICTORY_ROAD_B1F:3", player),
-        can_flash
-    )
+    if multiworld.require_flash[player] in [DarkCavesRequireFlash.option_only_victory_road, DarkCavesRequireFlash.option_both]:
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_1F:2/MAP_VICTORY_ROAD_B1F:5", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_1F:4/MAP_VICTORY_ROAD_B1F:4", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_1F:3/MAP_VICTORY_ROAD_B1F:2", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:3/MAP_VICTORY_ROAD_B2F:1", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:1/MAP_VICTORY_ROAD_B2F:2", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:6/MAP_VICTORY_ROAD_B2F:3", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:3/MAP_VICTORY_ROAD_B1F:6", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:2/MAP_VICTORY_ROAD_B1F:1", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0", player),
+            can_flash
+        )
+        add_rule(
+            multiworld.get_entrance("MAP_VICTORY_ROAD_B2F:1/MAP_VICTORY_ROAD_B1F:3", player),
+            can_flash
+        )
