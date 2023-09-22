@@ -21,7 +21,7 @@ class KeysBehindBosses(Toggle):
 
 class AbilityShuffling(Toggle):
     """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant pages of the manual have been found.
-        If playing with Hexagon Quest, abilities are instead randomly unlocked after obtaining 5, 10, and 15 Gold Hexagons.
+        If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
         *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     display_name = "Ability Shuffling"

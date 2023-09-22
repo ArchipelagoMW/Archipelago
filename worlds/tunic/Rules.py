@@ -24,11 +24,13 @@ blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
 
-def randomize_ability_unlocks(random: Random, hexagon_quest: int) -> Dict[str, int]:
-    ability_requirement = [5, 10, 15] if hexagon_quest == 1 else [1, 1, 1]
+def randomize_ability_unlocks(random: Random, hexagon_quest: bool, hexagon_goal: int) -> Dict[str, int]:
+    ability_requirement = [1, 1, 1]
+    if hexagon_quest:
+        # Set ability unlocks to 25, 50, and 75% of goal amount
+        ability_requirement = [(hexagon_goal // 4) * i for i in range(1, 4)]
     abilities = [prayer, holy_cross, ice_rod]
     random.shuffle(abilities)
-
     return dict(zip(abilities, ability_requirement))
 
 
@@ -49,10 +51,11 @@ def set_region_rules(multiworld: MultiWorld, player: int, ability_unlocks: Dict[
     multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = lambda state: state.has(laurels, player) and has_ability(state, player, prayer, multiworld, ability_unlocks)
     multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = lambda state: state.has_any({grapple, laurels}, player) and has_ability(state, player, prayer, multiworld, ability_unlocks)
     multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = lambda state: (state.has(gold_hexagon, player, multiworld.hexagon_goal[player].value) if multiworld.hexagon_quest[player].value else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)) \
-                                                                                             and has_ability(state, player, prayer, multiworld, ability_unlocks)
+                                                                                             and has_ability(state, player, prayer, multiworld, ability_unlocks) and state.has_group("melee weapons", player, 2)
     multiworld.get_entrance("Overworld -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
     multiworld.get_entrance("Overworld -> West Garden", player).access_rule = lambda state: state.has(laurels, player)
     multiworld.get_entrance("Overworld -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
+    multiworld.get_entrance("Overworld -> Quarry", player).access_rule = lambda state: state.has_group("melee weapons", player, 2) or state.has(fire_wand, player)
     multiworld.get_entrance("East Forest -> Eastern Vault Fortress", player).access_rule = lambda state: state.has(laurels, player)
     multiworld.get_entrance("Bottom of the Well -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
     multiworld.get_entrance("West Garden -> Dark Tomb", player).access_rule = lambda state: state.has(lantern, player)
@@ -195,6 +198,8 @@ def set_location_rules(multiworld: MultiWorld, player: int, ability_unlocks: Dic
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [Outside Cathedral] Obscured Behind Memorial", player),
              lambda state: state.has(laurels, player))
+    set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
+             lambda state: state.has_group("melee weapons", player, 2))
 
     # Hero's Grave
     set_rule(multiworld.get_location("Hero's Grave - Tooth Relic", player),

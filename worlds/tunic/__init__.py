@@ -137,7 +137,7 @@ class TunicWorld(World):
         victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        self.ability_unlocks = randomize_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value)
+        self.ability_unlocks = randomize_ability_unlocks(self.random, self.multiworld.hexagon_quest[self.player].value, self.multiworld.hexagon_goal[self.player].value)
         set_region_rules(self.multiworld, self.player, self.ability_unlocks)
         set_location_rules(self.multiworld, self.player, self.ability_unlocks)
 
