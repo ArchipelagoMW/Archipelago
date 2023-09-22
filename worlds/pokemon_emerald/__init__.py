@@ -123,6 +123,18 @@ class PokemonEmeraldWorld(World):
                             self.multiworld.player_name[self.player])
             self.multiworld.receive_item_messages[self.player].value = ReceiveItemMessages.option_all
 
+        if self.multiworld.goal[self.player] == Goal.option_legendary_hunt:
+            # Prevent turning off all legendary encounters
+            if len(self.multiworld.allowed_legendary_hunt_encounters[self.player].value) == 0:
+                raise ValueError("Pokemon Emerald: Player %s (%s) needs to allow at least one legendary encounter.")
+
+            # Prevent setting the number of required legendaries higher than the number of enabled legendaries
+            if self.multiworld.legendary_hunt_count[self.player].value > len(self.multiworld.allowed_legendary_hunt_encounters[self.player].value):
+                logging.warning("Pokemon Emerald: Legendary hunt count for Player %s (%s) higher than number of allowed "
+                                "legendary encounters. Reducing to number of allowed encounters.", self.player,
+                                self.multiworld.player_name[self.player])
+                self.multiworld.legendary_hunt_count[self.player].value = len(self.multiworld.allowed_legendary_hunt_encounters[self.player].value)
+
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
         # Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those
@@ -952,6 +964,7 @@ class PokemonEmeraldWorld(World):
             "legendary_hunt_catch",
             "legendary_hunt_count",
             "extra_boulders",
+            "extra_bumpy_slope",
             "free_fly_location",
             "fly_without_badge",
             "remote_items",
@@ -963,6 +976,7 @@ class PokemonEmeraldWorld(World):
 
         slot_data["free_fly_location_id"] = self.free_fly_location_id
         slot_data["remove_roadblocks"] = list(self.multiworld.remove_roadblocks[self.player].value)
+        slot_data["allowed_legendary_hunt_encounters"] = list(self.multiworld.allowed_legendary_hunt_encounters[self.player].value)
 
         return slot_data
 

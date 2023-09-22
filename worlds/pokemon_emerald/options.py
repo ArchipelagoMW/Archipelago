@@ -198,6 +198,57 @@ class LegendaryHuntCount(Range):
     default = 3
 
 
+class AllowedLegendaryHuntEncounters(OptionSet):
+    """
+    Sets which legendary encounters can contribute to the Legendary Hunt goal.
+
+    Latios will always be the roamer. Latias will always be at Southern Island.
+
+    Possible values are:
+    "Groudon"
+    "Kyogre"
+    "Rayquaza"
+    "Latios"
+    "Latias"
+    "Regirock"
+    "Registeel"
+    "Regice"
+    "Ho-oh"
+    "Lugia"
+    "Deoxys"
+    "Mew"
+    """
+    display_name = "Allowed Legendary Hunt Encounters"
+    valid_keys = frozenset([
+        "Groudon",
+        "Kyogre",
+        "Rayquaza",
+        "Latios",
+        "Latias",
+        "Regirock",
+        "Registeel",
+        "Regice",
+        "Ho-oh",
+        "Lugia",
+        "Deoxys",
+        "Mew",
+    ])
+    default = frozenset([
+        "Groudon",
+        "Kyogre",
+        "Rayquaza",
+        "Latios",
+        "Latias",
+        "Regirock",
+        "Registeel",
+        "Regice",
+        "Ho-oh",
+        "Lugia",
+        "Deoxys",
+        "Mew",
+    ])
+
+
 class RandomizeWildPokemon(Choice):
     """
     Randomizes wild pokemon encounters (grass, caves, water, fishing)
@@ -652,6 +703,7 @@ option_definitions: Dict[str, Option] = {
     "norman_count": NormanCount,
     "legendary_hunt_catch": LegendaryHuntCatch,
     "legendary_hunt_count": LegendaryHuntCount,
+    "allowed_legendary_hunt_encounters": AllowedLegendaryHuntEncounters,
 
     "wild_pokemon": RandomizeWildPokemon,
     "allow_wild_legendaries": AllowWildLegendaries,
