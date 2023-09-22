@@ -7,8 +7,6 @@
   - [r2modman](https://inscryption.thunderstore.io/package/ebkr/r2modman/) OR [Thunderstore Mod Manager](https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager)
 - For manual setup:
   - [BepInEx pack for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/BepInExPack_Inscryption/)
-  - [MonoMod Loader for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/MonoMod_Loader_Inscryption/)
-  - [Inscryption API](https://inscryption.thunderstore.io/package/API_dev/API/)
   - [ArchipelagoMod](https://inscryption.thunderstore.io/package/Ballin_Inc/ArchipelagoMod/)
 
 ## Installation
@@ -28,20 +26,14 @@ Before starting the installation process, here's what you should know:
 ### Manual setup
 1. Download the following mods using the "Manual Download" button:
    - [BepInEx pack for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/BepInExPack_Inscryption/)
-   - [MonoMod Loader for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/MonoMod_Loader_Inscryption/)
-   - [Inscryption API](https://inscryption.thunderstore.io/package/API_dev/API/)
    - [ArchipelagoMod](https://inscryption.thunderstore.io/package/Ballin_Inc/ArchipelagoMod/)
 2. Open your Inscryption installation directory. On Steam, you can find it easily by right clicking the game and clicking "Manage" > "Browse local files".
 3. Open the BepInEx pack zip file, then open the "BepInExPack_Inscryption" folder.
 4. Drag all folders and files located inside the "BepInExPack_Inscryption" folder and drop them in your Inscryption directory.
 5. Open the "BepInEx" folder in your Inscryption directory.
-6. Open the MonoMod Loader zip file.
-7. Drag and drop the "patchers" folder in the "BepInEx" folder.
-8. Open the API zip file.
-9. Drag and drop the "monomod" and "plugins" folder in the "BepInEx" folder.
-10. Open the ArchipelagoMod zip file.
-11. Drag and drop the "plugins" folder in the "BepInEx" folder to fuse with the existing "plugins" folder.
-12. Open the game normally to play with mods (if BepInEx was installed correctly, a console should appear).
+6. Open the ArchipelagoMod zip file.
+7. Drag and drop the "plugins" folder in the "BepInEx" folder to fuse with the existing "plugins" folder.
+8. Open the game normally to play with mods (if BepInEx was installed correctly, a console should appear).
 
 ## Joining a new MultiWorld Game
 1. Make sure you have a fresh save everytime you start a new MultiWorld! If this isn't your first MultiWorld with Inscryption, press the "Reset save data" button four times in the settings. This should boot you back to the starting cutscene.

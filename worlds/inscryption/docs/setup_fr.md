@@ -28,22 +28,16 @@ Avant de commencé le processus d'installation, voici ce que vous devriez savoir
 ### Installation manuelle
 1. Téléchargez les mods suivants en utilisant le bouton "Manual Download" :
    - [BepInEx pack for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/BepInExPack_Inscryption/)
-   - [MonoMod Loader for Inscryption](https://inscryption.thunderstore.io/package/BepInEx/MonoMod_Loader_Inscryption/)
-   - [Inscryption API](https://inscryption.thunderstore.io/package/API_dev/API/)
    - [ArchipelagoMod](https://inscryption.thunderstore.io/package/Ballin_Inc/ArchipelagoMod/)
 2. Ouvrez votre répertoire d'installation d'enregistrement. Sur Steam, vous pouvez le trouver facilement en faisant un clic droit sur le jeu et en cliquant sur "Gérer" > "Parcourir les fichiers locaux".
 3. Ouvrez le fichier zip du pack BepInEx, puis ouvrez le dossier "BepInExPack_Inscryption".
 4. Prenez tous les dossiers et fichiers situés dans le dossier "BepInExPack_Inscryption" et déposez-les dans votre répertoire Inscryption.
 5. Ouvrez le dossier "BepInEx" dans votre répertoire Inscryption.
-6. Ouvrez le fichier zip du MonoMod Loader.
-7. Prenez et déposez le dossier "patchers" dans le dossier "BepInEx".
-8. Ouvrez le fichier zip de l'API.
-9. Drag and drop the "monomod" and "plugins" folder in the "BepInEx" folder.
-10. Prenez et déposez le dossier "monomod" et "plugins"  dans le dossier "BepInEx".
-11. Prenez et déposez le dossier "plugins" dans le dossier "BepInEx" pour fusionner avec le dossier "plugins" existant.
-12. Ouvrez le jeu normalement pour jouer avec les mods (si BepInEx a été correctement installé, une console devrait apparaitre).
+6. Ouvrez le fichier zip d'ArchipelagoMod.
+7. Prenez et déposez le dossier "plugins" dans le dossier "BepInEx" pour fusionner avec le dossier "plugins" existant.
+8. Ouvrez le jeu normalement pour jouer avec les mods (si BepInEx a été correctement installé, une console devrait apparaitre).
 
-## Joining a new MultiWorld Game
+## Rejoindre un nouveau MultiWorld
 1. Assurez-vous d'avoir une nouvelle sauvegarde à chaque fois que vous démarrez un nouveau MultiWorld! Si ce n'est pas votre premier MultiWorld avec Inscryption, appuyez quatre fois sur le bouton "Réinitialiser les données de sauvegarde" dans les paramètres. Cela devrait vous ramener à la cinématique de départ.
 2. Dans le menu principal du jeu, ouvrez le menu des paramètres.
 3. Si tout a été installé correctement, vous devriez voir un quatrième onglet avec le logo d'Archipelago.
@@ -66,5 +60,5 @@ S'il n'y a pas de quatrième onglet, c'est peut être l'un des deux problèmes s
    - Regardez dans la console et assurez-vous que vous trouver un message concernant le chargement d'ArchipelagoMod.
    - Si vous voyez du texte rouge, il y a eu une erreur. Signalez le problème dans [Archipelago Discord Server](https://discord.gg/8Z65BR2) ou créez un issue dans notre [GitHub](https://github.com/DrBibop/Archipelago_Inscryption/issues).
 
-### J'ai un problème différent.
-Vous pouvez demander de l'aide sur [Archipelago Discord Server](https://discord.gg/8Z65BR2) ou, si vous pensez avoir trouvé un problème avec le mod, créez un issue dans notre [GitHub](https://github.com/DrBibop/Archipelago_Inscryption/issues).
+### J'ai un autre problème.
+Vous pouvez demander de l'aide sur [le serveur Discord d'Archipelago](https://discord.gg/8Z65BR2) ou, si vous pensez avoir trouvé un problème avec le mod, créez un issue dans notre [GitHub](https://github.com/DrBibop/Archipelago_Inscryption/issues).
