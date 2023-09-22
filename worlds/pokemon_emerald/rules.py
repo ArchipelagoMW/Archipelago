@@ -1144,11 +1144,15 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
     set_rule(
         multiworld.get_entrance("MAP_SOOTOPOLIS_CITY:2/MAP_SOOTOPOLIS_CITY_GYM_1F:0", player),
-        lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
+        lambda state: state.has("EVENT_RAYQUAZA_STOPS_FIGHT", player)
     )
     set_rule(
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM_WATERFALL"), player),
-        lambda state: state.has("EVENT_WAKE_RAYQUAZA", player)
+        lambda state: state.has("EVENT_RELEASE_KYOGRE", player)
+    )
+    set_rule(
+        multiworld.get_location("EVENT_RAYQUAZA_STOPS_FIGHT", player),
+        lambda state: state.has("EVENT_RELEASE_KYOGRE", player)
     )
 
     # Route 127
@@ -1317,7 +1321,11 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     # Sky Pillar
     set_rule(
         multiworld.get_entrance("MAP_SKY_PILLAR_OUTSIDE:1/MAP_SKY_PILLAR_1F:0", player),
-        lambda state: state.has("EVENT_WALLACE_GOES_TO_SKY_PILLAR", player)
+        lambda state: state.has("EVENT_RELEASE_KYOGRE", player)
+    )
+    add_rule(
+        multiworld.get_location("EVENT_ENCOUNTER_RAYQUAZA", player),
+        lambda state: state.has("EVENT_RAYQUAZA_STOPS_FIGHT", player)
     )
     # Sky Pillar does not require the mach bike until Rayquaza returns, which means the top
     # is only logically locked behind the mach bike after the top has been reached already

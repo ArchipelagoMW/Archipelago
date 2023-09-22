@@ -2472,9 +2472,7 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [],
-    "events": [
-      "EVENT_WALLACE_GOES_TO_SKY_PILLAR"
-    ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_CAVE_OF_ORIGIN_B1F:0/MAP_CAVE_OF_ORIGIN_1F:1"
@@ -2634,7 +2632,6 @@
     "has_fishing": false,
     "locations": [],
     "events": [
-      "EVENT_WAKE_RAYQUAZA",
       "EVENT_ENCOUNTER_RAYQUAZA"
     ],
     "exits": [],

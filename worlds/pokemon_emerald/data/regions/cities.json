@@ -2582,7 +2582,9 @@
     "has_water": false,
     "has_fishing": false,
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_RAYQUAZA_STOPS_FIGHT"
+    ],
     "exits": [
       "REGION_SOOTOPOLIS_CITY/WATER"
     ],
