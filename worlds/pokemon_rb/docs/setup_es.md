@@ -1,5 +1,3 @@
-TRADUCCION EN PROCESO
-
 # Guía de instalación para Pokémon Red and Blue: Archipelago
 
 ## Importante
