@@ -579,25 +579,27 @@ class ALTTPSNIClient(SNIClient):
 
 
 def get_alttp_settings(romfile: str):
-    lastSettings = Utils.get_adjuster_settings(GAME_ALTTP)
-    adjustedromfile = ''
-    if lastSettings:
-        choice = 'no'
-        if not hasattr(lastSettings, 'auto_apply') or 'ask' in lastSettings.auto_apply:
+    import LttPAdjuster
 
-            whitelist = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
-                         "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
-                         "reduceflashing", "deathlink", "allowcollect"}
-            printed_options = {name: value for name, value in vars(lastSettings).items() if name in whitelist}
-            if hasattr(lastSettings, "sprite_pool"):
-                sprite_pool = {}
-                for sprite in lastSettings.sprite_pool:
-                    if sprite in sprite_pool:
-                        sprite_pool[sprite] += 1
-                    else:
-                        sprite_pool[sprite] = 1
-                    if sprite_pool:
-                        printed_options["sprite_pool"] = sprite_pool
+    adjustedromfile = ''
+    if vars(Utils.get_adjuster_settings_no_defaults(GAME_ALTTP)):
+        last_settings = Utils.get_adjuster_settings(GAME_ALTTP)
+
+        allow_list = {"music", "menuspeed", "heartbeep", "heartcolor", "ow_palettes", "quickswap",
+                    "uw_palettes", "sprite", "sword_palettes", "shield_palettes", "hud_palettes",
+                    "reduceflashing", "deathlink", "allowcollect", "oof"}
+        choice = 'no'
+        if 'ask' in last_settings.auto_apply:
+            printed_options = {name: value for name, value in vars(last_settings).items() if name in allow_list}
+            
+            sprite_pool = {}
+            for sprite in last_settings.sprite_pool:
+                if sprite in sprite_pool:
+                    sprite_pool[sprite] += 1
+                else:
+                    sprite_pool[sprite] = 1
+                if sprite_pool:
+                    printed_options["sprite_pool"] = sprite_pool
             import pprint
 
             from CommonClient import gui_enabled
@@ -663,35 +665,35 @@ def get_alttp_settings(romfile: str):
                 choice = 'yes'
             elif choice and "never" in choice:
                 choice = 'no'
-                lastSettings.auto_apply = 'never'
-                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+                last_settings.auto_apply = 'never'
+                Utils.persistent_store("adjuster", GAME_ALTTP, last_settings)
             elif choice and "always" in choice:
                 choice = 'yes'
-                lastSettings.auto_apply = 'always'
-                Utils.persistent_store("adjuster", GAME_ALTTP, lastSettings)
+                last_settings.auto_apply = 'always'
+                Utils.persistent_store("adjuster", GAME_ALTTP, last_settings)
             else:
                 choice = 'no'
-        elif 'never' in lastSettings.auto_apply:
+        elif 'never' in last_settings.auto_apply:
             choice = 'no'
-        elif 'always' in lastSettings.auto_apply:
+        elif 'always' in last_settings.auto_apply:
             choice = 'yes'
 
         if 'yes' in choice:
+            import LttPAdjuster
             from worlds.alttp.Rom import get_base_rom_path
-            lastSettings.rom = romfile
-            lastSettings.baserom = get_base_rom_path()
-            lastSettings.world = None
+            last_settings.rom = romfile
+            last_settings.baserom = get_base_rom_path()
+            last_settings.world = None
 
-            if hasattr(lastSettings, "sprite_pool"):
+            if last_settings.sprite_pool:
                 from LttPAdjuster import AdjusterWorld
-                lastSettings.world = AdjusterWorld(getattr(lastSettings, "sprite_pool"))
+                last_settings.world = AdjusterWorld(getattr(last_settings, "sprite_pool"))
 
             adjusted = True
-            import LttPAdjuster
-            _, adjustedromfile = LttPAdjuster.adjust(lastSettings)
+            _, adjustedromfile = LttPAdjuster.adjust(last_settings)
 
-            if hasattr(lastSettings, "world"):
-                delattr(lastSettings, "world")
+            if hasattr(last_settings, "world"):
+                delattr(last_settings, "world")
         else:
             adjusted = False
         if adjusted:

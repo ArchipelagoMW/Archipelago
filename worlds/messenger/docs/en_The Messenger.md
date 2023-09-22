@@ -13,8 +13,7 @@
 
 All items and upgrades that can be picked up by the player in the game are randomized. The player starts in the Tower of
 Time HQ with the past section finished, all area portals open, and with the cloud step, and climbing claws already
-obtained. You'll be forced to do sections of the game in different ways with your current abilities. Currently, logic
-assumes you already have all shop upgrades.
+obtained. You'll be forced to do sections of the game in different ways with your current abilities.
 
 ## What items can appear in other players' worlds?
 
@@ -23,6 +22,7 @@ assumes you already have all shop upgrades.
 * Music Box notes
 * The Phobekins
 * Time shards
+* Shop Upgrades
 * Power Seals
 
 ## Where can I find items?
@@ -33,6 +33,7 @@ You can find items wherever items can be picked up in the original game. This in
 * Music Box notes
 * Phobekins
 * Bosses
+* Shop Upgrades, Money Wrench, and Figurine Purchases
 * Power seals
 * Mega Time Shards
 
@@ -46,7 +47,6 @@ for it. The groups you can use for The Messenger are:
 * Crest - The Sun and Moon Crests
 * Phobekin - Any of the Phobekins
 * Phobe - An alternative name for the Phobekins
-* Shuriken - The windmill shuriken
 
 ## Other changes
 
@@ -60,18 +60,21 @@ for it. The groups you can use for The Messenger are:
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
   the player fulfills the necessary conditions.
+* After running the game with the mod, a config file (APConfig.toml) will be generated in your game folder that can be
+  used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
+  be entered in game.
 
-## Currently known issues
-* Necro cutscene will sometimes not play correctly, but will still reward the item
+## Known issues
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
-* If you receive the Fairy Bottle while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
+* If you receive the Magic Firefly while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
   to Searing Crags and re-enter to get it to play correctly.
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
   player. This may also cause a softlock.
 * Text entry menus don't accept controller input
 * Opening the shop chest in power seal hunt mode from the tower of time HQ will softlock the game.
+* If you are unable to reset file slots, load into a save slot, let the game save, and close it.
 
 ## What do I do if I have a problem?
 
-If you believe something happened that isn't intended, please get the `log.txt`from the folder of your game installation
+If you believe something happened that isn't intended, please get the `log.txt` from the folder of your game installation
 and send a bug report either on GitHub or the [Archipelago Discord Server](http://archipelago.gg/discord)

@@ -27,12 +27,14 @@
 {% endblock %}
 {% block custom_table_row scoped  %}
 {% if games[player] == "Factorio" %}
-<td class="center-column">{% if inventory[team][player][131161] or inventory[team][player][131281] %}✔{% endif %}</td>
-<td class="center-column">{% if inventory[team][player][131172] or inventory[team][player][131281] > 1%}✔{% endif %}</td>
-<td class="center-column">{% if inventory[team][player][131195] or inventory[team][player][131281] > 2%}✔{% endif %}</td>
-<td class="center-column">{% if inventory[team][player][131240] or inventory[team][player][131281] > 3%}✔{% endif %}</td>
-<td class="center-column">{% if inventory[team][player][131240] or inventory[team][player][131281] > 4%}✔{% endif %}</td>
-<td class="center-column">{% if inventory[team][player][131220] or inventory[team][player][131281] > 5%}✔{% endif %}</td>
+{% set player_inventory = named_inventory[team][player] %}
+{% set prog_science = player_inventory["progressive-science-pack"] %}
+<td class="center-column">{% if player_inventory["logistic-science-pack"] or prog_science %}✔{% endif %}</td>
+<td class="center-column">{% if player_inventory["military-science-pack"] or prog_science > 1%}✔{% endif %}</td>
+<td class="center-column">{% if player_inventory["chemical-science-pack"] or prog_science > 2%}✔{% endif %}</td>
+<td class="center-column">{% if player_inventory["production-science-pack"] or prog_science > 3%}✔{% endif %}</td>
+<td class="center-column">{% if player_inventory["utility-science-pack"] or prog_science > 4%}✔{% endif %}</td>
+<td class="center-column">{% if player_inventory["space-science-pack"] or prog_science > 5%}✔{% endif %}</td>
 {% else %}
 <td class="center-column">❌</td>
 <td class="center-column">❌</td>

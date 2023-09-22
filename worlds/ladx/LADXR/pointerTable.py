@@ -59,12 +59,14 @@ class PointerTable:
             self.__storage = [{"bank": self.__storage[0]["bank"], "start": self.__storage[0]["start"], "end": self.__storage[-1]["end"]}]
         if "expand_to_end_of_bank" in info and info["expand_to_end_of_bank"]:
             for st in self.__storage:
-                expand = True
-                for st2 in self.__storage:
-                    if st["bank"] == st2["bank"] and st["end"] < st2["end"]:
-                        expand = False
-                if expand:
-                    st["end"] = 0x4000
+                if info["expand_to_end_of_bank"] == True or st["bank"] in info["expand_to_end_of_bank"]:
+                    expand = True
+                    for st2 in self.__storage:
+                        if st["bank"] == st2["bank"] and st["end"] < st2["end"]:
+                            expand = False
+                    if expand:
+                        st["end"] = 0x4000
+        self.storage = self.__storage
 
         # for s in sorted(self.__storage, key=lambda s: (s["bank"], s["start"])):
         #     print(self.__class__.__name__, s)

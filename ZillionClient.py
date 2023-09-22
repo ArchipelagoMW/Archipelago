@@ -423,9 +423,9 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                                         async_start(ctx.send_connect())
                                         log_no_spam("logging in to server...")
                                         await asyncio.wait((
-                                            ctx.got_slot_data.wait(),
-                                            ctx.exit_event.wait(),
-                                            asyncio.sleep(6)
+                                            asyncio.create_task(ctx.got_slot_data.wait()),
+                                            asyncio.create_task(ctx.exit_event.wait()),
+                                            asyncio.create_task(asyncio.sleep(6))
                                         ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
                             else:  # not correct seed name
                                 log_no_spam("incorrect seed - did you mix up roms?")
@@ -447,9 +447,9 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                     ctx.known_name = name
                     async_start(ctx.connect())
                     await asyncio.wait((
-                        ctx.got_room_info.wait(),
-                        ctx.exit_event.wait(),
-                        asyncio.sleep(6)
+                        asyncio.create_task(ctx.got_room_info.wait()),
+                        asyncio.create_task(ctx.exit_event.wait()),
+                        asyncio.create_task(asyncio.sleep(6))
                     ), return_when=asyncio.FIRST_COMPLETED)
             else:  # no name found in game
                 if not help_message_shown:

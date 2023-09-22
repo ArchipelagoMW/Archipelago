@@ -9,15 +9,18 @@ if __name__ == "__main__":
 import asyncio
 import base64
 import binascii
+import colorama
 import io
-import logging
+import os
+import re
 import select
+import shlex
 import socket
+import struct
+import sys
+import subprocess
 import time
 import typing
-import urllib
-
-import colorama
 
 
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
@@ -29,6 +32,7 @@ from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+
 
 class GameboyException(Exception):
     pass
@@ -91,7 +95,7 @@ class LAClientConstants:
     # wLinkSendShopTarget = 0xDDFF
 
 
-    wRecvIndex = 0xDDFE  # 0xDB58
+    wRecvIndex = 0xDDFD # Two bytes
     wCheckAddress = 0xC0FF - 0x4
     WRamCheckSize = 0x4
     WRamSafetyValue = bytearray([0]*WRamCheckSize)
@@ -115,17 +119,17 @@ class RAGameboy():
         assert (self.socket)
         self.socket.setblocking(False)
 
-    def get_retroarch_version(self):
-        self.send(b'VERSION\n')
-        select.select([self.socket], [], [])
-        response_str, addr = self.socket.recvfrom(16)
+    async def send_command(self, command, timeout=1.0):
+        self.send(f'{command}\n')
+        response_str = await self.async_recv()
+        self.check_command_response(command, response_str)
         return response_str.rstrip()
 
-    def get_retroarch_status(self, timeout):
-        self.send(b'GET_STATUS\n')
-        select.select([self.socket], [], [], timeout)
-        response_str, addr = self.socket.recvfrom(1000, )
-        return response_str.rstrip()
+    async def get_retroarch_version(self):
+        return await self.send_command("VERSION")
+
+    async def get_retroarch_status(self):
+        return await self.send_command("GET_STATUS")
 
     def set_cache_limits(self, cache_start, cache_size):
         self.cache_start = cache_start
@@ -141,8 +145,8 @@ class RAGameboy():
         response, _ = self.socket.recvfrom(4096)
         return response
 
-    async def async_recv(self):
-        response = await asyncio.get_event_loop().sock_recv(self.socket, 4096)
+    async def async_recv(self, timeout=1.0):
+        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), timeout)
         return response
 
     async def check_safe_gameplay(self, throw=True):
@@ -169,6 +173,8 @@ class RAGameboy():
                 raise InvalidEmulatorStateError()
             return False
         if not await check_wram():
+            if throw:
+                raise InvalidEmulatorStateError()
             return False
         return True
 
@@ -227,20 +233,30 @@ class RAGameboy():
 
         return r
 
+    def check_command_response(self, command: str, response: bytes):
+        if command == "VERSION":
+            ok = re.match("\d+\.\d+\.\d+", response.decode('ascii')) is not None
+        else:
+            ok = response.startswith(command.encode())
+        if not ok:
+            logger.warning(f"Bad response to command {command} - {response}")
+            raise BadRetroArchResponse()
+
     def read_memory(self, address, size=1):
         command = "READ_CORE_MEMORY"
 
         self.send(f'{command} {hex(address)} {size}\n')
         response = self.recv()
 
+        self.check_command_response(command, response)
+
         splits = response.decode().split(" ", 2)
-
-        assert (splits[0] == command)
         # Ignore the address for now
-
-        # TODO: transform to bytes
-        if splits[2][:2] == "-1" or splits[0] != "READ_CORE_MEMORY":
+        if splits[2][:2] == "-1":
             raise BadRetroArchResponse()
+
+        # TODO: check response address, check hex behavior between RA and BH
+
         return bytearray.fromhex(splits[2])
 
     async def async_read_memory(self, address, size=1):
@@ -248,14 +264,21 @@ class RAGameboy():
 
         self.send(f'{command} {hex(address)} {size}\n')
         response = await self.async_recv()
+        self.check_command_response(command, response)
         response = response[:-1]
         splits = response.decode().split(" ", 2)
+        try:
+            response_addr = int(splits[1], 16)
+        except ValueError:
+            raise BadRetroArchResponse()
 
-        assert (splits[0] == command)
-        # Ignore the address for now
+        if response_addr != address:
+            raise BadRetroArchResponse()
 
-        # TODO: transform to bytes
-        return bytearray.fromhex(splits[2])
+        ret = bytearray.fromhex(splits[2])
+        if len(ret) > size:
+            raise BadRetroArchResponse()
+        return ret
 
     def write_memory(self, address, bytes):
         command = "WRITE_CORE_MEMORY"
@@ -263,7 +286,7 @@ class RAGameboy():
         self.send(f'{command} {hex(address)} {" ".join(hex(b) for b in bytes)}')
         select.select([self.socket], [], [])
         response, _ = self.socket.recvfrom(4096)
-
+        self.check_command_response(command, response)
         splits = response.decode().split(" ", 3)
 
         assert (splits[0] == command)
@@ -281,6 +304,9 @@ class LinksAwakeningClient():
     pending_deathlink = False
     deathlink_debounce = True
     recvd_checks = {}
+    retroarch_address = None
+    retroarch_port = None
+    gameboy = None
 
     def msg(self, m):
         logger.info(m)
@@ -288,50 +314,48 @@ class LinksAwakeningClient():
         self.gameboy.send(s)
 
     def __init__(self, retroarch_address="127.0.0.1", retroarch_port=55355):
-        self.gameboy = RAGameboy(retroarch_address, retroarch_port)
+        self.retroarch_address = retroarch_address
+        self.retroarch_port = retroarch_port
+        pass
 
+    stop_bizhawk_spam = False
     async def wait_for_retroarch_connection(self):
-        logger.info("Waiting on connection to Retroarch...")
+        if not self.stop_bizhawk_spam:
+            logger.info("Waiting on connection to Retroarch...")
+            self.stop_bizhawk_spam = True
+        self.gameboy = RAGameboy(self.retroarch_address, self.retroarch_port)
+
         while True:
             try:
-                version = self.gameboy.get_retroarch_version()
+                version = await self.gameboy.get_retroarch_version()
                 NO_CONTENT = b"GET_STATUS CONTENTLESS"
                 status = NO_CONTENT
                 core_type = None
                 GAME_BOY = b"game_boy"
                 while status == NO_CONTENT or core_type != GAME_BOY:
-                    try:
-                        status = self.gameboy.get_retroarch_status(0.1)
-                        if status.count(b" ") < 2:
-                            await asyncio.sleep(1.0)
-                            continue
-                        
-                        GET_STATUS, PLAYING, info = status.split(b" ", 2)
-                        if status.count(b",") < 2:
-                            await asyncio.sleep(1.0)
-                            continue
-                        core_type, rom_name, self.game_crc = info.split(b",", 2)
-                        if core_type != GAME_BOY:
-                            logger.info(
-                                f"Core type should be '{GAME_BOY}', found {core_type} instead - wrong type of ROM?")
-                            await asyncio.sleep(1.0)
-                            continue
-                    except (BlockingIOError, TimeoutError) as e:
-                        await asyncio.sleep(0.1)
-                        pass
-                logger.info(f"Connected to Retroarch {version} {info}")
-                self.gameboy.read_memory(0x1000)
+                    status = await self.gameboy.get_retroarch_status()
+                    if status.count(b" ") < 2:
+                        await asyncio.sleep(1.0)
+                        continue
+                    GET_STATUS, PLAYING, info = status.split(b" ", 2)
+                    if status.count(b",") < 2:
+                        await asyncio.sleep(1.0)
+                        continue
+                    core_type, rom_name, self.game_crc = info.split(b",", 2)
+                    if core_type != GAME_BOY:
+                        logger.info(
+                            f"Core type should be '{GAME_BOY}', found {core_type} instead - wrong type of ROM?")
+                        await asyncio.sleep(1.0)
+                        continue
+                self.stop_bizhawk_spam = False
+                logger.info(f"Connected to Retroarch {version.decode('ascii')} running {rom_name.decode('ascii')}")
                 return
-            except ConnectionResetError:
+            except (BlockingIOError, TimeoutError, ConnectionResetError):
                 await asyncio.sleep(1.0)
                 pass
 
-    def reset_auth(self):
-        auth = binascii.hexlify(self.gameboy.read_memory(0x0134, 12)).decode()
-
-        if self.auth:
-            assert (auth == self.auth)
-
+    async def reset_auth(self):
+        auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth
 
     async def wait_and_init_tracker(self):
@@ -365,14 +389,16 @@ class LinksAwakeningClient():
                                   item_id, from_player])
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
-        self.gameboy.write_memory(LAClientConstants.wRecvIndex, [next_index])
+        self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
+    should_reset_auth = False
     async def wait_for_game_ready(self):
         logger.info("Waiting on game to be in valid state...")
         while not await self.gameboy.check_safe_gameplay(throw=False):
-            pass
-        logger.info("Ready!")
-    last_index = 0
+            if self.should_reset_auth:
+                self.should_reset_auth = False
+                raise GameboyException("Resetting due to wrong archipelago server")
+        logger.info("Game connection ready!")
 
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
@@ -381,11 +407,6 @@ class LinksAwakeningClient():
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
-
-        next_index = self.gameboy.read_memory(LAClientConstants.wRecvIndex)[0]
-        if next_index != self.last_index:
-            self.last_index = next_index
-            # logger.info(f"Got new index {next_index}")
 
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
@@ -404,7 +425,7 @@ class LinksAwakeningClient():
         if await self.is_victory():
             await win_cb()
 
-        recv_index = (await self.gameboy.async_read_memory_safe(LAClientConstants.wRecvIndex))[0]
+        recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.wRecvIndex, 2))[0]
 
         # Play back one at a time
         if recv_index in self.recvd_checks:
@@ -438,12 +459,16 @@ class LinksAwakeningContext(CommonContext):
     found_checks = []
     last_resend = time.time()
 
-    magpie = MagpieBridge()
+    magpie_enabled = False
+    magpie = None
     magpie_task = None
     won = False
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
+        if magpie:
+            self.magpie_enabled = True
+            self.magpie = MagpieBridge()
         super().__init__(server_address, password)
 
     def run_gui(self) -> None:
@@ -462,16 +487,17 @@ class LinksAwakeningContext(CommonContext):
             def build(self):
                 b = super().build()
 
-                button = Button(text="", size=(30, 30), size_hint_x=None,
-                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
-                image = Image(size=(16, 16), texture=magpie_logo())
-                button.add_widget(image)
+                if self.ctx.magpie_enabled:
+                    button = Button(text="", size=(30, 30), size_hint_x=None,
+                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    image = Image(size=(16, 16), texture=magpie_logo())
+                    button.add_widget(image)
 
-                def set_center(_, center):
-                    image.center = center
-                button.bind(center=set_center)
+                    def set_center(_, center):
+                        image.center = center
+                    button.bind(center=set_center)
 
-                self.connect_layout.add_widget(button)
+                    self.connect_layout.add_widget(button)
                 return b
 
         self.ui = LADXManager(self)
@@ -480,6 +506,15 @@ class LinksAwakeningContext(CommonContext):
     async def send_checks(self):
         message = [{"cmd": 'LocationChecks', "locations": self.found_checks}]
         await self.send_msgs(message)
+
+    had_invalid_slot_data = None
+    def event_invalid_slot(self):
+        # The next time we try to connect, reset the game loop for new auth
+        self.had_invalid_slot_data = True
+        self.auth = None
+        # Don't try to autoreconnect, it will just fail
+        self.disconnected_intentionally = True
+        CommonContext.event_invalid_slot(self)
 
     ENABLE_DEATHLINK = False
     async def send_deathlink(self):
@@ -506,13 +541,23 @@ class LinksAwakeningContext(CommonContext):
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks += item_ids
         create_task_log_exception(self.send_checks())
-        create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
+        if self.magpie_enabled:
+            create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(LinksAwakeningContext, self).server_auth(password_requested)
+
+        if self.had_invalid_slot_data:
+            # We are connecting when previously we had the wrong ROM or server - just in case
+            # re-read the ROM so that if the user had the correct address but wrong ROM, we
+            # allow a successful reconnect
+            self.client.should_reset_auth = True
+            self.had_invalid_slot_data = False
+
+        while self.client.auth == None:
+            await asyncio.sleep(0.1)
         self.auth = self.client.auth
-        await self.get_username()
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
@@ -520,8 +565,12 @@ class LinksAwakeningContext(CommonContext):
             self.game = self.slot_info[self.slot].game
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
-            for index, item in enumerate(args["items"], args["index"]):
+            for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
+
+    async def sync(self):
+        sync_msg = [{'cmd': 'Sync'}]
+        await self.send_msgs(sync_msg)
 
     item_id_lookup = get_locations_to_id()
 
@@ -537,18 +586,33 @@ class LinksAwakeningContext(CommonContext):
         async def deathlink():
             await self.send_deathlink()
 
-        self.magpie_task = asyncio.create_task(self.magpie.serve())
-        
+        if self.magpie_enabled:
+            self.magpie_task = asyncio.create_task(self.magpie.serve())
+
         # yield to allow UI to start
         await asyncio.sleep(0)
 
         while True:
             try:
                 # TODO: cancel all client tasks
-                logger.info("(Re)Starting game loop")
+                if not self.client.stop_bizhawk_spam:
+                    logger.info("(Re)Starting game loop")
                 self.found_checks.clear()
+                # On restart of game loop, clear all checks, just in case we swapped ROMs
+                # this isn't totally neccessary, but is extra safety against cross-ROM contamination
+                self.client.recvd_checks.clear()
                 await self.client.wait_for_retroarch_connection()
-                self.client.reset_auth()
+                await self.client.reset_auth()
+                # If we find ourselves with new auth after the reset, reconnect
+                if self.auth and self.client.auth != self.auth:
+                    # It would be neat to reconnect here, but connection needs this loop to be running
+                    logger.info("Detected new ROM, disconnecting...")
+                    await self.disconnect()
+                    continue
+
+                if not self.client.recvd_checks:
+                    await self.sync()
+
                 await self.client.wait_and_init_tracker()
 
                 while True:
@@ -558,39 +622,62 @@ class LinksAwakeningContext(CommonContext):
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
-                    self.magpie.set_checks(self.client.tracker.all_checks)
-                    await self.magpie.set_item_tracker(self.client.item_tracker)
-                    await self.magpie.send_gps(self.client.gps_tracker)
+                    if self.magpie_enabled:
+                        try:
+                            self.magpie.set_checks(self.client.tracker.all_checks)
+                            await self.magpie.set_item_tracker(self.client.item_tracker)
+                            await self.magpie.send_gps(self.client.gps_tracker)
+                        except Exception:
+                            # Don't let magpie errors take out the client
+                            pass
+                    if self.client.should_reset_auth:
+                        self.client.should_reset_auth = False
+                        raise GameboyException("Resetting due to wrong archipelago server")
+            except (GameboyException, asyncio.TimeoutError, TimeoutError, ConnectionResetError):
+                await asyncio.sleep(1.0)
 
-            except GameboyException:
-                time.sleep(1.0)
-                pass
+def run_game(romfile: str) -> None:
+    auto_start = typing.cast(typing.Union[bool, str],
+                            Utils.get_options()["ladx_options"].get("rom_start", True))
+    if auto_start is True:
+        import webbrowser
+        webbrowser.open(romfile)
+    elif isinstance(auto_start, str):
+        args = shlex.split(auto_start)
+        # Specify full path to ROM as we are going to cd in popen
+        full_rom_path = os.path.realpath(romfile)
+        args.append(full_rom_path)
+        try:
+            # set cwd so that paths to lua scripts are always relative to our client
+            if getattr(sys, 'frozen', False):
+                # The application is frozen
+                script_dir = os.path.dirname(sys.executable)
+            else:
+                script_dir = os.path.dirname(os.path.realpath(__file__))
 
+            subprocess.Popen(args, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=script_dir)
+        except FileNotFoundError:
+            logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
 async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
-
+    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
+
     args = parser.parse_args()
-    logger.info(args)
 
     if args.diff_file:
         import Patch
         logger.info("patch file was supplied - creating rom...")
         meta, rom_file = Patch.create_rom_file(args.diff_file)
-        if "server" in meta:
-            args.url = meta["server"]
+        if "server" in meta and not args.connect:
+            args.connect = meta["server"]
         logger.info(f"wrote rom file to {rom_file}")
 
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
 
-    ctx = LinksAwakeningContext(args.connect, args.password)
+    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
@@ -599,6 +686,10 @@ async def main():
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
+
+    # Down below run_gui so that we get errors out of the process
+    if args.diff_file:
+        run_game(rom_file)
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
