@@ -9,7 +9,8 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
 - BizHawk: [BizHawk Releases en TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - La versión 2.3.1 y posteriores son soportadas. Se recomienda la versión 2.7 para estabilidad.
   - Instrucciones de instalación detalladas para BizHawk se pueden encontrar en el enlace de arriba.
-  - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se encuentra en el enlace de arriba.
+  - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se 
+    encuentra en el enlace de arriba.
 - El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases)
   (selecciona `Pokemon Client` durante la instalación).
 - Los ROMs originales de Pokémon Red y/o Blue. La comunidad de Archipelago no puede proveerlos.
@@ -53,7 +54,8 @@ opciones.
 Puedes generar un archivo YAML or descargar su plantilla en la [pagina de configuración de jugador de Pokemon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
 
 Es importante tener en cuenta que la opción `game_version` determina el ROM que será parcheado.
-Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM correspondiente.
+Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM
+correspondiente.
 
 Para las opciones `trainer_name` y `rival_name`, los siguientes caracteres normales son permitidos:
 
@@ -80,8 +82,8 @@ Una vez que la generación acabe, el anfitrión te dará un enlace a tu archivo,
 todos. Tu archivo tiene una extensión `.apred` o `.apblue`.
 
 Haz doble click en tu archivo `.apred` o `.apblue` para que se ejecute el cliente y realize el parcheado de la ROM.
-Una vez acabe ese proceso (esto puede tardar un poco), el cliente y el emulador se abrirán automaticamente (si es que
-se ha asociado la extensión al emulador tal como fue recomendado)
+Una vez acabe ese proceso (esto puede tardar un poco), el cliente y el emulador se abrirán automaticamente (si es que se
+ha asociado la extensión al emulador tal como fue recomendado)
 
 ### Conectarse al multiserver
 
@@ -104,4 +106,5 @@ Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimie
 3. Haz click en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).
 
-Y ya, el resto debería hacerse solo! Los items y checks seran marcados automaticamente, e incluso reconocerá tus configuraciones - Ocultará checks y ajustará la logica segun corresponda.
+Y ya, el resto debería hacerse solo! Los items y checks seran marcados automaticamente, e incluso reconocerá tus
+configuraciones - Ocultará checks y ajustará la logica segun corresponda.
