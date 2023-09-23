@@ -389,7 +389,7 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP" and get_option_value(world, player, "shuffle_EPs") != 0:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
-            if loc_obj["entityType"] in {"EP", "General"}:
+            if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
                 self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
 
         adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
