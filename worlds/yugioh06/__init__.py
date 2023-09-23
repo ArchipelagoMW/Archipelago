@@ -178,7 +178,7 @@ class Yugioh06World(World):
             region = create_region(self,
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
-            if opponent.tier == 5:
+            if opponent.tier == 5 and opponent.column > 2:
                 entrance.access_rule =\
                     (lambda opp: lambda state: opp.rule(state))(opponent)
             else:
