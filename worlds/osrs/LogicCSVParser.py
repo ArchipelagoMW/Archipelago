@@ -45,7 +45,7 @@ def load_location_csv() -> typing.List[LocationRow]:
     if len(location_rows) > 0:
         return location_rows
 
-    locations_csv = pkgutil.get_data(__name__, "./LogicCSV/OSRS AP Tasks - Locations.csv")
+    locations_csv = pkgutil.get_data(__name__, "LogicCSV/OSRS AP Tasks - Locations.csv")
     locations_reader = csv.reader(locations_csv.decode('utf-8').splitlines(), delimiter=',', quotechar='"')
     for row in locations_reader:
         skill_strings = row[3].split(", ")
@@ -66,7 +66,7 @@ def load_location_csv() -> typing.List[LocationRow]:
 def load_region_csv() -> typing.List[RegionRow]:
     if len(region_rows) > 0:
         return region_rows
-    regions_csv = pkgutil.get_data(__name__, "./LogicCSV/OSRS AP Tasks - Regions.csv")
+    regions_csv = pkgutil.get_data(__name__, "LogicCSV/OSRS AP Tasks - Regions.csv")
     regions_reader = csv.reader(regions_csv.decode('utf-8').splitlines(), delimiter=',', quotechar='"')
     for row in regions_reader:
         region_rows.append(RegionRow(row[0], row[1], row[2].split(", "), row[3].split(", ")))
@@ -76,7 +76,7 @@ def load_region_csv() -> typing.List[RegionRow]:
 def load_resource_csv() -> typing.List[ResourceRow]:
     if len(resource_rows) > 0:
         return resource_rows
-    resources_csv = pkgutil.get_data(__name__, "./LogicCSV/OSRS AP Tasks - Resources.csv")
+    resources_csv = pkgutil.get_data(__name__, "LogicCSV/OSRS AP Tasks - Resources.csv")
     resources_reader = csv.reader(resources_csv.decode('utf-8').splitlines(), delimiter=',', quotechar='"')
     for row in resources_reader:
         resource_rows.append(ResourceRow(row[0]))
@@ -86,7 +86,7 @@ def load_resource_csv() -> typing.List[ResourceRow]:
 def load_item_csv() -> typing.List[ItemRow]:
     if len(item_rows) > 0:
         return item_rows
-    items_csv = pkgutil.get_data(__name__, "./LogicCSV/OSRS AP Tasks - Items.csv")
+    items_csv = pkgutil.get_data(__name__, "LogicCSV/OSRS AP Tasks - Items.csv")
     items_reader = csv.reader(items_csv.decode('utf-8').splitlines(), delimiter=',', quotechar='"')
     for row in items_reader:
         progression = ItemClassification.filler
