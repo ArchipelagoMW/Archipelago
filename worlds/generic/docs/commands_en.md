@@ -57,7 +57,7 @@ can be configured to allow/require manual usage of this command.
 - `/license` Returns the software licensing information.
 - `/options` Lists the server's current options, including password in plaintext.
 - `/players` List currently connected players.
-- `/save` Saves the state of the current multi-world. Note that the server auto-saves on a minute basis.
+- `/save` Saves the state of the current multiworld. Note that the server auto-saves on a minute basis.
 - `/exit` Shutdown the server
 
 ### Utilities
@@ -68,7 +68,7 @@ can be configured to allow/require manual usage of this command.
 
 
 ### Collect/Release
-- `/collect <player name>` Send out any items remaining in the multi-world belonging to the given player.
+- `/collect <player name>` Send out any items remaining in the multiworld belonging to the given player.
 - `/release <player name>` Sends out all remaining items in this world regardless of settings and game completion status.
 - `/allow_release <player name>` Allows the given player to use the `!release` command.
 - `/forbid_release <player name>` Prevents the given player from using the `!release` command.
@@ -88,7 +88,7 @@ execute these commands in your client window.
 
 The following commands are available in the clients that use the CommonClient, for example: TextClient, SNIClient, etc.
 
-- `/connect <address:port>` Connect to the multi-world server at the given address.
+- `/connect <address:port>` Connect to the multiworld server at the given address.
 - `/disconnect` Disconnects you from your current session.
 - `/help` Returns a list of available commands.
 - `/license` Returns the software licensing information.
