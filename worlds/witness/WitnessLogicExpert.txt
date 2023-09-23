@@ -266,7 +266,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Lift - 0x0
 158139 - 0x3C12D (Upper Row 6) - 0x0146C - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
 158140 - 0x03686 (Upper Row 7) - 0x3C12D - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
-158142 - 0x03677 (Stairs Control) - True - Squares & Colored Squares & Eraser
+158142 - 0x03677 (Stairs Panel) - True - Squares & Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
 158143 - 0x3C125 (Control Room Left) - 0x014E9 - Squares & Black/White Squares & Dots & Full Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Squares & Colored Squares & Triangles & Eraser & Stars & Stars + Same Colored Symbol

@@ -64,7 +64,7 @@ class StaticWitnessLocations:
         "Quarry Stoneworks Upper Row 8",
         "Quarry Stoneworks Control Room Left",
         "Quarry Stoneworks Control Room Right",
-        "Quarry Stoneworks Stairs Control",
+        "Quarry Stoneworks Stairs Panel",
         "Quarry Boathouse Intro Right",
         "Quarry Boathouse Intro Left",
         "Quarry Boathouse Front Row 5",

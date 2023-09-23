@@ -65,7 +65,7 @@ Doors:
 1162 - Town RGB House Entry (Panel) - 0x28998
 1163 - Town Church Entry (Panel) - 0x28A0D
 1164 - Town RGB Control (Panel) - 0x334D8
-1166 - Town Maze Stairs Control (Panel) - 0x28A79
+1166 - Town Maze Stairs (Panel) - 0x28A79
 1167 - Town Maze Rooftop Bridge Control (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
 1172 - Town Cargo Box Entry (Panel) - 0x0A0C8

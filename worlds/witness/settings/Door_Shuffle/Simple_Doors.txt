@@ -49,7 +49,7 @@ Quarry Stoneworks Entry Right Panel
 Quarry Stoneworks Entry Left Panel
 Quarry Stoneworks Side Exit Panel
 Quarry Stoneworks Roof Exit Panel
-Quarry Stoneworks Stairs Control
+Quarry Stoneworks Stairs Panel
 Quarry Boathouse Second Barrier Panel
 Shadows Door Timer Inside
 Shadows Door Timer Outside
