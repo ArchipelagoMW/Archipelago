@@ -1,11 +1,11 @@
 import collections
 import typing
 
-from BaseClasses import Entrance, MultiWorld
-from .SubClasses import LTTPRegion, LTTPRegionType
+from BaseClasses import MultiWorld
+from .SubClasses import LTTPEntrance, LTTPRegion, LTTPRegionType
 
 
-def is_main_entrance(entrance: Entrance) -> bool:
+def is_main_entrance(entrance: LTTPEntrance) -> bool:
     return entrance.parent_region.type in {LTTPRegionType.DarkWorld, LTTPRegionType.LightWorld} if entrance.parent_region.type else True
 
 
@@ -530,7 +530,7 @@ def _create_region(world: MultiWorld, player: int, name: str, type: LTTPRegionTy
     ret = LTTPRegion(name, type, hint, player, world)
     if exits:
         for exit in exits:
-            ret.exits.append(Entrance(player, exit, ret))
+            ret.create_exit(exit)
     if locations:
         for location in locations:
             address, player_address, crystal, hint_text = location_table[location]
