@@ -576,7 +576,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={suggest}",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
