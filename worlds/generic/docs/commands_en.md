@@ -20,6 +20,8 @@ including the exclamation point.
 - `!license` Returns the software licensing information.
 - `!options` Returns the current server options, including password in plaintext.
 - `!players` Returns info about the currently connected and non-connected players.
+- `!status` Returns information about the connection status and check completion numbers for all players in the current room. <br /> (Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink)
+
 
 ### Utilities
 - `!countdown <number of seconds>` Starts a countdown using the given seconds value. Useful for synchronizing starts.
@@ -45,10 +47,7 @@ goal completion.
 can be configured to allow/require manual usage of this command.
 
 ### Cheats
-- `!getitem <item>` Cheats an item, if it is enabled in the server.
-
-### Game status
-- `!status` Returns information about the connection status and check completion numbers for all players in the current room. <br /> (Optionally mention a Tag name and get information on who has that Tag. For example: !status DeathLink)
+- `!getitem <item>` Cheats an item to the currently connected slot, if it is enabled in the server.
 
 
 ## Host only (on Archipelago.gg or in your server console)
