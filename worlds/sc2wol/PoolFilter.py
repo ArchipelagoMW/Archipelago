@@ -1,9 +1,11 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
-from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, filler_items
-from .MissionTables import no_build_regions_list, easy_regions_list, medium_regions_list, hard_regions_list,\
-    mission_orders, MissionInfo, alt_final_mission_locations, MissionPools
-from .Options import get_option_value, MissionOrder, FinalMap, MissionProgressLocations, LocationInclusion
+from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
+from .MissionTables import mission_orders, MissionInfo, MissionPools, get_campaign_missions, \
+    get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
+    get_missions_by_pool, get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority
+from .Options import get_option_value, MissionOrder, \
+    get_enabled_campaigns, get_disabled_campaigns
 from .LogicMixin import SC2WoLLogic
 
 # Items with associated upgrades
@@ -21,43 +23,58 @@ STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "He
 PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
 
 
-def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]:
+def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, List[str]]:
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
 
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
-    shuffle_protoss = get_option_value(multiworld, player, "shuffle_protoss")
+    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    disabled_campaigns = get_disabled_campaigns(multiworld, player)
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
-    final_map = get_option_value(multiworld, player, "final_map")
     mission_pools = {
-        MissionPools.STARTER: no_build_regions_list[:],
-        MissionPools.EASY: easy_regions_list[:],
-        MissionPools.MEDIUM: medium_regions_list[:],
-        MissionPools.HARD: hard_regions_list[:],
+        MissionPools.STARTER: [mission.mission_name for mission in get_missions_by_pool(MissionPools.STARTER)],
+        MissionPools.EASY: [mission.mission_name for mission in get_missions_by_pool(MissionPools.EASY)],
+        MissionPools.MEDIUM: [mission.mission_name for mission in get_missions_by_pool(MissionPools.MEDIUM)],
+        MissionPools.HARD: [mission.mission_name for mission in get_missions_by_pool(MissionPools.HARD)],
+        MissionPools.VERY_HARD: [mission.mission_name for mission in get_missions_by_pool(MissionPools.VERY_HARD)],
         MissionPools.FINAL: []
     }
     if mission_order_type == MissionOrder.option_vanilla:
         # Vanilla uses the entire mission pool
-        mission_pools[MissionPools.FINAL] = ['All-In']
+        goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
+        goal_level = max(goal_priorities.values())
+        candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+        goal_campaign = multiworld.random.choice(candidate_campaigns)
+        mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission.mission_name]
+        remove_final_mission_from_other_pools(mission_pools)
         return mission_pools
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
-        excluded_missions = excluded_missions.union(no_build_regions_list)
-    # Omitting Protoss missions if not shuffling protoss
-    if not shuffle_protoss:
-        excluded_missions = excluded_missions.union(PROTOSS_REGIONS)
-    # Replacing All-In with alternate ending depending on option
-    if final_map == FinalMap.option_random_hard:
-        final_mission = multiworld.random.choice([mission for mission in alt_final_mission_locations.keys() if mission not in excluded_missions])
-        excluded_missions.add(final_mission)
+        excluded_missions = excluded_missions.union([mission.mission_name for mission in get_no_build_missions()])
+    # Omitting missions not in enabled campaigns
+    for campaign in disabled_campaigns:
+        excluded_missions = excluded_missions.union([mission.mission_name for mission in get_campaign_missions(campaign)])
+
+    # Finding the goal map
+    goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
+    goal_level = max(goal_priorities.values())
+    candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
+    goal_campaign = multiworld.random.choice(candidate_campaigns)
+    primary_goal = campaign_final_mission_locations[goal_campaign]
+    if primary_goal is None or primary_goal.mission.mission_name in excluded_missions:
+        # No primary goal or its mission is excluded
+        candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+        goal_mission = multiworld.random.choice(candidate_missions).mission_name
     else:
-        final_mission = 'All-In'
+        goal_mission = campaign_final_mission_locations[goal_campaign].mission
+
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
         mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
-    mission_pools[MissionPools.FINAL].append(final_mission)
+    mission_pools[MissionPools.FINAL].append(goal_mission.mission_name)
+
     # Mission pool changes on Build-Only
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
         def move_mission(mission_name, current_pool, new_pool):
@@ -82,7 +99,18 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[int, List[str]]
             move_mission("Welcome to the Jungle", MissionPools.MEDIUM, MissionPools.EASY)
             move_mission("Engine of Destruction", MissionPools.HARD, MissionPools.MEDIUM)
 
+    remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
+
+
+def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List[str]]):
+    final_missions = mission_pools[MissionPools.FINAL]
+    for pool, missions in mission_pools.items():
+        if pool == MissionPools.FINAL:
+            continue
+        for final_mission in final_missions:
+            while final_mission in missions:
+                missions.remove(final_mission)
 
 
 def get_item_upgrades(inventory: List[Item], parent_item: Item or str):
@@ -299,7 +327,7 @@ class ValidInventory:
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
-                 has_protoss: bool):
+                 used_races: List[SC2Race]):
         self.multiworld = multiworld
         self.player = player
         self.logical_inventory = set()
@@ -316,6 +344,9 @@ class ValidInventory:
         min_upgrades = 1 if mission_count < 10 else 2
         for item in item_pool:
             item_info = get_full_item_list()[item.name]
+            if item_info.race != SC2Race.ANY and item_info.race not in used_races:
+                # Drop any item belonging to a race not used in the campaign
+                continue
             if item_info.type == "Upgrade":
                 # Locking upgrades based on mission duration
                 if item.name not in item_quantities:
@@ -327,7 +358,7 @@ class ValidInventory:
                     self.item_pool.append(item)
             elif item_info.type == "Goal":
                 locked_items.append(item)
-            elif item_info.type != "Protoss" or has_protoss:
+            else:
                 self.item_pool.append(item)
         self.cascade_removal_map: Dict[Item, List[Item]] = dict()
         for item in self.item_pool + locked_items + existing_items:
@@ -340,7 +371,7 @@ class ValidInventory:
                         self.cascade_removal_map[upgrade] = associated_items
 
 
-def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo], location_cache: List[Location],
+def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], location_cache: List[Location],
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item]) -> List[Item]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
@@ -348,9 +379,9 @@ def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[st
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    has_protoss = bool(PROTOSS_REGIONS.intersection(mission_req_table.keys()))
+    used_races = set([mission.mission.race for campaign_missions in mission_req_table.values() for mission in campaign_missions.values()])
     mission_requirements = [location.access_rule for location in location_cache]
-    valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, has_protoss)
+    valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, used_races)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items

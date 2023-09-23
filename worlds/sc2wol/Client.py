@@ -15,9 +15,16 @@ import io
 import random
 from pathlib import Path
 
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.pagelayout import PageLayout
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.stacklayout import StackLayout
+
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows
+from worlds.sc2wol.Options import MissionOrder
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -33,7 +40,8 @@ from worlds._sc2common.bot.player import Bot
 from worlds.sc2wol import SC2WoLWorld
 from worlds.sc2wol.Items import lookup_id_to_name, get_full_item_list, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
-from worlds.sc2wol.MissionTables import lookup_id_to_mission
+from worlds.sc2wol.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_name_to_mission, \
+    lookup_id_to_campaign, MissionConnection, SC2Mission
 from worlds.sc2wol.Regions import MissionInfo
 
 import colorama
@@ -261,7 +269,7 @@ class SC2Context(CommonContext):
     all_in_choice = 0
     mission_order = 0
     player_color = 2
-    mission_req_table: typing.Dict[str, MissionInfo] = {}
+    mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
     final_mission: int = 29
     announcements = queue.Queue()
     sc2_run_task: typing.Optional[asyncio.Task] = None
@@ -295,13 +303,25 @@ class SC2Context(CommonContext):
                 self.game_speed = 0
             self.all_in_choice = args["slot_data"]["all_in_map"]
             slot_req_table = args["slot_data"]["mission_req"]
+
+            first_item = list(slot_req_table.keys())[0]
             # Maintaining backwards compatibility with older slot data
-            self.mission_req_table = {
-                mission: MissionInfo(
-                    **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
-                )
-                for mission, mission_info in slot_req_table.items()
-            }
+            if first_item in [str(campaign.id) for campaign in SC2Campaign]:
+                # Multi-campaign
+                for campaign_id in slot_req_table:
+                    campaign = lookup_id_to_campaign[int(campaign_id)]
+                    self.mission_req_table[campaign] = {
+                        mission: self.parse_mission_info(mission_info)
+                        for mission, mission_info in slot_req_table[campaign_id].items()
+                    }
+            else:
+                # Old format
+                self.mission_req_table = {SC2Campaign.GLOBAL: {
+                        mission: self.parse_mission_info(mission_info)
+                        for mission, mission_info in slot_req_table.items()
+                    }
+                }
+
             self.mission_order = args["slot_data"].get("mission_order", 0)
             self.final_mission = args["slot_data"].get("final_mission", 29)
             self.player_color = args["slot_data"].get("player_color", 2)
@@ -322,6 +342,23 @@ class SC2Context(CommonContext):
             elif maps_present:
                 sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
                                    "Run /download_data to update them.")
+
+    @staticmethod
+    def parse_mission_info(mission_info):
+        if mission_info.get("id") is not None:
+            mission_info["mission"] = lookup_id_to_mission[mission_info["id"]]
+        elif isinstance(mission_info["mission"], int):
+            mission_info["mission"] = lookup_id_to_mission[mission_info["mission"]]
+
+        return MissionInfo(
+            **{field: value for field, value in mission_info.items() if field in MissionInfo._fields}
+        )
+
+    def find_campaign(self, mission_name):
+        data = self.mission_req_table
+        for campaign in data.keys():
+            if mission_name in data[campaign].keys():
+                return campaign
 
 
     def on_print_json(self, args: dict):
@@ -384,6 +421,15 @@ class SC2Context(CommonContext):
             def ctx(self) -> CommonContext:
                 return App.get_running_app().ctx
 
+        class CampaignScroll(ScrollView):
+            pass
+
+        class MultiCampaignLayout(GridLayout):
+            pass
+
+        class CampaignLayout(GridLayout):
+            pass
+
         class MissionLayout(GridLayout):
             pass
 
@@ -397,7 +443,7 @@ class SC2Context(CommonContext):
             ]
             base_title = "Archipelago Starcraft 2 Client"
 
-            mission_panel = None
+            campaign_panel = None
             last_checked_locations = {}
             mission_id_to_button = {}
             launching: typing.Union[bool, int] = False  # if int -> mission ID
@@ -418,7 +464,9 @@ class SC2Context(CommonContext):
                 container = super().build()
 
                 panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-                self.mission_panel = panel.content = MissionLayout()
+                panel.content = CampaignScroll()
+                self.campaign_panel = MultiCampaignLayout()
+                panel.content.add_widget(self.campaign_panel)
 
                 self.tabs.add_widget(panel)
 
@@ -431,87 +479,106 @@ class SC2Context(CommonContext):
                                             not self.refresh_from_launching)) or self.first_check:
                     self.refresh_from_launching = True
 
-                    self.mission_panel.clear_widgets()
+                    self.campaign_panel.clear_widgets()
                     if self.ctx.mission_req_table:
                         self.last_checked_locations = self.ctx.checked_locations.copy()
                         self.first_check = False
 
                         self.mission_id_to_button = {}
-                        categories = {}
+
                         available_missions, unfinished_missions = calc_unfinished_missions(self.ctx)
 
-                        # separate missions into categories
-                        for mission in self.ctx.mission_req_table:
-                            if not self.ctx.mission_req_table[mission].category in categories:
-                                categories[self.ctx.mission_req_table[mission].category] = []
+                        multi_campaign_layout_height = 0
 
-                            categories[self.ctx.mission_req_table[mission].category].append(mission)
+                        for campaign, missions in self.ctx.mission_req_table.items():
+                            categories = {}
 
-                        for category in categories:
-                            category_panel = MissionCategory()
-                            if category.startswith('_'):
-                                category_display_name = ''
-                            else:
-                                category_display_name = category
-                            category_panel.add_widget(
-                                Label(text=category_display_name, size_hint_y=None, height=50, outline_width=1))
+                            # separate missions into categories
+                            for mission_index in missions:
+                                mission = self.ctx.mission_req_table[campaign][mission_index]
+                                if mission.category not in categories:
+                                    categories[mission.category] = []
 
-                            for mission in categories[category]:
-                                text: str = mission
-                                tooltip: str = ""
-                                mission_id: int = self.ctx.mission_req_table[mission].id
-                                # Map has uncollected locations
-                                if mission in unfinished_missions:
-                                    text = f"[color=6495ED]{text}[/color]"
-                                elif mission in available_missions:
-                                    text = f"[color=FFFFFF]{text}[/color]"
-                                # Map requirements not met
+                                categories[mission.category].append(mission_index)
+
+                            max_mission_count = max(len(categories[category]) for category in categories)
+                            campaign_layout_height = (max_mission_count + 2) * 50
+                            multi_campaign_layout_height += campaign_layout_height
+                            campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
+                            campaign_layout.add_widget(
+                                Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
+                            )
+                            mission_layout = MissionLayout()
+
+                            for category in categories:
+                                category_panel = MissionCategory()
+                                if category.startswith('_'):
+                                    category_display_name = ''
                                 else:
-                                    text = f"[color=a9a9a9]{text}[/color]"
-                                    tooltip = f"Requires: "
-                                    if self.ctx.mission_req_table[mission].required_world:
-                                        tooltip += ", ".join(list(self.ctx.mission_req_table)[req_mission - 1] for
-                                                             req_mission in
-                                                             self.ctx.mission_req_table[mission].required_world)
+                                    category_display_name = category
+                                category_panel.add_widget(
+                                    Label(text=category_display_name, size_hint_y=None, height=25, outline_width=1))
 
-                                        if self.ctx.mission_req_table[mission].number:
-                                            tooltip += " and "
-                                    if self.ctx.mission_req_table[mission].number:
-                                        tooltip += f"{self.ctx.mission_req_table[mission].number} missions completed"
-                                remaining_location_names: typing.List[str] = [
-                                    self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
-                                    if loc in self.ctx.missing_locations]
-
-                                if mission_id == self.ctx.final_mission:
-                                    if mission in available_missions:
-                                        text = f"[color=FFBC95]{mission}[/color]"
+                                for mission in categories[category]:
+                                    text: str = mission
+                                    tooltip: str = ""
+                                    mission_id: int = lookup_name_to_mission[mission].id
+                                    mission_data = self.ctx.mission_req_table[campaign][mission]
+                                    # Map has uncollected locations
+                                    if mission in unfinished_missions:
+                                        text = f"[color=6495ED]{text}[/color]"
+                                    elif mission in available_missions:
+                                        text = f"[color=FFFFFF]{text}[/color]"
+                                    # Map requirements not met
                                     else:
-                                        text = f"[color=D0C0BE]{mission}[/color]"
-                                    if tooltip:
-                                        tooltip += "\n"
-                                    tooltip += "Final Mission"
+                                        text = f"[color=a9a9a9]{text}[/color]"
+                                        tooltip = f"Requires: "
+                                        if mission_data.required_world:
+                                            tooltip += ", ".join(list(self.ctx.mission_req_table[parse_unlock(req_mission).campaign])[parse_unlock(req_mission).connect_to - 1] for
+                                                                 req_mission in
+                                                                 mission_data.required_world)
 
-                                if remaining_location_names:
-                                    if tooltip:
-                                        tooltip += "\n"
-                                    tooltip += f"Uncollected locations:\n"
-                                    tooltip += "\n".join(remaining_location_names)
+                                            if mission_data.number:
+                                                tooltip += " and "
+                                        if mission_data.number:
+                                            tooltip += f"{self.ctx.mission_req_table[campaign][mission].number} missions completed"
+                                    remaining_location_names: typing.List[str] = [
+                                        self.ctx.location_names[loc] for loc in self.ctx.locations_for_mission(mission)
+                                        if loc in self.ctx.missing_locations]
 
-                                mission_button = MissionButton(text=text, size_hint_y=None, height=50)
-                                mission_button.tooltip_text = tooltip
-                                mission_button.bind(on_press=self.mission_callback)
-                                self.mission_id_to_button[mission_id] = mission_button
-                                category_panel.add_widget(mission_button)
+                                    if mission_id == self.ctx.final_mission:
+                                        if mission in available_missions:
+                                            text = f"[color=FFBC95]{mission}[/color]"
+                                        else:
+                                            text = f"[color=D0C0BE]{mission}[/color]"
+                                        if tooltip:
+                                            tooltip += "\n"
+                                        tooltip += "Final Mission"
 
-                            category_panel.add_widget(Label(text=""))
-                            self.mission_panel.add_widget(category_panel)
+                                    if remaining_location_names:
+                                        if tooltip:
+                                            tooltip += "\n"
+                                        tooltip += f"Uncollected locations:\n"
+                                        tooltip += "\n".join(remaining_location_names)
+
+                                    mission_button = MissionButton(text=text, size_hint_y=None, height=50)
+                                    mission_button.tooltip_text = tooltip
+                                    mission_button.bind(on_press=self.mission_callback)
+                                    self.mission_id_to_button[mission_id] = mission_button
+                                    category_panel.add_widget(mission_button)
+
+                                category_panel.add_widget(Label(text=""))
+                                mission_layout.add_widget(category_panel)
+                            campaign_layout.add_widget(mission_layout)
+                            self.campaign_panel.add_widget(campaign_layout)
+                        self.campaign_panel.height = multi_campaign_layout_height
 
                 elif self.launching:
                     self.refresh_from_launching = False
 
-                    self.mission_panel.clear_widgets()
-                    self.mission_panel.add_widget(Label(text="Launching Mission: " +
-                                                             lookup_id_to_mission[self.launching]))
+                    self.campaign_panel.clear_widgets()
+                    self.campaign_panel.add_widget(Label(text="Launching Mission: " +
+                                                              lookup_id_to_mission[self.launching].name))
                     if self.ctx.ui:
                         self.ctx.ui.clear_tooltip()
 
@@ -559,7 +626,7 @@ class SC2Context(CommonContext):
 
     def build_location_to_mission_mapping(self):
         mission_id_to_location_ids: typing.Dict[int, typing.Set[int]] = {
-            mission_info.id: set() for mission_info in self.mission_req_table.values()
+            mission_info.mission.id: set() for campaign_mission in self.mission_req_table.values() for mission_info in campaign_mission.values()
         }
 
         for loc in self.server_locations:
@@ -568,9 +635,10 @@ class SC2Context(CommonContext):
         self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
                                            mission_id_to_location_ids.items()}
 
-    def locations_for_mission(self, mission: str):
-        mission_id: int = self.mission_req_table[mission].id
-        objectives = self.mission_id_to_location_ids[self.mission_req_table[mission].id]
+    def locations_for_mission(self, mission_name: str):
+        mission = lookup_name_to_mission[mission_name]
+        mission_id: int = mission.id
+        objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
             yield SC2WOL_LOC_ID_OFFSET + mission_id * 100 + objective
 
@@ -593,28 +661,6 @@ async def main():
     await ctx.exit_event.wait()
 
     await ctx.shutdown()
-
-
-maps_table = [
-    "ap_liberation_day", "ap_the_outlaws", "ap_zero_hour",
-    "ap_evacuation", "ap_outbreak", "ap_safe_haven", "ap_havens_fall",
-    "ap_smash_and_grab", "ap_the_dig", "ap_the_moebius_factor", "ap_supernova", "ap_maw_of_the_void",
-    "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
-    "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_piercing_the_shroud",
-    "ap_whispers_of_doom", "ap_a_sinister_turn", "ap_echoes_of_the_future", "ap_in_utter_darkness",
-    "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_shatter_the_sky", "ap_all_in"
-]
-
-wol_default_categories = [
-    "Mar Sara", "Mar Sara", "Mar Sara", "Colonist", "Colonist", "Colonist", "Colonist",
-    "Artifact", "Artifact", "Artifact", "Artifact", "Artifact", "Covert", "Covert", "Covert", "Covert",
-    "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Rebellion", "Prophecy", "Prophecy", "Prophecy", "Prophecy",
-    "Char", "Char", "Char", "Char"
-]
-wol_default_category_names = [
-    "Mar Sara", "Colonist", "Artifact", "Covert", "Rebellion", "Prophecy", "Char"
-]
-
 
 def calculate_items(ctx: SC2Context) -> typing.List[int]:
     items = ctx.items_received
@@ -682,7 +728,7 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(bot.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+        run_game(bot.maps.get(lookup_id_to_mission[mission_id].map_file), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
                                                                 name="Archipelago", fullscreen=True)], realtime=True)
 
 
@@ -859,6 +905,7 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check):
 def mark_up_mission_name(ctx: SC2Context, mission, unlock_table):
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
 
+
     if ctx.mission_req_table[mission].completion_critical:
         if ctx.ui:
             message = "[color=AF99EF]" + mission + "[/color]"
@@ -924,16 +971,30 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
         if loc % victory_modulo == 0:
             missions_complete += 1
 
-    for name in ctx.mission_req_table:
+    for campaign in ctx.mission_req_table:
         # Go through the required missions for each mission and fill up unlock table used later for hover-over tooltips
-        if unlocks:
-            for unlock in ctx.mission_req_table[name].required_world:
-                unlocks[list(ctx.mission_req_table)[unlock - 1]].append(name)
+        for mission_name in ctx.mission_req_table[campaign]:
+            if unlocks:
+                for unlock in ctx.mission_req_table[campaign][mission_name].required_world:
+                    parsed_unlock = parse_unlock(unlock)
+                    unlock_mission = list(ctx.mission_req_table[parsed_unlock.campaign])[parsed_unlock.connect_to - 1]
+                    unlock_campaign = ctx.find_campaign(unlock_mission)
+                    if unlocks[unlock_campaign]:
+                        unlocks[unlock_campaign][parsed_unlock.connect_to - 1].append(mission_name)
 
-        if mission_reqs_completed(ctx, name, missions_complete):
-            available_missions.append(name)
+            if mission_reqs_completed(ctx, mission_name, missions_complete):
+                available_missions.append(mission_name)
 
     return available_missions
+
+
+def parse_unlock(unlock) -> MissionConnection:
+    if isinstance(unlock, int):
+        # Legacy
+        return MissionConnection(SC2Campaign.GLOBAL, unlock)
+    else:
+        # Multi-campaign
+        return MissionConnection(lookup_id_to_campaign[unlock["campaign"]], unlock["connect_to"])
 
 
 def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
@@ -945,51 +1006,54 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
     missions_complete -- an int of how many missions have been completed
     mission_path -- a list of missions that have already been checked
 """
-    if len(ctx.mission_req_table[mission_name].required_world) >= 1:
+    campaign = ctx.find_campaign(mission_name)
+
+    if len(ctx.mission_req_table[campaign][mission_name].required_world) >= 1:
         # A check for when the requirements are being or'd
         or_success = False
 
         # Loop through required missions
-        for req_mission in ctx.mission_req_table[mission_name].required_world:
+        for req_mission in ctx.mission_req_table[campaign][mission_name].required_world:
             req_success = True
+            parsed_req_mission = parse_unlock(req_mission)
 
             # Check if required mission has been completed
-            if not (ctx.mission_req_table[list(ctx.mission_req_table)[req_mission - 1]].id *
+            if not (ctx.mission_req_table[parsed_req_mission.campaign][list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1]].mission.id *
                     victory_modulo + SC2WOL_LOC_ID_OFFSET) in ctx.checked_locations:
-                if not ctx.mission_req_table[mission_name].or_requirements:
+                if not ctx.mission_req_table[campaign][mission_name].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # Grid-specific logic (to avoid long path checks and infinite recursion)
-            if ctx.mission_order in (3, 4):
+            if ctx.mission_order in (MissionOrder.option_grid, MissionOrder.option_mini_grid):
                 if req_success:
                     return True
                 else:
-                    if req_mission is ctx.mission_req_table[mission_name].required_world[-1]:
+                    if parsed_req_mission == ctx.mission_req_table[campaign][mission_name].required_world[-1]:
                         return False
                     else:
                         continue
 
             # Recursively check required mission to see if it's requirements are met, in case !collect has been done
             # Skipping recursive check on Grid settings to speed up checks and avoid infinite recursion
-            if not mission_reqs_completed(ctx, list(ctx.mission_req_table)[req_mission - 1], missions_complete):
-                if not ctx.mission_req_table[mission_name].or_requirements:
+            if not mission_reqs_completed(ctx, list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1], missions_complete):
+                if not ctx.mission_req_table[campaign][mission_name].or_requirements:
                     return False
                 else:
                     req_success = False
 
             # If requirement check succeeded mark or as satisfied
-            if ctx.mission_req_table[mission_name].or_requirements and req_success:
+            if ctx.mission_req_table[campaign][mission_name].or_requirements and req_success:
                 or_success = True
 
-        if ctx.mission_req_table[mission_name].or_requirements:
+        if ctx.mission_req_table[campaign][mission_name].or_requirements:
             # Return false if or requirements not met
             if not or_success:
                 return False
 
         # Check number of missions
-        if missions_complete >= ctx.mission_req_table[mission_name].number:
+        if missions_complete >= ctx.mission_req_table[campaign][mission_name].number:
             return True
         else:
             return False
@@ -1065,7 +1129,8 @@ def is_mod_installed_correctly() -> bool:
     mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
     mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerWoL", "ArchipelagoTriggers"]
     modfiles = [os.environ["SC2PATH"] / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
-    wol_required_maps = ["WoL" + os.sep + map_name + ".SC2Map" for map_name in maps_table]
+    wol_required_maps = ["WoL" + os.sep + mission.map_file + ".SC2Map" for mission in SC2Mission
+                         if mission.campaign in (SC2Campaign.WOL, SC2Campaign.PROPHECY)]
     needs_files = False
 
     # Check for maps.

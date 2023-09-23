@@ -497,7 +497,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
         LocationData("Shatter the Sky", "Shatter the Sky: Mid Hatchery", SC2WOL_LOC_ID_OFFSET + 2808, LocationType.MISSION_PROGRESS,
                      lambda state: state._sc2wol_has_competent_comp(multiworld, player)),
-        LocationData("All-In", "All-In: Victory", None, LocationType.VICTORY,
+        LocationData("All-In", "All-In: Victory", SC2WOL_LOC_ID_OFFSET + 2900, LocationType.VICTORY,
                      lambda state: state._sc2wol_final_mission_requirements(multiworld, player))
     ]
 

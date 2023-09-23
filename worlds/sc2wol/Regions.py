@@ -1,23 +1,27 @@
-from typing import List, Set, Dict, Tuple, Optional, Callable
+from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, SupportsIndex
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
-from .Options import get_option_value, MissionOrder
-from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, alt_final_mission_locations, \
-    MissionPools, vanilla_shuffle_order
+from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders
+from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
+    MissionPools, SC2Campaign, lookup_name_to_mission, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
 
-PROPHECY_CHAIN_MISSION_COUNT = 4
 
-VANILLA_SHUFFLED_FIRST_PROPHECY_MISSION = 21
+class SC2MissionSlot(NamedTuple):
+    campaign: SC2Campaign
+    slot: MissionPools | SC2Mission | None
 
 def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location])\
-        -> Tuple[Dict[str, MissionInfo], int, str]:
+        -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     mission_order = mission_orders[mission_order_type]
+    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    shuffle_campaigns = get_option_value(multiworld, player, "shuffle_campaigns")
 
     mission_pools = filter_missions(multiworld, player)
+    final_mission = lookup_name_to_mission[mission_pools[MissionPools.FINAL][0]]
 
     regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
 
@@ -25,180 +29,218 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
 
     if mission_order_type == MissionOrder.option_vanilla:
 
-        # Generating all regions and locations
-        for region_name in vanilla_mission_req_table.keys():
-            regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
+        # Generating all regions and locations for each enabled campaign
+        for campaign in enabled_campaigns:
+            for region_name in vanilla_mission_req_table[campaign].keys():
+                regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
         multiworld.regions += regions
 
-        connect(multiworld, player, names, 'Menu', 'Liberation Day'),
-        connect(multiworld, player, names, 'Liberation Day', 'The Outlaws',
-                lambda state: state.has("Beat Liberation Day", player)),
-        connect(multiworld, player, names, 'The Outlaws', 'Zero Hour',
-                lambda state: state.has("Beat The Outlaws", player)),
-        connect(multiworld, player, names, 'Zero Hour', 'Evacuation',
-                lambda state: state.has("Beat Zero Hour", player)),
-        connect(multiworld, player, names, 'Evacuation', 'Outbreak',
-                lambda state: state.has("Beat Evacuation", player)),
-        connect(multiworld, player, names, "Outbreak", "Safe Haven",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
-                              state.has("Beat Outbreak", player)),
-        connect(multiworld, player, names, "Outbreak", "Haven's Fall",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
-                              state.has("Beat Outbreak", player)),
-        connect(multiworld, player, names, 'Zero Hour', 'Smash and Grab',
-                lambda state: state.has("Beat Zero Hour", player)),
-        connect(multiworld, player, names, 'Smash and Grab', 'The Dig',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                              state.has("Beat Smash and Grab", player)),
-        connect(multiworld, player, names, 'The Dig', 'The Moebius Factor',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 11) and
-                              state.has("Beat The Dig", player)),
-        connect(multiworld, player, names, 'The Moebius Factor', 'Supernova',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 14) and
-                              state.has("Beat The Moebius Factor", player)),
-        connect(multiworld, player, names, 'Supernova', 'Maw of the Void',
-                lambda state: state.has("Beat Supernova", player)),
-        connect(multiworld, player, names, 'Zero Hour', "Devil's Playground",
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 4) and
-                              state.has("Beat Zero Hour", player)),
-        connect(multiworld, player, names, "Devil's Playground", 'Welcome to the Jungle',
-                lambda state: state.has("Beat Devil's Playground", player)),
-        connect(multiworld, player, names, "Welcome to the Jungle", 'Breakout',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                              state.has("Beat Welcome to the Jungle", player)),
-        connect(multiworld, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
-                              state.has("Beat Welcome to the Jungle", player)),
-        connect(multiworld, player, names, "Zero Hour", 'The Great Train Robbery',
-                lambda state: state._sc2wol_cleared_missions(multiworld, player, 6) and
-                              state.has("Beat Zero Hour", player)),
-        connect(multiworld, player, names, 'The Great Train Robbery', 'Cutthroat',
-                lambda state: state.has("Beat The Great Train Robbery", player)),
-        connect(multiworld, player, names, 'Cutthroat', 'Engine of Destruction',
-                lambda state: state.has("Beat Cutthroat", player)),
-        connect(multiworld, player, names, 'Engine of Destruction', 'Media Blitz',
-                lambda state: state.has("Beat Engine of Destruction", player)),
-        connect(multiworld, player, names, 'Media Blitz', 'Piercing the Shroud',
-                lambda state: state.has("Beat Media Blitz", player)),
-        connect(multiworld, player, names, 'The Dig', 'Whispers of Doom',
-                lambda state: state.has("Beat The Dig", player)),
-        connect(multiworld, player, names, 'Whispers of Doom', 'A Sinister Turn',
-                lambda state: state.has("Beat Whispers of Doom", player)),
-        connect(multiworld, player, names, 'A Sinister Turn', 'Echoes of the Future',
-                lambda state: state.has("Beat A Sinister Turn", player)),
-        connect(multiworld, player, names, 'Echoes of the Future', 'In Utter Darkness',
-                lambda state: state.has("Beat Echoes of the Future", player)),
-        connect(multiworld, player, names, 'Maw of the Void', 'Gates of Hell',
-                lambda state: state.has("Beat Maw of the Void", player)),
-        connect(multiworld, player, names, 'Gates of Hell', 'Belly of the Beast',
-                lambda state: state.has("Beat Gates of Hell", player)),
-        connect(multiworld, player, names, 'Gates of Hell', 'Shatter the Sky',
-                lambda state: state.has("Beat Gates of Hell", player)),
-        connect(multiworld, player, names, 'Gates of Hell', 'All-In',
-                lambda state: state.has('Beat Gates of Hell', player) and (
-                        state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
+        if SC2Campaign.WOL in enabled_campaigns:
+            connect(multiworld, player, names, 'Menu', 'Liberation Day')
+            connect(multiworld, player, names, 'Liberation Day', 'The Outlaws',
+                    lambda state: state.has("Beat Liberation Day", player))
+            connect(multiworld, player, names, 'The Outlaws', 'Zero Hour',
+                    lambda state: state.has("Beat The Outlaws", player))
+            connect(multiworld, player, names, 'Zero Hour', 'Evacuation',
+                    lambda state: state.has("Beat Zero Hour", player))
+            connect(multiworld, player, names, 'Evacuation', 'Outbreak',
+                    lambda state: state.has("Beat Evacuation", player))
+            connect(multiworld, player, names, "Outbreak", "Safe Haven",
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
+                                  state.has("Beat Outbreak", player))
+            connect(multiworld, player, names, "Outbreak", "Haven's Fall",
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 7) and
+                                  state.has("Beat Outbreak", player))
+            connect(multiworld, player, names, 'Zero Hour', 'Smash and Grab',
+                    lambda state: state.has("Beat Zero Hour", player))
+            connect(multiworld, player, names, 'Smash and Grab', 'The Dig',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
+                                  state.has("Beat Smash and Grab", player))
+            connect(multiworld, player, names, 'The Dig', 'The Moebius Factor',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 11) and
+                                  state.has("Beat The Dig", player))
+            connect(multiworld, player, names, 'The Moebius Factor', 'Supernova',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 14) and
+                                  state.has("Beat The Moebius Factor", player))
+            connect(multiworld, player, names, 'Supernova', 'Maw of the Void',
+                    lambda state: state.has("Beat Supernova", player))
+            connect(multiworld, player, names, 'Zero Hour', "Devil's Playground",
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 4) and
+                                  state.has("Beat Zero Hour", player))
+            connect(multiworld, player, names, "Devil's Playground", 'Welcome to the Jungle',
+                    lambda state: state.has("Beat Devil's Playground", player))
+            connect(multiworld, player, names, "Welcome to the Jungle", 'Breakout',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
+                                  state.has("Beat Welcome to the Jungle", player))
+            connect(multiworld, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 8) and
+                                  state.has("Beat Welcome to the Jungle", player))
+            connect(multiworld, player, names, "Zero Hour", 'The Great Train Robbery',
+                    lambda state: state._sc2wol_cleared_missions(multiworld, player, 6) and
+                                  state.has("Beat Zero Hour", player))
+            connect(multiworld, player, names, 'The Great Train Robbery', 'Cutthroat',
+                    lambda state: state.has("Beat The Great Train Robbery", player))
+            connect(multiworld, player, names, 'Cutthroat', 'Engine of Destruction',
+                    lambda state: state.has("Beat Cutthroat", player))
+            connect(multiworld, player, names, 'Engine of Destruction', 'Media Blitz',
+                    lambda state: state.has("Beat Engine of Destruction", player))
+            connect(multiworld, player, names, 'Media Blitz', 'Piercing the Shroud',
+                    lambda state: state.has("Beat Media Blitz", player))
+            connect(multiworld, player, names, 'Maw of the Void', 'Gates of Hell',
+                    lambda state: state.has("Beat Maw of the Void", player))
+            connect(multiworld, player, names, 'Gates of Hell', 'Belly of the Beast',
+                    lambda state: state.has("Beat Gates of Hell", player))
+            connect(multiworld, player, names, 'Gates of Hell', 'Shatter the Sky',
+                    lambda state: state.has("Beat Gates of Hell", player))
+            connect(multiworld, player, names, 'Gates of Hell', 'All-In',
+                    lambda state: state.has('Beat Gates of Hell', player) and (
+                            state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
-        return vanilla_mission_req_table, 29, 'All-In: Victory'
+            if SC2Campaign.PROPHECY in enabled_campaigns:
+                if SC2Campaign.WOL in enabled_campaigns:
+                    connect(multiworld, player, names, 'The Dig', 'Whispers of Doom',
+                            lambda state: state.has("Beat The Dig", player)),
+                else:
+                    connect(multiworld, player, names, 'Menu', 'Whispers of Doom'),
+                connect(multiworld, player, names, 'Whispers of Doom', 'A Sinister Turn',
+                        lambda state: state.has("Beat Whispers of Doom", player))
+                connect(multiworld, player, names, 'A Sinister Turn', 'Echoes of the Future',
+                        lambda state: state.has("Beat A Sinister Turn", player))
+                connect(multiworld, player, names, 'Echoes of the Future', 'In Utter Darkness',
+                        lambda state: state.has("Beat Echoes of the Future", player))
+
+        return ({campaign: missions for campaign, missions in vanilla_mission_req_table.items() if campaign in enabled_campaigns},
+                final_mission.id, get_goal_location(final_mission))
 
     else:
-        missions = []
+        mission_slots: List[SC2MissionSlot] = []
+        mission_pool = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
 
-        remove_prophecy = mission_order_type == 1 and not get_option_value(multiworld, player, "shuffle_protoss")
+        if mission_order_type in campaign_depending_orders:
+            # Do slot removal per campaign
+            for campaign in enabled_campaigns:
+                campaign_mission_pool = [mission for mission in mission_pool if lookup_name_to_mission[mission].campaign == campaign]
+                campaign_mission_pool_size = len(campaign_mission_pool)
 
-        final_mission = mission_pools[MissionPools.FINAL][0]
+                removals = len(mission_order[campaign]) - campaign_mission_pool_size
 
-        # Determining if missions must be removed
-        mission_pool_size = sum(len(mission_pool) for mission_pool in mission_pools.values())
-        removals = len(mission_order) - mission_pool_size
-        # Removing entire Prophecy chain on vanilla shuffled when not shuffling protoss
-        if remove_prophecy:
-            removals -= PROPHECY_CHAIN_MISSION_COUNT
+                for mission in mission_order[campaign]:
+                    # Removing extra missions if mission pool is too small
+                    if 0 < mission.removal_priority <= removals:
+                        mission_slots.append(SC2MissionSlot(campaign, None))
+                    elif mission.type == MissionPools.FINAL:
+                        if campaign == final_mission.campaign:
+                            # Campaign is elected to be goal
+                            mission_slots.append(SC2MissionSlot(campaign, final_mission))
+                        else:
+                            # Not the goal, find the most difficult mission in the pool and set the difficulty
+                            campaign_difficulty = max(lookup_name_to_mission[mission].pool for mission in campaign_mission_pool)
+                            mission_slots.append(SC2MissionSlot(campaign, campaign_difficulty))
+                    else:
+                        mission_slots.append(SC2MissionSlot(campaign, mission.type))
+        else:
+            order = mission_order[SC2Campaign.GLOBAL]
+            # Determining if missions must be removed
+            mission_pool_size = sum(len(mission_pool) for mission_pool in mission_pools.values())
+            removals = len(order) - mission_pool_size
 
-        # Initial fill out of mission list and marking all-in mission
-        for mission in mission_order:
-            # Removing extra missions if mission pool is too small
-            # Also handle lower removal priority than Prophecy
-            if 0 < mission.removal_priority <= removals or mission.category == 'Prophecy' and remove_prophecy \
-                    or (remove_prophecy and mission_order_type == MissionOrder.option_vanilla_shuffled
-                        and mission.removal_priority > vanilla_shuffle_order[
-                            VANILLA_SHUFFLED_FIRST_PROPHECY_MISSION].removal_priority
-                        and 0 < mission.removal_priority <= removals + PROPHECY_CHAIN_MISSION_COUNT):
-                missions.append(None)
-            elif mission.type == MissionPools.FINAL:
-                missions.append(final_mission)
-            else:
-                missions.append(mission.type)
+            # Initial fill out of mission list and marking all-in mission
+            for mission in order:
+                # Removing extra missions if mission pool is too small
+                if 0 < mission.removal_priority <= removals:
+                    mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, None))
+                elif mission.type == MissionPools.FINAL:
+                    mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, final_mission))
+                else:
+                    mission_slots.append(SC2MissionSlot(SC2Campaign.GLOBAL, mission.type))
 
         no_build_slots = []
         easy_slots = []
         medium_slots = []
         hard_slots = []
+        very_hard_slots = []
 
         # Search through missions to find slots needed to fill
-        for i in range(len(missions)):
-            if missions[i] is None:
+        for i in range(len(mission_slots)):
+            mission_slot = mission_slots[i]
+            if mission_slot is None:
                 continue
-            if missions[i] == MissionPools.STARTER:
-                no_build_slots.append(i)
-            elif missions[i] == MissionPools.EASY:
-                easy_slots.append(i)
-            elif missions[i] == MissionPools.MEDIUM:
-                medium_slots.append(i)
-            elif missions[i] == MissionPools.HARD:
-                hard_slots.append(i)
+            if isinstance(mission_slot, SC2MissionSlot):
+                if mission_slot.slot is None:
+                    continue
+                if mission_slot.slot == MissionPools.STARTER:
+                    no_build_slots.append(i)
+                elif mission_slot.slot == MissionPools.EASY:
+                    easy_slots.append(i)
+                elif mission_slot.slot == MissionPools.MEDIUM:
+                    medium_slots.append(i)
+                elif mission_slot.slot == MissionPools.HARD:
+                    hard_slots.append(i)
+                elif mission_slot.slot == MissionPools.VERY_HARD:
+                    very_hard_slots.append(i)
+
+        def pick_mission(slot):
+            if shuffle_campaigns or mission_order not in campaign_depending_orders:
+                # Pick a mission from any campaign
+                filler = multiworld.random.randint(0, len(missions_to_add) - 1)
+                mission = lookup_name_to_mission[missions_to_add.pop(filler)]
+                slot_campaign = mission_slots[slot].campaign
+                mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
+            else:
+                # Pick a mission from required campaign
+                slot_campaign = mission_slots[slot].campaign
+                candidate_missions = [lookup_name_to_mission[mission_name] for mission_name in missions_to_add]
+                campaign_mission_candidates = [mission for mission in candidate_missions if mission.campaign == slot_campaign]
+                filler = multiworld.random.randint(0, len(campaign_mission_candidates) - 1)
+                mission = lookup_name_to_mission[missions_to_add.pop(filler)]
+                mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
 
         # Add no_build missions to the pool and fill in no_build slots
         missions_to_add = mission_pools[MissionPools.STARTER]
         if len(no_build_slots) > len(missions_to_add):
             raise Exception("There are no valid No-Build missions.  Please exclude fewer missions.")
         for slot in no_build_slots:
-            filler = multiworld.random.randint(0, len(missions_to_add) - 1)
-
-            missions[slot] = missions_to_add.pop(filler)
+            pick_mission(slot)
 
         # Add easy missions into pool and fill in easy slots
         missions_to_add = missions_to_add + mission_pools[MissionPools.EASY]
         if len(easy_slots) > len(missions_to_add):
             raise Exception("There are not enough Easy missions to fill the campaign.  Please exclude fewer missions.")
         for slot in easy_slots:
-            filler = multiworld.random.randint(0, len(missions_to_add) - 1)
-
-            missions[slot] = missions_to_add.pop(filler)
+            pick_mission(slot)
 
         # Add medium missions into pool and fill in medium slots
         missions_to_add = missions_to_add + mission_pools[MissionPools.MEDIUM]
         if len(medium_slots) > len(missions_to_add):
             raise Exception("There are not enough Easy and Medium missions to fill the campaign.  Please exclude fewer missions.")
         for slot in medium_slots:
-            filler = multiworld.random.randint(0, len(missions_to_add) - 1)
-
-            missions[slot] = missions_to_add.pop(filler)
+            pick_mission(slot)
 
         # Add hard missions into pool and fill in hard slots
         missions_to_add = missions_to_add + mission_pools[MissionPools.HARD]
         if len(hard_slots) > len(missions_to_add):
             raise Exception("There are not enough missions to fill the campaign.  Please exclude fewer missions.")
         for slot in hard_slots:
-            filler = multiworld.random.randint(0, len(missions_to_add) - 1)
+            pick_mission(slot)
 
-            missions[slot] = missions_to_add.pop(filler)
+        # Add very hard missions into pool and fill in very hard slots
+        missions_to_add = missions_to_add + mission_pools[MissionPools.VERY_HARD]
+        if len(very_hard_slots) > len(missions_to_add):
+            raise Exception("There are not enough missions to fill the campaign.  Please exclude fewer missions.")
+        for slot in very_hard_slots:
+            pick_mission(slot)
 
         # Generating regions and locations from selected missions
-        for region_name in missions:
-            regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
+        for mission_slot in mission_slots:
+            if isinstance(mission_slot.slot, SC2Mission):
+                regions.append(create_region(multiworld, player, locations_per_region, location_cache, mission_slot.slot.mission_name))
         multiworld.regions += regions
 
-        # Mapping original mission slots to shifted mission slots when missions are removed
-        slot_map = []
-        slot_offset = 0
-        for position, mission in enumerate(missions):
-            slot_map.append(position - slot_offset + 1)
-            if mission is None:
-                slot_offset += 1
-
-        # Loop through missions to create requirements table and connect regions
-        # TODO: Handle 'and' connections
-        mission_req_table = {}
+        campaigns: List[SC2Campaign]
+        if mission_order_type in campaign_depending_orders:
+            campaigns = list(enabled_campaigns)
+        else:
+            campaigns = [SC2Campaign.GLOBAL]
 
         def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
             if len(mission_names) > 1:
@@ -208,52 +250,76 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                 return lambda state: state.has(f"Beat {mission_names[0]}", player) and \
                                      state._sc2wol_cleared_missions(multiworld, player, missions_req)
 
-        for i, mission in enumerate(missions):
-            if mission is None:
-                continue
-            connections = []
-            all_connections = []
-            for connection in mission_order[i].connect_to:
-                if connection == -1:
+        mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {}
+        campaign_mission_slots: Dict[SC2Campaign, List[SC2MissionSlot]] = \
+            {
+                campaign: [mission_slot for mission_slot in mission_slots if campaign == mission_slot.campaign]
+                for campaign in campaigns
+            }
+
+        slot_map: Dict[SC2Campaign, List[int]] = dict()
+
+        for campaign in campaigns:
+            mission_req_table.update({campaign: dict()})
+
+            # Mapping original mission slots to shifted mission slots when missions are removed
+            slot_map[campaign] = []
+            slot_offset = 0
+            for position, mission in enumerate(campaign_mission_slots[campaign]):
+                slot_map[campaign].append(position - slot_offset + 1)
+                if mission is None:
+                    slot_offset += 1
+
+        for campaign in campaigns:
+            # Loop through missions to create requirements table and connect regions
+            # TODO: Handle 'and' connections
+            for i, mission in enumerate(campaign_mission_slots[campaign]):
+                if mission is None or mission.slot is None:
                     continue
-                while missions[connection] is None:
-                    connection -= 1
-                all_connections.append(missions[connection])
-            for connection in mission_order[i].connect_to:
-                required_mission = missions[connection]
-                if connection == -1:
-                    connect(multiworld, player, names, "Menu", mission)
-                else:
-                    if required_mission is None and not mission_order[i].completion_critical:  # Drop non-critical null slots
+                connections: List[MissionConnection] = []
+                all_connections: List[SC2MissionSlot] = []
+                connection: MissionConnection
+                for connection in mission_order[campaign][i].connect_to:
+                    if connection.connect_to == -1:
                         continue
-                    while required_mission is None:  # Substituting null slot with prior slot
-                        connection -= 1
-                        required_mission = missions[connection]
-                    required_missions = [required_mission] if mission_order[i].or_requirements else all_connections
-                    connect(multiworld, player, names, required_mission, mission,
-                            build_connection_rule(required_missions, mission_order[i].number))
-                    connections.append(slot_map[connection])
+                    while campaign_mission_slots[connection.campaign][connection.connect_to] is None:
+                        connection.connect_to -= 1
+                    all_connections.append(campaign_mission_slots[connection.campaign][connection.connect_to])
+                for connection in mission_order[campaign][i].connect_to:
+                    required_mission = campaign_mission_slots[connection.campaign][connection.connect_to]
+                    if connection.connect_to == -1:
+                        connect(multiworld, player, names, "Menu", mission.slot.mission_name)
+                    else:
+                        if (required_mission is None or required_mission.slot is None
+                                and not mission_order[campaign][i].completion_critical):  # Drop non-critical null slots
+                            continue
+                        while required_mission is None or required_mission.slot is None:  # Substituting null slot with prior slot
+                            connection.connect_to -= 1
+                            required_mission = campaign_mission_slots[connection.campaign][connection.connect_to]
+                        required_missions = [required_mission] if mission_order[campaign][i].or_requirements else all_connections
+                        if isinstance(required_mission.slot, SC2Mission):
+                            required_mission_name = required_mission.slot.mission_name
+                            required_missions_names = [mission.slot.mission_name for mission in required_missions]
+                            connect(multiworld, player, names, required_mission_name, mission.slot.mission_name,
+                                    build_connection_rule(required_missions_names, mission_order[campaign][i].number))
+                            connections.append(MissionConnection(connection.campaign, slot_map[connection.campaign][connection.connect_to]))
 
-            mission_req_table.update({mission: MissionInfo(
-                vanilla_mission_req_table[mission].id, connections, mission_order[i].category,
-                number=mission_order[i].number,
-                completion_critical=mission_order[i].completion_critical,
-                or_requirements=mission_order[i].or_requirements)})
+                mission_req_table[campaign].update({mission.slot.mission_name: MissionInfo(
+                    mission.slot, connections, mission_order[campaign][i].category,
+                    number=mission_order[campaign][i].number,
+                    completion_critical=mission_order[campaign][i].completion_critical,
+                    or_requirements=mission_order[campaign][i].or_requirements)})
 
-        final_mission_id = vanilla_mission_req_table[final_mission].id
-
+        final_mission_id = final_mission.id
         # Changing the completion condition for alternate final missions into an event
-        if final_mission != 'All-In':
-            final_location = alt_final_mission_locations[final_mission]
-            # Final location should be near the end of the cache
-            for i in range(len(location_cache) - 1, -1, -1):
-                if location_cache[i].name == final_location:
-                    location_cache[i].locked = True
-                    location_cache[i].event = True
-                    location_cache[i].address = None
-                    break
-        else:
-            final_location = 'All-In: Victory'
+        final_location = get_goal_location(final_mission)
+        # Final location should be near the end of the cache
+        for i in range(len(location_cache) - 1, -1, -1):
+            if location_cache[i].name == final_location:
+                location_cache[i].locked = True
+                location_cache[i].event = True
+                location_cache[i].address = None
+                break
 
         return mission_req_table, final_mission_id, final_location
 

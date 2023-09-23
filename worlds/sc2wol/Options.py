@@ -1,10 +1,8 @@
-from typing import Dict, FrozenSet, Union
+from typing import Dict, FrozenSet, Union, Set
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
-from .MissionTables import vanilla_mission_req_table
+from .MissionTables import vanilla_mission_req_table, SC2Campaign, SC2Mission
 
-ORDER_VANILLA = 0
-ORDER_VANILLA_SHUFFLED = 1
 
 class GameDifficulty(Choice):
     """
@@ -31,21 +29,6 @@ class GameSpeed(Choice):
     option_faster = 5
     default = option_default
 
-class FinalMap(Choice):
-    """
-    Determines if the final map and goal of the campaign.
-    All in: You need to beat All-in map
-    Random Hard: A random hard mission is selected as a goal.
-                Beat this mission in order to complete the game.
-                All-in map won't be in the campaign
-
-    Vanilla mission order always ends with All in mission!
-
-    This option is short-lived. It may be changed in the future
-    """
-    display_name = "Final Map"
-    option_all_in = 0
-    option_random_hard = 1
 
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
@@ -103,15 +86,33 @@ class PlayerColor(Choice):
     default = option_default
 
 
-class ShuffleProtoss(DefaultOnToggle):
-    """Determines if the 3 protoss missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off, the 3 protoss missions will not appear and Protoss units are removed from the pool."""
-    display_name = "Shuffle Protoss Missions"
+class EnableWolMissions(DefaultOnToggle):
+    """
+    Enables missions from main Wings of Liberty campaign.
+    """
+    display_name = "Enable Wings of Liberty missions"
+
+
+class EnableProphecyMissions(DefaultOnToggle):
+    """
+    Enables missions from Prophecy mini-campaign.
+    """
+    display_name = "Enable Prophecy missions"
+
+
+class ShuffleCampaigns(DefaultOnToggle):
+    """
+    Shuffles the missions between campaigns if enabled.
+    Only available for Vanilla Shuffled and Mini Campaign mission order
+    """
+    display_name = "Shuffle Campaigns"
 
 
 class ShuffleNoBuild(DefaultOnToggle):
-    """Determines if the 5 no-build missions are included in the shuffle if Vanilla mission order is not enabled.
-    If turned off, the 5 no-build missions will not appear."""
+    """
+    Determines if the no-build missions are included in the shuffle.
+    If turned off, the no-build missions will not appear. Has no effect for Vanilla mission order.
+    """
     display_name = "Shuffle No-Build Missions"
 
 
@@ -245,7 +246,7 @@ class ExcludedMissions(OptionSet):
     Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""
     display_name = "Excluded Missions"
-    valid_keys = {mission_name for mission_name in vanilla_mission_req_table.keys() if mission_name != 'All-In'}
+    valid_keys = {mission.mission_name for mission in SC2Mission}
 
 
 class LocationInclusion(Choice):
@@ -328,10 +329,11 @@ sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
     "game_speed": GameSpeed,
     "all_in_map": AllInMap,
-    "final_map": FinalMap,
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
-    "shuffle_protoss": ShuffleProtoss,
+    "enable_wol_missions": EnableWolMissions,
+    "enable_prohpecy_missions": EnableProphecyMissions,
+    "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
     "required_tactics": RequiredTactics,
@@ -360,3 +362,28 @@ def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[in
     player_option = getattr(multiworld, name)[player]
 
     return player_option.value
+
+
+def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaign]:
+    enabled_campaigns = set()
+    if get_option_value(multiworld, player, "enable_wol_missions"):
+        enabled_campaigns.add(SC2Campaign.WOL)
+    if get_option_value(multiworld, player, "enable_prohpecy_missions"):
+        enabled_campaigns.add(SC2Campaign.PROPHECY)
+    return enabled_campaigns
+
+
+def get_disabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaign]:
+    all_campaigns = set(SC2Campaign)
+    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    disabled_campaigns = all_campaigns.difference(enabled_campaigns)
+    disabled_campaigns.remove(SC2Campaign.GLOBAL)
+    return disabled_campaigns
+
+
+campaign_depending_orders = [
+    MissionOrder.option_vanilla,
+    MissionOrder.option_vanilla_shuffled,
+    MissionOrder.option_mini_campaign
+]
+

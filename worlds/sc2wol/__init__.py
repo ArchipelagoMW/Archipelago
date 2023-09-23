@@ -10,7 +10,7 @@ from .Regions import create_regions
 from .Options import sc2wol_options, get_option_value, LocationInclusion
 from .LogicMixin import SC2WoLLogic
 from .PoolFilter import filter_missions, filter_items, get_item_upgrades
-from .MissionTables import starting_mission_locations, MissionInfo
+from .MissionTables import starting_mission_locations, MissionInfo, SC2Campaign
 
 
 class Starcraft2WoLWebWorld(WebWorld):
@@ -43,7 +43,7 @@ class SC2WoLWorld(World):
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
     location_cache: typing.List[Location]
-    mission_req_table = {}
+    mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {}
     final_mission_id: int
     victory_item: str
     required_client_version = 0, 3, 6
@@ -90,8 +90,17 @@ class SC2WoLWorld(World):
             if type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         slot_req_table = {}
-        for mission in self.mission_req_table:
-            slot_req_table[mission] = self.mission_req_table[mission]._asdict()
+
+        # Serialize data
+        for campaign in self.mission_req_table:
+            slot_req_table[campaign.id] = {}
+            for mission in self.mission_req_table[campaign]:
+                slot_req_table[campaign.id][mission] = self.mission_req_table[campaign][mission]._asdict()
+                # Replace mission objects with mission IDs
+                slot_req_table[campaign.id][mission]["mission"] = slot_req_table[campaign.id][mission]["mission"].id
+
+                for index in range(len(slot_req_table[campaign.id][mission]["required_world"])):
+                    slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
@@ -129,7 +138,10 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
             raise Exception("At least one basic unit must be local")
 
         # The first world should also be the starting world
-        first_mission = list(multiworld.worlds[player].mission_req_table)[0]
+        campaigns = multiworld.worlds[player].mission_req_table.keys()
+        lowest_id = min([campaign.id for campaign in campaigns])
+        first_campaign = [campaign for campaign in campaigns if campaign.id == lowest_id][0]
+        first_mission = list(multiworld.worlds[player].mission_req_table[first_campaign])[0]
         if first_mission in starting_mission_locations:
             first_location = starting_mission_locations[first_mission]
         elif first_mission == "In Utter Darkness":
@@ -158,7 +170,7 @@ def assign_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set
     return item
 
 
-def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[str, MissionInfo],
+def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
                   starter_items: List[Item], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
 
