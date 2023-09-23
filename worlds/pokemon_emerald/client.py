@@ -115,12 +115,23 @@ KEY_LOCATION_FLAGS = [
 ]
 KEY_LOCATION_FLAG_MAP = {data.locations[location_name].flag: location_name for location_name in KEY_LOCATION_FLAGS}
 
-LEGENDARY_NAMES = ["GROUDON", "KYOGRE", "RAYQUAZA", "LATIAS", "LATIOS",
-                   "REGIROCK", "REGICE", "REGISTEEL", "MEW", "DEOXYS",
-                   "HO_OH", "LUGIA"]
+LEGENDARY_NAMES = {
+    "Groudon": "GROUDON",
+    "Kyogre": "KYOGRE",
+    "Rayquaza": "RAYQUAZA",
+    "Latias": "LATIAS",
+    "Latios": "LATIOS",
+    "Regirock": "REGIROCK",
+    "Regice": "REGICE",
+    "Registeel": "REGISTEEL",
+    "Mew": "MEW",
+    "Deoxys": "DEOXYS",
+    "Ho-oh": "HO_OH",
+    "Lugia": "LUGIA"
+}
 
-DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES}
-CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES}
+DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
+CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES.values()}
 
 
 class PokemonEmeraldClient(BizHawkClient):
@@ -280,8 +291,8 @@ class PokemonEmeraldClient(BizHawkClient):
             local_checked_locations = set()
             local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
             local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
-            defeated_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES}
-            caught_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES}
+            defeated_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES.values()}
+            caught_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES.values()}
 
             # Check set flags
             for byte_i, byte in enumerate(flag_bytes):
@@ -317,7 +328,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
                 num_caught = 0
                 for legendary, is_caught in caught_legendaries.items():
-                    if is_caught:
+                    if is_caught and legendary in [LEGENDARY_NAMES[name] for name in ctx.slot_data["allowed_legendary_hunt_encounters"]]:
                         num_caught += 1
 
                 if num_caught >= ctx.slot_data["legendary_hunt_count"]:
