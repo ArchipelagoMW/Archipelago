@@ -1,29 +1,33 @@
 FORBIDDEN = [
-    "TRADING",
-    "ITEM",
-    "BAD",
-    "SINGLE",
-    "UPGRADE",
-    "BLUE",
-    "RED",
-    "NOTHING",
-    "MESSAGE",
-    "POWER",
-    "MAGIC",
-    "PEGASUS",
-    "TAIL",
-    "ANGLER",
-    "FACE",
-    "BIRD",
-    "SLIME",
-    "GOLD",
+    # MAX_ARROWS_UPGRADE, MAX_BOMBS_UPGRADE, MAX_POWDER_UPGRADE
+    # arrows and bombs will be matched to arrow and bomb respectively through pluralization
+    "ARROWS",
+    "BOMBS",
     "MAX",
     "UPGRADE",
-    "BOMBS",
-    "ARROWS",
-    "NIGHTMARE",
-    "STONE",
-    "PIECE",
+
+    "TAIL",     # TAIL_KEY
+    "ANGLER",   # ANGLER_KEY
+    "FACE",     # FACE_KEY
+    "BIRD",     # BIRD_KEY
+    "SLIME",    # SLIME_KEY
+    "NIGHTMARE",# NIGHTMARE_KEY
+
+    "BLUE",     # BLUE_TUNIC
+    "RED",      # RED_TUNIC
+    
+    "TRADING",  # TRADING_ITEM_*
+    "ITEM",     # TRADING_ITEM_*
+    
+    "BAD",      # BAD_HEART_CONTAINER
+    "GOLD",     # GOLD_LEAF
+    "MAGIC",    # MAGIC_POWDER, MAGIC_ROD
+    "MESSAGE",  # MESSAGE (Master Stalfos' Message)
+    "PEGASUS",  # PEGASUS_BOOTS
+    "PIECE",    # HEART_PIECE, PIECE_OF_POWER
+    "POWER",    # POWER_BRACELET, PIECE_OF_POWER
+    "SINGLE",   # SINGLE_ARROW
+    "STONE",    # STONE_BEAK
 ]
 
 SYNONYMS = {
@@ -181,7 +185,8 @@ SYNONYMS = {
   'LENS': 'TRADING_ITEM_MAGNIFYING_GLASS',
   'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
   'SCOPE': 'TRADING_ITEM_MAGNIFYING_GLASS',
-  'CHAOS': 'PIECE_OF_POWER',
+  'CHAOS': 'PIECE_OF_POWER', # Chaos emerald
+  'POWER': 'PIECE_OF_POWER',
   'STAR': 'PIECE_OF_POWER',
   'TRIFORCE': 'PIECE_OF_POWER',
 
