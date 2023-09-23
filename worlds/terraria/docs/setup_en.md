@@ -9,19 +9,19 @@ and [tModLoader](https://store.steampowered.com/app/1281930/tModLoader/) on Stea
 
 1. Subscribe to [the mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2922217554) on Steam
 2. Open tModLoader
-3. Go to "Workshop" -> "Manage Mods" and enable the Archipelago mod
+3. Go to **Workshop -> Manage Mods** and enable the Archipelago mod
    - If tModLoader states that you need version 1.4.3, follow the following steps
      1. Close tModLoader
-     2. Right-Click tModLoader in Steam and select "Properties"
-     3. Navigate to "Betas" -> "Beta Participation"
-     4. Select "1.4.3-legacy - Legacy - Stable tModLoader for Terraria 1.4.3"
+     2. Right-Click tModLoader in Steam and select **Properties**
+     3. Navigate to **Betas -> Beta Participation**
+     4. Select **1.4.3-legacy - Legacy - Stable tModLoader for Terraria 1.4.3**
      5. Update tModLoader through Steam
      6. Open tModLoader and navigate back to the **Manage Mods** menu
 4. tModLoader will say that it needs to refresh; exit this menu, and it will do this automatically
 5. Once tModLoader finishes loading, the Archipelago mod is finished installing; you can now 
 [connect to an Archipelago game](#joining-an-archipelago-game-in-terraria).
 
-This mod may not work with mods that significantly alter progression or vanilla features. It is
+This mod might not work with mods that significantly alter progression or vanilla features. It is
 highly recommended to use utility mods and features to speed up gameplay, such as:
 
 - Journey Mode
@@ -36,8 +36,8 @@ highly recommended to use utility mods and features to speed up gameplay, such a
 
 ### What is a YAML and why do I need one?
 
-You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) here
-on the Archipelago website to learn about what YAML files are used for and how Archipelago uses them.
+The [basic multiworld setup guide](/tutorial/Archipelago/setup/en) can be found on Archipelago's website. Among other things, it explains what .yaml 
+files are, and how they are used.
 
 ### Where do I get a YAML?
 
@@ -47,10 +47,10 @@ on the Archipelago website to generate a YAML using a graphical interface.
 ## Joining an Archipelago Game in Terraria
 
 1. Launch tModLoader
-2. In `Workshop > Manage Mods`, edit Archipelago Randomizer's settings
-    - `Name` should be the player name you set when creating your YAML file.
-    - `Port` should be the port number associated with the Archipelago server. It will be a 4 or 5-digit number.
-    - If you're not hosting your game on the Archipelago website, change `Address` to the server's URL or IP address
+2. In **Workshop > Manage Mods**, edit Archipelago Randomizer's settings
+    - **Name** should be the player name you set when creating your YAML file.
+    - **Port** should be the port number associated with the Archipelago server. It will be a 4 or 5-digit number.
+    - If you're not hosting your game on the Archipelago website, change **Address** to the server's URL or IP address
 3. Create a new character and world as normal (or use an existing one if you prefer). Terraria usually becomes 
 significantly more difficult with this mod, so it is recommended to choose a lower difficulty than you normally would
 play on.
