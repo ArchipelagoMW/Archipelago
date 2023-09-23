@@ -1291,7 +1291,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_KINGS_ROCK": {
-    "label": "Mossdeep City - King's Rock from Kid",
+    "label": "Mossdeep City - King's Rock from Boy",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_MACHO_BRACE": {
@@ -1343,7 +1343,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
-    "label": "Mossdeep City - Gift from Man in Museum",
+    "label": "Mossdeep City - Gift from Man in Space Center",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_WATER_PULSE": {
@@ -1387,7 +1387,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_DIG": {
-    "label": "Route 114 - TM28 from Fossil Maniac",
+    "label": "Route 114 - TM28 from Fossil Maniac's Brother",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_BRICK_BREAK": {
