@@ -104,6 +104,7 @@ class SC2WoLWorld(World):
 
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
+        slot_data["version"] = 3
         return slot_data
 
 
