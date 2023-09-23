@@ -332,7 +332,7 @@ sc2wol_options: Dict[str, Option] = {
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
     "enable_wol_missions": EnableWolMissions,
-    "enable_prohpecy_missions": EnableProphecyMissions,
+    "enable_prophecy_missions": EnableProphecyMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "early_unit": EarlyUnit,
@@ -368,7 +368,7 @@ def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaig
     enabled_campaigns = set()
     if get_option_value(multiworld, player, "enable_wol_missions"):
         enabled_campaigns.add(SC2Campaign.WOL)
-    if get_option_value(multiworld, player, "enable_prohpecy_missions"):
+    if get_option_value(multiworld, player, "enable_prophecy_missions"):
         enabled_campaigns.add(SC2Campaign.PROPHECY)
     return enabled_campaigns
 
