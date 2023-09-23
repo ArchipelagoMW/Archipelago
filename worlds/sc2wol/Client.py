@@ -15,11 +15,7 @@ import io
 import random
 from pathlib import Path
 
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.pagelayout import PageLayout
-from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.stacklayout import StackLayout
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
@@ -45,7 +41,7 @@ from worlds.sc2wol.MissionTables import lookup_id_to_mission, SC2Campaign, looku
 from worlds.sc2wol.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser, JSONtoTextParser, JSONMessagePart
+from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
 loop = asyncio.get_event_loop_policy().new_event_loop()
