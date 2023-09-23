@@ -401,9 +401,9 @@ class LinksAwakeningWorld(World):
             self.name_cache.update(pluralizations)
 
         uppered = other.upper()
-        for phrase in ['BIG KEY', 'BOSS KEY']:
+        for phrase in ItemIconGuessing.PHRASES.keys()
             if phrase in uppered:
-                return 'NIGHTMARE_KEY'
+                return ItemIconGuessing.PHRASES[phrase]
         possibles = other.upper().split(" ")
         rejoined = "".join(possibles)
         if rejoined in self.name_cache:
