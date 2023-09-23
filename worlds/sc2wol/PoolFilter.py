@@ -20,8 +20,6 @@ BARRACKS_UNITS = {"Marine", "Medic", "Firebat", "Marauder", "Reaper", "Ghost", "
 FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "Thor", "Predator", "Widow Mine"}
 STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
 
-PROTOSS_REGIONS = {"A Sinister Turn", "Echoes of the Future", "In Utter Darkness"}
-
 
 def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, List[str]]:
     """
