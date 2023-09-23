@@ -21,12 +21,16 @@ filler_junk_table = {
 non_filler_junk_table = {
     IName.roast_chicken:        0x06,
     IName.roast_beef:           0x07,
-    IName.healing_kit:          0x08,
     IName.purifying:            0x09,
     IName.cure_ampoule:         0x0A,
     IName.powerup:              0x0C,
     IName.sun_card:             0x17,
     IName.moon_card:            0x18
+}
+
+useful_table = {
+    IName.healing_kit: 0x08,
+    IName.permaup:     0x10C
 }
 
 key_table = {
@@ -44,7 +48,7 @@ key_table = {
     IName.science_key_three:    0x23,
     IName.clocktower_key_one:   0x24,
     IName.clocktower_key_two:   0x25,
-    IName.clocktower_key_three: 0x26,
+    IName.clocktower_key_three: 0x26
 }
 
 special_table = {
@@ -56,11 +60,12 @@ sub_weapon_table = {
     IName.knife:      0x0D,
     IName.holy_water: 0x0E,
     IName.cross:      0x0F,
-    IName.axe:        0x10,
+    IName.axe:        0x10
 }
 
 # Every in-game item pickup actor that has a different ID from its actual item code.
 pickup_item_discrepancies = {
+    IName.permaup:              0x0C,
     IName.holy_water:           0x0D,
     IName.cross:                0x0E,
     IName.axe:                  0x0F,
@@ -87,6 +92,7 @@ pickup_item_discrepancies = {
 item_table = {
     **filler_junk_table,
     **non_filler_junk_table,
+    **useful_table,
     **key_table,
     **special_table,
     **sub_weapon_table

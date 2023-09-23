@@ -201,7 +201,8 @@ nitro_fall_killer = [
     # Custom code to force the instant fall death if at a high enough falling speed after getting killed by the Nitro
     # explosion, since the game doesn't run the checks for the fall death after getting hit by said explosion and could
     # result in a softlock when getting blown into an abyss.
-    0x92480046,  # LBU   T0, 0x0046 (S2)
+    0x3C0C8035,  # LUI   T4, 0x8035
+    0x918807E2,  # LBU   T0, 0x07E2 (T4)
     0x2409000C,  # ADDIU T1, R0, 0x000C
     0x15090006,  # BNE   T0, T1, [forward 0x06]
     0x3C098035,  # LUI   T1, 0x8035
@@ -209,7 +210,7 @@ nitro_fall_killer = [
     0x240A00C1,  # ADDIU T2, R0, 0x00C1
     0x152A0002,  # BNE   T1, T2, [forward 0x02]
     0x240B0001,  # ADDIU T3, R0, 0x0001
-    0xA24B0046,  # SB    T3, 0x0046 (S2)
+    0xA18B07E2,  # SB    T3, 0x07E2 (T4)
     0x03E00008   # JR    RA
 ]
 
@@ -314,10 +315,10 @@ npc_item_hack = [
     0x27BD0020,  # ADDIU SP, SP, 0x20
     0x15440004,  # BNE   T2, A0, [forward 0x04]
     0x240B0029,  # ADDIU T3, R0, 0x0029
-    0x34195300,  # ORI   T9, R0, 0x5300
-    0x10000003,  # B             [forward 0x03]
+    0x34199464,  # ORI   T9, R0, 0x9464
+    0x10000004,  # B             [forward 0x04]
     0x240C0002,  # ADDIU T4, R0, 0x0002
-    0x34199900,  # ORI   T9, R0, 0x5300
+    0x3419DA64,  # ORI   T9, R0, 0xDA64
     0x240B0002,  # ADDIU T3, R0, 0x0002
     0x240C000E,  # ADDIU T4, R0, 0x000E
     0x012C7021,  # ADDU  T6, T1, T4
@@ -649,7 +650,7 @@ map_data_modifiers = [
     # state if entered from the rear)
     0x24090002,  # ADDIU T1, R0, 0x0002
     0x15090006,  # BNE   T0, T1, [forward 0x06]
-    0x24090004,  # ADDIU T1, R0, 0x0004
+    0x24090000,  # ADDIU T1, R0, 0x0000
     0xA049009B,  # SB    T1, 0x009B (V0)
     0x24090010,  # ADDIU T1, R0, 0x0010
     0x1139FF75,  # BEQ   T1, T9, [backward 0x8B]
@@ -2348,7 +2349,7 @@ panther_jump_preventer = [
 
     # Decreases a "can running jump" value by 1 per frame unless it's at 0, or while in the sliding state. When the
     # player lets go of C-right, their running speed should have returned to a normal amount by the time it hits 0.
-    0x90C8002F,  # LBU   T0, 0x002F (A2)
+    0x9208007F,  # LBU   T0, 0x007F (S0)
     0x24090008,  # ADDIU T1, R0, 0x0008
     0x11090005,  # BEQ   T0, T1, [forward 0x05]
     0x3C088039,  # LUI   T0, 0x8039
@@ -2505,7 +2506,7 @@ multiworld_item_name_loader = [
     0x11000003,  # BEQZ  T0,     [forward 0x03]
     0x24090012,  # ADDIU T1, R0, 0x0012
     0x15090003,  # BNE   T0, T1, [forward 0x03]
-    0x00000000,  # NOP
+    0x24080000,  # ADDIU T0, R0, 0x0000
     0x10000010,  # B             [forward 0x10]
     0x24080000,  # ADDIU T0, R0, 0x0000
     0x920C0055,  # LBU   T4, 0x0055 (S0)

@@ -8,8 +8,6 @@ import os
 import pkgutil
 
 from . import Patches
-from .Names import RName
-from .Locations import base_id
 from .Stages import stage_info
 from .Text import cv64_string_to_bytes, cv64_text_truncate, cv64_text_wrap
 
@@ -72,6 +70,7 @@ rom_sub_weapon_flags = {
     0x10C831: 0x08,  # Castle Wall
     0x10C829: 0x10,
     0x10C821: 0x20,
+    0xBFCA97: 0x04,
 
     # Villa
     0xBFC926: 0xFF04,
@@ -417,8 +416,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     rom.write_int32s(0xBFC5B4, Patches.give_powerup_stopper)
 
     # Rename "Wooden stake" and "Rose" to "Sent major" and "Sent" respectively
-    rom.write_bytes(0xEFE34, cv64_string_to_bytes("Sent major  ", False))
-    rom.write_bytes(0xEFE4E, cv64_string_to_bytes("Sent", False))
+    rom.write_bytes(0xEFE34, cv64_string_to_bytes("Sent major  "))
+    rom.write_bytes(0xEFE4E, cv64_string_to_bytes("Sent"))
     # Capitalize the "k" in "Archives key" to be consistent with...literally every other key name!
     rom.write_byte(0xEFF21, 0x2D)
 
@@ -455,9 +454,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     else:
         total_s2s = multiworld.total_special2s[player]
     special_text = cv64_string_to_bytes(f"{multiworld.special1s_per_warp[player]} per warp unlock.\n"
-                                        f"{multiworld.total_special1s[player]} exist in total.", False) + \
+                                        f"{multiworld.total_special1s[player]} exist in total.") + \
         cv64_string_to_bytes(f"Need {required_s2s} to battle Dracula\n"
-                             f"out of {total_s2s} in total.", False)
+                             f"out of {total_s2s} in total.")
     rom.write_bytes(0xBFDC5C, special_text)
     rom.write_int32s(0xBFDD20, Patches.special_descriptions_redirector)
 
@@ -484,7 +483,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
                                                   f"`{w4} {active_warp_list[4]}\t"
                                                   f"`{w5} {active_warp_list[5]}\t"
                                                   f"`{w6} {active_warp_list[6]}\t"
-                                                  f"`{w7} {active_warp_list[7]}", False))
+                                                  f"`{w7} {active_warp_list[7]}"))
 
     # Lizard-man save proofing
     rom.write_int32(0xA99AC, 0x080FF0B8)  # J 0x803FC2E0
@@ -865,8 +864,8 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
     # Permanent PowerUp stuff
     if multiworld.permanent_powerups[player]:
         # Make receiving PowerUps increase the unused menu PowerUp counter instead of the one outside the save struct
-        rom.write_int32(0xBF2EE, 0x806B619B)   # LB	T3, 0x619B (V1)
-        rom.write_int32(0xBFC5BE, 0xA06C619B)  # SB	T4, 0x619B (V1)
+        rom.write_int32(0xBF2EC, 0x806B619B)   # LB	T3, 0x619B (V1)
+        rom.write_int32(0xBFC5BC, 0xA06C619B)  # SB	T4, 0x619B (V1)
         # Make Reinhardt's whip check the menu PowerUp counter
         rom.write_int32(0x69FA08, 0x80CC619B)  # LB	T4, 0x619B (A2)
         rom.write_int32(0x69FBFC, 0x80C3619B)  # LB	V1, 0x619B (A2)
@@ -877,9 +876,16 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         rom.write_int32(0x6AC99C, 0x810E619B)  # LB	T6, 0x619B (T0)
         rom.write_int32(0x5AFA0, 0x80639C53)   # LB	V1, 0x9C53 (V1)
         rom.write_int32(0x5B0A0, 0x81089C53)   # LB	T0, 0x9C53 (T0)
-        rom.write_byte(0x391C7, 0x00)  # Prevent PowerUps from dropping from enemies
-        rom.write_byte(0xAEC451, 0x2E)  # Make Fake Dracula's fireballs drop l jewels instead of PowerUps
-        rom.write_byte(0xAAC531, 0x2E)  # Make Real Dracula's fireballs drop l jewels instead of PowerUps
+        rom.write_byte(0x391C7, 0x00)  # Prevent PowerUps from dropping from regular enemies
+        rom.write_byte(0xEDEDF, 0x03)  # Make any vanishing PowerUps that do show up L jewels instead
+        # Rename the PowerUp to "PermaUp"
+        rom.write_bytes(0xEFDEE, cv64_string_to_bytes("PermaUp"))
+        # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
+        if not multiworld.multi_hit_breakables[player]:
+            rom.write_byte(0x10C7A1, 0x03)
+    # Change the appearance of the Pot-Pourri to that of a larger PowerUp regardless of the above setting, so other
+    # game PermaUps are distinguishable.
+    rom.write_int32s(0xEE558, [0x06005F08, 0x3FB00000, 0xFFFFFF00])
 
     # Write the randomized (or disabled) music ID list and its associated code
     if multiworld.background_music[player] != 0:
@@ -1002,7 +1008,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
 
     # Everything related to shopsanity
     if multiworld.shopsanity[player]:
-        rom.write_bytes(0x103868, cv64_string_to_bytes("Not obtained. ", False))
+        rom.write_bytes(0x103868, cv64_string_to_bytes("Not obtained. "))
         rom.write_int32s(0xBFD8D0, Patches.shopsanity_stuff)
         rom.write_int32(0xBD828, 0x0C0FF643)     # JAL	0x803FD90C
         rom.write_int32(0xBD5B8, 0x0C0FF651)     # JAL	0x803FD944
@@ -1015,12 +1021,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         shopsanity_desc_text = []
         for i in range(len(shop_name_list)):
             shopsanity_name_text += [0xA0, i] + shop_colors_list[i] + cv64_string_to_bytes(cv64_text_truncate(
-                shop_name_list[i], 80), False)
+                shop_name_list[i], 72))
 
             shopsanity_desc_text += [0xA0, i]
             if shop_desc_list[i][1] is not None:
-                shopsanity_desc_text += cv64_string_to_bytes("For " + shop_desc_list[i][1] + ".\n", False, False)
-            shopsanity_desc_text += cv64_string_to_bytes(renon_item_dialogue[shop_desc_list[i][0]], False)
+                shopsanity_desc_text += cv64_string_to_bytes("For " + shop_desc_list[i][1] + ".\n", append_end=False)
+            shopsanity_desc_text += cv64_string_to_bytes(renon_item_dialogue[shop_desc_list[i][0]])
         rom.write_bytes(0x1AD00, shopsanity_name_text)
         rom.write_bytes(0x1A800, shopsanity_desc_text)
 
@@ -1090,10 +1096,10 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
                 item_name = loc.item.name[0x00:0x68]
             else:
                 item_name = loc.item.name
-            inject_address = 0xBB7164 + (256 * (loc.address - base_id))
+            inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
             wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + multiworld.get_player_name(
                 loc.item.player), 96)
-            rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytes(wrapped_name, False))
+            rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytes(wrapped_name))
             rom.write_byte(inject_address + 255, num_lines)
 
     # Everything relating to loading the other game items text
@@ -1151,4 +1157,7 @@ def get_item_text_color(loc, trap_color: bool = True) -> list:
     elif loc.item.classification == ItemClassification.trap and trap_color:
         return [0xA2, 0x0B]
     else:
-        return [0xA2, 0x02]
+        if trap_color:
+            return [0xA2, 0x02]
+        else:
+            return [0xA2, 0x00]

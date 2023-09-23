@@ -151,7 +151,7 @@ class Castlevania64Client(BizHawkClient):
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names[next_item.item]}\n"
                                                               f"from {ctx.player_names[next_item.player]}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
-                                                [(0x389BE1, (next_item.item - base_id).to_bytes(1, "big"), "RDRAM"),
+                                                [(0x389BE1, (next_item.item & 0xFF).to_bytes(1, "big"), "RDRAM"),
                                                  (0x18C0A8, text_color + cv64_string_to_bytes(received_text, False),
                                                   "RDRAM"),
                                                  (0x18C1A7, [num_lines], "RDRAM")],

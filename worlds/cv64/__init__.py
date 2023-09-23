@@ -6,8 +6,8 @@ import base64
 import threading
 
 from BaseClasses import Item, Region, Entrance, Location, MultiWorld, Tutorial, ItemClassification
-from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, key_table, special_table, \
-    sub_weapon_table, pickup_item_discrepancies
+from .Items import CV64Item, item_table, filler_junk_table, non_filler_junk_table, useful_table, key_table, \
+    special_table, sub_weapon_table, pickup_item_discrepancies
 from .Locations import CV64Location, all_locations, create_locations, boss_table, base_id
 from .Entrances import create_entrances
 from .Options import cv64_options
@@ -171,11 +171,11 @@ class CV64World(World):
         for region in active_regions:
             self.multiworld.regions.append(active_regions[region])
 
-    def create_item(self, name: str, force_non_progression=False) -> Item:
-        if force_non_progression:
-            classification = ItemClassification.filler
-        elif name in key_table:
+    def create_item(self, name: str, force_progression=False) -> Item:
+        if force_progression or name in key_table:
             classification = ItemClassification.progression
+        elif name in useful_table:
+            classification = ItemClassification.useful
         elif name in special_table:
             classification = ItemClassification.progression_skip_balancing
         else:
@@ -194,7 +194,7 @@ class CV64World(World):
     def create_items(self) -> None:
         item_counts = {
             "filler_junk_counts": {name: 0 for name in filler_junk_table.keys()},
-            "non_filler_junk_counts": {name: 0 for name in non_filler_junk_table.keys()},
+            "non_filler_junk_counts": {name: 0 for name in {**non_filler_junk_table, **useful_table}.keys()},
             "key_counts": {name: 0 for name in key_table.keys()},
             "special_counts": {name: 0 for name in special_table.keys()},
         }
@@ -287,6 +287,12 @@ class CV64World(World):
                 item_counts["key_counts"][key] += spare_keys
                 extras_count += spare_keys
 
+        # Replace all but 2 PowerUps with junk if Permanent PowerUps is on and mark those two PowerUps as Useful.
+        if self.multiworld.permanent_powerups[self.player]:
+            add_filler_junk(item_counts["non_filler_junk_counts"][IName.powerup] - 2)
+            item_counts["non_filler_junk_counts"][IName.powerup] = 0
+            item_counts["non_filler_junk_counts"][IName.permaup] = 2
+
         # Subtract from the junk tables the total number of "extra" items we're adding. Tier 1 will be subtracted from
         # first until it runs out, at which point we'll start subtracting from Tier 2.
         total_filler_junk = 0
@@ -309,26 +315,22 @@ class CV64World(World):
                 item_to_subtract = self.random.choice(list(item_counts[table].keys()))
             item_counts[table][item_to_subtract] -= 1
 
-        # Progression balance the amount of S1s needed to unlock every warp only if S1s per warp is lower than 5.
-        if self.multiworld.special1s_per_warp[self.player] < 5:
-            s1s_to_balance = self.multiworld.special1s_per_warp[self.player] * 7
-            item_counts["special_counts"][IName.special_one] -= s1s_to_balance
-            self.multiworld.itempool += \
-                [Item(IName.special_one, ItemClassification.progression, 0x04 + base_id, self.player)
-                 for i in range(s1s_to_balance)]
-
-        # Replace all but 2 PowerUps with junk if Permanent PowerUps is on and mark those two PowerUps as Useful.
-        if self.multiworld.permanent_powerups[self.player]:
-            add_filler_junk(item_counts["non_filler_junk_counts"][IName.powerup] - 2)
-            item_counts["non_filler_junk_counts"][IName.powerup] = 0
-            self.multiworld.itempool += [Item(IName.powerup, ItemClassification.useful, 0x0C + base_id, self.player)
-                                         for i in range(2)]
-
-        # Set up the items correctly
+        # Set up the items correctly, progression balancing the amount of S1s needed to unlock every warp only if S1s
+        # per warp is lower than 5.
+        s1s_created = 0
         for table in item_counts:
             for item in item_counts[table]:
                 for i in range(item_counts[table][item]):
-                    self.multiworld.itempool.append(self.create_item(item))
+                    if item_counts[table][item] == IName.special_one:
+                        if self.multiworld.special1s_per_warp[self.player] < 5 and s1s_created <= \
+                                self.multiworld.special1s_per_warp[self.player] * 7:
+                            self.multiworld.itempool.append(self.create_item(item, True))
+                        else:
+                            self.multiworld.itempool.append(self.create_item(item))
+                        s1s_created += 1
+                    else:
+                        self.multiworld.itempool.append(self.create_item(item))
+
 
     def set_rules(self) -> None:
         self.multiworld.get_location(LName.the_end, self.player).place_locked_item(
@@ -493,6 +495,10 @@ class CV64World(World):
                     if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "npc":
                         offsets_to_ids[loc.cv64_rom_offset - 1] = item_table[loc.item.name]
 
+                # If it's a PermaUp, change the item's model to a big PowerUp no matter what.
+                if loc.item.game == "Castlevania 64" and loc.item.code == 0xC6410C:
+                    offsets_to_ids[loc.cv64_rom_offset - 1] = 0x0B
+
                 # Apply the invisibility variable depending on the "invisible items" setting.
                 if (inv_setting == 0 and loc.cv64_loc_type == "inv") or \
                         (inv_setting == 2 and loc.cv64_loc_type not in ["npc", "shop"]):
@@ -504,9 +510,9 @@ class CV64World(World):
 
                 # If it's an Axe or Cross in a higher freestanding location, lower it into grab range.
                 # KCEK made these spawn 3.2 units higher for some reason.
-                if loc.address - base_id in rom_axe_cross_lower_values and loc.item.code - base_id in [0x0F, 0x10]:
-                    offsets_to_ids[rom_axe_cross_lower_values[loc.address - base_id][0]] = \
-                        rom_axe_cross_lower_values[loc.address - base_id][1]
+                if loc.address & 0xFFF in rom_axe_cross_lower_values and loc.item.code & 0xFF in [0x0F, 0x10]:
+                    offsets_to_ids[rom_axe_cross_lower_values[loc.address & 0xFFF][0]] = \
+                        rom_axe_cross_lower_values[loc.address & 0xFFF][1]
 
                 # Figure out the list of shop names, descriptions, and text colors here.
                 if loc.parent_region.name == RName.renon:

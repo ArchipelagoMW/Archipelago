@@ -268,8 +268,8 @@ class DropPreviousSubWeapon(Toggle):
 
 
 class PermanentPowerUps(Toggle):
-    """Makes PowerUps stay permanently after receiving them. To compensate, only two will be in the pool overall, and
-    they will not drop from any enemy or projectile."""
+    """Replaces PowerUps with PermaUps, which upgrade your B weapon level permanently after receiving them even after
+    death. To compensate, only two will be in the pool overall, and they will not drop from any enemy or projectile."""
     display_name = "Permanent PowerUps"
 
 
