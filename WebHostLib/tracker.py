@@ -9,7 +9,7 @@ from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
-from NetUtils import SlotType, NetworkSlot
+from NetUtils import ClientStatus, SlotType, NetworkSlot
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package, games
 from worlds.alttp import Items
@@ -990,6 +990,7 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
     SC2WOL_LOC_ID_OFFSET = 1000
     SC2WOL_ITEM_ID_OFFSET = 1000
 
+
     icons = {
         "Starting Minerals": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-mineral-protoss.png",
         "Starting Vespene": "https://sclegacy.com/images/uploaded/starcraftii_beta/gamefiles/icons/icon-gas-terran.png",
@@ -1034,15 +1035,36 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Reaper": "https://static.wikia.nocookie.net/starcraft/images/7/7d/Reaper_SC2_Icon1.jpg",
 
         "Stimpack (Marine)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Super Stimpack (Marine)": "/static/static/icons/sc2/superstimpack.png",
         "Combat Shield (Marine)": "https://0rganics.org/archipelago/sc2wol/CombatShieldCampaign.png",
+        "Laser Targeting System (Marine)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Magrail Munitions (Marine)": "/static/static/icons/sc2/magrailmunitions.png",
+        "Optimized Logistics (Marine)": "/static/static/icons/sc2/optimizedlogistics.png",
         "Advanced Medic Facilities (Medic)": "https://0rganics.org/archipelago/sc2wol/AdvancedMedicFacilities.png",
         "Stabilizer Medpacks (Medic)": "https://0rganics.org/archipelago/sc2wol/StabilizerMedpacks.png",
+        "Restoration (Medic)": "/static/static/icons/sc2/restoration.png",
+        "Optical Flare (Medic)": "/static/static/icons/sc2/opticalflare.png",
+        "Optimized Logistics (Medic)": "/static/static/icons/sc2/optimizedlogistics.png",
         "Incinerator Gauntlets (Firebat)": "https://0rganics.org/archipelago/sc2wol/IncineratorGauntlets.png",
         "Juggernaut Plating (Firebat)": "https://0rganics.org/archipelago/sc2wol/JuggernautPlating.png",
+        "Stimpack (Firebat)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Super Stimpack (Firebat)": "/static/static/icons/sc2/superstimpack.png",
+        "Optimized Logistics (Firebat)": "/static/static/icons/sc2/optimizedlogistics.png",
         "Concussive Shells (Marauder)": "https://0rganics.org/archipelago/sc2wol/ConcussiveShellsCampaign.png",
         "Kinetic Foam (Marauder)": "https://0rganics.org/archipelago/sc2wol/KineticFoam.png",
+        "Stimpack (Marauder)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Super Stimpack (Marauder)": "/static/static/icons/sc2/superstimpack.png",
+        "Laser Targeting System (Marauder)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Magrail Munitions (Marauder)": "/static/static/icons/sc2/magrailmunitions.png",
+        "Internal Tech Module (Marauder)": "/static/static/icons/sc2/internalizedtechmodule.png",
         "U-238 Rounds (Reaper)": "https://0rganics.org/archipelago/sc2wol/U-238Rounds.png",
         "G-4 Clusterbomb (Reaper)": "https://0rganics.org/archipelago/sc2wol/G-4Clusterbomb.png",
+        "Stimpack (Reaper)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Super Stimpack (Reaper)": "/static/static/icons/sc2/superstimpack.png",
+        "Laser Targeting System (Reaper)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Advanced Cloaking Field (Reaper)": "/static/static/icons/sc2/terran-cloak-color.png",
+        "Spider Mines (Reaper)": "/static/static/icons/sc2/spidermine.png",
+        "Combat Drugs (Reaper)": "/static/static/icons/sc2/reapercombatdrugs.png",
 
         "Hellion": "https://static.wikia.nocookie.net/starcraft/images/5/56/Hellion_SC2_Icon1.jpg",
         "Vulture": "https://static.wikia.nocookie.net/starcraft/images/d/da/Vulture_WoL.jpg",
@@ -1052,14 +1074,35 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
 
         "Twin-Linked Flamethrower (Hellion)": "https://0rganics.org/archipelago/sc2wol/Twin-LinkedFlamethrower.png",
         "Thermite Filaments (Hellion)": "https://0rganics.org/archipelago/sc2wol/ThermiteFilaments.png",
-        "Cerberus Mine (Vulture)": "https://0rganics.org/archipelago/sc2wol/CerberusMine.png",
+        "Hellbat Aspect (Hellion)": "/static/static/icons/sc2/hellionbattlemode.png",
+        "Smart Servos (Hellion)": "/static/static/icons/sc2/transformationservos.png",
+        "Optimized Logistics (Hellion)": "/static/static/icons/sc2/optimizedlogistics.png",
+        "Jump Jets (Hellion)": "/static/static/icons/sc2/jumpjets.png",
+        "Stimpack (Hellion)": "https://0rganics.org/archipelago/sc2wol/StimpacksCampaign.png",
+        "Super Stimpack (Hellion)": "/static/static/icons/sc2/superstimpack.png",
+        "Cerberus Mine (Spider Mine)": "https://0rganics.org/archipelago/sc2wol/CerberusMine.png",
+        "High Explosive Munition (Spider Mine)": "/static/static/icons/sc2/high-explosive-spidermine.png",
         "Replenishable Magazine (Vulture)": "https://0rganics.org/archipelago/sc2wol/ReplenishableMagazine.png",
+        "Ion Thrusters (Vulture)": "/static/static/icons/sc2/emergencythrusters.png",
+        "Auto Launchers (Vulture)": "/static/static/icons/sc2/jotunboosters.png",
         "Multi-Lock Weapons System (Goliath)": "https://0rganics.org/archipelago/sc2wol/Multi-LockWeaponsSystem.png",
         "Ares-Class Targeting System (Goliath)": "https://0rganics.org/archipelago/sc2wol/Ares-ClassTargetingSystem.png",
+        "Jump Jets (Goliath)": "/static/static/icons/sc2/jumpjets.png",
+        "Optimized Logistics (Goliath)": "/static/static/icons/sc2/optimizedlogistics.png",
         "Tri-Lithium Power Cell (Diamondback)": "https://0rganics.org/archipelago/sc2wol/Tri-LithiumPowerCell.png",
         "Shaped Hull (Diamondback)": "https://0rganics.org/archipelago/sc2wol/ShapedHull.png",
+        "Hyperfluxor (Diamondback)": "/static/static/icons/sc2/hyperfluxor.png",
+        "Burst Capacitors (Diamondback)": "/static/static/icons/sc2/burstcapacitors.png",
+        "Optimized Logistics (Diamondback)": "/static/static/icons/sc2/optimizedlogistics.png",
         "Maelstrom Rounds (Siege Tank)": "https://0rganics.org/archipelago/sc2wol/MaelstromRounds.png",
         "Shaped Blast (Siege Tank)": "https://0rganics.org/archipelago/sc2wol/ShapedBlast.png",
+        "Jump Jets (Siege Tank)": "/static/static/icons/sc2/jumpjets.png",
+        "Spider Mines (Siege Tank)": "/static/static/icons/sc2/siegetank-spidermines.png",
+        "Smart Servos (Siege Tank)": "/static/static/icons/sc2/transformationservos.png",
+        "Graduating Range (Siege Tank)": "/static/static/icons/sc2/siegetankrange.png",
+        "Laser Targeting System (Siege Tank)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Advanced Siege Tech (Siege Tank)": "/static/static/icons/sc2/improvedsiegemode.png",
+        "Internal Tech Module (Siege Tank)": "/static/static/icons/sc2/internalizedtechmodule.png",
 
         "Medivac": "https://static.wikia.nocookie.net/starcraft/images/d/db/Medivac_SC2_Icon1.jpg",
         "Wraith": "https://static.wikia.nocookie.net/starcraft/images/7/75/Wraith_WoL.jpg",
@@ -1069,25 +1112,77 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
 
         "Rapid Deployment Tube (Medivac)": "https://0rganics.org/archipelago/sc2wol/RapidDeploymentTube.png",
         "Advanced Healing AI (Medivac)": "https://0rganics.org/archipelago/sc2wol/AdvancedHealingAI.png",
+        "Expanded Hull (Medivac)": "/static/static/icons/sc2/neosteelfortifiedarmor.png",
+        "Afterburners (Medivac)": "/static/static/icons/sc2/medivacemergencythrusters.png",
         "Tomahawk Power Cells (Wraith)": "https://0rganics.org/archipelago/sc2wol/TomahawkPowerCells.png",
         "Displacement Field (Wraith)": "https://0rganics.org/archipelago/sc2wol/DisplacementField.png",
+        "Advanced Laser Technology (Wraith)": "/static/static/icons/sc2/improvedburstlaser.png",
         "Ripwave Missiles (Viking)": "https://0rganics.org/archipelago/sc2wol/RipwaveMissiles.png",
         "Phobos-Class Weapons System (Viking)": "https://0rganics.org/archipelago/sc2wol/Phobos-ClassWeaponsSystem.png",
-        "Cross-Spectrum Dampeners (Banshee)": "https://0rganics.org/archipelago/sc2wol/Cross-SpectrumDampeners.png",
+        "Smart Servos (Viking)": "/static/static/icons/sc2/transformationservos.png",
+        "Magrail Munitions (Viking)": "/static/static/icons/sc2/magrailmunitions.png",
+        "Cross-Spectrum Dampeners (Banshee)": "/static/static/icons/sc2/crossspectrumdampeners.png",
+        "Advanced Cross-Spectrum Dampeners (Banshee)": "https://0rganics.org/archipelago/sc2wol/Cross-SpectrumDampeners.png",
         "Shockwave Missile Battery (Banshee)": "https://0rganics.org/archipelago/sc2wol/ShockwaveMissileBattery.png",
+        "Hyperflight Rotors (Banshee)": "/static/static/icons/sc2/hyperflightrotors.png",
+        "Laser Targeting System (Banshee)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Internal Tech Module (Banshee)": "/static/static/icons/sc2/internalizedtechmodule.png",
         "Missile Pods (Battlecruiser)": "https://0rganics.org/archipelago/sc2wol/MissilePods.png",
         "Defensive Matrix (Battlecruiser)": "https://0rganics.org/archipelago/sc2wol/DefensiveMatrix.png",
+        "Tactical Jump (Battlecruiser)": "/static/static/icons/sc2/warpjump.png",
+        "Cloak (Battlecruiser)": "/static/static/icons/sc2/terran-cloak-color.png",
+        "ATX Laser Battery (Battlecruiser)": "/static/static/icons/sc2/specialordance.png",
+        "Optimized Logistics (Battlecruiser)": "/static/static/icons/sc2/optimizedlogistics.png",
+        "Internal Tech Module (Battlecruiser)": "/static/static/icons/sc2/internalizedtechmodule.png",
 
         "Ghost": "https://static.wikia.nocookie.net/starcraft/images/6/6e/Ghost_SC2_Icon1.jpg",
         "Spectre": "https://static.wikia.nocookie.net/starcraft/images/0/0d/Spectre_WoL.jpg",
         "Thor": "https://static.wikia.nocookie.net/starcraft/images/e/ef/Thor_SC2_Icon1.jpg",
 
+        "Widow Mine": "/static/static/icons/sc2/widowmine.png",
+        "Cyclone": "/static/static/icons/sc2/cyclone.png",
+        "Liberator": "/static/static/icons/sc2/liberator.png",
+        "Valkyrie": "/static/static/icons/sc2/valkyrie.png",
+
         "Ocular Implants (Ghost)": "https://0rganics.org/archipelago/sc2wol/OcularImplants.png",
         "Crius Suit (Ghost)": "https://0rganics.org/archipelago/sc2wol/CriusSuit.png",
+        "EMP Rounds (Ghost)": "/static/static/icons/sc2/terran-emp-color.png",
+        "Lockdown (Ghost)": "/static/static/icons/sc2/lockdown.png",
         "Psionic Lash (Spectre)": "https://0rganics.org/archipelago/sc2wol/PsionicLash.png",
         "Nyx-Class Cloaking Module (Spectre)": "https://0rganics.org/archipelago/sc2wol/Nyx-ClassCloakingModule.png",
+        "Impaler Rounds (Spectre)": "/static/static/icons/sc2/impalerrounds.png",
         "330mm Barrage Cannon (Thor)": "https://0rganics.org/archipelago/sc2wol/330mmBarrageCannon.png",
         "Immortality Protocol (Thor)": "https://0rganics.org/archipelago/sc2wol/ImmortalityProtocol.png",
+        "High Impact Payload (Thor)": "/static/static/icons/sc2/thorsiegemode.png",
+        "Smart Servos (Thor)": "/static/static/icons/sc2/transformationservos.png",
+
+        "Optimized Logistics (Predator)": "/static/static/icons/sc2/optimizedlogistics.png",
+        "Drilling Claws (Widow Mine)": "/static/static/icons/sc2/drillingclaws.png",
+        "Concealment (Widow Mine)": "/static/static/icons/sc2/widowminehidden.png",
+        "Black Market Launchers (Widow Mine)": "/static/static/icons/sc2/widowmine-attackrange.png",
+        "Executioner Missiles (Widow Mine)": "/static/static/icons/sc2/widowmine-deathblossom.png",
+        "Mag-Field Accelerators (Cyclone)": "/static/static/icons/sc2/magfieldaccelerator.png",
+        "Mag-Field Launchers (Cyclone)": "/static/static/icons/sc2/cyclonerangeupgrade.png",
+        "Targeting Optics (Cyclone)": "/static/static/icons/sc2/targetingoptics.png",
+        "Rapid Fire Launchers (Cyclone)": "/static/static/icons/sc2/ripwavemissiles.png",
+        "Bio Mechanical Repair Drone (Raven)": "/static/static/icons/sc2/biomechanicaldrone.png",
+        "Spider Mines (Raven)": "/static/static/icons/sc2/siegetank-spidermines.png",
+        "Railgun Turret (Raven)": "/static/static/icons/sc2/autoturretblackops.png",
+        "Hunter-Seeker Weapon (Raven)": "/static/static/icons/sc2/specialordance.png",
+        "Interference Matrix (Raven)": "/static/static/icons/sc2/interferencematrix.png",
+        "Anti-Armor Missile (Raven)": "/static/static/icons/sc2/shreddermissile.png",
+        "Internal Tech Module (Raven)": "/static/static/icons/sc2/internalizedtechmodule.png",
+        "EMP Shockwave (Science Vessel)": "/static/static/icons/sc2/staticempblast.png",
+        "Defensive Matrix (Science Vessel)": "https://0rganics.org/archipelago/sc2wol/DefensiveMatrix.png",
+        "Advanced Ballistics (Liberator)": "/static/static/icons/sc2/advanceballistics.png",
+        "Raid Artillery (Liberator)": "/static/static/icons/sc2/terrandefendermodestructureattack.png",
+        "Cloak (Liberator)": "/static/static/icons/sc2/terran-cloak-color.png",
+        "Laser Targeting System (Liberator)": "/static/static/icons/sc2/lasertargetingsystem.png",
+        "Optimized Logistics (Liberator)": "/static/static/icons/sc2/optimizedlogistics.png",
+        "Enhanced Cluster Launchers (Valkyrie)": "https://0rganics.org/archipelago/sc2wol/HellstormBatteries.png",
+        "Shaped Hull (Valkyrie)": "https://0rganics.org/archipelago/sc2wol/ShapedHull.png",
+        "Burst Lasers (Valkyrie)": "/static/static/icons/sc2/improvedburstlaser.png",
+        "Afterburners (Valkyrie)": "/static/static/icons/sc2/medivacemergencythrusters.png",
 
         "War Pigs": "https://static.wikia.nocookie.net/starcraft/images/e/ed/WarPigs_SC2_Icon1.jpg",
         "Devil Dogs": "https://static.wikia.nocookie.net/starcraft/images/3/33/DevilDogs_SC2_Icon1.jpg",
@@ -1109,14 +1204,15 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Tech Reactor": "https://static.wikia.nocookie.net/starcraft/images/c/c5/SC2_Lab_Tech_Reactor_Icon.png",
         "Orbital Strike": "https://static.wikia.nocookie.net/starcraft/images/d/df/SC2_Lab_Orb_Strike_Icon.png",
 
-        "Shrike Turret": "https://static.wikia.nocookie.net/starcraft/images/4/44/SC2_Lab_Shrike_Turret_Icon.png",
-        "Fortified Bunker": "https://static.wikia.nocookie.net/starcraft/images/4/4f/SC2_Lab_FortBunker_Icon.png",
+        "Shrike Turret (Bunker)": "https://static.wikia.nocookie.net/starcraft/images/4/44/SC2_Lab_Shrike_Turret_Icon.png",
+        "Fortified Bunker (Bunker)": "https://static.wikia.nocookie.net/starcraft/images/4/4f/SC2_Lab_FortBunker_Icon.png",
         "Planetary Fortress": "https://static.wikia.nocookie.net/starcraft/images/0/0b/SC2_Lab_PlanetFortress_Icon.png",
         "Perdition Turret": "https://static.wikia.nocookie.net/starcraft/images/a/af/SC2_Lab_PerdTurret_Icon.png",
         "Predator": "https://static.wikia.nocookie.net/starcraft/images/8/83/SC2_Lab_Predator_Icon.png",
         "Hercules": "https://static.wikia.nocookie.net/starcraft/images/4/40/SC2_Lab_Hercules_Icon.png",
         "Cellular Reactor": "https://static.wikia.nocookie.net/starcraft/images/d/d8/SC2_Lab_CellReactor_Icon.png",
-        "Regenerative Bio-Steel": "https://static.wikia.nocookie.net/starcraft/images/d/d3/SC2_Lab_BioSteel_Icon.png",
+        "Regenerative Bio-Steel Level 1": "/static/static/icons/sc2/SC2_Lab_BioSteel_L1.png",
+        "Regenerative Bio-Steel Level 2": "/static/static/icons/sc2/SC2_Lab_BioSteel_L2.png",
         "Hive Mind Emulator": "https://static.wikia.nocookie.net/starcraft/images/b/bc/SC2_Lab_Hive_Emulator_Icon.png",
         "Psi Disrupter": "https://static.wikia.nocookie.net/starcraft/images/c/cf/SC2_Lab_Psi_Disruptor_Icon.png",
 
@@ -1132,39 +1228,70 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
 
         "Nothing": "",
     }
-
     sc2wol_location_ids = {
-        "Liberation Day": [SC2WOL_LOC_ID_OFFSET + 100, SC2WOL_LOC_ID_OFFSET + 101, SC2WOL_LOC_ID_OFFSET + 102, SC2WOL_LOC_ID_OFFSET + 103, SC2WOL_LOC_ID_OFFSET + 104, SC2WOL_LOC_ID_OFFSET + 105, SC2WOL_LOC_ID_OFFSET + 106],
-        "The Outlaws": [SC2WOL_LOC_ID_OFFSET + 200, SC2WOL_LOC_ID_OFFSET + 201],
-        "Zero Hour": [SC2WOL_LOC_ID_OFFSET + 300, SC2WOL_LOC_ID_OFFSET + 301, SC2WOL_LOC_ID_OFFSET + 302, SC2WOL_LOC_ID_OFFSET + 303],
-        "Evacuation": [SC2WOL_LOC_ID_OFFSET + 400, SC2WOL_LOC_ID_OFFSET + 401, SC2WOL_LOC_ID_OFFSET + 402, SC2WOL_LOC_ID_OFFSET + 403],
-        "Outbreak": [SC2WOL_LOC_ID_OFFSET + 500, SC2WOL_LOC_ID_OFFSET + 501, SC2WOL_LOC_ID_OFFSET + 502],
-        "Safe Haven": [SC2WOL_LOC_ID_OFFSET + 600, SC2WOL_LOC_ID_OFFSET + 601, SC2WOL_LOC_ID_OFFSET + 602, SC2WOL_LOC_ID_OFFSET + 603],
-        "Haven's Fall": [SC2WOL_LOC_ID_OFFSET + 700, SC2WOL_LOC_ID_OFFSET + 701, SC2WOL_LOC_ID_OFFSET + 702, SC2WOL_LOC_ID_OFFSET + 703],
-        "Smash and Grab": [SC2WOL_LOC_ID_OFFSET + 800, SC2WOL_LOC_ID_OFFSET + 801, SC2WOL_LOC_ID_OFFSET + 802, SC2WOL_LOC_ID_OFFSET + 803, SC2WOL_LOC_ID_OFFSET + 804],
-        "The Dig": [SC2WOL_LOC_ID_OFFSET + 900, SC2WOL_LOC_ID_OFFSET + 901, SC2WOL_LOC_ID_OFFSET + 902, SC2WOL_LOC_ID_OFFSET + 903],
-        "The Moebius Factor": [SC2WOL_LOC_ID_OFFSET + 1000, SC2WOL_LOC_ID_OFFSET + 1003, SC2WOL_LOC_ID_OFFSET + 1004, SC2WOL_LOC_ID_OFFSET + 1005, SC2WOL_LOC_ID_OFFSET + 1006, SC2WOL_LOC_ID_OFFSET + 1007, SC2WOL_LOC_ID_OFFSET + 1008],
-        "Supernova": [SC2WOL_LOC_ID_OFFSET + 1100, SC2WOL_LOC_ID_OFFSET + 1101, SC2WOL_LOC_ID_OFFSET + 1102, SC2WOL_LOC_ID_OFFSET + 1103, SC2WOL_LOC_ID_OFFSET + 1104],
-        "Maw of the Void": [SC2WOL_LOC_ID_OFFSET + 1200, SC2WOL_LOC_ID_OFFSET + 1201, SC2WOL_LOC_ID_OFFSET + 1202, SC2WOL_LOC_ID_OFFSET + 1203, SC2WOL_LOC_ID_OFFSET + 1204, SC2WOL_LOC_ID_OFFSET + 1205],
-        "Devil's Playground": [SC2WOL_LOC_ID_OFFSET + 1300, SC2WOL_LOC_ID_OFFSET + 1301, SC2WOL_LOC_ID_OFFSET + 1302],
-        "Welcome to the Jungle": [SC2WOL_LOC_ID_OFFSET + 1400, SC2WOL_LOC_ID_OFFSET + 1401, SC2WOL_LOC_ID_OFFSET + 1402, SC2WOL_LOC_ID_OFFSET + 1403],
-        "Breakout": [SC2WOL_LOC_ID_OFFSET + 1500, SC2WOL_LOC_ID_OFFSET + 1501, SC2WOL_LOC_ID_OFFSET + 1502],
-        "Ghost of a Chance": [SC2WOL_LOC_ID_OFFSET + 1600, SC2WOL_LOC_ID_OFFSET + 1601, SC2WOL_LOC_ID_OFFSET + 1602, SC2WOL_LOC_ID_OFFSET + 1603, SC2WOL_LOC_ID_OFFSET + 1604, SC2WOL_LOC_ID_OFFSET + 1605],
-        "The Great Train Robbery": [SC2WOL_LOC_ID_OFFSET + 1700, SC2WOL_LOC_ID_OFFSET + 1701, SC2WOL_LOC_ID_OFFSET + 1702, SC2WOL_LOC_ID_OFFSET + 1703],
-        "Cutthroat": [SC2WOL_LOC_ID_OFFSET + 1800, SC2WOL_LOC_ID_OFFSET + 1801, SC2WOL_LOC_ID_OFFSET + 1802, SC2WOL_LOC_ID_OFFSET + 1803, SC2WOL_LOC_ID_OFFSET + 1804],
-        "Engine of Destruction": [SC2WOL_LOC_ID_OFFSET + 1900, SC2WOL_LOC_ID_OFFSET + 1901, SC2WOL_LOC_ID_OFFSET + 1902, SC2WOL_LOC_ID_OFFSET + 1903, SC2WOL_LOC_ID_OFFSET + 1904, SC2WOL_LOC_ID_OFFSET + 1905],
-        "Media Blitz": [SC2WOL_LOC_ID_OFFSET + 2000, SC2WOL_LOC_ID_OFFSET + 2001, SC2WOL_LOC_ID_OFFSET + 2002, SC2WOL_LOC_ID_OFFSET + 2003, SC2WOL_LOC_ID_OFFSET + 2004],
-        "Piercing the Shroud": [SC2WOL_LOC_ID_OFFSET + 2100, SC2WOL_LOC_ID_OFFSET + 2101, SC2WOL_LOC_ID_OFFSET + 2102, SC2WOL_LOC_ID_OFFSET + 2103, SC2WOL_LOC_ID_OFFSET + 2104, SC2WOL_LOC_ID_OFFSET + 2105],
-        "Whispers of Doom": [SC2WOL_LOC_ID_OFFSET + 2200, SC2WOL_LOC_ID_OFFSET + 2201, SC2WOL_LOC_ID_OFFSET + 2202, SC2WOL_LOC_ID_OFFSET + 2203],
-        "A Sinister Turn": [SC2WOL_LOC_ID_OFFSET + 2300, SC2WOL_LOC_ID_OFFSET + 2301, SC2WOL_LOC_ID_OFFSET + 2302, SC2WOL_LOC_ID_OFFSET + 2303],
-        "Echoes of the Future": [SC2WOL_LOC_ID_OFFSET + 2400, SC2WOL_LOC_ID_OFFSET + 2401, SC2WOL_LOC_ID_OFFSET + 2402],
-        "In Utter Darkness": [SC2WOL_LOC_ID_OFFSET + 2500, SC2WOL_LOC_ID_OFFSET + 2501, SC2WOL_LOC_ID_OFFSET + 2502],
-        "Gates of Hell": [SC2WOL_LOC_ID_OFFSET + 2600, SC2WOL_LOC_ID_OFFSET + 2601],
-        "Belly of the Beast": [SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2701, SC2WOL_LOC_ID_OFFSET + 2702, SC2WOL_LOC_ID_OFFSET + 2703],
-        "Shatter the Sky": [SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2801, SC2WOL_LOC_ID_OFFSET + 2802, SC2WOL_LOC_ID_OFFSET + 2803, SC2WOL_LOC_ID_OFFSET + 2804, SC2WOL_LOC_ID_OFFSET + 2805],
+        "Liberation Day": range(SC2WOL_LOC_ID_OFFSET + 100, SC2WOL_LOC_ID_OFFSET + 200),
+        "The Outlaws": range(SC2WOL_LOC_ID_OFFSET + 200, SC2WOL_LOC_ID_OFFSET + 300),
+        "Zero Hour": range(SC2WOL_LOC_ID_OFFSET + 300, SC2WOL_LOC_ID_OFFSET + 400),
+        "Evacuation": range(SC2WOL_LOC_ID_OFFSET + 400, SC2WOL_LOC_ID_OFFSET + 500),
+        "Outbreak": range(SC2WOL_LOC_ID_OFFSET + 500, SC2WOL_LOC_ID_OFFSET + 600),
+        "Safe Haven": range(SC2WOL_LOC_ID_OFFSET + 600, SC2WOL_LOC_ID_OFFSET + 700),
+        "Haven's Fall": range(SC2WOL_LOC_ID_OFFSET + 700, SC2WOL_LOC_ID_OFFSET + 800),
+        "Smash and Grab": range(SC2WOL_LOC_ID_OFFSET + 800, SC2WOL_LOC_ID_OFFSET + 900),
+        "The Dig": range(SC2WOL_LOC_ID_OFFSET + 900, SC2WOL_LOC_ID_OFFSET + 1000),
+        "The Moebius Factor": range(SC2WOL_LOC_ID_OFFSET + 1000, SC2WOL_LOC_ID_OFFSET + 1100),
+        "Supernova": range(SC2WOL_LOC_ID_OFFSET + 1100, SC2WOL_LOC_ID_OFFSET + 1200),
+        "Maw of the Void": range(SC2WOL_LOC_ID_OFFSET + 1200, SC2WOL_LOC_ID_OFFSET + 1300),
+        "Devil's Playground": range(SC2WOL_LOC_ID_OFFSET + 1300, SC2WOL_LOC_ID_OFFSET + 1400),
+        "Welcome to the Jungle": range(SC2WOL_LOC_ID_OFFSET + 1400, SC2WOL_LOC_ID_OFFSET + 1500),
+        "Breakout": range(SC2WOL_LOC_ID_OFFSET + 1500, SC2WOL_LOC_ID_OFFSET + 1600),
+        "Ghost of a Chance": range(SC2WOL_LOC_ID_OFFSET + 1600, SC2WOL_LOC_ID_OFFSET + 1700),
+        "The Great Train Robbery": range(SC2WOL_LOC_ID_OFFSET + 1700, SC2WOL_LOC_ID_OFFSET + 1800),
+        "Cutthroat": range(SC2WOL_LOC_ID_OFFSET + 1800, SC2WOL_LOC_ID_OFFSET + 1900),
+        "Engine of Destruction": range(SC2WOL_LOC_ID_OFFSET + 1900, SC2WOL_LOC_ID_OFFSET + 2000),
+        "Media Blitz": range(SC2WOL_LOC_ID_OFFSET + 2000, SC2WOL_LOC_ID_OFFSET + 2100),
+        "Piercing the Shroud": range(SC2WOL_LOC_ID_OFFSET + 2100, SC2WOL_LOC_ID_OFFSET + 2200),
+        "Whispers of Doom": range(SC2WOL_LOC_ID_OFFSET + 2200, SC2WOL_LOC_ID_OFFSET + 2300),
+        "A Sinister Turn": range(SC2WOL_LOC_ID_OFFSET + 2300, SC2WOL_LOC_ID_OFFSET + 2400),
+        "Echoes of the Future": range(SC2WOL_LOC_ID_OFFSET + 2400, SC2WOL_LOC_ID_OFFSET + 2500),
+        "In Utter Darkness": range(SC2WOL_LOC_ID_OFFSET + 2500, SC2WOL_LOC_ID_OFFSET + 2600),
+        "Gates of Hell": range(SC2WOL_LOC_ID_OFFSET + 2600, SC2WOL_LOC_ID_OFFSET + 2700),
+        "Belly of the Beast": range(SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2800),
+        "Shatter the Sky": range(SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2900),
     }
 
     display_data = {}
+
+    # Grouped Items
+    grouped_item_ids = {
+        "Progressive Weapon Upgrade": 107 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Armor Upgrade": 108 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Infantry Upgrade": 109 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Vehicle Upgrade": 110 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Ship Upgrade": 111 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Weapon/Armor Upgrade": 112 + SC2WOL_ITEM_ID_OFFSET
+    }
+    grouped_item_replacements = {
+        "Progressive Weapon Upgrade": ["Progressive Infantry Weapon", "Progressive Vehicle Weapon", "Progressive Ship Weapon"],
+        "Progressive Armor Upgrade": ["Progressive Infantry Armor", "Progressive Vehicle Armor", "Progressive Ship Armor"],
+        "Progressive Infantry Upgrade": ["Progressive Infantry Weapon", "Progressive Infantry Armor"],
+        "Progressive Vehicle Upgrade": ["Progressive Vehicle Weapon", "Progressive Vehicle Armor"],
+        "Progressive Ship Upgrade": ["Progressive Ship Weapon", "Progressive Ship Armor"]
+    }
+    grouped_item_replacements["Progressive Weapon/Armor Upgrade"] = grouped_item_replacements["Progressive Weapon Upgrade"] + grouped_item_replacements["Progressive Armor Upgrade"]
+    replacement_item_ids = {
+        "Progressive Infantry Weapon": 100 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Infantry Armor": 102 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Vehicle Weapon": 103 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Vehicle Armor": 104 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Ship Weapon": 105 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Ship Armor": 106 + SC2WOL_ITEM_ID_OFFSET,
+    }
+    for grouped_item_name, grouped_item_id in grouped_item_ids.items():
+        count: int = inventory[grouped_item_id]
+        if count > 0:
+            for replacement_item in grouped_item_replacements[grouped_item_name]:
+                replacement_id: int = replacement_item_ids[replacement_item]
+                inventory[replacement_id] = count
 
     # Determine display for progressive items
     progressive_items = {
@@ -1173,7 +1300,15 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Progressive Vehicle Weapon": 103 + SC2WOL_ITEM_ID_OFFSET,
         "Progressive Vehicle Armor": 104 + SC2WOL_ITEM_ID_OFFSET,
         "Progressive Ship Weapon": 105 + SC2WOL_ITEM_ID_OFFSET,
-        "Progressive Ship Armor": 106 + SC2WOL_ITEM_ID_OFFSET
+        "Progressive Ship Armor": 106 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Stimpack (Marine)": 208 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Stimpack (Firebat)": 226 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Stimpack (Marauder)": 228 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Stimpack (Reaper)": 250 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Stimpack (Hellion)": 259 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive High Impact Payload (Thor)": 361 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Cross-Spectrum Dampeners (Banshee)": 316 + SC2WOL_ITEM_ID_OFFSET,
+        "Progressive Regenerative Bio-Steel": 617 + SC2WOL_ITEM_ID_OFFSET
     }
     progressive_names = {
         "Progressive Infantry Weapon": ["Infantry Weapons Level 1", "Infantry Weapons Level 1", "Infantry Weapons Level 2", "Infantry Weapons Level 3"],
@@ -1181,14 +1316,27 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
         "Progressive Vehicle Weapon": ["Vehicle Weapons Level 1", "Vehicle Weapons Level 1", "Vehicle Weapons Level 2", "Vehicle Weapons Level 3"],
         "Progressive Vehicle Armor": ["Vehicle Armor Level 1", "Vehicle Armor Level 1", "Vehicle Armor Level 2", "Vehicle Armor Level 3"],
         "Progressive Ship Weapon": ["Ship Weapons Level 1", "Ship Weapons Level 1", "Ship Weapons Level 2", "Ship Weapons Level 3"],
-        "Progressive Ship Armor": ["Ship Armor Level 1", "Ship Armor Level 1", "Ship Armor Level 2", "Ship Armor Level 3"]
+        "Progressive Ship Armor": ["Ship Armor Level 1", "Ship Armor Level 1", "Ship Armor Level 2", "Ship Armor Level 3"],
+        "Progressive Stimpack (Marine)": ["Stimpack (Marine)", "Stimpack (Marine)", "Super Stimpack (Marine)"],
+        "Progressive Stimpack (Firebat)": ["Stimpack (Firebat)", "Stimpack (Firebat)", "Super Stimpack (Firebat)"],
+        "Progressive Stimpack (Marauder)": ["Stimpack (Marauder)", "Stimpack (Marauder)", "Super Stimpack (Marauder)"],
+        "Progressive Stimpack (Reaper)": ["Stimpack (Reaper)", "Stimpack (Reaper)", "Super Stimpack (Reaper)"],
+        "Progressive Stimpack (Hellion)": ["Stimpack (Hellion)", "Stimpack (Hellion)", "Super Stimpack (Hellion)"],
+        "Progressive High Impact Payload (Thor)": ["High Impact Payload (Thor)", "High Impact Payload (Thor)", "Smart Servos (Thor)"],
+        "Progressive Cross-Spectrum Dampeners (Banshee)": ["Cross-Spectrum Dampeners (Banshee)", "Cross-Spectrum Dampeners (Banshee)", "Advanced Cross-Spectrum Dampeners (Banshee)"],
+        "Progressive Regenerative Bio-Steel": ["Regenerative Bio-Steel Level 1", "Regenerative Bio-Steel Level 1", "Regenerative Bio-Steel Level 2"]
     }
     for item_name, item_id in progressive_items.items():
         level = min(inventory[item_id], len(progressive_names[item_name]) - 1)
         display_name = progressive_names[item_name][level]
-        base_name = item_name.split(maxsplit=1)[1].lower().replace(' ', '_')
+        base_name = (item_name.split(maxsplit=1)[1].lower()
+                     .replace(' ', '_')
+                     .replace("-", "")
+                     .replace("(", "")
+                     .replace(")", ""))
         display_data[base_name + "_level"] = level
         display_data[base_name + "_url"] = icons[display_name]
+        display_data[base_name + "_name"] = display_name
 
     # Multi-items
     multi_items = {
@@ -1220,12 +1368,12 @@ def __renderSC2WoLTracker(multisave: Dict[str, Any], room: Room, locations: Dict
     checks_in_area['Total'] = sum(checks_in_area.values())
 
     return render_template("sc2wolTracker.html",
-                            inventory=inventory, icons=icons,
-                            acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
-                                            id in lookup_any_item_id_to_name},
-                            player=player, team=team, room=room, player_name=playerName,
-                            checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
-                            **display_data)
+                           inventory=inventory, icons=icons,
+                           acquired_items={lookup_any_item_id_to_name[id] for id in inventory if
+                                           id in lookup_any_item_id_to_name},
+                           player=player, team=team, room=room, player_name=playerName,
+                           checks_done=checks_done, checks_in_area=checks_in_area, location_info=location_info,
+                           **display_data)
 
 def __renderChecksfinder(multisave: Dict[str, Any], room: Room, locations: Dict[int, Dict[int, Tuple[int, int, int]]],
                              inventory: Counter, team: int, player: int, playerName: str,
@@ -1400,7 +1548,7 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         for player, name in enumerate(names, 1):
             player_names[team, player] = name
             states[team, player] = multisave.get("client_game_state", {}).get((team, player), 0)
-            if states[team, player] == 30:  # Goal Completed
+            if states[team, player] == ClientStatus.CLIENT_GOAL and player not in groups:
                 completed_worlds += 1
     long_player_names = player_names.copy()
     for (team, player), alias in multisave.get("name_aliases", {}).items():
@@ -1535,7 +1683,7 @@ def get_LttP_multiworld_tracker(tracker: UUID):
             for item_id in precollected:
                 attribute_item(team, player, item_id)
         for location in locations_checked:
-            if location not in player_locations or location not in player_location_to_area[player]:
+            if location not in player_locations or location not in player_location_to_area.get(player, {}):
                 continue
             item, recipient, flags = player_locations[location]
             recipients = groups.get(recipient, [recipient])
