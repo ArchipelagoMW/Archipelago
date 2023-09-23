@@ -852,7 +852,7 @@ def request_unfinished_missions(ctx: SC2Context):
             if unfinished_missions[final_mission] == -1:
                 unfinished_missions.pop(final_mission)
 
-        message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[mission].id}] " +
+        message += ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}[{ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id}] " +
                              mark_up_objectives(
                                  f"[{len(unfinished_missions[mission])}/"
                                  f"{sum(1 for _ in ctx.locations_for_mission(mission))}]",
@@ -895,14 +895,13 @@ def calc_unfinished_missions(ctx: SC2Context, unlocks=None):
 def is_mission_available(ctx: SC2Context, mission_id_to_check):
     unfinished_missions = calc_available_missions(ctx)
 
-    return any(mission_id_to_check == ctx.mission_req_table[mission].id for mission in unfinished_missions)
+    return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
 
 
 def mark_up_mission_name(ctx: SC2Context, mission, unlock_table):
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
 
-
-    if ctx.mission_req_table[mission].completion_critical:
+    if ctx.mission_req_table[ctx.find_campaign(mission)][mission].completion_critical:
         if ctx.ui:
             message = "[color=AF99EF]" + mission + "[/color]"
         else:
@@ -915,7 +914,7 @@ def mark_up_mission_name(ctx: SC2Context, mission, unlock_table):
 
         if len(unlocks) > 0:
             pre_message = f"[ref={list(ctx.mission_req_table).index(mission)}|Unlocks: "
-            pre_message += ", ".join(f"{unlock}({ctx.mission_req_table[unlock].id})" for unlock in unlocks)
+            pre_message += ", ".join(f"{unlock}({ctx.mission_req_table[ctx.find_campaign(unlock)][unlock].mission.id})" for unlock in unlocks)
             pre_message += f"]"
             message = pre_message + message + "[/ref]"
 
@@ -946,7 +945,7 @@ def request_available_missions(ctx: SC2Context):
         missions = calc_available_missions(ctx, unlocks)
         message += \
             ", ".join(f"{mark_up_mission_name(ctx, mission, unlocks)}"
-                      f"[{ctx.mission_req_table[mission].id}]"
+                      f"[{ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id}]"
                       for mission in missions)
 
         if ctx.ui:
