@@ -401,7 +401,7 @@ class LinksAwakeningWorld(World):
             self.name_cache.update(pluralizations)
 
         uppered = other.upper()
-        for phrase in ItemIconGuessing.PHRASES.keys()
+        for phrase in ItemIconGuessing.PHRASES.keys():
             if phrase in uppered:
                 return ItemIconGuessing.PHRASES[phrase]
         possibles = other.upper().split(" ")
