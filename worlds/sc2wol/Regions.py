@@ -302,7 +302,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                             required_missions_names = [mission.slot.mission_name for mission in required_missions]
                             connect(multiworld, player, names, required_mission_name, mission.slot.mission_name,
                                     build_connection_rule(required_missions_names, mission_order[campaign][i].number))
-                            connections.append(MissionConnection(connection.campaign, slot_map[connection.campaign][connection.connect_to]))
+                            connections.append(MissionConnection(slot_map[connection.campaign][connection.connect_to], connection.campaign))
 
                 mission_req_table[campaign].update({mission.slot.mission_name: MissionInfo(
                     mission.slot, connections, mission_order[campaign][i].category,

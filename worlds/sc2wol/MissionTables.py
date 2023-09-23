@@ -104,7 +104,7 @@ class MissionConnection:
     campaign: SC2Campaign
     connect_to: int  # -1 connects to Menu
 
-    def __init__(self, campaign, connect_to):
+    def __init__(self, connect_to, campaign = SC2Campaign.GLOBAL):
         self.campaign = campaign
         self.connect_to = connect_to
 
@@ -135,141 +135,141 @@ class FillMission(NamedTuple):
 
 vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.WOL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.WOL, -1)], "Mar Sara", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 0)], "Mar Sara", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 1)], "Mar Sara", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 2)], "Colonist"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 3)], "Colonist"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 4)], "Colonist", number=7),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 4)], "Colonist", number=7, removal_priority=1),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 2)], "Artifact", completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 7)], "Artifact", number=8, completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 8)], "Artifact", number=11, completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 9)], "Artifact", number=14, completion_critical=True, removal_priority=7),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 10)], "Artifact", completion_critical=True, removal_priority=6),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 2)], "Covert", number=4),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 12)], "Covert"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 13)], "Covert", number=8, removal_priority=3),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 13)], "Covert", number=8, removal_priority=2),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 2)], "Rebellion", number=6),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 16)], "Rebellion"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 17)], "Rebellion"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 18)], "Rebellion", removal_priority=8),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 19)], "Rebellion", removal_priority=5),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 11)], "Char", completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 21)], "Char", completion_critical=True, removal_priority=4),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 21)], "Char", completion_critical=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.WOL, 22), MissionConnection(SC2Campaign.WOL, 23)], "Char", completion_critical=True, or_requirements=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.WOL)], "Mar Sara", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.WOL)], "Mar Sara", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.WOL)], "Mar Sara", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(2, SC2Campaign.WOL)], "Colonist"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3, SC2Campaign.WOL)], "Colonist"),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.WOL)], "Colonist", number=7),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.WOL)], "Colonist", number=7, removal_priority=1),
+        FillMission(MissionPools.EASY, [MissionConnection(2, SC2Campaign.WOL)], "Artifact", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(7, SC2Campaign.WOL)], "Artifact", number=8, completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(8, SC2Campaign.WOL)], "Artifact", number=11, completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(9, SC2Campaign.WOL)], "Artifact", number=14, completion_critical=True, removal_priority=7),
+        FillMission(MissionPools.HARD, [MissionConnection(10, SC2Campaign.WOL)], "Artifact", completion_critical=True, removal_priority=6),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.WOL)], "Covert", number=4),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(12, SC2Campaign.WOL)], "Covert"),
+        FillMission(MissionPools.HARD, [MissionConnection(13, SC2Campaign.WOL)], "Covert", number=8, removal_priority=3),
+        FillMission(MissionPools.HARD, [MissionConnection(13, SC2Campaign.WOL)], "Covert", number=8, removal_priority=2),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.WOL)], "Rebellion", number=6),
+        FillMission(MissionPools.HARD, [MissionConnection(16, SC2Campaign.WOL)], "Rebellion"),
+        FillMission(MissionPools.HARD, [MissionConnection(17, SC2Campaign.WOL)], "Rebellion"),
+        FillMission(MissionPools.HARD, [MissionConnection(18, SC2Campaign.WOL)], "Rebellion", removal_priority=8),
+        FillMission(MissionPools.HARD, [MissionConnection(19, SC2Campaign.WOL)], "Rebellion", removal_priority=5),
+        FillMission(MissionPools.HARD, [MissionConnection(11, SC2Campaign.WOL)], "Char", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(21, SC2Campaign.WOL)], "Char", completion_critical=True, removal_priority=4),
+        FillMission(MissionPools.HARD, [MissionConnection(21, SC2Campaign.WOL)], "Char", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(22, SC2Campaign.WOL), MissionConnection(23, SC2Campaign.WOL)], "Char", completion_critical=True, or_requirements=True)
     ],
     SC2Campaign.PROPHECY: [
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 8)], "_1"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.PROPHECY, 0)], "_2", removal_priority=2),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.PROPHECY, 1)], "_3", removal_priority=1),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.PROPHECY, 2)], "_4"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(8, SC2Campaign.WOL)], "_1"),
+        FillMission(MissionPools.HARD, [MissionConnection(0, SC2Campaign.PROPHECY)], "_2", removal_priority=2),
+        FillMission(MissionPools.HARD, [MissionConnection(1, SC2Campaign.PROPHECY)], "_3", removal_priority=1),
+        FillMission(MissionPools.FINAL, [MissionConnection(2, SC2Campaign.PROPHECY)], "_4"),
     ]
 }
 
 mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.WOL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.WOL, -1)], "Mar Sara", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 0)], "Colonist"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 1)], "Colonist"),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.WOL, 0)], "Artifact", completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 3)], "Artifact", number=4, completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 4)], "Artifact", number=8, completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 0)], "Covert", number=2),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 6)], "Covert"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 0)], "Rebellion", number=3),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 8)], "Rebellion"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 5)], "Char", completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.WOL, 5)], "Char", completion_critical=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.WOL, 10), MissionConnection(SC2Campaign.WOL, 11)], "Char", completion_critical=True, or_requirements=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.WOL)], "Mar Sara", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.WOL)], "Colonist"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.WOL)], "Colonist"),
+        FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.WOL)], "Artifact", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3, SC2Campaign.WOL)], "Artifact", number=4, completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.WOL)], "Artifact", number=8, completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.WOL)], "Covert", number=2),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.WOL)], "Covert"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.WOL)], "Rebellion", number=3),
+        FillMission(MissionPools.HARD, [MissionConnection(8, SC2Campaign.WOL)], "Rebellion"),
+        FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.WOL)], "Char", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.WOL)], "Char", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(10, SC2Campaign.WOL), MissionConnection(11, SC2Campaign.WOL)], "Char", completion_critical=True, or_requirements=True)
     ],
     SC2Campaign.PROPHECY: [
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.WOL, 4)], "_1"),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.PROPHECY, 0)], "_2"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(4, SC2Campaign.WOL)], "_1"),
+        FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROPHECY)], "_2"),
     ]
 }
 
 gauntlet_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "I", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "II", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 1)], "III", completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 2)], "IV", completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 3)], "V", completion_critical=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 4)], "VI", completion_critical=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.GLOBAL, 5)], "Final", completion_critical=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "II", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(1)], "III", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(2)], "IV", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3)], "V", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(4)], "VI", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(5)], "Final", completion_critical=True)
     ]
 }
 
 mini_gauntlet_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "I", completion_critical=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "II", completion_critical=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 1)], "III", completion_critical=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.GLOBAL, 2)], "Final", completion_critical=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I", completion_critical=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "II", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1)], "III", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(2)], "Final", completion_critical=True)
     ]
 }
 
 grid_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "_1"),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_1"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 1), MissionConnection(SC2Campaign.GLOBAL, 6), MissionConnection(SC2Campaign.GLOBAL,  3)], "_1", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 2), MissionConnection(SC2Campaign.GLOBAL, 7)], "_1", or_requirements=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_2"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 1), MissionConnection(SC2Campaign.GLOBAL, 4)], "_2", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 2), MissionConnection(SC2Campaign.GLOBAL, 5), MissionConnection(SC2Campaign.GLOBAL, 10), MissionConnection(SC2Campaign.GLOBAL, 7)], "_2", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 3), MissionConnection(SC2Campaign.GLOBAL, 6), MissionConnection(SC2Campaign.GLOBAL, 11)], "_2", or_requirements=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 4), MissionConnection(SC2Campaign.GLOBAL, 9), MissionConnection(SC2Campaign.GLOBAL, 12)], "_3", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 5), MissionConnection(SC2Campaign.GLOBAL, 8), MissionConnection(SC2Campaign.GLOBAL, 10), MissionConnection(SC2Campaign.GLOBAL, 13)], "_3", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 6), MissionConnection(SC2Campaign.GLOBAL, 9), MissionConnection(SC2Campaign.GLOBAL, 11), MissionConnection(SC2Campaign.GLOBAL, 14)], "_3", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 7), MissionConnection(SC2Campaign.GLOBAL, 10)], "_3", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 8), MissionConnection(SC2Campaign.GLOBAL, 13)], "_4", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 9), MissionConnection(SC2Campaign.GLOBAL, 12), MissionConnection(SC2Campaign.GLOBAL, 14)], "_4", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 10), MissionConnection(SC2Campaign.GLOBAL, 13)], "_4", or_requirements=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.GLOBAL, 11), MissionConnection(SC2Campaign.GLOBAL, 14)], "_4", or_requirements=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "_1"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(6), MissionConnection( 3)], "_1", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(7)], "_1", or_requirements=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(4)], "_2", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(5), MissionConnection(10), MissionConnection(7)], "_2", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(3), MissionConnection(6), MissionConnection(11)], "_2", or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(4), MissionConnection(9), MissionConnection(12)], "_3", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(5), MissionConnection(8), MissionConnection(10), MissionConnection(13)], "_3", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(6), MissionConnection(9), MissionConnection(11), MissionConnection(14)], "_3", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(7), MissionConnection(10)], "_3", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(8), MissionConnection(13)], "_4", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(9), MissionConnection(12), MissionConnection(14)], "_4", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(10), MissionConnection(13)], "_4", or_requirements=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(11), MissionConnection(14)], "_4", or_requirements=True)
     ]
 }
 
 mini_grid_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "_1"),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_1"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 1), MissionConnection(SC2Campaign.GLOBAL, 5)], "_1", or_requirements=True),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_2"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 1), MissionConnection(SC2Campaign.GLOBAL, 3)], "_2", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 2), MissionConnection(SC2Campaign.GLOBAL, 4)], "_2", or_requirements=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 3), MissionConnection(SC2Campaign.GLOBAL, 7)], "_3", or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 4), MissionConnection(SC2Campaign.GLOBAL, 6)], "_3", or_requirements=True),
-        FillMission(MissionPools.FINAL, [MissionConnection(SC2Campaign.GLOBAL, 5), MissionConnection(SC2Campaign.GLOBAL, 7)], "_3", or_requirements=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "_1"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(5)], "_1", or_requirements=True),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1), MissionConnection(3)], "_2", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(2), MissionConnection(4)], "_2", or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(3), MissionConnection(7)], "_3", or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(4), MissionConnection(6)], "_3", or_requirements=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(5), MissionConnection(7)], "_3", or_requirements=True)
     ]
 }
 
 tiny_grid_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "_1"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_1"),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, 0)], "_2"),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 1), MissionConnection(SC2Campaign.GLOBAL, 2)], "_2", or_requirements=True),
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "_1"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0)], "_1"),
+        FillMission(MissionPools.EASY, [MissionConnection(0)], "_2"),
+        FillMission(MissionPools.HARD, [MissionConnection(1), MissionConnection(2)], "_2", or_requirements=True),
     ]
 }
 
 blitz_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.GLOBAL: [
-        FillMission(MissionPools.STARTER, [MissionConnection(SC2Campaign.GLOBAL, -1)], "I"),
-        FillMission(MissionPools.EASY, [MissionConnection(SC2Campaign.GLOBAL, -1)], "I"),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "II", number=1, or_requirements=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "II", number=1, or_requirements=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "III", number=2, or_requirements=True),
-        FillMission(MissionPools.MEDIUM, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "III", number=2, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "IV", number=3, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "IV", number=3, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "V", number=4, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "V", number=4, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "Final", number=5, or_requirements=True),
-        FillMission(MissionPools.HARD, [MissionConnection(SC2Campaign.GLOBAL, 0), MissionConnection(SC2Campaign.GLOBAL, 1)], "Final", number=5, or_requirements=True)
+        FillMission(MissionPools.STARTER, [MissionConnection(-1)], "I"),
+        FillMission(MissionPools.EASY, [MissionConnection(-1)], "I"),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "II", number=1, or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "II", number=1, or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "III", number=2, or_requirements=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0), MissionConnection(1)], "III", number=2, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "IV", number=3, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "IV", number=3, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "V", number=4, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True),
+        FillMission(MissionPools.HARD, [MissionConnection(0), MissionConnection(1)], "Final", number=5, or_requirements=True)
     ]
 }
 
@@ -290,36 +290,36 @@ mission_orders: List[Dict[SC2Campaign, List[FillMission]]] = [
 vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
     SC2Campaign.WOL: {
         SC2Mission.LIBERATION_DAY.mission_name: MissionInfo(SC2Mission.LIBERATION_DAY, [], SC2Mission.LIBERATION_DAY.area, completion_critical=True),
-        SC2Mission.THE_OUTLAWS.mission_name: MissionInfo(SC2Mission.THE_OUTLAWS, [MissionConnection(SC2Campaign.WOL, 1)], SC2Mission.THE_OUTLAWS.area, completion_critical=True),
-        SC2Mission.ZERO_HOUR.mission_name: MissionInfo(SC2Mission.ZERO_HOUR, [MissionConnection(SC2Campaign.WOL, 2)], SC2Mission.ZERO_HOUR.area, completion_critical=True),
-        SC2Mission.EVACUATION.mission_name: MissionInfo(SC2Mission.EVACUATION, [MissionConnection(SC2Campaign.WOL, 3)], SC2Mission.EVACUATION.area),
-        SC2Mission.OUTBREAK.mission_name: MissionInfo(SC2Mission.OUTBREAK, [MissionConnection(SC2Campaign.WOL, 4)], SC2Mission.OUTBREAK.area),
-        SC2Mission.SAFE_HAVEN.mission_name: MissionInfo(SC2Mission.SAFE_HAVEN, [MissionConnection(SC2Campaign.WOL, 5)], SC2Mission.SAFE_HAVEN.area, number=7),
-        SC2Mission.HAVENS_FALL.mission_name: MissionInfo(SC2Mission.HAVENS_FALL, [MissionConnection(SC2Campaign.WOL, 5)], SC2Mission.HAVENS_FALL.area, number=7),
-        SC2Mission.SMASH_AND_GRAB.mission_name: MissionInfo(SC2Mission.SMASH_AND_GRAB, [MissionConnection(SC2Campaign.WOL, 3)], SC2Mission.SMASH_AND_GRAB.area, completion_critical=True),
-        SC2Mission.THE_DIG.mission_name: MissionInfo(SC2Mission.THE_DIG, [MissionConnection(SC2Campaign.WOL, 8)], SC2Mission.THE_DIG.area, number=8, completion_critical=True),
-        SC2Mission.THE_MOEBIUS_FACTOR.mission_name: MissionInfo(SC2Mission.THE_MOEBIUS_FACTOR, [MissionConnection(SC2Campaign.WOL, 9)], SC2Mission.THE_MOEBIUS_FACTOR.area, number=11, completion_critical=True),
-        SC2Mission.SUPERNOVA.mission_name: MissionInfo(SC2Mission.SUPERNOVA, [MissionConnection(SC2Campaign.WOL, 10)], SC2Mission.SUPERNOVA.area, number=14, completion_critical=True),
-        SC2Mission.MAW_OF_THE_VOID.mission_name: MissionInfo(SC2Mission.MAW_OF_THE_VOID, [MissionConnection(SC2Campaign.WOL, 11)], SC2Mission.MAW_OF_THE_VOID.area, completion_critical=True),
-        SC2Mission.DEVILS_PLAYGROUND.mission_name: MissionInfo(SC2Mission.DEVILS_PLAYGROUND, [MissionConnection(SC2Campaign.WOL, 3)], SC2Mission.DEVILS_PLAYGROUND.area, number=4),
-        SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name: MissionInfo(SC2Mission.WELCOME_TO_THE_JUNGLE, [MissionConnection(SC2Campaign.WOL, 13)], SC2Mission.WELCOME_TO_THE_JUNGLE.area),
-        SC2Mission.BREAKOUT.mission_name: MissionInfo(SC2Mission.BREAKOUT, [MissionConnection(SC2Campaign.WOL, 14)], SC2Mission.BREAKOUT.area, number=8),
-        SC2Mission.GHOST_OF_A_CHANCE.mission_name: MissionInfo(SC2Mission.GHOST_OF_A_CHANCE, [MissionConnection(SC2Campaign.WOL, 14)], SC2Mission.GHOST_OF_A_CHANCE.area, number=8),
-        SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name: MissionInfo(SC2Mission.THE_GREAT_TRAIN_ROBBERY, [MissionConnection(SC2Campaign.WOL, 3)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area, number=6),
-        SC2Mission.CUTTHROAT.mission_name: MissionInfo(SC2Mission.CUTTHROAT, [MissionConnection(SC2Campaign.WOL, 17)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area),
-        SC2Mission.ENGINE_OF_DESTRUCTION.mission_name: MissionInfo(SC2Mission.ENGINE_OF_DESTRUCTION, [MissionConnection(SC2Campaign.WOL, 18)], SC2Mission.ENGINE_OF_DESTRUCTION.area),
-        SC2Mission.MEDIA_BLITZ.mission_name: MissionInfo(SC2Mission.MEDIA_BLITZ, [MissionConnection(SC2Campaign.WOL, 19)], SC2Mission.MEDIA_BLITZ.area),
-        SC2Mission.PIERCING_OF_THE_SHROUD.mission_name: MissionInfo(SC2Mission.PIERCING_OF_THE_SHROUD, [MissionConnection(SC2Campaign.WOL, 20)], SC2Mission.PIERCING_OF_THE_SHROUD.area),
-        SC2Mission.GATES_OF_HELL.mission_name: MissionInfo(SC2Mission.GATES_OF_HELL, [MissionConnection(SC2Campaign.WOL, 12)], SC2Mission.GATES_OF_HELL.area, completion_critical=True),
-        SC2Mission.BELLY_OF_THE_BEAST.mission_name: MissionInfo(SC2Mission.BELLY_OF_THE_BEAST, [MissionConnection(SC2Campaign.WOL, 22)], SC2Mission.BELLY_OF_THE_BEAST.area, completion_critical=True),
-        SC2Mission.SHATTER_THE_SKY.mission_name: MissionInfo(SC2Mission.SHATTER_THE_SKY, [MissionConnection(SC2Campaign.WOL, 22)], SC2Mission.SHATTER_THE_SKY.area, completion_critical=True),
-        SC2Mission.ALL_IN.mission_name: MissionInfo(SC2Mission.ALL_IN, [MissionConnection(SC2Campaign.WOL, 23), MissionConnection(SC2Campaign.WOL, 24)], SC2Mission.ALL_IN.area, or_requirements=True, completion_critical=True)
+        SC2Mission.THE_OUTLAWS.mission_name: MissionInfo(SC2Mission.THE_OUTLAWS, [MissionConnection(1, SC2Campaign.WOL)], SC2Mission.THE_OUTLAWS.area, completion_critical=True),
+        SC2Mission.ZERO_HOUR.mission_name: MissionInfo(SC2Mission.ZERO_HOUR, [MissionConnection(2, SC2Campaign.WOL)], SC2Mission.ZERO_HOUR.area, completion_critical=True),
+        SC2Mission.EVACUATION.mission_name: MissionInfo(SC2Mission.EVACUATION, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.EVACUATION.area),
+        SC2Mission.OUTBREAK.mission_name: MissionInfo(SC2Mission.OUTBREAK, [MissionConnection(4, SC2Campaign.WOL)], SC2Mission.OUTBREAK.area),
+        SC2Mission.SAFE_HAVEN.mission_name: MissionInfo(SC2Mission.SAFE_HAVEN, [MissionConnection(5, SC2Campaign.WOL)], SC2Mission.SAFE_HAVEN.area, number=7),
+        SC2Mission.HAVENS_FALL.mission_name: MissionInfo(SC2Mission.HAVENS_FALL, [MissionConnection(5, SC2Campaign.WOL)], SC2Mission.HAVENS_FALL.area, number=7),
+        SC2Mission.SMASH_AND_GRAB.mission_name: MissionInfo(SC2Mission.SMASH_AND_GRAB, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.SMASH_AND_GRAB.area, completion_critical=True),
+        SC2Mission.THE_DIG.mission_name: MissionInfo(SC2Mission.THE_DIG, [MissionConnection(8, SC2Campaign.WOL)], SC2Mission.THE_DIG.area, number=8, completion_critical=True),
+        SC2Mission.THE_MOEBIUS_FACTOR.mission_name: MissionInfo(SC2Mission.THE_MOEBIUS_FACTOR, [MissionConnection(9, SC2Campaign.WOL)], SC2Mission.THE_MOEBIUS_FACTOR.area, number=11, completion_critical=True),
+        SC2Mission.SUPERNOVA.mission_name: MissionInfo(SC2Mission.SUPERNOVA, [MissionConnection(10, SC2Campaign.WOL)], SC2Mission.SUPERNOVA.area, number=14, completion_critical=True),
+        SC2Mission.MAW_OF_THE_VOID.mission_name: MissionInfo(SC2Mission.MAW_OF_THE_VOID, [MissionConnection(11, SC2Campaign.WOL)], SC2Mission.MAW_OF_THE_VOID.area, completion_critical=True),
+        SC2Mission.DEVILS_PLAYGROUND.mission_name: MissionInfo(SC2Mission.DEVILS_PLAYGROUND, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.DEVILS_PLAYGROUND.area, number=4),
+        SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name: MissionInfo(SC2Mission.WELCOME_TO_THE_JUNGLE, [MissionConnection(13, SC2Campaign.WOL)], SC2Mission.WELCOME_TO_THE_JUNGLE.area),
+        SC2Mission.BREAKOUT.mission_name: MissionInfo(SC2Mission.BREAKOUT, [MissionConnection(14, SC2Campaign.WOL)], SC2Mission.BREAKOUT.area, number=8),
+        SC2Mission.GHOST_OF_A_CHANCE.mission_name: MissionInfo(SC2Mission.GHOST_OF_A_CHANCE, [MissionConnection(14, SC2Campaign.WOL)], SC2Mission.GHOST_OF_A_CHANCE.area, number=8),
+        SC2Mission.THE_GREAT_TRAIN_ROBBERY.mission_name: MissionInfo(SC2Mission.THE_GREAT_TRAIN_ROBBERY, [MissionConnection(3, SC2Campaign.WOL)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area, number=6),
+        SC2Mission.CUTTHROAT.mission_name: MissionInfo(SC2Mission.CUTTHROAT, [MissionConnection(17, SC2Campaign.WOL)], SC2Mission.THE_GREAT_TRAIN_ROBBERY.area),
+        SC2Mission.ENGINE_OF_DESTRUCTION.mission_name: MissionInfo(SC2Mission.ENGINE_OF_DESTRUCTION, [MissionConnection(18, SC2Campaign.WOL)], SC2Mission.ENGINE_OF_DESTRUCTION.area),
+        SC2Mission.MEDIA_BLITZ.mission_name: MissionInfo(SC2Mission.MEDIA_BLITZ, [MissionConnection(19, SC2Campaign.WOL)], SC2Mission.MEDIA_BLITZ.area),
+        SC2Mission.PIERCING_OF_THE_SHROUD.mission_name: MissionInfo(SC2Mission.PIERCING_OF_THE_SHROUD, [MissionConnection(20, SC2Campaign.WOL)], SC2Mission.PIERCING_OF_THE_SHROUD.area),
+        SC2Mission.GATES_OF_HELL.mission_name: MissionInfo(SC2Mission.GATES_OF_HELL, [MissionConnection(12, SC2Campaign.WOL)], SC2Mission.GATES_OF_HELL.area, completion_critical=True),
+        SC2Mission.BELLY_OF_THE_BEAST.mission_name: MissionInfo(SC2Mission.BELLY_OF_THE_BEAST, [MissionConnection(22, SC2Campaign.WOL)], SC2Mission.BELLY_OF_THE_BEAST.area, completion_critical=True),
+        SC2Mission.SHATTER_THE_SKY.mission_name: MissionInfo(SC2Mission.SHATTER_THE_SKY, [MissionConnection(22, SC2Campaign.WOL)], SC2Mission.SHATTER_THE_SKY.area, completion_critical=True),
+        SC2Mission.ALL_IN.mission_name: MissionInfo(SC2Mission.ALL_IN, [MissionConnection(23, SC2Campaign.WOL), MissionConnection(24, SC2Campaign.WOL)], SC2Mission.ALL_IN.area, or_requirements=True, completion_critical=True)
     },
     SC2Campaign.PROPHECY: {
-        SC2Mission.WHISPERS_OF_DOOM.mission_name: MissionInfo(SC2Mission.WHISPERS_OF_DOOM, [MissionConnection(SC2Campaign.WOL, 1)], SC2Mission.WHISPERS_OF_DOOM.area),
-        SC2Mission.A_SINISTER_TURN.mission_name: MissionInfo(SC2Mission.A_SINISTER_TURN, [MissionConnection(SC2Campaign.PROPHECY, 1)], SC2Mission.A_SINISTER_TURN.area),
-        SC2Mission.ECHOES_OF_THE_FUTURE.mission_name: MissionInfo(SC2Mission.ECHOES_OF_THE_FUTURE, [MissionConnection(SC2Campaign.PROPHECY, 2)], SC2Mission.A_SINISTER_TURN.area),
-        SC2Mission.IN_UTTER_DARKNESS.mission_name: MissionInfo(SC2Mission.IN_UTTER_DARKNESS, [MissionConnection(SC2Campaign.PROPHECY, 3)], SC2Mission.IN_UTTER_DARKNESS.area)
+        SC2Mission.WHISPERS_OF_DOOM.mission_name: MissionInfo(SC2Mission.WHISPERS_OF_DOOM, [MissionConnection(9, SC2Campaign.WOL)], SC2Mission.WHISPERS_OF_DOOM.area),
+        SC2Mission.A_SINISTER_TURN.mission_name: MissionInfo(SC2Mission.A_SINISTER_TURN, [MissionConnection(1, SC2Campaign.PROPHECY)], SC2Mission.A_SINISTER_TURN.area),
+        SC2Mission.ECHOES_OF_THE_FUTURE.mission_name: MissionInfo(SC2Mission.ECHOES_OF_THE_FUTURE, [MissionConnection(2, SC2Campaign.PROPHECY)], SC2Mission.A_SINISTER_TURN.area),
+        SC2Mission.IN_UTTER_DARKNESS.mission_name: MissionInfo(SC2Mission.IN_UTTER_DARKNESS, [MissionConnection(3, SC2Campaign.PROPHECY)], SC2Mission.IN_UTTER_DARKNESS.area)
     }
 }
 

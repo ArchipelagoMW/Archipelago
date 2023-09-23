@@ -987,10 +987,10 @@ def calc_available_missions(ctx: SC2Context, unlocks=None):
 def parse_unlock(unlock) -> MissionConnection:
     if isinstance(unlock, int):
         # Legacy
-        return MissionConnection(SC2Campaign.GLOBAL, unlock)
+        return MissionConnection(unlock)
     else:
         # Multi-campaign
-        return MissionConnection(lookup_id_to_campaign[unlock["campaign"]], unlock["connect_to"])
+        return MissionConnection(unlock["connect_to"], lookup_id_to_campaign[unlock["campaign"]])
 
 
 def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete: int):
