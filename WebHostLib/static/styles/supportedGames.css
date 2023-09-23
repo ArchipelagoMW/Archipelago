@@ -18,6 +18,16 @@
     margin-bottom: 2px;
 }
 
+#games h2 .collapse-arrow{
+    font-size: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+#games p.collapsed{
+    display: none;
+}
+
 #games a{
     font-size: 16px;
 }
