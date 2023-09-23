@@ -7,7 +7,7 @@ import hashlib
 import os
 import pkgutil
 
-from . import Patches
+from . import Patches, LZKN64
 from .Stages import stage_info
 from .Text import cv64_string_to_bytes, cv64_text_truncate, cv64_text_wrap
 
@@ -1072,8 +1072,9 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         else:
             rom.write_int32(offset, item_id)
 
-    # Insert the file containing the Archipelago item icons.
-    rom.write_bytes(0xBB2D88, list(pkgutil.get_data(__name__, "custom_model/ap_icons.bin")))
+    # Extract the item models file, decompress it, append the AP icons, compress it back, re-insert it.
+    items_file = LZKN64.decompress_buffer(rom.read_bytes(0x9C5310, 0x3D28))
+    rom.write_bytes(0xBB2D88, LZKN64.compress_buffer(items_file[0:0x69B6] + pkgutil.get_data(__name__, "ap_icons.bin")))
     # Update the items' Nisitenma-Ichigo table entry to point to the new file's start and end addresses in the ROM.
     rom.write_int32s(0x95F04, [0x80BB2D88, 0x00BB6EEC])
     # Update the items' decompressed file size tables with the new file's decompressed file size.
