@@ -8,16 +8,29 @@ from .paths import Paths
 
 
 def get(name: str) -> Map:
-    # Iterate through 2 folder depths
     for map_dir in (p for p in Paths.MAPS.iterdir()):
-        if map_dir.is_dir():
-            for map_file in (p for p in map_dir.iterdir()):
-                if Map.matches_target_map_name(map_file, name):
-                    return Map(map_file)
-        elif Map.matches_target_map_name(map_dir, name):
-            return Map(map_dir)
+        map = find_map_in_dir(name, map_dir)
+        if map is not None:
+            return map
 
     raise KeyError(f"Map '{name}' was not found. Please put the map file in \"/StarCraft II/Maps/\".")
+
+
+# Go deeper
+def find_map_in_dir(name, path):
+    if Map.matches_target_map_name(path, name):
+        return Map(path)
+
+    if path.name.endswith("SC2Map"):
+        return None
+
+    if path.is_dir():
+        for childPath in (p for p in path.iterdir()):
+            map = find_map_in_dir(name, childPath)
+            if map is not None:
+                return map
+
+    return None
 
 
 class Map:
