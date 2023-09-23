@@ -49,14 +49,25 @@ class PokemonSettings(settings.Group):
 
 
 class PokemonWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Pokemon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Alchav"]
-    )]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["Shiny"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class PokemonRedBlueWorld(World):
