@@ -79,6 +79,9 @@ trap_table = {
     ItemName.gravity_trap:    ItemData(0xFF0034, False, True),
     ItemName.exposition_trap: ItemData(0xFF0035, False, True),
     #ItemName.darkness_trap:   ItemData(0xFF0036, False, True),
+    ItemName.ice_trap:        ItemData(0xFF0037, False, True),
+    ItemName.slow_trap:       ItemData(0xFF0038, False, True),
+    ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
 
     ItemName.pong_trap:       ItemData(0xFF0050, False, True),
 }

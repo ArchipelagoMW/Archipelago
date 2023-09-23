@@ -1,3 +1,5 @@
+print("Loading AP lua connector script")
+
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
 lua_major = tonumber(lua_major)
 lua_minor = tonumber(lua_minor)
@@ -25,12 +27,13 @@ end
 
 local is23Or24Or25 = (bizhawk_version=="2.3.1") or (bizhawk_major == 2 and bizhawk_minor >= 3 and bizhawk_minor <= 5)
 local isGreaterOrEqualTo26 = bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor >= 6)
-local isUntestedBizhawk = bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)
-local untestedBizhawkMessage = "Warning: this version of bizhawk is newer than we know about. If it doesn't work, consider downgrading to 2.9"
+local isUntestedBizHawk = bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9)
+local untestedBizHawkMessage = "Warning: this version of BizHawk is newer than we know about. If it doesn't work, consider downgrading to 2.9"
 
 u8 = memory.read_u8
 wU8 = memory.write_u8
 u16 = memory.read_u16_le
+uRange = memory.readbyterange
 
 function getMaxMessageLength()
   local denominator = 12
@@ -91,12 +94,16 @@ function drawMessages()
   end
 end
 
-function checkBizhawkVersion()
+function checkBizHawkVersion()
   if not is23Or24Or25 and not isGreaterOrEqualTo26 then
-    print("Must use a version of bizhawk 2.3.1 or higher")
+    print("Must use a version of BizHawk 2.3.1 or higher")
     return false
-  elseif isUntestedBizhawk then
-    print(untestedBizhawkMessage)
+  elseif isUntestedBizHawk then
+    print(untestedBizHawkMessage)
   end
   return true
+end
+
+function stripPrefix(s, p)
+  return (s:sub(0, #p) == p) and s:sub(#p+1) or s
 end

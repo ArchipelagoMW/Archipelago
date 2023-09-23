@@ -14,7 +14,7 @@ Tutorial (Tutorial) - Outside Tutorial - True:
 158005 - 0x0A3B5 (Back Left) - True - Dots & Full Dots
 158006 - 0x0A3B2 (Back Right) - True - Dots & Full Dots
 158007 - 0x03629 (Gate Open) - 0x002C2 - Symmetry & Dots
-158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - False
+158008 - 0x03505 (Gate Close) - 0x2FAF6 & 0x03629 - True
 158009 - 0x0C335 (Pillar) - True - Triangles
 158010 - 0x0C373 (Patio Floor) - 0x0C335 - Dots
 159512 - 0x33530 (Cloud EP) - True - True
@@ -243,7 +243,7 @@ Door - 0x275FF (Side Exit) - 0x275ED
 Door - 0x17CE8 (Roof Exit) - 0x17CAC
 
 Quarry Stoneworks Middle Floor (Quarry Stoneworks) - Quarry Stoneworks Ground Floor - 0x03675 - Quarry Stoneworks Upper Floor - 0x03679:
-158125 - 0x00E0C (Lower Row 1) - True - Dots & Eraser
+158125 - 0x00E0C (Lower Row 1) - True - Triangles & Eraser
 158126 - 0x01489 (Lower Row 2) - 0x00E0C - Triangles & Eraser
 158127 - 0x0148A (Lower Row 3) - 0x01489 - Triangles & Eraser
 158128 - 0x014D9 (Lower Row 4) - 0x0148A - Triangles & Eraser
@@ -264,7 +264,7 @@ Quarry Stoneworks Upper Floor (Quarry Stoneworks) - Quarry Stoneworks Middle Flo
 158141 - 0x014E9 (Upper Row 8) - 0x03686 - Squares & Colored Squares & Eraser & Stars & Stars + Same Colored Symbol
 158142 - 0x03677 (Stair Control) - True - Squares & Colored Squares & Eraser
 Door - 0x0368A (Stairs) - 0x03677
-158143 - 0x3C125 (Control Room Left) - 0x0367C - Squares & Black/White Squares & Dots & Full Dots & Eraser
+158143 - 0x3C125 (Control Room Left) - 0x014E9 - Squares & Black/White Squares & Dots & Full Dots & Eraser
 158144 - 0x0367C (Control Room Right) - 0x014E9 - Squares & Colored Squares & Triangles & Eraser & Stars & Stars + Same Colored Symbol
 159411 - 0x0069D (Ramp EP) - 0x03676 & 0x275FF - True
 159413 - 0x00614 (Lift EP) - 0x275FF & 0x03675 - True
@@ -686,7 +686,7 @@ Swamp Cyan Underwater (Swamp):
 158309 - 0x00005 (Cyan Underwater 3) - 0x00004 - Shapers & Negative Shapers & Triangles & Black/White Squares
 158310 - 0x013E6 (Cyan Underwater 4) - 0x00005 - Shapers & Negative Shapers & Triangles & Black/White Squares
 158311 - 0x00596 (Cyan Underwater 5) - 0x013E6 - Shapers & Negative Shapers & Triangles & Black/White Squares
-158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers
+158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers & Black/White Squares
 159340 - 0x03AA6 (Cyan Underwater Sliding Bridge EP) - 0x18488 - True
 
 Swamp Between Bridges Near (Swamp) - Swamp Between Bridges Far - 0x18507:
@@ -703,7 +703,7 @@ Swamp Between Bridges Far (Swamp) - Swamp Red Underwater - 0x183F2 - Swamp Rotat
 158322 - 0x0000A (Between Bridges Far Row 4) - 0x00009 - Rotated Shapers & Shapers & Dots & Full Dots
 Door - 0x183F2 (Red Water Pump) - 0x00596
 
-Swamp Red Underwater (Swamp) - Swamp Maze - 0x014D1:
+Swamp Red Underwater (Swamp) - Swamp Maze - 0x305D5:
 158323 - 0x00001 (Red Underwater 1) - True - Shapers & Negative Shapers & Dots & Full Dots
 158324 - 0x014D2 (Red Underwater 2) - True - Shapers & Negative Shapers & Dots & Full Dots
 158325 - 0x014D4 (Red Underwater 3) - True - Shapers & Negative Shapers & Dots & Full Dots

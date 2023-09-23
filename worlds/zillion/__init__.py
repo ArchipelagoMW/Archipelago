@@ -1,13 +1,16 @@
 from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
+import settings
 import threading
+import typing
 from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
+from .config import detect_test
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -24,6 +27,26 @@ from zilliandomizer.logic_components.locations import Location as ZzLocation, Re
 from zilliandomizer.options import Chars
 
 from ..AutoWorld import World, WebWorld
+
+
+class ZillionSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Zillion US rom"""
+        description = "Zillion US ROM File"
+        copy_to = "Zillion (UE) [!].sms"
+        md5s = [ZillionDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+        True for operating system default program
+        Alternatively, a path to a program to open the .sfc file with
+        RetroArch doesn't make it easy to launch a game from the command line.
+        You have to know the path to the emulator core library on the user's computer.
+        """
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = RomStart("retroarch")
 
 
 class ZillionWebWorld(WebWorld):
@@ -48,6 +71,7 @@ class ZillionWorld(World):
     web = ZillionWebWorld()
 
     option_definitions = zillion_options
+    settings: typing.ClassVar[ZillionSettings]
     topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
@@ -122,7 +146,7 @@ class ZillionWorld(World):
 
         self._item_counts = item_counts
 
-        rom_dir_name = os.path.dirname(get_base_rom_path())
+        rom_dir_name = "" if detect_test() else os.path.dirname(get_base_rom_path())
         with redirect_stdout(self.lsi):  # type: ignore
             self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)
@@ -147,6 +171,16 @@ class ZillionWorld(World):
         self.my_locations = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
+        # low probability that place_canister_gun_reqs() results in empty 1st sphere
+        # testing code to force low probability event:
+        # for zz_room_name in ["r01c2", "r02c0", "r02c7", "r03c5"]:
+        #     for zz_loc in self.zz_system.randomizer.regions[zz_room_name].locations:
+        #         zz_loc.req.gun = 2
+        if len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) == 0:
+            self.logger.info("Zillion avoided rare empty 1st sphere.")
+            for zz_loc in self.zz_system.randomizer.regions["r03c5"].locations:
+                zz_loc.req.gun = 1
+            assert len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) != 0
 
         start = self.zz_system.randomizer.regions['start']
 

@@ -3,12 +3,14 @@ import copy
 import itertools
 import math
 import os
+import settings
+import typing
 from enum import IntFlag
 from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
     LocationProgressType
-from Main import __version__
+from Utils import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
@@ -31,20 +33,68 @@ from worlds.LauncherComponents import Component, components, SuffixIdentifier
 components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
 
 
+class AdventureSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """
+        File name of the standard NTSC Adventure rom.
+        The licensed "The 80 Classic Games" CD-ROM contains this.
+        It may also have a .a26 extension
+        """
+        copy_to = "ADVNTURE.BIN"
+        description = "Adventure ROM File"
+        md5s = [AdventureDeltaPatch.hash]
+
+    class RomStart(str):
+        """
+        Set this to false to never autostart a rom (such as after patching)
+        True for operating system default program for '.a26'
+        Alternatively, a path to a program to open the .a26 file with (generally EmuHawk for multiworld)
+        """
+
+    class RomArgs(str):
+        """
+        Optional, additional args passed into rom_start before the .bin file
+        For example, this can be used to autoload the connector script in BizHawk
+        (see BizHawk --lua= option)
+        Windows example:
+        rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"
+        """
+
+    class DisplayMsgs(settings.Bool):
+        """Set this to true to display item received messages in EmuHawk"""
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+    rom_start: typing.Union[RomStart, bool] = True
+    rom_args: Optional[RomArgs] = " "
+    display_msgs: typing.Union[DisplayMsgs, bool] = True
+
+
 class AdventureWeb(WebWorld):
-    tutorials = [Tutorial(
+    theme = "dirt"
+
+    setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Adventure for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["JusticePS"]
-    )]
-    theme = "dirt"
+    )
+
+    setup_fr = Tutorial(
+        "Guide de configuration Multimonde",
+        "Un guide pour configurer Adventure MultiWorld",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_fr]
 
 
 def get_item_position_data_start(table_index: int):
-    item_ram_address = item_ram_addresses[table_index];
+    item_ram_address = item_ram_addresses[table_index]
     return item_position_table + item_ram_address - items_ram_start
 
 
@@ -60,6 +110,7 @@ class AdventureWorld(World):
     web: ClassVar[WebWorld] = AdventureWeb()
 
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = adventure_option_definitions
+    settings: ClassVar[AdventureSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.id for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
     data_version: ClassVar[int] = 1
