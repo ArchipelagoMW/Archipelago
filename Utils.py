@@ -604,13 +604,14 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
     if is_linux:
         # prefer native dialog
         from shutil import which
-        kdialog = None#which("kdialog")
+        kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
-        zenity = None#which("zenity")
+            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+                       os.path.abspath(suggest) if suggest else ".")
+        zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
