@@ -248,6 +248,9 @@ class WitnessWorld(World):
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
+    def get_filler_item_name(self) -> str:
+        return "Speed Boost"
+
 
 class WitnessLocation(Location):
     """
