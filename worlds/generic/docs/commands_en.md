@@ -99,12 +99,6 @@ The following commands are available in the clients that use the CommonClient, f
 - `/ready` Sends ready status to the server.
 - Typing anything that doesn't start with `/` will broadcast a message to all players.
 
-## FF1Client Only
-
-The following command is only available when using the FF1Client for the Final Fantasy Randomizer.
-
-- `/nes` Shows the current status of the NES connection.
-
 ## SNIClient Only
 
 The following command is only available when using the SNIClient for SNES based games.
@@ -112,11 +106,3 @@ The following command is only available when using the SNIClient for SNES based 
 - `/snes` Attempts to connect to your SNES device via SNI.
 - `/snes_close` Closes the current SNES connection.
 - `/slow_mode` Toggles on or off slow mode, which limits the rate in which you receive items.
-
-## FactorioClient Only
-
-The following command is only available when using the FactorioClient to play Factorio with Archipelago.
-
-- `/factorio <command text>` Sends the command argument to the Factorio server as a command.
-
-
