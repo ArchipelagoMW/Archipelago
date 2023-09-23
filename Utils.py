@@ -588,7 +588,10 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
@@ -619,7 +622,10 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
