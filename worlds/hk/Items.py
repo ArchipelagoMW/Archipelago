@@ -21,7 +21,7 @@ for item, item_data in item_table.items():
 
 directionals = ('', 'Left_', 'Right_')
 item_name_groups = ({
-    "BossEssence": lookup_type_to_names["DreamWarrior"],
+    "BossEssence": lookup_type_to_names["DreamWarrior"] | lookup_type_to_names["DreamBoss"],
     "BossGeo": lookup_type_to_names["Boss_Geo"],
     "CDash": {x + "Crystal_Heart" for x in directionals},
     "Charms": lookup_type_to_names["Charm"],
@@ -51,10 +51,6 @@ item_name_groups = ({
     "Stags": lookup_type_to_names["Stag"],
     "VesselFragments": lookup_type_to_names["Vessel"],
     "WhisperingRoots": lookup_type_to_names["Root"],
-})
-item_name_groups["BossEssence"].update(lookup_type_to_names["DreamBoss"])
-item_name_groups.update({
-
 })
 item_name_groups['Horizontal'] = item_name_groups['Cloak'] | item_name_groups['CDash']
 item_name_groups['Vertical'] = item_name_groups['Claw'] | {'Monarch_Wings'}
