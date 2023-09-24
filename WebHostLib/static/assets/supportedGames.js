@@ -30,15 +30,18 @@ window.addEventListener('load', () => {
     // Loop over all the games
     Array.from(gameHeaders).forEach((header) => {
       const gameName = header.getAttribute('data-game');
+      const gameArrow = document.getElementById(`${gameName}-arrow`);
       const gameInfo = document.getElementById(gameName);
 
       // If the game name includes the search string, display the game. If not, hide it
       if (gameName.toLowerCase().includes(evt.target.value.toLowerCase())) {
         header.style.display = null;
+        gameArrow.innerText = '▼';
         gameInfo.classList.remove('collapsed');
       } else {
         console.log(header);
         header.style.display = 'none';
+        gameArrow.innerText = '▶';
         gameInfo.classList.add('collapsed');
       }
     });
