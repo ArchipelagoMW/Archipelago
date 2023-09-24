@@ -1021,7 +1021,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, total_available_bosses, a
         shopsanity_desc_text = []
         for i in range(len(shop_name_list)):
             shopsanity_name_text += [0xA0, i] + shop_colors_list[i] + cv64_string_to_bytes(cv64_text_truncate(
-                shop_name_list[i], 72))
+                shop_name_list[i], 74))
 
             shopsanity_desc_text += [0xA0, i]
             if shop_desc_list[i][1] is not None:
