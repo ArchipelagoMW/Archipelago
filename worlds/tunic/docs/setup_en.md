@@ -23,7 +23,7 @@ Find your TUNIC game installation directory:
 
 ### Install BepInEx
 
-BepInEx is a general purpose framework for modding Unity games, and is used by the Tunic Randomizer.
+BepInEx is a general purpose framework for modding Unity games, and is used by the TUNIC Randomizer.
 
 Download [BepInEx](https://builds.bepinex.dev/projects/bepinex_be/572/BepInEx_UnityIL2CPP_x64_9c2b17f_6.0.0-be.572.zip).
 
@@ -36,9 +36,9 @@ Extract the contents of the BepInEx .zip file into your TUNIC game directory:<br
 
 Launch the game once and close it to finish the BepInEx installation.
 
-### Install The Tunic Randomizer Archipelago Client Mod
+### Install The TUNIC Randomizer Archipelago Client Mod
 
-Download the latest release of the [Tunic Randomizer Archipelago Mod](https://github.com/silent-destroyer/tunic-randomizer-archipelago/releases/latest).
+Download the latest release of the [TUNIC Randomizer Archipelago Mod](https://github.com/silent-destroyer/tunic-randomizer-archipelago/releases/latest).
 
 The downloaded .zip will contain a folder called `Tunic Archipelago`.
 

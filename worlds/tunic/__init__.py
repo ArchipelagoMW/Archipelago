@@ -121,13 +121,13 @@ class TunicWorld(World):
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        for region_name in tunic_regions:
+        for region_name, exits in tunic_regions.items():
             region = self.multiworld.get_region(region_name, self.player)
-            region.add_exits(tunic_regions[region_name])
+            region.add_exits(exits)
 
-        for location_name in self.location_name_to_id:
+        for location_name, location_id in self.location_name_to_id.items():
             region = self.multiworld.get_region(location_table[location_name].region, self.player)
-            location = TunicLocation(self.player, location_name, self.location_name_to_id[location_name], region)
+            location = TunicLocation(self.player, location_name, location_id, region)
             region.locations.append(location)
 
         victory_region = self.multiworld.get_region("Spirit Arena", self.player)
