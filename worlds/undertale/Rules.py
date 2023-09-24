@@ -113,7 +113,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location("Hush Trade", player),
                  lambda state: state.can_reach("News Show", "Region", player) and state.has("Hot Dog...?", player, 1))
         set_rule(multiworld.get_location("Letter Quest", player),
-                 lambda state: state.can_reach("New Home Exit", "Entrance", player))
+                 lambda state: state.can_reach("New Home Exit", "Entrance", player) and state.has("Undyne Date", player))
     if (not _undertale_is_route(multiworld.state, player, 2)) or _undertale_is_route(multiworld.state, player, 3):
         set_rule(multiworld.get_location("Nicecream Punch Card", player),
                  lambda state: state.has("Punch Card", player, 3) and state.can_reach("Waterfall", "Region", player))
