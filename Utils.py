@@ -576,7 +576,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={suggest}",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -588,7 +588,10 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
@@ -601,13 +604,14 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
     if is_linux:
         # prefer native dialog
         from shutil import which
-        kdialog = None#which("kdialog")
+        kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
-        zenity = None#which("zenity")
+            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+                       os.path.abspath(suggest) if suggest else ".")
+        zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -619,7 +623,10 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
