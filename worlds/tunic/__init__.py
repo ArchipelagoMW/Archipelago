@@ -58,7 +58,7 @@ class TunicWorld(World):
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-        keys_beind_bosses = self.multiworld.keys_behind_bosses[self.player].value
+        keys_behind_bosses = self.multiworld.keys_behind_bosses[self.player].value
         hexagon_quest = self.multiworld.hexagon_quest[self.player].value
         sword_progression = self.multiworld.sword_progression[self.player].value
 
@@ -77,7 +77,7 @@ class TunicWorld(World):
         else:
             items_to_create["Sword Upgrade"] = 0
 
-        if keys_beind_bosses:
+        if keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if hexagon_quest else rgb_hexagon)
                 self.multiworld.get_location(location, self.player).place_locked_item(hex_item)
