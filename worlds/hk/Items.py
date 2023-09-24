@@ -52,7 +52,7 @@ item_name_groups = ({
     "CDash": {x + "Crystal_Heart" for x in directionals},
     "Fragments": {"Queen_Fragment", "King_Fragment", "Void_Heart"},
 })
-item_name_groups["BossEssence"].update({essence for essence in lookup_type_to_names["DreamBoss"]})
+item_name_groups["BossEssence"].update(lookup_type_to_names["DreamBoss"])
 item_name_groups.update({
 
 })
