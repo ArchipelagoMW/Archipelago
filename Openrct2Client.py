@@ -115,20 +115,24 @@ class OpenRCT2Socket:
             raise
         return None
 
-    
+
     def _send(self, data):
+        time.sleep(0.2)
         try:
             if data:
                 sock = self.game
-                sock.sendall(data)
-                print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
+                if sock:
+                    sock.sendall(data)
+                    print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
+                else:
+                    print("Aint no socks! You can't wear shoes!")
         except socket.timeout as e:
             print(e)
         except BlockingIOError as e:
             print(e)
 
     def sendobj(self, obj):
-        asyncio.run(self.connectgame())
+        # asyncio.run(self.connectgame())
         data = json.dumps(obj)
         data = data.encode()
         try:
@@ -172,6 +176,7 @@ class OpenRCT2Context(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
+        self.gamesock.sendobj(args)
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.game = ""
