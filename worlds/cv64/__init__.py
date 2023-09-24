@@ -537,7 +537,7 @@ class CV64World(World):
                         else:
                             shop_desc_list.append(["common", self.multiworld.get_player_name(loc.item.player)])
 
-                    shop_colors_list.append(get_item_text_color(loc, False))
+                    shop_colors_list.append(get_item_text_color(loc, True))
 
                 # Figure out the Countdown numbers here.
                 if loc.cv64_stage is not None:

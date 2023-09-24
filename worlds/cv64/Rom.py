@@ -206,6 +206,8 @@ renon_item_dialogue = {
           "brain spits on your ego.",
     0x0C: "It'd be a shame if you\n"
           "lost it immediately...",
+    0x10C: "No consequences should\n"
+           "you perish with this!",
     0x0D: "Arthur was far better\n"
           "with it than you!",
     0x0E: "Night Creatures handle\n"
@@ -261,7 +263,7 @@ renon_item_dialogue = {
     "common": "Every last little bit\n"
               "helps, right?",
     "trap":   "I'll teach this fool\n"
-              "a lesson for a price!"
+              " a lesson for a price!"
 }
 
 
@@ -1150,15 +1152,15 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def get_item_text_color(loc, trap_color: bool = True) -> list:
+def get_item_text_color(loc, shop_text: bool = False) -> list:
     if loc.item.advancement:
         return [0xA2, 0x0C]
     elif loc.item.classification == ItemClassification.useful:
         return [0xA2, 0x0A]
-    elif loc.item.classification == ItemClassification.trap and trap_color:
+    elif loc.item.classification == ItemClassification.trap:
         return [0xA2, 0x0B]
     else:
-        if trap_color:
-            return [0xA2, 0x02]
-        else:
+        if shop_text:
             return [0xA2, 0x00]
+        else:
+            return [0xA2, 0x02]
