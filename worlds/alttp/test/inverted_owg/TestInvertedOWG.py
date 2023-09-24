@@ -24,7 +24,7 @@ class TestInvertedOWG(TestBase):
         self.multiworld.set_options(args)
         self.multiworld.set_default_common_options()
         self.multiworld.logic[1] = "owglitches"
-        self.multiworld.mode[1] = "inverted"
+        self.multiworld.mode[1].value = 2
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()

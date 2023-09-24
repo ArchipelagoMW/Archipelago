@@ -21,17 +21,17 @@ def link_entrances(world, player):
         connect_simple(world, exitname, regionname, player)
 
     # if we do not shuffle, set default connections
-    if world.shuffle[player] == 'vanilla':
+    if world.entrance_shuffle[player] == 'vanilla':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
         for exitname, regionname in default_dungeon_connections:
             connect_simple(world, exitname, regionname, player)
-    elif world.shuffle[player] == 'dungeonssimple':
+    elif world.entrance_shuffle[player] == 'dungeonssimple':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
 
         simple_shuffle_dungeons(world, player)
-    elif world.shuffle[player] == 'dungeonsfull':
+    elif world.entrance_shuffle[player] == 'dungeonsfull':
         for exitname, regionname in default_connections:
             connect_simple(world, exitname, regionname, player)
 
@@ -63,9 +63,9 @@ def link_entrances(world, player):
             connect_mandatory_exits(world, lw_entrances, dungeon_exits, list(LW_Dungeon_Entrances_Must_Exit), player)
         connect_mandatory_exits(world, dw_entrances, dungeon_exits, list(DW_Dungeon_Entrances_Must_Exit), player)
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
-    elif world.shuffle[player] == 'dungeonscrossed':
+    elif world.entrance_shuffle[player] == 'dungeonscrossed':
         crossed_shuffle_dungeons(world, player)
-    elif world.shuffle[player] == 'simple':
+    elif world.entrance_shuffle[player] == 'simple':
         simple_shuffle_dungeons(world, player)
 
         old_man_entrances = list(Old_Man_Entrances)
@@ -136,7 +136,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
-    elif world.shuffle[player] == 'restricted':
+    elif world.entrance_shuffle[player] == 'restricted':
         simple_shuffle_dungeons(world, player)
 
         lw_entrances = list(LW_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
@@ -207,7 +207,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
-    elif world.shuffle[player] == 'restricted_legacy':
+    elif world.entrance_shuffle[player] == 'restricted_legacy':
         simple_shuffle_dungeons(world, player)
 
         lw_entrances = list(LW_Entrances)
@@ -262,7 +262,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
-    elif world.shuffle[player] == 'full':
+    elif world.entrance_shuffle[player] == 'full':
         skull_woods_shuffle(world, player)
 
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances)
@@ -368,7 +368,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
-    elif world.shuffle[player] == 'crossed':
+    elif world.entrance_shuffle[player] == 'crossed':
         skull_woods_shuffle(world, player)
 
         entrances = list(LW_Entrances + LW_Dungeon_Entrances + LW_Single_Cave_Doors + Old_Man_Entrances + DW_Entrances + DW_Dungeon_Entrances + DW_Single_Cave_Doors)
@@ -445,7 +445,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, entrances, door_targets, player)
-    elif world.shuffle[player] == 'full_legacy':
+    elif world.entrance_shuffle[player] == 'full_legacy':
         skull_woods_shuffle(world, player)
 
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + Old_Man_Entrances)
@@ -522,7 +522,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
-    elif world.shuffle[player] == 'madness_legacy':
+    elif world.entrance_shuffle[player] == 'madness_legacy':
         # here lie dragons, connections are no longer two way
         lw_entrances = list(LW_Entrances + LW_Dungeon_Entrances + Old_Man_Entrances)
         dw_entrances = list(DW_Entrances + DW_Dungeon_Entrances)
@@ -775,7 +775,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
-    elif world.shuffle[player] == 'insanity':
+    elif world.entrance_shuffle[player] == 'insanity':
         # beware ye who enter here
 
         entrances = LW_Entrances + LW_Dungeon_Entrances + DW_Entrances + DW_Dungeon_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave']
@@ -922,7 +922,7 @@ def link_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
-    elif world.shuffle[player] == 'insanity_legacy':
+    elif world.entrance_shuffle[player] == 'insanity_legacy':
         world.fix_fake_world[player] = False
         # beware ye who enter here
 
@@ -1067,7 +1067,7 @@ def link_entrances(world, player):
         connect_doors(world, single_doors, door_targets, player)
     else:
         raise NotImplementedError(
-            f'{world.shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
+            f'{world.entrance_shuffle[player]} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
     if world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']:
         overworld_glitch_connections(world, player)
@@ -1106,17 +1106,17 @@ def link_inverted_entrances(world, player):
         connect_simple(world, exitname, regionname, player)
 
     # if we do not shuffle, set default connections
-    if world.shuffle[player] == 'vanilla':
+    if world.entrance_shuffle[player] == 'vanilla':
         for exitname, regionname in inverted_default_connections:
             connect_simple(world, exitname, regionname, player)
         for exitname, regionname in inverted_default_dungeon_connections:
             connect_simple(world, exitname, regionname, player)
-    elif world.shuffle[player] == 'dungeonssimple':
+    elif world.entrance_shuffle[player] == 'dungeonssimple':
         for exitname, regionname in inverted_default_connections:
             connect_simple(world, exitname, regionname, player)
 
         simple_shuffle_dungeons(world, player)
-    elif world.shuffle[player] == 'dungeonsfull':
+    elif world.entrance_shuffle[player] == 'dungeonsfull':
         for exitname, regionname in inverted_default_connections:
             connect_simple(world, exitname, regionname, player)
 
@@ -1171,9 +1171,9 @@ def link_inverted_entrances(world, player):
         connect_mandatory_exits(world, lw_entrances, dungeon_exits, lw_dungeon_entrances_must_exit, player)
 
         connect_caves(world, lw_entrances, dw_entrances, dungeon_exits, player)
-    elif world.shuffle[player] == 'dungeonscrossed':
+    elif world.entrance_shuffle[player] == 'dungeonscrossed':
         inverted_crossed_shuffle_dungeons(world, player)
-    elif world.shuffle[player] == 'simple':
+    elif world.entrance_shuffle[player] == 'simple':
         simple_shuffle_dungeons(world, player)
 
         old_man_entrances = list(Inverted_Old_Man_Entrances)
@@ -1270,7 +1270,7 @@ def link_inverted_entrances(world, player):
         # place remaining doors
         connect_doors(world, single_doors, door_targets, player)
     
-    elif world.shuffle[player] == 'restricted':
+    elif world.entrance_shuffle[player] == 'restricted':
         simple_shuffle_dungeons(world, player)
 
         lw_entrances = list(Inverted_LW_Entrances + Inverted_LW_Single_Cave_Doors)
@@ -1355,7 +1355,7 @@ def link_inverted_entrances(world, player):
         doors = lw_entrances + dw_entrances
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
-    elif world.shuffle[player] == 'full':
+    elif world.entrance_shuffle[player] == 'full':
         skull_woods_shuffle(world, player)
 
         lw_entrances = list(Inverted_LW_Entrances + Inverted_LW_Dungeon_Entrances + Inverted_LW_Single_Cave_Doors)
@@ -1506,7 +1506,7 @@ def link_inverted_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, doors, door_targets, player)
-    elif world.shuffle[player] == 'crossed':
+    elif world.entrance_shuffle[player] == 'crossed':
         skull_woods_shuffle(world, player)
 
         entrances = list(Inverted_LW_Entrances + Inverted_LW_Dungeon_Entrances + Inverted_LW_Single_Cave_Doors + Inverted_Old_Man_Entrances + Inverted_DW_Entrances + Inverted_DW_Dungeon_Entrances + Inverted_DW_Single_Cave_Doors)
@@ -1617,7 +1617,7 @@ def link_inverted_entrances(world, player):
 
         # place remaining doors
         connect_doors(world, entrances, door_targets, player)
-    elif world.shuffle[player] == 'insanity':
+    elif world.entrance_shuffle[player] == 'insanity':
         # beware ye who enter here
 
         entrances = Inverted_LW_Entrances + Inverted_LW_Dungeon_Entrances + Inverted_DW_Entrances + Inverted_DW_Dungeon_Entrances + Inverted_Old_Man_Entrances + Old_Man_Entrances + ['Skull Woods Second Section Door (East)', 'Skull Woods Second Section Door (West)', 'Skull Woods First Section Door', 'Kakariko Well Cave', 'Bat Cave Cave', 'North Fairy Cave', 'Sanctuary', 'Lost Woods Hideout Stump', 'Lumberjack Tree Cave', 'Hyrule Castle Entrance (South)']
@@ -1880,14 +1880,14 @@ def scramble_holes(world, player):
         hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
 
     # do not shuffle sanctuary into pyramid hole unless shuffle is crossed
-    if world.shuffle[player] == 'crossed':
+    if world.entrance_shuffle[player] == 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
     if world.shuffle_ganon:
         world.random.shuffle(hole_targets)
         exit, target = hole_targets.pop()
         connect_two_way(world, 'Pyramid Entrance', exit, player)
         connect_entrance(world, 'Pyramid Hole', target, player)
-    if world.shuffle[player] != 'crossed':
+    if world.entrance_shuffle[player] != 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
     world.random.shuffle(hole_targets)
@@ -1922,14 +1922,14 @@ def scramble_inverted_holes(world, player):
     hole_targets.append(('Hyrule Castle Secret Entrance Exit', 'Hyrule Castle Secret Entrance'))
 
     # do not shuffle sanctuary into pyramid hole unless shuffle is crossed
-    if world.shuffle[player] == 'crossed':
+    if world.entrance_shuffle[player] == 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
     if world.shuffle_ganon:
         world.random.shuffle(hole_targets)
         exit, target = hole_targets.pop()
         connect_two_way(world, 'Inverted Pyramid Entrance', exit, player)
         connect_entrance(world, 'Inverted Pyramid Hole', target, player)
-    if world.shuffle[player] != 'crossed':
+    if world.entrance_shuffle[player] != 'crossed':
         hole_targets.append(('Sanctuary Exit', 'Sewer Drop'))
 
     world.random.shuffle(hole_targets)
@@ -3054,6 +3054,8 @@ mandatory_connections = [('Links House S&Q', 'Links House'),
                          ('Spiral Cave Ledge Access', 'Spiral Cave Ledge'),
                          ('Spiral Cave Ledge Drop', 'East Death Mountain (Bottom)'),
                          ('Spiral Cave (top to bottom)', 'Spiral Cave (Bottom)'),
+                         ('Hookshot Cave Bomb Wall (South)', 'Hookshot Cave (Upper)'),
+                         ('Hookshot Cave Bomb Wall (North)', 'Hookshot Cave'),
                          ('East Death Mountain (Top)', 'East Death Mountain (Top)'),
                          ('Death Mountain (Top)', 'Death Mountain (Top)'),
                          ('Death Mountain Drop', 'Death Mountain'),
@@ -3574,7 +3576,7 @@ default_connections = [('Waterfall of Wishing', 'Waterfall of Wishing'),
                        ('Superbunny Cave Exit (Bottom)', 'Dark Death Mountain (East Bottom)'),
                        ('Hookshot Cave Exit (South)', 'Dark Death Mountain (Top)'),
                        ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island (Dark World)'),
-                       ('Hookshot Cave Back Entrance', 'Hookshot Cave'),
+                       ('Hookshot Cave Back Entrance', 'Hookshot Cave (Upper)'),
                        ('Mimic Cave', 'Mimic Cave'),
 
                        ('Pyramid Hole', 'Pyramid'),
@@ -3705,7 +3707,7 @@ inverted_default_connections =  [('Waterfall of Wishing', 'Waterfall of Wishing'
                                  ('Superbunny Cave (Bottom)', 'Superbunny Cave (Bottom)'),
                                  ('Superbunny Cave Exit (Bottom)', 'Dark Death Mountain (East Bottom)'),
                                  ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island (Dark World)'),
-                                 ('Hookshot Cave Back Entrance', 'Hookshot Cave'),
+                                 ('Hookshot Cave Back Entrance', 'Hookshot Cave (Upper)'),
                                  ('Mimic Cave', 'Mimic Cave'),
                                  ('Inverted Pyramid Hole', 'Pyramid'),
                                  ('Inverted Links House', 'Inverted Links House'),

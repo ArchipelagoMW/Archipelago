@@ -41,10 +41,9 @@ class TestDungeons(TestVanillaOWG):
 
             ["Castle Tower - Room 03", False, []],
             ["Castle Tower - Room 03", False, ['Progressive Sword'], ['Progressive Sword', 'Cape', 'Beat Agahnim 1']],
-            ["Castle Tower - Room 03", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
             ["Castle Tower - Room 03", True, ['Progressive Sword', 'Progressive Sword']],
-            ["Castle Tower - Room 03", True, ['Cape', 'Progressive Bow']],
-            ["Castle Tower - Room 03", True, ['Beat Agahnim 1', 'Fire Rod']],
+            ["Castle Tower - Room 03", True, ['Cape']],
+            ["Castle Tower - Room 03", True, ['Beat Agahnim 1']],
 
             ["Palace of Darkness - Shooter Room", False, []],
             ["Palace of Darkness - Shooter Room", False, [], ['Moon Pearl']],

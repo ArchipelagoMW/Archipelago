@@ -96,8 +96,11 @@ def can_deal_class_4_damage(state: CollectionState, player: int) -> bool:
     return state.has("Tempered Sword", player) or state.has("Golden Sword", player)
 
 
-def can_use_bombs(state: CollectionState, player: int) -> bool:
-    return True
+def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
+    bombs = 0 if state.multiworld.bombless_start[player] else 10
+    bombs += min(((state.count("Bomb Upgrade (+5)", player) * 5) + (state.count("Bomb Upgrade (+10)", player) * 10)
+                  + (state.count("Bomb Upgrade (50)", player) * 50)), 50)
+    return bombs >= quantity
 
 
 def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
@@ -118,7 +121,7 @@ def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) 
             or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
             or can_shoot_arrows(state, player)
             or state.has('Fire Rod', player)
-            or (state.has('Bombs (10)', player) and enemies < 6))
+            or can_use_bombs(state, player, enemies))
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:

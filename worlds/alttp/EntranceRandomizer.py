@@ -49,7 +49,7 @@ def parse_arguments(argv, no_defaults=False):
                                         instead of a bunny.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
-                        choices=['ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
+                        choices=['ganon', 'pedestal', 'bosses', 'triforce_hunt', 'local_triforce_hunt', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'crystals', 'ganon_pedestal'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -92,7 +92,7 @@ def parse_arguments(argv, no_defaults=False):
                              Hard:            Reduced functionality.
                              Expert:          Greatly reduced functionality.
                                   ''')
-    parser.add_argument('--timer', default=defval('none'), const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
+    parser.add_argument('--timer', default=defval('none'), const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
                              None:            No timer.
@@ -178,7 +178,7 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--open_pyramid', default=defval('auto'), help='''\
                             Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it.
                             Depending on goal, you might still need to beat Agahnim 2 in order to beat ganon.
-                            fast ganon goals are crystals, ganontriforcehunt, localganontriforcehunt, pedestalganon
+                            fast ganon goals are crystals, ganon_triforce_hunt, local_ganon_triforce_hunt, pedestalganon
                             auto - Only opens pyramid hole if the goal specifies a fast ganon, and entrance shuffle
                                    is vanilla, dungeonssimple or dungeonsfull.
                             goal - Opens pyramid hole if the goal specifies a fast ganon.
