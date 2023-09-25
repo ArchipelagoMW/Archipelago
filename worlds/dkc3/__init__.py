@@ -216,5 +216,8 @@ class DKC3World(World):
 
         return created_item
 
+    def get_filler_item_name(self) -> str:
+        return self.multiworld.random.choice(list(junk_table.keys()))
+
     def set_rules(self):
         set_rules(self.multiworld, self.player)

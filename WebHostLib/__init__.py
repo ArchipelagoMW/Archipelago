@@ -49,11 +49,11 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
-app.config["CACHE_TYPE"] = "flask_caching.backends.SimpleCache"
+app.config["CACHE_TYPE"] = "SimpleCache"
 app.config["JSON_AS_ASCII"] = False
 app.config["HOST_ADDRESS"] = ""
 
-cache = Cache(app)
+cache = Cache()
 Compress(app)
 
 

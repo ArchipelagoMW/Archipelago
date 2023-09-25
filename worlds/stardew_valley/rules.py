@@ -5,15 +5,14 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
-from .data.crops_data import crops_by_name
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
     DeepWoodsEntrance, AlecEntrance, MagicEntrance
-from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
+from .data.museum_data import all_museum_items, all_museum_minerals, all_museum_artifacts, \
     dwarf_scrolls, skeleton_front, \
-    skeleton_middle, skeleton_back, all_museum_items_by_name
+    skeleton_middle, skeleton_back, all_museum_items_by_name, Artifact
 from .strings.region_names import Region
 from .mods.mod_data import ModNames
-from .mods.logic import magic, skills, deepwoods
+from .mods.logic import magic, deepwoods
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_upgrade_prices
 from .options import StardewOptions
@@ -23,7 +22,6 @@ from .strings.calendar_names import Weekday
 from .strings.craftable_names import Craftable
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
-from .strings.spells import MagicSpell
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.villager_names import NPC, ModNPC
@@ -357,25 +355,51 @@ def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, 
             MultiWorldRules.set_rule(multi_world.get_location(qi_order.name, player), order_rule.simplify())
 
 
-def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world_options):
-    desired_number_help_wanted: int = world_options[options.HelpWantedLocations] // 7
-    for i in range(0, desired_number_help_wanted):
-        prefix = "Help Wanted:"
-        delivery = "Item Delivery"
-        rule = logic.has_lived_months(i).simplify()
-        fishing_rule = rule & logic.can_fish()
-        slay_rule = rule & logic.can_do_combat_at_level("Basic")
-        item_delivery_index = (i * 4) + 1
-        for j in range(item_delivery_index, item_delivery_index + 4):
-            location_name = f"{prefix} {delivery} {j}"
-            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule)
+help_wanted_prefix = "Help Wanted:"
+item_delivery = "Item Delivery"
+gathering = "Gathering"
+fishing = "Fishing"
+slay_monsters = "Slay Monsters"
 
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i + 1}", player),
-                                 rule)
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i + 1}", player),
-                                 fishing_rule.simplify())
-        MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i + 1}", player),
-                                 slay_rule.simplify())
+
+def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world_options):
+    help_wanted_number = world_options[options.HelpWantedLocations]
+    for i in range(0, help_wanted_number):
+        set_number = i // 7
+        month_rule = logic.has_lived_months(set_number).simplify()
+        quest_number = set_number + 1
+        quest_number_in_set = i % 7
+        if quest_number_in_set < 4:
+            quest_number = set_number * 4 + quest_number_in_set + 1
+            set_help_wanted_delivery_rule(multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 4:
+            set_help_wanted_fishing_rule(logic, multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 5:
+            set_help_wanted_slay_monsters_rule(logic, multi_world, player, month_rule, quest_number)
+        elif quest_number_in_set == 6:
+            set_help_wanted_gathering_rule(multi_world, player, month_rule, quest_number)
+
+
+def set_help_wanted_delivery_rule(multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {item_delivery} {quest_number}"
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), month_rule)
+
+
+def set_help_wanted_gathering_rule(multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {gathering} {quest_number}"
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), month_rule)
+
+
+def set_help_wanted_fishing_rule(logic: StardewLogic, multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {fishing} {quest_number}"
+    fishing_rule = month_rule & logic.can_fish()
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), fishing_rule.simplify())
+
+
+def set_help_wanted_slay_monsters_rule(logic: StardewLogic, multi_world, player, month_rule, quest_number):
+    location_name = f"{help_wanted_prefix} {slay_monsters} {quest_number}"
+    slay_rule = month_rule & logic.can_do_combat_at_level("Basic")
+    MultiWorldRules.set_rule(multi_world.get_location(location_name, player), slay_rule.simplify())
 
 
 def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, multi_world: MultiWorld, player: int):
@@ -406,7 +430,7 @@ def set_museum_individual_donations_rules(all_location_names, logic: StardewLogi
         if museum_location.name in all_location_names:
             donation_name = museum_location.name[len(museum_prefix):]
             required_detectors = counter * 5 // number_donations
-            rule = logic.has(donation_name) & logic.received("Traveling Merchant Metal Detector", required_detectors)
+            rule = logic.can_donate_museum_item(all_museum_items_by_name[donation_name]) & logic.received("Traveling Merchant Metal Detector", required_detectors)
             MultiWorldRules.set_rule(multi_world.get_location(museum_location.name, player),
                                      rule.simplify())
         counter += 1
@@ -421,31 +445,31 @@ def set_museum_milestone_rule(logic: StardewLogic, multi_world: MultiWorld, muse
     metal_detector = "Traveling Merchant Metal Detector"
     rule = None
     if milestone_name.endswith(donations_suffix):
-        rule = get_museum_item_count_rule(logic, donations_suffix, milestone_name, all_museum_items)
+        rule = get_museum_item_count_rule(logic, donations_suffix, milestone_name, all_museum_items, logic.can_donate_museum_items)
     elif milestone_name.endswith(minerals_suffix):
-        rule = get_museum_item_count_rule(logic, minerals_suffix, milestone_name, all_mineral_items)
+        rule = get_museum_item_count_rule(logic, minerals_suffix, milestone_name, all_museum_minerals, logic.can_donate_museum_minerals)
     elif milestone_name.endswith(artifacts_suffix):
-        rule = get_museum_item_count_rule(logic, artifacts_suffix, milestone_name, all_artifact_items)
+        rule = get_museum_item_count_rule(logic, artifacts_suffix, milestone_name, all_museum_artifacts, logic.can_donate_museum_artifacts)
     elif milestone_name == "Dwarf Scrolls":
-        rule = logic.has([item.name for item in dwarf_scrolls]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_donate_museum_item(item) for item in dwarf_scrolls]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Front":
-        rule = logic.has([item.name for item in skeleton_front]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_donate_museum_item(item) for item in skeleton_front]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Middle":
-        rule = logic.has([item.name for item in skeleton_middle]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_donate_museum_item(item) for item in skeleton_middle]) & logic.received(metal_detector, 4)
     elif milestone_name == "Skeleton Back":
-        rule = logic.has([item.name for item in skeleton_back]) & logic.received(metal_detector, 4)
+        rule = And([logic.can_donate_museum_item(item) for item in skeleton_back]) & logic.received(metal_detector, 4)
     elif milestone_name == "Ancient Seed":
-        rule = logic.has("Ancient Seed") & logic.received(metal_detector, 4)
+        rule = logic.can_donate_museum_item(Artifact.ancient_seed) & logic.received(metal_detector, 4)
     if rule is None:
         return
     MultiWorldRules.set_rule(multi_world.get_location(museum_milestone.name, player), rule.simplify())
 
 
-def get_museum_item_count_rule(logic: StardewLogic, suffix, milestone_name, accepted_items):
+def get_museum_item_count_rule(logic: StardewLogic, suffix, milestone_name, accepted_items, donation_func):
     metal_detector = "Traveling Merchant Metal Detector"
     num = int(milestone_name[:milestone_name.index(suffix)])
     required_detectors = (num - 1) * 5 // len(accepted_items)
-    rule = logic.has([item.name for item in accepted_items], num) & logic.received(metal_detector, required_detectors)
+    rule = donation_func(num) & logic.received(metal_detector, required_detectors)
     return rule
 
 

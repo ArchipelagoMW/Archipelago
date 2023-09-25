@@ -14,6 +14,7 @@ import collections
 import importlib
 import logging
 
+from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 from yaml import load, load_all, dump, SafeLoader
@@ -43,7 +44,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -318,10 +319,25 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+def get_default_adjuster_settings(game_name: str) -> Namespace:
+    import LttPAdjuster
+    adjuster_settings = Namespace()
+    if game_name == LttPAdjuster.GAME_ALTTP:
+        return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
 
-def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
-    adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
     return adjuster_settings
+
+
+def get_adjuster_settings_no_defaults(game_name: str) -> Namespace:
+    return persistent_load().get("adjuster", {}).get(game_name, Namespace())
+
+
+def get_adjuster_settings(game_name: str) -> Namespace:
+    adjuster_settings = get_adjuster_settings_no_defaults(game_name)
+    default_settings = get_default_adjuster_settings(game_name)
+
+    # Fill in any arguments from the argparser that we haven't seen before
+    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
 
 
 @cache_argsless
@@ -343,11 +359,13 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
+    generic_properties_module: Optional[object]
+
     def __init__(self, *args, **kwargs):
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
-        self.generic_properties_module = importlib.import_module("worlds.generic")
+        self.generic_properties_module = None
 
     def find_class(self, module, name):
         if module == "builtins" and name in safe_builtins:
@@ -357,6 +375,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+            if not self.generic_properties_module:
+                self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
         if module.lower().endswith("options"):
@@ -556,7 +576,7 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={suggest}",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -568,7 +588,10 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
@@ -581,13 +604,14 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
     if is_linux:
         # prefer native dialog
         from shutil import which
-        kdialog = None#which("kdialog")
+        kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory", suggest or ".")
-        zenity = None#which("zenity")
+            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+                       os.path.abspath(suggest) if suggest else ".")
+        zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
-            selection = (f'--filename="{suggest}',) if suggest else ()
+            selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
             return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
@@ -599,7 +623,10 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
-        root = tkinter.Tk()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
         return tkinter.filedialog.askdirectory(title=title, mustexist=True, initialdir=suggest or None)
 
