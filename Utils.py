@@ -656,6 +656,11 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         if zenity:
             return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
+    elif is_windows:
+        import ctypes
+        style = 0x10 if error else 0x0
+        return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    
     # fall back to tk
     try:
         import tkinter
