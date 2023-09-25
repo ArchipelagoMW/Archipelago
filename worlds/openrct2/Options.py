@@ -157,6 +157,11 @@ class DeathLinkMode(IntEnum):
     disabled = 0
     enabled = 1
 
+class Visibility(IntEnum):
+    nothing = 0
+    recipient = 1
+    full = 2
+
 class Difficulty(IntEnum):
     very_easy = 0
     easy = 1
@@ -377,6 +382,22 @@ class DeathLink(Choice):
     option_enabled = DeathLinkMode.enabled.value
     default = DeathLinkMode.enabled.value
 
+class Visibility(Choice):
+    """Choose how much the unlock shop displays. 
+
+    "Nothing" tells you nothing about the item you'll purchase. 
+    
+    Recipient tells you who will recieve the item, but not what they'll receive. 
+    
+    Full tells you what you're buying and who recieves it.
+    """
+    auto_display_name = True
+    display_name = "Visibility"
+    option_nothing = Visibility.nothing.value
+    option_recipient = Visibility.recipient.value
+    option_full = Visibility.full.value
+    default = Visibility.recipient.value
+
 class Difficulty(Choice):
     """Choose a difficulty for the randomization. This will affect things such as ride multipliers and interest rates for loans.
     """
@@ -556,6 +577,7 @@ openRCT2_options = {
     "stat_rerolls": Stat_ReRolls,
     "include_park_rules": Include_Park_Rules,
     "randomize_park_values": Randomize_Park_Values,
+    "visibility": Visibility,
     # "include_guest_objective": Include_Guest_Objective,
     "guest_objective": Guest_Objective,
     # "include_park_value_objective": Include_Park_Value_Objective,

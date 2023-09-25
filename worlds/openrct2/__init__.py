@@ -317,6 +317,7 @@ class OpenRCT2World(World):
         monopoly = self.multiworld.monopoly_mode[self.player].value
         objectives = {"Guests": [guests, False], "ParkValue":[park_value, False], "RollerCoasters": [roller_coasters,excitement,intensity,nausea,0,False], "RideIncome": [0,False], "ShopIncome": [0,False], "ParkRating": [park_rating, False], "LoanPaidOff": [pay_off_loan, False], "Monopoly": [monopoly, False]}
         print(objectives)
+        print(self.item_id_to_name)
         return {
             "difficulty": self.multiworld.difficulty[self.player].value,
             "scenario_length": self.multiworld.scenario_length[self.player].value,
@@ -324,7 +325,8 @@ class OpenRCT2World(World):
             "death_link": self.multiworld.deathlink[self.player].value,
             "randomization_range": self.multiworld.randomization_range[self.player].value,
             "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
-            "randomize_park_values": self.multiworld.randomize_park_values[self.player].value
+            "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
+            "visibility": self.multiworld.visibility[self.player].value
         }
 
     def create_item(self, item:str) -> OpenRCT2Item:

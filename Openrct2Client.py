@@ -104,6 +104,11 @@ class OpenRCT2Socket:
             data = sock.recv(16384)
             if data:
                 print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
+                data = data.rstrip(b'\x00')#Strip the terminator from string
+                data = data.decode('UTF-8')
+                # data = json.dumps(data)
+                data = [json.loads(data)]
+                print(data)
                 self.disconnectgame()
             return data
         except socket.timeout as e:
@@ -124,8 +129,6 @@ class OpenRCT2Socket:
                 if sock:
                     sock.sendall(data)
                     print('sent', len(data), 'bytes to', sock.getsockname(), '->', sock.getpeername(),':\n', data)
-                else:
-                    print("Aint no socks! You can't wear shoes!")
         except socket.timeout as e:
             print(e)
         except BlockingIOError as e:
@@ -148,7 +151,8 @@ class OpenRCT2Socket:
         try:
             data = self.recv()
             if data:
-                await self.ctx.send_death('Some death message')
+                await self.ctx.send_msgs(data)
+                #await self.ctx.send_death('Some death message')
         except Exception as e:
             print('error receiving from game', e)
             #self.connectgame()
@@ -158,7 +162,7 @@ class OpenRCT2Socket:
 
 class OpenRCT2Context(CommonContext):
     # Text Mode to use !hint and such with games that have no text entry
-    tags = {"AP", "TextOnly"}
+    tags = {"AP", "TextOnly", "DeathLink"}
     game = ""  # empty matches any game since 0.3.2
     items_handling = 0b111  # receive all items for /received
     want_slot_data = False  # Can't use game specific slot_data
