@@ -68,7 +68,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
         candidate_missions = [mission for mission in candidate_missions if mission.mission_name not in excluded_missions]
         if len(candidate_missions) == 0:
-            raise Exception("There are no valid gaol missions.  Please exclude fewer missions.")
+            raise Exception("There are no valid goal missions.  Please exclude fewer missions.")
         goal_mission = multiworld.random.choice(candidate_missions).mission_name
     else:
         goal_mission = primary_goal.mission
