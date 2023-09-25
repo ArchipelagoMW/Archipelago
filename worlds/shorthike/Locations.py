@@ -9,9 +9,9 @@ class LocationInfo(TypedDict):
     purchase: bool
     chestAngle: int
 
-# base_ids from 81000 to 81132
+# base_ids from 83000 to 83132
 
-base_id = 81000
+base_id = 83000
 
 location_table: List[LocationInfo] = [
     # Original Seashell Locations
