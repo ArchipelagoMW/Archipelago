@@ -11,6 +11,7 @@ import socket
 import threading
 import time
 import typing
+import sys
 
 import websockets
 from pony.orm import commit, db_session, select
@@ -164,10 +165,10 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     db.generate_mapping(check_tables=False)
 
     async def main():
+        if "worlds" in sys.modules:
+            raise Exception("Worlds system should not be loaded in the custom server.")
+
         import gc
-        if __debug__:
-            import sys
-            assert "worlds" not in sys.modules, "Worlds system should not be loaded in the custom server."
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
