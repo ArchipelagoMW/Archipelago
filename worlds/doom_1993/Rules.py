@@ -50,9 +50,6 @@ def set_episode1_rules(player, world):
     set_rule(world.get_entrance("Command Control (E1M4) Blue -> Command Control (E1M4) Main", player), lambda state:
         state.has("Command Control (E1M4) - Yellow keycard", player, 1) or
         state.has("Command Control (E1M4) - Blue keycard", player, 1))
-    set_rule(world.get_entrance("Command Control (E1M4) Yellow -> Command Control (E1M4) Main", player), lambda state:
-        state.has("Command Control (E1M4) - Yellow keycard", player, 1) or
-        state.has("Command Control (E1M4) - Blue keycard", player, 1))
 
     # Phobos Lab (E1M5)
     set_rule(world.get_entrance("Hub -> Phobos Lab (E1M5) Main", player), lambda state:
@@ -354,8 +351,12 @@ def set_episode3_rules(player, world):
         state.has("Limbo (E3M7) - Red skull key", player, 1))
     set_rule(world.get_entrance("Limbo (E3M7) Main -> Limbo (E3M7) Blue", player), lambda state:
         state.has("Limbo (E3M7) - Blue skull key", player, 1))
+    set_rule(world.get_entrance("Limbo (E3M7) Main -> Limbo (E3M7) Pink", player), lambda state:
+        state.has("Limbo (E3M7) - Blue skull key", player, 1))
     set_rule(world.get_entrance("Limbo (E3M7) Red -> Limbo (E3M7) Yellow", player), lambda state:
         state.has("Limbo (E3M7) - Yellow skull key", player, 1))
+    set_rule(world.get_entrance("Limbo (E3M7) Pink -> Limbo (E3M7) Green", player), lambda state:
+        state.has("Limbo (E3M7) - Red skull key", player, 1))
 
     # Dis (E3M8)
     set_rule(world.get_entrance("Hub -> Dis (E3M8) Main", player), lambda state:
@@ -466,12 +467,10 @@ def set_episode4_rules(player, world):
         state.has("BFG9000", player, 1)))
     set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Main -> Against Thee Wickedly (E4M6) Blue", player), lambda state:
         state.has("Against Thee Wickedly (E4M6) - Blue skull key", player, 1))
-    set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Main -> Against Thee Wickedly (E4M6) Yellow", player), lambda state:
+    set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Blue -> Against Thee Wickedly (E4M6) Yellow", player), lambda state:
         state.has("Against Thee Wickedly (E4M6) - Yellow skull key", player, 1))
-    set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Main -> Against Thee Wickedly (E4M6) Red", player), lambda state:
+    set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Blue -> Against Thee Wickedly (E4M6) Red", player), lambda state:
         state.has("Against Thee Wickedly (E4M6) - Red skull key", player, 1))
-    set_rule(world.get_entrance("Against Thee Wickedly (E4M6) Blue -> Against Thee Wickedly (E4M6) Main", player), lambda state:
-        state.has("Against Thee Wickedly (E4M6) - Blue skull key", player, 1))
 
     # And Hell Followed (E4M7)
     set_rule(world.get_entrance("Hub -> And Hell Followed (E4M7) Main", player), lambda state:
