@@ -165,7 +165,9 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
 
     async def main():
         import gc
-
+        if __debug__:
+            import sys
+            assert "worlds" not in sys.modules, "Worlds system should not be loaded in the custom server."
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
