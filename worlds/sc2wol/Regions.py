@@ -1,15 +1,16 @@
-from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, SupportsIndex
+from typing import List, Dict, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .Options import get_option_value, MissionOrder, get_enabled_campaigns, campaign_depending_orders
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
-    MissionPools, SC2Campaign, lookup_name_to_mission, get_goal_location, SC2Mission, MissionConnection
+    MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
 
 
 class SC2MissionSlot(NamedTuple):
     campaign: SC2Campaign
     slot: MissionPools | SC2Mission | None
+
 
 def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location])\
         -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
@@ -20,8 +21,8 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     shuffle_campaigns = get_option_value(multiworld, player, "shuffle_campaigns")
 
-    mission_pools = filter_missions(multiworld, player)
-    final_mission = lookup_name_to_mission[mission_pools[MissionPools.FINAL][0]]
+    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(multiworld, player)
+    final_mission = mission_pools[MissionPools.FINAL][0]
 
     regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
 
@@ -119,7 +120,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
         if mission_order_type in campaign_depending_orders:
             # Do slot removal per campaign
             for campaign in enabled_campaigns:
-                campaign_mission_pool = [mission for mission in mission_pool if lookup_name_to_mission[mission].campaign == campaign]
+                campaign_mission_pool = [mission for mission in mission_pool if mission.campaign == campaign]
                 campaign_mission_pool_size = len(campaign_mission_pool)
 
                 removals = len(mission_order[campaign]) - campaign_mission_pool_size
@@ -134,7 +135,7 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
                             mission_slots.append(SC2MissionSlot(campaign, final_mission))
                         else:
                             # Not the goal, find the most difficult mission in the pool and set the difficulty
-                            campaign_difficulty = max(lookup_name_to_mission[mission].pool for mission in campaign_mission_pool)
+                            campaign_difficulty = max(mission.pool for mission in campaign_mission_pool)
                             mission_slots.append(SC2MissionSlot(campaign, campaign_difficulty))
                     else:
                         mission_slots.append(SC2MissionSlot(campaign, mission.type))
@@ -183,20 +184,20 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             if shuffle_campaigns or mission_order not in campaign_depending_orders:
                 # Pick a mission from any campaign
                 filler = multiworld.random.randint(0, len(missions_to_add) - 1)
-                mission = lookup_name_to_mission[missions_to_add.pop(filler)]
+                mission = missions_to_add.pop(filler)
                 slot_campaign = mission_slots[slot].campaign
                 mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
             else:
                 # Pick a mission from required campaign
                 slot_campaign = mission_slots[slot].campaign
-                candidate_missions = [lookup_name_to_mission[mission_name] for mission_name in missions_to_add]
+                candidate_missions = [mission_name for mission_name in missions_to_add]
                 campaign_mission_candidates = [mission for mission in candidate_missions if mission.campaign == slot_campaign]
                 filler = multiworld.random.randint(0, len(campaign_mission_candidates) - 1)
-                mission = lookup_name_to_mission[missions_to_add.pop(filler)]
+                mission = missions_to_add.pop(filler)
                 mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
 
         # Add no_build missions to the pool and fill in no_build slots
-        missions_to_add = mission_pools[MissionPools.STARTER]
+        missions_to_add: List[SC2Mission] = mission_pools[MissionPools.STARTER]
         if len(no_build_slots) > len(missions_to_add):
             raise Exception("There are no valid No-Build missions.  Please exclude fewer missions.")
         for slot in no_build_slots:
@@ -351,8 +352,8 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
 
 def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
-    sourceRegion = world.get_region(source, player)
-    targetRegion = world.get_region(target, player)
+    source_region = world.get_region(source, player)
+    target_region = world.get_region(target, player)
 
     if target not in used_names:
         used_names[target] = 1
@@ -361,13 +362,13 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
         used_names[target] += 1
         name = target + (' ' * used_names[target])
 
-    connection = Entrance(player, name, sourceRegion)
+    connection = Entrance(player, name, source_region)
 
     if rule:
         connection.access_rule = rule
 
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    source_region.exits.append(connection)
+    connection.connect(target_region)
 
 
 def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:

@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
 from .MissionTables import mission_orders, MissionInfo, MissionPools, get_campaign_missions, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    get_missions_by_pool, get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority
+    get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns
 from .LogicMixin import SC2WoLLogic
@@ -21,7 +21,7 @@ FACTORY_UNITS = {"Hellion", "Vulture", "Goliath", "Diamondback", "Siege Tank", "
 STARPORT_UNITS = {"Medivac", "Wraith", "Viking", "Banshee", "Battlecruiser", "Hercules", "Science Vessel", "Raven", "Liberator", "Valkyrie"}
 
 
-def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, List[str]]:
+def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, List[SC2Mission]]:
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
@@ -31,21 +31,23 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     disabled_campaigns = get_disabled_campaigns(multiworld, player)
     excluded_missions = get_option_value(multiworld, player, "excluded_missions")
-    mission_pools = {
-        MissionPools.STARTER: [mission.mission_name for mission in get_missions_by_pool(MissionPools.STARTER)],
-        MissionPools.EASY: [mission.mission_name for mission in get_missions_by_pool(MissionPools.EASY)],
-        MissionPools.MEDIUM: [mission.mission_name for mission in get_missions_by_pool(MissionPools.MEDIUM)],
-        MissionPools.HARD: [mission.mission_name for mission in get_missions_by_pool(MissionPools.HARD)],
-        MissionPools.VERY_HARD: [mission.mission_name for mission in get_missions_by_pool(MissionPools.VERY_HARD)],
-        MissionPools.FINAL: []
-    }
+    mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
+    for mission in SC2Mission:
+        if not mission_pools.get(mission.pool):
+            mission_pools[mission.pool] = list()
+        mission_pools[mission.pool].append(mission)
+    # A bit of safeguard:
+    for mission_pool in MissionPools:
+        if not mission_pools.get(mission_pool):
+            mission_pools[mission_pool] = []
+
     if mission_order_type == MissionOrder.option_vanilla:
         # Vanilla uses the entire mission pool
         goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
         candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
         goal_campaign = multiworld.random.choice(candidate_campaigns)
-        mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission.mission_name]
+        mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
         remove_final_mission_from_other_pools(mission_pools)
         return mission_pools
     # Omitting No-Build missions if not shuffling no-build
@@ -64,44 +66,47 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if primary_goal is None or primary_goal.mission.mission_name in excluded_missions:
         # No primary goal or its mission is excluded
         candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+        candidate_missions = [mission for mission in candidate_missions if mission.mission_name not in excluded_missions]
+        if len(candidate_missions) == 0:
+            raise Exception("There are no valid gaol missions.  Please exclude fewer missions.")
         goal_mission = multiworld.random.choice(candidate_missions).mission_name
     else:
-        goal_mission = campaign_final_mission_locations[goal_campaign].mission
+        goal_mission = primary_goal.mission
 
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
-        mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
-    mission_pools[MissionPools.FINAL].append(goal_mission.mission_name)
+        mission_pools[difficulty] = [mission for mission in mission_pool if mission.name not in excluded_missions]
+    mission_pools[MissionPools.FINAL] = [goal_mission]
 
     # Mission pool changes on Build-Only
     if not get_option_value(multiworld, player, 'shuffle_no_build'):
-        def move_mission(mission_name, current_pool, new_pool):
-            if mission_name in mission_pools[current_pool]:
-                mission_pools[current_pool].remove(mission_name)
-                mission_pools[new_pool].append(mission_name)
+        def move_mission(mission: SC2Mission, current_pool, new_pool):
+            if mission in mission_pools[current_pool]:
+                mission_pools[current_pool].remove(mission)
+                mission_pools[new_pool].append(mission)
         # Replacing No Build missions with Easy missions
-        move_mission("Zero Hour", MissionPools.EASY, MissionPools.STARTER)
-        move_mission("Evacuation", MissionPools.EASY, MissionPools.STARTER)
-        move_mission("Devil's Playground", MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.DEVILS_PLAYGROUND, MissionPools.EASY, MissionPools.STARTER)
         # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
-        move_mission("Outbreak", MissionPools.EASY, MissionPools.MEDIUM)
+        move_mission(SC2Mission.OUTBREAK, MissionPools.EASY, MissionPools.MEDIUM)
         # Pushing extra Normal missions to Easy
-        move_mission("The Great Train Robbery", MissionPools.MEDIUM, MissionPools.EASY)
-        move_mission("Echoes of the Future", MissionPools.MEDIUM, MissionPools.EASY)
-        move_mission("Cutthroat", MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
+        move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
         if get_option_value(multiworld, player, "required_tactics") > 0:
-            move_mission("The Great Train Robbery", MissionPools.EASY, MissionPools.STARTER)
-            move_mission("Smash and Grab", MissionPools.EASY, MissionPools.STARTER)
-            move_mission("Moebius Factor", MissionPools.MEDIUM, MissionPools.EASY)
-            move_mission("Welcome to the Jungle", MissionPools.MEDIUM, MissionPools.EASY)
-            move_mission("Engine of Destruction", MissionPools.HARD, MissionPools.MEDIUM)
+            move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
+            move_mission(SC2Mission.SMASH_AND_GRAB, MissionPools.EASY, MissionPools.STARTER)
+            move_mission(SC2Mission.THE_MOEBIUS_FACTOR, MissionPools.MEDIUM, MissionPools.EASY)
+            move_mission(SC2Mission.WELCOME_TO_THE_JUNGLE, MissionPools.MEDIUM, MissionPools.EASY)
+            move_mission(SC2Mission.ENGINE_OF_DESTRUCTION, MissionPools.HARD, MissionPools.MEDIUM)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
 
 
-def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List[str]]):
+def remove_final_mission_from_other_pools(mission_pools: Dict[MissionPools, List[SC2Mission]]):
     final_missions = mission_pools[MissionPools.FINAL]
     for pool, missions in mission_pools.items():
         if pool == MissionPools.FINAL:
