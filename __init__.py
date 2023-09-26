@@ -12,6 +12,7 @@ from .logic import WL4Logic
 from .options import wl4_options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
+from .rules import set_access_rules
 from .types import ItemType, Passage
 
 
@@ -73,6 +74,7 @@ class WL4World(World):
     def create_regions(self):
         location_table = setup_locations(self.multiworld, self.player)
         create_regions(self.multiworld, self.player, location_table)
+        set_access_rules(self.multiworld, self.player)
         connect_regions(self.multiworld, self.player)
 
         passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
@@ -115,6 +117,10 @@ class WL4World(World):
             itempool.append(self.create_item(name))
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
+
+        if full_health_items <= 8:
+            raise NotImplementedError('Logic is only implemented for Normal')
+        full_health_items -= 8
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))

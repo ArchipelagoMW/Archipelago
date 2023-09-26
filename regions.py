@@ -1,22 +1,30 @@
-from typing import Callable, Dict, Iterable, Optional
+from typing import Iterable, MutableMapping, Set
 
 from BaseClasses import MultiWorld, Region, Entrance
 
 from .locations import WL4Location, get_level_locations
-from .types import Passage
+from .types import AccessRule, Passage
 
 
-def create_regions(world: MultiWorld, player: int, location_table: dict):
+class WL4Region(Region):
+    clear_rule: AccessRule
+
+    def __init__(self, name: str, player: int, multiworld: MultiWorld):
+        super().__init__(name, player, multiworld)
+        self.clear_rule = None
+
+
+def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     def basic_region(name, locations=()):
         return create_region(world, player, location_table, name, locations)
 
     def passage_region(passage: Passage):
         return basic_region(passage.long_name())
 
-    def level_region(name, passage, level):
+    def level_region(name: str, passage: Passage, level: int):
         return basic_region(name, get_level_locations(passage, level))
 
-    def boss_region(passage: Passage, boss_name):
+    def boss_region(passage: Passage, boss_name: str):
         return basic_region(f'{passage.long_name()} Boss', [boss_name])
 
     menu_region = basic_region('Menu')
@@ -93,70 +101,68 @@ def create_regions(world: MultiWorld, player: int, location_table: dict):
 
 
 def connect_regions(world, player):
-    names: Dict[str, int] = {}
+    names: MutableMapping[str, int] = {}
 
     connect(world, player, names, 'Menu', 'Entry Passage')
-    connect(world, player, names, 'Entry Passage', 'Hall of Hieroglyphs')
+    connect_level(world, player, names, 'Entry Passage', 'Hall of Hieroglyphs')
     connect(world, player, names, 'Hall of Hieroglyphs', 'Entry Passage Boss',
             lambda state: state.wl4_has_full_jewels(player, Passage.ENTRY, 1))
 
     connect(world, player, names, 'Menu', 'Emerald Passage')
-    connect(world, player, names, 'Emerald Passage', 'Palm Tree Paradise')
-    connect(world, player, names, 'Palm Tree Paradise', 'Wildflower Fields')
-    connect(world, player, names, 'Wildflower Fields', 'Mystic Lake')
-    connect(world, player, names, 'Mystic Lake', 'Monsoon Jungle')
+    connect_level(world, player, names, 'Emerald Passage', 'Palm Tree Paradise')
+    connect_level(world, player, names, 'Palm Tree Paradise', 'Wildflower Fields')
+    connect_level(world, player, names, 'Wildflower Fields', 'Mystic Lake')
+    connect_level(world, player, names, 'Mystic Lake', 'Monsoon Jungle')
     connect(world, player, names, 'Monsoon Jungle', 'Emerald Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.EMERALD, 4))
+            lambda state: state.wl4_has_full_jewels(player, Passage.EMERALD, 4))
 
     connect(world, player, names, 'Menu', 'Ruby Passage')
-    connect(world, player, names, 'Ruby Passage', 'The Curious Factory')
-    connect(world, player, names, 'The Curious Factory', 'The Toxic Landfill')
-    connect(world, player, names, 'The Toxic Landfill', '40 Below Fridge')
-    connect(world, player, names, '40 Below Fridge', 'Pinball Zone')
+    connect_level(world, player, names, 'Ruby Passage', 'The Curious Factory')
+    connect_level(world, player, names, 'The Curious Factory', 'The Toxic Landfill')
+    connect_level(world, player, names, 'The Toxic Landfill', '40 Below Fridge')
+    connect_level(world, player, names, '40 Below Fridge', 'Pinball Zone')
     connect(world, player, names, 'Pinball Zone', 'Ruby Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.RUBY, 4))
+            lambda state: state.wl4_has_full_jewels(player, Passage.RUBY, 4))
 
     connect(world, player, names, 'Menu', 'Topaz Passage')
-    connect(world, player, names, 'Topaz Passage', 'Toy Block Tower')
-    connect(world, player, names, 'Toy Block Tower', 'The Big Board')
-    connect(world, player, names, 'The Big Board', 'Doodle Woods')
-    connect(world, player, names, 'Doodle Woods', 'Domino Row')
+    connect_level(world, player, names, 'Topaz Passage', 'Toy Block Tower')
+    connect_level(world, player, names, 'Toy Block Tower', 'The Big Board')
+    connect_level(world, player, names, 'The Big Board', 'Doodle Woods')
+    connect_level(world, player, names, 'Doodle Woods', 'Domino Row')
     connect(world, player, names, 'Domino Row', 'Topaz Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.TOPAZ, 4))
+            lambda state: state.wl4_has_full_jewels(player, Passage.TOPAZ, 4))
 
     connect(world, player, names, 'Menu', 'Sapphire Passage')
-    connect(world, player, names, 'Sapphire Passage', 'Crescent Moon Village')
-    connect(world, player, names, 'Crescent Moon Village', 'Arabian Night')
-    connect(world, player, names, 'Arabian Night', 'Fiery Cavern')
-    connect(world, player, names, 'Fiery Cavern', 'Hotel Horror')
+    connect_level(world, player, names, 'Sapphire Passage', 'Crescent Moon Village')
+    connect_level(world, player, names, 'Crescent Moon Village', 'Arabian Night')
+    connect_level(world, player, names, 'Arabian Night', 'Fiery Cavern')
+    connect_level(world, player, names, 'Fiery Cavern', 'Hotel Horror')
     connect(world, player, names, 'Hotel Horror', 'Sapphire Passage Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.SAPPHIRE, 4))
+            lambda state: state.wl4_has_full_jewels(player, Passage.SAPPHIRE, 4))
 
     connect(world, player, names, 'Menu', 'Golden Pyramid',
-        lambda state: (state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
-                                      'Topaz Passage Clear', 'Sapphire Passage Clear'}, player)))
-    connect(world, player, names, 'Golden Pyramid', 'Golden Passage')
+            lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
+                                     'Topaz Passage Clear', 'Sapphire Passage Clear'}, player))
+    # Golden Passage is weird because you can leave at any time and Keyzer needs an extra item.
+    # It's fine for now, but level shuffle's gonna need some extra rules to cope with that.
+    connect(world, player, names, 'Golden Pyramid', 'Golden Passage',
+            lambda state: state.has('Swim', player))
     connect(world, player, names, 'Golden Passage', 'Golden Pyramid Boss',
-        lambda state: state.wl4_has_full_jewels(player, Passage.GOLDEN, 1))
+            lambda state: state.has('Progressive Grab', player) and
+                          state.wl4_has_full_jewels(player, Passage.GOLDEN, 1))
 
 
-def create_region(world: MultiWorld, player: int, location_table: dict,
-                  name: str, locations: Iterable[str] = ()):
-    region = Region(name, player, world)
+def create_region(world: MultiWorld, player: int, location_table: Set[str],
+                  name: str, locations: Iterable[str] = ()) -> WL4Region:
+    region = WL4Region(name, player, world)
     for location in locations:
         if location in location_table:
             region.locations.append(WL4Location.from_name(player, location, region))
     return region
 
 
-def connect(
-    world: MultiWorld,
-    player: int,
-    used_names: Dict[str, int],
-    source: str,
-    target: str,
-    rule: Optional[Callable] = None,
-):
+def connect(world: MultiWorld, player: int, used_names: MutableMapping[str, int],
+            source: str, target: str, rule: AccessRule = None):
     source_region = world.get_region(source, player)
     target_region = world.get_region(target, player)
 
@@ -174,3 +180,8 @@ def connect(
 
     source_region.exits.append(connection)
     connection.connect(target_region)
+
+def connect_level(world: MultiWorld, player: int, used_names: MutableMapping[str, int],
+                  source: str, target: str):
+    connect(world, player, used_names, source, target,
+            lambda state: state.wl4_can_clear(player, target))
