@@ -27,9 +27,9 @@ Una vez que Bizhawk se haya instalado, abre Emuhawk y cambia las siguientes conf
 - (≤ 2.8) Abrir EmuHawk e ir a Config > Customize. Abrir la pestaña Advanced, y en la opción de Lua Core cambiar desde
   "NLua+KopiLua" a "Lua+LuaInterface". Luego reinicia EmuHawk. Esto es fundamental para que el script de Lua funcione
   correctamente.
-  **NOTA: Incluso si "Lua+LuaInterface" ya estaba seleccionado, cambia entre las opciones y vuélvelo a seleccionar.**
-  **Algunas instalaciones de versiones nuevas de EmuHawk tienen una tendencia a mostrar "Lua+LuaInterface" por defecto**
-  **pero siguen cargando "NLua+KopiLua" hasta completar este paso.**
+  **NOTA: Incluso si "Lua+LuaInterface" ya estaba seleccionado, cambia entre las opciones y vuélvelo a seleccionar.
+  Algunas instalaciones de versiones nuevas de EmuHawk tienen una tendencia a mostrar "Lua+LuaInterface" por defecto
+  pero siguen cargando "NLua+KopiLua" hasta completar este paso.**
 - Aun en la pestaña Advanced, asegurate que la casilla de AutoSaveRAM esté marcada, y selecciona también la casilla 5s.
   Esto reduce la posibilidad de que se pierdan datos guardados en el caso de que el emulador deje de funcionar (crash).
 - En Config > Customize, pestaña General, marcar la casilla "Run in background". Esto evitará que te desconectes del
