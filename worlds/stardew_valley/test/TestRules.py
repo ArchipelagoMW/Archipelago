@@ -467,11 +467,48 @@ class TestCraftsanityLogic(SVTestBase):
         self.multiworld.state.collect(self.world.create_item("Month End"), event=False)
         self.assertTrue(rule(self.multiworld.state))
 
+    def test_can_craft_festival_recipe(self):
+        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Torch Recipe"), event=False)
+        rule = self.world.logic.crafting.can_craft(recipe)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Jack-O-Lantern Recipe"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+
+class TestCraftsanityWithFestivalsLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+    }
+
+    def test_can_craft_festival_recipe(self):
+        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        rule = self.world.logic.crafting.can_craft(recipe)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Jack-O-Lantern Recipe"), event=False)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Torch Recipe"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
 
 class TestNoCraftsanityLogic(SVTestBase):
     options = {
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_disabled,
         options.Craftsanity.internal_name: options.Craftsanity.option_none,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
     }
@@ -479,6 +516,35 @@ class TestNoCraftsanityLogic(SVTestBase):
     def test_can_craft_recipe(self):
         recipe = all_crafting_recipes_by_name["Wood Floor"]
         rule = self.world.logic.crafting.can_craft(recipe)
+        self.assertTrue(rule(self.multiworld.state))
+
+    def test_can_craft_festival_recipe(self):
+        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
+        rule = self.world.logic.crafting.can_craft(recipe)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+
+class TestNoCraftsanityWithFestivalsLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_easy,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+    }
+
+    def test_can_craft_festival_recipe(self):
+        recipe = all_crafting_recipes_by_name["Jack-O-Lantern"]
+        self.multiworld.state.collect(self.world.create_item("Pumpkin Seeds"), event=False)
+        self.multiworld.state.collect(self.world.create_item("Fall"), event=False)
+        rule = self.world.logic.crafting.can_craft(recipe)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Jack-O-Lantern Recipe"), event=False)
         self.assertTrue(rule(self.multiworld.state))
 
 

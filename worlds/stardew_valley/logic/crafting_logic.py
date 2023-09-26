@@ -9,7 +9,7 @@ from .time_logic import TimeLogic
 from .. import options
 from ..data.craftable_data import CraftingRecipe
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource
-from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource
+from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.region_names import Region
 
@@ -17,6 +17,7 @@ from ..strings.region_names import Region
 class CraftingLogic:
     player: int
     craftsanity_option: int
+    festivals_option: int
     special_orders_option: int
     received: ReceivedLogic
     has: HasLogic
@@ -27,10 +28,11 @@ class CraftingLogic:
     skill: SkillLogic
     special_orders: SpecialOrderLogic
 
-    def __init__(self, player: int, craftsanity_option: int, special_orders_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
+    def __init__(self, player: int, craftsanity_option: int, festivals_option: int, special_orders_option: int, received: ReceivedLogic, has: HasLogic, region: RegionLogic,
                  time: TimeLogic, money: MoneyLogic, relationship: RelationshipLogic, skill: SkillLogic, special_orders: SpecialOrderLogic):
         self.player = player
         self.craftsanity_option = craftsanity_option
+        self.festivals_option = festivals_option
         self.special_orders_option = special_orders_option
         self.received = received
         self.has = has
@@ -55,6 +57,11 @@ class CraftingLogic:
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):
             return self.received(recipe.source.ap_item, len(recipe.source.ap_item))
+        if isinstance(recipe.source, FestivalShopSource):
+            if self.festivals_option == options.FestivalLocations.option_disabled:
+                return self.can_learn_recipe(recipe)
+            else:
+                return self.received_recipe(recipe.item)
         if self.craftsanity_option == options.Craftsanity.option_none:
             return self.can_learn_recipe(recipe)
         if isinstance(recipe.source, StarterSource) or isinstance(recipe.source, ShopTradeSource) or isinstance(recipe.source, ShopSource):

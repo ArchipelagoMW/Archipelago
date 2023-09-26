@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable
 from ..strings.crop_names import Fruit, Vegetable
@@ -57,6 +57,11 @@ def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int])
 
 def shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int]) -> CraftingRecipe:
     source = ShopSource(region, price)
+    return create_recipe(name, ingredients, source)
+
+
+def festival_shop_recipe(name: str, region: str, price: int, ingredients: Dict[str, int]) -> CraftingRecipe:
+    source = FestivalShopSource(region, price)
     return create_recipe(name, ingredients, source)
 
 
@@ -203,7 +208,7 @@ skull_brazier = shop_recipe(Lighting.skull_brazier, Region.carpenter, 3000, {Fos
 marble_brazier = shop_recipe(Lighting.marble_brazier, Region.carpenter, 5000, {Mineral.marble: 1, Mineral.aquamarine: 1, Material.stone: 100})
 wood_lamp_post = shop_recipe(Lighting.wood_lamp_post, Region.carpenter, 500, {Material.wood: 50, ArtisanGood.battery_pack: 1})
 iron_lamp_post = shop_recipe(Lighting.iron_lamp_post, Region.carpenter, 1000, {MetalBar.iron: 1, ArtisanGood.battery_pack: 1})
-jack_o_lantern = shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
+jack_o_lantern = festival_shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
 
 bone_mill = ap_recipe(Machine.bone_mill, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 4, {Material.wood: 20, MetalBar.copper: 2})
@@ -221,7 +226,7 @@ solar_panel = ap_recipe(Machine.solar_panel, {MetalBar.quartz: 10, MetalBar.iron
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 3, {Material.wood: 40, MetalBar.copper: 2})
 worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 8, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
 
-tub_o_flowers = shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
+tub_o_flowers = festival_shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
 wicked_statue = shop_recipe(Furniture.wicked_statue, Region.sewer, 1000, {Material.stone: 25, Material.coal: 5})
 flute_block = cutscene_recipe(Furniture.flute_block, Region.carpenter, NPC.robin, 6, {Material.wood: 10, Ore.copper: 2, Material.fiber: 20})
 drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 6, {Material.stone: 10, Ore.copper: 2, Material.fiber: 20})

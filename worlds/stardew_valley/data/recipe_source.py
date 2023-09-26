@@ -96,6 +96,12 @@ class ShopSource(RecipeSource):
         return f"ShopSource at {self.region} costing {self.price}g"
 
 
+class FestivalShopSource(ShopSource):
+
+    def __init__(self, region: str, price: int):
+        super().__init__(region, price)
+
+
 class ShopTradeSource(ShopSource):
     currency: str
 

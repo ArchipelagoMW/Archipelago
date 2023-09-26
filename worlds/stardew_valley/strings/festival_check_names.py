@@ -30,3 +30,7 @@ class FestivalCheck:
     spirit_eve_maze = "Spirit's Eve Maze"
     strawberry_seeds = "Egg Festival: Strawberry Seeds"
     all_rarecrows = "Collect All Rarecrows"
+    tub_o_flowers = "Tub o' Flowers Recipe"
+    jack_o_lantern = "Jack-O-Lantern Recipe"
+    moonlight_jellies_banner = "Moonlight Jellies Banner"
+    starport_decal = "Starport Decal"

@@ -140,8 +140,9 @@ class StardewLogic:
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
-        self.crafting = CraftingLogic(self.player, self.options[options.Craftsanity], self.options[options.SpecialOrderLocations], self.received, self.has,
-                                      self.region, self.time, self.money, self.relationship, self.skill, self.special_order)
+        self.crafting = CraftingLogic(self.player, self.options[options.Craftsanity], self.options[options.FestivalLocations],
+                                      self.options[options.SpecialOrderLocations], self.received, self.has, self.region, self.time, self.money,
+                                      self.relationship, self.skill, self.special_order)
 
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
                             self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability)
@@ -513,14 +514,18 @@ class StardewLogic:
             FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
             FestivalCheck.strawberry_seeds: self.money.can_spend(1000),
             FestivalCheck.dance: self.relationship.has_hearts(Generic.bachelor, 4),
+            FestivalCheck.tub_o_flowers: self.money.can_spend(2000),
             FestivalCheck.rarecrow_5: self.money.can_spend(2500),
             FestivalCheck.luau_soup: self.can_succeed_luau_soup(),
             FestivalCheck.moonlight_jellies: True_(),
+            FestivalCheck.moonlight_jellies_banner: self.money.can_spend(800),
+            FestivalCheck.starport_decal: self.money.can_spend(1000),
             FestivalCheck.smashing_stone: True_(),
             FestivalCheck.grange_display: self.can_succeed_grange_display(),
             FestivalCheck.rarecrow_1: True_(),  # only cost star tokens
             FestivalCheck.fair_stardrop: True_(),  # only cost star tokens
             FestivalCheck.spirit_eve_maze: True_(),
+            FestivalCheck.jack_o_lantern: self.money.can_spend(2000),
             FestivalCheck.rarecrow_2: self.money.can_spend(5000),
             FestivalCheck.fishing_competition: self.can_win_fishing_competition(),
             FestivalCheck.rarecrow_4: self.money.can_spend(5000),
