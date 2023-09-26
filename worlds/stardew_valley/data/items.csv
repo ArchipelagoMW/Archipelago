@@ -435,6 +435,8 @@ id,name,classification,groups,mod_name
 459,Chest Recipe,progression,"CRAFTSANITY",
 460,Wood Sign Recipe,progression,"CRAFTSANITY",
 461,Stone Sign Recipe,progression,"CRAFTSANITY",
+480,Moonlight Jellies Banner,filler,FESTIVAL,
+481,Starport Decal,filler,FESTIVAL,
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,
