@@ -16,7 +16,10 @@ window.addEventListener('load', () => {
   });
 
   // Handle game filter input
-  document.getElementById('game-search').addEventListener('input', (evt) => {
+  const gameSearch = document.getElementById('game-search');
+  gameSearch.value = '';
+
+  gameSearch.addEventListener('input', (evt) => {
     if (!evt.target.value.trim()) {
       // If input is empty, display all collapsed games
       return Array.from(gameHeaders).forEach((header) => {
@@ -46,4 +49,35 @@ window.addEventListener('load', () => {
       }
     });
   });
+
+  document.getElementById('expand-all').addEventListener('click', expandAll);
+  document.getElementById('collapse-all').addEventListener('click', collapseAll);
 });
+
+const expandAll = () => {
+  const gameHeaders = document.getElementsByClassName('collapse-toggle');
+  // Loop over all the games
+    Array.from(gameHeaders).forEach((header) => {
+      const gameName = header.getAttribute('data-game');
+      const gameArrow = document.getElementById(`${gameName}-arrow`);
+      const gameInfo = document.getElementById(gameName);
+
+      if (header.style.display === 'none') { return; }
+      gameArrow.innerText = '▼';
+      gameInfo.classList.remove('collapsed');
+    });
+};
+
+const collapseAll = () => {
+  const gameHeaders = document.getElementsByClassName('collapse-toggle');
+  // Loop over all the games
+    Array.from(gameHeaders).forEach((header) => {
+      const gameName = header.getAttribute('data-game');
+      const gameArrow = document.getElementById(`${gameName}-arrow`);
+      const gameInfo = document.getElementById(gameName);
+
+      if (header.style.display === 'none') { return; }
+      gameArrow.innerText = '▶';
+      gameInfo.classList.add('collapsed');
+    });
+};
