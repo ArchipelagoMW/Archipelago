@@ -18,6 +18,16 @@
     margin-bottom: 2px;
 }
 
+#games h2 .collapse-arrow{
+    font-size: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+#games p.collapsed{
+    display: none;
+}
+
 #games a{
     font-size: 16px;
 }
@@ -30,4 +40,14 @@
 #games p{
     line-height: 25px;
     margin-bottom: 7px;
+}
+
+#games #page-controls{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.25rem;
+}
+
+#games #page-controls button{
+    margin-left: 0.5rem;
 }
