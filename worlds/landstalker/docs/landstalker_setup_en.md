@@ -3,7 +3,9 @@
 ## Required Software
 
 - [Landstalker Archipelago Client](https://github.com/Dinopony/randstalker-archipelago/releases) (only available on Windows)
-- [RetroArch](https://retroarch.com?page=platforms) with the Genesis Plus GX core
+- A compatible emulator to run the game
+  - [RetroArch](https://retroarch.com?page=platforms) with the Genesis Plus GX core
+  - [Bizhawk](https://tasvideos.org/BizHawk/ReleaseHistory) with the Genesis Plus GX core
 - Your legally obtained Landstalker US ROM file (which can be acquired on [Steam](https://store.steampowered.com/app/71118/Landstalker_The_Treasures_of_King_Nole/))
 
 ## Installation Instructions
@@ -71,7 +73,7 @@ randomized seed if everything went right.
 If it didn't, double-check your `Input ROM file` and `Output ROM path`, then retry  building the ROM by clicking 
 the same button again.
 
-### Connecting to Retroarch
+### Connecting to the emulator
 
 Now that you're connected to the Archipelago server and have a randomized ROM, all we need is to get the client 
 connected to the emulator. This way, the client will be able to see what's happening while you play and give you in-game
@@ -81,22 +83,25 @@ You should see the following window:
 
 ![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_emu.png)
 
-As written, you have to open the newly generated ROM inside Retroarch using the Genesis Plus GX core. Be careful to
+As written, you have to open the newly generated ROM inside either Retroarch or Bizhawk using the Genesis Plus GX core. Be careful to
 select that core, because any other core (e.g. BlastEm) won't work.
 
 The easiest way to do so is to:
-- open Retroarch
-- if it's your first time, download the Genesis Plus GX core through Retroarch user interface
+- open the emu of your choice
+- if you're using Retroarch and it's your first time, download the Genesis Plus GX core through Retroarch user interface
 - click the `Show ROM file in explorer` button
-- drag-and-drop the shown ROM file on Retroarch window
+- drag-and-drop the shown ROM file on the emulator window
+- press Start to reach file select screen (to ensure game RAM is properly set-up)
 
-The game should instantly launch. Then, you can click on the `Connect to emulator` button below.
+Then, you can click on the `Connect to emulator` button below and it should work.
 
 If this didn't work, try the following:
-- ensure you have loaded your ROM inside Retroarch
+- ensure you have loaded your ROM and reached the save select screen
 - ensure you are using Genesis Plus GX and not another core (e.g. BlastEm will not work)
 - try launching the client in Administrator Mode (right click on `randstalker_archipelago.exe`, then `Run as administrator`)
-- if all else fails, try using RetroArch 1.9.0 and Genesis Plus GX 1.7.4 (it works on all versions tested so far, but you never know...)
+- if all else fails, try using one of those specific emulator versions:
+  - RetroArch 1.9.0 and Genesis Plus GX 1.7.4
+  - Bizhawk 2.9.1 (x64)
 
 ### Play the game
 
