@@ -384,9 +384,9 @@ class PokemonEmeraldWorld(World):
                                 slot_location.item.name = f"CATCH_{emerald_data.species[new_species_id].name}"
 
                                 # Mark Wailord and Relicanth as placed somewhere in logic
-                                if new_species_id == 313:
+                                if new_species_id == emerald_data.constants["SPECIES_WAILORD"]:
                                     placed_wailord = True
-                                elif new_species_id == 381:
+                                elif new_species_id == emerald_data.constants["SPECIES_RELICANTH"]:
                                     placed_relicanth = True
                             except KeyError:
                                 pass  # Map probably isn't included; should be careful here about bad encounter location names

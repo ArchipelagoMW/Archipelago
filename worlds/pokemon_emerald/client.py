@@ -146,6 +146,8 @@ class PokemonEmeraldClient(BizHawkClient):
     latest_wonder_trades: dict
     latest_wonder_trade_reply: dict
     wonder_trade_task: Optional[asyncio.Task]
+    wonder_trade_cooldown: int
+    wonder_trade_cooldown_timer: int
 
     def __init__(self) -> None:
         super().__init__()
@@ -157,6 +159,8 @@ class PokemonEmeraldClient(BizHawkClient):
         self.wonder_trade_update_event = asyncio.Event()
         self.latest_wonder_trades = {}
         self.wonder_trade_task = None
+        self.wonder_trade_cooldown = 5000
+        self.wonder_trade_cooldown_timer = 0
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -280,12 +284,16 @@ class PokemonEmeraldClient(BizHawkClient):
                         # sent by this player, and if so, try to receive one.
                         # TODO: Should filter for trades that can't be completed (like Gen IV+ species) here and/or
                         # throttle calls to `wonder_trade_receive`.
-                        if any(item[0] != ctx.slot for key, item in self.latest_wonder_trades.items() if key != "_lock"):
-                            received_trade = await self.wonder_trade_receive(ctx)
-                            if received_trade is not None:
-                                await bizhawk.write(ctx.bizhawk_ctx, [
-                                    (save_block_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
-                                ])
+                        if self.wonder_trade_cooldown_timer <= 0:
+                            if any(item[0] != ctx.slot for key, item in self.latest_wonder_trades.items() if key != "_lock"):
+                                received_trade = await self.wonder_trade_receive(ctx)
+                                if received_trade is not None:
+                                    await bizhawk.write(ctx.bizhawk_ctx, [
+                                        (save_block_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
+                                    ])
+                        else:
+                            # Very approximate "time since last loop", but extra delay is fine for this
+                            self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
 
             game_clear = False
             local_checked_locations = set()
@@ -386,8 +394,16 @@ class PokemonEmeraldClient(BizHawkClient):
             pass
 
     async def wonder_trade_acquire(self, ctx: BizHawkClientContext, keep_trying: bool = False) -> Optional[dict]:
-        from CommonClient import logger
+        """
+        Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
+        datastorage. Locking the key means you have exclusive access
+        to modifying the value until you unlock it or the key expires (5
+        seconds).
 
+        If `keep_trying` is `True`, it will keep trying to acquire the lock
+        until successful. Otherwise it will return `None` if it fails to
+        acquire the lock.
+        """
         while not ctx.exit_event.is_set():
             lock = int(time.time_ns() / 1000000)
             uuid = Utils.get_unique_identifier()
@@ -404,26 +420,42 @@ class PokemonEmeraldClient(BizHawkClient):
             await self.wonder_trade_update_event.wait()
             reply = copy.deepcopy(self.latest_wonder_trade_reply)
 
+            # Make sure the most recently received update was triggered by our lock attempt
             if reply.get("uuid", None) != uuid:
                 if not keep_trying:
                     return None
+                await asyncio.sleep(self.wonder_trade_cooldown)
                 continue
 
-            if lock - reply["original_value"]["_lock"] < 5000:
-                if not keep_trying:
-                    return None
-                await asyncio.sleep(10)
-                continue
-
+            # Make sure the current value of the lock is what we set it to
+            # (I think this should theoretically never run)
             if reply["value"]["_lock"] != lock:
                 if not keep_trying:
                     return None
-                await asyncio.sleep(10)
+                await asyncio.sleep(self.wonder_trade_cooldown)
+                continue
+
+            # Make sure that the lock value we replaced is at least 5 seconds old
+            # If it was unlocked before our change, its value was 0 and it will look decades old
+            if lock - reply["original_value"]["_lock"] < 5000:
+                # Multiple clients trying to lock the key may get stuck in a loop of checking the lock
+                # by trying to set it, which will extend its expiration. So if we see that the lock was
+                # too new when we replaced it, we should wait for increasingly longer periods so that
+                # eventually the lock will expire and a client will acquire it.
+                self.wonder_trade_cooldown *= 2
+
+                if not keep_trying:
+                    self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
+                    return None
+                await asyncio.sleep(self.wonder_trade_cooldown)
                 continue
 
             return reply
 
     async def wonder_trade_send(self, ctx: BizHawkClientContext, data: str) -> None:
+        """
+        Sends a wonder trade pokemon to data storage
+        """
         from CommonClient import logger
 
         reply = await self.wonder_trade_acquire(ctx, True)
@@ -441,9 +473,14 @@ class PokemonEmeraldClient(BizHawkClient):
                 str(wonder_trade_slot): (ctx.slot, data)
             }}]
         }])
+
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
 
     async def wonder_trade_receive(self, ctx: BizHawkClientContext) -> Optional[str]:
+        """
+        Tries to pop a pokemon out of the wonder trades. Returns `None` if
+        for some reason it can't immediately remove a compatible pokemon.
+        """
         from CommonClient import logger
 
         reply = await self.wonder_trade_acquire(ctx)

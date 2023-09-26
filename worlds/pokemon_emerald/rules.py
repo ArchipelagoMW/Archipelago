@@ -911,19 +911,19 @@ def set_default_rules(multiworld: MultiWorld, player: int) -> None:
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Eon Ticket", player)
+        lambda state: state.has("Eon Ticket", player)
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_FARAWAY_ISLAND_ENTRANCE/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Old Sea Map", player)
+        lambda state: state.has("Old Sea Map", player)
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_BIRTH_ISLAND_HARBOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Aurora Ticket", player)
+        lambda state: state.has("Aurora Ticket", player)
     )
     set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_NAVEL_ROCK_HARBOR/MAIN", player),
-        lambda state: state.has("S.S. Ticket", player) and state.has("Mystic Ticket", player)
+        lambda state: state.has("Mystic Ticket", player)
     )
 
     if "Lilycove City Wailmer" not in multiworld.remove_roadblocks[player].value:
