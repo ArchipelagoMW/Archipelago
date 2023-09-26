@@ -80,6 +80,8 @@ class LocationTags(enum.Enum):
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
     CHEFSANITY_STARTER = enum.auto()
+    CRAFTSANITY = enum.auto()
+    # Mods
     # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
@@ -387,6 +389,16 @@ def extend_chefsanity_locations(randomized_locations: List[LocationData], world_
     randomized_locations.extend(filtered_chefsanity_locations)
 
 
+def extend_craftsanity_locations(randomized_locations: List[LocationData], world_options):
+    craftsanity = world_options[options.Craftsanity]
+    if craftsanity == options.Craftsanity.option_none:
+        return
+
+    craftsanity_locations = [craft for craft in locations_by_tag[LocationTags.CRAFTSANITY]]
+    filtered_chefsanity_locations = filter_disabled_locations(world_options, craftsanity_locations)
+    randomized_locations.extend(filtered_chefsanity_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      options: StardewValleyOptions,
                      random: Random):
@@ -430,6 +442,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_shipsanity_locations(randomized_locations, world_options)
     extend_cooksanity_locations(randomized_locations, world_options)
     extend_chefsanity_locations(randomized_locations, world_options)
+    extend_craftsanity_locations(randomized_locations, world_options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)

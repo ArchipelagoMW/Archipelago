@@ -66,13 +66,15 @@ class Group(enum.Enum):
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
     TV_CHANNEL = enum.auto()
-    CRAFTING_RECIPE = enum.auto()
+    QI_CRAFTING_RECIPE = enum.auto()
     CHEFSANITY = enum.auto()
     CHEFSANITY_STARTER = enum.auto()
     CHEFSANITY_QOS = enum.auto()
     CHEFSANITY_PURCHASE = enum.auto()
     CHEFSANITY_FRIENDSHIP = enum.auto()
     CHEFSANITY_SKILL = enum.auto()
+    CRAFTSANITY = enum.auto()
+    # Mods
     MAGIC_SPELL = enum.auto()
 
 
@@ -326,6 +328,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
     items.append(item_factory("Magnifying Glass"))
     items.append(item_factory("Bear's Knowledge"))
     items.append(item_factory("Iridium Snake Milk"))
+    items.append(item_factory("Fairy Dust Recipe"))
 
 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -495,10 +498,10 @@ def create_walnut_purchase_rewards(item_factory: StardewItemFactory, options: St
 def create_special_order_board_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     if options.special_order_locations == SpecialOrderLocations.option_disabled:
         return
-    need_all_recipes = world_is_perfection(world_options)
-    items_and_classifications = {item: (special_order_board_item_classification(item, need_all_recipes)) for item in items_by_group[Group.SPECIAL_ORDER_BOARD]}
 
-    items.extend([item_factory(item, items_and_classifications[item]) for item in items_and_classifications])
+    special_order_board_items = {item for item in items_by_group[Group.SPECIAL_ORDER_BOARD]}
+
+    items.extend([item_factory(item) for item in special_order_board_items])
 
 
 def special_order_board_item_classification(item: ItemData, need_all_recipes: bool) -> ItemClassification:
@@ -528,10 +531,16 @@ def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
 
 
 def create_crafting_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
-    if world_options[options.Shipsanity] == options.Shipsanity.option_everything:
-        crafting_recipes = [reward for reward in items_by_group[Group.CRAFTING_RECIPE]]
-        crafting_recipes = remove_excluded_items(crafting_recipes, world_options)
-        items.extend([item_factory(item) for item in crafting_recipes])
+    has_shipsanity = world_options[options.Shipsanity] == options.Shipsanity.option_everything
+    has_craftsanity = world_options[options.Craftsanity] == options.Craftsanity.option_all
+    need_qi_recipes = has_shipsanity or has_craftsanity
+    crafting_recipes = []
+    if need_qi_recipes:
+        crafting_recipes.extend([recipe for recipe in items_by_group[Group.QI_CRAFTING_RECIPE]])
+    if has_craftsanity:
+        crafting_recipes.extend([recipe for recipe in items_by_group[Group.CRAFTSANITY]])
+    crafting_recipes = remove_excluded_items(crafting_recipes, world_options)
+    items.extend([item_factory(item) for item in crafting_recipes])
 
 
 def create_cooking_recipes(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):

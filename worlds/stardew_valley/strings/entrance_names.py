@@ -203,6 +203,7 @@ class Entrance:
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
 
+
 # Skull Cavern Elevator
 
 

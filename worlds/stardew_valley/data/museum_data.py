@@ -6,6 +6,8 @@ from typing import List, Tuple, Union, Optional
 from . import common_data as common
 from .game_item import GameItem
 from worlds.stardew_valley.strings.monster_names import Monster
+from ..strings.fish_names import WaterChest
+from ..strings.forageable_names import Forageable
 from ..strings.region_names import Region
 from ..strings.geode_names import Geode
 
@@ -97,41 +99,41 @@ class Artifact:
     arrowhead = create_artifact("Arrowhead", 101, 8.5, (Region.mountain, Region.forest, Region.bus_stop),
                                 geodes=Geode.artifact_trove)
     ancient_doll = create_artifact("Ancient Doll", 103, 13.1, (Region.mountain, Region.forest, Region.bus_stop),
-                                   geodes=(Geode.artifact_trove, common.fishing_chest))
+                                   geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     elvish_jewelry = create_artifact("Elvish Jewelry", 104, 5.3, Region.forest,
-                                     geodes=(Geode.artifact_trove, common.fishing_chest))
+                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     chewing_stick = create_artifact("Chewing Stick", 105, 10.3, (Region.mountain, Region.forest, Region.town),
-                                    geodes=(Geode.artifact_trove, common.fishing_chest))
+                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     ornamental_fan = create_artifact("Ornamental Fan", 106, 7.4, (Region.beach, Region.forest, Region.town),
-                                     geodes=(Geode.artifact_trove, common.fishing_chest))
+                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     dinosaur_egg = create_artifact("Dinosaur Egg", 107, 11.4, (Region.mountain, Region.skull_cavern),
-                                   geodes=common.fishing_chest,
+                                   geodes=WaterChest.fishing_chest,
                                    monsters=Monster.pepper_rex)
     rare_disc = create_artifact("Rare Disc", 108, 5.6, Region.stardew_valley,
-                                geodes=(Geode.artifact_trove, common.fishing_chest),
+                                geodes=(Geode.artifact_trove, WaterChest.fishing_chest),
                                 monsters=unlikely)
     ancient_sword = create_artifact("Ancient Sword", 109, 5.8, (Region.forest, Region.mountain),
-                                    geodes=(Geode.artifact_trove, common.fishing_chest))
+                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     rusty_spoon = create_artifact("Rusty Spoon", 110, 9.6, Region.town,
-                                  geodes=(Geode.artifact_trove, common.fishing_chest))
+                                  geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     rusty_spur = create_artifact("Rusty Spur", 111, 15.6, Region.farm,
-                                 geodes=(Geode.artifact_trove, common.fishing_chest))
+                                 geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     rusty_cog = create_artifact("Rusty Cog", 112, 9.6, Region.mountain,
-                                geodes=(Geode.artifact_trove, common.fishing_chest))
+                                geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     chicken_statue = create_artifact("Chicken Statue", 113, 13.5, Region.farm,
-                                     geodes=(Geode.artifact_trove, common.fishing_chest))
+                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     ancient_seed = create_artifact("Ancient Seed", 114, 8.4, (Region.forest, Region.mountain),
-                                   geodes=(Geode.artifact_trove, common.fishing_chest),
+                                   geodes=(Geode.artifact_trove, WaterChest.fishing_chest),
                                    monsters=unlikely)
     prehistoric_tool = create_artifact("Prehistoric Tool", 115, 11.1, (Region.mountain, Region.forest, Region.bus_stop),
-                                       geodes=(Geode.artifact_trove, common.fishing_chest))
+                                       geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     dried_starfish = create_artifact("Dried Starfish", 116, 12.5, Region.beach,
-                                     geodes=(Geode.artifact_trove, common.fishing_chest))
-    anchor = create_artifact("Anchor", 117, 8.5, Region.beach, geodes=(Geode.artifact_trove, common.fishing_chest))
+                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
+    anchor = create_artifact("Anchor", 117, 8.5, Region.beach, geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     glass_shards = create_artifact("Glass Shards", 118, 11.5, Region.beach,
-                                   geodes=(Geode.artifact_trove, common.fishing_chest))
+                                   geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     bone_flute = create_artifact("Bone Flute", 119, 6.3, (Region.mountain, Region.forest, Region.town),
-                                 geodes=(Geode.artifact_trove, common.fishing_chest))
+                                 geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     prehistoric_handaxe = create_artifact("Prehistoric Handaxe", 120, 13.7,
                                           (Region.mountain, Region.forest, Region.bus_stop),
                                           geodes=Geode.artifact_trove)
@@ -146,9 +148,9 @@ class Artifact:
     golden_relic = create_artifact("Golden Relic", 125, 9.7, Region.desert,
                                    geodes=Geode.artifact_trove)
     strange_doll_green = create_artifact("Strange Doll (Green)", 126, 10, Region.town,
-                                         geodes=common.secret_note)
+                                         geodes=Forageable.secret_note)
     strange_doll = create_artifact("Strange Doll", 127, 10, Region.desert,
-                                   geodes=common.secret_note)
+                                   geodes=Forageable.secret_note)
     prehistoric_scapula = create_artifact("Prehistoric Scapula", 579, 6.2,
                                           (Region.dig_site, Region.forest, Region.town))
     prehistoric_tibia = create_artifact("Prehistoric Tibia", 580, 16.6,
@@ -160,11 +162,11 @@ class Artifact:
     prehistoric_vertebra = create_artifact("Prehistoric Vertebra", 584, 12.7, (Region.dig_site, Region.bus_stop),
                                            monsters=Monster.pepper_rex)
     skeletal_tail = create_artifact("Skeletal Tail", 585, 5.1, (Region.dig_site, Region.mines_floor_20),
-                                    geodes=common.fishing_chest)
+                                    geodes=WaterChest.fishing_chest)
     nautilus_fossil = create_artifact("Nautilus Fossil", 586, 6.9, (Region.dig_site, Region.beach),
-                                      geodes=common.fishing_chest)
+                                      geodes=WaterChest.fishing_chest)
     amphibian_fossil = create_artifact("Amphibian Fossil", 587, 6.3, (Region.dig_site, Region.forest, Region.mountain),
-                                       geodes=common.fishing_chest)
+                                       geodes=WaterChest.fishing_chest)
     palm_fossil = create_artifact("Palm Fossil", 588, 10.2,
                                   (Region.dig_site, Region.desert, Region.forest, Region.beach))
     trilobite = create_artifact("Trilobite", 589, 7.4, (Region.dig_site, Region.desert, Region.forest, Region.beach))
@@ -173,30 +175,30 @@ class Artifact:
 class Mineral:
     quartz = create_mineral("Quartz", 80, Region.mines_floor_20)
     fire_quartz = create_mineral("Fire Quartz", 82, Region.mines_floor_100,
-                                 geodes=(Geode.magma, Geode.omni, common.fishing_chest),
+                                 geodes=(Geode.magma, Geode.omni, WaterChest.fishing_chest),
                                  difficulty=1.0 / 12.0)
     frozen_tear = create_mineral("Frozen Tear", 84, Region.mines_floor_60,
-                                 geodes=(Geode.frozen, Geode.omni, common.fishing_chest),
+                                 geodes=(Geode.frozen, Geode.omni, WaterChest.fishing_chest),
                                  monsters=unlikely,
                                  difficulty=1.0 / 12.0)
     earth_crystal = create_mineral("Earth Crystal", 86, Region.mines_floor_20,
-                                   geodes=(Geode.geode, Geode.omni, common.fishing_chest),
+                                   geodes=(Geode.geode, Geode.omni, WaterChest.fishing_chest),
                                    monsters=Monster.duggy,
                                    difficulty=1.0 / 12.0)
     emerald = create_mineral("Emerald", 60, Region.mines_floor_100,
-                             geodes=common.fishing_chest)
+                             geodes=WaterChest.fishing_chest)
     aquamarine = create_mineral("Aquamarine", 62, Region.mines_floor_60,
-                                geodes=common.fishing_chest)
+                                geodes=WaterChest.fishing_chest)
     ruby = create_mineral("Ruby", 64, Region.mines_floor_100,
-                          geodes=common.fishing_chest)
+                          geodes=WaterChest.fishing_chest)
     amethyst = create_mineral("Amethyst", 66, Region.mines_floor_20,
-                              geodes=common.fishing_chest)
+                              geodes=WaterChest.fishing_chest)
     topaz = create_mineral("Topaz", 68, Region.mines_floor_20,
-                           geodes=common.fishing_chest)
+                           geodes=WaterChest.fishing_chest)
     jade = create_mineral("Jade", 70, Region.mines_floor_60,
-                          geodes=common.fishing_chest)
+                          geodes=WaterChest.fishing_chest)
     diamond = create_mineral("Diamond", 72, Region.mines_floor_60,
-                             geodes=common.fishing_chest)
+                             geodes=WaterChest.fishing_chest)
     prismatic_shard = create_mineral("Prismatic Shard", 74, Region.skull_cavern_100,
                                      geodes=unlikely,
                                      monsters=unlikely)

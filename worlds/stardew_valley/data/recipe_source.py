@@ -106,3 +106,14 @@ class ShopTradeSource(ShopSource):
     def __repr__(self):
         return f"ShopTradeSource at {self.region} costing {self.price} {self.currency}"
 
+
+
+class SpecialOrderSource(RecipeSource):
+    special_order: str
+
+    def __init__(self, special_order: str):
+        self.special_order = special_order
+
+
+    def __repr__(self):
+        return f"SpecialOrderSource from {special_order}"

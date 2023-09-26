@@ -2,6 +2,7 @@ from collections import Counter
 
 from . import SVTestBase
 from .. import options
+from ..data.craftable_data import all_crafting_recipes_by_name
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -430,6 +431,54 @@ class TestRecipeReceiveLogic(SVTestBase):
         self.multiworld.state.remove(house)
 
         self.multiworld.state.collect(self.world.create_item("The Queen of Sauce"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+
+class TestCraftsanityLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+    }
+
+    def test_can_craft_recipe(self):
+        location = "Craft Marble Brazier"
+        rule = self.world.logic.region.can_reach_location(location)
+        self.collect([self.world.create_item("Progressive Pickaxe")] * 4)
+        self.collect([self.world.create_item("Progressive Fishing Rod")] * 4)
+        self.collect([self.world.create_item("Progressive Sword")] * 4)
+        self.collect([self.world.create_item("Progressive Mine Elevator")] * 24)
+        self.collect([self.world.create_item("Mining Level")] * 10)
+        self.collect([self.world.create_item("Combat Level")] * 10)
+        self.collect([self.world.create_item("Fishing Level")] * 10)
+        self.collect([self.world.create_item("Month End")] * 12)
+        self.multiworld.state.collect(self.world.create_item("Adventurer's Guild"), event=False)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Marble Brazier Recipe"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+    def test_can_learn_crafting_recipe(self):
+        location = "Marble Brazier Recipe"
+        rule = self.world.logic.region.can_reach_location(location)
+        self.assertFalse(rule(self.multiworld.state))
+
+        self.multiworld.state.collect(self.world.create_item("Month End"), event=False)
+        self.assertTrue(rule(self.multiworld.state))
+
+
+class TestNoCraftsanityLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.Cropsanity.internal_name: options.Cropsanity.option_shuffled,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+    }
+
+    def test_can_craft_recipe(self):
+        recipe = all_crafting_recipes_by_name["Wood Floor"]
+        rule = self.world.logic.crafting.can_craft(recipe)
         self.assertTrue(rule(self.multiworld.state))
 
 

@@ -1,10 +1,7 @@
-from typing import Iterable
-
 from .received_logic import ReceivedLogic
 from .region_logic import RegionLogic
-from ..data.monster_data import StardewMonster
 from ..mods.logic.magic_logic import MagicLogic
-from ..stardew_rule import StardewRule, Or, And
+from ..stardew_rule import StardewRule, Or
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
@@ -80,16 +77,3 @@ class CombatLogic:
         if weapon_rule is None:
             return adventure_guild_rule
         return adventure_guild_rule & weapon_rule
-
-    def can_kill_monster(self, monster: StardewMonster) -> StardewRule:
-        region_rule = self.region.can_reach_any(monster.locations)
-        combat_rule = self.can_fight_at_level(monster.difficulty)
-        return region_rule & combat_rule
-
-    def can_kill_any_monster(self, monsters: Iterable[StardewMonster]) -> StardewRule:
-        rules = [self.can_kill_monster(monster) for monster in monsters]
-        return Or(rules)
-
-    def can_kill_all_monsters(self, monsters: Iterable[StardewMonster]) -> StardewRule:
-        rules = [self.can_kill_monster(monster) for monster in monsters]
-        return And(rules)

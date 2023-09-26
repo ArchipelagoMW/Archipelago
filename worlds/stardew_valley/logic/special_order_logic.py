@@ -94,7 +94,7 @@ class SpecialOrderLogic:
             SpecialOrder.robins_project: self.relationship.can_meet(NPC.robin) & self.region.can_reach(Region.carpenter) &
                                          self.ability.can_chop_perfectly() & self.has(Material.hardwood),
             SpecialOrder.robins_resource_rush: self.relationship.can_meet(NPC.robin) & self.region.can_reach(Region.carpenter) & self.ability.can_chop_perfectly() & self.has(Fertilizer.tree) & self.ability.can_mine_perfectly(),
-            SpecialOrder.juicy_bugs_wanted_yum: self.region.can_reach(Region.beach) & self.has(Loot.bug_meat),
+            SpecialOrder.juicy_bugs_wanted: self.region.can_reach(Region.beach) & self.has(Loot.bug_meat),
             SpecialOrder.tropical_fish: self.relationship.can_meet(NPC.willy) & self.received("Island Resort") & self.has_island_transport() &
                                         self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
             SpecialOrder.a_curious_substance: self.region.can_reach(Region.wizard_tower) & self.ability.can_mine_perfectly() & self.mine.can_mine_to_floor(80),

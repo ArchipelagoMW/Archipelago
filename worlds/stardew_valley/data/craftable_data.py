@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource
+    ArchipelagoSource, LogicSource, SpecialOrderSource
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, Fishing, Ring, Consumable, Edible, Lighting, Storage, Furniture, Sign, Craftable
 from ..strings.crop_names import Fruit, Vegetable
@@ -18,6 +18,7 @@ from ..strings.monster_drop_names import Loot
 from ..strings.region_names import Region
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
+from ..strings.special_order_names import SpecialOrder
 from ..strings.villager_names import NPC
 
 
@@ -66,6 +67,11 @@ def shop_trade_recipe(name: str, region: str, currency: str, price: int, ingredi
 
 def queen_of_sauce_recipe(name: str, year: int, season: str, day: int, ingredients: Dict[str, int]) -> CraftingRecipe:
     source = QueenOfSauceSource(year, season, day)
+    return create_recipe(name, ingredients, source)
+
+
+def special_order_recipe(name: str, special_order: str, ingredients: Dict[str, int]) -> CraftingRecipe:
+    source = SpecialOrderSource(special_order)
     return create_recipe(name, ingredients, source)
 
 
@@ -134,7 +140,7 @@ ancient_seeds = ap_recipe(WildSeeds.ancient, {Artifact.ancient_seed: 1})
 grass_starter = shop_recipe(WildSeeds.grass_starter, Region.pierre_store, 1000, {Material.fiber: 10})
 for wild_seeds in [WildSeeds.spring, WildSeeds.summer, WildSeeds.fall, WildSeeds.winter]:
     tea_sapling = cutscene_recipe(WildSeeds.tea_sapling, Region.sunroom, NPC.caroline, 2, {wild_seeds: 2, Material.fiber: 5, Material.wood: 5})
-fiber_seeds = ap_recipe(WildSeeds.fiber, {Seed.mixed: 1, Material.sap: 5, Material.clay: 1})
+fiber_seeds = special_order_recipe(WildSeeds.fiber, SpecialOrder.community_cleanup, {Seed.mixed: 1, Material.sap: 5, Material.clay: 1})
 
 wood_floor = shop_recipe(Floor.wood, Region.carpenter, 100, {Material.wood: 1})
 rustic_floor = shop_recipe(Floor.rustic, Region.carpenter, 200, {Material.wood: 1})
@@ -153,7 +159,7 @@ crystal_path = shop_recipe(Floor.crystal_path, Region.carpenter, 200, {MetalBar.
 spinner = skill_recipe(Fishing.spinner, Skill.fishing, 6, {MetalBar.iron: 2})
 trap_bobber = skill_recipe(Fishing.trap_bobber, Skill.fishing, 6, {MetalBar.copper: 1, Material.sap: 10})
 cork_bobber = skill_recipe(Fishing.cork_bobber, Skill.fishing, 7, {Material.wood: 10, Material.hardwood: 5, Loot.slime: 10})
-quality_bobber = ap_recipe(Fishing.quality_bobber, {MetalBar.copper: 1, Material.sap: 20, Loot.solar_essence: 5})
+quality_bobber = special_order_recipe(Fishing.quality_bobber, SpecialOrder.juicy_bugs_wanted, {MetalBar.copper: 1, Material.sap: 20, Loot.solar_essence: 5})
 treasure_hunter = skill_recipe(Fishing.treasure_hunter, Skill.fishing, 7, {MetalBar.gold: 2})
 dressed_spinner = skill_recipe(Fishing.dressed_spinner, Skill.fishing, 8, {MetalBar.iron: 2, ArtisanGood.cloth: 1})
 barbed_hook = skill_recipe(Fishing.barbed_hook, Skill.fishing, 8, {MetalBar.copper: 1, MetalBar.iron: 1, MetalBar.gold: 1})
@@ -197,7 +203,7 @@ skull_brazier = shop_recipe(Lighting.skull_brazier, Region.carpenter, 3000, {Fos
 marble_brazier = shop_recipe(Lighting.marble_brazier, Region.carpenter, 5000, {Mineral.marble: 1, Mineral.aquamarine: 1, Material.stone: 100})
 wood_lamp_post = shop_recipe(Lighting.wood_lamp_post, Region.carpenter, 500, {Material.wood: 50, ArtisanGood.battery_pack: 1})
 iron_lamp_post = shop_recipe(Lighting.iron_lamp_post, Region.carpenter, 1000, {MetalBar.iron: 1, ArtisanGood.battery_pack: 1})
-jack_o_lantern = ap_recipe(Lighting.jack_o_lantern, {Vegetable.pumpkin: 1, Lighting.torch: 1})
+jack_o_lantern = shop_recipe(Lighting.jack_o_lantern, Region.spirit_eve, 2000, {Vegetable.pumpkin: 1, Lighting.torch: 1})
 
 bone_mill = ap_recipe(Machine.bone_mill, {Fossil.bone_fragment: 10, Material.clay: 3, Material.stone: 20})
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 4, {Material.wood: 20, MetalBar.copper: 2})
@@ -215,7 +221,7 @@ solar_panel = ap_recipe(Machine.solar_panel, {MetalBar.quartz: 10, MetalBar.iron
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 3, {Material.wood: 40, MetalBar.copper: 2})
 worm_bin = skill_recipe(Machine.worm_bin, Skill.fishing, 8, {Material.hardwood: 25, MetalBar.gold: 1, MetalBar.iron: 1, Material.fiber: 50})
 
-tub_o_flowers = ap_recipe(Furniture.tub_o_flowers, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
+tub_o_flowers = shop_recipe(Furniture.tub_o_flowers, Region.flower_dance, 2000, {Material.wood: 15, Seed.tulip: 1, Seed.jazz: 1, Seed.poppy: 1, Seed.spangle: 1})
 wicked_statue = shop_recipe(Furniture.wicked_statue, Region.sewer, 1000, {Material.stone: 25, Material.coal: 5})
 flute_block = cutscene_recipe(Furniture.flute_block, Region.carpenter, NPC.robin, 6, {Material.wood: 10, Ore.copper: 2, Material.fiber: 20})
 drum_block = cutscene_recipe(Furniture.drum_block, Region.carpenter, NPC.robin, 6, {Material.stone: 10, Ore.copper: 2, Material.fiber: 20})
@@ -239,3 +245,6 @@ mini_obelisk = ap_recipe(Craftable.mini_obelisk, {Material.hardwood: 30, Loot.so
 farm_computer = ap_recipe(Craftable.farm_computer, {Artifact.dwarf_gadget: 1, ArtisanGood.battery_pack: 1, MetalBar.quartz: 10})
 hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1, MetalBar.radioactive: 1})
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 9, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
+
+
+all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}

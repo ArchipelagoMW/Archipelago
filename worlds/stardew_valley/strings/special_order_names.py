@@ -13,7 +13,7 @@ class SpecialOrder:
     pierres_prime_produce = "Pierre's Prime Produce"
     robins_project = "Robin's Project"
     robins_resource_rush = "Robin's Resource Rush"
-    juicy_bugs_wanted_yum = "Juicy Bugs Wanted!"
+    juicy_bugs_wanted = "Juicy Bugs Wanted!"
     tropical_fish = "Tropical Fish"
     a_curious_substance = "A Curious Substance"
     prismatic_jelly = "Prismatic Jelly"

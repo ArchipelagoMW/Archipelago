@@ -16,6 +16,7 @@ from .fishing_logic import FishingLogic
 from .gift_logic import GiftLogic
 from .mine_logic import MineLogic
 from .money_logic import MoneyLogic
+from .monster_logic import MonsterLogic
 from .museum_logic import MuseumLogic
 from .pet_logic import PetLogic
 from .received_logic import ReceivedLogic
@@ -126,6 +127,7 @@ class StardewLogic:
         self.museum = MuseumLogic(self.player, self.options[options.Museumsanity], self.received, self.has, self.region, self.action)
         self.wallet = WalletLogic(self.player, self.received, self.museum)
         self.combat = CombatLogic(self.player, self.received, self.region)
+        self.monster = MonsterLogic(self.player, self.region, self.time, self.combat)
         self.tool = ToolLogic(self.player, tool_option, self.received, self.has, self.region, self.season, self.money)
         self.pet = PetLogic(self.player, friendsanity_option, heart_size_option, self.received, self.region, self.time, self.tool)
         self.crop = CropLogic(self.player, self.has, self.region, self.season, self.tool)
@@ -134,11 +136,12 @@ class StardewLogic:
         self.mine = MineLogic(self.player, tool_option, skill_option, elevator_option, self.received, self.region, self.combat,
                               self.tool, self.skill)
         self.cooking = CookingLogic(self.player, self.options[options.Chefsanity], self.options[options.ExcludeGingerIsland], self.received, self.has, self.region, self.season, self.time, self.money, self.action, self.buildings, self.relationship, self.skill)
-        self.crafting = CraftingLogic(self.player, self.received, self.has, self.region, self.time, self.money, self.relationship, self.skill)
         self.ability = AbilityLogic(self.player, self.options[options.NumberOfMovementBuffs], self.options[options.NumberOfLuckBuffs], self.received,
                                     self.region, self.tool, self.skill, self.mine)
         self.special_order = SpecialOrderLogic(self.player, self.received, self.has, self.region, self.season, self.time, self.money, self.shipping,
                                                self.arcade, self.artisan, self.relationship, self.tool, self.skill, self.mine, self.cooking, self.ability)
+        self.crafting = CraftingLogic(self.player, self.options[options.Craftsanity], self.options[options.SpecialOrderLocations], self.received, self.has,
+                                      self.region, self.time, self.money, self.relationship, self.skill, self.special_order)
 
         self.mod = ModLogic(self.player, skill_option, elevator_option, mods_option, self.received, self.has, self.region, self.action, self.season, self.money,
                             self.relationship, self.buildings, self.wallet, self.combat, self.tool, self.skill, self.fishing, self.cooking, self.mine, self.ability)
@@ -291,7 +294,7 @@ class StardewLogic:
             Fish.periwinkle: self.skill.can_crab_pot(Region.town),
             Fish.shrimp: self.skill.can_crab_pot(Region.beach),
             Fish.snail: self.skill.can_crab_pot(Region.town),
-            Fishing.curiosity_lure: self.combat.can_kill_monster(all_monsters_by_name[Monster.mummy]),
+            Fishing.curiosity_lure: self.monster.can_kill(all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Forageable.blackberry: self.tool.can_forage(Season.fall),
             Forageable.cactus_fruit: self.tool.can_forage(Generic.any, Region.desert),
@@ -325,7 +328,7 @@ class StardewLogic:
             Forageable.wild_horseradish: self.tool.can_forage(Season.spring),
             Forageable.wild_plum: self.tool.can_forage(Season.fall),
             Forageable.winter_root: self.tool.can_forage(Season.winter, Region.forest, True),
-            Fossil.bone_fragment: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
+            Fossil.bone_fragment: (self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe)) | self.monster.can_kill(Monster.skeleton),
             Fossil.fossilized_leg: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
             Fossil.fossilized_ribs: self.region.can_reach(Region.island_south) & self.tool.has_tool(Tool.hoe),
             Fossil.fossilized_skull: self.action.can_open_geode(Geode.golden_coconut),
@@ -507,36 +510,36 @@ class StardewLogic:
         self.quest_rules.update(self.mod.quests.get_modded_quest_rules())
 
         self.festival_rules.update({
-            FestivalCheck.egg_hunt: self.season.has(Season.spring) & self.region.can_reach(Region.town) & self.can_win_egg_hunt(),
-            FestivalCheck.strawberry_seeds: self.season.has(Season.spring) & self.region.can_reach(Region.town) & self.money.can_spend(1000),
-            FestivalCheck.dance: self.season.has(Season.spring) & self.region.can_reach(Region.forest) & self.relationship.has_hearts(Generic.bachelor, 4),
-            FestivalCheck.rarecrow_5: self.season.has(Season.spring) & self.region.can_reach(Region.forest) & self.money.can_spend(2500),
-            FestivalCheck.luau_soup: self.season.has(Season.summer) & self.region.can_reach(Region.beach) & self.can_succeed_luau_soup(),
-            FestivalCheck.moonlight_jellies: self.season.has(Season.summer) & self.region.can_reach(Region.beach),
-            FestivalCheck.smashing_stone: self.season.has(Season.fall) & self.region.can_reach(Region.town),
-            FestivalCheck.grange_display: self.season.has(Season.fall) & self.region.can_reach(Region.town) & self.can_succeed_grange_display(),
-            FestivalCheck.rarecrow_1: self.season.has(Season.fall) & self.region.can_reach(Region.town),  # only cost star tokens
-            FestivalCheck.fair_stardrop: self.season.has(Season.fall) & self.region.can_reach(Region.town),  # only cost star tokens
-            FestivalCheck.spirit_eve_maze: self.season.has(Season.fall) & self.region.can_reach(Region.town),
-            FestivalCheck.rarecrow_2: self.season.has(Season.fall) & self.region.can_reach(Region.town) & self.money.can_spend(5000),
-            FestivalCheck.fishing_competition: self.season.has(Season.winter) & self.region.can_reach(Region.forest) & self.can_win_fishing_competition(),
-            FestivalCheck.rarecrow_4: self.season.has(Season.winter) & self.region.can_reach(Region.forest) & self.money.can_spend(5000),
-            FestivalCheck.mermaid_pearl: self.season.has(Season.winter) & self.region.can_reach(Region.beach),
-            FestivalCheck.cone_hat: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(2500),
-            FestivalCheck.iridium_fireplace: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(15000),
-            FestivalCheck.rarecrow_7: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_donate_museum_artifacts(20),
-            FestivalCheck.rarecrow_8: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(5000) & self.museum.can_donate_museum_items(40),
-            FestivalCheck.lupini_red_eagle: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
-            FestivalCheck.lupini_portrait_mermaid: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
-            FestivalCheck.lupini_solar_kingdom: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.money.can_spend(1200),
-            FestivalCheck.lupini_clouds: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_1000_years: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_three_trees: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_two() & self.money.can_spend(1200),
-            FestivalCheck.lupini_the_serpent: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.lupini_tropical_fish: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.lupini_land_of_clay: self.season.has(Season.winter) & self.region.can_reach(Region.beach) & self.time.has_year_three() & self.money.can_spend(1200),
-            FestivalCheck.secret_santa: self.season.has(Season.winter) & self.region.can_reach(Region.town) & self.gifts.has_any_universal_love(),
-            FestivalCheck.legend_of_the_winter_star: self.season.has(Season.winter) & self.region.can_reach(Region.town),
+            FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
+            FestivalCheck.strawberry_seeds: self.money.can_spend(1000),
+            FestivalCheck.dance: self.relationship.has_hearts(Generic.bachelor, 4),
+            FestivalCheck.rarecrow_5: self.money.can_spend(2500),
+            FestivalCheck.luau_soup: self.can_succeed_luau_soup(),
+            FestivalCheck.moonlight_jellies: True_(),
+            FestivalCheck.smashing_stone: True_(),
+            FestivalCheck.grange_display: self.can_succeed_grange_display(),
+            FestivalCheck.rarecrow_1: True_(),  # only cost star tokens
+            FestivalCheck.fair_stardrop: True_(),  # only cost star tokens
+            FestivalCheck.spirit_eve_maze: True_(),
+            FestivalCheck.rarecrow_2: self.money.can_spend(5000),
+            FestivalCheck.fishing_competition: self.can_win_fishing_competition(),
+            FestivalCheck.rarecrow_4: self.money.can_spend(5000),
+            FestivalCheck.mermaid_pearl: self.has(Forageable.secret_note),
+            FestivalCheck.cone_hat: self.money.can_spend(2500),
+            FestivalCheck.iridium_fireplace: self.money.can_spend(15000),
+            FestivalCheck.rarecrow_7: self.money.can_spend(5000) & self.museum.can_donate_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.money.can_spend(5000) & self.museum.can_donate_museum_items(40),
+            FestivalCheck.lupini_red_eagle: self.money.can_spend(1200),
+            FestivalCheck.lupini_portrait_mermaid: self.money.can_spend(1200),
+            FestivalCheck.lupini_solar_kingdom: self.money.can_spend(1200),
+            FestivalCheck.lupini_clouds: self.time.has_year_two() & self.money.can_spend(1200),
+            FestivalCheck.lupini_1000_years: self.time.has_year_two() & self.money.can_spend(1200),
+            FestivalCheck.lupini_three_trees: self.time.has_year_two() & self.money.can_spend(1200),
+            FestivalCheck.lupini_the_serpent: self.time.has_year_three() & self.money.can_spend(1200),
+            FestivalCheck.lupini_tropical_fish: self.time.has_year_three() & self.money.can_spend(1200),
+            FestivalCheck.lupini_land_of_clay: self.time.has_year_three() & self.money.can_spend(1200),
+            FestivalCheck.secret_santa: self.gifts.has_any_universal_love(),
+            FestivalCheck.legend_of_the_winter_star: True_(),
             FestivalCheck.all_rarecrows: self.region.can_reach(Region.farm) & self.has_all_rarecrows(),
         })
 
@@ -710,7 +713,7 @@ class StardewLogic:
         for category in all_monsters_by_category:
             if exclude_island and all(monster.locations[0] in island_regions for monster in all_monsters_by_category[category]):
                 continue
-            rules.append(self.combat.can_kill_any_monster(all_monsters_by_category[category]))
+            rules.append(self.monster.can_kill_any(all_monsters_by_category[category]))
 
         return And(rules)
 
