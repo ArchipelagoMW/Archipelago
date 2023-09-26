@@ -3,7 +3,7 @@ from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
 from .MissionTables import mission_orders, MissionInfo, MissionPools, get_campaign_missions, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission
+    get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns
 from .LogicMixin import SC2WoLLogic
@@ -30,7 +30,8 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     disabled_campaigns = get_disabled_campaigns(multiworld, player)
-    excluded_missions = get_option_value(multiworld, player, "excluded_missions")
+    excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
+    excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
     mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
     for mission in SC2Mission:
         if not mission_pools.get(mission.pool):
@@ -52,10 +53,10 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         return mission_pools
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
-        excluded_missions = excluded_missions.union([mission.mission_name for mission in get_no_build_missions()])
+        excluded_missions = excluded_missions.union(get_no_build_missions())
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
-        excluded_missions = excluded_missions.union([mission.mission_name for mission in get_campaign_missions(campaign)])
+        excluded_missions = excluded_missions.union(get_campaign_missions(campaign))
 
     # Finding the goal map
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
@@ -63,19 +64,19 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
     goal_campaign = multiworld.random.choice(candidate_campaigns)
     primary_goal = campaign_final_mission_locations[goal_campaign]
-    if primary_goal is None or primary_goal.mission.mission_name in excluded_missions:
+    if primary_goal is None or primary_goal.mission in excluded_missions:
         # No primary goal or its mission is excluded
         candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
-        candidate_missions = [mission for mission in candidate_missions if mission.mission_name not in excluded_missions]
+        candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
         if len(candidate_missions) == 0:
-            raise Exception("There are no valid goal missions.  Please exclude fewer missions.")
+            raise Exception("There are no valid goal missions. Please exclude fewer missions.")
         goal_mission = multiworld.random.choice(candidate_missions).mission_name
     else:
         goal_mission = primary_goal.mission
 
     # Excluding missions
     for difficulty, mission_pool in mission_pools.items():
-        mission_pools[difficulty] = [mission for mission in mission_pool if mission.name not in excluded_missions]
+        mission_pools[difficulty] = [mission for mission in mission_pool if mission not in excluded_missions]
     mission_pools[MissionPools.FINAL] = [goal_mission]
 
     # Mission pool changes on Build-Only

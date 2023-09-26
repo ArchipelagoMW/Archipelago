@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, List
+from typing import NamedTuple, Dict, List, Set
 from enum import IntEnum, Enum
 
 
@@ -340,7 +340,7 @@ def get_campaign_missions(campaign: SC2Campaign) -> List[SC2Mission]:
     return [mission for mission in SC2Mission if mission.campaign == campaign]
 
 
-def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: list[str] = None) -> MissionPools:
+def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] = None) -> MissionPools:
     """
 
     :param campaign:
@@ -349,14 +349,12 @@ def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: list[str] 
     """
     if excluded_missions is None:
         excluded_missions = []
-    mission_names = set([mission.mission_name for mission in get_campaign_missions(campaign)])
     excluded_mission_set = set(excluded_missions)
-    included_mission_names = mission_names.difference(excluded_mission_set)
-    included_missions = [lookup_name_to_mission[mission_name] for mission_name in included_mission_names]
+    included_missions = set(get_campaign_missions(campaign)).difference(excluded_mission_set)
     return max([mission.pool for mission in included_missions])
 
 
-def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: List[str] | frozenset[str] = None) -> SC2CampaignGoalPriority:
+def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] | frozenset[str] = None) -> SC2CampaignGoalPriority:
     """
     Gets a modified campaign goal priority.
     If all the campaign's goal missions are excluded, it's ineligible to have the goal
