@@ -28,7 +28,8 @@ Certain interactable objects within levels will be unable to be used until the c
 - Platform Ghost
 - Middle Rings
 - Buckets
-- Tulips.
+- Tulips
+
 Yoshi will start out being able to carry only one egg, and 5 capacity upgrades can be found to bring the total up to 6.
 The player will start with all levels unlocked in their starting world, and can collect 'World Gates' to unlock levels from other worlds.
 Extra and Bonus stages will also start out locked, and require respective items to access them. 6-8 is locked, and will be unlocked
@@ -40,7 +41,7 @@ the world they start in, the starting amount of lives, route through 6-8, and th
 
 ## What is the goal of Yoshi's Island when randomized?
 
-The player can choose one of two goals
+The player can choose one of two goals:
 - Bowser: Defeat a pre-defined number of bosses, and defeat Bowser at the end of 6-8.
 - Luigi Hunt: Collect a pre-defined number of 'Pieces of Luigi' within levels.
 
@@ -51,6 +52,7 @@ Locations consist of 'level objectives', that being:
 - Collecting 20 red coins.
 - Collecting 5 flowers.
 - Collecting 30 stars.
+
 Checks will be sent immediately upon achieving that objective, regardless of if the stage is cleared or not.
 Additional checks can be placed on Bandit mini-battles, or overworld minigames.
 

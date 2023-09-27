@@ -55,6 +55,7 @@ class YIWorld(World):
 
     web = YIWeb()
     settings: typing.ClassVar[YISettings]
+    #topology_present = True
 
     locked_locations: List[str]
     location_cache: List[Location]
@@ -84,7 +85,7 @@ class YIWorld(World):
 
     def _get_slot_data(self):
         return {
-            "active_levels": self.global_level_list,
+            "world_1": self.world_1_stages
         }
 
     def fill_slot_data(self) -> dict:

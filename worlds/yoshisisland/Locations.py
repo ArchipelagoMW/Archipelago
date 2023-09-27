@@ -118,9 +118,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int], boss_
     LocationData("3-2", "Jungle Rhythm...: Level Clear", 0x305068, 0x19, lambda state: logic._32Clear(state)),
 
     LocationData("3-3", "Nep-Enuts' Domain: Red Coins", 0x305069, 0x1A, lambda state: logic._33Coins(state)),
-    LocationData("3-2", "Nep-Enuts' Domain: Flowers", 0x30506A, 0x1A, lambda state: logic._33Flowers(state)),
-    LocationData("3-2", "Nep-Enuts' Domain: Stars", 0x30506B, 0x1A, lambda state: logic._33Stars(state)),
-    LocationData("3-2", "Nep-Enuts' Domain: Level Clear", 0x30506C, 0x1A, lambda state: logic._33Clear(state)),
+    LocationData("3-3", "Nep-Enuts' Domain: Flowers", 0x30506A, 0x1A, lambda state: logic._33Flowers(state)),
+    LocationData("3-3", "Nep-Enuts' Domain: Stars", 0x30506B, 0x1A, lambda state: logic._33Stars(state)),
+    LocationData("3-3", "Nep-Enuts' Domain: Level Clear", 0x30506C, 0x1A, lambda state: logic._33Clear(state)),
 
     LocationData("3-4", "Prince Froggy's Fort: Red Coins", 0x30506D, 0x1B, lambda state: logic._34Coins(state)),
     LocationData("3-4", "Prince Froggy's Fort: Flowers", 0x30506E, 0x1B, lambda state: logic._34Flowers(state)),
