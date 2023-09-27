@@ -372,16 +372,14 @@ class World(metaclass=AutoWorldRegister):
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
         """Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these."""
-        import Options
+        # TODO remove loop when worlds use options dataclass
+        for option_key, option in cls.options_dataclass.type_hints.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        group = cls(multiworld, new_player_id)
+        group.options = cls.options_dataclass(**{option_key: option(option.default)
+                                                 for option_key, option in cls.options_dataclass.type_hints.items()})
 
-        for option_key, option in cls.option_definitions.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
-        for option_key, option in Options.common_options.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
-        for option_key, option in Options.per_game_common_options.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
-
-        return cls(multiworld, new_player_id)
+        return group
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
