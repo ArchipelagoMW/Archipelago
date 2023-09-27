@@ -354,7 +354,7 @@ def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Set[SC2Mis
     return max([mission.pool for mission in included_missions])
 
 
-def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] | frozenset[str] = None) -> SC2CampaignGoalPriority:
+def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] | frozenset[SC2Mission] = None) -> SC2CampaignGoalPriority:
     """
     Gets a modified campaign goal priority.
     If all the campaign's goal missions are excluded, it's ineligible to have the goal
@@ -366,9 +366,9 @@ def get_campaign_goal_priority(campaign: SC2Campaign, excluded_missions: Set[SC2
     if excluded_missions is None:
         return campaign.goal_priority
     else:
-        goal_mission_names = set([mission.mission_name for mission in get_campaign_potential_goal_missions(campaign)])
+        goal_missions = set(get_campaign_potential_goal_missions(campaign))
         excluded_mission_set = set(excluded_missions)
-        remaining_goals = goal_mission_names.difference(excluded_mission_set)
+        remaining_goals = goal_missions.difference(excluded_mission_set)
         if remaining_goals == set():
             # All potential goals are excluded, the campaign can't be a goal
             return SC2CampaignGoalPriority.NONE
