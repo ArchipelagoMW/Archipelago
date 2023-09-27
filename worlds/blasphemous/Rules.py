@@ -4193,8 +4193,9 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("BotSS: Platforming gauntlet", player),
         lambda state: (
-            state.has("D17BZ02S01[FrontR]", player)
-            or state.has_all({"Dash Ability", "Wall Climb Ability"}, player)
+            #state.has("D17BZ02S01[FrontR]", player) or
+            # TODO: actually fix this once door rando is real
+            state.has_all({"Dash Ability", "Wall Climb Ability"}, player) 
         ))
     # Doors
     set_rule(world.get_entrance("D17BZ02S01[FrontR]", player),
