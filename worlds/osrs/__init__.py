@@ -295,21 +295,24 @@ class OSRSWorld(World):
         ]
 
         while locations_added < locations_required:
+            taskChosen = False
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
-                task = chosen_task.pop()
-                if (len(chosen_task) == 0):
+                if len(chosen_task) > 0:
+                    task = chosen_task.pop()
+                    taskChosen = True
+                if len(chosen_task) == 0:
                     index = all_tasks.index(chosen_task)
                     del all_tasks[index]
                     del all_weights[index]
 
             else:
-                # assert len(general_tasks) > 0, "There are not enough avaialbe tasks to vfill the remaining pool for OSRS"
-                # task = general_tasks.pop()
+                assert len(general_tasks) > 0, "There are not enough avaialbe tasks to vfill the remaining pool for OSRS"
+                task = general_tasks.pop()
                 pass
-
-            self.add_location(task)
-            locations_added += 1
+            if taskChosen:
+                self.add_location(task)
+                locations_added += 1
 
     def add_location(self, location):
         index = [i for i in range(0, len(self.location_rows)) if self.location_rows[i].name == location.name][0]
