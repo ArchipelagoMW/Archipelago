@@ -1,9 +1,10 @@
 from typing import Callable, Dict, List, Set
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items
-from .MissionTables import mission_orders, MissionInfo, MissionPools, get_campaign_missions, \
+from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
-    get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission
+    get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
+    campaign_mission_table
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns
 from .LogicMixin import SC2WoLLogic
@@ -56,7 +57,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         excluded_missions = excluded_missions.union(get_no_build_missions())
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
-        excluded_missions = excluded_missions.union(get_campaign_missions(campaign))
+        excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
 
     # Finding the goal map
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}

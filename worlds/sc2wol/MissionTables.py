@@ -336,8 +336,11 @@ lookup_id_to_campaign: Dict[int, SC2Campaign] = {
 }
 
 
-def get_campaign_missions(campaign: SC2Campaign) -> List[SC2Mission]:
-    return [mission for mission in SC2Mission if mission.campaign == campaign]
+campaign_mission_table: Dict[SC2Campaign, Set[SC2Mission]] = {
+    campaign: set() for campaign in SC2Campaign
+}
+for mission in SC2Mission:
+    campaign_mission_table[mission.campaign].add(mission)
 
 
 def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Set[SC2Mission] = None) -> MissionPools:
@@ -350,7 +353,7 @@ def get_campaign_difficulty(campaign: SC2Campaign, excluded_missions: Set[SC2Mis
     if excluded_missions is None:
         excluded_missions = []
     excluded_mission_set = set(excluded_missions)
-    included_missions = set(get_campaign_missions(campaign)).difference(excluded_mission_set)
+    included_missions = campaign_mission_table[campaign].difference(excluded_mission_set)
     return max([mission.pool for mission in included_missions])
 
 

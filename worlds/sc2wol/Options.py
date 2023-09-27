@@ -1,7 +1,7 @@
 from typing import Dict, FrozenSet, Union, Set
 from BaseClasses import MultiWorld
 from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
-from .MissionTables import vanilla_mission_req_table, SC2Campaign, SC2Mission
+from .MissionTables import SC2Campaign, SC2Mission
 
 
 class GameDifficulty(Choice):
