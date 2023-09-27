@@ -14,7 +14,7 @@ class LADXROption:
     def to_ladxr_option(self, all_options):
         if not self.ladxr_name:
             return None, None
-        
+
         return (self.ladxr_name, self.name_lookup[self.value].replace("_", ""))
 
 
@@ -32,7 +32,7 @@ class Logic(Choice, LADXROption):
     option_hard = 2
     option_glitched = 3
     option_hell = 4
-    
+
     default = option_normal
 
 class TradeQuest(DefaultOffToggle, LADXROption):
@@ -40,13 +40,15 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     [On] adds the trade items to the pool (the trade locations will always be local items)
     [Off] (default) doesn't add them
     """
+    display_name = "Trade Quest"
     ladxr_name = "tradequest"
 
 class Rooster(DefaultOnToggle, LADXROption):
     """
-    [On] Adds the rooster to the item pool. 
+    [On] Adds the rooster to the item pool.
     [Off] The rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.
     """
+    display_name = "Rooster"
     ladxr_name = "rooster"
 
 class Boomerang(Choice):
@@ -74,9 +76,10 @@ class EntranceShuffle(Choice, LADXROption):
     option_none = 0
     option_simple = 1
     #option_advanced = 2
-    #option_expert = 3    
+    #option_expert = 3
     #option_insanity = 4
     default = option_none
+    display_name = "Experimental Entrance Shuffle"
     ladxr_name = "entranceshuffle"
 
 class DungeonShuffle(DefaultOffToggle, LADXROption):
@@ -84,13 +87,14 @@ class DungeonShuffle(DefaultOffToggle, LADXROption):
     [WARNING] Experimental, may fail to fill
     Randomizes dungeon entrances within eachother
     """
+    display_name = "Experimental Dungeon Shuffle"
     ladxr_name = "dungeonshuffle"
 
 class APTitleScreen(DefaultOnToggle):
     """
     Enables AP specific title screen and disables the intro cutscene
     """
-    
+    display_name = "AP Title Screen"
 
 class BossShuffle(Choice):
     none = 0
@@ -119,6 +123,7 @@ class ShuffleNightmareKeys(DungeonItemShuffle):
     [Any World] The item could be anywhere
     [Different World] The item will be somewhere in another world
     """
+    display_name = "Shuffle Nightmare Keys"
     ladxr_item = "NIGHTMARE_KEY"
 
 class ShuffleSmallKeys(DungeonItemShuffle):
@@ -128,8 +133,9 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     [Own Dungeons] The item will be within a dungeon in your world
     [Own World] The item will be somewhere in your world
     [Any World] The item could be anywhere
-    [Different World] The item will be somewhere in another world 
+    [Different World] The item will be somewhere in another world
     """
+    display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
 class ShuffleMaps(DungeonItemShuffle):
     """
@@ -140,6 +146,7 @@ class ShuffleMaps(DungeonItemShuffle):
     [Any World] The item could be anywhere
     [Different World] The item will be somewhere in another world
     """
+    display_name = "Shuffle Maps"
     ladxr_item = "MAP"
 
 class ShuffleCompasses(DungeonItemShuffle):
@@ -151,6 +158,7 @@ class ShuffleCompasses(DungeonItemShuffle):
     [Any World] The item could be anywhere
     [Different World] The item will be somewhere in another world
     """
+    display_name = "Shuffle Compasses"
     ladxr_item = "COMPASS"
 
 class ShuffleStoneBeaks(DungeonItemShuffle):
@@ -162,6 +170,7 @@ class ShuffleStoneBeaks(DungeonItemShuffle):
     [Any World] The item could be anywhere
     [Different World] The item will be somewhere in another world
     """
+    display_name = "Shuffle Stone Beaks"
     ladxr_item = "STONE_BEAK"
 
 class Goal(Choice, LADXROption):
@@ -169,14 +178,14 @@ class Goal(Choice, LADXROption):
     The Goal of the game
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
-    [Open] The Egg will start pre-opened.  
+    [Open] The Egg will start pre-opened.
     """
     display_name = "Goal"
     ladxr_name = "goal"
     option_instruments = 1
     option_seashells = 2
     option_open = 3
-    
+
     default = option_instruments
 
     def to_ladxr_option(self, all_options):
@@ -189,6 +198,7 @@ class InstrumentCount(Range, LADXROption):
     """
     Sets the number of instruments required to open the Egg
     """
+    display_name = "Instrument Count"
     ladxr_name = None
     range_start = 0
     range_end = 8
@@ -198,7 +208,7 @@ class NagMessages(DefaultOffToggle, LADXROption):
     """
     Controls if nag messages are shown when rocks and crystals are touched. Useful for glitches, annoying for everyone else.
     """
-
+    display_name = "Nag Messages"
     ladxr_name = "nagmessages"
 
 class MusicChangeCondition(Choice):
@@ -207,6 +217,7 @@ class MusicChangeCondition(Choice):
     [Sword] When you pick up a sword, the music changes
     [Always] You always have the post-sword music
     """
+    display_name = "Music Change Condition"
     option_sword = 0
     option_always = 1
     default = option_always
@@ -288,7 +299,7 @@ class LinkPalette(Choice, LADXROption):
     Sets link's palette
     A-D are color palettes usually used during the damage animation and can change based on where you are.
     """
-    display_name = "Links Palette"
+    display_name = "Link's Palette"
     ladxr_name = "linkspalette"
     option_normal = -1
     option_green = 0
@@ -313,6 +324,7 @@ class TrendyGame(Choice):
     [Hardest] The items move diagonally
     [Impossible] The items move impossibly fast, may scroll on and off the screen
     """
+    display_name = "Trendy Game"
     option_easy = 0
     option_normal = 1
     option_hard = 2
@@ -343,12 +355,12 @@ class GfxMod(FreeText, LADXROption):
                 name, extension = os.path.splitext(file)
                 if extension in self.extensions:
                     GfxMod.__spriteFiles[name].append(file)
-                    
+
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
             return
         raise Exception(f"LADX Sprite '{self.value}' not found. Possible sprites are: {['Link'] + list(GfxMod.__spriteFiles.keys())}")
-            
+
 
     def to_ladxr_option(self, all_options):
         if self.value == -1 or self.value == "Link":
@@ -363,7 +375,7 @@ class GfxMod(FreeText, LADXROption):
 
 class Palette(Choice):
     """
-    Sets the palette for the game. 
+    Sets the palette for the game.
     Note: A few places aren't patched, such as the menu and a few color dungeon tiles.
     [Normal] The vanilla palette
     [1-Bit] One bit of color per channel
@@ -372,22 +384,23 @@ class Palette(Choice):
     [Pink] Aesthetic
     [Inverted] Inverted
     """
+    display_name = "Palette"
     option_normal = 0
     option_1bit = 1
     option_2bit = 2
     option_greyscale = 3
     option_pink = 4
     option_inverted = 5
-    
+
 links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'logic': Logic,
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
-    'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),                
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
-    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),                
+    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),
+    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),
+    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),
+    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),
+    'tradequest': TradeQuest, # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
+    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),
+    'rooster': Rooster, # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
     'experimental_dungeon_shuffle': DungeonShuffle, # 'Randomizes the dungeon that each dungeon entrance leads to'),
