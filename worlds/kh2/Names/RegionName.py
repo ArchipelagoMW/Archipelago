@@ -2,7 +2,7 @@ Ha1 = "Pooh's House"
 Ha2 = "Piglet's House"
 Ha3 = "Rabbit's House"
 Ha4 = "Roo's House"
-Ha5 = "Spookey Cave"
+Ha5 = "Spooky Cave"
 Ha6 = "Starry Hill"
 
 SoraLevels = "Sora's Levels"
